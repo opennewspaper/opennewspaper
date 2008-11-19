@@ -62,7 +62,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		$article = null;
 		
 		/// $article is set to an object of an appropriate class
-		if (is_a($articleclass, 'Article')) {
+		if (is_a($articleclass, 'tx_newspaper_Article')) {
 			$article = $articleclass;
 			$articleclass = get_class($article);
 		} else {
@@ -71,7 +71,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		}
 		
 		/// If that didn't work, throw up
-		if (!is_a($article, 'Article')) {
+		if (!is_a($article, 'tx_newspaper_Article')) {
 			throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		
