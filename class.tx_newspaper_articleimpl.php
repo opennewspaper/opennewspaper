@@ -17,7 +17,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articlestrate
  */
 class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
-	public function __construct(tx_newspaper_Article $parent) {
+	public function __construct() {
 		$this->articleStrategy = new tx_newspaper_ArticleStrategy($this);
 	}
 	
