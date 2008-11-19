@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.articleimpl.php
+ *  \file class.tx_newspaper_articleimpl.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
