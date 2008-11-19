@@ -12,8 +12,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articleimpl.p
 class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		$this->source = new taz_DBSource();
-		$this->article = new ArticleImpl;
+		$this->source = new tx_newspaper_taz_DBSource();
+		$this->article = new tx_newspaper_ArticleImpl;
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
 		// "Wie geht es uns..." from Oct 27 '08
@@ -26,11 +26,11 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_createSource() {
-		$temp = new taz_RedsysSource($this->red_cfg);
+		$temp = new tx_newspaper_taz_RedsysSource($this->red_cfg);
 		$this->assertTrue(is_object($this->source));
-		$this->assertTrue(is_a($this->source, 'Source'));
-		$this->setExpectedException('SourceOpenFailedException');
-		$temp = new taz_RedsysSource('es gibt mich nicht, schmeiss ne exception!');
+		$this->assertTrue(is_a($this->source, 'tx_newspaper_Source'));
+		$this->setExpectedException('tx_newspaper_SourceOpenFailedException');
+		$temp = new tx_newspaper_taz_RedsysSource('es gibt mich nicht, schmeiss ne exception!');
 	}
 
 	public function test_readField() {
@@ -48,7 +48,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_Attributes() {
-		$attrs = ArticleImpl::getAttributeList();
+		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		foreach ($this->reqFields as $field) {
 			if (!in_array($field, $attrs)) 
 				$this->fail("Required attribute $field not in Article::getRequiredAttributes()");
@@ -56,8 +56,8 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_readArticle() {
-		$this->article = $this->source->readArticle('ArticleImpl', $this->uid);
-		$attrs = ArticleImpl::getAttributeList();
+		$this->article = $this->source->readArticle('tx_newspaper_ArticleImpl', $this->uid);
+		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
 			if (!$this->article->getAttribute($req)) $failed[] = $req;
@@ -67,13 +67,13 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 						" not in article read via source->readArticle()");
 		}
 		
-		$this->setExpectedException('WrongClassException');
+		$this->setExpectedException('tx_newspaper_WrongClassException');
 		$this->source->readArticle('es gibt mich nicht, schmeiss ne exception!', $this->uid);
 	}
 
 	public function test_readArticleWithObject() {
 		$this->article = $this->source->readArticle($this->article, $this->uid);
-		$attrs = ArticleImpl::getAttributeList();
+		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
 			if (!$this->article->getAttribute($req)) $failed[] = $req;
@@ -85,8 +85,8 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_readArticles() {
-		$articles = $this->source->readArticles('ArticleImpl', $this->uidList);
-		$attrs = ArticleImpl::getAttributeList();
+		$articles = $this->source->readArticles('tx_newspaper_ArticleImpl', $this->uidList);
+		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		$failed = array();
 		foreach ($articles as $art) {
 			foreach ($attrs as $req) {
@@ -103,12 +103,12 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_readExtra() {
-		$this->setExpectedException('NotYetImplementedException');
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->readExtra("", "");
 	}
 
 	public function test_readExtras() {
-		$this->setExpectedException('NotYetImplementedException');
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->readExtras("", array());
 	}
 	

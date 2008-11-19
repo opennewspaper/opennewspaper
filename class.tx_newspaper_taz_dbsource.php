@@ -15,7 +15,7 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 
 	/** \param $config red.cfg file that defines the redsys
 	 */
-	public function __construct($config) {
+	public function __construct() {
 	}
 
 	public function __destruct() {

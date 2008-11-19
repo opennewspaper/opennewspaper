@@ -56,5 +56,6 @@
 	 * 							   configured
 	 */
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
+	static function table(tx_newspaper_Source $source);
 }
 ?>

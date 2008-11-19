@@ -73,6 +73,16 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return $mapping[$fieldname];
 	}
 	
+	static function table(tx_newspaper_Source $source) {
+		$table = self::$table[get_class($source)];
+
+		if (!$table) 
+			throw new tx_newspaper_WrongClassException('No mapping configured for Source type '.
+										  get_class($source));
+
+		return $table;		
+	}
+	
 	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $attributes = array();	///< array of attributes
@@ -90,6 +100,10 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'text' => 'Text',
 	    	'ressort' => 'OnRes' 
 		)
+	);
+	private static $table = array(
+		'tx_newspaper_taz_RedsysSource' => '',
+		'tx_newspaper_taz_DBSource' => 'tx_hptazarticle_list'
 	);
 }
 ?>
