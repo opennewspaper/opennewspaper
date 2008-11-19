@@ -99,6 +99,12 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'teaser' => 'Titel2',
 	    	'text' => 'Text',
 	    	'ressort' => 'OnRes' 
+		),
+		'tx_newspaper_taz_DBSource' => array(
+	    	'title' => 'article_manualtitle',
+	    	'teaser' => 'article_teaser',
+	    	'text' => 'article_manualtext',
+	    	'ressort' => 'article_ressort' 
 		)
 	);
 	private static $table = array(
