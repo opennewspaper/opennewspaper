@@ -6,14 +6,14 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
 /// An article for the online newspaper
 /** \todo The names for the functions are not defined yet. The interface
  *  (Article) is not yet ready either. In fact, this is just a dummy class.
  */
-class ArticleImpl implements Article {
+class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
 	public function render($template) {
 		throw new NotYetImplementedException("ArticleImpl::render()");
@@ -56,14 +56,14 @@ class ArticleImpl implements Article {
 
 	function getSource() { return $this->source; }
 
-	function setSource(Source $source) {$this->source = $source; }
+	function setSource(tx_newspaper_Source $source) {$this->source = $source; }
 
 	function getUid() { return $this->uid; }
 	function setUid($uid) { $this->uid = $uid; }
 	
 	static function getAttributeList() { return self::$attribute_list; }
 
-	static function mapFieldToSourceField($fieldname, Source $source) {
+	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
 		$mapping = self::$mapFieldsToSourceFields[get_class($source)];
 
 		if (!$mapping) 

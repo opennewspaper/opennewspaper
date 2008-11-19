@@ -1,17 +1,17 @@
 <?php
 /**
- *  \file class.taz_redsyssource.php
+ *  \file class.tx_newspaper_taz_redsyssource.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.source.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_source.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
 /// A Source which reads articles from the taz redaktionssystem
-class taz_RedsysSource implements Source {
+class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/** \param $config red.cfg file that defines the redsys
 	 */
@@ -39,7 +39,7 @@ class taz_RedsysSource implements Source {
 	/** \todo this should work for Extra too. Easy? Just replace Article with 
 	 *  Extra?
 	 */
-	public function readField(Article $article, $field, $uid) {
+	public function readField(tx_newspaper_Article $article, $field, $uid) {
 		if (!$this->text) $this->text = red_text_open($this->red_private, $uid);
 
 		$value = red_text_get($this->text, 
@@ -49,7 +49,7 @@ class taz_RedsysSource implements Source {
 	}
 
 	/// Reads the specified fields of the article with the specified UID (-> Source)
-	public function readFields(Article $article, array $fieldList, $uid) {
+	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
 		$this->text = red_text_open($this->red_private, $uid);
 
 		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
@@ -113,11 +113,11 @@ class taz_RedsysSource implements Source {
 		throw new NotYetImplementedException("taz_RedsysSource::readExtras()");
     }
 
-    public function writeArticle(Article $article, $uid) {
+    public function writeArticle(tx_newspaper_Article $article, $uid) {
     	throw new NotYetImplementedException("taz_RedsysSource::writeArticle()");
     }
     
-    public function writeExtra(Extra $extra, $uid) {
+    public function writeExtra(tx_newspaper_Extra $extra, $uid) {
     	throw new NotYetImplementedException("taz_RedsysSource::writeExtra()");
     }
 

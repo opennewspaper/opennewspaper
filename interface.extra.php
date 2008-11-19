@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file interface.extra.php
+ *  \file interface.tx_newspaper_extra.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
@@ -19,7 +19,7 @@
  *
  *  \todo define the interface!
  */
- interface Extra {
+ interface tx_newspaper_Extra {
  	/// Render the Extra using the given Smarty template
  	/** \param $template Smarty template used to render the Extra
  	 *  \return The rendered HTML
@@ -41,7 +41,7 @@
 	function getSource();
 	/// Set the Source object associated with this Article
 	/** \param $source The new Source */
-	function setSource(Source $source);
+	function setSource(tx_newspaper_Source $source);
 
 	/// Definition of attributes and their mapping to implementation fields
 	/// for all supported Sources
@@ -55,6 +55,6 @@
 	 *  \throw WrongClassException If the mapping for class \p $source is not  
 	 * 							   configured
 	 */
-	static function mapFieldToSourceField($fieldname, Source $source);
+	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
 }
 ?>

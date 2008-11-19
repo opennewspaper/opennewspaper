@@ -1,6 +1,6 @@
 <?php
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
 
  /// A source, from which articles are read
  /** This interface supplies functions which read an Article, or parts of it,
@@ -8,14 +8,14 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
   *
   *  \author Helge Preuss <helge.preuss@gmx.net>
   */
-interface Source {
+interface tx_newspaper_Source {
 
 	/// Reads ONE field for the given Article 
 	/** \param $article Article object for which a field is read
 	 *  \param $field The field which should be read from the source
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readField(Article $article, $field, $uid);
+	public function readField(tx_newspaper_Article $article, $field, $uid);
 
 	/// Reads the specified fields of the article with the specified UID
 	/** \param $article Article object for which fields are read
@@ -24,7 +24,7 @@ interface Source {
 	 *  \param $uid a unique key to locate the article in the given source
 	 *  \return an Article object
 	 */
-	public function readFields(Article $article, array $fieldList, $uid);
+	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid);
 
 	/// Creates and reads a full article with the specified UID
 	/** \param $articleclass The class name for the article; must implement 
@@ -84,21 +84,21 @@ interface Source {
 	 */
     public function readExtras($extraclass, array $uids);
     
-    public function writeArticle(Article $article, $uid);
-    public function writeExtra(Extra $extra, $uid);
+    public function writeArticle(tx_newspaper_Article $article, $uid);
+    public function writeExtra(tx_newspaper_Extra $extra, $uid);
 }
 
 /// Base class for all exceptions thrown by this Typo3 extension
-class NewspaperException extends Exception { }
+class tx_newspaper_Exception extends Exception { }
 
 /// This Exception is thrown when opening a Source fails
 /** I could have named it OpenSourceFailedException, but no way! Open Source rules! :-)) */
-class SourceOpenFailedException extends NewspaperException { }
+class tx_newspaper_SourceOpenFailedException extends tx_newspaper_Exception { }
 
 /// This Exception is thrown when a Source is asked to create a class that is not an Article or Extra
-class WrongClassException extends NewspaperException { }
+class tx_newspaper_WrongClassException extends tx_newspaper_Exception { }
 
 /// This Exception is thrown if a feature is not yet implemented
-class NotYetImplementedException extends NewspaperException { }
+class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { }
 
 ?>

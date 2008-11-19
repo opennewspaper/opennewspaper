@@ -6,7 +6,7 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
 /// This is the interface that every Article class must implement
 /** Basically I created this class because I want an intermediate stage for the
@@ -18,7 +18,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
  *  \todo Actually define the interface. The current functions are just
  *  preliminary notes.
  */
-interface Article extends Extra {
+interface tx_newspaper_Article extends tx_newspaper_Extra {
 	public function importieren();
 	public function exportieren();
 	public function laden();
