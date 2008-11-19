@@ -5,8 +5,8 @@
  * Author: helge
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/class.taz_dbsource.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/class.articleimpl.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_taz_dbsource.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articleimpl.php');
 
 /// testsuite for class taz_RedsysSource
 class test_DBSource_testcase extends tx_phpunit_testcase {
