@@ -70,12 +70,12 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	static function getAttributeList() { return self::$attribute_list; }
 
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		return articleStrategy::mapFieldToSourceField($fieldname, $source,
-													  self::$mapFieldsToSourceFields);
+		return tx_newspaper_ArticleStrategy::mapFieldToSourceField($fieldname, $source,
+																   self::$mapFieldsToSourceFields);
 	}
 	
 	static function sourceTable(tx_newspaper_Source $source) {
-		return articleStrategy::sourceTable($source, self::$table);
+		return tx_newspaper_ArticleStrategy::sourceTable($source, self::$table);
 	}
 	
 	private $extras = null;			///< array of Extra s
