@@ -15,6 +15,10 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php
  */
 class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
+	public function __construct(tx_newspaper_Article $parent) {
+		$this->articleStrategy = new tx_newspaper_ArticleStrategy($this);
+	}
+	
 	public function render($template) {
 		throw new NotYetImplementedException("ArticleImpl::render()");
 	}
@@ -64,23 +68,12 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	static function getAttributeList() { return self::$attribute_list; }
 
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		$mapping = self::$mapFieldsToSourceFields[get_class($source)];
-
-		if (!$mapping) 
-			throw new tx_newspaper_WrongClassException('No mapping configured for Source type '.
-										  get_class($source));
-
-		return $mapping[$fieldname];
+		return $this->articleStrategy->mapFieldToSourceField($fieldname, $source,
+															 self::$mapFieldsToSourceFields);
 	}
 	
-	static function table(tx_newspaper_Source $source) {
-		$table = self::$table[get_class($source)];
-
-		if (!$table) 
-			throw new tx_newspaper_WrongClassException('No mapping configured for Source type '.
-										  get_class($source));
-
-		return $table;		
+	static function sourceTable(tx_newspaper_Source $source) {
+		return $this->articleStrategy->sourceTable($source, self::$table);
 	}
 	
 	private $extras = null;			///< array of Extra s
@@ -111,5 +104,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		'tx_newspaper_taz_RedsysSource' => '',
 		'tx_newspaper_taz_DBSource' => 'tx_hptazarticle_list'
 	);
+	
+	private $articleStrategy = null;
 }
 ?>

@@ -56,6 +56,8 @@
 	 * 							   configured
 	 */
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
-	static function table(tx_newspaper_Source $source);
+	
+	/// Additional info needed to instantiate an Extra, such as a SQL table
+	static function sourceTable(tx_newspaper_Source $source);
 }
 ?>
