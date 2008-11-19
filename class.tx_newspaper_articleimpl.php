@@ -84,7 +84,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	);
 	
 	private static $mapFieldsToSourceFields = array(
-		'taz_RedsysSource' => array(
+		'tx_newspaper_taz_RedsysSource' => array(
 	    	'title' => 'Titel',
 	    	'teaser' => 'Titel2',
 	    	'text' => 'Text',
