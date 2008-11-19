@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Onlinetaz 2.0 / tt_newspaper"
+PROJECT_NAME           = "Onlinetaz 2.0 / Newspaper"
 PROJECT_NUMBER         = 0.0.9
 OUTPUT_DIRECTORY       = "doc/"
 CREATE_SUBDIRS         = NO
