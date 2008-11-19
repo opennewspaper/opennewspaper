@@ -9,7 +9,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/class.taz_redsyssource.php');
 require_once(BASEPATH.'/typo3conf/ext/newspaper/class.articleimpl.php');
 
 /// testsuite for class taz_RedsysSource
-class test_Source_testcase extends tx_phpunit_testcase {
+class test_redsysSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 		$this->source = new taz_RedsysSource($this->red_cfg);
