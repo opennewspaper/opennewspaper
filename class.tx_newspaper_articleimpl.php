@@ -67,7 +67,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		$mapping = self::$mapFieldsToSourceFields[get_class($source)];
 
 		if (!$mapping) 
-			throw new WrongClassException('No mapping configured for Source type '.
+			throw new tx_newspaper_WrongClassException('No mapping configured for Source type '.
 										  get_class($source));
 
 		return $mapping[$fieldname];
