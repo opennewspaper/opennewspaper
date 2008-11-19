@@ -25,10 +25,9 @@
 require_once(PATH_tslib.'class.tslib_pibase.php');
 
 
-/**
- * Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
- *
- * \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
+/// Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
+/** Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
+ *  \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
 	var $prefixId      = 'tx_newspaper_pi1';		// Same as class name
@@ -36,12 +35,10 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	var $extKey        = 'newspaper';	// The extension key.
 	var $pi_checkCHash = true;
 	
-	/**
-	 * The main method of the PlugIn
-	 *
-	 * @param			$content: The PlugIn content
-	 * @param			$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	/// The main method of the PlugIn
+	/** @param			$content: The PlugIn content
+	 *  @param			$conf: The PlugIn configuration
+	 *  @return	The content that is displayed on the website
 	 */
 	function main($content,$conf)	{
 		$this->conf=$conf;

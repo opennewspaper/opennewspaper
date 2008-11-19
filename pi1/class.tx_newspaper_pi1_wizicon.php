@@ -25,10 +25,8 @@
 
 
 
-/**
- * Class that adds the wizard icon.
- *
- * \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
+/// Class that adds the wizard icon.
+/** \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1_wizicon {
 
