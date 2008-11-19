@@ -104,7 +104,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
-	    	'ressort' => 'article_ressort' 
+	    	'ressort' => 'ressort' 
 		)
 	);
 	private static $table = array(
