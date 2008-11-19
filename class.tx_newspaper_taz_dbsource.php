@@ -29,7 +29,7 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$article->mapFieldToSourceField($field, $this),
 			/// \todo How do I know the table for the Article or Extra? 
-			$article->table(),
+			$article->table($this),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
