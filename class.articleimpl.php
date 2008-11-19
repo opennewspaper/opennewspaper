@@ -6,8 +6,8 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.article.php');
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
 
 /// An article for the online newspaper
 /** \todo The names for the functions are not defined yet. The interface

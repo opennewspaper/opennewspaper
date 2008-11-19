@@ -6,9 +6,9 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.source.php');
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.article.php');
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.source.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
 
 /// A Source which reads articles from the taz redaktionssystem
 class taz_RedsysSource implements Source {

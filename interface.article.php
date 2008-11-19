@@ -6,7 +6,7 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/tt_newspaper/interface.extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.extra.php');
 
 /// This is the interface that every Article class must implement
 /** Basically I created this class because I want an intermediate stage for the
