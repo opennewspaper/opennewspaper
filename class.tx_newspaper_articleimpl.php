@@ -102,7 +102,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		),
 		'tx_newspaper_taz_DBSource' => array(
 	    	'title' => 'article_manualtitle',
-	    	'teaser' => 'article_teaser',
+	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
 	    	'ressort' => 'article_ressort' 
 		)
