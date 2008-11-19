@@ -19,12 +19,12 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
        	if (file_exists($config)) {
        		$this->red_private = red_popen($config);
        	} else {
-       		throw new SourceOpenFailedException("Konnte Redaktionsbereich ".
+       		throw new tx_newspaper_SourceOpenFailedException("Konnte Redaktionsbereich ".
 				"$config nicht oeffnen. Konfigurationsdatei existiert nicht!");
        	}
 
         if (!$this->red_private) {
-			throw new SourceOpenFailedException("Konnte Redaktionsbereich ".
+			throw new tx_newspaper_SourceOpenFailedException("Konnte Redaktionsbereich ".
 				"$config nicht oeffnen. red_popen() failed!");
         }
 
@@ -67,12 +67,12 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 			$articleclass = get_class($article);
 		} else {
 			if (class_exists($articleclass)) $article = new $articleclass;
-			else throw new WrongClassException($articleclass);
+			else throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		
 		/// If that didn't work, throw up
 		if (!is_a($article, 'Article')) {
-			throw new WrongClassException($articleclass);
+			throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		
 		/// Finally read all required attributes for $article
@@ -100,25 +100,25 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {
-		throw new NotYetImplementedException("taz_RedsysSource::readPartialArticles()");
+		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readPartialArticles()");
 	}
 
     /// reads an extra (-> Source)
     public function readExtra($extraclass, $uid) {
-		throw new NotYetImplementedException("taz_RedsysSource::readExtra()");
+		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtra()");
     }
 
     /// reads an array of extras (-> Source)
     public function readExtras($extraclass, array $uids) {
-		throw new NotYetImplementedException("taz_RedsysSource::readExtras()");
+		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtras()");
     }
 
     public function writeArticle(tx_newspaper_Article $article, $uid) {
-    	throw new NotYetImplementedException("taz_RedsysSource::writeArticle()");
+    	throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::writeArticle()");
     }
     
     public function writeExtra(tx_newspaper_Extra $extra, $uid) {
-    	throw new NotYetImplementedException("taz_RedsysSource::writeExtra()");
+    	throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::writeExtra()");
     }
 
 	////////////////////////////////////////////////////////////////////////////
