@@ -28,16 +28,14 @@
 /**
  * Class that adds the wizard icon.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
- * @package	TYPO3
- * @subpackage	tx_newspaper
+ * \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1_wizicon {
 
 					/**
 					 * Processing the wizard items array
 					 *
-					 * @param	array		$wizardItems: The wizard items
+					 * @param			$wizardItems: The wizard items
 					 * @return	Modified array with wizard items
 					 */
 					function proc($wizardItems)	{

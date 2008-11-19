@@ -28,9 +28,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
 /**
  * Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
- * @package	TYPO3
- * @subpackage	tx_newspaper
+ * \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
 	var $prefixId      = 'tx_newspaper_pi1';		// Same as class name
@@ -41,8 +39,8 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	/**
 	 * The main method of the PlugIn
 	 *
-	 * @param	string		$content: The PlugIn content
-	 * @param	array		$conf: The PlugIn configuration
+	 * @param			$content: The PlugIn content
+	 * @param			$conf: The PlugIn configuration
 	 * @return	The content that is displayed on the website
 	 */
 	function main($content,$conf)	{
