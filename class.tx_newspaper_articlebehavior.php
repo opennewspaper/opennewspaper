@@ -1,43 +1,43 @@
 <?php
-/*
- * Created on Nov 19, 2008
+/**
+ *  \file class.tx_newspaper_sourcebehavior.php
  *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
+ *  \author Helge Preuss <helge.preuss@gmx.net>
+ *  \date Nov 19, 2008
  */
 
 /// Behavior class to factor out code common to more or less all Article implementations
 class tx_newspaper_ArticleBehavior {
 	
-	/** \param $parent The tx_newspaper_Article object using this Strategy
+	/** \param $parent The tx_newspaper_Article object using this Behavior
 	 */ 
 	public function __construct(tx_newspaper_Article $parent) {
 		$this->parent = $parent;
 	}
 	
 	public function render($template) {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::render()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::render()");
 	}
 	public function importieren() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::importieren()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::importieren()");
 	}
 	public function exportieren() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::exportieren()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::exportieren()");
 	}
 	public function laden() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::laden()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::laden()");
 	}
 	public function speichern() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::speichern()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::speichern()");
 	}
 	public function vergleichen() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::vergleichen()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::vergleichen()");
 	}
 	public function extraAnlegen() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::extraAnlegen()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::extraAnlegen()");
 	}	
 	static function getAttributeList() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleStrategy::addExtra()");
+		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::addExtra()");
 	}
 
 	/** Usage:
