@@ -9,7 +9,7 @@
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articlestrategy.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articlebehavior.php');
 
 /// An article for the online newspaper
 /** \todo The names for the functions are not defined yet. The interface

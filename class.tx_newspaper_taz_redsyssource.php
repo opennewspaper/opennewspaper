@@ -10,6 +10,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_source.ph
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_sourcebehavior.php');
+
 /// A Source which reads articles from the taz redaktionssystem
 class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
