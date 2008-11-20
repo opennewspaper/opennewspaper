@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_sourcebehavior.php
+ *  \file class.tx_newspaper_articlebehavior.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Nov 19, 2008
