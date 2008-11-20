@@ -16,6 +16,9 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	/** \param $config red.cfg file that defines the redsys
 	 */
 	public function __construct($config) {
+		
+		$this->sourceBehavior = new tx_newspaper_SourceBehavior($this);
+		
        	if (file_exists($config)) {
        		$this->red_private = red_popen($config);
        	} else {
@@ -52,7 +55,8 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
 		$this->text = red_text_open($this->red_private, $uid);
 
-		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
+//		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
+		$this->sourceBehavior->readFields($article, $fieldList, $uid);
 
 		$this->closeText();
 	}
@@ -134,6 +138,8 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     private $red_private = null;	///< The RedSys resource
     private $text = null;			///< A red_text resource
     
-    private static $red_filter = "tkr2html"; 
+    private static $red_filter = "tkr2html";
+    
+    private $sourceBehavior = null; 
 }
 ?>
