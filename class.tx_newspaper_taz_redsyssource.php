@@ -72,12 +72,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	/// Reads an array of articles with the specified UIDs (-> Source)
 	public function readArticles($articleclass, array $uids) {
 		return  $this->sourceBehavior->readArticles($articleclass, $uids);
-/*		$articles = array();
-		foreach ($uids as $uid) {
-			$articles[] = $this->readArticle($articleclass, $uid);
-		}
-		return $articles;
-*/	}
+	}
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {

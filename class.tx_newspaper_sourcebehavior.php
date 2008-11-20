@@ -65,29 +65,6 @@ class tx_newspaper_SourceBehavior {
 		return $articles;
 	}
 
-	/// Reads array of only the specified fields of articles with the given UIDs 
-	public function readPartialArticles($articleclass,array $fields, array $uids) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_SourceBehavior::readPartialArticles()");
-	}
-
-    /// reads an extra (-> Source)
-    public function readExtra($extraclass, $uid) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_SourceBehavior::readExtra()");
-    }
-
-    /// reads an array of extras (-> Source)
-    public function readExtras($extraclass, array $uids) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_SourceBehavior::readExtras()");
-    }
-
-    public function writeArticle(tx_newspaper_Article $article, $uid) {
-    	throw new tx_newspaper_NotYetImplementedException("tx_newspaper_SourceBehavior::writeArticle()");
-    }
-    
-    public function writeExtra(tx_newspaper_Extra $extra, $uid) {
-    	throw new tx_newspaper_NotYetImplementedException("tx_newspaper_SourceBehavior::writeExtra()");
-    }
-
 	////////////////////////////////////////////////////////////////////////////
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////

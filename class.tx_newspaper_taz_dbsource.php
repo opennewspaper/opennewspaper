@@ -23,13 +23,12 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 	}
 
 	/// Reads ONE field for the given Article (-> Source)
-	/** \todo this should work for Extra too. Easy? Just replace Article with 
-	 *  Extra?
+	/** \todo this should work for Extras too. Easy? Just replace "Article" with 
+	 *  	  "Extra"?
 	 */
 	public function readField(tx_newspaper_Article $article, $field, $uid) {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$article->mapFieldToSourceField($field, $this),
-			/// \todo How do I know the table for the Article or Extra? 
 			$article->sourceTable($this),
 			"uid = ".intval($uid)
 		);
@@ -52,49 +51,17 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 	/// Reads the specified fields of the article with the specified UID (-> Source)
 	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
 		$this->sourceBehavior->readFields($article, $fieldList, $uid);
-//		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
 	}
 
 	/// Creates and reads a full article with the specified UID (-> Source)
 	public function readArticle($articleclass, $uid) {
 		return $this->sourceBehavior->readArticle($articleclass, $uid);
-/*		$article = null;
-		
-		/// $article is set to an object of an appropriate class
-		if (is_a($articleclass, 'tx_newspaper_Article')) {
-			$article = $articleclass;
-			$articleclass = get_class($article);
-		} else {
-			if (class_exists($articleclass)) $article = new $articleclass;
-			else throw new tx_newspaper_WrongClassException($articleclass);
-		}
-		
-		/// If that didn't work, throw up
-		if (!is_a($article, 'tx_newspaper_Article')) {
-			throw new tx_newspaper_WrongClassException($articleclass);
-		}
-		
-		/// Finally read all required attributes for $article
-		foreach ($article->getAttributeList() as $field) {
-			$this->readField($article, $field, $uid);
-		}
-
-		/// And tell the Article the truth: "I'm your father, Luke"
-		$article->setSource($this);
-		$article->setUid($uid);
-						 
-		return $article;
-*/	}
+	}
 
 	/// Reads an array of articles with the specified UIDs (-> Source)
 	public function readArticles($articleclass, array $uids) {
 		return  $this->sourceBehavior->readArticles($articleclass, $uids);
-/*		$articles = array();
-		foreach ($uids as $uid) {
-			$articles[] = $this->readArticle($articleclass, $uid);
-		}
-		return $articles;
-*/	}
+	}
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {
