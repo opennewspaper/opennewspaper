@@ -96,7 +96,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'text' => 'Text',
 	    	'ressort' => 'OnRes' 
 		),
-		'tx_newspaper_taz_DBSource' => array(
+		'tx_newspaper_DBSource' => array(
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
@@ -107,7 +107,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	///	Additional info needed to instantiate an article for each supported Source type
 	private static $table = array(
 		'tx_newspaper_taz_RedsysSource' => '',
-		'tx_newspaper_taz_DBSource' => 'tx_hptazarticle_list'
+		'tx_newspaper_DBSource' => 'tx_hptazarticle_list'
 	);
 	
 	private $articleBehavior = null;
