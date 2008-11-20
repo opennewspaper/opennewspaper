@@ -16,6 +16,7 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 	/** \param $config red.cfg file that defines the redsys
 	 */
 	public function __construct() {
+		$this->sourceBehavior = new tx_newspaper_SourceBehavior($this);
 	}
 
 	public function __destruct() {
@@ -121,6 +122,8 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 	////////////////////////////////////////////////////////////////////////////
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
+
+    private $sourceBehavior = null; 
 
 }
 ?>
