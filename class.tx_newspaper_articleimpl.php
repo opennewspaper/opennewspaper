@@ -18,7 +18,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articlestrate
 class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
 	public function __construct() {
-		$this->articleStrategy = new tx_newspaper_ArticleStrategy($this);
+		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 	}
 	
 	public function render($template) {
@@ -70,12 +70,12 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	static function getAttributeList() { return self::$attribute_list; }
 
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		return tx_newspaper_ArticleStrategy::mapFieldToSourceField($fieldname, $source,
+		return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
 																   self::$mapFieldsToSourceFields);
 	}
 	
 	static function sourceTable(tx_newspaper_Source $source) {
-		return tx_newspaper_ArticleStrategy::sourceTable($source, self::$table);
+		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
 	
 	private $extras = null;			///< array of Extra s
@@ -88,6 +88,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		'title', 'teaser', 'text', 'ressort'
 	);
 	
+	/// Mapping of the attributes to the names they have in the Source for each supported Source type
 	private static $mapFieldsToSourceFields = array(
 		'tx_newspaper_taz_RedsysSource' => array(
 	    	'title' => 'Titel',
@@ -102,11 +103,13 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'ressort' => 'ressort' 
 		)
 	);
+	
+	///	Additional info needed to instantiate an article for each supported Source type
 	private static $table = array(
 		'tx_newspaper_taz_RedsysSource' => '',
 		'tx_newspaper_taz_DBSource' => 'tx_hptazarticle_list'
 	);
 	
-	private $articleStrategy = null;
+	private $articleBehavior = null;
 }
 ?>
