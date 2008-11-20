@@ -11,6 +11,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.p
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
 /// Behavior class to factor out code common to more or less all Source implementations
+/** \see tx_newspaper_Source::readField() */
 class tx_newspaper_SourceBehavior {
 
 	/** \param $parent The tx_newspaper_Source object using this Behavior
@@ -20,6 +21,12 @@ class tx_newspaper_SourceBehavior {
 	}
 
 	/// Reads the specified fields of the article with the specified UID
+	/** \param $article Article object for which fields are read
+	 *  \param $fieldList the fields which should be read from the source - if there's
+	 *  	   more than one field, supply them as array
+	 *  \param $uid a unique key to locate the article in the given source
+	 *  \return an Article object
+	 */	
 	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
 		foreach ($fieldList as $field) { 
 			$this->parentSource->readField($article, $field, $uid);
@@ -27,6 +34,13 @@ class tx_newspaper_SourceBehavior {
 	}
 
 	/// Creates and reads a full article with the specified UID
+	/** \param $articleclass The class name for the article; must implement 
+	 * 		   				 Article
+	 *  \param $uid A unique key to locate the article in the given source
+	 *  \return A newly created Article object
+	 *  \throw WrongClassException If \p $articleclass is not the name of a 
+	 * 							   class that implements Article 
+	 */
 	public function readArticle($articleclass, $uid) {
 		$article = null;
 		
@@ -56,7 +70,14 @@ class tx_newspaper_SourceBehavior {
 		return $article;
 	}
 
-	/// Reads an array of articles with the specified UIDs (-> Source)
+	/// Reads an array of articles with the specified UIDs
+	/** \param $articleclass The class name for the article; the class must 
+	 * 						 implement Article
+	 *  \param $uids Unique keys to locate the articles in the given source
+	 *  \return array of article objects
+	 *  \throw WrongClassException If \p $articleclass is not the name of a 
+	 * 							   class that implements Article 
+	 */
 	public function readArticles($articleclass, array $uids) {
 		$articles = array();
 		foreach ($uids as $uid) {

@@ -11,7 +11,24 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.p
 interface tx_newspaper_Source {
 
 	/// Reads ONE field for the given Article 
-	/** \param $article Article object for which a field is read
+	/** In theory, this is the only method of a Source that must be implemented
+	 *  fully. All other methods call readField(), directly or indirectly, to
+	 *  read their data. 
+	 * 
+	 *  This leads to the question, why don't we just define an abstract class
+	 *  which implements all methods of the Source interface but readField(),
+	 *  and derive the implementation from it? The answer (and it isn't clear
+	 *  yet whether it's a good answer) is, that in PHP classes cannot inherit
+	 *  from multiple classes, so if a Source implementation needs to subclass
+	 *  another class, we're fscked.
+	 * 
+	 *  So I delegate all code that is common to all implementations to 
+	 *  tx_newspaper_SourceBehavior, and let the implementing classes call the
+	 *  method on the Behavior class. I haven't found a case yet, though, where
+	 *  a Source needs to subclass any other class, so maybe this is 
+	 *  unnecessarily complicated.
+	 * 
+	 *  \param $article Article object for which a field is read
 	 *  \param $field The field which should be read from the source
 	 *  \param $uid a unique key to locate the article in the given source
 	 */

@@ -62,14 +62,14 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		$this->closeText();
 	}
 
-	/// Creates and reads a full article with the specified UID (-> Source)
+	/// Creates and reads a full article with the specified UID
 	public function readArticle($articleclass, $uid) {
 		$article = $this->sourceBehavior->readArticle($articleclass, $uid);
 		$this->closeText();
 		return $article;
 	}
 
-	/// Reads an array of articles with the specified UIDs (-> Source)
+	/// Reads an array of articles with the specified UIDs
 	public function readArticles($articleclass, array $uids) {
 		return  $this->sourceBehavior->readArticles($articleclass, $uids);
 	}
@@ -79,12 +79,12 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readPartialArticles()");
 	}
 
-    /// reads an extra (-> Source)
+    /// reads an extra
     public function readExtra($extraclass, $uid) {
 		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtra()");
     }
 
-    /// reads an array of extras (-> Source)
+    /// reads an array of extras
     public function readExtras($extraclass, array $uids) {
 		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtras()");
     }
