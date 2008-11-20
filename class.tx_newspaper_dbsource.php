@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_taz_dbsource.php
+ *  \file class.tx_newspaper_dbsource.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
@@ -11,7 +11,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.p
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
 /// A Source which reads articles from the taz redaktionssystem
-class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
+class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 	public function __construct() {
 		$this->sourceBehavior = new tx_newspaper_SourceBehavior($this);

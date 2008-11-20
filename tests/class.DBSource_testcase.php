@@ -5,14 +5,14 @@
  * Author: helge
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_taz_dbsource.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_dbsource.php');
 require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articleimpl.php');
 
 /// testsuite for class taz_RedsysSource
 class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		$this->source = new tx_newspaper_taz_DBSource();
+		$this->source = new tx_newspaper_DBSource();
 		$this->article = new tx_newspaper_ArticleImpl;
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
@@ -26,7 +26,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_createSource() {
-		$temp = new tx_newspaper_taz_DBSource();
+		$temp = new tx_newspaper_DBSource();
 		$this->assertTrue(is_object($this->source));
 		$this->assertTrue(is_a($this->source, 'tx_newspaper_Source'));
 	}
