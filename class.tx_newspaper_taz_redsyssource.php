@@ -57,7 +57,6 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
 		$this->text = red_text_open($this->red_private, $uid);
 
-//		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
 		$this->sourceBehavior->readFields($article, $fieldList, $uid);
 
 		$this->closeText();
@@ -65,6 +64,10 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/// Creates and reads a full article with the specified UID (-> Source)
 	public function readArticle($articleclass, $uid) {
+		$article = $this->sourceBehavior->readArticle($articleclass, $uid);
+		$this->closeText();
+		return $article;
+/*
 		$article = null;
 		
 		/// $article is set to an object of an appropriate class
@@ -93,6 +96,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		$this->closeText();
 						 
 		return $article;
+*/
 	}
 
 	/// Reads an array of articles with the specified UIDs (-> Source)
