@@ -50,12 +50,14 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 
 	/// Reads the specified fields of the article with the specified UID (-> Source)
 	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
-		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
+		$this->sourceBehavior->readFields($article, $fieldList, $uid);
+//		foreach ($fieldList as $field) $this->readField($article, $field, $uid);
 	}
 
 	/// Creates and reads a full article with the specified UID (-> Source)
 	public function readArticle($articleclass, $uid) {
-		$article = null;
+		return $this->sourceBehavior->readArticle($articleclass, $uid);
+/*		$article = null;
 		
 		/// $article is set to an object of an appropriate class
 		if (is_a($articleclass, 'tx_newspaper_Article')) {
@@ -81,16 +83,17 @@ class tx_newspaper_taz_DBSource implements tx_newspaper_Source {
 		$article->setUid($uid);
 						 
 		return $article;
-	}
+*/	}
 
 	/// Reads an array of articles with the specified UIDs (-> Source)
 	public function readArticles($articleclass, array $uids) {
-		$articles = array();
+		return  $this->sourceBehavior->readArticles($articleclass, $uids);
+/*		$articles = array();
 		foreach ($uids as $uid) {
 			$articles[] = $this->readArticle($articleclass, $uid);
 		}
 		return $articles;
-	}
+*/	}
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {

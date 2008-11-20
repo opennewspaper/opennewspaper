@@ -67,46 +67,17 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		$article = $this->sourceBehavior->readArticle($articleclass, $uid);
 		$this->closeText();
 		return $article;
-/*
-		$article = null;
-		
-		/// $article is set to an object of an appropriate class
-		if (is_a($articleclass, 'tx_newspaper_Article')) {
-			$article = $articleclass;
-			$articleclass = get_class($article);
-		} else {
-			if (class_exists($articleclass)) $article = new $articleclass;
-			else throw new tx_newspaper_WrongClassException($articleclass);
-		}
-		
-		/// If that didn't work, throw up
-		if (!is_a($article, 'tx_newspaper_Article')) {
-			throw new tx_newspaper_WrongClassException($articleclass);
-		}
-		
-		/// Finally read all required attributes for $article
-		foreach ($article->getAttributeList() as $field) {
-			$this->readField($article, $field, $uid);
-		}
-
-		/// And tell the Article the truth: "I'm your father, Luke"
-		$article->setSource($this);
-		$article->setUid($uid);
-
-		$this->closeText();
-						 
-		return $article;
-*/
 	}
 
 	/// Reads an array of articles with the specified UIDs (-> Source)
 	public function readArticles($articleclass, array $uids) {
-		$articles = array();
+		return  $this->sourceBehavior->readArticles($articleclass, $uids);
+/*		$articles = array();
 		foreach ($uids as $uid) {
 			$articles[] = $this->readArticle($articleclass, $uid);
 		}
 		return $articles;
-	}
+*/	}
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {
