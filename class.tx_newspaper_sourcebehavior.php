@@ -47,7 +47,7 @@ class tx_newspaper_SourceBehavior {
 		/// $article is set to an object of an appropriate class
 		if (is_a($articleclass, 'tx_newspaper_Article')) {
 			$article = $articleclass;
-			$articleclass = get_class($article);
+			$articleclass = get_class($article);	// to throw meaningful exception
 		} else {
 			if (class_exists($articleclass)) $article = new $articleclass;
 			else throw new tx_newspaper_WrongClassException($articleclass);
