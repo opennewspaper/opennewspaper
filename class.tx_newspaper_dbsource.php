@@ -53,10 +53,66 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 	/// Creates and reads a full article with the specified UID
 	public function readArticle($articleclass, $uid) {
-		return $this->sourceBehavior->readArticle($articleclass, $uid);
+		/** \todo Factor out the code to check the class into SourceBehavior and
+		 *  call that one. Also from SourceBehavior::readArticle().
+		 */
+		$article = null;
+		
+		/// $article is set to an object of an appropriate class
+		if (is_a($articleclass, 'tx_newspaper_Article')) {
+			$article = $articleclass;
+			$articleclass = get_class($article);	// to throw meaningful exception
+		} else {
+			if (class_exists($articleclass)) $article = new $articleclass;
+			else throw new tx_newspaper_WrongClassException($articleclass);
+		}
+		
+		/// If that didn't work, throw up
+		if (!is_a($article, 'tx_newspaper_Article')) {
+			throw new tx_newspaper_WrongClassException($articleclass);
+		}
+		
+		/// Read all fields which are stored in the DB
+		/** \todo ...or should I read just those which are defined in
+		 * 		  self::$attribute_list? Which is better?
+		 */
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*',
+			$article->sourceTable($this),
+			"uid = ".intval($uid)
+		);
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Graceful error handling
+            return "Couldn't retrieve article #$uid";
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if (!$row) {
+        	/// \todo Graceful error handling
+        	return "Article #$uid has no article_id field";
+        }
+        
+        /// \todo ...or loop over self::$attribute_list? Which is better?
+        foreach ($row as $field => $value) {
+        	/** \bug This is not correct yet! But I'm leaving now!
+        	 * 		 In fact I should do something like \code
+        	 * 		 $article->setAttribute($article->mapSourceFieldToField($field, $this), $value)
+        	 * 		 \endcode
+        	 *  \todo Still, the question: What to do if there are fields in the
+        	 * 		  DB which are not in self::$attribute_list? 
+        	 */		 
+			$article->setAttribute($field, $value);
+		}
+
+		/// And tell the Article the truth: "I'm your father, Luke"
+		$article->setSource($this->parentSource);
+		$article->setUid($uid);
+						 
+		return $article;
 	}
 
-	/// Reads an array of articles with the specified UIDs (-> Source)
+	/// Reads an array of articles with the specified UIDs
 	public function readArticles($articleclass, array $uids) {
 		return  $this->sourceBehavior->readArticles($articleclass, $uids);
 	}
