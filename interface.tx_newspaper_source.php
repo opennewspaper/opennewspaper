@@ -116,6 +116,11 @@ class tx_newspaper_SourceOpenFailedException extends tx_newspaper_Exception { }
 class tx_newspaper_WrongClassException extends tx_newspaper_Exception { }
 
 /// This Exception is thrown if a feature is not yet implemented
-class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { }
+class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { 
+	public function __construct($message, $code = 0) {
+        parent::__construct("Not yet implemented: $message", $code);
+    }
+	
+}
 
 ?>
