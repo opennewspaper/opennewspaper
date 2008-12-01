@@ -10,10 +10,10 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.p
   */
 interface tx_newspaper_Source {
 
-	/// Reads ONE field for the given Article 
+	/// Reads ONE field for the given Article or Extra 
 	/** In theory, this is the only method of a Source that must be implemented
-	 *  fully. All other methods call readField(), directly or indirectly, to
-	 *  read their data. 
+	 *  fully. All other methods can call readField(), directly or indirectly, 
+	 *  to read their data. 
 	 * 
 	 *  This leads to the question, why don't we just define an abstract class
 	 *  which implements all methods of the Source interface but readField(),
@@ -28,20 +28,24 @@ interface tx_newspaper_Source {
 	 *  a Source needs to subclass any other class, so maybe this is 
 	 *  unnecessarily complicated.
 	 * 
-	 *  \param $article Article object for which a field is read
+	 *  Another answer is, though, that calling readField() multiple times can
+	 *  be (much) less efficient than reading all fields at once. Compare, for 
+	 *  instance, doing multiple SQL SELECT queries, each with one field of the
+	 *  table, to a single SELECT which reads all relevant fields.
+	 * 
+	 *  \param $extra Extra object for which a field is read
 	 *  \param $field The field which should be read from the source
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readField(tx_newspaper_Article $article, $field, $uid);
+	public function readField(tx_newspaper_Extra $extra, $field, $uid);
 
-	/// Reads the specified fields of the article with the specified UID
-	/** \param $article Article object for which fields are read
-	 *  \param $fieldList the fields which should be read from the source - if there's
-	 *  	   more than one field, supply them as array
+	/// Reads the specified fields of the Article or Extra with the specified UID
+	/** \param $extra Extra object for which fields are read
+	 *  \param $fieldList the fields which should be read from the source - if
+	 *  	   there's more than one field, supply them as array
 	 *  \param $uid a unique key to locate the article in the given source
-	 *  \return an Article object
 	 */
-	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid);
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid);
 
 	/// Creates and reads a full article with the specified UID
 	/** \param $articleclass The class name for the article; must implement 

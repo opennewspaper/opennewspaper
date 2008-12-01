@@ -89,6 +89,15 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	);
 	
 	/// Mapping of the attributes to the names they have in the Source for each supported Source type
+	/** Form of the array:
+	 *  \code
+	 *  source_class_name => array (
+	 * 		attribute_name => name_of_that_attribute_in_source
+	 * 		...		
+	 *  )
+	 * \endcode 
+	 * the attributes from \p $attribute_list must be the same as here.
+	 */
 	private static $mapFieldsToSourceFields = array(
 		'tx_newspaper_taz_RedsysSource' => array(
 	    	'title' => 'Titel',
@@ -100,7 +109,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
-	    	'ressort' => 'ressort' 
+	    	'ressort' => 'tx_hptazarticle_list:ressort' 
 		)
 	);
 	

@@ -19,8 +19,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php
  *  preliminary notes.
  */
 interface tx_newspaper_Article extends tx_newspaper_Extra {
-	public function importieren();
-	public function exportieren();
+	public function importieren(tx_newspaper_Source $quelle);
+	public function exportieren(tx_newspaper_Source $quelle);
 	public function laden();
 	public function speichern();
 	public function vergleichen();
@@ -28,12 +28,7 @@ interface tx_newspaper_Article extends tx_newspaper_Extra {
 
 	/// \return The list of Extra s associated with this Article
 	function getExtras();
-	function addExtra();
+	function addExtra(tx_newspaper_Extra $newExtra);
 	
-	function setUid($uid);
-	function getUid();
-		
-	/// \return List of attributes which make up an Article implementation
-	static function getAttributeList();
 }
 ?>
