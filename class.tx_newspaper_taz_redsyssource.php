@@ -44,20 +44,20 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	/** \todo this should work for Extra too. Easy? Just replace Article with 
 	 *  Extra?
 	 */
-	public function readField(tx_newspaper_Article $article, $field, $uid) {
+	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
 		if (!$this->text) $this->text = red_text_open($this->red_private, $uid);
 
 		$value = red_text_get($this->text, 
-							  $article->mapFieldToSourceField($field, $this));		
+							  $extra->mapFieldToSourceField($field, $this));		
 
-		$article->setAttribute($field, $value);
+		$extra->setAttribute($field, $value);
 	}
 
 	/// Reads the specified fields of the article with the specified UID (-> Source)
-	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
 		$this->text = red_text_open($this->red_private, $uid);
 
-		$this->sourceBehavior->readFields($article, $fieldList, $uid);
+		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
 
 		$this->closeText();
 	}

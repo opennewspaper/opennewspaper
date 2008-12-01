@@ -27,9 +27,9 @@ class tx_newspaper_SourceBehavior {
 	 *  \param $uid a unique key to locate the article in the given source
 	 *  \return an Article object
 	 */	
-	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
 		foreach ($fieldList as $field) { 
-			$this->parentSource->readField($article, $field, $uid);
+			$this->parentSource->readField($extra, $field, $uid);
 		}
 	}
 

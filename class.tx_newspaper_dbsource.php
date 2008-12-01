@@ -24,10 +24,10 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	/** \todo this should work for Extras too. Easy? Just replace "Article" with 
 	 *  	  "Extra"?
 	 */
-	public function readField(tx_newspaper_Article $article, $field, $uid) {
+	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$article->mapFieldToSourceField($field, $this),
-			$article->sourceTable($this),
+			$extra->mapFieldToSourceField($field, $this),
+			$extra->sourceTable($this),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -41,14 +41,14 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
         	/// \todo Graceful error handling
         	return "Article #$uid has no article_id field";
         }
-		$value = $row[$article->mapFieldToSourceField($field, $this)];		
+		$value = $row[$extra->mapFieldToSourceField($field, $this)];		
 
-		$article->setAttribute($field, $value);
+		$extra->setAttribute($field, $value);
 	}
 
 	/// Reads the specified fields of the article with the specified UID
-	public function readFields(tx_newspaper_Article $article, array $fieldList, $uid) {
-		$this->sourceBehavior->readFields($article, $fieldList, $uid);
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
+		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
 	}
 
 	/// Creates and reads a full article with the specified UID
