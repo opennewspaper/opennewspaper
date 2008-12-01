@@ -56,7 +56,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	/// Get the list of Extra s associated with this Article
 	function getExtras() { return $this->extras; }
 
-	function addExtra() {
+	function addExtra(tx_newspaper_Extra $newExtra) {
 		throw new NotYetImplementedException("ArticleImpl::addExtra()");
 	}
 
