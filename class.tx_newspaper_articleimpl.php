@@ -24,10 +24,10 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	public function render($template) {
 		throw new NotYetImplementedException("ArticleImpl::render()");
 	}
-	public function importieren() {
+	public function importieren(tx_newspaper_Source $quelle) {
 		throw new NotYetImplementedException("ArticleImpl::importieren()");
 	}
-	public function exportieren() {
+	public function exportieren(tx_newspaper_Source $quelle) {
 		throw new NotYetImplementedException("ArticleImpl::exportieren()");
 	}
 	public function laden() {
