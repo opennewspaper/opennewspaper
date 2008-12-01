@@ -143,7 +143,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 	/// Separate the source table from the field names in the field -> source field mapping 
 	private function sourceTable(tx_newspaper_Extra $extra) {
-		$attributes = $extra->getAttributes();
+		$attributes = $extra->getAttributeList();
 		/// Split first attribute (in fact we could take any attribute) at character ':' 
 		$components = explode(':', $extra->mapFieldToSourceField($attributes[0], $this));
 		if (sizeof($components) == 0)
