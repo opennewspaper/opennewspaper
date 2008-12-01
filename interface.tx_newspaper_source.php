@@ -124,7 +124,13 @@ class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception {
 	public function __construct($message, $code = 0) {
         parent::__construct("Not yet implemented: $message", $code);
     }
-	
+}
+
+/// This Exception is thrown if a feature is used in a wrong way
+class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception { 
+	public function __construct($message, $code = 0) {
+        parent::__construct("Illegal usage: $message", $code);
+    }	
 }
 
 ?>
