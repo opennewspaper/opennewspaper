@@ -24,7 +24,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$extra->mapFieldToSourceField($field, $this),
-			$extra->sourceTable($this),
+			self::sourceTable($extra),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -75,7 +75,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		 */
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'*',
-			$article->sourceTable($this),
+			self::sourceTable($article),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -141,6 +141,10 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
 
+	private static function sourceTable(tx_newspaper_Extra $extra) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+	
     private $sourceBehavior = null; 
 
 }
