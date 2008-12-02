@@ -73,7 +73,11 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
 																   self::$mapFieldsToSourceFields);
 	}
-		
+	
+	static function sourceTable(tx_newspaper_Source $source) {
+		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
+	}
+	
 	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $attributes = array();	///< array of attributes
@@ -102,13 +106,19 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'ressort' => 'OnRes' 
 		),
 		'tx_newspaper_DBSource' => array(
-	    	'title' => 'tx_hptazarticle_list:article_manualtitle',
-	    	'teaser' => 'tx_hptazarticle_list:article_title2',
-	    	'text' => 'tx_hptazarticle_list:article_manualtext',
+	    	'title' => 'article_manualtitle',
+	    	'teaser' => 'article_title2',
+	    	'text' => 'article_manualtext',
 	    	'ressort' => 'tx_hptazarticle_list:ressort' 
 		)
 	);
-		
+	
+	///	Additional info needed to instantiate an article for each supported Source type
+	private static $table = array(
+		'tx_newspaper_taz_RedsysSource' => '',
+		'tx_newspaper_DBSource' => 'tx_hptazarticle_list'
+	);
+	
 	private $articleBehavior = null;
 }
 ?>
