@@ -43,12 +43,6 @@
 	/** \param $source The new Source */
 	function setSource(tx_newspaper_Source $source);
 
-	/// \return The Unique ID which identifies the Extra in its Source
-	function getUid();
-	/// Set the Unique ID which identifies the Extra in its Source
-	/** \param $uid The new Unique ID */
-	function setUid($uid);
-
 	/// Definition of attributes and their mapping to implementation fields
 	/// for all supported Sources
 	/** \note For every new Source that is defined, if the Extra must support
@@ -62,9 +56,8 @@
 	 * 							   configured
 	 */
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
-		
-	/// \return List of attributes which make up an Extra implementation
-	static function getAttributeList();
 	
+	/// Additional info needed to instantiate an Extra, such as a SQL table
+	static function sourceTable(tx_newspaper_Source $source);
 }
 ?>

@@ -20,11 +20,14 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	public function __destruct() {
 	}
 
-	/// Reads ONE field for the given Extra
+	/// Reads ONE field for the given Article
+	/** \todo this should work for Extras too. Easy? Just replace "Article" with 
+	 *  	  "Extra"?
+	 */
 	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$extra->mapFieldToSourceField($field, $this),
-			$this->sourceTable($extra),
+			$extra->sourceTable($this),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -75,7 +78,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		 */
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'*',
-			$this->sourceTable($article),
+			$article->sourceTable($this),
 			"uid = ".intval($uid)
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -141,20 +144,6 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
 
-	/// Separate the source table from the field names in the field -> source field mapping 
-	private function sourceTable(tx_newspaper_Extra $extra) {
-		$attributes = $extra->getAttributeList();
-		/// Split first attribute (in fact we could take any attribute) at character ':' 
-		$components = explode(':', $extra->mapFieldToSourceField($attributes[0], $this));
-		if (sizeof($components) == 0)
-			/// If there was no ':', report an error
-			throw new tx_newspaper_IllegalUsageException('Mappings for Extra class '.
-				get_class($extra).' and Source class '.get_class(). ' must have the '.
-				'form \'field name\' => \'MySQL table:MySQL field\'');
-		/// The table name is the part before the ':'
-		return $components[0];
-	}
-	
     private $sourceBehavior = null; 
 
 }
