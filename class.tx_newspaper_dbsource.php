@@ -95,15 +95,22 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
         
         /// \todo ...or loop over self::$attribute_list? Which is better?
         foreach ($row as $field => $value) {
-        	/** \bug This is not correct yet! But I'm leaving now!
-        	 * 		 In fact I should do something like \code
-        	 * 		 $article->setAttribute($article->mapSourceFieldToField($field, $this), $value)
-        	 * 		 \endcode
+        	/** Set the attribute of \p $article connected with the DB field
+        	 *  \p $field 
+        	 * 
+        	 *  If \p $field does not map to an attribute of \p $article, we
+        	 *  must catch a tx_newspaper_IllegalUsageException
+        	 * 
         	 *  \todo Still, the question: What to do if there are fields in the
         	 * 		  DB which are not in self::$attribute_list? 
-        	 */		 
-			$article->setAttribute($this->mapSourceFieldToField($article, $field), 
-								   $value);
+        	 */
+        	try {		 
+				$article->setAttribute($this->mapSourceFieldToField($article,
+																	$field), 
+									   $value);
+        	} catch (tx_newspaper_IllegalUsageException $e) {
+        		//  nothing to do!
+        	}
 		}
 
 		/// And tell the Article the truth: "I'm your father, Luke"
