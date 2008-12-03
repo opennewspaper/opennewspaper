@@ -102,7 +102,8 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
         	 *  \todo Still, the question: What to do if there are fields in the
         	 * 		  DB which are not in self::$attribute_list? 
         	 */		 
-			$article->setAttribute($field, $value);
+			$article->setAttribute($this->mapSourceFieldToField($article, $field), 
+								   $value);
 		}
 
 		/// And tell the Article the truth: "I'm your father, Luke"
@@ -144,6 +145,15 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
 
+	private function mapSourceFieldToField($article, $field) {
+		foreach ($article->attributeList() as $attribute) {
+			if ($article->mapFieldToSourceField($attribute, $this) == $field) {
+				return $attribute;
+			} 
+		}
+		throw new tx_newspaper_IllegalUsageException("$field is not an attribute".
+			" of class ".get_class($article)." mapped to ".get_class());
+	}
     private $sourceBehavior = null; 
 
 }
