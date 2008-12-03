@@ -109,7 +109,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
-	    	'ressort' => 'tx_hptazarticle_list:ressort' 
+	    	'ressort' => 'ressort' 
 		)
 	);
 	
