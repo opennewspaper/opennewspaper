@@ -21,11 +21,10 @@ class tx_newspaper_SourceBehavior {
 	}
 
 	/// Reads the specified fields of the article with the specified UID
-	/** \param $article Article object for which fields are read
+	/** \param $extra Extra object for which fields are read
 	 *  \param $fieldList the fields which should be read from the source - if there's
 	 *  	   more than one field, supply them as array
 	 *  \param $uid a unique key to locate the article in the given source
-	 *  \return an Article object
 	 */	
 	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
 		foreach ($fieldList as $field) { 
