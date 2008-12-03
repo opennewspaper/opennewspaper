@@ -146,7 +146,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	////////////////////////////////////////////////////////////////////////////
 
 	private function mapSourceFieldToField($article, $field) {
-		foreach ($article->attributeList() as $attribute) {
+		foreach ($article->getAttributeList() as $attribute) {
 			if ($article->mapFieldToSourceField($attribute, $this) == $field) {
 				return $attribute;
 			} 
