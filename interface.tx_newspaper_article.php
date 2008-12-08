@@ -8,6 +8,8 @@
 
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
 
+require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_articlebehavior.php');
+
 /// This is the interface that every Article class must implement
 /** Basically I created this class because I want an intermediate stage for the
  *  deployment of tt_newspaper on taz.de. The Source interface returns objects
