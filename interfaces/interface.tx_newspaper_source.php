@@ -1,6 +1,6 @@
 <?php
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
 
  /// A source, from which articles are read
  /** This interface supplies functions which read an Article, or parts of it,

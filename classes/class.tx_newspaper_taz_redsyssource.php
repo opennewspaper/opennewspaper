@@ -6,11 +6,11 @@
  *  \date Oct 27, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_source.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_source.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/class.tx_newspaper_sourcebehavior.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_sourcebehavior.php');
 
 /// A Source which reads articles from the taz redaktionssystem
 class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {

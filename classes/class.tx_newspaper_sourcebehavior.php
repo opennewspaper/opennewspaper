@@ -6,9 +6,9 @@
  *  \date Nov 20, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_source.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_article.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interface.tx_newspaper_extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_source.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
 
 /// Behavior class to factor out code common to more or less all Source implementations
 /** \see tx_newspaper_Source::readField() */
