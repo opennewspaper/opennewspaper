@@ -1,7 +1,7 @@
 <?php
 
 // modifications after generating with the kickstarter (bottom of file tca.php)
-// require_once(PATH_typo3conf . 'ext/extra/tca_addon.php');
+// require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
 
 // modify fields set in tca.php

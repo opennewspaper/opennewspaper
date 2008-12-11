@@ -60,5 +60,5 @@ t3lib_div::loadTCA("tt_content");
 t3lib_extMgm::addTCAcolumns("tt_content",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("tt_content","tx_newspaper_extra;;;;1-1-1");
 
-require_once(PATH_typo3conf . 'ext/extra/ext_tables_addon.php');
+require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>

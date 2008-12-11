@@ -1,7 +1,7 @@
 <?php
 
 // modifications after generating with the kickstarter (at bottom of file ext_tables.php)
-// require_once(PATH_typo3conf . 'ext/extra/ext_tables_addon.php');
+// require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 
 
 
@@ -15,7 +15,7 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_
 
 // include some classes
 // TODO: check if needed in "real" class structure
-require_once('class.extra.php'); // extra class
+require_once('class.extra.php');
 require_once('class.tx_newspaper.php'); // class for extras in be
 
 ?>

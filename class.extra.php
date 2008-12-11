@@ -23,7 +23,7 @@ class Extra {
 
 	/**
 	 * checks if backend is in modal box mode (or iframe mode)
-	 * (set as Page TSConfig tx_extra.mode = modal|iframe or as User TSConfig page.tx_extra.mode = ...)
+	 * (set as Page TSConfig tx_newspaper.extra_mode = modal|iframe or as User TSConfig page.tx_newspaper.extra_mode = ...)
 	 * \param String $extra name of Extra to get display mode
 	 * \return int const value for display mode
 	 */
@@ -32,7 +32,7 @@ class Extra {
 		// read tsconfig of folder for Extra data
 		$tsconfig = t3lib_BEfunc::getPagesTSconfig(self::getExtraPid());
 
-		if (isset($tsconfig['tx_extra.']['mode']) && trim(strtolower($tsconfig['tx_extra.']['mode'])) == 'iframe')
+		if (isset($tsconfig['tx_newspaper.']['extra_mode']) && trim(strtolower($tsconfig['tx_newspaper.']['extra_mode'])) == 'iframe')
 			return EXTRA_DISPLAY_MODE_IFRAME; // mode is set to iframe
 
 		// other display modes may be added here (f. ex. another modal box script)
@@ -75,11 +75,11 @@ class Extra {
 		// add javscript for display mode
 		switch(self::getDisplayMode()) {
 			case EXTRA_DISPLAY_MODE_IFRAME:
-				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('extra') . 'res/extra_iframe.js"> </script>';
+				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_iframe.js"> </script>';
 			break;
 			case EXTRA_DISPLAY_MODE_MODAL:
 			default:
-				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('extra') . 'res/extra_modalbox.js"> </script>';
+				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_modalbox.js"> </script>';
 			break;
 		}
 
@@ -177,11 +177,12 @@ class Extra {
 	 * gets a list of Extras associated with the current record
 	 * \param String $table
 	 */
-//TOFO: mm query???
+//TODO: mm query??? could fields conf and position be read?
 	private static function readList($table, $uid) {
 		$list = array();
 		// read all extras assigned to content in given table
 #$GLOBALS['TYPO3_DB']->debugOutput = true;
+//TODO: name of table??? tx_newspaper_content_mm ???
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'tx_extra_content_mm',
@@ -194,7 +195,7 @@ class Extra {
 				$list[] = $row;
 			}
 		}
-#t3lib_div::devlog('list', 'extra', 0, $list);
+#t3lib_div::devlog('list', 'newspaper', 0, $list);
 		return $list;
 	}
 
@@ -209,7 +210,7 @@ class Extra {
 		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			return $row;
 		}
-		t3lib_div::devlog('readExtraItem - referenced Extra can\'t be found in table', 'extra', 3, $extra);
+		t3lib_div::devlog('readExtraItem - referenced Extra can\'t be found in table', 'newspaper', 3, $extra);
 		return false;
 	}
 
@@ -220,7 +221,7 @@ class Extra {
 				return 'Image';
 			break;
 			default:
-				t3lib_div::devlog('getExtraTitle - unknown type', 'extra', 3, $type);
+				t3lib_div::devlog('getExtraTitle - unknown type', 'newspaper', 3, $type);
 				return 'Unknown';
 		}
 	}
@@ -245,9 +246,9 @@ class Extra {
 			case EXTRA_DISPLAY_MODE_MODAL:
 			default:
 			// add modalbox js to top (so modal box can be displayed over the whole backend, only onle the content frame)
-			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('extra') . 'contrib/subModal/common.js');
-			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('extra') . 'contrib/subModal/subModal.js');
-			$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('extra') . 'contrib/subModal/subModal.css');
+			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
+			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
+			$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
 			return true; // javascript and css files added
 			break;
 		}

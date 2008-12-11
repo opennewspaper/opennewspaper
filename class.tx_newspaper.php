@@ -13,11 +13,11 @@ class tx_newspaper {
 		$js = '';
 		switch(Extra::getDisplayMode()) {
 			case EXTRA_DISPLAY_MODE_IFRAME:
-				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('extra') . 'res/extra_form_iframe.js"></script>';
+				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_form_iframe.js"></script>';
 			break;
 			case EXTRA_DISPLAY_MODE_MODAL:
 			default:
-				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('extra') . 'res/extra_form_modalbox.js"></script>';
+				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_form_modalbox.js"></script>';
 			break;
 		}
 		return $js;
@@ -31,14 +31,13 @@ class tx_newspaper {
 	 * \return String html code to be placed in the html header <script ...></script>
 	 */
 	function renderList($PA, $fobj) {
-#t3lib_div::devlog('pa', 'extra', 0, $PA);
+#t3lib_div::devlog('pa', 'newspaper', 0, $PA);
 
 //TODO: can/should articles be hard-coded here?
 		// get table and uid of current record
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
 
-		//$extra = new Extra();
 		return Extra::renderList($current_record['table'], $current_record['uid']);
 
 	}

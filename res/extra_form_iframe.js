@@ -5,7 +5,7 @@ $$('div.docheader-row2-right')[0].hide();
 
 // check if handle is still unused
 if (window.onunload) {
-	alert("onunload handle in use. Please inform  developer of extension 'extra'.");
+	alert("onunload handle in use. Please inform  developer of extension 'newspaper'.");
 }
 
 // add function

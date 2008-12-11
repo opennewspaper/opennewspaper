@@ -29,7 +29,7 @@ require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
-$LANG->includeLLFile('EXT:extra/mod1/locallang.xml');
+$LANG->includeLLFile('EXT:newspaper/mod1/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
@@ -37,7 +37,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 
 
 /**
- * Module 'AJAX' for the 'extra' extension.
+ * Module 'AJAX' for the 'newspaper' extension.
  *
  * @author	Oliver Schröder <typo3@schroederbros.de>
  * @package	TYPO3
@@ -47,7 +47,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				var $pageinfo;
 
 	private function parseParam($param) {
-#t3lib_div::devlog('extra parseparam', 'extra', 0, $param);
+#t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		$p = explode('|', $param);
 		if (sizeof($p) != 4)
 			return false;
@@ -81,7 +81,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
 			$tmp['modalbox_param'] = 'edit[' . $param[0] . '][' . $param[1] . ']=edit';
 			$tmp['modalbox_close_param'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
-t3lib_div::devlog('/mod1/index.php Modal box json', 'extra', 0, $tmp);
+t3lib_div::devlog('/mod1/index.php Modal box json', 'newspaper', 0, $tmp);
 
 #header("Content-Type: application/json");
 			echo json_encode($tmp);
@@ -136,7 +136,7 @@ t3lib_div::devlog('/mod1/index.php Modal box json', 'extra', 0, $tmp);
 
 
 // TODO check permissions
-t3lib_div::devlog('ajax 1', 'extra', 0, $_REQUEST);
+t3lib_div::devlog('ajax 1', 'newspaper', 0, $_REQUEST);
 // TODO if isset extra_modalbox|extra_iframe and param
 if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_REQUEST['extra_iframe'])) )  {
 	$this->processExtra();
@@ -224,7 +224,7 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 					switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1:
 							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('extra'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
+								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
 								<hr />
 								<br />This is the GET/POST vars sent to the script:<br />'.
 								'GET:'.t3lib_div::view_array($_GET).'<br />'.
@@ -246,8 +246,8 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/extra/mod1/index.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/extra/mod1/index.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod1/index.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod1/index.php']);
 }
 
 

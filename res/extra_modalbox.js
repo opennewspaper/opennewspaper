@@ -28,7 +28,7 @@ if (typeof document.innerWidth != 'undefined') {
 function getExtra(extra, extra_uid, content, content_uid) {
 // TODO path is currently set constantly
   var request = new Ajax.Request(
-    path + "typo3conf/ext/extra/mod1/index.php",
+    path + "typo3conf/ext/newspaper/mod1/index.php",
     {
       method: 'get',
       parameters: "extra_modalbox&param=" + extra + "|" + extra_uid + "|" + content + "|" + content_uid + "&no_cache=" + new Date().getTime(),
@@ -45,7 +45,7 @@ function updatePageJsonModalbox(request) {
 //TODO: use 80% of width and height
 var width = viewportwidth; // viewport measures content frame, form fit content frame, so use full width
 var height = viewportheight - 50;
-top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/extra/res/close_extra_modalbox.html" + param + "&" + json.modalbox_param, width, height, null, true)
+top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra_modalbox.html" + param + "&" + json.modalbox_param, width, height, null, true)
 //TODO: set title for modal window
 
 }
