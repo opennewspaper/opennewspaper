@@ -15,7 +15,7 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 
 if (TYPO3_MODE == 'BE')	{
-		
+
 	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
@@ -24,17 +24,17 @@ t3lib_extMgm::addToInsertRecords('tx_newspaper_image');
 
 $TCA["tx_newspaper_image"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image',		
-		'label'     => 'title',	
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image',
+		'label'     => 'title',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'sortby' => 'sorting',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',	
+		'sortby' => 'sorting',
+		'delete' => 'deleted',
+		'enablecolumns' => array (
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
@@ -46,9 +46,9 @@ $TCA["tx_newspaper_image"] = array (
 );
 
 $tempColumns = Array (
-	"tx_newspaper_extra" => Array (		
-		"exclude" => 1,		
-		"label" => "LLL:EXT:newspaper/locallang_db.xml:tt_content.tx_newspaper_extra",		
+	"tx_newspaper_extra" => Array (
+		"exclude" => 1,
+		"label" => "LLL:EXT:newspaper/locallang_db.xml:tt_content.tx_newspaper_extra",
 		"config" => Array (
 			"type" => "none",
 		)
@@ -59,4 +59,6 @@ $tempColumns = Array (
 t3lib_div::loadTCA("tt_content");
 t3lib_extMgm::addTCAcolumns("tt_content",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("tt_content","tx_newspaper_extra;;;;1-1-1");
+
+require_once(PATH_typo3conf . 'ext/extra/ext_tables_addon.php');
 ?>
