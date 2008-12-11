@@ -41,9 +41,9 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  *
  * @author	Oliver Schröder <typo3@schroederbros.de>
  * @package	TYPO3
- * @subpackage	tx_extra
+ * @subpackage	tx_newspaper
  */
-class  tx_extra_module1 extends t3lib_SCbase {
+class  tx_newspaper_module1 extends t3lib_SCbase {
 				var $pageinfo;
 
 	private function parseParam($param) {
@@ -254,7 +254,7 @@ if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/extra/m
 
 
 // Make instance:
-$SOBE = t3lib_div::makeInstance('tx_extra_module1');
+$SOBE = t3lib_div::makeInstance('tx_newspaper_module1');
 $SOBE->init();
 
 // Include files?

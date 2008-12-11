@@ -1,7 +1,7 @@
 <?php
 
 
-class tx_extra {
+class tx_newspaper {
 
 	/**
 	 * add javascript (or other script parts) to extra form (basically containing an onunload script)
