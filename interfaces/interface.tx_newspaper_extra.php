@@ -37,7 +37,7 @@
 	 */
 	public function setAttribute($fieldname, $value);
 
-	/// \return The Source object associated with this Article (if any) 
+	/// \return The Source object associated with this Article (if any)
 	function getSource();
 	/// Set the Source object associated with this Article
 	/** \param $source The new Source */
@@ -52,12 +52,19 @@
 	 *  \param $fieldname Name of the attribute which must be mapped
 	 *  \param $source The Source for which the mapping is wanted
 	 *  \return The name of attribute \p $fieldname in Source \p $source
-	 *  \throw WrongClassException If the mapping for class \p $source is not  
+	 *  \throw WrongClassException If the mapping for class \p $source is not
 	 * 							   configured
 	 */
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
-	
+
 	/// Additional info needed to instantiate an Extra, such as a SQL table
 	static function sourceTable(tx_newspaper_Source $source);
+
+	/// \return the name of the Extra = the name of the database table the Extra data is stored in
+	static function getName();
+
+	/// \return the title of the Extra (using the language set in BE)
+	static function getTitle();
+
 }
 ?>
