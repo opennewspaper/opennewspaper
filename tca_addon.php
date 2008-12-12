@@ -11,6 +11,6 @@ $TCA['tx_newspaper_image']['columns']['extra_field']['config']['type'] = 'user';
 $TCA['tx_newspaper_image']['columns']['extra_field']['config']['userFunc'] = 'tx_newspaper->getCodeForBackend';
 $TCA['tx_newspaper_image']['columns']['extra_field']['config']['noTableWrapping'] = true;
 
-Extra::registerExtra('tx_newspaper_image'); // register Extra "Text with Image"
+tx_newspaper_ExtraImpl::registerExtra('tx_newspaper_image'); // register Extra "Text with Image"
 
 ?>
