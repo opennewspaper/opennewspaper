@@ -10,17 +10,7 @@ class tx_newspaper {
 	 * \return String html code to be placed in the html header <script ...></script>
 	 */
 	public function getCodeForBackend($PA, $fobj) {
-		$js = '';
-		switch(Extra::getDisplayMode()) {
-			case EXTRA_DISPLAY_MODE_IFRAME:
-				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_form_iframe.js"></script>';
-			break;
-			case EXTRA_DISPLAY_MODE_MODAL:
-			default:
-				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_form_modalbox.js"></script>';
-			break;
-		}
-		return $js;
+		return tx_newspaper_ExtraBE::getJsForExtraField();
 	}
 
 

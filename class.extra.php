@@ -1,46 +1,10 @@
 <?php
 
-define('EXTRA_DISPLAY_MODE_MODAL', 1); // default value for display mode
-define('EXTRA_DISPLAY_MODE_IFRAME', 2);
+require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra_be.php');
 
 class Extra {
 
 	private static $registeredExtra = array(); // list of registered Extras
-
-
-	/**
-	 * get uid of folder used to store data
-	 * \param String $extra Extra to get pid of
-	 * \ return int pid of Folder to store data for given Extra
-	 */
-	public static function getExtraPid() {
-//TODO: set REAL page_uid (where does that come from? config????)
-//TODO: should be done like dam does it: Extra folder can be hidden (if not existing the folder is created)
-//TODO: one folder per Extra or one folder for ALL Extras?
-		return 7;
-	}
-
-
-	/**
-	 * checks if backend is in modal box mode (or iframe mode)
-	 * (set as Page TSConfig tx_newspaper.extra_mode = modal|iframe or as User TSConfig page.tx_newspaper.extra_mode = ...)
-	 * \param String $extra name of Extra to get display mode
-	 * \return int const value for display mode
-	 */
-	public static function getDisplayMode() {
-//TODO: move all switch statements here?
-		// read tsconfig of folder for Extra data
-		$tsconfig = t3lib_BEfunc::getPagesTSconfig(self::getExtraPid());
-
-		if (isset($tsconfig['tx_newspaper.']['extra_mode']) && trim(strtolower($tsconfig['tx_newspaper.']['extra_mode'])) == 'iframe')
-			return EXTRA_DISPLAY_MODE_IFRAME; // mode is set to iframe
-
-		// other display modes may be added here (f. ex. another modal box script)
-		// those modes has to be defined (see top of this file) and integrated in all switch(getDisplayMode()) statements
-
-		return EXTRA_DISPLAY_MODE_MODAL; // use default mode: modal
-
-	}
 
 
 	/**
@@ -73,15 +37,8 @@ class Extra {
 		$content = '';
 
 		// add javscript for display mode
-		switch(self::getDisplayMode()) {
-			case EXTRA_DISPLAY_MODE_IFRAME:
-				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_iframe.js"> </script>';
-			break;
-			case EXTRA_DISPLAY_MODE_MODAL:
-			default:
-				$content .= '<script language="javascript" type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_modalbox.js"> </script>';
-			break;
-		}
+		$content = tx_newspaper_ExtraBE::getJsForExtraForm();
+
 
 //TODO: check permissions before setting buttons (especially delete button)
 //TODO: labels (LLL)
@@ -228,33 +185,6 @@ class Extra {
 
 
 
-
-
-
-
-
-	/**
-	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
-	 * \return true, if files were added
-	 */
-	function addAdditionalScriptToBackend() {
-
-		switch(Extra::getDisplayMode()) {
-			case EXTRA_DISPLAY_MODE_IFRAME:
-				return true; // nothing to add
-			break;
-			case EXTRA_DISPLAY_MODE_MODAL:
-			default:
-			// add modalbox js to top (so modal box can be displayed over the whole backend, only onle the content frame)
-			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
-			$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
-			$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-			return true; // javascript and css files added
-			break;
-		}
-
-		return true; // nothing was added
-	}
 
 
 //TODO: add real functions, this is just a demo

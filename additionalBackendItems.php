@@ -4,7 +4,7 @@
 		die ('Access denied.');
 
 	if (TYPO3_MODE == 'BE') {
-		Extra::addAdditionalScriptToBackend(); // add additional script (if needed) to top of backend
+		tx_newspaper_ExtraBE::addAdditionalScriptToBackend(); // add additional script (if needed) to top of backend
 	}
 
 ?>

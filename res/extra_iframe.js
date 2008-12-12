@@ -33,9 +33,9 @@ function getExtra(extra, extra_uid, content, content_uid) {
 
 function updatePageJsonIframe(request) {
   var json = request.responseText.evalJSON(true);
-  var param = escape("?param=" + json.iframe_close_param);
+  var param = escape("?param=" + json.extra_close_param);
 
 //TODO colspan 7 -> make configurable
-  $(json.id).update("<td colspan=\"7\"><iframe class=\"extra_iframe\" width=\"600\" height=\"549\" src=\"" + path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra.html" + param + "&" + json.iframe_param + "\"></iframe></td>");
+  $(json.id).update("<td colspan=\"7\"><iframe class=\"extra_iframe\" width=\"600\" height=\"549\" src=\"" + path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra.html" + param + "&" + json.extra_param + "\"></iframe></td>");
 }
 

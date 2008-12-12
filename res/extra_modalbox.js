@@ -39,13 +39,13 @@ function getExtra(extra, extra_uid, content, content_uid) {
 
 function updatePageJsonModalbox(request) {
   var json = request.responseText.evalJSON(true);
-  var param = escape("?param=" + json.modalbox_close_param);
+  var param = escape("?param=" + json.extra_close_param);
 
 // submodal
 //TODO: use 80% of width and height
 var width = viewportwidth; // viewport measures content frame, form fit content frame, so use full width
 var height = viewportheight - 50;
-top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra_modalbox.html" + param + "&" + json.modalbox_param, width, height, null, true)
+top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra_modalbox.html" + param + "&" + json.extra_param, width, height, null, true)
 //TODO: set title for modal window
 
 }

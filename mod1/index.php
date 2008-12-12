@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+///TODO: implemention still very basic
+
 
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
@@ -59,35 +61,16 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 		if (!$param = $this->parseParam($_REQUEST['param']))
 			return false;
-//FIXME: this should REALLY be done
-//TODO: one version for iframe AND modalbox should do
-//TODO: check if all those params are really needed
 
-		switch(Extra::getDisplayMode()) {
-			case EXTRA_DISPLAY_MODE_IFRAME:
-			// prepare JSON response data
-			$tmp = array();
-			$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
-			$tmp['iframe_param'] = 'edit[' . $param[0] . '][' . $param[1] . ']=edit';
-			$tmp['iframe_close_param'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
+		// prepare JSON response data
+		$tmp = array();
+		$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
+		$tmp['extra_param'] = 'edit[' . $param[0] . '][' . $param[1] . ']=edit';
+		$tmp['extra_close_param'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
 #header("Content-Type: application/json");
-			echo json_encode($tmp);
-			exit();
-			break;
-			case EXTRA_DISPLAY_MODE_MODAL:
-			default:
-			// prepare JSON response data
-			$tmp = array();
-			$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
-			$tmp['modalbox_param'] = 'edit[' . $param[0] . '][' . $param[1] . ']=edit';
-			$tmp['modalbox_close_param'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
-t3lib_div::devlog('/mod1/index.php Modal box json', 'newspaper', 0, $tmp);
-
-#header("Content-Type: application/json");
-			echo json_encode($tmp);
-			exit();
-			break;
-		}
+		echo json_encode($tmp);
+		exit();
+#t3lib_div::devlog('/mod1/index.php ajax json', 'newspaper', 0, $tmp);
 
 	}
 
