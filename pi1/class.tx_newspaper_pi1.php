@@ -47,19 +47,28 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
-		/// Get the tx_newspaper_Ressort object associated with the current Typo3 page
-		$ressort = $this->getRessort();
-		
-		/// Find out which page we are on (Ressort, Article, RSS, Comments, whatever)
-		/// If $_GET['art'] is set, it is the article page
-		/// Else if $_GET['type'] is set, it is the page corresponding to that type
-		/// Else it is the ressort page
-	
-		/// Call the render() method for that page, which renders all page areas
-		
 		// dummy functionality
 		$content .= '<h2>The Big One</h2>
 		';
+
+		/// Get the tx_newspaper_Ressort object associated with the current Typo3 page
+		$ressort = $this->getRessort();
+		if (!($ressort instanceof tx_newspaper_Ressort))
+			throw new tx_newspaper_WrongClassException();
+			
+		$content .= print_r($ressort, 1);
+		
+		/// Find out which page type we're on (Ressort, Article, RSS, Comments, whatever)
+		/// If $_GET['art'] is set, it is the article page
+		/// Else if $_GET['type'] is set, it is the page corresponding to that type
+		/// Else it is the ressort page
+		$page = $this->getPage($ressort);
+	
+		if (!($page instanceof tx_newspaper_Page))
+			throw new tx_newspaper_WrongClassException();
+
+		/// Call the render() method for that page, which renders all page areas
+		$content .= $page->render();
 	
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -69,10 +78,18 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  current Typo3 page. This implementation may change, but this function
 	 *  is required to always return the correct tx_newspaper_Ressort.
 	 * 
-	 *  \return the tx_newspaper_Ressort object the plugin currently works on
+	 *  \return The tx_newspaper_Ressort object the plugin currently works on
 	 */
 	private function getRessort() {
 		throw new NotYetImplementedException("tx_newspaper_pi1::getRessort()");
+	}
+	
+	/// Get the tx_newspaper_Page which is currently displayed
+	/**
+	 *  \return The tx_newspaper_Page which is currently displayed
+	 */ 
+	private function getPage(tx_newspaper_Ressort $ressort) {
+		throw new NotYetImplementedException("tx_newspaper_pi1::getPage()");
 	}
 }
 
