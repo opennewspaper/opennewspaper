@@ -47,7 +47,8 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
-		/// Get the ressort record associated with the current Typo3 page
+		/// Get the tx_newspaper_Ressort object associated with the current Typo3 page
+		$ressort = $this->getRessort();
 		
 		/// Find out which page we are on (Ressort, Article, RSS, Comments, whatever)
 		/// If $_GET['art'] is set, it is the article page
@@ -61,6 +62,17 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		';
 	
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	/// Get the tx_newspaper_Ressort object the plugin currently works on
+	/** Currently, that means it returns the ressort record which lies on the
+	 *  current Typo3 page. This implementation may change, but this function
+	 *  is required to always return the correct tx_newspaper_Ressort.
+	 * 
+	 *  \return the tx_newspaper_Ressort object the plugin currently works on
+	 */
+	private function getRessort() {
+		throw new NotYetImplementedException("tx_newspaper_pi1::getRessort()");
 	}
 }
 
