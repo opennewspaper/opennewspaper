@@ -40,35 +40,26 @@
  * 
  *  Currently just a dummy.
  */
-class tx_newspaper_Page {
-	
-	public function __construct(tx_newspaper_Department $parent) {
-		$this->parentDepartment = $parent;
+class tx_newspaper_PageZone implements tx_newspaper_Extra {
+		
+	public function __construct() {
 		$this->smarty = new Smarty();
 		/// \todo smarty template dir
 		/// \todo default smarty template?
 	}
 	
-	/// Render the page, containing all associated page areas
+	/// Render the page zone, containing all extras
 	/**
 	 *  \todo default smarty template?
 	 * 
 	 *  \return The rendered page as HTML (or XML, if you insist) 
 	 */
  	public function render($template) {
- 		foreach ($this->pageZones as $zone) {
- 			/// \todo assign smarty variable
- 		}
+		/// \todo assign smarty variables
  		return $this->smarty->fetch($template);
  	}
  	
- 	public function getParent() {
- 		return $this->parentDepartment;
- 	}
- 	
  	private $smarty = null;
- 	private $parentDepartment = null;
- 	private $pageZones = array();
 }
  
 ?>
