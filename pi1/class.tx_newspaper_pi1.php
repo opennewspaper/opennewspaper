@@ -47,7 +47,12 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
+		/// Get the ressort record associated with the current Typo3 page
+		
 		/// Find out which page we are on (Ressort, Article, RSS, Comments, whatever)
+		/// If $_GET['art'] is set, it is the article page
+		/// Else if $_GET['type'] is set, it is the page corresponding to that type
+		/// Else it is the ressort page
 	
 		/// Call the render() method for that page, which renders all page areas
 		
