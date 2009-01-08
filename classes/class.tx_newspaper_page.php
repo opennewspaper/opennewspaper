@@ -41,7 +41,24 @@
  *  Currently just a dummy.
  */
 class tx_newspaper_Page {
+	
+	public function __construct() {
+		$this->smarty = new Smarty();
+		/// \todo default smarty template?
+	}
+	
+	/// Render the page, containing all associated page areas
+	/**
+	 *  \todo default smarty template?
+	 * 
+	 *  \return The rendered page as HTML (or XML, if you insist) 
+	 */
+ 	public function render($template) {
+ 		/// \todo assign variables
+ 		return $this->smarty->fetch($template);
+ 	}
  	
+ 	private $smarty;
 }
  
 ?>
