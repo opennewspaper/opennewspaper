@@ -33,7 +33,7 @@
 /** Currently just a dummy
  * 
  */
- class tx_newspaper_Ressort {
+ class tx_newspaper_Department {
  	
  }
  
