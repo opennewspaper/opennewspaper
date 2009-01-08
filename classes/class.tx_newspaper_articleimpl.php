@@ -77,6 +77,14 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	static function sourceTable(tx_newspaper_Source $source) {
 		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
+
+	static function getName() {
+		return 'articleimpl';
+	}
+
+	static function getTitle() {
+		return 'articleimpl';
+	}
 	
 	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
