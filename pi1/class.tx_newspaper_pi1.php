@@ -25,8 +25,10 @@
 require_once(PATH_tslib.'class.tslib_pibase.php');
 
 
-/// Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
+/// Plugin 'Display Ressorts/Articles' for the 'newspaper' extension. Aka TBO.
 /** Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
+ *  Also known as "The Big One".
+ * 
  *  \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
@@ -36,29 +38,21 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	var $pi_checkCHash = true;
 	
 	/// The main method of the PlugIn
-	/** @param			$content: The PlugIn content
-	 *  @param			$conf: The PlugIn configuration
-	 *  @return	The content that is displayed on the website
+	/** \param			$content: The PlugIn content
+	 *  \param			$conf: The PlugIn configuration
+	 *  \return	The content that is displayed on the website
 	 */
 	function main($content,$conf)	{
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
+		/// Find out which page we are on (Ressort, Article, RSS, Comments, whatever)
 	
-		$content='
-			<strong>This is a few paragraphs:</strong><br />
-			<p>This is line 1</p>
-			<p>This is line 2</p>
-	
-			<h3>This is a form:</h3>
-			<form action="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'" method="POST">
-				<input type="hidden" name="no_cache" value="1">
-				<input type="text" name="'.$this->prefixId.'[input_field]" value="'.htmlspecialchars($this->piVars['input_field']).'">
-				<input type="submit" name="'.$this->prefixId.'[submit_button]" value="'.htmlspecialchars($this->pi_getLL('submit_button_label')).'">
-			</form>
-			<br />
-			<p>You can click here to '.$this->pi_linkToPage('get to this page again',$GLOBALS['TSFE']->id).'</p>
+		/// Call the render() method for that page, which renders all page areas
+		
+		// dummy functionality
+		$content .= '<h2>The Big One</h2>
 		';
 	
 		return $this->pi_wrapInBaseClass($content);
