@@ -81,15 +81,17 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 * 
 	 *  \return The tx_newspaper_Department object the plugin currently works on
 	 */
-	private function getDepartment() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getDepartment()");
+	public function getDepartment() {
+		$page = $TSFE->page;
+		
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getDepartment(): $page");
 	}
 	
 	/// Get the tx_newspaper_Page which is currently displayed
 	/**
 	 *  \return The tx_newspaper_Page which is currently displayed
 	 */ 
-	private function getPage(tx_newspaper_Department $ressort) {
+	public function getPage(tx_newspaper_Department $ressort) {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getPage()");
 	}
 }
