@@ -59,7 +59,43 @@ class tx_newspaper_PageZone implements tx_newspaper_Extra {
  		return $this->smarty->fetch($template);
  	}
  	
+ 	/// returns an actual member (-> Extra)
+	function getAttribute($attribute) {
+		return $this->attributes[$attribute];
+	}
+
+	/// sets a member (-> Extra)
+	function setAttribute($attribute, $value) {
+		$this->attributes[$attribute] = $value;
+	}
+	
+	/// Defined to implement the tx_newspaper_Extra interface
+	/** Of course it sucks that we implement an interface that, well, we don't
+	 *  implement fully. 
+	 *  \todo Think of a way out of this.
+	 */
+	function getSource() { 
+		throw new tx_newspaper_IllegalUsageException(
+			"tx_newspaper_PageZone::getSource(): " .
+			"PageZone should never deal with Sources");
+	}
+
+	/// Defined to implement the tx_newspaper_Extra interface
+	/** Of course it sucks that we implement an interface that, well, we don't
+	 *  implement fully. 
+	 *  \todo Think of a way out of this.
+	 */
+	function setSource(tx_newspaper_Source $source) {
+		throw new tx_newspaper_IllegalUsageException(
+			"tx_newspaper_PageZone::setSource(): " .
+			"PageZone should never deal with Sources");
+	 }
+	
+ 	
  	private $smarty = null;
+ 	
+ 	private $attributes = array();	///< array of attributes
+ 	
 }
  
 ?>
