@@ -109,28 +109,4 @@ interface tx_newspaper_Source {
     public function writeExtra(tx_newspaper_Extra $extra, $uid);
 }
 
-/// Base class for all exceptions thrown by this Typo3 extension
-class tx_newspaper_Exception extends Exception { }
-
-/// This Exception is thrown when opening a Source fails
-/** I could have named it OpenSourceFailedException, but no way! Open Source rules! :-)) */
-class tx_newspaper_SourceOpenFailedException extends tx_newspaper_Exception { }
-
-/// This Exception is thrown when a Source is asked to create a class that is not an Article or Extra
-class tx_newspaper_WrongClassException extends tx_newspaper_Exception { }
-
-/// This Exception is thrown if a feature is not yet implemented
-class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { 
-	public function __construct($message, $code = 0) {
-        parent::__construct("Not yet implemented: $message", $code);
-    }
-}
-
-/// This Exception is thrown if a feature is used in a wrong way
-class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception { 
-	public function __construct($message, $code = 0) {
-        parent::__construct("Illegal usage: $message", $code);
-    }	
-}
-
 ?>
