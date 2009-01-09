@@ -7,18 +7,20 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tt_content.list_type_pi1">Display Ressorts/Articles</label>
-			<label index="tx_newspaper_image">Image</label>
-			<label index="tx_newspaper_image.title">Title</label>
-			<label index="tx_newspaper_image.image">Image</label>
-			<label index="tx_newspaper_image.caption">Caption</label>
+			<label index="tx_newspaper_extra_image">Extra: Image</label>
+			<label index="tx_newspaper_extra_image.extra_field">Extra field</label>
+			<label index="tx_newspaper_extra_image.title">Title</label>
+			<label index="tx_newspaper_extra_image.image">Image</label>
+			<label index="tx_newspaper_extra_image.caption">Caption</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">Ressorts/Artikel anzeigen</label>
-			<label index="tx_newspaper_image">Bild</label>
-			<label index="tx_newspaper_image.title">Titel</label>
-			<label index="tx_newspaper_image.image">Bild</label>
-			<label index="tx_newspaper_image.caption">Bildunterschrift</label>
+			<label index="tx_newspaper_extra_image">Extra: Bild</label>
+			<label index="tx_newspaper_extra_image.extra_field">Extra field</label>
+			<label index="tx_newspaper_extra_image.title">Titel</label>
+			<label index="tx_newspaper_extra_image.image">Bild</label>
+			<label index="tx_newspaper_extra_image.caption">Bildunterschrift</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 		</languageKey>
 	</data>

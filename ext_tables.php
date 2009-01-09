@@ -15,40 +15,40 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 
 if (TYPO3_MODE == 'BE')	{
-
+		
 	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 
-t3lib_extMgm::addToInsertRecords('tx_newspaper_image');
+t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_image');
 
-$TCA["tx_newspaper_image"] = array (
+$TCA["tx_newspaper_extra_image"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image',
-		'label'     => 'title',
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image',		
+		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'sortby' => 'sorting',
-		'delete' => 'deleted',
-		'enablecolumns' => array (
-			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
+		'sortby' => 'sorting',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',	
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_image.gif',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_image.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, title, image, caption",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, extra_field, title, image, caption",
 	)
 );
 
 $tempColumns = Array (
-	"tx_newspaper_extra" => Array (
-		"exclude" => 1,
-		"label" => "LLL:EXT:newspaper/locallang_db.xml:tt_content.tx_newspaper_extra",
+	"tx_newspaper_extra" => Array (		
+		"exclude" => 1,		
+		"label" => "LLL:EXT:newspaper/locallang_db.xml:tt_content.tx_newspaper_extra",		
 		"config" => Array (
 			"type" => "none",
 		)

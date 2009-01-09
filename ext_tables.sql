@@ -1,7 +1,7 @@
 #
-# Table structure for table 'tx_newspaper_image'
+# Table structure for table 'tx_newspaper_extra_image'
 #
-CREATE TABLE tx_newspaper_image (
+CREATE TABLE tx_newspaper_extra_image (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 	tstamp int(11) DEFAULT '0' NOT NULL,
@@ -13,6 +13,7 @@ CREATE TABLE tx_newspaper_image (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	fe_group int(11) DEFAULT '0' NOT NULL,
+	extra_field tinytext NOT NULL,
 	title tinytext NOT NULL,
 	image blob NOT NULL,
 	caption tinytext NOT NULL,
@@ -28,4 +29,20 @@ CREATE TABLE tx_newspaper_image (
 #
 CREATE TABLE tt_content (
 	tx_newspaper_extra tinytext NOT NULL
+);
+
+
+#
+# Table structure for table 'tx_newspaper_content_extra_mm'
+# This table has to be added manually to this file after using the kickstarter
+#
+CREATE TABLE tx_newspaper_content_extra_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  extra_type varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) unsigned DEFAULT '0' NOT NULL,
+  conf text,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
 );

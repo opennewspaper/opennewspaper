@@ -28,8 +28,8 @@
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
 require_once('conf.php');
-require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
+require_once($BACK_PATH . 'init.php');
+require_once($BACK_PATH . 'template.php');
 
 $LANG->includeLLFile('EXT:newspaper/mod1/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
@@ -48,30 +48,81 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 class  tx_newspaper_module1 extends t3lib_SCbase {
 				var $pageinfo;
 
-	private function parseParam($param) {
-#t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
+	private function parseParam($param, $length=4) {
+t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		$p = explode('|', $param);
-		if (sizeof($p) != 4)
+		if (sizeof($p) != $length)
 			return false;
 		return $p;
 // TODO some more param checks needed (security!!!)
 	}
 
-	private function processExtra() {
 
+	private function processExtraForm() {
 		if (!$param = $this->parseParam($_REQUEST['param']))
 			return false;
-
+			
 		// prepare JSON response data
 		$tmp = array();
 		$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
 		$tmp['extra_param'] = 'edit[' . $param[0] . '][' . $param[1] . ']=edit';
 		$tmp['extra_close_param'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
+#t3lib_div::devlog('/mod1/index.php extra form ajax json', 'newspaper', 0, $tmp);
 #header("Content-Type: application/json");
 		echo json_encode($tmp);
 		exit();
-#t3lib_div::devlog('/mod1/index.php ajax json', 'newspaper', 0, $tmp);
+	}
 
+
+	function processExtraToggleVisibility() {
+		if (!$param = $this->parseParam($_REQUEST['param'], 5))
+			return false;	
+
+		// prepare JSON response data
+		$tmp = array();
+//TODO skinning missing
+		if (strpos($param[4], 'gfx/button_unhide.gif')) { // toggle hide/unhide icon and write to db
+			$tmp['img_src'] = 'sysext/t3skin/icons/gfx/button_hide.gif';
+			$this->toggleVisibilityDb($param[0], $param[1], false);
+		} else {
+			$tmp['img_src'] = 'sysext/t3skin/icons/gfx/button_unhide.gif';
+			$this->toggleVisibilityDb($param[0], $param[1], true);
+		}
+		$tmp['id'] = 'vis_icon_' . $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
+#t3lib_div::devlog('/mod1/index.php visibility ajax json', 'newspaper', 0, $tmp);
+#header("Content-Type: application/json");
+		echo json_encode($tmp);
+		exit();			
+	}
+
+//TODO: move to Extra class
+	function toggleVisibilityDb($table, $uid, $hidden) {
+//TODO: check permissions (ajax call can be faked easily)
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, 'uid=' . $uid, array('hidden' => $hidden));
+//TODO error handling missing
+	}
+
+
+
+
+	function processExtraDelete() {
+		if (!$param = $this->parseParam($_REQUEST['param']))
+			return false;	
+
+		// prepare JSON response data
+		$tmp = array();
+		$this->deleteExtra($param[0], $param[1]);
+		$tmp['id'] = 'list_' . $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
+#t3lib_div::devlog('/mod1/index.php delete ajax json', 'newspaper', 0, $tmp);
+#header("Content-Type: application/json");
+		echo json_encode($tmp);
+		exit();			
+	}
+	
+//TODO: save hook -> deleted Extra -> delete all relations
+//move to Extra class
+	function deleteExtra($table, $uid) {
+#t3lib_div::devlog("delete Extra from $table, $uid", 'newspaper', 0);
 	}
 
 
@@ -97,6 +148,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				 * @return	void
 				 */
 				function menuConfig()	{
+/*
 					global $LANG;
 					$this->MOD_MENU = Array (
 						'function' => Array (
@@ -106,7 +158,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 						)
 					);
 					parent::menuConfig();
+*/
 				}
+
 
 				/**
 				 * Main function of the module. Write the content to $this->content
@@ -119,14 +173,24 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 
 // TODO check permissions
-t3lib_div::devlog('ajax 1', 'newspaper', 0, $_REQUEST);
-// TODO if isset extra_modalbox|extra_iframe and param
-if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_REQUEST['extra_iframe'])) )  {
-	$this->processExtra();
-	return false; // if processing was successful, the script died after the AJAX request was answered
-}
+t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
+					if (!isset($_REQUEST['param']))
+						return false; // no valid call without params possible
+					
+					
+					if (isset($_REQUEST['extra_modalbox']) || isset($_REQUEST['extra_iframe']))
+						$this->processExtraForm(); // AJAX call for Extra form (modalbox or iframe)
+					
+					if (isset($_REQUEST['extra_toggle_visibility']))
+						$this->processExtraToggleVisibility(); // AJAX call for toggle visibility
 
+					if (isset($_REQUEST['extra_delete']))
+						$this->processExtraDelete(); // AJAX call
+					
+					
+					return false; // if processing was successful, the script died after the AJAX request was answered; if param weren't valid return false anyway
 
+/*
 					// Access check!
 					// The page will show only if there is a valid page and if this page may be viewed by the user
 					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
@@ -185,6 +249,7 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 						$this->content.=$this->doc->spacer(5);
 						$this->content.=$this->doc->spacer(10);
 					}
+*/
 				}
 
 				/**
@@ -193,10 +258,11 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 				 * @return	void
 				 */
 				function printContent()	{
-
+/*
 					$this->content.=$this->doc->endPage();
 					echo $this->content;
-				}
+*/
+								}
 
 				/**
 				 * Generates the module content
@@ -204,6 +270,7 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 				 * @return	void
 				 */
 				function moduleContent()	{
+/*
 					switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1:
 							$content='<div align="center"><strong>Hello World!</strong></div><br />
@@ -224,8 +291,11 @@ if ( isset($_REQUEST['param']) && (isset($_REQUEST['extra_modalbox'])||isset($_R
 							$this->content.=$this->doc->section('Message #3:',$content,0,1);
 						break;
 					}
+*/
 				}
-			}
+
+
+}
 
 
 

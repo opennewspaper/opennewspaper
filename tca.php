@@ -1,14 +1,14 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
-$TCA["tx_newspaper_image"] = array (
-	"ctrl" => $TCA["tx_newspaper_image"]["ctrl"],
+$TCA["tx_newspaper_extra_image"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,title,image,caption"
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,extra_field,title,image,caption"
 	),
-	"feInterface" => $TCA["tx_newspaper_image"]["feInterface"],
+	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -16,7 +16,7 @@ $TCA["tx_newspaper_image"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -28,7 +28,7 @@ $TCA["tx_newspaper_image"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -44,7 +44,7 @@ $TCA["tx_newspaper_image"] = array (
 				)
 			)
 		),
-		'fe_group' => array (
+		'fe_group' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
 			'config'  => array (
@@ -58,40 +58,48 @@ $TCA["tx_newspaper_image"] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image.title",
+		"extra_field" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.extra_field",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"image" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image.image",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"image" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
-				"max_size" => 500,
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
 				"uploadfolder" => "uploads/tx_newspaper",
-				"show_thumbs" => 1,
-				"size" => 1,
+				"show_thumbs" => 1,	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"caption" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_image.caption",
+		"caption" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.caption",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, image;;;;3-3-3, caption")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, extra_field, title;;;;2-2-2, image;;;;3-3-3, caption")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")

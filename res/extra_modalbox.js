@@ -41,11 +41,63 @@ function updatePageJsonModalbox(request) {
   var json = request.responseText.evalJSON(true);
   var param = escape("?param=" + json.extra_close_param);
 
-// submodal
-//TODO: use 80% of width and height
-var width = viewportwidth; // viewport measures content frame, form fit content frame, so use full width
-var height = viewportheight - 50;
-top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra_modalbox.html" + param + "&" + json.extra_param, width, height, null, true)
-//TODO: set title for modal window
-
+  // submodal
+  var width = viewportwidth; // viewport measures content frame, form fit content frame, so use full width
+  var height = viewportheight - 50;
+  top.showPopWin(path + "typo3/alt_doc.php?returnUrl=" + path + "typo3conf/ext/newspaper/res/close_extra_modalbox.html" + param + "&" + json.extra_param, width, height, null, true)
+  //TODO: set title for modal window
 }
+
+
+
+function toggleExtraVisibility(extra, extra_uid, content, content_uid, img_id) {
+// TODO path is currently set constantly
+  var request = new Ajax.Request(
+    path + "typo3conf/ext/newspaper/mod1/index.php",
+    {
+      method: 'get',
+      parameters: "extra_toggle_visibility&param=" + extra + "|" + extra_uid + "|" + content + "|" + content_uid + "|" + img_id + "&no_cache=" + new Date().getTime(),
+      onSuccess: updatePageJsonVisibility
+    }
+  );
+}
+
+function updatePageJsonVisibility(request) {
+  var json = request.responseText.evalJSON(true);
+//TODO: working in ff, what about the other browsers???
+  document.getElementById(json.id).src = json.img_src;
+}
+
+
+
+function deleteExtra(extra, extra_uid, content, content_uid, confirmed) {
+
+	var confirm_cancelled = false;
+	if (!confirmed) {
+//TODO: LL
+		check = confirm("Delete Extra? Can't be undone!");
+		if (check == false) 
+			confirm_cancelled = true;
+		else
+			confirmed = true;
+	}
+	
+	if (!confirm_cancelled && confirmed) {
+      var request = new Ajax.Request(
+        path + "typo3conf/ext/newspaper/mod1/index.php",
+        {
+          method: 'get',
+          parameters: "extra_delete&param=" + extra + "|" + extra_uid + "|" + content + "|" + content_uid + "&no_cache=" + new Date().getTime(),
+          onSuccess: updatePageJsonDelete
+        }
+      );
+
+	}
+}
+
+function updatePageJsonDelete(request) {
+  var json = request.responseText.evalJSON(true);
+//TODO: working in ff, what about the other browsers???
+  $(json.id).remove();
+}
+
