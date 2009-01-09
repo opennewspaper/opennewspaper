@@ -82,8 +82,9 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return 'articleimpl';
 	}
 
+	/** \todo Internationalization */
 	static function getTitle() {
-		return 'articleimpl';
+		return 'ArticleImpl';
 	}
 	
 	private $extras = null;			///< array of Extra s
