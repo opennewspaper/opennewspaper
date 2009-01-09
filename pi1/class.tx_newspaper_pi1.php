@@ -82,7 +82,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return The tx_newspaper_Department object the plugin currently works on
 	 */
 	public function getDepartment() {
-		$page = $TSFE->page;
+		$page = $GLOBALS['TSFE']->page;
 		
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getDepartment(): $page");
 	}
