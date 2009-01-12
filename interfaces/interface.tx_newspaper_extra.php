@@ -67,9 +67,9 @@
 	static function getTitle();
 
 	/// \return String the name of the extra module -> needed to fill varchar(10) field "module" in table pages to find/create a storage folder for an Extra etc.
-/// \todo static function getModuleName(); 
+	static function getModuleName(); 
 
-	/// \return Array with Extra data for given uid
-/// \todo static function readExtraItem($uid, $table);
+	/// \return Array with tx_newspaper_Extra data for given uid
+	static function readExtraItem($uid, $table);
 }
 ?>
