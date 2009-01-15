@@ -102,7 +102,7 @@ class tx_newspaper_Page {
  	private $pageZones = array();
  	private $attributes = array();					///< The member variables
  	
- 	static private $table = 'tx_newspaper_section';	///< SQL table for persistence
+ 	static private $table = 'tx_newspaper_page';	///< SQL table for persistence
  	
 }
  
