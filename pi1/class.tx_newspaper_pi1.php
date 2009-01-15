@@ -145,21 +145,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 			$cond = 'get_var = \'type\' AND get_value = '.intal(t3lib_div::_GP('type'));
 		else $cond = 'NOT get_var';
 		
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*',
-			'tx_newspaper_page',
-			'section = '.$section->getAttribute('uid').' AND '.$cond
-		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getPage(): ".print_r($row, 1));
+		return new tx_newspaper_Page($cond);
 	}
 }
 

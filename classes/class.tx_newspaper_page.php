@@ -42,12 +42,43 @@
  */
 class tx_newspaper_Page {
 	
-	public function __construct(tx_newspaper_Section $parent) {
+	public function __construct(tx_newspaper_Section $parent, $condition = '') {
 		$this->parentSection = $parent;
 		$this->smarty = new Smarty();
 		/// \todo smarty template dir
 		/// \todo default smarty template?
-	}
+		
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*',
+			self::$table,
+			'section = '.$this->parentSection->getAttribute('uid') .
+			($condition? ' AND '.$condition: '')
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+ 		
+ 		$this->attributes = $row;
+ 	}
+ 	
+ 	function getAttribute($attribute) {
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+ 		}
+ 		return $this->attributes[$attribute];
+ 	}
+		
 	
 	/// Render the page, containing all associated page areas
 	/**
@@ -69,6 +100,10 @@ class tx_newspaper_Page {
  	private $smarty = null;
  	private $parentSection = null;
  	private $pageZones = array();
+ 	private $attributes = array();					///< The member variables
+ 	
+ 	static private $table = 'tx_newspaper_section';	///< SQL table for persistence
+ 	
 }
  
 ?>
