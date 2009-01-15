@@ -48,27 +48,29 @@ $TCA["tx_newspaper_extra_image"] = array (
 
 t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_section');
 
+
+t3lib_extMgm::addToInsertRecords('tx_newspaper_section');
+
 $TCA["tx_newspaper_section"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section',		
-		'label'     => 'uid',	
+		'label'     => 'section_name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'languageField'            => 'sys_language_uid',	
-		'transOrigPointerField'    => 'l18n_parent',	
-		'transOrigDiffSourceField' => 'l18n_diffsource',	
-		'default_sortby' => "ORDER BY crdate",	
+		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
 			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',	
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_section.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "sys_language_uid, l18n_parent, l18n_diffsource, hidden, fe_group, section_name",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, section_name",
 	)
 );
 
