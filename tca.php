@@ -189,7 +189,7 @@ $TCA["tx_newspaper_section"] = array (
 $TCA["tx_newspaper_page"] = array (
 	"ctrl" => $TCA["tx_newspaper_page"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,type_name,get_var,get_value"
+		"showRecordFieldList" => "hidden,starttime,endtime,section,type_name,get_var,get_value"
 	),
 	"feInterface" => $TCA["tx_newspaper_page"]["feInterface"],
 	"columns" => array (
@@ -229,6 +229,22 @@ $TCA["tx_newspaper_page"] = array (
 				)
 			)
 		),
+		"section" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.section",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 		"type_name" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.type_name",		
@@ -266,13 +282,10 @@ $TCA["tx_newspaper_page"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, type_name, get_var, get_value")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, section, type_name, get_var, get_value")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
 	)
 );
-
-
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

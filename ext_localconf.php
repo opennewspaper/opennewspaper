@@ -9,5 +9,10 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
 
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_newspaper_pi1.php','_pi1','list_type',1);
 
-require_once(PATH_typo3conf . 'ext/newspaper/ext_localconf_addon.php');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_section=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_page=1
+');
 ?>
