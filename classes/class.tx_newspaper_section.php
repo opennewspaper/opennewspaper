@@ -52,10 +52,20 @@
         	throw new tx_newspaper_Exception();
         }
  		
- 		/// \todo the rest
+ 		$this->attributes = $row;
  	}
  	
- 	static private $table = 'tx_newspaper_section';
+ 	function getAttribute($attribute) {
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+ 		}
+ 		return $this->attributes[$attribute];
+ 	}
+ 	
+ 	private $attributes = array();					///< The member variables
+ 	
+ 	static private $table = 'tx_newspaper_section';	///< SQL table for persistence
  }
  
 ?>
