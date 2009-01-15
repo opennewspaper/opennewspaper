@@ -46,11 +46,11 @@ $TCA["tx_newspaper_extra_image"] = array (
 );
 
 
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_department');
+t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_section');
 
-$TCA["tx_newspaper_department"] = array (
+$TCA["tx_newspaper_section"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_department',		
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section',		
 		'label'     => 'uid',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
@@ -65,10 +65,10 @@ $TCA["tx_newspaper_department"] = array (
 			'fe_group' => 'fe_group',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_department.gif',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_section.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "sys_language_uid, l18n_parent, l18n_diffsource, hidden, fe_group, department_name",
+		"fe_admin_fieldList" => "sys_language_uid, l18n_parent, l18n_diffsource, hidden, fe_group, section_name",
 	)
 );
 
@@ -87,5 +87,30 @@ t3lib_div::loadTCA("tt_content");
 t3lib_extMgm::addTCAcolumns("tt_content",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("tt_content","tx_newspaper_extra;;;;1-1-1");
 
+$tempColumns = Array (
+	"tx_newspaper_associated_section" => Array (		
+		"exclude" => 1,		
+		"label" => "LLL:EXT:newspaper/locallang_db.xml:pages.tx_newspaper_associated_section",		
+		"config" => Array (
+			"type"     => "input",
+			"size"     => "4",
+			"max"      => "4",
+			"eval"     => "int",
+			"checkbox" => "0",
+			"range"    => Array (
+				"upper" => "1000",
+				"lower" => "10"
+			),
+			"default" => 0
+		)
+	),
+);
+
+
+t3lib_div::loadTCA("pages");
+t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
+t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
+
 require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
+
 ?>
