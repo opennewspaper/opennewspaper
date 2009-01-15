@@ -108,12 +108,12 @@ $TCA["tx_newspaper_extra_image"] = array (
 
 
 
-$TCA["tx_newspaper_department"] = array (
-	"ctrl" => $TCA["tx_newspaper_department"]["ctrl"],
+$TCA["tx_newspaper_section"] = array (
+	"ctrl" => $TCA["tx_newspaper_section"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "sys_language_uid,l18n_parent,l18n_diffsource,hidden,fe_group,department_name"
+		"showRecordFieldList" => "sys_language_uid,l18n_parent,l18n_diffsource,hidden,fe_group,section_name"
 	),
-	"feInterface" => $TCA["tx_newspaper_department"]["feInterface"],
+	"feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
 	"columns" => array (
 		'sys_language_uid' => array (		
 			'exclude' => 1,
@@ -137,8 +137,8 @@ $TCA["tx_newspaper_department"] = array (
 				'items' => array (
 					array('', 0),
 				),
-				'foreign_table'       => 'tx_newspaper_department',
-				'foreign_table_where' => 'AND tx_newspaper_department.pid=###CURRENT_PID### AND tx_newspaper_department.sys_language_uid IN (-1,0)',
+				'foreign_table'       => 'tx_newspaper_section',
+				'foreign_table_where' => 'AND tx_newspaper_section.pid=###CURRENT_PID### AND tx_newspaper_section.sys_language_uid IN (-1,0)',
 			)
 		),
 		'l18n_diffsource' => array (		
@@ -168,9 +168,9 @@ $TCA["tx_newspaper_department"] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
-		"department_name" => Array (		
+		"section_name" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_department.department_name",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.section_name",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "40",	
@@ -180,7 +180,7 @@ $TCA["tx_newspaper_department"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "sys_language_uid;;;;1-1-1, l18n_parent, l18n_diffsource, hidden;;1, department_name")
+		"0" => array("showitem" => "sys_language_uid;;;;1-1-1, l18n_parent, l18n_diffsource, hidden;;1, section_name")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "fe_group")
