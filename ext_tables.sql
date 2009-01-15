@@ -87,6 +87,7 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL
 );
 
+#
 # Table structure for table 'tx_newspaper_content_extra_mm'
 # This table has to be added manually to this file after using the kickstarter
 #

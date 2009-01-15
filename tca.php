@@ -273,6 +273,6 @@ $TCA["tx_newspaper_page"] = array (
 	)
 );
 
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
+require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
