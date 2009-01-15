@@ -233,16 +233,12 @@ $TCA["tx_newspaper_page"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.section",		
 			"config" => Array (
-				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
-				"eval"     => "int",
-				"checkbox" => "0",
-				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
-				),
-				"default" => 0
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 		"type_name" => Array (		

@@ -61,7 +61,7 @@ CREATE TABLE tx_newspaper_page (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	section int(11) DEFAULT '0' NOT NULL,
+	section blob NOT NULL,
 	type_name tinytext NOT NULL,
 	get_var varchar(10) DEFAULT '' NOT NULL,
 	get_value int(11) DEFAULT '0' NOT NULL,
