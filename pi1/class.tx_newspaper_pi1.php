@@ -54,17 +54,17 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		';
 
 		/// Get the tx_newspaper_Section object associated with the current Typo3 page
-		$ressort = $this->getSection();
-		if (!($ressort instanceof tx_newspaper_Section))
+		$section = $this->getSection();
+		if (!($section instanceof tx_newspaper_Section))
 			throw new tx_newspaper_WrongClassException();
 			
-		$content .= print_r($ressort, 1);
+		$content .= print_r($section, 1);
 		
 		/// Find out which page type we're on (Section, Article, RSS, Comments, whatever)
 		/// If $_GET['art'] is set, it is the article page
 		/// Else if $_GET['type'] is set, it is the page corresponding to that type
 		/// Else it is the ressort page
-		$page = $this->getPage($ressort);
+		$page = $this->getPage($section);
 	
 		if (!($page instanceof tx_newspaper_Page))
 			throw new tx_newspaper_WrongClassException();
@@ -103,13 +103,15 @@ class tx_newspaper_pi1 extends tslib_pibase {
         	throw new tx_newspaper_Exception();
         }
 
-		$ressort_uid = intval($row['tx_newspaper_associated_section']);
-		if (!$ressort_uid) {
+		$section_uid = intval($row['tx_newspaper_associated_section']);
+		if (!$section_uid) {
         	/// \todo Throw an appropriate exception
         	throw new tx_newspaper_Exception();			
 		}
 		
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $ressort_uid");
+		return new tx_newspaper_Section($section_uid);
+		
+//		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $section_uid");
 	}
 	
 	/// Get the tx_newspaper_Page which is currently displayed

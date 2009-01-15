@@ -27,7 +27,7 @@
 			<label index="tx_newspaper_section">Ressorts der Zeitung</label>
 			<label index="tx_newspaper_section.section_name">Name des Ressorts</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
-			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
+			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 		</languageKey>
 	</data>
 </T3locallang>
