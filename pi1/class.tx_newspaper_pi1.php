@@ -28,7 +28,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 
 /// Plugin 'Display Ressorts/Articles' for the 'newspaper' extension. Aka TBO.
 /** Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
- *  Also known as "The Big One".
+ *  Also known as "The Big One", because it is the one plugin that does all
+ *  rendering.
  * 
  *  \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
@@ -82,9 +83,33 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return The tx_newspaper_Section object the plugin currently works on
 	 */
 	public function getSection() {
-		$page = $GLOBALS['TSFE']->page;
+		$page = intval($GLOBALS['TSFE']->page);
 		
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $page");
+		/// Retrieve the UID of the section associated with current page
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'tx_newspaper_associated_section',
+			'pages',
+			"uid = $page"
+		);
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+		$ressort_uid = intval($row['tx_newspaper_associated_section']);
+		if (!$ressort_uid) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();			
+		}
+		
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $ressort_uid");
 	}
 	
 	/// Get the tx_newspaper_Page which is currently displayed
