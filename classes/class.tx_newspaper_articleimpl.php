@@ -87,6 +87,14 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return 'ArticleImpl';
 	}
 	
+	static function getModuleName() {
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::getModuleName()");
+	}
+
+	static function readExtraItem($uid, $table) {
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::readExtraItem()");
+	}
+	
 	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $attributes = array();	///< array of attributes
