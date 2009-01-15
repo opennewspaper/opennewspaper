@@ -60,10 +60,6 @@ class tx_newspaper_pi1 extends tslib_pibase {
 			
 		$content .= print_r($section, 1);
 		
-		/// Find out which page type we're on (Section, Article, RSS, Comments, whatever)
-		/// If $_GET['art'] is set, it is the article page
-		/// Else if $_GET['type'] is set, it is the page corresponding to that type
-		/// Else it is the ressort page
 		$page = $this->getPage($section);
 	
 		if (!($page instanceof tx_newspaper_Page))
@@ -110,16 +106,60 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		}
 		
 		return new tx_newspaper_Section($section_uid);
-		
-//		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $section_uid");
 	}
 	
 	/// Get the tx_newspaper_Page which is currently displayed
 	/**
+	 *	Find out which page type we're on (Section, Article, RSS, Comments, whatever)
+	 *
+	 *	If $_GET['art'] is set, it is the article page
+	 *
+	 *	Else if $_GET['type'] is set, it is the page corresponding to that type
+	 *
+	 *	Else it is the section overview page
+	 *
 	 *  \return The tx_newspaper_Page which is currently displayed
 	 */ 
-	public function getPage(tx_newspaper_Section $ressort) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getPage()");
+	public function getPage(tx_newspaper_Section $section) {
+		/*	forget about this, we'll just hard code the response for now.
+
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'DISTINCT get_var',
+			'tx_newspaper_page',
+			'section = '.$section->getAttribute('uid')
+		);
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+		$get_vars = array();
+        while ($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        	$get_vars[] = $row; 
+        }
+		 */
+
+		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
+		else if (t3lib_div::_GP('type')) 
+			$cond = 'get_var = \'type\' AND get_value = '.intal(t3lib_div::_GP('type'));
+		else $cond = 'NOT get_var';
+		
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*',
+			'tx_newspaper_page',
+			'section = '.$section->getAttribute('uid').' AND '.$cond
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getPage(): ".print_r($row, 1));
 	}
 }
 
