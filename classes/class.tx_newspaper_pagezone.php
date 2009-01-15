@@ -122,6 +122,14 @@ class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		return 'PageZone';
 	}
 	
+	
+	static function getModuleName() {
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::getModuleName()");
+	}
+
+	static function readExtraItem($uid, $table) {
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
+	}
  	
  	private $smarty = null;
  	
