@@ -31,9 +31,9 @@
  
 /// A page type for an online edition of a newspaper
 /** Examples include:
- *  - List view of the most recent articles in a department
+ *  - List view of the most recent articles in a section
  *  - Article view, displays an article
- *  - Comments page, shows the comments to an article (or a department page)
+ *  - Comments page, shows the comments to an article (or a section page)
  *  - RSS feed for list view or article page
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of

@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_ressort.php
+ *  \file class.tx_newspaper_section.php
  * 
  *  This file is part of the TYPO3 extension "newspaper".
  * 
@@ -29,11 +29,11 @@
  *  \date Jan 8, 2009
  */
  
-/// A department for an online edition of a newspaper
+/// A section of an online edition of a newspaper
 /** Currently just a dummy
  * 
  */
- class tx_newspaper_Department {
+ class tx_newspaper_Section {
  	
  }
  

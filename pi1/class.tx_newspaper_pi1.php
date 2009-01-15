@@ -52,14 +52,14 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$content .= '<h2>The Big One</h2>
 		';
 
-		/// Get the tx_newspaper_Department object associated with the current Typo3 page
-		$ressort = $this->getDepartment();
-		if (!($ressort instanceof tx_newspaper_Department))
+		/// Get the tx_newspaper_Section object associated with the current Typo3 page
+		$ressort = $this->getSection();
+		if (!($ressort instanceof tx_newspaper_Section))
 			throw new tx_newspaper_WrongClassException();
 			
 		$content .= print_r($ressort, 1);
 		
-		/// Find out which page type we're on (Department, Article, RSS, Comments, whatever)
+		/// Find out which page type we're on (Section, Article, RSS, Comments, whatever)
 		/// If $_GET['art'] is set, it is the article page
 		/// Else if $_GET['type'] is set, it is the page corresponding to that type
 		/// Else it is the ressort page
@@ -74,24 +74,24 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		return $this->pi_wrapInBaseClass($content);
 	}
 	
-	/// Get the tx_newspaper_Department object the plugin currently works on
+	/// Get the tx_newspaper_Section object the plugin currently works on
 	/** Currently, that means it returns the ressort record which lies on the
 	 *  current Typo3 page. This implementation may change, but this function
-	 *  is required to always return the correct tx_newspaper_Department.
+	 *  is required to always return the correct tx_newspaper_Section.
 	 * 
-	 *  \return The tx_newspaper_Department object the plugin currently works on
+	 *  \return The tx_newspaper_Section object the plugin currently works on
 	 */
-	public function getDepartment() {
+	public function getSection() {
 		$page = $GLOBALS['TSFE']->page;
 		
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getDepartment(): $page");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getSection(): $page");
 	}
 	
 	/// Get the tx_newspaper_Page which is currently displayed
 	/**
 	 *  \return The tx_newspaper_Page which is currently displayed
 	 */ 
-	public function getPage(tx_newspaper_Department $ressort) {
+	public function getPage(tx_newspaper_Section $ressort) {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_pi1::getPage()");
 	}
 }

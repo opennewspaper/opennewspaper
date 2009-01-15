@@ -31,9 +31,9 @@
  
 /// A page type for an online edition of a newspaper
 /** Examples include:
- *  - List view of the most recent articles in a department
+ *  - List view of the most recent articles in a section
  *  - Article view, displays an article
- *  - Comments page, shows the comments to an article (or a department page)
+ *  - Comments page, shows the comments to an article (or a section page)
  *  - RSS feed for list view or article page
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of
@@ -42,8 +42,8 @@
  */
 class tx_newspaper_Page {
 	
-	public function __construct(tx_newspaper_Department $parent) {
-		$this->parentDepartment = $parent;
+	public function __construct(tx_newspaper_Section $parent) {
+		$this->parentSection = $parent;
 		$this->smarty = new Smarty();
 		/// \todo smarty template dir
 		/// \todo default smarty template?
@@ -63,11 +63,11 @@ class tx_newspaper_Page {
  	}
  	
  	public function getParent() {
- 		return $this->parentDepartment;
+ 		return $this->parentSection;
  	}
  	
  	private $smarty = null;
- 	private $parentDepartment = null;
+ 	private $parentSection = null;
  	private $pageZones = array();
 }
  
