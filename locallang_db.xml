@@ -19,6 +19,17 @@
 			<label index="tx_newspaper_page.type_name">Name of the page type</label>
 			<label index="tx_newspaper_page.get_var">Associated GET variable</label>
 			<label index="tx_newspaper_page.get_value">Value of associated GET variable</label>
+			<label index="tx_newspaper_pagezone">Page zones (collective table, abstract class)</label>
+			<label index="tx_newspaper_pagezone.name">Name</label>
+			<label index="tx_newspaper_pagezone.page_id">Corresponding page</label>
+			<label index="tx_newspaper_pagezone.pagezone_table">Type/table of actual record (concrete class)</label>
+			<label index="tx_newspaper_pagezone.pagezone_uid">UID of actual record</label>
+			<label index="tx_newspaper_pagezone_page">Page zones on actual pages</label>
+			<label index="tx_newspaper_pagezone_page.name">Name</label>
+			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_article">Articles as page zones</label>
+			<label index="tx_newspaper_pagezone_article.name">Name</label>
+			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 		</languageKey>
@@ -36,6 +47,17 @@
 			<label index="tx_newspaper_page.type_name">Name des Seitentyps</label>
 			<label index="tx_newspaper_page.get_var">Zugeordnete GET-Variable</label>
 			<label index="tx_newspaper_page.get_value">Wert der zugeordneten GET-Variable</label>
+			<label index="tx_newspaper_pagezone">Seitenbereiche (Sammeltabelle, abstrakte Klasse)</label>
+			<label index="tx_newspaper_pagezone.name">Name</label>
+			<label index="tx_newspaper_pagezone.page_id">Zugeordnete Seite</label>
+			<label index="tx_newspaper_pagezone.pagezone_table">Typ/Tabelle des eigentlichen Datensatzes (Konkrete Klasse)</label>
+			<label index="tx_newspaper_pagezone.pagezone_uid">UID des eigentlichen Datensatzes</label>
+			<label index="tx_newspaper_pagezone_page">Seitenbereiche auf konkreten Seiten</label>
+			<label index="tx_newspaper_pagezone_page.name">Name</label>
+			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_article">Artikel als Seitenbereiche</label>
+			<label index="tx_newspaper_pagezone_article.name">Name</label>
+			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 		</languageKey>

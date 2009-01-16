@@ -15,4 +15,13 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_page=1
 ');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_pagezone=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_pagezone_page=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_pagezone_article=1
+');
 ?>
