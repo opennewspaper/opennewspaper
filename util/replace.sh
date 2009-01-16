@@ -36,5 +36,9 @@ add_file "ext_tables.sql" "util/ext_tables_addon.sql"
 
 svn ci -m "auto-fixed changes from kickstarter"
 
-echo "Don't forget to open the extension in the ExtMgr and make the SQL alterations"
+echo "###"
+echo "###"
+echo "### Don't forget to open the extension in the ExtMgr and make the SQL alterations\!"
+echo "###"
+echo "###"
 
