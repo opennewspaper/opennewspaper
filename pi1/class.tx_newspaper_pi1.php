@@ -137,7 +137,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 
 		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
 		else if (t3lib_div::_GP('type')) 
-			$cond = 'get_var = \'type\' AND get_value = '.intal(t3lib_div::_GP('type'));
+			$cond = 'get_var = \'type\' AND get_value = '.intval(t3lib_div::_GP('type'));
 		else $cond = 'NOT get_var';
 		
 		return new tx_newspaper_Page($section, $cond);
