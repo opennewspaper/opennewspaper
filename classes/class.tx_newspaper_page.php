@@ -55,10 +55,10 @@ class tx_newspaper_Page {
 		$tmp = "/tmp/" . substr(BASEPATH, 1);
 		file_exists($tmp) || mkdir($tmp, 0774, true);
 		
-		$smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
-		$smarty->compile_dir  = $tmp;
-		$smarty->config_dir   = $tmp;
-		$smarty->cache_dir    = $tmp;
+		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
+		$this->smarty->compile_dir  = $tmp;
+		$this->smarty->config_dir   = $tmp;
+		$this->smarty->cache_dir    = $tmp;
 		
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
