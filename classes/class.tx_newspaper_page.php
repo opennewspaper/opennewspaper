@@ -86,7 +86,9 @@ class tx_newspaper_Page {
 	 * 
 	 *  \return The rendered page as HTML (or XML, if you insist) 
 	 */
- 	public function render($template) {
+ 	public function render($template = '') {
+ 		if (!$template) $template = self::$defaultTemplate;
+ 		
  		foreach ($this->pageZones as $zone) {
  			/// \todo assign smarty variable
  		}
@@ -97,12 +99,14 @@ class tx_newspaper_Page {
  		return $this->parentSection;
  	}
  	
- 	private $smarty = null;
- 	private $parentSection = null;
- 	private $pageZones = array();
+ 	private $smarty = null;							///< Smarty object for HTML rendering
+ 	private $parentSection = null;					///< Newspaper section this page is in
+ 	private $pageZones = array();					///< Page zones on this page
  	private $attributes = array();					///< The member variables
  	
  	static private $table = 'tx_newspaper_page';	///< SQL table for persistence
+ 	/// Default Smarty template for HTML rendering
+ 	static private $defaultTemplate = 'tx_newspaper_page.tmpl';
  	
 }
  
