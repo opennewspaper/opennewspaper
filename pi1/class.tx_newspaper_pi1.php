@@ -58,7 +58,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		if (!($section instanceof tx_newspaper_Section))
 			throw new tx_newspaper_WrongClassException();
 			
-		$content .= print_r($section, 1);
+		$content .= '<h1>Ressort: ' . $section->getAttribute('section_name') . "</h1>\n";
 		
 		$page = $this->getPage($section);
 	
