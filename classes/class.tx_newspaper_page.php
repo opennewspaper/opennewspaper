@@ -42,17 +42,29 @@
  */
 class tx_newspaper_Page {
 	
-	public function __construct(tx_newspaper_Section $parent, $condition = '') {
+	/// Construct a page from DB
+	/** \param $parent The newspaper section the page is in
+	 *  \param $condition SQL WHERE condition to further specify the page
+	 */
+	public function __construct(tx_newspaper_Section $parent, $condition = '1') {
+
 		$this->parentSection = $parent;
+
+		/// Configure Smarty rendering engine
 		$this->smarty = new Smarty();
-		/// \todo smarty template dir
-		/// \todo default smarty template?
+		$tmp = "/tmp/" . substr(BASEPATH, 1);
+		file_exists($tmp) || mkdir($tmp, 0774, true);
 		
+		$smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
+		$smarty->compile_dir  = $tmp;
+		$smarty->config_dir   = $tmp;
+		$smarty->cache_dir    = $tmp;
+		
+		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'*',
 			self::$table,
-			'section = '.$this->parentSection->getAttribute('uid') .
-			($condition? ' AND '.$condition: '')
+			'section = ' . $this->parentSection->getAttribute('uid') . " AND $condition"
 		);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
