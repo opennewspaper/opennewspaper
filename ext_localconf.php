@@ -24,4 +24,10 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_pagezone_article=1
 ');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_article=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_extra=1
+');
 ?>

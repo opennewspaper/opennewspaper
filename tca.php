@@ -564,5 +564,185 @@ $TCA["tx_newspaper_pagezone_article"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_article"] = array (
+	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,title,extras"
+	),
+	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'starttime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'default'  => '0',
+				'checkbox' => '0'
+			)
+		),
+		'endtime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0',
+				'range'    => array (
+					'upper' => mktime(0, 0, 0, 12, 31, 2020),
+					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
+				)
+			)
+		),
+		'fe_group' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
+			'config'  => array (
+				'type'  => 'select',
+				'items' => array (
+					array('', 0),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
+				),
+				'foreign_table' => 'fe_groups'
+			)
+		),
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.extras",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "pages",	
+				"size" => 5,	
+				"minitems" => 0,
+				"maxitems" => 100,	
+				"MM" => "tx_newspaper_article_extras_mm",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, extras;;;;3-3-3")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "starttime, endtime, fe_group")
+	)
+);
+
+
+
+$TCA["tx_newspaper_extra"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,extra_table,extra_uid"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'starttime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'default'  => '0',
+				'checkbox' => '0'
+			)
+		),
+		'endtime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0',
+				'range'    => array (
+					'upper' => mktime(0, 0, 0, 12, 31, 2020),
+					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
+				)
+			)
+		),
+		'fe_group' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
+			'config'  => array (
+				'type'  => 'select',
+				'items' => array (
+					array('', 0),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
+				),
+				'foreign_table' => 'fe_groups'
+			)
+		),
+		"extra_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_table",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"extra_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_uid",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, extra_table, extra_uid")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "starttime, endtime, fe_group")
+	)
+);
 ?>
