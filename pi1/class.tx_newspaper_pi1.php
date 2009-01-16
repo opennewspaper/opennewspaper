@@ -49,17 +49,12 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
-		// dummy functionality
-		$content .= '<h2>The Big One</h2>
-		';
-
 		/// Get the tx_newspaper_Section object associated with the current Typo3 page
 		$section = $this->getSection();
 		if (!($section instanceof tx_newspaper_Section))
 			throw new tx_newspaper_WrongClassException();
-			
-		$content .= '<h1>Ressort: ' . $section->getAttribute('section_name') . "</h1>\n";
 		
+		/// Get the page displayed on that section	
 		$page = $this->getPage($section);
 	
 		if (!($page instanceof tx_newspaper_Page))

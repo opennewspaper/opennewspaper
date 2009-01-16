@@ -101,6 +101,7 @@ class tx_newspaper_Page {
  	public function render($template = '') {
  		if (!$template) $template = self::$defaultTemplate;
  		
+ 		$this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
  		$this->smarty->assign('page_type', $this->getAttribute('type_name'));
  		foreach ($this->pageZones as $zone) {
  			/// \todo assign smarty variable
