@@ -75,6 +75,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 */
 	public function getSection() {
 		$page = intval($GLOBALS['TSFE']->page);
+		t3lib_div::debug($GLOBALS['TSFE']->page);
 		
 		/// Retrieve the UID of the section associated with current page
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
