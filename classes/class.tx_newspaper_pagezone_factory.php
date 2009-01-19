@@ -61,8 +61,18 @@ class tx_newspaper_PageZone_Factory {
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+        if (!$row['pagezone_table']) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        if (!$row['pagezone_uid']) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
 		
-		throw new tx_newspaper_NotYetImplementedException('tx_newspaper_PageZone_Factory::create()' . print_r($row, 1));
+		return new $row['pagezone_table']($row['pagezone_uid']);
 	}
 	
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
