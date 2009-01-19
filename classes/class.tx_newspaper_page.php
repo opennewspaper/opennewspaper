@@ -123,6 +123,7 @@ class tx_newspaper_Page {
  		$this->smarty->assign('page_type', $this->getAttribute('type_name'));
  		foreach ($this->pageZones as $zone) {
  			/// \todo assign smarty variable
+ 			
  		}
  		return $this->smarty->fetch($template);
  	}

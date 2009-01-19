@@ -85,19 +85,19 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception('No section associated with current page');
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         if (!$row) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception('No section associated with current page');
         }
 
 		$section_uid = intval($row['tx_newspaper_associated_section']);
 		if (!$section_uid) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();			
+        	throw new tx_newspaper_Exception('No section associated with current page');	
 		}
 		
 		return new tx_newspaper_Section($section_uid);
