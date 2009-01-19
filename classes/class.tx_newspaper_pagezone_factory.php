@@ -49,7 +49,20 @@ class tx_newspaper_PageZone_Factory {
 	}
 	
 	public function create($uid) {
-		throw new tx_newspaper_NotYetImplementedException('tx_newspaper_PageZone_Factory::create()');
+		/// Read actual type and UID of the PageZone to instantiate from DB
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'pagezone_table, pagezone_uid', tx_newspaper_PageZone::$table, "uid = $uid"
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		
+		throw new tx_newspaper_NotYetImplementedException('tx_newspaper_PageZone_Factory::create()' . print_r($row, 1));
 	}
 	
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
