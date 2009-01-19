@@ -40,6 +40,7 @@
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_source.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_section.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_page.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 //}
 
 ?>
