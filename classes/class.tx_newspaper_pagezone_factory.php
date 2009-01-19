@@ -29,6 +29,8 @@
  *  \date Jan 8, 2009
  */
  
+require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone_page.php');
+
 /// Factory class to create the correct kind of tx_newspaper_PageZone from a UID
 /** Problem: The tx_newspaper_PageZone is stored in a table for the abstract
  *  parent type. At the time of creation, given only a UID, the concrete type
