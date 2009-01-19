@@ -114,7 +114,7 @@ class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	}
 
 	static function getName() {
-		return 'pagezone';
+		return self::$table;
 	}
 
 	/** \todo Internationalization */
@@ -134,6 +134,8 @@ class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	private $smarty = null;
  	
  	private $attributes = array();	///< array of attributes
+ 	
+ 	static private $table = 'tx_newspaper_pagezone';///< SQL table for persistence
  	
 }
  

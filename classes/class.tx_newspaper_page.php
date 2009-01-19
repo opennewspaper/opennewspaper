@@ -84,7 +84,7 @@ class tx_newspaper_Page {
  		
  		/// Get tx_newspaper_PageZone list for current page
  		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
- 			'uid', tx_newspaper_PageZone::$table, 
+ 			'uid', tx_newspaper_PageZone::getName(), 
 			'page_id = '.$this->getAttribute('uid')
 		);
 
@@ -123,6 +123,10 @@ class tx_newspaper_Page {
  	
  	public function getParent() {
  		return $this->parentSection;
+ 	}
+ 	
+ 	public static function getName() {
+ 		return self::$table;
  	}
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
