@@ -42,7 +42,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
  *  Class tx_newspaper_PageZone implements the tx_newspaper_Extra interface,
  *  because a PageZone can be placed like an Extra.
  */
-abstract class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
+class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
 	public function __construct($uid) {
 		parent::__construct();
