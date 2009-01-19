@@ -70,7 +70,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	public function render($template = '') {
  		if (!$template) $template = self::$defaultTemplate;
  		
- 		$this->smarty->assign('classs', get_class());
+ 		$this->smarty->assign('class', get_class());
  		$this->smarty->assign('attributes', $this->attributes);
 
  		return $this->smarty->fetch($template);
