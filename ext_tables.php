@@ -108,10 +108,11 @@ t3lib_extMgm::addToInsertRecords('tx_newspaper_pagezone');
 $TCA["tx_newspaper_pagezone"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone',		
-		'label'     => 'uid',	
+		'label'     => 'name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
+		'type' => 'pagezone_table',	
 		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
@@ -137,7 +138,7 @@ t3lib_extMgm::addToInsertRecords('tx_newspaper_pagezone_page');
 $TCA["tx_newspaper_pagezone_page"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page',		
-		'label'     => 'uid',	
+		'label'     => 'name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -166,7 +167,7 @@ t3lib_extMgm::addToInsertRecords('tx_newspaper_pagezone_article');
 $TCA["tx_newspaper_pagezone_article"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_article',		
-		'label'     => 'uid',	
+		'label'     => 'name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -195,11 +196,10 @@ t3lib_extMgm::addToInsertRecords('tx_newspaper_article');
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article',		
-		'label'     => 'uid',	
+		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'type' => 'title',	
 		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
@@ -284,5 +284,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>

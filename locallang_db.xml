@@ -33,7 +33,7 @@
 			<label index="tx_newspaper_article">Articles</label>
 			<label index="tx_newspaper_article.title">Title</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
-			<label index="tx_newspaper_extra">Extras</label>
+			<label index="tx_newspaper_extra">Extras (abstract superklass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
@@ -67,7 +67,7 @@
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.title">Titel</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
-			<label index="tx_newspaper_extra">Artikel-Extras</label>
+			<label index="tx_newspaper_extra">Artikel-Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
