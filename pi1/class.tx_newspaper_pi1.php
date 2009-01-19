@@ -74,32 +74,12 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return The tx_newspaper_Section object the plugin currently works on
 	 */
 	public function getSection() {
-		$page = intval($GLOBALS['TSFE']->page);
-		t3lib_div::debug($GLOBALS['TSFE']->page);
-		
-		/// Retrieve the UID of the section associated with current page
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'tx_newspaper_associated_section',
-			'pages',
-			"uid = $page"
-		);
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No section associated with current page '. $query);
-        }
+		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
 
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row) {
+        if (!$section_uid) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No section associated with current page '. $query);
+        	throw new tx_newspaper_Exception('No section associated with current page');
         }
-
-		$section_uid = intval($row['tx_newspaper_associated_section']);
-		if (!$section_uid) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No section associated with current page '. $query);	
-		}
 		
 		return new tx_newspaper_Section($section_uid);
 	}
