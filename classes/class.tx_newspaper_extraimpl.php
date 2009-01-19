@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_extraimpl.php
  *
- *  \author Oliver Schröder <newspaper@schroederbros.de>
+ *  \author Oliver Schrï¿½der <newspaper@schroederbros.de>
  *  \date Dec 12, 2008
  */
 
@@ -16,7 +16,7 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	private static $registeredExtra = array(); // list of registered Extras
 
 
-	public function render($template) {
+	public function render($template = '') {
 		throw new NotYetImplementedException("ExtraImpl::render()");
 	}
 
