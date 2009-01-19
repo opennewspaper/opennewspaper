@@ -30,6 +30,7 @@
  */
  
 require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone_page.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone_article.php');
 
 /// Factory class to create the correct kind of tx_newspaper_PageZone from a UID
 /** Problem: The tx_newspaper_PageZone is stored in a table for the abstract
