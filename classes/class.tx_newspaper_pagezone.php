@@ -42,10 +42,40 @@
  */
 class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		
-	public function __construct() {
+	public function __construct($uid) {
 		$this->smarty = new Smarty();
-		/// \todo smarty template dir
+
+		/// Configure Smarty rendering engine
+		$this->smarty = new Smarty();
+		$tmp = "/tmp/" . substr(BASEPATH, 1);
+		file_exists($tmp) || mkdir($tmp, 0774, true);
+		
+		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
+		$this->smarty->compile_dir  = $tmp;
+		$this->smarty->config_dir   = $tmp;
+		$this->smarty->cache_dir    = $tmp;
+
 		/// \todo default smarty template?
+
+		/// Read Attributes from persistent storage
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*', self::$table, "uid = $uid"
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+ 		
+ 		$this->attributes = $row;
 	}
 	
 	/// Render the page zone, containing all extras
