@@ -92,6 +92,9 @@ class tx_newspaper_Page {
 
 		if ($res) {
 			/// Populate the tx_newspaper_PageZone array 
+        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        		$this->pageZones[] = new tx_newspaper_PageZone($row['uid']);
+        	}
 		}
  	}
  	
@@ -102,7 +105,10 @@ class tx_newspaper_Page {
  		}
  		return $this->attributes[$attribute];
  	}
-		
+	
+	function getPageZones() {
+		return $this->pageZones;
+	}
 	
 	/// Render the page, containing all associated page areas
 	/**
