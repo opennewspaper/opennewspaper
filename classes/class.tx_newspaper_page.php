@@ -81,6 +81,18 @@ class tx_newspaper_Page {
         }
  		
  		$this->attributes = $row;
+ 		
+ 		/// Get tx_newspaper_PageZone list for current page
+ 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+ 			'uid', tx_newspaper_PageZone::$table, 
+			'page_id = '.$this->getAttribute('uid')
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+
+		if ($res) {
+			/// Populate the tx_newspaper_PageZone array 
+		}
  	}
  	
  	function getAttribute($attribute) {
