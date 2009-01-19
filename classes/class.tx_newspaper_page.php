@@ -93,7 +93,7 @@ class tx_newspaper_Page {
 		if ($res) {
 			/// Populate the tx_newspaper_PageZone array 
         	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->pageZones[] = new tx_newspaper_PageZone($row['uid']);
+        		$this->pageZones[] = tx_newspaper_PageZone_Factory::getInstance()->create($row['uid']);
         	}
 		}
  	}
