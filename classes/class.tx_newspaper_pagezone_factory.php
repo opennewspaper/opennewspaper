@@ -51,7 +51,7 @@ class tx_newspaper_PageZone_Factory {
 	public function create($uid) {
 		/// Read actual type and UID of the PageZone to instantiate from DB
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'pagezone_table, pagezone_uid', tx_newspaper_PageZone::$table, "uid = $uid"
+			'pagezone_table, pagezone_uid', tx_newspaper_PageZone::getName(), "uid = $uid"
 		);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
