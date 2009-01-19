@@ -67,7 +67,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 * 
 	 *  \return The rendered page as HTML (or XML, if you insist) 
 	 */
- 	public function render($template) {
+ 	public function render($template = '') {
+ 		if (!$template) $template = self::$defaultTemplate;
+ 		
 		/// \todo assign smarty variables
  		return $this->smarty->fetch($template);
  	}
@@ -149,6 +151,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	protected $attributes = array();	///< array of attributes
  	
  	static protected $table = 'tx_newspaper_pagezone';///< SQL table for persistence
+ 	 
+ 	/// Default Smarty template for HTML rendering
+ 	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
  	
 }
  
