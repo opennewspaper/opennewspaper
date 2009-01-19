@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_page.php
+ *  \file class.tx_newspaper_pagezone_page.php
  * 
  *  This file is part of the TYPO3 extension "newspaper".
  * 
@@ -40,23 +40,30 @@
  *  Class tx_newspaper_PageZone implements the tx_newspaper_Extra interface,
  *  because a PageZone can be placed like an Extra.
  */
-abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
+abstract class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
 	public function __construct() {
-		$this->smarty = new Smarty();
-
-		/// Configure Smarty rendering engine
-		$this->smarty = new Smarty();
-		$tmp = "/tmp/" . substr(BASEPATH, 1);
-		file_exists($tmp) || mkdir($tmp, 0774, true);
+		parent::__construct($uid);
 		
-		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
-		$this->smarty->compile_dir  = $tmp;
-		$this->smarty->config_dir   = $tmp;
-		$this->smarty->cache_dir    = $tmp;
+		/// Read Attributes from persistent storage
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*', self::$table, "uid = $uid"
+		);
 
-		/// \todo default smarty template?
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
 
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+        }
+ 		
+ 		$this->attributes = $row;
 	}
 	
 	/// Render the page zone, containing all extras
