@@ -21,7 +21,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 	}
 	
-	public function render($template) {
+	public function render($template = '') {
 		throw new NotYetImplementedException("ArticleImpl::render()");
 	}
 	public function importieren(tx_newspaper_Source $quelle) {
