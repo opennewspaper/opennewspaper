@@ -24,7 +24,7 @@
  	/** \param $template Smarty template used to render the Extra
  	 *  \return The rendered HTML
  	 */
-	public function render($template);
+	public function render($template = '');
 
 	/// returns an actual member of the Extra
 	/** \param $fieldname Name of the attribute which is wanted
