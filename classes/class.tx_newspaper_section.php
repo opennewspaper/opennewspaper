@@ -58,7 +58,7 @@
  	function getAttribute($attribute) {
  		if (!array_key_exists($attribute, $this->attributes)) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception("Attribute '$attribute' does not exist");
  		}
  		return $this->attributes[$attribute];
  	}
