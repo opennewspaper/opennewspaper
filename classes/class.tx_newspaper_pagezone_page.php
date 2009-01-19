@@ -42,8 +42,8 @@
  */
 abstract class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
-	public function __construct() {
-		parent::__construct($uid);
+	public function __construct($uid) {
+		parent::__construct();
 		
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -65,96 +65,9 @@ abstract class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
  		
  		$this->attributes = $row;
 	}
-	
-	/// Render the page zone, containing all extras
-	/**
-	 *  \todo default smarty template?
-	 * 
-	 *  \return The rendered page as HTML (or XML, if you insist) 
-	 */
- 	public function render($template) {
-		/// \todo assign smarty variables
- 		return $this->smarty->fetch($template);
- 	}
- 	
- 	/// returns an actual member (-> Extra)
-	function getAttribute($attribute) {
-		return $this->attributes[$attribute];
-	}
 
-	/// sets a member (-> Extra)
-	function setAttribute($attribute, $value) {
-		$this->attributes[$attribute] = $value;
-	}
+ 	static protected $table = 'tx_newspaper_pagezone_page';	///< SQL table for persistence
 	
-	/// Defined to implement the tx_newspaper_Extra interface
-	/** Of course it sucks that we implement an interface that, well, we don't
-	 *  implement fully. 
-	 *  \todo Think of a way out of this.
-	 */
-	function getSource() { 
-		throw new tx_newspaper_IllegalUsageException(
-			"tx_newspaper_PageZone::getSource(): " .
-			"PageZone should never deal with Sources");
-	}
-
-	/// Defined to implement the tx_newspaper_Extra interface
-	/** Of course it sucks that we implement an interface that, well, we don't
-	 *  implement fully. 
-	 *  \todo Think of a way out of this.
-	 */
-	function setSource(tx_newspaper_Source $source) {
-		throw new tx_newspaper_IllegalUsageException(
-			"tx_newspaper_PageZone::setSource(): " .
-			"PageZone should never deal with Sources");
-	 }
-	
-	/// Defined to implement the tx_newspaper_Extra interface
-	/** Of course it sucks that we implement an interface that, well, we don't
-	 *  implement fully. 
-	 *  \todo Think of a way out of this.
-	 */
-	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		throw new tx_newspaper_IllegalUsageException(
-			"tx_newspaper_PageZone::mapFieldToSourceField(): " .
-			"PageZone should never deal with Sources");
-	}
-	
-	/// Defined to implement the tx_newspaper_Extra interface
-	/** Of course it sucks that we implement an interface that, well, we don't
-	 *  implement fully. 
-	 *  \todo Think of a way out of this.
-	 */
-	static function sourceTable(tx_newspaper_Source $source) {
-		throw new tx_newspaper_IllegalUsageException(
-			"tx_newspaper_PageZone::sourceTable(): " .
-			"PageZone should never deal with Sources");
-	}
-
-	static function getName() {
-		return self::$table;
-	}
-
-	/** \todo Internationalization */
-	static function getTitle() {
-		return 'PageZone';
-	}
-	
-	
-	static function getModuleName() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::getModuleName()");
-	}
-
-	static function readExtraItem($uid, $table) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
-	}
- 	
- 	private $smarty = null;
- 	
- 	private $attributes = array();	///< array of attributes
- 	
- 	static private $table = 'tx_newspaper_pagezone';///< SQL table for persistence
- 	
 }
  
 ?>

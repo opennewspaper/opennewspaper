@@ -144,11 +144,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
 	}
  	
- 	private $smarty = null;
+ 	protected $smarty = null;
  	
- 	private $attributes = array();	///< array of attributes
+ 	protected $attributes = array();	///< array of attributes
  	
- 	static private $table = 'tx_newspaper_pagezone';///< SQL table for persistence
+ 	static protected $table = 'tx_newspaper_pagezone';///< SQL table for persistence
  	
 }
  
