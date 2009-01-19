@@ -59,19 +59,19 @@ class tx_newspaper_PageZone_Factory {
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception('No result for ' . $query);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
         if (!$row['pagezone_table']) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception('No pagezone_table');
         }
 
         if (!$row['pagezone_uid']) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception('No pagezone_uid for table ' . $row['pagezone_table']);
         }
 		
 		return new $row['pagezone_table']($row['pagezone_uid']);
