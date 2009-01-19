@@ -49,7 +49,7 @@ class tx_newspaper_PageZone_Factory {
 	}
 	
 	public function create($uid) {
-		
+		throw new tx_newspaper_NotYetImplementedException('tx_newspaper_PageZone_Factory::create()');
 	}
 	
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
