@@ -59,16 +59,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	}
 	
 	/// Render the page zone, containing all extras
-	/**
-	 *  \todo default smarty template?
-	 * 
-	 *  \return The rendered page as HTML (or XML, if you insist) 
+	/** \return The rendered page as HTML (or XML, if you insist) 
 	 */
  	public function render($template = '') {
  		if (!$template) $template = self::$defaultTemplate;
  		
  		$this->smarty->assign('class', get_class($this));
  		$this->smarty->assign('attributes', $this->attributes);
+ 		
+ 		/// \todo render extras
+ 		foreach ($this->extras as $extra) {
+ 			// ...
+ 		}
+ 		// instead:
+ 		$this->smarty->assign('extras', $this->extras);
 
  		return $this->smarty->fetch($template);
  	}
