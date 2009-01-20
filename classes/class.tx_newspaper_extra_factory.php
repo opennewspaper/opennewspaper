@@ -88,6 +88,8 @@ class tx_newspaper_Extra_Factory {
 		return new $row['extra_table']($row['extra_uid']);
 	}
 	
+	static function getExtraTable() { return self::$extra_table; } 
+	
 	/// Protected constructor, tx_newspaper_Extra_Factory cannot be created freely
 	protected function __construct() { }
 	
