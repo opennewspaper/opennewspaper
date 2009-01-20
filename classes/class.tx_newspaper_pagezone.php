@@ -67,12 +67,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  		$this->smarty->assign('class', get_class($this));
  		$this->smarty->assign('attributes', $this->attributes);
  		
- 		/// \todo render extras
+ 		/// render extras
+ 		$temp_extras = array();
  		foreach ($this->extras as $extra) {
- 			// ...
+ 			$temp_extras[] = $extra->render();
  		}
- 		// instead:
- 		$this->smarty->assign('extras', $this->extras);
+ 		$this->smarty->assign('extras', $temp_extras);
 
  		return $this->smarty->fetch($template);
  	}
