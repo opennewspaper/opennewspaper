@@ -17,31 +17,31 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 
 	public function render($template = '') {
-		throw new NotYetImplementedException("ExtraImpl::render()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::render()");
 	}
 
 	public function getAttribute($fieldname) {
-		throw new NotYetImplementedException("ExtraImpl::getAttribute()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getAttribute()");
 	}
 
 	public function setAttribute($fieldname, $value) {
-		throw new NotYetImplementedException("ExtraImpl::setAttribute()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setAttribute()");
 	}
 
 	function getSource() {
-		throw new NotYetImplementedException("ExtraImpl::getSource()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getSource()");
 	}
 
 	function setSource(tx_newspaper_Source $source) {
-		throw new NotYetImplementedException("ExtraImpl::setSource()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setSource()");
 	}
 
 	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		throw new NotYetImplementedException("ExtraImpl::mapFieldToSourceField()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::mapFieldToSourceField()");
 	}
 
 	static function sourceTable(tx_newspaper_Source $source) {
-		throw new NotYetImplementedException("ExtraImpl::sourceTable()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::sourceTable()");
 	}
 
 
@@ -82,12 +82,12 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	
 // internal name
 	static function getName() {
-#throw new NotYetImplementedException("ExtraImpl::getName()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getName()");
 	}
 
 // title for be
 	static function getTitle() {
-#throw new NotYetImplementedException("ExtraImpl::getTitle()");
+		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getTitle()");
 	}
 
 // title for module
@@ -109,7 +109,7 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			return $row;
 		}
-//TODO: throw Exception ... (how to? -> Helge)
+		/// \todo  throw Exception ... (how to? -> Helge)
 t3lib_div::devlog('readExtraItem - referenced Extra can\'t be found in table', 'newspaper', 3, $uid);
 		return false;
 	}
