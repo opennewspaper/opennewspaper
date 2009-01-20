@@ -17,7 +17,8 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 
 	public function render($template = '') {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::render()");
+		return get_class($this) . '::render() not yet implemented - called ' .
+			   get_class() . '::render('.$template.')';
 	}
 
 	public function getAttribute($fieldname) {
