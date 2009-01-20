@@ -56,9 +56,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
-
-		/// \todo default smarty template?
-
 	}
 	
 	/// Render the page zone, containing all extras
@@ -151,8 +148,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	protected $smarty = null;
  	
  	protected $attributes = array();	///< array of attributes
+ 	protected $extras = array();		///< array of tx_newspaper_Extra s
  	
- 	static protected $table = 'tx_newspaper_pagezone';///< SQL table for persistence
+ 	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
  	 
  	/// Default Smarty template for HTML rendering
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';

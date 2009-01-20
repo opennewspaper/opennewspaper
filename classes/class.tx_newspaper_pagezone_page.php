@@ -66,6 +66,8 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
         }
  		
  		$this->attributes = $row;
+ 		
+ 		/// Read Extras from DB
 	}
 
  	static protected $table = 'tx_newspaper_pagezone_page';	///< SQL table for persistence
