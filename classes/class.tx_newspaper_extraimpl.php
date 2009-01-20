@@ -6,7 +6,7 @@
  *  \date Dec 12, 2008
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 
 /// An Extra for the online newspaper, all Extras (except article) inherit from this class
 /** \todo This is just a dummy class.
