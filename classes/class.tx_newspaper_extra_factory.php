@@ -54,7 +54,7 @@ class tx_newspaper_Extra_Factory {
 	public function create($uid) {
 		/// Read actual type and UID of the Extra to instantiate from DB
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'extra_table, extra_uid', tx_newspaper_Extra::getName(), "uid = $uid"
+			'extra_table, extra_uid', self::$extra_table, "uid = $uid"
 		);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -68,21 +68,21 @@ class tx_newspaper_Extra_Factory {
         if (!$row['extra_table']) {
         	/// \todo Throw an appropriate exception
         	throw new tx_newspaper_Exception('No extra_table in ' .
-        									 tx_newspaper_Extra::getName() . " UID $uid");
+        									 self::$extra_table . " UID $uid");
         }
 		
 		if (!class_exists($row['extra_table'])) {
         	/// \todo Throw an appropriate exception
         	throw new tx_newspaper_Exception('Class ' . $row['extra_table'] .
 											 ' not defined in ' .
-        									 tx_newspaper_Extra::getName() . " UID $uid");
+        									 self::$extra_table . " UID $uid");
 		}
 
         if (!$row['extra_uid']) {
         	/// \todo Throw an appropriate exception
         	throw new tx_newspaper_Exception('No extra_uid for table ' .
         									 $row['pagezone_table'] . ' in ' . 
-        									 tx_newspaper_Extra::getName() . " UID $uid");
+        									 self::$extra_table . " UID $uid");
         }
 		
 		return new $row['extra_table']($row['extra_uid']);
@@ -98,6 +98,9 @@ class tx_newspaper_Extra_Factory {
 	
 	/// The only instance of the tx_newspaper_Extra_Factory Singleton
 	private static $instance = null;
+	
+	/// Extra table must be defined here because tx_newspaper_Extra is an interface
+	private static $extra_table = 'tx_newspaper_extra';
  	
 }
  
