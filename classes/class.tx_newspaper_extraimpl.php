@@ -109,16 +109,25 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	public static function readExtraItem($uid, $table) {
 t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'*',
 			$table,
 			'uid=' . $uid);
-		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			return $row;
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table $table");
+        }
+        
+        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("UID $uid found in table $table, but no record returned");
 		}
-		/// \todo  throw Exception ... (how to? -> Helge)
-t3lib_div::devlog('readExtraItem - referenced Extra can\'t be found in table', 'newspaper', 3, $uid);
-		return false;
+
+		return $row;
 	}
 	
 	private $attributes = array();				///< attributes of the extra
