@@ -69,7 +69,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
  		
  		/// Read Extras from DB
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', self::$table, "uid = $uid"
+			'*', tx_newspaper_Extra_Factory::getExtraTable(), "uid = $uid"
 		);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
