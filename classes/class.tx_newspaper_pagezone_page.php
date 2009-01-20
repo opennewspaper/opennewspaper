@@ -55,7 +55,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
