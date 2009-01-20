@@ -27,13 +27,14 @@
 			<label index="tx_newspaper_pagezone_page">Page zones on actual pages</label>
 			<label index="tx_newspaper_pagezone_page.name">Name</label>
 			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_page.extras">Extras on this page zone</label>
 			<label index="tx_newspaper_pagezone_article">Articles as page zones</label>
 			<label index="tx_newspaper_pagezone_article.name">Name</label>
 			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
 			<label index="tx_newspaper_article">Articles</label>
 			<label index="tx_newspaper_article.title">Title</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
-			<label index="tx_newspaper_extra">Extras (abstract superklass)</label>
+			<label index="tx_newspaper_extra">Extras (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
@@ -61,6 +62,7 @@
 			<label index="tx_newspaper_pagezone_page">Seitenbereiche auf konkreten Seiten</label>
 			<label index="tx_newspaper_pagezone_page.name">Name</label>
 			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_page.extras">Extras auf diesem Seitenbereich</label>
 			<label index="tx_newspaper_pagezone_article">Artikel als Seitenbereiche</label>
 			<label index="tx_newspaper_pagezone_article.name">Name</label>
 			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
