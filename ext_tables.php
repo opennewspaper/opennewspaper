@@ -112,7 +112,6 @@ $TCA["tx_newspaper_pagezone"] = array (
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'type' => 'pagezone_table',	
 		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
@@ -229,7 +228,6 @@ $TCA["tx_newspaper_extra"] = array (
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'type' => 'extra_table',	
 		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
@@ -284,5 +282,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>
