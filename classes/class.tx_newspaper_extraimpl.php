@@ -108,7 +108,7 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 *  \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
-#t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
+t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			$table,
