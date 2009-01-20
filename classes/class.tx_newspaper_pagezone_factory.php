@@ -67,12 +67,22 @@ class tx_newspaper_PageZone_Factory {
         
         if (!$row['pagezone_table']) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No pagezone_table');
+        	throw new tx_newspaper_Exception('No pagezone_table in ' .
+        									 tx_newspaper_PageZone::getName() . " UID $uid");
         }
+		
+		if (!class_exists($row['pagezone_table'])) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception('Class ' . $row['pagezone_table'] .
+											 ' not defined in ' .
+        									 tx_newspaper_PageZone::getName() . " UID $uid");
+		}
 
         if (!$row['pagezone_uid']) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No pagezone_uid for table ' . $row['pagezone_table']);
+        	throw new tx_newspaper_Exception('No pagezone_uid for table ' .
+        									 $row['pagezone_table'] . ' in ' . 
+        									 tx_newspaper_PageZone::getName() . " UID $uid");
         }
 		
 		return new $row['pagezone_table']($row['pagezone_uid']);
