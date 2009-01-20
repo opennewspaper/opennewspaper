@@ -13,12 +13,15 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
  */
 class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
-	private static $registeredExtra = array(); // list of registered Extras
-
+	public function __construct($uid) {
+		$this->attributes = $this->readExtraItem($uid, $this->getName());
+	}
 
 	public function render($template = '') {
-		return get_class($this) . '::render() not yet implemented - called ' .
-			   get_class() . '::render('.$template.')';
+		return '<p>' .
+			   get_class($this) . '::render() not yet implemented - called ' .
+			   get_class() . '::render(' . $template . ')' . "</p>\n" .
+			   '<p>' . print_r($this->attributes, 1) . "</p>\n";
 	}
 
 	public function getAttribute($fieldname) {
@@ -97,9 +100,12 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 
 
-	/**
-	 * read data of Extra
-	 * \return Array row with Extra data for given uid and table
+	/** read data of Extra
+	 * 
+	 *  \todo oli: is this function still needed if we populate $this->attributes 
+	 *  in the constructor?
+	 * 
+	 *  \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
 #t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
@@ -114,6 +120,9 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 t3lib_div::devlog('readExtraItem - referenced Extra can\'t be found in table', 'newspaper', 3, $uid);
 		return false;
 	}
-
+	
+	private $attributes = array();				///< attributes of the extra
+	
+	private static $registeredExtra = array();	///< list of registered Extras
 }
 ?>
