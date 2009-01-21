@@ -64,7 +64,7 @@ class tx_newspaper_Extra_Factory {
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        throw new tx_newspaper_Exception("UID: $uid, row: ".print_r($row, 1));
+
         if (!$row['extra_table']) {
         	/// \todo Throw an appropriate exception
         	throw new tx_newspaper_Exception('No extra_table in ' .
