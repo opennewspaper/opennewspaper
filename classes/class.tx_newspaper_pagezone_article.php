@@ -35,29 +35,9 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
 class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		
 	public function __construct($uid) {
-		parent::__construct($uid);
+		parent::__construct();
 		$this->readExtras($uid);
 	    $this->readAttributes($uid);
-		
-		/// Read Attributes from persistent storage
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', self::$table, "uid = $uid"
-		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
-        }
- 		
- 		$this->attributes = $row;
  	}
 	
 	protected function getExtra2PagezoneTable() {

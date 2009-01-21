@@ -45,7 +45,7 @@
 abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	
 	/// Configure Smarty rendering engine
-	public function __construct($uid) {
+	public function __construct() {
 		$this->smarty = new Smarty();
 
 		$this->smarty = new Smarty();
@@ -164,7 +164,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 *  Solution: Factor out the methods to read Extras and attributes in the 
 	 *  base class, and call them in the descended c'tor like this:
 	 *  \code
-	 * 	parent::__construct($uid);
+	 * 	parent::__construct();
 	 *  $this->readExtras($uid);
 	 *  $this->readAttributes($uid);
 	 *  \endcode
