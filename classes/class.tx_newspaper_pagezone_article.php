@@ -36,6 +36,8 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		
 	public function __construct($uid) {
 		parent::__construct($uid);
+		$this->readExtras($uid);
+	    $this->readAttributes($uid);
 		
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(

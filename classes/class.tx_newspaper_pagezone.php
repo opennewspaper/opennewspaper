@@ -43,11 +43,11 @@
  *  because a PageZone can be placed like an Extra.
  */
 abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
-		
+	
+	/// Configure Smarty rendering engine
 	public function __construct($uid) {
 		$this->smarty = new Smarty();
 
-		/// Configure Smarty rendering engine
 		$this->smarty = new Smarty();
 		$tmp = "/tmp/" . substr(BASEPATH, 1);
 		file_exists($tmp) || mkdir($tmp, 0774, true);
@@ -56,22 +56,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
-		
-		/// Read Extras from DB
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
-		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-
-		if ($res) {
-			/// Populate the tx_newspaper_Extra array 
-        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid_foreign']);
-        	}
-		}
- 		
-		
 	}
 	
 	/// Render the page zone, containing all extras
@@ -165,6 +149,64 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	static function readExtraItem($uid, $table) {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
 	}
+ 	
+ 	////////////////////////////////////////////////////////////////////////////
+ 	
+	/// Read Extras from DB
+	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
+	 *  class c'tor instead of every descendant to minimize code duplication.
+	 * 
+	 *  Problem: The descendant c'tor calls <tt>parent::__construct()</tt>. The
+	 *  base c'tor knows only its own class, not the concrete class which is 
+	 *  intantiated. Every function call in the base c'tor therefore calls 
+	 *  functions in the base class. Late binding is impossible.
+	 * 
+	 *  Solution: Factor out the methods to read Extras and attributes in the 
+	 *  base class, and call them in the descended c'tor like this:
+	 *  \code
+	 * 	parent::__construct($uid);
+	 *  $this->readExtras($uid);
+	 *  $this->readAttributes($uid);
+	 *  \endcode
+	 */
+ 	protected function readExtras($uid) {
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+
+		if ($res) {
+			/// Populate the tx_newspaper_Extra array 
+        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid_foreign']);
+        	}
+		} 		
+ 	}
+ 	
+	/// Read Extras from DB
+	/** \see readAttributes() */
+ 	protected function readAttributes($uid) {
+		/// Read Attributes from persistent storage
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*', self::$table, "uid = $uid"
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
+        }
+ 		
+ 		$this->attributes = $row;
+ 	}
  	
  	protected function getExtra2PagezoneTable() {
 		throw new tx_newspaper_IllegalUsageException(
