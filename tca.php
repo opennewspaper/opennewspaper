@@ -606,13 +606,46 @@ $TCA["tx_newspaper_pagezone_article"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_article.extras",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_extra",	
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_extra",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_extra.uid",	
 				"size" => 5,	
 				"minitems" => 0,
 				"maxitems" => 100,	
-				"MM" => "tx_newspaper_pagezone_article_extras_mm",
+				"MM" => "tx_newspaper_pagezone_article_extras_mm",	
+				"wizards" => Array(
+					"_PADDING" => 2,
+					"_VERTICAL" => 1,
+					"add" => Array(
+						"type" => "script",
+						"title" => "Create new record",
+						"icon" => "add.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_extra",
+							"pid" => "###CURRENT_PID###",
+							"setValue" => "prepend"
+						),
+						"script" => "wizard_add.php",
+					),
+					"list" => Array(
+						"type" => "script",
+						"title" => "List",
+						"icon" => "list.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_extra",
+							"pid" => "###CURRENT_PID###",
+						),
+						"script" => "wizard_list.php",
+					),
+					"edit" => Array(
+						"type" => "popup",
+						"title" => "Edit",
+						"script" => "wizard_edit.php",
+						"popup_onlyOpenIfSelected" => 1,
+						"icon" => "edit2.gif",
+						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
+					),
+				),
 			)
 		),
 	),
@@ -804,5 +837,4 @@ $TCA["tx_newspaper_extra"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
