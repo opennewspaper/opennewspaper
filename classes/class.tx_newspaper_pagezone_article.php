@@ -59,7 +59,7 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
  		
  		/// Read Extras from DB
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', tx_newspaper_Extra_Factory::getExtraTable(), "uid = $uid"
+			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
 		);
 		throw new tx_newspaper_Exception($query);
 
@@ -73,6 +73,8 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		}
  		
 	}
+	
+	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
 
  	static protected $table = 'tx_newspaper_pagezone_article';	///< SQL table for persistence
 	
