@@ -61,7 +61,6 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
 		);
-		throw new tx_newspaper_Exception($query);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
 
