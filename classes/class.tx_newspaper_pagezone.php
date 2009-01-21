@@ -208,11 +208,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  		$this->attributes = $row;
  	}
  	
- 	protected function getExtra2PagezoneTable() {
-		throw new tx_newspaper_IllegalUsageException(
-			'getExtra2PagezoneTable() can not be called on class ' .
-			'tx_newspaper_PageZone, only on its  descendants');
- 	}
+ 	abstract protected function getExtra2PagezoneTable();
  	
  	protected $smarty = null;
  	
