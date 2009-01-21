@@ -189,7 +189,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	protected function readAttributes($uid) {
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', $this->table, "uid = $uid"
+			'*', self::getName(), "uid = $uid"
 		);
 
 		throw new tx_newspaper_Exception($query);
