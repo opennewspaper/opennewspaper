@@ -56,22 +56,7 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
         }
  		
  		$this->attributes = $row;
- 		
- 		/// Read Extras from DB
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
-		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-
-		if ($res) {
-			/// Populate the tx_newspaper_Extra array 
-        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid_foreign']);
-        	}
-		}
- 		
-	}
+ 	}
 	
 	protected function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
