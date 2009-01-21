@@ -24,8 +24,12 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 			   '<p>' . print_r($this->attributes, 1) . "</p>\n";
 	}
 
-	public function getAttribute($fieldname) {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getAttribute()");
+	public function getAttribute($attribute) {
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception();
+ 		}
+ 		return $this->attributes[$attribute];
 	}
 
 	public function setAttribute($fieldname, $value) {
