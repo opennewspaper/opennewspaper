@@ -151,12 +151,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	}
  	
  	protected function getExtra2PagezoneTable() {
- 		if (!$this->extra_2_pagezone_table) {
- 			throw new tx_newspaper_IllegalUsageException(
-				'getExtra2PagezoneTable() can not be called on class ' .
-				'tx_newspaper_PageZone, only on its  descendants');
- 		}
- 		return $this->extra_2_pagezone_table;
+		throw new tx_newspaper_IllegalUsageException(
+			'getExtra2PagezoneTable() can not be called on class ' .
+			'tx_newspaper_PageZone, only on its  descendants');
  	}
  	
  	protected $smarty = null;

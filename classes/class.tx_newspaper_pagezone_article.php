@@ -74,6 +74,11 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
  		
 	}
 	
+	protected function getExtra2PagezoneTable() {
+		return self::$extra_2_pagezone_table;
+	}
+	
+	
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
 
  	static protected $table = 'tx_newspaper_pagezone_article';	///< SQL table for persistence
