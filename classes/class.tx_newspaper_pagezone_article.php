@@ -67,7 +67,7 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		if ($res) {
 			/// Populate the tx_newspaper_Extra array 
         	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid']);
+        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid_foreign']);
         	}
 		}
  		
