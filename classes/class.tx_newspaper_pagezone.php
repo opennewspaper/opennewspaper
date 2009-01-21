@@ -192,6 +192,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 			'*', self::$table, "uid = $uid"
 		);
 
+		throw new tx_newspaper_Exception($query);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
         	/// \todo Throw an appropriate exception
