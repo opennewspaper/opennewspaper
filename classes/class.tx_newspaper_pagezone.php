@@ -150,7 +150,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
 	}
  	
- 	static protected function getExtra2PagezoneTable() {
+ 	protected function getExtra2PagezoneTable() {
  		if (!$this->extra_2_pagezone_table) {
  			throw new tx_newspaper_IllegalUsageException(
 				'getExtra2PagezoneTable() can not be called on class ' .
