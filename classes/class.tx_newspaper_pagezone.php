@@ -189,22 +189,40 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	protected function readAttributes($uid) {
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', self::getName(), "uid = $uid"
+			'pagezone_table, pagezone_uid', self::getName(), "uid = $uid"
 		);
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));
         
 		if (!$row) {
         	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::$table);
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
         }
+
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*', $row['pagezone_table'], 'uid = '.$row['pagezone_uid']
+		);
+
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
+        }
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+        	/// \todo Throw an appropriate exception
+        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
+        }
+
+		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));
  		
  		$this->attributes = $row;
  	}
