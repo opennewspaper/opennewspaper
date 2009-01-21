@@ -532,7 +532,7 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_pagezone_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezone_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,name,pagezone_id"
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,name,pagezone_id,extras"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone_article"]["feInterface"],
 	"columns" => array (
@@ -602,9 +602,22 @@ $TCA["tx_newspaper_pagezone_article"] = array (
 				"size" => "30",
 			)
 		),
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_article.extras",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra",	
+				"size" => 5,	
+				"minitems" => 0,
+				"maxitems" => 100,	
+				"MM" => "tx_newspaper_pagezone_article_extras_mm",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, name, pagezone_id")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, name, pagezone_id, extras")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
@@ -791,5 +804,4 @@ $TCA["tx_newspaper_extra"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

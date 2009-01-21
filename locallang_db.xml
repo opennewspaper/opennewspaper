@@ -31,6 +31,7 @@
 			<label index="tx_newspaper_pagezone_article">Articles as page zones</label>
 			<label index="tx_newspaper_pagezone_article.name">Name</label>
 			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_article.extras">Extras</label>
 			<label index="tx_newspaper_article">Articles</label>
 			<label index="tx_newspaper_article.title">Title</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
@@ -66,6 +67,7 @@
 			<label index="tx_newspaper_pagezone_article">Artikel als Seitenbereiche</label>
 			<label index="tx_newspaper_pagezone_article.name">Name</label>
 			<label index="tx_newspaper_pagezone_article.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_article.extras">Extras</label>
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.title">Titel</label>
 			<label index="tx_newspaper_article.extras">Extras</label>

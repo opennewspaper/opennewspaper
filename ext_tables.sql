@@ -139,6 +139,22 @@ CREATE TABLE tx_newspaper_pagezone_page (
 
 
 
+
+#
+# Table structure for table 'tx_newspaper_pagezone_article_extras_mm'
+# 
+#
+CREATE TABLE tx_newspaper_pagezone_article_extras_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
 #
 # Table structure for table 'tx_newspaper_pagezone_article'
 #
@@ -156,6 +172,7 @@ CREATE TABLE tx_newspaper_pagezone_article (
 	fe_group int(11) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
 	pagezone_id tinytext NOT NULL,
+	extras int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -241,18 +258,4 @@ CREATE TABLE tt_content (
 #
 CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL
-);
-#
-# Table structure for table 'tx_newspaper_content_extra_mm'
-# This table has to be added manually to this file after using the kickstarter
-#
-CREATE TABLE tx_newspaper_content_extra_mm (
-  uid_local int(11) DEFAULT '0' NOT NULL,
-  tablenames varchar(30) DEFAULT '' NOT NULL,
-  uid_foreign int(11) DEFAULT '0' NOT NULL,
-  extra_type varchar(30) DEFAULT '' NOT NULL,
-  sorting int(11) unsigned DEFAULT '0' NOT NULL,
-  conf text,
-  KEY uid_local (uid_local),
-  KEY uid_foreign (uid_foreign)
 );
