@@ -35,7 +35,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
 class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		
 	public function __construct($uid) {
-		parent::__construct();
+		parent::__construct($uid);
 		
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(

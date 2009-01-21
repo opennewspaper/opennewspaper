@@ -44,7 +44,7 @@
  */
 abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		
-	public function __construct() {
+	public function __construct($uid) {
 		$this->smarty = new Smarty();
 
 		/// Configure Smarty rendering engine
