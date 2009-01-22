@@ -43,7 +43,13 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 	protected function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
-	
+
+ 	protected function readAttributes($uid) {
+ 		parent::readAttributes($uid);
+ 		t3lib_div::debug($this->attributes);
+ 		t3lib_div::debug(debug_backtrace());
+ 		throw new tx_newspaper_Exception();	
+ 	}
 	
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
 
