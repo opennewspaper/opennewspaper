@@ -226,7 +226,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 
  		$row[] = $pagezone_table;
  		$row[] = $pagezone_uid;
-		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));
  		
  		$this->attributes = $row;
  	}

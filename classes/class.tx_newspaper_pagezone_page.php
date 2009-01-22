@@ -54,6 +54,11 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		return self::$extra_2_pagezone_table;
 	}
 
+ 	protected function readAttributes($uid) {
+ 		parent::readAttributes($uid);
+ 		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));	
+ 	}
+ 	
  	static protected $table = 'tx_newspaper_pagezone_page';	///< SQL table for persistence
 	
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
