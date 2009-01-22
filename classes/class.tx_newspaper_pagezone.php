@@ -205,11 +205,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
         	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
         }
 
-		extract($row);
+ 		$this->attributes = $row;
 		
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', $pagezone_table, "uid = $pagezone_uid"
+			'*', $row['pagezone_table'], 'uid = '.$row['pagezone_uid']
 		);
+ 		$this->attributes['query'] = $query;
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
@@ -224,10 +225,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
         	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
         }
 
- 		$row[] = $pagezone_table;
- 		$row[] = $pagezone_uid;
- 		
- 		$this->attributes = $row;
+ 		$this->attributes = array_merge($this->attributes, $row);
  	}
  	
  	abstract protected function getExtra2PagezoneTable();
