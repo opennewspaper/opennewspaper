@@ -59,30 +59,23 @@ class tx_newspaper_Extra_Factory {
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No result for ' . $query);
+        	throw new tx_newspaper_NoResException($query);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         if (!$row['extra_table']) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No extra_table in ' .
-        									 self::$extra_table . " UID $uid");
+        	throw new tx_newspaper_DBException($query, 'No extra_table in result', 
+											   $row);
         }
 		
 		if (!class_exists($row['extra_table'])) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('Class ' . $row['extra_table'] .
-											 ' not defined in ' .
-        									 self::$extra_table . " UID $uid");
+        	throw new tx_newspaper_WrongClassException($row['extra_table']);
 		}
 
         if (!$row['extra_uid']) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No extra_uid for table ' .
-        									 $row['pagezone_table'] . ' in ' . 
-        									 self::$extra_table . " UID $uid");
+        	throw new tx_newspaper_DBException($query, 'No extra_uid in result', 
+        									   $row);
         }
 		
 		return new $row['extra_table']($row['extra_uid']);

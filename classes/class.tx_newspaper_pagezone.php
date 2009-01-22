@@ -201,15 +201,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
+        	throw new tx_newspaper_NoResException($query);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
 		if (!$row) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
+			throw new tx_newspaper_EmptyResultException($query);
         }
 
  		$this->attributes = array_merge($this->attributes, $row);

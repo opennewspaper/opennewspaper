@@ -31,38 +31,68 @@
 
 /// Base class for all exceptions thrown by this Typo3 extension
 class tx_newspaper_Exception extends Exception { 
-	public function __construct($message, $code = 0) {
-        parent::__construct($message, $code);
+	public function __construct($message) {
+        parent::__construct($message);
     }
 }
 
 /// This Exception is thrown when opening a Source fails
 /** I could have named it OpenSourceFailedException, but no way! Open Source rules! :-)) */
 class tx_newspaper_SourceOpenFailedException extends tx_newspaper_Exception { 
-	public function __construct($message = '', $code = 0) {
-        parent::__construct($message, $code);
+	public function __construct($message = '') {
+        parent::__construct($message);
     }	
 }
 
 /// This Exception is thrown when a Source is asked to create a class that is not an Article or Extra
 class tx_newspaper_WrongClassException extends tx_newspaper_Exception {
-	public function __construct($message = '', $code = 0) {
-        parent::__construct($message, $code);
+	public function __construct($message = '') {
+        parent::__construct($message);
     }
 }
 
 /// This Exception is thrown if a feature is not yet implemented
 class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { 
-	public function __construct($message, $code = 0) {
-        parent::__construct("Not yet implemented: $message", $code);
+	public function __construct($message) {
+        parent::__construct("Not yet implemented: $message");
     }
 }
 
 /// This Exception is thrown if a feature is used in a wrong way
 class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception { 
-	public function __construct($message, $code = 0) {
-        parent::__construct("Illegal usage: $message", $code);
+	public function __construct($message) {
+        parent::__construct("Illegal usage: $message");
     }	
 }
+
+/// This Exception is thrown if a non-existing attribute is accessed
+class tx_newspaper_WrongAttributeException 
+	extends tx_newspaper_IllegalUsageException { 
+	public function __construct($attribute) {
+        parent::__construct("Attribute $attribute does not exist");
+    }	
+}
+
+/// This Exception is thrown if a database operation fails
+class tx_newspaper_DBException extends tx_newspaper_Exception { 
+	public function __construct($query, $message, array $row = array()) {
+        parent::__construct("SQL query: \n$query \nfailed with message: \n$message" .
+        					($row? print_r($row, 1): ''));
+    }
+}
  
+/// This Exception is thrown if a database operation does not return a result set
+class tx_newspaper_NoResException extends tx_newspaper_DBException { 
+	public function __construct($query) {
+        tx_newspaper_DBException::__construct($query, 'No result set found');
+    }
+}
+
+/// This Exception is thrown if a database operation return an empty result set
+class tx_newspaper_EmptyResultException extends tx_newspaper_DBException { 
+	public function __construct($query) {
+        tx_newspaper_DBException::__construct($query, 'Result empty');
+    }
+}
+
 ?>

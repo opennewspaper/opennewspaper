@@ -26,8 +26,7 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function getAttribute($attribute) {
  		if (!array_key_exists($attribute, $this->attributes)) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
  		return $this->attributes[$attribute];
 	}
@@ -120,15 +119,13 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		
 		if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table $table");
+        	throw new tx_newspaper_NoResException($query);
         }
         
         $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
 		if (!$row) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("UID $uid found in table $table, but no record returned");
+			throw new tx_newspaper_EmptyResultException($query);
 		}
 
 		return $row;

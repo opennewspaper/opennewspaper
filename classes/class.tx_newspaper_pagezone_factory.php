@@ -59,30 +59,25 @@ class tx_newspaper_PageZone_Factory {
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No result for ' . $query);
+        	throw new tx_newspaper_NoResException($query);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
         if (!$row['pagezone_table']) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No pagezone_table in ' .
-        									 tx_newspaper_PageZone::getName() . " UID $uid");
+        	throw new tx_newspaper_DBException($query, 
+											   'No pagezone_table in result', 
+											   $row);
         }
 		
 		if (!class_exists($row['pagezone_table'])) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('Class ' . $row['pagezone_table'] .
-											 ' not defined in ' .
-        									 tx_newspaper_PageZone::getName() . " UID $uid");
+        	throw new tx_newspaper_WrongClassException($row['pagezone_table']);
 		}
 
         if (!$row['pagezone_uid']) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No pagezone_uid for table ' .
-        									 $row['pagezone_table'] . ' in ' . 
-        									 tx_newspaper_PageZone::getName() . " UID $uid");
+        	throw new tx_newspaper_DBException($query, 
+											   'No pagezone_uid in result', 
+        									   $row);
         }
 		
 		return new $row['pagezone_table']($row['pagezone_uid']);

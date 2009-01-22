@@ -77,8 +77,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
 
         if (!$section_uid) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception('No section associated with current page');
+        	throw new tx_newspaper_IllegalUsageException('No section associated with current page');
         }
 		
 		return new tx_newspaper_Section($section_uid);
@@ -97,25 +96,6 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return The tx_newspaper_Page which is currently displayed
 	 */ 
 	public function getPage(tx_newspaper_Section $section) {
-		/*	forget about this, we'll just hard code the response for now.
-
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'DISTINCT get_var',
-			'tx_newspaper_page',
-			'section = '.$section->getAttribute('uid')
-		);
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
-        }
-
-		$get_vars = array();
-        while ($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        	$get_vars[] = $row; 
-        }
-		 */
-
 		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
 		else if (t3lib_div::_GP('type')) 
 			$cond = 'get_var = \'type\' AND get_value = '.intval(t3lib_div::_GP('type'));

@@ -71,15 +71,13 @@ class tx_newspaper_Page {
 
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_NoResException($query);
         }
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
 		if (!$row) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+			throw new tx_newspaper_EmptyResultException($query);
         }
  		
  		$this->attributes = $row;
@@ -102,8 +100,7 @@ class tx_newspaper_Page {
  	
  	function getAttribute($attribute) {
  		if (!array_key_exists($attribute, $this->attributes)) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception();
+        	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
  		return $this->attributes[$attribute];
  	}
