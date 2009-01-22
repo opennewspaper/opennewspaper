@@ -56,7 +56,9 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 
  	protected function readAttributes($uid) {
  		parent::readAttributes($uid);
- 		throw new tx_newspaper_Exception(print_r(debug_backtrace(), 1).print_r($this->attributes, 1));	
+ 		t3lib_div::debug($this->attributes);
+ 		t3lib_div::debug(debug_backtrace());
+ 		throw new tx_newspaper_Exception();	
  	}
  	
  	static protected $table = 'tx_newspaper_pagezone_page';	///< SQL table for persistence
