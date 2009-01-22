@@ -166,8 +166,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 *  \code
 	 * 	parent::__construct();
 	 *  $this->readExtras($uid);
-	 *  $this->readAttributes($uid);
+	 *  $this->readAttributes(self::$table, $uid);
 	 *  \endcode
+	 * 
+	 *  \param $uid UID in the table of the concrete type 
 	 */
  	protected function readExtras($uid) {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -185,7 +187,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	}
  	
 	/// Read Attributes from DB
-	/** \see readExtras() */
+	/** \see readExtras()
+	 * 
+	 *  \param $table Table which stores the concrete object 
+	 *  \param $uid UID in the table of the concrete type 
+	 */
  	protected function readAttributes($table, $uid) {
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -209,6 +215,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  		$this->attributes = array_merge($this->attributes, $row);
  	}
  	
+ 	/// Returns the table which links Extras to this type of page zone
+ 	/** This function is needed, and non-static, because late static binding
+ 	 *  does not work too well with PHP (at least prior to 5.3, which introduced
+ 	 *  the static:: storage type - but this is not yet distributed widely 
+ 	 *  enough).
+ 	 *  \return self::$extra_2_pagezone_table
+ 	 */
  	abstract protected function getExtra2PagezoneTable();
  	
  	protected $smarty = null;
