@@ -88,7 +88,7 @@ class tx_newspaper_NoResException extends tx_newspaper_DBException {
     }
 }
 
-/// This Exception is thrown if a database operation return an empty result set
+/// This Exception is thrown if a database operation returns an empty result set
 class tx_newspaper_EmptyResultException extends tx_newspaper_DBException { 
 	public function __construct($query) {
         tx_newspaper_DBException::__construct($query, 'Result empty');
