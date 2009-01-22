@@ -186,29 +186,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	
 	/// Read Attributes from DB
 	/** \see readExtras() */
- 	protected function readAttributes($uid) {
+ 	protected function readAttributes($table, $uid) {
 		/// Read Attributes from persistent storage
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'pagezone_table, pagezone_uid', self::getName(), "uid = $uid"
-		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-        	/// \todo Throw an appropriate exception
-        	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
-        }
-
- 		$this->attributes = $row;
-		
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', $row['pagezone_table'], 'uid = '.$row['pagezone_uid']
+			'*', $table, 'uid = ' . $uid
 		);
  		$this->attributes['query'] = $query;
 
