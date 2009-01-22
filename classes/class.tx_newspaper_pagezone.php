@@ -224,11 +224,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
         	throw new tx_newspaper_Exception("couldn't find UID $uid in table " . self::getName());
         }
 
-//		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));
+ 		$row[] = $pagezone_table;
+ 		$row[] = $pagezone_uid;
+		throw new tx_newspaper_Exception($query.' -> '.print_r($row, 1));
  		
  		$this->attributes = $row;
- 		$this->attributes[] = $pagezone_table;
- 		$this->attributes[] = $pagezone_uid;
  	}
  	
  	abstract protected function getExtra2PagezoneTable();
