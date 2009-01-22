@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "newspaper"
 #
-# Auto generated 21-01-2009 15:18
+# Auto generated 22-01-2009 17:12
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -24,7 +24,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'state' => 'alpha',
 	'internal' => '',
 	'uploadfolder' => 1,
-	'createDirs' => '',
+	'createDirs' => 'uploads/tx_newspaper/rte/',
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',

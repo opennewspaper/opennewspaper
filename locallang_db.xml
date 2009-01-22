@@ -34,7 +34,13 @@
 			<label index="tx_newspaper_pagezone_article.extras">Extras</label>
 			<label index="tx_newspaper_article">Articles</label>
 			<label index="tx_newspaper_article.title">Title</label>
+			<label index="tx_newspaper_article.kicker">Kicker</label>
+			<label index="tx_newspaper_article.teaser">Teaser</label>
+			<label index="tx_newspaper_article.text">Article text</label>
+			<label index="tx_newspaper_article.author">Author</label>
+			<label index="tx_newspaper_article.redsys_id">Unique ID in newspaper editing system</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
+			<label index="tx_newspaper_article.sections">Sections this article appears in</label>
 			<label index="tx_newspaper_extra">Extras (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
@@ -70,7 +76,13 @@
 			<label index="tx_newspaper_pagezone_article.extras">Extras</label>
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.title">Titel</label>
+			<label index="tx_newspaper_article.kicker">Dachzeile</label>
+			<label index="tx_newspaper_article.teaser">Teaser</label>
+			<label index="tx_newspaper_article.text">Artikeltext</label>
+			<label index="tx_newspaper_article.author">Autor</label>
+			<label index="tx_newspaper_article.redsys_id">Unique ID im Redaktionssystem der Zeitung</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
+			<label index="tx_newspaper_article.sections">Ressorts in denen dieser Artikel erscheint</label>
 			<label index="tx_newspaper_extra">Artikel-Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
