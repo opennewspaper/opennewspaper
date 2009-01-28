@@ -31,23 +31,24 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 			   $this->getAttribute('text');
 		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::render()");
 	}
+	
 	public function importieren(tx_newspaper_Source $quelle) {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::importieren()");
+		$this->articleBehavior->importieren($quelle);
 	}
 	public function exportieren(tx_newspaper_Source $quelle) {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::exportieren()");
+		$this->articleBehavior->exportieren($quelle);
 	}
 	public function laden() {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::laden()");
+		$this->articleBehavior->laden();
 	}
 	public function speichern() {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::speichern()");
+		$this->articleBehavior->speichern();
 	}
 	public function vergleichen() {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::vergleichen()");
+		$this->articleBehavior->vergleichen();
 	}
 	public function extraAnlegen() {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::extraAnlegen()");
+		$this->articleBehavior->extraAnlegen();
 	}
 
 	/// returns an actual member (-> Extra)
@@ -65,7 +66,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function getExtras() { return $this->extras; }
 
 	function addExtra(tx_newspaper_Extra $newExtra) {
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::addExtra()");
+		$this->articleBehavior->addExtra();
 	}
 
 	function getSource() { return $this->source; }
