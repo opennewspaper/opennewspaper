@@ -1000,4 +1000,5 @@ $TCA["tx_newspaper_extra_articlerenderer"] = array (
 		"1" => array("showitem" => "fe_group")
 	)
 );
+require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
