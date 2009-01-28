@@ -123,7 +123,6 @@ class tx_newspaper_Page {
  		
  		$rendered = array(); 
  		foreach ($this->pageZones as $zone) {
- 			t3lib_div::debug($zone);
  			$rendered[$zone->getAttribute('name')] = $zone->render();
  		}
 		$this->smarty->assign('page_zones', $rendered);
