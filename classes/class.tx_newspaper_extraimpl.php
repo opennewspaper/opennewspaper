@@ -11,7 +11,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 /// An Extra for the online newspaper, all Extras (except article) inherit from this class
 /** \todo This is just a dummy class.
  */
-class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
+abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
 		$this->attributes = $this->readExtraItem($uid, $this->getName());
