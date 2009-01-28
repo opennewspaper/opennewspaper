@@ -76,7 +76,7 @@ class tx_newspaper_WrongAttributeException
 
 /// This Exception is thrown if a database operation fails
 class tx_newspaper_DBException extends tx_newspaper_Exception { 
-	public function __construct($query, $message, array $row = array()) {
+	public function __construct($query, $message, $row = array()) {
         parent::__construct("SQL query: \n$query \nfailed with message: \n$message" .
         					($row? print_r($row, 1): ''));
     }
