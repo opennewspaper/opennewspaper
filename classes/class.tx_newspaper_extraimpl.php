@@ -86,12 +86,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return false;
 	}
 	
-	
-// title for be
-	static function getTitle() {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getTitle()");
-	}
-
 // title for module
 	static function getModuleName() {
 		return 'newspaper'; // this is the default folder for data associated with newspaper etxension, overwrite in conrete Extras
@@ -99,9 +93,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 
 	/** read data of Extra
-	 * 
-	 *  \todo oli: is this function still needed if we populate $this->attributes 
-	 *  in the constructor?
 	 * 
 	 *  \return Array row with Extra data for given uid and table
 	 */
