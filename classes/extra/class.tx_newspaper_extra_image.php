@@ -34,4 +34,6 @@ class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 	}
 }
 
+tx_newspaper_ExtraImpl::registerExtra(new tx_newspaper_extra_image());
+
 ?>
