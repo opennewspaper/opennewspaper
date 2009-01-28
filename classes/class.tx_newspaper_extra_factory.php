@@ -78,6 +78,7 @@ class tx_newspaper_Extra_Factory {
         									   $row);
         }
 		
+		t3lib_div::debug($row['extra_table'].'('.$row['extra_uid'].')');
 		return new $row['extra_table']($row['extra_uid']);
 	}
 	
