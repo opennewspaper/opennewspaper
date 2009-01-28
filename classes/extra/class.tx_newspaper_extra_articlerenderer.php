@@ -8,7 +8,9 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 	 *  \todo use smarty
 	 */
 	public function render($template = '') {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_extra_ArticleRenderer::render()");
+		$article = new tx_newspaper_ArticleImpl($_GET['art']);
+		/// \todo this is vastly over-simplified. we must insert all the extras at their appropriate place.
+		return $article->render();
 	}
 
 
