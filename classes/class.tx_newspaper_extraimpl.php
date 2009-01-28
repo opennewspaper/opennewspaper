@@ -88,9 +88,7 @@ class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	
 	
 // internal name
-	static function getName() {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getName()");
-	}
+	abstract static function getName();
 
 // title for be
 	static function getTitle() {
