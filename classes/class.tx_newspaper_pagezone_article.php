@@ -40,9 +40,6 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 	    $this->readAttributes(self::$table, $uid);
  	}
 	
-	public function render($template = '') {
-		throw new tx_newspaper_NotYetImplementedException('tx_newspaper_PageZone_Article::render()');
-	}
 	protected function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
