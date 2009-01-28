@@ -17,9 +17,6 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		$this->sourceBehavior = new tx_newspaper_SourceBehavior($this);
 	}
 
-	public function __destruct() {
-	}
-
 	/// Reads ONE field for the given Article
 	/** \todo this should work for Extras too. Easy? Just replace "Article" with 
 	 *  	  "Extra"?
