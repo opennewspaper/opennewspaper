@@ -87,9 +87,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 	
 	
-// internal name
-	abstract static function getName();
-
 // title for be
 	static function getTitle() {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getTitle()");
