@@ -19,25 +19,25 @@ class tx_newspaper_ArticleBehavior {
 		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::render()");
 	}
 	public function importieren() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::importieren()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::importieren()");
 	}
 	public function exportieren() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::exportieren()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::exportieren()");
 	}
 	public function laden() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::laden()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::laden()");
 	}
 	public function speichern() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::speichern()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::speichern()");
 	}
 	public function vergleichen() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::vergleichen()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::vergleichen()");
 	}
 	public function extraAnlegen() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::extraAnlegen()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::extraAnlegen()");
 	}	
 	static function getAttributeList() {
-		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::addExtra()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::addExtra()");
 	}
 
 	/** Usage:
