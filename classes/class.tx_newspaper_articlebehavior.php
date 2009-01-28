@@ -15,7 +15,7 @@ class tx_newspaper_ArticleBehavior {
 		$this->parent = $parent;
 	}
 	
-	public function render($template) {
+	public function render($template= '') {
 		throw new NotYetImplementedException("tx_newspaper_ArticleBehavior::render()");
 	}
 	public function importieren() {
