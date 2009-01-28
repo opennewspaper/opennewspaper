@@ -17,9 +17,9 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_artic
  */
 class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
-	public function __construct($uid) {
+	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
-		$this->attributes = $this->readExtraItem($uid, $this->getName());		
+		if ($uid) $this->attributes = $this->readExtraItem($uid, $this->getName());		
 	}
 	
 	public function render($template = '') {
