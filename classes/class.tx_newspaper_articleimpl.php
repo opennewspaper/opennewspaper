@@ -66,7 +66,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function getExtras() { return $this->extras; }
 
 	function addExtra(tx_newspaper_Extra $newExtra) {
-		$this->articleBehavior->addExtra();
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::addExtra()");
 	}
 
 	function getSource() { return $this->source; }
