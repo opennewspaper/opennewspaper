@@ -17,11 +17,13 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_artic
  */
 class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
-	public function __construct() {
+	public function __construct($uid) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
+		$this->attributes = $this->readExtraItem($uid, $this->getName());		
 	}
 	
 	public function render($template = '') {
+		t3lib_div::debug($this);
 		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::render()");
 	}
 	public function importieren(tx_newspaper_Source $quelle) {
@@ -80,8 +82,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 
 	static function getName() {
-		/// \todo correct
-		return 'articleimpl';
+		return 'tx_newspaper_article';
 	}
 
 	/** \todo Internationalization */
@@ -94,8 +95,26 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 
 	static function readExtraItem($uid, $table) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::readExtraItem()");
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*',
+			$table,
+			'uid=' . $uid);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) {
+        	throw new tx_newspaper_NoResException($query);
+        }
+        
+        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+			throw new tx_newspaper_EmptyResultException($query);
+		}
+
+		return $row;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////
 	
 	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
