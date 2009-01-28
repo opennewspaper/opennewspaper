@@ -22,29 +22,30 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	public function render($template = '') {
-		throw new NotYetImplementedException("ArticleImpl::render()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::render()");
 	}
 	public function importieren(tx_newspaper_Source $quelle) {
-		throw new NotYetImplementedException("ArticleImpl::importieren()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::importieren()");
 	}
 	public function exportieren(tx_newspaper_Source $quelle) {
-		throw new NotYetImplementedException("ArticleImpl::exportieren()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::exportieren()");
 	}
 	public function laden() {
-		throw new NotYetImplementedException("ArticleImpl::laden()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::laden()");
 	}
 	public function speichern() {
-		throw new NotYetImplementedException("ArticleImpl::speichern()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::speichern()");
 	}
 	public function vergleichen() {
-		throw new NotYetImplementedException("ArticleImpl::vergleichen()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::vergleichen()");
 	}
 	public function extraAnlegen() {
-		throw new NotYetImplementedException("ArticleImpl::extraAnlegen()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::extraAnlegen()");
 	}
 
 	/// returns an actual member (-> Extra)
 	function getAttribute($attribute) {
+		/// \todo throw exception if wrong attribute; see ExtraImpl
 		return $this->attributes[$attribute];
 	}
 
@@ -57,7 +58,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function getExtras() { return $this->extras; }
 
 	function addExtra(tx_newspaper_Extra $newExtra) {
-		throw new NotYetImplementedException("ArticleImpl::addExtra()");
+		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::addExtra()");
 	}
 
 	function getSource() { return $this->source; }
@@ -79,6 +80,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 
 	static function getName() {
+		/// \todo correct
 		return 'articleimpl';
 	}
 
