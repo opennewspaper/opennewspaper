@@ -46,4 +46,7 @@ RTE.config.tx_newspaper_article.text {
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_extra=1
 ');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_extra_articlerenderer=1
+');
 ?>

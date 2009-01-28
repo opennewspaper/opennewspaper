@@ -960,5 +960,44 @@ $TCA["tx_newspaper_extra"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_extra_articlerenderer"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_articlerenderer"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,fe_group"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_articlerenderer"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'fe_group' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
+			'config'  => array (
+				'type'  => 'select',
+				'items' => array (
+					array('', 0),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
+				),
+				'foreign_table' => 'fe_groups'
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "fe_group")
+	)
+);
 ?>

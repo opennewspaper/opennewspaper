@@ -244,6 +244,33 @@ $TCA["tx_newspaper_extra"] = array (
 	)
 );
 
+
+t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_extra_articlerenderer');
+
+
+t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_articlerenderer');
+
+$TCA["tx_newspaper_extra_articlerenderer"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlerenderer',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'sortby' => 'sorting',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',	
+			'fe_group' => 'fe_group',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_articlerenderer.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden, fe_group",
+	)
+);
+
 $tempColumns = Array (
 	"tx_newspaper_extra" => Array (		
 		"exclude" => 1,		
@@ -282,5 +309,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>
