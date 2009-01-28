@@ -86,15 +86,15 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return false;
 	}
 	
-// title for module
-	static function getModuleName() {
-		return 'newspaper'; // this is the default folder for data associated with newspaper etxension, overwrite in conrete Extras
-	}
+	/// title for module
+	/** this is the default folder for data associated with newspaper etxension,
+	 *   overwrite in conrete Extras
+	 */
+//	static function getModuleName() { return 'newspaper'; }
 
 
-	/** read data of Extra
-	 * 
-	 *  \return Array row with Extra data for given uid and table
+	/// Read data of Extra
+	/** \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
 t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
