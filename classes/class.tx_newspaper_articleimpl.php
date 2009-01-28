@@ -19,7 +19,10 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
-		if ($uid) $this->attributes = $this->readExtraItem($uid, $this->getName());		
+		if ($uid) {
+			$this->setUid($uid);
+			$this->attributes = $this->readExtraItem($uid, $this->getName());
+		}	
 	}
 	
 	public function render($template = '') {
