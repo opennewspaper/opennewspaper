@@ -68,17 +68,14 @@ class tx_newspaper_Page {
 		);
  		
  		/// Get tx_newspaper_PageZone list for current page
- 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		$uids = tx_newspaper::selectRows(
  			'uid', tx_newspaper_PageZone::getName(), 
 			'page_id = '.$this->getAttribute('uid')
 		);
 
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-
-		if ($res) {
-			/// Populate the tx_newspaper_PageZone array 
-        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->pageZones[] = tx_newspaper_PageZone_Factory::getInstance()->create($row['uid']);
+		if ($uids) {
+        	foreach ($uids as $uid) {
+        		$this->pageZones[] = tx_newspaper_PageZone_Factory::getInstance()->create($uid['uid']);
         	}
 		}
  	}
