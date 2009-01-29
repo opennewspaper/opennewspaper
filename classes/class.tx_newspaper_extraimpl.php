@@ -35,19 +35,19 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setAttribute()");
 	}
 
-	function getSource() {
+	public function getSource() {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getSource()");
 	}
 
-	function setSource(tx_newspaper_Source $source) {
+	public function setSource(tx_newspaper_Source $source) {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setSource()");
 	}
 
-	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
+	public static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::mapFieldToSourceField()");
 	}
 
-	static function sourceTable(tx_newspaper_Source $source) {
+	public static function sourceTable(tx_newspaper_Source $source) {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::sourceTable()");
 	}
 
@@ -58,7 +58,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 *  \todo: return real pid (like it's done in dam: check if folder exists, if not create folder)
 	 *  \todo oli: what is this function for? does it need to be public?
 	 */
-	static function getExtraPid() {
+	public static function getExtraPid() {
 #t3lib_div::devlog('getExtraPid()', 'newspaper', 0, 2526);
 		return 2526; // TODO: HARD-CODED!!!
 	}
@@ -80,7 +80,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 * \param tx_newspaper_Extra $extra concrete Extra object
 	 * \return true if this Extra was registered or false if Extra was registered already
 	 */
-	static function registerExtra(tx_newspaper_Extra $extra) {
+	public static function registerExtra(tx_newspaper_Extra $extra) {
 #t3lib_div::devlog('registerExtra', 'newspaper', 0);
 		if (!self::isRegisteredExtra($extra)) {
 			self::$registeredExtra[] = $extra; // add this Extra to list
@@ -118,6 +118,24 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		}
 
 		return $row;
+	}
+	
+	/// Create the record for a concrete Extra in the table of abstract Extras
+	/** This is probably necessary because a concrete Extra has been freshly
+	 *  created.
+	 * 
+	 *  Does nothing if the concrete Extra is already linked in the abstract table. 
+	 * 
+	 *  \param $uid UID of the Extra in the table of concrete Extras
+	 *  \param $table table of concrete Extras
+	 */ 
+	public static function createExtraRecord($uid, $table) {
+		/// \todo check if record is already present in extra table
+		
+		/// \todo read typo3 fields to copy into extra table
+		
+		/// \todo write the uid and table into extra table, with the values read above
+		throw new tx_newspaper_NotYetImplementedException('');
 	}
 	
 	private $attributes = array();				///< attributes of the extra
