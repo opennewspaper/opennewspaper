@@ -101,23 +101,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 
 	static function readExtraItem($uid, $table) {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*',
-			$table,
-			'uid=' . $uid);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		
-		if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-        
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
-		}
-
-		return $row;
+		return tx_newspaper::selectRows('*', $table, 'uid=' . $uid);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
