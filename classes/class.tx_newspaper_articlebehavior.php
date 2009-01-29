@@ -37,7 +37,7 @@ class tx_newspaper_ArticleBehavior {
 		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::extraAnlegen()");
 	}	
 	static function getAttributeList() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::addExtra()");
+		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::getAttributeList()");
 	}
 
 	/** Usage:

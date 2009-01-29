@@ -149,7 +149,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
 
-	function mapSourceFieldToField($article, $field) {
+	function mapSourceFieldToField(tx_newspaper_Article $article, $field) {
 		foreach ($article->getAttributeList() as $attribute) {
 			if ($article->mapFieldToSourceField($attribute, $this) == $field) {
 				return $attribute;
@@ -158,6 +158,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		throw new tx_newspaper_IllegalUsageException("$field is not an attribute".
 			" of class ".get_class($article)." mapped to ".get_class());
 	}
+    
     private $sourceBehavior = null; 
 
 }

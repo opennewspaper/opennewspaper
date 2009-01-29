@@ -126,6 +126,8 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $attributes = array();	///< array of attributes
 	private $uid = '';				///< UID that identifies the article in the source
+
+	private $articleBehavior = null;	///< Object to delegate operations to
 	
 	///	List of attributes that together constitute an ArticleImpl
 	private static $attribute_list = array(
@@ -163,6 +165,5 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		'tx_newspaper_DBSource' => 'tx_hptazarticle_list'
 	);
 	
-	private $articleBehavior = null;
 }
 ?>

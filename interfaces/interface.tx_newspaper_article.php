@@ -32,5 +32,6 @@ interface tx_newspaper_Article extends tx_newspaper_Extra {
 	function getExtras();
 	function addExtra(tx_newspaper_Extra $newExtra);
 	
+	static function getAttributeList();
 }
 ?>
