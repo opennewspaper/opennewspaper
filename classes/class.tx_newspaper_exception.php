@@ -54,9 +54,8 @@ class tx_newspaper_WrongClassException extends tx_newspaper_Exception {
 
 /// This Exception is thrown if a feature is not yet implemented
 class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { 
-	public function __construct($message) {
+	public function __construct() {
 		$backtrace = debug_backtrace();
-#		t3lib_div::debug($backtrace[1]);
         parent::__construct('Not yet implemented: ' . $backtrace[1]['class'] . 
 			'::' . $backtrace[1]['function'] . '(' . sizeof($backtrace[1]['args']) . ' args)' .
 			($message? " - $message": ''));
