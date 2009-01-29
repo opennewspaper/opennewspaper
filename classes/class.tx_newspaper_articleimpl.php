@@ -29,7 +29,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
 			   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
 			   $this->getAttribute('text');
-		throw new tx_newspaper_NotYetImplementedException("ArticleImpl::render()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
 	public function importieren(tx_newspaper_Source $quelle) {
@@ -66,7 +66,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function getExtras() { return $this->extras; }
 
 	function addExtra(tx_newspaper_Extra $newExtra) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::addExtra()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	function getSource() { return $this->source; }
@@ -97,7 +97,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	static function getModuleName() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleImpl::getModuleName()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	static function readExtraItem($uid, $table) {

@@ -57,8 +57,10 @@ class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception {
 	public function __construct() {
 		$backtrace = debug_backtrace();
         parent::__construct('Not yet implemented: ' . $backtrace[1]['class'] . 
-			'::' . $backtrace[1]['function'] . '(' . sizeof($backtrace[1]['args']) . ' args)' .
-			($message? " - $message": ''));
+			'::' . $backtrace[1]['function'] . 
+			'(' . sizeof($backtrace[1]['args']) . ' args)' .
+			' [ called from ' . $backtrace[2]['class'] . 
+			'::' . $backtrace[2]['function'] .'() ]');
     }
 }
 

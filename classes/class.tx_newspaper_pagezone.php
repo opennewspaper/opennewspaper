@@ -143,11 +143,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	
 	
 	static function getModuleName() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::getModuleName()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	static function readExtraItem($uid, $table) {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_PageZone::readExtraItem()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
  	
  	////////////////////////////////////////////////////////////////////////////

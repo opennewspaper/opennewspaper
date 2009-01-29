@@ -32,23 +32,23 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 
 	public function setAttribute($attribute, $value) {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setAttribute()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	public function getSource() {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::getSource()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	public function setSource(tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setSource()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	public static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::mapFieldToSourceField()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	public static function sourceTable(tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::sourceTable()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 
@@ -135,7 +135,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		/// \todo read typo3 fields to copy into extra table
 		
 		/// \todo write the uid and table into extra table, with the values read above
-		throw new tx_newspaper_NotYetImplementedException('');
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
 	private $attributes = array();				///< attributes of the extra

@@ -16,28 +16,28 @@ class tx_newspaper_ArticleBehavior {
 	}
 	
 	public function render($template= '') {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::render()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function importieren() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::importieren()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function exportieren() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::exportieren()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function laden() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::laden()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function speichern() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::speichern()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function vergleichen() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::vergleichen()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	public function extraAnlegen() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::extraAnlegen()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}	
 	static function getAttributeList() {
-		throw new tx_newspaper_NotYetImplementedException("tx_newspaper_ArticleBehavior::getAttributeList()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	/** Usage:

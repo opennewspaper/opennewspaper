@@ -73,25 +73,25 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/// Reads array of only the specified fields of articles with the given UIDs 
 	public function readPartialArticles($articleclass,array $fields, array $uids) {
-		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readPartialArticles()");
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 
     /// reads an extra
     public function readExtra($extraclass, $uid) {
-		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtra()");
+		throw new tx_newspaper_NotYetImplementedException();
     }
 
     /// reads an array of extras
     public function readExtras($extraclass, array $uids) {
-		throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::readExtras()");
+		throw new tx_newspaper_NotYetImplementedException();
     }
 
     public function writeArticle(tx_newspaper_Article $article, $uid) {
-    	throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::writeArticle()");
+    	throw new tx_newspaper_NotYetImplementedException();
     }
     
     public function writeExtra(tx_newspaper_Extra $extra, $uid) {
-    	throw new tx_newspaper_NotYetImplementedException("taz_RedsysSource::writeExtra()");
+    	throw new tx_newspaper_NotYetImplementedException();
     }
 
 	////////////////////////////////////////////////////////////////////////////
