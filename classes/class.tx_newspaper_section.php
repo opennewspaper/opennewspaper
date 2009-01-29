@@ -37,20 +37,9 @@
  	
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
  	function __construct($section_uid) {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		$this->attributes = tx_newspaper::selectOneRow(
 			'*', self::$table, "uid = $section_uid"
 		);
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
-        }
- 		
- 		$this->attributes = $row;
  	}
  	
  	function getAttribute($attribute) {
