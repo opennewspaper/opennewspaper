@@ -64,22 +64,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		/** \todo ...or should I read just those which are defined in
 		 * 		  self::$attribute_list? Which is better?
 		 */
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+        $row = tx_newspaper::selectOneRow(
 			'*',
-			$article->sourceTable($this),
+			$extra->sourceTable($this),
 			"uid = ".intval($uid)
 		);
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Graceful error handling
-            return "Couldn't retrieve article #$uid";
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row) {
-        	/// \todo Graceful error handling
-        	return "Article #$uid has no article_id field";
-        }
         
         /// \todo ...or loop over self::$attribute_list? Which is better?
         foreach ($row as $field => $value) {
