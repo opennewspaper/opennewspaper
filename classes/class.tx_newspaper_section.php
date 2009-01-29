@@ -60,7 +60,17 @@
  		return $this->attributes[$attribute];
  	}
  	
+ 	function getList() {
+ 		throw new tx_newspaper_NotYetImplementedException();
+ 	}
+ 	
+ 	function getParentPage() {
+ 		throw new tx_newspaper_NotYetImplementedException();
+ 	}
+ 	
  	private $attributes = array();					///< The member variables
+	private $subPages = array();
+	private $list = null;
  	
  	static private $table = 'tx_newspaper_section';	///< SQL table for persistence
  }

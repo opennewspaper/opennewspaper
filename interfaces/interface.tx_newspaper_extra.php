@@ -30,12 +30,12 @@
 	/** \param $fieldname Name of the attribute which is wanted
 	 *  \return The value of attribute \p $fieldname
 	 */
-	public function getAttribute($fieldname);
+	public function getAttribute($attribute);
 	/// sets a member
 	/** \param $fieldname Name of the attribute which is to be set
 	 *  \param $value New value for attribute \p $fieldname
 	 */
-	public function setAttribute($fieldname, $value);
+	public function setAttribute($attribute, $value);
 
 	/// \return The Source object associated with this Article (if any)
 	function getSource();

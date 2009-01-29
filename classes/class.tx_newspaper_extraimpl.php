@@ -31,7 +31,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
  		return $this->attributes[$attribute];
 	}
 
-	public function setAttribute($fieldname, $value) {
+	public function setAttribute($attribute, $value) {
 		throw new tx_newspaper_NotYetImplementedException("ExtraImpl::setAttribute()");
 	}
 
@@ -52,9 +52,12 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 
 
-// \todo: return real pid (like it's done in dam: check if folder exists, if not create folder)
-// Extra folder can be hidden (see dam)
-// One folder per Extra
+	/** Extra folder can be hidden (see dam)
+	 *  One folder per Extra
+	 * 
+	 *  \todo: return real pid (like it's done in dam: check if folder exists, if not create folder)
+	 *  \todo oli: what is this function for? does it need to be public?
+	 */
 	static function getExtraPid() {
 #t3lib_div::devlog('getExtraPid()', 'newspaper', 0, 2526);
 		return 2526; // TODO: HARD-CODED!!!

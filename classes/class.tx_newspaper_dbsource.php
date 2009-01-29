@@ -159,7 +159,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 			" of class ".get_class($article)." mapped to ".get_class());
 	}
     
-    private $sourceBehavior = null; 
+    private $sourceBehavior = null; 	///< Object to delegate operations to
 
 }
 ?>

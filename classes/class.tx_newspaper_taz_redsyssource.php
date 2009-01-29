@@ -107,8 +107,9 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     private $red_private = null;	///< The RedSys resource
     private $text = null;			///< A red_text resource
     
+    private $sourceBehavior = null; ///< Object to delegate operations to
+
     private static $red_filter = "tkr2html";
     
-    private $sourceBehavior = null; 
 }
 ?>
