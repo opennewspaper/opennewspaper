@@ -172,18 +172,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 *  \param $uid UID in the table of the concrete type 
 	 */
  	protected function readExtras($uid) {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		$uids = tx_newspaper::selectRows(
 			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
 		);
 
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-
-		if ($res) {
-			/// Populate the tx_newspaper_Extra array 
-        	while($row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['uid_foreign']);
+		if ($uids) {
+        	foreach ($uids as $uid) {
+        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
         	}
-		} 		
+		}
  	}
  	
 	/// Read Attributes from DB
