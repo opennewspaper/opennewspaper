@@ -191,23 +191,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 */
  	protected function readAttributes($table, $uid) {
 		/// Read Attributes from persistent storage
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*', $table, 'uid = ' . $uid
-		);
- 		$this->attributes['query'] = $query;
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
-        }
-
- 		$this->attributes = array_merge($this->attributes, $row);
+ 		$this->attributes = tx_newspaper::selectOneRow('*', $table, 'uid = ' . $uid);
+ 		$this->attributes['query'] = tx_newspaper::$query;
  	}
  	
  	/// Returns the table which links Extras to this type of page zone
