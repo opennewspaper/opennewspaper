@@ -11,7 +11,7 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 		\todo this is vastly over-simplified. we must insert all the extras at
 		their appropriate place. To this end, we must split the text returned by
 		$article->render() into paragraphs, insert extras where desired, and 
-		assemble the text back into one piece.
+		assemble the text back into one piece. 
 	 */
 	public function render($template = '') {
 		$article = new tx_newspaper_ArticleImpl($_GET['art']);
@@ -19,19 +19,16 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 	}
 
 
-// internal name
 	static function getName() {
 		return 'tx_newspaper_extra_articlerenderer';
 	}
 
-//TODO: getLLL
 	static function getTitle() {
 		return 'ArticleRenderer';
 	}
 
-// title for module
 	static function getModuleName() {
-		return 'npe_rend'; // this is the default folder for data associated with newspaper etxension, overwrite in conrete Extras
+		return 'npe_rend'; 
 	}
 }
 
