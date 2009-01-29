@@ -22,22 +22,13 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	 *  	  "Extra"?
 	 */
 	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$extra->mapFieldToSourceField($field, $this),
+		
+        $row = tx_newspaper::selectOneRow(
+        	$extra->mapFieldToSourceField($field, $this),
 			$extra->sourceTable($this),
 			"uid = ".intval($uid)
 		);
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	/// \todo Graceful error handling
-            return "Couldn't retrieve article #$uid";
-        }
 
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row) {
-        	/// \todo Graceful error handling
-        	return "Article #$uid has no article_id field";
-        }
 		$value = $row[$extra->mapFieldToSourceField($field, $this)];		
 
 		$extra->setAttribute($field, $value);
