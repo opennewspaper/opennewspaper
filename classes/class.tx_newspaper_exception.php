@@ -56,9 +56,9 @@ class tx_newspaper_WrongClassException extends tx_newspaper_Exception {
 class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception { 
 	public function __construct($message) {
 		$backtrace = debug_backtrace();
-//		t3lib_div::debug($backtrace[1]);
+		t3lib_div::debug($backtrace[1]);
         parent::__construct('Not yet implemented: ' . $backtrace[1]['class'] . 
-			'::' . $backtrace[1]['function'] .
+			'::' . $backtrace[1]['function'] . '()' .
 			($message? " - $message": ''));
     }
 }
