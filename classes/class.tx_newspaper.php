@@ -38,6 +38,78 @@ class tx_newspaper {
 
 	}
 
+	/// Execute a SELECT query, check the result, return zero or one record(s)
+	/** \param $fields Fields to SELECT
+	 *  \param $table Table to SELECT FROM
+	 *  \param $where WHERE-clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to GROUP BY
+	 *  \param $orderBy Fields to ORDER BY
+	 *  \param $limit Maximum number of records to SELECT
+	 */
+	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
+											   $groupBy = '', $orderBy = '', $limit = '') {
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$fields, $table, $where, $groupBy, $orderBy, $limit);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) {
+        	throw new tx_newspaper_NoResException($query);
+        }
+        
+        return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+	}
+
+	/// Execute a SELECT query, check the result, return \em exactly one record
+	/** \param $fields Fields to SELECT
+	 *  \param $table Table to SELECT FROM
+	 *  \param $where WHERE-clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to GROUP BY
+	 *  \param $orderBy Fields to ORDER BY
+	 *  \param $limit Maximum number of records to SELECT
+	 */
+	public static function selectOneRow($fields, $table, $where = '1',
+										$groupBy = '', $orderBy = '', $limit = '') {
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$fields, $table, $where, $groupBy, $orderBy, $limit);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) {
+        	throw new tx_newspaper_NoResException($query);
+        }
+        
+        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        
+		if (!$row) {
+			throw new tx_newspaper_EmptyResultException($query);
+		}
+
+		return $row;		
+	}
+
+	/// Execute a SELECT query, check the result, return all records
+	/** \param $fields Fields to SELECT
+	 *  \param $table Table to SELECT FROM
+	 *  \param $where WHERE-clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to GROUP BY
+	 *  \param $orderBy Fields to ORDER BY
+	 *  \param $limit Maximum number of records to SELECT
+	 */
+	public static function selectRows($fields, $table, $where = '1',
+										$groupBy = '', $orderBy = '', $limit = '') {
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$fields, $table, $where, $groupBy, $orderBy, $limit);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) {
+        	throw new tx_newspaper_NoResException($query);
+        }
+        
+        $rows = array();
+        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+        	$rows[] = $row;
+
+		return $rows;		
+	}
 
 }
 

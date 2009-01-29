@@ -101,23 +101,8 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	public static function readExtraItem($uid, $table) {
 t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*',
-			$table,
-			'uid=' . $uid);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		
-		if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-        
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
-		}
-
-		return $row;
+		return tx_newspaper::selectOneRow('*', $table, "uid = $uid");
 	}
 	
 	/// Create the record for a concrete Extra in the table of abstract Extras
@@ -127,7 +112,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 	 *  Does nothing if the concrete Extra is already linked in the abstract table. 
 	 * 
 	 *  \param $uid UID of the Extra in the table of concrete Extras
-	 *  \param $table table of concrete Extras
+	 *  \param $table Table of concrete Extras. If empty, 
 	 */ 
 	public static function createExtraRecord($uid, $table) {
 		/// \todo check if record is already present in extra table
