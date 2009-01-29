@@ -29,7 +29,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
 			   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
 			   $this->getAttribute('text');
-		throw new tx_newspaper_NotYetImplementedException();
+		/// \todo use smarty
 	}
 	
 	public function importieren(tx_newspaper_Source $quelle) {

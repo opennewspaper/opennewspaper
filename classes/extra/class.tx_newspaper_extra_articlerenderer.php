@@ -7,11 +7,14 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 	public function __construct($uid = 0) { if ($uid) parent::__construct($uid); }
 	
 	/** Just a quick hack to see anything
-	 *  \todo use smarty
+	 *  \todo use smarty.
+		\todo this is vastly over-simplified. we must insert all the extras at
+		their appropriate place. To this end, we must split the text returned by
+		$article->render() into paragraphs, insert extras where desired, and 
+		assemble the text back into one piece.
 	 */
 	public function render($template = '') {
 		$article = new tx_newspaper_ArticleImpl($_GET['art']);
-		/// \todo this is vastly over-simplified. we must insert all the extras at their appropriate place.
 		return $article->render();
 	}
 
