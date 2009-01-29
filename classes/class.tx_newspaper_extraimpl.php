@@ -8,10 +8,17 @@
 
 require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 
-/// An Extra for the online newspaper, all Extras (except article) inherit from this class
-/** \todo This is just a dummy class.
- */
-abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
+/// An Extra for the online newspaper
+/** This is an abstract class which implements most of the methods defined in
+ *  interface tx_newspaper_Extra, except those that must be overridden in a
+ *  concrete Extra anyway. All Extras (except tx_newspaper_Article) inherit from
+ *  this class.
+ * 
+ *  \todo Currently implements tx_newspaper_WithSource as well. I am not sure if
+ *  this makes sense.
+ */ 
+abstract class tx_newspaper_ExtraImpl 
+	implements tx_newspaper_Extra, tx_newspaper_WithSource {
 
 	public function __construct($uid) {
 		$this->attributes = $this->readExtraItem($uid, $this->getName());
