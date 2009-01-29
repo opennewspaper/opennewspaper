@@ -54,19 +54,12 @@ class tx_newspaper_Extra_Factory {
 	
 	public function create($uid) {
 		/// Read actual type and UID of the Extra to instantiate from DB
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+        $row =  tx_newspaper::selectOneRow(
 			'extra_table, extra_uid', self::$extra_table, "uid = $uid"
 		);
 
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-
         if (!$row['extra_table']) {
-        	throw new tx_newspaper_DBException($query, 'No extra_table in result', 
+        	throw new tx_newspaper_DBException('No extra_table in result', 
 											   $row);
         }
 		
@@ -75,7 +68,7 @@ class tx_newspaper_Extra_Factory {
 		}
 
         if (!$row['extra_uid']) {
-        	throw new tx_newspaper_DBException($query, 'No extra_uid in result', 
+        	throw new tx_newspaper_DBException('No extra_uid in result', 
         									   $row);
         }
 		

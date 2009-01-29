@@ -81,23 +81,24 @@ class tx_newspaper_WrongAttributeException
 
 /// This Exception is thrown if a database operation fails
 class tx_newspaper_DBException extends tx_newspaper_Exception { 
-	public function __construct($query, $message, $row = array()) {
-        parent::__construct("SQL query: \n$query \nfailed with message: \n$message" .
+	public function __construct($message, $row = array()) {
+        parent::__construct("SQL query: \n" . tx_newspaper::$query . 
+							" \nfailed with message: \n$message " .
         					($row? print_r($row, 1): ''));
     }
 }
  
 /// This Exception is thrown if a database operation does not return a result set
 class tx_newspaper_NoResException extends tx_newspaper_DBException { 
-	public function __construct($query) {
-        tx_newspaper_DBException::__construct($query, 'No result set found');
+	public function __construct() {
+        tx_newspaper_DBException::__construct('No result set found');
     }
 }
 
 /// This Exception is thrown if a database operation returns an empty result set
 class tx_newspaper_EmptyResultException extends tx_newspaper_DBException { 
-	public function __construct($query) {
-        tx_newspaper_DBException::__construct($query, 'Result empty');
+	public function __construct() {
+        tx_newspaper_DBException::__construct('Result empty');
     }
 }
 

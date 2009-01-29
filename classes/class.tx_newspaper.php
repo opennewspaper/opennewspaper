@@ -48,12 +48,12 @@ class tx_newspaper {
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
 		if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
+        	throw new tx_newspaper_NoResException(self::$query);
         }
         
         return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -69,18 +69,18 @@ class tx_newspaper {
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
 		if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
+        	throw new tx_newspaper_NoResException(self::$query);
         }
         
         $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         
 		if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
+			throw new tx_newspaper_EmptyResultException(self::$query);
 		}
 
 		return $row;		
@@ -96,12 +96,12 @@ class tx_newspaper {
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
 		if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
+        	throw new tx_newspaper_NoResException(self::$query);
         }
         
         $rows = array();
@@ -111,6 +111,11 @@ class tx_newspaper {
 		return $rows;		
 	}
 
+	/** SQL queries are stored as a static member variable, so they can be 
+	 *  accessed for debugging from outside the function if a query does not  
+	 *  return the desired result.
+	 */ 
+	static $query = ''; 
 }
 
 ?>
