@@ -66,7 +66,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		 */
         $row = tx_newspaper::selectOneRow(
 			'*',
-			$extra->sourceTable($this),
+			$article->sourceTable($this),
 			"uid = ".intval($uid)
 		);
         
