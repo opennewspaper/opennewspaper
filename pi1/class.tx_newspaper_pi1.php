@@ -73,7 +73,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 * 
 	 *  \return The tx_newspaper_Section object the plugin currently works on
 	 */
-	private function getSection() {
+	public function getSection() {
 		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
 
         if (!$section_uid) {
@@ -95,7 +95,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *
 	 *  \return The tx_newspaper_Page which is currently displayed
 	 */ 
-	private function getPage(tx_newspaper_Section $section) {
+	public function getPage(tx_newspaper_Section $section) {
 		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
 		else if (t3lib_div::_GP('type')) 
 			$cond = 'get_var = \'type\' AND get_value = '.intval(t3lib_div::_GP('type'));
