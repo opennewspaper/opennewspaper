@@ -100,15 +100,13 @@ class tx_newspaper {
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
-		if (!$res) {
-        	throw new tx_newspaper_NoResException(self::$query);
-        }
-        
-        $rows = array();
-        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
-        	$rows[] = $row;
-
-		return $rows;		
+		if ($res) {        
+	        $rows = array();
+	        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+	        	$rows[] = $row;
+	
+			return $rows;
+		}		
 	}
 
 	/** SQL queries are stored as a static member variable, so they can be 
