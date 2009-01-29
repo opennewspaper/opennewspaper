@@ -63,24 +63,9 @@ class tx_newspaper_Page {
 		$this->smarty->cache_dir    = $tmp;
 		
 		/// Read Attributes from persistent storage
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'*',
-			self::$table,
+		$this->attributes = tx_newspaper::selectOneRow('*', self::$table,
 			'section = ' . $this->parentSection->getAttribute('uid') . " AND $condition"
 		);
-
-		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) {
-        	throw new tx_newspaper_NoResException($query);
-        }
-
-        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-		if (!$row) {
-			throw new tx_newspaper_EmptyResultException($query);
-        }
- 		
- 		$this->attributes = $row;
  		
  		/// Get tx_newspaper_PageZone list for current page
  		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
