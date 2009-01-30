@@ -39,6 +39,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
  	}
  	
  	function getArticles($number, $start = 0) {
+ 		$GLOBALS['TYPO3_DB']->explainOutput = 1;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'uid', 
 			'tx_newspaper_article',
