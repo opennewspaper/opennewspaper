@@ -9,7 +9,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_taz_r
 require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_articleimpl.php');
 
 /// testsuite for class taz_RedsysSource
-class test_redsysSource_testcase extends tx_phpunit_testcase {
+class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->red_cfg);
@@ -19,8 +19,7 @@ class test_redsysSource_testcase extends tx_phpunit_testcase {
 		// "Wie geht es uns..." from Oct 27 '08
 		$this->uid = '2008/10/27/a0105';
 		// Three rather randomly selected articles
-		$this->uidList = array('2008/10/27/a0105', '2008/10/27/a0125', 
-							   '2008/07/09/a0003', '2008/10/27/a0118',);
+		$this->uidList = array('2008/10/27/a0105', '2008/10/27/a0125');
 		// manually defined as the required fields for an article object
 		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
 	}
@@ -110,6 +109,27 @@ class test_redsysSource_testcase extends tx_phpunit_testcase {
 	public function test_readExtras() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->readExtras("", array());
+	}
+	
+	public function test_readPartialArticles() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$articles = $this->source->readPartialArticles('tx_newspaper_ArticleImpl', 
+													   $this->fieldList, 
+													   $this->uidList);
+	}
+
+	public function test_writeArticle() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$this->source->writeArticle($this->article, $this->uid);
+		/// \todo actually write an article and compare the written article to the original
+	}
+	
+	public function test_writeExtra() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$extra_uid = 1;
+		$extra = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
+		$this->source->writeExtra($extra, $extra_uid);
+		/// \todo actually write an extra and compare the written extra to the original
 	}
 	
 	

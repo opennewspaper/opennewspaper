@@ -13,7 +13,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 		$this->source = new tx_newspaper_DBSource();
-		$this->article = new tx_newspaper_ArticleImpl;
+		$this->article = new tx_newspaper_ArticleImpl();
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
 		// "Wie geht es uns..." from Oct 27 '08
@@ -73,7 +73,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readArticleWithObject() {
 		$this->article = $this->source->readArticle($this->article, $this->uid);
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+		$attrs = $this->article->getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
 			if (!$this->article->getAttribute($req)) $failed[] = $req;
@@ -102,6 +102,13 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		}			
 	}
 
+	public function test_readPartialArticles() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$articles = $this->source->readPartialArticles('tx_newspaper_ArticleImpl', 
+													   $this->fieldList, 
+													   $this->uidList);
+	}
+	
 	public function test_readExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->readExtra("", "");
@@ -112,7 +119,50 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->source->readExtras("", array());
 	}
 	
+	public function test_mapSourceFieldToField() {
+		$attrs = $this->article->getAttributeList();
+		
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'*',
+			$this->article->sourceTable($this->source),
+			"uid = ".intval($this->uid)
+		);
+		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
+        if (!$res) $this->fail("Couldn't retrieve article #$uid");
+
+        $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if (!$row) $this->fail("Article #$uid has no article_id field");
+
+		$failed = array();
+        foreach ($row as $field => $value) {
+         	try {
+         		if ($field != $this->article->mapFieldToSourceField(
+         			$this->source->mapSourceFieldToField($this->article, $field),
+         			$this->source)) { 
+	        		$failed[] = $field." ".$this->source->mapSourceFieldToField($this->article, $field);
+				}
+	        } catch (tx_newspaper_IllegalUsageException $e) { }
+        }
+		
+		if ($failed) {
+			$this->fail("Mapping source field to field failed for".implode(', ', $failed));
+		}
+	}
 	
+	public function test_writeArticle() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$this->source->writeArticle($this->article, $this->uid);
+		/// \todo actually write an article and compare the written article to the original
+	}
+	
+	public function test_writeExtra() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$extra_uid = 1;
+		$extra = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
+		$this->source->writeExtra($extra, $extra_uid);
+		/// \todo actually write an extra and compare the written extra to the original
+	}
+
 	private $source = null;				///< the local RedsysSource
 	private $field = null;				///< single article field to read
 	private $fieldList = array();		///< list of article fields to read
