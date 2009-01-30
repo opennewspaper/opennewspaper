@@ -46,6 +46,10 @@
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
 			<label index="tx_newspaper_extra_articlerenderer">Render an article - place this extra on article-page zones to display the article</label>
 			<label index="tx_newspaper_extra_sectionlist">Display the list of articles in a section</label>
+			<label index="tx_newspaper_articlelist">List of articles (abstract superclass)</label>
+			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
+			<label index="tx_newspaper_articlelist.list_uid">UID of the list</label>
+			<label index="tx_newspaper_articlelist_auto">Automatically filled list of articles</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 		</languageKey>
@@ -90,6 +94,10 @@
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
 			<label index="tx_newspaper_extra_articlerenderer">Artikel-Renderer - positioniere dieses Extra auf Artikel-Seitenbereichen, um den Artikel darzustellen</label>
 			<label index="tx_newspaper_extra_sectionlist">Anzeige der Artikel in einem Ressort</label>
+			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>
+			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>
+			<label index="tx_newspaper_articlelist.list_uid">UID der Liste</label>
+			<label index="tx_newspaper_articlelist_auto">Automatisch bestückte Artikelliste</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 		</languageKey>
