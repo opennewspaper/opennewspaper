@@ -10,7 +10,9 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_ExtraImpl {
 	 *  \todo everything
 	 */
 	public function render($template = '') {
-		return "<h1>Section List Plugin - coming soon to a page near you</h3>\n";
+		$section = tx_newspaper::getSection();
+		return "<h1>Section List Plugin - coming soon to a page near you</h1>\n".
+		"<p>".print_r($section, 1)."</p>\n";
 	}
 
 
