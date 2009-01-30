@@ -44,7 +44,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 			'tx_newspaper_article',
 			'tx_newspaper_article_sections_mm',
 			'tx_newspaper_section',
-			' AND tx_newspaper_article_sections_mm. uid_foreign = ' . $this->section->getAttribute('uid'),
+			' AND tx_newspaper_article_sections_mm.uid_foreign = ' . $this->section->getAttribute('uid'),
 			'',
 			'',
 			''
@@ -53,7 +53,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 	        $rows = array();
 	        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
 	        	$rows[] = $row;
-		}
+		} else throw new tx_newspaper_NoResException('exec_SELECT_mm_query() returned no result set'); 
 				
  		throw new tx_newspaper_DBException('exec_SELECT_mm_query() returned ', $rows);
  	}
