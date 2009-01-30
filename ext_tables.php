@@ -325,7 +325,7 @@ $TCA["tx_newspaper_articlelist"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, list_table, list_uid",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group, list_table, list_uid, section_id",
 	)
 );
 
@@ -396,5 +396,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>

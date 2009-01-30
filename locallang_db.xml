@@ -49,6 +49,7 @@
 			<label index="tx_newspaper_articlelist">List of articles (abstract superclass)</label>
 			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID of the list</label>
+			<label index="tx_newspaper_articlelist.section_id">ID of associated Section</label>
 			<label index="tx_newspaper_articlelist_auto">Automatically filled list of articles</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
@@ -97,6 +98,7 @@
 			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID der Liste</label>
+			<label index="tx_newspaper_articlelist.section_id">ID des zugehörigen Ressorts</label>
 			<label index="tx_newspaper_articlelist_auto">Automatisch bestückte Artikelliste</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>

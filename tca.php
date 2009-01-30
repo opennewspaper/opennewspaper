@@ -1074,7 +1074,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 $TCA["tx_newspaper_articlelist"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,list_table,list_uid"
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,list_table,list_uid,section_id"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist"]["feInterface"],
 	"columns" => array (
@@ -1153,9 +1153,21 @@ $TCA["tx_newspaper_articlelist"] = array (
 				"default" => 0
 			)
 		),
+		"section_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.section_id",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, list_table, list_uid")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, list_table, list_uid, section_id")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
@@ -1229,5 +1241,4 @@ $TCA["tx_newspaper_articlelist_auto"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
