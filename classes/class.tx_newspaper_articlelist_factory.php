@@ -46,7 +46,7 @@ class tx_newspaper_ArticleList_Factory {
 	/// Returns the only instance of the tx_newspaper_ArticleList_Factory Singleton
 	public static function getInstance() {
 		if (self::$instance == null) {
-			self::$instance = new tx_newspaper_Extra_Factory();
+			self::$instance = new tx_newspaper_ArticleList_Factory();
 		}
 		return self::$instance;
 	}
