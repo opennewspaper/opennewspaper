@@ -40,7 +40,6 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
  	
  	function getArticles($number, $start = 0) {
  		/// \todo honor $number and $start
- 		$GLOBALS['TYPO3_DB']->debugOutput = 1;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'tx_newspaper_article.uid', 
 			'tx_newspaper_article',
@@ -51,6 +50,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 			'',
 			''
 		);
+		tx_newspaper::$query = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
 		
 		if (!$res) {
 			throw new tx_newspaper_NoResException();
