@@ -38,7 +38,7 @@
 		if ($section) {
 			$this->section = $section;
 		} else {
-			$this->section = tx_newspaper_Section($this->attributes['section_id']);
+			$this->section = new tx_newspaper_Section($this->attributes['section_id']);
 		}
  	}
  	
