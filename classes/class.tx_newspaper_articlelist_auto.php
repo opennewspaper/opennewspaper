@@ -50,7 +50,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 			'',
 			''
 		);
-		
+		throw new tx_newspaper_DBException($res);
 		if (!$res) {
 			throw new tx_newspaper_NoResException();
 		}
