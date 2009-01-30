@@ -109,6 +109,46 @@ class tx_newspaper {
 		}		
 	}
 
+	/// Get the tx_newspaper_Section object of the page currently displayed
+	/** Currently, that means it returns the ressort record which lies on the
+	 *  current Typo3 page. This implementation may change, but this function
+	 *  is required to always return the correct tx_newspaper_Section.
+	 * 
+	 *  \return The tx_newspaper_Section object the plugin currently works on
+	 */
+	public static function getSection() {
+		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
+
+        if (!$section_uid) {
+        	throw new tx_newspaper_IllegalUsageException('No section associated with current page');
+        }
+		
+		return new tx_newspaper_Section($section_uid);
+	}
+	
+	/// Get the tx_newspaper_Page which is currently displayed
+	/**
+	 *	Find out which page type we're on (Section, Article, RSS, Comments, whatever)
+	 *
+	 *	If $_GET['art'] is set, it is the article page
+	 *
+	 *	Else if $_GET['type'] is set, it is the page corresponding to that type
+	 *
+	 *	Else it is the section overview page
+	 *
+	 *  \return The tx_newspaper_Page which is currently displayed
+	 */ 
+	public static function getPage(tx_newspaper_Section $section) {
+		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
+		else if (t3lib_div::_GP('type')) 
+			$cond = 'get_var = \'type\' AND get_value = '.intval(t3lib_div::_GP('type'));
+		else $cond = 'NOT get_var';
+		
+		return new tx_newspaper_Page($section, $cond);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
 	/** SQL queries are stored as a static member variable, so they can be 
 	 *  accessed for debugging from outside the function if a query does not  
 	 *  return the desired result.
