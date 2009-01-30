@@ -37,6 +37,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->assertTrue(sizeof($articles) == 7);
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
+			t3lib_div::debug($article->getAttribute('title'));
 		}
 		
 	}
