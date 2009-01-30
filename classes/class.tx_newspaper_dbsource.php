@@ -61,7 +61,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		/** \todo ...or should I read just those which are defined in
 		 * 		  self::$attribute_list? Which is better?
 		 */
-        $row = tx_newspaper::selectOneRow(
+        $row = tx_newspaper::selectZeroOrOneRows(
 			'*',
 			$article->sourceTable($this),
 			"uid = ".intval($uid)
