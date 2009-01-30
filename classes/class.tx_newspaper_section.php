@@ -36,10 +36,14 @@
  class tx_newspaper_Section {
  	
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
- 	function __construct($section_uid) {
+ 	function __construct($uid) {
 		$this->attributes = tx_newspaper::selectOneRow(
-			'*', self::$table, "uid = $section_uid"
+			'*', self::$table, "uid = $uid"
 		);
+		$list = tx_newspaper::selectOneRow(
+			'uid', self::$list_table, "section_id  = $uid"
+		);
+		$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid']);
  	}
  	
  	function getAttribute($attribute) {
@@ -49,9 +53,7 @@
  		return $this->attributes[$attribute];
  	}
  	
- 	function getList() {
- 		throw new tx_newspaper_NotYetImplementedException();
- 	}
+ 	function getList() { return $this->articlelist; }
  	
  	function getParentPage() {
  		throw new tx_newspaper_NotYetImplementedException();
@@ -59,9 +61,11 @@
  	
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
-	private $list = null;
+	private $articlelist = null;
  	
  	static private $table = 'tx_newspaper_section';	///< SQL table for persistence
+ 	/// table which stores the tx_newspaper_ArticleList associated with this section
+ 	static private $list_table = 'tx_newspaper_articlelist';
  }
  
 ?>
