@@ -68,7 +68,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		);
         
         /// \todo ...or loop over self::$attribute_list? Which is better?
-        foreach ($row as $field => $value) {
+        if ($row) foreach ($row as $field => $value) {
         	/** Set the attribute of \p $article connected with the DB field
         	 *  \p $field 
         	 * 
