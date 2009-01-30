@@ -51,7 +51,7 @@ class tx_newspaper_ArticleList_Factory {
 		return self::$instance;
 	}
 	
-	public function create($uid) {
+	public function create($uid, tx_newspaper_Section $section) {
 		/// Read actual type and UID of the ArticleList to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
 			'list_table, list_uid', self::$list_table, "uid = $uid"
@@ -71,7 +71,7 @@ class tx_newspaper_ArticleList_Factory {
         									   $row);
         }
 		
-		return new $row['list_table']($row['list_uid']);
+		return new $row['list_table']($row['list_uid'], $section);
 	}
 	
 	/// Protected constructor, tx_newspaper_ArticleList_Factory cannot be created freely
