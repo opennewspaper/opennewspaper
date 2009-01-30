@@ -28,15 +28,19 @@ $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['userFunc']
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['noTableWrapping'] = true;
 
 // fix ranges artificially imposed by kickstarter
-$TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
-	"upper" => "1000000000",
-	"lower" => "1"
-);
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"upper" => "1000000000",
 	"lower" => "1"
 );
+$TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
+	"upper" => "1000000000",
+	"lower" => "1"
+);
 $TCA["tx_newspaper_pagezone"]["columns"]["pagezone_uid"]["config"]["range"] = array (
+	"upper" => "1000000000",
+	"lower" => "1"
+);
+$TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"upper" => "1000000000",
 	"lower" => "1"
 );
