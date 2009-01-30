@@ -12,8 +12,18 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
 class test_Page_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
+		$this->old_page = $GLOBALS['TSFE']->page;
+		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
+		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		$this->section = new tx_newspaper_Section($this->section_uid);
 		$this->page = new tx_newspaper_Page($this->section, 'NOT get_var');
+	}
+
+	function tearDown() {
+		$GLOBALS['TSFE']->page = $this->old_page;
+		/// Make sure $_GET is clean
+		unset($_GET['art']);
+		unset($_GET['type']);		
 	}
 
 	public function test_createPage() {
