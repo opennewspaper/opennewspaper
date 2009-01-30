@@ -44,6 +44,7 @@
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_page.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_articlelist_factory.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_articleimpl.php');
 //}
 
