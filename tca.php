@@ -1241,4 +1241,5 @@ $TCA["tx_newspaper_articlelist_auto"] = array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
 	)
 );
+require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
