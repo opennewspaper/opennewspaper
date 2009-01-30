@@ -32,7 +32,13 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$list = $this->section->getList();
 		$this->assertEquals($list, 
 							tx_newspaper_ArticleList_Factory::getInstance()->create(1, $this->section));
-		t3lib_div::debug($list->getArticles(1));
+		// section 1 has currently 7 articles associated with it.
+		$articles = $list->getArticles(7);
+		$this->assertTrue(sizeof($articles) == 7);
+		foreach ($articles as $article) {
+			$this->assertTrue($article instanceof tx_newspaper_Article);
+		}
+		
 	}
 	
 	public function test_getParentPage() {
