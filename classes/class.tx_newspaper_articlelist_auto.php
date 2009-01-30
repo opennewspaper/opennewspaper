@@ -39,6 +39,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
  	}
  	
  	function getArticles($number, $start = 0) {
+ 		/// \todo honor $number and $start
  		$GLOBALS['TYPO3_DB']->debugOutput = 1;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'tx_newspaper_article.uid', 
@@ -55,10 +56,12 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 			throw new tx_newspaper_NoResException();
 		}
 		
-	    $rows = array();
-	    while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) $rows[] = $row;
-				
- 		throw new tx_newspaper_DBException('exec_SELECT_mm_query() returned ', $rows);
+		$articles = array();
+	    while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	    	$articles[] = new tx_newspaper_ArticleImpl($row['uid']);
+	    } 
+			
+		return $articles;
  	}
  	
  	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
