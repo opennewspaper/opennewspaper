@@ -28,6 +28,16 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->section->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
 	
+	public function test_getList() {
+		$list = $this->section->getList();
+		$this->assertEquals($list, tx_newspaper_ArticleList_Factory::getInstance()->create(1));
+	}
+	
+	public function test_getParentPage() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$parent = $this->section->getParentPage();
+	}
+	
 	private $section = null;					///< the object
 	private $section_uid = 1;					///< uid of stored object
 	private $pid = 2473;						///< pid of stored object
