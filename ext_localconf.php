@@ -49,4 +49,7 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_extra_articlerenderer=1
 ');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_extra_sectionlist=1
+');
 ?>

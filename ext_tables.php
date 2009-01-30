@@ -271,6 +271,55 @@ $TCA["tx_newspaper_extra_articlerenderer"] = array (
 	)
 );
 
+$TCA["tx_newspaper"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => "ORDER BY crdate",	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden",
+	)
+);
+
+
+t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_extra_sectionlist');
+
+
+t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_sectionlist');
+
+$TCA["tx_newspaper_extra_sectionlist"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'sortby' => 'sorting',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',	
+			'fe_group' => 'fe_group',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_sectionlist.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden, starttime, endtime, fe_group",
+	)
+);
+
 $tempColumns = Array (
 	"tx_newspaper_extra" => Array (		
 		"exclude" => 1,		
