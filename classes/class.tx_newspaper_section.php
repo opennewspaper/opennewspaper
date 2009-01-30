@@ -43,7 +43,7 @@
 		$list = tx_newspaper::selectOneRow(
 			'uid', self::$list_table, "section_id  = $uid"
 		);
-		$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], this);
+		$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
  	}
  	
  	function getAttribute($attribute) {
