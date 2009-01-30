@@ -31,10 +31,15 @@
  
  /// A list of tx_newspaper_Article s
  abstract class tx_newspaper_ArticleList {
- 	function __construct($uid) {
+ 	function __construct($uid, tx_newspaper_Section $section = null) {
  		$this->attributes = tx_newspaper::selectOneRow(
 			'*', self::$table, "uid = $uid"
 		);
+		if ($section) {
+			$this->section = $section;
+		} else {
+			$this->section = tx_newspaper_Section($this->attributes['section_id']);
+		}
  	}
  	
  	abstract function getArticle($number);
@@ -42,8 +47,12 @@
  	abstract function getArticles($number, $start = 0);
  	
  	protected $attributes = array();
+ 	protected $section = null;
  	
- 	static protected $table = 'tx_newspaper_articlelist';	///< SQL table for persistence
+ 	/// SQL table for persistence
+ 	static protected $table = 'tx_newspaper_articlelist';
+ 	/// SQL table for tx_newspaper_Section objects	
+ 	static protected $section_table = 'tx_newspaper_section';
  }
  
 ?>
