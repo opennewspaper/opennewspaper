@@ -61,12 +61,15 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		/** \todo ...or should I read just those which are defined in
 		 * 		  self::$attribute_list? Which is better?
 		 */
-        $row = tx_newspaper::selectZeroOrOneRows(
-			'*',
-			$article->sourceTable($this),
-			"uid = ".intval($uid)
-		);
-        
+        try {
+	        $row = tx_newspaper::selectOneRow(
+				'*',
+				$article->sourceTable($this),
+				"uid = ".intval($uid)
+			);
+        } catch (tx_newspaper_DBException $e) {
+        	throw new tx_newspaper_WrongClassException();
+        }
         /// \todo ...or loop over self::$attribute_list? Which is better?
         if ($row) foreach ($row as $field => $value) {
         	/** Set the attribute of \p $article connected with the DB field
