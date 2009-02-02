@@ -181,5 +181,9 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	private $extras_table = 'tx_newspaper_extra';
 	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
 	private $extra_uid_to_create_superobject_for = 1;
+	
+#	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
+	private $section_uid = 1;
+	
 }
 ?>
