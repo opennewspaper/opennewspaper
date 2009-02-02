@@ -43,13 +43,15 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($temp->getModuleName(), 'npe_rend');
 	}
 
-	public function test_createImage() {
-		$temp = new tx_newspaper_Extra_Image(1);
-		$this->assertTrue(is_object($temp));
-		$this->assertTrue($temp instanceof tx_newspaper_Extra);
-		$this->assertTrue($temp instanceof tx_newspaper_Extra_Image);
-		$this->assertEquals($temp->getTitle(), 'Image');
-		$this->assertEquals($temp->getModuleName(), 'npe_image');
+	public function test_createExtra() {
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);
+			$this->assertTrue(is_object($temp));
+			$this->assertTrue($temp instanceof tx_newspaper_Extra);
+			$this->assertTrue($temp instanceof $extra_class);
+			$this->assertEquals($temp->getTitle(), self::$attributes_to_test['title'][$extra_class]);
+			$this->assertEquals($temp->getModuleName(), self::$attributes_to_test['modulename'][$extra_class]);
+		}
 	}
 	
 	public function test_getAttribute() {
@@ -176,6 +178,18 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		'tx_newspaper_Extra_ArticleRenderer',
 		'tx_newspaper_Extra_Image',
 		'tx_newspaper_Extra_SectionList',
+	);
+	private $attributes_to_test = array(
+		'title' => array(
+			'tx_newspaper_Extra_ArticleRenderer' => 'ArticleRenderer',
+			'tx_newspaper_Extra_Image' => 'Image',
+			'tx_newspaper_Extra_SectionList' => 'SectionList',
+		),
+		'modulename' => array(
+			'tx_newspaper_Extra_ArticleRenderer' => 'npe_rend',
+			'tx_newspaper_Extra_Image' => 'npe_image',
+			'tx_newspaper_Extra_SectionList' => 'npe_sect_l',
+		),
 	);
 
 	private $extras_table = 'tx_newspaper_extra';
