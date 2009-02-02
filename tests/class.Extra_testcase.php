@@ -127,6 +127,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->extra_uid_to_create_superobject_for, 
 			$this->extra_table_to_create_superobject_for
 		);
+
 		/// check if the Extra record is present
 		$row = tx_newspaper::selectOneRow(
 			'uid',
@@ -135,6 +136,11 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
 		$this->assertTrue($row['uid'] > 0);
+		
+		/// delete the record from the extra table and check it it really is created anew
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->extras_table,
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
+			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for));
 	}
 	
 	private $source = null;
