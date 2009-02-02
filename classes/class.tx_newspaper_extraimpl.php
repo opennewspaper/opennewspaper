@@ -30,6 +30,12 @@ abstract class tx_newspaper_ExtraImpl
 	implements tx_newspaper_Extra, tx_newspaper_WithSource {
 
 	public function __construct($uid) {
+		/** I'm not sure whether the following line should remain. It's a
+		 *  safety net because currently it's not ensured that extras are 
+		 *  created consistently.
+		 */
+		ExtraImpl::createExtraRecord($uid, $this->getName());
+		
 		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
 

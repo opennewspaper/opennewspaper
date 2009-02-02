@@ -157,6 +157,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		);
 		$this->assertTrue($row['uid'] > 0);
 		
+		/// \todo check if all fields are consistent
 	}
 	
 	private $source = null;
