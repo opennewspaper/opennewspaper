@@ -129,7 +129,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		);
 		/// check if the Extra record is present
 		$row = tx_newspaper::selectOneRow(
-			implode(', ', self::$fields_to_copy_into_extra_table),
+			'uid',
 			$this->extra_table_to_create_superobject_for,
 			'uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
