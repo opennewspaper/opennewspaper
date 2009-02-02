@@ -150,9 +150,8 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		$row['extra_uid'] = $uid;
 		$row['extra_table'] = $table;
 
-		/** pid must be calculated somehow. it does not matter if that computation  
-		 *  is expensive, because it is executed only once per extra, (hopefully)
-		 *  during its creation.
+		/** use the PID all Extras share. If Extras are created under more than
+		 *  one page, we have a problem and can't continue.
 		 */
 		$rows = tx_newspaper::selectRows(
 			'DISTINCT pid', self::$table, 'pid != 0'
