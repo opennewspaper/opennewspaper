@@ -156,7 +156,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		 */
 		
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		tx_newspaper::$query = $query;
 				
 //		throw new tx_newspaper_NotYetImplementedException();
