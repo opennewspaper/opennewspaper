@@ -141,7 +141,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		
 		/// \todo read typo3 fields to copy into extra table
 		$row = tx_newspaper::selectOneRow(
-			implode(self::$fields_to_copy_into_extra_table),
+			implode(', ', self::$fields_to_copy_into_extra_table),
 			$table,
 			'uid = ' . intval($uid)
 		);
