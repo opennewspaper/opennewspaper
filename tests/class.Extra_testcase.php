@@ -49,8 +49,8 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertTrue(is_object($temp));
 			$this->assertTrue($temp instanceof tx_newspaper_Extra);
 			$this->assertTrue($temp instanceof $extra_class);
-			$this->assertEquals($temp->getTitle(), self::$attributes_to_test['title'][$extra_class]);
-			$this->assertEquals($temp->getModuleName(), self::$attributes_to_test['modulename'][$extra_class]);
+			$this->assertEquals($temp->getTitle(), $this->attributes_to_test['title'][$extra_class]);
+			$this->assertEquals($temp->getModuleName(), $this->attributes_to_test['modulename'][$extra_class]);
 		}
 	}
 	
