@@ -154,11 +154,22 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		 *  that computation is expensive, because it is executed only once per 
 		 *  extra, (hopefully) during its creation.
 		 */
+		$rows = tx_newspaper::selectRows(
+			'DISTINCT pid', self::$table, 'pid != 0'
+		);
+		if (sizeof($rows) != 1) {
+		 	throw new tx_newspaper_InconsistencyException(
+		 		'Abstract Extras were created on more than one page:<br />' . "\n" .
+		 		print_r($rows, 1)
+		 	);
+		}
+		throw new tx_newspaper_Exception(print_r($rows, 1));
+				
 		
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		tx_newspaper::$query = $query;
-				
+		
 //		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
