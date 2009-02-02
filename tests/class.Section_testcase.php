@@ -43,7 +43,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		
 		$article = $list->getArticle(1);
 		$this->assertTrue($article instanceof tx_newspaper_Article);
-		t3lib_div::debug($article->getAttribute('title'));		
+		$this->assertEquals($article->getAttribute('title'), 'Nummer zwei');		
 	}
 	
 	public function test_getParentPage() {
