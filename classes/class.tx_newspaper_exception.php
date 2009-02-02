@@ -109,4 +109,10 @@ class tx_newspaper_EmptyResultException extends tx_newspaper_DBException {
     }
 }
 
+class tx_newspaper_ArticleNotFoundException extends tx_newspaper_Exception { 
+	public function __construct($uid) {
+        parent::__construct("Article $uid does not exist");
+    }
+}
+
 ?>

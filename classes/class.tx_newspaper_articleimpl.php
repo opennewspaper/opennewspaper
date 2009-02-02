@@ -28,7 +28,11 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 			 */
 			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
 			
-			$this->attributes = $this->readExtraItem($uid, $this->getName());
+			try {
+				$this->attributes = $this->readExtraItem($uid, $this->getName());
+			} catch (tx_newspaper_DBException $e) {
+				throw new tx_newspaper_ArticleNotFoundException($uid);
+			}
 		}	
 	}
 	
