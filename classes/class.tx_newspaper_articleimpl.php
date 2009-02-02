@@ -30,7 +30,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 			
 			try {
 				$this->attributes = $this->readExtraItem($uid, $this->getName());
-			} catch (tx_newspaper_DBException $e) {
+			} catch (tx_newspaper_EmptyResultException $e) {
 				throw new tx_newspaper_ArticleNotFoundException($uid);
 			}
 		}	
