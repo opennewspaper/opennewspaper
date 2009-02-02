@@ -122,7 +122,10 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	}	
 	
 	public function test_createExtraRecord() {
-		tx_newspaper_ExtraImpl::createExtraRecord(0, '');
+		tx_newspaper_ExtraImpl::createExtraRecord(
+			$this->extra_uid_to_create_superobject_for, 
+			$this->extra_table_to_create_superobject_for
+		);
 	}
 	
 	private $source = null;
@@ -131,5 +134,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		'tx_newspaper_Extra_ArticleRenderer',
 		'tx_newspaper_Extra_Image'
 	);
+	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
+	private $extra_uid_to_create_superobject_for = 1;
 }
 ?>
