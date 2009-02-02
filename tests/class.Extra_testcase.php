@@ -33,15 +33,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_DBException');
 		tx_newspaper_Extra_Factory::getInstance()->create($this->bad_extra_uid);
 	}
-	
-	public function test_createArticleRenderer() {
-		$temp = new tx_newspaper_Extra_ArticleRenderer(1);
-		$this->assertTrue(is_object($temp));
-		$this->assertTrue($temp instanceof tx_newspaper_Extra);
-		$this->assertTrue($temp instanceof tx_newspaper_Extra_ArticleRenderer);
-		$this->assertEquals($temp->getTitle(), 'ArticleRenderer');
-		$this->assertEquals($temp->getModuleName(), 'npe_rend');
-	}
 
 	public function test_createExtra() {
 		foreach($this->extras_to_test as $extra_class) {
@@ -49,8 +40,12 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertTrue(is_object($temp));
 			$this->assertTrue($temp instanceof tx_newspaper_Extra);
 			$this->assertTrue($temp instanceof $extra_class);
-			$this->assertEquals($temp->getTitle(), $this->attributes_to_test['title'][$extra_class]);
-			$this->assertEquals($temp->getModuleName(), $this->attributes_to_test['modulename'][$extra_class]);
+			if ($this->attributes_to_test['title'][$extra_class])
+				$this->assertEquals($temp->getTitle(), 
+								    $this->attributes_to_test['title'][$extra_class]);
+			if ($this->attributes_to_test['modulename'][$extra_class])
+				$this->assertEquals($temp->getModuleName(),
+									$this->attributes_to_test['modulename'][$extra_class]);
 		}
 	}
 	
