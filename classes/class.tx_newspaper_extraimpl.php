@@ -150,9 +150,9 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		$row['extra_uid'] = $uid;
 		$row['extra_table'] = $table;
 
-		/** \todo sorting, pid must be calculated somehow. it does not matter if 
-		 *  that computation is expensive, because it is executed only once per 
-		 *  extra, (hopefully) during its creation.
+		/** pid must be calculated somehow. it does not matter if that computation  
+		 *  is expensive, because it is executed only once per extra, (hopefully)
+		 *  during its creation.
 		 */
 		$rows = tx_newspaper::selectRows(
 			'DISTINCT pid', self::$table, 'pid != 0'
@@ -163,8 +163,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		 		print_r($rows, 1)
 		 	);
 		}
-		throw new tx_newspaper_Exception(print_r($rows, 1));
-				
+		$row['pid'] = $rows[0]['pid'];
 		
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
