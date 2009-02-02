@@ -45,7 +45,7 @@
 abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	
 	/// Configure Smarty rendering engine
-	public function __construct() {
+	public function __construct($uid = 0) {
 		$this->smarty = new Smarty();
 
 		$this->smarty = new Smarty();
@@ -56,6 +56,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
+		
+		if ($uid) {
+			$this->setUid($uid);
+		
+			/** I'm not sure whether the following line should remain. It's a
+			 *  safety net because currently it's not ensured that extras are 
+			 *  created consistently.
+			 */
+			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
+		}
 	}
 	
 	/// Render the page zone, containing all extras
