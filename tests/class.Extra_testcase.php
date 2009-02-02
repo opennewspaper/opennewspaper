@@ -131,9 +131,10 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$row = tx_newspaper::selectOneRow(
 			'uid',
 			$this->extra_table_to_create_superobject_for,
-			'uid = ' . intval($this->extra_uid_to_create_superobject_for)
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, self::$extras_table) .
+			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
-		$this->assertTrue($row['uid']);
+		$this->assertTrue($row['uid'] > 0);
 	}
 	
 	private $source = null;
@@ -142,6 +143,8 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		'tx_newspaper_Extra_ArticleRenderer',
 		'tx_newspaper_Extra_Image'
 	);
+
+	private $extras_table = 'tx_newspaper_extra';
 	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
 	private $extra_uid_to_create_superobject_for = 1;
 }
