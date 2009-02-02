@@ -65,6 +65,13 @@ class tx_newspaper_NotYetImplementedException extends tx_newspaper_Exception {
 }
 
 /// This Exception is thrown if a feature is used in a wrong way
+class tx_newspaper_InconsistencyException extends tx_newspaper_Exception { 
+	public function __construct($message) {
+        parent::__construct("Internal inconsistency discovered: $message");
+    }	
+}
+
+/// This Exception is thrown if a feature is used in a wrong way
 class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception { 
 	public function __construct($message) {
         parent::__construct("Illegal usage: $message");
