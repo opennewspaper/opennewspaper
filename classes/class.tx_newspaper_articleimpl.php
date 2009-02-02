@@ -22,15 +22,15 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		if ($uid) {
 			$this->setUid($uid);
 			
-			/** I'm not sure whether the following line should remain. It's a
-			 *  safety net because currently it's not ensured that extras are 
-			 *  created consistently.
-			 */
-			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
-			
 			try {
+				/** I'm not sure whether the following line should remain. It's a
+				 *  safety net because currently it's not ensured that extras are 
+				 *  created consistently.
+				 */
+				tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
+			
 				$this->attributes = $this->readExtraItem($uid, $this->getName());
-			} catch (tx_newspaper_EmptyResultException $e) {
+			} catch (tx_newspaper_DBException $e) {
 				throw new tx_newspaper_ArticleNotFoundException($uid);
 			}
 		}	
