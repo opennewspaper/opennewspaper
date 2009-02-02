@@ -33,22 +33,17 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_artic
 
 /// A list of tx_newspaper_Article s
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
- 	
- 	function getArticle($number) { 
- 		throw new tx_newspaper_NotYetImplementedException();
- 	}
- 	
+ 	 	
  	function getArticles($number, $start = 0) {
- 		/// \todo honor $number and $start
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'tx_newspaper_article.uid', 
 			'tx_newspaper_article',
 			'tx_newspaper_article_sections_mm',
 			'tx_newspaper_section',
-			' AND tx_newspaper_article_sections_mm.uid_foreign = ' . $this->section->getAttribute('uid'),
+			' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')),
 			'',
 			'',
-			''
+			"$start, $number"
 		);
 		tx_newspaper::$query = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
 		

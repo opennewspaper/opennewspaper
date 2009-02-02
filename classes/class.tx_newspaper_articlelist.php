@@ -42,7 +42,10 @@
 		}
  	}
  	
- 	abstract function getArticle($number);
+ 	function getArticle($number) {
+ 		$articles = $this->getArticles(1, $number);
+ 		return $articles[0];
+ 	}
  	
  	abstract function getArticles($number, $start = 0);
  	
