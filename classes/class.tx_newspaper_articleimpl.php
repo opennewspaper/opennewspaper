@@ -26,7 +26,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			ExtraImpl::createExtraRecord($uid, $this->getName());
+			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
 			
 			$this->attributes = $this->readExtraItem($uid, $this->getName());
 		}	
