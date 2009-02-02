@@ -141,6 +141,22 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for));
+		/// \todo if i were pedantic, i'd check wheter deletion has really succeeded...
+
+		tx_newspaper_ExtraImpl::createExtraRecord(
+			$this->extra_uid_to_create_superobject_for, 
+			$this->extra_table_to_create_superobject_for
+		);
+
+		/// check if the Extra record is present
+		$row = tx_newspaper::selectOneRow(
+			'uid',
+			$this->extras_table,
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
+			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
+		);
+		$this->assertTrue($row['uid'] > 0);
+		
 	}
 	
 	private $source = null;
