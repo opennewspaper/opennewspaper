@@ -130,7 +130,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		/// check if the Extra record is present
 		$row = tx_newspaper::selectOneRow(
 			'uid',
-			$this->extra_table_to_create_superobject_for,
+			$this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
