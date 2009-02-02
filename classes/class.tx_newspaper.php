@@ -110,7 +110,7 @@ class tx_newspaper {
 	}
 	
 	public static function insertRows($table, $row) {
-		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
+		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) {
