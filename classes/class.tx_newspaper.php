@@ -108,6 +108,15 @@ class tx_newspaper {
 			return $rows;
 		}		
 	}
+	
+	public static function insertRows($table, $row) {
+		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		if (!$res) {
+        	throw new tx_newspaper_NoResException(self::$query);
+        }
+	}
 
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the ressort record which lies on the

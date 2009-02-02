@@ -169,12 +169,8 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		 	);
 		}
 		$row['pid'] = $rows[0]['pid'];
-		
-		$query = $GLOBALS['TYPO3_DB']->INSERTquery(self::$table, $row);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		tx_newspaper::$query = $query;
-		
-//		throw new tx_newspaper_NotYetImplementedException();
+
+		tx_newspaper::insertRows(self::$table, $row);		
 	}
 	
 	private $attributes = array();				///< attributes of the extra
