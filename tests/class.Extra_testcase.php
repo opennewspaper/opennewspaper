@@ -164,7 +164,8 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist
 	private $extras_to_test = array(
 		'tx_newspaper_Extra_ArticleRenderer',
-		'tx_newspaper_Extra_Image'
+		'tx_newspaper_Extra_Image',
+		'tx_newspaper_Extra_SectionList',
 	);
 
 	private $extras_table = 'tx_newspaper_extra';
