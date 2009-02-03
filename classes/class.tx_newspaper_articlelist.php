@@ -49,6 +49,10 @@
  	
  	abstract function getArticles($number, $start = 0);
  	
+ 	static function getName() {
+		return strtolower(get_class());
+	}
+ 	
  	protected $attributes = array();
  	protected $section = null;
  	
