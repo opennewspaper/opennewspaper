@@ -26,8 +26,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
  *  \todo Currently implements tx_newspaper_WithSource as well. I am not sure if
  *  this makes sense.
  */ 
-abstract class tx_newspaper_ExtraImpl 
-	implements tx_newspaper_Extra/*, tx_newspaper_WithSource*/ {
+abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
 		/** \todo I'm not sure whether the following line should remain. It's a
@@ -56,23 +55,6 @@ abstract class tx_newspaper_ExtraImpl
 	public function setAttribute($attribute, $value) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-/*
-	public function getSource() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-
-	public function setSource(tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-
-	public static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-
-	public static function sourceTable(tx_newspaper_Source $source) {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-*/
 
 	/** Extra folder can be hidden (see dam)
 	 *  One folder per Extra
