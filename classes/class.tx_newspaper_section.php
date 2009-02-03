@@ -38,7 +38,7 @@
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
  	function __construct($uid) {
 		$this->attributes = tx_newspaper::selectOneRow(
-			'*', self::$table, "uid = $uid"
+			'*', self::getName(), "uid = $uid"
 		);
 		$list = tx_newspaper::selectOneRow(
 			'uid', self::$list_table, "section_id  = $uid"
@@ -59,6 +59,10 @@
  		throw new tx_newspaper_NotYetImplementedException();
  	}
  	
+ 	static function getName() {
+		return strtolower(get_class());
+	}
+	
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
 	private $articlelist = null;

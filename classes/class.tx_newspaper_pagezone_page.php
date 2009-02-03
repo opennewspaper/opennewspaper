@@ -47,7 +47,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 	public function __construct($uid) {
 		parent::__construct($uid);
 		$this->readExtras($uid);
-	    $this->readAttributes(self::$table, $uid);
+	    $this->readAttributes(self::getName(), $uid);
  	}
 
 	protected function getExtra2PagezoneTable() {
