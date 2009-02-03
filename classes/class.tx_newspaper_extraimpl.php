@@ -99,6 +99,13 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 //	static function getModuleName() { return 'newspaper'; }
 
+	static function getName() {
+		$class = strtolower(get_class());
+		/// special treatment because abstract superclass table is called 'tx_newspaper_extra'
+		if ('tx_newspaper_extraimpl' == $class) return self::$table;
+		return $class;
+	}
+
 
 	/// Read data of Extra
 	/** \return Array row with Extra data for given uid and table

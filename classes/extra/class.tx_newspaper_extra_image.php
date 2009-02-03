@@ -20,11 +20,6 @@ class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 	}
 
 
-// internal name
-	static function getName() {
-		return 'tx_newspaper_extra_image';
-	}
-
 //TODO: getLLL
 	static function getTitle() {
 		return 'Image';
