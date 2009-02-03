@@ -18,6 +18,11 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_ExtraImpl {
 		"<p>".print_r($list, 1)."</p>\n".$ret;
 	}
 
+
+	static function getName() {
+		return 'tx_newspaper_extra_sectionlist';
+	}
+
 	static function getTitle() {
 		return 'SectionList';
 	}

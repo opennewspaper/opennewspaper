@@ -18,6 +18,11 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 		return $article->render();
 	}
 
+
+	static function getName() {
+		return 'tx_newspaper_extra_articlerenderer';
+	}
+
 	static function getTitle() {
 		return 'ArticleRenderer';
 	}
