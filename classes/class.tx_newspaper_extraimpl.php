@@ -27,10 +27,10 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
  *  this makes sense.
  */ 
 abstract class tx_newspaper_ExtraImpl 
-	implements tx_newspaper_Extra, tx_newspaper_WithSource {
+	implements tx_newspaper_Extra/*, tx_newspaper_WithSource*/ {
 
 	public function __construct($uid) {
-		/** I'm not sure whether the following line should remain. It's a
+		/** \todo I'm not sure whether the following line should remain. It's a
 		 *  safety net because currently it's not ensured that extras are 
 		 *  created consistently.
 		 */
@@ -56,7 +56,7 @@ abstract class tx_newspaper_ExtraImpl
 	public function setAttribute($attribute, $value) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-
+/*
 	public function getSource() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
@@ -72,7 +72,7 @@ abstract class tx_newspaper_ExtraImpl
 	public static function sourceTable(tx_newspaper_Source $source) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-
+*/
 
 	/** Extra folder can be hidden (see dam)
 	 *  One folder per Extra

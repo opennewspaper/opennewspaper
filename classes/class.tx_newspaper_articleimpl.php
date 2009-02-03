@@ -23,7 +23,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 			$this->setUid($uid);
 			
 			try {
-				/** I'm not sure whether the following line should remain. It's a
+				/** \todo I'm not sure whether the following line should remain. It's a
 				 *  safety net because currently it's not ensured that extras are 
 				 *  created consistently.
 				 */
