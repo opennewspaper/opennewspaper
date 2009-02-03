@@ -70,34 +70,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$temp->setAttribute('es gibt mich nicht, schmeiss ne exception!', 1);
 	}
-/*
-	public function test_getSource() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$this->assertNull($temp->getSource());
-			$temp->setSource($this->source);
-			$this->assertEquals($temp->getSource(), $this->source);
-		}
-	}
 
-	public function test_mapFieldToSourceField() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			/// \todo find generic fieldnames to map
-			$temp->mapFieldToSourceField($fieldname, $this->source);
-		}
-	}
-
-	public function test_sourceTable() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$temp->sourceTable($this->source);
-		}
-	}	
-*/
 	public function test_getExtraPid() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
