@@ -114,6 +114,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
  	
+ 	static function getName() {
+		return self::$table;
+	}
+
+ 	
  	////////////////////////////////////////////////////////////////////////////
  	
 	/// Read Extras from DB
