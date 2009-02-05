@@ -38,7 +38,7 @@
 	public function setAttribute($attribute, $value);
 
 	/// \return the name of the Extra = the name of the database table the Extra data is stored in
-	static function getName();
+	public function getName();
 
 	/// \return the title of the Extra (using the language set in BE)
 	static function getTitle();
