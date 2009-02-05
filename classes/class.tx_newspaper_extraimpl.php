@@ -24,11 +24,6 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
-		/** \todo I'm not sure whether the following line should remain. It's a
-		 *  safety net because currently it's not ensured that extras are 
-		 *  created consistently.
-		 */
-		tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
 		
 //		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
