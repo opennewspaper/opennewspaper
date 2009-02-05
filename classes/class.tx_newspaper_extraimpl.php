@@ -25,7 +25,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
 		
-		$this->attributes = $this->readExtraItem($uid, $this->getName());
+//		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
 
 	/// \todo remove before launch
