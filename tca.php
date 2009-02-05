@@ -111,7 +111,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 $TCA["tx_newspaper_section"] = array (
 	"ctrl" => $TCA["tx_newspaper_section"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,section_name"
+		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,section_name,parent_section"
 	),
 	"feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
 	"columns" => array (
@@ -175,9 +175,24 @@ $TCA["tx_newspaper_section"] = array (
 				"eval" => "required",
 			)
 		),
+		"parent_section" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.parent_section",		
+			"config" => Array (
+				"type" => "select",	
+				"items" => Array (
+					Array("",0),
+				),
+				"foreign_table" => "tx_newspaper_section",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_section.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, section_name")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, section_name, parent_section")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
@@ -189,46 +204,10 @@ $TCA["tx_newspaper_section"] = array (
 $TCA["tx_newspaper_page"] = array (
 	"ctrl" => $TCA["tx_newspaper_page"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,section,type_name,get_var,get_value"
+		"showRecordFieldList" => "section,pagetype_id,inherit_from_page"
 	),
 	"feInterface" => $TCA["tx_newspaper_page"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		'starttime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'default'  => '0',
-				'checkbox' => '0'
-			)
-		),
-		'endtime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'checkbox' => '0',
-				'default'  => '0',
-				'range'    => array (
-					'upper' => mktime(0, 0, 0, 12, 31, 2020),
-					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
-				)
-			)
-		),
 		"section" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.section",		
@@ -241,47 +220,39 @@ $TCA["tx_newspaper_page"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"type_name" => Array (		
+		"pagetype_id" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.type_name",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.pagetype_id",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",	
-				"eval" => "required",
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_pagetypes",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
-		"get_var" => Array (		
+		"inherit_from_page" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.get_var",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.inherit_from_page",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "10",	
-				"max" => "10",	
-				"eval" => "trim",
-			)
-		),
-		"get_value" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.get_value",		
-			"config" => Array (
-				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
-				"eval"     => "int",
-				"checkbox" => "0",
-				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
+				"type" => "select",	
+				"items" => Array (
+					Array("",0),
 				),
-				"default" => 0
+				"foreign_table" => "tx_newspaper_page",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_page.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, section, type_name, get_var, get_value")
+		"0" => array("showitem" => "section;;;;1-1-1, pagetype_id, inherit_from_page")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime")
+		"1" => array("showitem" => "")
 	)
 );
 
@@ -290,7 +261,7 @@ $TCA["tx_newspaper_page"] = array (
 $TCA["tx_newspaper_pagezone"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezone"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,name,page_id,pagezone_table,pagezone_uid"
+		"showRecordFieldList" => "hidden,starttime,endtime,name,page_id,pagezone_table,pagezone_uid"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone"]["feInterface"],
 	"columns" => array (
@@ -328,20 +299,6 @@ $TCA["tx_newspaper_pagezone"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
-			)
-		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
 			)
 		),
 		"name" => Array (		
@@ -393,7 +350,7 @@ $TCA["tx_newspaper_pagezone"] = array (
 		"0" => array("showitem" => "hidden;;1;;1-1-1, name, page_id, pagezone_table, pagezone_uid")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "starttime, endtime")
 	)
 );
 
@@ -402,66 +359,20 @@ $TCA["tx_newspaper_pagezone"] = array (
 $TCA["tx_newspaper_pagezone_page"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezone_page"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,name,pagezone_id,extras"
+		"showRecordFieldList" => "pagezonetype_id,pagezone_id,extras"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone_page"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		'starttime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'default'  => '0',
-				'checkbox' => '0'
-			)
-		),
-		'endtime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'checkbox' => '0',
-				'default'  => '0',
-				'range'    => array (
-					'upper' => mktime(0, 0, 0, 12, 31, 2020),
-					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
-				)
-			)
-		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
-			)
-		),
-		"name" => Array (		
+		"pagezonetype_id" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.name",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.pagezonetype_id",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_pagezonetype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_pagezonetype.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 		"pagezone_id" => Array (		
@@ -520,10 +431,10 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, name, pagezone_id, extras")
+		"0" => array("showitem" => "pagezonetype_id;;;;1-1-1, pagezone_id, extras")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "")
 	)
 );
 
@@ -532,66 +443,20 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_pagezone_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezone_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,name,pagezone_id,extras"
+		"showRecordFieldList" => "pagezonetype_id,pagezone_id,extras"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone_article"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		'starttime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'default'  => '0',
-				'checkbox' => '0'
-			)
-		),
-		'endtime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'checkbox' => '0',
-				'default'  => '0',
-				'range'    => array (
-					'upper' => mktime(0, 0, 0, 12, 31, 2020),
-					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
-				)
-			)
-		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
-			)
-		),
-		"name" => Array (		
+		"pagezonetype_id" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_article.name",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_article.pagezonetype_id",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_pagezonetype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_pagezonetype.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 		"pagezone_id" => Array (		
@@ -650,10 +515,10 @@ $TCA["tx_newspaper_pagezone_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, name, pagezone_id, extras")
+		"0" => array("showitem" => "pagezonetype_id;;;;1-1-1, pagezone_id, extras")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "")
 	)
 );
 
@@ -662,7 +527,7 @@ $TCA["tx_newspaper_pagezone_article"] = array (
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,title,kicker,teaser,text,author,redsys_id,extras,sections"
+		"showRecordFieldList" => "hidden,starttime,endtime,title,kicker,teaser,text,author,source_id,source_object,extras,sections"
 	),
 	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
 	"columns" => array (
@@ -700,20 +565,6 @@ $TCA["tx_newspaper_article"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
-			)
-		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
 			)
 		),
 		"title" => Array (		
@@ -771,12 +622,26 @@ $TCA["tx_newspaper_article"] = array (
 				"size" => "30",
 			)
 		),
-		"redsys_id" => Array (		
+		"source_id" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.redsys_id",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_id",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
+			)
+		),
+		"source_object" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_object",		
+			"config" => Array (
+				"type" => "group",
+				"internal_type" => "file",
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
+				"uploadfolder" => "uploads/tx_newspaper",
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 		"extras" => Array (		
@@ -862,10 +727,10 @@ $TCA["tx_newspaper_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, redsys_id, extras, sections")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "starttime, endtime")
 	)
 );
 
@@ -874,7 +739,7 @@ $TCA["tx_newspaper_article"] = array (
 $TCA["tx_newspaper_extra"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,extra_table,extra_uid"
+		"showRecordFieldList" => "hidden,starttime,endtime,extra_table,extra_uid,position,paragraph"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra"]["feInterface"],
 	"columns" => array (
@@ -914,20 +779,6 @@ $TCA["tx_newspaper_extra"] = array (
 				)
 			)
 		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
-			)
-		),
 		"extra_table" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_table",		
@@ -952,12 +803,44 @@ $TCA["tx_newspaper_extra"] = array (
 				"default" => 0
 			)
 		),
+		"position" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.position",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+		"paragraph" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.paragraph",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, extra_table, extra_uid")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "starttime, endtime")
 	)
 );
 
@@ -1239,6 +1122,92 @@ $TCA["tx_newspaper_articlelist_auto"] = array (
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime, fe_group")
+	)
+);
+
+
+
+$TCA["tx_newspaper_pagetypes"] = array (
+	"ctrl" => $TCA["tx_newspaper_pagetypes"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "type_name,get_var,get_value"
+	),
+	"feInterface" => $TCA["tx_newspaper_pagetypes"]["feInterface"],
+	"columns" => array (
+		"type_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.type_name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required,nospace,uniqueInPid",
+			)
+		),
+		"get_var" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.get_var",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+		"get_value" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.get_value",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "type_name;;;;1-1-1, get_var, get_value")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
+
+
+
+$TCA["tx_newspaper_pagezonetype"] = array (
+	"ctrl" => $TCA["tx_newspaper_pagezonetype"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "name"
+	),
+	"feInterface" => $TCA["tx_newspaper_pagezonetype"]["feInterface"],
+	"columns" => array (
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required,nospace,uniqueInPid",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "name;;;;1-1-1")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');

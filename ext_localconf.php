@@ -19,12 +19,6 @@ t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_pagezone=1
 ');
 t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_pagezone_page=1
-');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_pagezone_article=1
-');
-t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_article=1
 ');
 t3lib_extMgm::addPageTSConfig('
@@ -57,5 +51,11 @@ t3lib_extMgm::addUserTSConfig('
 ');
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_articlelist_auto=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_pagetypes=1
+');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_pagezonetype=1
 ');
 ?>
