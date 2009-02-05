@@ -33,7 +33,7 @@
  abstract class tx_newspaper_ArticleList {
  	function __construct($uid, tx_newspaper_Section $section = null) {
  		$this->attributes = tx_newspaper::selectOneRow(
-			'*', self::getName(), "uid = $uid"
+			'*', $this->getName(), "uid = $uid"
 		);
 		if ($section) {
 			$this->section = $section;
@@ -42,8 +42,8 @@
 		}
  	}
  	
- 	function getArticle($number) {
- 		$articles = $this->getArticles(1, $number);
+ 	function getArticle($index) {
+ 		$articles = $this->getArticles(1, $index);
  		return $articles[0];
  	}
  	

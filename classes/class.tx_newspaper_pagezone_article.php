@@ -40,6 +40,11 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 	    $this->readAttributes(self::$table, $uid);
  	}
 	
+	/// \todo Return default paragraph of extra of given type in article
+	public function getDefaultParagraph($extra_type) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+	
 	protected function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}

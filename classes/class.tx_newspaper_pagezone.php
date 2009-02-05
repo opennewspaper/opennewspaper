@@ -130,7 +130,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 *  \code
 	 * 	parent::__construct();
 	 *  $this->readExtras($uid);
-	 *  $this->readAttributes(self::getName(), $uid);
+	 *  $this->readAttributes($this->getName(), $uid);
 	 *  \endcode
 	 * 
 	 *  \param $uid UID in the table of the concrete type 

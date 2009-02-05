@@ -63,7 +63,7 @@ class tx_newspaper_Page {
 		$this->smarty->cache_dir    = $tmp;
 		
 		/// Read Attributes from persistent storage
-		$this->attributes = tx_newspaper::selectOneRow('*', self::getName(),
+		$this->attributes = tx_newspaper::selectOneRow('*', $this->getName(),
 			'section = ' . $this->parentSection->getAttribute('uid') . " AND $condition"
 		);
  		

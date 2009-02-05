@@ -11,8 +11,6 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 class test_Extra_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		$this->source = new tx_newspaper_DBSource();
-		
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
@@ -70,34 +68,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$temp->setAttribute('es gibt mich nicht, schmeiss ne exception!', 1);
 	}
-/*
-	public function test_getSource() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$this->assertNull($temp->getSource());
-			$temp->setSource($this->source);
-			$this->assertEquals($temp->getSource(), $this->source);
-		}
-	}
 
-	public function test_mapFieldToSourceField() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			/// \todo find generic fieldnames to map
-			$temp->mapFieldToSourceField($fieldname, $this->source);
-		}
-	}
-
-	public function test_sourceTable() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$temp->sourceTable($this->source);
-		}
-	}	
-*/
 	public function test_getExtraPid() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
@@ -127,6 +98,14 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			/// \todo test the output... how can i do that generically?
 		}
 	}	
+	
+	public function test_getName() {
+		foreach(array_merge($this->extras_to_test, 
+							$this->extras_to_test_additionally) as $extra_class) {
+			$temp = new $extra_class(1);
+			$this->assertEquals(strtolower($extra_class), $temp->getName());
+		}
+	}
 	
 	public function test_createExtraRecord() {
 		/// test whether the function runs at all
@@ -167,13 +146,23 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		/// \todo check if all fields are consistent
 	}
 	
-	private $source = null;
+	/// Section which contains the objects to be tested
+	private $section_uid = 1;	
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist
+	/// Extra classes that should be subjected to all tests
 	private $extras_to_test = array(
 		'tx_newspaper_Extra_ArticleRenderer',
 		'tx_newspaper_Extra_Image',
 		'tx_newspaper_Extra_SectionList',
 	);
+	/// Extra classes that will have additional tests run on them
+	private $extras_to_test_additionally = array(
+		'tx_newspaper_PageZone',
+		'tx_newspaper_PageZone_Page',
+		'tx_newspaper_PageZone_Article',
+		// ...
+	);
+	/// Attributes to test in test_createExtra() and their expected values
 	private $attributes_to_test = array(
 		'title' => array(
 			'tx_newspaper_Extra_ArticleRenderer' => 'ArticleRenderer',
@@ -186,13 +175,13 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			'tx_newspaper_Extra_SectionList' => 'npe_sect_l',
 		),
 	);
-
+	/// Table which stores the Extra superclass
 	private $extras_table = 'tx_newspaper_extra';
+	/// Extra which is used to test createExtraRecord()
 	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
+	/// UID of concrete record to test in createExtraRecord()
 	private $extra_uid_to_create_superobject_for = 1;
 	
-#	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
-	private $section_uid = 1;
 	
 }
 ?>

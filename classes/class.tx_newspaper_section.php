@@ -38,7 +38,7 @@
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
  	function __construct($uid) {
 		$this->attributes = tx_newspaper::selectOneRow(
-			'*', self::getName(), "uid = $uid"
+			'*', $this->getName(), "uid = $uid"
 		);
 		$list = tx_newspaper::selectOneRow(
 			'uid', self::$list_table, "section_id  = $uid"
@@ -53,9 +53,15 @@
  		return $this->attributes[$attribute];
  	}
  	
+ 	/// \todo instantiate $this->articlelist on 1st call, not in c'tor
  	function getList() { return $this->articlelist; }
  	
  	function getParentPage() {
+ 		throw new tx_newspaper_NotYetImplementedException();
+ 	}
+ 	
+ 	/// \todo do!
+ 	function getSubPages() {
  		throw new tx_newspaper_NotYetImplementedException();
  	}
  	

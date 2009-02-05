@@ -106,7 +106,8 @@ class tx_newspaper {
 	        	$rows[] = $row;
 	
 			return $rows;
-		}		
+		}
+		/// \todo noresexception		
 	}
 	
 	public static function insertRows($table, $row) {

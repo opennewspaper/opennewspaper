@@ -95,7 +95,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	public static function getModuleName() { return 'newspaper'; }
 
 	public function getName() {
-#		throw new tx_newspaper_NotYetImplementedException();
 		$class = strtolower(get_class($this));
 		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
 		return $class;
@@ -122,7 +121,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 	public static function createExtraRecord($uid, $table) {
 		/// Check if record is already present in extra table
 		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid', self::getName(), 
+			'uid', self::$table, 
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
 			' AND extra_uid = ' . intval($uid)	
 		);
@@ -143,7 +142,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		 *  one page, we have a problem and can't continue.
 		 */
 		$rows = tx_newspaper::selectRows(
-			'DISTINCT pid', self::getName(), 'pid != 0'
+			'DISTINCT pid', self::$table, 'pid != 0'
 		);
 		if (sizeof($rows) != 1) {
 		 	throw new tx_newspaper_InconsistencyException(
@@ -153,7 +152,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		}
 		$row['pid'] = $rows[0]['pid'];
 
-		tx_newspaper::insertRows(self::getName(), $row);		
+		tx_newspaper::insertRows(self::$table, $row);		
 	}
 	
 	private $uid = 0;
