@@ -36,17 +36,14 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 
 	public function getAttribute($attribute) {
-			t3lib_div::debug('tx_newspaper_ExtraImpl::getAttribute');
 
 		if (!$this->attributes) 
-			$this->attributes = $this->readExtraItem($this->uid, /* $this->getName() */strtolower(get_class($this)));
-
-#			t3lib_div::debug($this->attributes);
-#			t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
+			$this->attributes = $this->readExtraItem($this->uid, $this->getName());
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
+
  		return $this->attributes[$attribute];
 	}
 
@@ -98,7 +95,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	public static function getModuleName() { return 'newspaper'; }
 
 	public static function getName() {
-		$class = strtolower(get_class());
+		$class = strtolower(get_class($this));
 		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
 		return $class;
 	}

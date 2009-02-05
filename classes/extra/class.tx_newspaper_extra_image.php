@@ -7,8 +7,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_ExtraImpl {
 	public function __construct($uid = 0) { 
 		if ($uid) {
 			parent::__construct($uid); 
-#			$this->attributes = $this->readExtraItem($uid, $this->getName());
-#			unset ($this->attributes['image']);		
 		}
 	}
 	
@@ -16,8 +14,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_ExtraImpl {
 	 *  \todo use smarty
 	 */
 	public function render($template = '') {
-			t3lib_div::debug('tx_newspaper_Extra_Image::render');
-#			t3lib_div::debug($this->attributes);
 		$ret = '<h4>' . $this->getAttribute('title') . "</h4>\n" .
 		'<p>' .
 		'<img src="data:image/png;base64,'.base64_encode($this->getAttribute('image')) .
