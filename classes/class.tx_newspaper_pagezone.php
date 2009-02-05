@@ -96,7 +96,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		$this->attributes[$attribute] = $value;
 	}
 	
-	static function getName() {
+	public  function getName() {
 		return self::$table;
 	}
 
