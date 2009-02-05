@@ -4,7 +4,12 @@ require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_ext
 
 class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 
-	public function __construct($uid = 0) { if ($uid) parent::__construct($uid); }
+	public function __construct($uid = 0) { 
+		if ($uid) {
+			parent::__construct($uid); 
+			$this->attributes = $this->readExtraItem($uid, $this->getName());		
+		}
+	}
 	
 	/** Just a quick hack to see anything
 	 *  \todo use smarty
