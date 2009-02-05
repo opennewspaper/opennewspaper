@@ -33,7 +33,7 @@
 class tx_newspaper_Exception extends Exception { 
 	public function __construct($message) {
 #		t3lib_div::devlog('Exception thrown', 'newspaper', debug_backtrace());
-		t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
+//		t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
         parent::__construct($message);
     }
 }
