@@ -30,7 +30,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		 */
 		tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
 		
-		$this->attributes = $this->readExtraItem($uid, $this->getName());
+//		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
 
 	/// \todo remove before launch
