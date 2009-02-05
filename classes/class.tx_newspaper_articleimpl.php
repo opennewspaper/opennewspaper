@@ -98,7 +98,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
 
-	public function getName() {
+	static function getName() {
 		return 'tx_newspaper_article';
 	}
 
