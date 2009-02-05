@@ -11,8 +11,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 /// An Extra for the online newspaper
 /** This is an abstract class which implements most of the methods defined in
  *  interface tx_newspaper_Extra, except those that must be overridden in a
- *  concrete Extra anyway. All Extras (except tx_newspaper_Article) inherit from
- *  this class.
+ *  concrete Extra anyway. All Extras (except tx_newspaper_Article and 
+ *  tx_newspaper_Pagezone) inherit from this class.
  * 
  *  abstract functions:
  *	- static function getTitle()
@@ -25,7 +25,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
 		
-		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
 
 	/// \todo remove before launch
@@ -38,6 +37,8 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function getAttribute($attribute) {
 			t3lib_div::debug('tx_newspaper_ExtraImpl::getAttribute');
+		if (!$this->attributes) 
+			$this->attributes = $this->readExtraItem($uid, $this->getName());
 			t3lib_div::debug($this->attributes);
 		t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
  		if (!array_key_exists($attribute, $this->attributes)) {
@@ -91,9 +92,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	/** this is the default folder for data associated with newspaper etxension,
 	 *   overwrite in conrete Extras
 	 */
-	static function getModuleName() { return 'newspaper'; }
+	public static function getModuleName() { return 'newspaper'; }
 
-	static function getName() {
+	public static function getName() {
 		$class = strtolower(get_class());
 		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
 		return $class;
