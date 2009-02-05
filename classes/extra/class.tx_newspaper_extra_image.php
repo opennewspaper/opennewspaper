@@ -16,6 +16,7 @@ class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 	 *  \todo use smarty
 	 */
 	public function render($template = '') {
+			t3lib_div::debug($this->attributes);
 		$ret = '<h4>' . $this->getAttribute('title') . "</h4>\n" .
 		'<p>' .
 		'<img src="data:image/png;base64,'.base64_encode($this->getAttribute('image')) .
