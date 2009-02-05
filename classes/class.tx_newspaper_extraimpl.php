@@ -39,7 +39,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 			t3lib_div::debug('tx_newspaper_ExtraImpl::getAttribute');
 
 		if (!$this->attributes) 
-			$this->attributes = $this->readExtraItem($this->uid, $this->getName());
+			$this->attributes = $this->readExtraItem($this->uid, /* $this->getName() */get_class($this));
 
 			t3lib_div::debug($this->attributes);
 			t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
