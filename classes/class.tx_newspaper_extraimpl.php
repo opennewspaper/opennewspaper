@@ -92,6 +92,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	static function getName() {
 		$class = strtolower(get_class());
+		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
 		return $class;
 	}
 	
