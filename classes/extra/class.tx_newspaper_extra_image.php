@@ -9,7 +9,6 @@ class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 			parent::__construct($uid); 
 			$this->attributes = $this->readExtraItem($uid, get_class($this));
 			unset ($this->attributes['image']);		
-			t3lib_div::debug($this->attributes);
 		}
 	}
 	
