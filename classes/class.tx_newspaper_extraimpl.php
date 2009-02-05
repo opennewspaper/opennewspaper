@@ -122,7 +122,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		/// Check if record is already present in extra table
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', self::getName(), 
-			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, self::getName()) .
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
 			' AND extra_uid = ' . intval($uid)	
 		);
 		if ($row['uid']) return;
