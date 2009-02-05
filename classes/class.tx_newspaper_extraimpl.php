@@ -24,7 +24,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function __construct($uid) {
-		
+		$this->uid = $uid;
 	}
 
 	/// \todo remove before launch
@@ -37,10 +37,13 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function getAttribute($attribute) {
 			t3lib_div::debug('tx_newspaper_ExtraImpl::getAttribute');
+
 		if (!$this->attributes) 
-			$this->attributes = $this->readExtraItem($uid, $this->getName());
+			$this->attributes = $this->readExtraItem($this->uid, $this->getName());
+
 			t3lib_div::debug($this->attributes);
-		t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
+			t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
+
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
@@ -154,6 +157,8 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 
 		tx_newspaper::insertRows(self::getName(), $row);		
 	}
+	
+	private $uid = 0;
 	
 	private $attributes = array();				///< attributes of the extra
 	
