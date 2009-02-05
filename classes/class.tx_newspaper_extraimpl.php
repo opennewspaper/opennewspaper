@@ -38,6 +38,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function getAttribute($attribute) {
 			t3lib_div::debug($this->attributes);
+		t3lib_div::debug(array_slice(debug_backtrace(), 0, 7));
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
