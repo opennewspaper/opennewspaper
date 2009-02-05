@@ -15,16 +15,11 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
  *  this class.
  * 
  *  abstract functions:
- *  - static function getName()
  *	- static function getTitle()
- *	- static function getModuleName()
  *
  *  generic functions which should be overridden:
  *  - __construct()
  *  - render()
- * 
- *  \todo Currently implements tx_newspaper_WithSource as well. I am not sure if
- *  this makes sense.
  */ 
 abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
@@ -38,6 +33,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		$this->attributes = $this->readExtraItem($uid, $this->getName());
 	}
 
+	/// \todo remove before launch
 	public function render($template = '') {
 		return '<p>' .
 			   get_class($this) . '::render() not yet implemented - called ' .
@@ -97,12 +93,10 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	/** this is the default folder for data associated with newspaper etxension,
 	 *   overwrite in conrete Extras
 	 */
-//	static function getModuleName() { return 'newspaper'; }
+	static function getModuleName() { return 'newspaper'; }
 
 	static function getName() {
 		$class = strtolower(get_class());
-		/// special treatment because abstract superclass table is called 'tx_newspaper_extra'
-		if ('tx_newspaper_extraimpl' == $class) return self::$table;
 		return $class;
 	}
 	
@@ -133,7 +127,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		);
 		if ($row['uid']) return;
 		
-		/// \todo read typo3 fields to copy into extra table
+		/// read typo3 fields to copy into extra table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_extra_table),
 			$table,
