@@ -7,7 +7,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_ExtraImpl {
 	public function __construct($uid = 0) { 
 		if ($uid) {
 			parent::__construct($uid); 
-			$this->attributes = $this->readExtraItem($uid, get_class($this));
+			$this->attributes = $this->readExtraItem($uid, $this->getName());
 			unset ($this->attributes['image']);		
 		}
 	}
