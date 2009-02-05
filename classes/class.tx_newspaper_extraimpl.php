@@ -95,9 +95,8 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	static function getModuleName() { return 'newspaper'; }
 
-	static function getName() {
-		$class = strtolower(get_class());
-		return $class;
+	function getName() {
+		return strtolower(get_class());
 	}
 	
 	/// Read data of Extra
