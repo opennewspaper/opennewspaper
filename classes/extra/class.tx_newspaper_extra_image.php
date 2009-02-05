@@ -2,7 +2,7 @@
 
 require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
 
-class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
+class tx_newspaper_Extra_Image extends tx_newspaper_ExtraImpl {
 
 	public function __construct($uid = 0) { 
 		if ($uid) {
@@ -16,6 +16,7 @@ class tx_newspaper_extra_image extends tx_newspaper_ExtraImpl {
 	 *  \todo use smarty
 	 */
 	public function render($template = '') {
+			t3lib_div::debug('tx_newspaper_Extra_Image::render');
 			t3lib_div::debug($this->attributes);
 		$ret = '<h4>' . $this->getAttribute('title') . "</h4>\n" .
 		'<p>' .
