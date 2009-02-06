@@ -27,9 +27,9 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 				 *  safety net because currently it's not ensured that extras are 
 				 *  created consistently.
 				 */
-				tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
+				tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());
 			
-				$this->attributes = $this->readExtraItem($uid, $this->getName());
+				$this->attributes = $this->readExtraItem($uid, $this->getTable());
 			} catch (tx_newspaper_DBException $e) {
 				throw new tx_newspaper_ArticleNotFoundException($uid);
 			}
@@ -98,7 +98,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
 
-	public function getName() {
+	public function getTable() {
 		return 'tx_newspaper_article';
 	}
 
