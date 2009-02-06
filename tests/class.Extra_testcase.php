@@ -99,11 +99,11 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		}
 	}	
 	
-	public function test_getName() {
+	public function test_getTable() {
 		foreach(array_merge($this->extras_to_test, 
 							$this->extras_to_test_additionally) as $extra_class) {
 			$temp = new $extra_class(1);
-			$this->assertEquals(strtolower($extra_class), $temp->getName());
+			$this->assertEquals(strtolower($extra_class), $temp->getTable());
 		}
 	}
 	

@@ -77,8 +77,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($this->page->getParent(), $this->section);
 	}
 	
-	public function test_getName() {
-		$this->assertEquals($this->page->getName(), 'tx_newspaper_page');
+	public function test_getTable() {
+		$this->assertEquals($this->page->getTable(), 'tx_newspaper_page');
 	}
 	
 	private $section = null;

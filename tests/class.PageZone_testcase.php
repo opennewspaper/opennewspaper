@@ -38,7 +38,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 
 	public function test_readExtraItem() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$this->pagezone->readExtraItem(1, $this->pagezone->getName());
+		$this->pagezone->readExtraItem(1, $this->pagezone->getTable());
 	}
 
 	public function test_nonexistentZone() {
