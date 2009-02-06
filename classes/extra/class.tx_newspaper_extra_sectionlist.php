@@ -7,7 +7,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_ExtraImpl {
 	public function __construct($uid = 0) { 
 		if ($uid) {
 			parent::__construct($uid); 
-			$this->attributes = $this->readExtraItem($uid, $this->getName());		
+			$this->attributes = $this->readExtraItem($uid, $this->getTable());		
 		}
 	}
 	
