@@ -54,7 +54,7 @@ class tx_newspaper_PageZone_Factory {
 	public function create($uid) {
 		/// Read actual type and UID of the PageZone to instantiate from DB
 		$row = tx_newspaper::selectOneRow(
-			'pagezone_table, pagezone_uid', tx_newspaper_PageZone::getName(), "uid = $uid"
+			'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"
 		);
         
         if (!$row['pagezone_table']) {
