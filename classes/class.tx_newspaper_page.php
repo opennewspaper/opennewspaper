@@ -63,13 +63,13 @@ class tx_newspaper_Page {
 		$this->smarty->cache_dir    = $tmp;
 		
 		/// Read Attributes from persistent storage
-		$this->attributes = tx_newspaper::selectOneRow('*', $this->getName(),
+		$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
 			'section = ' . $this->parentSection->getAttribute('uid') . " AND $condition"
 		);
  		
  		/// Get tx_newspaper_PageZone list for current page
 		$uids = tx_newspaper::selectRows(
- 			'uid', tx_newspaper_PageZone::getName(), 
+ 			'uid', 'tx_newspaper_pagezone', 
 			'page_id = '.$this->getAttribute('uid')
 		);
 
@@ -116,8 +116,8 @@ class tx_newspaper_Page {
  		return $this->parentSection;
  	}
  	
- 	public static function getName() {
- 		return self::$table;
+ 	public function getTable() {
+ 		return tx_newspaper::getTable($this);
  	}
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
@@ -125,7 +125,6 @@ class tx_newspaper_Page {
  	private $pageZones = array();					///< Page zones on this page
  	private $attributes = array();					///< The member variables
  	
- 	static private $table = 'tx_newspaper_page';	///< SQL table for persistence
  	/// Default Smarty template for HTML rendering
  	static private $defaultTemplate = 'tx_newspaper_page.tmpl';
  	
