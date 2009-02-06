@@ -62,7 +62,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getName());
+			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());
 		}
 	}
 	
@@ -96,8 +96,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		$this->attributes[$attribute] = $value;
 	}
 	
-	public  function getName() {
-		return self::$table;
+	public  function getTable() {
+		return tx_newspaper::getTable($this);
 	}
 
 	/** \todo Internationalization */
@@ -130,8 +130,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	 *  \code
 	 * 	parent::__construct();
 	 *  $this->readExtras($uid);
-	 *  $this->readAttributes($this->getName(), $uid);
+	 *  $this->readAttributes($this->getTable(), $uid);
 	 *  \endcode
+	 * 
+	 *  \todo factor out code to read MM table and create Extras
 	 * 
 	 *  \param $uid UID in the table of the concrete type 
 	 */
