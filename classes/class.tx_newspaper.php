@@ -156,7 +156,11 @@ class tx_newspaper {
 		
 		return new tx_newspaper_Page($section, $cond);
 	}
-	
+
+	public static function getTable($object) {
+		return strtolower(get_class($object));
+	}	
+
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 
