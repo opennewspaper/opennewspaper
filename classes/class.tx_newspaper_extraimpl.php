@@ -38,7 +38,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	public function getAttribute($attribute) {
 
 		if (!$this->attributes) 
-			$this->attributes = $this->readExtraItem($this->uid, /* $this->getName() */strtolower(get_class($this)));
+			$this->attributes = $this->readExtraItem($this->uid, $this->getTable());
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
@@ -68,7 +68,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	public static function isRegisteredExtra(tx_newspaper_Extra $extra) {
 		for ($i = 0; $i < sizeof(self::$registeredExtra); $i++) {
-			if ($extra->getName() == self::$registeredExtra[$i]->getName())
+			if ($extra->getTable() == self::$registeredExtra[$i]->getTable())
 				return true;
 		}
 		return false;
@@ -94,8 +94,8 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	public static function getModuleName() { return 'newspaper'; }
 
-	public function getName() {
-		$class = strtolower(get_class($this));
+	public function getTable() {
+		$class = tx_newspaper::getTable($this);
 		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
 		return $class;
 	}
