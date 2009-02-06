@@ -37,10 +37,10 @@
 	 */
 	public function setAttribute($attribute, $value);
 
-	/// \return the name of the Extra = the name of the database table the Extra data is stored in
-	public function getName();
+	/// \return Name of the database table the Extra data is stored in
+	public function getTable();
 
-	/// \return the title of the Extra (using the language set in BE)
+	/// \return Title of the Extra (using the language set in BE)
 	public static function getTitle();
 
 	/// \return String the name of the extra module -> needed to fill varchar(10) field "module" in table pages to find/create a storage folder for an Extra etc.
