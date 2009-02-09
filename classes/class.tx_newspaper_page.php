@@ -63,11 +63,14 @@ class tx_newspaper_Page {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
+		
+		/// Read page type
+		$pagetype = new tx_newspaper_PageType($this->parentSection, $this->condition);
  	}
  	
  	function getAttribute($attribute) {
+		/// Read Attributes from persistent storage at first call
 		if (!$this->attributes) {
-			/// Read Attributes from persistent storage
 			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
 				'section = ' . $this->parentSection->getAttribute('uid') . 
 				' AND ' . $this->condition
@@ -81,8 +84,8 @@ class tx_newspaper_Page {
  	}
 	
 	function getPageZones() {
+ 		/// Get tx_newspaper_PageZone list for current page at first call
 		if (!$this->pageZones) {
-	 		/// Get tx_newspaper_PageZone list for current page
 			$uids = tx_newspaper::selectRows(
 	 			'uid', 'tx_newspaper_pagezone', 
 				'page_id = '.$this->getAttribute('uid')
