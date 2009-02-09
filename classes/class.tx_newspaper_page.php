@@ -52,6 +52,7 @@ class tx_newspaper_Page {
 	public function __construct(tx_newspaper_Section $parent, $condition = '1') {
 
 		$this->parentSection = $parent;
+		$this->condition = $condition;
 
 		/// Configure Smarty rendering engine
 		$this->smarty = new Smarty();
@@ -62,26 +63,17 @@ class tx_newspaper_Page {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
-		
-		/// Read Attributes from persistent storage
-		$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
-			'section = ' . $this->parentSection->getAttribute('uid') . " AND $condition"
-		);
- 		
- 		/// Get tx_newspaper_PageZone list for current page
-		$uids = tx_newspaper::selectRows(
- 			'uid', 'tx_newspaper_pagezone', 
-			'page_id = '.$this->getAttribute('uid')
-		);
-
-		if ($uids) {
-        	foreach ($uids as $uid) {
-        		$this->pageZones[] = tx_newspaper_PageZone_Factory::getInstance()->create($uid['uid']);
-        	}
-		}
  	}
  	
  	function getAttribute($attribute) {
+		if (!$this->attributes) {
+			/// Read Attributes from persistent storage
+			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
+				'section = ' . $this->parentSection->getAttribute('uid') . 
+				' AND ' . $this->condition
+			);
+		}
+
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
@@ -89,6 +81,26 @@ class tx_newspaper_Page {
  	}
 	
 	function getPageZones() {
+		if (!$this->pageZones) {
+	 		/// Get tx_newspaper_PageZone list for current page
+			$uids = tx_newspaper::selectRows(
+	 			'uid', 'tx_newspaper_pagezone', 
+				'page_id = '.$this->getAttribute('uid')
+			);
+	
+			if ($uids) {
+	        	foreach ($uids as $uid) {
+	        		$this->pageZones[] = 
+	        			tx_newspaper_PageZone_Factory::getInstance()->create($uid['uid']);
+	        	}
+			} else {
+				/*  no page zones under this page - pagezones attribute is set 
+				 *  to true so it is not read again.
+				 */ 
+				$this->pageZones = true; 
+			}
+		}
+		
 		return $this->pageZones;
 	}
 	
@@ -123,6 +135,7 @@ class tx_newspaper_Page {
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
  	private $parentSection = null;					///< Newspaper section this page is in
+ 	private $condition = null;						///< WHERE-condition used to find current page
  	private $pageZones = array();					///< Page zones on this page
  	private $attributes = array();					///< The member variables
  	
