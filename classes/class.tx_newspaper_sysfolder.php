@@ -61,7 +61,7 @@ class tx_newspaper_Sysfolder {
  			$this->sysfolder[$row['module']] = $row['uid'];
  		}
  		
- 		// check if sysfolder 'newspaper' exists (create, if not)
+ 		// make sure sysfolder 'newspaper' exists
  		if (!in_array('newspaper', $this->sysfolder)) {
  			$this->createSysfolder('newspaper');
  		}
