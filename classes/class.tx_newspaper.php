@@ -110,6 +110,13 @@ class tx_newspaper {
 		/// \todo noresexception		
 	}
 	
+	
+	/// inserts a record using T3 API
+	/** \param $table T3 table
+	 *  \param $row fields and data 
+	 *  \return uid of inserted record
+	 */
+/// \todo: rename to insertRow ???
 	public static function insertRows($table, $row) {
 		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
@@ -117,6 +124,9 @@ class tx_newspaper {
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
+        
+        return $GLOBALS['TYPO3_DB']->sql_insert_id();
+        
 	}
 
 	/// Get the tx_newspaper_Section object of the page currently displayed
