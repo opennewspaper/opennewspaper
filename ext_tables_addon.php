@@ -20,7 +20,7 @@ if (TYPO3_MODE == 'BE') {
 
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
-		(isset($tsconfig['tx_newspaper.']['showFolder'])) && $tsconfig['tx_newspaper.']['showFolder'] != true
+		(isset($tsconfig['tx_newspaper.']['showFolder'])) && $tsconfig['tx_newspaper.']['showFolder'] != 1
 	) {
 /// \to do: append $pid (current version overwrites)
 		t3lib_extMgm::addUserTSConfig('
