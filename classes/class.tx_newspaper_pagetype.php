@@ -35,21 +35,12 @@
 class tx_newspaper_PageType {
  	
  	/// Construct a tx_newspaper_PageType given the UID of the SQL record
- 	function __construct(tx_newspaper_Section $parent, $condition) {
- 				
-		$uid = tx_newspaper::selectOneRow('pagetype_id', $this->getTable(),
-				'section = ' . $parent->getAttribute('uid') . 
-				' AND ' . $condition
-				);
+ 	function __construct($uid) {
  		
 		$this->attributes = tx_newspaper::selectOneRow(
-			'*', tx_newspaper::getTable($this), 'uid = ' . $uid['pagetype_id']
+			'*', tx_newspaper::getTable($this), 'uid = ' . $uid
 		);
  	}
- 	
- 	public function getTable() {
- 		return tx_newspaper::getTable($this);
- 	}
- 	
+ 	 	
 }
 ?>

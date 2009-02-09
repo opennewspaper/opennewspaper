@@ -63,19 +63,20 @@ class tx_newspaper_Page {
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
 		$this->smarty->cache_dir    = $tmp;
-		
-		/// Read page type
-		$pagetype = new tx_newspaper_PageType($this->parentSection, $this->condition);
- 	}
- 	
- 	function getAttribute($attribute) {
-		/// Read Attributes from persistent storage at first call
+
+		/// Read Attributes from persistent storage
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
 				'section = ' . $this->parentSection->getAttribute('uid') . 
 				' AND ' . $this->condition
 			);
 		}
+		
+		/// Read page type
+		$pagetype = new tx_newspaper_PageType($this->attributes['pagetype_id']);
+ 	}
+ 	
+ 	function getAttribute($attribute) {
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
