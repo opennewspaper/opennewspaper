@@ -1147,16 +1147,8 @@ $TCA["tx_newspaper_pagetypes"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.get_var",		
 			"config" => Array (
-				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
-				"eval"     => "int",
-				"checkbox" => "0",
-				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
-				),
-				"default" => 0
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"get_value" => Array (		
@@ -1210,5 +1202,4 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
