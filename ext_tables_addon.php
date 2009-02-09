@@ -17,7 +17,15 @@ if (TYPO3_MODE == 'BE') {
 	$pid = $sysfolder->getPid(new tx_newspaper());
 	
 	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
-#t3lib_div::debug($tsconfig); exit();
+
+// test
+t3lib_extMgm::addUserTSConfig('
+	option.hideRecords.pages = ' . $pid . '
+');
+
+
+
+
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
 		(isset($tsconfig['tx_newspaper.']['showFolder'])) && $tsconfig['tx_newspaper.']['showFolder'] != true
