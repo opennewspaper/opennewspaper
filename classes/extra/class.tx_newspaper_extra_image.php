@@ -30,7 +30,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_ExtraImpl {
 
 // title for module
 	static function getModuleName() {
-		return 'np_image'; // this is the default folder for data associated with newspaper etxension, overwrite in conrete Extras
+		return 'np_image';
 	}
 }
 
