@@ -50,7 +50,7 @@
 	
 	
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
-	$newspaper_sysfolder = tx_newspaper_Sysfolder::getInstance();
+	#$newspaper_sysfolder = tx_newspaper_Sysfolder::getInstance();
 	
 //}
 
