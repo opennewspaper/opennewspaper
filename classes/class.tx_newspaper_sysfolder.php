@@ -61,12 +61,12 @@ class tx_newspaper_Sysfolder {
  		for ($i = 0; $i < sizeof($row); $i++) {
  			$this->sysfolder[$row['module']] = $row['uid'];
  		}
-t3lib_div::debug($this->sysfolder); 		
+#t3lib_div::debug($this->sysfolder); 		
  		// make sure sysfolder 'newspaper' exists
  		if (!isset($this->sysfolder['newspaper'])) {
  			$this->createSysfolder('newspaper');
  		}
-t3lib_div::debug($this->sysfolder);
+#t3lib_div::debug($this->sysfolder);
  		
  	}
  	
