@@ -30,7 +30,12 @@
  */
  
  /// A list of tx_newspaper_Article s
- abstract class tx_newspaper_ArticleList {
+ /**  
+  *  abstract functions:
+  *  - function getArticles($number, $start)
+  *	 - public static function getModuleName()
+  */
+ abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
  	function __construct($uid, tx_newspaper_Section $section = null) {
  		$this->attributes = tx_newspaper::selectOneRow(
 			'*', $this->getTable(), "uid = $uid"

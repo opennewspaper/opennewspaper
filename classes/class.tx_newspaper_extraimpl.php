@@ -20,6 +20,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
  *  generic functions which should be overridden:
  *  - __construct()
  *  - render()
+ *  - getModuleName()
  */ 
 abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
