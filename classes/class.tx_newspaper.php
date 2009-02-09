@@ -42,7 +42,7 @@ class tx_newspaper implements tx_newspaper_InSysFolder {
 	/// insysfodler interface
 	/** \return String module name (for sysfolder)
 	 */
-	function getModuleName() {
+	public static function getModuleName() {
 		return 'newspaper'; // root
 	}
 	
