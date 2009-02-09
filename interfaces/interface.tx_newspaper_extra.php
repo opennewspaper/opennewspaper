@@ -19,7 +19,7 @@
  *
  *  \todo define the interface!
  */
- interface tx_newspaper_Extra {
+ interface tx_newspaper_Extra extends tx_newspaper_InSysFolder {
  	/// Render the Extra using the given Smarty template
  	/** \param $template Smarty template used to render the Extra
  	 *  \return The rendered HTML
@@ -42,9 +42,6 @@
 
 	/// \return Title of the Extra (using the language set in BE)
 	public static function getTitle();
-
-	/// \return String the name of the extra module -> needed to fill varchar(10) field "module" in table pages to find/create a storage folder for an Extra etc.
-	public static function getModuleName(); 
 
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);
