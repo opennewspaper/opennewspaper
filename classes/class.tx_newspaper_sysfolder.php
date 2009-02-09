@@ -57,7 +57,7 @@ class tx_newspaper_Sysfolder {
  	/// constructor fills arary $this->sysfolder mapping module names to uid in table pages
  	protected function __construct() {
  		// read and store all tx_newspaper sysfolders
- 		$row = tx_newspaper::selectRows('uid, module', 'pages', '(module="newspaper" OR module LIKE "np_%") AND deleted=0 AND doktype=254"');
+ 		$row = tx_newspaper::selectRows('uid, module', 'pages', '(module="newspaper" OR module LIKE "np_%") AND deleted=0 AND doktype=254');
 t3lib_div::debug($row);
  		for ($i = 0; $i < sizeof($row); $i++) {
  			$this->sysfolder[$row['module']] = $row['uid'];
