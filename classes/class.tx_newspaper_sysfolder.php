@@ -63,7 +63,7 @@ class tx_newspaper_Sysfolder {
  		}
  		
  		// make sure sysfolder 'newspaper' exists
- 		if (!in_array('newspaper', $this->sysfolder)) {
+ 		if (!isset($this->sysfolder['newspaper'])) {
  			$this->createSysfolder('newspaper');
  		}
  		
@@ -113,7 +113,7 @@ class tx_newspaper_Sysfolder {
 		self::checkModuleName($module_name);
 
 		// check if sysfolder exists (and create, if not)
- 		if (!in_array($module_name, $this->sysfolder)) {
+ 		if (!isset($this->sysfolder[$module_name])) {
  			$this->createSysfolder($module_name); // create and store uid in $this->sysfolder
  		}
  		
