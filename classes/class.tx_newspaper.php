@@ -43,7 +43,7 @@ class tx_newspaper implements tx_newspaper_InSysFolder {
 	/** \return String module name (for sysfolder)
 	 */
 	public static function getModuleName() {
-		return 'newspaper'; // name of root sysfolder for nespaper ext
+		return 'newspaper'; // name of root sysfolder for newspaper ext
 	}
 	
 	
