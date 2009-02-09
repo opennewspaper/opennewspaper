@@ -24,7 +24,7 @@ if (TYPO3_MODE == 'BE') {
 	) {
 /// \to do: append $pid (current version overwrites)
 		t3lib_extMgm::addUserTSConfig('
-			option.hideRecords.pages = ' . $pid . '
+			options.hideRecords.pages = ' . $pid . '
 		');
 	}
 }
