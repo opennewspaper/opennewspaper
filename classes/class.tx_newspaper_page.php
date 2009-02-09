@@ -117,7 +117,7 @@ class tx_newspaper_Page {
  		$this->smarty->assign('page_type', $this->getAttribute('type_name'));
  		
  		$rendered = array(); 
- 		foreach ($this->pageZones as $zone) {
+ 		foreach ($this->getPageZones() as $zone) {
  			$rendered[$zone->getAttribute('name')] = $zone->render();
  		}
 		$this->smarty->assign('page_zones', $rendered);
