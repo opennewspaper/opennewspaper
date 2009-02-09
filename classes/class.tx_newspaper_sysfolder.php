@@ -62,9 +62,9 @@ class tx_newspaper_Sysfolder {
  			$this->sysfolder[$row[$i]['module']] = $row[$i]['uid'];
  		}
  		
- 		// make sure sysfolder 'newspaper' exists
- 		if (!isset($this->sysfolder['newspaper'])) {
- 			$this->createSysfolder('newspaper');
+ 		// make sure root sysfolder exists
+ 		if (!isset($this->sysfolder[tx_newspaper::getModuleName()])) {
+ 			$this->createSysfolder(tx_newspaper::getModuleName());
  		}
  		
  	}
@@ -80,13 +80,13 @@ class tx_newspaper_Sysfolder {
 		$module_name = strtolower($module_name);
 		
 		$fields = array(); // data for sysfolder creation
-		if ($module_name == 'newspaper') {
-			/// sysfolder for module 'newspaper' is created on root level in Typo3
+		if ($module_name == tx_newspaper::getModuleName()) {
+			/// newspaper root sysfolder for module is created on root level in Typo3
 			$fields['pid'] = 0;
 			$fields['sorting'] = 29999; // insert at the bottom of the page tree
 		} else {
-			/// all other sysfolders are created within the 'newspaper' sysfolder
-			$fields['pid'] = self::getPid('newspaper'); 
+			/// all other sysfolders are created within the newspaper root sysfolder
+			$fields['pid'] = self::getPid(new tx_newspaper()); 
 		}
 		$fields['module'] = $module_name;
 		$fields['title'] = $module_name;
@@ -125,7 +125,7 @@ class tx_newspaper_Sysfolder {
 	/// checks if module name matches the specification
 	/** Specification for module name:
 	 *  max 10 charcters (Typo3 condition) for field module in table pages
-	 *  'np_*' or 'newspaper'  
+	 *  'np_*' or tx_newspaper::getModuleName()  
 	 *  \param $name Module name to be checked
 	 */
  	public static function checkModuleName($module_name) {
@@ -135,7 +135,7 @@ class tx_newspaper_Sysfolder {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
  		
- 		if ($module_name != 'newspaper' && substr($module_name, 0, 3) != 'np_') {
+ 		if ($module_name != tx_newspaper::getModuleName() && substr($module_name, 0, 3) != 'np_') {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
  		
