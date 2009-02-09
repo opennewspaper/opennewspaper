@@ -5,8 +5,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 #t3lib_div::devlog('class.tx_newspaper.php loaded', 'newspaper', 0);
 
 
-// is this class still needed or can these two methods be moved to tx_newspaper_extra_be.php?
-class tx_newspaper {
+/// \to do: is this class still needed or can these two methods be moved to tx_newspaper_extra_be.php?
+class tx_newspaper implements tx_newspaper_InSysFolder {
 
 	/**
 	 * add javascript (or other script parts) to extra form (basically containing an onunload script)
@@ -37,6 +37,17 @@ class tx_newspaper {
 		return tx_newspaper_ExtraBE::renderList($current_record['table'], $current_record['uid']);
 
 	}
+	
+	
+	/// insysfodler interface
+	/** \return String module name (for sysfolder)
+	 */
+	function getModuleName() {
+		return 'newspaper'; // root
+	}
+	
+	
+	
 
 	/// Execute a SELECT query, check the result, return zero or one record(s)
 	/** \param $fields Fields to SELECT
