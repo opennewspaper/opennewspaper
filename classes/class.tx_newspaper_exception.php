@@ -115,4 +115,16 @@ class tx_newspaper_ArticleNotFoundException extends tx_newspaper_Exception {
     }
 }
 
+
+
+
+/// This Exception is thrown if a module name does not match module name specification  
+class tx_newspaper_SysfolderIllegalModulenameException 
+	extends tx_newspaper_IllegalUsageException { 
+	public function __construct($name) {
+        parent::__construct("Illegal Module name $name. Allowed: np_* or newspaper; max. 10 characters.");
+    }	
+}
+
+
 ?>
