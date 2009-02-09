@@ -20,7 +20,7 @@ if (TYPO3_MODE == 'BE') {
 
 // test
 t3lib_extMgm::addUserTSConfig('
-	option.hideRecords.pages = ' . $pid . '
+	option.hideRecords.pages = 2568
 ');
 
 
