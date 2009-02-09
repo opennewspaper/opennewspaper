@@ -57,8 +57,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	public function testEmptyPageZones() {
 		/// This test page is guaranteed to have no page zones
 		$this->page = new tx_newspaper_Page($this->section, 'get_var = \'type\' AND get_value = 666');
-		$this->assertTrue(is_array($this->page->getPageZones()));
-		$this->assertEquals($this->page->getPageZones(), array());
+		$this->assertFalse(is_array($this->page->getPageZones()));
+		$this->assertTrue($this->page->getPageZones());
 	}
 
 	public function testPageZones() {
