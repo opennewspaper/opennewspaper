@@ -6,6 +6,8 @@
  *  \date Oct 27, 2008
  */
 
+require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+
 /// An Extra for Article s or Ressort s
 /** An Extra is, so to speak, a plugin for a displayable object.
  *
