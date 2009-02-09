@@ -47,5 +47,9 @@ class tx_newspaper_PageType {
 		);
  	}
  	
+ 	public function getTable() {
+ 		return tx_newspaper::getTable($this);
+ 	}
+ 	
 }
 ?>
