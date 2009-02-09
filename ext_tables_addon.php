@@ -14,12 +14,6 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_
 
 if (TYPO3_MODE == 'BE') {
 	$sysfolder = tx_newspaper_Sysfolder::getInstance();
-	
-// test
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
-$pid = $sysfolder->getPid(new tx_newspaper_Extra_Image());	
-	
-	
 	if ($TYPO3_CONF_VARS['EXTCONF']['newspaper']['setup']['hideFolder']) {
 		$pid = $sysfolder->getPid(new tx_newspaper());
 /// \to do: append $pid (current version overwrites)
