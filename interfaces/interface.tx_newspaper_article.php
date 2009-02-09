@@ -33,7 +33,8 @@ interface tx_newspaper_Article
 	/// \return The list of Extra s associated with this Article
 	function getExtras();
 	function addExtra(tx_newspaper_Extra $newExtra);
-	
-	static function getAttributeList();
+
+	/// \return List of attributes this Extra has
+	public static function getAttributeList();
 }
 ?>

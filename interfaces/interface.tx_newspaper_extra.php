@@ -47,5 +47,6 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspape
 
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);
+	
 }
 ?>
