@@ -53,7 +53,7 @@ t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_articlelist_auto=1
 ');
 t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_pagetypes=1
+	options.saveDocNew.tx_newspaper_pagetype=1
 ');
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_pagezonetype=1

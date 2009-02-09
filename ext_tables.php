@@ -320,9 +320,9 @@ $TCA["tx_newspaper_articlelist_auto"] = array (
 	)
 );
 
-$TCA["tx_newspaper_pagetypes"] = array (
+$TCA["tx_newspaper_pagetype"] = array (
 	"ctrl" => array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes',		
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype',		
 		'label'     => 'type_name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
@@ -330,7 +330,7 @@ $TCA["tx_newspaper_pagetypes"] = array (
 		'sortby' => 'sorting',	
 		'delete' => 'deleted',	
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagetypes.gif',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagetype.gif',
 	),
 	"feInterface" => array (
 		"fe_admin_fieldList" => "type_name, get_var, get_value",
@@ -392,5 +392,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>

@@ -1127,16 +1127,16 @@ $TCA["tx_newspaper_articlelist_auto"] = array (
 
 
 
-$TCA["tx_newspaper_pagetypes"] = array (
-	"ctrl" => $TCA["tx_newspaper_pagetypes"]["ctrl"],
+$TCA["tx_newspaper_pagetype"] = array (
+	"ctrl" => $TCA["tx_newspaper_pagetype"]["ctrl"],
 	"interface" => array (
 		"showRecordFieldList" => "type_name,get_var,get_value"
 	),
-	"feInterface" => $TCA["tx_newspaper_pagetypes"]["feInterface"],
+	"feInterface" => $TCA["tx_newspaper_pagetype"]["feInterface"],
 	"columns" => array (
 		"type_name" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.type_name",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.type_name",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",	
@@ -1145,7 +1145,7 @@ $TCA["tx_newspaper_pagetypes"] = array (
 		),
 		"get_var" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.get_var",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_var",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -1153,7 +1153,7 @@ $TCA["tx_newspaper_pagetypes"] = array (
 		),
 		"get_value" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetypes.get_value",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_value",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1202,5 +1202,4 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
