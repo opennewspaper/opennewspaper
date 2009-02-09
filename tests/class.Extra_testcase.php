@@ -170,9 +170,9 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			'tx_newspaper_Extra_SectionList' => 'SectionList',
 		),
 		'modulename' => array(
-			'tx_newspaper_Extra_ArticleRenderer' => 'npe_rend',
-			'tx_newspaper_Extra_Image' => 'npe_image',
-			'tx_newspaper_Extra_SectionList' => 'npe_sect_l',
+			'tx_newspaper_Extra_ArticleRenderer' => 'np_artrend',
+			'tx_newspaper_Extra_Image' => 'np_image',
+			'tx_newspaper_Extra_SectionList' => 'np_sect_l',
 		),
 	);
 	/// Table which stores the Extra superclass
