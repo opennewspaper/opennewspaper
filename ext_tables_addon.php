@@ -18,14 +18,6 @@ if (TYPO3_MODE == 'BE') {
 	
 	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
 
-// test
-t3lib_extMgm::addUserTSConfig('
-	option.hideRecords.pages = 2568
-');
-
-
-
-
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
 		(isset($tsconfig['tx_newspaper.']['showFolder'])) && $tsconfig['tx_newspaper.']['showFolder'] != true
