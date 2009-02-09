@@ -28,7 +28,7 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 	}
 
 	static function getModuleName() {
-		return 'npe_rend'; 
+		return 'np_artrend'; 
 	}
 }
 

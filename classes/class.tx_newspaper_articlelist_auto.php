@@ -59,7 +59,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 		return $articles;
  	}
  	
- 	public static function getModuleName() { return 'npe_alauto'; }
+ 	public static function getModuleName() { return 'np_al_auto'; }
  	
  	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
  }
