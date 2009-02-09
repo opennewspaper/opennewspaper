@@ -38,8 +38,8 @@ class tx_newspaper_PageType {
  	function __construct(tx_newspaper_Section $parent, $condition) {
  				
 		$uid = tx_newspaper::selectOneRow('pagetype_id', $this->getTable(),
-				'section = ' . $this->parentSection->getAttribute('uid') . 
-				' AND ' . $this->condition
+				'section = ' . $parent->getAttribute('uid') . 
+				' AND ' . $condition
 				);
  		
 		$this->attributes = tx_newspaper::selectOneRow(
