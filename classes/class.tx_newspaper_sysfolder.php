@@ -30,8 +30,9 @@
  */
 
 
-/// \todo: deleting and hiding can lead to data inconsistency - check in savehook if newspaper sysfolders are involved???
+/// \to do: deleting and hiding can lead to data inconsistency - check in savehook if newspaper sysfolders are involved???
 
+/// \to do: function to move lost records to the appropriate sysfolders
  
 /// Get and create sysfolders for newspaper data
 /**
@@ -57,6 +58,7 @@ class tx_newspaper_Sysfolder {
  	protected function __construct() {
  		// read and store all tx_newspaper sysfolders
  		$row = tx_newspaper::selectRows('uid, module', 'pages', '(module="newspaper" OR module LIKE "np_%) AND deleted=0 AND doktype=254"');
+t3lib_div::devlog('row', 'newspaper', 0, $row);
  		for ($i = 0; $i < sizeof($row); $i++) {
  			$this->sysfolder[$row['module']] = $row['uid'];
  		}
