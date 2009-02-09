@@ -14,10 +14,14 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_
 
 if (TYPO3_MODE == 'BE') {
 	$sysfolder = tx_newspaper_Sysfolder::getInstance();
+	$pid = $sysfolder->getPid(new tx_newspaper());
 	
-	$tsconfig = t3lib_BEfunc::getPagesTSconfig($sysfolder->getPid(new tx_newspaper()));
-	if (isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder']) {
-		$pid = $sysfolder->getPid(new tx_newspaper());
+	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
+	
+	if (
+		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
+		(isset($tsconfig['tx_newspaper.']['showFolder'])) && $tsconfig['tx_newspaper.']['showFolder'] != true
+	) {
 /// \to do: append $pid (current version overwrites)
 		t3lib_extMgm::addUserTSConfig('
 			option.hideRecords.pages = ' . $pid . '
