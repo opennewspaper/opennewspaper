@@ -8,7 +8,7 @@ t3lib_div::devlog('sh fields', 'newspaper', 0, $incomingFieldArray);
 t3lib_div::devlog('sh table', 'newspaper', 0, $table);
 t3lib_div::devlog('sh id', 'newspaper', 0, $id);
 
-t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
+#t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
 
 
 /// \todo: remove by-pass after article class and table have the same name
@@ -23,8 +23,9 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			/// tx_newspaper_InSysFolder is implemented, so record is to be stored in a special sysfolder
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($np_obj);
-t3lib_div::devlog('sh pid', 'newspaper', 0, $pid);
+#t3lib_div::devlog('sh pid', 'newspaper', 0, $pid);
 			$incomingFieldArray['pid'] = $pid;
+t3lib_div::devlog('sh fields modified', 'newspaper', 0, $incomingFieldArray);
 		}
 	}
 
