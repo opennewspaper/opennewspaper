@@ -18,7 +18,7 @@ if (TYPO3_MODE == 'BE') {
 	
 	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
 t3lib_div::devlog('pts', 'newspaper', 0, $tsconfig);
-t3lib_div::devlog('uts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS);
+t3lib_div::devlog('uts', 'newspaper', 0, $GLOBALS['BE_USER']);
 
 
 	// read other pages to be hidden
