@@ -17,7 +17,7 @@ if (TYPO3_MODE == 'BE') {
 	$pid = $sysfolder->getPid(new tx_newspaper());
 	
 	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
-
+t3lib_div::devlog('tsc', 'newspaper', 0, $tsconfig);
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
 		(isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder'] != 1)
