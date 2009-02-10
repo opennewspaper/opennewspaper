@@ -12,6 +12,9 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
 $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
 
 
+// add newspaper to Plugin-in list
+$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
+
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 }
