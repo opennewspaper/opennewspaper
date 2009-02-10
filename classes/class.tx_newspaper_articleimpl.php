@@ -15,7 +15,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_artic
 /** \todo The names for the functions are not defined yet. The interface
  *  (Article) is not yet ready either. In fact, this is just a dummy class.
  */
-class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
+class tx_newspaper_ArticleImpl implements tx_newspaper_Article, tx_newspaper_InSysFolder {
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
@@ -108,7 +108,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	static function getModuleName() {
-		throw new tx_newspaper_NotYetImplementedException();
+		return 'np_article';
 	}
 
 	static function readExtraItem($uid, $table) {
