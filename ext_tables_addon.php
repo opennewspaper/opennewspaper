@@ -18,7 +18,7 @@ $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'ne
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 
-$s = tx_newspaper_Sysfolder.getInstance();
+$s = tx_newspaper_Sysfolder::getInstance();
 $s->getPid(new tx_newspaper_Extra_Image());
 
 }
