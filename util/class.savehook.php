@@ -17,6 +17,7 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($np_obj);
 			$row['pid'] = $pid;
+t3lib_div::devlog('sh mainfields row modified', 'newspaper', 0, $row);
 		}
 	}
 
@@ -29,11 +30,6 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 #t3lib_div::devlog('sh datamap table', 'newspaper', 0, $table);
 #t3lib_div::devlog('sh datamap id', 'newspaper', 0, $id);
 #t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
-
-
-
-
-
   }
 
 }
