@@ -32,7 +32,7 @@
 /// Base class for all exceptions thrown by this Typo3 extension
 class tx_newspaper_Exception extends Exception { 
 	public function __construct($message) {
-		t3lib_div::devlog('Exception thrown', 'newspaper', 3, debug_backtrace());
+		t3lib_div::devlog('Exception thrown: ' . $message, 'newspaper', 3, debug_backtrace());
         parent::__construct($message);
     }
 }
