@@ -32,6 +32,10 @@ replace "ext_tables.php" \
 		"require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');" \
 		'?>'
 
+replace "ext_localconf.php" \
+		"require_once(PATH_typo3conf . 'ext/newspaper/ext_localconf_addon.php');" \
+		'?>'
+
 add_file "ext_tables.sql" "util/ext_tables_addon.sql"
 
 svn ci -m "auto-fixed changes from kickstarter"
