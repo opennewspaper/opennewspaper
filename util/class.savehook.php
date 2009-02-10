@@ -3,7 +3,7 @@
 class user_savehook_newspaper {
 
 
-  function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
+  function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 t3lib_div::devlog('sh fields', 'newspaper', 0, $incomingFieldArray);
 t3lib_div::devlog('sh table', 'newspaper', 0, $table);
 t3lib_div::devlog('sh id', 'newspaper', 0, $id);
@@ -24,6 +24,7 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($np_obj);
 t3lib_div::devlog('sh pid', 'newspaper', 0, $pid);
+			$incomingFieldArray['pid'] = $pid;
 		}
 	}
 
