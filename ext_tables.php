@@ -397,4 +397,5 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
+require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>
