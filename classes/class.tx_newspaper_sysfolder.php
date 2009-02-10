@@ -57,9 +57,9 @@ class tx_newspaper_Sysfolder {
  	/// constructor fills arary $this->sysfolder mapping module names to uid in table pages
  	protected function __construct() {
  		// read and store all tx_newspaper sysfolders
- 		$row = tx_newspaper::selectRows('uid, module', 'pages', '(module="newspaper" OR module LIKE "np_%") AND deleted=0 AND doktype=254');
+ 		$row = tx_newspaper::selectRows('uid, tx_newspaper_module', 'pages', '(tx_newspaper_module="newspaper" OR tx_newspaper_module LIKE "np_%") AND module="newspaper" AND deleted=0 AND doktype=254');
  		for ($i = 0; $i < sizeof($row); $i++) {
- 			$this->sysfolder[$row[$i]['module']] = $row[$i]['uid'];
+ 			$this->sysfolder[$row[$i]['tx_newspaper_module']] = $row[$i]['uid'];
  		}
  		
  		// make sure root sysfolder exists
@@ -88,7 +88,8 @@ class tx_newspaper_Sysfolder {
 			/// all other sysfolders are created within the newspaper root sysfolder
 			$fields['pid'] = self::getPid(new tx_newspaper()); 
 		}
-		$fields['module'] = $module_name;
+		$fields['module'] = 'newspaper'; // for plugin-list in pages
+		$fields['tx_newspaper_module'] = $module_name;
 		$fields['title'] = $module_name;
 		$fields['doktype'] = 254;
 		$fields['perms_user'] = 31;
