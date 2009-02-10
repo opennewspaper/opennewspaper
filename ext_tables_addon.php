@@ -13,28 +13,7 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_
 
 
 if (TYPO3_MODE == 'BE') {
-	$sysfolder = tx_newspaper_Sysfolder::getInstance();
-	$pid = $sysfolder->getPid(new tx_newspaper());
-	
-	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
-t3lib_div::devlog('pts', 'newspaper', 0, $tsconfig);
-t3lib_div::devlog('uts', 'newspaper', 0, $GLOBALS['BE_USER']);
-
-
-	// read other pages to be hidden
-	if (isset($tsconfig['options.']['hideRecords.']['pages']) && $tsconfig['tx_newspaper.']['showFolder']) {
-		$pid .= ',' . $tsconfig['options.']['hideRecords.']['pages']; 
-	}
-
-	if (
-		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
-		(isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder'] != 1)
-	) {
-		t3lib_extMgm::addUserTSConfig('
-			options.hideRecords.pages = ' . $pid . '
-		');
-	}
-
+/// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 }
 
 ?>
