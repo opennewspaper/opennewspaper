@@ -26,7 +26,7 @@ t3lib_div::devlog('sh mainfields row modified', 'newspaper', 0, $row);
 
 
   function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-#t3lib_div::devlog('sh datamap fields', 'newspaper', 0, $incomingFieldArray);
+t3lib_div::devlog('sh datamap fields', 'newspaper', 0, $incomingFieldArray);
 #t3lib_div::devlog('sh datamap table', 'newspaper', 0, $table);
 #t3lib_div::devlog('sh datamap id', 'newspaper', 0, $id);
 #t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
