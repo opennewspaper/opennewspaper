@@ -17,17 +17,23 @@ if (TYPO3_MODE == 'BE') {
 	$pid = $sysfolder->getPid(new tx_newspaper());
 	
 	$tsconfig = t3lib_BEfunc::getPagesTSconfig($pid);
-t3lib_div::devlog('tsc', 'newspaper', 0, $tsconfig);
+#t3lib_div::devlog('tsc', 'newspaper', 0, $tsconfig);
+
+	// read other pages to be hidden
+	if (isset($tsconfig['options.']['hideRecords.']['pages']) && $tsconfig['tx_newspaper.']['showFolder']) {
+		$pid .= ',' . $tsconfig['options.']['hideRecords.']['pages']; 
+	}
+
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
 		(isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder'] != 1)
 	) {
 /// \to do: append $pid (current version overwrites)
-/*
+
 		t3lib_extMgm::addUserTSConfig('
 			options.hideRecords.pages = ' . $pid . '
 		');
-*/
+
 		}
 }
 
