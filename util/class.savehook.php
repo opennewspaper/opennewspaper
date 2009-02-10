@@ -8,6 +8,9 @@ t3lib_div::devlog('sh fields', 'newspaper', 0, $incomingFieldArray);
 t3lib_div::devlog('sh table', 'newspaper', 0, $table);
 t3lib_div::devlog('sh id', 'newspaper', 0, $id);
 
+t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
+
+
 	/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
 	if (class_exists($table)) { ///<newspaper specification: table name = class name
 		$np_obj = new $table();
