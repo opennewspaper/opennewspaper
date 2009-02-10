@@ -5,7 +5,7 @@
 
 
 	// register save hook
-	$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:newspaper/util/class.savehook.php:user_savehook_extra';
+	$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:newspaper/util/class.savehook.php:user_savehook_newspaper';
 
 
 	// register hook to add javascript and css to BE (loaded to top)
