@@ -5,7 +5,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 #t3lib_div::devlog('class.tx_newspaper.php loaded', 'newspaper', 0);
 
 
-/// \to do: is this class still needed or can these two methods be moved to tx_newspaper_extra_be.php?
+/// \todo: is this class still needed or can these two methods be moved to tx_newspaper_extra_be.php?
 class tx_newspaper implements tx_newspaper_InSysFolder {
 
 	/**
