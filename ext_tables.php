@@ -386,7 +386,7 @@ $tempColumns = Array (
 			"default" => 0
 		)
 	),
-	"tx_newspaper_module_newspaper" => Array (		
+	"tx_newspaper_module" => Array (		
 		"config" => Array (
 			"type" => "passthrough",
 		)
@@ -396,5 +396,5 @@ $tempColumns = Array (
 
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
-t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module_newspaper");
+t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
 ?>

@@ -393,5 +393,5 @@ CREATE TABLE tt_content (
 #
 CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
-	tx_newspaper_module_newspaper tinytext NOT NULL
+	tx_newspaper_module tinytext NOT NULL
 );
