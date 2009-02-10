@@ -2,11 +2,17 @@
 
 class user_savehook_newspaper {
 
+	function getMainFields_preProcess($table, &$row, $that) {
+t3lib_div::devlog('sh mainfields table', 'newspaper', 0, $table);
+t3lib_div::devlog('sh mainfields row', 'newspaper', 0, $row);
+		
+	}
+
 
   function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh fields', 'newspaper', 0, $incomingFieldArray);
-t3lib_div::devlog('sh table', 'newspaper', 0, $table);
-t3lib_div::devlog('sh id', 'newspaper', 0, $id);
+t3lib_div::devlog('sh datamap fields', 'newspaper', 0, $incomingFieldArray);
+t3lib_div::devlog('sh datamap table', 'newspaper', 0, $table);
+t3lib_div::devlog('sh datamap id', 'newspaper', 0, $id);
 
 #t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
 
@@ -23,9 +29,9 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			/// tx_newspaper_InSysFolder is implemented, so record is to be stored in a special sysfolder
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($np_obj);
-#t3lib_div::devlog('sh pid', 'newspaper', 0, $pid);
+#t3lib_div::devlog('sh datamap pid', 'newspaper', 0, $pid);
 			$incomingFieldArray['pid'] = $pid;
-t3lib_div::devlog('sh fields modified', 'newspaper', 0, $incomingFieldArray);
+t3lib_div::devlog('sh datamap fields modified', 'newspaper', 0, $incomingFieldArray);
 		}
 	}
 
