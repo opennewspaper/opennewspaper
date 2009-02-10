@@ -23,10 +23,12 @@ t3lib_div::devlog('tsc', 'newspaper', 0, $tsconfig);
 		(isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder'] != 1)
 	) {
 /// \to do: append $pid (current version overwrites)
+/*
 		t3lib_extMgm::addUserTSConfig('
 			options.hideRecords.pages = ' . $pid . '
 		');
-	}
+*/
+		}
 }
 
 ?>
