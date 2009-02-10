@@ -23,18 +23,16 @@ if (TYPO3_MODE == 'BE') {
 	if (isset($tsconfig['options.']['hideRecords.']['pages']) && $tsconfig['tx_newspaper.']['showFolder']) {
 		$pid .= ',' . $tsconfig['options.']['hideRecords.']['pages']; 
 	}
-t3lib_div::devlog('pid', 'newspaper', 0, $pid);
+
 	if (
 		!isset($tsconfig['tx_newspaper.']['showFolder']) || 
 		(isset($tsconfig['tx_newspaper.']['showFolder']) && $tsconfig['tx_newspaper.']['showFolder'] != 1)
 	) {
-/// \to do: append $pid (current version overwrites)
-
 		t3lib_extMgm::addUserTSConfig('
 			options.hideRecords.pages = ' . $pid . '
 		');
+	}
 
-		}
 }
 
 ?>
