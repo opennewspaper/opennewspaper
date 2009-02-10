@@ -46,7 +46,7 @@ class tx_newspaper_Sysfolder {
  	
  	protected function __clone() {} ///< singleton pattern
  	
- 	/// get instance (singeton pattern)
+ 	/// get instance (singleton pattern)
  	public static function getInstance() {
 		if (self::$instance == null) {
 			self::$instance = new tx_newspaper_Sysfolder();
@@ -125,14 +125,14 @@ class tx_newspaper_Sysfolder {
 
 	/// checks if module name matches the specification
 	/** Specification for module name:
-	 *  max 10 charcters (Typo3 condition) for field module in table pages
+	 *  max 255 charcters (Typo3 condition) for field module in table pages
 	 *  'np_*' or tx_newspaper::getModuleName()  
 	 *  \param $name Module name to be checked
 	 */
  	public static function checkModuleName($module_name) {
  		$module_name = strtolower($module_name);
  		
- 		if (strlen($module_name) > 10) {
+ 		if (strlen($module_name) > 255) {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
  		
