@@ -30,9 +30,9 @@
  */
 
 
-/// \to do: deleting and hiding can lead to data inconsistency - check in savehook if newspaper sysfolders are involved???
+/// \todo: deleting and hiding can lead to data inconsistency - check in savehook if newspaper sysfolders are involved???
 
-/// \to do: function to move lost records to the appropriate sysfolders
+/// \todo: function to move lost records to the appropriate sysfolders
  
 /// Get and create sysfolders for newspaper data
 /**

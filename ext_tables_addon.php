@@ -16,7 +16,7 @@ $TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_
 $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 
 if (TYPO3_MODE == 'BE') {
-/// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
+/// \todo: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 }
 
 ?>
