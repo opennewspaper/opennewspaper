@@ -27,7 +27,6 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 	t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
 		}
-		
 	}
 	
 	
@@ -38,5 +37,8 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 #t3lib_div::devlog('sh datamap id', 'newspaper', 0, $id);
 #t3lib_div::devlog('classes', 'newspaper', 0, get_declared_classes());
 	}
+
+	
+}	
 
 ?>
