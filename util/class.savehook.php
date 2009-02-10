@@ -21,7 +21,8 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 		$np_obj = new $class_bypass();
 		if (in_array("tx_newspaper_InSysFolder", class_implements($np_obj))) { 
 			/// tx_newspaper_InSysFolder is implemented, so record is to be stored in a special sysfolder
-			$pid = $np_obj->getModuleName();
+			$sf = new tx_newspaper_Sysfolder();
+			$pid = $sf->getPid($np_obj);
 t3lib_div::devlog('sh pid', 'newspaper', 0, $pid);
 		}
 	}
