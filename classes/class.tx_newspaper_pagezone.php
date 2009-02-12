@@ -42,8 +42,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
  *  Class tx_newspaper_PageZone implements the tx_newspaper_Extra interface,
  *  because a PageZone can be placed like an Extra.
  */
-abstract class tx_newspaper_PageZone 
-		implements tx_newspaper_Extra, tx_newspaper_InSysFolder {
+abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	
 	/// Configure Smarty rendering engine
 	public function __construct($uid = 0) {
