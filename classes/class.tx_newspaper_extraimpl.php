@@ -49,7 +49,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 
 	public function setAttribute($attribute, $value) {
-		throw new tx_newspaper_NotYetImplementedException();
+//		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	/** Extra folder can be hidden (see dam)
