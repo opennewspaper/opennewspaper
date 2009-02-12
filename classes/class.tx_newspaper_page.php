@@ -72,6 +72,7 @@ class tx_newspaper_Page {
 				'section = ' . $this->parentSection->getAttribute('uid') . 
 				' AND pagetype_id = ' . $this->pagetype->getID()
 			);
+			t3lib_div::debug(tx_newspaper::$query);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
