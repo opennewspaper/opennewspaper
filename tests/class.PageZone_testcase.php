@@ -45,6 +45,13 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		tx_newspaper_PageZone_Factory::getInstance()->create($this->bad_uid);
 	}
 	
+	public function test_store() {
+		$this->pagezone->store();
+		/// \todo check that record in DB equals data in memory
+		/// \todo change an attribute, store and check
+		/// \todo create an empty pagezone and write it. verify it's been written.
+	}	
+	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
 	private $source = null;
