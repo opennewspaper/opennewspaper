@@ -23,7 +23,7 @@
 	public function setUid($uid);
 	
 	/// \return Name of the database table the object's data are stored in
-	public static function getTable();
+	public function getTable();
 
 	
 	/// \return String the name of the extra module
