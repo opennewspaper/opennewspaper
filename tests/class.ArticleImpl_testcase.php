@@ -97,6 +97,8 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 			$this->assertEquals($this->article->getAttribute($key), $value);
 		}
 		
+		/// \todo check storing of extras with article
+		
 		/// change an attribute, store and check
 		$random_string = md5(time());
 		$this->article->setAttribute('text', 

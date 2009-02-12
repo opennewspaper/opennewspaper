@@ -102,7 +102,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 	
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException();		
+		/// \todo insert extra data (if uid == 0) or update if uid > 0
 	}
 	
 	/// Read data of Extra

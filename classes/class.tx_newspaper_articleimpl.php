@@ -85,7 +85,8 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function setUid($uid) { $this->uid = $uid; }
 	
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException();		
+		/// \todo insert article data (if uid == 0) or update if uid > 0
+		/// \todo store all extras and make sure they are in the MM relation table
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {

@@ -50,6 +50,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		/// \todo check that record in DB equals data in memory
 		/// \todo change an attribute, store and check
 		/// \todo create an empty pagezone and write it. verify it's been written.
+		/// \see ArticleImpl_testcase
 	}	
 	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
