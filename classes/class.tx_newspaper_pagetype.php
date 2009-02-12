@@ -46,6 +46,7 @@ class tx_newspaper_PageType {
 	 */ 
  	
  	function __construct($get) {
+ 		t3lib_div::debug($get);
  		if ($get['art']) $this->condition = 'get_var = \'art\'';
 		else if ($get['page']) 
 			$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
