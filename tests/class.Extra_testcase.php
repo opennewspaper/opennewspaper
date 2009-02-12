@@ -64,9 +64,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$temp->setAttribute('crdate', $time);
 			$this->assertEquals($temp->getAttribute('crdate'), $time);
 		}
-
-		$this->setExpectedException('tx_newspaper_WrongAttributeException');
-		$temp->setAttribute('es gibt mich nicht, schmeiss ne exception!', 1);
 	}
 
 	public function test_getExtraPid() {

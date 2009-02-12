@@ -48,6 +48,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
  		return $this->attributes[$attribute];
 	}
 
+	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
+	 *  attributes, even if they don't exist beforehand.
+	 */
 	public function setAttribute($attribute, $value) {
 		$this->attributes[$attribute] = $value;
 	}
