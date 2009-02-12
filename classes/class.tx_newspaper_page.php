@@ -49,10 +49,11 @@ class tx_newspaper_Page {
 	/** \param $parent The newspaper section the page is in
 	 *  \param $condition SQL WHERE condition to further specify the page
 	 */
-	public function __construct(tx_newspaper_Section $parent, $condition = '1') {
+	public function __construct(tx_newspaper_Section $parent, tx_newspaper_PageType $type) {
 
 		$this->parentSection = $parent;
-		$this->condition = $condition;
+		$this->pagetype = $type;
+		$this->condition = $type->getCondition();
 
 		/// Configure Smarty rendering engine
 		$this->smarty = new Smarty();
@@ -62,21 +63,17 @@ class tx_newspaper_Page {
 		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
 		$this->smarty->compile_dir  = $tmp;
 		$this->smarty->config_dir   = $tmp;
-		$this->smarty->cache_dir    = $tmp;
-
-		/// Read Attributes from persistent storage
+		$this->smarty->cache_dir    = $tmp;		
+ 	}
+ 	
+ 	function getAttribute($attribute) {
+		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
 				'section = ' . $this->parentSection->getAttribute('uid') . 
 				' AND ' . $this->condition
 			);
 		}
-		
-		/// Read page type
-		$pagetype = new tx_newspaper_PageType($this->attributes['pagetype_id']);
- 	}
- 	
- 	function getAttribute($attribute) {
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
@@ -142,6 +139,7 @@ class tx_newspaper_Page {
  	private $condition = null;						///< WHERE-condition used to find current page
  	private $pageZones = array();					///< Page zones on this page
  	private $attributes = array();					///< The member variables
+ 	private $pagetype = null;
  	
  	/// Default Smarty template for HTML rendering
  	static private $defaultTemplate = 'tx_newspaper_page.tmpl';
