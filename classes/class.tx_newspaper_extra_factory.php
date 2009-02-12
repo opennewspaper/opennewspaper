@@ -93,7 +93,7 @@ class tx_newspaper_Extra_Factory {
 	
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	private static $extra_table = 'tx_newspaper_extra';
-	private static $extra2article_table =  'tx_newspaper_article_extras_mm'
+	private static $extra2article_table =  'tx_newspaper_article_extras_mm';
  	
 }
  
