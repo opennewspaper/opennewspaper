@@ -71,7 +71,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	
 	/// Get the tx_newspaper_Page which is currently displayed
 	public function getPage(tx_newspaper_Section $section) {
-		return new tx_newspaper_Page(new tx_newspaper_PageType($_GET));
+		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
 }
 
