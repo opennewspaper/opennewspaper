@@ -49,8 +49,9 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		if ($uid) {
 			$this->readExtras($uid);
 		    $this->readAttributes(self::$table, $uid);
+		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
 		}
-		t3lib_div::debug($this->attributes);
+#		t3lib_div::debug($this->attributes);
 		
  	}
 

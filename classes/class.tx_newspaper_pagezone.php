@@ -106,6 +106,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		return tx_newspaper::getTable($this);
 	}
 
+	public function getPageZoneType() { return $this->pagezonetype; }
+	
 	/** \todo Internationalization */
 	static function getTitle() {
 		return 'PageZone';
@@ -180,6 +182,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	
  	protected $attributes = array();	///< array of attributes
  	protected $extras = array();		///< array of tx_newspaper_Extra s
+ 	protected $pagezonetype = null;
+ 	
  	
  	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
  	 
