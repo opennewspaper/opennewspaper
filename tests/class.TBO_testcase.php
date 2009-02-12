@@ -21,7 +21,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
-		unset($_GET['type']);		
+		unset($_GET['page']);		
 	}
 
 	public function test_createPlugin() {
@@ -47,9 +47,9 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		
 		$this->doTestContains($this->pi->main('', null), 'Ressortseite');
 
-		$_GET['type'] = 100;
+		$_GET['page'] = 100;
 		$this->doTestContains($this->pi->main('', null), 'RSS');
-		unset($_GET['type']);
+		unset($_GET['page']);
 
 		$_GET['art'] = $this->article_uid;
 		$this->doTestContains($this->pi->main('', null), 'Artikelseite');
@@ -71,13 +71,13 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_PageZone_rss() {
-		$_GET['type'] = 100;
+		$_GET['page'] = 100;
 		// The following tests page header, not zone, and is therefore disabled
 		// $this->doTestContains($this->pi->main('', null), 'Class: tx_newspaper_PageZone_Page');
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Test-Seitenbereich RSS');
 		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
-		unset($_GET['type']);
+		unset($_GET['page']);
 	}
 	
 	public function test_PageZone_article() {
