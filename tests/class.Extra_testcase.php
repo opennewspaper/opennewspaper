@@ -58,11 +58,11 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_setAttribute() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
-			$temp->setAttribute('uid', 100);
-			$this->assertEquals($temp->getAttribute('uid'), 100);
+			$time = time();
+			$temp->setAttribute('crdate', $time);
+			$this->assertEquals($temp->getAttribute('crdate'), $time);
 		}
 
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
