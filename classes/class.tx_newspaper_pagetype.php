@@ -45,11 +45,11 @@ class tx_newspaper_PageType {
 	 *	Else it is the section overview page
 	 */ 
  	
- 	function __construct($get) {
-		t3lib_div::debug($get);
- 		if ($get['art']) $this->condition = 'get_var = \'art\'';
-		else if ($get['page']) 
-			$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
+ 	function __construct($get_in) {
+		t3lib_div::debug($get_in);
+ 		if ($get_in['art']) $this->condition = 'get_var = \'art\'';
+		else if ($get_in['page']) 
+			$this->condition = 'get_var = \'page\' AND get_value = '.intval($get_in['page']);
 		else $this->condition = 'NOT get_var';
 		t3lib_div::debug($this->condition);
   	}
