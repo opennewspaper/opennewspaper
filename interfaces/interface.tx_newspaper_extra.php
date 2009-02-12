@@ -42,6 +42,15 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspape
 	/// \return Name of the database table the Extra data is stored in
 	public function getTable();
 
+	/// Writes the Extra to DB
+	/** If the Extra is new, creates the record and sets the UID to the result.
+	 *  Else overwrites theexisting record.
+	 * 
+	 *  Associated records, such as relation tables and sub-records, are written
+	 *  too.
+	 */
+	public function store();
+
 	/// \return Title of the Extra (using the language set in BE)
 	public static function getTitle();
 

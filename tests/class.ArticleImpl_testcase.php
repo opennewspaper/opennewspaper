@@ -94,6 +94,13 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		tx_newspaper_ArticleImpl::relateExtra2Article('extra_table', 0, 0);
 	}
 	
+	public function test_store() {
+		$this->article->store();
+		/// \todo check that record in DB equals data in memory
+		/// \todo change an attribute, store and check
+		/// \todo create an empty article and write it. verify it's been written.
+	}	
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function checkOutput($output) {

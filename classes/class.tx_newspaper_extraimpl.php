@@ -101,6 +101,10 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return $class;
 	}
 	
+	public function store() {
+		throw new tx_newspaper_NotYetImplementedException();		
+	}
+	
 	/// Read data of Extra
 	/** \return Array row with Extra data for given uid and table
 	 */

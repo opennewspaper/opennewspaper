@@ -98,6 +98,16 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			/// \todo test the output... how can i do that generically?
 		}
 	}	
+
+	public function test_store() {
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);
+			$temp->store();
+			/// \todo check that record in DB equals data in memory
+			/// \todo change an attribute, store and check
+			/// \todo create an empty extra and write it. verify it's been written.
+		}
+	}	
 	
 	public function test_getTable() {
 		foreach(array_merge($this->extras_to_test, 

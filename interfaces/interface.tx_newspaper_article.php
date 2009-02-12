@@ -26,7 +26,6 @@ interface tx_newspaper_Article
 	public function importieren(tx_newspaper_Source $quelle);
 	public function exportieren(tx_newspaper_Source $quelle);
 	public function laden();
-	public function speichern();
 	public function vergleichen();
 	public function extraAnlegen();
 
