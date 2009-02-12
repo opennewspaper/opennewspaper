@@ -88,6 +88,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	
  	/// returns an actual member (-> Extra)
 	function getAttribute($attribute) {
+		/// For reasons explained in readExtras() we don't read the attributes here
+		
+		if (!array_key_exists($attribute, $this->attributes)) {
+        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		}
+		
 		return $this->attributes[$attribute];
 	}
 
