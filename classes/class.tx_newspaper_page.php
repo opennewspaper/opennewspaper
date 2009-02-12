@@ -73,6 +73,7 @@ class tx_newspaper_Page {
 				' AND pagetype_id = ' . $this->pagetype->getID()
 			);
 			t3lib_div::debug(tx_newspaper::$query);
+			t3lib_div::debug($this->pagetype);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
