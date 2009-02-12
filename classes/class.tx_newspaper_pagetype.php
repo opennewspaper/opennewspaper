@@ -50,15 +50,26 @@ class tx_newspaper_PageType {
 		else if ($get['page']) 
 			$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
 		else $this->condition = 'NOT get_var';
- 		
-		$this->attributes = tx_newspaper::selectOneRow(
-			'*', tx_newspaper::getTable($this), $this->condition
-		);
- 	}
+  	}
  	
  	public function getCondition() { return $this->condition; }
- 	public function getID() { return $this->attributes['uid']; }
- 	 	
+ 	public function getID() { return $this->getAttribute('uid'); }
+ 	
+ 	function getAttribute($attribute) {
+		/// Read Attributes from persistent storage on first call
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', tx_newspaper::getTable($this), $this->condition
+			);
+		}
+
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		}
+ 		return $this->attributes[$attribute];
+ 	}
+ 	
+ 	
  	private $condition = null;
  	private $attributes = array();
 }
