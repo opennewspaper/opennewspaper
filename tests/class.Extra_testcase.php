@@ -129,6 +129,10 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$uid = $temp->store();
 			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
 			$this->assertEquals($data['text'], $random_string);
+			
+			/// delete extra
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
+			
 		}
 	}	
 
