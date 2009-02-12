@@ -37,14 +37,28 @@ class tx_newspaper_PageZoneType {
  	/// Construct a tx_newspaper_PageZoneType given the UID of the SQL record
  	function __construct($uid = 0) {
  		if ($uid) {
+ 			$this->setUid($uid);
+ 		}
+ 	}
+ 	 
+	function getAttribute($attribute) {
+		/// Read Attributes from persistent storage on first call
+		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-				'*', tx_newspaper::getTable($this), "uid = $uid"
+				'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
- 		} else {
- 			throw new tx_newspaper_IllegalUsageException('PageZoneType: uid == 0');
- 		} 
- 		
+		}
+
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		}
+ 		return $this->attributes[$attribute];
  	}
  	
+ 	function setUid($uid) { $this->uid = $uid; }
+	function getUid() { return $this->uid; }
+ 	
+ 	private $uid = 0;
+ 	private $attributes = array();
 }
 ?>
