@@ -45,9 +45,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
 	public function __construct($uid = 0) {
-		parent::__construct();
+		parent::__construct($uid);
 		if ($uid) {
-			$this->setUid($uid);
 			$this->readExtras($uid);
 		    $this->readAttributes(self::$table, $uid);
 		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
