@@ -39,9 +39,6 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspape
 	 */
 	public function setAttribute($attribute, $value);
 
-	/// \return Name of the database table the Extra data is stored in
-	public function getTable();
-
 	/// Writes the Extra to DB
 	/** If the Extra is new, creates the record and sets the UID to the result.
 	 *  Else overwrites theexisting record.
