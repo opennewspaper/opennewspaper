@@ -57,6 +57,8 @@ class tx_newspaper_PageZoneType implements tx_newspaper_InSysFolder {
  	
  	function setUid($uid) { $this->uid = $uid; }
 	function getUid() { return $this->uid; }
+
+	static function getModuleName() { return 'np_pagezonetype'; }
  	
  	private $uid = 0;
  	private $attributes = array();

@@ -133,6 +133,8 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		return tx_newspaper::getTable($this);
  	}
  	
+	static function getModuleName() { return 'np_page'; }
+ 	
  	private $smarty = null;							///< Smarty object for HTML rendering
  	private $parentSection = null;					///< Newspaper section this page is in
  	private $condition = null;						///< WHERE-condition used to find current page

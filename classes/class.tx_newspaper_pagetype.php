@@ -80,6 +80,8 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
  		throw new tx_newspaper_NotYetImplementedException();
  	}
  	
+	static function getModuleName() { return 'np_pagetype'; }
+ 	
  	private $condition = null;
  	private $attributes = array();
 }

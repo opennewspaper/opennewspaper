@@ -49,6 +49,8 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
+	static function getModuleName() { return 'np_pagezone_article'; }	
+	
 	protected function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}

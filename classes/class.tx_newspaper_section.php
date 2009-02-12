@@ -83,6 +83,8 @@
 	function setUid($uid) { $this->uid = $uid; }
 	function getUid() { return $this->uid; }
 	
+	static function getModuleName() { return 'np_section'; }
+	
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
 	private $articlelist = null;

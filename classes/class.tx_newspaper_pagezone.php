@@ -114,10 +114,7 @@ abstract class tx_newspaper_PageZone
 		return 'PageZone';
 	}
 	
-	
-	static function getModuleName() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
+	static function getModuleName() { return 'np_pagezone'; }
 
 	static function readExtraItem($uid, $table) {
 		throw new tx_newspaper_NotYetImplementedException();
