@@ -90,6 +90,10 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$behavior->getAttributeList();
 	}
 	
+	public function test_relateExtra2Article() {
+		tx_newspaper_ArticleImpl::relateExtra2Article('extra_table', 0, 0);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function checkOutput($output) {
