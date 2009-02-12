@@ -16,7 +16,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		$this->section = new tx_newspaper_Section($this->section_uid);
-		$this->page = new tx_newspaper_Page($this->section, 'NOT get_var');
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_Page(array()));
 	}
 
 	function tearDown() {
@@ -27,7 +27,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_createPage() {
-		$temp = new tx_newspaper_Page($this->section);
+		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_Page(array()));
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_Page);
 	}
@@ -40,7 +40,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
-		$this->page = new tx_newspaper_Page($this->section, 'get_var = \'type\' AND get_value = 100');
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_Page(array('get_var'=> 'page', 'get_value' => 100)));
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
