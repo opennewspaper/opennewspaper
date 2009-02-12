@@ -34,10 +34,12 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
 /// An article represented as PageZone to allow placement of extras
 class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 		
-	public function __construct($uid) {
+	public function __construct($uid = 0) {
 		parent::__construct();
-		$this->readExtras($uid);
-	    $this->readAttributes(self::$table, $uid);
+		if ($uid) {
+			$this->readExtras($uid);
+		    $this->readAttributes(self::$table, $uid);
+		}
  	}
 	
 	/// \todo Return default paragraph of extra of given type in article

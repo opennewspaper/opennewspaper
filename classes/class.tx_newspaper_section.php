@@ -36,25 +36,36 @@
  class tx_newspaper_Section {
  	
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
- 	function __construct($uid) {
-		$this->attributes = tx_newspaper::selectOneRow(
-			'*', $this->getTable(), "uid = $uid"
-		);
-		$list = tx_newspaper::selectOneRow(
-			'uid', self::$list_table, "section_id  = $uid"
-		);
-		$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
+ 	function __construct($uid = 0) {
+ 		if ($uid) {
+ 			$this->setUid($uid);
+ 		}
  	}
  	
  	function getAttribute($attribute) {
+ 		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), 'uid = ' . $this->getUid() 
+			); 			
+ 		}
+ 		
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
+ 		
  		return $this->attributes[$attribute];
  	}
  	
- 	/// \todo instantiate $this->articlelist on 1st call, not in c'tor
- 	function getList() { return $this->articlelist; }
+ 	function getList() {
+ 		if (!$this->articlelist) { 
+ 			$list = tx_newspaper::selectOneRow(
+				'uid', self::$list_table, "section_id  = $uid"
+			);
+			$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
+ 		}
+ 	
+ 		return $this->articlelist; 
+ 	}
  	
  	function getParentPage() {
  		throw new tx_newspaper_NotYetImplementedException();
@@ -69,9 +80,13 @@
 		return tx_newspaper::getTable($this);
 	}
 	
+	function setUid($uid) { $this->uid = $uid; }
+	function getUid() { return $this->uid; }
+	
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
 	private $articlelist = null;
+	private $uid = 0;
  	
  	/// table which stores the tx_newspaper_ArticleList associated with this section
  	static private $list_table = 'tx_newspaper_articlelist';

@@ -49,7 +49,7 @@ class tx_newspaper_Page {
 	/** \param $parent The newspaper section the page is in
 	 *  \param $condition SQL WHERE condition to further specify the page
 	 */
-	public function __construct(tx_newspaper_Section $parent, tx_newspaper_PageType $type) {
+	public function __construct(tx_newspaper_Section $parent = null, tx_newspaper_PageType $type = null) {
 
 		$this->parentSection = $parent;
 		$this->pagetype = $type;

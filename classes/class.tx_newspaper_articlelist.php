@@ -36,10 +36,12 @@
   *	 - public static function getModuleName()
   */
  abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
- 	function __construct($uid, tx_newspaper_Section $section = null) {
- 		$this->attributes = tx_newspaper::selectOneRow(
-			'*', $this->getTable(), "uid = $uid"
-		);
+ 	function __construct($uid = 0, tx_newspaper_Section $section = null) {
+		if ($uid) {
+	 		$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), "uid = $uid"
+			);
+		}
 		if ($section) {
 			$this->section = $section;
 		} else {

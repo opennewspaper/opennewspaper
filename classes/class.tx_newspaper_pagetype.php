@@ -47,7 +47,7 @@ class tx_newspaper_PageType {
 	 *	Else it is the section overview page
 	 */ 
  	
- 	function __construct($get) {
+ 	function __construct($get = array()) {
  		if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
  		} else {

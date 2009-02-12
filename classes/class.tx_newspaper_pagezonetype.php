@@ -34,11 +34,13 @@
  */
 class tx_newspaper_PageZoneType {
  	
- 	/// Construct a tx_newspaper_PageType given the UID of the SQL record
- 	function __construct($uid) {
-		$this->attributes = tx_newspaper::selectOneRow(
-			'*', tx_newspaper::getTable($this), "uid = $uid"
-		);
+ 	/// Construct a tx_newspaper_PageZoneType given the UID of the SQL record
+ 	function __construct($uid = 0) {
+ 		if ($uid) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', tx_newspaper::getTable($this), "uid = $uid"
+			);
+ 		}
  	}
  	
 }

@@ -44,10 +44,12 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
  */
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
-	public function __construct($uid) {
+	public function __construct($uid = 0) {
 		parent::__construct();
-		$this->readExtras($uid);
-	    $this->readAttributes(self::$table, $uid);
+		if ($uid) {
+			$this->readExtras($uid);
+		    $this->readAttributes(self::$table, $uid);
+		}
  	}
 
 	protected function getExtra2PagezoneTable() {
