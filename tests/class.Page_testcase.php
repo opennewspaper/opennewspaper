@@ -40,13 +40,14 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
-		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_Page(array('get_var'=> 'page', 'get_value' => 100)));
+		$this->page = new tx_newspaper_Page($this->section, 
+											new tx_newspaper_Page(array('get_var'=> 'page', 'get_value' => 100)));
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));						    
 
-		$this->page = new tx_newspaper_Page($this->section, 'get_var = \'art\'');
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_Page(array('get_var'=> 'art')));
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
@@ -56,7 +57,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	
 	public function testEmptyPageZones() {
 		/// This test page is guaranteed to have no page zones
-		$this->page = new tx_newspaper_Page($this->section, 'get_var = \'type\' AND get_value = 666');
+		$this->page = new tx_newspaper_Page($this->section, 
+											new tx_newspaper_Page(array('get_var'=> 'page', 'get_value' => 666)));
 		$this->assertFalse(is_array($this->page->getPageZones()));
 		$this->assertTrue($this->page->getPageZones());
 	}
