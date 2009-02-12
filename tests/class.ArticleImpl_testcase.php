@@ -91,7 +91,8 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_store() {
-		$this->article->store();
+		$uid = $this->article->store();
+		$this->assertEquals($uid, $this->article->getUid());
 
 		/// check that record in DB equals data in memory
 		$data = tx_newspaper::selectOneRow(
@@ -99,15 +100,23 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		foreach ($data as $key => $value) {
 			$this->assertEquals($this->article->getAttribute($key), $value);
 		}
-		/// \todo change an attribute, store and check
+		
+		/// change an attribute, store and check
 		$random_string = md5(time());
 		$this->article->setAttribute('text', 
 									 $this->article->getAttribute('text') . $random_string);
-		$this->article->store();
+		$uid = $this->article->store();
+		$this->assertEquals($uid, $this->article->getUid());
 		$data = tx_newspaper::selectOneRow(
 			'*', $this->article->getTable(), 'uid = ' . $this->article->getUid());
 		$this->doTestContains($data['text'], $random_string);
-		/// \todo create an empty article and write it. verify it's been written.
+		
+		/// create an empty article and write it. verify it's been written.
+		$article = new tx_newspaper_ArticleImpl();
+		$article->setAttribute('text', $random_string);
+		$uid = $article->store();
+		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
+		$this->assertEquals($data['text'], $random_string);
 	}	
 	
 	////////////////////////////////////////////////////////////////////////////

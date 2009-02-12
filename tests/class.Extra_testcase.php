@@ -103,9 +103,32 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
 			$temp->store();
-			/// \todo check that record in DB equals data in memory
-			/// \todo change an attribute, store and check
-			/// \todo create an empty extra and write it. verify it's been written.
+			$uid = $temp->store();
+			$this->assertEquals($uid, $temp->getUid());
+
+			/// check that record in DB equals data in memory
+			$data = tx_newspaper::selectOneRow(
+				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
+			foreach ($data as $key => $value) {
+				$this->assertEquals($temp->getAttribute($key), $value);
+			}
+		
+			/// change an attribute, store and check
+			$random_string = md5(time());
+			$temp->setAttribute('text', 
+								$temp->getAttribute('text') . $random_string);
+			$uid = $temp->store();
+			$this->assertEquals($uid, $temp->getUid());
+			$data = tx_newspaper::selectOneRow(
+				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
+			$this->doTestContains($data['text'], $random_string);
+		
+			/// create an empty extra and write it. verify it's been written.
+			$temp = new $extra_class();
+			$temp->setAttribute('text', $random_string);
+			$uid = $temp->store();
+			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
+			$this->assertEquals($data['text'], $random_string);
 		}
 	}	
 	

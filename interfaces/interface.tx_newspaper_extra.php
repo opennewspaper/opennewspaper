@@ -48,6 +48,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspape
 	 * 
 	 *  Associated records, such as relation tables and sub-records, are written
 	 *  too.
+	 * 
+	 *  \return UID of the written record
 	 */
 	public function store();
 
