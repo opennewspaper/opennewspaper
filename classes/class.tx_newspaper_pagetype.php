@@ -47,6 +47,8 @@ class tx_newspaper_PageType {
  	
  	function __construct($get) {
 		t3lib_div::debug($get);
+		t3lib_div::debug($get['art']);
+		t3lib_div::debug($get['page']);
  		if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
  		} else {
