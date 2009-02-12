@@ -40,7 +40,9 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
-		$pagetype = new tx_newspaper_PageType(array('get_var'=> 'page', 'get_value' => 100));
+		$get = array('get_var'=> 'page',
+					 'get_value' => 100);
+		$pagetype = new tx_newspaper_PageType($get);
 		t3lib_div::debug($pagetype);
 		$this->page = new tx_newspaper_Page($this->section, 
 											$pagetype);
