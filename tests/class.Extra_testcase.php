@@ -134,7 +134,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 
 	public function test_relateExtra2Article() {
 		$article_uid = 1;
-		$article = tx_newspaper_ArticleImpl($article_uid);
+		$article = new tx_newspaper_ArticleImpl($article_uid);
 		foreach($this->extras_to_test as $extra_class) {
 			/// create a new extra, call relateExtra2Article() on a known article 
 			$extra = new $extra_class();
