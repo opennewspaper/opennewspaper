@@ -110,7 +110,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	public function getPageZoneType() { return $this->pagezonetype; }
 	
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException();		
+		/// \todo see extraImpl::store()
 	}
 	
 	/** \todo Internationalization */
