@@ -41,10 +41,6 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->laden();
 	}
-	public function test_save() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$this->article->speichern();
-	}
 	public function test_diff() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->vergleichen();
