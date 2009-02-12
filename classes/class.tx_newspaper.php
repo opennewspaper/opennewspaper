@@ -157,27 +157,10 @@ class tx_newspaper implements tx_newspaper_InSysFolder {
 		return new tx_newspaper_Section($section_uid);
 	}
 	
-	/// Get the tx_newspaper_Page which is currently displayed
-	/**
-	 *	Find out which page type we're on (Section, Article, RSS, Comments, whatever)
-	 *
-	 *	If $_GET['art'] is set, it is the article page
-	 *
-	 *	Else if $_GET['type'] is set, it is the page corresponding to that type
-	 *
-	 *	Else it is the section overview page
-	 *
-	 *  \return The tx_newspaper_Page which is currently displayed
+	/// Return the name of the SQL table \p $object resides in
+	/** \param $object The object to find the SQL table for
+	 *  \return The lower-cased class name of \p $object
 	 */ 
-	public static function getPage(tx_newspaper_Section $section) {
-		if (t3lib_div::_GP('art')) $cond = 'get_var = \'art\'';
-		else if (t3lib_div::_GP('type')) 
-			$cond = 'get_var = \'type\' AND get_value = '.intval(t3lib_div::_GP('type'));
-		else $cond = 'NOT get_var';
-		
-		return new tx_newspaper_Page($section, $cond);
-	}
-
 	public static function getTable($object) {
 		return strtolower(get_class($object));
 	}	
