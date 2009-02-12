@@ -62,6 +62,7 @@ class tx_newspaper_PageType {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), $this->condition
 			);
+			t3lib_div::debug(tx_newspaper::$query);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
