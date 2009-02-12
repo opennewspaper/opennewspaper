@@ -72,6 +72,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 				'section = ' . $this->parentSection->getAttribute('uid') . 
 				' AND pagetype_id = ' . $this->pagetype->getID()
 			);
+			$this->setUid($this->attributes['uid']);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
@@ -129,11 +130,13 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		return $this->parentSection;
  	}
  	
- 	public function getTable() {
- 		return tx_newspaper::getTable($this);
- 	}
- 	
 	static function getModuleName() { return 'np_page'; }
+
+ 	public function getTable() { return tx_newspaper::getTable($this); }
+	function getUid() { return intval($this->uid); }
+	function setUid($uid) { $this->uid = $uid; }
+ 	
+ 	private $uid = 0;
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
  	private $parentSection = null;					///< Newspaper section this page is in
