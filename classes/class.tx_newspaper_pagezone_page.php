@@ -50,6 +50,8 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 			$this->readExtras($uid);
 		    $this->readAttributes(self::$table, $uid);
 		}
+		t3lib_div::debug($this->attributes);
+		
  	}
 
 	protected function getExtra2PagezoneTable() {
