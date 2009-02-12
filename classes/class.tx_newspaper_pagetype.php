@@ -49,10 +49,12 @@ class tx_newspaper_PageType {
 		t3lib_div::debug($get);
  		if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
- 		} else if ($get['page']) { 
-			$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
  		} else {
- 			$this->condition = 'NOT get_var';
+ 			if ($get['page']) { 
+				$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
+ 			} else {
+ 				$this->condition = 'NOT get_var';
+ 			}
  		}
 		t3lib_div::debug($this->condition);
   	}
