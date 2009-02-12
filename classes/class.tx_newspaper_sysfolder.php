@@ -132,10 +132,10 @@ class tx_newspaper_Sysfolder {
  	public static function checkModuleName($module_name) {
  		$module_name = strtolower($module_name);
  		
- 		if (strlen($module_name) > 255) {
+ 		if ((strlen($module_name) < 4) || (strlen($module_name) > 255)) {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
- 		
+
  		if ($module_name != tx_newspaper::getModuleName() && substr($module_name, 0, 3) != 'np_') {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
