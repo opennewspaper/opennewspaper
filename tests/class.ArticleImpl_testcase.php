@@ -79,8 +79,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($this->article->getTitle(), 'ArticleImpl');
 	}
 	public function test_getModuleName() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$this->article->getModuleName();
+		$this->assertEquals($this->article->getModuleName(), 'np_article');
 	}
 	
 	/// Test functions in tx_newspaper_ArticleBehavior which are not covered yet
