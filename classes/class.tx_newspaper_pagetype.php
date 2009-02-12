@@ -46,9 +46,6 @@ class tx_newspaper_PageType {
 	 */ 
  	
  	function __construct($get) {
-		t3lib_div::debug($get);
-		t3lib_div::debug($get['art']);
-		t3lib_div::debug($get['page']);
  		if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
  		} else {
@@ -58,7 +55,6 @@ class tx_newspaper_PageType {
  				$this->condition = 'NOT get_var';
  			}
  		}
-		t3lib_div::debug($this->condition);
   	}
  	
  	public function getCondition() { return $this->condition; }
@@ -70,7 +66,6 @@ class tx_newspaper_PageType {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), $this->condition
 			);
-			t3lib_div::debug(tx_newspaper::$query);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {

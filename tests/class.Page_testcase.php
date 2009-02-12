@@ -40,9 +40,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
-		$get = array('page' => 100);
-		$pagetype = new tx_newspaper_PageType($get);
-		t3lib_div::debug($pagetype);
+		$pagetype = new tx_newspaper_PageType(array('page' => 100));
 		$this->page = new tx_newspaper_Page($this->section, 
 											$pagetype);
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
