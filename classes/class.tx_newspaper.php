@@ -5,8 +5,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 #t3lib_div::devlog('class.tx_newspaper.php loaded', 'newspaper', 0);
 
 
-/// \todo: is this class still needed or can these two methods be moved to tx_newspaper_extra_be.php?
-class tx_newspaper implements tx_newspaper_InSysFolder {
+/// Utility class which provides static functions. A namespace, so to speak.
+class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
 
 	/**
 	 * add javascript (or other script parts) to extra form (basically containing an onunload script)
@@ -127,7 +127,6 @@ class tx_newspaper implements tx_newspaper_InSysFolder {
 	 *  \param $row fields and data 
 	 *  \return uid of inserted record
 	 */
-/// \todo: rename to insertRow ???
 	public static function insertRows($table, $row) {
 		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
