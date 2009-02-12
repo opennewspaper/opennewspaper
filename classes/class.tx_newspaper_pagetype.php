@@ -82,6 +82,11 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
  	
 	static function getModuleName() { return 'np_pagetype'; }
  	
+ 	public function getTable() { return tx_newspaper::getTable($this); }
+	function getUid() { return intval($this->uid); }
+	function setUid($uid) { $this->uid = $uid; }
+ 	
+ 	private $uid = 0;
  	private $condition = null;
  	private $attributes = array();
 }
