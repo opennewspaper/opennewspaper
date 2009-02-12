@@ -81,7 +81,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
 	function setSource(tx_newspaper_Source $source) {$this->source = $source; }
 
-	function getUid() { return $this->uid; }
+	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
 	
 	public function store() {
