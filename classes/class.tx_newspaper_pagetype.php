@@ -37,6 +37,8 @@ class tx_newspaper_PageType {
  	/// Construct a tx_newspaper_PageType given the $_GET array
 	/**
 	 *	Find out which page type we're on (Section, Article, RSS, Comments, whatever)
+	 *  \note If we need to change the mapping of GET-parameters to page types, 
+	 *  do it here!
 	 *
 	 *	If $_GET['art'] is set, it is the article page
 	 *
@@ -74,6 +76,9 @@ class tx_newspaper_PageType {
  		return $this->attributes[$attribute];
  	}
  	
+ 	static public function getPageTypeList() {
+ 		throw new tx_newspaper_NotYetImplementedException();
+ 	}
  	
  	private $condition = null;
  	private $attributes = array();
