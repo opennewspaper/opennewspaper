@@ -43,7 +43,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagez
  * 
  *  Currently just a dummy.
  */
-class tx_newspaper_Page {
+class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	
 	/// Construct a page from DB
 	/** \param $parent The newspaper section the page is in

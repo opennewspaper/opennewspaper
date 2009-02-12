@@ -32,7 +32,7 @@
 /// brief description
 /** long description
  */
-class tx_newspaper_PageType {
+class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
  	
  	/// Construct a tx_newspaper_PageType given the $_GET array
 	/**

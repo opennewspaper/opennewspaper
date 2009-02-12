@@ -33,7 +33,7 @@
 /** Currently just a dummy
  * 
  */
- class tx_newspaper_Section {
+ class tx_newspaper_Section implements tx_newspaper_InSysFolder {
  	
  	/// Construct a tx_newspaper_Section given the UID of the SQL record
  	function __construct($uid = 0) {
