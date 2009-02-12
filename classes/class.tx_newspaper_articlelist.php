@@ -38,6 +38,7 @@
  abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
  	function __construct($uid = 0, tx_newspaper_Section $section = null) {
 		if ($uid) {
+			$this->setUid($uid);
 	 		$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), "uid = $uid"
 			);
@@ -56,9 +57,11 @@
  	
  	abstract function getArticles($number, $start = 0);
  	
- 	function getTable() {
-		return tx_newspaper::getTable($this);
-	}
+ 	public function getTable() { return tx_newspaper::getTable($this); }
+	function getUid() { return intval($this->uid); }
+	function setUid($uid) { $this->uid = $uid; }
+ 	
+ 	private $uid = 0;
  	
  	protected $attributes = array();
  	protected $section = null;
