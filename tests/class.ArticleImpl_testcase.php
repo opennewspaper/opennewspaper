@@ -85,11 +85,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$behavior->render();
 		$behavior->getAttributeList();
 	}
-	
-	public function test_relateExtra2Article() {
-		tx_newspaper_ArticleImpl::relateExtra2Article('extra_table', 0, 0);
-	}
-	
+		
 	public function test_store() {
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
@@ -117,6 +113,8 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$uid = $article->store();
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
 		$this->assertEquals($data['text'], $random_string);
+		
+		/// \todo delete article
 	}	
 	
 	////////////////////////////////////////////////////////////////////////////

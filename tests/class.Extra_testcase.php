@@ -131,6 +131,40 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertEquals($data['text'], $random_string);
 		}
 	}	
+
+	public function test_relateExtra2Article() {
+		$article_uid = 1;
+		$article = tx_newspaper_ArticleImpl($article_uid);
+		foreach($this->extras_to_test as $extra_class) {
+			/// create a new extra, call relateExtra2Article() on a known article 
+			$extra = new $extra_class();
+			$crdate = time();
+			$extra->setAttribute('crdate', $crdate);
+			$extra_uid = $extra->store();
+			tx_newspaper_ArticleImpl::relateExtra2Article($extra_class, $extra_uid, $article_uid);
+
+			/// check that entry for Extra supertable has been written and is equal to new Extra
+			$data = tx_newspaper::selectOneRow(
+				'*', 
+				tx_newspaper_Extra_Factory::getExtraTable(),
+				'extra_table = \'' . $extra_class . '\' AND extra_uid = ' . intval($extra_uid)
+			);
+			$this->assertTrue(is_array($data));
+			$this->assertTrue(sizeof($data) > 0);
+			$extra_reborn = tx_newspaper_Extra_Factory::create($data['uid']);
+			$this->assertTrue(is_a($extra_reborn, $extra_class));
+			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
+			
+			/// \todo check that MM-relation to the article has been written
+			$data = tx_newspaper::selectOneRow(
+				'*', 
+				tx_newspaper_Extra_Factory::getExtraTable(),
+				'extra_table = \'' . $extra_class . '\' AND extra_uid = ' . intval($extra_uid)
+			);
+			
+			/// \todo remove newly created extra, superclass table entry and MM relation
+		}	
+	}
 	
 	public function test_getTable() {
 		foreach(array_merge($this->extras_to_test, 
