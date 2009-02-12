@@ -40,7 +40,10 @@ class tx_newspaper_PageZoneType {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), "uid = $uid"
 			);
- 		}
+ 		} else {
+ 			throw new tx_newspaper_IllegalUsageException('PageZoneType: uid == 0');
+ 		} 
+ 		
  	}
  	
 }
