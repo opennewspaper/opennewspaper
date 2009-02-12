@@ -51,6 +51,8 @@ class tx_newspaper_Page {
 	 */
 	public function __construct(tx_newspaper_Section $parent, tx_newspaper_PageType $type) {
 
+ 		t3lib_div::debug($type);
+
 		$this->parentSection = $parent;
 		$this->pagetype = $type;
 
