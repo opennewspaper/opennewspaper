@@ -27,9 +27,6 @@ class tx_newspaper_ArticleBehavior {
 	public function laden() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-	public function speichern() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
 	public function vergleichen() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}

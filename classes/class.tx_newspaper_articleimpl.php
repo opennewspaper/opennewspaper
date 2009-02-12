@@ -52,9 +52,6 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	public function laden() {
 		$this->articleBehavior->laden();
 	}
-	public function speichern() {
-		$this->articleBehavior->speichern();
-	}
 	public function vergleichen() {
 		$this->articleBehavior->vergleichen();
 	}
