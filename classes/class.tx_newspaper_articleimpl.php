@@ -90,7 +90,8 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
-		throw new tx_newspaper_NotYetImplementedException();		
+		/// \todo call ExtraImpl::createExtraRecord($uid, $table)
+		/// \todo write entry in MM table (if not exists)
 	}
 	
 	static function getAttributeList() { return self::$attribute_list; }
