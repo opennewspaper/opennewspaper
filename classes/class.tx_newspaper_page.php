@@ -53,7 +53,6 @@ class tx_newspaper_Page {
 
 		$this->parentSection = $parent;
 		$this->pagetype = $type;
-		$this->condition = $type->getCondition();
 
 		/// Configure Smarty rendering engine
 		$this->smarty = new Smarty();
@@ -71,7 +70,7 @@ class tx_newspaper_Page {
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
 				'section = ' . $this->parentSection->getAttribute('uid') . 
-				' AND ' . $this->condition
+				' AND pagetype_id = ' . $this->pagetype->getID()
 			);
 		}
 

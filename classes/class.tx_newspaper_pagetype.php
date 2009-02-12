@@ -57,6 +57,7 @@ class tx_newspaper_PageType {
  	}
  	
  	public function getCondition() { return $this->condition; }
+ 	public function getID() { return $this->attributes['uid']; }
  	 	
  	private $condition = null;
  	private $attributes = array();
