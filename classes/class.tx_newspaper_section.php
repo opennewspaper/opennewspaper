@@ -59,7 +59,7 @@
  	function getList() {
  		if (!$this->articlelist) { 
  			$list = tx_newspaper::selectOneRow(
-				'uid', self::$list_table, "section_id  = $uid"
+				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
 			);
 			$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
  		}
