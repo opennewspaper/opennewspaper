@@ -40,9 +40,10 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
+		$pagetype = new tx_newspaper_PageType(array('get_var'=> 'page', 'get_value' => 100));
+		t3lib_div::debug($pagetype);
 		$this->page = new tx_newspaper_Page($this->section, 
-											new tx_newspaper_PageType(array('get_var'=> 'page', 'get_value' => 100)));
-		t3lib_div::debug($this->page);
+											$pagetype);
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
