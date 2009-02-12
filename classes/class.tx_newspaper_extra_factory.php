@@ -78,6 +78,7 @@ class tx_newspaper_Extra_Factory {
 	}
 	
 	static function getExtraTable() { return self::$extra_table; } 
+	static function getExtra2ArticleTable() { return self::$extra2article_table; } 
 	
 	/// Protected constructor, tx_newspaper_Extra_Factory cannot be created freely
 	protected function __construct() { }
@@ -92,6 +93,7 @@ class tx_newspaper_Extra_Factory {
 	
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	private static $extra_table = 'tx_newspaper_extra';
+	private static $extra2article_table =  'tx_newspaper_article_extras_mm'
  	
 }
  

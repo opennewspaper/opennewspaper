@@ -114,7 +114,8 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
 		$this->assertEquals($data['text'], $random_string);
 		
-		/// \todo delete article
+		/// delete article
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery($article->getTable(), 'uid = ' . $uid);
 	}	
 	
 	////////////////////////////////////////////////////////////////////////////

@@ -151,18 +151,31 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			);
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
-			$extra_reborn = tx_newspaper_Extra_Factory::create($data['uid']);
+			$extra_supertable_uid = $data['uid'];
+			$extra_reborn = tx_newspaper_Extra_Factory::create($extra_supertable_uid);
 			$this->assertTrue(is_a($extra_reborn, $extra_class));
 			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
 			
-			/// \todo check that MM-relation to the article has been written
+			/// check that MM-relation to the article has been written
 			$data = tx_newspaper::selectOneRow(
 				'*', 
-				tx_newspaper_Extra_Factory::getExtraTable(),
-				'extra_table = \'' . $extra_class . '\' AND extra_uid = ' . intval($extra_uid)
+				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_uid)
 			);
+			$this->assertTrue(is_array($data));
+			$this->assertTrue(sizeof($data) > 0);
 			
-			/// \todo remove newly created extra, superclass table entry and MM relation
+			/// remove MM relation, superclass table entry and newly created extra 
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_uid)
+			);
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+				tx_newspaper_Extra_Factory::getExtraTable(),
+				'uid = ' . $extra_supertable_uid
+			);
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery($extra->getTable(), $extra_uid);
+			
 		}	
 	}
 	
