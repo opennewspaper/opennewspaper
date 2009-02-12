@@ -179,6 +179,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	 */
  	abstract protected function getExtra2PagezoneTable();
  	
+	function getUid() { return intval($this->uid); }
+	function setUid($uid) { $this->uid = $uid; }
+ 	
+ 	private $uid = 0;
+ 	
  	protected $smarty = null;
  	
  	protected $attributes = array();	///< array of attributes

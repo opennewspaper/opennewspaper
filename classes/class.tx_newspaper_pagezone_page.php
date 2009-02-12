@@ -47,6 +47,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 	public function __construct($uid = 0) {
 		parent::__construct();
 		if ($uid) {
+			$this->setUid($uid);
 			$this->readExtras($uid);
 		    $this->readAttributes(self::$table, $uid);
 		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
@@ -61,8 +62,6 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		return self::$extra_2_pagezone_table;
 	}
  	
- 	static protected $table = 'tx_newspaper_pagezone_page';	///< SQL table for persistence
-	
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
 }
  
