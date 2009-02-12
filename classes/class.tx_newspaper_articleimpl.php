@@ -87,6 +87,10 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function getUid() { return $this->uid; }
 	function setUid($uid) { $this->uid = $uid; }
 	
+	public function store() {
+		throw new tx_newspaper_NotYetImplementedException();		
+	}
+	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
 		throw new tx_newspaper_NotYetImplementedException();		
 	}
