@@ -40,6 +40,7 @@ class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {
 			$this->readExtras($uid);
 		    $this->readAttributes(self::$table, $uid);
 		}
+		t3lib_div::debug($this->attributes);
  	}
 	
 	/// \todo Return default paragraph of extra of given type in article
