@@ -148,7 +148,8 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 	 *  Does nothing if the concrete Extra is already linked in the abstract table. 
 	 * 
 	 *  \param $uid UID of the Extra in the table of concrete Extras
-	 *  \param $table Table of concrete Extras. If empty, 
+	 *  \param $table Table of concrete Extras
+	 *  \return UID of abstract Extra record
 	 */ 
 	public static function createExtraRecord($uid, $table) {
 		/// Check if record is already present in extra table
@@ -157,7 +158,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
 			' AND extra_uid = ' . intval($uid)	
 		);
-		if ($row['uid']) return;
+		if ($row['uid']) return $row['uid'];
 		
 		/// read typo3 fields to copy into extra table
 		$row = tx_newspaper::selectOneRow(
@@ -184,7 +185,7 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		}
 		$row['pid'] = $rows[0]['pid'];
 
-		tx_newspaper::insertRows(self::$table, $row);		
+		return tx_newspaper::insertRows(self::$table, $row);		
 	}
 
 	function getUid() { return intval($this->uid); }

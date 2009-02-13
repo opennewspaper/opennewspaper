@@ -140,7 +140,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$crdate = time();
 			$extra->setAttribute('crdate', $crdate);
 			$extra_uid = $extra->store();
-			tx_newspaper_ArticleImpl::relateExtra2Article($extra_class, $extra_uid, $article_uid);
+			$abstract_uid = tx_newspaper_ArticleImpl::relateExtra2Article($extra_class, $extra_uid, $article_uid);
 
 			/// check that entry for Extra supertable has been written and is equal to new Extra
 			$data = tx_newspaper::selectOneRow(
@@ -154,6 +154,8 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$extra_reborn = tx_newspaper_Extra_Factory::create($extra_supertable_uid);
 			$this->assertTrue(is_a($extra_reborn, $extra_class));
 			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
+			
+			/// \todo check that $abstract_uid correspnds to entry in extra supertable
 			
 			/// check that MM-relation to the article has been written
 			$data = tx_newspaper::selectOneRow(

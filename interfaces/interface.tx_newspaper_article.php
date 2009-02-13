@@ -38,10 +38,14 @@ interface tx_newspaper_Article
 	
 	/// Store the relation of an Extra to a concrete Article (used from BE)
 	/** - Write the entry in the abstract Extra table, if the Extra has been 
-	 *    frshly created
+	 *    freshly created
 	 *  - Link the Extra to the given article in the MM-table
 	 *  \todo Do we take strings and ints as UIDs here, or can we already work
 	 * 	with full objects?
+	 *  \param $extra_table SQL table/class of concrete extra to link
+	 *  \param $extra_uid UID of concrete extra
+	 *  \param $article_uid UID of article the extra is linked to
+	 *  \return UID of entry in abstract extra table
 	 */
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid);
 #	public static function relateExtra2Article(tx_newspaper_Extra $extra, tx_newspaper_Article $article);

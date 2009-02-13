@@ -90,8 +90,26 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
-		/// \todo call ExtraImpl::createExtraRecord($uid, $table)
+		$abstract_uid = ExtraImpl::createExtraRecord($extra_uid, $extra_table); 
+		
 		/// \todo write entry in MM table (if not exists)
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid_local', 
+			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+			'uid_local = ' . intval($article_uid) .
+			' AND uid_foreign = ' . intval($abstract_uid)	
+		);
+		if ($row['uid_local'] != $article_uid || 
+			$row['uid_foreign'] != $abstract_uid) {
+			tx_newspaper::insertRows(
+				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+				array('uid_local' => $article_uid,
+					  'uid_foreign' => $abstract_uid)
+			);
+		} 
+		
+		return $abstract_uid;
+		
 	}
 	
 	static function getAttributeList() { return self::$attribute_list; }
