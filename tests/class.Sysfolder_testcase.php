@@ -32,6 +32,8 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 	}
 	
 	
+	/// this test must be run as first test because tx_newspaper_Sysfolder uses the Singleton pattern
+	// if it's run later, the sysfolders are already read and the object won't notice the new sysfolder created in this test
 	public function testUseSysfolder() {
 		
 		// create sysfolder for np_phpunit_testcase_5 (test should use this sysfolder without creating it)
