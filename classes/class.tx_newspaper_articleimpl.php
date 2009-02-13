@@ -90,7 +90,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
-		$abstract_uid = ExtraImpl::createExtraRecord($extra_uid, $extra_table); 
+		$abstract_uid = tx_newspaper_ExtraImpl::createExtraRecord($extra_uid, $extra_table); 
 		
 		/// \todo write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
