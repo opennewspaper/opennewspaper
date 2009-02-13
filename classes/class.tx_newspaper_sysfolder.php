@@ -44,7 +44,7 @@ class tx_newspaper_Sysfolder {
  	private static $instance = null; ///< use Singleton pattern
  	private $sysfolder = array(); 
  	
- 	private static $rootfolder_modulename = 'newspaper'; // module name for root sysfolder
+ 	private static $rootfolder_modulename = 'newspaper'; /// module name for root sysfolder
  	
  	protected function __clone() {} ///< singleton pattern
  	
@@ -88,7 +88,7 @@ class tx_newspaper_Sysfolder {
 			$fields['sorting'] = 29999; // insert at the bottom of the page tree
 		} else {
 			/// all other sysfolders are created within the newspaper root sysfolder
-			$fields['pid'] = self::getPid(new tx_newspaper()); 
+			$fields['pid'] = self::getPidRootfolder(); 
 		}
 		$fields['module'] = 'newspaper'; // for plugin-list in pages
 		$fields['tx_newspaper_module'] = $module_name;
@@ -111,8 +111,15 @@ class tx_newspaper_Sysfolder {
  	 *  \return $pid of sysfolder (sysfolder is created if not existing)
  	 */
  	public function getPid(tx_newspaper_InSysFolder $obj) {
- 		
  		$module_name = strtolower($obj->getModuleName());
+		return $this->getPidFromArray($module_name);
+ 	} 
+ 	/// as no object for the root sysfolder exists, the pid for this folder is handled separately
+ 	public function getPidRootfolder() {
+ 		$module_name = strtolower(self::getRootSysfolderModuleName());
+		return $this->getPidFromArray($module_name);
+ 	}
+	private function getPidFromArray($module_name) {
 		self::checkModuleName($module_name);
 
 		// check if sysfolder exists (and create, if not)
@@ -121,8 +128,7 @@ class tx_newspaper_Sysfolder {
  		}
  		
  		return $this->sysfolder[$module_name];
- 		
- 	} 
+	}
 
 
 	/// checks if module name matches the specification
@@ -144,7 +150,7 @@ class tx_newspaper_Sysfolder {
  		
  	}
 
-
+	/// gets the name of the root sysfolder
 	public static function getRootSysfolderModuleName() {
 		return self::$rootfolder_modulename;
 	}
