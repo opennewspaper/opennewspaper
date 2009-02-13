@@ -61,13 +61,12 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 		$t = new tx_newspaper_Sysfolder_test('np_phpunit_testcase_4');
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pid = $sf->getPid($t); // get pid (sysfolder should have been created by this getPid call)
-		#$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, 'SELECT uid FROM pages WHERE tx_newspaper_module="np_phpunit_testcase_4", title="np_phpunit_testcase_4, module="newspaper", doktype=254"');
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'pages', 
 			'tx_newspaper_module="np_phpunit_testcase_4" AND title="np_phpunit_testcase_4" AND module="newspaper" AND doktype=254'
 		);
-		if (!$GLOBALS['TYPO3_DB']->mysql_fetch_assoc()) {
+		if (!$GLOBALS['TYPO3_DB']->sql_fetch_assoc()) {
 			$this->fail('sysfolder for module "np_phpunit_testcase_4" wasn\'t created.');
 		}
 	}
