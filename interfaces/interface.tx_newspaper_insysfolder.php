@@ -26,9 +26,10 @@
 	public function getTable();
 
 	
-	/// \return String the name of the extra module
-	/** Needed to fill varchar(10) field "module" in table pages to find/create
+	/// \return String the name of the newspaper sysfolder
+	/** Needed to fill field "tx_newspaper_module" in table pages to find/create
 	 *  a storage folder for an Extra etc.
+	 *  Specification: np_* (max. 255 char); should not contain "phpunit"
 	 */
 	public static function getModuleName(); 
 
