@@ -29,7 +29,7 @@
  *  \date Jan 9, 2009
  */
  
-t3lib_div::debug($TYPO3_LOADED_EXT);
+t3lib_div::debug($GLOBALS['TYPO3_LOADED_EXT']);
 if (t3lib_extMgm::isLoaded('newspaper')) {
 	require_once(t3lib_extMgm::extPath('newspaper', 'classes/class.tx_newspaper_exception.php'));
 	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_extra.php'));
