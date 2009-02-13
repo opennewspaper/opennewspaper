@@ -31,7 +31,6 @@
 
 
 /// \todo: deleting and hiding can lead to data inconsistency - check in savehook if newspaper sysfolders are involved???
-
 /// \todo: function to move lost records to the appropriate sysfolders
  
 /// Get and create sysfolders for newspaper data
@@ -42,11 +41,11 @@
 class tx_newspaper_Sysfolder {
  	
  	private static $instance = null; ///< use Singleton pattern
- 	private $sysfolder = array(); 
+ 	private $sysfolder = array(); ///< sysfolder are read only once
  	
  	private static $rootfolder_modulename = 'newspaper'; /// module name for root sysfolder
  	
- 	protected function __clone() {} ///< singleton pattern
+ 	protected function __clone() {} // singleton pattern
  	
  	/// get instance (singleton pattern)
  	public static function getInstance() {
@@ -58,13 +57,13 @@ class tx_newspaper_Sysfolder {
  	
  	/// constructor fills arary $this->sysfolder mapping module names to uid in table pages
  	protected function __construct() {
- 		// read and store all tx_newspaper sysfolders
+ 		/// read and store all tx_newspaper sysfolders
  		$row = tx_newspaper::selectRows('uid, tx_newspaper_module', 'pages', '(tx_newspaper_module="newspaper" OR tx_newspaper_module LIKE "np_%") AND module="newspaper" AND deleted=0 AND doktype=254');
  		for ($i = 0; $i < sizeof($row); $i++) {
  			$this->sysfolder[$row[$i]['tx_newspaper_module']] = $row[$i]['uid'];
  		}
  		
- 		// make sure root sysfolder exists
+ 		/// make sure root sysfolder exists
  		if (!isset($this->sysfolder[self::getRootSysfolderModuleName()])) {
  			$this->createSysfolder(self::getRootSysfolderModuleName());
  		}
@@ -75,7 +74,6 @@ class tx_newspaper_Sysfolder {
  
   	/// creates a sysfolder (in Typo3 table pages)
  	/** \param $module_name name of module
- 	 *  \return $pid pid of sysfolder
  	 */	
 	private function createSysfolder($module_name) {
 		
@@ -101,24 +99,28 @@ class tx_newspaper_Sysfolder {
 		$fields['tstamp'] = time();
 		
 		$uid = tx_newspaper::insertRows('pages', $fields); // insert sysfolder and get uid of that sysfolder
-		$this->sysfolder[$module_name] = $uid; // append this sysfolder
-		
-	}
+		$this->sysfolder[$module_name] = $uid; // append this sysfolder in local storage array
+}
  	
  	
  	/// gets the uid of the sysfolder to store data in
- 	/** \param Extra $extra
+ 	/** \param tx_newspaper_InSysFolder $obj object implemeting the tx_newspaper_InSysFolder interface
  	 *  \return $pid of sysfolder (sysfolder is created if not existing)
  	 */
  	public function getPid(tx_newspaper_InSysFolder $obj) {
  		$module_name = strtolower($obj->getModuleName());
 		return $this->getPidFromArray($module_name);
- 	} 
+ 	}
+ 	 
  	/// as no object for the root sysfolder exists, the pid for this folder is handled separately
+ 	/// \return pid of root sysfolder
  	public function getPidRootfolder() {
  		$module_name = strtolower(self::getRootSysfolderModuleName());
 		return $this->getPidFromArray($module_name);
  	}
+ 	
+ 	/// read pid from local array or create sysfolder and return that uid
+ 	/// \return pid of sysfolder for given module name
 	private function getPidFromArray($module_name) {
 		self::checkModuleName($module_name);
 
@@ -133,9 +135,9 @@ class tx_newspaper_Sysfolder {
 
 	/// checks if module name matches the specification
 	/** Specification for module name:
-	 *  max 255 charcters (Typo3 condition) for field module in table pages
+	 *  min 4 chars, max 255 chars for field tx_newspaper_module in table pages
 	 *  'np_*' or self::getRootSysfolderModuleName()  
-	 *  \param $name Module name to be checked
+	 *  \param $module_name Module name to be checked
 	 */
  	public static function checkModuleName($module_name) {
  		$module_name = strtolower($module_name);
