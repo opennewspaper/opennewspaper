@@ -23,13 +23,33 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 	}
 
 
-//	function tearDown() {
-//		// delete sysfolder for np_phpunit_testcase_4 and np_phpunit_testcase_5 (so they don't bother when developing)
-//		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
-//			'pages',
-//			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
-//		);
-//	}
+	function tearDown() {
+		// delete sysfolder for np_phpunit_testcase_4 and np_phpunit_testcase_5 (so they don't bother when developing)
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			'pages',
+			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
+		);
+	}
+	
+	
+	public function testUseSysfolder() {
+		
+		// create sysfolder for np_phpunit_testcase_5 (test should use this sysfolder without creating it)
+		$data = array(
+			'tx_newspaper_module' => 'np_phpunit_testcase_5', 
+			'title' => 'np_phpunit_testcase_5', 
+			'module' => 'newspaper', 
+			'pid' => 0, 
+			'doktype' => 254
+		);
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('pages', $data);
+		$pid_np_phpunit_testcase_5 = $GLOBALS['TYPO3_DB']->sql_insert_id();
+
+		$t = new tx_newspaper_Sysfolder_test('np_phpunit_testcase_5');
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		$pid = $sf->getPid($t); // get pid of sysfolder (sysfolder exists)
+		$this->assertEquals($pid_np_phpunit_testcase_5, $pid);
+	}
 	
 
 	public function testNameTooShort() {
@@ -80,24 +100,7 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 		}
 	}
 	
-	public function testUseSysfolder() {
-		
-		// create sysfolder for np_phpunit_testcase_5 (test should use this sysfolder without creating it)
-		$data = array(
-			'tx_newspaper_module' => 'np_phpunit_testcase_5', 
-			'title' => 'np_phpunit_testcase_5', 
-			'module' => 'newspaper', 
-			'pid' => 0, 
-			'doktype' => 254
-		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('pages', $data);
-		$pid_np_phpunit_testcase_5 = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
-		$t = new tx_newspaper_Sysfolder_test('np_phpunit_testcase_5');
-		$sf = tx_newspaper_Sysfolder::getInstance();
-		$pid = $sf->getPid($t); // get pid of sysfolder (sysfolder exists)
-		$this->assertEquals($pid_np_phpunit_testcase_5, $pid);
-	}
 
 
 	public function testRootSysfolder() {
