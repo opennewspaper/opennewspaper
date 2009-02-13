@@ -33,6 +33,7 @@ if (t3lib_extMgm::isLoaded('newspaper')) {
 	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_extra.php'));
 	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_article.php'));
 	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_source.php'));
+}
 //} else {
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper.php');
 //	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_exception.php');
