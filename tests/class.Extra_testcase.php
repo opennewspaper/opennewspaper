@@ -175,7 +175,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 				tx_newspaper_Extra_Factory::getExtraTable(),
 				'uid = ' . $extra_supertable_uid
 			);
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery($extra->getTable(), $extra_uid);
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery($extra->getTable(), 'uid = ' . $extra_uid);
 			
 		}	
 	}
