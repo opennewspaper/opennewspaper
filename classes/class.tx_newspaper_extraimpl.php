@@ -58,7 +58,6 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		}
 		
 		$this->attributes[$attribute] = $value;
-
 	}
 
 	/** Extra folder can be hidden (see dam)

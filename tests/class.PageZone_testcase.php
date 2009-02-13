@@ -51,6 +51,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		/// \todo change an attribute, store and check
 		/// \todo create an empty pagezone and write it. verify it's been written.
 		/// \see ArticleImpl_testcase
+		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
 	}	
 	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist

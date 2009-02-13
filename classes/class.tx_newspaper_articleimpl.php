@@ -22,17 +22,11 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		if ($uid) {
 			$this->setUid($uid);
 			
-			try {
-				/** \todo I'm not sure whether the following line should remain. It's a
-				 *  safety net because currently it's not ensured that extras are 
-				 *  created consistently.
-				 */
-				tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());
-			
-				$this->attributes = $this->readExtraItem($uid, $this->getTable());
-			} catch (tx_newspaper_DBException $e) {
-				throw new tx_newspaper_ArticleNotFoundException($uid);
-			}
+			/** \todo I'm not sure whether the following line should remain. It's a
+			 *  safety net because currently it's not ensured that extras are 
+			 *  created consistently.
+			 */
+			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());			
 		}	
 	}
 	
@@ -61,12 +55,24 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 
 	/// returns an actual member (-> Extra)
 	function getAttribute($attribute) {
-		/// \todo throw exception if wrong attribute; see ExtraImpl
-		return $this->attributes[$attribute];
+
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+
+ 		if (!array_key_exists($attribute, $this->attributes)) {
+        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		}
+
+ 		return $this->attributes[$attribute];
 	}
 
 	/// sets a member (-> Extra)
 	function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+		
 		$this->attributes[$attribute] = $value;
 	}
 
@@ -85,8 +91,33 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	function setUid($uid) { $this->uid = $uid; }
 	
 	public function store() {
-		/// \todo insert article data (if uid == 0) or update if uid > 0
-		/// \todo store all extras and make sure they are in the MM relation table
+		
+		/// insert article data (if uid == 0) or update if uid > 0
+		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, read them now
+			if (!$this->attributes) { 
+				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+			}
+			
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+		
+		/// store all extras and make sure they are in the MM relation table
+		foreach ($this->extras as $extra) {
+			$extra_uid = $extra->store();
+			$extra_table = $extra->getTable();
+			self::relateExtra2Article($extra_table, $extra_uid, getUid());
+		}
+		
+		return $this->getUid();		
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
