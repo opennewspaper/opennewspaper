@@ -115,7 +115,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
 			if (!$this->attributes) { 
-				$this->readExtraItem($this->getUid(), $this->getTable());
+				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 			}
 			
 			tx_newspaper::updateRows(
