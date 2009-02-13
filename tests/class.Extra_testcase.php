@@ -110,14 +110,13 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			}
 		
 			/// change an attribute, store and check
-			$random_string = md5(time());
-			$temp->setAttribute('text', 
-								$temp->getAttribute('text') . $random_string);
+			$time = time();
+			$temp->setAttribute('tstamp', $time);
 			$uid = $temp->store();
 			$this->assertEquals($uid, $temp->getUid());
 			$data = tx_newspaper::selectOneRow(
 				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
-			$this->doTestContains($data['text'], $random_string);
+			$this->doTestContains($data['tstamp'], $time);
 		
 			/// create an empty extra and write it. verify it's been written.
 			$temp = new $extra_class();
