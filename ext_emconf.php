@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "newspaper"
 #
-# Auto generated 10-02-2009 13:54
+# Auto generated 13-02-2009 16:47
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author' => 'Helge Preuss, Oliver Schröder, Samuel Talleux',
 	'author_email' => 'helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de',
 	'shy' => '',
-	'dependencies' => 'cms',
+	'dependencies' => 'cms,smarty',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => 'mod1',
@@ -33,6 +33,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
+			'smarty' => '',
 		),
 		'conflicts' => array(
 		),
