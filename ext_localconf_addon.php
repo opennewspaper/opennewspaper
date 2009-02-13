@@ -10,4 +10,5 @@
 	// register hook to add javascript and css to BE (loaded to top)
 	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = PATH_typo3conf . 'ext/newspaper/util/additionalBackendItems.php';
 
+	require_once('tx_newspaper_include.php');
 ?>
