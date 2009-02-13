@@ -205,7 +205,6 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 	
 	private static $fields_to_copy_into_extra_table = array(
 		'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 
-		'starttime', 'endtime', 'fe_group'
 	);
 	
 }
