@@ -146,7 +146,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$data = tx_newspaper::selectOneRow(
 				'*', 
 				tx_newspaper_Extra_Factory::getExtraTable(),
-				'extra_table = \'' . $extra_class . '\' AND extra_uid = ' . intval($extra_uid)
+				'extra_table = \'' . strtolower($extra_class) . '\' AND extra_uid = ' . intval($extra_uid)
 			);
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
