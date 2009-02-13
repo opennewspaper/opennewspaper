@@ -36,12 +36,12 @@ if (t3lib_extMgm::isLoaded('newspaper')) {
 }
 //} else {
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper.php');
-//	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_exception.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_exception.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
-//	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
-//	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
-//	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_source.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
+	require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_source.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_section.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_page.php');
 	require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone.php');
