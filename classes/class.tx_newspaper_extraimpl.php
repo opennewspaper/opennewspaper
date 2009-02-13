@@ -136,6 +136,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 */
 	public static function readExtraItem($uid, $table) {
 t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
+		if (!$uid) return array();
 		
 		return tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
 	}
