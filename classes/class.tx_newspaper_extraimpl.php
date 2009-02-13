@@ -71,6 +71,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return false;
 	}
 
+	/// register an Extra
 	/**
 	 * every Extra has to register to be used
 	 * \param tx_newspaper_Extra $extra concrete Extra object
@@ -85,9 +86,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return false;
 	}
 	
-	/// title for module
+	/// name of module
 	/** this is the default folder for data associated with newspaper etxension,
-	 *   overwrite in conrete Extras
+	 *  overwrite in conrete Extras
 	 */
 	public static function getModuleName() { return 'np_extra_default'; }
 
