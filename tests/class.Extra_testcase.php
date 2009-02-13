@@ -89,11 +89,14 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	}	
 
 	public function test_render() {
+		/// set an article ID for article renderer extra
+		$_GET['art'] = 1;
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
 			$temp->render();
 			/// \todo test the output... how can i do that generically?
 		}
+		unset($_GET['art']);
 	}	
 
 	public function test_store() {
