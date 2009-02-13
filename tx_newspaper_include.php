@@ -32,7 +32,7 @@
 t3lib_div::debug($TYPO3_CONF_VARS['EXT']['extList']);
 t3lib_div::debug(t3lib_extMgm::isLoaded('newspaper')? "np": "nonp");
 t3lib_div::debug(t3lib_extMgm::isLoaded('smarty')? "sm": "nosm");
-die(include('/www/onlinetaz/branches/taz 2.0/helge/typo3conf/temp_CACHED_ps9158_ext_localconf.php'));
+die(file_get_contents('/www/onlinetaz/branches/taz 2.0/helge/typo3conf/temp_CACHED_ps9158_ext_localconf.php'));
 
 if (t3lib_extMgm::isLoaded('newspaper')) {
 	require_once(t3lib_extMgm::extPath('newspaper', 'classes/class.tx_newspaper_exception.php'));
