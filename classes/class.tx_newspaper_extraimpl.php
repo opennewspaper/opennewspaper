@@ -60,20 +60,8 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		$this->attributes[$attribute] = $value;
 	}
 
-	/** Extra folder can be hidden (see dam)
-	 *  One folder per Extra
-	 * 
-	 *  \todo: return real pid (like it's done in dam: check if folder exists, if not create folder)
-	 *  \todo oli: what is this function for? does it need to be public?
-	 */
-	public static function getExtraPid() {
-#t3lib_div::devlog('getExtraPid()', 'newspaper', 0, 2526);
-		return 2526; // TODO: HARD-CODED!!!
-	}
-
-	/**
-	 * checks if an Extra is registered
-	 * \return true if the Extra is registered (else false)
+	/// checks if an Extra is registered
+	/** \return true if the Extra is registered (else false)
 	 */
 	public static function isRegisteredExtra(tx_newspaper_Extra $extra) {
 		for ($i = 0; $i < sizeof(self::$registeredExtra); $i++) {
