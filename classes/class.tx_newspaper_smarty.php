@@ -29,6 +29,8 @@
  *  \date Feb 13, 2009
  */
  
+require_once(t3lib_extMgm::extPath('smarty', 'Smarty.class.php'));
+
 /// Smarty rendering engine with configurable template directory
 /** Smarty suffers from the limitation that you can only have \em one folder to
  *  store templates in per instance. For that reason, you must instantiate a 
