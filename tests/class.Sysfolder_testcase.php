@@ -76,7 +76,7 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 
 
 	public function testRootSysfolder() {
-		$t = new tx_newspaper_Sysfolder_test(tx_newspaper_RootSysfolder::getModuleName());
+		$t = new tx_newspaper_Sysfolder_test(tx_newspaper_Sysfolder::getRootSysfolderModuleName());
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pid = $sf->getPid($t); // get pid of root sysfolder
 		if ($pid <= 0)
