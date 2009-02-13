@@ -31,6 +31,8 @@
  
 require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagetype.php');
 require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
+require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_smarty.php');
+
 
 /// A page type for an online edition of a newspaper
 /** Examples include:
@@ -55,14 +57,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		$this->pagetype = $type;
 
 		/// Configure Smarty rendering engine
-		$this->smarty = new Smarty();
-		$tmp = "/tmp/" . substr(BASEPATH, 1);
-		file_exists($tmp) || mkdir($tmp, 0774, true);
-		
-		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
-		$this->smarty->compile_dir  = $tmp;
-		$this->smarty->config_dir   = $tmp;
-		$this->smarty->cache_dir    = $tmp;		
+		$this->smarty = new tx_newspaper_Smarty('/fileadmin/templates/tx_newspaper/smarty');
  	}
  	
  	function getAttribute($attribute) {
