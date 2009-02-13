@@ -38,8 +38,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 
 	public function getAttribute($attribute) {
 
-		if (!$this->attributes) 
+		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
@@ -52,7 +53,12 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	 *  attributes, even if they don't exist beforehand.
 	 */
 	public function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+		
 		$this->attributes[$attribute] = $value;
+
 	}
 
 	/** Extra folder can be hidden (see dam)
@@ -108,12 +114,13 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	public function store() {
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
-			if (!$this->attributes) $this->getAttribute('uid');
-#			try {
+			if (!$this->attributes) { 
+				$this->readExtraItem($this->getUid(), $this->getTable());
+			}
+			
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
-#			} catch (tx_newspaper_DBException $e) { t3lib_div::debug(tx_newspaper::$query); }
 		} else {
 			$this->setUid(
 				tx_newspaper::insertRows(
