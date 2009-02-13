@@ -104,11 +104,15 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		);
 		if ($row['uid_local'] != $article_uid || 
 			$row['uid_foreign'] != $abstract_uid) {
-			tx_newspaper::insertRows(
-				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-				array('uid_local' => $article_uid,
-					  'uid_foreign' => $abstract_uid)
-			);
+			if (!tx_newspaper::insertRows(
+					tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+					array(
+						'uid_local' => $article_uid,
+						'uid_foreign' => $abstract_uid)
+					)
+				) {
+				return false;					
+			}
 		} 
 		
 		return $abstract_uid;
