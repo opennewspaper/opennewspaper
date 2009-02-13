@@ -117,18 +117,34 @@ class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
 	        	$rows[] = $row;
 	
 			return $rows;
-		}
-		/// \todo noresexception		
+		} else throw new tx_newspaper_NoResException(self::$query);		
 	}
 	
 	
 	/// inserts a record using T3 API
-	/** \param $table T3 table
-	 *  \param $row fields and data 
+	/** \param $table SQL table to insert into
+	 *  \param $row Data as key=>value pairs
 	 *  \return uid of inserted record
 	 */
-	public static function insertRows($table, $row) {
+	public static function insertRows($table, array $row) {
 		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		if (!$res) {
+        	throw new tx_newspaper_NoResException(self::$query);
+        }
+        
+        return $GLOBALS['TYPO3_DB']->sql_insert_id();
+        
+	}
+
+	/// updates a record using T3 API
+	/** \param $table SQL table to update
+	 *  \param $where SQL WHERE condition (typically 'uid = ...')
+	 *  \param $row Data as key=>value pairs
+	 */
+	public static function updateRows($table, $where, array $row) {
+		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) {
