@@ -28,6 +28,12 @@
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Jan 9, 2009
  */
+ 
+t3lib_extMgm::typo3_loadExtensions();
+
+if (!t3lib_extMgm::isLoaded('smarty')) die('loadExtensions() sucks! (smarty)');
+if (!t3lib_extMgm::isLoaded('newspaper')) die('loadExtensions() sucks! (newspaper)');
+
 if (t3lib_extMgm::isLoaded('newspaper')) {
 	require_once(t3lib_extMgm::extPath('newspaper', 'classes/class.tx_newspaper_exception.php'));
 	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_extra.php'));
