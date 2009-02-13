@@ -101,7 +101,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	/** this is the default folder for data associated with newspaper etxension,
 	 *   overwrite in conrete Extras
 	 */
-	public static function getModuleName() { return 'newspaper'; }
+	public static function getModuleName() { return 'np_extra_default'; }
 
 	public function getTable() {
 		$class = tx_newspaper::getTable($this);
