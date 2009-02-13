@@ -161,7 +161,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$data = tx_newspaper::selectOneRow(
 				'*', 
 				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_uid)
+				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_supertable_uid)
 			);
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
