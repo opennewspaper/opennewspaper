@@ -13,12 +13,22 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_sysfo
 /// testsuite for class tx_newspaper_Sysfolder
 class test_Sysfolder_testcase extends tx_phpunit_testcase {
 
+
+	function setUp() {
+		// delete sysfolder for np_phpunit_testcase_4 (mustn't be there) and np_phpunit_testcase_5 (so we can create new without checking)
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			'pages',
+			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
+		);
+	}
+
+
 	function tearDown() {
 		// delete sysfolder for np_phpunit_testcase_4 and np_phpunit_testcase_5 (so they don't bother when developing)
-//		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
-//			'pages',
-//			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
-//		);
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			'pages',
+			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
+		);
 	}
 	
 
