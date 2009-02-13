@@ -28,8 +28,9 @@
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Jan 9, 2009
  */
-//if (t3lib_extMgm::isLoaded('newspaper')) {
-//	require_once(t3lib_extMgm::extPath('newspaper', 'classes/class.tx_newspaper_exception.php'));
+if (t3lib_extMgm::isLoaded('newspaper')) {
+	require_once(t3lib_extMgm::extPath('newspaper', 'classes/class.tx_newspaper_exception.php'));
+}
 //	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_extra.php'));
 //	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_article.php'));
 //	require_once(t3lib_extMgm::extPath('newspaper', 'interfaces/interface.tx_newspaper_source.php'));
