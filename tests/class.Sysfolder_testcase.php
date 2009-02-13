@@ -66,7 +66,7 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 			'pages', 
 			'tx_newspaper_module="np_phpunit_testcase_4" AND title="np_phpunit_testcase_4" AND module="newspaper" AND doktype=254'
 		);
-		if (!$GLOBALS['TYPO3_DB']->sql_fetch_assoc()) {
+		if (!$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$this->fail('sysfolder for module "np_phpunit_testcase_4" wasn\'t created.');
 		}
 	}
