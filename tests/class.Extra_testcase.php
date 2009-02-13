@@ -116,14 +116,14 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertEquals($uid, $temp->getUid());
 			$data = tx_newspaper::selectOneRow(
 				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
-			$this->doTestContains($data['tstamp'], $time);
+			$this->assertEquals($data['tstamp'], $time);
 		
 			/// create an empty extra and write it. verify it's been written.
 			$temp = new $extra_class();
-			$temp->setAttribute('text', $random_string);
+			$temp->setAttribute('tstamp', $time);
 			$uid = $temp->store();
 			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
-			$this->assertEquals($data['text'], $random_string);
+			$this->assertEquals($data['tstamp'], $time);
 			
 			/// delete extra
 			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
