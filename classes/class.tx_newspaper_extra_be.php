@@ -181,8 +181,9 @@ class tx_newspaper_ExtraBE {
 	 */
 	public static function getExtraBeDisplayMode() {
 
-		// read tsconfig of folder for Extra data
-		$tsconfig = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_ExtraImpl::getExtraPid());
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		// read tsconfig for Extra data
+		$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPid(new tx_newspaper_ExtraImpl()));
 
 		$mode = EXTRA_DISPLAY_MODE_MODAL; // default mode is modalbox
 		if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
