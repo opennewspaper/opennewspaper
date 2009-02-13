@@ -46,16 +46,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 	
 	/// Configure Smarty rendering engine
 	public function __construct($uid = 0) {
-		$this->smarty = new Smarty();
-
-		$this->smarty = new Smarty();
-		$tmp = "/tmp/" . substr(BASEPATH, 1);
-		file_exists($tmp) || mkdir($tmp, 0774, true);
-		
-		$this->smarty->template_dir = BASEPATH.'/fileadmin/templates/tx_newspaper/smarty';
-		$this->smarty->compile_dir  = $tmp;
-		$this->smarty->config_dir   = $tmp;
-		$this->smarty->cache_dir    = $tmp;
+		/// Configure Smarty rendering engine
+		$this->smarty = new tx_newspaper_Smarty('/fileadmin/templates/tx_newspaper/smarty');
 		
 		if ($uid) {
 			$this->setUid($uid);
