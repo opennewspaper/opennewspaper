@@ -24,7 +24,7 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 		// create sysfolder for np_phpunit_testcase_5 (test should use this sysfolder without creating it)
 		$data = array(
 			'tx_newspaper_module' => 'np_phpunit_testcase_5', 
-			'title' => 'np_phpunit_testcase_4', 
+			'title' => 'np_phpunit_testcase_5', 
 			'module' => 'newspaper', 
 			'pid' => 0, 
 			'doktype' => 254
