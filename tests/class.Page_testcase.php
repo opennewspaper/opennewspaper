@@ -49,6 +49,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 						    'Plugin output: '.$this->page->render('', null));						    
 
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
+		/// set an article ID for article renderer extra
+		$_GET['art'] = 1;		
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
