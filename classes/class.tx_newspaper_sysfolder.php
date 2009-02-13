@@ -63,8 +63,8 @@ class tx_newspaper_Sysfolder {
  		}
  		
  		// make sure root sysfolder exists
- 		if (!isset($this->sysfolder[tx_newspaper::getModuleName()])) {
- 			$this->createSysfolder(tx_newspaper::getModuleName());
+ 		if (!isset($this->sysfolder[tx_newspaper_RootSysfolder::getModuleName()])) {
+ 			$this->createSysfolder(tx_newspaper_RootSysfolder::getModuleName());
  		}
  		
  	}
@@ -80,7 +80,7 @@ class tx_newspaper_Sysfolder {
 		$module_name = strtolower($module_name);
 		
 		$fields = array(); // data for sysfolder creation
-		if ($module_name == tx_newspaper::getModuleName()) {
+		if ($module_name == tx_newspaper_RootSysfolder::getModuleName()) {
 			/// newspaper root sysfolder for module is created on root level in Typo3
 			$fields['pid'] = 0;
 			$fields['sorting'] = 29999; // insert at the bottom of the page tree
@@ -126,7 +126,7 @@ class tx_newspaper_Sysfolder {
 	/// checks if module name matches the specification
 	/** Specification for module name:
 	 *  max 255 charcters (Typo3 condition) for field module in table pages
-	 *  'np_*' or tx_newspaper::getModuleName()  
+	 *  'np_*' or tx_newspaper_RootSysfolder::getModuleName()  
 	 *  \param $name Module name to be checked
 	 */
  	public static function checkModuleName($module_name) {
@@ -136,13 +136,26 @@ class tx_newspaper_Sysfolder {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
 
- 		if ($module_name != tx_newspaper::getModuleName() && substr($module_name, 0, 3) != 'np_') {
+ 		if ($module_name != tx_newspaper_RootSysfolder::getModuleName() && substr($module_name, 0, 3) != 'np_') {
  			throw new tx_newspaper_SysfolderIllegalModulenameException($module_name);
  		}
  		
  	}
 
  	
+}
+
+
+
+class tx_newspaper_RootSysfolder implements tx_newspaper_InSysFolder {
+	
+	public function getUid() {return false;}
+	public function setUid($uid) {return false;}
+	public function getTable() {return false;}
+
+	public static function getModuleName() {
+		return 'newspaper';
+	} 
 }
 
 ?>
