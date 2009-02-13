@@ -81,8 +81,9 @@ class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception {
 /// This Exception is thrown if a non-existing attribute is accessed
 class tx_newspaper_WrongAttributeException 
 	extends tx_newspaper_IllegalUsageException { 
-	public function __construct($attribute) {
-        parent::__construct("Attribute $attribute does not exist");
+	public function __construct($attribute, $uid = '') {
+        parent::__construct("Attribute $attribute does not exist" .
+        					($uid == ''? '': " - UID $uid"));
     }	
 }
 

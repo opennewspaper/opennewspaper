@@ -61,7 +61,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
-        	throw new tx_newspaper_WrongAttributeException($attribute);
+        	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
  		}
 
  		return $this->attributes[$attribute];
