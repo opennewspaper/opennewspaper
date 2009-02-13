@@ -91,6 +91,10 @@ class tx_newspaper_Sysfolder_test implements tx_newspaper_InSysFolder {
 	
 	private static $module_name;
 
+	public function getUid() {return false;}
+	public function setUid($uid) {return false;}
+	public function getTable() {return false;}
+
 	function __construct($module_name) {
 		self::$module_name = $module_name;
 	}
