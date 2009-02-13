@@ -16,17 +16,29 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 	private $pid_np_phpunit_testcase_5 = -1;
 
 	function setUp() {
-		// delete sysfolder for np_phpunit_testcase_4 (test mustcreate this folder)
-		$GLOBALS['TYPO3_DB']->sql(TYPO3_db, 'DELETE FROM pages WHERE tx_newspaper_module="np_phpunit_testcase_4"');
+		// delete sysfolder for np_phpunit_testcase_4 (test must create this folder)
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			'pages',
+			'tx_newspaper_module="np_phpunit_testcase_4"'
+		);
 		// create sysfolder for np_phpunit_testcase_5 (test should use this sysfolder without creating it)
-		$GLOBALS['TYPO3_DB']->sql(TYPO3_db, 'INSERT INTO pages SET tx_newspaper_module="np_phpunit_testcase_4", title="np_phpunit_testcase_4, module="newspaper", pid=0, doktype=254');
+		$data = array(
+			'tx_newspaper_module' => 'np_phpunit_testcase_4', 
+			'title' => 'np_phpunit_testcase_4', 
+			'module' => 'newspaper', 
+			'pid' => 0, 
+			'doktype' => 254
+		);
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('pages', $data);
 		$this->pid_np_phpunit_testcase_5 = $GLOBALS['TYPO3_DB']->sql_insert_id();
 	}
 	
 	function tearDown() {
 		// delete sysfolder for np_phpunit_testcase_4 and np_phpunit_testcase_5 (so they don't bother when developing)
-		$GLOBALS['TYPO3_DB']->sql(TYPO3_db, 'DELETE FROM pages WHERE tx_newspaper_module="np_phpunit_testcase_4"');
-		$GLOBALS['TYPO3_DB']->sql(TYPO3_db, 'DELETE FROM pages WHERE tx_newspaper_module="np_phpunit_testcase_5"');
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			'pages',
+			'tx_newspaper_module="np_phpunit_testcase_4" OR tx_newspaper_module="np_phpunit_testcase_5"'
+		);
 	}
 	
 
