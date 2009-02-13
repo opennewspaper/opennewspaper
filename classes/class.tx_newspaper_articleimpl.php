@@ -111,7 +111,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 		}
 		
 		/// store all extras and make sure they are in the MM relation table
-		foreach ($this->extras as $extra) {
+		if ($this->extras) foreach ($this->extras as $extra) {
 			$extra_uid = $extra->store();
 			$extra_table = $extra->getTable();
 			self::relateExtra2Article($extra_table, $extra_uid, getUid());
