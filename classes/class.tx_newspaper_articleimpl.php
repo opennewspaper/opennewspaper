@@ -175,6 +175,7 @@ class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
 	}
 
 	static function readExtraItem($uid, $table) {
+		if (!$uid) return array();
 		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
 	}
 	
