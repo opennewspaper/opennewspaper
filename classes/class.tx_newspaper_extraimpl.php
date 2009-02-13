@@ -108,7 +108,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	public function store() {
 		if ($this->getUid()) {
 			tx_newspaper::updateRows(
-				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+				$this->getTable(), 'uid = ' . $this->getUid(), array($this->attributes)
 			);
 		} else {
 			$this->setUid(
