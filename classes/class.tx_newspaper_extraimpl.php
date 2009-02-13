@@ -104,8 +104,16 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 		return $class;
 	}
 	
+	/// Write or overwrite Extra data in DB, return UID of stored record
 	public function store() {
-		/// \todo insert extra data (if uid == 0) or update if uid > 0
+		if ($this->getUid()) {
+			/// \todo update extra data
+			return $this->getUid();		
+		} else {
+			$uid = tx_newspaper::insertRows($this->getTable(), array($this->attributes));
+			$this->setUid($uid);
+			return $uid;
+		}
 	}
 	
 	/// Read data of Extra

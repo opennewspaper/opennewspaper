@@ -99,7 +99,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	public function test_store() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
-			$temp->store();
 			$uid = $temp->store();
 			$this->assertEquals($uid, $temp->getUid());
 
