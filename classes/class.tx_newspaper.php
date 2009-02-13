@@ -144,7 +144,9 @@ class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
 	 *  \param $row Data as key=>value pairs
 	 */
 	public static function updateRows($table, $where, array $row) {
+		t3lib_div::debug($row);
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
+		t3lib_div::debug(self::$query);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) {
