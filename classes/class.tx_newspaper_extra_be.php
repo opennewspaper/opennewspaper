@@ -45,9 +45,9 @@ class tx_newspaper_ExtraBE {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'*',
 			'tx_newspaper_article',
-			'tx_newspaper_article_extra_mm',
+			'tx_newspaper_article_extras_mm',
 			'tx_newspaper_extra',
-			'uid_local=' . $uid
+			' AND uid_local=' . $uid
 		); 
 		$tmp = array();
 		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
