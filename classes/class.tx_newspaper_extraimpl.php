@@ -123,7 +123,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	/** \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
-t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0);
+t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($table, $uid));
 		if (!$uid) return array();
 		
 		return tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
