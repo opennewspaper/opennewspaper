@@ -38,16 +38,21 @@ class tx_newspaper_ExtraBE {
 	
 	
 	/// read list of associated Extras from database
-	/// \return Array entries in tx_newspaper_extra associated with current article
+	/** \param $table local table (tx_newspaper_article) 
+	 *  \param $uid local uid in given table
+	 *  \return Array entries in tx_newspaper_extra associated with current article
+	 */
 	private static function readExtraList($table, $uid) {
 		
-		$GLOBALS['TYPO3_DB']->debugOutput = true;
+#$GLOBALS['TYPO3_DB']->debugOutput = true;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-			'*',
+			'extra_table, extra_uid, paragraph, position',
 			'tx_newspaper_article',
 			'tx_newspaper_article_extras_mm',
 			'tx_newspaper_extra',
-			' AND uid_local=' . $uid
+			' AND uid_local=' . $uid,
+			'',
+			'paragraph, position'
 		); 
 		$tmp = array();
 		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
