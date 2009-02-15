@@ -16,6 +16,8 @@ define('EXTRA_DISPLAY_MODE_IFRAME', 'iframe');
 class tx_newspaper_ExtraBE {
 
 /// \to do: called by tx_newspaper->renderList() - is class tx_newspaper still needed? (t3 naming convention for user field?)
+	/// renders the list of associates Extra
+	/// \return String html code with list of Extras
 	public static function renderList($table, $uid) {
 		
 		$listOfExtras = self::readExtraList($table, $uid);
@@ -35,6 +37,50 @@ t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 	}
 	
 	
+	/// read list of associated Extras from database
+	/// \return Array entries in tx_newspaper_extra associated with current article
+	private static function readExtraList($table, $uid) {
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+			'*',
+			'tx_newspaper_article',
+			'tx_newspaper_article_extra_mm',
+			'tx_newspaper_extra',
+			'uid_local=' . $uid
+		); 
+		$tmp = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$tmp[] = $row;	
+		}
+t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $tmp);
+		
+		
+		
+		$list = array();
+		// read all extras assigned to content in given table
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_newspaper_content_extra_mm',
+			'tablenames="' . $table . '" AND uid_local=' . $uid,
+			'',
+			'sorting');
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+//TODO: add permission checks somewhere here
+			$class = $row['extra_type']; // $row['extra_type'] contains the name of the database table = name of Extra class
+			if (class_exists($class)) {
+				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['uid_foreign'], $class))) {
+					// append data for this extra (if found and accessible)
+					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
+					$list[] = $row;
+				} // TODO else throw Exception
+			} // TODO else throw Exception
+			
+		}
+		return $list;
+	}
+
+
+
 	private static function renderListItem(array $item) {
 		global $LANG;
 #t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
@@ -126,29 +172,7 @@ t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 
 
 
-	private static function readExtraList($table, $uid) {
-		$list = array();
-		// read all extras assigned to content in given table
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'*',
-			'tx_newspaper_content_extra_mm',
-			'tablenames="' . $table . '" AND uid_local=' . $uid,
-			'',
-			'sorting');
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-//TODO: add permission checks somewhere here
-			$class = $row['extra_type']; // $row['extra_type'] contains the name of the database table = name of Extra class
-			if (class_exists($class)) {
-				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['uid_foreign'], $class))) {
-					// append data for this extra (if found and accessible)
-					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
-					$list[] = $row;
-				} // TODO else throw Exception
-			} // TODO else throw Exception
-			
-		}
-		return $list;
-	}
+
 
 
 
