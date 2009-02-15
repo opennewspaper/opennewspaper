@@ -49,10 +49,11 @@ class tx_newspaper_ExtraBE {
 			'uid_local=' . $uid
 		); 
 		$tmp = array();
+		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$tmp[] = $row;	
 		}
-		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
+		
 t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $tmp);
 		
 		
