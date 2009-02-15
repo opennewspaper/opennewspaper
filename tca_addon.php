@@ -20,12 +20,16 @@ require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_ext
 #tx_newspaper_ExtraImpl::registerExtra(new tx_newspaper_extra_image()); // register Extra "Image"
 
 
+// /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
+$TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
+$TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper->renderList';
 
-//TODO: move $TCA-modifications to registerExtra() - is that possible???
+/// \to do: is there a better way to include the js to the backend (without creating a field); otherwise all Extras MUST have this field
 unset($TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']);
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['type'] = 'user';
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['userFunc'] = 'tx_newspaper->getCodeForBackend';
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['noTableWrapping'] = true;
+
 
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
