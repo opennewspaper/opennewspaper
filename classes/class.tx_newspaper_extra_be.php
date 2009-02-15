@@ -58,10 +58,9 @@ class tx_newspaper_ExtraBE {
 		$list = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$class = $row['extra_table'];
-t3lib_div::devlog('row[extra_table] (=class)', 'newspaper', 0, $class);
+t3lib_div::devlog('row', 'newspaper', 0, $row);
 			if (class_exists($class)) {
 				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['uid_foreign'], $class))) {
-t3lib_div::devlog('row[extra]', 'newspaper', 0, $row['extra']);
 					// append data for this extra (if found and accessible)
 					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
 t3lib_div::devlog('row[type]', 'newspaper', 0, $row['type']);
