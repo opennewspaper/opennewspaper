@@ -11,8 +11,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 # might be needed if Extras will be available for tt_content too
 #$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
 #$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
-$TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
-$TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper->renderList';
 
 
 /// add newspaper to Plugin-in list
