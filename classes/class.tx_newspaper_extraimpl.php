@@ -123,7 +123,7 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	/** \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
-t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
+t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0);
 		if (!$uid) return array();
 		
 		return tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
@@ -159,6 +159,8 @@ t3lib_div::devlog('Extra Image: readExtraItem - reached!', 'newspaper', 0);
 		$row['extra_uid'] = $uid;
 		$row['extra_table'] = $table;
 
+
+/// \to do: Helge: use the PID all Extras share??? Or one pid per concrete Extra?
 		/** use the PID all Extras share. If Extras are created under more than
 		 *  one page, we have a problem and can't continue.
 		 */
