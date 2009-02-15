@@ -19,7 +19,7 @@ class tx_newspaper_ExtraBE {
 	public static function renderList($table, $uid) {
 		
 		$listOfExtras = self::readExtraList($table, $uid);
-#t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
+t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		
 		$content = '';
 		for ($i = 0; $i < sizeof($listOfExtras); $i++) {
