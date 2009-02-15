@@ -54,16 +54,24 @@ class tx_newspaper_ExtraBE {
 			'',
 			'paragraph, position'
 		); 
-		$tmp = array();
-		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
+#t3lib_div::devlog('readExtraList - qzuery', 'newspaper', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
+		$list = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$tmp[] = $row;	
+			$class = $row['extra_table'];
+			if (class_exists($class)) {
+				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['uid_foreign'], $class))) {
+t3lib_div::devlog('row[extra]', 'newspaper', 0, $row['extra']);
+					// append data for this extra (if found and accessible)
+					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
+t3lib_div::devlog('row[type]', 'newspaper', 0, $row['type']);
+					$list[] = $row;
+				} // \to do:  else throw Exception
+			} // \to do: else throw Exception Extra class not found
 		}
-		
-t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $tmp);
-		
+t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $list);
 		
 		
+/*		
 		$list = array();
 		// read all extras assigned to content in given table
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -84,6 +92,8 @@ t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $tmp);
 			} // TODO else throw Exception
 			
 		}
+*/
+		
 		return $list;
 	}
 
