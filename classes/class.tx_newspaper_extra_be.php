@@ -21,7 +21,7 @@ class tx_newspaper_ExtraBE {
 	public static function renderList($table, $uid) {
 		
 		$listOfExtras = self::readExtraList($table, $uid);
-t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
+#t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		
 		$content = 'List of Extras still missing ...<br />';
 		for ($i = 0; $i < sizeof($listOfExtras); $i++) {
@@ -52,6 +52,7 @@ t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$tmp[] = $row;	
 		}
+		$tmp[] = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
 t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $tmp);
 		
 		
