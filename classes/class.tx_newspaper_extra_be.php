@@ -41,6 +41,7 @@ class tx_newspaper_ExtraBE {
 	/// \return Array entries in tx_newspaper_extra associated with current article
 	private static function readExtraList($table, $uid) {
 		
+		$GLOBALS['TYPO3_DB']->debugOutput = true;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'*',
 			'tx_newspaper_article',
