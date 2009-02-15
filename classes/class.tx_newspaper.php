@@ -8,28 +8,26 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 /// Utility class which provides static functions. A namespace, so to speak.
 class tx_newspaper  {
 
-	/**
-	 * add javascript (or other script parts) to extra form (basically containing an onunload script)
-	 * \param $PA typo3 standard for userFunc
-	 * \param $fobj typo3 standard for userFunc
-	 * \return String html code to be placed in the html header <script ...></script>
-	 */
+	/// add javascript (or other script parts) to extra form (basically containing an onunload script)
+	/** \param $PA typo3 standard for userFunc
+	  * \param $fobj typo3 standard for userFunc
+	  * \return String html code to be placed in the html header <script ...></script>
+	  */
 	public function getCodeForBackend($PA, $fobj) {
 #t3lib_div::devlog('tx_newspaper->getCodeForBackend', 'newspaper', 0);
 		return tx_newspaper_ExtraBE::getJsForExtraField();
 	}
 
 
-	/**
-	 * add Extra list to backend form
-	 * \param $PA typo3 standard for userFunc
-	 * \param $fobj typo3 standard for userFunc
-	 * \return String html code to be placed in the html header <script ...></script>
-	 */
+	/// add Extra list to backend form
+	/** \param $PA typo3 standard for userFunc
+	  * \param $fobj typo3 standard for userFunc
+	  * \return String html code: list of assiciated Extras
+	  */
 	function renderList($PA, $fobj) {
 t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 
-//TODO: can/should articles be hard-coded here?
+/// \to do: can/should articles be hard-coded here? Or: throw exception if table is not tx_newspaper_article
 		// get table and uid of current record
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
