@@ -7,16 +7,21 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 
 // overwrite data set in ext_tables.php
 
-// make field a userFunc field (displaying a list of associated extras)
-$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
-$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
+// make Extra field (created by kickstrater) a userFunc field (displaying a list of associated Extras)
+# might be needed if Extras will be available for tt_content too
+#$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
+#$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
+$TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
+$TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper->renderList';
 
 
-// add newspaper to Plugin-in list
+/// add newspaper to Plugin-in list
+/// records are stored in sysfolders with module set to 'newspaper'
 $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 
+
 if (TYPO3_MODE == 'BE') {
-/// \todo: hide sysfolder (with user tsconfig): options.hideRecords.pages	
+/// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 }
 
 ?>
