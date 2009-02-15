@@ -17,13 +17,16 @@ class tx_newspaper_ExtraBE {
 
 /// \to do: called by tx_newspaper->renderList() - is class tx_newspaper still needed? (t3 naming convention for user field?)
 	/// renders the list of associates Extra
-	/// \return String html code with list of Extras
+	/** \param $table table Extras are associates with (f. ex. tx_newspaper_article)
+	 *  \param $uid uid of record in given table
+	 *  \return String html code with list of Extras
+	 */
 	public static function renderList($table, $uid) {
 		
 		$listOfExtras = self::readExtraList($table, $uid);
 #t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		
-		$content = 'List of Extras still missing ...<br />';
+		$content = '';
 		for ($i = 0; $i < sizeof($listOfExtras); $i++) {
 			$content .= self::renderListItem($listOfExtras[$i]);
 		}	
@@ -58,47 +61,23 @@ class tx_newspaper_ExtraBE {
 		$list = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$class = $row['extra_table'];
-t3lib_div::devlog('row', 'newspaper', 0, $row);
 			if (class_exists($class)) {
 				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['extra_uid'], $class))) {
 					// append data for this extra (if found and accessible)
 					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
-t3lib_div::devlog('row[type]', 'newspaper', 0, $row['type']);
 					$list[] = $row;
 				} // \to do:  else throw Exception
 			} // \to do: else throw Exception Extra class not found
 		}
-t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $list);
-		
-		
-/*		
-		$list = array();
-		// read all extras assigned to content in given table
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'*',
-			'tx_newspaper_content_extra_mm',
-			'tablenames="' . $table . '" AND uid_local=' . $uid,
-			'',
-			'sorting');
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-//TODO: add permission checks somewhere here
-			$class = $row['extra_type']; // $row['extra_type'] contains the name of the database table = name of Extra class
-			if (class_exists($class)) {
-				if ($row['extra'] = call_user_func_array(array($class, 'readExtraItem'), array($row['uid_foreign'], $class))) {
-					// append data for this extra (if found and accessible)
-					$row['type'] = call_user_func_array(array($class, 'getTitle'), array()); // get title of this extra and add to array
-					$list[] = $row;
-				} // TODO else throw Exception
-			} // TODO else throw Exception
-			
-		}
-*/
 		
 		return $list;
 	}
 
 
-
+	/// render one item (=row) in list of Extras
+	/** \param $item data for that Extra (row from database)
+	 *  \return String html code of that row
+	 */
 	private static function renderListItem(array $item) {
 		global $LANG;
 #t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
@@ -161,14 +140,18 @@ t3lib_div::devlog('readExtraList - Extras', 'newspaper', 0, $list);
 		return $content;
 	}
 	
-//TODO: comment for some params still missing
-	/** get html for this icon (may include an anchor)
-	 * \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
-	 * \return String <img ...> or <a href><img ...></a> (if linked)
+	
+	/// get html for this icon (may include an anchor) 
+	/** \param $image path to icon
+	 *  \param $id 
+	 *  \param $title title for title flag of img
+	 *  \param $ahref 
+	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
+	 *  \return String <img ...> or <a href><img ...></a> (if linked)
 	 */
 	private static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false) {
 
-//TODO: read width and height from file? or hardcode 16x16px?
+/// \to do: read width and height from file? or hardcode 16x16px?
 		$width = 16;
 		$height = 16;
 		
