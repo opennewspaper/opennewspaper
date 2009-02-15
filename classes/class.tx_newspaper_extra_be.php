@@ -15,13 +15,13 @@ define('EXTRA_DISPLAY_MODE_IFRAME', 'iframe');
  */
 class tx_newspaper_ExtraBE {
 
-// called by tx_newspaper->renderList() - is class tx_newspaper still needed?
+/// \to do: called by tx_newspaper->renderList() - is class tx_newspaper still needed? (t3 naming convention for user field?)
 	public static function renderList($table, $uid) {
 		
 		$listOfExtras = self::readExtraList($table, $uid);
 t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		
-		$content = '';
+		$content = 'List of Extras still missing ...<br />';
 		for ($i = 0; $i < sizeof($listOfExtras); $i++) {
 			$content .= self::renderListItem($listOfExtras[$i]);
 		}	
