@@ -6,7 +6,7 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra
 
 
 /// Utility class which provides static functions. A namespace, so to speak.
-class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
+class tx_newspaper  {
 
 	/**
 	 * add javascript (or other script parts) to extra form (basically containing an onunload script)
@@ -27,7 +27,7 @@ class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
 	 * \return String html code to be placed in the html header <script ...></script>
 	 */
 	function renderList($PA, $fobj) {
-#t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
+t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 
 //TODO: can/should articles be hard-coded here?
 		// get table and uid of current record
@@ -37,14 +37,7 @@ class tx_newspaper /* implements tx_newspaper_InSysFolder */ {
 		return tx_newspaper_ExtraBE::renderList($current_record['table'], $current_record['uid']);
 
 	}
-	
-	
-	/// insysfodler interface
-	/** \return String module name (for sysfolder)
-	 */
-	public static function getModuleName() {
-		return 'newspaper'; // name of root sysfolder for newspaper ext
-	}
+
 	
 	
 	
