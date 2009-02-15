@@ -46,7 +46,7 @@ class tx_newspaper_ExtraBE {
 		
 #$GLOBALS['TYPO3_DB']->debugOutput = true;
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-			'extra_table, extra_uid, paragraph, position',
+			'uid_foreign, extra_table, extra_uid, paragraph, position',
 			'tx_newspaper_article',
 			'tx_newspaper_article_extras_mm',
 			'tx_newspaper_extra',
@@ -54,7 +54,7 @@ class tx_newspaper_ExtraBE {
 			'',
 			'paragraph, position'
 		); 
-#t3lib_div::devlog('readExtraList - qzuery', 'newspaper', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
+#t3lib_div::devlog('readExtraList - query', 'newspaper', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
 		$list = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$class = $row['extra_table'];
