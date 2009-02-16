@@ -188,10 +188,13 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
 t3lib_div::devlog('be mode tsc', 'newspaper', 0, $tsconfig);
 
-		$mode = EXTRA_DISPLAY_MODE_MODAL; // default mode is modalbox
 		if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
 			switch(trim(strtolower($tsconfig['tx_newspaper.']['extra_mode']))) {
+				case EXTRA_DISPLAY_MODE_MODAL:
+					$mode = EXTRA_DISPLAY_MODE_MODAL;
+				break;
 				case EXTRA_DISPLAY_MODE_IFRAME:
+				default:
 					$mode = EXTRA_DISPLAY_MODE_IFRAME;
 				break;
 				// other display modes can be added here (f. ex. another modal box script)
@@ -199,7 +202,7 @@ t3lib_div::devlog('be mode tsc', 'newspaper', 0, $tsconfig);
 				// additional scripts are to be added in a sub directory of the res diretory
 			}
 		}
-#t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
+t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
 		return $mode;
 	}
 
