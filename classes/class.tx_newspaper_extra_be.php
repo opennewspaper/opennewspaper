@@ -81,34 +81,52 @@ class tx_newspaper_ExtraBE {
 	private static function renderListItem(array $item) {
 		global $LANG;
 t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
-		$id = $item['extra_type'] . '[' . $item['uid_foreign'] . ']' .
-			  $item['tablenames'] . '[' . $item['uid_local'] . ']';
-		$type = $item['extra_type'];
-		$extra_uid = $item['uid_foreign'];
+		$id = $item['extra_type'] . '[' . $item['uid_foreign'] . ']' . 
+			$item['tablenames'] . '[' . $item['uid_local'] . ']';
+
 		$content_table = $item['tablenames'];
 		$content_uid = $item['uid_local'];
 
-		$ahref = array(); ///< build links for BE
-		$ahref['edit'] .= '<a href="javascript:getExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ');">';
-		$ahref['toggle_visibility'] = '<a href="javascript:toggleExtraVisibility(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ', $(\'vis_icon_' . $id . '\').src);">';
-		$ahref['delete'] = '<a href="javascript:deleteExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' . $content_uid . ', false);">';
+		/// build links for BE
+		$ahref = array(); 
+		$ahref['edit'] .= '<a href="javascript:getExtra(\'' . 
+			$item['extra_table'] .'\', ' . $item['extra_uid'] .', \'' . 
+			$content_table . '\', ' .$content_uid . ');">';
+		$ahref['toggle_visibility'] = 
+			'<a href="javascript:toggleExtraVisibility(\'' . 
+			$item['extra_table'] .'\', ' . $item['extra_uid'] .', \'' . 
+			$content_table . '\', ' .$content_uid . ', $(\'vis_icon_' . $id . 
+			'\').src);">';
+		$ahref['delete'] = '<a href="javascript:deleteExtra(\'' . 
+			$item['extra_table'] .'\', ' . $item['extra_uid'] .', \'' . 
+			$content_table . '\', ' . $content_uid . ', false);">';
 
 		$content = '<tr id="list_' . $id . '">';
 		$content .= '<td bgcolor="white">' . $item['type'] . '</td>';
 		$content .= '<td id="title_' . $id . '">' . $item['extra']['title'] . '</td>';
-
+//$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.showPage', 1)
 		// edit
-		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', $LANG->getLL('editPage', 1), $ahref['edit'], true) . '</td>';
+		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_edit', false), 
+			$ahref['edit'], true) . '</td>';
 
 		// visibility
 		if (!$item['extra']['hidden']) {
-			$content .= '<td id="visibility_' . $id . '">' . self::renderIcon('gfx/button_hide.gif', 'vis_icon_' . $id, $LANG->getLL('hide', 1), $ahref['toggle_visibility'], false) . '</td>';
+			$content .= '<td id="visibility_' . $id . '">' . 
+				self::renderIcon('gfx/button_hide.gif', 'vis_icon_' . $id, 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_hide', false), 
+				$ahref['toggle_visibility'], false) . '</td>';
 		} else {
-			$content .= '<td id="visibility_' . $id . '">' . self::renderIcon('gfx/button_unhide.gif', 'vis_icon_' . $id, $LANG->getLL('unhide', 1), $ahref['toggle_visibility'], false) . '</td>';
+			$content .= '<td id="visibility_' . $id . '">' . 
+				self::renderIcon('gfx/button_unhide.gif', 'vis_icon_' . $id, 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_unhide', false), 
+				$ahref['toggle_visibility'], false) . '</td>';
 		}
 
 		// delete
-		$content .= '<td>' . self::renderIcon('gfx/garbage.gif', '', $LANG->getLL('delete',1), $ahref['delete'], true) . '</td>';
+		$content .= '<td>' . 
+			self::renderIcon('gfx/garbage.gif', '', 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_delete', false), $ahref['delete'], true) . '</td>';
 
 // TODO colspan still constant
 // TODO ifram only, not needed for modalbox

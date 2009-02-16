@@ -6,10 +6,16 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="flag.extra_preview">Preview extra</label>
+			<label index="flag.extra_edit">Edit extra</label>
+			<label index="flag.extra_hide">Hide extra</label>
+			<label index="flag.extra_unhide">Unhide extra</label>
+			<label index="flag.extra_delete">Delete extra</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="flag.extra_preview">Vorschau Extra</label>
+			<label index="flag.extra_edit">Extra bearbeiten</label>
+			<label index="flag.extra_hide">Extra verstecken</label>
+			<label index="flag.extra_unhide">Extra sichtbar machen</label>
+			<label index="flag.extra_delete">Extra löschen</label>
 		</languageKey>
 	</data>
 </T3locallang>
