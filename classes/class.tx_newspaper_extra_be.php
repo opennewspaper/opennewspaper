@@ -209,7 +209,7 @@ t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
 
 		$mode = EXTRA_DISPLAY_MODE_IFRAME; ///< set default
 		if ($value) {
-			switch(trim(strtolower($tsconfig['tx_newspaper.']['extra_mode']))) {
+			switch(trim(strtolower($value))) {
 				case EXTRA_DISPLAY_MODE_MODAL:
 					$mode = EXTRA_DISPLAY_MODE_MODAL;
 				break;
