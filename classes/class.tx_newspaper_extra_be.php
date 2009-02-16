@@ -186,8 +186,8 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		/// read tsconfig for Extra data
 		$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
-t3lib_div::devlog('be mode tsc', 'newspaper', 0, $tsconfig);
-t3lib_div::devlog('user ts?', 'newspaper', 0, $GLOBALS['BE_USER']->userTS);
+#t3lib_div::devlog('be mode tsc', 'newspaper', 0, $tsconfig);
+#t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
 
 		if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
 			switch(trim(strtolower($tsconfig['tx_newspaper.']['extra_mode']))) {
