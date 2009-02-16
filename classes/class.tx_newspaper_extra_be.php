@@ -15,7 +15,7 @@ define('EXTRA_DISPLAY_MODE_IFRAME', 'iframe');
  */
 class tx_newspaper_ExtraBE {
 
-	private $be_mode = null; /// < stores the backend mode (iframe, modalbox)
+	private static $be_mode = null; /// < stores the backend mode (iframe, modalbox)
 
 
 /// \to do: called by tx_newspaper->renderList() - is class tx_newspaper still needed? (t3 naming convention for user field?)
@@ -186,8 +186,8 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 	 */
 	public static function getExtraBeDisplayMode() {
 
-		if ($this->be_mode)
-			return $this->be_mode; // be_mode already known
+		if (self::$be_mode)
+			return self::$be_mode; // be_mode already known
 
 		/// read tsconfig for Extra data		
 		$sf = tx_newspaper_Sysfolder::getInstance();
@@ -211,7 +211,7 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		}
 t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
 
-		$this->be_mode = $mode; ///< store be_mode, so next access won't read tsconfig from database
+		self::$be_mode = $mode; ///< store be_mode, so next access won't read tsconfig from database
 
 		return $mode;
 	}
