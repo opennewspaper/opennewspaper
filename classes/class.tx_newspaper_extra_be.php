@@ -189,14 +189,26 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		if (self::$be_mode)
 			return self::$be_mode; // be_mode already known
 
-		/// read tsconfig for Extra data		
-		$sf = tx_newspaper_Sysfolder::getInstance();
-		$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
-t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
+		$value = '';
+		if (isset($GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'])) {
+			/// user tsconfig has higher priority than page tsconfig
 t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
+			$value = $GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'];
+		}
+
+		if (!$value) {
+			/// check page tsconfig, if no use tsconfig was found
+			$sf = tx_newspaper_Sysfolder::getInstance();
+			$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
+t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
+			if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
+				/// read tsconfig for Extra data		;
+				$value = $tsconfig['tx_newspaper.']['extra_mode'];
+			}
+		} 
 
 		$mode = EXTRA_DISPLAY_MODE_IFRAME; ///< set default
-		if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
+		if ($value) {
 			switch(trim(strtolower($tsconfig['tx_newspaper.']['extra_mode']))) {
 				case EXTRA_DISPLAY_MODE_MODAL:
 					$mode = EXTRA_DISPLAY_MODE_MODAL;
