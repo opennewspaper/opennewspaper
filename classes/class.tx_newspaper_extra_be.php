@@ -126,11 +126,15 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		// delete
 		$content .= '<td>' . 
 			self::renderIcon('gfx/garbage.gif', '', 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_delete', false), $ahref['delete'], true) . '</td>';
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_delete', false), 
+			$ahref['delete'], true) . '</td>';
 
-// TODO colspan still constant
-// TODO ifram only, not needed for modalbox
-		$content .= '<tr id="' . $id . '" style="display: block;"><td colspan="7"></td></tr>';
+		if (self::getExtraBeDisplayMode() == EXTRA_DISPLAY_MODE_MODAL) {}
+// \to do: colspan still constant
+			/// insert row for iframe (one per Extra)
+			$content .= '<tr id="' . $id . 
+				'" style="display: block;"><td colspan="5"></td></tr>';
+		}
 		
 		return $content;
 	}
