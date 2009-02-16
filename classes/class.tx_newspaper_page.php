@@ -42,8 +42,6 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_smart
  *  - RSS feed for list view or article page
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of
- * 
- *  Currently just a dummy.
  */
 class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	

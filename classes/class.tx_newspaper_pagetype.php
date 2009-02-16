@@ -42,11 +42,10 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
 	 *
 	 *	If $_GET['art'] is set, it is the article page
 	 *
-	 *	Else if $_GET['type'] is set, it is the page corresponding to that type
+	 *	Else if $_GET['page'] is set, it is the page corresponding to that type
 	 *
 	 *	Else it is the section overview page
-	 */ 
- 	
+	 */
  	function __construct($get = array()) {
  		if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';

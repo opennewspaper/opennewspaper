@@ -43,6 +43,7 @@
  	}
  	
  	function getAttribute($attribute) {
+	 	/// TODO: \todo tx_np::getAttribute($attribute, array $attributes, '*', $this->getTable(), 'uid = ' . $this->getUid() )
  		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid() 
