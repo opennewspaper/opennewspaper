@@ -92,22 +92,15 @@ class tx_newspaper_ExtraBE {
 		$ahref['edit'] .= '<a href="javascript:getExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ');">';
 		$ahref['toggle_visibility'] = '<a href="javascript:toggleExtraVisibility(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ', $(\'vis_icon_' . $id . '\').src);">';
 		$ahref['delete'] = '<a href="javascript:deleteExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' . $content_uid . ', false);">';
-		$ahref['preview'] = '<a href="javascript:alert(\'Preview: what to display here?\')">';
-		$ahref['info'] = '<a href="javascript:alert(\'Info: what to display here?\')">';
 
 		$content = '<tr id="list_' . $id . '">';
 		$content .= '<td bgcolor="white">' . $item['type'] . '</td>';
 		$content .= '<td id="title_' . $id . '">' . $item['extra']['title'] . '</td>';
 
 // \to do: $LANG->sL('LLL:EXT: -> real text (and translation) still missing
-		// preview
-		$content .= '<td>' . self::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_preview', 0), $ahref['preview'], true) . '</td>';
 
 		// edit
 		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', $LANG->getLL('editPage', 1), $ahref['edit'], true) . '</td>';
-
-		// info
-		$content .= '<td><img' . self::renderIcon('gfx/zoom2.gif', '', $LANG->getLL('showInfo',1), $ahref['info'], true) . '</td>';
 
 		// visibility
 		if (!$item['extra']['hidden']) {
