@@ -120,7 +120,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 	}
 	
 	/// Read data of Extra
-	/** \return Array row with Extra data for given uid and table
+	/** \param $uid uid of record in given table
+	 *  \param $table name of table (f.ex tx_newspaper_extra_image)
+	 *  \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
 t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($table, $uid));
