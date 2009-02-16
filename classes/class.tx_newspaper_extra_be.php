@@ -132,7 +132,7 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_delete', false), 
 			$ahref['delete'], true) . '</td>';
 
-		if (self::getExtraBeDisplayMode() == EXTRA_DISPLAY_MODE_MODAL) {
+		if (self::getExtraBeDisplayMode() == EXTRA_DISPLAY_MODE_IFRAME) {
 // \to do: colspan still constant
 			/// insert row for iframe (one per Extra)
 			$content .= '<tr id="' . $id . 
