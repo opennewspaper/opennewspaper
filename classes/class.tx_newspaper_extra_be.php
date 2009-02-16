@@ -80,7 +80,7 @@ class tx_newspaper_ExtraBE {
 	 */
 	private static function renderListItem(array $item) {
 		global $LANG;
-#t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
+t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		$id = $item['extra_type'] . '[' . $item['uid_foreign'] . ']' .
 			  $item['tablenames'] . '[' . $item['uid_local'] . ']';
 		$type = $item['extra_type'];
@@ -96,8 +96,6 @@ class tx_newspaper_ExtraBE {
 		$content = '<tr id="list_' . $id . '">';
 		$content .= '<td bgcolor="white">' . $item['type'] . '</td>';
 		$content .= '<td id="title_' . $id . '">' . $item['extra']['title'] . '</td>';
-
-// \to do: $LANG->sL('LLL:EXT: -> real text (and translation) still missing
 
 		// edit
 		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', $LANG->getLL('editPage', 1), $ahref['edit'], true) . '</td>';
