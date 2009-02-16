@@ -6,10 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="labels.extra_preview">Preview extra</label>
+			<label index="flag.extra_preview">Preview extra</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="labels.extra_preview">Vorschau Extra</label>
+			<label index="flag.extra_preview">Vorschau Extra</label>
 		</languageKey>
 	</data>
 </T3locallang>

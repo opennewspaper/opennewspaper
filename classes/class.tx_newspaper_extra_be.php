@@ -88,34 +88,20 @@ class tx_newspaper_ExtraBE {
 		$content_table = $item['tablenames'];
 		$content_uid = $item['uid_local'];
 
-//TODO: most real links still missing
-		// init links
-		$ahref['delete'] = '';
-		$ahref['edit'] = '';
-		$ahref['toggle_visibility'] = '';
-		$ahref['preview'] = '';
-		// check permissions (and add a hrefs if permissions are granted)
-		if (self::isUserAllowedToEdit()) {
-			$ahref['edit'] .= '<a href="javascript:getExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ');">';
-			$ahref['toggle_visibility'] = '<a href="javascript:toggleExtraVisibility(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ', $(\'vis_icon_' . $id . '\').src);">';
-		}
-		if (self::isUserAllowedToDelete()) {
-			$ahref['delete'] = '<a href="javascript:deleteExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' . $content_uid . ', false);">';
-		}
-		if (self::isUserAllowedToPreview()) {
-			$ahref['preview'] = '<a href="javascript:alert(\'Preview: what to display here?\')">';
-		}
-		if (self::isUserAllowedToViewInfo()) {
-			$ahref['info'] = '<a href="javascript:alert(\'Info: what to display here?\')">';
-		}
+		$ahref = array(); ///< build links for BE
+		$ahref['edit'] .= '<a href="javascript:getExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ');">';
+		$ahref['toggle_visibility'] = '<a href="javascript:toggleExtraVisibility(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' .$content_uid . ', $(\'vis_icon_' . $id . '\').src);">';
+		$ahref['delete'] = '<a href="javascript:deleteExtra(\'' . $type .'\', ' . $extra_uid .', \'' . $content_table . '\', ' . $content_uid . ', false);">';
+		$ahref['preview'] = '<a href="javascript:alert(\'Preview: what to display here?\')">';
+		$ahref['info'] = '<a href="javascript:alert(\'Info: what to display here?\')">';
 
 		$content = '<tr id="list_' . $id . '">';
 		$content .= '<td bgcolor="white">' . $item['type'] . '</td>';
 		$content .= '<td id="title_' . $id . '">' . $item['extra']['title'] . '</td>';
 
-//TODO: $LANG->sL('LLL:EXT: -> real text (and translation) still missing
+// \to do: $LANG->sL('LLL:EXT: -> real text (and translation) still missing
 		// preview
-		$content .= '<td>' . self::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:lang/locallang_core.php:labels.showPage', 1), $ahref['preview'], true) . '</td>';
+		$content .= '<td>' . self::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.extra_preview', 0), $ahref['preview'], true) . '</td>';
 
 		// edit
 		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', $LANG->getLL('editPage', 1), $ahref['edit'], true) . '</td>';
@@ -169,28 +155,6 @@ class tx_newspaper_ExtraBE {
 			return $ahref . $html . '</a>'; // if linked wrap in link
 		return $html; // return image html code
 
-	}
-
-
-
-
-
-
-
-
-
-//TODO: add real functions, this is just a demo
-	private function isUserAllowedToPreview() {
-		return true;
-	}
-	private function isUserAllowedToEdit() {
-		return true;
-	}
-	private function isUserAllowedToViewInfo() {
-		return true;
-	}
-	private function isUserAllowedToDelete() {
-		return true;
 	}
 
 
