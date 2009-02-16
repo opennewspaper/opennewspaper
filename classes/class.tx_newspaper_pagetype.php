@@ -68,6 +68,7 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), $this->condition
 			);
+			$this->setUid($this->attributes['uid']);
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
