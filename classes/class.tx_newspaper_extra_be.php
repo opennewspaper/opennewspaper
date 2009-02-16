@@ -31,7 +31,7 @@ class tx_newspaper_ExtraBE {
 		
 		$content = '';
 		for ($i = 0; $i < sizeof($listOfExtras); $i++) {
-			$content .= self::renderListItem($listOfExtras[$i]);
+			$content .= self::renderListItem($listOfExtras[$i], $table, $uid);
 		}	
 		
 		if ($content) {
@@ -79,16 +79,15 @@ class tx_newspaper_ExtraBE {
 
 	/// render one item (=row) in list of Extras
 	/** \param $item data for that Extra (row from database)
+	 *  \param $content_table table to associate the Extra with (f.ex. tx_newspaper_article)
+	 *  \param $content_uid uid in given table
 	 *  \return String html code of that row
 	 */
-	private static function renderListItem(array $item) {
+	private static function renderListItem(array $item, $content_table, $content_uid) {
 		global $LANG;
 t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		$id = $item['extra_type'] . '[' . $item['uid_foreign'] . ']' . 
 			$item['tablenames'] . '[' . $item['uid_local'] . ']';
-
-		$content_table = $item['tablenames'];
-		$content_uid = $item['uid_local'];
 
 		/// build links for BE
 		$ahref = array(); 
