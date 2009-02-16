@@ -192,7 +192,7 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 		$value = '';
 		if (isset($GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'])) {
 			/// user tsconfig has higher priority than page tsconfig
-t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
+#t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
 			$value = $GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'];
 		}
 
@@ -200,7 +200,7 @@ t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_new
 			/// check page tsconfig, if no use tsconfig was found
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
-t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
+#t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
 			if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
 				/// read tsconfig for Extra data		;
 				$value = $tsconfig['tx_newspaper.']['extra_mode'];
@@ -222,7 +222,7 @@ t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
 				// additional scripts are to be added in a sub directory of the res diretory
 			}
 		}
-t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
+#t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
 
 		self::$be_mode = $mode; ///< store be_mode, so next access won't read tsconfig from database
 
