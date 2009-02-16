@@ -184,8 +184,9 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 	public static function getExtraBeDisplayMode() {
 
 		$sf = tx_newspaper_Sysfolder::getInstance();
-		// read tsconfig for Extra data
+		/// read tsconfig for Extra data
 		$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
+t3liv_div::devlog('be mode tsc', 'newspaper', 0, $tsconfig);
 
 		$mode = EXTRA_DISPLAY_MODE_MODAL; // default mode is modalbox
 		if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
@@ -261,6 +262,6 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 
 
 }
-///TODO: xclassing still not available, so new modes can't be added with an XCLASS
+/// \to do: xclassing still not available, so new modes can't be added with an XCLASS
 
 ?>
