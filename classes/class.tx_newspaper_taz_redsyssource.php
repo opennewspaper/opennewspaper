@@ -97,9 +97,29 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
-    	foreach(array_keys(red_list_read($this->red_private, "$path/dir.list")) as $subdir)
-    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
-    		
+    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir') ."/$path/dir.list")) {
+	    	foreach(array_keys(red_list_read($this->red_private, "$path/dir.list")) as $subdir)
+	    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
+    	}
+    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/quelle.list")) {
+    		$quellen = red_list_read($this->red_private, "$path/quelle.list");
+    		foreach ($quellen as $quelle => $quellendescription) {
+		    	if (!file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$quelle.list")) {
+		    		throw new tx_newspaper_InconsistencyException(
+						"$quelle listed in $path/quelle.list as '$quellendescription', but no $quelle.list exists"
+					);
+		    	}
+		    	$ressorts = red_list_read($this->red_private, "$path/$quelle.list");
+		    	foreach ($ressorts as $ressort => $ressortdescription) {
+			    	if (!file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/{$quelle}_{$ressort}.list")) {
+			    		throw new tx_newspaper_InconsistencyException(
+							"$ressort listed in $path/$quelle.list as '$ressortdescription', but no {$quelle}_{$ressort}.list exists"
+						);
+			    	}
+		    		// TODO ...
+		    	}
+    		}
+    	}
     	return $paths;
     }
 
