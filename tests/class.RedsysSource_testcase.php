@@ -169,7 +169,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		}		
 	}
 	
-	private function test_currentProduction() {
+	public function test_browseCurrentProduction() {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
 		$date = date('d.m');
 		$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
