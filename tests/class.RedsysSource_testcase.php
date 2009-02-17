@@ -59,7 +59,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readArticle() {
 		$this->article = $this->source->readArticle('tx_newspaper_ArticleImpl', $this->uid);
-		$this->doTestIfArticleValid($this->article);
+		$this->doTestIfArticleValid($this->article, 'source->readArticle()');
 		
 		$this->setExpectedException('tx_newspaper_WrongClassException');
 		$this->source->readArticle('es gibt mich nicht, schmeiss ne exception!', $this->uid);
@@ -67,7 +67,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readArticleWithObject() {
 		$this->article = $this->source->readArticle($this->article, $this->uid);
-		$this->doTestIfArticleValid($this->article);
+		$this->doTestIfArticleValid($this->article, 'source->readArticle()');
 	}
 
 	public function test_readArticles() {
@@ -159,14 +159,14 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				
 				foreach ($articles as $article_path) {
 					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-					$this->doTestIfArticleValid($article);
+					$this->doTestIfArticleValid($article, "source->browse() with path $article_path");
 				}
 			}			
 		}		
 	}
 	
 	
-	private function doTestIfArticleValid($article) {
+	private function doTestIfArticleValid($article, $message) {
 		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
@@ -174,7 +174,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		}		
 		if ($failed) {
 			$this->fail("Required attribute(s) ".implode(', ', $failed).
-						" not in article read via source->readArticle()");
+						" not in article read via $message");
 		}
 		
 	}
