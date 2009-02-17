@@ -17,11 +17,11 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
 		// "Wie geht es uns..." from Oct 27 '08
-		$this->uid = new tx_newspaper_taz_SourcePath('2008/10/27/a0105');
+		$this->uid = new tx_newspaper_SourcePath('2008/10/27/a0105');
 		// Three rather randomly selected articles
 		$this->uidList = array(
-			new tx_newspaper_taz_SourcePath('2008/10/27/a0105'), 
-			new tx_newspaper_taz_SourcePath('2008/10/27/a0125')
+			new tx_newspaper_SourcePath('2008/10/27/a0105'), 
+			new tx_newspaper_SourcePath('2008/10/27/a0125')
 		);
 		// manually defined as the required fields for an article object
 		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
