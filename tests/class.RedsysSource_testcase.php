@@ -75,15 +75,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readArticleWithObject() {
 		$this->article = $this->source->readArticle($this->article, $this->uid);
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
-		$failed = array();
-		foreach ($attrs as $req) {
-			if (!$this->article->getAttribute($req)) $failed[] = $req;
-		}		
-		if ($failed) {
-			$this->fail("Required attribute(s) ".implode(', ', $failed).
-						" not in article read via source->readArticle()");
-		}
+		$this->doTestIfArticleValid($this->article);
 	}
 
 	public function test_readArticles() {
@@ -173,9 +165,25 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$this->assertTrue(sizeof($articles) > 0, 
 								  "you should find at least one article in $day. " );
 				
-				t3lib_div::debug($articles);
+				foreach ($articles as $article) {
+					
+				}
 			}			
 		}		
+	}
+	
+	
+	private function doTestIfArticleValid($article) {
+		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+		$failed = array();
+		foreach ($attrs as $req) {
+			if (!$article->getAttribute($req)) $failed[] = $req;
+		}		
+		if ($failed) {
+			$this->fail("Required attribute(s) ".implode(', ', $failed).
+						" not in article read via source->readArticle()");
+		}
+		
 	}
 	
 	private $source = null;				///< the local RedsysSource

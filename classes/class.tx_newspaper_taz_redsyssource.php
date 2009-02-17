@@ -94,6 +94,9 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     	throw new tx_newspaper_NotYetImplementedException();
     }
 
+	/** This function requires intimate knowledge of how the taz's editing system
+	 *  works and is guaranteed to be non-portable.
+	 */
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
