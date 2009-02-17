@@ -98,7 +98,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     	$paths = array();
     	
     	foreach(array_keys(red_list_read($this->red_private, "$path/dir.list")) as $subdir)
-    		$paths[] = new tx_newspaper_SourcePath($subdir);
+    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
     		
     	return $paths;
     }
