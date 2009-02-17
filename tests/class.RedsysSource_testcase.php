@@ -144,8 +144,10 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		foreach ($months as $month) {
 			$this->assertTrue($month instanceof tx_newspaper_SourcePath,
 							  'good try! but '.$month.' is not a SourcePath!');
-			$this->assertTrue(intval($month->getID()) > 0 && intval($month->getID()) <= 12,
-							  $month->getID().' is a weird number for a month...');
+			$tmp = explode('/', $month->getID());
+			$month_num = $tmp[1];
+			$this->assertTrue($month_num > 0 && $month_num <= 12,
+							  $month->getID() . ': ' . $month_num . ' is a weird number for a month...');
 			
 			// browse $month
 			$days = $this->source->browse($month);
