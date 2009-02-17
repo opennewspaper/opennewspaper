@@ -154,8 +154,10 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 			foreach ($days as $day) {
 				$this->assertTrue($day instanceof tx_newspaper_SourcePath,
 								  'good try! but '.$day.' is not a SourcePath!');
-				$this->assertTrue(intval($day->getID()) > 0 && intval($day->getID()) <= 31,
-								  $day->getID().' is a weird number for a day...');
+				$tmp = explode('/', $day->getID());
+				$day_num = $tmp[2];
+				$this->assertTrue($day_num > 0 && $day_num <= 31,
+								  $day->getID() . ': ' . $day_num . ' is a weird number for a day...');
 			}			
 		}		
 	}
