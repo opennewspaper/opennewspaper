@@ -42,7 +42,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/// Reads ONE field for the given Article (-> Source)
 	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid) {
-		if (!$this->text) $this->text = red_text_open($this->red_private, $uid);
+		if (!$this->text) $this->text = red_text_open($this->red_private, $uid->getID());
 
 		$value = red_text_get($this->text, 
 							  $extra->mapFieldToSourceField($field, $this));		
@@ -52,7 +52,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/// Reads the specified fields of the article with the specified UID (-> Source)
 	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
-		$this->text = red_text_open($this->red_private, $uid);
+		$this->text = red_text_open($this->red_private, $uid->getID());
 
 		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
 
