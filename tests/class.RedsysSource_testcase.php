@@ -157,11 +157,10 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$this->assertTrue(sizeof($articles) > 0, 
 								  "you should find at least one article in $day. " );
 
-#				set_time_limit(40);			//	allow 40 seconds more for the next loop
 				$count = 0;
 				foreach ($articles as $article_path) {
 					$count++;
-					if ($count%3 == 0) {
+					if ($count%10 == 0) {
 						$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
 						$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
 					}
