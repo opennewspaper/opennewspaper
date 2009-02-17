@@ -124,6 +124,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
     public function writeExtra(tx_newspaper_Extra $extra, $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
+    
+    public function browse(tx_newspaper_SourcePath $path) {
+    	throw new tx_newspaper_NotYetImplementedException();
+    }
+    
 
 	////////////////////////////////////////////////////////////////////////////
 	//		end of public interface											  //

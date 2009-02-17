@@ -2,6 +2,11 @@
 
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
 
+/// A path to locate a tx_newspaper_Article in a tx_newspaper_Source
+interface tx_newspaper_SourcePath {
+	public function getID();
+}
+
  /// A source, from which articles are read
  /** This interface supplies functions which read an Article, or parts of it,
   *  or [parts of] many Articles, or one Extra, or many Extras.
@@ -107,6 +112,9 @@ interface tx_newspaper_Source {
     
     public function writeArticle(tx_newspaper_Article $article, $uid);
     public function writeExtra(tx_newspaper_Extra $extra, $uid);
+    
+    public function browse(tx_newspaper_SourcePath $path);
+    
 }
 
 ?>
