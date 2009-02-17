@@ -131,15 +131,9 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     	/// Check if a .pag file exists. if so, we're in a current production seitenbereich
     	$pathname = array_pop(explode('/', $path));
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag")) {
-//    		t3lib_div::debug(file_get_contents(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag"));
-			t3lib_div::debug(red_text_ls($this->red_private, $path));
-    		$text = red_text_open($this->red_private, "$path/$pathname.pag");
-    		if(!$text) 
-    			throw new tx_newspaper_InconsistencyException('couldnt open ' . "$path/$pathname.pag");
-    		if (!red_text_exist($text, 'TxtList'))
-    			throw new tx_newspaper_InconsistencyException('TxtList does not exist in ' . "$path/$pathname.pag");
-			t3lib_div::debug(red_text_get($text, 'TxtList'));
-			red_text_close($text);
+			foreach (red_text_ls($this->red_private, $path) as $text) {
+				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$text");
+			}
     	}
     	
     	return $paths;
