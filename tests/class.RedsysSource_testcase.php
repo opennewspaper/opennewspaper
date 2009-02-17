@@ -159,15 +159,15 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				
 				foreach ($articles as $article_path) {
 					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-					$this->doTestIfArticleValid($article, "source->browse() with path $article_path");
+					$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser'));
 				}
 			}			
 		}		
 	}
 	
 	
-	private function doTestIfArticleValid($article, $message) {
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+	private function doTestIfArticleValid($article, $message, $unneeded_fields = array()) {
+		$attrs = array_diff(tx_newspaper_ArticleImpl::getAttributeList(), $unneeded_fields);
 		$failed = array();
 		foreach ($attrs as $req) {
 			if (!$article->getAttribute($req)) $failed[] = $req;
