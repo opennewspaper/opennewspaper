@@ -9,6 +9,8 @@ require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspape
 class tx_newspaper_SourcePath {
 
 	public function __construct($path) { $this->path = $path; }
+	
+	public function __toString() { return $this->path; }
 
 	public function getID() { return $this->path; }
 
