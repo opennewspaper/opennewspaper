@@ -106,7 +106,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$this->source->readExtra("", "");
+		$this->source->readExtra("", new tx_newspaper_SourcePath(""));
 	}
 
 	public function test_readExtras() {
@@ -129,7 +129,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	
 	public function test_writeExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$extra_uid = 1;
+		$extra_uid = new tx_newspaper_SourcePath(1);
 		$extra = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
 		$this->source->writeExtra($extra, $extra_uid);
 		/// \todo actually write an extra and compare the written extra to the original
