@@ -177,6 +177,8 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 						  'browse() dind\'t even bother to return an array');
 		$this->assertTrue(sizeof($seitenbereiche) > 0, 
 						  "you should find at least one seitenbereich in $date. " );
+		t3lib_div::debug($seitenbereiche);
+						  
 	}
 	
 	private function doTestIfArticleValid($article, $message, $unneeded_fields = array()) {
