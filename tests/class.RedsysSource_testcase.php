@@ -158,6 +158,8 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$day_num = $tmp[2];
 				$this->assertTrue($day_num > 0 && $day_num <= 31,
 								  $day->getID() . ': ' . $day_num . ' is a weird number for a day...');
+				$articles = $this->source->browse($day);
+				t3lib_div::debug($articles);
 			}			
 		}		
 	}
