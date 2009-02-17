@@ -100,10 +100,13 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
+    	/// Check whether a directory listing exists and if so, read its contents
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir') ."/$path/dir.list")) {
 	    	foreach(array_keys(red_list_read($this->red_private, "$path/dir.list")) as $subdir)
 	    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
     	}
+    	
+    	/// Check if we're in an archive directory and read the articles inside
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/quelle.list")) {
     		$quellen = red_list_read($this->red_private, "$path/quelle.list");
     		foreach ($quellen as $quelle => $quellendescription) {
@@ -124,6 +127,13 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		    	}
     		}
     	}
+    	
+    	/// Check if a .pag file exists. if so, we're in a current production seitenbereich
+    	$pathname = array_pop(explode('/', $path));
+    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag")) {
+    		t3lib_div::debug(file_get_contents(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag"));
+    	}
+    	
     	return $paths;
     }
 
