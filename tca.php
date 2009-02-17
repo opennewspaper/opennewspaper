@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_newspaper_extra_image"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,fe_group,extra_field,title,image,caption"
+		"showRecordFieldList" => "hidden,starttime,endtime,extra_field,title,image,caption"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
@@ -44,20 +44,6 @@ $TCA["tx_newspaper_extra_image"] = array (
 				)
 			)
 		),
-		'fe_group' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
-			'config'  => array (
-				'type'  => 'select',
-				'items' => array (
-					array('', 0),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups'
-			)
-		),
 		"extra_field" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.extra_field",		
@@ -80,7 +66,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"allowed" => "gif,png,jpeg,jpg",	
 				"max_size" => 500,	
 				"uploadfolder" => "uploads/tx_newspaper",
 				"show_thumbs" => 1,	
@@ -102,7 +88,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		"0" => array("showitem" => "hidden;;1;;1-1-1, extra_field, title;;;;2-2-2, image;;;;3-3-3, caption")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime, fe_group")
+		"1" => array("showitem" => "starttime, endtime")
 	)
 );
 
@@ -1202,5 +1188,4 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
