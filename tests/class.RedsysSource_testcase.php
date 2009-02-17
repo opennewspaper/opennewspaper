@@ -159,7 +159,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				
 				foreach ($articles as $article_path) {
 					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-					$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser'));
+					$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
 				}
 			}			
 		}		
