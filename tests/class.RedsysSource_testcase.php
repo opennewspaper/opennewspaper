@@ -181,7 +181,10 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 			$this->assertTrue($seitenbereich instanceof tx_newspaper_SourcePath,
 							  'good try! but ' . $seitenbereich . ' is not a SourcePath!');
 			$articles = $this->source->browse($seitenbereich);
-			t3lib_div::debug($articles);			
+			if (is_array($articles) && sizeof($articles) > 0) foreach ($articles as $article_path) {
+				$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
+				$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
+			}
 		}
 						  
 	}
