@@ -59,15 +59,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readArticle() {
 		$this->article = $this->source->readArticle('tx_newspaper_ArticleImpl', $this->uid);
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
-		$failed = array();
-		foreach ($attrs as $req) {
-			if (!$this->article->getAttribute($req)) $failed[] = $req;
-		}		
-		if ($failed) {
-			$this->fail("Required attribute(s) ".implode(', ', $failed).
-						" not in article read via source->readArticle()");
-		}
+		$this->doTestIfArticleValid($this->article);
 		
 		$this->setExpectedException('tx_newspaper_WrongClassException');
 		$this->source->readArticle('es gibt mich nicht, schmeiss ne exception!', $this->uid);
