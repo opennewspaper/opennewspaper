@@ -19,11 +19,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 	/// Reads ONE field for the given Extra
 	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid) {
-		t3lib_div::debug($uid);
+//		t3lib_div::debug($uid);
         $row = tx_newspaper::selectOneRow(
         	$extra->mapFieldToSourceField($field, $this),
 			$extra->sourceTable($this),
-			"uid = ".intval($uid)
+			"uid = ".intval($uid->getID())
 		);
 
 		$value = $row[$extra->mapFieldToSourceField($field, $this)];		
@@ -65,7 +65,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	        $row = tx_newspaper::selectOneRow(
 				'*',
 				$article->sourceTable($this),
-				"uid = ".intval($uid)
+				"uid = ".intval($uid->getID())
 			);
         } catch (tx_newspaper_DBException $e) {
         	throw new tx_newspaper_WrongClassException();
