@@ -148,7 +148,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 							  $month->getID().' is a weird number for a month...');
 			
 			// browse $month
-			$days = $this->source->browse($month);
+			$days = $this->source->browse("2008/$month");
 			foreach ($days as $day) {
 				$this->assertTrue($day instanceof tx_newspaper_SourcePath,
 								  'good try! but '.$day.' is not a SourcePath!');
