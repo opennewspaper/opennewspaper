@@ -157,7 +157,8 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$this->assertTrue(sizeof($articles) > 0, 
 								  "you should find at least one article in $day. " );
 				
-				foreach ($articles as $article) {
+				foreach ($articles as $article_path) {
+					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
 					$this->doTestIfArticleValid($article);
 				}
 			}			
