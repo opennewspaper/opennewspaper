@@ -116,7 +116,8 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 							"$ressort listed in $path/$quelle.list as '$ressortdescription', but no {$quelle}_{$ressort}.list exists"
 						);
 			    	}
-		    		// TODO ...
+			    	foreach(array_keys(red_list_read($this->red_private, "$path/{$quelle}_{$ressort}.list")) as $article)
+	    				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$article");
 		    	}
     		}
     	}
