@@ -139,7 +139,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		$months = $this->source->browse(new tx_newspaper_SourcePath('2008'));
 		$this->assertTrue(is_array($months), 
 						  'browse() dind\'t even bother to return an array');
-		$this->assertTrue(sizeof($months), 
+		$this->assertTrue(sizeof($months) > 0, 
 						  'you should find at least one month in 2008. ' );
 		foreach ($months as $month) {
 			$this->assertTrue($month instanceof tx_newspaper_SourcePath);
