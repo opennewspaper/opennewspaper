@@ -10,7 +10,7 @@ class tx_newspaper_SourcePath {
 
 	public function __construct($path) { $this->path = $path; }
 	
-	public function __toString() { return $this->path; }
+	public function __toString() { return strval($this->path); }
 
 	public function getID() { return $this->path; }
 
