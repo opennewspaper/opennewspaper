@@ -158,7 +158,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 								  "you should find at least one article in $day. " );
 				
 				foreach ($articles as $article) {
-					
+					$this->doTestIfArticleValid($article);
 				}
 			}			
 		}		
