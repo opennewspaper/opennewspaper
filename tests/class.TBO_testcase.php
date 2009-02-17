@@ -118,7 +118,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		$this->doTestContains($output, 'Daemonic Gentoo');
 		
 		$this->doTestContains($output, 'title\[5\]');
-		$this->doTestContains($output, 'img src="data:image\/png;base64,R0lGODdh');
+		$this->doTestContains($output, 'img src="data:image\/png;base64,\/9j\/4AAQSkZJ');
 		$this->doTestContains($output, 'caption\[5\]');
 		
 	}
