@@ -136,11 +136,14 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_browse() {
-		$months = $this->source->browse(new tx_newspaper_SourcePath('2008'));
+		$year = 2008;
+		
+		$months = $this->source->browse(new tx_newspaper_SourcePath($year));
 		$this->assertTrue(is_array($months), 
 						  'browse() dind\'t even bother to return an array');
 		$this->assertTrue(sizeof($months) > 0, 
-						  'you should find at least one month in 2008. ' );
+						  "you should find at least one month in $year. " );
+
 		foreach ($months as $month) {
 			$this->assertTrue($month instanceof tx_newspaper_SourcePath,
 							  'good try! but '.$month.' is not a SourcePath!');
@@ -151,6 +154,11 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 			
 			// browse $month
 			$days = $this->source->browse($month);
+			$this->assertTrue(is_array($days), 
+						  	  'browse() dind\'t even bother to return an array');
+			$this->assertTrue(sizeof($days) > 0, 
+							  "you should find at least one day in $month. " );
+
 			foreach ($days as $day) {
 				$this->assertTrue($day instanceof tx_newspaper_SourcePath,
 								  'good try! but '.$day.' is not a SourcePath!');
@@ -159,6 +167,12 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$this->assertTrue($day_num > 0 && $day_num <= 31,
 								  $day->getID() . ': ' . $day_num . ' is a weird number for a day...');
 				$articles = $this->source->browse($day);
+				
+				$this->assertTrue(is_array($articles), 
+							  	  'browse() dind\'t even bother to return an array');
+				$this->assertTrue(sizeof($articles) > 0, 
+								  "you should find at least one article in $day. " );
+				
 				t3lib_div::debug($articles);
 			}			
 		}		
