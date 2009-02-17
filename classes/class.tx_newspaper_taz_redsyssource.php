@@ -41,7 +41,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	}
 
 	/// Reads ONE field for the given Article (-> Source)
-	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
+	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid) {
 		if (!$this->text) $this->text = red_text_open($this->red_private, $uid);
 
 		$value = red_text_get($this->text, 
@@ -51,7 +51,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	}
 
 	/// Reads the specified fields of the article with the specified UID (-> Source)
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
 		$this->text = red_text_open($this->red_private, $uid);
 
 		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
@@ -60,7 +60,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	}
 
 	/// Creates and reads a full article with the specified UID
-	public function readArticle($articleclass, $uid) {
+	public function readArticle($articleclass, tx_newspaper_SourcePath $uid) {
 		$article = $this->sourceBehavior->readArticle($articleclass, $uid);
 		$this->closeText();
 		return $article;
@@ -77,7 +77,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	}
 
     /// reads an extra
-    public function readExtra($extraclass, $uid) {
+    public function readExtra($extraclass, tx_newspaper_SourcePath $uid) {
 		throw new tx_newspaper_NotYetImplementedException();
     }
 
@@ -86,11 +86,11 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 		throw new tx_newspaper_NotYetImplementedException();
     }
 
-    public function writeArticle(tx_newspaper_Article $article, $uid) {
+    public function writeArticle(tx_newspaper_Article $article, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
-    public function writeExtra(tx_newspaper_Extra $extra, $uid) {
+    public function writeExtra(tx_newspaper_Extra $extra, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
 

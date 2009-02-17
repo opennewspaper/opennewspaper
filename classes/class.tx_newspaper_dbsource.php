@@ -18,7 +18,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	}
 
 	/// Reads ONE field for the given Extra
-	public function readField(tx_newspaper_Extra $extra, $field, $uid) {
+	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid) {
 		
         $row = tx_newspaper::selectOneRow(
         	$extra->mapFieldToSourceField($field, $this),
@@ -32,12 +32,12 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	}
 
 	/// Reads the specified fields of the article with the specified UID
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid) {
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
 		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
 	}
 
 	/// Creates and reads a full article with the specified UID
-	public function readArticle($articleclass, $uid) {
+	public function readArticle($articleclass, tx_newspaper_SourcePath $uid) {
 		/** \todo Factor out the code to check the class into SourceBehavior and
 		 *  call that one. Also from SourceBehavior::readArticle().
 		 */
@@ -108,7 +108,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	}
 
     /// reads an extra (-> Source)
-    public function readExtra($extraclass, $uid) {
+    public function readExtra($extraclass, tx_newspaper_SourcePath $uid) {
 		throw new tx_newspaper_NotYetImplementedException();
     }
 
@@ -117,11 +117,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		throw new tx_newspaper_NotYetImplementedException();
     }
 
-    public function writeArticle(tx_newspaper_Article $article, $uid) {
+    public function writeArticle(tx_newspaper_Article $article, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
-    public function writeExtra(tx_newspaper_Extra $extra, $uid) {
+    public function writeExtra(tx_newspaper_Extra $extra, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     

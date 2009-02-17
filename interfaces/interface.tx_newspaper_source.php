@@ -3,8 +3,17 @@
 require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
 
 /// A path to locate a tx_newspaper_Article in a tx_newspaper_Source
-interface tx_newspaper_SourcePath {
-	public function getID();
+/** It may consist either of an integer UID or a string. This class treats all
+ *  variants equally.
+ */
+class tx_newspaper_SourcePath {
+
+	public function __construct($path) { $this->path = $path; }
+
+	public function getID() { return $this->path; }
+
+	private $path = null;
+
 }
 
  /// A source, from which articles are read
@@ -42,7 +51,7 @@ interface tx_newspaper_Source {
 	 *  \param $field The field which should be read from the source
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readField(tx_newspaper_Extra $extra, $field, $uid);
+	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid);
 
 	/// Reads the specified fields of the Article or Extra with the specified UID
 	/** \param $extra Extra object for which fields are read
@@ -50,7 +59,7 @@ interface tx_newspaper_Source {
 	 *  	   there's more than one field, supply them as array
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, $uid);
+	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid);
 
 	/// Creates and reads a full article with the specified UID
 	/** \param $articleclass The class name for the article; must implement 
@@ -60,7 +69,7 @@ interface tx_newspaper_Source {
 	 *  \throw WrongClassException If \p $articleclass is not the name of a 
 	 * 							   class that implements Article 
 	 */
-	public function readArticle($articleclass, $uid);
+	public function readArticle($articleclass, tx_newspaper_SourcePath $uid);
 
 	/// Reads an array of articles with the specified UIDs
 	/** \param $articleclass The class name for the article; the class must 
@@ -96,7 +105,7 @@ interface tx_newspaper_Source {
 	 *  \throw WrongClassException If \p $extraclass is not the name of a 
 	 * 							   class that implements Extra 
 	 */
-    public function readExtra($extraclass, $uid);
+    public function readExtra($extraclass, tx_newspaper_SourcePath $uid);
 
     /// reads an array of Extra s
 	/** \param $extraclass If an object of a class implementing Extra: The
@@ -110,8 +119,8 @@ interface tx_newspaper_Source {
 	 */
     public function readExtras($extraclass, array $uids);
     
-    public function writeArticle(tx_newspaper_Article $article, $uid);
-    public function writeExtra(tx_newspaper_Extra $extra, $uid);
+    public function writeArticle(tx_newspaper_Article $article, tx_newspaper_SourcePath $uid);
+    public function writeExtra(tx_newspaper_Extra $extra, tx_newspaper_SourcePath $uid);
     
     public function browse(tx_newspaper_SourcePath $path);
     
