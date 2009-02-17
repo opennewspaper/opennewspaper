@@ -95,7 +95,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     }
 
     public function browse(tx_newspaper_SourcePath $path) {
-    	return array();
+    	return red_list_read($this->red_private, "$path/dir.list");
     }
 
 	////////////////////////////////////////////////////////////////////////////
