@@ -133,6 +133,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag")) {
 //    		t3lib_div::debug(file_get_contents(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag"));
     		$text = red_text_open($this->red_private, "$path/$pathname.pag");
+    		if(!$text) throw new tx_newspaper_InconsistencyException('couldnt open ' . "$path/$pathname.pag");
 			t3lib_div::debug(red_text_get($text, 'TxtList'));	
     	}
     	
