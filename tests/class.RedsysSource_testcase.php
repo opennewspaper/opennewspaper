@@ -171,23 +171,26 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	
 	public function test_browseCurrentProduction() {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
-		$date = date('d.m');
-		$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
-		$this->assertTrue(is_array($seitenbereiche), 
-						  'browse() dind\'t even bother to return an array');
-		$this->assertTrue(sizeof($seitenbereiche) > 0, 
-						  "you should find at least one seitenbereich in $date. " );
-		foreach ($seitenbereiche as $seitenbereich) {
-			$this->assertTrue($seitenbereich instanceof tx_newspaper_SourcePath,
-							  'good try! but ' . $seitenbereich . ' is not a SourcePath!');
-			$articles = $this->source->browse($seitenbereich);
-			if (is_array($articles) && sizeof($articles) > 0) foreach ($articles as $article_path) {
-				$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-				$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
+		$articles_tested = 0;
+		$dates = $this->source->browse(new tx_newspaper_SourcePath(''));
+		foreach($dates as $date){
+			$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
+			$this->assertTrue(is_array($seitenbereiche), 
+							  'browse() dind\'t even bother to return an array');
+			$this->assertTrue(sizeof($seitenbereiche) > 0, 
+							  "you should find at least one seitenbereich in $date. " );
+			foreach ($seitenbereiche as $seitenbereich) {
+				$this->assertTrue($seitenbereich instanceof tx_newspaper_SourcePath,
+								  'good try! but ' . $seitenbereich . ' is not a SourcePath!');
+				$articles = $this->source->browse($seitenbereich);
+				if (is_array($articles) && sizeof($articles) > 0) foreach ($articles as $article_path) {
+					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
+					$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
+				}
+				$articles_tested += sizeof($articles);
 			}
-			t3lib_div::debug(sizeof($articles).' articles tested ');
-		}
-						  
+		}		
+		t3lib_div::debug($articles_tested.' articles tested ');						  
 	}
 	
 	private function doTestIfArticleValid($article, $message, $unneeded_fields = array()) {
