@@ -135,6 +135,16 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		/// \todo actually write an extra and compare the written extra to the original
 	}
 	
+	public function test_browse() {
+		$months = $this->source->browse(new tx_newspaper_SourcePath('2008'));
+		$this->assertTrue(is_array($months));
+		$this->assertTrue(sizeof($months) >= 12);
+		foreach ($months as $month) {
+			$this->assertTrue($month instanceof tx_newspaper_SourcePath);
+			$this->assertTrue(intval($month->getID) > 0 && intval($month->getID) <= 12);
+			// TODO browse $month
+		}		
+	}
 	
 	private $source = null;				///< the local RedsysSource
 	private $field = null;				///< single article field to read
