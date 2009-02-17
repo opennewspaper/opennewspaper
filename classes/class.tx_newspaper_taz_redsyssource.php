@@ -96,13 +96,16 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 
 	/** This function requires intimate knowledge of how the taz's editing system
 	 *  works and is guaranteed to be non-portable.
+	 * 
+	 *  \todo can I replace the recursive reading of lists with a simple red_text_ls()?
 	 */
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
     	/// Check whether a directory listing exists and if so, read its contents
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir') ."/$path/dir.list")) {
-	    	foreach(array_keys(red_list_read($this->red_private, "$path/dir.list")) as $subdir)
+	    	foreach(array_keys(red_list_read($this->red_private, 
+											 ($path? "$path/": '') . 'dir.list')) as $subdir)
 	    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
     	}
     	
