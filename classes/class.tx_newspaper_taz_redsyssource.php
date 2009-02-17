@@ -135,7 +135,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     		$text = red_text_open($this->red_private, "$path/$pathname.pag");
     		if(!$text) 
     			throw new tx_newspaper_InconsistencyException('couldnt open ' . "$path/$pathname.pag");
-    		if (!red_text_exists($text, 'TxtList'))
+    		if (!red_text_exist($text, 'TxtList'))
     			throw new tx_newspaper_InconsistencyException('TxtList does not exist in ' . "$path/$pathname.pag");
 			t3lib_div::debug(red_text_get($text, 'TxtList'));	
     	}
