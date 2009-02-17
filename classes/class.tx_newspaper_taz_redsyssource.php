@@ -95,7 +95,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     }
 
     public function browse(tx_newspaper_SourcePath $path) {
-    	throw new tx_newspaper_NotYetImplementedException();
+    	return array();
     }
 
 	////////////////////////////////////////////////////////////////////////////
