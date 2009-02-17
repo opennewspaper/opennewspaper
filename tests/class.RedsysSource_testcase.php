@@ -146,7 +146,15 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 							  'good try! but '.$month.' is not a SourcePath!');
 			$this->assertTrue(intval($month->getID()) > 0 && intval($month->getID()) <= 12,
 							  $month->getID().' is a weird number for a month...');
-			// TODO browse $month
+			
+			// browse $month
+			$days = $this->source->browse($month);
+			foreach ($days as $day) {
+				$this->assertTrue($day instanceof tx_newspaper_SourcePath,
+								  'good try! but '.$day.' is not a SourcePath!');
+				$this->assertTrue(intval($day->getID()) > 0 && intval($day->getID()) <= 31,
+								  $day->getID().' is a weird number for a day...');
+			}			
 		}		
 	}
 	
