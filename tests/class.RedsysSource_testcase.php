@@ -177,7 +177,13 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 						  'browse() dind\'t even bother to return an array');
 		$this->assertTrue(sizeof($seitenbereiche) > 0, 
 						  "you should find at least one seitenbereich in $date. " );
-		t3lib_div::debug($seitenbereiche);
+		foreach ($seitenbereiche as $seitenbereich) {
+			$this->assertTrue($seitenbereich instanceof tx_newspaper_SourcePath,
+							  'good try! but ' . $seitenbereich . ' is not a SourcePath!');
+			$articles = $this->source->browse($seitenbereich);
+			t3lib_div::debug($articles);
+			
+		}
 						  
 	}
 	
