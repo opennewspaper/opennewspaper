@@ -115,8 +115,9 @@ abstract class tx_newspaper_ExtraImpl implements tx_newspaper_Extra {
 					$this->getTable(), $this->attributes
 				)
 			);
+			self::createExtraRecord($this->getUid(), $this->getTable());
 		}
-		return $this->getUid();		
+		return $this->getUid();
 	}
 	
 	/// Read data of Extra
