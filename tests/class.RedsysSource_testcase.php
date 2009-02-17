@@ -185,6 +185,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
 				$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
 			}
+			t3lib_div::debug(sizeof($articles).' articles tested ');
 		}
 						  
 	}
