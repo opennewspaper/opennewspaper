@@ -120,7 +120,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_browse() {
-		$year = 2008;
+		$year = date('Y');
 		
 		$months = $this->source->browse(new tx_newspaper_SourcePath($year));
 		$this->assertTrue(is_array($months), 
@@ -169,6 +169,15 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		}		
 	}
 	
+	private function test_currentProduction() {
+		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
+		$date = date('d.m');
+		$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
+		$this->assertTrue(is_array($seitenbereiche), 
+						  'browse() dind\'t even bother to return an array');
+		$this->assertTrue(sizeof($seitenbereiche) > 0, 
+						  "you should find at least one seitenbereich in $date. " );
+	}
 	
 	private function doTestIfArticleValid($article, $message, $unneeded_fields = array()) {
 		$attrs = array_diff(tx_newspaper_ArticleImpl::getAttributeList(), $unneeded_fields);
@@ -190,6 +199,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	private $uidList = array();			///< unique keys of articles to read
 	
 	private $red_cfg = '/redonline/digitaz/etc/redonline.cfg';
+	private $akt_cfg = '/redonline/akt/etc/redonline.cfg';
 	private $article;
 	private $reqFields = array();
 }
