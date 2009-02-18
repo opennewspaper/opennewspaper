@@ -193,9 +193,9 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 						$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
 						$this->assertTrue($article instanceof tx_newspaper_ArticleImpl, 
 										  "article $article_path is not really an article");
+						$articles_tested++;
 					}
 				}
-				$articles_tested += sizeof($articles);
 			}
 		}		
 		t3lib_div::debug($articles_tested.' articles tested ');						  
