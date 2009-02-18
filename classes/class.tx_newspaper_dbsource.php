@@ -91,7 +91,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 		/// And tell the Article the truth: "I'm your father, Luke"
 		$article->setSource($this);
-		$article->setUid($uid);
+		$article->setUid($uid->getID());
 						 
 		return $article;
 	}
