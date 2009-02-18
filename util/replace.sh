@@ -23,6 +23,24 @@ function add_file() {
 	tail -n 20 "$1".bak
 	mv -i "$1".bak "$1"
 }
+
+function remove_line() {
+	file="$1"
+	remove_lines_with_string="$2"
+	# remove lines containing search string
+	cat ${file} | grep -v "${remove_lines_with_string}" > "${file}".bak
+	mv -i "${file}".bak "${file}"	
+}
+
+function change_main_module() {
+  for file in ./mod*/conf.php
+  do
+    # switch main module for modules to 'newspaper' main module
+    sed -i 's/web_/txnewspaperMmain_/g' $file
+  done
+}	
+
+
 set +xv
 replace "tca.php" \
 		"require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');" \
@@ -37,6 +55,13 @@ replace "ext_localconf.php" \
 		'?>'
 
 add_file "ext_tables.sql" "util/ext_tables_addon.sql"
+
+# modules are added in ext_tables_addon.php
+remove_line "ext_tables.php" \
+		"t3lib_extMgm::addModule("
+
+change_main_module
+
 
 svn ci -m "auto-fixed changes from kickstarter"
 

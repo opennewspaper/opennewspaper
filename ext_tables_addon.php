@@ -20,6 +20,11 @@ $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'ne
 
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
+
+
+	// add main module 'newspaper', add sub modules
+	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/');	
+	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 ?>
