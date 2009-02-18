@@ -93,12 +93,12 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
 		$failed = array();
 		foreach ($articles as $art) {
+			t3lib_div::debug($art);
 			foreach ($attrs as $req) {
 				if (!$art->getAttribute($req)) $failed[] = array($art->getUid(), $req);
 			}		
 		}
 		if ($failed) {
-			t3lib_div::debug($articles);
 			$err = '';
 			foreach ($failed as $fail) 
 				$err .= 'attribute '.$fail[1].' in Article '.$fail[0].', ';
