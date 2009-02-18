@@ -172,7 +172,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	public function test_browseCurrentProduction() {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
 		$articles_tested = 0;
-		$dates = $this->source->browse(new tx_newspaper_SourcePath(''));
+		$dates = $this->source->browse(new tx_newspaper_SourcePath('/'));
 		foreach($dates as $date){
 			$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
 			$this->assertTrue(is_array($seitenbereiche), 
