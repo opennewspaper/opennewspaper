@@ -16,14 +16,14 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->article = new tx_newspaper_ArticleImpl();
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
-		// "Wie geht es uns..." from Oct 27 '08
-		$this->uid = new tx_newspaper_SourcePath('2008');
-		// Three rather randomly selected articles
+		// "Diktatur des Proletariats" from July 17 '07
+		$this->uid = new tx_newspaper_SourcePath(2008);
+		// A couple of randomly selected articles
 		$this->uidList = array(
-			new tx_newspaper_SourcePath('2008'), 
-			new tx_newspaper_SourcePath('2008/10/27/a0125'), 
-			new tx_newspaper_SourcePath('2008/07/09/a0003'), 
-			new tx_newspaper_SourcePath('2008/10/27/a0118'),
+			new tx_newspaper_SourcePath(2008), 
+			new tx_newspaper_SourcePath(4016), 
+			new tx_newspaper_SourcePath(8032), 
+			new tx_newspaper_SourcePath(16064),
 		);
 		// manually defined as the required fields for an article object
 		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
