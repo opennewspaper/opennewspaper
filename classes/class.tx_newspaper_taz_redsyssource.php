@@ -111,6 +111,11 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     	
     	/// Check if we're in an archive directory and read the articles inside
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/quelle.list")) {
+			if (true) {
+			foreach (red_text_ls($this->red_private, $path) as $text) {
+				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$text");
+			}
+			} else {
     		$quellen = red_list_read($this->red_private, "$path/quelle.list");
     		foreach ($quellen as $quelle => $quellendescription) {
 		    	if (!file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$quelle.list")) {
@@ -129,6 +134,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	    				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$article");
 		    	}
     		}
+			}
     	}
     	
     	/// Check if a .pag file exists. if so, we're in a current production seitenbereich
