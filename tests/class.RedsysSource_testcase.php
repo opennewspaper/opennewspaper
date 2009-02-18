@@ -121,6 +121,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	
 	public function test_browse() {
 		$year = date('Y');
+		$articles_tested = 0;
 		
 		$months = $this->source->browse(new tx_newspaper_SourcePath($year));
 		$this->assertTrue(is_array($months), 
@@ -163,6 +164,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 					if ($count%10 == 0) {
 						$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
 						$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
+						$articles_tested++;
 					}
 				}
 			}			
@@ -172,7 +174,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 	public function test_browseCurrentProduction() {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
 		$articles_tested = 0;
-		$dates = $this->source->browse(new tx_newspaper_SourcePath('/'));
+		$dates = $this->source->browse(new tx_newspaper_SourcePath('.'));
 		foreach($dates as $date){
 			$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
 			$this->assertTrue(is_array($seitenbereiche), 
