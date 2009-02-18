@@ -102,6 +102,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
+    	t3lib_div::debug(red_text_ls($this->red_private, $path));
     	/// Check whether a directory listing exists and if so, read its contents
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir') ."/$path/dir.list")) {
 	    	foreach(array_keys(red_list_read($this->red_private, 
@@ -109,37 +110,14 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
 	    		$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$subdir");
     	}
     	
-    	/// Check if we're in an archive directory and read the articles inside
-    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/quelle.list")) {
-			if (true) {
-			foreach (red_text_ls($this->red_private, $path) as $text) {
-				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$text");
-			}
-			} else {
-    		$quellen = red_list_read($this->red_private, "$path/quelle.list");
-    		foreach ($quellen as $quelle => $quellendescription) {
-		    	if (!file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$quelle.list")) {
-		    		throw new tx_newspaper_InconsistencyException(
-						"$quelle listed in $path/quelle.list as '$quellendescription', but no $quelle.list exists"
-					);
-		    	}
-		    	$ressorts = red_list_read($this->red_private, "$path/$quelle.list");
-		    	foreach ($ressorts as $ressort => $ressortdescription) {
-			    	if (!file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/{$quelle}_{$ressort}.list")) {
-			    		throw new tx_newspaper_InconsistencyException(
-							"$ressort listed in $path/$quelle.list as '$ressortdescription', but no {$quelle}_{$ressort}.list exists"
-						);
-			    	}
-			    	foreach(red_list_read($this->red_private, "$path/{$quelle}_{$ressort}.list") as $article)
-	    				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$article");
-		    	}
-    		}
-			}
-    	}
-    	
-    	/// Check if a .pag file exists. if so, we're in a current production seitenbereich
+    	/** Check if we're in an archive directory and read the articles inside.
+    	 *    	
+    	 *  Check if a .pag file exists. if so, we're in a current production 
+    	 *  "seitenbereich"
+    	 */
     	$pathname = array_pop(explode('/', $path));
-    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag")) {
+    	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/$pathname.pag") ||
+    		file_exists(red_get_var($this->red_private, 'TxtBaseDir')."/$path/quelle.list")) {
 			foreach (red_text_ls($this->red_private, $path) as $text) {
 				$paths[] = new tx_newspaper_SourcePath($path->getID() . "/$text");
 			}
