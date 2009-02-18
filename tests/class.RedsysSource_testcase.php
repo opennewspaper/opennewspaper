@@ -119,7 +119,7 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		/// \todo actually write an extra and compare the written extra to the original
 	}
 	
-	public function test_browse() {
+	public function test_browseArchive() {
 		$year = date('Y');
 		$articles_tested = 0;
 		
