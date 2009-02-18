@@ -21,7 +21,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		// A couple of randomly selected articles
 		$this->uidList = array(
 			new tx_newspaper_SourcePath(2008), 
-			new tx_newspaper_SourcePath(4016), 
+			new tx_newspaper_SourcePath(4017), 
 			new tx_newspaper_SourcePath(8032), 
 			new tx_newspaper_SourcePath(16064),
 		);
