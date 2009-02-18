@@ -99,6 +99,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 			}		
 		}
 		if ($failed) {
+			t3lib_div::debug($failed);
 			$err = '';
 			foreach ($failed as $fail) 
 				$err .= 'attribute '.$fail[1].' in Article '.$fail[0].', ';
