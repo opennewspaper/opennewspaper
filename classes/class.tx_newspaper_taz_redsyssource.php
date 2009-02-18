@@ -102,7 +102,7 @@ class tx_newspaper_taz_RedsysSource implements tx_newspaper_Source {
     public function browse(tx_newspaper_SourcePath $path) {
     	$paths = array();
     	
-    	t3lib_div::debug(red_text_ls($this->red_private, $path));
+#    	t3lib_div::debug(red_text_ls($this->red_private, $path));
     	/// Check whether a directory listing exists and if so, read its contents
     	if (file_exists(red_get_var($this->red_private, 'TxtBaseDir') ."/$path/dir.list")) {
 	    	foreach(array_keys(red_list_read($this->red_private, 
