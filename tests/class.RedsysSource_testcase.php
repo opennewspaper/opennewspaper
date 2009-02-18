@@ -176,7 +176,6 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 		$this->source = new tx_newspaper_taz_RedsysSource($this->akt_cfg);
 		$articles_tested = 0;
 		$dates = $this->source->browse(new tx_newspaper_SourcePath('.'));
-		t3lib_div::debug($dates);						  
 		foreach($dates as $date){
 			$seitenbereiche = $this->source->browse(new tx_newspaper_SourcePath($date));
 			$this->assertTrue(is_array($seitenbereiche), 
@@ -187,10 +186,14 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$this->assertTrue($seitenbereich instanceof tx_newspaper_SourcePath,
 								  'good try! but ' . $seitenbereich . ' is not a SourcePath!');
 				$articles = $this->source->browse($seitenbereich);
+				$count = 0;
 				if (is_array($articles) && sizeof($articles) > 0) foreach ($articles as $article_path) {
-					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-					$this->assertTrue($article instanceof tx_newspaper_ArticleImpl, 
-									  "article $article_path is not really an article");
+					$count++;
+					if ($count%10 == 0) {
+						$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
+						$this->assertTrue($article instanceof tx_newspaper_ArticleImpl, 
+										  "article $article_path is not really an article");
+					}
 				}
 				$articles_tested += sizeof($articles);
 			}
