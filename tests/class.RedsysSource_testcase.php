@@ -189,7 +189,8 @@ class test_RedsysSource_testcase extends tx_phpunit_testcase {
 				$articles = $this->source->browse($seitenbereich);
 				if (is_array($articles) && sizeof($articles) > 0) foreach ($articles as $article_path) {
 					$article = $this->source->readArticle('tx_newspaper_ArticleImpl', $article_path);
-					$this->doTestIfArticleValid($article, "source->browse() with path $article_path", array('teaser', 'ressort'));
+					$this->assertTrue($article instanceof tx_newspaper_ArticleImpl, 
+									  "article $article_path is not really an article");
 				}
 				$articles_tested += sizeof($articles);
 			}
