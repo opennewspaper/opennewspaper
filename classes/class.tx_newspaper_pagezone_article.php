@@ -29,7 +29,7 @@
  *  \date Jan 8, 2009
  */
  
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
  
 /// An article represented as PageZone to allow placement of extras
 class tx_newspaper_PageZone_Article extends tx_newspaper_PageZone {

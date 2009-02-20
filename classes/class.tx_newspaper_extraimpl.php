@@ -6,8 +6,6 @@
  *  \date Dec 12, 2008
  */
 
-#require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
-
 /// An Extra for the online newspaper
 /** This is an abstract class which implements most of the methods defined in
  *  interface tx_newspaper_Extra, except those that must be overridden in a

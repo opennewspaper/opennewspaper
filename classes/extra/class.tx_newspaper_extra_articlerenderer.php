@@ -1,6 +1,6 @@
 <?php
 
-require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
 
 class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_ExtraImpl {
 

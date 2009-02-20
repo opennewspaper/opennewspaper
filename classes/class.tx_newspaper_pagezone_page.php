@@ -29,7 +29,7 @@
  *  \date Jan 8, 2009
  */
  
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 
 /// A section of a page for an online edition of a newspaper
 /** Pages are divided into several independent sections, or zones, such as:

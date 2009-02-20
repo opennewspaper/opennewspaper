@@ -29,7 +29,7 @@
  *  \date Jan 30, 2009
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_articlelist.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
 /// A list of tx_newspaper_Article s
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {

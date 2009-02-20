@@ -1,6 +1,6 @@
 <?php
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra_be.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_be.php');
 
 #t3lib_div::devlog('class.tx_newspaper.php loaded', 'newspaper', 0);
 
