@@ -187,7 +187,6 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	private $extras = null;			///< array of Extra s
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $uid = '';				///< UID that identifies the article in the source
 
