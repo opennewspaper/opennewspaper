@@ -185,6 +185,12 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
 	}
 	
+	protected function getExtra2PagezoneTable() {
+		return self::$extra_2_pagezone_table;
+	}
+
+	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private $source = null;			///< Source the ArticleImpl is read from
