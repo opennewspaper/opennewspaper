@@ -60,6 +60,7 @@
 			<label index="tx_newspaper_pagetype.get_value">Value of associated GET variable</label>
 			<label index="tx_newspaper_pagezonetype">Types of page zones</label>
 			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.is_article">This page zone contains the article (unique in database)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 		</languageKey>
@@ -118,6 +119,7 @@
 			<label index="tx_newspaper_pagetype.get_value">Wert der zugeordneten GET-Variable</label>
 			<label index="tx_newspaper_pagezonetype">Seitenbereichstypen</label>
 			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.is_article">Dieser Seitenbereich enthält den Artikel (nur einmalig in der Datenbank)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 		</languageKey>

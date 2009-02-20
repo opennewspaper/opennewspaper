@@ -15,6 +15,7 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 
 if (TYPO3_MODE == 'BE')	{
+		
 }
 
 
@@ -347,7 +348,7 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagezonetype.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "name",
+		"fe_admin_fieldList" => "name, is_article",
 	)
 );
 

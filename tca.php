@@ -1167,7 +1167,7 @@ $TCA["tx_newspaper_pagetype"] = array (
 $TCA["tx_newspaper_pagezonetype"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezonetype"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "name"
+		"showRecordFieldList" => "name,is_article"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezonetype"]["feInterface"],
 	"columns" => array (
@@ -1180,9 +1180,16 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 				"eval" => "required,nospace,uniqueInPid",
 			)
 		),
+		"is_article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.is_article",		
+			"config" => Array (
+				"type" => "check",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "name;;;;1-1-1")
+		"0" => array("showitem" => "name;;;;1-1-1, is_article")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
