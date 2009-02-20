@@ -15,7 +15,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
 /** \todo The names for the functions are not defined yet. The interface
  *  (Article) is not yet ready either. In fact, this is just a dummy class.
  */
-class tx_newspaper_ArticleImpl implements tx_newspaper_Article {
+class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newspaper_Article {
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
