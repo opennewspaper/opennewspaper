@@ -4,9 +4,9 @@
 // require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
 
-require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 // base class for extras
-require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
+require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
 
 
 // modify fields set in tca.php
@@ -16,8 +16,6 @@ require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_ext
 
 // TODO: moved to ext_localconf.php (so classes and Extras available in ext_tables AND tca)
 // if modalbox is working, this part of the code should be deleted
-#require_once(BASEPATH . '/typo3conf/ext/newspaper/classes/class.tx_newspaper_extra_image.php');
-#tx_newspaper_ExtraImpl::registerExtra(new tx_newspaper_extra_image()); // register Extra "Image"
 
 
 // /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
