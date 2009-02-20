@@ -188,7 +188,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	protected $pagezonetype = null;
  	
  	
- 	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
+# 	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
  	 
  	/// Default Smarty template for HTML rendering
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
