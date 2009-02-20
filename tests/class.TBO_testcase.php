@@ -5,7 +5,7 @@
  * Author: helge
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/pi1/class.tx_newspaper_pi1.php');
+require_once(PATH_typo3conf . 'ext/newspaper/pi1/class.tx_newspaper_pi1.php');
 
 /// testsuite for class tx_newspaper_pi1 (also known as "The Big One" or "TBO")
 class test_TBO_testcase extends tx_phpunit_testcase {

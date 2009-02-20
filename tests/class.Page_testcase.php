@@ -5,8 +5,8 @@
  * Author: helge
  */
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_page.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
 
 /// testsuite for class tx_newspaper_page
 class test_Page_testcase extends tx_phpunit_testcase {

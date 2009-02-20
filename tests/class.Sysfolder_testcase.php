@@ -6,8 +6,8 @@
  */
 
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
-require_once(BASEPATH.'/typo3conf/ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 
 
 /// testsuite for class tx_newspaper_Sysfolder
