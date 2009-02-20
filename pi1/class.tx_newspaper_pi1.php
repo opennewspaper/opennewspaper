@@ -23,8 +23,6 @@
 ***************************************************************/
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
-//require_once(t3lib_extMgm::extPath('newspaper', 'tx_newspaper_include.php'));
-//require_once(BASEPATH.'/typo3conf/ext/newspaper/tx_newspaper_include.php');
 
 /// Plugin 'Display Ressorts/Articles' for the 'newspaper' extension. Aka TBO.
 /** Plugin 'Display Ressorts/Articles' for the 'newspaper' extension.
