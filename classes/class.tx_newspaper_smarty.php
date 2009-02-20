@@ -43,11 +43,12 @@ class tx_newspaper_Smarty extends Smarty {
 
 /// \to do: add windows version
 
+		$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/'));
 		/// Configure directories (one path per t3 installation)
-		$tmp = "/tmp/" . substr(BASEPATH, 1);
+		$tmp = "/tmp/" . substr($installation, 1);
 		file_exists($tmp) || mkdir($tmp, 0774, true);
 		
-		$this->template_dir = BASEPATH . '/' . $basepath;
+		$this->template_dir = $installation . '/' . $basepath;
 		$this->compile_dir  = $tmp;
 		$this->config_dir   = $tmp;
 		$this->cache_dir    = $tmp;		
