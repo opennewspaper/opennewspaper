@@ -43,7 +43,7 @@ class tx_newspaper_Smarty extends Smarty {
 
 /// \to do: add windows version
 
-		$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -1));
+		$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2));
 		t3lib_div::debug($installation);
 		/// Configure directories (one path per t3 installation)
 		$tmp = "/tmp/" . substr($installation, 1);
