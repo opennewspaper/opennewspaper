@@ -30,7 +30,7 @@
  */
  
 //require_once(t3lib_extMgm::extPath('smarty', 'Smarty.class.php'));
-require_once(BASEPATH.'/typo3conf/ext/smarty/Smarty.class.php');
+require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
 
 /// Smarty rendering engine with configurable template directory
 /** Smarty suffers from the limitation that you can only have \em one folder to
@@ -41,7 +41,9 @@ require_once(BASEPATH.'/typo3conf/ext/smarty/Smarty.class.php');
 class tx_newspaper_Smarty extends Smarty {
 	public function __construct($basepath) {
 
-		/// Configure directories
+/// \to do: add windows version
+
+		/// Configure directories (one path per t3 installation)
 		$tmp = "/tmp/" . substr(BASEPATH, 1);
 		file_exists($tmp) || mkdir($tmp, 0774, true);
 		
