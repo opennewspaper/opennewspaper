@@ -1,6 +1,6 @@
 <?php
 
-require_once(BASEPATH.'/typo3conf/ext/newspaper/interfaces/interface.tx_newspaper_article.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_article.php');
 
 /// A path to locate a tx_newspaper_Article in a tx_newspaper_Source
 /** It may consist either of an integer UID or a string. This class treats all
