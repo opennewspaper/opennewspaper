@@ -22,13 +22,16 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			/// make sure no other page zone type with is_article flag set exists
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($pzt);
-			
+			$where = 'pid=' . $pid . ' AND deleted=0 AND is_article=1';
+			if ($status != 'new') { /// no uid if new record (NEW49b018c614878)
+				$where .= ' AND uid !=' . $id; 				
+			}
 			$row = tx_newspaper::selectRows(
 				'uid, name',
 				$pzt->getTable(),
-				'pid=' . $pid . ' AND uid !=' . $id . ' AND deleted=0 AND is_article=1'
+				$where
 			);
-t3lib_div::devlog('pzt: # is_article', 'newspaper', 0, count($row));
+t3lib_div::devlog('pzt: is_article', 'newspaper', 0, array('pid' => $pzt->getTable(), 'where' => $where, 'row' => $row));
 			if (count($row) > 0) {
 				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
 			}
