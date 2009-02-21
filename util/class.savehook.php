@@ -22,6 +22,7 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			/// make sure no other page zone type with is_article flag set exists
 			$sf = tx_newspaper_Sysfolder::getInstance();
 			$pid = $sf->getPid($pzt);
+			
 			$row = tx_newspaper::selectRows(
 				'uid, name',
 				$pzt->getTable(),
