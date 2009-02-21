@@ -3,10 +3,10 @@
 class user_savehook_newspaper {
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-#t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
-#t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
-#t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
-#t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
+t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
+t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
+t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
 /// \todo: remove by-pass after article class and table have the same name
 $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' : $table;
@@ -27,7 +27,7 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 				$pzt->getTable(),
 				'pid=' . $pid . ' AND uid !=' . $id . ' AND deleted=0 AND is_article=1'
 			);
-#t3lib_div::devlog('pzt: # is_article', 'newspaper', 0, count($row));
+t3lib_div::devlog('pzt: # is_article', 'newspaper', 0, count($row));
 			if (count($row) > 0) {
 				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
 			}
