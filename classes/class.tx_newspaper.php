@@ -111,6 +111,49 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		} else throw new tx_newspaper_NoResException(self::$query);		
 	}
 	
+
+	/// Execute a SELECT query, check the result, return all records
+	/** \param $fields Fields to SELECT
+	 *  \param $table Table to SELECT FROM
+	 *  \param $where WHERE-clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to GROUP BY
+	 *  \param $orderBy Fields to ORDER BY
+	 *  \param $limit Maximum number of records to SELECT
+	 */
+	public static function selectRows($fields, $table, $where = '1',
+									$groupBy = '', $orderBy = '', $limit = '') {
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$fields, $table, $where, $groupBy, $orderBy, $limit);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		$rows = array();
+		if ($res) {        
+	        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+	        	$rows[] = $row;
+		}		
+		return $rows;
+	}
+
+	/// Execute a SELECT query, check the result, return all records, if any; exception if no records are found
+	/** \param $fields Fields to SELECT
+	 *  \param $table Table to SELECT FROM
+	 *  \param $where WHERE-clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to GROUP BY
+	 *  \param $orderBy Fields to ORDER BY
+	 *  \param $limit Maximum number of records to SELECT
+	 */
+	public static function selectRowsNotEmpty($fields, $table, $where = '1',
+									$groupBy = '', $orderBy = '', $limit = '') {
+		$rows = self::selectRows($fields, $table, $where, 
+			$groupBy, $orderBy , $limit);
+		if (count($rows) > 0)
+			return $rows;
+		else
+			throw new tx_newspaper_NoResException(self::$query);		
+	}
+
+
+
 	
 	/// inserts a record using T3 API
 	/** \param $table SQL table to insert into
