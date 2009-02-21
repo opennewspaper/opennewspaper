@@ -102,13 +102,12 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
+		$rows = array();
 		if ($res) {        
-	        $rows = array();
 	        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
 	        	$rows[] = $row;
-	
-			return $rows;
-		} else throw new tx_newspaper_NoResException(self::$query);		
+		} 
+		return $rows;		
 	}
 	
 
