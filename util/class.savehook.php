@@ -35,6 +35,7 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 			);
 #t3lib_div::devlog('pzt: is_article', 'newspaper', 0, array('pid' => $pzt->getTable(), 'where' => $where, 'row' => $row));
 			if (count($row) > 0) {
+/// \to do: add to log file - but which?
 				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
 			}
 		}
