@@ -14,7 +14,7 @@ class user_savehook_newspaper {
 $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' : $table;
 
 
-		/// check if a page zone type with is_article fals set is allowed
+		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
 		if  ($table == $pzt->getTable() && 
 			isset($fieldArray['is_article']) && 
