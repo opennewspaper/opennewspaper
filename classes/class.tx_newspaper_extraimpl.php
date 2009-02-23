@@ -161,7 +161,8 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		$row['extra_table'] = $table;
 
 
-/// \to do: Helge: use the PID all Extras share??? Or one pid per concrete Extra?
+		//  Helge: use the PID all Extras share??? Or one pid per concrete Extra?
+		//  answer: it's the sysfolder for the abstract Extra records. So the wording is correct.
 		/** use the PID all Extras share. If Extras are created under more than
 		 *  one page, we have a problem and can't continue.
 		 */
