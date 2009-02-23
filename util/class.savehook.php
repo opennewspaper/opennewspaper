@@ -2,6 +2,8 @@
 
 class user_savehook_newspaper {
 
+	/// save hook: new and update
+
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 #t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
 #t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
@@ -49,6 +51,23 @@ $class_bypass = ($table == 'tx_newspaper_article')? 'tx_newspaper_ArticleImpl' :
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
 		}
+	}
+	
+	
+	/// save hook: delete
+	
+	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
+#t3lib_div::devlog('command', 'newspaper', 0, $command);
+#t3lib_div::devlog('id', 'newspaper', 0, $id);
+#t3lib_div::devlog('value', 'newspaper', 0, $value);
+
+		if ($table == 'tx_newspaper_pagetype' || $table == 'tx_newspaper_pagezonetype') {
+			// it is not allowed to delete these records (with T3 means)
+/// \to do: fully implement deleting these record types
+/// \to do: add to log file - but which?
+			die('Fatal error: It is not allowed to delete this record, so it was NOT deleted. If you still want to delete this record please contact the Typo3 developers.<br /><br /><a href="javascript:history.back();">Go back</a>');
+		}
+		
 	}
 	
 }	
