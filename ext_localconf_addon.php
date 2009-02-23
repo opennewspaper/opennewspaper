@@ -10,6 +10,14 @@
 	// register hook to add javascript and css to BE (loaded to top)
 	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = PATH_typo3conf . 'ext/newspaper/util/additionalBackendItems.php';
 
-	#require_once(t3lib_extMgm::extPath('newspaper', 'tx_newspaper_include.php'));
+	// include newspaper classes and interfaces
 	require_once(PATH_typo3conf . 'ext/newspaper/tx_newspaper_include.php');
+	
+
+	// disable 'delete' for page types and page zone types records
+	t3lib_extMgm::addUserTSConfig('
+	options.disableDelete.tx_newspaper_pagetype = 1
+	options.disableDelete.tx_newspaper_pagezonetype = 1
+');
+
 ?>
