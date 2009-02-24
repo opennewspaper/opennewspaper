@@ -15,6 +15,11 @@
 			<label index="tx_newspaper_section">Newspaper Sections</label>
 			<label index="tx_newspaper_section.section_name">Name of the section</label>
 			<label index="tx_newspaper_section.parent_section">Parent section</label>
+			<label index="tx_newspaper_section.articlelist">Article list</label>
+			<label index="tx_newspaper_section.inheritance_mode.I.0">Default</label>
+			<label index="tx_newspaper_section.inheritance_mode.I.1">Don't inherit</label>
+			<label index="tx_newspaper_section.inheritance_mode">Inheritance mode</label>
+			<label index="tx_newspaper_section.pagetype_pagezone">Page type / page zone</label>
 			<label index="tx_newspaper_page">Pages</label>
 			<label index="tx_newspaper_page.section">Section this particular page is associated to</label>
 			<label index="tx_newspaper_page.pagetype_id">Page type</label>
@@ -74,6 +79,11 @@
 			<label index="tx_newspaper_section">Ressorts der Zeitung</label>
 			<label index="tx_newspaper_section.section_name">Name des Ressorts</label>
 			<label index="tx_newspaper_section.parent_section">Elternressort</label>
+			<label index="tx_newspaper_section.articlelist">Artikelliste</label>
+			<label index="tx_newspaper_section.inheritance_mode.I.0">Default</label>
+			<label index="tx_newspaper_section.inheritance_mode.I.1">Keine Vererbung</label>
+			<label index="tx_newspaper_section.inheritance_mode">Vererbungstyp</label>
+			<label index="tx_newspaper_section.pagetype_pagezone">Seitentyp / Seitenbereich</label>
 			<label index="tx_newspaper_page">Seiten</label>
 			<label index="tx_newspaper_page.section">Ressort, dem diese Seite zugeordnet ist</label>
 			<label index="tx_newspaper_page.pagetype_id">Seitentyp</label>
