@@ -171,16 +171,16 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertTrue(sizeof($data) > 0);
 			
 			/// remove MM relation, superclass table entry and newly created extra
-			tx_newspaper::DELETEquery(
+			tx_newspaper::deleteRows(
 				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_uid)
 			);
 			t3lib_div::debug(tx_newspaper::$query);
-			tx_newspaper::DELETEquery(
+			tx_newspaper::deleteRows(
 				tx_newspaper_Extra_Factory::getExtraTable(),
 				'uid = ' . $extra_supertable_uid
 			);
-			tx_newspaper::DELETEquery($extra->getTable(), 'uid = ' . $extra_uid);
+			tx_newspaper::deleteRows($extra->getTable(), 'uid = ' . $extra_uid);
 			
 		}	
 	}
