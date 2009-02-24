@@ -89,12 +89,13 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		$this->doTestContains($output, 'uid: 3');
 		$this->doTestContains($output, 'name: Test-Seitenbereich auf Artikelseite - 1');
 		$this->doTestContains($output, 'pagezone_id: Z');
-
+/*
 		$this->doTestContains($output, 'Artikel als Seitenbereich');
 		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Article');
 		$this->doTestContains($output, 'uid: 1');
 		$this->doTestContains($output, 'name: Artikel als Seitenbereich');
 		$this->doTestContains($output, 'pagezone_id: A');
+*/		
 		unset($_GET['art']);
 	}
 	
