@@ -32,6 +32,6 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_Extra {
 	}
 }
 
-tx_newspaper_ExtraImpl::registerExtra(new tx_newspaper_extra_ArticleRenderer());
+tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_ArticleRenderer());
 
 ?>
