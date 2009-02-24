@@ -47,6 +47,7 @@
 			<label index="tx_newspaper_article.source_object">Source the article was imported from (serialized object)</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.sections">Sections this article appears in</label>
+			<label index="tx_newspaper_article.name">Name of page zone</label>
 			<label index="tx_newspaper_extra">Extras (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
@@ -111,6 +112,7 @@
 			<label index="tx_newspaper_article.source_object">Quelle aus der der Artikel importiert wurde (serialisiertes Objekt)</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.sections">Ressorts in denen dieser Artikel erscheint</label>
+			<label index="tx_newspaper_article.name">Name des Seitenbereichs</label>
 			<label index="tx_newspaper_extra">Artikel-Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
