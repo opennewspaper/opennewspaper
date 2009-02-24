@@ -2,7 +2,7 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
 
-class tx_newspaper_extra_SectionList extends tx_newspaper_ExtraImpl {
+class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
 	public function __construct($uid = 0) { 
 		if ($uid) {

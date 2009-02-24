@@ -20,7 +20,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
  *  - rename to article and interface to articleiface
  *  - make sure it works as generic page zone (when assembling pages) as well as concrete article 
  */
-class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newspaper_Article {
+class tx_newspaper_Article extends tx_newspaper_PageZone 
+	implements tx_newspaper_ArticleIface {
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
@@ -41,6 +42,8 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 			   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
 			   $this->getAttribute('text');
 		/// \todo use smarty
+		/// \todo print extras
+		/// \todo handle case where $this is a placeholder for an actual article (formerly Extra_ArticleRenderer)
 	}
 	
 	public function importieren(tx_newspaper_Source $quelle) {
@@ -99,8 +102,8 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 					t3lib_div::debug($query);
 					$GLOBALS['TYPO3_DB']->sql_query($query);
 				}
-			} 
-		}	
+			}
+		}
 		return $this->extras; 
 	}
 
