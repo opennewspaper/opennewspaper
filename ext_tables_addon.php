@@ -17,6 +17,11 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 /// records are stored in sysfolders with module set to 'newspaper'
 $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 
+/// add icon for newspaper sysfolders
+$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
+
+
+
 
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
