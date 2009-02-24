@@ -32,7 +32,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			$this->extra_uid = tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());	
+			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
 			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
 		}	
 	}
@@ -158,7 +158,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		$extra_table = strtolower($extra_table);
 		
-		$abstract_uid = tx_newspaper_ExtraImpl::createExtraRecord($extra_uid, $extra_table); 
+		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
 		
 		/// \todo write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
@@ -201,7 +201,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	/** \todo Internationalization */
 	static function getTitle() {
-		return 'ArticleImpl';
+		return 'Article';
 	}
 	
 	static function getModuleName() {
@@ -221,7 +221,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	private $source = null;			///< Source the ArticleImpl is read from
+	private $source = null;			///< Source the Article is read from
 	private $uid = '';				///< UID that identifies the article in the source
 	
 	private $extra_uid = null;		///< article's UID in the abstract Extra table
@@ -229,7 +229,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	private $articleBehavior = null;	///< Object to delegate operations to
 	
-	///	List of attributes that together constitute an ArticleImpl
+	///	List of attributes that together constitute an Article
 	private static $attribute_list = array(
 		'title', 'teaser', 'text', 'ressort'
 	);
