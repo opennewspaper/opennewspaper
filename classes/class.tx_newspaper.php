@@ -168,7 +168,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */ 
 	public static function getTable($object) {
 		return strtolower(get_class($object));
-	}	
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	
