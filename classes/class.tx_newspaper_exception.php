@@ -87,7 +87,7 @@ class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception {
 class tx_newspaper_WrongAttributeException 
 	extends tx_newspaper_IllegalUsageException { 
 	public function __construct($attribute, $uid = '') {
-        parent::__construct("Attribute $attribute does not exist" .
+        parent::__construct("Attribute '$attribute' does not exist" .
         					($uid === ''? '': " - UID $uid"));
     }	
 }
