@@ -6,7 +6,7 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dbsource.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleimpl.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
 
 /// testsuite for class taz_RedsysSource
 class test_DBSource_testcase extends tx_phpunit_testcase {
