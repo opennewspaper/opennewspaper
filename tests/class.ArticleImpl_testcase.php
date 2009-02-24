@@ -57,9 +57,16 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 
 		$this->assertTrue(is_array($extras));
 		if (is_array($extras)) foreach ($extras as $extra) {
-			$this->assertTrue($extra->getAttribute('uid') > 0);
-			t3lib_div::debug($extra);
 			$this->assertTrue($extra instanceof tx_newspaper_Extra);
+			$this->assertTrue($extra->getAttribute('uid') > 0);
+			$this->assertTrue($extra->getAttribute('pid') == tx_newspaper_Sysfolder::getInstance()->getPid($extra));
+			if ($extra instanceof tx_newspaper_Extra_Image) {
+				$this->assertTrue($extra->getAttribute('image') != '');
+				$this->assertTrue($extra->getAttribute('title') != '');
+				$this->assertTrue($extra->getAttribute('caption') != '');
+			} else if ($extra instanceof tx_newspaper_Extra_ArticleRenderer) {
+				t3lib_div::debug($extra);
+			}
 
 		}
 		/// \todo check concrete extras in this article for correctness
