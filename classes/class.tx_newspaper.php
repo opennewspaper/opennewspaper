@@ -148,16 +148,21 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	/// deletes a record using T3 API
 	/** \param $table SQL table to delete a record from
 	 *  \param $where SQL WHERE condition (typically 'uid = ...')
+	 *  \param $really If set, really delete records; else set deleted = 1
 	 */
-	public static function deleteRows($table, $where) {
-		self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
+	public static function deleteRows($table, $where, $really = false) {
+		if ($really) {
+			self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
+		} else {
+			self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, array('deleted' => 1));
+		}
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
         
-        return $GLOBALS['TYPO3_DB']->sql_insert_id();
+        return $GLOBALS['TYPO3_DB']->sql_affected_rows();
         
 	}
 
