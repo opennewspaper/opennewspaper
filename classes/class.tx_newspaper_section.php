@@ -86,6 +86,52 @@
 	
 	static function getModuleName() { return 'np_section'; }
 	
+	
+	
+	/// get all descendant sections
+	/** \param $section_uid uid of section to get descendant sections for
+	 *  \param $include_hidden if true, hidden sections are included
+	 *  \return array uid of sections
+	 */
+	static function getDescendantSections($section_uid, $include_hidden=true) {
+		
+		$sections = array();
+		
+		$where = $include_hidden? '' : ' AND hidden=0'; // check if hidden sections are to be included
+	
+		// get pid for section records
+ 		$sf = tx_newspaper_Sysfolder::getInstance();
+		$pid = $sf->getPid(new tx_newspaper_Section());
+	
+		$queue[] = intval($section_uid); // start with given section
+		while (count($queue) > 0) {
+			reset($queue); // process first entry in queue
+			$row = tx_newspaper::selectRows(
+				'uid',
+				'tx_newspaper_section',
+				'parent_section=' . current($queue) . ' AND pid=' . $pid . $where
+			);
+			for ($i = 0; $i < sizeof($row); $i++) {
+				$sections[] = $row[$i]['uid']; // store this descendant section
+				$queue[] = $row[$i]['uid']; // append this descendant section to queue
+			}
+			unset($queue[key($queue)]); // remove current entry from queue
+		}
+		return $sections;
+	}
+	/// get all descendant sections - including given section (which is not descending ...)
+	/** \param $section_uid uid of section to get descendant sections for
+	 *  \param $include_hidden if true, hidden sections are included
+	 *  \return array uid of sections
+	 */
+	static function getSelfAndDescendantSections($section_uid, $include_hidden=true) {
+		$sections = self::getDescendantSections($section_uid, $include_hidden); // get descendant section
+		return array_merge(array(intval($section_uid)), $sections); // prepend start section
+	}
+	
+	
+	
+	
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
 	private $articlelist = null;
