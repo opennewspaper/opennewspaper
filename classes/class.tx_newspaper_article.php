@@ -40,15 +40,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function render($template = '') {
 		/// \todo handle case where $this is a placeholder for an actual article (formerly Extra_ArticleRenderer)
 		if ($this->getAttribute('is_template')) {
+			$ret = '';
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
-			return "<h1>artikel als seitenbereich sagt:</h1>".$article->render();
+			$ret .= "<h1>artikel als seitenbereich sagt:</h1>".$article->render();
+			foreach($article->getExtras() as $extra) {
+				$ret .= $extra->render();
+			}
+			
 		} else {
-		return '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
-			   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
-			   $this->getAttribute('text');
+			$ret = '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
+			   	   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
+			   	   $this->getAttribute('text');
 		/// \todo use smarty
 		/// \todo print extras
 		} 
+		return $ret;
 	}
 	
 	public function importieren(tx_newspaper_Source $quelle) {
