@@ -145,6 +145,22 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
         
 	}
 
+	/// deletes a record using T3 API
+	/** \param $table SQL table to delete a record from
+	 *  \param $where SQL WHERE condition (typically 'uid = ...')
+	 */
+	public static function deleteRows($table, $where) {
+		self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		if (!$res) {
+        	throw new tx_newspaper_NoResException(self::$query);
+        }
+        
+        return $GLOBALS['TYPO3_DB']->sql_insert_id();
+        
+	}
+
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the ressort record which lies on the
 	 *  current Typo3 page. This implementation may change, but this function
