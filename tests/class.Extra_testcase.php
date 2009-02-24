@@ -244,7 +244,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	);
 	/// Extra classes that will have additional tests run on them
 	private $extras_to_test_additionally = array(
-//		'tx_newspaper_PageZone',
 		'tx_newspaper_PageZone_Page',
 		'tx_newspaper_Article',
 		// ...
