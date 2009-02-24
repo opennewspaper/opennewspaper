@@ -38,12 +38,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	public function render($template = '') {
+		/// \todo handle case where $this is a placeholder for an actual article (formerly Extra_ArticleRenderer)
+		if ($this->getAttribute('is_template')) {
+		} else {
 		return '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
 			   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
 			   $this->getAttribute('text');
 		/// \todo use smarty
 		/// \todo print extras
-		/// \todo handle case where $this is a placeholder for an actual article (formerly Extra_ArticleRenderer)
+		} 
 	}
 	
 	public function importieren(tx_newspaper_Source $quelle) {
