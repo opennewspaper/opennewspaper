@@ -56,9 +56,10 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$extras = $this->article->getExtras();
 
 		$this->assertTrue(is_array($extras));
-		t3lib_div::debug($extras);
 		if (is_array($extras)) foreach ($extras as $extra) {
+			t3lib_div::debug($extra);
 			$this->assertTrue($extra instanceof tx_newspaper_Extra);
+
 		}
 		/// \todo check concrete extras in this article for correctness
 	}
