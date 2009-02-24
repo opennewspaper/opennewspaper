@@ -29,8 +29,14 @@
  *  \date Feb 13, 2009
  */
  
-//require_once(t3lib_extMgm::extPath('smarty', 'Smarty.class.php'));
-require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
+if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
+	// new smarty extension
+	require_once(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php');	
+} else {
+	// old smarty extension
+	require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
+}
+
 
 /// Smarty rendering engine with configurable template directory
 /** Smarty suffers from the limitation that you can only have \em one folder to
