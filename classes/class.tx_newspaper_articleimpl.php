@@ -31,8 +31,8 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());	
-			tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
+			$this->extra_uid = tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());	
+			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
 		}	
 	}
 	
@@ -201,6 +201,9 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 	
 	private $source = null;			///< Source the ArticleImpl is read from
 	private $uid = '';				///< UID that identifies the article in the source
+	
+	private $extra_uid = null;		///< article's UID in the abstract Extra table
+	private $pagezone_uid = null;	///< article's UID in the abstract PageZone table
 
 	private $articleBehavior = null;	///< Object to delegate operations to
 	
