@@ -53,7 +53,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	*/
 	private $section = null;					///< the object
 	private $section_uid = 1;					///< uid of stored object
-	private $pid = 2473;						///< pid of stored object
+	private $pid = 2828;						///< pid of stored object
 	private $section_name = 'Testressort';		///< section_name of stored object
 	
 }
