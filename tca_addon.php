@@ -6,7 +6,7 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 // base class for extras
-require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extraimpl.php');
+require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
 
 // modify fields set in tca.php
