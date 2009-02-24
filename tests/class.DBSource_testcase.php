@@ -13,7 +13,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 		$this->source = new tx_newspaper_DBSource();
-		$this->article = new tx_newspaper_ArticleImpl();
+		$this->article = new tx_newspaper_Article();
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
 		// "Diktatur des Proletariats" from July 17 '07
@@ -52,7 +52,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_Attributes() {
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+		$attrs = tx_newspaper_Article::getAttributeList();
 		foreach ($this->reqFields as $field) {
 			if (!in_array($field, $attrs)) 
 				$this->fail("Required attribute $field not in Article::getRequiredAttributes()");
@@ -60,8 +60,8 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_readArticle() {
-		$this->article = $this->source->readArticle('tx_newspaper_ArticleImpl', $this->uid);
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+		$this->article = $this->source->readArticle('tx_newspaper_Article', $this->uid);
+		$attrs = tx_newspaper_Article::getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
 			if (!$this->article->getAttribute($req)) $failed[] = $req;
@@ -89,8 +89,8 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_readArticles() {
-		$articles = $this->source->readArticles('tx_newspaper_ArticleImpl', $this->uidList);
-		$attrs = tx_newspaper_ArticleImpl::getAttributeList();
+		$articles = $this->source->readArticles('tx_newspaper_Article', $this->uidList);
+		$attrs = tx_newspaper_Article::getAttributeList();
 		$failed = array();
 		foreach ($articles as $art) {
 			foreach ($attrs as $req) {
