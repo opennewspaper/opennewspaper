@@ -6,8 +6,8 @@
  *  \date Oct 27, 2008
  */
 
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_article.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlebehavior.php');
 
