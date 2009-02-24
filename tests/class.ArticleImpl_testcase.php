@@ -8,18 +8,18 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 
 /// testsuite for class tx_newspaper_pagezone
-class test_ArticleImpl_testcase extends tx_phpunit_testcase {
+class test_Article_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		$this->article = new tx_newspaper_ArticleImpl($this->uid);
+		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
 		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
 	}
 
 	public function test_createArticle() {
-		$temp = new tx_newspaper_ArticleImpl($this->uid);
+		$temp = new tx_newspaper_Article($this->uid);
 		$this->assertTrue(is_object($temp));
-		$this->assertTrue($temp instanceof tx_newspaper_ArticleImpl);
+		$this->assertTrue($temp instanceof tx_newspaper_Article);
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 		$this->assertTrue($temp instanceof tx_newspaper_Extra);
 		
@@ -94,7 +94,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($this->article->getUid(), $this->uid);
 	}
 	public function test_getTitle() {
-		$this->assertEquals($this->article->getTitle(), 'ArticleImpl');
+		$this->assertEquals($this->article->getTitle(), 'Article');
 	}
 	public function test_getModuleName() {
 		$this->assertEquals($this->article->getModuleName(), 'np_article');
@@ -132,7 +132,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$this->doTestContains($data['text'], $random_string);
 		
 		/// create an empty article and write it. verify it's been written.
-		$article = new tx_newspaper_ArticleImpl();
+		$article = new tx_newspaper_Article();
 		$article->setAttribute('text', $random_string);
 		$uid = $article->store();
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
