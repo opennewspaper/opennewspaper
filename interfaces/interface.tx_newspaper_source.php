@@ -53,7 +53,7 @@ interface tx_newspaper_Source {
 	 *  \param $field The field which should be read from the source
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid);
+	public function readField(tx_newspaper_ExtraIface $extra, $field, tx_newspaper_SourcePath $uid);
 
 	/// Reads the specified fields of the Article or Extra with the specified UID
 	/** \param $extra Extra object for which fields are read
@@ -61,7 +61,7 @@ interface tx_newspaper_Source {
 	 *  	   there's more than one field, supply them as array
 	 *  \param $uid a unique key to locate the article in the given source
 	 */
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid);
+	public function readFields(tx_newspaper_ExtraIface $extra, array $fieldList, tx_newspaper_SourcePath $uid);
 
 	/// Creates and reads a full article with the specified UID
 	/** \param $articleclass The class name for the article; must implement 
@@ -121,8 +121,8 @@ interface tx_newspaper_Source {
 	 */
     public function readExtras($extraclass, array $uids);
     
-    public function writeArticle(tx_newspaper_Article $article, tx_newspaper_SourcePath $uid);
-    public function writeExtra(tx_newspaper_Extra $extra, tx_newspaper_SourcePath $uid);
+    public function writeArticle(tx_newspaper_ArticleIface $article, tx_newspaper_SourcePath $uid);
+    public function writeExtra(tx_newspaper_ExtraIface $extra, tx_newspaper_SourcePath $uid);
     
     public function browse(tx_newspaper_SourcePath $path);
     

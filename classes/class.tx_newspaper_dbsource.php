@@ -19,7 +19,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	}
 
 	/// Reads ONE field for the given Extra
-	public function readField(tx_newspaper_Extra $extra, $field, tx_newspaper_SourcePath $uid) {
+	public function readField(tx_newspaper_ExtraIface $extra, $field, tx_newspaper_SourcePath $uid) {
         $row = tx_newspaper::selectOneRow(
         	$extra->mapFieldToSourceField($field, $this),
 			$extra->sourceTable($this),
@@ -32,7 +32,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	}
 
 	/// Reads the specified fields of the article with the specified UID
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
+	public function readFields(tx_newspaper_ExtraIface $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
 		$this->sourceBehavior->readFields($extra, $fieldList, $uid);
 	}
 
@@ -44,7 +44,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		$article = null;
 		
 		/// $article is set to an object of an appropriate class
-		if (is_a($articleclass, 'tx_newspaper_Article')) {
+		if (is_a($articleclass, 'tx_newspaper_ArticleIface')) {
 			$article = $articleclass;
 			$articleclass = get_class($article);	// to throw meaningful exception
 		} else {
@@ -53,7 +53,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		}
 		
 		/// If that didn't work, throw up
-		if (!is_a($article, 'tx_newspaper_Article')) {
+		if (!is_a($article, 'tx_newspaper_ArticleIface')) {
 			throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		
@@ -117,11 +117,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		throw new tx_newspaper_NotYetImplementedException();
     }
 
-    public function writeArticle(tx_newspaper_Article $article, tx_newspaper_SourcePath $uid) {
+    public function writeArticle(tx_newspaper_ArticleIface $article, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
-    public function writeExtra(tx_newspaper_Extra $extra, tx_newspaper_SourcePath $uid) {
+    public function writeExtra(tx_newspaper_ExtraIface $extra, tx_newspaper_SourcePath $uid) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
@@ -134,7 +134,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	//		end of public interface											  //
 	////////////////////////////////////////////////////////////////////////////
 
-	function mapSourceFieldToField(tx_newspaper_Article $article, $field) {
+	function mapSourceFieldToField(tx_newspaper_ArticleIface $article, $field) {
 		foreach ($article->getAttributeList() as $attribute) {
 			if ($article->mapFieldToSourceField($attribute, $this) == $field) {
 				return $attribute;
