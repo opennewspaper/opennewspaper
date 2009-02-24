@@ -94,10 +94,11 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
 					$this->extras[] = $new_extra;
 				} catch(tx_newspaper_EmptyResultException $e) {
-					/// \todo remove mm-table entry
+					/// remove mm-table entry if the extra pointed to doesn't exist
 					$query = $GLOBALS['TYPO3_DB']->DELETEquery(
 						'tx_newspaper_article_extras_mm', 'uid_foreign = ' . intval($extra['uid_foreign']));
 					t3lib_div::debug($query);
+					$GLOBALS['TYPO3_DB']->sql_query($query);
 				}
 			} 
 		}	

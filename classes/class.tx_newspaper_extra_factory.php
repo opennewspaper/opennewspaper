@@ -53,7 +53,9 @@ class tx_newspaper_Extra_Factory {
 		return self::$instance;
 	}
 	
-	/// \todo rename: instantiate()
+	/** \todo rename: instantiate()
+	 *  \todo honor deleted and hidden flags
+	 */
 	public function create($uid) {
 		/// Read actual type and UID of the Extra to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
