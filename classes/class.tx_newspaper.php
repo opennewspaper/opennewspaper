@@ -178,13 +178,20 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return new tx_newspaper_Section($section_uid);
 	}
 	
-	/// Return the name of the SQL table \p $object resides in
-	/** \param $object The object to find the SQL table for
-	 *  \return The lower-cased class name of \p $object
-	 */ 
-	public static function getTable($object) {
-		return strtolower(get_class($object));
-	}
+	
+	/// Return the name of the SQL table \p $class resides in
+	/** \param $class either object or a class name to find the SQL table for
+	 *  \return The lower-cased class name of \p $class (= name of associated db table; newspaper convention)
+	 */
+	public static function getTable($class) {
+		if (is_object($class)) {
+			return strtolower(get_class($class));
+		}
+		return strtolower($class);
+	}	
+	
+	
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	
