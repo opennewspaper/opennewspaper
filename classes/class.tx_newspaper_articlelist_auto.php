@@ -53,7 +53,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 		
 		$articles = array();
 	    while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-	    	$articles[] = new tx_newspaper_ArticleImpl($row['uid']);
+	    	$articles[] = new tx_newspaper_Article($row['uid']);
 	    } 
 			
 		return $articles;
