@@ -198,7 +198,7 @@ $TCA["tx_newspaper_page"] = array (
 			"config" => Array (
 				"type" => "group",	
 				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_page",	
+				"allowed" => "tx_newspaper_pagetype",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -1125,5 +1125,4 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
