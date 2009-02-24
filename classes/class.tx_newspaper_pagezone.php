@@ -55,7 +55,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());
+			tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
 		}
 	}
 	
