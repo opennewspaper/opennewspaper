@@ -19,7 +19,7 @@ class tx_newspaper_extra_ArticleRenderer extends tx_newspaper_Extra {
 		assemble the text back into one piece. 
 	 */
 	public function render($template = '') {
-		$article = new tx_newspaper_ArticleImpl($_GET['art']);
+		$article = new tx_newspaper_Article($_GET['art']);
 		return $article->render();
 	}
 
