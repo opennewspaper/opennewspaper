@@ -26,7 +26,7 @@ if (TYPO3_MODE == 'BE') {
 	$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 	
 	/// add icon for newspaper sysfolders
-	$ICON_TYPES['newspaper'] = array('icon' => PATH_typo3conf . 'ext/newspaper/icon_tx_newspaper_sysf.gif');
+	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
 
 
 }
