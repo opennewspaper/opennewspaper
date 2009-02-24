@@ -89,6 +89,7 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 				'uid', 'tx_newspaper_extra', 
 				'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
 				' AND extra_uid = ' . $this->getUid());
+			t3lib_div::debug($extras);
 			if ($extras) foreach ($extras as $extra) {
 				$this->extras[] = -1;
 			} 
