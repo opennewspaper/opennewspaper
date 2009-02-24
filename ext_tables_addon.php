@@ -18,7 +18,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 $TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 
 /// add icon for newspaper sysfolders
-$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
+$ICON_TYPES['newspaper'] = array('icon' => PATH_typo3conf . 'ext/newspaper/icon_tx_newspaper_sysf.gif');
 
 
 
