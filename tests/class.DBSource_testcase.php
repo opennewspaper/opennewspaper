@@ -105,7 +105,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 						" not in article read via source->readArticles()");
 		}			
 	}
-
+	/*
 	public function test_readPartialArticles() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$articles = $this->source->readPartialArticles('tx_newspaper_ArticleImpl', 
@@ -122,7 +122,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->readExtras("", array());
 	}
-	
+	*/
 	public function test_mapSourceFieldToField() {
 		$attrs = $this->article->getAttributeList();
 		
@@ -152,7 +152,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 			$this->fail("Mapping source field to field failed for".implode(', ', $failed));
 		}
 	}
-	
+	/*
 	public function test_writeArticle() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->source->writeArticle($this->article, $this->uid);
@@ -166,7 +166,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->source->writeExtra($extra, $extra_uid);
 		/// \todo actually write an extra and compare the written extra to the original
 	}
-
+	*/
 	private $source = null;				///< the local RedsysSource
 	private $field = null;				///< single article field to read
 	private $fieldList = array();		///< list of article fields to read

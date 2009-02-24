@@ -34,12 +34,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	public function test_modulename() {
 		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
 	}
-
+	/*
 	public function test_readExtraItem() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->pagezone->readExtraItem(1, $this->pagezone->getTable());
 	}
-
+	*/
 	public function test_nonexistentZone() {
 		$this->setExpectedException('tx_newspaper_DBException');
 		tx_newspaper_PageZone_Factory::getInstance()->create($this->bad_uid);
