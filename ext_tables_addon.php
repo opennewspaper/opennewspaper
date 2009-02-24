@@ -13,23 +13,22 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 #$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
 
 
-/// add newspaper to Plugin-in list
-/// records are stored in sysfolders with module set to 'newspaper'
-$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
-
-/// add icon for newspaper sysfolders
-$ICON_TYPES['newspaper'] = array('icon' => PATH_typo3conf . 'ext/newspaper/icon_tx_newspaper_sysf.gif');
-
-
-
-
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
-
 
 	// add main module 'newspaper', add sub modules
 	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/');	
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
+
+
+	/// add newspaper to Plugin-in list
+	/// records are stored in sysfolders with module set to 'newspaper'
+	$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
+	
+	/// add icon for newspaper sysfolders
+	$ICON_TYPES['newspaper'] = array('icon' => PATH_typo3conf . 'ext/newspaper/icon_tx_newspaper_sysf.gif');
+
+
 }
 
 ?>
