@@ -86,7 +86,7 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 	function getExtras() { 
 		if (!$this->extras) {
 			$extras = tx_newspaper::selectRows(
-				'uid', 'tx_newspaper_article_extras_mm', 
+				'uid_foreign', 'tx_newspaper_article_extras_mm', 
 				'uid_local = ' . $this->getUid());
 			t3lib_div::debug(tx_newspaper::$query);
 			t3lib_div::debug($extras);
