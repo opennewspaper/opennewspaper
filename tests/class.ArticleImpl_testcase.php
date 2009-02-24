@@ -21,7 +21,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_Article);
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
-		$this->assertTrue($temp instanceof tx_newspaper_Extra);
+		$this->assertTrue($temp instanceof tx_newspaper_ExtraIface);
 		
 		$this->checkOutput($temp->render());
 	}
