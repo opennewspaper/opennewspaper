@@ -20,6 +20,8 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$temp = new tx_newspaper_ArticleImpl($this->uid);
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_ArticleImpl);
+		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
+		$this->assertTrue($temp instanceof tx_newspaper_Extra);
 		
 		$this->checkOutput($temp->render());
 	}
@@ -27,7 +29,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 	public function test_render() {
 		$this->checkOutput($this->article->render());		
 	}
-	
+	/*
 	public function test_import() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->importieren($this->source);
@@ -49,6 +51,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->extraAnlegen();
 	}
+	*/
 	public function test_getExtras() {
 		$extras = $this->article->getExtras();
 
@@ -57,11 +60,13 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 		}
 		/// \todo check concrete extras in this article for correctness
 	}
+	/*
 	public function test_addExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->addExtra($this->extra);
 		/// \todo check if extra has been added
 	}
+	*/
 	public function test_getSource() {
 		/// No source should be returned, because none has been set
 		$this->assertNull($this->article->getSource());

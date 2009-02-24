@@ -189,6 +189,8 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	
 	private static $registeredExtra = array();	///< list of registered Extras
 	
+	protected $extra_uid = null;	///< article's UID in the abstract Extra table
+	
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	/** \todo this table is defined in tx_newspaper_Extra_Factory too. decide
 	 * 		  on one class to store it!

@@ -184,7 +184,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		/// write the uid and table into extra table, with the values read above
 		$row['pagezone_uid'] = $uid;
 		$row['pagezone_table'] = $table;
-		$row['tstamp'] = time();
+		$row['tstamp'] = time();				///< tstamp is set to now
 
 
 		/** use the PID all PageZones share. If PageZones are created under more
