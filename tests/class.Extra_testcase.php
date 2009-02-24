@@ -77,15 +77,15 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	public function test_isRegisteredExtra() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
-			$this->assertTrue(tx_newspaper_ExtraImpl::isRegisteredExtra($temp));
+			$this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($temp));
 		}
 	}	
 
 	public function test_registerExtra() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
-			tx_newspaper_ExtraImpl::registerExtra($temp);
-			$this->assertTrue(tx_newspaper_ExtraImpl::isRegisteredExtra($temp));
+			tx_newspaper_Extra::registerExtra($temp);
+			$this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($temp));
 		}
 	}	
 
@@ -137,14 +137,14 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 
 	public function test_relateExtra2Article() {
 		$article_uid = 1;
-		$article = new tx_newspaper_ArticleImpl($article_uid);
+		$article = new tx_newspaper_Article($article_uid);
 		foreach($this->extras_to_test as $extra_class) {
 			/// create a new extra, call relateExtra2Article() on a known article 
 			$extra = new $extra_class();
 			$crdate = time();
 			$extra->setAttribute('crdate', $crdate);
 			$extra_uid = $extra->store();
-			$abstract_uid = tx_newspaper_ArticleImpl::relateExtra2Article($extra_class, $extra_uid, $article_uid);
+			$abstract_uid = tx_newspaper_Article::relateExtra2Article($extra_class, $extra_uid, $article_uid);
 
 			/// check that entry for Extra supertable has been written and is equal to new Extra
 			$data = tx_newspaper::selectOneRow(
@@ -196,7 +196,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	
 	public function test_createExtraRecord() {
 		/// test whether the function runs at all
-		tx_newspaper_ExtraImpl::createExtraRecord(
+		tx_newspaper_Extra::createExtraRecord(
 			$this->extra_uid_to_create_superobject_for, 
 			$this->extra_table_to_create_superobject_for
 		);
@@ -216,7 +216,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for));
 		/// \todo if i were pedantic, i'd check wheter deletion has really succeeded...
 
-		tx_newspaper_ExtraImpl::createExtraRecord(
+		tx_newspaper_Extra::createExtraRecord(
 			$this->extra_uid_to_create_superobject_for, 
 			$this->extra_table_to_create_superobject_for
 		);
