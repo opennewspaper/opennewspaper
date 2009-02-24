@@ -57,6 +57,7 @@ class test_ArticleImpl_testcase extends tx_phpunit_testcase {
 
 		$this->assertTrue(is_array($extras));
 		if (is_array($extras)) foreach ($extras as $extra) {
+			$this->assertTrue($extra->getAttribute('uid') > 0);
 			t3lib_div::debug($extra);
 			$this->assertTrue($extra instanceof tx_newspaper_Extra);
 
