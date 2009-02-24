@@ -37,16 +37,16 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_exception.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_article.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_source.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_section.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_factory.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleimpl.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 	
 
