@@ -7,8 +7,8 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_source.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_article.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 
 /// Behavior class to factor out code common to more or less all Source implementations
 /** \see tx_newspaper_Source::readField() */
