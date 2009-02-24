@@ -26,7 +26,7 @@ class tx_newspaper_SourceBehavior {
 	 *  	   more than one field, supply them as array
 	 *  \param $uid a unique key to locate the article in the given source
 	 */	
-	public function readFields(tx_newspaper_Extra $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
+	public function readFields(tx_newspaper_ExtraIface $extra, array $fieldList, tx_newspaper_SourcePath $uid) {
 		foreach ($fieldList as $field) { 
 			$this->parentSource->readField($extra, $field, $uid);
 		}
