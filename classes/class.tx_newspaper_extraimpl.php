@@ -20,7 +20,7 @@
  *  - render()
  *  - getModuleName()
  */ 
-abstract class tx_newspaper_Extra implements tx_newspaper_Extra {
+abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	public function __construct($uid) {
 		$this->setUid($uid);
