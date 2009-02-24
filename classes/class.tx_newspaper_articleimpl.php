@@ -13,10 +13,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
 
 /// An article for the online newspaper
 /** \todo The names for the functions are not defined yet. The interface
- *  (Article) is not yet ready either. In fact, this is just a dummy class.
+ *  (Article) is not yet ready either.
  *  \todo take over all functionality from tx_newspaper_PageZone_Article. that includes:
  *  - generate a record in tx_newspaper_pagezone in addition to tx_newspaper_exra
- *  - remove pagezone_article and replace with articleimpl everywhere
+ *  - remove pagezone_article and extra_articlerenderer and replace with articleimpl everywhere
  *  - rename to article and interface to articleiface
  *  - make sure it works as generic page zone (when assembling pages) as well as concrete article 
  */
@@ -31,7 +31,8 @@ class tx_newspaper_ArticleImpl extends tx_newspaper_PageZone implements tx_newsp
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());			
+			tx_newspaper_ExtraImpl::createExtraRecord($uid, $this->getTable());	
+			tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
 		}	
 	}
 	

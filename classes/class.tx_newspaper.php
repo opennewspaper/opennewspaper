@@ -108,7 +108,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	        	$rows[] = $row;
 			return $rows;
 		} else throw new tx_newspaper_NoResException(self::$query);		
-	}	
+	}
 
 	
 	/// inserts a record using T3 API

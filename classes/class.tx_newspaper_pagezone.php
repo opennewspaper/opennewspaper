@@ -155,6 +155,54 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
 		}
  	}
  	
+ 	/// Create the record for a concrete PageZone in the table of abstract PageZones
+	/** This is probably necessary because a concrete PageZone has been freshly
+	 *  created.
+	 * 
+	 *  Does nothing if the concrete PageZone is already linked in the abstract table. 
+	 * 
+	 *  \param $uid UID of the PageZone in the table of concrete PageZone
+	 *  \param $table Table of concrete PageZone
+	 *  \return UID of abstract PageZone record
+	 */ 
+	public static function createPageZoneRecord($uid, $table) {
+		/// Check if record is already present in extra table
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid', 'tx_newspaper_pagezone', 
+			'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
+			' AND pagezone_uid = ' . intval($uid)	
+		);
+		if ($row['uid']) return $row['uid'];
+		
+		/// read typo3 fields to copy into extra table
+		$row = tx_newspaper::selectOneRow(
+			implode(', ', self::$fields_to_copy_into_pagezone_table),
+			$table,
+			'uid = ' . intval($uid)
+		);
+		
+		/// write the uid and table into extra table, with the values read above
+		$row['extra_uid'] = $uid;
+		$row['extra_table'] = $table;
+
+
+		/** use the PID all PageZones share. If PageZones are created under more
+		 *  than one page, we have a problem and can't continue.
+		 */
+		$rows = tx_newspaper::selectRows(
+			'DISTINCT pid', 'tx_newspaper_pagezone', 'pid != 0'
+		);
+		if (sizeof($rows) != 1) {
+		 	throw new tx_newspaper_InconsistencyException(
+		 		'Abstract PageZones were created on more than one page:<br />' . "\n" .
+		 		print_r($rows, 1)
+		 	);
+		}
+		$row['pid'] = $rows[0]['pid'];
+
+		return tx_newspaper::insertRows('tx_newspaper_pagezone', $row);		
+	}
+ 	
 	/// Read Attributes from DB
 	/** \see readExtras()
 	 * 
@@ -192,6 +240,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_Extra {
  	 
  	/// Default Smarty template for HTML rendering
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
+ 	
+ 	private static $fields_to_copy_into_pagezone_table = array(
+		'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 
+	);
  	
 }
  
