@@ -128,7 +128,25 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  	public function getTable() { return tx_newspaper::getTable($this); }
 	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
- 	
+
+
+	/// get active pages for given section
+	/** \param $section_uid uid of section
+	 *  \return array uids of active pages for given section
+	 */
+	public static function getActivePages($section_uid, $include_hidden=true) {
+		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		$p = new tx_newspaper_Page();
+		$row = tx_newspaper::selectRows(
+			'*',
+			$p->getTable(),
+			'pid=' . $sf->getPid($p) . ' AND section=' . intval($section_uid) . $where
+		);
+		return $row;
+	}
+
+
  	private $uid = 0;
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
