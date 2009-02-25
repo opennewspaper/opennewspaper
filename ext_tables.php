@@ -16,6 +16,7 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 
@@ -39,7 +40,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_image.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, extra_field, title, image, caption",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, extra_field, title, image, caption, template_set",
 	)
 );
 
@@ -87,7 +88,7 @@ $TCA["tx_newspaper_page"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_page.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "section, pagetype_id, inherit_from_page",
+		"fe_admin_fieldList" => "section, pagetype_id, inherit_from_page, template_set",
 	)
 );
 
@@ -132,7 +133,7 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagezone_page.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "pagezonetype_id, pagezone_id, extras",
+		"fe_admin_fieldList" => "pagezonetype_id, pagezone_id, extras, template_set",
 	)
 );
 
@@ -154,7 +155,7 @@ $TCA["tx_newspaper_article"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_article.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, title, kicker, teaser, text, author, source_id, source_object, extras, sections, name, is_template",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, title, kicker, teaser, text, author, source_id, source_object, extras, sections, name, is_template, template_set",
 	)
 );
 
@@ -210,7 +211,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_sectionlist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, template_set",
 	)
 );
 
@@ -347,5 +348,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>
