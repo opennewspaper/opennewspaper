@@ -59,6 +59,8 @@ add_file "ext_tables.sql" "util/ext_tables_addon.sql"
 # modules are added in ext_tables_addon.php
 remove_line "ext_tables.php" \
 		"t3lib_extMgm::addModule("
+remove_line "ext_tables.php" \
+		"t3lib_extMgm::addTCAColumns("
 
 change_main_module
 
