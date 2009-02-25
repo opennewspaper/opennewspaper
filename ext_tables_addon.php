@@ -15,6 +15,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
+	
+	$tempColumns["tx_newspaper_associated_section"]["config"]["range"] = array();
+	t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 
 	// add main module 'newspaper', add sub modules
 	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/');	
