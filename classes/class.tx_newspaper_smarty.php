@@ -87,13 +87,14 @@ class tx_newspaper_Smarty extends Smarty {
 		if (is_object($template)) {
 			$template = strtolower(get_class($template)) . '.tmpl';
 		}
-		t3lib_div::debug($GLOBALS['TSFE']->rootLine);
+		
 		foreach ($this->templateSearchPath as $dir) {
 			if (file_exists(/* ... */$template)) {
 				$this->template_dir = /* $installation . '/' . $basepath . */ $dir;	
 			}
 		}
-		return parent::fetch($template);
+		
+		return print_r($GLOBALS['TSFE']->getPageAndRootline(), 1).parent::fetch($template);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
