@@ -46,5 +46,9 @@ $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = arr
 	"upper" => "1000000000",
 	"lower" => "1"
 );
+$TCA["pages"]["columns"]["tx_newspaper_associated_section"]["config"]["range"] = array (
+	"upper" => "1000000000",
+	"lower" => "1"
+);
 
 ?>
