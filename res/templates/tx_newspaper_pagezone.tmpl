@@ -1,0 +1,20 @@
+
+<!-- start tx_newspaper/smarty/tx_newspaper_pagezone.tmpl -->
+
+{* Page Zone containing (several) Extras
+   Variables:
+   $class		class whose render() method is called
+   $attributes	array(name => value)
+*}
+
+<h3>Class: {$class} </h3>
+
+{foreach from=$attributes key=name item=value}
+   <p> {$name}: {$value}</p>
+{/foreach}
+
+{foreach from=$extras item=extra}
+   <p> {$extra}</p>
+{/foreach}
+
+<!--  end  tx_newspaper/smarty/tx_newspaper_page.tmpl -->
