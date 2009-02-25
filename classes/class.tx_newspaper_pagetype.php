@@ -85,7 +85,23 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
  	public function getTable() { return tx_newspaper::getTable($this); }
 	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
- 	
+
+
+	/// get all available page types
+	/// \return array all available page types
+	public static function getAvailablePageTypes($include_hidden=true) {
+		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages types be included?
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		$pt = new tx_newspaper_PageType();
+		$row = tx_newspaper::selectRows(
+			'*', 
+			$pt->getTable(),
+			'pid=' . $sf->getPid($pt) . $where
+		);
+		return $row;
+	}
+
+
  	private $uid = 0;
  	private $condition = null;
  	private $attributes = array();
