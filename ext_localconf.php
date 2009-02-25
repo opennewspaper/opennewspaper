@@ -41,9 +41,6 @@ t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_extra=1
 ');
 t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_extra_articlerenderer=1
-');
-t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_extra_sectionlist=1
 ');
 t3lib_extMgm::addUserTSConfig('
@@ -58,5 +55,4 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_pagezonetype=1
 ');
-require_once(PATH_typo3conf . 'ext/newspaper/ext_localconf_addon.php');
 ?>
