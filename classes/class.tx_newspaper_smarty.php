@@ -47,11 +47,18 @@ if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
 class tx_newspaper_Smarty extends Smarty {
 	public function __construct($basepath) {
 
-/// \to do: add windows version
-
 		/// Configure directories (one path per t3 installation)
-		$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2));
-		$tmp = "/tmp/" . substr($installation, 1);
+		if (TYPO3_OS == 'WIN') {
+			/// windows
+			$temp_dir_win = str_replace('\\', '/', sys_get_temp_dir()); // temp dir, split paths with / character
+			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2)); 
+			$tmp = $temp_dir_win . str_replace(':', '', $installation); // remove ':' (like in 'c:/example')
+		} else {
+			/// other os
+			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2));
+			$tmp = "/tmp/" . substr($installation, 1);
+		}
+		
 		file_exists($tmp) || mkdir($tmp, 0774, true);
 		
 		$this->template_dir = $installation . '/' . $basepath;
