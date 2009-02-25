@@ -67,6 +67,39 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->cache_dir    = $tmp;		
  	}
 
+	/// Sets the directories in which smarty looks for templates, in correct order
+	/** The default path, <tt>PATH_typo3conf.'ext/newspaper/res/templates'</tt>, 
+	 * 	must always be set.
+	 * 
+	 * \param $path
+	 */
+	public function setTemplateSearchPath(array $path) { 
+		$this->templateSearchPath = 
+			array_unique(
+				array_merge(
+					$path, 
+					array(PATH_typo3conf . 'ext/newspaper/res/templates')
+				)
+			); 
+	}
+	
+	public function fetch($template) {
+		if (is_object($template)) {
+			$template = strtolower(get_class($template)) . '.tmpl';
+		}
+		t3lib_div::debug($GLOBALS['TSFE']->rootLine);
+		foreach ($this->templateSearchPath as $dir) {
+			if (file_exists(/* ... */$template)) {
+				$this->template_dir = /* $installation . '/' . $basepath . */ $dir;	
+			}
+		}
+		return parent::fetch($template);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	private $templateSearchPath = array();
+
 }
 
 ?>

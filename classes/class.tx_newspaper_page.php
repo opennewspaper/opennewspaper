@@ -99,13 +99,24 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	}
 	
 	/// Render the page, containing all associated page areas
-	/**
-	 *  \todo default smarty template?
+	/** The correct template is found the following way.
+	 *  - the template set for the page is set via TypoScript
+	 *  - the name for the page is found via its page type
+	 *  - if the template <tt>tx_newspaper_page.tmpl</tt> exists under directory
+	 *    <tt><template_set>/<page_type></tt>, use it
+	 *  - else, if <tt>tx_newspaper_page.tmpl</tt> exists under directory
+	 *    <tt><template_set></tt>, use it
+	 *  - else, use the default template under 
+	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>
+	 * 
+	 *  \todo implement this template-finding logic
 	 * 
 	 *  \return The rendered page as HTML (or XML, if you insist) 
 	 */
  	public function render($template = '') {
- 		if (!$template) $template = self::$defaultTemplate;
+ 		if (!$template) {
+ 			$template = self::$defaultTemplate;
+ 		}
  		
  		$this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
  		$this->smarty->assign('page_type', $this->pagetype->getAttribute('type_name'));
