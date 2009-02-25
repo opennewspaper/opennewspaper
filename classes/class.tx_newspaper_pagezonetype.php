@@ -62,6 +62,22 @@ class tx_newspaper_PageZoneType implements tx_newspaper_InSysFolder {
 
  	public function getTable() { return tx_newspaper::getTable($this); }
 
+
+	/// get all available page zone types
+	/// \return array all available page zone types
+	public static function getAvailablePageZoneTypes($include_hidden=true) {
+		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		$pzt = new tx_newspaper_PageZoneType();
+		$row = tx_newspaper::selectRows(
+			'*', 
+			$pzt->getTable(),
+			'pid=' . $sf->getPid($pzt) . $where
+		);
+		return $row;
+	}
+
+
  	private $uid = 0;
  	private $attributes = array();
 }
