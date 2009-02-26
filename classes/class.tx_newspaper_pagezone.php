@@ -63,7 +63,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \return The rendered page as HTML (or XML, if you insist) 
 	 */
  	public function render($template = '') {
- 		if (!$template) $template = self::$defaultTemplate;
+ 		if (!$template) $template = $this;
  		
  		$this->smarty->assign('class', get_class($this));
  		$this->smarty->assign('attributes', $this->attributes);
