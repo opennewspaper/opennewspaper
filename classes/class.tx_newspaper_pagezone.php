@@ -66,6 +66,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		$this->smarty->setTemplateSearchPath(
 			array(
+				'template_sets/' . strtolower($this->getParentPage()->pagetype->getAttribute('type_name')) . '/'. 
+								   strtolower($this->getPageZoneType()->getAttribute('name')),
 				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
 				'template_sets'
 			)
@@ -115,6 +117,19 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$this->pagezonetype = new tx_newspaper_PageZoneType($this->getAttribute('pagezonetype_id'));
 		} 
 		return $this->pagezonetype; 
+	}
+
+	public function getParentPage() {
+		if (!$this->parent_page) {
+			if (!$this->parent_page_id) {
+				$pagezone_record = tx_newspaper::selectOneRow(
+					'page_id', 'tx_newspaper_pagezone', 
+					'pagezone_table = ' . $this->getTable() .
+					' AND pagezone_uid = ' .$this->getUid()
+				);
+				t3lib_div::debug($pagezone_record);
+			}
+		}
 	}
 	
 	public function store() {
@@ -248,6 +263,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	protected $extras = array();		///< array of tx_newspaper_Extra s
  	protected $pagezonetype = null;
  	
+ 	protected $parent_page_id = 0;
+ 	protected $parent_page = null;
  	
 # 	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
  	 
