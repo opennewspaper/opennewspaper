@@ -85,7 +85,6 @@ class tx_newspaper_Smarty extends Smarty {
 					array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY)
 				)
 			);
-		t3lib_div::debug($this->templateSearchPath);
 	}
 	
 	/// Render a template, scanning several directories for it
