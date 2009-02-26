@@ -132,5 +132,12 @@ class tx_newspaper_SysfolderIllegalModulenameException
     }	
 }
 
+/// This Exception is thrown if it's not possible to get pids for a class implmenting the tx_newspaper_InSysfolder interface
+class tx_newspaper_SysfolderNoPidsFoundException
+	extends tx_newspaper_InconsistencyException {
+	public function __construct($class) {
+        parent::__construct("Could not retrieve pids for class $class");
+    }	
+}
 
 ?>
