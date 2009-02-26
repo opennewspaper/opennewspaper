@@ -180,12 +180,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	protected function splitIntoParagraphs() {
-		$paragraphs = explode('<p', $this->getAttribute('text'));
 		/** A text usually starts with a <p>, in that case the first paragraph
 		 *  must be removed. It may not be the case though, if so, the first
 		 *  paragraph is meaningful and must be kept.
 		 */
-		if (!$paragraphs[0]) unset($paragraphs[0]);
+		$paragraphs = explode('<p', $this->getAttribute('text'));		
+		if (!$paragraphs[0]) {
+			$tmp  = explode('<p', $this->getAttribute('text'), 2);
+			$paragraphs = explode('<p', $tmp[1]);
+		}
 		
 		foreach ($paragraphs as $index => $paragraph) {
 			/// remove the test of the <p>-tag from every line
