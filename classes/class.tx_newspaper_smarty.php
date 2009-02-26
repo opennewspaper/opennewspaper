@@ -110,7 +110,9 @@ class tx_newspaper_Smarty extends Smarty {
 				break;
 			}
 		}
-		
+		t3lib_div::debug('-------------------------------------------------------');
+		t3lib_div::debug($dir . '/' . $template);
+		t3lib_div::debug('-------------------------------------------------------');
 		return parent::fetch($template);
 	}
 	
