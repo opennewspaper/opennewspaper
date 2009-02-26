@@ -108,7 +108,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return tx_newspaper::getTable($this);
 	}
 
-	public function getPageZoneType() { return $this->pagezonetype; }
+	public function getPageZoneType() {
+		if (!$this->pagezonetype) {
+			$this->pagezonetype = new tx_newspaper_PageZoneType($this->getAttribute('pagezonetype_id'));
+		} 
+		return $this->pagezonetype; 
+	}
 	
 	public function store() {
 		/// \todo see extraImpl::store()
