@@ -101,6 +101,7 @@ class tx_newspaper_Smarty extends Smarty {
 		
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
+		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 		foreach ($this->templateSearchPath as $dir) {
 			t3lib_div::debug($basepath.$dir);
 			if (file_exists($basepath . '/' . $dir . '/' . $template)) {
