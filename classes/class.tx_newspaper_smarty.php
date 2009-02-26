@@ -103,15 +103,12 @@ class tx_newspaper_Smarty extends Smarty {
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 		foreach ($this->templateSearchPath as $dir) {
 			if ($dir[0] != '/') $dir = $basepath . '/' . $dir;
-			t3lib_div::debug($dir);
 			if (file_exists($dir . '/' . $template)) {
 				$this->template_dir = $dir;	
 				break;
 			}
 		}
-		t3lib_div::debug('-------------------------------------------------------');
-		t3lib_div::debug($dir . '/' . $template);
-		t3lib_div::debug('-------------------------------------------------------');
+		t3lib_div::debug('-------------------------------------------------------'. $dir . '/' . $template. '-------------------------------------------------------');
 		return parent::fetch($template);
 	}
 	
