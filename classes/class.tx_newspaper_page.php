@@ -55,7 +55,13 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		$this->pagetype = $type;
 
 		/// Configure Smarty rendering engine
-		$this->smarty = new tx_newspaper_Smarty('/fileadmin/templates/tx_newspaper/smarty');
+		$this->smarty = new tx_newspaper_Smarty();
+		$this->smarty->setTemplateSearchPath(
+			array(
+				'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
+				'template_sets'
+			)
+		);
  	}
  	
  	function getAttribute($attribute) {
@@ -100,7 +106,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	
 	/// Render the page, containing all associated page areas
 	/** The correct template is found the following way.
-	 *  - the template set for the page is set via TypoScript
+	 *  - the template set for the page is set via TSConfig
 	 *  - the name for the page is found via its page type
 	 *  - if the template <tt>tx_newspaper_page.tmpl</tt> exists under directory
 	 *    <tt><template_set>/<page_type></tt>, use it
@@ -109,9 +115,10 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	 *  - else, use the default template under 
 	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>
 	 * 
-	 *  \todo implement this template-finding logic
+	 *  \todo implement this template-finding logic by calling 
+	 * 		  $this->smarty-setTemplateSearchPath()
 	 * 
-	 *  \return The rendered page as HTML (or XML, if you insist) 
+	 *  \return The rendered page as HTML (or whatever your template does) 
 	 */
  	public function render($template = '') {
  		if (!$template) {

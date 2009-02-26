@@ -45,7 +45,10 @@ if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
  *  Because that process is somewhat tedious, this class does it in the c'tor.  
  */
 class tx_newspaper_Smarty extends Smarty {
-	public function __construct($basepath) {
+	
+	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
+	
+	public function __construct() {
 
 		/// Configure directories (one path per t3 installation)
 		if (TYPO3_OS == 'WIN') {
@@ -54,14 +57,15 @@ class tx_newspaper_Smarty extends Smarty {
 			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2)); 
 			$tmp = $temp_dir_win . str_replace(':', '', $installation); // remove ':' (like in 'c:/example')
 		} else {
-			/// other os
+			/// real os
 			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2));
 			$tmp = "/tmp/" . substr($installation, 1);
 		}
-		
+
+		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
+
 		file_exists($tmp) || mkdir($tmp, 0774, true);
-		
-		$this->template_dir = $installation . '/' . $basepath;
+
 		$this->compile_dir  = $tmp;
 		$this->config_dir   = $tmp;
 		$this->cache_dir    = $tmp;		
@@ -78,27 +82,33 @@ class tx_newspaper_Smarty extends Smarty {
 			array_unique(
 				array_merge(
 					$path, 
-					array(PATH_typo3conf . 'ext/newspaper/res/templates')
+					array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY)
 				)
 			); 
 	}
 	
+	/// Render a template, scanning several directories for it
+	/** The directories under which to search smarty templates are set with
+	 *  setTemplateSearchPath().
+	 * 
+	 *  \return The rendered template as HTML (or XML, whatever your template does) 
+	 */
 	public function fetch($template) {
 		if (is_object($template)) {
 			$template = strtolower(get_class($template)) . '.tmpl';
 		}
 		
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		foreach ($this->templateSearchPath as $dir) {
-			if (file_exists(/* ... */$template)) {
-				$this->template_dir = /* $installation . '/' . $basepath . */ $dir;	
+			t3lib_div::debug($basepath.$dir);
+			if (file_exists($basepath . '/' . $dir . '/' . $template)) {
+				$this->template_dir = $basepath . $dir;	
+				break;
 			}
 		}
 		
-		$TSCONFIG = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		return "debugging information: " . 
-				print_r($TSCONFIG['newspaper.'], 1) .
-				"debugging information end " .
-				parent::fetch($template);
+		return parent::fetch($template);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
