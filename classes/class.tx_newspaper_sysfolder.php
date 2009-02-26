@@ -100,9 +100,29 @@ class tx_newspaper_Sysfolder {
 		
 		$uid = tx_newspaper::insertRows('pages', $fields); // insert sysfolder and get uid of that sysfolder
 		$this->sysfolder[$module_name] = $uid; // append this sysfolder in local storage array
-}
- 	
- 	
+	}
+
+
+ 	/// gets pids of classes extending the given class
+ 	/** \param $class_name class name to get pid (if available) of child classes
+ 	 *  \return array list of pids (for storing records in Typo3 database)
+ 	 */ 
+ 	public function getPidsForAbstractClass($class_name) {
+ 		if ($class_name == '') return array();
+ 		$child_class = tx_newspaper::getChildClasses($class_name);
+		$pid_list = array(); /// < list of all pids associated with class $class
+		for ($i = 0; $i < sizeof($child_class); $i++) {
+			$tmp_impl = class_implements($child_class[$i]);
+			if (isset($tmp_impl['tx_newspaper_InSysFolder'])) {
+				/// store pid for this (concrete) child class
+				// this works because that class implments the tx_newspaper_InSysfolder interface
+				$pid_list[] = tx_newspaper_Sysfolder::getInstance()->getPid(new $child_class[$i]());
+			}
+		}
+		return $pid_list;
+ 	}
+
+
  	/// gets the uid of the sysfolder to store data in
  	/** \param tx_newspaper_InSysFolder $obj object implemeting the tx_newspaper_InSysFolder interface
  	 *  \return $pid of sysfolder (sysfolder is created if not existing)
