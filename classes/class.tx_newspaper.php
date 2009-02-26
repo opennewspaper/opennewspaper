@@ -196,6 +196,27 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	}	
 	
 	
+
+
+
+
+	/// get all child classes (but child only, no grand children etc.)
+	/** basically used to get concrete classes extending an abstract class
+	 *  \param $class_name name of class to look for child classes
+	 *  \return array list of child classes
+	 */ 
+	public static function getChildClasses($class_name) {
+		if ($class_name == '') return array();
+		$class_name = strtolower($class_name);
+		$child_list = array();
+		foreach(get_declared_classes() as $cl) {
+			if (strtolower(get_parent_class($cl)) == $class_name && strtolower($cl) != $class_name) 
+				$child_list[] = $cl;
+		}
+		return $child_list;	
+	}
+
+
 	
 
 	////////////////////////////////////////////////////////////////////////////
