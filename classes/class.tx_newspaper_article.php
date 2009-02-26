@@ -189,7 +189,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		foreach ($paragraphs as $index => $paragraph) {
 			/// remove the test of the <p>-tag from every line
-			$paragraphs[$index] = substr($paragraph, strpos($paragraph, '>')+1);
+			$paragraphs[$index] = trim(substr($paragraph, strpos($paragraph, '>')+1));
+			/** each paragraph now ends with a </p>. If it doesn't, the text is
+			 *  not well-formed. In any case, we must remove the </p>.
+			 */
+			$paragraphs[$index] = str_replace('</p>', '', $paragraphs[$index]);
 		}
 		t3lib_div::debug($paragraphs);
 		return $paragraphs;	
