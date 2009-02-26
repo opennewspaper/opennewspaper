@@ -95,7 +95,8 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		return "debugging information: " . 
-				print_r($GLOBALS['TSFE'], 1) .
+				print_r($GLOBALS['TSFE']->page, 1) .
+				print_r(t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page), 1) .
 				"debugging information end " .
 				parent::fetch($template);
 	}
