@@ -63,6 +63,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
 			$paragraphs = $this->splitIntoParagraphs();
+			$this->smarty->assign('paragraphs', $paragraphs);
 			$ret = $this->smarty->fetch($this);
 
 			/// \todo print extras
@@ -193,12 +194,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		foreach ($paragraphs as $index => $paragraph) {
 			/// remove the test of the <p>-tag from every line
 			$paragraphs[$index] = trim(substr($paragraph, strpos($paragraph, '>')+1));
-			/** each paragraph now ends with a </p>. If it doesn't, the text is
-			 *  not well-formed. In any case, we must remove the </p>.
+			/** each paragraph now should end with a </p>. If it doesn't, the
+			 *  text is not well-formed. In any case, we must remove the </p>.
 			 */
 			$paragraphs[$index] = str_replace('</p>', '', $paragraphs[$index]);
 		}
-		t3lib_div::debug($paragraphs);
+
 		return $paragraphs;	
 	}
 	

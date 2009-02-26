@@ -18,6 +18,13 @@
 
 <p> 
 	{if $paragraphs}
+		<ul>
+			{section name=i loop=$paragraphs}
+				<li>
+					{$paragraphs[i]}
+				</li>
+			{/section}
+		</ul>
 	{else}
 		{$text}
 	{/if}		
