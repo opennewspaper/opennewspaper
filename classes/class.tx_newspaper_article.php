@@ -39,8 +39,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		$this->smarty->setTemplateSearchPath(
 			array(
-				'template_sets/' . strtolower($this->getParentPage()->getPagetype()->getAttribute('type_name')) . '/'. 
-								   strtolower($this->getPageZoneType()->getAttribute('name')),
+#				'template_sets/' . strtolower($this->getParentPage()->getPagetype()->getAttribute('type_name')) . '/'. 
+#								   strtolower($this->getPageZoneType()->getAttribute('name')),
 				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
 				'template_sets'
 			)
