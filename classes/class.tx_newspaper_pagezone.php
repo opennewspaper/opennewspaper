@@ -261,7 +261,29 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	
 	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
- 	
+
+
+	/// get active pages zone for given page
+	/** \param $page_uid uid of page
+	 *  \return array uids of active pages zone for given page
+	 */
+	public static function getActivePageZones($page_uid, $include_hidden=true) {
+		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
+	
+		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
+		if (sizeof($pid_list) == 0) {
+			throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
+		}
+		
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_pagezone',
+			'pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($page_uid) . $where
+		);
+		return $row;
+	}
+
+
  	private $uid = 0;
  	
  	protected $smarty = null;
