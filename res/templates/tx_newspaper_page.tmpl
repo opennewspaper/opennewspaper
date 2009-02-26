@@ -8,7 +8,8 @@
    $page_zones: array (name of page zone => rendered content)
 *}
 
-<h2> {$section} {$page_type} </h2>
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+<h1> {$section} {$page_type} </h1>
 
 {foreach from=$page_zones key=name item=content}
    <div class="{$name}"> {$name}: {$content}</div>
