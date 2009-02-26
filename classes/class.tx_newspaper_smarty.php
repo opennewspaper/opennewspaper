@@ -69,7 +69,8 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->compile_dir  = $tmp;
 		$this->config_dir   = $tmp;
 		$this->cache_dir    = $tmp;
-						$this->caching = false;
+		$this->caching = false;
+		$this->debugging = true;
 				
  	}
 
