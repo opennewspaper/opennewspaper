@@ -189,7 +189,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		foreach ($paragraphs as $index => $paragraph) {
 			/// remove the test of the <p>-tag from every line
-			$paragraphs[$index] = substr($paragraph, strpos($paragraph, '>'));
+			$paragraphs[$index] = substr($paragraph, strpos($paragraph, '>')+1);
 		}
 		t3lib_div::debug($paragraphs);
 		return $paragraphs;	
