@@ -127,9 +127,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), 'tx_newspaper_pagezone') .
 					' AND pagezone_uid = ' .$this->getUid()
 				);
-				t3lib_div::debug($pagezone_record);
+				$this->parent_page_id = $pagezone_record['page_id'];
 			}
+			$this->parentPage = new tx_newspaper_page($this->parent_page_id);
+			#t3lib_div::debug($pagezone_record);
 		}
+		return $this->parent_page;
 	}
 	
 	public function store() {
