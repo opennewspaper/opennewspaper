@@ -25,6 +25,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
+		$this->smarty = new tx_newspaper_Smarty();
+		
 		if ($uid) {
 			$this->setUid($uid);
 			
@@ -34,7 +36,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
 			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
-		}	
+		}
+		$this->smarty->setTemplateSearchPath(
+			array(
+				'template_sets/' . strtolower($this->getParentPage()->getPagetype()->getAttribute('type_name')) . '/'. 
+								   strtolower($this->getPageZoneType()->getAttribute('name')),
+				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
+				'template_sets'
+			)
+		);
+		
 	}
 	
 	public function render($template = '') {
@@ -48,11 +59,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			}
 			
 		} else {
-			$ret = '<h2>'.$this->getAttribute('kicker').'</h2>'.'<h1>'.$this->getAttribute('title').'</h1>'.
-			   	   '<h3>'.$this->getAttribute('teaser').'</h3>'.'<p>VON '.$this->getAttribute('author').'</p>'.
-			   	   $this->getAttribute('text');
-		/// \todo use smarty
-		/// \todo print extras
+			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
+			$this->smarty->assign('title', $this->getAttribute('title'));
+			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
+			$this->smarty->assign('author', $this->getAttribute('author'));
+			$this->smarty->assign('text', $this->getAttribute('text'));
+			$ret = $this->smarty->fetch($this);
+
+			/// \todo print extras
+			
 		} 
 		return $ret;
 	}

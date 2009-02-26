@@ -1,0 +1,20 @@
+
+<!-- start res/templates/tx_newspaper_article.tmpl -->
+
+{* Article
+   Variables:
+   $kicker
+   $title
+   $teaser
+   $author
+   $text
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+<h2> {$kicker} </h2>
+<h1> {$title} </h1>
+<h3> {$teaser} {if $author}VON {$author}{/if} </h3>
+
+<p> {$text} </p>
+
+<!--  end  res/templates/tx_newspaper_article.tmpl -->
