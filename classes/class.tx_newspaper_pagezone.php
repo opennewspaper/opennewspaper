@@ -124,7 +124,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if (!$this->parent_page_id) {
 				$pagezone_record = tx_newspaper::selectOneRow(
 					'page_id', 'tx_newspaper_pagezone', 
-					'pagezone_table = ' . $this->getTable() .
+					'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), 'tx_newspaper_pagezone') .
 					' AND pagezone_uid = ' .$this->getUid()
 				);
 				t3lib_div::debug($pagezone_record);
