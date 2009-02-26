@@ -140,6 +140,8 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		return $this->parentSection;
  	}
  	
+ 	public function getPageType() { return $this->pagetype; }
+ 	
 	static function getModuleName() { return 'np_page'; }
 
  	public function getTable() { return tx_newspaper::getTable($this); }
