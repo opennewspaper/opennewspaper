@@ -68,7 +68,9 @@ class tx_newspaper_Smarty extends Smarty {
 
 		$this->compile_dir  = $tmp;
 		$this->config_dir   = $tmp;
-		$this->cache_dir    = $tmp;		
+		$this->cache_dir    = $tmp;
+						$this->caching = false;
+				
  	}
 
 	/// Sets the directories in which smarty looks for templates, in correct order
