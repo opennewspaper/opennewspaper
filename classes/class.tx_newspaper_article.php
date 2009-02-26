@@ -36,13 +36,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
 			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
+			$this->smarty->setTemplateSearchPath(
+				array(
+					'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
+					'template_sets'
+				)
+			);
 		}
-		$this->smarty->setTemplateSearchPath(
-			array(
-				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
-				'template_sets'
-			)
-		);
 		
 	}
 	
