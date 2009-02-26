@@ -47,8 +47,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// Configure Smarty rendering engine
 	public function __construct($uid = 0) {
 		/// Configure Smarty rendering engine
-		$this->smarty = new tx_newspaper_Smarty('/fileadmin/templates/tx_newspaper/smarty');
-		
+		$this->smarty = new tx_newspaper_Smarty();
+		$this->smarty->setTemplateSearchPath(
+			array(
+				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
+				'template_sets'
+			)
+		);
 		if ($uid) {
 			$this->setUid($uid);
 			/** I'm not sure whether the following line should remain. It's a
