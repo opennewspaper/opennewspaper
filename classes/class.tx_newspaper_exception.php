@@ -128,7 +128,7 @@ class tx_newspaper_ArticleNotFoundException extends tx_newspaper_Exception {
 class tx_newspaper_SysfolderIllegalModulenameException 
 	extends tx_newspaper_IllegalUsageException { 
 	public function __construct($name) {
-        parent::__construct("Illegal Module name $name. Allowed: np_* or newspaper; max. 10 characters.");
+        parent::__construct("Illegal Module name $name. Allowed: np_* or newspaper; max. 255 characters.");
     }	
 }
 
