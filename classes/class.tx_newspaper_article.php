@@ -181,6 +181,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	protected function splitIntoParagraphs() {
 		$paragraphs = explode('<p', $this->getAttribute('text'));
+		if (!$paragraphs[0]) unset($paragraphs[0]);
 		t3lib_div::debug($paragraphs);
 		return $paragraphs;	
 	}
