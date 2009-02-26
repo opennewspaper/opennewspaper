@@ -62,6 +62,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
+			$paragraphs = $this->splitIntoParagraphs();
 			$ret = $this->smarty->fetch($this);
 
 			/// \todo print extras
@@ -176,6 +177,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		
 		return $this->getUid();		
+	}
+	
+	protected function splitIntoParagraphs() {
+		$paragraphs = explode('<p', $this->getAttribute('text'));
+		t3lib_div::debug($paragraphs);
+		return $paragraphs;	
 	}
 	
 	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
