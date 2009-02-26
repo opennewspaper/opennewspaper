@@ -103,8 +103,8 @@ class tx_newspaper_Smarty extends Smarty {
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 		foreach ($this->templateSearchPath as $dir) {
-			t3lib_div::debug($basepath.'.'.$dir);
 			if ($dir[0] != '/') $dir = $basepath . '/' . $dir;
+			t3lib_div::debug($dir);
 			if (file_exists($dir . '/' . $template)) {
 				$this->template_dir = $dir;	
 				break;
