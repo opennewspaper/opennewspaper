@@ -209,7 +209,7 @@ $TCA["tx_newspaper_section"] = array (
 $TCA["tx_newspaper_page"] = array (
 	"ctrl" => $TCA["tx_newspaper_page"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "section,pagetype_id,inherit_from_page,template_set"
+		"showRecordFieldList" => "section,pagetype_id,inherit_pagetype_id,template_set"
 	),
 	"feInterface" => $TCA["tx_newspaper_page"]["feInterface"],
 	"columns" => array (
@@ -237,16 +237,16 @@ $TCA["tx_newspaper_page"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"inherit_from_page" => Array (		
+		"inherit_pagetype_id" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.inherit_from_page",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.inherit_pagetype_id",		
 			"config" => Array (
 				"type" => "select",	
 				"items" => Array (
 					Array("",0),
 				),
-				"foreign_table" => "tx_newspaper_page",	
-				"foreign_table_where" => "ORDER BY tx_newspaper_page.uid",	
+				"foreign_table" => "tx_newspaper_pagetype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_pagetype.uid",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -262,7 +262,7 @@ $TCA["tx_newspaper_page"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "section;;;;1-1-1, pagetype_id, inherit_from_page, template_set")
+		"0" => array("showitem" => "section;;;;1-1-1, pagetype_id, inherit_pagetype_id, template_set")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1095,5 +1095,4 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
