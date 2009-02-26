@@ -70,8 +70,6 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->config_dir   = $tmp;
 		$this->cache_dir    = $tmp;
 		$this->caching = false;
-		$this->debugging = true;
-				
  	}
 
 	/// Sets the directories in which smarty looks for templates, in correct order
@@ -101,14 +99,11 @@ class tx_newspaper_Smarty extends Smarty {
 			$template = strtolower(get_class($template)) . '.tmpl';
 		}
 		
-		t3lib_div::debug($this->templateSearchPath);
-		
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 		foreach ($this->templateSearchPath as $dir) {
 			if ($dir[0] != '/') $dir = $basepath . '/' . $dir;
-			t3lib_div::debug("$dir - $template");
 			if (file_exists($dir . '/' . $template)) {
 				$this->template_dir = $dir;	
 				break;
