@@ -96,7 +96,7 @@ class tx_newspaper_Smarty extends Smarty {
 		
 		$TSCONFIG = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		return "debugging information: " . 
-				print_r($TSCONFIG, 1) .
+				print_r($TSCONFIG['newspaper.'], 1) .
 				"debugging information end " .
 				parent::fetch($template);
 	}
