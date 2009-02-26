@@ -129,7 +129,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				);
 				$this->parent_page_id = $pagezone_record['page_id'];
 			}
-			$this->parentPage = new tx_newspaper_page($this->parent_page_id);
+			$page_attributes = tx_newspaper::selectOneRow(
+				'section, pagetype_id', 'tx_newspaper_page', 
+				'uid = ' . $this->parent_page_id 
+			);
+			$this->parentPage = new tx_newspaper_page(new tx_newspaper_Section($page_attributes['section']),
+													  new tx_newspaper_PageType($page_attributes['pagetype_id']));
 			#t3lib_div::debug($pagezone_record);
 		}
 		return $this->parent_page;
