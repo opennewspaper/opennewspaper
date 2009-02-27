@@ -62,6 +62,10 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$extras = $this->article->getExtras();
 		t3lib_div::debug($extras);
 		/// \todo change paragraph for one extra
+		$extra[2]->setAttribute('paragraph', 1);
+		$this->checkComesBefore($this->article->render(), 'Image 1', 'Image 2');	 
+		$this->checkComesBefore($this->article->render(), 'Image 2', 'Image 4');	 
+		
 		/// \todo change position for one extra after paragraph 1
 		/// \todo make paragraph for one extra greater than number of paragraphs
 		/// \todo make paragraph for one extra less than negative number of paragraphs
