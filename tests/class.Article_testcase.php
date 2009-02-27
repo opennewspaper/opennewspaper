@@ -216,7 +216,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$pos2 = strpos($text, $second_string);
 		t3lib_div::debug("$second_string at $pos2");
 		if ($pos2 === false) return false;	// $second_string not found
-		return ($pos1 < $pos2);
+		$this->assertTrue($pos1 < $pos2);
 	}
 	
 	private $article = null;			///< the object
