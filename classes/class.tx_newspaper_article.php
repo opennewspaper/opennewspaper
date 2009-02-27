@@ -108,12 +108,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 					$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render();
 				}
 			}
-			t3lib_div::debug($paragraphs);
+
 			$this->smarty->assign('paragraphs', $paragraphs);
 			$ret = $this->smarty->fetch($this);
-
-			/// \todo print extras
-			
 		} 
 		return $ret;
 	}
