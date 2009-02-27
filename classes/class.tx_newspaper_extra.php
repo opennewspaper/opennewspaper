@@ -123,6 +123,17 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $this->getUid();
 	}
 	
+	/// Read data of Extra
+	/** \param $uid uid of record in given table
+	 *  \param $table name of table (f.ex tx_newspaper_extra_image)
+	 *  \return Array row with Extra data for given uid and table
+	 */
+	public static function readExtraItem($uid, $table) {
+t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($table, $uid));
+		if (!$uid) return array();
+		
+		return tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
+	}
 	
 	/// Create the record for a concrete Extra in the table of abstract Extras
 	/** This is probably necessary because a concrete Extra has been freshly
