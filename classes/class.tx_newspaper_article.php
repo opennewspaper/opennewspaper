@@ -78,6 +78,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 						$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render();
 					}
 				}
+				/** Braindead PHP does not sort arrays automatically, even if
+				 *  the keys are integers. So if you, e.g., insert first $a[4]
+				 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
+				 *  Thus, you must call ksort.
+				 */
+				ksort($paragraph['extras']);
 				$paragraphs[] = $paragraph;
 			}
 			t3lib_div::debug($paragraphs);
