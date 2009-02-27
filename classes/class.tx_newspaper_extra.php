@@ -189,6 +189,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	function setUid($uid) { $this->uid = $uid; }
  	
  	function setExtraUid($uid) { $this->extra_uid = $uid; }
+ 	protected function getExtraUid() { return $this->extra_uid; }
  	
 	private $uid = 0;
 	
