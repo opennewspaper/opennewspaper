@@ -238,7 +238,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist
 	/// Extra classes that should be subjected to all tests
 	private $extras_to_test = array(
-		'tx_newspaper_Extra_ArticleRenderer',
 		'tx_newspaper_Extra_Image',
 		'tx_newspaper_Extra_SectionList',
 	);
@@ -251,12 +250,10 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	/// Attributes to test in test_createExtra() and their expected values
 	private $attributes_to_test = array(
 		'title' => array(
-			'tx_newspaper_Extra_ArticleRenderer' => 'ArticleRenderer',
 			'tx_newspaper_Extra_Image' => 'Image',
 			'tx_newspaper_Extra_SectionList' => 'SectionList',
 		),
 		'modulename' => array(
-			'tx_newspaper_Extra_ArticleRenderer' => 'np_artrend',
 			'tx_newspaper_Extra_Image' => 'np_image',
 			'tx_newspaper_Extra_SectionList' => 'np_sect_ls',
 		),
