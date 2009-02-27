@@ -62,21 +62,21 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$extras = $this->article->getExtras();
 		
 		/// change paragraph for one extra
-		$extras[2]->setAttribute('paragraph', 1);
+		$extras[1]->setAttribute('paragraph', 1);
 		$this->checkComesBefore($this->article->render(), 'Image 1', 'Image 2');	 
 		$this->checkComesBefore($this->article->render(), 'Image 2', 'Image 4');	 
 		
 		/// change position for one extra after paragraph 1
-		$extras[2]->setAttribute('position', 6);
+		$extras[1]->setAttribute('position', 6);
 		$this->checkComesBefore($this->article->render(), 'Image 4', 'Image 2');	 
 		$this->checkComesBefore($this->article->render(), 'Image 2', 'title[5]');	 
 		
 		/// make paragraph for one extra greater than number of paragraphs
-		$extras[2]->setAttribute('paragraph', 100);
+		$extras[1]->setAttribute('paragraph', 100);
 		$this->checkComesBefore($this->article->render(), 'title[5]', 'Image 2');	 
 		
 		/// \todo make paragraph for one extra less than negative number of paragraphs
-		$extras[2]->setAttribute('paragraph', -100);
+		$extras[1]->setAttribute('paragraph', -100);
 		$this->checkComesBefore($this->article->render(), 'title[5]', 'Image 2');	 
 		t3lib_div::debug(preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->article->render()));
 	}
