@@ -68,6 +68,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				$paragraph = array();
 				if ($text_paragraph) $paragraph['text'] = $text_paragraph;
 				foreach ($this->getExtras() as $extra) {
+					/// \todo honor position parameter
+					/** \todo make sure all extras are rendered, even those
+					 * 		  whose paragraph attribute is > or < -the number of
+					 * 		  text paragraphs
+					 */ 
 					if ($extra->getAttribute('paragraph') == $index ||
 						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
 						$paragraph['extras'][] = $extra->render();

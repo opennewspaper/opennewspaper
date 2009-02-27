@@ -37,10 +37,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public function getAttribute($attribute) {
 
 		if (!$this->attributes) {
-			$this->attributes = tx_newspaper::selectOneRow(
-				'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()
-			)
-			+ tx_newspaper::selectOneRow(
+			$this->attributes = $this->getExtraUid()? 
+				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+				array();
+			$this->attributes += tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
@@ -173,7 +173,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	function setUid($uid) { $this->uid = $uid; }
  	
  	function setExtraUid($uid) { $this->extra_uid = $uid; }
- 	protected function getExtraUid() { return $this->extra_uid; }
+ 	protected function getExtraUid() { return intval($this->extra_uid); }
  	
 	private $uid = 0;
 	
