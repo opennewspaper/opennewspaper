@@ -62,7 +62,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
-			$paragraphs = $this->splitIntoParagraphs();
+			$text_paragraphs = $this->splitIntoParagraphs();
+			$paragraphs = array();
+			foreach ($text_paragraphs as $index => $text_paragraph) {
+				$paragraph = array();
+				if ($text_paragraph) $paragraph['text'] = $text_paragraph;
+				foreach ($this->getExtras() as $extra) {
+					if ($extra->getAttribute('paragraph') == $index ||
+						sizeof($text_paragraphs)-$extra->getAttribute('paragraph') == $index) {
+						$paragraph['extras'] .= $extra->render();
+					}
+				}
+				$paragraphs[] = $paragraph;
+			}
 			t3lib_div::debug($paragraphs);
 			$this->smarty->assign('paragraphs', $paragraphs);
 			$ret = $this->smarty->fetch($this);
