@@ -24,8 +24,8 @@
 					<p>{$paragraphs[i].text}</p>
 				{/if}
 				{if $paragraphs[i].extras}
-					{section name=j loop=$paragraphs[i].extras}
-						{$paragraphs[i].extras[j]}
+					{foreach from=$paragraphs[i].extras item=extra}
+						{$extra}
 					{/section}					
 				{/if}				
 			{/section}
