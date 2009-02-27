@@ -37,6 +37,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readField() {
 		$this->source->readField($this->article, $this->field, $this->uid);
+		t3lib_div::debug($this->article);
 		$this->assertRegExp('/.*einzigen Bushaltestelle im Umkreis von zwei Kilometern.*/', 
 						  $this->article->getAttribute('text'),
 						  'readField(Text) returned text: '.$this->article->getAttribute('text'));
@@ -44,6 +45,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 
 	public function test_readFields() {
 		$this->source->readFields($this->article, $this->fieldList, $this->uid);
+		t3lib_div::debug($this->article);
 		$this->assertRegExp('/.*Diktatur des Proletariats.*/', $this->article->getAttribute('title'),
 						  'readFields(Titel, Text) returned title: '.$this->article->getAttribute('title'));
 		$this->assertRegExp('/.*einzigen Bushaltestelle im Umkreis von zwei Kilometern.*/', 
