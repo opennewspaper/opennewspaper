@@ -28,7 +28,36 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	
 	public function test_render() {
 		$this->checkOutput($this->article->render());
-		/// test 	
+	}
+
+	public function test_renderingOrder() {
+		/** this test relies on extras bound to article 1 having a certain order.
+		 *  At the beginning of the test, this order is:
+		 *  - Extra 1, paragraph 0, position 0  ('Image 1')
+		 *  - Extra 4, paragraph 1, position 2  ('Image 4')
+		 *  - Extra 3, paragraph 1, position 4  ('Image 3')
+		 *  - Extra 2, paragraph -2, position 0 ('Image 2')
+		 *  - Extra 5, paragraph -1, position 0 ('title[5]')
+		 * 
+		 */
+		$output = $this->article->render();
+		
+		$this->checkComesBefore($output, 'Image 1', 'Image 4');	 
+		$this->checkComesBefore($output, 'Image 1', 'Image 3');	 
+		$this->checkComesBefore($output, 'Image 1', 'Image 2');	 
+		$this->checkComesBefore($output, 'Image 1', 'title[5]');	 
+		$this->checkComesBefore($output, 'Image 4', 'Image 3');	 
+		$this->checkComesBefore($output, 'Image 4', 'Image 2');	 
+		$this->checkComesBefore($output, 'Image 4', 'title[5]');
+		$this->checkComesBefore($output, 'Image 3', 'Image 2');	 
+		$this->checkComesBefore($output, 'Image 3', 'title[5]');	 
+		$this->checkComesBefore($output, 'Image 2', 'title[5]');	 
+
+		/// \todo change paragraph for one extra
+		/// \todo change position for one extra after paragraph 1
+		/// \todo make paragraph for one extra greater than number of paragraphs
+		/// \todo make paragraph for one extra less than negative number of paragraphs
+		
 	}
 	
 	/*
@@ -157,6 +186,14 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private function doTestContains($string, $word) {
 		$this->assertRegExp("/.*$word.*/", $string, 
 							"Plugin output (expected $word): $string");
+	}
+	
+	private function checkComesBefore($text, $first_string, $second_string) {
+		$pos1 = strpos($text, $first_string);
+		if ($pos1 === false) return false;	// $first_string not found
+		$pos2 = strpos($text, $second_string);
+		if ($pos2 === false) return false;	// $second_string not found
+		return $pos1 < $pos2;
 	}
 	
 	private $article = null;			///< the object
