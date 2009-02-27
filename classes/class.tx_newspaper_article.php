@@ -63,6 +63,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
 			$paragraphs = $this->splitIntoParagraphs();
+			t3lib_div::debug($paragraphs);
 			$this->smarty->assign('paragraphs', $paragraphs);
 			$ret = $this->smarty->fetch($this);
 
@@ -186,10 +187,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		 *  paragraph is meaningful and must be kept.
 		 */
 		$paragraphs = explode('<p', $this->getAttribute('text'));		
-		if (!$paragraphs[0]) {
-			$tmp  = explode('<p', $this->getAttribute('text'), 2);
-			$paragraphs = explode('<p', $tmp[1]);
-		}
 		
 		foreach ($paragraphs as $index => $paragraph) {
 			/// remove the test of the <p>-tag from every line
