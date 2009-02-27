@@ -42,6 +42,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		 */
 		$output = $this->article->render();
 		
+		/// Test order of Extras among each other
 		$this->checkComesBefore($output, 'Image 1', 'Image 4');	 
 		$this->checkComesBefore($output, 'Image 1', 'Image 3');	 
 		$this->checkComesBefore($output, 'Image 1', 'Image 2');	 
@@ -52,6 +53,11 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->checkComesBefore($output, 'Image 3', 'Image 2');	 
 		$this->checkComesBefore($output, 'Image 3', 'title[5]');	 
 		$this->checkComesBefore($output, 'Image 2', 'title[5]');	 
+
+		/// Test order of Extras inside text
+		$this->checkComesBefore($output, 'Image 1', 'Und was fuer einer');	 
+		$this->checkComesBefore($output, 'Image 4', 'Hier kommt noch etwas mehr Testtext');	 
+		$this->checkComesBefore($output, 'Also darum noch ein dritter Absatz mit noch mehr Text', 'Image 2');	 
 
 		/// \todo change paragraph for one extra
 		/// \todo change position for one extra after paragraph 1
