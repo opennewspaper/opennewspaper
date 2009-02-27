@@ -133,14 +133,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	/// returns an actual member (-> Extra)
 	function getAttribute($attribute) {
-		
-		if (!$this->uid) return;
-		
+				
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 		}
 
- 		if (!array_key_exists($attribute, $this->attributes)) {
+ 		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
         	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
  		}
 
