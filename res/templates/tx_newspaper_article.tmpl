@@ -20,9 +20,14 @@
 	{if $paragraphs}
 		<ul>
 			{section name=i loop=$paragraphs}
-				<li>
-					{$paragraphs[i]}
-				</li>
+				{if $paragraphs[i].text}
+					<p>{$paragraphs[i].text}</p>
+				{/if}
+				{if $paragraphs[i].extras}
+					{section name=j loop=$paragraphs[i].extras}
+						{$paragraphs[i].extras[j]}
+					{/section}					
+				{/if}				
 			{/section}
 		</ul>
 	{else}
