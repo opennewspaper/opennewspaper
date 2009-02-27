@@ -76,7 +76,9 @@ class tx_newspaper_Extra_Factory {
         									   $row);
         }
 		
-		return new $row['extra_table']($row['extra_uid']);
+		$extra = new $row['extra_table']($row['extra_uid']);
+		$extra->setExtraUid($uid);
+		return $extra;
 	}
 	
 	static function getExtraTable() { return self::$extra_table; } 
