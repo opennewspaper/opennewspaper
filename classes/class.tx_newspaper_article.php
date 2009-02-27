@@ -62,29 +62,51 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
+
+			/** Assemble the text paragraphs and extras in an array of the form
+			 *  \code
+			 *  array(
+			 *  	$paragraph_number => array(
+			 * 			"text" => $text_of_paragraph,
+			 * 			"extras" => array(
+			 * 				$position => $rendered_extra,
+			 * 				...
+			 * 			)
+			 * 		),
+			 * 		...
+			 *  )
+			 *  \endcode
+			 */
 			$text_paragraphs = $this->splitIntoParagraphs();
 			$paragraphs = array();
 			foreach ($text_paragraphs as $index => $text_paragraph) {
 				$paragraph = array();
 				if ($text_paragraph) $paragraph['text'] = $text_paragraph;
 				foreach ($this->getExtras() as $extra) {
-					/// \todo honor position parameter
-					/** \todo make sure all extras are rendered, even those
-					 * 		  whose paragraph attribute is > or < -the number of
-					 * 		  text paragraphs
-					 */ 
 					if ($extra->getAttribute('paragraph') == $index ||
 						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
 						$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render();
 					}
 				}
-				/** Braindead PHP does not sort arrays automatically, even if
+				/*  Braindead PHP does not sort arrays automatically, even if
 				 *  the keys are integers. So if you, e.g., insert first $a[4]
 				 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
 				 *  Thus, you must call ksort.
 				 */
-				ksort($paragraph['extras']);
+				if ($paragraph['extras']) ksort($paragraph['extras']);
 				$paragraphs[] = $paragraph;
+			}
+			
+			/** Make sure all extras are rendered, even those whose 'paragraph'
+			 *  attribute is greater than the number of text paragraphs or less
+			 *  than its negative.
+			 */ 		
+			foreach ($this->getExtras() as $extra) {
+				if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
+					$paragraphs[0]['extras'][] = $extra->render();
+				} else if ($extra->getAttribute('paragraph') > sizeof($text_paragraphs)) {
+					$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render();
+				}
 			}
 			t3lib_div::debug($paragraphs);
 			$this->smarty->assign('paragraphs', $paragraphs);
