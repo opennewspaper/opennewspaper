@@ -59,6 +59,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->checkComesBefore($output, 'Image 4', 'Hier kommt noch etwas mehr Testtext');	 
 		$this->checkComesBefore($output, 'Also darum noch ein dritter Absatz mit noch mehr Text', 'Image 2');	 
 
+		$extras = $this->article->getExtras();
+		t3lib_div::debug($extras);
 		/// \todo change paragraph for one extra
 		/// \todo change position for one extra after paragraph 1
 		/// \todo make paragraph for one extra greater than number of paragraphs
