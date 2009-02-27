@@ -214,7 +214,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		if ($pos1 === false) return false;	// $first_string not found
 		$pos2 = strpos($text, $second_string);
 		if ($pos2 === false) return false;	// $second_string not found
-		return $pos1 < $pos2;
+		return ($pos1 < $pos2);
 	}
 	
 	private $article = null;			///< the object
