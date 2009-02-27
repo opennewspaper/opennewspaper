@@ -31,7 +31,6 @@
 
 /// \todo All extra definitions must be known to this class, even those which are not part of tx_newspaper 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_articlerenderer.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_sectionlist.php');
 
 /// Factory class to create the correct kind of tx_newspaper_Extra from a UID
