@@ -78,7 +78,6 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		/// \todo make paragraph for one extra less than negative number of paragraphs
 		$extras[1]->setAttribute('paragraph', -100);
 		$this->checkComesBefore($this->article->render(), 'title[5]', 'Image 2');	 
-		t3lib_div::debug(preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->article->render()));
 	}
 	
 	/*
@@ -210,6 +209,9 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	private function checkComesBefore($text, $first_string, $second_string) {
+		t3lib_div::debug(preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $text));
+		t3lib_div::debug($first_string);
+		t3lib_div::debug($second_string);
 		$pos1 = strpos($text, $first_string);
 		if ($pos1 === false) return false;	// $first_string not found
 		$pos2 = strpos($text, $second_string);
