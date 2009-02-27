@@ -209,14 +209,11 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	private function checkComesBefore($text, $first_string, $second_string) {
-		t3lib_div::debug(preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $text));
 		$pos1 = strpos($text, $first_string);
-		t3lib_div::debug("$first_string at $pos1");
-		if ($pos1 === false) return false;	// $first_string not found
+		if ($pos1 === false) $this->fail("$first_string is not even present");
 		$pos2 = strpos($text, $second_string);
-		t3lib_div::debug("$second_string at $pos2");
-		if ($pos2 === false) return false;	// $second_string not found
-		$this->assertTrue($pos1 < $pos2);
+		if ($pos2 === false) $this->fail("$second_string is not even present");
+		$this->assertTrue($pos1 < $pos2, "$first_string should be before $second_string");
 	}
 	
 	private $article = null;			///< the object
