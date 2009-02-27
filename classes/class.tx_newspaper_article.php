@@ -70,7 +70,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				foreach ($this->getExtras() as $extra) {
 					if ($extra->getAttribute('paragraph') == $index ||
 						sizeof($text_paragraphs)-$extra->getAttribute('paragraph') == $index) {
-						$paragraph['extras'] .= $extra->render();
+						$paragraph['extras'][] = $extra;
 					}
 				}
 				$paragraphs[] = $paragraph;
