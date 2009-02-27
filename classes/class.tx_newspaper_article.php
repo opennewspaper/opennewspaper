@@ -51,11 +51,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getAttribute('is_template')) {
 			$ret = '';
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
-			$ret .= "<h1>artikel als seitenbereich sagt:</h1>".$article->render();
-			foreach($article->getExtras() as $extra) {
+			$ret = $article->render();
+/*			foreach($article->getExtras() as $extra) {
 				$ret .= $extra->render();
 			}
-			
+*/			
 		} else {
 			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
 			$this->smarty->assign('title', $this->getAttribute('title'));
