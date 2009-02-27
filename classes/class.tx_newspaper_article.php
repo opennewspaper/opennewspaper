@@ -48,15 +48,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	/// Renders an article
 	public function render($template = '') {
-		/// \todo handle case where $this is a placeholder for an actual article (formerly Extra_ArticleRenderer)
+
 		if ($this->getAttribute('is_template')) {
+			/** Handle case where $this is a placeholder for an actual article
+			 *  (formerly Extra_ArticleRenderer)
+			 */
 			$ret = '';
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
 			$ret = $article->render();
-/*			foreach($article->getExtras() as $extra) {
-				$ret .= $extra->render();
-			}
-*/			
 		} else {
 			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
 			$this->smarty->assign('title', $this->getAttribute('title'));
@@ -64,7 +63,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->smarty->assign('author', $this->getAttribute('author'));
 			$this->smarty->assign('text', $this->getAttribute('text'));
 
-			/** Assemble the text paragraphs and extras in an array of the form
+			/** Assemble the text paragraphs and extras in an array of the form:
 			 *  \code
 			 *  array(
 			 *  	$paragraph_number => array(

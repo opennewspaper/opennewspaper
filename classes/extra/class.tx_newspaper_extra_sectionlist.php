@@ -17,7 +17,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	public function render($template = '') {
 		$list = tx_newspaper::getSection()->getList();
 		foreach ($list->getArticles(10) as $article) {
-			$ret .= "<p>".print_r($article, 1)."</p>\n";
+			$ret .= "<p>".$article->render()."</p>\n";
 		}
 		return "<h1>Section List Plugin - coming soon to a page near you</h1>\n".
 		"<p>".print_r($list, 1)."</p>\n".$ret;

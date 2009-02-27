@@ -30,6 +30,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->checkOutput($this->article->render());
 		/// test 	
 	}
+	
 	/*
 	public function test_import() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
