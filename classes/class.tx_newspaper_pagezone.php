@@ -220,21 +220,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$row['pagezone_table'] = $table;
 		$row['tstamp'] = time();				///< tstamp is set to now
 
-
-		/** use the PID all PageZones share. If PageZones are created under more
-		 *  than one page, we have a problem and can't continue.
-		 */
-		$rows = tx_newspaper::selectRows(
-			'DISTINCT pid', 'tx_newspaper_pagezone', 'pid != 0'
-		);
-		if (sizeof($rows) != 1) {
-		 	throw new tx_newspaper_InconsistencyException(
-		 		'Abstract PageZones were created on more than one page:<br />' . "\n" .
-		 		print_r($rows, 1)
-		 	);
-		}
-		$row['pid'] = $rows[0]['pid'];
-
 		return tx_newspaper::insertRows('tx_newspaper_pagezone', $row);		
 	}
  	
@@ -301,7 +286,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
  	
  	private static $fields_to_copy_into_pagezone_table = array(
-		'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 
+		'pid', 'crdate', 'cruser_id', 'deleted', 'hidden', 
 	);
  	
 }

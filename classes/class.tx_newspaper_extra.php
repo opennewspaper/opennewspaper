@@ -164,23 +164,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		/// write the uid and table into extra table, with the values read above
 		$row['extra_uid'] = $uid;
 		$row['extra_table'] = $table;
-
-
-		//  Helge: use the PID all Extras share??? Or one pid per concrete Extra?
-		//  answer: it's the sysfolder for the abstract Extra records. So the wording is correct.
-		/** use the PID all Extras share. If Extras are created under more than
-		 *  one page, we have a problem and can't continue.
-		 */
-		$rows = tx_newspaper::selectRows(
-			'DISTINCT pid', self::$table, 'pid != 0'
-		);
-		if (sizeof($rows) != 1) {
-		 	throw new tx_newspaper_InconsistencyException(
-		 		'Abstract Extras were created on more than one page:<br />' . "\n" .
-		 		print_r($rows, 1)
-		 	);
-		}
-		$row['pid'] = $rows[0]['pid'];
+		$row['tstamp'] = time();				///< tstamp is set to now
 
 		return tx_newspaper::insertRows(self::$table, $row);		
 	}
@@ -206,7 +190,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	private static $table = 'tx_newspaper_extra';
 	
 	private static $fields_to_copy_into_extra_table = array(
-		'tstamp', 'crdate', 'cruser_id', 'deleted', 'hidden', 
+		'pid', 'crdate', 'cruser_id', 'deleted', 'hidden', 
 	);
 	
 }
