@@ -27,7 +27,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_render() {
-		$this->checkOutput($this->article->render());		
+		$this->checkOutput($this->article->render());
+		/// test 	
 	}
 	/*
 	public function test_import() {
