@@ -77,7 +77,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		
 		/// \todo make paragraph for one extra less than negative number of paragraphs
 		$extras[1]->setAttribute('paragraph', -100);
-		$this->checkComesBefore($this->article->render(), 'title[5]', 'Image 2');	 
+		$this->checkComesBefore($this->article->render(), 'Image 2', 'title[5]');	 
 	}
 	
 	/*
