@@ -17,7 +17,7 @@ class tx_newspaper_BE {
 require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 			$conf['pathToTemplateDirectory'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/';
 			$conf['compile_dir'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/compile/';
-			self::$smarty = tx_smarty->smarty($conf);
+			self::$smarty = tx_smarty::smarty($conf);
 		}
 	}
 	
