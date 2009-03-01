@@ -13,6 +13,8 @@ class tx_newspaper_BE {
 	
 	
 	private static function initSmarty() {
+/// \todo: which smarty version to use?
+return;
 		if (self::$smarty == null) {
 require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 			$conf['pathToTemplateDirectory'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/';
