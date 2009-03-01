@@ -40,7 +40,6 @@ require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 
 		if (strtolower(substr($section_uid, 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
-/// \todo real text, localization
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.section_not_saved', false);
 		}
 		
