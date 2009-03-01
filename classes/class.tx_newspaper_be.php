@@ -33,7 +33,7 @@ class tx_newspaper_BE {
 	public static function renderPageList($PA, $fObj=null) {
 		global $LANG;
 
-#t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
+t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
 
 		$section_uid = $PA['row']['uid'];
 t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);		
