@@ -359,3 +359,5 @@ CREATE TABLE tx_newspaper_content_extra_mm (
   KEY uid_local (uid_local),
   KEY uid_foreign (uid_foreign)
 );
+
+
