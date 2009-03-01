@@ -48,6 +48,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_fa
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
-	
+
+if (TYPO3_MODE == 'BE')	{
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');	
+}
 
 ?>
