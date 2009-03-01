@@ -6,8 +6,6 @@
  *  \date Feb 27, 2009
  */
 
-t3liv_div::devlog('test be', 'newspaper', 0);
-
 /// function for adding newspaper functionality to the backend
 class tx_newspaper_BE {
 	
