@@ -14,18 +14,6 @@ class tx_newspaper_BE {
 	
 	private static function initSmarty() {
 		if (self::$smarty == null) {
-
-
-if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
-	// new smarty extension
-	require_once(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php');	
-} else {
-	// old smarty extension
-	require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
-}
-
-
-
 			$conf['pathToTemplateDirectory'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/';
 			$conf['compile_dir'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/compile/';
 			self::$smarty = tx_smarty::smarty($conf);
