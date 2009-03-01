@@ -126,6 +126,44 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	}
 
 
+
+
+
+
+
+
+
+
+
+//new stuff for section
+	function processActivatePageType() {
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+/// \todo REAL section_uid 
+		$PA['row']['uid'] = 6; // simulate call from be
+		$PA['AJAX_CALL'] = true; 
+		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
+		echo json_encode($tmp);
+		exit();
+	}
+	function processEditPageType() {
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
+/// \todo readl page_uid		
+		$PA['row']['uid'] = 5; // simulate call from be
+		$PA['AJAX_CALL'] = true; 
+		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		echo json_encode($tmp);
+		exit();
+	}
+
+
+
+
+
+
+
+
+
+
 				/**
 				 * Initializes the Module
 				 * @return	void
@@ -186,7 +224,17 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 
 					if (isset($_REQUEST['extra_delete']))
 						$this->processExtraDelete(); // AJAX call
-					
+
+
+
+// new stuff for section
+					if (isset($_REQUEST['activate_page_type']))
+						$this->processActivatePageType(); // AJAX call
+					if (isset($_REQUEST['edit_page_type']))
+						$this->processEditPageType(); // AJAX call
+
+
+
 					
 					return false; // if processing was successful, the script died after the AJAX request was answered; if param weren't valid return false anyway
 
