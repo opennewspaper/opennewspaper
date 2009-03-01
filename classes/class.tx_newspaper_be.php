@@ -6,6 +6,8 @@
  *  \date Feb 27, 2009
  */
 
+t3liv_div::devlog('test be', 'newspaper', 0);
+
 /// function for adding newspaper functionality to the backend
 class tx_newspaper_BE {
 	
@@ -18,7 +20,6 @@ class tx_newspaper_BE {
 			$conf['compile_dir'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/compile/';
 			self::$smarty = tx_smarty::smarty($conf);
 		}
-			
 	}
 	
 	
