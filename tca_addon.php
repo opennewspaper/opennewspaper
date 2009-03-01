@@ -10,12 +10,11 @@ require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php
 
 
 // modify fields set in tca.php
-// add javascript to extra form (onunload ...) and requice classes for Extra
 
-// Extra: Image
-
-// TODO: moved to ext_localconf.php (so classes and Extras available in ext_tables AND tca)
-// if modalbox is working, this part of the code should be deleted
+// add user fucntion for page type and page zone type in section records 
+unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
+$TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
+$TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPageList';
 
 
 // /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
