@@ -33,10 +33,10 @@ require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 	public static function renderPageList($PA, $fObj=null) {
 		global $LANG;
 
-t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
+#t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
 
 		$section_uid = $PA['row']['uid'];
-t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);		
+#t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);		
 
 		if (strtolower(substr($section_uid, 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
