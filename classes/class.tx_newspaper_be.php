@@ -13,10 +13,7 @@ class tx_newspaper_BE {
 	
 	
 	private static function initSmarty() {
-/// \todo: which smarty version to use?
-return;
 		if (self::$smarty == null) {
-require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 			$conf['pathToTemplateDirectory'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/';
 			$conf['compile_dir'] = PATH_typo3conf . 'ext/newspaper/res/be/templates/compile/';
 			self::$smarty = tx_smarty::smarty($conf);
@@ -73,6 +70,8 @@ require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 #t3lib_div::devlog('rpl pt', 'newspaper', 0, $page_type);
 
  
+/* 
+/// \todo smarty versions incompatible 
 		self::initSmarty();
 
 		/// add skinned icons
@@ -95,8 +94,10 @@ require_once(PATH_typo3conf . 'ext/smarty/class.tx_smarty.php');
 		}
 		$html .= self::$smarty->fetch('pagetype4section.tmpl');
 #t3lib_div::devlog('smarty fetched', 'newspaper', 0, $tmp);		
-		
 		return $html;
+*/		
+		return 'page type form ...';
+		
 	}
 	
 
