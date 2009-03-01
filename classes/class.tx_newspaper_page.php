@@ -50,18 +50,19 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	 *  \param $condition SQL WHERE condition to further specify the page
 	 */
 	public function __construct(tx_newspaper_Section $parent = null, tx_newspaper_PageType $type = null) {
-
-		$this->parentSection = $parent;
-		$this->pagetype = $type;
-
-		/// Configure Smarty rendering engine
-		$this->smarty = new tx_newspaper_Smarty();
-		$this->smarty->setTemplateSearchPath(
-			array(
-				'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
-				'template_sets'
-			)
-		);
+		if (TYPO3_MODE == 'FE') {
+			$this->parentSection = $parent;
+			$this->pagetype = $type;
+	
+			/// Configure Smarty rendering engine
+			$this->smarty = new tx_newspaper_Smarty();
+			$this->smarty->setTemplateSearchPath(
+				array(
+					'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
+					'template_sets'
+				)
+			);
+		}
  	}
  	
  	function getAttribute($attribute) {
