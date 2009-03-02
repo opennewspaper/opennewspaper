@@ -76,6 +76,7 @@ class tx_newspaper_PageType implements tx_newspaper_InSysFolder {
  		return $this->attributes[$attribute];
  	}
  	
+/// \todo: still needed? see getAvailablePageTypes()
  	static public function getPageTypeList() {
  		throw new tx_newspaper_NotYetImplementedException();
  	}
