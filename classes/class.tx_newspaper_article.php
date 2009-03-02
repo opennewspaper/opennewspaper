@@ -45,6 +45,33 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_InSysFolder
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+	public function getUid() { return intval($this->uid); }
+
+	public function setUid($uid) { 
+		$this->uid = $uid;
+		 $this->setAttribute('source_id', $uid);
+	}
+
+	public public function getTable() {
+		return 'tx_newspaper_article';
+	}
+
+	static public function getModuleName() {
+		return 'np_article';
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_ExtraIface
+	//
+	////////////////////////////////////////////////////////////////////////////
 	
 	/// Renders an article
 	public function render($template = '') {
@@ -114,25 +141,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		} 
 		return $ret;
 	}
-	
-	public function importieren(tx_newspaper_Source $quelle) {
-		$this->articleBehavior->importieren($quelle);
-	}
-	public function exportieren(tx_newspaper_Source $quelle) {
-		$this->articleBehavior->exportieren($quelle);
-	}
-	public function laden() {
-		$this->articleBehavior->laden();
-	}
-	public function vergleichen() {
-		$this->articleBehavior->vergleichen();
-	}
-	public function extraAnlegen() {
-		$this->articleBehavior->extraAnlegen();
-	}
 
 	/// returns an actual member (-> Extra)
-	function getAttribute($attribute) {
+	public function getAttribute($attribute) {
 				
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
@@ -146,7 +157,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// sets a member (-> Extra)
-	function setAttribute($attribute, $value) {
+	public function setAttribute($attribute, $value) {
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 		}
@@ -154,45 +165,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->attributes[$attribute] = $value;
 	}
 
-	/// Get the list of Extra s associated with this Article
-	function getExtras() { 
-		if (!$this->extras) {
-			$extras = tx_newspaper::selectRows(
-				'uid_foreign', 'tx_newspaper_article_extras_mm', 
-				'uid_local = ' . $this->getUid());
-			if ($extras) foreach ($extras as $extra) {
-				try {
-					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
-					$this->extras[] = $new_extra;
-				} catch(tx_newspaper_EmptyResultException $e) {
-					/// remove mm-table entry if the extra pointed to doesn't exist
-					$query = $GLOBALS['TYPO3_DB']->DELETEquery(
-						'tx_newspaper_article_extras_mm', 'uid_foreign = ' . intval($extra['uid_foreign']));
-					t3lib_div::debug($query);
-					$GLOBALS['TYPO3_DB']->sql_query($query);
-				}
-			}
-		}
-		return $this->extras; 
-	}
-
-	function addExtra(tx_newspaper_Extra $newExtra) {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-
-	function getSource() { return $this->source; }
-
-	function setSource(tx_newspaper_Source $source) {
-		$this->source = $source;
-		$this->setAttribute('source_object', serialize($source)); 
-	}
-
-	function getUid() { return intval($this->uid); }
-	function setUid($uid) { 
-		$this->uid = $uid;
-		 $this->setAttribute('source_id', $uid);
-	}
-	
 	public function store() {
 		
 		/// insert article data (if uid == 0) or update if uid > 0
@@ -222,27 +194,98 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		return $this->getUid();		
 	}
-	
-	protected function splitIntoParagraphs() {
-		/** A text usually starts with a <p>, in that case the first paragraph
-		 *  must be removed. It may not be the case though, if so, the first
-		 *  paragraph is meaningful and must be kept.
-		 */
-		$paragraphs = explode('<p', $this->getAttribute('text'));		
-		
-		foreach ($paragraphs as $index => $paragraph) {
-			/// remove the test of the <p>-tag from every line
-			$paragraphs[$index] = trim(substr($paragraph, strpos($paragraph, '>')+1));
-			/** each paragraph now should end with a </p>. If it doesn't, the
-			 *  text is not well-formed. In any case, we must remove the </p>.
-			 */
-			$paragraphs[$index] = str_replace('</p>', '', $paragraphs[$index]);
-		}
 
-		return $paragraphs;	
+	/** \todo Internationalization */
+	static public function getTitle() {
+		return 'Article';
 	}
 	
-	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
+	static public function readExtraItem($uid, $table) {
+		if (!$uid) return array();
+		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_WithSource
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+	public function getSource() { return $this->source; }
+
+	public function setSource(tx_newspaper_Source $source) {
+		$this->source = $source;
+		$this->setAttribute('source_object', serialize($source)); 
+	}
+
+	static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
+		return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
+																   self::$mapFieldsToSourceFields);
+	}
+	
+	static public function sourceTable(tx_newspaper_Source $source) {
+		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_ArticleIface
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
+	public function importieren(tx_newspaper_Source $quelle) {
+		$this->articleBehavior->importieren($quelle);
+	}
+
+	public function exportieren(tx_newspaper_Source $quelle) {
+		$this->articleBehavior->exportieren($quelle);
+	}
+
+	public function laden() {
+		$this->articleBehavior->laden();
+	}
+
+	public function vergleichen() {
+		$this->articleBehavior->vergleichen();
+	}
+
+	public function extraAnlegen() {
+		$this->articleBehavior->extraAnlegen();
+	}
+
+	/// Get the list of Extra s associated with this Article
+	public function getExtras() { 
+		if (!$this->extras) {
+			$extras = tx_newspaper::selectRows(
+				'uid_foreign', 'tx_newspaper_article_extras_mm', 
+				'uid_local = ' . $this->getUid());
+			if ($extras) foreach ($extras as $extra) {
+				try {
+					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
+					$this->extras[] = $new_extra;
+				} catch(tx_newspaper_EmptyResultException $e) {
+					/// remove mm-table entry if the extra pointed to doesn't exist
+					$query = $GLOBALS['TYPO3_DB']->DELETEquery(
+						'tx_newspaper_article_extras_mm', 'uid_foreign = ' . intval($extra['uid_foreign']));
+					t3lib_div::debug($query);
+					$GLOBALS['TYPO3_DB']->sql_query($query);
+				}
+			}
+		}
+		return $this->extras; 
+	}
+
+	public function addExtra(tx_newspaper_Extra $newExtra) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	class tx_newspaper_Article
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
+	static public function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
 		
 		$extra_table = strtolower($extra_table);
 		
@@ -272,33 +315,49 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 	
-	static function getAttributeList() { return self::$attribute_list; }
+	static public function getAttributeList() { return self::$attribute_list; }
 
-	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
-		return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
-																   self::$mapFieldsToSourceFields);
+	////////////////////////////////////////////////////////////////////////////
+	
+	protected function splitIntoParagraphs() {
+		/** A text usually starts with a <p>, in that case the first paragraph
+		 *  must be removed. It may not be the case though, if so, the first
+		 *  paragraph is meaningful and must be kept.
+		 */
+		$paragraphs = explode('<p', $this->getAttribute('text'));		
+		
+		foreach ($paragraphs as $index => $paragraph) {
+			/// remove the test of the <p>-tag from every line
+			$paragraphs[$index] = trim(substr($paragraph, strpos($paragraph, '>')+1));
+			/** each paragraph now should end with a </p>. If it doesn't, the
+			 *  text is not well-formed. In any case, we must remove the </p>.
+			 */
+			$paragraphs[$index] = str_replace('</p>', '', $paragraphs[$index]);
+		}
+
+		return $paragraphs;	
 	}
 	
-	static function sourceTable(tx_newspaper_Source $source) {
-		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
-	}
-
-	public function getTable() {
-		return 'tx_newspaper_article';
-	}
-
-	/** \todo Internationalization */
-	static function getTitle() {
-		return 'Article';
+	protected function getSections($limit = 0) {
+		$section_ids = tx_newspaper::selectRows(
+			'uid_foreign',
+			'tx_newspaper_article_sections_mm',
+			'uid_local = '.$this->getUid(),
+			'',
+			'',
+			$limit? "0, $limit": ''
+		);
+		
+		$sections = array();
+		foreach ($section_ids as $id) {
+			$sections[] = new tx_newspaper_Section($id['uid_foreign']);
+		}
+		return $sections;
 	}
 	
-	static function getModuleName() {
-		return 'np_article';
-	}
-
-	static function readExtraItem($uid, $table) {
-		if (!$uid) return array();
-		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
+	protected function getPrimarySection() {
+		$sections = $this->getSections(1);
+		return $sections[0];
 	}
 	
 	protected function getExtra2PagezoneTable() {

@@ -19,10 +19,10 @@
  interface tx_newspaper_WithSource {
 
 	/// \return The Source object associated with this Article (if any)
-	function getSource();
+	public function getSource();
 	/// Set the Source object associated with this Article
 	/** \param $source The new Source */
-	function setSource(tx_newspaper_Source $source);
+	public function setSource(tx_newspaper_Source $source);
 
 	/// Definition of attributes and their mapping to implementation fields
 	/// for all supported Sources
@@ -36,9 +36,9 @@
 	 *  \throw WrongClassException If the mapping for class \p $source is not
 	 * 							   configured
 	 */
-	static function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
+	static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
 
 	/// Additional info needed to instantiate an Extra, such as a SQL table
-	static function sourceTable(tx_newspaper_Source $source);
+	static public function sourceTable(tx_newspaper_Source $source);
 }
 ?>
