@@ -123,7 +123,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		if (!$template) {
  			$template = $this;
  		}
- 		t3lib_div::debug($this->smarty);
+
  		$this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
  		$this->smarty->assign('page_type', $this->pagetype->getAttribute('type_name'));
  		
