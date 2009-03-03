@@ -136,9 +136,18 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 
 //new stuff for section
+	function processListPageTypes() {
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		$param = $this->splitParams();
+		$PA['row']['uid'] = $param['section']; // simulate call from be
+		$PA['AJAX_CALL'] = true; 
+		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
+		echo json_encode($tmp);
+		exit();
+	}
 	function processActivatePageType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
-/// \todo REAL section_uid 
+		$param = $this->splitParams();
 		$PA['row']['uid'] = 6; // simulate call from be
 		$PA['AJAX_CALL'] = true; 
 		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
@@ -147,9 +156,20 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	}
 	function processEditPageType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
-/// \todo readl page_uid		
-		$PA['row']['uid'] = 5; // simulate call from be
-		$PA['AJAX_CALL'] = true; 
+		$param = $this->splitParams();
+		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['AJAX_CALL'] = true;
+		$PA['SECTION'] = $param['section']; 
+		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		echo json_encode($tmp);
+		exit();
+	}
+	function processActivatePageZoneType() {
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		$param = $this->splitParams();
+		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['AJAX_CALL'] = true;
+		$PA['SECTION'] = $param['section']; 
 		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
@@ -228,10 +248,14 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 
 
 // new stuff for section
+					if (isset($_REQUEST['list_page_types']))
+						$this->processListPageTypes(); // AJAX call
 					if (isset($_REQUEST['activate_page_type']))
 						$this->processActivatePageType(); // AJAX call
 					if (isset($_REQUEST['edit_page_type']))
 						$this->processEditPageType(); // AJAX call
+					if (isset($_REQUEST['activate_pagezone_type']))
+						$this->processActivatePageZoneType(); // AJAX call
 
 
 
