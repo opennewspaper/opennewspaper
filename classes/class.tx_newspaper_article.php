@@ -318,6 +318,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	static public function getAttributeList() { return self::$attribute_list; }
 
 	////////////////////////////////////////////////////////////////////////////
+	//
+	//	protected functions
+	//
+	////////////////////////////////////////////////////////////////////////////
 	
 	protected function splitIntoParagraphs() {
 		/** A text usually starts with a <p>, in that case the first paragraph
