@@ -152,17 +152,17 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 
 
 	/// get active pages for given section
-	/** \param $section_uid uid of section
+	/** \param $section section object
 	 *  \return array uids of active pages for given section
 	 */
-	public static function getActivePages($section_uid, $include_hidden=true) {
+	public static function getActivePages(tx_newspaper_Section $section, $include_hidden=true) {
 		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
 		$sf = tx_newspaper_Sysfolder::getInstance();
-		$p = new tx_newspaper_Page();
+		$p = new tx_newspaper_Page($section);
 		$row = tx_newspaper::selectRows(
 			'*',
 			$p->getTable(),
-			'pid=' . $sf->getPid($p) . ' AND section=' . intval($section_uid) . $where
+			'pid=' . $sf->getPid($p) . ' AND section=' . $section->getAttribute('uid') . $where
 		);
 		return $row;
 	}
