@@ -55,12 +55,14 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
-		$this->smarty->setTemplateSearchPath(
-			array(
-				'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
-				'template_sets'
-			)
-		);
+		if ($type != null) {
+			$this->smarty->setTemplateSearchPath(
+				array(
+					'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
+					'template_sets'
+				)
+			);
+		}
  	}
  	
  	function getAttribute($attribute) {
