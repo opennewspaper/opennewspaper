@@ -158,6 +158,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	public static function getActivePages(tx_newspaper_Section $section, $include_hidden=true) {
 		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
 		$sf = tx_newspaper_Sysfolder::getInstance();
+t3lib_div::devlog('gap', 'newspaper', 0);
 		$p = new tx_newspaper_Page($section);
 		$row = tx_newspaper::selectRows(
 			'*',
