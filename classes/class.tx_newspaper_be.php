@@ -103,6 +103,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 #t3lib_div::devlog('rpl pt', 'newspaper', 0, $page_type);		
 
 		// structure: ['pagetype_id'] <- ref to tx_newspaper_pagetype
+t3lib_div::devlog('section uid', 'newspaper', 0, $section_uid);
 		foreach(tx_newspaper_Page::getActivePages(new tx_newspaper_Section($section_uid)) as $active_page) {
 #t3lib_div::devlog('rpl ap', 'newspaper', 0, $active_page);		
 			for ($i = 0; $i < sizeof($page_type); $i++) {
