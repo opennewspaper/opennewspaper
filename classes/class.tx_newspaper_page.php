@@ -55,7 +55,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
-#t3lib_div::devlog('_constr page', 'newspaper', 0); // test svn 2
+#t3lib_div::devlog('_constr page', 'newspaper', 0); // test svn 33333333
 		if ($type != null) {
 			$this->smarty->setTemplateSearchPath(
 				array(
