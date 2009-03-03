@@ -133,7 +133,21 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 
 
+	function splitParams() {
+		if (!isset($_REQUEST['param'])) return array();
+	
+		/// structure [test1]#|[test2]#
+		$p = explode('|', $_REQUEST['param']); // split given params
 
+		$param = array();
+		for ($i = 0; $i < sizeof($p); $i++) {
+			/// structure: [test1]#
+			$row = explode(']', $p[$i]);
+			$param[strtolower(substr($row[0], 1))] = $row[1];
+		}
+#t3lib_div::devlog('param', 'newspaper', 0, $param);
+		return $param;
+	}
 
 //new stuff for section
 	function processListPageTypes() {
