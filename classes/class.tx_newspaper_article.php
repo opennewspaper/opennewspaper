@@ -371,6 +371,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
 	
 	////////////////////////////////////////////////////////////////////////////
+	//
+	//	private data members
+	//
+	////////////////////////////////////////////////////////////////////////////
 	
 	private $source = null;			///< Source the Article is read from
 	private $uid = '';				///< UID that identifies the article in the source
