@@ -5,10 +5,10 @@ class user_savehook_newspaper {
 	/// save hook: new and update
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
-t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
-t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
-t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+#t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
+#t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
+#t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
+#t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
 
 		/// check if a page zone type with is_article flag set is allowed
