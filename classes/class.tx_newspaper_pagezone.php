@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  *  \file class.tx_newspaper_page.php
  * 
@@ -78,6 +78,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		
  		/// render extras
  		/// \todo correct order of extras
+ 		/// \todo - blockweise zusammenfuehren von extras gleiches layout
  		$temp_extras = array();
  		foreach ($this->extras as $extra) {
  			$temp_extras[] = $extra->render();
