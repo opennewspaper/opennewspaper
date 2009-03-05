@@ -57,6 +57,7 @@
  		return $this->attributes[$attribute];
  	}
  	
+/// \todo rename getArticleList()
  	function getList() {
  		if (!$this->articlelist) { 
  			$list = tx_newspaper::selectOneRow(
