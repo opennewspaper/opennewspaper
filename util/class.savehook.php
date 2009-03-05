@@ -71,6 +71,14 @@ class user_savehook_newspaper {
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 		/// If a new section has been created, copy its placement
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
+#			return $this->newSection($id, $fieldArray);
+		} 
+	}
+
+	function processDatamap_afterAllOperations($pObj) {
+		t3lib_div::debug($pObj->datamap);
+		/// If a new section has been created, copy its placement
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			return $this->newSection($id, $fieldArray);
 		} 
 	}
