@@ -76,7 +76,7 @@
  	function getSubPages() {
  		$row = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_page',
-			'parent = ' . $this->getAttribute('uid') 
+			'section = ' . $this->getAttribute('uid') 
  		);
  		$subpages = array();
  		foreach ($row as $record) {
