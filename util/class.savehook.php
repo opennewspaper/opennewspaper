@@ -77,7 +77,9 @@ class user_savehook_newspaper {
 
 	function processDatamap_afterAllOperations($pObj) {
 		t3lib_div::devlog('datamap', 'newspaper', 0, $pObj->datamap);
-		t3lib_div::devlog('getPID', 'newspaper', 0, $pObj->getPID($table, $uid));  	
+		$table = 'tx_newspaper_section';
+		$uid = array_keys($pObj->datamap[$table]);
+		t3lib_div::devlog('getPID', 'newspaper', 0, $pObj->getPID($table, $uid[0]));  	
 		/// If a new section has been created, copy its placement
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			return $this->newSection($id, $fieldArray);
