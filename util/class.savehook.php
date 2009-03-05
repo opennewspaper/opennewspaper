@@ -10,10 +10,6 @@ class user_savehook_newspaper {
 #t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
 #t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
-		/// If a new section has been created, copy its placement
-		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			return $this->newSection($id, $fieldArray);
-		} 
 
 		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
@@ -70,6 +66,13 @@ class user_savehook_newspaper {
 			die('Fatal error: It is not allowed to delete this record, so it was NOT deleted. If you still want to delete this record please contact the Typo3 developers.<br /><br /><a href="javascript:history.back();">Go back</a>');
 		}
 		
+	}
+	
+	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+		/// If a new section has been created, copy its placement
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
+			return $this->newSection($id, $fieldArray);
+		} 
 	}
 	
 	/// Stuff to do when a new section is created
