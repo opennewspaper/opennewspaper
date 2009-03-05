@@ -16,7 +16,7 @@ class user_savehook_newspaper {
 #		t3lib_div::debug('id: '.$id);
 #		t3lib_div::debug($fieldArray);
 #		t3lib_div::debug('that: '.$that);
-		if ($status == 'new' /* && $table == tx_newspaper_Section::getTable() */) {
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			t3lib_div::debug('table: '.$table);
 			t3lib_div::debug('tx_newspaper_Section::getTable(): '.tx_newspaper_Section::getTable());
 			t3lib_div::debug('id: '.$id);
