@@ -65,7 +65,7 @@
 			);
 			$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
  		}
- 	
+
  		return $this->articlelist; 
  	}
  	
