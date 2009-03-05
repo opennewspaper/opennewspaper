@@ -75,12 +75,13 @@
  	/// \todo do!
  	function getSubPages() {
  		$row = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_page',
+			'pagetype_id', 'tx_newspaper_page',
 			'section = ' . $this->getAttribute('uid') 
  		);
  		$subpages = array();
  		foreach ($row as $record) {
- 			$subpages = new tx_newspaper_page($record['uid']);
+ 			$subpages = new tx_newspaper_Page($this, 
+ 											  new tx_newspaper_PageType($record['pagetype_id']));
  		}
  		
  		return $subpages;
