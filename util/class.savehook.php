@@ -10,6 +10,10 @@ class user_savehook_newspaper {
 #t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
 #t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
+		/// If a new section has been created, copy its placement
+		if ($status == 'new' && $table == tx_newspaper_Section::getTable()) {
+			return $this->newSection($id, $fieldArray);
+		} 
 
 		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
@@ -66,6 +70,29 @@ class user_savehook_newspaper {
 			die('Fatal error: It is not allowed to delete this record, so it was NOT deleted. If you still want to delete this record please contact the Typo3 developers.<br /><br /><a href="javascript:history.back();">Go back</a>');
 		}
 		
+	}
+	
+	/// Stuff to do when a new section is created
+	/** - pages, page zones and extras are copied from the parent section
+	 *  - an automatic article list is created and associated with the section
+	 */
+	private function newSection($id, &$fieldArray) {
+		$this->copyPagesFromParent();
+		$this->generateArticleList();
+	}
+
+	/// Copy active pages and their content from parent section
+	/** - copies the active pages from the parent section
+	 *  - copies the page zones on those pages
+	 *  - copies the Extras on those page zones
+	 */	
+	private function copyPagesFromParent() {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+
+	/// Generate an automatically filled article list and link it to the section
+	private function generateArticleList() {
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
 }	
