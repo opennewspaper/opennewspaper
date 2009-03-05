@@ -75,15 +75,13 @@
  	/// \todo do!
  	function getSubPages() {
  		$row = tx_newspaper::selectRows(
-			'pagetype_id', 'tx_newspaper_page',
+			'uid', 'tx_newspaper_page',
 			'section = ' . $this->getAttribute('uid') 
  		);
  		$subpages = array();
  		t3lib_div::debug($row);
  		foreach ($row as $record) {
- 			$pagetype = new tx_newspaper_PageType($record['pagetype_id']);
-	 		t3lib_div::debug($pagetype);
- 			$subpages = new tx_newspaper_Page($this, $pagetype);
+ 			$subpages[] = new tx_newspaper_Page($record['uid']);
  		}
  		
  		return $subpages;

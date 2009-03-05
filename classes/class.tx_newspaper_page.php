@@ -49,10 +49,14 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	/** \param $parent The newspaper section the page is in
 	 *  \param $condition SQL WHERE condition to further specify the page
 	 */
-	public function __construct(tx_newspaper_Section $parent = null, tx_newspaper_PageType $type = null) {
-		$this->parentSection = $parent;
-		$this->pagetype = $type;
-	
+	public function __construct($parent = null, tx_newspaper_PageType $type = null) {
+		if ($parent instanceof tx_newspaper_Section) {
+			$this->parentSection = $parent;
+			$this->pagetype = $type;
+		} else if (is_integer($parent)) {
+			$this->setUid($parent);
+			
+		}	
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
 		if ($type != null) {
@@ -76,11 +80,17 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
-			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
-				'section = ' . $this->parentSection->getAttribute('uid') . 
-				' AND pagetype_id = ' . $this->pagetype->getID()
-			);
-			$this->setUid($this->attributes['uid']);
+			if ($this->getUid()) {
+				$this->attributes = tx_newspaper::selectOneRow(
+					'*', $this->getTable(), 'uid = ' . $this->getUid()
+				);
+			} else {
+				$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
+					'section = ' . $this->parentSection->getAttribute('uid') . 
+					' AND pagetype_id = ' . $this->pagetype->getID()
+				);
+				$this->setUid($this->attributes['uid']);
+			}
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
