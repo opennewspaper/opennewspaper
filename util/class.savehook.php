@@ -11,17 +11,7 @@ class user_savehook_newspaper {
 #t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
 		/// If a new section has been created, copy its placement
-#		t3lib_div::debug('status: '.$status);
-#		t3lib_div::debug('table: '.$table);
-#		t3lib_div::debug('id: '.$id);
-#		t3lib_div::debug($fieldArray);
-#		t3lib_div::debug('that: '.$that);
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			t3lib_div::debug('table: '.$table);
-			t3lib_div::debug('tx_newspaper_Section::getTable(): '.tx_newspaper_Section::getTable());
-			t3lib_div::debug('id: '.$id);
-			t3lib_div::debug($fieldArray);
-			
 			return $this->newSection($id, $fieldArray);
 		} 
 
