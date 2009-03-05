@@ -70,22 +70,12 @@ class user_savehook_newspaper {
 	
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 		/// If a new section has been created, copy its placement
-		if ($status == 'new' && $table == 'tx_newspaper_section') {
-#			return $this->newSection($id, $fieldArray);
-		} 
-	}
-
-	function processDatamap_afterAllOperations($pObj) {
-		t3lib_div::devlog('datamap', 'newspaper', 0, $pObj->datamap);
-#		$table = 'tx_newspaper_section';
-#		$uid = array_keys($pObj->datamap[$table]);
-#		t3lib_div::devlog('getPID', 'newspaper', 0, $pObj->getPID($table, $uid[0]));  	
-		/// If a new section has been created, copy its placement
+		t3lib_div::devlog('datamap', 'newspaper', 0, $fieldArray);
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			return $this->newSection($id, $fieldArray);
 		} 
 	}
-	
+
 	/// Stuff to do when a new section is created
 	/** - pages, page zones and extras are copied from the parent section
 	 *  - an automatic article list is created and associated with the section
