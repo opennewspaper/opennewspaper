@@ -77,7 +77,10 @@ class user_savehook_newspaper {
 	 *  - an automatic article list is created and associated with the section
 	 */
 	private function newSection($id, &$fieldArray) {
-		$this->copyPagesFromParent();
+		t3lib_div::debug('user_savehook_newspaper::newSection('.$id.')');
+		t3lib_div::debug($fieldArray);
+		
+		if ($fieldArray['inheritance_mode'] != '') $this->copyPagesFromParent();
 		$this->generateArticleList();
 	}
 
