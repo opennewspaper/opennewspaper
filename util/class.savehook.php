@@ -78,34 +78,52 @@ class user_savehook_newspaper {
 	/// Stuff to do when a new section is created
 	/** - pages, page zones and extras are copied from the parent section
 	 *  - an automatic article list is created and associated with the section
+	 * 
+	 *  \param $id The UID assigned to the new record by Typo3 - usually NEW....
+	 *  \param $fieldarray The data which have already been written to the new record
 	 */
-	private function newSection($id, &$fieldArray) {
-		t3lib_div::debug('user_savehook_newspaper::newSection('.$id.')');
-		t3lib_div::debug($fieldArray);
+	private function newSection($id, array $fieldArray) {
+		
+		$section = new tx_newspaper_Section($this->getSectionID($fieldArray));
+		t3lib_div::debug($section);
 
+		if ($fieldArray['inheritance_mode'] != 'dont_inherit') 
+			$this->copyPagesFromParent($section);
+
+		$this->generateArticleList($section);
+	}
+
+	/// Determine the UID of a newly written section
+	/** Typo3 apparently provides no reliable way to determine the UID of the 
+	 *  record which has just been written to the 
+	 *  processDatamap_afterDatabaseOperations() hook. Therefore, the only way
+	 *  to find the identity of the new record is to search for the written data
+	 *  in the DB.
+	 * 
+	 *  \param $fieldarray The data written to DB
+	 */
+	private function getSectionID(array $fieldArray) {
 		$where = 1;
 		foreach ($fieldArray as $key => $value) {
 			$where .= " AND $key = '$value'";
 		}
 		$row = tx_newspaper::selectOneRow('uid', 'tx_newspaper_section', $where);
-		t3lib_div::debug(tx_newspaper::$query);
-		t3lib_div::debug($row);
-		
-		if ($fieldArray['inheritance_mode'] != '') $this->copyPagesFromParent();
-		$this->generateArticleList();
+		return intval($row['uid']);		
 	}
-
+	
 	/// Copy active pages and their content from parent section
 	/** - copies the active pages from the parent section
 	 *  - copies the page zones on those pages
 	 *  - copies the Extras on those page zones
 	 */	
-	private function copyPagesFromParent() {
+	private function copyPagesFromParent(tx_newspaper_Section $section) {
+		$parent = $section->getParentPage();
+		t3lib_div::debug($parent);
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	/// Generate an automatically filled article list and link it to the section
-	private function generateArticleList() {
+	private function generateArticleList(tx_newspaper_Section $section) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
