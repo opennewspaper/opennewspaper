@@ -87,7 +87,7 @@ class user_savehook_newspaper {
 		foreach ($fieldArray as $key => $value) {
 			$where .= " AND $key = '$value'";
 		}
-		$row = tx_newspaper::selectRow('uid', 'tx_newspaper_section', $where);
+		$row = tx_newspaper::selectOneRow('uid', 'tx_newspaper_section', $where);
 		t3lib_div::debug(tx_newspaper::$query);
 		t3lib_div::debug($row);
 		
