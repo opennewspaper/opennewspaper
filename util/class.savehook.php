@@ -70,7 +70,6 @@ class user_savehook_newspaper {
 	
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 		/// If a new section has been created, copy its placement
-		t3lib_div::devlog('datamap', 'newspaper', 0, $fieldArray);
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			return $this->newSection($id, $fieldArray);
 		} 
@@ -83,6 +82,14 @@ class user_savehook_newspaper {
 	private function newSection($id, &$fieldArray) {
 		t3lib_div::debug('user_savehook_newspaper::newSection('.$id.')');
 		t3lib_div::debug($fieldArray);
+
+		$where = 1;
+		foreach ($fieldArray as $key => $value) {
+			$where .= " AND $key = '$value'";
+		}
+		$row = tx_newspaper::selectRow('uid', 'tx_newspaper_section', $where);
+		t3lib_div::debug(tx_newspaper::$query);
+		t3lib_div::debug($row);
 		
 		if ($fieldArray['inheritance_mode'] != '') $this->copyPagesFromParent();
 		$this->generateArticleList();
