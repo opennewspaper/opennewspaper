@@ -1,4 +1,8 @@
 <?php
+
+/// \todo: this class will probably move to class.tx_newspaper_be.php
+
+
 /**
  *  \file class.tx_newspaper_extra_be.php
  *
