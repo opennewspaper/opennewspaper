@@ -118,7 +118,7 @@ class user_savehook_newspaper {
 	 */	
 	private function copyPagesFromParent(tx_newspaper_Section $section) {
 		$parent = $section->getParentSection();
-		t3lib_div::debug($parent);
+		t3lib_div::debug($parent->getSubPages());
 		foreach ($parent->getSubPages() as $page) {
 			t3lib_div::debug($page);
 			/// clone page, set parent section to new section and store it
@@ -127,7 +127,6 @@ class user_savehook_newspaper {
 			$new_page->store();
 			t3lib_div::debug($new_page);
 		}
-		throw new tx_newspaper_NotYetImplementedException();
 	}
 
 	/// Generate an automatically filled article list and link it to the section
