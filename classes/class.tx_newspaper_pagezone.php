@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  *  \file class.tx_newspaper_page.php
  * 
