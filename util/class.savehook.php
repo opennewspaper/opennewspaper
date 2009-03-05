@@ -117,8 +117,16 @@ class user_savehook_newspaper {
 	 *  - copies the Extras on those page zones
 	 */	
 	private function copyPagesFromParent(tx_newspaper_Section $section) {
-		$parent = $section->getParentPage();
+		$parent = $section->getParentSection();
 		t3lib_div::debug($parent);
+		foreach ($parent->getSubPages() as $page) {
+			t3lib_div::debug($page);
+			/// clone page, set parent section to new section and store it
+			$new_page = clone $page;
+			$new_page->setAttribute('parent_section', $section->getAttribute('uid'));
+			$new_page->store();
+			t3lib_div::debug($new_page);
+		}
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 

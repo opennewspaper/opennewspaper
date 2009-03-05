@@ -65,6 +65,14 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		}
  	}
  	
+ 	public function __clone() {
+ 		$this->attributes = clone $this->attributes;
+ 		$this->attributes['uid'] = 0;
+ 		$this->setUid(0);
+ 		
+ 		/// \todo clone page zones 
+ 	}
+ 	
  	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
@@ -154,6 +162,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 	/// get active pages for given section
 	/** \param $section section object
 	 *  \return array uids of active pages for given section
+	 *  \todo move to tx_newspaper_Section
 	 */
 	public static function getActivePages(tx_newspaper_Section $section, $include_hidden=true) {
 		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?

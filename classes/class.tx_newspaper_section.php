@@ -57,8 +57,7 @@
  		return $this->attributes[$attribute];
  	}
  	
-/// \todo rename getArticleList()
- 	function getList() {
+ 	function getArticleList() {
  		if (!$this->articlelist) { 
  			$list = tx_newspaper::selectOneRow(
 				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
@@ -69,13 +68,22 @@
  		return $this->articlelist; 
  	}
  	
- 	function getParentPage() {
- 		throw new tx_newspaper_NotYetImplementedException();
+ 	function getParentSection() {
+ 		return new tx_newspaper_Section($this->getAttribute('parent_section'));
  	}
  	
  	/// \todo do!
  	function getSubPages() {
- 		throw new tx_newspaper_NotYetImplementedException();
+ 		$row = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_page',
+			'parent_section = ' . $this->getAttribute('uid') 
+ 		);
+ 		$subpages = array();
+ 		foreach ($row as $record) {
+ 			$subpages = new tx_newspaper_page($record['uid']);
+ 		}
+ 		
+ 		return $subpages;
  	}
  	
  	function getTable() {
