@@ -56,7 +56,12 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		} else if (is_integer($parent)) {
 			$this->setUid($parent);
 			
-		}	
+		} else 
+			throw new tx_newspaper_IllegalUsageException(
+				'First argument to tx_newspaper_Page::__construct() must be' .
+				' either a tx_newspaper_Section or an integer UID! In fac it is: ' .
+				$parent);
+				
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
 		if ($type != null) {
