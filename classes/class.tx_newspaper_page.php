@@ -100,10 +100,10 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  			   'condition: ' . $this->condition . " \n" .
  			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
  			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
- 			   $this->pagetype instanceof tx_newspaper_PageType? 
+/* 			   $this->pagetype instanceof tx_newspaper_PageType? 
  			   		('pagetype: ' . $this->pagetype->getAttribute('type_name') . " \n"): 
-					'';
- 		return $ret;
+*/					'';
+		return $ret;
  	}
  	
  	function getAttribute($attribute) {
