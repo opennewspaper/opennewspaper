@@ -58,10 +58,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		$this->setUid(0);
  		
  		/// \todo clone extras
- 		$old_pagezones = $this->getPageZones();
- 		$this->pageZones = array();
- 		foreach ($old_pagezones as $old_pagezone) {
- 			$this->pageZones[] = clone $old_pagezone;
+ 		$old_extras = $this->getExtras();
+ 		$this->extras = array();
+ 		foreach ($old_extras as $old_extra) {
+ 			$this->extras[] = clone $old_extra;
  		}
  	}
 	
