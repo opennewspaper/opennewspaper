@@ -56,6 +56,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		//  unset the UID so the object can be written to a new DB record.
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
+
+ 		$this->setAttribute('crdate', time());
+ 		$this->setAttribute('tstamp', time());
  		
  		/// \todo clone extras
  		$old_extras = $this->getExtras();

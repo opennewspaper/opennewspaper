@@ -85,6 +85,9 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
  		
+ 		$this->setAttribute('crdate', time());
+ 		$this->setAttribute('tstamp', time());
+ 		
  		/// clone page zones contained on page
  		$old_pagezones = $this->getPageZones();
  		$this->pageZones = array();
