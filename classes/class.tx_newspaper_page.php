@@ -243,6 +243,37 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		return $row;
 	}
 
+	static public function relatePageZone2Page($pagezone_table, $pagezone_uid, $page_uid) {
+			throw new tx_newspaper_NotYetImplementedException();
+		
+		$extra_table = strtolower($extra_table);
+		
+		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
+		
+		/// \todo write entry in MM table (if not exists)
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid_local', 
+			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+			'uid_local = ' . intval($article_uid) .
+			' AND uid_foreign = ' . intval($abstract_uid)	
+		);
+		if ($row['uid_local'] != $article_uid || 
+			$row['uid_foreign'] != $abstract_uid) {
+			if (!tx_newspaper::insertRows(
+					tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+					array(
+						'uid_local' => $article_uid,
+						'uid_foreign' => $abstract_uid)
+					)
+				) {
+				return false;					
+			}
+		} 
+		
+		return $abstract_uid;
+		
+	}
+
 	/// Read the record for this object from DB
 	/** Because a page can be constructed both with a UID and a combination of
 	 *  parent section and page type to uniquely define it, reading the record
