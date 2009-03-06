@@ -127,6 +127,34 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		$this->attributes[$attribute] = $value;
 	}
 	
+	/// insert page data (if uid == 0) or update if uid > 0
+	public function store() {
+		
+		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, read them now
+			if (!$this->attributes) $this->readAttributesFromDB();
+			
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+		
+		/// \todo store all page zones and make sure they are in the MM relation table
+/*		if ($this->extras) foreach ($this->extras as $extra) {
+			$extra_uid = $extra->store();
+			$extra_table = $extra->getTable();
+			self::relateExtra2Article($extra_table, $extra_uid, getUid());
+		}
+*/		
+		return $this->getUid();		
+	}
+	
 	function getPageZones() {
  		/// Get tx_newspaper_PageZone list for current page at first call
 		if (!$this->pageZones) {
