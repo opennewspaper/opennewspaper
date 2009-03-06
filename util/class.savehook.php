@@ -118,7 +118,7 @@ class user_savehook_newspaper {
 	 */	
 	private function copyPagesFromParent(tx_newspaper_Section $section) {
 		$parent = $section->getParentSection();
-		t3lib_div::debug($parent->getSubPages());
+
 		foreach ($parent->getSubPages() as $page) {
 			t3lib_div::debug($page);
 			/// clone page, set parent section to new section and store it

@@ -70,27 +70,28 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  	}
  	
  	public function __clone() {
- 		$this->attributes = clone $this->attributes;
+ 		/*  ensure attributes are loaded from DB. Don't call 
+ 		 *  readAttributesFromDB() here because maybe the content is already
+ 		 *  there and it would cause the DB operation to be done twice.
+ 		 */
+		$this->getAttribute('uid');
+		
+		//  unset the UID so the object can be written to a new DB record.
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
  		
- 		/// \todo clone page zones 
+ 		/// \todo clone page zones
+ 		$old_pagezones = $this->getPageZones();
+ 		$this->pageZones = array();
+ 		foreach ($old_pagezones as $old_pagezone) {
+ 			$this->pageZones[] = clone $old_pagezone;
+ 		}
  	}
  	
  	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
-			if ($this->getUid()) {
-				$this->attributes = tx_newspaper::selectOneRow(
-					'*', $this->getTable(), 'uid = ' . $this->getUid()
-				);
-			} else {
-				$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
-					'section = ' . $this->parentSection->getAttribute('uid') . 
-					' AND pagetype_id = ' . $this->pagetype->getID()
-				);
-				$this->setUid($this->attributes['uid']);
-			}
+			$this->readAttributesFromDB();
 		}
 
  		if (!array_key_exists($attribute, $this->attributes)) {
@@ -185,6 +186,26 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 			'pid=' . $sf->getPid($p) . ' AND section=' . $section->getAttribute('uid') . $where
 		);
 		return $row;
+	}
+
+	/// Read the record for this object from DB
+	/** Because a page can be constructed both with a UID and a combination of
+	 *  parent section and page type to uniquely define it, reading the record
+	 *  is a bit more complicated than for other objects. Thus, I have factored
+	 *  it out here.
+	 */
+	protected function readAttributesFromDB() {
+		if ($this->getUid()) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), 'uid = ' . $this->getUid()
+			);
+		} else {
+			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
+				'section = ' . $this->parentSection->getAttribute('uid') . 
+				' AND pagetype_id = ' . $this->pagetype->getID()
+			);
+			$this->setUid($this->attributes['uid']);
+		}
 	}
 
 
