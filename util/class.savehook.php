@@ -120,7 +120,7 @@ class user_savehook_newspaper {
 		$parent = $section->getParentSection();
 
 		foreach ($parent->getSubPages() as $page) {
-			t3lib_div::debug($page);
+			t3lib_div::debug($page->__toString());
 			/// clone page, set parent section to new section and store it
 			$new_page = clone $page;
 			$new_page->setAttribute('section', $section->getAttribute('uid'));
