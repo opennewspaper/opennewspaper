@@ -78,7 +78,7 @@
 			'uid', 'tx_newspaper_page',
 			'section = ' . $this->getAttribute('uid') 
  		);
- 		t3lib_div::debug($row);
+
  		$subpages = array();
  		foreach ($row as $record) {
  			$subpages[] = new tx_newspaper_Page((int)$record['uid']);
