@@ -149,7 +149,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		if ($this->pageZones) foreach ($this->pageZones as $pagezone) {
 			$pagezone_uid = $pagezone->store();
 			$pagezone_table = $pagezone->getTable();
-			self::relatePageZone2Page($pagezone_table, $pagezone_uid, getUid());
+			self::relatePageZone2Page($pagezone_table, $pagezone_uid, $this->getUid());
 		}
 		
 		return $this->getUid();		
