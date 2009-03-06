@@ -117,6 +117,15 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		}
  		return $this->attributes[$attribute];
  	}
+
+	public function setAttribute($attribute, $value) {
+		/// Read Attributes from persistent storage on first call
+		if (!$this->attributes) {
+			$this->readAttributesFromDB();
+		}
+		
+		$this->attributes[$attribute] = $value;
+	}
 	
 	function getPageZones() {
  		/// Get tx_newspaper_PageZone list for current page at first call
