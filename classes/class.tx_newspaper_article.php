@@ -46,6 +46,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 
+	public function __clone() {
+ 		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
+ 		 *  called here because maybe the content is already there and it would
+ 		 *  cause the DB operation to be done twice.
+ 		 */
+		$this->getAttribute('uid');
+		
+		//  unset the UID so the object can be written to a new DB record.
+ 		$this->attributes['uid'] = 0;
+ 		$this->setUid(0);
+ 		
+ 		/// \todo clone extras
+ 		$old_pagezones = $this->getPageZones();
+ 		$this->pageZones = array();
+ 		foreach ($old_pagezones as $old_pagezone) {
+ 			$this->pageZones[] = clone $old_pagezone;
+ 		}
+ 	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	interface tx_newspaper_InSysFolder

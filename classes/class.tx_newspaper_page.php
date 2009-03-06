@@ -75,17 +75,17 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  	}
  	
  	public function __clone() {
- 		/*  ensure attributes are loaded from DB. Don't call 
- 		 *  readAttributesFromDB() here because maybe the content is already
- 		 *  there and it would cause the DB operation to be done twice.
+ 		/*  ensure attributes are loaded from DB. readAttributesFromDB() isn't  
+ 		 *  called here because maybe the content is already there and it would
+ 		 *  cause the DB operation to be done twice.
  		 */
 		$this->getAttribute('uid');
 		
-		//  unset the UID so the object can be written to a new DB record.
+		///  unset the UID so the object can be written to a new DB record.
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
  		
- 		/// \todo clone page zones
+ 		/// clone page zones contained on page
  		$old_pagezones = $this->getPageZones();
  		$this->pageZones = array();
  		foreach ($old_pagezones as $old_pagezone) {
@@ -100,9 +100,9 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  			   'condition: ' . $this->condition . " \n" .
  			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
  			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
-/* 			   $this->pagetype instanceof tx_newspaper_PageType? 
+ 			   $this->pagetype && ($this->pagetype instanceof tx_newspaper_PageType)? 
  			   		('pagetype: ' . $this->pagetype->getAttribute('type_name') . " \n"): 
-*/					'';
+					'';
 		return $ret;
  	}
  	
@@ -145,13 +145,13 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 			);
 		}
 		
-		/// \todo store all page zones and make sure they are in the MM relation table
-/*		if ($this->extras) foreach ($this->extras as $extra) {
-			$extra_uid = $extra->store();
-			$extra_table = $extra->getTable();
-			self::relateExtra2Article($extra_table, $extra_uid, getUid());
+		/// store all page zones and make sure they are in the MM relation table
+		if ($this->pageZones) foreach ($this->pageZones as $pagezone) {
+			$pagezone_uid = $pagezone->store();
+			$pagezone_table = $pagezone->getTable();
+			self::relatePageZone2Page($pagezone_table, $pagezone_uid, getUid());
 		}
-*/		
+		
 		return $this->getUid();		
 	}
 	
