@@ -145,11 +145,16 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 			);
 		}
 		
-		/// store all page zones and make sure they are in the MM relation table
+		/// store all page zones and set the page_id of their respective pagezone superclass entry
 		if ($this->pageZones) foreach ($this->pageZones as $pagezone) {
 			$pagezone_uid = $pagezone->store();
-			$pagezone_table = $pagezone->getTable();
-			self::relatePageZone2Page($pagezone_table, $pagezone_uid, $this->getUid());
+			$pagezone_superclass_uid = tx_newspaper_PageZone::createPageZoneRecord(
+				$pagezone_uid, $pagezone->getTable()
+			);
+			tx_newspaper::updateRows(
+				'tx_newspaper_pagezone', "uid = $pagezone_superclass_uid", 
+				array('page_id' => $this->getUid())
+			);
 		}
 		
 		return $this->getUid();		
@@ -241,37 +246,6 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 			'pid=' . $sf->getPid($p) . ' AND section=' . $section->getAttribute('uid') . $where
 		);
 		return $row;
-	}
-
-	static public function relatePageZone2Page($pagezone_table, $pagezone_uid, $page_uid) {
-			throw new tx_newspaper_NotYetImplementedException();
-		
-		$extra_table = strtolower($extra_table);
-		
-		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
-		
-		/// \todo write entry in MM table (if not exists)
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid_local', 
-			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-			'uid_local = ' . intval($article_uid) .
-			' AND uid_foreign = ' . intval($abstract_uid)	
-		);
-		if ($row['uid_local'] != $article_uid || 
-			$row['uid_foreign'] != $abstract_uid) {
-			if (!tx_newspaper::insertRows(
-					tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-					array(
-						'uid_local' => $article_uid,
-						'uid_foreign' => $abstract_uid)
-					)
-				) {
-				return false;					
-			}
-		} 
-		
-		return $abstract_uid;
-		
 	}
 
 	/// Read the record for this object from DB
