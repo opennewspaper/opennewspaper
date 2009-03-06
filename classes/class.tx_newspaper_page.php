@@ -59,7 +59,7 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
 		} else 
 			throw new tx_newspaper_IllegalUsageException(
 				'First argument to tx_newspaper_Page::__construct() must be' .
-				' either a tx_newspaper_Section or an integer UID! In fac it is: ' .
+				' either a tx_newspaper_Section or an integer UID! In fact it is: ' .
 				$parent);
 				
 		/// Configure Smarty rendering engine
