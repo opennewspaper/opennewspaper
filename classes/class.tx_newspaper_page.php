@@ -88,6 +88,17 @@ class tx_newspaper_Page implements tx_newspaper_InSysFolder {
  		}
  	}
  	
+ 	public function __toString() {
+ 		$ret = $this->getTable() . ':' . " \n" .
+ 			   'UID: ' . $this->getUid() . " \n" .
+ 			   'parentSection: ' . $this->parentSection . " \n" .
+ 			   'condition: ' . $this->condition . " \n" .
+ 			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
+ 			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
+ 			   'pagetype: ' . $this->pagetype->getAttribute('type_name') . " \n";
+ 		return $ret;
+ 	}
+ 	
  	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
