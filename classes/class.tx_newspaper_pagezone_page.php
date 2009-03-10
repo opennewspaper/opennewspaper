@@ -54,6 +54,29 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
  	}
 
+	/// \todo Will this work in the parent class too?
+	public function __clone() {
+ 		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
+ 		 *  called here because maybe the content is already there and it would
+ 		 *  cause the DB operation to be done twice.
+ 		 */
+		$this->getAttribute('uid');
+		
+		//  unset the UID so the object can be written to a new DB record.
+ 		$this->attributes['uid'] = 0;
+ 		$this->setUid(0);
+
+ 		$this->setAttribute('crdate', time());
+ 		$this->setAttribute('tstamp', time());
+ 		
+ 		/// \todo clone extras
+ 		$old_extras = $this->getExtras();
+ 		$this->extras = array();
+ 		foreach ($old_extras as $old_extra) {
+ 			$this->extras[] = clone $old_extra;
+ 		}
+ 	}
+
 	static function getModuleName() { return 'np_pagezone_page'; }
 
 	protected function getExtra2PagezoneTable() {
