@@ -28,8 +28,8 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->section->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
 	
-	public function test_getList() {
-		$list = $this->section->getList();
+	public function test_getArticleList() {
+		$list = $this->section->getArticleList();
 		$this->assertEquals($list, 
 							tx_newspaper_ArticleList_Factory::getInstance()->create(1, $this->section));
 		
