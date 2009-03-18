@@ -1,6 +1,6 @@
 <?php
 
-class user_savehook_newspaper {
+class tx_newspaper_SaveHook {
 
 	/// save hook: new and update
 
