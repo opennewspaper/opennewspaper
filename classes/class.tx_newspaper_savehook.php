@@ -52,11 +52,11 @@ class tx_newspaper_SaveHook {
 
 			/// check if a newspaper record action should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
-t3lib_div::debug('log ...');
-t3lib_div::debug($status);
-t3lib_div::debug($table);
-t3lib_div::debug($id);
-t3lib_div::debug($fieldArray);
+#t3lib_div::debug('log ...');
+#t3lib_div::debug($status);
+#t3lib_div::debug($table);
+#t3lib_div::debug($id);
+#t3lib_div::debug($fieldArray);
 			}
 			
 		}
