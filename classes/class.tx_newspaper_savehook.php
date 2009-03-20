@@ -38,9 +38,11 @@ class tx_newspaper_SaveHook {
 		}
 
 
-		/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
+
 		if (class_exists($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
+
+			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
 			if (in_array("tx_newspaper_InSysFolder", class_implements($np_obj))) { 
 				/// tx_newspaper_InSysFolder is implemented, so record is to be stored in a special sysfolder
 				$sf = tx_newspaper_Sysfolder::getInstance();
@@ -48,6 +50,16 @@ class tx_newspaper_SaveHook {
 				$fieldArray['pid'] = $pid; // map pid to appropriate sysfolder
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
+
+			/// check if a newspaper record action should be logged
+			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
+t3lib_div::debug('log ...');
+t3lib_div::debug($status);
+t3lib_div::debug($table);
+t3lib_div::debug($id);
+t3lib_div::debug($fieldArray);
+			}
+			
 		}
 	}
 	
