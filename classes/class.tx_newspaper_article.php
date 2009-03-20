@@ -8,6 +8,7 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_writeslog.php');
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlebehavior.php');
 
@@ -21,7 +22,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
  *  - make sure it works as generic page zone (when assembling pages) as well as concrete article 
  */
 class tx_newspaper_Article extends tx_newspaper_PageZone 
-	implements tx_newspaper_ArticleIface {
+	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
