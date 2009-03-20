@@ -1111,5 +1111,78 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_log"] = array (
+	"ctrl" => $TCA["tx_newspaper_log"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "table_name,table_uid,be_user,action,comment"
+	),
+	"feInterface" => $TCA["tx_newspaper_log"]["feInterface"],
+	"columns" => array (
+		"table_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required",
+			)
+		),
+		"table_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_uid",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+		"be_user" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.be_user",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "be_users",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"action" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.action",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"max" => "30",	
+				"eval" => "required",
+			)
+		),
+		"comment" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.comment",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "table_name;;;;1-1-1, table_uid, be_user, action, comment")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 ?>

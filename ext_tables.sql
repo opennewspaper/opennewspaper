@@ -330,6 +330,27 @@ CREATE TABLE tx_newspaper_pagezonetype (
 
 
 #
+# Table structure for table 'tx_newspaper_log'
+#
+CREATE TABLE tx_newspaper_log (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	table_name tinytext NOT NULL,
+	table_uid int(11) DEFAULT '0' NOT NULL,
+	be_user blob NOT NULL,
+	action tinytext NOT NULL,
+	comment text NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
@@ -345,6 +366,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-
-
-
