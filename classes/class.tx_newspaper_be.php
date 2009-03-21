@@ -192,7 +192,7 @@ t3lib_div::devlog('section uid', 'newspaper', 0, $section_uid);
 	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
 	 *  \return String <img ...> or <a href><img ...></a> (if linked)
 	 */
-	private static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false) {
+	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false) {
 
 /// \to do: read width and height from file? or hardcode 16x16px?
 		$width = 16;
