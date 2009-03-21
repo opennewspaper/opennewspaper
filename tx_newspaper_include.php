@@ -51,7 +51,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 
 if (TYPO3_MODE == 'BE')	{
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');	
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php');
 }
 
 ?>
