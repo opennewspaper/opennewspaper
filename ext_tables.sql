@@ -190,6 +190,7 @@ CREATE TABLE tx_newspaper_article (
 	is_template tinyint(3) DEFAULT '0' NOT NULL,
 	template_set tinytext NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
+	workflow_status int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -366,4 +367,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-
