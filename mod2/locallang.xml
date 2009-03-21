@@ -10,6 +10,41 @@
 			<label index="function1">Function #1</label>
 			<label index="function2">Function #2</label>
 			<label index="function3">Function #3</label>
+			
+			<label index="label.status_hidden">Show articles</label>
+			<label index="option.status_hidden_all">all</label>
+			<label index="option.status_hidden_on">hidden only</label>
+			<label index="option.status_hidden_off">visible only</label>
+
+			<label index="label.status_moderation">Moderation status</label>
+			<label index="option.status_moderation_all">all</label>
+			<label index="option.status_moderation_on">to be moderated only</label>
+			<label index="option.status_moderation_off">not to be moderated only</label>
+			
+			<label index="label.range">Time range</label>			
+			<label index="option.range_today">today</label>
+			<label index="option.range_day">day</label>
+			<label index="option.range_days">days</label>
+			<label index="option.range_no_limit">no limit</label>
+			
+			<label index="label.author">Author</label>
+			<label index="label.section">Section</label>
+			<label index="label.textsearch">Text</label>
+			<label index="label.go">Go</label>
+			
+			<label index="label.step_items_per_page">Items per page</label>
+			
+			<label index="label.hide">Hide article</label>
+			<label index="label.unhide">Unhide article</label>
+			<label index="label.preview_article">Preview article</label>
+			<label index="label.edit_article">Edit article</label>
+			<label index="label.time">This article uses start time and/ or end time</label>
+			<label index="label.internal_comments">View all internal comments for this article</label>
+			
+			<label index="label.page_prev">&lt;&lt; previous hits</label>
+			<label index="label.page_next">next hits &gt;&gt;</label>
+			<label index="label.page_hits">hit(s)</label>
+
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Moderationsliste</label>
