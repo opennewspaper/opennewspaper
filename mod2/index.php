@@ -274,7 +274,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 			$_POST['start_page'] = 0;
 		} elseif ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) > 0)) {
 			/// set some defaults for pages being called by url
-			$_POST = t3lib_div::_GET();
+			$_POST = t3lib_div::_GET(); // copy to $_post -> ring is created based on $_post
 /// \todo: check: $_get[]=... - warum nicht $_post[]=... ???
 			if (!t3lib_div::_POST('range')) $_GET['range'] = 'today';
 			if (!t3lib_div::_POST('hidden')) $_GET['hidden'] = 'all';
