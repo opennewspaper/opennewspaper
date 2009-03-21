@@ -20,8 +20,8 @@ if (TYPO3_MODE == 'BE') {
 	t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 
 	// add main module 'newspaper', add sub modules
-	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/');	
-	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
+	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/'); // main
+	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM2','',t3lib_extMgm::extPath($_EXTKEY).'mod2/'); // moderation list (workflow)
 
 
 	/// add newspaper to Plugin-in list
