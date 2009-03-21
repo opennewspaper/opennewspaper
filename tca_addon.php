@@ -29,6 +29,7 @@ $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['noTableWra
 
 
 // fix ranges artificially imposed by kickstarter
+/// \todo: check, if upper value can remain empty for "no upper limit"?"
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"upper" => "1000000000",
 	"lower" => "1"
