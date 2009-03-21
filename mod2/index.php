@@ -249,7 +249,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 		
 		
 		/// build url for switch visibility button
-		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_ModUtil::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
+		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
 		
 
 		$smarty->assign('DATA', $row);
