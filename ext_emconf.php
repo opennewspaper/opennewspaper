@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "newspaper"
 #
-# Auto generated 20-03-2009 16:22
+# Auto generated 21-03-2009 14:27
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.
@@ -20,7 +20,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'dependencies' => 'cms,smarty',
 	'conflicts' => '',
 	'priority' => '',
-	'module' => 'mod1',
+	'module' => 'mod1,mod2',
 	'state' => 'alpha',
 	'internal' => '',
 	'uploadfolder' => 1,
