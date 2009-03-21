@@ -23,7 +23,7 @@ class tx_newspaper_UtilMod {
   		foreach($overwrite as $key => $value) {
   			$item[$key] = $key . '=' . urlencode($value);
   		}
-  		$query_string = implode("&", $$item);
+  		$query_string = implode("&", $item);
 #t3lib_div::devlog('querystring', 'newspaper', 0, $query_string);
  		return $query_string;
 	}
