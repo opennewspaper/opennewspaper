@@ -1,0 +1,194 @@
+<style type="text/css">
+table {ldelim}
+  table-layout: auto; 
+  border: 1px solid gray; 
+  padding: 0; 
+  margin: 0; 
+  border-collapse: collapse; 
+{rdelim}
+td {ldelim}
+  vertical-align: top;
+   border: 1px solid #e8e8e8;
+{rdelim}
+.bg1 {ldelim}
+  background-color: #f0f0f0;"
+{rdelim}
+.bg2 {ldelim}
+  background-color: #d0d0d0;
+{rdelim}
+.kicker {ldelim}
+  color: #c61940;
+{rdelim}
+.comment_box {ldelim}
+  display: none;
+  background-color: white;
+{rdelim} 
+</style> 
+
+<script language="javascript" src="/taz426/typo3/contrib/prototype/prototype.js"> </script>
+
+<script language="javascript">
+
+	var path = window.location.pathname;
+	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+
+	function toggleComment(comment_id) {ldelim}
+		if (document.getElementById(comment_id).style.display != "none")
+			document.getElementById(comment_id).style.display = "none";
+		else
+			document.getElementById(comment_id).style.display = "block";
+	{rdelim}
+
+	function getComment(article_uid, comment_uid) {ldelim}
+//alert(path + "typo3conf/ext/newspaper/mod2/index.php");
+		var request = new Ajax.Request(
+// 			path + "typo3conf/ext/newspaper/mod2/index.php",
+ 			"/taz426/typo3conf/ext/newspaper/mod2/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "ajax=1&param=" + article_uid + "|" + comment_uid + "&no_cache=" + new Date().getTime(),
+				onSuccess: updateComment
+			{rdelim}
+		);
+	{rdelim}
+
+	function updateComment(request) {ldelim}
+
+	{rdelim}
+
+</script>
+
+
+</head></body>
+
+
+
+
+<form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
+{$RANGE_LABEL}: <select name="range">
+{foreach from=$RANGE key=key item=value}
+{if $key == $_POST.range}
+	<option selected="selected" value="{$key}">{$value}</option>
+{else}
+	<option value="{$key}">{$value}</option>
+{/if}
+{/foreach}
+</select>
+
+
+{$HIDDEN_LABEL}: <select name="hidden">
+{foreach from=$HIDDEN key=key item=value}
+{if $key == $_POST.hidden}
+	<option selected="selected" value="{$key}">{$value}</option>
+{else}
+	<option value="{$key}">{$value}</option>
+{/if}
+{/foreach}
+</select>
+
+
+{$MODERATION_LABEL}: <select name="moderation">
+{foreach from=$MODERATION key=key item=value}
+{if $key == $_POST.moderation}
+	<option selected="selected" value="{$key}">{$value}</option>
+{else}
+	<option value="{$key}">{$value}</option>
+{/if}
+{/foreach}
+</select>
+
+
+<br />
+
+{$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author}" /> 
+{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" /> 
+{$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
+
+{$STEP_LABEL}: <select name="step">
+{foreach from=$STEP item=value}
+{if $value == $_POST.step}
+	<option selected="selected" value="{$value}">{$value}</option>
+{else}
+	<option value="{$value}">{$value}</option>
+{/if}
+{/foreach}
+</select>
+
+<input type="submit" name="go" value="{$GO_LABEL}" />
+
+</form>
+
+<br /><br />
+
+
+{if $URL_PREV != ''}
+<a href="index.php?{$URL_PREV}">{$PAGE_PREV_LABEL}</a>
+{else}
+{$PAGE_PREV_LABEL}
+{/if}
+ [ 
+{$PAGE_HITS_LABEL} {$_POST.start_page*$_POST.step+1}
+ - 
+{if ($DATA|@sizeof < $_POST.step) } 
+	{math equation="sp*st+sizeof" sp=$_POST.start_page st=$_POST.step sizeof=$DATA|@sizeof}
+{else}
+	{math equation="(sp+1)*st" sp=$_POST.start_page st=$_POST.step}
+{/if}
+ ]
+{if $URL_NEXT != ''}
+<a href="index.php?{$URL_NEXT}">{$PAGE_NEXT_LABEL}</a>
+{else}
+{$PAGE_NEXT_LABEL}
+{/if}
+
+<table>
+<tr>
+<td>No. </td>
+<td>Article</td>
+<td>Author</td>
+<td>BE user</td>
+<td>Date</td>
+<td align="center">Visible&nbsp;</td>
+<td align="center">Command&nbsp;</td>
+<td align="center">Time controlled</td>
+</tr>
+{section name=i loop=$DATA}
+{if ($smarty.section.i.index % 2 == 0)}
+	<tr class="bg1">
+{else}
+	<tr class="bg2">
+{/if}
+		<td align="right"> {math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step} </td>
+		<td> 
+			<div title="{$DATA[i].teaser}"><span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})</div>
+			<div id="comments{$DATA[i].uid}" class="comment_box">{$DATA[i].comment} <a href="javascript:getComment({$DATA[i].uid}, 1);">ajax</a></div>
+		</td>
+		<td> {$DATA[i].author} </td>
+		<td> <!-- {$DATA[i].be_user} --> test_user </td> 
+		<td> {$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"} </td>
+		<td align="center">
+{if $DATA[i].hidden == 0}
+<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
+{else}
+<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
+{/if}
+		</td>
+		<td> 
+{$ARTICLE_PREVIEW_ICON} 
+<a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
+<a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
+		</td>
+		<td align="center">
+{if ($DATA[i].starttime > 0 || $DATA[i].enddtime > 0)}
+	{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
+		{$TIME_HIDDEN_ICON}
+	{else}
+		{$TIME_VISIBLE_ICON}
+	{/if}
+{/if}
+		</td>	
+	</tr>
+{/section}
+</table>
+
+</form><br /><br />
