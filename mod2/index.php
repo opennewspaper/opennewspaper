@@ -225,13 +225,13 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {
-			$smarty->assign('URL_PREV', $this->convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) - 1)));
+			$smarty->assign('URL_PREV', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) - 1)));
 		} else {
 			$smarty->assign('URL_PREV', '');
 		}
 		if (sizeof($row) > intval(t3lib_div::_GP('step'))) {
 			// so there's at least one next record
-			$smarty->assign('URL_NEXT', $this->convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) + 1)));
+			$smarty->assign('URL_NEXT', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) + 1)));
 			$row = array_slice($row, 0, intval(t3lib_div::_GP('step'))); // cut off entry from next page
 		} else {
 			$smarty->assign('URL_NEXT', '');
