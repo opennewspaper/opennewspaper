@@ -39,6 +39,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /// \todo: require_once needed?
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 
