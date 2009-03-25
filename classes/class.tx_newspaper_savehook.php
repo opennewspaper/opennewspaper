@@ -98,7 +98,10 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('id', 'newspaper', 0, $id);
 #t3lib_div::devlog('value', 'newspaper', 0, $value);
 
-		if ($table == 'tx_newspaper_pagetype' || $table == 'tx_newspaper_pagezonetype') {
+		if ($table == 'tx_newspaper_pagetype' || 
+			$table == 'tx_newspaper_pagezonetype' || 
+			$table == 'tx_newspaper_articletype'
+		) {
 			// it is not allowed to delete these records (with T3 means)
 /// \to do: fully implement deleting these record types
 /// \to do: add to log file - but which?
