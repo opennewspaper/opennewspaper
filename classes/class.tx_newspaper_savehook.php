@@ -2,6 +2,34 @@
 
 class tx_newspaper_SaveHook {
 
+
+	/// tceform hooks (well, those aren't really save hooks ...)
+	
+	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
+		global $TCA;
+
+#t3lib_div::devlog('th pre table', 'newspaper', 0, $table);
+#t3lib_div::devlog('th pre field', 'newspaper', 0, $field);
+#t3lib_div::devlog('th pre row', 'newspaper', 0, $row);
+#t3lib_div::devlog('th pre altName', 'newspaper', 0, $altName);
+#t3lib_div::devlog('th pre palette', 'newspaper', 0, $palette);
+#t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
+#t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
+		
+		$at = new tx_newspaper_Articletype();
+		if ($table == $at->getTable() && $field == 'tsconfig_name' && $row['tsconfig_name'] != '') {
+			/// if field 'tsconfig_name' is filled, just display the value, but the value can't be edited
+			
+			// Make sure to load full $TCA array for the table
+			t3lib_div::loadTCA($table);
+			unset($TCA['tx_newspaper_articletype']['columns']['tsconfig_name']['config']['type']);
+			$TCA['tx_newspaper_articletype']['columns']['tsconfig_name']['config']['type'] = 'none';
+		}
+		
+	}
+
+
+
 	/// save hook: new and update
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
