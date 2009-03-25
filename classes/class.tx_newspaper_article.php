@@ -37,12 +37,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
 			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
-			$this->smarty->setTemplateSearchPath(
-				array(
-					'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
-					'template_sets'
-				)
-			);
 		}
 		
 	}
@@ -107,6 +101,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
 			$ret = $article->render();
 		} else {
+			$this->smarty->setTemplateSearchPath(
+				array(
+					'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
+					'template_sets'
+				)
+			);
 			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
 			$this->smarty->assign('title', $this->getAttribute('title'));
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
@@ -118,7 +118,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 *  array(
 			 *  	$paragraph_number => array(
 			 * 			"text" => $text_of_paragraph,
-			 * 			"extras" => array(
+			 *          "extras" => array(
 			 * 				$position => $rendered_extra,
 			 * 				...
 			 * 			)
