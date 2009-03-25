@@ -72,19 +72,17 @@
  		return new tx_newspaper_Section($this->getAttribute('parent_section'));
  	}
  	
- 	/// \todo do!
  	function getSubPages() {
- 		$row = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_page',
-			'section = ' . $this->getAttribute('uid') 
- 		);
-
- 		$subpages = array();
- 		foreach ($row as $record) {
- 			$subpages[] = new tx_newspaper_Page((int)$record['uid']);
- 		}
- 		
- 		return $subpages;
+        if (!$this->subPages) {
+            $row = tx_newspaper::selectRows(
+                'uid', 'tx_newspaper_page',
+                'section = ' . $this->getAttribute('uid') 
+            );
+     		foreach ($row as $record) {
+ 			    $this->subPages[] = new tx_newspaper_Page((int)$record['uid']);
+ 		    }
+        }
+ 		return $this->subPages;
  	}
  	
  	function getTable() {
