@@ -105,46 +105,10 @@ $TCA["tx_newspaper_extra_image"] = array (
 $TCA["tx_newspaper_section"] = array (
 	"ctrl" => $TCA["tx_newspaper_section"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,section_name,parent_section,articlelist,inheritance_mode,pagetype_pagezone"
+		"showRecordFieldList" => "section_name,parent_section,articlelist,inheritance_mode,pagetype_pagezone"
 	),
 	"feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		'starttime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'default'  => '0',
-				'checkbox' => '0'
-			)
-		),
-		'endtime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'checkbox' => '0',
-				'default'  => '0',
-				'range'    => array (
-					'upper' => mktime(0, 0, 0, 12, 31, 2020),
-					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
-				)
-			)
-		),
 		"section_name" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.section_name",		
@@ -197,10 +161,10 @@ $TCA["tx_newspaper_section"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, section_name, parent_section, articlelist, inheritance_mode, pagetype_pagezone")
+		"0" => array("showitem" => "section_name;;;;1-1-1, parent_section, articlelist, inheritance_mode, pagetype_pagezone")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime")
+		"1" => array("showitem" => "")
 	)
 );
 
@@ -274,46 +238,10 @@ $TCA["tx_newspaper_page"] = array (
 $TCA["tx_newspaper_pagezone"] = array (
 	"ctrl" => $TCA["tx_newspaper_pagezone"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,name,page_id,pagezone_table,pagezone_uid"
+		"showRecordFieldList" => "name,page_id,pagezone_table,pagezone_uid"
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		'starttime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'default'  => '0',
-				'checkbox' => '0'
-			)
-		),
-		'endtime' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-			'config'  => array (
-				'type'     => 'input',
-				'size'     => '8',
-				'max'      => '20',
-				'eval'     => 'date',
-				'checkbox' => '0',
-				'default'  => '0',
-				'range'    => array (
-					'upper' => mktime(0, 0, 0, 12, 31, 2020),
-					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
-				)
-			)
-		),
 		"name" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.name",		
@@ -360,10 +288,10 @@ $TCA["tx_newspaper_pagezone"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, name, page_id, pagezone_table, pagezone_uid")
+		"0" => array("showitem" => "name;;;;1-1-1, page_id, pagezone_table, pagezone_uid")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime")
+		"1" => array("showitem" => "")
 	)
 );
 
@@ -1201,5 +1129,39 @@ $TCA["tx_newspaper_log"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_articletype"] = array (
+	"ctrl" => $TCA["tx_newspaper_articletype"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "title,tsconfig_name"
+	),
+	"feInterface" => $TCA["tx_newspaper_articletype"]["feInterface"],
+	"columns" => array (
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"tsconfig_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.tsconfig_name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required,alphanum,nospace,uniqueInPid",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "title;;;;2-2-2, tsconfig_name;;;;3-3-3")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 ?>
