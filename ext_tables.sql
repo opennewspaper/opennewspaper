@@ -171,6 +171,7 @@ CREATE TABLE tx_newspaper_article (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
+	articletype_id int(11) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	kicker tinytext NOT NULL,
 	teaser text NOT NULL,
@@ -381,4 +382,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-

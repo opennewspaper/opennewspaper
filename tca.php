@@ -392,7 +392,7 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status"
+		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status"
 	),
 	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
 	"columns" => array (
@@ -430,6 +430,18 @@ $TCA["tx_newspaper_article"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"articletype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.articletype_id",		
+			"config" => Array (
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_articletype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_articletype.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 		"title" => Array (		
@@ -647,7 +659,7 @@ $TCA["tx_newspaper_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -1164,5 +1176,4 @@ $TCA["tx_newspaper_articletype"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
