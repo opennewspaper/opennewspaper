@@ -339,6 +339,35 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	static public function getAttributeList() { return self::$attribute_list; }
+	
+	
+	/// gets a list of tx_newspaper_Article objects assigned to given article type
+	/** \param int uid of article type
+	 *  \param int limit max number of records to read (default: 10), if negative no limit is used
+	 *  \return array with tx_newspaper_Article objects 
+	 */
+	static public function listArticlesWithArticletype($uid, $limit=10) {
+		$uid = intval($uid);
+		$limit = intval($limit);
+		
+		$limit_part = ($limit > 0)? '0,' . $limit : ''; 
+		
+		$row = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_article',
+			'deleted=0 AND articletype_id=' . $uid,
+			'',
+			'tstamp DESC',
+			$limit_part
+		);
+
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$list[] = new tx_newspaper_Article($row[$i]['uid']);
+		}
+		return $list;
+	}
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	//
