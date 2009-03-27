@@ -98,9 +98,22 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('id', 'newspaper', 0, $id);
 #t3lib_div::devlog('value', 'newspaper', 0, $value);
 
+		/// check if it is allowed to delete an article type
+		if ($table == 'tx_newspaper_articletype') {
+			$list = tx_newspaper_Article::listArticlesWithArticletype($id, 3);
+			if (sizeof($list) > 0) {
+				/// assigned articles found, so this article type can't be deleted
+				$content = 'This article type can\'t be deleted, because at least one article is using this article type. Find examples below (list might be much longer)<br /><br />';
+				for ($i = 0; $i < sizeof($list); $i++) {
+					$content .= ($i+1) . '. ' . $list[$i]->getAttribute('kicker') . ': ' . $list[$i]->getAttribute('title') . ' (#'. $list[$i]->getAttribute('uid') . ')<br />';  
+				}
+				die($content);
+			}
+		}
+
+
 		if ($table == 'tx_newspaper_pagetype' || 
-			$table == 'tx_newspaper_pagezonetype' || 
-			$table == 'tx_newspaper_articletype'
+			$table == 'tx_newspaper_pagezonetype' 
 		) {
 			// it is not allowed to delete these records (with T3 means)
 /// \to do: fully implement deleting these record types
