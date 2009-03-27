@@ -14,11 +14,6 @@
 	// register hook to add javascript and css to BE (loaded to top)
 	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = PATH_typo3conf . 'ext/newspaper/res/be/additionalBackendItems.php';
 
-	// disallow deleting article types (additional check in savehook; delete icon can't be surpressed in extended list view)
-	t3lib_extMgm::addUserTSConfig('
-	options.disableDelete.tx_newspaper_articletype=1
-	');
-
 	// include newspaper classes and interfaces
 	require_once(PATH_typo3conf . 'ext/newspaper/tx_newspaper_include.php');
 
