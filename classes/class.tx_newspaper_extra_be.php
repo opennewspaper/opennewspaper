@@ -29,7 +29,7 @@ class tx_newspaper_ExtraBE {
 	 *  \return String html code with list of Extras
 	 */
 	public static function renderList($table, $uid) {
-		
+return 'ausgebaut in tx_npExtraBE::renderList()'; // mysql error message otherwise
 		$listOfExtras = self::readExtraList($table, $uid);
 #t3lib_div::devlog('renderList', 'newspaper', 0, $listOfExtras);
 		
