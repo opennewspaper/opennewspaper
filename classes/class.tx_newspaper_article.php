@@ -102,7 +102,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$ret = $article->render();
 		} else {
 			$search_path = array();
-			if ($this->getPageZoneType()) {
+			if ($this->getPageZoneType()->getUid()) {
 				$search_path[] = 'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name'));
 			}
 			$search_path[] = 'template_sets';
