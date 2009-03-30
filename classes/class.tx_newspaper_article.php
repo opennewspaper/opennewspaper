@@ -101,12 +101,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
 			$ret = $article->render();
 		} else {
-			$this->smarty->setTemplateSearchPath(
-				array(
-					'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
-					'template_sets'
-				)
-			);
+			$search_path = array();
+			if ($this->getPageZoneType()) {
+				$search_path[] = 'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name'));
+			}
+			$search_path[] = 'template_sets';
+			$this->smarty->setTemplateSearchPath($search_path);
+			
 			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
 			$this->smarty->assign('title', $this->getAttribute('title'));
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
