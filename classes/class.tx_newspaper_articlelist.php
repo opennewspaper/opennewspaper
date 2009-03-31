@@ -35,8 +35,8 @@
   *  - function getArticles($number, $start)
   *	 - public static function getModuleName()
   */
- abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
- 	function __construct($uid = 0, tx_newspaper_Section $section = null) {
+abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
+	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
 		if ($uid) {
 			$this->setUid($uid);
 	 		$this->attributes = tx_newspaper::selectOneRow(
@@ -48,28 +48,43 @@
 		} else {
 			$this->section = new tx_newspaper_Section($this->attributes['section_id']);
 		}
- 	}
- 	
- 	function getArticle($index) {
- 		$articles = $this->getArticles(1, $index);
- 		return $articles[0];
- 	}
- 	
- 	abstract function getArticles($number, $start = 0);
- 	
- 	public function getTable() { return tx_newspaper::getTable($this); }
-	function getUid() { return intval($this->uid); }
-	function setUid($uid) { $this->uid = $uid; }
- 	
- 	private $uid = 0;
- 	
- 	protected $attributes = array();
- 	protected $section = null;
- 	
- 	/// SQL table for persistence
- 	static protected $table = 'tx_newspaper_articlelist';
- 	/// SQL table for tx_newspaper_Section objects	
- 	static protected $section_table = 'tx_newspaper_section';
- }
- 
+	}
+
+	public function getArticle($index) {
+		$articles = $this->getArticles(1, $index);
+		return $articles[0];
+	}
+
+	abstract function getArticles($number, $start = 0);
+
+	public function getTable() { return tx_newspaper::getTable($this); }
+	public function getUid() { return intval($this->uid); }
+	public function setUid($uid) { $this->uid = $uid; }
+	
+	static public function registerArticleList(tx_newspaper_ArticleList $newList) {
+		self::$registered_articlelists[] = $newList;
+	}
+	
+	static public function getRegisteredArticleLists() {
+		return self::$registered_articlelists[];
+	}
+
+	static public function getTitle() {
+		return 'Artikelliste';
+	}
+
+	private $uid = 0;
+	
+	protected $attributes = array();
+	protected $section = null;
+	
+	/// SQL table for persistence
+	static protected $table = 'tx_newspaper_articlelist';
+	/// SQL table for tx_newspaper_Section objects	
+	static protected $section_table = 'tx_newspaper_section';
+	/// Array for registered article lists (subclasses of tx_newspaper_ArticleList)
+	static protected $registered_articlelists = array();
+}
+
+
 ?>

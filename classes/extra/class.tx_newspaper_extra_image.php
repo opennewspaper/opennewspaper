@@ -24,7 +24,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 
 //TODO: getLLL
-	static function getTitle() {
+	static public function getTitle() {
 		return 'Image';
 	}
 

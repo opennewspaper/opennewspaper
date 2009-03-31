@@ -33,8 +33,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 
 /// A list of tx_newspaper_Article s
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
- 	 	
- 	function getArticles($number, $start = 0) {
+
+	public function getArticles($number, $start = 0) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 			'tx_newspaper_article.uid', 
 			'tx_newspaper_article',
@@ -57,11 +57,18 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 	    } 
 			
 		return $articles;
- 	}
- 	
- 	public static function getModuleName() { return 'np_al_auto'; }
- 	
- 	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
- }
- 
+	}
+	
+	static public function getModuleName() { return 'np_al_auto'; }
+	
+	/// \todo i18n
+	static public function getTitle() {
+		return 'Automatische Artikelliste';
+	}
+
+	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
+}
+
+tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto);
+
 ?>
