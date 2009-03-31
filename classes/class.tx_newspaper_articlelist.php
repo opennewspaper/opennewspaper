@@ -69,7 +69,38 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return self::$registered_articlelists;
 	}
 
-	/// \todo i18n
+	function getAttribute($attribute) {
+		/// Read Attributes from persistent storage on first call
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+			);
+		}
+
+		if (!array_key_exists($attribute, $this->attributes)) {
+			throw new tx_newspaper_WrongAttributeException($attribute);
+		}
+		return $this->attributes[$attribute];
+	}
+
+	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
+	  *  attributes, even if they don't exist beforehand.
+	  */
+	public function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+			);
+		}
+		
+		$this->attributes[$attribute] = $value;
+	}
+
+	/// Write or overwrite Section data in DB, return UID of stored record
+	public function store() {
+		throw new tx_newspaper_NotYetImplementedException($attribute);
+	}
+
 	public function getTitle() {
 		global $LANG;
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:title_' .
