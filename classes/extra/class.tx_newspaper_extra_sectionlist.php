@@ -23,7 +23,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		"<p>".print_r($list, 1)."</p>\n".$ret;
 	}
 
-	static function getTitle() {
+	public function getTitle() {
 		return 'SectionList';
 	}
 
