@@ -99,7 +99,7 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('value', 'newspaper', 0, $value);
 
 		/// check if it is allowed to delete an article type
-		if ($table == 'tx_newspaper_articletype') {
+		if ($command == 'delete' && $table == 'tx_newspaper_articletype') {
 			$list = tx_newspaper_Article::listArticlesWithArticletype($id, 3);
 			if (sizeof($list) > 0) {
 				/// assigned articles found, so this article type can't be deleted
