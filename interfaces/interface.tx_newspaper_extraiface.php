@@ -2,11 +2,12 @@
 /**
  *  \file interface.tx_newspaper_extra.php
  *
- *  \author Helge Preuss <helge.preuss@gmx.net>
+ *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Oct 27, 2008
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_renderable.php');
 
 /// An Extra for Article s or Ressort s
 /** An Extra is, so to speak, a plugin for a displayable object.
@@ -21,13 +22,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_s
  *
  *  \todo define the interface!
  */
-interface tx_newspaper_ExtraIface extends tx_newspaper_StoredObject {
-	/// Render the Extra using the given Smarty template
-	/** \param $template Smarty template used to render the Extra
-	 *  \return The rendered HTML
-	 */
-	public function render($template = '');
-
+interface tx_newspaper_ExtraIface
+		extends tx_newspaper_StoredObject, tx_newspaper_Renderable {
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);
 	

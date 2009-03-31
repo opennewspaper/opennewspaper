@@ -21,7 +21,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
  *  \todo Actually define the interface. The current functions are just
  *  preliminary notes.
  */
-interface tx_newspaper_ArticleIface 
+interface tx_newspaper_ArticleIface
 	extends tx_newspaper_ExtraIface, tx_newspaper_WithSource {
 	public function importieren(tx_newspaper_Source $quelle);
 	public function exportieren(tx_newspaper_Source $quelle);
