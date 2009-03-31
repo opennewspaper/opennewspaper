@@ -62,20 +62,22 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 */
 	public function setAttribute($attribute, $value) {
 		if (!$this->attributes) {
-			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), 'uid = ' . $this->getUid()
+			);
 		}
 		
 		$this->attributes[$attribute] = $value;
 	}
 
-	/// Write or overwrite Extra data in DB, return UID of stored record
+	/// Write or overwrite Section data in DB, return UID of stored record
 	public function store() {
 		throw new tx_newspaper_NotYetImplementedException($attribute);
 	}
 	
 	/** \todo Internationalization */
 	public function getTitle() {
-		return 'Page';
+		return 'Section';
 	}
 
 	function getArticleList() {
