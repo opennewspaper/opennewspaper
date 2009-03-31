@@ -36,7 +36,8 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_exception.php');
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+#require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');
