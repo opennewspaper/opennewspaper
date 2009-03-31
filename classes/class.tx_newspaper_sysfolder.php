@@ -110,10 +110,10 @@ class tx_newspaper_Sysfolder {
  	public function getPidsForAbstractClass($class_name) {
  		if ($class_name == '') return array();
  		$child_class = tx_newspaper::getChildClasses($class_name);
-		$pid_list = array(); /// < list of all pids associated with class $class
+		$pid_list = array(); ///< list of all pids associated with class $class
 		for ($i = 0; $i < sizeof($child_class); $i++) {
 			$tmp_impl = class_implements($child_class[$i]);
-			if (isset($tmp_impl['tx_newspaper_InSysFolder'])) {
+			if (isset($tmp_impl['tx_newspaper_StoredObject'])) {
 				/// store pid for this (concrete) child class
 				// this works because that class implments the tx_newspaper_InSysfolder interface
 				$pid_list[] = tx_newspaper_Sysfolder::getInstance()->getPid(new $child_class[$i]());
@@ -124,10 +124,10 @@ class tx_newspaper_Sysfolder {
 
 
  	/// gets the uid of the sysfolder to store data in
- 	/** \param tx_newspaper_InSysFolder $obj object implemeting the tx_newspaper_InSysFolder interface
+ 	/** \param $obj object implemeting the tx_newspaper_StoredObject interface
  	 *  \return $pid of sysfolder (sysfolder is created if not existing)
  	 */
- 	public function getPid(tx_newspaper_InSysFolder $obj) {
+ 	public function getPid(tx_newspaper_StoredObject $obj) {
  		$module_name = strtolower($obj->getModuleName());
 		return $this->getPidFromArray($module_name);
  	}

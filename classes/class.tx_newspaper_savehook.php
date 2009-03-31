@@ -70,8 +70,8 @@ class tx_newspaper_SaveHook {
 			$np_obj = new $table();
 
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
-			if (in_array("tx_newspaper_InSysFolder", class_implements($np_obj))) { 
-				/// tx_newspaper_InSysFolder is implemented, so record is to be stored in a special sysfolder
+			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) { 
+				/// tx_newspaper_StoredObject is implemented, so record is to be stored in a special sysfolder
 				$sf = tx_newspaper_Sysfolder::getInstance();
 				$pid = $sf->getPid($np_obj);
 				$fieldArray['pid'] = $pid; // map pid to appropriate sysfolder
