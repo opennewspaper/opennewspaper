@@ -64,6 +64,6 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
 }
 
-tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto);
+tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto());
 
 ?>
