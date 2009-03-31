@@ -21,37 +21,12 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_i
  *
  *  \todo define the interface!
  */
- interface tx_newspaper_ExtraIface extends tx_newspaper_StoredObject {
- 	/// Render the Extra using the given Smarty template
- 	/** \param $template Smarty template used to render the Extra
- 	 *  \return The rendered HTML
- 	 */
+interface tx_newspaper_ExtraIface extends tx_newspaper_StoredObject {
+	/// Render the Extra using the given Smarty template
+	/** \param $template Smarty template used to render the Extra
+	 *  \return The rendered HTML
+	 */
 	public function render($template = '');
-
-	/// returns an actual member of the Extra
-	/** \param $fieldname Name of the attribute which is wanted
-	 *  \return The value of attribute \p $fieldname
-	 */
-	public function getAttribute($attribute);
-	/// sets a member
-	/** \param $fieldname Name of the attribute which is to be set
-	 *  \param $value New value for attribute \p $fieldname
-	 */
-	public function setAttribute($attribute, $value);
-
-	/// Writes the Extra to DB
-	/** If the Extra is new, creates the record and sets the UID to the result.
-	 *  Else overwrites theexisting record.
-	 * 
-	 *  Associated records, such as relation tables and sub-records, are written
-	 *  too.
-	 * 
-	 *  \return UID of the written record
-	 */
-	public function store();
-
-	/// \return Title of the Extra (using the language set in BE)
-	public static function getTitle();
 
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);

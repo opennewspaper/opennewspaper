@@ -29,8 +29,13 @@
 
 	/// Write or overwrite Extra data in DB
 	/** Of course, a StoredObject needs a store() procedure ;-)
+	/*  If the object is new, creates the record and sets the UID to the result.
+	 *  Else overwrites the existing record.
 	 *
-	 *  \return UID of stored record
+	 *  Associated records, such as relation tables and sub-records, are written
+	 *  too.
+	 *
+	 *  \return UID of the written record
 	 */
 	public function store();
 
