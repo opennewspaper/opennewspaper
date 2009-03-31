@@ -54,7 +54,29 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
  		}
  		return $this->attributes[$attribute];
  	}
- 	
+ 	 /** No tx_newspaper_WrongAttributeException here. We want to be able to set
+	  *  attributes, even if they don't exist beforehand.
+	  */
+	public function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+			);
+		}
+		
+		$this->attributes[$attribute] = $value;
+	}
+
+	/// Write or overwrite Section data in DB, return UID of stored record
+	public function store() {
+		throw new tx_newspaper_NotYetImplementedException($attribute);
+	}
+	
+	/** \todo Internationalization */
+	public function getTitle() {
+		return 'Page Zone Type';
+	}
+
  	function setUid($uid) { $this->uid = $uid; }
 	function getUid() { return $this->uid; }
 
