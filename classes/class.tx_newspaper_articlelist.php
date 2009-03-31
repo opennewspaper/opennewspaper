@@ -35,7 +35,7 @@
   *  - function getArticles($number, $start)
   *	 - public static function getModuleName()
   */
-abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
+abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
 		if ($uid) {
 			$this->setUid($uid);

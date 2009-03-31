@@ -30,7 +30,7 @@
  */
  
 /// \todo: description
-class tx_newspaper_ArticleType implements tx_newspaper_InSysFolder {
+class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	
 	/// \todo: not needed
 	public function getUid() {}

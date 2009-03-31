@@ -65,10 +65,67 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
-	//	interface tx_newspaper_InSysFolder
+	//	interface tx_newspaper_StoredObject
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	/// returns an actual member (-> Extra)
+	public function getAttribute($attribute) {
+				
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+
+ 		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
+        	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
+ 		}
+
+ 		return $this->attributes[$attribute];
+	}
+
+	/// sets a member (-> Extra)
+	public function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+		
+		$this->attributes[$attribute] = $value;
+	}
+
+	public function store() {
+		
+		/// insert article data (if uid == 0) or update if uid > 0
+		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, read them now
+			if (!$this->attributes) { 
+				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+			}
+			
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+		
+		/// store all extras and make sure they are in the MM relation table
+		if ($this->extras) foreach ($this->extras as $extra) {
+			$extra_uid = $extra->store();
+			$extra_table = $extra->getTable();
+			self::relateExtra2Article($extra_table, $extra_uid, getUid());
+		}
+		
+		return $this->getUid();		
+	}
+
+	/** \todo Internationalization */
+	static public function getTitle() {
+		return 'Article';
+	}
 	public function getUid() { return intval($this->uid); }
 
 	public function setUid($uid) { 
@@ -166,64 +223,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $ret;
 	}
 
-	/// returns an actual member (-> Extra)
-	public function getAttribute($attribute) {
-				
-		if (!$this->attributes) {
-			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
-		}
-
- 		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
-        	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
- 		}
-
- 		return $this->attributes[$attribute];
-	}
-
-	/// sets a member (-> Extra)
-	public function setAttribute($attribute, $value) {
-		if (!$this->attributes) {
-			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
-		}
-		
-		$this->attributes[$attribute] = $value;
-	}
-
-	public function store() {
-		
-		/// insert article data (if uid == 0) or update if uid > 0
-		if ($this->getUid()) {
-			/// If the attributes are not yet in memory, read them now
-			if (!$this->attributes) { 
-				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
-			}
-			
-			tx_newspaper::updateRows(
-				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
-			);
-		} else {
-			$this->setUid(
-				tx_newspaper::insertRows(
-					$this->getTable(), $this->attributes
-				)
-			);
-		}
-		
-		/// store all extras and make sure they are in the MM relation table
-		if ($this->extras) foreach ($this->extras as $extra) {
-			$extra_uid = $extra->store();
-			$extra_table = $extra->getTable();
-			self::relateExtra2Article($extra_table, $extra_uid, getUid());
-		}
-		
-		return $this->getUid();		
-	}
-
-	/** \todo Internationalization */
-	static public function getTitle() {
-		return 'Article';
-	}
-	
 	static public function readExtraItem($uid, $table) {
 		if (!$uid) return array();
 		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);

@@ -43,7 +43,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of
  */
-class tx_newspaper_Page implements tx_newspaper_InSysFolder {
+class tx_newspaper_Page implements tx_newspaper_StoredObject {
 	
 	/// Construct a page from DB
 	/** \param $parent The newspaper section the page is in

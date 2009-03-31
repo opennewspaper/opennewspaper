@@ -21,7 +21,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_i
  *
  *  \todo define the interface!
  */
- interface tx_newspaper_ExtraIface extends tx_newspaper_InSysFolder {
+ interface tx_newspaper_ExtraIface extends tx_newspaper_StoredObject {
  	/// Render the Extra using the given Smarty template
  	/** \param $template Smarty template used to render the Extra
  	 *  \return The rendered HTML

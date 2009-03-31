@@ -32,7 +32,7 @@
 /// brief description
 /** long description
  */
-class tx_newspaper_PageZoneType implements tx_newspaper_InSysFolder {
+class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
  	
  	/// Construct a tx_newspaper_PageZoneType given the UID of the SQL record
  	function __construct($uid = 0) {
