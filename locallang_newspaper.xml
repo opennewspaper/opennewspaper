@@ -23,6 +23,7 @@
 			<label index="message.check_new_pagezone_in_page">Please keep in mind: You cannot undo the activation of a page zone type! Do you really want to activate this page zone type?</label>
 			<label index="message.close_pagezone_in_section">Return to list of page types</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
+			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="flag.extra_edit">Extra bearbeiten</label>
@@ -34,6 +35,7 @@
 			<label index="flag.new_page_in_section">Diesen Seitentyp für dieses Ressort aktivieren</label>
 			<label index="message.title_page_in_section">Liste der editierbaren Seiten oder aktivierbaren Seitentypen für dieses Ressort</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
+			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 		</languageKey>
 	</data>
 </T3locallang>
