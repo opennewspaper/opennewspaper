@@ -11,6 +11,9 @@ require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php
 
 // modify fields set in tca.php
 
+// set sorting for dropdown article type in article
+$TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
+
 // add user function for page type and page zone type in section records 
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
