@@ -163,6 +163,11 @@ class tx_newspaper_Page implements tx_newspaper_StoredObject {
 		return $this->getUid();		
 	}
 	
+	/** \todo Internationalization */
+	public function getTitle() {
+		return 'PageZone';
+	}
+
 	function getPageZones() {
  		/// Get tx_newspaper_PageZone list for current page at first call
 		if (!$this->pageZones) {
