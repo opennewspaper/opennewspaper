@@ -145,7 +145,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	/** \todo Internationalization */
-	static function getTitle() {
+	public function getTitle() {
 		return 'PageZone';
 	}
 	
