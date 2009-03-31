@@ -69,8 +69,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
 		return self::$registered_articlelists[];
 	}
 
-	static public function getTitle() {
-		return 'Artikelliste';
+	/// \todo i18n
+	public function getTitle() {
+		global $LANG;
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:title_' .
+				tx_newspaper::getTable($this), false)));
 	}
 
 	private $uid = 0;

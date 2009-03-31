@@ -61,13 +61,6 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 	
 	static public function getModuleName() { return 'np_al_auto'; }
 	
-	/// \todo i18n
-	public function getTitle() {
-		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:title_' .
-						 tx_newspaper::getTable($this), false)));
-	}
-
 	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
 }
 
