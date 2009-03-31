@@ -6,7 +6,7 @@
  *  \date Oct 27, 2008
  */
 
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
 
 /// An Extra for Article s or Ressort s
 /** An Extra is, so to speak, a plugin for a displayable object.
