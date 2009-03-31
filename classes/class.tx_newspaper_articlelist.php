@@ -60,11 +60,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
 	public function getTable() { return tx_newspaper::getTable($this); }
 	public function getUid() { return intval($this->uid); }
 	public function setUid($uid) { $this->uid = $uid; }
-	
+
 	static public function registerArticleList(tx_newspaper_ArticleList $newList) {
 		self::$registered_articlelists[] = $newList;
 	}
-	
+
 	static public function getRegisteredArticleLists() {
 		return self::$registered_articlelists;
 	}
@@ -77,10 +77,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
 	}
 
 	private $uid = 0;
-	
+
 	protected $attributes = array();
 	protected $section = null;
-	
+
 	/// SQL table for persistence
 	static protected $table = 'tx_newspaper_articlelist';
 	/// SQL table for tx_newspaper_Section objects	

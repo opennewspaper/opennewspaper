@@ -193,12 +193,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			return strtolower(get_class($class));
 		}
 		return strtolower($class);
-	}	
-	
-	
-
-
-
+	}
 
 	/// get all child classes (but child only, no grand children etc.)
 	/** basically used to get concrete classes extending an abstract class
