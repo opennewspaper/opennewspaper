@@ -115,7 +115,7 @@ class tx_newspaper_Sysfolder {
 			$tmp_impl = class_implements($child_class[$i]);
 			if (isset($tmp_impl['tx_newspaper_StoredObject'])) {
 				/// store pid for this (concrete) child class
-				// this works because that class implments the tx_newspaper_InSysfolder interface
+				// this works because that class implments the tx_newspaper_StoredObject interface
 				$pid_list[] = tx_newspaper_Sysfolder::getInstance()->getPid(new $child_class[$i]());
 			}
 		}

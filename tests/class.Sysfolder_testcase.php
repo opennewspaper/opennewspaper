@@ -6,7 +6,7 @@
  */
 
 
-require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_insysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 
 
@@ -117,13 +117,17 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 
 
 
-class tx_newspaper_Sysfolder_test implements tx_newspaper_InSysFolder {
+class tx_newspaper_Sysfolder_test implements tx_newspaper_StoredObject {
 	
 	private static $module_name;
 
 	public function getUid() {return false;}
 	public function setUid($uid) {return false;}
 	public function getTable() {return false;}
+	public function getAttribute($attribute) {return false;}
+	public function setAttribute($attribute, $value) {return false;}
+	public function store() {return false;}
+	public function getTitle() {return false;}
 
 	function __construct($module_name) {
 		self::$module_name = $module_name;
