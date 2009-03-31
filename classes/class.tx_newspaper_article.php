@@ -123,7 +123,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/** \todo Internationalization */
-	static public function getTitle() {
+	public function getTitle() {
 		return 'Article';
 	}
 

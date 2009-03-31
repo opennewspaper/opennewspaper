@@ -74,7 +74,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	/** \todo Internationalization */
-	static public function getTitle() {
+	public function getTitle() {
 		return 'Page';
 	}
 
