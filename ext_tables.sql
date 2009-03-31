@@ -296,6 +296,7 @@ CREATE TABLE tx_newspaper_pagetype (
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	type_name tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	get_var tinytext NOT NULL,
 	get_value int(11) DEFAULT '0' NOT NULL,
 	
@@ -317,6 +318,7 @@ CREATE TABLE tx_newspaper_pagezonetype (
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	is_article tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -358,7 +360,7 @@ CREATE TABLE tx_newspaper_articletype (
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
-	tsconfig_name tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -382,4 +384,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-

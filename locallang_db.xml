@@ -66,10 +66,12 @@
 			<label index="tx_newspaper_articlelist_auto">Automatically filled list of articles</label>
 			<label index="tx_newspaper_pagetype">Page type</label>
 			<label index="tx_newspaper_pagetype.type_name">Type name</label>
+			<label index="tx_newspaper_pagetype.normalized_name">Path name for Smarty templates. Please note that this entry CAN'T BE MODIFIED LATER</label>
 			<label index="tx_newspaper_pagetype.get_var">Associated GET variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Value of associated GET variable</label>
 			<label index="tx_newspaper_pagezonetype">Page zone type</label>
 			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.normalized_name">Path name for Smarty templates. Please note that this entry CAN'T BE MODIFIED LATER</label>
 			<label index="tx_newspaper_pagezonetype.is_article">This page zone contains the article (unique in database)</label>
 			<label index="tx_newspaper_log">Workflow logging</label>
 			<label index="tx_newspaper_log.table_name">Table</label>
@@ -79,7 +81,7 @@
 			<label index="tx_newspaper_log.comment">Comment</label>
 			<label index="tx_newspaper_articletype">Article type</label>
 			<label index="tx_newspaper_articletype.title">Title</label>
-			<label index="tx_newspaper_articletype.tsconfig_name">Internal title for TSConfig usage - Please note that this entry CAN'T BE MODIFIED LATER</label>
+			<label index="tx_newspaper_articletype.normalized_name">Internal title for TSConfig usage. Please note that this entry CAN'T BE MODIFIED LATER</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -145,10 +147,12 @@
 			<label index="tx_newspaper_articlelist_auto">Automatisch bestückte Artikelliste</label>
 			<label index="tx_newspaper_pagetype">Seitentyp</label>
 			<label index="tx_newspaper_pagetype.type_name">Typname</label>
+			<label index="tx_newspaper_pagetype.normalized_name">Pathname für Smarty-Templates. Hinweis: Der Wert kann nach dem Speichern NICHT MEHR GEÄNDERT werden.</label>
 			<label index="tx_newspaper_pagetype.get_var">Zugeordnete GET-Variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Wert der zugeordneten GET-Variable</label>
 			<label index="tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.normalized_name">Pathname für Smarty-Templates. Hinweis: Der Wert kann nach dem Speichern NICHT MEHR GEÄNDERT werden.</label>
 			<label index="tx_newspaper_pagezonetype.is_article">Dieser Seitenbereich enthält den Artikel (nur einmalig in der Datenbank)</label>
 			<label index="tx_newspaper_log">Workflow-Logging</label>
 			<label index="tx_newspaper_log.table_name">Table</label>
@@ -158,7 +162,7 @@
 			<label index="tx_newspaper_log.comment">Kommentar</label>
 			<label index="tx_newspaper_articletype">Artikeltyp</label>
 			<label index="tx_newspaper_articletype.title">Titel</label>
-			<label index="tx_newspaper_articletype.tsconfig_name">Interner Titel für den Zugriff per TSConfig. Hinweis: Der Wert kann nach dem Speichern NICHT MEHR GEÄNDERT werden.</label>
+			<label index="tx_newspaper_articletype.normalized_name">Interner Titel für den Zugriff per TSConfig. Hinweis: Der Wert kann nach dem Speichern NICHT MEHR GEÄNDERT werden.</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

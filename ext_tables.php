@@ -16,11 +16,13 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM2','',t3lib_extMgm::extPath($_EXTKEY).'mod2/');
 }
 
 
@@ -275,7 +277,7 @@ $TCA["tx_newspaper_pagetype"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagetype.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "type_name, get_var, get_value",
+		"fe_admin_fieldList" => "type_name, normalized_name, get_var, get_value",
 	)
 );
 
@@ -292,7 +294,7 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_pagezonetype.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "name, is_article",
+		"fe_admin_fieldList" => "name, normalized_name, is_article",
 	)
 );
 
@@ -325,7 +327,7 @@ $TCA["tx_newspaper_articletype"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articletype.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "title, tsconfig_name",
+		"fe_admin_fieldList" => "title, normalized_name",
 	)
 );
 
@@ -375,5 +377,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>
