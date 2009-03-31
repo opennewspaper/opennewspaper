@@ -33,46 +33,67 @@
 /** Currently just a dummy
  * 
  */
- class tx_newspaper_Section implements tx_newspaper_StoredObject {
- 	
- 	/// Construct a tx_newspaper_Section given the UID of the SQL record
- 	function __construct($uid = 0) {
- 		if ($uid) {
- 			$this->setUid($uid);
- 		}
- 	}
- 	
- 	function getAttribute($attribute) {
-	 	/// TODO: \todo tx_np::getAttribute($attribute, array $attributes, '*', $this->getTable(), 'uid = ' . $this->getUid() )
- 		if (!$this->attributes) {
+class tx_newspaper_Section implements tx_newspaper_StoredObject {
+	
+	/// Construct a tx_newspaper_Section given the UID of the SQL record
+	function __construct($uid = 0) {
+		if ($uid) {
+			$this->setUid($uid);
+		}
+	}
+
+	function getAttribute($attribute) {
+		/// TODO: \todo tx_np::getAttribute($attribute, array $attributes, '*', $this->getTable(), 'uid = ' . $this->getUid() )
+		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid() 
 			); 			
- 		}
- 		
- 		if (!array_key_exists($attribute, $this->attributes)) {
+		}
+		
+		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
- 		}
- 		
- 		return $this->attributes[$attribute];
- 	}
- 	
- 	function getArticleList() {
- 		if (!$this->articlelist) { 
- 			$list = tx_newspaper::selectOneRow(
+		}
+		
+		return $this->attributes[$attribute];
+	}
+
+	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
+	 *  attributes, even if they don't exist beforehand.
+	 */
+	public function setAttribute($attribute, $value) {
+		if (!$this->attributes) {
+			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		}
+		
+		$this->attributes[$attribute] = $value;
+	}
+
+	/// Write or overwrite Extra data in DB, return UID of stored record
+	public function store() {
+		throw new tx_newspaper_NotYetImplementedException($attribute);
+	}
+	
+	/** \todo Internationalization */
+	static public function getTitle() {
+		return 'Page';
+	}
+
+	function getArticleList() {
+		if (!$this->articlelist) { 
+			$list = tx_newspaper::selectOneRow(
 				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
 			);
 			$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
- 		}
+		}
 
- 		return $this->articlelist; 
- 	}
- 	
- 	function getParentSection() {
- 		return new tx_newspaper_Section($this->getAttribute('parent_section'));
- 	}
- 	
- 	function getSubPages() {
+		return $this->articlelist; 
+	}
+	
+	function getParentSection() {
+		return new tx_newspaper_Section($this->getAttribute('parent_section'));
+	}
+	
+	function getSubPages() {
         if (!$this->subPages) {
             $row = tx_newspaper::selectRows(
                 'uid', 'tx_newspaper_page',

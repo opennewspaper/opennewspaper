@@ -126,6 +126,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	static public function getTitle() {
 		return 'Article';
 	}
+
 	public function getUid() { return intval($this->uid); }
 
 	public function setUid($uid) { 
