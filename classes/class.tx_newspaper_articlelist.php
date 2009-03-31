@@ -66,7 +66,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_InSysFolder {
 	}
 	
 	static public function getRegisteredArticleLists() {
-		return self::$registered_articlelists[];
+		return self::$registered_articlelists;
 	}
 
 	/// \todo i18n
