@@ -68,8 +68,7 @@ class tx_newspaper_Smarty extends Smarty {
 	}
 
 	public function setTemplateSearchPath(array $path) {
-		t3lib_div::debug("setTemplateSearchPath()");
-		t3lib_div::debug($path);
+		t3lib_div::debug(debug_backtrace());
 		$this->templateSearchPath = $path;
 	}
 	/// Sets the template set we're working in
@@ -132,8 +131,7 @@ class tx_newspaper_Smarty extends Smarty {
 	 *  \endcode
 	 */
 	private function assembleSearchPath() {
-		$this->templateSearchPath = array();
-
+		$temporary_searchpath = array();
 		if ($this->templateset &&
 			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
 			is_dir($this->basepath . 'template_sets/' . $this->templateset)
@@ -149,16 +147,16 @@ class tx_newspaper_Smarty extends Smarty {
 					if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 						is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 					   ) {
-						$this->templateSearchPath[] = 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name;
+						$temporary_searchpath[] = 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name;
 					}
 				}
 				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
 					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
 				   ) {
-					$this->templateSearchPath[] = 'template_sets/' . $this->templateset . '/'. $page_name;
+					$temporary_searchpath = 'template_sets/' . $this->templateset . '/'. $page_name;
 				}
 			}
-			$this->templateSearchPath[] = 'template_sets/' . $this->templateset;
+			$temporary_searchpath = 'template_sets/' . $this->templateset;
 		}
 		
 		//	default template set
@@ -173,19 +171,21 @@ class tx_newspaper_Smarty extends Smarty {
 				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 				   ) {
-					$this->templateSearchPath[] = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
+					$temporary_searchpath = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
 				}
 			}
 			if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
 				is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
 			   ) {
-				$this->templateSearchPath[] = 'template_sets/default/'. $page_name;
+				$temporary_searchpath = 'template_sets/default/'. $page_name;
 			}
 		}
-		$this->templateSearchPath[] = 'template_sets/default';
+		$temporary_searchpath = 'template_sets/default';
 		
 		//  default templates delivered with the newspaper extension
-		$this->templateSearchPath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
+		$temporary_searchpath = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
+
+		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
 	}
 
 	private $templateset = '';
