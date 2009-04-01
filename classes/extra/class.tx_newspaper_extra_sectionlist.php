@@ -16,6 +16,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 		$list = tx_newspaper::getSection()->getArticleList();
+		$list->getArticles(10); t3lib_div::debug(tx_newspaper::$query);
 		foreach ($list->getArticles(10) as $article) {
 			$ret .= "<p>".$article->render($template_set)."</p>\n";
 		}
