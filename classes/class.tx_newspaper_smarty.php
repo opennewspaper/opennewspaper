@@ -42,7 +42,7 @@ if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
 /** Smarty suffers from the limitation that you can only have \em one folder to
  *  store templates in per instance. For that reason, you must instantiate a 
  *  separate Smarty object per template folder, and set the folder manually.
- *  Because that process is somewhat tedious, this class does it in the c'tor.  
+ *  Because that process is somewhat tedious, this class does it in the c'tor.
  */
 class tx_newspaper_Smarty extends Smarty {
 	
@@ -61,28 +61,32 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
 
 		$this->caching = false;
- 	}
 
-	/// Sets the directories in which smarty looks for templates, in correct order
-	/** The default path, <tt>PATH_typo3conf.'ext/newspaper/res/templates'</tt>, 
-	 * 	must always be set.
-	 * 
-	 * \param $path
-	 */
-	public function setTemplateSearchPath(array $path) { 
-		$this->templateSearchPath = 
-			array_unique(
-				array_merge(
-					$path, 
-					array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY)
-				)
-			);
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$this->basepath = $TSConfig['newspaper.']['defaultTemplate'];
+		if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
+	}
+
+	/// Sets the template set we're working in
+	public function setTemplateSet($template_set = 'default') {
+		$this->templateset = $template_set;
 	}
 	
+	/// Sets the page type we're working on
+	public function setPageType(tx_newspaper_Page $page) {
+		$this->pagetype = $page->getPageType();
+	}
+	
+	/// Sets the page zone type we're working on
+	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
+		$this->pagezonetype = $pagezone->getPageZoneType();
+	}
+		
 	/// Render a template, scanning several directories for it
 	/** The directories under which to search smarty templates are set with
 	 *  setTemplateSearchPath().
 	 * 
+	 *	\param $template Either a smarty template or a Renderable object to be rendered
 	 *  \return The rendered template as HTML (or XML, whatever your template does) 
 	 */
 	public function fetch($template) {
@@ -90,11 +94,13 @@ class tx_newspaper_Smarty extends Smarty {
 			$template = strtolower(get_class($template)) . '.tmpl';
 		}
 		
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
-		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
+		$this->assembleSearchPath();
+		
 		foreach ($this->templateSearchPath as $dir) {
-			if ($dir[0] != '/') $dir = $basepath . '/' . $dir;
+			//	if not absolute path, prepend $this->basepath
+			if ($dir[0] != '/') $dir = $this->basepath . '/' . $dir;
+			
+			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
 				$this->template_dir = $dir;	
 				break;
@@ -103,8 +109,85 @@ class tx_newspaper_Smarty extends Smarty {
 
 		return parent::fetch($template);
 	}
-	
+		
 	////////////////////////////////////////////////////////////////////////////
+	
+	///	Sets the path in which Smarty looks for renderable templates
+	/** The template search path consists of the following directories, each 
+	 *	subject to the existence of the necessary parameters: template set, 
+	 *	page zone type, page type.
+	 *  \code
+	 *  $basepath/<template set>/<page type name>/<page zone type name>
+	 *  $basepath/<template set>/<page type name>
+	 *  $basepath/<template set>
+	 *  $basepath/default/<page type name>/<page zone type name>
+	 *  $basepath/default/<page type name>
+	 *  $basepath/default
+	 *  PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY
+	 *  \endcode
+	 */
+	private function assembleSearchPath() {
+		$this->templateSearchPath = array();
+
+		if ($this->templateset &&
+			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
+			is_dir($this->basepath . 'template_sets/' . $this->templateset)
+		   ) {
+			if ($this->pagetype) {
+				$page_name = $this->pagetype->getAttribute('normalized_name')?
+					$this->pagetype->getAttribute('normalized_name'):
+					strtolower($this->pagetype->getAttribute('type_name');
+				if ($this->pagezonetype) {
+					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
+						$this->pagezonetype->getAttribute('normalized_name'):
+						strtolower($this->pagezonetype->getAttribute('type_name');
+					if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
+						is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
+					   ) {
+						$this->templateSearchPath[] = 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name;
+					}
+				}
+				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
+					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
+				   ) {
+					$this->templateSearchPath[] = 'template_sets/' . $this->templateset . '/'. $page_name;
+				}
+			}
+			$this->templateSearchPath[] = 'template_sets/' . $this->templateset;
+		}
+		
+		//	default template set
+		if ($this->pagetype) {
+			$page_name = $this->pagetype->getAttribute('normalized_name')?
+				$this->pagetype->getAttribute('normalized_name'):
+				strtolower($this->pagetype->getAttribute('type_name');
+			if ($this->pagezonetype) {
+				$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
+					$this->pagezonetype->getAttribute('normalized_name'):
+					strtolower($this->pagezonetype->getAttribute('type_name');
+				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
+					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
+				   ) {
+					$this->templateSearchPath[] = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
+				}
+			}
+			if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
+				is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
+			   ) {
+				$this->templateSearchPath[] = 'template_sets/default/'. $page_name;
+			}
+		}
+		$this->templateSearchPath[] = 'template_sets/default';
+		
+		//  default templates delivered with the newspaper extension
+		$this->templateSearchPath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
+	}
+
+	private $templateset = '';
+	private $pagetype = null;
+	private $pagezonetype = null;
+
+	private $basepath = '';
 	
 	private $templateSearchPath = array();
 
