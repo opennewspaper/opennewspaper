@@ -76,12 +76,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
-			t3lib_div::debug(tx_newspaper::$query);
 		}
 		
-		t3lib_div::debug("UID: ".$this->getUid().", table: ".$this->getTable().", attributes:");
-		t3lib_div::debug($this->attributes);
-
  		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
         	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
  		}
@@ -140,7 +136,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function setUid($uid) { 
 		$this->uid = $uid;
-//		$this->attributes['source_id'] = $uid;
+		if ($this->attributes) $this->attributes['source_id'] = $uid;
 	}
 
 	public public function getTable() {
@@ -167,6 +163,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
+		t3lib_div::debug("UID: ".$this->getUid().", table: ".$this->getTable().", attributes:");
+		t3lib_div::debug($this->attributes);
 
 		if ($this->getAttribute('is_template')) {
 		
