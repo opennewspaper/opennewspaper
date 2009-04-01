@@ -158,6 +158,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		 *	This must be done regardless if this is a template used to define
 		 *	default placements for articles, or an actual article
 		 */
+		t3lib_div::debug($this->attributes);
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
