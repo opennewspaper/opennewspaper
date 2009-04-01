@@ -47,7 +47,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 				'',
 				"$start, $number"
 		);
-		t3lib_div::debug("mm query: ".tx_newspaper::$query);
+
 		foreach ($results as $row) {
 			$articles[] = new tx_newspaper_Article($row['uid']);
 		}
