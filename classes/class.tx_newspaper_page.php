@@ -213,7 +213,7 @@ class tx_newspaper_Page
 		
 		/// Configure Smarty rendering engine
 		if ($template_set) $this->smarty->setTemplateSet($template_set);
-		if ($this->pagetype) $this->smarty->setPageType($this);
+		if ($this->getPagetype()) $this->smarty->setPageType($this);
 
 		/// Pass global attributes to Smarty
  		$this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
