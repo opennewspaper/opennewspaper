@@ -317,7 +317,7 @@ CREATE TABLE tx_newspaper_pagezonetype (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	name tinytext,
+	type_name tinytext,
 	normalized_name tinytext,
 	is_article tinyint(3) DEFAULT '0' NOT NULL,
 	

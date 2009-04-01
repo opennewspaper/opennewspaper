@@ -68,7 +68,7 @@
 			<label index="tx_newspaper_pagetype.get_var">Associated GET variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Value of associated GET variable</label>
 			<label index="tx_newspaper_pagezonetype">Page zone type</label>
-			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.type_name">Name</label>
 			<label index="tx_newspaper_pagezonetype.normalized_name">Path name for Smarty templates. Please note that this entry CAN'T BE MODIFIED LATER</label>
 			<label index="tx_newspaper_pagezonetype.is_article">This page zone contains the article (unique in database)</label>
 			<label index="tx_newspaper_log">Workflow logging</label>
@@ -147,7 +147,7 @@
 			<label index="tx_newspaper_pagetype.get_var">Zugeordnete GET-Variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Wert der zugeordneten GET-Variable</label>
 			<label index="tx_newspaper_pagezonetype">Seitenbereichstyp</label>
-			<label index="tx_newspaper_pagezonetype.name">Name</label>
+			<label index="tx_newspaper_pagezonetype.type_name">Name</label>
 			<label index="tx_newspaper_pagezonetype.normalized_name">Pathname für Smarty-Templates. Hinweis: Der Wert kann nach dem Speichern NICHT MEHR GEÄNDERT werden.</label>
 			<label index="tx_newspaper_pagezonetype.is_article">Dieser Seitenbereich enthält den Artikel (nur einmalig in der Datenbank)</label>
 			<label index="tx_newspaper_log">Workflow-Logging</label>
