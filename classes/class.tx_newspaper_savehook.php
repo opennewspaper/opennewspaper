@@ -22,8 +22,8 @@ class tx_newspaper_SaveHook {
 			
 			// Make sure to load full $TCA array for the table
 			t3lib_div::loadTCA($table);
-			unset($TCA['tx_newspaper_articletype']['columns']['tsconfig_name']['config']['type']);
-			$TCA['tx_newspaper_articletype']['columns']['tsconfig_name']['config']['type'] = 'none';
+			unset($TCA['tx_newspaper_articletype']['columns']['normalized_name']['config']['type']);
+			$TCA['tx_newspaper_articletype']['columns']['normalized_name']['config']['type'] = 'none';
 		}
 		
 	}
