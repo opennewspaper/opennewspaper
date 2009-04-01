@@ -204,8 +204,8 @@ class tx_newspaper_Page
 	 */
  	public function render($template_set = '') {
 		/// Check the parent Section and own attributes whether to use a specific template set
- 		if ($this->getParentSection()->getAttribute('template_set')) {
-			$template_set = $this->getParentSection()->getAttribute('template_set');
+ 		if ($this->getParent()->getAttribute('template_set')) {
+			$template_set = $this->getParent()->getAttribute('template_set');
 		}
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
