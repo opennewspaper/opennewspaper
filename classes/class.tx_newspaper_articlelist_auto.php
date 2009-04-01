@@ -38,11 +38,12 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 		$articles = array();
 		if (1) {
 			$results = tx_newspaper::selectMMQuery(
-				'tx_newspaper_article.uid', 
+				'tx_newspaper_article.uid',
 				'tx_newspaper_article',
 				'tx_newspaper_article_sections_mm',
 				'tx_newspaper_section',
-				' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')),
+				' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')) .
+				' AND NOT tx_newspaper_article.is_template',
 				'',
 				'',
 				"$start, $number"
