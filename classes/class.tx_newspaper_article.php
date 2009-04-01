@@ -73,7 +73,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function getAttribute($attribute) {
 				
 		if (!$this->attributes) {
-			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+			);
 		}
 		
 		t3lib_div::debug("UID: ".$this->getUid().", table: ".$this->getTable().", attributes:");
