@@ -103,7 +103,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 										$groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
-		/* if (strpos('mm', $table) ) */t3lib_div::debug("SELECT query: ".self::$query);
+		t3lib_div::debug(self::$query);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
@@ -150,7 +150,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			$table .= ',' . $foreign_table;
 			if ($foreign_table_as) $table .= ' AS '.$foreign_table_as;
 		}
-
+		t3lib_div::debug("MM Query:");
 		return tx_newspaper::selectRows(
 			$select, $table, $mmWhere.' '.$whereClause,
 			$groupBy, $orderBy, $limit
