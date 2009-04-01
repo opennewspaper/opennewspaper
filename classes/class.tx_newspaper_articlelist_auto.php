@@ -35,8 +35,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
+		$articles = array();
 		if (1) {
-			$articles = tx_newspaper::selectMMQuery(
+			$results = tx_newspaper::selectMMQuery(
 				'tx_newspaper_article.uid', 
 				'tx_newspaper_article',
 				'tx_newspaper_article_sections_mm',
@@ -46,6 +47,9 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 				'',
 				"$start, $number"
 			);
+			foreach ($results as $row) {
+				$articles[] = new tx_newspaper_Article($row['uid']);
+			}
 		} else {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 				'tx_newspaper_article.uid', 
@@ -62,7 +66,6 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 				throw new tx_newspaper_NoResException();
 			}
 			
-			$articles = array();
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$articles[] = new tx_newspaper_Article($row['uid']);
 			} 
