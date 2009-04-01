@@ -43,7 +43,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of
  */
-class tx_newspaper_Page 
+class tx_newspaper_Page
 		implements tx_newspaper_StoredObject, tx_newspaper_Renderable {
 	
 	/// Construct a page from DB
@@ -63,16 +63,7 @@ class tx_newspaper_Page
 				' either a tx_newspaper_Section or an integer UID! In fact it is: ' .
 				$parent);
 				
-		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
-		if ($type != null) {
-			$this->smarty->setTemplateSearchPath(
-				array(
-					'template_sets/' . strtolower($this->pagetype->getAttribute('type_name')),
-					'template_sets'
-				)
-			);
-		}
  	}
  	
  	public function __clone() {
@@ -207,28 +198,40 @@ class tx_newspaper_Page
 	 *  \todo implement this template-finding logic by calling 
 	 * 		  $this->smarty-setTemplateSearchPath()
 	 * 
+	 *  \param $template_set the template set used to render this page (as 
+	 *  		passed down from The Big One - should be always empty.
 	 *  \return The rendered page as HTML (or whatever your template does) 
 	 */
- 	public function render($template = '') {
- 		if (!$template) {
- 			$template = $this;
- 		}
+ 	public function render($template_set = '') {
+		/// Check the parent Section and own attributes whether to use a specific template set
+ 		if ($this->getParentSection()->getAttribute('template_set')) {
+			$template_set = $this->getParentSection()->getAttribute('template_set');
+		}
+		if ($this->getAttribute('template_set')) {
+			$template_set = $this->getAttribute('template_set');
+		}
+		
+		/// Configure Smarty rendering engine
+		if ($template_set) $this->smarty->setTemplateSet($template_set);
+		if ($this->pagetype) $this->smarty->setPageType($this);
 
+		/// Pass global attributes to Smarty
  		$this->smarty->assign('section', $this->parentSection->getAttribute('section_name'));
  		$this->smarty->assign('page_type', $this->pagetype->getAttribute('type_name'));
  		
+		/// Pass the page zones on this page, already rendered, to Smarty
  		$rendered = array(); 
  		foreach ($this->getPageZones() as $zone) {
- 			$rendered[$zone->getAttribute('name')] = $zone->render();
+ 			$rendered[$zone->getAttribute('name')] = $zone->render($template_set);
  		}
 		$this->smarty->assign('page_zones', $rendered);
 		
- 		return $this->smarty->fetch($template);
+		/// Return the rendered page
+ 		return $this->smarty->fetch($this);
  	}
  	
- 	public function getParent() {
- 		return $this->parentSection;
- 	}
+	/// \return The tx_newspaper_Section under which this page lies
+ 	public function getParent() { return $this->parentSection; }
  	
  	public function getPageType() { return $this->pagetype; }
  	
