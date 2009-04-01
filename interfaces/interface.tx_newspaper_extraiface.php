@@ -24,8 +24,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_r
  */
 interface tx_newspaper_ExtraIface
 		extends tx_newspaper_StoredObject, tx_newspaper_Renderable {
+
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);
-	
+
 }
 ?>

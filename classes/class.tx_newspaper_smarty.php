@@ -50,25 +50,16 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	public function __construct() {
 
-		/// Configure directories (one path per t3 installation)
-		if (TYPO3_OS == 'WIN') {
-			/// windows
-			$temp_dir_win = str_replace('\\', '/', sys_get_temp_dir()); // temp dir, split paths with / character
-			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2)); 
-			$tmp = $temp_dir_win . str_replace(':', '', $installation); // remove ':' (like in 'c:/example')
-		} else {
-			/// real os
-			$installation = substr(PATH_typo3conf, 0, strrpos(PATH_typo3conf, '/', -2));
-			$tmp = "/tmp/" . substr($installation, 1);
-		}
+		$tmp = PATH_site . 'typo3temp/';
+		file_exists($tmp . 'smarty_cache') || mkdir($tmp . 'smarty_cache', 0774, true);
+		$this->cache_dir    = $tmp . 'smarty_cache';
+		file_exists($tmp . 'smarty_compile') || mkdir($tmp . 'smarty_compile', 0774, true);
+		$this->compile_dir  = $tmp . 'smarty_compile';
+		file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
+		$this->config_dir   = $tmp . 'smarty_config';
 
 		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
 
-		file_exists($tmp) || mkdir($tmp, 0774, true);
-
-		$this->compile_dir  = $tmp;
-		$this->config_dir   = $tmp;
-		$this->cache_dir    = $tmp;
 		$this->caching = false;
  	}
 
