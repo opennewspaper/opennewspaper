@@ -46,7 +46,7 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 			"$start, $number"
 		);
 		tx_newspaper::$query = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
-		t3lib_div::debug(tx_newspaper::$query);
+		t3lib_div::debug("mm query: ".$GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
 		if (!$res) {
 			throw new tx_newspaper_NoResException();
 		}
