@@ -137,17 +137,26 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), 'tx_newspaper_pagezone') .
 					' AND pagezone_uid = ' .$this->getUid()
 				);
-				t3lib_div::debug(tx_newspaper::$query);
-				t3lib_div::debug($pagezone_record);
 				$this->parent_page_id = intval($pagezone_record['page_id']);
 			}
-			$page_attributes = tx_newspaper::selectOneRow(
-				'section, pagetype_id', 'tx_newspaper_page', 
-				'uid = ' . $this->parent_page_id 
-			);
-			$this->parent_page = new tx_newspaper_page(new tx_newspaper_Section($page_attributes['section']),
-							 						   new tx_newspaper_PageType($page_attributes['pagetype_id']));
-		}
+			if ($this->parent_page_id) {
+				$page_attributes = tx_newspaper::selectOneRow(
+					'section, pagetype_id', 'tx_newspaper_page', 
+					'uid = ' . $this->parent_page_id 
+				);
+				if (intval($page_attributes['section']) &&
+					intval($page_attributes['pagetype_id'])) {
+					$this->parent_page = new tx_newspaper_page(
+							new tx_newspaper_Section($page_attributes['section']),
+							new tx_newspaper_PageType($page_attributes['pagetype_id'])
+					);
+				}
+			} else {
+				throw new tx_newspaper_InconsistencyException(
+					'PageZone ' . $this->getUid() . ' appears to have no parent Page'
+				);
+			}
+
 		return $this->parent_page;
 	}
 	
