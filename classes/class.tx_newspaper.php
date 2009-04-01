@@ -103,7 +103,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 										$groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
-		if (strpos('mm', $table) ) t3lib_div::debug("SELECT query: ".self::$query);
+		/* if (strpos('mm', $table) ) */t3lib_div::debug("SELECT query: ".self::$query);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
