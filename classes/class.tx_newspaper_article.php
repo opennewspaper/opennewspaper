@@ -174,6 +174,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			if ($template_set) {
 				$this->smarty->setTemplateSet($template_set);
 			}
+			t3lib_div::debug($this->getUid());
 			if ($this->getParentPage()->getUID() && $this->getParentPage()->getPageType()) {
 				$this->smarty->setPageType($this->getParentPage());
 			}
