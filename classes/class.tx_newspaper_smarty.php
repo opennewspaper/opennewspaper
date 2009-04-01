@@ -136,11 +136,11 @@ class tx_newspaper_Smarty extends Smarty {
 			if ($this->pagetype) {
 				$page_name = $this->pagetype->getAttribute('normalized_name')?
 					$this->pagetype->getAttribute('normalized_name'):
-					strtolower($this->pagetype->getAttribute('type_name');
+					strtolower($this->pagetype->getAttribute('type_name'));
 				if ($this->pagezonetype) {
 					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 						$this->pagezonetype->getAttribute('normalized_name'):
-						strtolower($this->pagezonetype->getAttribute('type_name');
+						strtolower($this->pagezonetype->getAttribute('type_name'));
 					if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 						is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 					   ) {
@@ -160,11 +160,11 @@ class tx_newspaper_Smarty extends Smarty {
 		if ($this->pagetype) {
 			$page_name = $this->pagetype->getAttribute('normalized_name')?
 				$this->pagetype->getAttribute('normalized_name'):
-				strtolower($this->pagetype->getAttribute('type_name');
+				strtolower($this->pagetype->getAttribute('type_name'));
 			if ($this->pagezonetype) {
 				$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 					$this->pagezonetype->getAttribute('normalized_name'):
-					strtolower($this->pagezonetype->getAttribute('type_name');
+					strtolower($this->pagezonetype->getAttribute('type_name'));
 				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 				   ) {
