@@ -149,23 +149,38 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 	
 	/// Renders an article
-	public function render($template = '') {
+	public function render($template_set = '') {
+		
+		/** Check whether to use a specific template set.
+		 *	This must be done regardless if this is a template used to define
+		 *	default placements for articles, or an actual article
+		 */
+		if ($this->getAttribute('template_set')) {
+			$template_set = $this->getAttribute('template_set');
+		}
 
 		if ($this->getAttribute('is_template')) {
+		
 			/** Handle case where $this is a placeholder for an actual article
 			 *  (formerly Extra_ArticleRenderer)
 			 */
 			$ret = '';
 			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
-			$ret = $article->render();
-		} else {
-			$search_path = array();
-			if ($this->getPageZoneType()->getUid()) {
-				$search_path[] = 'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name'));
-			}
-			$search_path[] = 'template_sets';
-			$this->smarty->setTemplateSearchPath($search_path);
+			$ret = $article->render($template_set);
 			
+		} else {
+		
+			/// Configure Smarty rendering engine
+			if ($template_set) {
+				$this->smarty->setTemplateSet($template_set);
+			}
+			if ($this->getParentPage()->getPagetype()) {
+				$this->smarty->setPageType($this->getParentPage());
+			}
+			if ($this->getPageZoneType()) {
+				$this->smarty->setPageZoneType($this);
+			}
+
 			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
 			$this->smarty->assign('title', $this->getAttribute('title'));
 			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
@@ -194,7 +209,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				foreach ($this->getExtras() as $extra) {
 					if ($extra->getAttribute('paragraph') == $index ||
 						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
-						$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render();
+						$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render($template_set);
 					}
 				}
 				/*  Braindead PHP does not sort arrays automatically, even if
@@ -212,9 +227,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 */ 		
 			foreach ($this->getExtras() as $extra) {
 				if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
-					$paragraphs[0]['extras'][] = $extra->render();
+					$paragraphs[0]['extras'][] = $extra->render($template_set);
 				} else if ($extra->getAttribute('paragraph') > sizeof($text_paragraphs)) {
-					$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render();
+					$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
 				}
 			}
 
