@@ -17,7 +17,7 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
 		
 		$at = new tx_newspaper_Articletype();
-		if ($table == $at->getTable() && $field == 'tsconfig_name' && $row['tsconfig_name'] != '') {
+		if ($table == $at->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
 			/// if field 'tsconfig_name' is filled, just display the value, but the value can't be edited
 			
 			// Make sure to load full $TCA array for the table
