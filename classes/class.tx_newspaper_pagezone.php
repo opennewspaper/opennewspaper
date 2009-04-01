@@ -130,7 +130,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
 	public function getParentPage() {
-		if (!$this->parent_page && $this->getUid()) {
+		if (!$this->parent_page) {
 			if (!$this->parent_page_id) {
 				$pagezone_record = tx_newspaper::selectOneRow(
 					'page_id', 'tx_newspaper_pagezone', 
