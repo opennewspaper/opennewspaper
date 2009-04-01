@@ -59,33 +59,42 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	/// Render the page zone, containing all extras
-	/** \return The rendered page as HTML (or XML, if you insist) 
+	/** \param $template_set the template set used to render this page (as 
+	 *  		passed down from tx_newspaper_Page::render() )
+	 *	\return The rendered page as HTML (or XML, if you insist) 
 	 */
- 	public function render($template = '') {
- 		if (!$template) $template = $this;
+ 	public function render($template_set = '') {
+		/// Check whether to use a specific template set
+		if ($this->getAttribute('template_set')) {
+			$template_set = $this->getAttribute('template_set');
+		}
+		
+		/// Configure Smarty rendering engine
+		if ($template_set) {
+			$this->smarty->setTemplateSet($template_set);
+		}
+		if ($this->getParentPage()->getPagetype()) {
+			$this->smarty->setPageType($this->getParentPage());
+		}
+		if ($this->getPageZoneType()) {
+			$this->smarty->setPageZoneType($this);
+		}
 
-		$this->smarty->setTemplateSearchPath(
-			array(
-				'template_sets/' . strtolower($this->getParentPage()->getPagetype()->getAttribute('type_name')) . '/'. 
-								   strtolower($this->getPageZoneType()->getAttribute('name')),
-				'template_sets/' . strtolower($this->getPageZoneType()->getAttribute('name')),
-				'template_sets'
-			)
-		);
- 		
+ 		/// Pass global attributes to Smarty
  		$this->smarty->assign('class', get_class($this));
  		$this->smarty->assign('attributes', $this->attributes);
  		
- 		/// render extras
- 		/// \todo correct order of extras
- 		/// \todo - blockweise zusammenfuehren von extras gleiches layout
+		/** Pass the Extras on this page zone, already rendered, to Smarty
+		 *  \todo correct order of extras
+		 *  \todo blockweise zusammenfuehren von extras gleiches layout (nicht vor taz launch)
+		 */
  		$temp_extras = array();
  		foreach ($this->extras as $extra) {
- 			$temp_extras[] = $extra->render();
+ 			$temp_extras[] = $extra->render($template_set);
  		}
  		$this->smarty->assign('extras', $temp_extras);
 
- 		return $this->smarty->fetch($template);
+ 		return $this->smarty->fetch($this);
  	}
  	
  	/// returns an actual member (-> Extra)
