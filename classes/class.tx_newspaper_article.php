@@ -134,7 +134,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	public function getUid() { 
-		if (!intval($this->uid)) $this->setUid($this->attributes['uid']);
+		if (!intval($this->uid)) $this->uid = $this->attributes['uid'];
 		return intval($this->uid);
 	}
 
