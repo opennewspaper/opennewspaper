@@ -35,27 +35,39 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-			'tx_newspaper_article.uid', 
-			'tx_newspaper_article',
-			'tx_newspaper_article_sections_mm',
-			'tx_newspaper_section',
-			' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')),
-			'',
-			'',
-			"$start, $number"
-		);
-		tx_newspaper::$query = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
-		t3lib_div::debug("mm query: ".$GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
-		if (!$res) {
-			throw new tx_newspaper_NoResException();
-		}
-		
-		$articles = array();
-	    while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-	    	$articles[] = new tx_newspaper_Article($row['uid']);
-	    } 
+		if (1) {
+			$articles = tx_newspaper::selectMMQuery(
+				'tx_newspaper_article.uid', 
+				'tx_newspaper_article',
+				'tx_newspaper_article_sections_mm',
+				'tx_newspaper_section',
+				' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')),
+				'',
+				'',
+				"$start, $number"
+			);
+		} else {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+				'tx_newspaper_article.uid', 
+				'tx_newspaper_article',
+				'tx_newspaper_article_sections_mm',
+				'tx_newspaper_section',
+				' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')),
+				'',
+				'',
+				"$start, $number"
+			);
+			tx_newspaper::$query = $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery;
+			if (!$res) {
+				throw new tx_newspaper_NoResException();
+			}
 			
+			$articles = array();
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				$articles[] = new tx_newspaper_Article($row['uid']);
+			} 
+		}			
+		t3lib_div::debug("mm query: ".tx_newspaper::$query);
 		return $articles;
 	}
 	

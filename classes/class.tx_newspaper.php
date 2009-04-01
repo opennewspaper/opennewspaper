@@ -47,6 +47,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
+	 *  \return The result of the query as associative array
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
@@ -68,6 +69,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
+	 *  \return The result of the query as associative array
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
@@ -95,6 +97,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
+	 *  \return The result of the query as 2-dimensional associative array
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
@@ -109,8 +112,49 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			return $rows;
 		} else throw new tx_newspaper_NoResException(self::$query);		
 	}
-
 	
+	/// Execute a SELECT query on M-M related tables
+	/** Copied and adapted from t3lib_db::exec_SELECT_mm_query so that the 
+	 *	SQL query is retained for debugging.
+	 *	\param $select Field list for SELECT
+	 *  \param $local_table Tablename, local table
+	 *  \param $mm_table Tablename, relation table
+	 *  \param $foreign_table Tablename, foreign table
+	 *  \param $whereClause Optional additional WHERE clauses put in the end of
+	 *  	   the query. NOTICE: You must escape values in this argument with
+	 *  	   $this->fullQuoteStr() yourself! DO NOT PUT IN GROUP BY, ORDER BY
+	 *  	   or LIMIT! You have to prepend 'AND ' to this parameter yourself!
+	 *  \param $groupBy Optional GROUP BY field(s), if none, supply blank string.
+	 *  \param $orderBy Optional ORDER BY field(s), if none, supply blank string.
+	 *  \param $limit Optional LIMIT value ([begin,]max), if none, supply blank string.
+	 *  \return The result of the query as 2-dimensional associative array
+	 */
+	public static function selectMMQuery($select, $local_table, $mm_table, $foreign_table,
+										 $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
+		if($foreign_table == $local_table) {
+			$foreign_table_as = $foreign_table . uniqid('_join');
+		}
+
+		$mmWhere = $local_table ? $local_table.'.uid='.$mm_table.'.uid_local' : '';
+		$mmWhere .= ($local_table AND $foreign_table) ? ' AND ' : '';
+		if ($foreign_table) {
+			$mmWhere .= ($foreign_table_as ? $foreign_table_as : $foreign_table) .
+						'.uid='.$mm_table.'.uid_foreign';
+		}
+		
+		if ($local_table) $table = $local_table . ',';
+		$table .= $mm_table;
+		if ($foreign_table) {
+			$table .= ',' . $foreign_table;
+			if ($foreign_table_as) $table .= ' AS '.$foreign_table_as;
+		}
+
+		return tx_newspaper::selectRows(
+			$select, $table, $mmWhere.' '.$whereClause,
+			$groupBy, $orderBy, $limit
+		);
+	}
+
 	/// inserts a record using T3 API
 	/** \param $table SQL table to insert into
 	 *  \param $row Data as key=>value pairs
