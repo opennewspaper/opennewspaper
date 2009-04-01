@@ -67,6 +67,11 @@ class tx_newspaper_Smarty extends Smarty {
 		if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
 	}
 
+	public function setTemplateSearchPath(array $path) {
+		t3lib_div::debug("setTemplateSearchPath()");
+		t3lib_div::debug($path);
+		$this->templateSearchPath = $path;
+	}
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = 'default') {
 		$this->templateset = $template_set;
