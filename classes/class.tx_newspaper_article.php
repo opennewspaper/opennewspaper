@@ -127,7 +127,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return 'Article';
 	}
 
-	public function getUid() { return intval($this->uid); }
+	public function getUid() { 
+		if (!intval($this->uid)) $this->setUid($this->getAttribute('uid'));
+		return intval($this->uid);
+	}
 
 	public function setUid($uid) { 
 		$this->uid = $uid;
@@ -446,7 +449,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 	
 	private $source = null;			///< Source the Article is read from
-//	private $uid = '';				///< UID that identifies the article in the source
+	private $uid = '';				///< UID that identifies the article in the source
 	
 	private $extra_uid = null;		///< article's UID in the abstract Extra table
 	private $pagezone_uid = null;	///< article's UID in the abstract PageZone table
