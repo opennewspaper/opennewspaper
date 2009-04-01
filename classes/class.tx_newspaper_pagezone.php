@@ -156,7 +156,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					'PageZone ' . $this->getUid() . ' appears to have no parent Page'
 				);
 			}
-
+		}
 		return $this->parent_page;
 	}
 	
