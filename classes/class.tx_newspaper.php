@@ -100,19 +100,19 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return The result of the query as 2-dimensional associative array
 	 */
 	public static function selectRows($fields, $table, $where = '1',
-										$groupBy = '', $orderBy = '', $limit = '') {
+									  $groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where, $groupBy, $orderBy, $limit);
 		t3lib_div::debug(self::$query);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
-		if ($res) {        
+		if ($res) {
 	        $rows = array();
-	        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
 	        	$rows[] = $row;
 			return $rows;
-		} else throw new tx_newspaper_NoResException(self::$query);		
+		} else throw new tx_newspaper_NoResException(self::$query);
 	}
 	
 	/// Execute a SELECT query on M-M related tables
