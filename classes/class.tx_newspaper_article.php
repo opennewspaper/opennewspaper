@@ -140,7 +140,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function setUid($uid) { 
 		$this->uid = $uid;
-		$this->attributes['source_id'] = $uid;
+//		$this->attributes['source_id'] = $uid;
 	}
 
 	public public function getTable() {
