@@ -163,8 +163,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
-		t3lib_div::debug("UID: ".$this->getUid().", table: ".$this->getTable().", attributes:");
-		t3lib_div::debug($this->attributes);
 
 		if ($this->getAttribute('is_template')) {
 		
@@ -181,7 +179,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			if ($template_set) {
 				$this->smarty->setTemplateSet($template_set);
 			}
-			t3lib_div::debug($this->getUid());
 			if ($this->getParentPage()->getUID() && $this->getParentPage()->getPageType()) {
 				$this->smarty->setPageType($this->getParentPage());
 			}
