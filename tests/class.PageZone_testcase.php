@@ -68,10 +68,29 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			
 			$pzt->setAttribute('uid', 0);
 			$this->assertEquals($pzt->getAttribute('uid'), 0);
+		}
+	}
+	
+	/**	setAttribute is tested without calling getAttribute() first
+	 *  WrongAttributeException is tested */
+	public function test_PageZoneType_2() {
+		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
+		foreach ($rows as $row) {
+			$pzt = new tx_newspaper_PageZoneType($row['uid']);
 			
+			$pzt->setAttribute('uid', 0);
+			$this->assertEquals($pzt->getAttribute('uid'), 0);
+
 			$this->setExpectedException('tx_newspaper_WrongAttributeException');
 			$pzt->getAttribute('Gibts nicht');
-			
+		}	
+	}
+	
+	/// test NotYetImplementedException
+	public function test_PageZoneType_3() {
+		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
+		foreach ($rows as $row) {
+			$pzt = new tx_newspaper_PageZoneType($row['uid']);
 			$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 			$pzt->store();
 		}
