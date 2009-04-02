@@ -13,7 +13,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/** Just a quick hack to see anything
 	 *  \todo use smarty
 	 */
-	public function render($template = '') {
+	public function render($template_set = '') {
+		$this->prepare_render($template_set);
 		$ret = '<h4>' . $this->getAttribute('title') . "</h4>\n" .
 		'<p>' .
 		'<img src="data:image/png;base64,'.base64_encode($this->getAttribute('image')) .

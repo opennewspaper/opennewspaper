@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_extraimpl.php
  *
- *  \author Oliver Schr�der <newspaper@schroederbros.de>
+ *  \author Oliver Schroeder <newspaper@schroederbros.de>
  *  \date Dec 12, 2008
  */
 
@@ -26,11 +26,31 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$this->setUid($uid);
 	}
 
+	protected function prepare_render(&$template_set = '') {
+		/// Check whether to use a specific template set.
+		if ($this->getAttribute('template_set')) {
+			$template_set = $this->getAttribute('template_set');
+		}
+		
+		/// Configure Smarty rendering engine
+		if ($template_set) {
+			$this->smarty->setTemplateSet($template_set);
+		}
+/*		if ($this->getParentPage()->getUID() && $this->getParentPage()->getPageType()) {
+	$this->smarty->setPageType($this->getParentPage());
+	}
+		if ($this->getPageZoneType()) {
+	$this->smarty->setPageZoneType($this);
+	}
+ */
+	}
+	
 	/// \todo remove before launch
-	public function render($template = '') {
+	public function render($template_set = '') {
+		$this->prepare_render($template_set);
 		return '<p>' .
 			   get_class($this) . '::render() not yet implemented - called ' .
-			   get_class() . '::render(' . $template . ')' . "</p>\n" .
+			   get_class() . '::render(' . $template_set . ')' . "</p>\n" .
 			   '<p>' . print_r($this->attributes, 1) . "</p>\n";
 	}
 
