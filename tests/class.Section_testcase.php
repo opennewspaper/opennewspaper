@@ -81,6 +81,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	
 	public function test_ArticleList() {
 		$registered = tx_newspaper_ArticleList::getRegisteredArticleLists();
+		t3lib_div::debug($registered);
 		$this->assertTrue(in_array('tx_newspaper_ArticleList_Auto', $registered));
 		
 		$list = $this->section->getArticleList();
