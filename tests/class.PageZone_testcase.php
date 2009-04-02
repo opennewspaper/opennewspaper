@@ -54,6 +54,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
 	}	
 	*/
+	
+	public function test_AvailablePagezoneTypes() {
+		$row = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
+		t3lib_div::debug($row);
+	}
+	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
 	private $source = null;
