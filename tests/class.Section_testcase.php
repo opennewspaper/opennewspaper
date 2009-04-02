@@ -44,6 +44,13 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->section->store();
 	}
 	
+	public function test_Title() {
+		global $LANG;
+		$this->assertEquals($this->section->getTitle(), 'Section');
+		$lang->lang = 'de';
+		$this->assertEquals($this->section->getTitle(), 'Ressort');
+	}
+	
 	public function test_getArticleList() {
 		$list = $this->section->getArticleList();
 		$this->assertEquals($list, 
