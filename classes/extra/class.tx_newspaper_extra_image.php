@@ -15,9 +15,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public function render($template_set = '') {
 		$this->prepare_render($template_set);
 		
-		$this->smarty->assign('title'), $this->getAttribute('title');
-		$this->smarty->assign('image'), $this->getAttribute('image');
-		$this->smarty->assign('caption'), $this->getAttribute('caption');
+		$this->smarty->assign('title', $this->getAttribute('title'));
+		$this->smarty->assign('image', $this->getAttribute('image'));
+		$this->smarty->assign('caption', $this->getAttribute('caption'));
 		return $this->smarty->fetch($this);
 	}
 
