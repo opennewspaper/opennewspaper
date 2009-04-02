@@ -78,7 +78,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	}
 
 	public function getUid() {
-		return $this->uid;
+		return intval($this->uid);
 	}
 	
 	public function setUid($uid) {
