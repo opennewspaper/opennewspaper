@@ -100,6 +100,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_toString() {
+		$this->page->getAttribute('uid');
 		$string = strval($this->page);
 		$this->doTestContains($string, 'UID: 1');
 	}
