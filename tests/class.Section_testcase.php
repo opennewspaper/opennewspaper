@@ -47,8 +47,10 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	public function test_Title() {
 		global $LANG;
 		$LANG->lang = 'default';
+		t3lib_div::debug($this->section->getTitle());
 		$this->assertEquals($this->section->getTitle(), 'Section');
 		$LANG->lang = 'de';
+		t3lib_div::debug($this->section->getTitle());
 		$this->assertEquals($this->section->getTitle(), 'Ressort');
 	}
 	
