@@ -60,10 +60,6 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($list, 
 							tx_newspaper_ArticleList_Factory::getInstance()->create(1, $this->section));
 		
-		$list->setAttribute('new attribute', 1);
-		$this->assertEquals($list->getAttribute('new attribute'), 1);
-		$this->assertEquals($list->getAttribute('uid'), 1);
-
 		$this->assertEquals($list->getTitle(), 'Automatic article list');
 		
 		// section 1 has currently 7 articles associated with it.
@@ -80,6 +76,15 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$list->store();
+	}
+	
+	public function test_ArticleList() {
+		$list = $this->section->getArticleList();
+		$list->setAttribute('new attribute', 1);
+		$this->assertEquals($list->getAttribute('new attribute'), 1);
+		$this->assertEquals($list->getAttribute('uid'), 1);
+		$this->setExpectedException('tx_newspaper_WrongAttributeException');
+		$list->getAttribute('wrong attribute');
 	}
 	/*
 	public function test_getParentPage() {
