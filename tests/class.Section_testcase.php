@@ -90,12 +90,17 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$list->getAttribute('wrong attribute');
 	}
-	/*
-	public function test_getParentPage() {
+	
+	public function test_getParentSection() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$parent = $this->section->getParentPage();
+		$parent = $this->section->getParentSection();
 	}
-	*/
+	
+	public function test_getSubPages() {
+		$subpages = $this->section->getSubPages();
+		t3lib_div::debug($subpages);
+	}
+
 	private $section = null;					///< the object
 	private $section_uid = 1;					///< uid of stored object
 	private $pid = 2828;						///< pid of stored object
