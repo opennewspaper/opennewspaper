@@ -36,6 +36,8 @@ if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
 	// old smarty extension
 	require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
 }
+//	this is needed because the following error appears sometimes:
+//	Fatal error: Class 't3lib_TSparser' not found in /var/lib/httpd/onlinetaz/typo3_src-4.2.2/t3lib/class.t3lib_befunc.php on line 1276
 require_once (PATH_t3lib.'class.t3lib_tsparser.php');
 
 /// Smarty rendering engine with configurable template directory

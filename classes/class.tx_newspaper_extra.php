@@ -191,27 +191,29 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 
 	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
- 	
- 	function setExtraUid($uid) { $this->extra_uid = $uid; }
- 	protected function getExtraUid() { return intval($this->extra_uid); }
- 	
+
+	function setExtraUid($uid) { $this->extra_uid = $uid; }
+	protected function getExtraUid() { return intval($this->extra_uid); }
+
 	private $uid = 0;
-	
+
 	private $attributes = array();				///< attributes of the extra
-	
+
+	private $smarty = null;
+
 	private static $registeredExtra = array();	///< list of registered Extras
-	
-	protected $extra_uid = null;	///< article's UID in the abstract Extra table
-	
+
+	protected $extra_uid = 0;	///< article's UID in the abstract Extra table
+
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	/** \todo this table is defined in tx_newspaper_Extra_Factory too. decide
 	 * 		  on one class to store it!
 	 */
 	private static $table = 'tx_newspaper_extra';
-	
+
 	private static $fields_to_copy_into_extra_table = array(
 		'pid', 'crdate', 'cruser_id', 'deleted', 'hidden', 
 	);
-	
+
 }
 ?>
