@@ -23,5 +23,22 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		throw new tx_newspaper_EmptyResultException('');
 	}
 
+	public function test_SourceOpenFailedException() {
+		$this->setExpectedException('tx_newspaper_SourceOpenFailedException');
+		throw new tx_newspaper_SourceOpenFailedException('');
+	}
+	public function test_InconsistencyException() {
+		$this->setExpectedException('tx_newspaper_InconsistencyException');
+		throw new tx_newspaper_InconsistencyException('');
+	}
+	public function test_ArticleNotFoundException() {
+		$this->setExpectedException('tx_newspaper_ArticleNotFoundException');
+		throw new tx_newspaper_NoResException('');
+	}
+	public function test_SysfolderNoPidsFoundException() {
+		$this->setExpectedException('tx_newspaper_SysfolderNoPidsFoundException');
+		throw new tx_newspaper_SysfolderNoPidsFoundException('');
+	}
+
 }
 ?>
