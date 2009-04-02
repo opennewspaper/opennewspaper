@@ -28,6 +28,22 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->section->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
 	
+	public function test_setAttribute() {
+		$this->section->setAttribute('uid', -1);
+		$this->assertEquals($this->section->getAttribute('uid'), -1);
+		$this->section->setAttribute('pid', -1);
+		$this->assertEquals($this->section->getAttribute('pid'), -1);
+		$this->section->setAttribute('section_name', 'my unique section name');
+		$this->assertEquals($this->section->getAttribute('section_name'), 'my unique section name');
+		$this->section->setAttribute('es gibt mich nicht', 'aber jetzt gibt es mich');
+		$this->assertEquals($this->section->getAttribute('es gibt mich nicht'), 'aber jetzt gibt es mich');
+	}
+
+	public function test_store() {
+		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+		$this->section->store();
+	}
+	
 	public function test_getArticleList() {
 		$list = $this->section->getArticleList();
 		$this->assertEquals($list, 
