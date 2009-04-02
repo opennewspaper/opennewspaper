@@ -82,10 +82,12 @@ class tx_newspaper_Page
  		
  		/// clone page zones contained on page
  		$old_pagezones = $this->getPageZones();
- 		$this->pageZones = array();
- 		foreach ($old_pagezones as $old_pagezone) {
- 			$this->pageZones[] = clone $old_pagezone;
- 		}
+		$this->pageZones = array();
+		if (is_array($old_pagezones) && sizeof($old_pagezones) > 0) {
+			foreach ($old_pagezones as $old_pagezone) {
+				$this->pageZones[] = clone $old_pagezone;
+			}
+		}
  	}
  	
  	public function __toString() {
