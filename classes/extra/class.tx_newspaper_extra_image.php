@@ -17,7 +17,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$this->prepare_render($template_set);
 		$ret = '<h4>' . $this->getAttribute('title') . "</h4>\n" .
 		'<p>' .
-		'<img src="data:image/png;base64,'.base64_encode($this->getAttribute('image')) .
+		'<img src="uploads/tx_newspaper/'.$this->getAttribute('image') .
 		   '" alt="' . $this->getAttribute('caption') . '" />' .
 		"</p>\n" . $this->getAttribute('caption') . "\n";
 		
