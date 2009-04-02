@@ -268,6 +268,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	function getUid() { return intval($this->uid); }
 	function setUid($uid) { $this->uid = $uid; }
 
+	protected function getExtras() { return $this->extras; }
 
 	/// get active pages zone for given page
 	/** \param $page_uid uid of page
