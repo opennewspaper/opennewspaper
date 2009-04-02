@@ -55,10 +55,16 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}	
 	*/
 	
-	public function test_AvailablePagezoneTypes() {
-		$row = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
-		t3lib_div::debug($row);
-	}
+	public function test_PageZoneType() {
+		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
+		foreach ($rows as $row) {
+			$pzt = new tx_newspaper_PageZoneType($row['uid']);
+			foreach ($row as $attribute => $value) {
+				$this->assertEquals($pzt->getAttribute($attribute), $value);
+			}
+			$this->assertEquals($pzt->getTable(), 'tx_newspaper_pagezonetype');
+			$this->assertEquals($pzt->getModuleName(), 'np_pagezonetype'); 
+		}
 	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
