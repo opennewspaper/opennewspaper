@@ -38,13 +38,15 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
-/*		if ($this->getParentPage()->getUID() && $this->getParentPage()->getPageType()) {
-	$this->smarty->setPageType($this->getParentPage());
-	}
-		if ($this->getPageZoneType()) {
-	$this->smarty->setPageZoneType($this);
-	}
- */
+		if ($this->getPageZone() && 
+			$this->getPageZone()->getParentPage()) &&
+			$this->getPageZone()->getParentPage()->getUID() && 
+			$this->getPageZone()->getParentPage()->getPageType()) {
+			$this->smarty->setPageType($this->getPageZone()->getParentPage());
+			if ($this->getPageZone()->getPageZoneType()) {
+				$this->smarty->setPageZoneType($this->getPageZone());
+			}
+		}
 	}
 	
 	/// \todo remove before launch
@@ -191,12 +193,16 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		return tx_newspaper::insertRows(self::$table, $row);		
 	}
 
-	function getUid() { return intval($this->uid); }
-	function setUid($uid) { $this->uid = $uid; }
+	public function getUid() { return intval($this->uid); }
+	public function setUid($uid) { $this->uid = $uid; }
 
-	function setExtraUid($uid) { $this->extra_uid = $uid; }
+	public function setExtraUid($uid) { $this->extra_uid = $uid; }
 	protected function getExtraUid() { return intval($this->extra_uid); }
 
+	protected function getPageZone() {
+		return null;
+	}
+	
 	private $uid = 0;
 
 	private $attributes = array();				///< attributes of the extra
