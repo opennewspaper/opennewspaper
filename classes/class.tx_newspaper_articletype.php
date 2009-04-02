@@ -70,11 +70,15 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 						 tx_newspaper::getTable($this), false);
 	}
 
-	/// \todo: not needed
-	public function getUid() {}
+	/// not needed
+	public function getUid() {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
 	
-	/// \todo: not needed
-	public function setUid($uid) {}
+	/// not needed
+	public function setUid($uid) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
 	
 	/// \return Name of the database table the object's data are stored in
 	public function getTable() { return tx_newspaper::getTable($this); }
