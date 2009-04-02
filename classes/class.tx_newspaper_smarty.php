@@ -77,6 +77,7 @@ class tx_newspaper_Smarty extends Smarty {
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = 'default') {
 		$this->templateset = $template_set;
+		$this->assign('template_set', $template_set);
 	}
 	
 	/// Sets the page type we're working on
