@@ -115,11 +115,11 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		$output = $this->pi->main('', null);
 		
 		$this->doTestContains($output, 'Image 4');
-		$this->doTestContains($output, 'img src="uploads/tx_newspaper/120px-GentooFreeBSD-logo.svg_02.png"');
+		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/120px-GentooFreeBSD-logo.svg_02.png"');
 		$this->doTestContains($output, 'Daemonic Gentoo');
 		
 		$this->doTestContains($output, 'title\[5\]');
-		$this->doTestContains($output, 'img src="uploads/tx_newspaper/lolcatsdotcomoh5o6d9hdjcawys6.jpg"');
+		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/lolcatsdotcomoh5o6d9hdjcawys6.jpg"');
 		$this->doTestContains($output, 'caption\[5\]');
 		
 	}
