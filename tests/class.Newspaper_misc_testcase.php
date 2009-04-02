@@ -33,7 +33,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 	}
 	public function test_ArticleNotFoundException() {
 		$this->setExpectedException('tx_newspaper_ArticleNotFoundException');
-		throw new tx_newspaper_NoResException('');
+		throw new tx_newspaper_ArticleNotFoundException('');
 	}
 	public function test_SysfolderNoPidsFoundException() {
 		$this->setExpectedException('tx_newspaper_SysfolderNoPidsFoundException');
