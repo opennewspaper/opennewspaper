@@ -107,6 +107,7 @@ class tx_newspaper_SaveHook {
 				for ($i = 0; $i < sizeof($list); $i++) {
 					$content .= ($i+1) . '. ' . $list[$i]->getAttribute('kicker') . ': ' . $list[$i]->getAttribute('title') . ' (#'. $list[$i]->getAttribute('uid') . ')<br />';  
 				}
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
 			}
 		}
