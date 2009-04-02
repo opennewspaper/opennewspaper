@@ -159,7 +159,7 @@ class tx_newspaper_Page
 	
 	/** \todo Internationalization */
 	public function getTitle() {
-		return 'PageZone';
+		return 'Page';
 	}
 
 	function getPageZones() {

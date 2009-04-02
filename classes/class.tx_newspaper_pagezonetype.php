@@ -92,7 +92,7 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pzt = new tx_newspaper_PageZoneType();
 		$row = tx_newspaper::selectRows(
-			'*', 
+			'*',
 			$pzt->getTable(),
 			'pid=' . $sf->getPid($pzt) . $where
 		);

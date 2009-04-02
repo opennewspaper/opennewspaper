@@ -52,7 +52,6 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 		$pid = $sf->getPid($t); // get pid of sysfolder (sysfolder exists)
 		$this->assertEquals($pid_np_phpunit_testcase_5, $pid);
 	}
-	
 
 	public function testNameTooShort() {
 		$t = new tx_newspaper_Sysfolder_test('123');
