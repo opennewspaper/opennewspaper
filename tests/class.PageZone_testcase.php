@@ -109,7 +109,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getActivePageZones() {
-		t3lib_div::debug(tx_newspaper_PageZone::getActivePageZones(1)));
+		t3lib_div::debug(tx_newspaper_PageZone::getActivePageZones(1));
 		t3lib_div::debug("finish me!");
 	}
 	
