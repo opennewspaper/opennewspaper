@@ -199,7 +199,36 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	public function setExtraUid($uid) { $this->extra_uid = $uid; }
 	protected function getExtraUid() { return intval($this->extra_uid); }
 
+	/// Finds the PageZone this Extra is placed upon
+	/** I'm afraid this raises several problems, so this function should be used
+	 *  with care.
+	 *  - What if an Extra is placed on more than one PageZone?
+	 *  - What if an Extra is not placed on any PageZone at all (perhaps because
+	 *    it is a template from which other Extras are copied)
+	 *  - We must manually select the Extras from all Extra to PageZone-MM-tables
+	 *    there are. 
+	 *    - These are currently limited to two (for Articles and normal
+	 *      Page Zones), but there is no guarantee that that stays this way
+	 *      (although it is highly likely). When that happens, this function
+	 *      must be changed. Bad software design!
+	 *    - The order in which these MM-tables are checked for the Extra is
+	 *      pretty arbitrary.
+	 *      
+	 *	\return The PageZone this Extra is placed upon, or null
+	 */
 	protected function getPageZone() {
+		/// Check if the Extra is associated with an article...
+		foreach (array('tx_newspaper_article_extras_mm' => 'tx_newspaper_Article',
+						/// ...or a page zone...
+				 	   'tx_newspaper_pagezone_page_extras_mm' => 'tx_newspaper_PageZone_Page')
+					   as $table => $type) {
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'uid_local', $table, 'uid_foreign = ' . $this->getExtraUid()
+			);
+			if ($row['uid_local']) {
+				return new $type(intval($row['uid_local']));
+			}
+		}
 		return null;
 	}
 	
