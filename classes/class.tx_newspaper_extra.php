@@ -201,7 +201,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 
 	private $attributes = array();				///< attributes of the extra
 
-	private $smarty = null;
+	protected $smarty = null;
 
 	private static $registeredExtra = array();	///< list of registered Extras
 
@@ -209,7 +209,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	/** \todo this table is defined in tx_newspaper_Extra_Factory too. decide
-	 * 		  on one class to store it!
+	 *		  on one class to store it!
 	 */
 	private static $table = 'tx_newspaper_extra';
 
