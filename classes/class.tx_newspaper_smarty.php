@@ -36,7 +36,7 @@ if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
 	// old smarty extension
 	require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
 }
-
+require_once (PATH_t3lib.'class.t3lib_tsparser.php');
 
 /// Smarty rendering engine with configurable template directory
 /** Smarty suffers from the limitation that you can only have \em one folder to
