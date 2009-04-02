@@ -96,6 +96,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		}
 	}
 	
+	/// \todo finish test
 	public function test_clone() {
 		$cloned = clone $this->pagezone;
 		$this->assertEquals($cloned->getAttribute('uid'), 0);
@@ -104,6 +105,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($cloned->getAttribute('tstamp'), time());
 		
 		// ...
+		t3lib_div::debug("finish me!");
+	}
+	
+	public function test_getActivePageZones() {
+		t3lib_div::debug(tx_newspaper_PageZone::getActivePageZones(1)));
+		t3lib_div::debug("finish me!");
 	}
 	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
