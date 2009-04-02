@@ -93,16 +93,18 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	
 	public function test_getParentSection() {
 		$parent = $this->section->getParentSection();
+		$this->assertEquals($parent->getUid(), 0);
 		t3lib_div::debug($parent);
+		$children = tx_newspaper_Section::getDescendantSections($this->getUid());
+		t3lib_div::debug($children);
 	}
 	
 	public function test_getSubPages() {
 		$subpages = $this->section->getSubPages();
 		foreach ($subpages as $page) {
 			$this->assertTrue($page instanceof tx_newspaper_Page);
-			t3lib_div::debug($page->getAttribute('uid'));
+			$this->assertEquals($page->getAttribute('section'), 1);
 		}
-		t3lib_div::debug($subpages);
 	}
 
 	private $section = null;					///< the object

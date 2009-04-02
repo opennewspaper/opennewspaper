@@ -111,7 +111,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
 
 	/// get all available page types
-	/// \return array all available page types
+	/** \return array all available page types
+	 *	\todo return objects
+	 */
 	public static function getAvailablePageTypes($include_hidden=true) {
 		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages types be included?
 		$sf = tx_newspaper_Sysfolder::getInstance();

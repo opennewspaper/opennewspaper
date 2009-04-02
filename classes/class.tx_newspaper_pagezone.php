@@ -274,6 +274,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $page_uid uid of page
 	 *  \return array uids of active pages zone for given page
 	 *  \todo move to tx_newspaper_Page as non-static function
+	 *  \todo return objects
 	 */
 	public static function getActivePageZones($page_uid, $include_hidden=true) {
 		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
