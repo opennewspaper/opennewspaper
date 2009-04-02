@@ -30,6 +30,11 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_Page);
+		$temp = new tx_newspaper_Page(1);
+		$this->assertEquals($temp->getUid(), 1);
+		$this->assertEquals($temp->getAttribute('uid'), 1);
+		$this->setExpectedException('tx_newspaper_IllegalUsageException');
+		$temp = new tx_newspaper_Page('I\'m a string!');
 	}
 	
 	public function testRender() {
