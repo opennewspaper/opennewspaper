@@ -102,11 +102,11 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	public function test_Extras_ressort() {
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Image 1');
-		$this->doTestContains($output, 'img src="uploads/tx_newspaper/BSD_-_Daemon_tux_thumb');
+		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/BSD_-_Daemon_tux_thumb');
 		$this->doTestContains($output, 'Caption for image 1');
 
 		$this->doTestContains($output, 'Image 2 Titel');
-		$this->doTestContains($output, 'img src="uploads/tx_newspaper/kari.080524.gif"');
+		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/kari.080524.gif"');
 		$this->doTestContains($output, 'Image 2 Caption');
 	}
 	
