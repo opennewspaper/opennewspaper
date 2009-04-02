@@ -102,11 +102,11 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	public function test_Extras_ressort() {
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Image 1');
-		$this->doTestContains($output, 'img src="data:image\/png;base64,\/9j\/4AAQ');
+		$this->doTestContains($output, 'img src="uploads/tx_newspaper/BSD_-_Daemon_tux_thumb');
 		$this->doTestContains($output, 'Caption for image 1');
 
 		$this->doTestContains($output, 'Image 2 Titel');
-		$this->doTestContains($output, 'img src="data:image\/png;base64,iVBORw0K');
+		$this->doTestContains($output, 'img src="uploads/tx_newspaper/kari.080524.gif"');
 		$this->doTestContains($output, 'Image 2 Caption');
 	}
 	
@@ -115,11 +115,11 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 		$output = $this->pi->main('', null);
 		
 		$this->doTestContains($output, 'Image 4');
-		$this->doTestContains($output, 'img src="data:image\/png;base64,iVBORw0K');
+		$this->doTestContains($output, 'img src="uploads/tx_newspaper/120px-GentooFreeBSD-logo.svg_02.png"');
 		$this->doTestContains($output, 'Daemonic Gentoo');
 		
 		$this->doTestContains($output, 'title\[5\]');
-		$this->doTestContains($output, 'img src="data:image\/png;base64,\/9j\/4AAQSkZJ');
+		$this->doTestContains($output, 'img src="uploads/tx_newspaper/lolcatsdotcomoh5o6d9hdjcawys6.jpg"');
 		$this->doTestContains($output, 'caption\[5\]');
 		
 	}
