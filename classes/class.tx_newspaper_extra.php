@@ -38,8 +38,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
-		if ($this->getPageZone() && 
-			$this->getPageZone()->getParentPage()) &&
+		if ($this->getPageZone() &&
+			$this->getPageZone()->getParentPage() &&
 			$this->getPageZone()->getParentPage()->getUID() && 
 			$this->getPageZone()->getParentPage()->getPageType()) {
 			$this->smarty->setPageType($this->getPageZone()->getParentPage());
