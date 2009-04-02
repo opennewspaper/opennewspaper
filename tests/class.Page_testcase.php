@@ -86,6 +86,14 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($this->page->getTable(), 'tx_newspaper_page');
 	}
 	
+	public function test_cloneAndStore() {
+		/// clone current page
+		$temp_page = $this->page;
+		$this->assertGreaterThan($this->page->getAttribute('crdate'), $temp_page->getAttribute('crdate'));
+		$this->assertGreaterThan($this->page->getAttribute('tstamp'), $temp_page->getAttribute('tstamp'));
+		$this->assertEquals($temp_page->getUid(), 0);
+	}
+	
 	private $section = null;
 	private $page = null;					///< the object
 	private $section_uid = 1;
