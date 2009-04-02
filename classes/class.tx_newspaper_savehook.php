@@ -4,10 +4,8 @@ class tx_newspaper_SaveHook {
 
 
 	/// tceform hooks (well, those aren't really save hooks ...)
-	
-	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
-		global $TCA;
 
+	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
 #t3lib_div::devlog('th pre table', 'newspaper', 0, $table);
 #t3lib_div::devlog('th pre field', 'newspaper', 0, $field);
 #t3lib_div::devlog('th pre row', 'newspaper', 0, $row);
@@ -15,17 +13,10 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('th pre palette', 'newspaper', 0, $palette);
 #t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
 #t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
-		
-		$at = new tx_newspaper_Articletype();
-		if ($table == $at->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
-			/// if field 'tsconfig_name' is filled, just display the value, but the value can't be edited
-			
-			// Make sure to load full $TCA array for the table
-			t3lib_div::loadTCA($table);
-			unset($TCA['tx_newspaper_articletype']['columns']['normalized_name']['config']['type']);
-			$TCA['tx_newspaper_articletype']['columns']['normalized_name']['config']['type'] = 'none';
-		}
-		
+		/// make sure field "normalized_name" can't be modified if data is present already
+		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_Articletype());
+		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageType());
+		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageZoneType());
 	}
 
 
@@ -187,6 +178,25 @@ class tx_newspaper_SaveHook {
 	private function generateArticleList(tx_newspaper_Section $section) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
+	
+	
+	
+	/// check if a normlized_name was already entered - if yes, display value as non-editable field
+	/** \param string $table table name in hook
+	 *  \param string $field name of single field currently processed in hook 
+	 *  \param array $row data to be written
+	 *  \return void 
+	 */
+	private function checkNormalizedNameField($table, $field, $row, tx_newspaper_StoredObject $obj) {
+		if ($table == $obj->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
+			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
+			/// if field 'normalized_name' is filled, just display the value, but the value can't be edited
+			unset($GLOBALS['TCA'][$table]['columns']['normalized_name']['config']['type']);
+			$GLOBALS['TCA'][$table]['columns']['normalized_name']['config']['type'] = 'none';
+		}
+	}
+	
+	
 	
 }	
 
