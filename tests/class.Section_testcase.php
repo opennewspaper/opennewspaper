@@ -64,6 +64,8 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($list->getAttribute('new attribute'), 1);
 		$this->assertEquals($list->getAttribute('uid'), 1);
 
+		t3lib_div::debug($list->getTitle());
+		
 		// section 1 has currently 7 articles associated with it.
 		$articles = $list->getArticles(7);
 		$this->assertTrue(sizeof($articles) == 7);
