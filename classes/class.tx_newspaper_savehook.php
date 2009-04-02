@@ -14,9 +14,9 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
 #t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
 		/// make sure field "normalized_name" can't be modified if data is present already
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_Articletype());
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageType());
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageZoneType());
+//		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_Articletype());
+//		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageType());
+//		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageZoneType());
 	}
 
 
