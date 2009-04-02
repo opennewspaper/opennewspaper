@@ -99,6 +99,13 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($temp_page->getUid(), 0);
 	}
 	
+	public function test_toString() {
+		$string = strval($this->page);
+//		$this->assertRegExp("/.*$word.*/", $string, 
+//							 "Plugin output (expected $word): $string");
+	}
+	////////////////////////////////////////////////////////////////////////////
+			
 	private $section = null;
 	private $page = null;					///< the object
 	private $section_uid = 1;
