@@ -80,7 +80,9 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_ArticleList() {
-		t3lib_div::debug(tx_newspaper_ArticleList::getRegisteredArticleLists());
+		$registered = tx_newspaper_ArticleList::getRegisteredArticleLists();
+		$this->assertTrue(in_array('tx_newspaper_ArticleList_Auto', $registered));
+		
 		$list = $this->section->getArticleList();
 		$list->setAttribute('new attribute', 1);
 		$this->assertEquals($list->getAttribute('new attribute'), 1);
