@@ -8,7 +8,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		if ($uid) {
 			parent::__construct($uid); 
 		}
-		$this->smarty = new tx_newspaper_Smarty();
+//		$this->smarty = new tx_newspaper_Smarty();
 	}
 	
 	/** Just a quick hack to see anything
