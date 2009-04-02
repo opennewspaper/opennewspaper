@@ -63,7 +63,17 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 				$this->assertEquals($pzt->getAttribute($attribute), $value);
 			}
 			$this->assertEquals($pzt->getTable(), 'tx_newspaper_pagezonetype');
-			$this->assertEquals($pzt->getModuleName(), 'np_pagezonetype'); 
+			$this->assertEquals($pzt->getModuleName(), 'np_pagezonetype');
+			$this->assertEquals($pzt->getTitle(), 'Page Zone Type');
+			
+			$pzt->setAttribute('uid', 0);
+			$this->assertEquals($pzt->getAttribute('uid'), 0);
+			
+			$this->setExpectedException('tx_newspaper_WrongAttributeException');
+			$pzt->getAttribute('Gibts nicht');
+			
+			$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+			$pzt->store();
 		}
 	}
 	
