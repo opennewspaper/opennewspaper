@@ -194,12 +194,9 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}	
 	
 	public function test_getSections() {
-		$sections = $this->article->getSections();
-		$this->assertTrue(is_array($sections));
-		foreach($sections as $section) {
-			$this->assertTrue($sections instanceof tx_newspaper_Section);
-		}
-		$this->assertEquals($sections[0]->getUid(), 1);
+		$section = $this->article->getPrimarySection();
+		$this->assertTrue($section instanceof tx_newspaper_Section);
+		$this->assertEquals($section->getUid(), 1);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////

@@ -432,7 +432,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $sections;
 	}
 	
-	protected function getPrimarySection() {
+	public function getPrimarySection() {
 		$sections = $this->getSections(1);
 		return $sections[0];
 	}
