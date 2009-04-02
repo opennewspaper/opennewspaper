@@ -96,6 +96,16 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		}
 	}
 	
+	public function test_clone() {
+		$cloned = clone $this->pagezone;
+		$this->assertEquals($cloned->getAttribute('uid'), 0);
+		$this->assertEquals($cloned->getUid(), 0);
+		$this->assertEquals($cloned->getAttribute('crdate'), time());
+		$this->assertEquals($cloned->getAttribute('tstamp'), time());
+		
+		// ...
+	}
+	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
 	private $source = null;
