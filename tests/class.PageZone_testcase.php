@@ -65,6 +65,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			$this->assertEquals($pzt->getTable(), 'tx_newspaper_pagezonetype');
 			$this->assertEquals($pzt->getModuleName(), 'np_pagezonetype'); 
 		}
+	}
 	
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
