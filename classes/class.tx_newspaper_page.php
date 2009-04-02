@@ -93,7 +93,7 @@ class tx_newspaper_Page
  	public function __toString() {
  		$ret = $this->getTable() . ':' . " \n" .
  			   'UID: ' . $this->getUid() . " \n" .
- 			   'parentSection: ' . $this->parentSection->getUid() . " \n" .
+				($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
  			   'condition: ' . $this->condition . " \n" .
  			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
  			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
