@@ -95,7 +95,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$parent = $this->section->getParentSection();
 		$this->assertEquals($parent->getUid(), 0);
 		t3lib_div::debug($parent);
-		$children = tx_newspaper_Section::getDescendantSections($this->getUid());
+		$children = tx_newspaper_Section::getDescendantSections($this->section->getUid());
 		t3lib_div::debug($children);
 	}
 	
