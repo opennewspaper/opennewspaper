@@ -97,7 +97,7 @@ class tx_newspaper_Page
  			   'condition: ' . $this->condition . " \n" .
  			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
  			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
- 			   $this->pagetype && ($this->pagetype instanceof tx_newspaper_PageType)? 
+ 			   ($this->pagetype && $this->pagetype instanceof tx_newspaper_PageType)? 
  			   		('pagetype: ' . $this->pagetype->getAttribute('type_name') . " \n"): 
 					'';
 		return $ret;
