@@ -105,6 +105,11 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 						" not in article read via source->readArticles()");
 		}			
 	}
+	
+	public function test_SourcePath() {
+		$path = new tx_newspaper_SourcePath('blah');
+		$this->assertEquals('blah', $path);
+	}
 	/*
 	public function test_readPartialArticles() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
