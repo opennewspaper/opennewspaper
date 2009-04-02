@@ -77,6 +77,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/** \todo Internationalization */
 	public function getTitle() {
+		global $LANG;
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:title_' .
+				tx_newspaper::getTable($this), false);
 		return 'Section';
 	}
 

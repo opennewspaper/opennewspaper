@@ -101,9 +101,9 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	
 	public function test_toString() {
 		$string = strval($this->page);
-//		$this->assertRegExp("/.*$word.*/", $string, 
-//							 "Plugin output (expected $word): $string");
+		$this->doTestContains($string, 'UID: 1');
 	}
+	
 	////////////////////////////////////////////////////////////////////////////
 
 	private function doTestContains($string, $word) {
