@@ -70,8 +70,6 @@ class tx_newspaper_Smarty extends Smarty {
 	}
 
 	public function setTemplateSearchPath(array $path) {
-		t3lib_div::debug("setTemplateSearchPath()");
-		t3lib_div::debug($path);
 		$this->templateSearchPath = $path;
 	}
 	/// Sets the template set we're working in
