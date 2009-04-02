@@ -211,6 +211,29 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
         
 	}
 
+
+	/// Returns a part of a WHERE clause which will filter out records with start/end times, deleted flag set, or hidden flag set (if hidden should be included used); switch for BE/FE is included 
+	/** \param String $table name of db table to check
+	 *  \param int [0|1] specifies if hidden records are to be included (ignored if in FE)
+	 *  \return WHERE part of an SQL statement starting with AND
+	 */
+	static public function enableFields($table, $show_hidden = 1) {
+		require_once(PATH_t3lib . '/class.t3lib_page.php');
+	
+		if (TYPO3_MODE == 'FE') {
+			// use values defined in admPanel config (override given $show_hidden param)
+			$show_hidden = ($table=='pages')? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
+		} else if ($show_hidden != 0) {
+			$show_hidden = 1; // make sure show_hidden param is correct
+		}
+	
+		$p = t3lib_div::makeInstance('t3lib_pageSelect');
+	
+		return $p->enableFields($table, $show_hidden);
+	}
+
+
+
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the ressort record which lies on the
 	 *  current Typo3 page. This implementation may change, but this function
