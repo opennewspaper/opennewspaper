@@ -43,7 +43,9 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid() . ' AND deleted=0'
+				'*', 
+				tx_newspaper::getTable($this), 
+				'uid=' . $this->getUid() . tx_newspaper::enableFields(tx_newspaper::getTable($this))
 			);
 		}
 
