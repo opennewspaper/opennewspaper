@@ -199,6 +199,22 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($section->getUid(), 1);
 	}
 	
+	public function test_listArticlesWithArticletype() {
+		/// many articles are articletype 0 because it's a field that was introduced late
+		$articletype = new tx_newspaper_ArticleType(0);
+		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
+		$this->assertTrue(sizeof($articles) == 10);
+		foreach ($articles as $article) {
+			$this->assertTrue($article instanceof tx_newspaper_Article);
+		}
+		
+		/// article type 3 is deleted, no articles should have it
+		/// \todo select uid from tx_newspaper_articletype where deleted = 1 order by uid asc limit 1
+		$articletype = new tx_newspaper_ArticleType(3);
+		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
+		$this->assertTrue(sizeof($articles) == 0);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function checkOutput($output) {
