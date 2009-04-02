@@ -27,6 +27,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	protected function prepare_render(&$template_set = '') {
+		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
+		
 		/// Check whether to use a specific template set.
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
