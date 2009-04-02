@@ -92,12 +92,16 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getParentSection() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$parent = $this->section->getParentSection();
+		t3lib_div::debug($parent);
 	}
 	
 	public function test_getSubPages() {
 		$subpages = $this->section->getSubPages();
+		foreach ($subpages as $page) {
+			$this->assertTrue($page instanceof tx_newspaper_Page);
+			t3lib_div::debug($page->getAttribute('uid'));
+		}
 		t3lib_div::debug($subpages);
 	}
 
