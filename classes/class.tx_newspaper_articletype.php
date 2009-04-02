@@ -32,11 +32,18 @@
 /// \todo: description
 class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	
+	public function __construct($uid = 0) {
+		$uid = intval($uid);
+		if ($uid > 0) {
+			$this->setUid($uid);
+		}
+	}
+	
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
+					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid() . ' AND deleted=0'
 			);
 		}
 
@@ -70,18 +77,20 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 						 tx_newspaper::getTable($this), false);
 	}
 
-	/// not needed
 	public function getUid() {
-		throw new tx_newspaper_NotYetImplementedException();
+		return $this->uid;
 	}
 	
-	/// not needed
 	public function setUid($uid) {
-		throw new tx_newspaper_NotYetImplementedException();
+		$this->uid = $uid;
 	}
 	
 	/// \return Name of the database table the object's data are stored in
 	public function getTable() { return tx_newspaper::getTable($this); }
 	
 	static function getModuleName() { return 'np_articletype'; }
+	
+	
+	
+	private $uid = ''; ///< UID that identifies the article type
 }

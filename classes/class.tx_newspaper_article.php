@@ -363,20 +363,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	
 	/// gets a list of tx_newspaper_Article objects assigned to given article type
-	/** \param int uid of article type
+	/** \param tx_newspaper_ArticleType article type object
 	 *  \param int limit max number of records to read (default: 10), if negative no limit is used
 	 *  \return array with tx_newspaper_Article objects 
 	 */
-	static public function listArticlesWithArticletype($uid, $limit=10) {
-		$uid = intval($uid);
+	static public function listArticlesWithArticletype(tx_newspaper_ArticleType $at, $limit=10) {
+
 		$limit = intval($limit);
-		
 		$limit_part = ($limit > 0)? '0,' . $limit : ''; 
 		
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_article',
-			'deleted=0 AND articletype_id=' . $uid,
+			'deleted=0 AND articletype_id=' . $at->getUid(),
 			'',
 			'tstamp DESC',
 			$limit_part

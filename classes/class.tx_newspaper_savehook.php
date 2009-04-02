@@ -91,7 +91,7 @@ class tx_newspaper_SaveHook {
 
 		/// check if it is allowed to delete an article type
 		if ($command == 'delete' && $table == 'tx_newspaper_articletype') {
-			$list = tx_newspaper_Article::listArticlesWithArticletype($id, 3);
+			$list = tx_newspaper_Article::listArticlesWithArticletype(new tx_newspaper_ArticleType($id), 3);
 			if (sizeof($list) > 0) {
 				/// assigned articles found, so this article type can't be deleted
 				$content = 'This article type can\'t be deleted, because at least one article is using this article type. Find examples below (list might be much longer)<br /><br />';
