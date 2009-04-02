@@ -69,7 +69,7 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 
 	/// Write or overwrite Section data in DB, return UID of stored record
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException($attribute);
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
 	/** \todo Internationalization */
