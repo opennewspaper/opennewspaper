@@ -193,6 +193,15 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($article->getTable(), 'uid = ' . $uid);
 	}	
 	
+	public function test_getSections() {
+		$sections = $this->article->getSections();
+		$this->assertTrue(is_array($sections));
+		foreach($sections as $section) {
+			$this->assertTrue($sections instanceof tx_newspaper_Section);
+		}
+		$this->assertEquals($sections[0]->getUid(), 1);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function checkOutput($output) {
