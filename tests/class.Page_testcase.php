@@ -105,7 +105,12 @@ class test_Page_testcase extends tx_phpunit_testcase {
 //							 "Plugin output (expected $word): $string");
 	}
 	////////////////////////////////////////////////////////////////////////////
-			
+
+	private function doTestContains($string, $word) {
+		$this->assertRegExp("/.*$word.*/", $string, 
+							"Plugin output (expected $word): $string");
+	}
+
 	private $section = null;
 	private $page = null;					///< the object
 	private $section_uid = 1;
