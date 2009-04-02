@@ -96,9 +96,10 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->assertEquals($parent->getUid(), 0);
 		
 		$children = tx_newspaper_Section::getDescendantSections($this->section->getUid());
-		$child_section = new tx_newspaper_Section($children[0]);
-		$this->assertEquals($child_section->getParentSection()->getUid(), $this->section->getUid());
-		t3lib_div::debug($children);
+		foreach ($children as $child_uid) {
+			$child_section = new tx_newspaper_Section($child_uid);
+			$this->assertEquals($child_section->getParentSection()->getUid(), $this->section->getUid());
+		}
 	}
 	
 	public function test_getSubPages() {
