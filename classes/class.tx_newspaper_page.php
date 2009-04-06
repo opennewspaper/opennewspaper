@@ -246,20 +246,24 @@ class tx_newspaper_Page
 
 	/// get active pages for given section
 	/** \param $section section object
-	 *  \return array uids of active pages for given section
+	 *  \return array uids of active pages objects for given section
 	 *  \todo move to tx_newspaper_Section
 	 */
-	public static function getActivePages(tx_newspaper_Section $section, $include_hidden=true) {
-		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
+	public static function getActivePages(tx_newspaper_Section $section) {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 #t3lib_div::devlog('gap', 'newspaper', 0);
 		$p = new tx_newspaper_Page($section);
 		$row = tx_newspaper::selectRows(
 			'*',
 			$p->getTable(),
-			'pid=' . $sf->getPid($p) . ' AND section=' . $section->getAttribute('uid') . $where
+			'pid=' . $sf->getPid($p) . ' AND section=' . $section->getUid()
 		);
-		return $row;
+#t3lib_div::devlog('gap row', 'newspaper', 0, $row);
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$list[] = new tx_newspaper_Page(intval($row[$i]));
+		}
+		return $list;
 	}
 
 	/// Read the record for this object from DB
