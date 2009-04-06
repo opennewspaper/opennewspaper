@@ -47,7 +47,12 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	 *	Else it is the section overview page
 	 */
  	function __construct($get = array()) {
- 		if ($get['art']) {
+ 		if (is_int($get)) {
+			$this->setUid($get); // just read the record (probably for backend)
+			if (TYPO3_MODE == 'BE') {
+				$this->condition = '1' . tx_newspaper::enableFields(tx_newspaper::getTable($this));
+			}
+ 		} else if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
  		} else {
  			if ($get['page']) { 
