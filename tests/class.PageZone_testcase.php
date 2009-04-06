@@ -57,8 +57,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	public function test_PageZoneType() {
 		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
-		foreach ($rows as $row) {
-			$pzt = new tx_newspaper_PageZoneType($row['uid']);
+		foreach ($rows as $pzt) {
 			foreach ($row as $attribute => $value) {
 				$this->assertEquals($pzt->getAttribute($attribute), $value);
 			}
