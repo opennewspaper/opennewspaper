@@ -31,7 +31,7 @@
 			<label index="tx_newspaper_pagezone.pagezone_uid">UID of actual record</label>
 			<label index="tx_newspaper_pagezone_page">Page zone on actual pages</label>
 			<label index="tx_newspaper_pagezone_page.pagezonetype_id">Page zone type</label>
-			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_page.pagezone_id">Page zone id</label>
 			<label index="tx_newspaper_pagezone_page.extras">Extras on this page zone</label>
 			<label index="tx_newspaper_pagezone_page.template_set">Template set</label>
 			<label index="tx_newspaper_article">Article</label>
@@ -110,7 +110,7 @@
 			<label index="tx_newspaper_pagezone.pagezone_uid">UID des eigentlichen Datensatzes</label>
 			<label index="tx_newspaper_pagezone_page">Seitenbereich auf konkreten Seiten</label>
 			<label index="tx_newspaper_pagezone_page.pagezonetype_id">Seitenbereichstyp</label>
-			<label index="tx_newspaper_pagezone_page.pagezone_id">ID</label>
+			<label index="tx_newspaper_pagezone_page.pagezone_id">Seitenbereichs-Id</label>
 			<label index="tx_newspaper_pagezone_page.extras">Extras auf diesem Seitenbereich</label>
 			<label index="tx_newspaper_pagezone_page.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article">Artikel</label>
