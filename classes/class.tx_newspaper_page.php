@@ -56,12 +56,12 @@ class tx_newspaper_Page
 			$this->pagetype = $type;
 		} else if (is_integer($parent)) {
 			$this->setUid($parent);
-			
-		} else 
+		} else if (TYPO3_MODE == 'FE') {
 			throw new tx_newspaper_IllegalUsageException(
 				'First argument to tx_newspaper_Page::__construct() must be' .
 				' either a tx_newspaper_Section or an integer UID! In fact it is: ' .
 				$parent);
+		}
 				
 		$this->smarty = new tx_newspaper_Smarty();
  	}
