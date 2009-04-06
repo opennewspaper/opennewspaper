@@ -86,17 +86,20 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 
 
 	/// get all available page zone types
-	/// \return array all available page zone types
-	public static function getAvailablePageZoneTypes($include_hidden=true) {
-		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages be included?
+	/// \return array all available page zone types objects
+	public static function getAvailablePageZoneTypes() {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pzt = new tx_newspaper_PageZoneType();
 		$row = tx_newspaper::selectRows(
-			'*',
+			'*', 
 			$pzt->getTable(),
-			'pid=' . $sf->getPid($pzt) . $where
+			'deleted=0 AND pid=' . $sf->getPid($pzt) 
 		);
-		return $row;
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$list[] = new tx_newspaper_PageZoneType(intval($row['uid']));
+		}
+		return $list;
 	}
 
 
