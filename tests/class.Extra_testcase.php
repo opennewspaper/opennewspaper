@@ -66,14 +66,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		}
 	}
 
-/* \todo Helge: still needed? getExtraPid() removed (->tx_newspaper_Sysfolder -> getPid(obj))
-	public function test_getExtraPid() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$temp->getExtraPid();
-		}
-	}	
-*/
 	public function test_isRegisteredExtra() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
