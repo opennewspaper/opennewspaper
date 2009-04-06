@@ -104,7 +104,8 @@ class tx_newspaper_Smarty extends Smarty {
 		
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
-			if ($dir[0] != '/') $dir = $this->basepath . '/' . $dir;
+			if (TYPO3_OS != 'WIN' && $dir[0] != '/') $dir = $this->basepath . '/' . $dir;			
+/// \todo: windows version?
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
