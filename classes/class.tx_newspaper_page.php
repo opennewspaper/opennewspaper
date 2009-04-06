@@ -231,7 +231,85 @@ class tx_newspaper_Page
 		/// Return the rendered page
  		return $this->smarty->fetch($this);
  	}
+
+
+ 	static public function listPagesWithPageType(tx_newspaper_PageType $pt, $limit=10) {
+
+		$limit = intval($limit);
+		$limit_part = ($limit > 0)? '0,' . $limit : ''; 
+		
+		$row = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_page',
+			'deleted=0 AND pagetype_id=' . $pt->getUid(),
+			'',
+			'tstamp DESC',
+			$limit_part
+		);
+
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$list[] = new tx_newspaper_Page(intval($row[$i]['uid']));
+		}
+		return $list;
+	}
  	
+
+ 	static public function listPagesWithPageZoneType(tx_newspaper_PageZoneType $pzt, $limit=10) {
+#t3lib_div::devlog('lPZWPZT', 'newspaper', 0, $pzt->getUid());
+		$limit = intval($limit);
+		$limit_part = ($limit > 0)? '0,' . $limit : ''; 
+		
+		$list = array();
+		if ($pzt->getAttribute('is_article') == 0) {
+			/// so it's a non-article page zone type
+#t3lib_div::devlog('lPZWPZT pz', 'newspaper', 0);
+			$row = tx_newspaper::selectRows(
+				'uid',
+				'tx_newspaper_pagezone_page',
+				'deleted=0 AND pagezonetype_id=' . $pzt->getUid(),
+				'',
+				'tstamp DESC',
+				$limit_part
+			);
+			for ($i = 0; $i < sizeof($row); $i++) {
+				$list[] = tx_newspaper_Page::getPageOfPageZonePage(new tx_newspaper_PageZone_Page(intval($row[$i]['uid'])));
+			}
+		} else {
+			/// so it's an article page zone type
+t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
+//			$row = tx_newspaper::selectRows(
+//				'uid',
+//				'tx_newspaper_article',
+//				'deleted=0 AND pagezonetype_id=' . $pzt->getUid(),
+//				'',
+//				'tstamp DESC',
+//				$limit_part
+//			);
+//			for ($i = 0; $i < sizeof($row); $i++) {
+//				$list[] = new tx_newspaper_Article(intval($row[$i]['uid']));
+//			}
+		}
+		return $list;
+	}
+
+	/// get page zone object for given page zone page object
+	/** \param tx_newspaper_PageZone_Page $pzp page zone page object
+	 *  \return tx_newspaper_PageZone parent page zone object
+	 */
+	public static function getPageOfPageZonePage(tx_newspaper_PageZone_Page $pzp) {
+#t3lib_div::devlog('get pzp', 'newspaper', 0, $pzp->getAttribute('uid'));
+		$row = tx_newspaper::selectOneRow(
+			'page_id',
+			'tx_newspaper_pagezone',
+			'pagezone_table="tx_newspaper_pagezone_page" AND pagezone_uid=' . $pzp->getAttribute('uid')
+		);
+#t3lib_div::devlog('get pz row', 'newspaper', 0, $row);
+		return new tx_newspaper_Page(intval($row['page_id']));		
+	}
+
+
+
 	/// \return The tx_newspaper_Section under which this page lies
  	public function getParent() { return $this->parentSection; }
  	
