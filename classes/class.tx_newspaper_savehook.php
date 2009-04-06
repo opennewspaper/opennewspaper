@@ -44,7 +44,7 @@ class tx_newspaper_SaveHook {
 				$where .= ' AND uid !=' . $id; 				
 			}
 			$row = tx_newspaper::selectRows(
-				'uid, name',
+				'uid, type_name',
 				$pzt->getTable(),
 				$where
 			);
