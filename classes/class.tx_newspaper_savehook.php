@@ -153,7 +153,7 @@ class tx_newspaper_SaveHook {
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 		/// If a new section has been created, copy its placement
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			return $this->newSection($id, $fieldArray);
+#			return $this->newSection($id, $fieldArray);
 		} 
 	}
 
