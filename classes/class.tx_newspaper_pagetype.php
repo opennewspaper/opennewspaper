@@ -116,19 +116,21 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
 
 	/// get all available page types
-	/** \return array all available page types
-	 *	\todo return objects
-	 */
-	public static function getAvailablePageTypes($include_hidden=true) {
-		$where = ($include_hidden)? '' : ' AND hidden=0'; // should hidden pages types be included?
+	/// \return array all available page types objects
+	public static function getAvailablePageTypes() {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pt = new tx_newspaper_PageType();
 		$row = tx_newspaper::selectRows(
 			'*', 
 			$pt->getTable(),
-			'pid=' . $sf->getPid($pt) . $where
+			'pid=' . $sf->getPid($pt)
 		);
-		return $row;
+#t3lib_div::devlog('gapt row', 'newspaper', 0, $row);
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$list[] = new tx_newspaper_PageType(intval($row['uid']));
+		}
+		return $list;
 	}
 
 
