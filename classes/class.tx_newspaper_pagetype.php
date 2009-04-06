@@ -128,7 +128,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 #t3lib_div::devlog('gapt row', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$list[] = new tx_newspaper_PageType(intval($row['uid']));
+			$list[] = new tx_newspaper_PageType(intval($row[$i]['uid']));
 		}
 		return $list;
 	}
