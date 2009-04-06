@@ -36,7 +36,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 *  created consistently.
 			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
+/// \todo: can this be done this way???
+if (TYPO3_MODE == 'FE') {
 			$this->pagezone_uid = tx_newspaper_PageZone::createPageZoneRecord($uid, $this->getTable());
+}
 		}
 		
 	}
