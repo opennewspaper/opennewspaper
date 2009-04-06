@@ -104,14 +104,49 @@ class tx_newspaper_SaveHook {
 		}
 
 
-		if ($table == 'tx_newspaper_pagetype' || 
-			$table == 'tx_newspaper_pagezonetype' 
-		) {
-			// it is not allowed to delete these records (with T3 means)
-/// \to do: fully implement deleting these record types
-/// \to do: add to log file - but which?
-			die('Fatal error: It is not allowed to delete this record, so it was NOT deleted. If you still want to delete this record please contact the Typo3 developers.<br /><br /><a href="javascript:history.back();">Go back</a>');
+		/// check if it is allowed to delete an page type
+		if ($command == 'delete' && $table == 'tx_newspaper_pagetype') {
+			$list = tx_newspaper_Page::listPagesWithPageType(new tx_newspaper_PageType($id, 3));
+			if (sizeof($list) > 0) {
+				/// assigned articles found, so this article type can't be deleted
+				$content = 'This page type can\'t be deleted, because at least one page is using this page type. Find examples below (list might be much longer)<br /><br />';
+				for ($i = 0; $i < sizeof($list); $i++) {
+					$content .= ($i+1) . '. Section <i>';
+					$tmp_section = new tx_newspaper_Section(intval($list[$i]->getAttribute('section')));
+					$content .= $tmp_section->getAttribute('section_name');
+					$content .= '</i><br />';  
+				}
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
+				die($content);
+			}
 		}
+		
+		
+		/// check if it is allowed to delete an page zone type
+		if ($command == 'delete' && $table == 'tx_newspaper_pagezonetype') {
+			$list = tx_newspaper_Page::listPagesWithPageZoneType(new tx_newspaper_PageZoneType($id, 3));
+			if (sizeof($list) > 0) {
+				/// assigned articles found, so this article type can't be deleted
+				$content = 'This page zone type can\'t be deleted, because at least one page is using this page zone type. Find examples below (list might be much longer)<br /><br />';
+				for ($i = 0; $i < sizeof($list); $i++) {
+					$content .= ($i+1) . '. Section <i>';
+					$tmp_section = new tx_newspaper_Section(intval($list[$i]->getAttribute('section')));
+					$content .= $tmp_section->getAttribute('section_name');
+					$content .= '</i> on Page <i>';
+					$tmp_pt = new tx_newspaper_PageType(intval($list[$i]->getAttribute('pagetype_id')));
+					$content .= $tmp_pt->getAttribute('type_name'); 
+					$content .= '</i><br />';  
+				}
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
+				die($content);
+			}
+		}
+
+
+/// \todo: check if articles are assigned to section
+/// \todo: check if pages are assigned to section
+		
+		
 		
 	}
 	
