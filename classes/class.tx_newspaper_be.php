@@ -131,7 +131,6 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.title_page_in_section', false));
-		self::$smarty->assign('MESSAGE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.message_page_in_section', false));
 
 		/// add data rows
 		self::$smarty->assign('DATA', $page_type_data);

@@ -10,7 +10,6 @@
 <div id="pagetype_pagezone">
 {/if}
 {if $TITLE}{$TITLE}<br />{/if}
-{if $MESSAGE}<span style="color: red;">{$MESSAGE}</span><br /><br />{/if}
 {section name=i loop=$DATA}
 {if $DATA[i].ACTIVE == 1}
 	<a href="{$DATA[i].AJAX_URL}">{$EDIT_ICON}</a> {$DATA[i].type_name}<br />
