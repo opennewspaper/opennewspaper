@@ -85,50 +85,45 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 	/// either called by userfunc in be or ajax
 	public static function renderPageList($PA, $fObj=null) {
 		global $LANG;
-
-
-
 #t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
 
-		$section_uid = $PA['row']['uid'];
-t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);		
+		$section_uid = intval($PA['row']['uid']);
+#t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);	
 
 		if (strtolower(substr($section_uid, 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.section_not_saved', false);
 		}
-		
-		// structure: [#]['uid'] <- uid of page type
-		$page_type = tx_newspaper_PageType::getAvailablePageTypes();
-#t3lib_div::devlog('rpl pt', 'newspaper', 0, $page_type);		
 
-		// structure: ['pagetype_id'] <- ref to tx_newspaper_pagetype
-t3lib_div::devlog('section uid', 'newspaper', 0, $section_uid);
+		$page_type = tx_newspaper_PageType::getAvailablePageTypes();
+
+		$page_type_data = array(); // to collect information for be rendering
+
+		// add data to active page types
 		foreach(tx_newspaper_Page::getActivePages(new tx_newspaper_Section($section_uid)) as $active_page) {
-#t3lib_div::devlog('rpl ap', 'newspaper', 0, $active_page);		
 			for ($i = 0; $i < sizeof($page_type); $i++) {
-				if ($page_type[$i]['uid'] == $active_page['pagetype_id']) {
-					$page_type[$i]['ACTIVE'] = true;
-					$page_type[$i]['ACTIVE_PAGE_ID'] = $active_page['uid'];
+				if ($page_type[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
+					$page_type_data[$i]['ACTIVE'] = true;
+					$page_type_data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
 					break;
 				}
 			}
 		}
-	
+
 		// add ajax call to each row
 		for ($i = 0; $i < sizeof($page_type); $i++) {
-			if (isset($page_type[$i]['ACTIVE'])) {
-				$page_type[$i]['AJAX_URL'] = 'javascript:editActivePage(' . $section_uid . ' , ' . $page_type[$i]['ACTIVE_PAGE_ID'] . ');';
+			$page_type_data[$i]['type_name'] = $page_type[$i]->getAttribute('type_name');
+			if (isset($page_type_data[$i]['ACTIVE'])) {
+				$page_type_data[$i]['AJAX_URL'] = 'javascript:editActivePage(' . $section_uid . ' , ' . $page_type_data[$i]['ACTIVE_PAGE_ID'] . ');';
 			} else {
-				$page_type[$i]['ACTIVE'] = false;
-				$page_type[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_type[$i]['uid'] . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_page_in_section', false)) . '\');';
+				$page_type_data[$i]['ACTIVE'] = false;
+				$page_type_data[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_page_in_section', false)) . '\');';
 			}
 		}
-#t3lib_div::devlog('rpl pt', 'newspaper', 0, $page_type);
 
 		/// generate be html code using smarty 
  		self::$smarty = new tx_newspaper_Smarty();
-		self::$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
  
 		// add skinned icons
 		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.edit_page_in_section', false)));
@@ -139,7 +134,7 @@ t3lib_div::devlog('section uid', 'newspaper', 0, $section_uid);
 		self::$smarty->assign('MESSAGE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.message_page_in_section', false));
 
 		/// add data rows
-		self::$smarty->assign('DATA', $page_type);
+		self::$smarty->assign('DATA', $page_type_data);
 		
 		$html = '';
 		if (!$PA['AJAX_CALL']) {
@@ -149,7 +144,6 @@ t3lib_div::devlog('section uid', 'newspaper', 0, $section_uid);
 			self::$smarty->assign('AJAX_CALL', false);
 		}
 		$html .= self::$smarty->fetch('pagetype4section.tmpl');
-#t3lib_div::devlog('smarty fetched', 'newspaper', 0, $tmp);		
 		
 		return $html;
 
