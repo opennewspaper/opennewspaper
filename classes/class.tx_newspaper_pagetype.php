@@ -123,7 +123,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 		$row = tx_newspaper::selectRows(
 			'*', 
 			$pt->getTable(),
-			'pid=' . $sf->getPid($pt)
+			'deleted=0 AND pid=' . $sf->getPid($pt)
 		);
 #t3lib_div::devlog('gapt row', 'newspaper', 0, $row);
 		$list = array();
