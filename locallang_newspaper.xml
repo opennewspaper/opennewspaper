@@ -12,7 +12,6 @@
 			<label index="flag.extra_delete">Delete extra</label>
 			<label index="message.section_not_saved">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message.title_page_in_section">List of pages to edit or page types to activate for this section</label>
-			<label index="message.message_page_in_section">Please keep in mind: All changes are inherited by sub sections. You cannot undo the activation of a page type!</label>
 			<label index="flag.edit_page_in_section">Check or activate pages zones for this page</label>
 			<label index="flag.new_page_in_section">Activate this page type for this section</label>
 			<label index="message.check_new_page_in_section">Please keep in mind: You cannot undo the activation of a page type! Do you really want to activate this page type?</label>
