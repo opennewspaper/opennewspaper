@@ -12,6 +12,35 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 #$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
 #$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
 
+$TCA['tx_newspaper_extra_image']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_image.gif';
+$TCA['tx_newspaper_section']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_section.gif';
+$TCA['tx_newspaper_page']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_page.gif';
+$TCA['tx_newspaper_pagezone']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_pagezone.gif';
+$TCA['tx_newspaper_pagezone_page']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_pagezone_page.gif';
+$TCA['tx_newspaper_article']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_article.gif';
+$TCA['tx_newspaper_extra']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra.gif';
+$TCA['tx_newspaper_extra_sectionlist']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_sectionlist.gif';
+$TCA['tx_newspaper_articlelist']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articlelist.gif';
+$TCA['tx_newspaper_articlelist_auto']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articlelist_auto.gif';
+$TCA['tx_newspaper_pagetype']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_pagetype.gif';
+$TCA['tx_newspaper_pagezonetype']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_pagezonetype.gif';
+$TCA['tx_newspaper_log']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_log.gif';
+$TCA['tx_newspaper_articletype']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articletype.gif';
+
 
 if (TYPO3_MODE == 'BE') {
 /// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
