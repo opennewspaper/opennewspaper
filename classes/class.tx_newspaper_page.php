@@ -137,11 +137,9 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
-			if (!$this->attributes) {
-				$this->attributes['section'] = $this->parentSection->getUid();
-				$this->attributes['pagetype_id'] = $this->pagetype->getUid();
+			$this->attributes['section'] = $this->parentSection->getUid();
+			$this->attributes['pagetype_id'] = $this->pagetype->getUid();
 //					$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
-			}
 			if (true) {
 				$datamap = array(
 					$this->getTable() => array(
