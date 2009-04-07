@@ -61,4 +61,9 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 
 tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto());
 
+
+/// \todo: remove this test objects after testing ...
+class tx_newspaper_ArticleList_Auto2 extends tx_newspaper_ArticleList_Auto {}
+tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto2());
+
 ?>
