@@ -138,13 +138,9 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 			);
 		} else {
 			if (!$this->attributes) {
-				try {
-					$this->readAttributesFromDB();
-				} catch (tx_newspaper_EmptyResultException $e) {
-					$this->attributes['section'] = $this->parentSection->getUid();
-					$this->attributes['pagetype_id'] = $this->pagetype->getUid();
-					$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
-				}
+				$this->attributes['section'] = $this->parentSection->getUid();
+				$this->attributes['pagetype_id'] = $this->pagetype->getUid();
+//					$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
 			}
 			if (true) {
 				$datamap = array(
