@@ -188,9 +188,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			);
 		}
 
-		/// \todo ensure the page zone is attached to the correct page
-				
-		return $this->getUid();		
+		/// Ensure the page zone has an entry in the abstract supertable...
+		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
+		/// ... and is attached to the correct page
+		tx_newspaper::updateRows(
+			'tx_newspaper_pagezone', 
+			'uid = ' . $pagezone_uid, 
+			array('page_id' => $this->parent_page)
+		);
+		
+		
+		return $this->getUid();
 		
 	}
 	
@@ -251,7 +259,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return UID of abstract PageZone record
 	 */ 
 	public static function createPageZoneRecord($uid, $table) {
-		/// Check if record is already present in extra table
+		/// Check if record is already present in page zone table
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', 'tx_newspaper_pagezone', 
 			'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
@@ -259,14 +267,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		);
 		if ($row['uid']) return $row['uid'];
 		
-		/// read typo3 fields to copy into extra table
+		/// read typo3 fields to copy into page zone table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_pagezone_table),
 			$table,
 			'uid = ' . intval($uid)
 		);
 		
-		/// write the uid and table into extra table, with the values read above
+		/// write the uid and table into page zone table, with the values read above
 		$row['pagezone_uid'] = $uid;
 		$row['pagezone_table'] = $table;
 		$row['tstamp'] = time();				///< tstamp is set to now
