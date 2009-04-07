@@ -362,7 +362,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 #t3lib_div::devlog('gap row', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$list[] = new tx_newspaper_Page(intval($row[$i]));
+			$list[] = new tx_newspaper_Page(intval($row[$i]['uid']));
 		}
 		return $list;
 	}
