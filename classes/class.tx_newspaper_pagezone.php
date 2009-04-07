@@ -329,10 +329,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		for ($i = 0; $i < sizeof($row); $i++) {
 			switch (strtolower($row['pagezone_table'])) {
 				case 'tx_newspaper_article':
-					$list[] = new tx_newspaper_Article($row['pagezone_uid']);
+					$list[] = new tx_newspaper_Article(intval($row['pagezone_uid']));
 				break;
 				case 'tx_newspaper_pagezone_page':
-					$list[] = new tx_newspaper_PageZone_Page($row['pagezone_uid']);
+					$list[] = new tx_newspaper_PageZone_Page(intval($row['pagezone_uid']));
 				break;
 				default:
 					/// \todo: throw ...
