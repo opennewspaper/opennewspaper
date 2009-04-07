@@ -45,7 +45,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	/// Configure Smarty rendering engine
-	public function __construct($uid = 0) {
+	public function __construct($uid = 0, tx_newspaper_Page $page = null, tx_newspaper_PageZoneType $type = null) {
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
 		if ($uid) {
@@ -56,6 +56,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 */
 			tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
 		}
+		if ($page) $this->parent_page = $page;
+		if ($type) $this->pagezonetype = $type;
 	}
 	
 	/// Render the page zone, containing all extras
@@ -161,7 +163,35 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	public function store() {
-		/// \todo see extraImpl::store()
+		
+		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, now would be a good time to read them 
+			if (!$this->attributes) {
+				$this->readAttributes($this->getTable(), $this->getUid());
+			}			
+				
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			///	Store a newly created page zone
+			$this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
+			/** \todo If the PID is not set manually, $tce->process_datamap()
+			 * 		  fails silently. 
+			 */
+			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+
+		/// \todo ensure the page zone is attached to the correct page
+				
+		return $this->getUid();		
+		
 	}
 	
 	/** \todo Internationalization */
