@@ -58,6 +58,8 @@
 			<label index="tx_newspaper_extra.position">Position</label>
 			<label index="tx_newspaper_extra.paragraph">Paragraph</label>
 			<label index="tx_newspaper_extra.origin_uid">UID of Extra this Extra inherits its placement from</label>
+			<label index="tx_newspaper_extra.is_inheritable">Inherit this Extra on subsections</label>
+			<label index="tx_newspaper_extra.show">Show this Extra on current Page Zone</label>
 			<label index="tx_newspaper_extra_sectionlist">Display the list of articles in a section</label>
 			<label index="tx_newspaper_extra_sectionlist.template_set">Template set</label>
 			<label index="tx_newspaper_articlelist">List of articles (abstract superclass)</label>
@@ -140,6 +142,8 @@
 			<label index="tx_newspaper_extra.position">Position</label>
 			<label index="tx_newspaper_extra.paragraph">Absatz</label>
 			<label index="tx_newspaper_extra.origin_uid">UID des Extras von dem dieses Extra seine Platzierung erbt</label>
+			<label index="tx_newspaper_extra.is_inheritable">Dieses Extra auf Subressorts vererben</label>
+			<label index="tx_newspaper_extra.show">Dieses Extra auf aktuellem Seitenbereich anzeigen</label>
 			<label index="tx_newspaper_extra_sectionlist">Anzeige der Artikel in einem Ressort</label>
 			<label index="tx_newspaper_extra_sectionlist.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>

@@ -213,6 +213,8 @@ CREATE TABLE tx_newspaper_extra (
 	position int(11) DEFAULT '0' NOT NULL,
 	paragraph int(11) DEFAULT '0' NOT NULL,
 	origin_uid int(11) DEFAULT '0' NOT NULL,
+	is_inheritable tinyint(3) DEFAULT '0' NOT NULL,
+	show tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -700,7 +700,7 @@ $TCA['tx_newspaper_article'] = array (
 $TCA['tx_newspaper_extra'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph,origin_uid'
+		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph,origin_uid,is_inheritable,show'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra']['feInterface'],
 	'columns' => array (
@@ -812,9 +812,23 @@ $TCA['tx_newspaper_extra'] = array (
 				'default' => 0
 			)
 		),
+		'is_inheritable' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.is_inheritable',		
+			'config' => array (
+				'type' => 'check',
+			)
+		),
+		'show' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.show',		
+			'config' => array (
+				'type' => 'check',
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph, origin_uid')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph, origin_uid, is_inheritable, show')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
