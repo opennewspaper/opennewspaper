@@ -129,14 +129,21 @@ t3lib_div::devlog('p setAtrr atrr', 'newspaper', $this->attributes);
 	/// insert page data (if uid == 0) or update if uid > 0
 	public function store() {
 			/// If the attributes are not yet in memory, read them now
-			if (!$this->attributes) $this->readAttributesFromDB();
 t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 		if ($this->getUid()) {
+			if (!$this->attributes) $this->readAttributesFromDB();
 			
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
+			if (!$this->attributes) {
+				try {
+					$this->readAttributesFromDB();
+				} catch (tx_newspaper_EmptyResultException $e) {
+					$this->attributes['section'] = $this->parentSection->getUid();
+					$this->attributes['pagetype_id'] = $this->pagetype->getUid();
+				}
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
