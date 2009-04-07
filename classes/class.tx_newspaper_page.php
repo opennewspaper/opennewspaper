@@ -146,7 +146,7 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 					$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
 				}
 			}
-			if (false) {
+			if (true) {
 				$datamap = array(
 					$this->getTable() => array(
 						'NEW'.uniqid('') => $this->attributes
@@ -155,6 +155,7 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 				$tce->start($datamap, null);
 				$tce->process_datamap();
+t3lib_div::devlog('substNEWwithIDs', 'newspaper', 0, $tce->substNEWwithIDs);
 			} else {
 				$this->setUid(
 					tx_newspaper::insertRows(
