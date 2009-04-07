@@ -204,7 +204,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 		if (strpos($_SERVER['SCRIPT_FILENAME'], 'typo3conf/ext') > 0 && 
 			substr(PATH_typo3, 0, strlen($_SERVER['DOCUMENT_ROOT'])) == $_SERVER['DOCUMENT_ROOT']
 		) {
-			$backPath = '/' . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']));
+			$backPath = ((TYPO3_OS == 'WIN')? '' : '/') . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']));
 		}
 	
 		if ($id)
