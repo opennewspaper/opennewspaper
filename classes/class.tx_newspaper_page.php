@@ -150,6 +150,7 @@ class tx_newspaper_Page
 		
 		/// store all page zones and set the page_id of their respective pagezone superclass entry
 		//	disabled because pagezones now must be enabled manually
+		/// \todo delete, i guess
 		if (false && $this->pageZones) foreach ($this->pageZones as $pagezone) {
 			$pagezone_uid = $pagezone->store();
 			$pagezone_superclass_uid = tx_newspaper_PageZone::createPageZoneRecord(
