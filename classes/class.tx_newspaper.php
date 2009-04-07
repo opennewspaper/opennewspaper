@@ -162,15 +162,30 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return uid of inserted record
 	 */
 	public static function insertRows($table, array $row) {
-		self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
-
-		if (!$res) {
-        	throw new tx_newspaper_NoResException(self::$query);
-        }
-        
-        return $GLOBALS['TYPO3_DB']->sql_insert_id();
-        
+		if (true) {
+			$new_id = 'NEW'.uniqid('');
+			$datamap = array(
+				$table => array(
+					$new_id => $row
+				)
+			);
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, null);
+			$tce->process_datamap();
+			if (count($tce->errorLog)){
+				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			}
+			return $tce->substNEWwithIDs[$new_id];
+		} else {
+			self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
+			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+	
+			if (!$res) {
+	        	throw new tx_newspaper_NoResException(self::$query);
+	        }
+	        
+	        return $GLOBALS['TYPO3_DB']->sql_insert_id();
+		}        
 	}
 
 	/// updates a record using T3 API

@@ -139,16 +139,22 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 		} else {
 			$this->attributes['section'] = $this->parentSection->getUid();
 			$this->attributes['pagetype_id'] = $this->pagetype->getUid();
+			/** \todo If the PID is not set manually, $tce->process_datamap()
+			 * 		  fails silently. 
+			 */
 			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
-			if (true) {
-				$datamap = array(
-					$this->getTable() => array(
-						'NEW'.uniqid('') => $this->attributes
-					)
-				);
-				$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-				$tce->start($datamap, null);
-				$tce->process_datamap();
+
+			if (false) {
+			$new_id = 'NEW'.uniqid('');
+			$datamap = array(
+				$this->getTable() => array(
+					$new_id => $this->attributes
+				)
+			);
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, null);
+			$tce->process_datamap();
+			$this->setUid($tce->substNEWwithIDs);
 t3lib_div::devlog('substNEWwithIDs', 'newspaper', 0, $tce->substNEWwithIDs);
 			} else {
 				$this->setUid(
