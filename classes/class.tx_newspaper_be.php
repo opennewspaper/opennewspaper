@@ -154,7 +154,15 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 
 
 
+	/// render article list form for section backend
+	/// either called by userfunc in be or ajax
+	public static function renderArticleList($PA, $fObj=null) {
+		$al = tx_newspaper_ArticleList::getRegisteredArticleLists();
 
+		
+
+		return '###';
+	}
 
 
 
