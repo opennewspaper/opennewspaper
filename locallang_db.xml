@@ -51,7 +51,7 @@
 			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Page Zone Type</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
-			<label index="tx_newspaper_article.inheritsfrom">Page zone the placement is inherited from</label>
+			<label index="tx_newspaper_article.inherits_from">Page zone the placement is inherited from</label>
 			<label index="tx_newspaper_extra">Extras (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
@@ -133,7 +133,7 @@
 			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Seitenbereichstyp</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
-			<label index="tx_newspaper_article.inheritsfrom">Seitenbereich von dem die Bestückung geerbt wird</label>
+			<label index="tx_newspaper_article.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
 			<label index="tx_newspaper_extra">Artikel-Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>

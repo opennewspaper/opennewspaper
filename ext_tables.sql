@@ -187,7 +187,7 @@ CREATE TABLE tx_newspaper_article (
 	template_set tinytext,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
-	inheritsfrom int(11) DEFAULT '0' NOT NULL,
+	inherits_from int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

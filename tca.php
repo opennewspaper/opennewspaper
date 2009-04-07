@@ -405,7 +405,7 @@ $TCA['tx_newspaper_pagezone_page'] = array (
 $TCA['tx_newspaper_article'] = array (
 	'ctrl' => $TCA['tx_newspaper_article']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status,inheritsfrom'
+		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status,inherits_from'
 	),
 	'feInterface' => $TCA['tx_newspaper_article']['feInterface'],
 	'columns' => array (
@@ -670,9 +670,9 @@ $TCA['tx_newspaper_article'] = array (
 				'default' => 0
 			)
 		),
-		'inheritsfrom' => array (		
+		'inherits_from' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.inheritsfrom',		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.inherits_from',		
 			'config' => array (
 				'type'     => 'input',
 				'size'     => '4',
@@ -688,7 +688,7 @@ $TCA['tx_newspaper_article'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status, inheritsfrom')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status, inherits_from')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
