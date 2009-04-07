@@ -201,6 +201,32 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->getUid();
 		
 	}
+
+	/// Get the Page Zone from which the current object inherits the placement of its extras
+	/** \param $inherit_mode If negative, don't inherit at all; if positive, 
+	 * 		inherit from the page identified by the UID given (parameter 
+	 * 		misnomer ;-) ; if zero, find the page zone in the parent page or
+	 * 		higher up in the hierarchy with the same page zone type as $this.  
+	 *  \return The PageZone object from which to copy the Extras and their 
+	 * 		placements. 
+	 */
+	public function getParentForPlacement($inherit_mode) {
+		$inherit_mode = intval($inherit_mode);
+		
+		if ($inherit_mode < 0) return null;
+		if ($inherit_mode > 0) return new tx_newspaper_PageZone($inherit_mode);
+		
+		/// Step from parent to parent until a PageZone with matching type is found
+		$current_page = $this->getParentPage();
+		while ($current_page = $current_page->getParent()) {
+			foreach (self::getActivePageZones($current_page) as $parent_pagezone) {
+				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
+					return $parent_pagezone;
+			}
+		}
+		
+		return null;
+	}
 	
 	/** \todo Internationalization */
 	public function getTitle() {
