@@ -14,10 +14,16 @@ require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php
 // set sorting for dropdown article type in article
 $TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
 
+
 // add user function for page type and page zone type in section records 
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPageList';
+
+// add user function for article list in section records
+unset($TCA['tx_newspaper_section']['columns']['articlelist']['config']);
+$TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
+$TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
 
 
 // /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
