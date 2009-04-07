@@ -116,17 +116,20 @@ class tx_newspaper_Page
  	}
 
 	public function setAttribute($attribute, $value) {
+t3lib_div::devlog('p setAtrr called', 'newspaper', 0);
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->readAttributesFromDB();
 		}
-		
+t3lib_div::devlog('p setAtrr db read', 'newspaper', 0);		
 		$this->attributes[$attribute] = $value;
+t3lib_div::devlog('p setAtrr atrr', 'newspaper', $this->attributes);
 	}
 	
 	/// insert page data (if uid == 0) or update if uid > 0
 	public function store() {
-		
+t3lib_div::devlog('page store attr', 'newspaper', 0);
+#t3lib_div::debug($this->attributes);
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
 			if (!$this->attributes) $this->readAttributesFromDB();
