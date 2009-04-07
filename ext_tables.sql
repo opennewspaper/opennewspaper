@@ -119,6 +119,7 @@ CREATE TABLE tx_newspaper_pagezone_page (
 	pagezone_id tinytext,
 	extras int(11) DEFAULT '0' NOT NULL,
 	template_set tinytext,
+	inherits_from int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -186,6 +187,7 @@ CREATE TABLE tx_newspaper_article (
 	template_set tinytext,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
+	inheritsfrom int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -210,6 +212,7 @@ CREATE TABLE tx_newspaper_extra (
 	extra_uid int(11) DEFAULT '0' NOT NULL,
 	position int(11) DEFAULT '0' NOT NULL,
 	paragraph int(11) DEFAULT '0' NOT NULL,
+	origin_uid int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

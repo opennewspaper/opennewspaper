@@ -34,6 +34,7 @@
 			<label index="tx_newspaper_pagezone_page.pagezone_id">Page zone id</label>
 			<label index="tx_newspaper_pagezone_page.extras">Extras on this page zone</label>
 			<label index="tx_newspaper_pagezone_page.template_set">Template set</label>
+			<label index="tx_newspaper_pagezone_page.inherits_from">Page zone the placement is inherited from</label>
 			<label index="tx_newspaper_article">Article</label>
 			<label index="tx_newspaper_article.articletype_id">Article type</label>
 			<label index="tx_newspaper_article.title">Title</label>
@@ -50,11 +51,13 @@
 			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Page Zone Type</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
+			<label index="tx_newspaper_article.inheritsfrom">Page zone the placement is inherited from</label>
 			<label index="tx_newspaper_extra">Extras (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
 			<label index="tx_newspaper_extra.position">Position</label>
 			<label index="tx_newspaper_extra.paragraph">Paragraph</label>
+			<label index="tx_newspaper_extra.origin_uid">UID of Extra this Extra inherits its placement from</label>
 			<label index="tx_newspaper_extra_sectionlist">Display the list of articles in a section</label>
 			<label index="tx_newspaper_extra_sectionlist.template_set">Template set</label>
 			<label index="tx_newspaper_articlelist">List of articles (abstract superclass)</label>
@@ -113,6 +116,7 @@
 			<label index="tx_newspaper_pagezone_page.pagezone_id">Seitenbereichs-Id</label>
 			<label index="tx_newspaper_pagezone_page.extras">Extras auf diesem Seitenbereich</label>
 			<label index="tx_newspaper_pagezone_page.template_set">Satz an Vorlagen</label>
+			<label index="tx_newspaper_pagezone_page.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.articletype_id">Artikeltyp</label>
 			<label index="tx_newspaper_article.title">Titel</label>
@@ -129,11 +133,13 @@
 			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Seitenbereichstyp</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
+			<label index="tx_newspaper_article.inheritsfrom">Seitenbereich von dem die Bestückung geerbt wird</label>
 			<label index="tx_newspaper_extra">Artikel-Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
 			<label index="tx_newspaper_extra.position">Position</label>
 			<label index="tx_newspaper_extra.paragraph">Absatz</label>
+			<label index="tx_newspaper_extra.origin_uid">UID des Extras von dem dieses Extra seine Platzierung erbt</label>
 			<label index="tx_newspaper_extra_sectionlist">Anzeige der Artikel in einem Ressort</label>
 			<label index="tx_newspaper_extra_sectionlist.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>

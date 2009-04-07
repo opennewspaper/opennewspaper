@@ -297,7 +297,7 @@ $TCA['tx_newspaper_pagezone'] = array (
 $TCA['tx_newspaper_pagezone_page'] = array (
 	'ctrl' => $TCA['tx_newspaper_pagezone_page']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'pagezonetype_id,pagezone_id,extras,template_set'
+		'showRecordFieldList' => 'pagezonetype_id,pagezone_id,extras,template_set,inherits_from'
 	),
 	'feInterface' => $TCA['tx_newspaper_pagezone_page']['feInterface'],
 	'columns' => array (
@@ -375,9 +375,25 @@ $TCA['tx_newspaper_pagezone_page'] = array (
 				'size' => '30',
 			)
 		),
+		'inherits_from' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.inherits_from',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '4',
+				'max'      => '4',
+				'eval'     => 'int',
+				'checkbox' => '0',
+				'range'    => array (
+					'upper' => '1000',
+					'lower' => '10'
+				),
+				'default' => 0
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'pagezonetype_id;;;;1-1-1, pagezone_id, extras, template_set')
+		'0' => array('showitem' => 'pagezonetype_id;;;;1-1-1, pagezone_id, extras, template_set, inherits_from')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -389,7 +405,7 @@ $TCA['tx_newspaper_pagezone_page'] = array (
 $TCA['tx_newspaper_article'] = array (
 	'ctrl' => $TCA['tx_newspaper_article']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status'
+		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status,inheritsfrom'
 	),
 	'feInterface' => $TCA['tx_newspaper_article']['feInterface'],
 	'columns' => array (
@@ -654,9 +670,25 @@ $TCA['tx_newspaper_article'] = array (
 				'default' => 0
 			)
 		),
+		'inheritsfrom' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.inheritsfrom',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '4',
+				'max'      => '4',
+				'eval'     => 'int',
+				'checkbox' => '0',
+				'range'    => array (
+					'upper' => '1000',
+					'lower' => '10'
+				),
+				'default' => 0
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status, inheritsfrom')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
@@ -668,7 +700,7 @@ $TCA['tx_newspaper_article'] = array (
 $TCA['tx_newspaper_extra'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph'
+		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph,origin_uid'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra']['feInterface'],
 	'columns' => array (
@@ -764,9 +796,25 @@ $TCA['tx_newspaper_extra'] = array (
 				'default' => 0
 			)
 		),
+		'origin_uid' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.origin_uid',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '4',
+				'max'      => '4',
+				'eval'     => 'int',
+				'checkbox' => '0',
+				'range'    => array (
+					'upper' => '1000',
+					'lower' => '10'
+				),
+				'default' => 0
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph, origin_uid')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
