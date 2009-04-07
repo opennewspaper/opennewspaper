@@ -129,10 +129,10 @@ t3lib_div::devlog('p setAtrr atrr', 'newspaper', $this->attributes);
 	/// insert page data (if uid == 0) or update if uid > 0
 	public function store() {
 t3lib_div::devlog('page store attr', 'newspaper', 0);
-#t3lib_div::debug($this->attributes);
-		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
 			if (!$this->attributes) $this->readAttributesFromDB();
+t3lib_div::devlog($this->attributes);
+		if ($this->getUid()) {
 			
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
