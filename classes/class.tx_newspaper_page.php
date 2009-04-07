@@ -116,21 +116,18 @@ class tx_newspaper_Page
  	}
 
 	public function setAttribute($attribute, $value) {
-t3lib_div::devlog('p setAtrr called', 'newspaper', 0);
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->readAttributesFromDB();
 		}
-t3lib_div::devlog('p setAtrr db read', 'newspaper', 0);		
 		$this->attributes[$attribute] = $value;
-t3lib_div::devlog('p setAtrr atrr', 'newspaper', $this->attributes);
 	}
 	
 	/// insert page data (if uid == 0) or update if uid > 0
 	public function store() {
-			/// If the attributes are not yet in memory, read them now
-t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
+
 		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, read them now
 			if (!$this->attributes) $this->readAttributesFromDB();
 			
 			tx_newspaper::updateRows(
@@ -144,29 +141,16 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 			 */
 			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
 
-			if (false) {
-			$new_id = 'NEW'.uniqid('');
-			$datamap = array(
-				$this->getTable() => array(
-					$new_id => $this->attributes
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
 				)
 			);
-			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-			$tce->start($datamap, null);
-			$tce->process_datamap();
-			$this->setUid($tce->substNEWwithIDs);
-t3lib_div::devlog('substNEWwithIDs', 'newspaper', 0, $tce->substNEWwithIDs);
-			} else {
-				$this->setUid(
-					tx_newspaper::insertRows(
-						$this->getTable(), $this->attributes
-					)
-				);
-			}
 		}
 		
 		/// store all page zones and set the page_id of their respective pagezone superclass entry
-		if ($this->pageZones) foreach ($this->pageZones as $pagezone) {
+		//	disabled because pagezones now must be enabled manually
+		if (false && $this->pageZones) foreach ($this->pageZones as $pagezone) {
 			$pagezone_uid = $pagezone->store();
 			$pagezone_superclass_uid = tx_newspaper_PageZone::createPageZoneRecord(
 				$pagezone_uid, $pagezone->getTable()
