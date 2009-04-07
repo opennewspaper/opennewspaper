@@ -144,6 +144,7 @@ t3lib_div::devlog('page store attr', 'newspaper', 0, $this->attributes);
 					$this->attributes['section'] = $this->parentSection->getUid();
 					$this->attributes['pagetype_id'] = $this->pagetype->getUid();
 				}
+			}
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
