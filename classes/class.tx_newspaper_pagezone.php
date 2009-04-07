@@ -327,6 +327,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 #t3lib_div::devlog('gapz', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
+// \todo: new $row['pagezone_table']()
 			switch (strtolower($row['pagezone_table'])) {
 				case 'tx_newspaper_article':
 					$list[] = new tx_newspaper_Article(intval($row['pagezone_uid']));
