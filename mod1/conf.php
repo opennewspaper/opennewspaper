@@ -2,7 +2,7 @@
 
 	// DO NOT REMOVE OR CHANGE THESE 3 LINES:
 define('TYPO3_MOD_PATH', '../typo3conf/ext/newspaper/mod1/');
-$BACK_PATH='../../../../typo3/';
+$BACK_PATH = PATH_typo3; // '../../../../typo3/';
 $MCONF['name']='txnewspaperMmain_txnewspaperM1';
 
 	
