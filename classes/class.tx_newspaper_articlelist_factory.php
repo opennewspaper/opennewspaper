@@ -31,6 +31,7 @@
 
 /// \todo All articlelist definitions must be known to this class, even those which are not part of tx_newspaper 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_auto.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_test.php');
 
 /// Factory class to create the correct kind of tx_newspaper_ArticleList from a UID
 /** Problem: The tx_newspaper_ArticleList is stored in a table for the abstract
