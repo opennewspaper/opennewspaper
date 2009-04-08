@@ -368,6 +368,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function setParentPage(tx_newspaper_Page $parent) {
 		$this->parent_page = $parent;
 		$this->parent_page_id = $parent->getUid();
+		t3lib_div::debug($this);
 	}
 
  	private $uid = 0;
