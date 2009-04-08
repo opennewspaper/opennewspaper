@@ -97,7 +97,7 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 		);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$list[] = new tx_newspaper_PageZoneType(intval($row['uid']));
+			$list[] = new tx_newspaper_PageZoneType(intval($row[$i]['uid']));
 		}
 		return $list;
 	}
