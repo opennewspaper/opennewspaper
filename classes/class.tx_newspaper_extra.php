@@ -249,7 +249,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	private static $table = 'tx_newspaper_extra';
 
 	private static $fields_to_copy_into_extra_table = array(
-		'pid', 'crdate', 'cruser_id', 'deleted', 'hidden', 
+		'pid', 'crdate', 'cruser_id', 'deleted',  
 	);
 
 }
