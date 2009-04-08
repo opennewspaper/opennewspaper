@@ -57,7 +57,14 @@ class tx_newspaper_SaveHook {
 
 
 
-		if (class_exists($table)) { ///<newspaper specification: table name = class name
+		$abstract = false;
+		if (class_exists($table)) {
+			$tmp = new ReflectionClass();
+			$abstract = $tmp->isAbstract();
+		}
+		
+		if (!$abstract && class_exists($table)) { ///<newspaper specification: table name = class name
+
 			$np_obj = new $table();
 
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
