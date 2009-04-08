@@ -163,12 +163,11 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processActivatePageType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
-#t3lib_div::devlog('papt param', 'newspaper', 0, $param);
+t3lib_div::devlog('papt param', 'newspaper', 0, $param);
 		$p = new tx_newspaper_Page(
 			new tx_newspaper_Section(intval($param['section'])),
 			new tx_newspaper_PageType(intval($param['pagetype']))
 		);
-#t3lib_div::devlog('papt after new page', 'newspaper', 0);
 		$dummy = $p->store(); 
 #t3lib_div::devlog('papt after store', 'newspaper', 0, $dummy);
 		$PA['row']['uid'] = $param['section']; // set section id to show
@@ -191,6 +190,12 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processActivatePageZoneType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
+t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+//		$pz = new tx_newspaper_PageZone(
+//			
+//		);
+		$dummy = $pz->store();
+		
 		$PA['row']['uid'] = $param['page']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
 		$PA['SECTION'] = $param['section']; 
