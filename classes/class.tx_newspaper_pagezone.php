@@ -122,10 +122,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
 	public function getPageZoneType() {
-t3lib_div::devlog('in gpzt', 'newspaper', 0);
 		if (!$this->pagezonetype) {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
-t3lib_div::devlog('in gpzt pzt_id', 'newspaper', 0, $pagezonetype_id);
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
 		}
 		return $this->pagezonetype; 
