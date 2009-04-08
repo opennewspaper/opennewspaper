@@ -127,7 +127,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if (!$this->pagezonetype) {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
-		} 
+		}
 		return $this->pagezonetype; 
 	}
 
@@ -226,6 +226,35 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		
 		return null;
+	}
+	
+	/// As the name says, copies Extras from another PageZone
+	/** In particular, it copies the entry from the abstract Extra supertable,
+	 *  but not the data from the concrete Extra_* tables. I.e. it creates a
+	 *  new Extra which is a reference to a concrete Extra for each copyable
+	 *  Extra on the template PageZone.
+	 *  Also, it sets the origin_uid property on the copied Extras to reflect
+	 *  the origin of the Extra.
+	 */
+	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
+		foreach ($parent_zone->getExtras as $extra_to_copy) {
+			if (!$extra_to_copy->getAttribute('inheritable')) continue;
+			/// Clone $extra_to_copy
+			/** Not nice: because we're working on the abstract superclass here, we
+			 * 	can't clone the superclass entry because there's no object for it.
+			 */
+			$new_extra = array();
+			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
+				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
+			} 
+			$new_extra['show'] = 1;
+			if (!$extra_to_copy->getAttribute('origin_uid')) {
+				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
+			}
+			$extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
+			
+			$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
+		}
 	}
 	
 	/** \todo Internationalization */
