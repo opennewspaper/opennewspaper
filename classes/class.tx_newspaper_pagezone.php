@@ -161,8 +161,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	public function store() {
-		t3lib_div::debug("store()");
-		t3lib_div::debug($this);
 		
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, now would be a good time to read them 
@@ -187,6 +185,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				)
 			);
 		}
+		t3lib_div::debug("store()");
+		t3lib_div::debug($this);
 
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
