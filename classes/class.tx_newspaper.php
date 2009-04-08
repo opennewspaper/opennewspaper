@@ -207,23 +207,22 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 
 	/// deletes a record using T3 API
 	/** \param $table SQL table to delete a record from
-	 *  \param $where SQL WHERE condition (typically 'uid = ...')
-	 *  \param $really If set, really delete records; else set deleted = 1
+	 *  \param $uids Array of UIDs to delete
 	 */
-	public static function deleteRows($table, $where, $really = false) {
-		if ($really) {
-			self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
-		} else {
-			self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, array('deleted' => 1));
+	public static function deleteRows($table, array $uids) {
+		$cmdmap = array();
+		foreach ($uids as $uid) {
+			$cmdmap[$table][$uid] = array('delete' => '');
 		}
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
-		if (!$res) {
-        	throw new tx_newspaper_NoResException(self::$query);
-        }
+		$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+		$tce->start(null, $cmdmap);
+		$tce->process_cmdmap();
+		if (count($tce->errorLog)){
+			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+		}
         
-        return $GLOBALS['TYPO3_DB']->sql_affected_rows();
-        
+        return $GLOBALS['TYPO3_DB']->sql_affected_rows();        
 	}
 
 
