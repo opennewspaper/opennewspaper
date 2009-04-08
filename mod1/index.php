@@ -205,7 +205,22 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	}
 
 
-
+	function processDeletePageZone() {
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		$param = $this->splitParams();
+#t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+//		tx_newspaper_PageZone_Factory::getInstance()->createNew(
+//			new tx_newspaper_Page(intval($param['page'])), 
+//			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
+//		);
+		
+		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['AJAX_CALL'] = true;
+		$PA['SECTION'] = $param['section']; 
+		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		echo json_encode($tmp);
+		exit();
+	}
 
 
 
@@ -285,7 +300,10 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 						$this->processEditPageType(); // AJAX call
 					if (isset($_REQUEST['activate_pagezone_type']))
 						$this->processActivatePageZoneType(); // AJAX call
-
+					if (isset($_REQUEST['delete_page']))
+						$this->processDeletePage(); // AJAX call
+					if (isset($_REQUEST['delete_pagezone']))
+						$this->processDeletePageZone(); // AJAX call
 
 
 					
