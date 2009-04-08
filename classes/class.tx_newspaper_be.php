@@ -19,47 +19,47 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 		if (!isset($PA['SECTION'])) {
 			t3lib_div::devlog('renderPZL: no section', 'newspaper', 3, $PA); exit(); /// \todo replace with exception
 		}
-		
 		$section_uid = $PA['SECTION'];
 
+		$pagezone_type = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page  zone type objects
 
-		
-		// structure: [#]['uid'] <- uid of page zone type
-		$pagezone_type = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
-#t3lib_div::devlog('pzt', 'newspaper', 0, $pagezone_type);
-		
+		$pagezone_type_data = array(); // to collect information for rendering
+
 		$page_uid = $PA['row']['uid'];
-		// structure:
-		foreach(tx_newspaper_PageZone::getActivePageZones($page_uid) as $active_pagezone) {
-#t3lib_div::devlog('rpzl apz', 'newspaper', 0, $active_pagezone);
+		$p = new tx_newspaper_Page(intval($page_uid));
+#t3lib_div::debug($p);
+		// add data to active pagezone types
+		foreach($p->getActivePageZones() as $active_pagezone) {
+#t3lib_div::debug($active_pagezone);
 			/// get page zone type id for this active page
-			$pzObj = tx_newspaper_PageZone_Factory::getInstance()->create($active_pagezone['uid']);
-			$pzt_id = $pzObj->getAttribute('pagezonetype_id');
-#t3lib_div::devlog('rpzl pzt', 'newspaper', 0, $pzt_id);
 			for ($i = 0; $i < sizeof($pagezone_type); $i++) {
-				if ($pagezone_type[$i]['uid'] == $pzt_id) {
-					$pagezone_type[$i]['ACTIVE'] = true;
+				// $active_pagezone->getUid()
+				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()) {
+					$pagezone_type_data[$i]['ACTIVE'] = true;
+					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
 					break;
 				}
 			}
 		}
-#t3lib_div::devlog('pzt AFTER', 'newspaper', 0, $pagezone_type);
+
 		// add ajax call to each row
 		for ($i = 0; $i < sizeof($pagezone_type); $i++) {
-			if (!isset($pagezone_type[$i]['ACTIVE'])) {
-				$pagezone_type[$i]['AJAX_URL'] = 'javascript:activatePageZoneType(' . $section_uid. ', ' . $page_uid . ' , ' . $pagezone_type[$i]['uid'] . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_pagezone_in_page', false)) . '\');';				
-				$pagezone_type[$i]['ACTIVE'] = false;
+			$pagezone_type_data[$i]['type_name'] = $pagezone_type[$i]->getAttribute('type_name');
+#t3lib_div::debug($pagezone_type[$i]);
+			// no edit icon needed - nothing to edit here
+			if (!isset($pagezone_type_data[$i]['ACTIVE'])) {
+				$pagezone_type_data[$i]['ACTIVE'] = false;
+				$pagezone_type_data[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_pagezone_in_page', false)) . '\');';
 			}
 		}
-#t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type);
-
+#t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type_data);
 
 		/// generate be html code using smarty
  		self::$smarty = new tx_newspaper_Smarty();
-		self::$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 
 		// add data rows
-		self::$smarty->assign('DATA', $pagezone_type);
+		self::$smarty->assign('DATA', $pagezone_type_data);
 
 		// add skinned icons
 		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.activated_pagezone_in_section', false)));
@@ -68,7 +68,6 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.title_pagezone_in_section', false));
-		self::$smarty->assign('MESSAGE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.message_pagezone_in_section', false));
 		
 		self::$smarty->assign('AJAX_RETURN_URL', 'javascript:listPages(' . $section_uid . ');');
 		self::$smarty->assign('RETURN_TO_PAGETYPES', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.close_pagezone_in_section', false));
