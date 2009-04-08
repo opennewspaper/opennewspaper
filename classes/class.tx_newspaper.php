@@ -154,10 +154,19 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			if ($foreign_table_as) $table .= ' AS '.$foreign_table_as;
 		}
 		
-		return tx_newspaper::selectRows(
-			$select, $table, $mmWhere.' '.$whereClause,
-			$groupBy, $orderBy, $limit
-		);
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$select, $table, 
+			$mmWhere.' '.$whereClause, 
+			$groupBy, $orderBy, $limit);
+
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		if ($res) {
+	        $rows = array();
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+	        	$rows[] = $row;
+			return $rows;
+		} else throw new tx_newspaper_NoResException(self::$query);
 	}
 
 	/// inserts a record using T3 API
