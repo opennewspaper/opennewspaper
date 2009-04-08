@@ -338,6 +338,24 @@ if (TYPO3_MODE == 'FE') {
 
 	////////////////////////////////////////////////////////////////////////////
 	//
+	//	class tx_newspaper_PageZone
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+	public function getPageZoneType() {
+		if (!$this->pagezonetype) {
+			if ($this->getUid()) $pagezonetype_id = $this->getAttribute('pagezonetype_id');
+			else {
+				$pzt = tx_newspaper::selectOneRow('uid', 'tx_newspaper_pagezonetype', 'is_article');
+				$pagezonetype_id = $pzt['uid'];
+			}
+			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
+		}
+		return $this->pagezonetype; 
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
 	//	class tx_newspaper_Article
 	//
 	////////////////////////////////////////////////////////////////////////////
