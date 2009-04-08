@@ -237,6 +237,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	
 		if (TYPO3_MODE == 'FE') {
 			// use values defined in admPanel config (override given $show_hidden param)
+			// see: enableFields() in t3lib_pageSelect
 			$show_hidden = ($table=='pages')? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
 		} else if ($show_hidden != 0) {
 			$show_hidden = 1; // make sure show_hidden param is correct
