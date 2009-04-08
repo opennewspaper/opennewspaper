@@ -294,7 +294,16 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return $child_list;	
 	}
 
-
+	/// Get a list of all the attributes/DB fields an object (or class) has
+	/** \param $object An object of the desired class, or the class name as string
+	 *  \return The list of attributes
+	 */
+	public static function getAttributes($object) {
+		global $TCA;
+		$object = self::getTable($object);
+		t3lib_div::loadTCA($object);
+		return array_keys($TCA[$object]['columns']);
+	}
 	
 
 	////////////////////////////////////////////////////////////////////////////
