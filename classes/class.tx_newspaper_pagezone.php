@@ -161,6 +161,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	public function store() {
+		t3lib_div::debug("store()");
+		t3lib_div::debug($this);
 		
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, now would be a good time to read them 
@@ -368,7 +370,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function setParentPage(tx_newspaper_Page $parent) {
 		$this->parent_page = $parent;
 		$this->parent_page_id = $parent->getUid();
-		t3lib_div::debug($this);
 	}
 
  	private $uid = 0;
