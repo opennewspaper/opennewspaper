@@ -315,7 +315,7 @@ if (TYPO3_MODE == 'FE') {
 		if (!$this->extras) {
 			$extras = tx_newspaper::selectRows(
 				'uid_foreign', 'tx_newspaper_article_extras_mm', 
-				'uid_local = ' . $this->getUid());
+				'uid_local = ' . $this->getUid(), '', '', '', false);
 			if ($extras) foreach ($extras as $extra) {
 				try {
 					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
