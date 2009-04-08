@@ -700,7 +700,7 @@ $TCA['tx_newspaper_article'] = array (
 $TCA['tx_newspaper_extra'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph,origin_uid,is_inheritable,show'
+		'showRecordFieldList' => 'hidden,starttime,endtime,extra_table,extra_uid,position,paragraph,origin_uid,is_inheritable,show_extra'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra']['feInterface'],
 	'columns' => array (
@@ -819,16 +819,16 @@ $TCA['tx_newspaper_extra'] = array (
 				'type' => 'check',
 			)
 		),
-		'show' => array (		
+		'show_extra' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.show',		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.show_extra',		
 			'config' => array (
 				'type' => 'check',
 			)
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph, origin_uid, is_inheritable, show')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_table, extra_uid, position, paragraph, origin_uid, is_inheritable, show_extra')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
@@ -1117,7 +1117,7 @@ $TCA['tx_newspaper_pagezonetype'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
-				'eval' => 'required,nospace,uniqueInPid',
+				'eval' => 'required,uniqueInPid',
 			)
 		),
 		'normalized_name' => array (		
@@ -1254,5 +1254,4 @@ $TCA['tx_newspaper_articletype'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

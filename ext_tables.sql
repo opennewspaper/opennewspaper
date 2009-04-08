@@ -214,7 +214,7 @@ CREATE TABLE tx_newspaper_extra (
 	paragraph int(11) DEFAULT '0' NOT NULL,
 	origin_uid int(11) DEFAULT '0' NOT NULL,
 	is_inheritable tinyint(3) DEFAULT '0' NOT NULL,
-	show tinyint(3) DEFAULT '0' NOT NULL,
+	show_extra tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -389,4 +389,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext
 );
-
