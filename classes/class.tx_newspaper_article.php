@@ -110,7 +110,8 @@ if (TYPO3_MODE == 'FE') {
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
-			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
+#			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
+			$this->setAttribute('pid', 0);
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
