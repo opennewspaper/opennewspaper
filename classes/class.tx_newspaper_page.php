@@ -323,6 +323,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	public function getActivePageZones() {
 
 		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
+t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
 		if (sizeof($pid_list) == 0) {
 			throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
 		}
