@@ -29,7 +29,7 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
 #t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
-t3liv_div::devlog('templ set', 'newspaper', 0, tx_newspaper_Smarty::getAvailableTemplateSets(new tx_newspaper_Section(intval(1))));
+t3lib_div::devlog('templ set', 'newspaper', 0, tx_newspaper_Smarty::getAvailableTemplateSets(new tx_newspaper_Section(intval(1))));
 		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
 		if  ($table == $pzt->getTable() && 
