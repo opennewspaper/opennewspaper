@@ -69,6 +69,10 @@ class tx_newspaper_Smarty extends Smarty {
 		if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
 	}
 
+	public function __toString() {
+		$this->assembleSearchPath();
+		return 'tx_newspaper_Smarty object: search path = ' . print_r($this->templateSearchPath, 1);
+	}
 	public function setTemplateSearchPath(array $path) {
 		$this->templateSearchPath = $path;
 	}
