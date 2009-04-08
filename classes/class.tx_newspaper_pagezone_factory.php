@@ -88,7 +88,8 @@ class tx_newspaper_PageZone_Factory {
 		$pagezone->store();
 		
 		return $pagezone;
-	}	
+	}
+
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
 	protected function __construct() { }
 	

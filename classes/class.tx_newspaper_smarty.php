@@ -168,7 +168,6 @@ class tx_newspaper_Smarty extends Smarty {
 		
 		if (TYPO3_MODE == 'FE') {
 			//	log the template search path and the used template to admin panel
-			$GLOBALS['TT']->setTSlogMessage('Base path: ' . $this->basepath);
 			$GLOBALS['TT']->setTSlogMessage('Smarty template search path: ' .
 											print_r($this->templateSearchPath, 1));
 			$GLOBALS['TT']->setTSlogMessage('Smarty template used: ' . $this->template_dir . '/' . $template);
