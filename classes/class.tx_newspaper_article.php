@@ -315,7 +315,7 @@ if (TYPO3_MODE == 'FE') {
 		if (!$this->extras) {
 			$extras = tx_newspaper::selectRows(
 				'uid_foreign', 'tx_newspaper_article_extras_mm', 
-				'uid_local = ' . $this->getUid(), '', '', '', false);
+				'uid_local = ' . $this->getUid());
 			if ($extras) foreach ($extras as $extra) {
 				try {
 					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
@@ -368,7 +368,7 @@ if (TYPO3_MODE == 'FE') {
 			'uid_local', 
 			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 			'uid_local = ' . intval($article_uid) .
-			' AND uid_foreign = ' . intval($abstract_uid), '', '', '', false
+			' AND uid_foreign = ' . intval($abstract_uid)	
 		);
 		if ($row['uid_local'] != $article_uid || 
 			$row['uid_foreign'] != $abstract_uid) {
@@ -449,8 +449,7 @@ if (TYPO3_MODE == 'FE') {
 			'uid_local = '.$this->getUid(),
 			'',
 			'',
-			$limit? "0, $limit": '',
-			false
+			$limit? "0, $limit": ''
 		);
 		
 		$sections = array();
