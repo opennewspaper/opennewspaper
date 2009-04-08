@@ -387,7 +387,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
  	
  	private static $fields_to_copy_into_pagezone_table = array(
-		'pid', 'crdate', 'cruser_id', 'deleted', 'hidden', 
+		'pid', 'crdate', 'cruser_id', 'deleted', 
 	);
  	
 }
