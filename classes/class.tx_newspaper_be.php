@@ -30,7 +30,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 #t3lib_div::debug($p);
 		// add data to active pagezone types
 		foreach($p->getActivePageZones() as $active_pagezone) {
-t3lib_div::debug($active_pagezone);
+#t3lib_div::debug($active_pagezone);
 			/// get page zone type id for this active page
 			for ($i = 0; $i < sizeof($pagezone_type); $i++) {
 				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
