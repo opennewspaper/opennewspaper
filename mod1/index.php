@@ -190,7 +190,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processActivatePageZoneType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
-t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+#t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
 		tx_newspaper_PageZone_Factory::getInstance()->createNew(
 			new tx_newspaper_Page(intval($param['page'])), 
 			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
