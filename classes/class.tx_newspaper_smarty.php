@@ -60,7 +60,7 @@ class tx_newspaper_Smarty extends Smarty {
 		file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
 		$this->config_dir   = $tmp . 'smarty_config';
 
-		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
+#		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
 
 		$this->caching = false;
 
