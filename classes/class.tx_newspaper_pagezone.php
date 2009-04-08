@@ -291,7 +291,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
  	protected function readExtras($uid) {
 		$uids = tx_newspaper::selectRows(
-			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid"
+			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
 		);
 
 		if ($uids) {
