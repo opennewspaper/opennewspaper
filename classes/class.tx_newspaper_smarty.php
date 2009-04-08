@@ -165,7 +165,12 @@ class tx_newspaper_Smarty extends Smarty {
 				break;
 			}
 		}
-
+		
+		//	log the template search path and the used template to admin panel
+		$GLOBALS['TT']->setTSlogMessage('Smarty template search path: ' .
+										print_r($this->templateSearchPath, 1));
+		$GLOBALS['TT']->setTSlogMessage('Smarty template dir used: ' . $this->template_dir);
+		
 		return parent::fetch($template);
 	}
 		
