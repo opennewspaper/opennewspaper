@@ -72,6 +72,59 @@ class tx_newspaper_Smarty extends Smarty {
 	public function setTemplateSearchPath(array $path) {
 		$this->templateSearchPath = $path;
 	}
+	
+	/// Get the list of templates which are present for a specific object
+	/** \param $object Object to render
+	 *  \param $section Section in which the object lies
+	 *  \param $page Page in which the object lies
+	 *  \param $pagezone Page zone in which the object lies
+	 *  \return Array of available templates
+	 */
+	static public function getAvailableTemplates(tx_newspaper_StoredObject $object, 
+												 tx_newspaper_Section $section = null,
+												 tx_newspaper_Page $page = null,
+												 tx_newspaper_PageZone $pagezone = null) {
+		$smarty = new tx_newspaper_Smarty();
+		$template_set = '';
+		
+		if ($section) {
+			if ($section->getAttribute('template_set')) {
+				$template_set = $section->getAttribute('template_set');
+			}
+		}
+		if ($page) {
+			$smarty->setPageType($page);
+			if ($page->getAttribute('template_set')) {
+				$template_set = $page->getAttribute('template_set');
+			}
+		}								 	
+		if ($pagezone) {
+			$smarty->setPageZoneType($pagezone);
+			if ($pagezone->getAttribute('template_set')) {
+				$template_set = $pagezone->getAttribute('template_set');
+			}
+		}
+		if ($object->getAttribute('template_set')) {
+			$template_set = $object->getAttribute('template_set');
+		}
+		
+		if ($template_set) $smarty->setTemplateSet($template_set);
+		
+		$smarty->assembleSearchPath();
+		
+		$found_templates = array();
+		foreach ($smarty->templateSearchPath as $dir) {
+			//	if not absolute path, prepend $this->basepath
+			if (TYPO3_OS != 'WIN' && $dir[0] != '/') $dir = $this->basepath . '/' . $dir;			
+			
+			//	if required template exists in current dir, append template to found
+			if (file_exists($dir . '/' . tx_newspaper::getTable($object))) {
+				$found_templates[] = $dir . '/' . tx_newspaper::getTable($object);	
+			}
+		}
+		
+	}
+	
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = 'default') {
 		$this->templateset = $template_set;

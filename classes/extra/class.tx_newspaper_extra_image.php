@@ -4,7 +4,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
-	public function __construct($uid = 0) { 
+	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
 		}
