@@ -73,7 +73,22 @@ class tx_newspaper_PageZone_Factory {
 		
 		return new $row['pagezone_table']($row['pagezone_uid']);
 	}
-	
+
+	public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
+		$pagezone = null;
+		if ($type->getAttribute('is_article')) {
+			$pagezone = new tx_newspaper_Article();
+			$pagezone->setAttribute('is_template', 1);
+		} else {
+			$pagezone = new tx_newspaper_PageZone_Page();
+		}
+		$pagezone->setParentPage($page);
+		$pagezone->setPageZoneType($type);
+		
+		$pagezone->store();
+		
+		return $pagezone;
+	}	
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
 	protected function __construct() { }
 	

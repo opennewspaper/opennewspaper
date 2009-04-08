@@ -45,7 +45,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	/// Configure Smarty rendering engine
-	public function __construct($uid = 0, tx_newspaper_Page $page = null, tx_newspaper_PageZoneType $type = null) {
+	public function __construct($uid = 0) {
 		/// Configure Smarty rendering engine
 		$this->smarty = new tx_newspaper_Smarty();
 		if ($uid) {
@@ -56,8 +56,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 */
 			tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
 		}
-		if ($page) $this->parent_page = $page;
-		if ($type) $this->pagezonetype = $type;
 	}
 	
 	/// Render the page zone, containing all extras
@@ -247,7 +245,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
 				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
 			} 
-			$new_extra['show'] = 1;
+			$new_extra['show_extra'] = 1;
 			if (!$extra_to_copy->getAttribute('origin_uid')) {
 				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
 			}
@@ -363,6 +361,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	protected function getExtras() { return $this->extras; }
 
+	public function setPageZoneType(tx_newspaper_PageZoneType $type) {
+		$this->pagezonetype = $type;
+	}
+
+	public function setParentPage(tx_newspaper_Page $parent) {
+		$this->parent_page = $parent;
+		$this->parent_page_id = $parent->getUid();
+	}
 
  	private $uid = 0;
  	

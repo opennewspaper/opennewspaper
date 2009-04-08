@@ -7,12 +7,14 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
 
-/// testsuite for all extras belonging to the newspaper extension
+/// testsuite for classes which don't warrant a full testsuite on their own
 class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 	}
 
+	//	exceptions
+	
 	public function test_NoResException() {
 		$this->setExpectedException('tx_newspaper_NoResException');
 		throw new tx_newspaper_NoResException('');
@@ -40,5 +42,16 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		throw new tx_newspaper_SysfolderNoPidsFoundException('');
 	}
 
+	//	smarty
+	
+	public function test_getAvailableTemplates() {
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
+		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
+		
+		$template_sets_to_test = array('default', 'test_templateset');
+		
+				
+	}
 }
 ?>
