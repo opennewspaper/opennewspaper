@@ -52,7 +52,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where, $groupBy, $orderBy, $limit);
+			$fields, $table, $where . self::enableFields($table), 
+			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
 		if (!$res) {
@@ -74,7 +75,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where, $groupBy, $orderBy, $limit);
+			$fields, $table, $where . self::enableFields($table), 
+			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
 		if (!$res) {
@@ -102,7 +104,9 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where, $groupBy, $orderBy, $limit);
+			$fields, $table, 
+			$where . self::enableFields($table), 
+			$groupBy, $orderBy, $limit);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
