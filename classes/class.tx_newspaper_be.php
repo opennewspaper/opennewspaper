@@ -45,7 +45,7 @@ t3lib_div::debug($pagezone_type);
 		// add ajax call to each row
 		for ($i = 0; $i < sizeof($pagezone_type); $i++) {
 			$pagezone_type_data[$i]['type_name'] = $pagezone_type[$i]->getAttribute('type_name');
-#t3lib_div::debug($pagezone_type[$i]);
+t3lib_div::debug($pagezone_type[$i]);
 			// no edit icon needed - nothing to edit here
 			if (!isset($pagezone_type_data[$i]['ACTIVE'])) {
 				$pagezone_type_data[$i]['ACTIVE'] = false;
