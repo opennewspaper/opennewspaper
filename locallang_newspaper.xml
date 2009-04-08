@@ -17,7 +17,7 @@
 			<label index="message.check_new_page_in_section">Do you really want to activate this page type?</label>
 			<label index="message.title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
 			<label index="flag.activated_pagezone_in_section">This page zone is activated</label>
-			<label index="flag.new_pagezone_in_section">Activate this page zone type for this section</label>
+			<label index="flag.new_pagezone_in_section">Activate this page zone type for this section and page</label>
 			<label index="message.check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
 			<label index="message.close_pagezone_in_section">Return to list of page types</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
