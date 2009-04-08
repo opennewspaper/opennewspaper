@@ -8,7 +8,7 @@
 {if $MESSAGE}<span style="color: red;">{$MESSAGE}</span><br /><br />{/if}
 {section name=i loop=$DATA}
 {if $DATA[i].ACTIVE == 1}
-	{$OK_ICON} {$DATA[i].name}<br />
+	{$OK_ICON} {$DATA[i].type_name}<br />
 {else}
 	<a href="{$DATA[i].AJAX_URL}">{$ADD_ICON}</a> {$DATA[i].type_name}<br />
 {/if}
