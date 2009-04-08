@@ -363,40 +363,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	protected function getExtras() { return $this->extras; }
 
-	/// get active pages zone for given page
-	/** \param page object
-	 *  \return array active pages zone objects for given page
-	 */
-	public static function getActivePageZones(tx_newspaper_Page $p) {
-
-		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
-		if (sizeof($pid_list) == 0) {
-			throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
-		}
-		
-		$row = tx_newspaper::selectRows(
-			'*',
-			'tx_newspaper_pagezone',
-			'pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($p->getUid())
-		);
-#t3lib_div::devlog('gapz', 'newspaper', 0, $row);
-		$list = array();
-		for ($i = 0; $i < sizeof($row); $i++) {
-// \todo: new $row['pagezone_table']()
-			switch (strtolower($row['pagezone_table'])) {
-				case 'tx_newspaper_article':
-					$list[] = new tx_newspaper_Article(intval($row['pagezone_uid']));
-				break;
-				case 'tx_newspaper_pagezone_page':
-					$list[] = new tx_newspaper_PageZone_Page(intval($row['pagezone_uid']));
-				break;
-				default:
-					/// \todo: throw ...
-			}
-		}
-		return $list;
-	}
-
 
  	private $uid = 0;
  	
