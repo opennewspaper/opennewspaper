@@ -323,7 +323,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	public function getActivePageZones() {
 
 		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
-t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
+#t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
 		if (sizeof($pid_list) == 0) {
 			throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
 		}
@@ -334,12 +334,12 @@ t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
 			'deleted=0 AND pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($this->getUid())
 		);
 
-#t3lib_div::devlog('gapz', 'newspaper', 0, $row);
+t3lib_div::devlog('gapz', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
 		}
-t3lib_div::debug($list);
+#t3lib_div::debug($list);
 		return $list;
 	}
 
