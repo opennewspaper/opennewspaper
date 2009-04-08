@@ -185,8 +185,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				)
 			);
 		}
-		t3lib_div::debug("store()");
-		t3lib_div::debug($this);
 
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
@@ -194,7 +192,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		tx_newspaper::updateRows(
 			'tx_newspaper_pagezone', 
 			'uid = ' . $pagezone_uid, 
-			array('page_id' => $this->parent_page)
+			array('page_id' => $this->parent_page->getUid())
 		);
 		
 		
