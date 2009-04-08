@@ -368,7 +368,7 @@ if (TYPO3_MODE == 'FE') {
 			'uid_local', 
 			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 			'uid_local = ' . intval($article_uid) .
-			' AND uid_foreign = ' . intval($abstract_uid)	
+			' AND uid_foreign = ' . intval($abstract_uid), '', '', '', false
 		);
 		if ($row['uid_local'] != $article_uid || 
 			$row['uid_foreign'] != $abstract_uid) {
@@ -449,7 +449,8 @@ if (TYPO3_MODE == 'FE') {
 			'uid_local = '.$this->getUid(),
 			'',
 			'',
-			$limit? "0, $limit": ''
+			$limit? "0, $limit": '',
+			false
 		);
 		
 		$sections = array();
