@@ -77,56 +77,47 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->templateSearchPath = $path;
 	}
 	
-	/// Get the list of templates which are present for a specific object
+	/// Get the list of template sets which contain a template for a specific object
 	/** \param $object Object to render
-	 *  \param $section Section in which the object lies
 	 *  \param $page Page in which the object lies
 	 *  \param $pagezone Page zone in which the object lies
-	 *  \return Array of available templates
+	 *  \return Array of available template sets
 	 */
-	static public function getAvailableTemplates(tx_newspaper_StoredObject $object, 
-												 tx_newspaper_Section $section = null,
-												 tx_newspaper_Page $page = null,
-												 tx_newspaper_PageZone $pagezone = null) {
-		$smarty = new tx_newspaper_Smarty();
-		$template_set = '';
-		
-		if ($section) {
-			if ($section->getAttribute('template_set')) {
-				$template_set = $section->getAttribute('template_set');
-			}
-		}
+	static public function getAvailableTemplateSets(tx_newspaper_StoredObject $object, 
+												 	tx_newspaper_Page $page = null,
+												 	tx_newspaper_PageZone $pagezone = null) {
+
+		$template_name = tx_newspaper::getTable($object);
+		$template_sets = array();
+
 		if ($page) {
-			$smarty->setPageType($page);
-			if ($page->getAttribute('template_set')) {
-				$template_set = $page->getAttribute('template_set');
-			}
-		}								 	
-		if ($pagezone) {
-			$smarty->setPageZoneType($pagezone);
-			if ($pagezone->getAttribute('template_set')) {
-				$template_set = $pagezone->getAttribute('template_set');
-			}
-		}
-		if ($object->getAttribute('template_set')) {
-			$template_set = $object->getAttribute('template_set');
-		}
-		
-		if ($template_set) $smarty->setTemplateSet($template_set);
-		
-		$smarty->assembleSearchPath();
-		
-		$found_templates = array();
-		foreach ($smarty->templateSearchPath as $dir) {
-			//	if not absolute path, prepend $this->basepath
-			if (TYPO3_OS != 'WIN' && $dir[0] != '/') $dir = $this->basepath . '/' . $dir;			
-			
-			//	if required template exists in current dir, append template to found
-			if (file_exists($dir . '/' . tx_newspaper::getTable($object))) {
-				$found_templates[] = $dir . '/' . tx_newspaper::getTable($object);	
+			$page_name = $page->getPageType()->getAttribute('normalized_name')?
+				$page->getPageType()->getAttribute('normalized_name'):
+				strtolower($page->getPageType()->getAttribute('type_name'));
+			if ($pagezone) {
+				$pagezone_name = $pagezone->getPageZoneType()->getAttribute('normalized_name')?
+					$pagezone->getPageZoneType()->getAttribute('normalized_name'):
+					strtolower($pagezone->getPageZoneType()->getAttribute('type_name'));
 			}
 		}
 		
+		$basedir = dir($this->basepath);
+		while (false !== ($template_set = $basedir->read())) {
+			if (!is_dir($template_set)) continue;
+			if (file_exists($this->basepath . 'template_sets/' . 
+							$template_set . '/' . $page_name . '/' . $pagezone_name . '/' .
+							$template_name . '.tmpl') ||
+					file_exists($this->basepath . 'template_sets/' . 
+								$template_set . '/' . $page_name . '/' . $template_name . '.tmpl') ||
+					file_exists($this->basepath . 'template_sets/' . $template_set . '/' . 
+								$template_name . '.tmpl')
+				) {
+				$template_sets[] = $template_set;
+			}
+		}
+		$basedir->close();
+
+		return $template_sets;
 	}
 	
 	/// Sets the template set we're working in
