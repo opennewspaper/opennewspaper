@@ -48,7 +48,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 			// no edit icon needed - nothing to edit here
 			if (!isset($pagezone_type_data[$i]['ACTIVE'])) {
 				$pagezone_type_data[$i]['ACTIVE'] = false;
-				$pagezone_type_data[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_pagezone_in_page', false)) . '\');';
+				$pagezone_type_data[$i]['AJAX_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_pagezone_in_page', false)) . '\');';
 			}
 		}
 #t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type_data);
