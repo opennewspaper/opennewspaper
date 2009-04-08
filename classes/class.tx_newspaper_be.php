@@ -22,7 +22,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 		$section_uid = $PA['SECTION'];
 
 		$pagezone_type = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page  zone type objects
-t3lib_div::debug($pagezone_type);
+
 		$pagezone_type_data = array(); // to collect information for rendering
 
 		$page_uid = $PA['row']['uid'];
@@ -45,14 +45,13 @@ t3lib_div::debug($pagezone_type);
 		// add ajax call to each row
 		for ($i = 0; $i < sizeof($pagezone_type); $i++) {
 			$pagezone_type_data[$i]['type_name'] = $pagezone_type[$i]->getAttribute('type_name');
-t3lib_div::debug($pagezone_type[$i]);
 			// no edit icon needed - nothing to edit here
 			if (!isset($pagezone_type_data[$i]['ACTIVE'])) {
 				$pagezone_type_data[$i]['ACTIVE'] = false;
 				$pagezone_type_data[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_new_pagezone_in_page', false)) . '\');';
 			}
 		}
-t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type_data);
+#t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type_data);
 
 		/// generate be html code using smarty
  		self::$smarty = new tx_newspaper_Smarty();
