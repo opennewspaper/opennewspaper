@@ -90,6 +90,10 @@ class tx_newspaper_Smarty extends Smarty {
 		$template_name = tx_newspaper::getTable($object);
 		$template_sets = array();
 
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
+		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
+
 		if ($page) {
 			$page_name = $page->getPageType()->getAttribute('normalized_name')?
 				$page->getPageType()->getAttribute('normalized_name'):
@@ -101,15 +105,15 @@ class tx_newspaper_Smarty extends Smarty {
 			}
 		}
 		
-		$basedir = dir($this->basepath);
+		$basedir = dir($basepath);
 		while (false !== ($template_set = $basedir->read())) {
 			if (!is_dir($template_set)) continue;
-			if (file_exists($this->basepath . 'template_sets/' . 
+			if (file_exists($basepath . 'template_sets/' . 
 							$template_set . '/' . $page_name . '/' . $pagezone_name . '/' .
 							$template_name . '.tmpl') ||
-					file_exists($this->basepath . 'template_sets/' . 
+					file_exists($basepath . 'template_sets/' . 
 								$template_set . '/' . $page_name . '/' . $template_name . '.tmpl') ||
-					file_exists($this->basepath . 'template_sets/' . $template_set . '/' . 
+					file_exists($basepath . 'template_sets/' . $template_set . '/' . 
 								$template_name . '.tmpl')
 				) {
 				$template_sets[] = $template_set;
