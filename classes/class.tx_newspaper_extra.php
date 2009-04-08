@@ -223,7 +223,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 				 	   'tx_newspaper_pagezone_page_extras_mm' => 'tx_newspaper_PageZone_Page')
 					   as $table => $type) {
 			$row = tx_newspaper::selectZeroOrOneRows(
-				'uid_local', $table, 'uid_foreign = ' . $this->getExtraUid()
+				'uid_local', $table, 'uid_foreign = ' . $this->getExtraUid(), '', '', '', false);
 			);
 			if ($row['uid_local']) {
 				return new $type(intval($row['uid_local']));
