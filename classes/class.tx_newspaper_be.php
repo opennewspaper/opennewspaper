@@ -36,6 +36,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
 					$pagezone_type_data[$i]['ACTIVE'] = true;
 					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
@@ -63,6 +64,8 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.activated_pagezone_in_section', false)));
 		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.new_pagezone_in_section', false)));
 		self::$smarty->assign('CLOSE_ICON', self::renderIcon('gfx/goback.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.close_pagezone_in_section', false)));
+		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.delete_pagezone_in_section', false)));
+
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.title_pagezone_in_section', false));
