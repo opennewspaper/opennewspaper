@@ -339,7 +339,7 @@ t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
 		}
-#t3lib_div::debug($list);
+t3lib_div::debug($list);
 		return $list;
 	}
 
