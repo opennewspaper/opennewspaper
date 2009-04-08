@@ -22,7 +22,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 		$section_uid = $PA['SECTION'];
 
 		$pagezone_type = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page  zone type objects
-
+t3lib_div::debug($pagezone_type);
 		$pagezone_type_data = array(); // to collect information for rendering
 
 		$page_uid = $PA['row']['uid'];
