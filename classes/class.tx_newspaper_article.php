@@ -121,11 +121,13 @@ if (TYPO3_MODE == 'FE') {
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
 		/// ... and is attached to the correct page
-		tx_newspaper::updateRows(
-			'tx_newspaper_pagezone', 
-			'uid = ' . $pagezone_uid, 
-			array('page_id' => $this->parent_page->getUid())
-		);
+		if ($this->getParentPage()->getUid()) {
+			tx_newspaper::updateRows(
+				'tx_newspaper_pagezone', 
+				'uid = ' . $pagezone_uid, 
+				array('page_id' => $this->getParentPage()->getUid())
+			);
+		}
 		
 		/// store all extras and make sure they are in the MM relation table
 		if ($this->extras) foreach ($this->extras as $extra) {

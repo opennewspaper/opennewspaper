@@ -137,6 +137,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
+			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
