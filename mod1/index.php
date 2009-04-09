@@ -208,11 +208,13 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processDeletePageZone() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
-#t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
 //		tx_newspaper_PageZone_Factory::getInstance()->createNew(
 //			new tx_newspaper_Page(intval($param['page'])), 
 //			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
 //		);
+		
+		//tx_newspaper::deleteRows('tx_newspaper_pagezone', array());
 		
 		$PA['row']['uid'] = $param['page']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
