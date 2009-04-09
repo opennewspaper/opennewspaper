@@ -36,7 +36,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
 					$pagezone_type_data[$i]['ACTIVE'] = true;
 					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
-					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
