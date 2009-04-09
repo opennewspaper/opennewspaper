@@ -85,7 +85,7 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 	/// either called by userfunc in be or ajax
 	public static function renderPageList($PA, $fObj=null) {
 		global $LANG;
-#t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
+t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
 
 		$section_uid = intval($PA['row']['uid']);
 t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);	
