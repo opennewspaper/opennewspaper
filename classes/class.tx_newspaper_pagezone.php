@@ -153,7 +153,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				}
 			} else {
 				throw new tx_newspaper_InconsistencyException(
-					'PageZone ' . $this->getUid() . ' appears to have no parent Page'
+					'PageZone ' . tx_newspaper::getTable($this) . ': ' .
+					$this->getUid() . ' appears to have no parent Page'
 				);
 			}
 		}
@@ -232,11 +233,85 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return Inheritance hierarchy of pages from which the current Page Zone 
 	 * 			inherits, ordered upwards  
 	 */
-	public function getInheritanceHierarchyUp($including_myself = true, $hierarchy = array()) {
-		if ($including_myself && !$hierarchy) $hierarchy[] = $this;
+	public function getInheritanceHierarchyUp($including_myself = true, 
+											  $hierarchy = array()) {
+		if ($including_myself) $hierarchy[] = $this;
 		if ($this->getParentForPlacement()) {
-			return $this->getInheritanceHierarchyUp(true, $hierarchy);			
+			return $this->getParentForPlacement()->getInheritanceHierarchyUp(true, $hierarchy);			
 		}
+	}
+	
+	/// Get the hierarchy of Page Zones inheriting placement from $this
+	/** \param $including_myself If true, add $this to the list
+	 *  \param $hierarchy List of already found parents (for recursive calling) 
+	 *  \return Inheritance hierarchy of pages inheriting from the current Page 
+	 * 			Zone, ordered downwards, depth-first
+	 */
+	public function getInheritanceHierarchyDown($including_myself = true, 
+												$hierarchy = array()) {
+		if ($including_myself) $hierarchy[] = $this;
+		
+		//  look for inheriting page zones only of the same type as $this
+		$table = tx_newspaper::getTable($this);
+		$heirs = tx_newspaper::selectRows(
+			'uid', $table, 'inherits_from = ' . $this->getUid()
+		);
+		foreach ($heirs as $heir) {
+			$inheriting_pagezone = new $table($heir['uid']);
+			array_merge($hierarchy, $this->getInheritanceHierarchyDown(true, $inheriting_pagezone));
+		}
+		return $hierarchy;
+	}
+
+	/// Add an extra after the Extra which is on the original page zone as $origin_uid
+	/** \param $origin_uid 
+	 *  \param $extra The new, fully instantiated Extra to insert
+	 */ 
+	public function insertInheritedExtraAfter($origin_uid, 
+											  tx_newspaper_Extra $insert_extra) {
+		/** Find the Extra to insert after. If it is not deleted on this page,
+		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
+		 */ 
+		$extra_after_which = null;
+		foreach ($this->getExtras() as $extra) {
+			if ($extra->getAttribute('origin_uid') == $origin_uid) {
+				$extra_after_which = $extra;
+				break;
+			} 
+		}
+		if (!$extra_after_which) {
+			/// \todo Deduce the $extra_after_which from the parent page(s)
+			/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
+			throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
+		}
+
+		/// Find Extra before which to insert the new Extra
+		$position_before_which = 0;
+		$position = $extra_after_which->getAttribute('position');
+		foreach ($this->getExtras() as $extra) {
+			/// \todo If $this is an article, handle paragraphs
+			if ($extra->getAttribute('position') > $position &&
+					(!$position_before_which ||
+					 $position_before_which > $extra->getAttribute('position')
+					)
+				) {
+				$position_before_which = $extra->getAttribute('position');
+				break;
+			} 
+		}
+		if (!$position_before_which) $position_before_which = 2*$position;
+		
+		if ($position_before_which-$position < 2) {
+			/// \todo Increase 'position' attribute for all extras after $extra_after_which 
+			throw new tx_newspaper_NotYetImplementedException('Rearranging extra positions if distance has shrunk to 1');			
+		}
+
+		/// Place Extra to insert between $extra_after and $extra_before (or at end)
+		$new_position = $position+($position_before_which-$position)/2;
+		$insert_extra->setAttribute('position', $new_position);
+		
+		/// Write Extra to DB
+		$insert_extra->store();
 	}
 	
 	/// As the name says, copies Extras from another PageZone
