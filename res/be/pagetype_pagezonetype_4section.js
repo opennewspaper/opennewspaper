@@ -102,7 +102,7 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 	}
 	
 	
-	function deletePageZone(section_id, page_id, pagezone, message) {
+	function deletePageZone(section_id, page_id, pagezone_id, message) {
 		
 		if (message == undefined) {
 			alert('Illegal function call');
@@ -117,7 +117,7 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 			path + "typo3conf/ext/newspaper/mod1/index.php",
 				{
 					method: 'get',
-					parameters: "delete_pagezone&param=[section]" + section_id + "|[page]" + page_id + "|[pagezone]" + pagezone + "&no_cache=" + new Date().getTime(),
+					parameters: "delete_pagezone&param=[section]" + section_id + "|[page]" + page_id + "|[pagezone]" + pagezone_id + "&no_cache=" + new Date().getTime(),
 					onSuccess: updatePageTypePageZoneType
 				}
 		);
