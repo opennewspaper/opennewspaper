@@ -85,16 +85,15 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 	/// either called by userfunc in be or ajax
 	public static function renderPageList($PA, $fObj=null) {
 		global $LANG;
-t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
+#t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
 
-		$section_uid = intval($PA['row']['uid']);
-t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);	
-
-		if (strtolower(substr($section_uid, 0, 3)) == 'new') {
+		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.section_not_saved', false);
 		}
-
+		$section_uid = intval($PA['row']['uid']);
+#t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);
+		
 		$page_type = tx_newspaper_PageType::getAvailablePageTypes();
 
 		$page_type_data = array(); // to collect information for be rendering
