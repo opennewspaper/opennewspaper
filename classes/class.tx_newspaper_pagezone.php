@@ -207,6 +207,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 		higher up in the hierarchy with the same page zone type as $this.  
 	 *  \return The PageZone object from which to copy the Extras and their 
 	 * 		placements. 
+	 *  \todo $inherit_mode -> getAttribute(inherits_from)
 	 */
 	public function getParentForPlacement($inherit_mode) {
 		$inherit_mode = intval($inherit_mode);
@@ -225,6 +226,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		return null;
 	}
+	
 	
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,

@@ -51,7 +51,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '',
-									  		   $useEnableFields = false) {
+									  		   $useEnableFields = true) {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . ($useEnableFields? self::enableFields($table): ''), 
 			$groupBy, $orderBy, $limit);
@@ -75,7 +75,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '',
-									  	$useEnableFields = false) {
+									  	$useEnableFields = true) {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . ($useEnableFields? self::enableFields($table): ''), 
 			$groupBy, $orderBy, $limit);
@@ -105,7 +105,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '',
-									  $useEnableFields = false) {
+									  $useEnableFields = true) {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, 
 			$where . ($useEnableFields? self::enableFields($table): ''), 
@@ -239,6 +239,10 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return WHERE part of an SQL statement starting with AND
 	 */
 	static public function enableFields($table, $show_hidden = 1) {
+		global $TCA;
+		t3lib_div::loadTCA($table);
+		if (!isset($TCA[$table])) return '';
+
 		require_once(PATH_t3lib . '/class.t3lib_page.php');
 	
 		if (TYPO3_MODE == 'FE') {
@@ -248,7 +252,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		} else if ($show_hidden != 0) {
 			$show_hidden = 1; // make sure show_hidden param is correct
 		}
-	
+			
 		$p = t3lib_div::makeInstance('t3lib_pageSelect');
 	
 		return $p->enableFields($table, $show_hidden);
