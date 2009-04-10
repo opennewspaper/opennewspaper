@@ -1,8 +1,11 @@
 {*
+	$TITLE
 	$AJAX_CALL
 	$DATA
+
 	$EDIT_ICON
 	$ADD_ICON
+	$DELETE_ICON
 *}
 
 {if $AJAX_CALL}
@@ -12,7 +15,7 @@
 {if $TITLE}{$TITLE}<br />{/if}
 {section name=i loop=$DATA}
 {if $DATA[i].ACTIVE == 1}
-	<a href="{$DATA[i].AJAX_URL}">{$EDIT_ICON}</a> {$DATA[i].type_name}<br />
+	<a href="{$DATA[i].AJAX_URL}">{$EDIT_ICON}</a> {$DATA[i].type_name} <a href="{$DATA[i].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
 {else}
 	<a href="{$DATA[i].AJAX_URL}">{$ADD_ICON}</a> {$DATA[i].type_name}<br />
 {/if}
