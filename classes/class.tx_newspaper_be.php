@@ -106,7 +106,7 @@ class tx_newspaper_BE {
 				if ($page_type[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
 					$page_type_data[$i]['ACTIVE'] = true;
 					$page_type_data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
-					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
