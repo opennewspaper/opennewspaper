@@ -113,26 +113,26 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 //$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.showPage', 1)
 		// edit
 		$content .= '<td>' . self::renderIcon('gfx/edit2.gif', '', 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag.extra_edit', false), 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_extra_edit', false), 
 			$ahref['edit'], true) . '</td>';
 
 		// visibility
 		if (!$item['extra']['hidden']) {
 			$content .= '<td id="visibility_' . $id . '">' . 
 				self::renderIcon('gfx/button_hide.gif', 'vis_icon_' . $id, 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag.extra_hide', false), 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_extra_hide', false), 
 				$ahref['toggle_visibility'], false) . '</td>';
 		} else {
 			$content .= '<td id="visibility_' . $id . '">' . 
 				self::renderIcon('gfx/button_unhide.gif', 'vis_icon_' . $id, 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag.extra_unhide', false), 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_extra_unhide', false), 
 				$ahref['toggle_visibility'], false) . '</td>';
 		}
 
 		// delete
 		$content .= '<td>' . 
 			self::renderIcon('gfx/garbage.gif', '', 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag.extra_delete', false), 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_extra_delete', false), 
 			$ahref['delete'], true) . '</td>';
 
 		if (self::getExtraBeDisplayMode() == EXTRA_DISPLAY_MODE_IFRAME) {

@@ -6,36 +6,28 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="flag.extra_edit">Edit extra</label>
-			<label index="flag.extra_hide">Hide extra</label>
-			<label index="flag.extra_unhide">Unhide extra</label>
-			<label index="flag.extra_delete">Delete extra</label>
-			<label index="message.section_not_saved">You can activate pages and page zones once you have saved this section.</label>
-			<label index="message.title_page_in_section">List of pages to edit or page types to activate for this section</label>
-			<label index="flag.edit_page_in_section">Check or activate pages zones for this page</label>
-			<label index="flag.new_page_in_section">Activate this page type for this section</label>
-			<label index="message.check_new_page_in_section">Do you really want to activate this page type?</label>
-			<label index="message.delete_page_in_section">Delete this page</label>
-			<label index="message.title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
-			<label index="flag.activated_pagezone_in_section">This page zone is activated</label>
-			<label index="flag.new_pagezone_in_section">Activate this page zone type for this section and page</label>
-			<label index="message.check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
-			<label index="message.check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
-			<label index="message.close_pagezone_in_section">Return to list of page types</label>
-			<label index="message.delete_pagezone_in_section">Delete this page zone</label>
+			<label index="flag_extra_edit">Edit extra</label>
+			<label index="flag_extra_hide">Hide extra</label>
+			<label index="flag_extra_unhide">Unhide extra</label>
+			<label index="flag_extra_delete">Delete extra</label>
+			<label index="message_section_not_saved">You can activate pages and page zones once you have saved this section.</label>
+			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
+			<label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
+			<label index="flag_new_page_in_section">Activate this page type for this section</label>
+			<label index="message_check_new_page_in_section">Do you really want to activate this page type?</label>
+			<label index="message_delete_page_in_section">Delete this page</label>
+			<label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
+			<label index="flag_activated_pagezone_in_section">This page zone is activated</label>
+			<label index="flag_new_pagezone_in_section">Activate this page zone type for this section and page</label>
+			<label index="message_check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
+			<label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
+			<label index="message_close_pagezone_in_section">Return to list of page types</label>
+			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_section">Section</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="flag.extra_edit">Extra bearbeiten</label>
-			<label index="flag.extra_hide">Extra verstecken</label>
-			<label index="flag.extra_unhide">Extra sichtbar machen</label>
-			<label index="flag.extra_delete">Extra löschen</label>
-			<label index="message.section_not_saved">Sie können Seiten und Seitenbereiche aktivieren, nachdem Sie dieses Ressort gespeichert haben.</label>
-			<label index="flag.edit_page_in_section">Überprüfen/aktivieren von Seitenbereichen für diese Seite</label>
-			<label index="flag.new_page_in_section">Diesen Seitentyp für dieses Ressort aktivieren</label>
-			<label index="message.title_page_in_section">Liste der editierbaren Seiten oder aktivierbaren Seitentypen für dieses Ressort</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
