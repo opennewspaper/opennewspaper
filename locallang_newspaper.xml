@@ -20,7 +20,7 @@
 			<label index="flag.activated_pagezone_in_section">This page zone is activated</label>
 			<label index="flag.new_pagezone_in_section">Activate this page zone type for this section and page</label>
 			<label index="message.check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
-			<label index="message.check_delete_pagezone_in_page">Do you really want to delete this page zone type?</label>
+			<label index="message.check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
 			<label index="message.close_pagezone_in_section">Return to list of page types</label>
 			<label index="message.delete_pagezone_in_section">Delete this page zone</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
