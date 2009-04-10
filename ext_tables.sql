@@ -38,7 +38,7 @@ CREATE TABLE tx_newspaper_section (
 	parent_section int(11) DEFAULT '0' NOT NULL,
 	articlelist tinytext,
 	pagetype_pagezone tinytext,
-	template_set tinytext,
+	template_set int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -59,7 +59,7 @@ CREATE TABLE tx_newspaper_page (
 	section text,
 	pagetype_id text,
 	inherit_pagetype_id int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext,
+	template_set int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -118,7 +118,7 @@ CREATE TABLE tx_newspaper_pagezone_page (
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	pagezone_id tinytext,
 	extras int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext,
+	template_set int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -184,7 +184,7 @@ CREATE TABLE tx_newspaper_article (
 	sections int(11) DEFAULT '0' NOT NULL,
 	name tinytext,
 	is_template tinyint(3) DEFAULT '0' NOT NULL,
-	template_set tinytext,
+	template_set int(11) DEFAULT '0' NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
@@ -389,4 +389,3 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext
 );
-

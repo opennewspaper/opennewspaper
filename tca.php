@@ -152,8 +152,12 @@ $TCA['tx_newspaper_section'] = array (
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set',		
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',
+				'type' => 'select',
+				'items' => array (
+					array('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set.I.0', '0'),
+				),
+				'size' => 1,	
+				'maxitems' => 1,
 			)
 		),
 	),
@@ -217,8 +221,12 @@ $TCA['tx_newspaper_page'] = array (
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.template_set',		
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',
+				'type' => 'select',
+				'items' => array (
+					array('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.template_set.I.0', '0'),
+				),
+				'size' => 1,	
+				'maxitems' => 1,
 			)
 		),
 	),
@@ -371,8 +379,12 @@ $TCA['tx_newspaper_pagezone_page'] = array (
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.template_set',		
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',
+				'type' => 'select',
+				'items' => array (
+					array('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.template_set.I.0', '0'),
+				),
+				'size' => 1,	
+				'maxitems' => 1,
 			)
 		),
 		'inherits_from' => array (		
@@ -634,8 +646,12 @@ $TCA['tx_newspaper_article'] = array (
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.template_set',		
 			'config' => array (
-				'type' => 'input',	
-				'size' => '30',
+				'type' => 'select',
+				'items' => array (
+					array('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.template_set.I.0', '0'),
+				),
+				'size' => 1,	
+				'maxitems' => 1,
 			)
 		),
 		'pagezonetype_id' => array (		
@@ -1254,5 +1270,4 @@ $TCA['tx_newspaper_articletype'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
