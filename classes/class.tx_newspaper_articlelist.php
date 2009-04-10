@@ -103,7 +103,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	public function getTitle() {
 		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:title_' .
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
 						 tx_newspaper::getTable($this), false);
 	}
 
