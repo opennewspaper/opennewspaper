@@ -129,6 +129,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->pagezonetype; 
 	}
 
+	/// \return uid of "parent" abstract pagezone record for given pagezone
+	public function getAbtractUid() {
+		$row = tx_newspaper::selectOneRow(
+			'uid',
+			'tx_newspaper_pagezone',
+			'deleted=0 AND pagezone_uid=' . $this->getUid() . ' AND pagezone_table="' .$this->getTable() . '"'
+		);
+#t3lib_div::devlog('gau', 'newspaper', 0, array($this->getUid(), $this->getTable(), intval($row['uid'])));	
+		return intval($row['uid']);
+	}
+
 	public function getParentPage() {
 		if (!$this->parent_page) {
 			if (!$this->parent_page_id) {
