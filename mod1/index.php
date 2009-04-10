@@ -209,7 +209,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
 t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
-		//tx_newspaper::deleteRows('tx_newspaper_pagezone', array(intval($param['pagezone'])));
+		tx_newspaper::deleteRows('tx_newspaper_pagezone', array(intval($param['pagezone'])));
 		
 		$PA['row']['uid'] = $param['page']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
