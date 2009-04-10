@@ -14,7 +14,7 @@ class tx_newspaper_BE {
 
 	public static function renderPageZoneList($PA, $fObj=null) {
 		global $LANG;
-t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);		
+#t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);		
 
 		if (!isset($PA['SECTION'])) {
 			t3lib_div::devlog('renderPZL: no section', 'newspaper', 3, $PA); exit(); /// \todo replace with exception
@@ -30,13 +30,15 @@ t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);
 #t3lib_div::debug($p);
 		// add data to active pagezone types
 		foreach($p->getActivePageZones() as $active_pagezone) {
-t3lib_div::debug($active_pagezone);
+#t3lib_div::debug($active_pagezone);
+#t3lib_div::devlog('gapz uid', 'newspaper', 0, $active_pagezone->getUid());
 			/// get page zone type id for this active page
 			for ($i = 0; $i < sizeof($pagezone_type); $i++) {
 				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
 					$pagezone_type_data[$i]['ACTIVE'] = true;
 					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
-					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
+#t3lib_div::devlog('gapz abstract uid 3', 'newspaper', 0, $active_pagezone->getAbtractUid());
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getAbtractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
