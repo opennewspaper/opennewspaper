@@ -106,6 +106,7 @@ class tx_newspaper_BE {
 				if ($page_type[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
 					$page_type_data[$i]['ACTIVE'] = true;
 					$page_type_data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
@@ -129,6 +130,8 @@ class tx_newspaper_BE {
 		// add skinned icons
 		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.edit_page_in_section', false)));
 		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:flag.new_page_in_section', false)));
+		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.delete_page_in_section', false)));
+		
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.php:message.title_page_in_section', false));
