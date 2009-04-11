@@ -80,7 +80,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		global $LANG;
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
 				tx_newspaper::getTable($this), false);
-		return 'Section';
 	}
 
 	function getArticleList() {
