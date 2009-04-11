@@ -153,7 +153,32 @@ class tx_newspaper_BE {
 	}
 	
 
+	/// itemsProcFunc to fill templateset dropdowns
+	function addTemplateSetDropdownEntries(&$params, &$pObj) {
+		
+		$default_found = false;
+		
+		$templateset = tx_newspaper_smarty::getAvailableTemplateSets(new tx_newspaper_Section(1));
+#t3lib_div::devlog('templ set', 'newspaper', 0, $template
+/// \todo: use tx_newspaper_smarty::getAvailableTemplateSets() !
+$templateset = array('rot', 'test', 'default', 'dummy');
 
+		$params['items'][] = array('', ''); // empty entry -> templateset is inherited 
+		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
+		
+		for ($i = 0; $i < sizeof($templateset); $i++) {
+			if (strtolower($templateset[$i]) != 'default') {
+				$params['items'][] = array($templateset[$i], $templateset[$i]);				
+			} else {
+				$default_found = true;
+			}
+		}
+		
+		if (!$default_found) {
+			unset($params['default']); // remover entry 'default' (because there's no templateset default available)
+		}
+		
+	} 
 
 
 
