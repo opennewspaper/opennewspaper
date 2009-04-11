@@ -15,15 +15,28 @@ require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php
 $TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
 
 
-// add user function for page type and page zone type in section records 
+/// add user function for page type and page zone type in section records 
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPageList';
 
-// add user function for article list in section records
+
+/// add user function for article list in section records
 unset($TCA['tx_newspaper_section']['columns']['articlelist']['config']);
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
+
+
+/// add entries for template set dropdowns
+unset($TCA['tx_newspaper_section']['columns']['template_set']['config']['items']['0']);
+$TCA['tx_newspaper_section']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
+unset($TCA['tx_newspaper_page']['columns']['template_set']['config']['items']['0']);
+$TCA['tx_newspaper_page']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
+unset($TCA['tx_newspaper_pagezone_page']['columns']['template_set']['config']['items']['0']);
+$TCA['tx_newspaper_pagezone_page']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
+unset($TCA['tx_newspaper_article']['columns']['template_set']['config']['items']['0']);
+$TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
+
 
 
 // /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
