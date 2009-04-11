@@ -10,7 +10,8 @@
 			<label index="flag_extra_hide">Hide extra</label>
 			<label index="flag_extra_unhide">Unhide extra</label>
 			<label index="flag_extra_delete">Delete extra</label>
-			<label index="message_section_not_saved">You can activate pages and page zones once you have saved this section.</label>
+			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
+			<label index="message_section_not_saved_articlelist">You edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
 			<label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
 			<label index="flag_new_page_in_section">Activate this page type for this section</label>

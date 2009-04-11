@@ -91,7 +91,7 @@ class tx_newspaper_BE {
 
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
-			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved', false);
+			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_page', false);
 		}
 		$section_uid = intval($PA['row']['uid']);
 #t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);
