@@ -27,6 +27,7 @@
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_section">Section</label>
+			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
