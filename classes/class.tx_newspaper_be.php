@@ -182,67 +182,119 @@ $templateset = array('rot', 'test', 'default', 'dummy');
 
 
 
-
-	function addArticlelistDropdownEntries(&$params, &$pObj) {
-		$s = new tx_newspaper_Section(intval($params['row']['uid']));
-		try {
-			$al_active = $s->getArticleList();	
-		} catch (tx_newspaper_EmptyResultException $e) {
-t3lib_div::devlog('remove try/catch later', 'newspaper', 0); /// \todo
-			$al_active = null;
-		};
-
-		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
-		for ($i = 0; $i < sizeof($al_available); $i++) {
-			if ($al_available[$i]->getUid() > 0) 
-				$value = $al_available[$i]->getUid();
-			else 
-				$value = $al_available[$i]->getTable(); // -($i+1);
-			$params['items'][] = array($al_available[$i]->getTitle(), $value);
-		}
-		
-t3lib_div::devlog('al dropdown', 'newspaper', 0, $params);
-	}
-
-
-
-
-
-
-//// UNNEEDED UNNEEDED UNNEEDED UNNEEDED UNNEEDED
-//
-//	/// render article list form for section backend
-//	/// either called by userfunc in be or ajax
-//	public static function renderArticleList($PA, $fObj=null) {
-//		global $LANG;
-//		
-//		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
-//			/// new section record, so no "real" section uid available
-//			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
-//		}
-//		$section_uid = intval($PA['row']['uid']);
+/// \todo: remove if really not needed
+//	function addArticlelistDropdownEntries(&$params, &$pObj) {
+//		$s = new tx_newspaper_Section(intval($params['row']['uid']));
+//		try {
+//			$al_active = $s->getArticleList();	
+//		} catch (tx_newspaper_EmptyResultException $e) {
+//t3lib_div::devlog('remove try/catch later', 'newspaper', 0); /// \todo
+//			$al_active = null;
+//		};
 //
 //		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
-//
-///// \todo: aus tca auslesen
-//$config['type'] = 'select';
-//$config['size'] = 1;
-//$config['maxitems'] = 1;
-//$config['itemsProcFunc'] = 'tx_newspaper_BE->addArticlelistDropdownEntries';
-//$config['form_type'] = 'select';
-//
-//	$selItems = array();
-//	$selItems[] = array('1', '2', '');
-//	$selItems[] = array('4', '5', '');
-//	#$nMV_label = isset($PA['fieldTSConfig']['noMatchingValue_label']) ? $this->sL($PA['fieldTSConfig']['noMatchingValue_label']) : '[ '.$this->getLL('l_noMatchingValue').' ]';
-//	$nMV_label = '[ INVALID VALUE ("%s") ]';
-//
-//	$obj = new t3lib_TCEforms(); 
-//
-//	$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA, $PA['row'], $config, $selItems, $nMV_label);
-//t3lib_div::devlog('al out', 'newspaper', 0, $out);
-//	return $out;
+//		for ($i = 0; $i < sizeof($al_available); $i++) {
+//			if ($al_available[$i]->getUid() > 0) 
+//				$value = $al_available[$i]->getUid();
+//			else 
+//				$value = $al_available[$i]->getTable(); // -($i+1);
+//			$params['items'][] = array($al_available[$i]->getTitle(), $value);
+//		}
+//		
+//t3lib_div::devlog('al dropdown', 'newspaper', 0, $params);
 //	}
+
+
+
+
+
+
+	/// render article list form for section backend
+	/// either called by userfunc in be or ajax
+	public static function renderArticleList($PA, $fObj=null) {
+/// \todo: transfer to external js file when finalized
+echo "
+<script language='javascript'>
+ function processArticlelist() {
+
+ 	tmp = findElementsByName('data[tx_newspaper_section][49][articlelist]', 'select');
+ 	if (tmp.length > 0)
+ 		selectbox = tmp[0];
+ 	else {
+ 		alert('Dropdown for article list cannot be found');
+ 		return false;
+ 	}
+ 	
+ 	selIndex = selectbox.selectedIndex;
+	//top.console.log(selectbox.options[selIndex].value); alert(selectbox.options[selIndex].value);
+	
+	if (isNaN(selectbox.options[selIndex].value)) {
+		// value is a class name -> create new super table record for article list
+		top.console.log('not a number');
+	} else {
+		// value is an uid, nothing to do
+		top.console.log('a number');	
+	}	
+ 	
+ 		
+ 		
+ }
+
+
+function findElementsByName(name, type) {
+    var res = document.getElementsByTagName(type || '*');
+    var ret = [];
+    for (var i = 0; i < res.length; i++)
+        if (res[i].getAttribute('name') == name) ret.push(res[i]);
+    return ret;
+};
+
+</script>
+<a href='javascript:test();'>Test AL</a>
+";
+		
+		
+		
+		global $LANG;
+t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);		
+		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
+			/// new section record, so no "real" section uid available
+			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
+		}
+		$section_uid = intval($PA['row']['uid']);
+
+		// set configuration
+		$config['type'] = 'select';
+		$config['size'] = 1;
+		$config['maxitems'] = 1;
+		$config['form_type'] = 'select';
+
+		// add article lists to dropdown
+		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
+		$s = new tx_newspaper_Section($section_uid);
+		$selItems = array();
+		for ($i = 0; $i < sizeof($al_available); $i++) {
+			if ($al_available[$i]->getTable() == $s->getArticleList()->getTable()) { 
+				$value = $s->getAbstractArticleListUid(); // store uid in tx_newspaper_article of active article list as value
+				$PA['itemFormElValue'] = $i; // and set as selected element
+			} else {
+				$value = $al_available[$i]->getTable(); // store class name as value
+			}
+			$selItems[] = array($al_available[$i]->getTitle(), $value, '');
+		}
+		
+		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);	
+
+		$obj = new t3lib_TCEforms(); 
+	
+		// add javascript to onchange field
+		$PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] = 'processArticlelist(); ' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'];
+	
+		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
+		return $out;
+
+	}
+
 
 
 

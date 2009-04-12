@@ -23,12 +23,8 @@ $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc
 
 /// add article liste dropdown
 unset($TCA['tx_newspaper_section']['columns']['articlelist']['config']);
-$TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'select';
-$TCA['tx_newspaper_section']['columns']['articlelist']['config']['size'] = 1;
-$TCA['tx_newspaper_section']['columns']['articlelist']['config']['maxitems'] = 1;
-$TCA['tx_newspaper_section']['columns']['articlelist']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addArticlelistDropdownEntries';
-//$TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
-//$TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
+$TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
+$TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
 
 
 /// add entries for template set dropdowns
