@@ -196,6 +196,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	static protected $section_table = 'tx_newspaper_section';
 	/// Array for registered article lists (subclasses of tx_newspaper_ArticleList)
 	static protected $registered_articlelists = array();
+	
+	private static $fields_to_copy_into_articlelist_table = array(
+		'pid', 'crdate', 'cruser_id'
+	);
+
 }
 
 
