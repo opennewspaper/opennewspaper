@@ -183,15 +183,67 @@ $templateset = array('rot', 'test', 'default', 'dummy');
 
 
 
-	/// render article list form for section backend
-	/// either called by userfunc in be or ajax
-	public static function renderArticleList($PA, $fObj=null) {
-		$al = tx_newspaper_ArticleList::getRegisteredArticleLists();
+	function addArticlelistDropdownEntries(&$params, &$pObj) {
+		$s = new tx_newspaper_Section(intval($params['row']['uid']));
+		try {
+			$al_active = $s->getArticleList();	
+		} catch (tx_newspaper_EmptyResultException $e) {
+t3lib_div::devlog('remove try/catch later', 'newspaper', 0); /// \todo
+			$al_active = null;
+		};
 
+		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
+		for ($i = 0; $i < sizeof($al_available); $i++) {
+			if ($al_available[$i]->getUid() > 0) 
+				$value = $al_available[$i]->getUid();
+			else 
+				$value = $al_available[$i]->getTable(); // -($i+1);
+			$params['items'][] = array($al_available[$i]->getTitle(), $value);
+		}
 		
-
-		return '###';
+t3lib_div::devlog('al dropdown', 'newspaper', 0, $params);
 	}
+
+
+
+
+
+
+//// UNNEEDED UNNEEDED UNNEEDED UNNEEDED UNNEEDED
+//
+//	/// render article list form for section backend
+//	/// either called by userfunc in be or ajax
+//	public static function renderArticleList($PA, $fObj=null) {
+//		global $LANG;
+//		
+//		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
+//			/// new section record, so no "real" section uid available
+//			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
+//		}
+//		$section_uid = intval($PA['row']['uid']);
+//
+//		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
+//
+///// \todo: aus tca auslesen
+//$config['type'] = 'select';
+//$config['size'] = 1;
+//$config['maxitems'] = 1;
+//$config['itemsProcFunc'] = 'tx_newspaper_BE->addArticlelistDropdownEntries';
+//$config['form_type'] = 'select';
+//
+//	$selItems = array();
+//	$selItems[] = array('1', '2', '');
+//	$selItems[] = array('4', '5', '');
+//	#$nMV_label = isset($PA['fieldTSConfig']['noMatchingValue_label']) ? $this->sL($PA['fieldTSConfig']['noMatchingValue_label']) : '[ '.$this->getLL('l_noMatchingValue').' ]';
+//	$nMV_label = '[ INVALID VALUE ("%s") ]';
+//
+//	$obj = new t3lib_TCEforms(); 
+//
+//	$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA, $PA['row'], $config, $selItems, $nMV_label);
+//t3lib_div::devlog('al out', 'newspaper', 0, $out);
+//	return $out;
+//	}
+
 
 
 
