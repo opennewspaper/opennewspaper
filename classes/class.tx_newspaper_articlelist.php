@@ -96,10 +96,88 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$this->attributes[$attribute] = $value;
 	}
 
-	/// Write or overwrite Section data in DB, return UID of stored record
+	/// Write or overwrite article list in DB, return UID of stored record 
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException();
+		
+		if ($this->getUid()) {
+			// read attributes initially
+			if (!$this->attributes) {
+				$this->readAttributes($this->getTable(), $this->getUid());
+			}			
+				
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			///	Store a newly created article list
+			/// \todo If the PID is not set manually, $tce->process_datamap() fails silently. 
+			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+
+		/// Ensure the article list has an entry in the abstract super table...
+		$articlelist_uid = $this->createArticleListRecord($this->getUid(), $this->getTable());
+		return $this->getUid();
 	}
+
+
+ 	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
+	/** This is probably necessary because a concrete ArticleList has been freshly
+	 *  created.
+	 *  Does nothing if the concrete ArticleList is already linked in the abstract table. 
+	 * 
+	 *  \param $uid UID of the ArticleList in the table of concrete ArticleList
+	 *  \param $table Table of concrete ArticleList
+	 *  \return UID of abstract ArticleList record
+	 */ 
+	public static function createArticleListRecord($uid, $table) {
+		/// Check if record is already present in articlelist table
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid', 'tx_newspaper_articlelist', 
+			'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
+			' AND list_uid = ' . intval($uid)
+		);
+		if (sizeof($row) > 0) {
+			if ($row['deleted'] == 0 && $row['uid']) return $row['uid']; // active record found
+			if ($row['deleted'] == 1 && $row['uid']) {
+				/// reactivate old record
+				// check if referenced record is still available
+				$row2 = tx_newspaper::selectZeroOrOneRows(
+					'uid', $row['list_table'], 
+					'uid = ' . intval($row['list_uid'])
+				);
+				if (sizeof($row2) > 0) {
+					/// undelete (= re-activate) record
+					tx_newspaper::updateRows(
+						'tx_newspaper_articlelist',
+						'uid=' . $row['uid'],
+						array('deleted' => 0)
+					);
+					return $row['uid']; // old record was undeleted
+				}
+			}
+		}
+		
+		/// read typo3 fields to copy into article list super table
+		$row = tx_newspaper::selectOneRow(
+			implode(', ', self::$fields_to_copy_into_articlelist_table),
+			$table,
+			'uid = ' . intval($uid)
+		);
+		
+		/// write the uid and table into page zone table, with the values read above
+		$row['list_uid'] = $uid;
+		$row['list_table'] = $table;
+		$row['tstamp'] = time();				///< tstamp is set to now
+
+		return tx_newspaper::insertRows('tx_newspaper_articlelist', $row);		
+	}
+
 
 	public function getTitle() {
 		global $LANG;
