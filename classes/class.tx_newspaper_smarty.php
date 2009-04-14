@@ -96,6 +96,8 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		$basedir->close();
 
+		sort($template_sets);
+		
 		return $template_sets;
 	}
 	
