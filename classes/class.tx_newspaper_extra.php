@@ -68,7 +68,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-		t3lib_div::debug($this->attributes);
+
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
@@ -198,6 +198,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	public function setUid($uid) { $this->uid = $uid; }
 
 	public function setExtraUid($uid) { $this->extra_uid = $uid; }
+	/// This function is only public so unit tests can access it	
 	public function getExtraUid() { return intval($this->extra_uid); }
 
 	/// Finds the PageZone this Extra is placed upon
