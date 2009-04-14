@@ -68,7 +68,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-
+		t3lib_div::debug($this->attributes);
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
  		}
