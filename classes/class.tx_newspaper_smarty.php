@@ -77,45 +77,20 @@ class tx_newspaper_Smarty extends Smarty {
 		$this->templateSearchPath = $path;
 	}
 	
-	/// Get the list of template sets which contain a template for a specific object
-	/** \param $object Object to render
-	 *  \param $page Page in which the object lies
-	 *  \param $pagezone Page zone in which the object lies
-	 *  \return Array of available template sets
+	/// Get the list of template sets present in the template directory
+	/** \return Array of available template sets
 	 */
-	static public function getAvailableTemplateSets(tx_newspaper_StoredObject $object, 
-												 	tx_newspaper_Page $page = null,
-												 	tx_newspaper_PageZone $pagezone = null) {
+	static public function getAvailableTemplateSets() {
 
-		$template_name = tx_newspaper::getTable($object);
 		$template_sets = array();
 
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
-
-		if ($page) {
-			$page_name = $page->getPageType()->getAttribute('normalized_name')?
-				$page->getPageType()->getAttribute('normalized_name'):
-				strtolower($page->getPageType()->getAttribute('type_name'));
-			if ($pagezone) {
-				$pagezone_name = $pagezone->getPageZoneType()->getAttribute('normalized_name')?
-					$pagezone->getPageZoneType()->getAttribute('normalized_name'):
-					strtolower($pagezone->getPageZoneType()->getAttribute('type_name'));
-			}
-		}
 		
 		$basedir = dir($basepath);
 		while (false !== ($template_set = $basedir->read())) {
-			if (!is_dir($template_set)) continue;
-			if (file_exists($basepath . 'template_sets/' . 
-							$template_set . '/' . $page_name . '/' . $pagezone_name . '/' .
-							$template_name . '.tmpl') ||
-					file_exists($basepath . 'template_sets/' . 
-								$template_set . '/' . $page_name . '/' . $template_name . '.tmpl') ||
-					file_exists($basepath . 'template_sets/' . $template_set . '/' . 
-								$template_name . '.tmpl')
-				) {
+			if (is_dir($basepath . 'template_sets/' . $template_set)) {
 				$template_sets[] = $template_set;
 			}
 		}
