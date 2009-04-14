@@ -75,8 +75,8 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$this->assertTrue($article instanceof tx_newspaper_Article);
 		$this->assertEquals($article->getAttribute('title'), 'Nummer zwei');
 		
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$list->store();
+		t3lib_div::debug('to do: test storing a list');
 	}
 	
 	public function test_ArticleList() {
