@@ -162,9 +162,12 @@ t3lib_div::devlog('adbo post fields', 'newspaper', 0, $fieldArray);
 		
 t3lib_div::devlog('new ids', 'newspaper', 0, $that->substNEWwithIDs);		
 		
-		/// If a new section has been created, copy its placement
+		/// If a new section has been created, create default article list
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
-#			return $this->newSection($id, $fieldArray);
+			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
+			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
+			$al->store();
+/// \todo $this->newSection($id, $fieldArray); /// copy placement ...
 		} 
 	}
 
