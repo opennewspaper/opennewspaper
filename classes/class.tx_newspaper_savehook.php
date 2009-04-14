@@ -20,10 +20,10 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
-t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
-t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
-t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+//t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
+//t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
+//t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
+//t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 
 #t3lib_div::devlog('templ set', 'newspaper', 0, tx_newspaper_Smarty::getAvailableTemplateSets(new tx_newspaper_Section(intval(1))));
 		/// check if a page zone type with is_article flag set is allowed
@@ -155,6 +155,11 @@ t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
 	}
 	
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
+t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
+t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
+t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+		
 		/// If a new section has been created, copy its placement
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 #			return $this->newSection($id, $fieldArray);
