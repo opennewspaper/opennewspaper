@@ -50,10 +50,9 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return The result of the query as associative array
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
-											   $groupBy = '', $orderBy = '', $limit = '',
-									  		   $useEnableFields = true) {
+											   $groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where . ($useEnableFields? self::enableFields($table): ''), 
+			$fields, $table, $where . self::enableFields($table), 
 			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
@@ -74,10 +73,9 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return The result of the query as associative array
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
-										$groupBy = '', $orderBy = '', $limit = '',
-									  	$useEnableFields = true) {
+										$groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where . ($useEnableFields? self::enableFields($table): ''), 
+			$fields, $table, $where . self::enableFields($table), 
 			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 		
@@ -104,11 +102,10 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return The result of the query as 2-dimensional associative array
 	 */
 	public static function selectRows($fields, $table, $where = '1',
-									  $groupBy = '', $orderBy = '', $limit = '',
-									  $useEnableFields = true) {
+									  $groupBy = '', $orderBy = '', $limit = '') {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, 
-			$where . ($useEnableFields? self::enableFields($table): ''), 
+			$where . self::enableFields($table), 
 			$groupBy, $orderBy, $limit);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
