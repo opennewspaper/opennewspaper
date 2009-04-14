@@ -230,19 +230,28 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	/** \param $table SQL table to delete a record from
 	 *  \param $uids Array of UIDs to delete
 	 */
-	public static function deleteRows($table, array $uids) {
-		$cmdmap = array();
-		foreach ($uids as $uid) {
-			$cmdmap[$table][$uid] = array('delete' => '');
-		}
+	public static function deleteRows($table, $uids_or_where) {
+		if (is_array($uids_or_where)) {
+			$cmdmap = array();
+			foreach ($uids_or_where as $uid) {
+				$cmdmap[$table][$uid] = array('delete' => '');
+			}
+	
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start(null, $cmdmap);
+			$tce->process_cmdmap();
+			if (count($tce->errorLog)){
+				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			}
+		} else {
+			self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $uids_or_where, array('deleted' => 1));
+			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
-		$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-		$tce->start(null, $cmdmap);
-		$tce->process_cmdmap();
-		if (count($tce->errorLog)){
-			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			if (!$res) {
+        		throw new tx_newspaper_NoResException(self::$query);
+        	}
 		}
-        
+		
         return $GLOBALS['TYPO3_DB']->sql_affected_rows();        
 	}
 
