@@ -198,7 +198,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	public function setUid($uid) { $this->uid = $uid; }
 
 	public function setExtraUid($uid) { $this->extra_uid = $uid; }
-	protected function getExtraUid() { return intval($this->extra_uid); }
+	public function getExtraUid() { return intval($this->extra_uid); }
 
 	/// Finds the PageZone this Extra is placed upon
 	/** I'm afraid this raises several problems, so this function should be used
