@@ -60,7 +60,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
 						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
-		t3lib_div::debug(tx_newspaper_PageType::getAvailablePageTypes());
+		
+		/// \todo tx_newspaper_PageType::getAvailablePageTypes()
 		
 	}
 	

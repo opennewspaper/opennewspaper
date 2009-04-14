@@ -131,12 +131,15 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$article_uid = 1;
 		$article = new tx_newspaper_Article($article_uid);
 		foreach($this->extras_to_test as $extra_class) {
+			t3lib_div::debug($extra_class);
 			/// create a new extra, call relateExtra2Article() on a known article 
 			$extra = new $extra_class();
 			$crdate = time();
 			$extra->setAttribute('crdate', $crdate);
 			$extra_uid = $extra->store();
+			t3lib_div::debug($extra_uid);
 			$abstract_uid = tx_newspaper_Article::relateExtra2Article($extra_class, $extra_uid, $article_uid);
+			t3lib_div::debug($abstract_uid);
 
 			/// check that entry for Extra supertable has been written and is equal to new Extra
 			$data = tx_newspaper::selectOneRow(
@@ -147,11 +150,12 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
 			$extra_supertable_uid = $data['uid'];
+			t3lib_div::debug($extra_supertable_uid);
 			$extra_reborn = tx_newspaper_Extra_Factory::create($extra_supertable_uid);
 			$this->assertTrue(is_a($extra_reborn, $extra_class));
 			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
 			
-			/// \todo check that $abstract_uid correspnds to entry in extra supertable
+			/// \todo check that $abstract_uid corresponds to entry in extra supertable
 			
 			/// check that MM-relation to the article has been written
 			$data = tx_newspaper::selectOneRow(
