@@ -212,6 +212,7 @@ $templateset = array('rot', 'test', 'default', 'dummy');
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
+return 'deactivated renderArticleList()';
 /// \todo: transfer to external js file when finalized
 echo "
 <script language='javascript'>
