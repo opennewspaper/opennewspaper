@@ -105,7 +105,7 @@ $TCA['tx_newspaper_extra_image'] = array (
 $TCA['tx_newspaper_section'] = array (
 	'ctrl' => $TCA['tx_newspaper_section']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'section_name,parent_section,articlelist,pagetype_pagezone,template_set'
+		'showRecordFieldList' => 'section_name,parent_section,articlelist,template_set,pagetype_pagezone'
 	),
 	'feInterface' => $TCA['tx_newspaper_section']['feInterface'],
 	'columns' => array (
@@ -150,13 +150,6 @@ $TCA['tx_newspaper_section'] = array (
 				'default' => 0
 			)
 		),
-		'pagetype_pagezone' => array (		
-			'exclude' => 1,		
-			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone',		
-			'config' => array (
-				'type' => 'none',
-			)
-		),
 		'template_set' => array (		
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set',		
@@ -169,9 +162,16 @@ $TCA['tx_newspaper_section'] = array (
 				'maxitems' => 1,
 			)
 		),
+		'pagetype_pagezone' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone',		
+			'config' => array (
+				'type' => 'none',
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'section_name;;;;1-1-1, parent_section, articlelist, pagetype_pagezone, template_set')
+		'0' => array('showitem' => 'section_name;;;;1-1-1, parent_section, articlelist, template_set, pagetype_pagezone')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -1091,7 +1091,7 @@ $TCA['tx_newspaper_pagetype'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
-				'eval' => 'required,alphanum,nospace,uniqueInPid',
+				'eval' => 'alphanum,nospace',
 			)
 		),
 		'get_var' => array (		
@@ -1151,7 +1151,7 @@ $TCA['tx_newspaper_pagezonetype'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
-				'eval' => 'required,alphanum,nospace,uniqueInPid',
+				'eval' => 'alphanum,nospace',
 			)
 		),
 		'is_article' => array (		
@@ -1268,7 +1268,7 @@ $TCA['tx_newspaper_articletype'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
-				'eval' => 'required,alphanum,nospace,uniqueInPid',
+				'eval' => 'required,alphanum,nospace',
 			)
 		),
 	),
@@ -1279,5 +1279,4 @@ $TCA['tx_newspaper_articletype'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
