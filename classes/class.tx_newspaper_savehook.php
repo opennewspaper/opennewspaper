@@ -155,10 +155,10 @@ class tx_newspaper_SaveHook {
 	}
 	
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
-t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
-t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
-t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+t3lib_div::devlog('adbo post status', 'newspaper', 0, $status);
+t3lib_div::devlog('adbo post table', 'newspaper', 0, $table);
+t3lib_div::devlog('adbo post id', 'newspaper', 0, $id);
+t3lib_div::devlog('adbo post fields', 'newspaper', 0, $fieldArray);
 		
 		/// If a new section has been created, copy its placement
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
