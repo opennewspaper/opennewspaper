@@ -172,7 +172,7 @@ class tx_newspaper_BE {
 		}
 		
 		if (!$default_found) {
-			unset($params['default']); // remover entry 'default' (because there's no templateset default available)
+			unset($params['default']); // remove entry 'default' (because there's no templateset default available)
 		}
 		
 	} 
