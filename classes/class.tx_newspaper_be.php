@@ -212,13 +212,14 @@ $templateset = array('rot', 'test', 'default', 'dummy');
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
-return 'deactivated renderArticleList()';
-/// \todo: transfer to external js file when finalized
+		global $LANG;
+/// \todo: move js to external file ... but how to handle localization then? And access to $PA?		
+#return 'to come ... renderArticleList()';
 echo "
 <script language='javascript'>
  function processArticlelist() {
 
- 	tmp = findElementsByName('data[tx_newspaper_section][49][articlelist]', 'select');
+ 	tmp = findElementsByName('" . $PA['itemFormElName'] . "', 'select');
  	if (tmp.length > 0)
  		selectbox = tmp[0];
  	else {
@@ -227,20 +228,25 @@ echo "
  	}
  	
  	selIndex = selectbox.selectedIndex;
-	//top.console.log(selectbox.options[selIndex].value); alert(selectbox.options[selIndex].value);
 	
 	if (isNaN(selectbox.options[selIndex].value)) {
 		// value is a class name -> create new super table record for article list
-		top.console.log('not a number');
+		document.getElementById('edit_articlelist').style.display = 'none';
+		document.getElementById('NO_edit_articlelist').style.display = 'inline';
 	} else {
-		// value is an uid, nothing to do
-		top.console.log('a number');	
-	}	
+		document.getElementById('edit_articlelist').style.display = 'inline';
+		document.getElementById('NO_edit_articlelist').style.display = 'none';		
+	}
  	
  		
  		
  }
 
+function editArticleList() {
+
+
+
+}
 
 function findElementsByName(name, type) {
     var res = document.getElementsByTagName(type || '*');
@@ -273,11 +279,13 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 		// add article lists to dropdown
 		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
 		$s = new tx_newspaper_Section($section_uid);
+		$s_al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($PA['row']['articlelist']), $s);
 		$selItems = array();
 		for ($i = 0; $i < sizeof($al_available); $i++) {
-			if ($al_available[$i]->getTable() == $s->getArticleList()->getTable()) { 
+			if ($al_available[$i]->getTable() == $s_al->getTable()) {
+//			if ($al_available[$i]->getTable() == $s->getArticleList()->getTable()) { 
 				$value = $s->getAbstractArticleListUid(); // store uid in tx_newspaper_article of active article list as value
-				$PA['itemFormElValue'] = $i; // and set as selected element
+				$PA['itemFormElValue'] = $value; // and set as selected element
 			} else {
 				$value = $al_available[$i]->getTable(); // store class name as value
 			}
@@ -292,9 +300,24 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 		$PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] = 'processArticlelist(); ' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'];
 	
 		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
+
+		$out .= ' ' . self::renderEditIcon4ArticleList($s->getArticleList());
+
 		return $out;
 
 	}
+
+	function renderEditIcon4ArticleList(tx_newspaper_Articlelist $al) {
+		global $LANG;
+		$html .= '<span id="edit_articlelist">';
+		$html .= '<a target="np" href="alt_doc.php?returnUrl=close.html&edit[' . $al->getTable() . '][' . $al->getUid() . ']=edit">';
+		$html .= self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_articlelist_in_section', false));
+		$html .= '</a>';
+		$html .= '</span>';
+		$html .= '<span style="display:none;" id="NO_edit_articlelist">' .  $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_edit_articlelist_in_section_save_first', false) . '</span>';
+		return $html;
+	}
+
 
 
 
