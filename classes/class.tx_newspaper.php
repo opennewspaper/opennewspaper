@@ -166,32 +166,47 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return uid of inserted record
 	 */
 	public static function insertRows($table, array $row) {
+
+		global $TCA;
+		t3lib_div::loadTCA($table);
+
+		if (isset($TCA[$table])) {
 		/// process_datamap() dies if PID is not set
 /*		if (!isset($row['pid']) || !$row['pid']) {
 			throw new tx_newspaper_IllegalUsageException('PID must be set, else process_datamap() will die! ' .
 														 print_r($row, 1));
 		}
 */		
-		///	Assemble a datamap with a new UID
-		$new_id = 'NEW'.uniqid('');
-		$datamap = array(
-			$table => array(
-				$new_id => $row
-			)
-		);
-		
-		/// Process the datamap, inserting a new record into $table
-		$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-		$tce->start($datamap, null);
-		$tce->process_datamap();
-		
-		if (count($tce->errorLog)){
-			/// Set tx_newspaper::$query so the user can see what was attempted
+			///	Assemble a datamap with a new UID
+			$new_id = 'NEW'.uniqid('');
+			$datamap = array(
+				$table => array(
+					$new_id => $row
+				)
+			);
+			
+			/// Process the datamap, inserting a new record into $table
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, null);
+			$tce->process_datamap();
+			
+			if (count($tce->errorLog)){
+				/// Set tx_newspaper::$query so the user can see what was attempted
+				self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
+				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			}
+			
+			return $tce->substNEWwithIDs[$new_id];
+		} else {
 			self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
-			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+	
+			if (!$res) {
+	        	throw new tx_newspaper_NoResException(self::$query);
+	        }
+	        
+	        return $GLOBALS['TYPO3_DB']->sql_insert_id();        			
 		}
-		
-		return $tce->substNEWwithIDs[$new_id];
 	}
 
 	/// updates a record using T3 API
