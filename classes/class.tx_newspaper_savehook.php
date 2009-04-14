@@ -13,10 +13,6 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('th pre palette', 'newspaper', 0, $palette);
 #t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
 #t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
-		/// make sure field "normalized_name" can't be modified if data is present already
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_Articletype());
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageType());
-		$this->checkNormalizedNameField($table, $field, $row, new tx_newspaper_PageZoneType());
 	}
 
 
@@ -224,13 +220,13 @@ class tx_newspaper_SaveHook {
 	
 	
 	
-	/// check if a normlized_name was already entered - if yes, display value as non-editable field
+	/// check if a UNIQUE normlized_name was already entered - if yes, display value as non-editable field
 	/** \param string $table table name in hook
 	 *  \param string $field name of single field currently processed in hook 
 	 *  \param array $row data to be written
 	 *  \return void 
 	 */
-	private function checkNormalizedNameField($table, $field, $row, tx_newspaper_StoredObject $obj) {
+	private function checkNormalizedNameUniqueField($table, $field, $row, tx_newspaper_StoredObject $obj) {
 		if ($table == $obj->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
 			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
 			/// if field 'normalized_name' is filled, just display the value, but the value can't be edited
