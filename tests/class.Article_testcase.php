@@ -110,8 +110,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		if (is_array($extras)) foreach ($extras as $extra) {
 			$this->assertTrue($extra instanceof tx_newspaper_Extra);
 			$this->assertTrue($extra->getAttribute('uid') > 0);
-			$this->assertTrue($extra->getAttribute('uid') == $extra->getUid(), 
-							  "Attribute 'uid' (" . $extra->getAttribute('uid') . " != getUid() " . $extra->getUid() . ")");
+			$this->assertTrue($extra->getAttribute('extra_uid') == $extra->getExtraUid(), 
+							  "Attribute 'extra_uid' (" . $extra->getAttribute('extra_uid') . ") != getExtraUid() (" . $extra->getUid() . ")");
 /*			test for PID disabled because $sf->getPid() is not consistent yet
  			$sf = tx_newspaper_Sysfolder::getInstance();
 			$this->assertTrue($extra->getAttribute('pid') == $sf->getPid($extra),
