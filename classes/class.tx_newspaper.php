@@ -244,7 +244,15 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
 			}
 		} else {
-			self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $uids_or_where, array('deleted' => 1));
+			global $TCA;
+			t3lib_div::loadTCA($table);
+
+			if (isset($TCA[$table])) {
+				self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $uids_or_where, array('deleted' => 1));
+			} else {		
+				self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $uids_or_where);
+			}
+			
 			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 			if (!$res) {
