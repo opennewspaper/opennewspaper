@@ -96,9 +96,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$this->attributes[$attribute] = $value;
 	}
 
+
 	/// Write or overwrite article list in DB, return UID of stored record 
 	public function store() {
-		
+
 		if ($this->getUid()) {
 			// read attributes initially
 			if (!$this->attributes) {
@@ -127,6 +128,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 
  	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
+ 	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
 	/** This is probably necessary because a concrete ArticleList has been freshly
 	 *  created.
 	 *  Does nothing if the concrete ArticleList is already linked in the abstract table. 
@@ -135,30 +137,35 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \param $table Table of concrete ArticleList
 	 *  \return UID of abstract ArticleList record
 	 */ 
-	public static function createArticleListRecord($uid, $table) {
+	public function createArticleListRecord($uid, $table) {
 		/// Check if record is already present in articlelist table
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid', 'tx_newspaper_articlelist', 
-			'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
-			' AND list_uid = ' . intval($uid)
-		);
-		if (sizeof($row) > 0) {
-			if ($row['deleted'] == 0 && $row['uid']) return $row['uid']; // active record found
-			if ($row['deleted'] == 1 && $row['uid']) {
-				/// reactivate old record
-				// check if referenced record is still available
-				$row2 = tx_newspaper::selectZeroOrOneRows(
-					'uid', $row['list_table'], 
-					'uid = ' . intval($row['list_uid'])
-				);
-				if (sizeof($row2) > 0) {
-					/// undelete (= re-activate) record
-					tx_newspaper::updateRows(
-						'tx_newspaper_articlelist',
-						'uid=' . $row['uid'],
-						array('deleted' => 0)
+		if ($this->section) {
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'uid', 'tx_newspaper_articlelist', 
+				'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
+				' AND section_id = ' . intval($this->section->getUid())
+			);
+			if ($row) {
+				if ($row['deleted'] == 0) { 
+					return $row['uid']; // active record found
+				} else {
+					/// reactivate old record
+					// check if referenced record is still available
+					$row2 = tx_newspaper::selectZeroOrOneRows(
+						'uid', $row['list_table'], 
+						'uid = ' . intval($row['list_uid'])
 					);
-					return $row['uid']; // old record was undeleted
+/// \todo check if referenced record is deleted - undelete if necessary
+					if (sizeof($row2) > 0) {
+						/// undelete (= re-activate) record
+						tx_newspaper::updateRows(
+							'tx_newspaper_articlelist',
+							'uid=' . $row['uid'],
+							array('deleted' => 0)
+						);
+						return $row['uid']; // old record was undeleted
+					}
+/// \todo else delete article record (because it's referencing a non-existing records)
 				}
 			}
 		}
@@ -169,13 +176,28 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$table,
 			'uid = ' . intval($uid)
 		);
-		
+	
 		/// write the uid and table into page zone table, with the values read above
 		$row['list_uid'] = $uid;
 		$row['list_table'] = $table;
 		$row['tstamp'] = time();				///< tstamp is set to now
+		
+		// assign article list with section (if any)
+		if ($this->section)
+			$row['section_id'] = $this->section->getUid();
 
-		return tx_newspaper::insertRows('tx_newspaper_articlelist', $row);		
+		$al_uid = tx_newspaper::insertRows('tx_newspaper_articlelist', $row);
+		
+		/// add article to section (if any)
+		if ($this->section) {
+			tx_newspaper::updateRows(
+				$this->section->getTable(), 
+				'uid=' . $this->section->getUid(),
+				array('articlelist' => $al_uid)	
+			);
+		}
+
+		return $al_uid; 		
 	}
 
 
