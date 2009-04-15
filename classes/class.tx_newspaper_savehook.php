@@ -13,6 +13,7 @@ class tx_newspaper_SaveHook {
 #t3lib_div::devlog('th pre palette', 'newspaper', 0, $palette);
 #t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
 #t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
+		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
 
@@ -241,10 +242,30 @@ t3lib_div::devlog('new ids', 'newspaper', 0, $that->substNEWwithIDs);
 	
 	
 	
+	/// the checkbox is_article in pagezonetype can't be unchecked later!
+	/** \param string $table table name in hook
+	 *  \param string $field name of single field currently processed in hook 
+	 *  \param array $row data to be written
+
+	 *  \return void 
+	 */
+	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {
+		$obj = new tx_newspaper_PageZoneType();
+		if ($table == $obj->getTable() && $field == 'is_article' && $row['is_article'] == 1) {
+			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
+			/// if field 'normalized_name' is filled, just display the value, but the value can't be edited
+			unset($GLOBALS['TCA'][$table]['columns']['is_article']['config']['type']);
+			$GLOBALS['TCA'][$table]['columns']['is_article']['config']['type'] = 'none';
+		}
+	}
+	
+	
+	
 	/// check if a UNIQUE normlized_name was already entered - if yes, display value as non-editable field
 	/** \param string $table table name in hook
 	 *  \param string $field name of single field currently processed in hook 
 	 *  \param array $row data to be written
+	 *  \param tx_newspaper_StoredObject object type to check
 	 *  \return void 
 	 */
 	private function checkNormalizedNameUniqueField($table, $field, $row, tx_newspaper_StoredObject $obj) {
