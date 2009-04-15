@@ -34,6 +34,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	function tearDown() {
 		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article_table, 'uid = ' . $this->uid);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article2section_table, 'uid_local = ' . $this->uid);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		if (!$res) die("$query failed!");		
 	}
 
@@ -265,7 +267,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertTrue($pos1 < $pos2, "$first_string should be before $second_string");
 	}
 	
-	private $section_id = 1;			///< section we assign new articles to. \todo create my own new section
+	private $section_uid = 1;			///< section we assign new articles to. \todo create my own new section
 	private $article = null;			///< the object
 	private $uid = 0;					///< The article we use as test object
 	private $source = null;				///< dummy source object
