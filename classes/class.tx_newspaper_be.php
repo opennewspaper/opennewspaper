@@ -159,7 +159,7 @@ class tx_newspaper_BE {
 		$default_found = false;
 		
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
-
+t3lib_div::Devlog('available temöl sets', 'newspaper', 0, $templateset);
 		$params['items'][] = array('', ''); // empty entry -> templateset is inherited 
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		
