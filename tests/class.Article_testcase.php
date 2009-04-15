@@ -246,11 +246,10 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function checkOutput($output) {
-		$this->doTestContains($output, 'Neuer Artikel');
-		$this->doTestContains($output, 'Nummer eins');
-		$this->doTestContains($output, 'Artikel ist im Lande');
-		$this->doTestContains($output, 'Test Text');
-		$this->doTestContains($output, 'Nicht ein einziges sinnvolles Wort');		
+		$this->doTestContains($output, $this->article_data['title']);
+		$this->doTestContains($output, $this->article_data['teaser']);
+		$this->doTestContains($output, $this->article_data['text']);
+		$this->doTestContains($output, $this->article_data['author']);
 	}
 	
 	private function doTestContains($string, $word) {
