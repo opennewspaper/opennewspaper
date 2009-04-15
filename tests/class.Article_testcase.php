@@ -28,24 +28,18 @@ class test_Article_testcase extends tx_phpunit_testcase {
 
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
-		
+
+		$this->createExtras();
+			
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
 #		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
 	}
 	
-	private function createExtras() {
-		foreach ($this->extra_data as $extra) {
-			$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->extra_table, $extra);
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			if (!$res) die("$query failed!");
-	        
-	    	$extra_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
-			// ...
-		}	
-	}
-	
 	function tearDown() {
+		
+		$this->removeExtras();
+		
 		//	delete article
 		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article_table, 'uid = ' . $this->uid);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
@@ -280,6 +274,54 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
+
+	private function createExtras() {
+		foreach ($this->extra_data as $index => $extra) {
+			$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->concrete_extra_table, $extra);
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			if (!$res) die("$query failed!");
+	        
+	    	$extra_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+	    	
+	    	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $this->concrete_extra_table);
+	    	
+	    	///	link extra to article
+			$query = $GLOBALS['TYPO3_DB']->INSERTquery(
+				$this->article2extra_table,
+				array(
+					'uid_local' => $this->uid,
+					'uid_foreign' => $abstract_uid
+				));
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			if (!$res) die("$query failed!");
+	    	
+	    	/// set position and paragraph of extra
+	    	$row = array();
+	    	$row['paragraph'] = $this->extra_par_pos[$index][0];
+	    	$row['position'] = $this->extra_par_pos[$index][1];
+			$query = $GLOBALS['TYPO3_DB']->UPDATEquery(
+				$this->extra_table, 'uid = ' . $abstract_uid, $row
+			);
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			if (!$res) die("$query failed!");
+		}	
+	}
+	
+	private function removeExtras() {
+		$rows = tx_newspaper::selectRows('uid_foreign', $this->article2extra_table, 'uid_local = ' . $this->uid);
+		foreach ($rows as $row) {
+			$abstract_uid = $row['uid_foreign'];
+			$extra = tx_newspaper::selectOneRow('extra_uid, extra_table', $this->extra_table, 'uid = ' . $abstract_uid);
+			$concrete_uid = $extra['extra_uid'];
+			$this->assertEquals($extra['extra_table'], $this->concrete_extra_table);
+			
+			tx_newspaper::deleteRows($this->extra_table, array($abstract_uid));
+			tx_newspaper::deleteRows($this->article2extra_table, 
+									 "uid_foreign = $abstract_uid AND uid_local = " . $this->uid);
+			tx_newspaper::delete_rows($this->concrete_extra_table, array($concrete_uid));
+		}
+	}
+	
 	
 	private function checkOutput($output) {
 		$this->doTestContains($output, $this->article_data['title']);
@@ -310,6 +352,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
 	
 	private $extra_table = 'tx_newspaper_extra';
+	private $concrete_extra_table = 'tx_newspaper_extra';
+	private $extra2article_table = 'tx_newspaper_article_extras_mm';
 	private $pagezone_table = 'tx_newspaper_pagezone';
 	
 	private $article_table = 'tx_newspaper_article';
@@ -430,6 +474,13 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		),
 	);
 	
+	private $extra_par_pos = array(
+		array(0, 0),
+		array(-2, 0),
+		array(1, 4),
+		array(1, 2),
+		array(-1, 0),
+	);
 	
 }
 ?>
