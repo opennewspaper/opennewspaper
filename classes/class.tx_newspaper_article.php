@@ -121,7 +121,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
 		/// ... and is attached to the correct page
-		if ($this->getParentPage()->getUid()) {
+		if ($this->getParentPage() && $this->getParentPage()->getUid()) {
 			tx_newspaper::updateRows(
 				'tx_newspaper_pagezone', 
 				'uid = ' . $pagezone_uid, 
