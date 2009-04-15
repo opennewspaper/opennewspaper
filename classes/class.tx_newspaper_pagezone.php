@@ -410,25 +410,26 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \param $table Table of concrete PageZone
 	 *  \return UID of abstract PageZone record
 	 */ 
-	public static function createPageZoneRecord($uid, $table) {
+	public function createPageZoneRecord() {
 		/// Check if record is already present in page zone table
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', 'tx_newspaper_pagezone', 
-			'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
-			' AND pagezone_uid = ' . intval($uid)	
+			'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
+			' AND pagezone_uid = ' . $this->getUid()	
 		);
 		if ($row['uid']) return $row['uid'];
 		
 		/// read typo3 fields to copy into page zone table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_pagezone_table),
-			$table,
-			'uid = ' . intval($uid)
+			$this->getTable(),
+			'uid = ' . $this->getUid()
 		);
 		
+		if ($this->getTable())
 		/// write the uid and table into page zone table, with the values read above
-		$row['pagezone_uid'] = $uid;
-		$row['pagezone_table'] = $table;
+		$row['pagezone_uid'] = $this->getUid();
+		$row['pagezone_table'] = $this->getTable();
 		$row['tstamp'] = time();				///< tstamp is set to now
 
 		return tx_newspaper::insertRows('tx_newspaper_pagezone', $row);		

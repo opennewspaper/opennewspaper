@@ -153,9 +153,7 @@ class tx_newspaper_Page
 		/// \todo delete, i guess
 		if (false && $this->pageZones) foreach ($this->pageZones as $pagezone) {
 			$pagezone_uid = $pagezone->store();
-			$pagezone_superclass_uid = tx_newspaper_PageZone::createPageZoneRecord(
-				$pagezone_uid, $pagezone->getTable()
-			);
+			$pagezone_superclass_uid = $pagezone->createPageZoneRecord();
 			tx_newspaper::updateRows(
 				'tx_newspaper_pagezone', "uid = $pagezone_superclass_uid", 
 				array('page_id' => $this->getUid())
