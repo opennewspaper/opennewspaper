@@ -44,12 +44,16 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 
 	//	smarty
 	
-	public function test_getAvailableTemplates() {
+	public function test_getAvailableTemplateSets() {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 		
 		$template_sets_to_test = array('default', 'test_templateset');
+		foreach ($template_sets_to_test as $ts) {
+#			if (!file_exists($basepath . '/' . $ts)) mkdir ($basepath . '/' . $ts);
+			t3lib_div::debug($basepath . '/' . $ts);
+		}
 		
 				
 	}
