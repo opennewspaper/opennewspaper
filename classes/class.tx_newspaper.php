@@ -215,7 +215,6 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \param $row Data as key=>value pairs
 	 */
 	public static function updateRows($table, $where, array $row) {
-/// \todo: throw exception if non valid fields are usung in where clause
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
