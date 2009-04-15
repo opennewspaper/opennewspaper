@@ -163,10 +163,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					);
 				}
 			} else {
-				throw new tx_newspaper_InconsistencyException(
-					'PageZone ' . tx_newspaper::getTable($this) . ': ' .
-					$this->getUid() . ' appears to have no parent Page'
-				);
+				// that's ok, articles don't have parent pages
+				return null;
 			}
 		}
 		return $this->parent_page;
