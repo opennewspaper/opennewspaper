@@ -168,6 +168,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
+	protected function getCurrentPage() {
+		$section = tx_newspaper::getSection();
+		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
+	}
+	
 	/// Renders an article
 	public function render($template_set = '') {
 		
