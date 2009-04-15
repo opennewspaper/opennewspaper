@@ -91,7 +91,7 @@ class tx_newspaper_Smarty extends Smarty {
 
 		$basedir = dir($basepath . '/template_sets/');
 		while (false !== ($template_set = $basedir->read())) {
-			if (is_dir($basepath . '/template_sets/' . $template_set)) {
+			if (substr($template_set, 0, 1) != '.' && is_dir($basepath . '/template_sets/' . $template_set)) {
 				$template_sets[] = $template_set;
 			}
 		}
