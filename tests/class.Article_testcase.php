@@ -245,11 +245,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		
 		/// create an empty article and write it. verify it's been written.
 		$article = new tx_newspaper_Article();
-/*
-		$this->setExpectedException('tx_newspaper_InconsistencyException');
-		$article->getParentPage();
-*/		
-		$article->setParentPage($this->article->getParentPage());
+
+		if ($this->article->getParentPage()) $article->setParentPage($this->article->getParentPage());
 		
 		$article->setAttribute('text', $random_string);
 		$uid = $article->store();
