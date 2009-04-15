@@ -295,6 +295,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $extra_uid = 1;
 	
 	private $extra_table = 'tx_newspaper_extra';
+	private $pagezone_table = 'tx_newspaper_pagezone';
 	
 	private $article_table = 'tx_newspaper_article';
 	private $article2section_table = 'tx_newspaper_article_sections_mm';
