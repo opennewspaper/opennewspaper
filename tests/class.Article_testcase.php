@@ -53,7 +53,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		//	delete extra entry for article
 		$query = $GLOBALS['TYPO3_DB']->DELETEquery(
 			$this->extra_table, 
-			'extra_table = \'' . $this->article_table . '\' AND pagezone_uid = ' . $this->uid
+			'extra_table = \'' . $this->article_table . '\' AND extra_uid = ' . $this->uid
 		);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		if (!$res) die("$query failed!");		
