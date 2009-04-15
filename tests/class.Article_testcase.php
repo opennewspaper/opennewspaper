@@ -11,9 +11,21 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 class test_Article_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
+		$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->article_table, $this->article_data);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");
+	        
+	    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
 		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
+	}
+	
+	function tearDown() {
+		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article_table, 'uid = ' . $this->uid);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");		
 	}
 
 	public function test_createArticle() {
@@ -250,5 +262,124 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $source = null;				///< dummy source object
 	private $extra = null;
 	private $extra_uid = 1;
+	
+	private $article_table = 'tx_newspaper_article';
+	private $article_data = array(
+		'pid' => 2574,
+		'tstamp' => 1234806796,
+		'crdate' => 1232647355,
+		'cruser_id' => 1,
+		'sorting' => 64,
+		'deleted' => 0,
+		'hidden' => 0,
+		'starttime' => 0,
+		'endtime' => 0,
+		'fe_group' => 0,
+		'title' => "Nummer eins!",
+		'extras' => 0,
+		'teaser' => "Hey, ein neuer Artikel ist im Lande!",
+		'text' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
+		'author' => "Test Text",
+		'sections' => 1,
+		'source_id' => 1,
+		'source_object' => "",
+		'name' => "",
+		'is_template' => 0,
+		'template_set' => "",
+		'pagezonetype_id' => 1,
+		'workflow_status' => 0,
+		'articletype_id' => 0,
+		'inherits_from' => 0,
+	);
+		 
+	private $extra_data = array(
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234806796,
+			'crdate' => 1232647355,
+			'cruser_id' => 1,
+			'sorting' => 16,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "extra_field for tx_newspaper_extra_image[1]\r\n(whatever is this field for?)",
+			'title' => "Image 1",	
+			'image' => "BSD_-_Daemon_tux_thumb_02.jpg",	
+			'caption' => "Caption for image 1",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234806796,
+			'crdate' => 1232647355,
+			'cruser_id' => 1,
+			'sorting' => 32,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "tx_newspaper_extra_image[2].extra_field",	
+			'title' => "Image 2 Titel",	
+			'image' => "kari.080524.gif",	
+			'caption' => "Image 2 Caption",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234806796,
+			'crdate' => 1232647355,
+			'cruser_id' => 1,
+			'sorting' => 96,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "",	
+			'title' => "Image 3",
+			'image' => "E3_033009T.jpg",	
+			'caption' => "Caption for image 3",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234806796,
+			'crdate' => 1232647355,
+			'cruser_id' => 1,
+			'sorting' => 128,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "",	
+			'title' => "Image 4",	
+			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
+			'caption' => "Daemonic Gentoo",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234806796,
+			'crdate' => 1232647355,
+			'cruser_id' => 1,
+			'sorting' => 0,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "extra_field[5]",	
+			'title' => "title[5]",	
+			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
+			'caption' => "caption[5]",	
+			'template_set' => "",	
+		),
+	);
+	
+	
 }
 ?>
