@@ -248,7 +248,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private function checkOutput($output) {
 		$this->doTestContains($output, $this->article_data['title']);
 		$this->doTestContains($output, $this->article_data['teaser']);
-		$this->doTestContains($output, $this->article_data['text']);
+		$this->doTestContains($output, substr($this->article_data['text'], 0, 100));
 		$this->doTestContains($output, $this->article_data['author']);
 	}
 	
