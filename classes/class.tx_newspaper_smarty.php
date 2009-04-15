@@ -84,7 +84,9 @@ class tx_newspaper_Smarty extends Smarty {
 
 		$template_sets = array();
 
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPidRootfolder());
+		$root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
+			t3lib_div::debug($root_page);
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($root_page);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($basepath[0] != '/') $basepath = PATH_site . '/' . $basepath;
 
