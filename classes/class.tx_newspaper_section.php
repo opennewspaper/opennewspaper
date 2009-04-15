@@ -98,24 +98,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	
-		/// \return uid of parent abstract record for concrete article list associated with section
+	/// \return uid of parent abstract record for concrete article list associated with section
 	function getAbstractArticleListUid() {
-		if (!$this->abstract_articlelist_id) {
-			$al = $this->getArticleList();
-			$row = tx_newspaper::selectOneRow(
-				'uid',
-				'tx_newspaper_articlelist',
-				'deleted=0 AND section_id=' . $this->getUid() . 
-					' AND list_table="' . $al->getTable() . 
-					'" AND list_uid=' . $al->getUid(),
-				'',
-				'',
-				'',
-				false
-			);
-			$this->abstract_articleliste_id = $row['uid'];
-		}
-		return $this->abstract_articlelist_id;
+		return $this->getAttribute('articlelist');
 	}
 	
 	function getSubPages() {
