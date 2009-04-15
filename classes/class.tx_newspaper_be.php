@@ -280,9 +280,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 		$selItems = array();
 		for ($i = 0; $i < sizeof($al_available); $i++) {
 			if ($al_available[$i]->getTable() == $s_al->getTable()) {
-//			if ($al_available[$i]->getTable() == $s->getArticleList()->getTable()) { 
-				$value = $s->getAbstractArticleListUid(); // store uid in tx_newspaper_article of active article list as value
-				$PA['itemFormElValue'] = $value; // and set as selected element
+				$value = $s->getAbstractArticleListUid(); // set value to uid of abstract article list
 			} else {
 				$value = $al_available[$i]->getTable(); // store class name as value
 			}
