@@ -54,14 +54,7 @@ class tx_newspaper_SaveHook {
 		}
 
 
-		/// exclude abtract classes from being instanciated 
-		$abstract = false;
-		if (class_exists($table)) {
-			$tmp = new ReflectionClass($table);
-			$abstract = $tmp->isAbstract();
-		}
-		
-		if (!$abstract && class_exists($table)) { ///<newspaper specification: table name = class name
+		if (!tx_newspaper::isAbstractClass($table) && class_exists($table)) { ///<newspaper specification: table name = class name
 
 			$np_obj = new $table();
 
