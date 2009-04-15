@@ -428,6 +428,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		if ($this instanceof tx_newspaper_Article) {
 			$row['page_id'] = $this->getPrimarySection()->getAssociatedTypo3Page();
+			t3lib_div::debug($row['page_id']);
 		}
 		
 		/// write the uid and table into page zone table, with the values read above
