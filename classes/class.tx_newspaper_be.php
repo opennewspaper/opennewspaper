@@ -159,12 +159,12 @@ class tx_newspaper_BE {
 		$default_found = false;
 		
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
-t3lib_div::Devlog('available temöl sets', 'newspaper', 0, $templateset);
+t3lib_div::devlog('available templ sets', 'newspaper', 0, $templateset);
 		$params['items'][] = array('', ''); // empty entry -> templateset is inherited 
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		
 		for ($i = 0; $i < sizeof($templateset); $i++) {
-			if (strtolower($templateset[$i]) != 'default') {
+			if ($templateset[$i] != 'default') {
 				$params['items'][] = array($templateset[$i], $templateset[$i]);				
 			} else {
 				$default_found = true;
@@ -172,7 +172,7 @@ t3lib_div::Devlog('available temöl sets', 'newspaper', 0, $templateset);
 		}
 		
 		if (!$default_found) {
-			unset($params['default']); // remove entry 'default' (because there's no templateset default available)
+			unset($params['items']['default']); // remove entry 'default' (because there's no templateset default available)
 		}
 		
 	} 
