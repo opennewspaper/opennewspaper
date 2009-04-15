@@ -17,6 +17,15 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	        
 	    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 		
+		$query = $GLOBALS['TYPO3_DB']->INSERTquery(
+			$this->article2section_table,
+			array(
+				'uid_local' => $this->uid,
+				'uid_foreign' => $this->section_uid
+			));
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");
+		
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
 		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
@@ -257,13 +266,15 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertTrue($pos1 < $pos2, "$first_string should be before $second_string");
 	}
 	
+	private $section_id = 1;			///< section we assign new articles to. \todo create my own new section
 	private $article = null;			///< the object
-	private $uid = 1;					///< The article we use as test object
+	private $uid = 0;					///< The article we use as test object
 	private $source = null;				///< dummy source object
 	private $extra = null;
 	private $extra_uid = 1;
 	
 	private $article_table = 'tx_newspaper_article';
+	private $article2section_table = 'tx_newspaper_article_sections_mm';
 	private $article_data = array(
 		'pid' => 2574,
 		'tstamp' => 1234806796,
