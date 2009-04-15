@@ -25,6 +25,9 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			));
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		if (!$res) die("$query failed!");
+
+		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
+		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
@@ -293,6 +296,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $source = null;				///< dummy source object
 	private $extra = null;
 	private $extra_uid = 1;
+	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
 	
 	private $extra_table = 'tx_newspaper_extra';
 	private $pagezone_table = 'tx_newspaper_pagezone';
