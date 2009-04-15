@@ -352,7 +352,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
 	
 	private $extra_table = 'tx_newspaper_extra';
-	private $concrete_extra_table = 'tx_newspaper_extra';
+	private $concrete_extra_table = 'tx_newspaper_extra_image';
 	private $extra2article_table = 'tx_newspaper_article_extras_mm';
 	private $pagezone_table = 'tx_newspaper_pagezone';
 	
