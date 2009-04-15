@@ -97,11 +97,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return new tx_newspaper_Section($this->getAttribute('parent_section'));
 	}
 	
-	public function getAssociatedTypo3Page() {
-		$row = tx_newspaper::selectOneRow('uid', 'pages', 'tx_newspaper_associated_section = ' . $this->getUid());
-		return $row['uid'];
-	}
-	
 	/// \return uid of parent abstract record for concrete article list associated with section
 	function getAbstractArticleListUid() {
 		return $this->getAttribute('articlelist');

@@ -58,6 +58,13 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 				$this->fail("$ts should be in available template_sets, but isn't: " . print_r($available_template_sets, 1));
 			}
 		}
+
+		/// \todo If directories are empty, delete them
+		foreach ($template_sets_to_test as $ts) {
+			//	checking if a dir is empty is a PITA in PHP. leave it for now.
+			if (is_dir($basepath . 'template_sets/' . $ts) &&
+			 	false) rmdir ($basepath . 'template_sets/' . $ts);
+		}
 				
 	}
 }
