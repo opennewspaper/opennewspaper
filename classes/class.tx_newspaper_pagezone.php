@@ -426,7 +426,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			'uid = ' . $this->getUid()
 		);
 		
-		if ($this->getTable())
+		if ($this instanceof tx_newspaper_Article) {
+			$row['page_id'] = $this->getPrimarySection()->getAssociatedTypo3Page();
+		}
+		
 		/// write the uid and table into page zone table, with the values read above
 		$row['pagezone_uid'] = $this->getUid();
 		$row['pagezone_table'] = $this->getTable();
