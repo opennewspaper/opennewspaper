@@ -254,7 +254,9 @@ function findElementsByName(name, type) {
 };
 
 </script>
-<a href='javascript:test();'>Test AL</a>
+<!--
+		<a href='javascript:test();'>Test AL</a>
+-->
 ";
 		
 		
