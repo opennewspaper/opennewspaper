@@ -28,13 +28,33 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
-		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
+#		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
 	}
 	
 	function tearDown() {
+		//	delete article
 		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article_table, 'uid = ' . $this->uid);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");		
+
+		//	delete association with section
 		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article2section_table, 'uid_local = ' . $this->uid);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");		
+
+		//	delete page zone entry for article
+		$query = $GLOBALS['TYPO3_DB']->DELETEquery(
+			$this->pagezone_table, 
+			'pagezone_table = ' . $this->article_table . ' AND pagezone_uid = ' . $this->uid
+		);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");		
+		
+		//	delete extra entry for article
+		$query = $GLOBALS['TYPO3_DB']->DELETEquery(
+			$this->extra_table, 
+			'extra_table = ' . $this->article_table . ' AND pagezone_uid = ' . $this->uid
+		);
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		if (!$res) die("$query failed!");		
 	}
@@ -273,6 +293,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	private $source = null;				///< dummy source object
 	private $extra = null;
 	private $extra_uid = 1;
+	
+	private $extra_table = 'tx_newspaper_extra';
 	
 	private $article_table = 'tx_newspaper_article';
 	private $article2section_table = 'tx_newspaper_article_sections_mm';
