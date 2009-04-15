@@ -91,10 +91,10 @@ class tx_newspaper_Smarty extends Smarty {
 
 			t3lib_div::debug($basepath);
 		
-		$basedir = dir($basepath . 'template_sets/');
+		$basedir = dir($basepath . '/template_sets/');
 		while (false !== ($template_set = $basedir->read())) {
 			t3lib_div::debug($template_set);
-			if (is_dir($basepath . 'template_sets/' . $template_set)) {
+			if (is_dir($basepath . '/template_sets/' . $template_set)) {
 				$template_sets[] = $template_set;
 			}
 		}
