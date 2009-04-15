@@ -292,6 +292,18 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	}
 
 
+	/// check if given class name is an abstract class
+	/// \param String $class class name
+	/// \return true if abstract class, false else (or if no class at all)
+	public static function isAbstractClass($class) {
+		$abstract = false;
+		if (class_exists($class)) {
+			$tmp = new ReflectionClass($class);
+			$abstract = $tmp->isAbstract();
+		}
+		return $abstract;
+	}
+
 
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the ressort record which lies on the
