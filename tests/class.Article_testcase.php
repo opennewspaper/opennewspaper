@@ -33,7 +33,6 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			
 		$this->article = new tx_newspaper_Article($this->uid);
 		$this->source = new tx_newspaper_DBSource();
-#		$this->extra = tx_newspaper_Extra_Factory::getInstance()->create($this->extra_uid);
 	}
 	
 	function tearDown() {
