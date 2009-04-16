@@ -18,7 +18,8 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 		
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery(
-			$this->article2section_table,
+			'tx_newspaper_article_sections_mm',
+//			$this->article2section_table,
 			array(
 				'uid_local' => $this->uid,
 				'uid_foreign' => $this->section_uid
