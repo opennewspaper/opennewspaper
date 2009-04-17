@@ -97,6 +97,7 @@ class tx_newspaper_Sysfolder {
 		$fields['perms_everybody'] = 31;
 		$fields['crdate'] = time();
 		$fields['tstamp'] = time();
+		$fields['hidden'] = 0;
 		
 		$uid = tx_newspaper::insertRows('pages', $fields); // insert sysfolder and get uid of that sysfolder
 		$this->sysfolder[$module_name] = $uid; // append this sysfolder in local storage array
