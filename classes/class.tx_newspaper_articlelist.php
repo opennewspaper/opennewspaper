@@ -128,7 +128,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 
  	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
- 	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
 	/** This is probably necessary because a concrete ArticleList has been freshly
 	 *  created.
 	 *  Does nothing if the concrete ArticleList is already linked in the abstract table. 
