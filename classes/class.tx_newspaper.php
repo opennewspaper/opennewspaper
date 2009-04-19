@@ -313,18 +313,21 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	public static function createAbsolutePath($path2check, $absolutePath) {
 /// \todo: throw exception if created path does not exist???
 
+		// windows uses the backslash character as path delimiter - make sure slashes are used only
+		$path2check = str_replace('\\', '/', $path2check);
+		$absolutePath = str_replace('\\', '/', $absolutePath);
+
 		if ($absolutePath == '')
-			return $path2check; // nothing to prepend, just return $path2check 
+			return preg_replace('#/+#', '/', $$path2check); // nothing to prepend, just return $path2check 
 		
 		if ($path2check == '') 
-			return $absolutePath; // no path to check, just return the absolute path to prepend 
-			
+			return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend 
+
+		// prepend absolute path			
 		if (TYPO3_OS == 'WIN') {
-			// prepend absolute path
 			if ($path2check[1] != ':') {
 				// windows 
 				$newpath = $absolutePath . '/' . $path2check;
-				$newpath = str_replace('\\', '/', $newpath);
 			}
 		} else {
 			// linux etc.
