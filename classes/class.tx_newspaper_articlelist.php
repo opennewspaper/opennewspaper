@@ -137,38 +137,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \return UID of abstract ArticleList record
 	 */ 
 	public function createArticleListRecord($uid, $table) {
-		/// Check if record is already present in articlelist table
-		if ($this->section) {
-			$row = tx_newspaper::selectZeroOrOneRows(
-				'uid', 'tx_newspaper_articlelist', 
-				'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
-				' AND section_id = ' . intval($this->section->getUid())
-			);
-			if ($row) {
-				if ($row['deleted'] == 0) { 
-					return $row['uid']; // active record found
-				} else {
-					/// reactivate old record
-					// check if referenced record is still available
-					$row2 = tx_newspaper::selectZeroOrOneRows(
-						'uid', $row['list_table'], 
-						'uid = ' . intval($row['list_uid'])
-					);
-/// \todo check if referenced record is deleted - undelete if necessary
-					if (sizeof($row2) > 0) {
-						/// undelete (= re-activate) record
-						tx_newspaper::updateRows(
-							'tx_newspaper_articlelist',
-							'uid=' . $row['uid'],
-							array('deleted' => 0)
-						);
-						return $row['uid']; // old record was undeleted
-					}
-/// \todo else delete article record (because it's referencing a non-existing records)
-				}
-			}
-		}
-		
 		/// read typo3 fields to copy into article list super table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_articlelist_table),
