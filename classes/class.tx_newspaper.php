@@ -305,6 +305,37 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	}
 
 
+	/// prepends the given absulte path part if path to check is no absolute path
+	/** \param string $path2check path to check if it's an absolute path
+	 *  \param string $absolutePath this path is prepended to $path2check; no check, if this path is absolute
+	 *  \return string absolute path (either absolute string was prepended or path to check was absolute already); WIN: backslashes are converted to slashes
+	 */
+	public static function createAbsolutePath($path2check, $absolutePath) {
+/// \todo: throw exception if created path does not exist???
+
+		if ($absolutePath == '')
+			return $path2check; // nothing to prepend, just return $path2check 
+		
+		if ($path2check == '') 
+			return $absolutePath; // no path to check, just return the absolute path to prepend 
+			
+		if (TYPO3_OS == 'WIN') {
+			// prepend absolute path
+			if ($path2check[1] != ':') {
+				// windows 
+				$newpath = $absolutePath . '/' . $path2check;
+				$newpath = str_replace('\\', '/', $newpath);
+			}
+		} else {
+			// linux etc.
+			if ($path2check[0] != '/') 
+				$newpath = $absolutePath . '/' . $path2check;
+		}
+
+		return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
+	}
+	
+
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the ressort record which lies on the
 	 *  current Typo3 page. This implementation may change, but this function
