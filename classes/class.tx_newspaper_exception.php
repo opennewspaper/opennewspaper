@@ -124,6 +124,12 @@ class tx_newspaper_ArticleNotFoundException extends tx_newspaper_Exception {
 }
 
 
+/// This Exception is thrown if a path can't be found in the filesystem
+class tx_newspaper_PathNotFoundException extends tx_newspaper_Exception { 
+	public function __construct($message, $path) {
+        parent::__construct("$message\n$path");
+    }	
+}
 
 
 /// This Exception is thrown if a module name does not match module name specification  
