@@ -15,13 +15,14 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id));
-#$this->checkArticleListChangedInSection($incomingFieldArray, $table, $id);
-//t3lib_div::devlog('sh pre exit', 'newspaper', 0, array($incomingFieldArray, $table, $id));
+//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id));
 	}
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+
+		/// check if an article list was changed for a section
+		$this->checkArticleListChangedInSection($fieldArray, $table, $id);
 
 		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
@@ -158,7 +159,21 @@ t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);
 
 
 
+	private function checkArticleListChangedInSection(array &$incomingFieldArray, $table, $id) {
+		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
+		if (!isset($incomingFieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
 
+		if (!tx_newspaper::isAbstractClass($incomingFieldArray['articlelist']) && class_exists($incomingFieldArray['articlelist'])) {
+			$al = new $incomingFieldArray['articlelist']();
+			if ($al instanceof tx_newspaper_articlelist) {
+				// so articlelist was changed to another valid articlelist type
+				$new_al = new $incomingFieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
+				$new_al->store();
+
+ 				$incomingFieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list
+			}
+		}
+	}
 
 
 
