@@ -201,6 +201,29 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	}
 
 
+	/// get uid of abtract article list
+	/// \return UID of abstract ArticleList record, or 0 if no record was found
+	public function getAbstractUid() {
+		if ($this->abstract_uid)
+			return $this->abstract_uid;
+			
+		// add section to query if this article list is assigned to a section
+		$where = '';
+		if ($this->section) 
+			$where = ' AND section_id = ' . intval($this->section->getUid());
+
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid', 'tx_newspaper_articlelist', 
+			'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) . 
+			' AND list_uid=' . $this->getUid() . $where .
+			tx_newspaper::enableFields('tx_newspaper_articlelist')
+		);
+		if ($row) 
+			$this->abstract_uid = $row['uid'];
+		return $this->abstract_uid;
+	}
+	
+	
 	public function getTitle() {
 		global $LANG;
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
@@ -211,6 +234,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	protected $attributes = array();
 	protected $section = null;
+	protected $abstract_uid = 0;
 
 	/// SQL table for persistence
 	static protected $table = 'tx_newspaper_articlelist';
