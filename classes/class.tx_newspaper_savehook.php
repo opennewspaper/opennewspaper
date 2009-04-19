@@ -6,13 +6,7 @@ class tx_newspaper_SaveHook {
 	/// tceform hooks (well, those aren't really save hooks ...)
 
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
-#t3lib_div::devlog('th pre table', 'newspaper', 0, $table);
-#t3lib_div::devlog('th pre field', 'newspaper', 0, $field);
-#t3lib_div::devlog('th pre row', 'newspaper', 0, $row);
-#t3lib_div::devlog('th pre altName', 'newspaper', 0, $altName);
-#t3lib_div::devlog('th pre palette', 'newspaper', 0, $palette);
-#t3lib_div::devlog('th pre extra', 'newspaper', 0, $extra);
-#t3lib_div::devlog('th pre pal', 'newspaper', 0, $pal);
+#t3lib_div::devlog('th pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
@@ -20,13 +14,15 @@ class tx_newspaper_SaveHook {
 
 	/// save hook: new and update
 
-	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('sh post status', 'newspaper', 0, $status);
-//t3lib_div::devlog('sh post table', 'newspaper', 0, $table);
-//t3lib_div::devlog('sh post id', 'newspaper', 0, $id);
-//t3lib_div::devlog('sh post fields', 'newspaper', 0, $fieldArray);
+	function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id));
+#$this->checkArticleListChangedInSection($incomingFieldArray, $table, $id);
+//t3lib_div::devlog('sh pre exit', 'newspaper', 0, array($incomingFieldArray, $table, $id));
+	}
 
-#t3lib_div::devlog('templ set', 'newspaper', 0, tx_newspaper_Smarty::getAvailableTemplateSets(new tx_newspaper_Section(intval(1))));
+	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+//t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+
 		/// check if a page zone type with is_article flag set is allowed
 		$pzt = new tx_newspaper_PageZoneType(); 
 		if  ($table == $pzt->getTable() && 
@@ -83,9 +79,7 @@ class tx_newspaper_SaveHook {
 	/// save hook: delete
 	
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
-#t3lib_div::devlog('command', 'newspaper', 0, $command);
-#t3lib_div::devlog('id', 'newspaper', 0, $id);
-#t3lib_div::devlog('value', 'newspaper', 0, $value);
+//t3lib_div::devlog('command pre enter', 'newspaper', 0, array($command, $id, $value));
 
 		/// check if it is allowed to delete an article type
 		if ($command == 'delete' && $table == 'tx_newspaper_articletype') {
@@ -149,12 +143,8 @@ class tx_newspaper_SaveHook {
 	}
 
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('adbo post status', 'newspaper', 0, $status);
-t3lib_div::devlog('adbo post table', 'newspaper', 0, $table);
-t3lib_div::devlog('adbo post id', 'newspaper', 0, $id);
-t3lib_div::devlog('adbo post fields', 'newspaper', 0, $fieldArray);
-		
-t3lib_div::devlog('new ids', 'newspaper', 0, $that->substNEWwithIDs);		
+t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
 		
 		/// If a new section has been created, create default article list
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
