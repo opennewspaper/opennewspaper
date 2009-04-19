@@ -159,15 +159,15 @@ t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);
 
 
 
-	private function checkArticleListChangedInSection(array &$incomingFieldArray, $table, $id) {
+	private function checkArticleListChangedInSection(array &$fieldArray, $table, $id) {
 		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
-		if (!isset($incomingFieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
+		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
 
-		if (!tx_newspaper::isAbstractClass($incomingFieldArray['articlelist']) && class_exists($incomingFieldArray['articlelist'])) {
-			$al = new $incomingFieldArray['articlelist']();
+		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
+			$al = new $fieldArray['articlelist']();
 			if ($al instanceof tx_newspaper_articlelist) {
 				// so articlelist was changed to another valid articlelist type
-				$new_al = new $incomingFieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
+				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
 				$new_al->store();
 				// delete all other article lists assigned to this section
 				tx_newspaper::updateRows(
@@ -176,7 +176,7 @@ t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);
 					array('deleted' => 1)
 				);
 
- 				$incomingFieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list
+ 				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list
 			}
 		}
 	}
