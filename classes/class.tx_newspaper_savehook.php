@@ -169,6 +169,12 @@ t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);
 				// so articlelist was changed to another valid articlelist type
 				$new_al = new $incomingFieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
 				$new_al->store();
+				// delete all other article lists assigned to this section
+				tx_newspaper::updateRows(
+					'tx_newspaper_articlelist',
+					'section_id=' . $id . ' AND list_table<>"' . $new_al->getTable() . '"',
+					array('deleted' => 1)
+				);
 
  				$incomingFieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list
 			}
