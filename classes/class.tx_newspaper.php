@@ -318,7 +318,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		$absolutePath = str_replace('\\', '/', $absolutePath);
 
 		if ($absolutePath == '')
-			return preg_replace('#/+#', '/', $$path2check); // nothing to prepend, just return $path2check 
+			return preg_replace('#/+#', '/', $path2check); // nothing to prepend, just return $path2check 
 		
 		if ($path2check == '') 
 			return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend 
