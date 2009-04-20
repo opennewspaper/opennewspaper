@@ -159,8 +159,8 @@ class tx_newspaper_BE {
 		$default_found = false;
 		
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
-t3lib_div::devlog('available templ sets', 'newspaper', 0, $templateset);
-		$params['items'][] = array('', ''); // empty entry -> templateset is inherited 
+//t3lib_div::devlog('available templ sets', 'newspaper', 0, $templateset);
+		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		
 		for ($i = 0; $i < sizeof($templateset); $i++) {
