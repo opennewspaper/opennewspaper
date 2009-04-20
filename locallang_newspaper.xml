@@ -30,6 +30,7 @@
 			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
 			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
 			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
+			<label index="entry_templateset_inherit">Inherit template set from upper level</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
