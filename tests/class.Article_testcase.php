@@ -287,7 +287,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	    	
 	    	///	link extra to article
 			$query = $GLOBALS['TYPO3_DB']->INSERTquery(
-				$this->article2extra_table,
+				$this->extra2article_table,
 				array(
 					'uid_local' => $this->uid,
 					'uid_foreign' => $abstract_uid
@@ -308,7 +308,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	private function removeExtras() {
-		$rows = tx_newspaper::selectRows('uid_foreign', $this->article2extra_table, 'uid_local = ' . $this->uid);
+		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2article_table, 'uid_local = ' . $this->uid);
 		foreach ($rows as $row) {
 			$abstract_uid = $row['uid_foreign'];
 			$extra = tx_newspaper::selectOneRow('extra_uid, extra_table', $this->extra_table, 'uid = ' . $abstract_uid);
@@ -316,7 +316,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			$this->assertEquals($extra['extra_table'], $this->concrete_extra_table);
 			
 			tx_newspaper::deleteRows($this->extra_table, array($abstract_uid));
-			tx_newspaper::deleteRows($this->article2extra_table, 
+			tx_newspaper::deleteRows($this->extra2article_table, 
 									 "uid_foreign = $abstract_uid AND uid_local = " . $this->uid);
 			tx_newspaper::delete_rows($this->concrete_extra_table, array($concrete_uid));
 		}
