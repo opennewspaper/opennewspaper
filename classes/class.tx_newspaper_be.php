@@ -172,7 +172,7 @@ t3lib_div::devlog('available templ sets', 'newspaper', 0, $templateset);
 		}
 		
 		if (!$default_found) {
-			unset($params['items']['default']); // remove entry 'default' (because there's no templateset default available)
+			unset($params['items'][1]); // remove entry 'default' (because there's no templateset default available)
 		}
 		
 	} 
