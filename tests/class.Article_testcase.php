@@ -318,7 +318,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			tx_newspaper::deleteRows($this->extra_table, array($abstract_uid));
 			tx_newspaper::deleteRows($this->extra2article_table, 
 									 "uid_foreign = $abstract_uid AND uid_local = " . $this->uid);
-			tx_newspaper::delete_rows($this->concrete_extra_table, array($concrete_uid));
+			tx_newspaper::deleteRows($this->concrete_extra_table, array($concrete_uid));
 		}
 	}
 	
