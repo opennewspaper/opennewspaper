@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *  
- *  \author Oliver Schörder <typo3@schroederbros.de>
+ *  \author Oliver Schï¿½rder <typo3@schroederbros.de>
  *  \date Mar 25, 2009
  */
  
@@ -37,6 +37,12 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		if ($uid > 0) {
 			$this->setUid($uid);
 		}
+	}
+	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
 	
 	function getAttribute($attribute) {

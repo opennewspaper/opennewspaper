@@ -50,6 +50,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		}
 	}
 
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n";
+	}
+
 	public function getArticle($index) {
 		$articles = $this->getArticles(1, $index);
 		return $articles[0];

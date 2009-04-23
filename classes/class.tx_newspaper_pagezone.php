@@ -58,6 +58,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 	}
 	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n" .
+			   'extras: ' . print_r($this->extras, 1) . "\n";
+	}
+	
 	/// Render the page zone, containing all extras
 	/** \param $template_set the template set used to render this page (as 
 	 *  		passed down from tx_newspaper_Page::render() )

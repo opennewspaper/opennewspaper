@@ -18,6 +18,11 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 		$this->sourceBehavior = new tx_newspaper_SourceBehavior($this);
 	}
 
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n";
+	}
+
 	/// Reads ONE field for the given Extra
 	public function readField(tx_newspaper_ExtraIface $extra, $field, tx_newspaper_SourcePath $uid) {
         $row = tx_newspaper::selectOneRow(

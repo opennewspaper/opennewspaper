@@ -41,6 +41,12 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
  		}
  	}
  	 
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n";
+	}
+ 	 
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {

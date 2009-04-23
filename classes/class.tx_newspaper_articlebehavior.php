@@ -15,6 +15,11 @@ class tx_newspaper_ArticleBehavior {
 		$this->parent = $parent;
 	}
 	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n";
+	}
+	
 	public function render($template= '') {
 		throw new tx_newspaper_NotYetImplementedException();
 	}

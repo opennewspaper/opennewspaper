@@ -26,6 +26,12 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$this->setUid($uid);
 	}
 
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n";
+	}
+
 	protected function prepare_render(&$template_set = '') {
 		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
 		

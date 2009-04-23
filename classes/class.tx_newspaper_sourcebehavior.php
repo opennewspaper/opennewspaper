@@ -20,6 +20,11 @@ class tx_newspaper_SourceBehavior {
 		$this->parentSource = $parent;
 	}
 
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n";
+	}
+
 	/// Reads the specified fields of the article with the specified UID
 	/** \param $extra Extra object for which fields are read
 	 *  \param $fieldList the fields which should be read from the source - if there's

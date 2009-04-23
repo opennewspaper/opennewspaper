@@ -66,6 +66,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		}
  	}
 	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+	public function __toString() {
+		return get_class($this) . '-object ' . "\n" .
+			   'attributes: ' . print_r($this->attributes, 1) . "\n" .
+			   'extras: ' . print_r($this->extras, 1) . "\n";
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	interface tx_newspaper_StoredObject
