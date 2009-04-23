@@ -399,25 +399,93 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
 		}
 	}
-	
+
+	///	Insert an Extra after another Extra, defined by its origin UID
+	/** \param $new_extra The Extra to be inserted
+	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
+	 * 			will be inserted. If $origin_uid == 0, insert at the beginning.
+	 */	
 	public function insertExtraAfter(tx_newspaper_Extra $new_extra, $origin_uid = 0) {
-		throw new tx_newspaper_NotYetImplementedException();
+		$new_extra->setAttribute('position', $this->findPositionAfter($origin_uid));
+		$this->extras[] = $new_extra;
+		$this->store();
 	}
 	
+	///	Remove a given Extra from the PageZone
+	/** \param $remove_extra Extra to be removed
+	 *  \return false if $remove_extra was not found, true otherwise
+	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra) {
-		throw new tx_newspaper_NotYetImplementedException();
+		$index = -1;
+		try {
+			$index = $this->indexOfExtra($remove_extra);
+		} catch (tx_newspaper_InconsistencyException $e) {
+			//	Extra not found, nothing to do
+			return false;
+		}
+		unset($this->extras[$index]);
+		$this->store();
+		return true;
 	}
 	
+	/// Move an Extra present on the PageZone after another Extra, defined by its origin UID
+	/** \param $move_extra The Extra to be moved
+	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
+	 * 			will be inserted. If $origin_uid == 0, insert at the beginning.
+	 *  \exception tx_newspaper_InconsistencyException If $move_extra is not
+	 * 			present on the PageZone
+	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
-		$this->removeExtra($move_extra);
-		$this->insertExtraAfter($move_extra, $origin_uid);
+		if ($this->removeExtra($move_extra)) {
+			$this->insertExtraAfter($move_extra, $origin_uid);
+		} else {
+			throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
+														  ' to move was not found on the PageZone');
+		}
 	}
 
+	/// Set whether an Extra is really displayed
+	/** Extras can be hidden on certain PageZones. This behavior is not inherited
+	 *  by the Extras on PageZones further down in the inheritance hierarchy.
+	 * 
+	 *  This is intended as an easy way to have PageZones inherit Extra 
+	 *  configuration even if the inheritance hierarchy is discontinued for some
+	 *  PageZones. 
+	 * 
+	 *  \param $extra The Extra to be shown or hidden
+	 *  \param $show Whether tho display the Extra or hide it
+	 *  \exception tx_newspaper_InconsistencyException If $extra is not present
+	 * 			on the PageZone
+	 */
 	public function setShow(tx_newspaper_Extra $extra, $show = true) {
-		throw new tx_newspaper_NotYetImplementedException();
+		
+		//	Check if the Extra is really present. An exception is thrown if not.
+		$this->indexOfExtra($extra);
+		
+		$extra->setAttribute('show_extra', $show);
+		$extra->store();
 	}
 
+	/// Set whether PageZones down the inheritance hierarchy inherit this Extra
+	/** If the inheritance mode is changed to false, the Extra must be removed 
+	 *  from all PageZones inheriting from $this (if it's  already present there).
+	 *  If it is set to true, it must be copied to all inheriting PageZones. Or,
+	 *  if it is already present there (because the inheritance status was
+	 *  toggled to false previously), the Extras must be reactivated and placed 
+	 *  according to their origin_uid. 
+	 * 
+	 *  \param $extra The Extra whose inheritance status is changed
+	 *  \param $inherits Whether to pass the Extra down the hierarchy
+	 *  \exception tx_newspaper_InconsistencyException If $extra is not present
+	 * 			on the PageZone
+	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
+
+		//	Check if the Extra is really present. An exception is thrown if not.
+		$this->indexOfExtra($extra);
+
+		if ($inherits == $extra->getAttribute('is_inheritable')) return;
+		
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 
@@ -476,6 +544,63 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	/// Find next free position after the Extra whose origin_uid attribute matches $origin_uid
+	/** \param $origin_uid The origin_uid of the Extra after which a free place
+	 *  				   is wanted
+	 *  \return A position value which is halway between the found Extra and the
+	 * 			next Extra
+	 */
+	protected function findPositionAfter($origin_uid) {
+
+		//	define variables first (i'm never certain about blocks and scoping in PHP)		
+		$position_before = 0;
+		$position_after = 0;
+		$extra_after = null;
+
+		$extra_before = $this->findExtraByOriginUID($origin_uid);
+		
+		if ($extra_before) {
+			$position_before = $extra_before->getAttribute('position');
+			$extra_after = $this->getExtra($this->indexOfExtra($extra_before)+1);
+		} else {
+			$position_before = 0;
+			$extra_after = $this->getExtra(0);
+		}
+		if ($extra_after) {
+			$position_after = $extra_after->getAttribute('position');
+		} else {
+			$position_after = 2*($position_before+2);
+		}
+		return floor(($position_before+$position_after)/2);
+	}
+	
+	/// Binary search for an Extra, assuming that $this->extras is ordered by position
+	protected function indexOfExtra($extra) {
+        $high = sizeof($this->getExtras())-1;
+        $low = 0;
+       
+        while ($high >= $low) {
+            $index_to_check = floor(($high+$low)/2);
+            $comparison = $this->getExtra($index_to_check)->getAttribute('position') -
+            			  $extra->getAttribute('position');
+            if ($comparison < 0) $low = $index_to_check+1;
+            elseif ($comparison > 0) $high = $index_to_check-1;
+            else return $index_to_check;
+        }
+		
+		// Loop ended without a match
+		throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
+													  ' not found in array of Extras!');		
+	}
+	
+	///	Given a origin_uid, find the Extra which has this value for origin_uid
+	final protected function findExtraByOriginUID($origin_uid) {
+		foreach ($this->getExtras() as $extra) {
+			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
+		}
+		return null;
+	}
+	
 	/// Read Extras from DB
 	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
 	 *  class c'tor instead of every descendant to minimize code duplication.
@@ -509,7 +634,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
  	}
  	
- 	
+ 	/// Ordering function to keep Extras in the order in which they appear on the PageZone
+ 	/** Supplied as parameter to usort() in getExtras().
+ 	 *  \param $extra1 first Extra to compare
+ 	 *  \param $extra2 second Extra to compare
+ 	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
+ 	 * 			== 0 if their position is the same 
+ 	 */
+ 	static protected function compareExtras(tx_newspaper_Extra $extra1, 
+ 									 		tx_newspaper_Extra $extra2) {
+ 		return $extra2->getAttribute('position')-$extra1->getAttribute('position');			 	
+	}
+	
 	/// Read Attributes from DB
 	/** \see readExtras()
 	 * 
@@ -531,7 +667,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
  	abstract protected function getExtra2PagezoneTable();
  	
-	protected function getExtras() { return $this->extras; }
+	protected function getExtras() {
+		usort($this->extras, array(get_class($this), 'compareExtras')); 
+		return $this->extras; 
+	}
+
+	protected function getExtra($index) {
+		usort($this->extras, array(get_class($this), 'compareExtras'));
+		return $this->extras[$index];
+	}
 
  	private $uid = 0;
  	
