@@ -174,12 +174,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	interface tx_newspaper_ExtraIface
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
-	protected function getCurrentPage() {
-		$section = tx_newspaper::getSection();
-		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
-	}
-	
+		
 	/// Renders an article
 	public function render($template_set = '') {
 		
@@ -436,6 +431,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	protected functions
 	//
 	////////////////////////////////////////////////////////////////////////////
+	
+	protected function getCurrentPage() {
+		$section = tx_newspaper::getSection();
+		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
+	}
 	
 	protected function splitIntoParagraphs() {
 		/** A text usually starts with a <p>, in that case the first paragraph

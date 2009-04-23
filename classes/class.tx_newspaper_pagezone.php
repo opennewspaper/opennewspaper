@@ -65,6 +65,100 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			   'extras: ' . print_r($this->extras, 1) . "\n";
 	}
 	
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_StoredObject
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+ 	
+ 	/// returns an actual member (-> Extra)
+	function getAttribute($attribute) {
+		/** For reasons explained in readExtras() the attributes are read in the
+		 *  constructor, so we don't read the attributes here 
+		 */
+		if (!array_key_exists($attribute, $this->attributes)) {
+        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		}
+		
+		return $this->attributes[$attribute];
+	}
+
+	/// sets a member (-> Extra)
+	function setAttribute($attribute, $value) {
+		/** For reasons explained in readExtras() the attributes are read in the
+		 *  constructor, so we don't read the attributes here 
+		 */
+		$this->attributes[$attribute] = $value;
+	}
+	
+	public function store() {
+		
+		if ($this->getUid()) {
+			/// If the attributes are not yet in memory, now would be a good time to read them 
+			if (!$this->attributes) {
+				$this->readAttributes($this->getTable(), $this->getUid());
+			}			
+				
+			tx_newspaper::updateRows(
+				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+			);
+		} else {
+			///	Store a newly created page zone
+			$this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
+			/** \todo If the PID is not set manually, $tce->process_datamap()
+			 * 		  fails silently. 
+			 */
+			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+
+			$this->setUid(
+				tx_newspaper::insertRows(
+					$this->getTable(), $this->attributes
+				)
+			);
+		}
+
+		/// Ensure the page zone has an entry in the abstract supertable...
+		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
+		/// ... and is attached to the correct page
+		tx_newspaper::updateRows(
+			'tx_newspaper_pagezone', 
+			'uid = ' . $pagezone_uid, 
+			array('page_id' => $this->parent_page->getUid())
+		);
+		
+		
+		return $this->getUid();
+		
+	}
+	
+	/** \todo Internationalization */
+	public function getTitle() {
+		return 'PageZone';
+	}
+	
+	function getUid() { 
+		return intval($this->uid); 
+	}
+	
+	function setUid($uid) { 
+		$this->uid = $uid; 
+	}
+
+	public  function getTable() {
+		return tx_newspaper::getTable($this);
+	}
+
+	static function getModuleName() { 
+		return 'np_pagezone'; 
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_ExtraIface
+	//
+	////////////////////////////////////////////////////////////////////////////
+
 	/// Render the page zone, containing all extras
 	/** \param $template_set the template set used to render this page (as 
 	 *  		passed down from tx_newspaper_Page::render() )
@@ -103,30 +197,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
  		return $this->smarty->fetch($this);
  	}
- 	
- 	/// returns an actual member (-> Extra)
-	function getAttribute($attribute) {
-		/** For reasons explained in readExtras() the attributes are read in the
-		 *  constructor, so we don't read the attributes here 
-		 */
-		if (!array_key_exists($attribute, $this->attributes)) {
-        	throw new tx_newspaper_WrongAttributeException($attribute);
- 		}
-		
-		return $this->attributes[$attribute];
-	}
-
-	/// sets a member (-> Extra)
-	function setAttribute($attribute, $value) {
-		/** For reasons explained in readExtras() the attributes are read in the
-		 *  constructor, so we don't read the attributes here 
-		 */
-		$this->attributes[$attribute] = $value;
+	
+	static function readExtraItem($uid, $table) {
+		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
-	public  function getTable() {
-		return tx_newspaper::getTable($this);
-	}
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	class tx_newspaper_PageZone
+	//
+	////////////////////////////////////////////////////////////////////////////
 
 	public function getPageZoneType() {
 		if (!$this->pagezonetype) {
@@ -177,45 +257,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->parent_page;
 	}
 	
-	public function store() {
-		
-		if ($this->getUid()) {
-			/// If the attributes are not yet in memory, now would be a good time to read them 
-			if (!$this->attributes) {
-				$this->readAttributes($this->getTable(), $this->getUid());
-			}			
-				
-			tx_newspaper::updateRows(
-				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
-			);
-		} else {
-			///	Store a newly created page zone
-			$this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
-			/** \todo If the PID is not set manually, $tce->process_datamap()
-			 * 		  fails silently. 
-			 */
-			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
-
-			$this->setUid(
-				tx_newspaper::insertRows(
-					$this->getTable(), $this->attributes
-				)
-			);
-		}
-
-		/// Ensure the page zone has an entry in the abstract supertable...
-		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
-		/// ... and is attached to the correct page
-		tx_newspaper::updateRows(
-			'tx_newspaper_pagezone', 
-			'uid = ' . $pagezone_uid, 
-			array('page_id' => $this->parent_page->getUid())
-		);
-		
-		
-		return $this->getUid();
-		
-	}
 
 	/// Get the Page Zone from which the current object inherits the placement of its extras
 	/** \param $inherit_mode If negative, don't inherit at all; if positive, 
@@ -359,51 +400,32 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 	}
 	
-	/** \todo Internationalization */
-	public function getTitle() {
-		return 'PageZone';
-	}
-	
-	static function getModuleName() { return 'np_pagezone'; }
-
-	static function readExtraItem($uid, $table) {
+	public function insertExtraAfter(tx_newspaper_Extra $new_extra, $origin_uid = 0) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
- 	
- 	////////////////////////////////////////////////////////////////////////////
- 	
-	/// Read Extras from DB
-	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
-	 *  class c'tor instead of every descendant to minimize code duplication.
-	 * 
-	 *  Problem: The descendant c'tor calls <tt>parent::__construct()</tt>. The
-	 *  base c'tor knows only its own class, not the concrete class which is 
-	 *  intantiated. Every function call in the base c'tor therefore calls 
-	 *  functions in the base class. Late binding is impossible.
-	 * 
-	 *  Solution: Factor out the methods to read Extras and attributes in the 
-	 *  base class, and call them in the descended c'tor like this:
-	 *  \code
-	 * 	parent::__construct();
-	 *  $this->readExtras($uid);
-	 *  $this->readAttributes($this->getTable(), $uid);
-	 *  \endcode
-	 * 
-	 *  \todo factor out code to read MM table and create Extras
-	 * 
-	 *  \param $uid UID in the table of the concrete type 
-	 */
- 	protected function readExtras($uid) {
-		$uids = tx_newspaper::selectRows(
-			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
-		);
+	
+	public function removeExtra(tx_newspaper_Extra $remove_extra) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+	
+	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
+		$this->removeExtra($move_extra);
+		$this->insertExtraAfter($move_extra, $origin_uid);
+	}
 
-		if ($uids) {
-        	foreach ($uids as $uid) {
-        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
-        	}
-		}
- 	}
+	public function setShow(tx_newspaper_Extra $extra, $show = true) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+
+	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
+		throw new tx_newspaper_NotYetImplementedException();
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	internal functions (public only to enable unit testing)
+	//
+	////////////////////////////////////////////////////////////////////////////
  	
  	/// Create the record for a concrete PageZone in the table of abstract PageZones
 	/** This is probably necessary because a concrete PageZone has been freshly
@@ -438,6 +460,55 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		return tx_newspaper::insertRows('tx_newspaper_pagezone', $row);		
 	}
+
+	public function setPageZoneType(tx_newspaper_PageZoneType $type) {
+		$this->pagezonetype = $type;
+	}
+
+	public function setParentPage(tx_newspaper_Page $parent) {
+		$this->parent_page = $parent;
+		$this->parent_page_id = $parent->getUid();
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	protected functions
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+	/// Read Extras from DB
+	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
+	 *  class c'tor instead of every descendant to minimize code duplication.
+	 * 
+	 *  Problem: The descendant c'tor calls <tt>parent::__construct()</tt>. The
+	 *  base c'tor knows only its own class, not the concrete class which is 
+	 *  intantiated. Every function call in the base c'tor therefore calls 
+	 *  functions in the base class. Late binding is impossible.
+	 * 
+	 *  Solution: Factor out the methods to read Extras and attributes in the 
+	 *  base class, and call them in the descended c'tor like this:
+	 *  \code
+	 * 	parent::__construct();
+	 *  $this->readExtras($uid);
+	 *  $this->readAttributes($this->getTable(), $uid);
+	 *  \endcode
+	 * 
+	 *  \todo factor out code to read MM table and create Extras
+	 * 
+	 *  \param $uid UID in the table of the concrete type 
+	 */
+ 	protected function readExtras($uid) {
+		$uids = tx_newspaper::selectRows(
+			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
+		);
+
+		if ($uids) {
+        	foreach ($uids as $uid) {
+        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+        	}
+		}
+ 	}
+ 	
  	
 	/// Read Attributes from DB
 	/** \see readExtras()
@@ -460,19 +531,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
  	abstract protected function getExtra2PagezoneTable();
  	
-	function getUid() { return intval($this->uid); }
-	function setUid($uid) { $this->uid = $uid; }
-
 	protected function getExtras() { return $this->extras; }
-
-	public function setPageZoneType(tx_newspaper_PageZoneType $type) {
-		$this->pagezonetype = $type;
-	}
-
-	public function setParentPage(tx_newspaper_Page $parent) {
-		$this->parent_page = $parent;
-		$this->parent_page_id = $parent->getUid();
-	}
 
  	private $uid = 0;
  	
