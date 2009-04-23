@@ -50,7 +50,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  		if (is_int($get)) {
 			$this->setUid($get); // just read the record (probably for backend)
 			if (TYPO3_MODE == 'BE') {
-				$this->condition = 'uid=' . $this->getUid() . tx_newspaper::enableFields(tx_newspaper::getTable($this));
+				$this->condition = 'uid=' . $this->getUid();
 			}
  		} else if ($get['art']) {
  			$this->condition = 'get_var = \'art\'';
@@ -69,14 +69,17 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
  	
- 	public function getCondition() { return $this->condition; }
+ 	public function getCondition() { 
+ 		return $this->condition . tx_newspaper::enableFields(tx_newspaper::getTable($this)); 
+ 	}
+
  	public function getID() { return $this->getAttribute('uid'); }
  	
  	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-				'*', tx_newspaper::getTable($this), $this->condition
+				'*', tx_newspaper::getTable($this), $this->getCondition()
 			);
 			$this->setUid($this->attributes['uid']);
 		}
