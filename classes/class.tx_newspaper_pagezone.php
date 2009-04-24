@@ -127,6 +127,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			array('page_id' => $this->parent_page->getUid())
 		);
 		
+		/// \todo store Extras placed on $this
+		throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
+		
 		
 		return $this->getUid();
 		
