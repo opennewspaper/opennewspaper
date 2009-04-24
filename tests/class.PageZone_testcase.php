@@ -21,8 +21,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	        
 		    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 		}			
-		$rows = tx_newspaper::selectRows('*', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
-		t3lib_div::debug($rows);
 		
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
 		
@@ -149,10 +147,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	    	
 	    	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $this->concrete_extra_table);
 
-			t3lib_div::debug($this->uid);
-			t3lib_div::debug($extra_uid);
-			t3lib_div::debug($abstract_uid);
-	    	
 	    	///	link extra to article
 			tx_newspaper::insertRows(
 				$this->extra2pagezone_table,
