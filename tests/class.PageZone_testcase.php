@@ -154,6 +154,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	private function removeExtras() {
 		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
+		t3lib_div::debug($rows);
 		foreach ($rows as $row) {
 			$abstract_uid = $row['uid_foreign'];
 			$extra = tx_newspaper::selectOneRow('extra_uid, extra_table', $this->extra_table, 'uid = ' . $abstract_uid);
