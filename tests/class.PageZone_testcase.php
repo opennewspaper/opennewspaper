@@ -41,7 +41,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_createPageZone() {
-		$temp = tx_newspaper_PageZone_Factory::getInstance()->create($this->uid);
+		$temp = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone->getPageZoneUID());
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 	}
