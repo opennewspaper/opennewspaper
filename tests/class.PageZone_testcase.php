@@ -137,6 +137,10 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
 	    	
 	    	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $this->concrete_extra_table);
+
+			t3lib_div::debug($this->uid);
+			t3lib_div::debug($extra_uid);
+			t3lib_div::debug($abstract_uid);
 	    	
 	    	///	link extra to article
 			tx_newspaper::insertRows(
