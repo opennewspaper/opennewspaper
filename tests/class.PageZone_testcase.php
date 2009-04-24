@@ -133,6 +133,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	////////////////////////////////////////////////////////////////////////////
 
 	private function createExtras() {
+		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
+		t3lib_div::debug($rows);
 		foreach ($this->extra_data as $index => $extra) {
 			$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
 	    	
