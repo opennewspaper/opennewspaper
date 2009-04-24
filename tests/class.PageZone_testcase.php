@@ -12,8 +12,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 		$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);		
+		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
+		t3lib_div::debug($rows);
 		
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
+		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
+		t3lib_div::debug($rows);
 		
 		$this->createExtras();
 		
@@ -133,8 +137,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	////////////////////////////////////////////////////////////////////////////
 
 	private function createExtras() {
-		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
-		t3lib_div::debug($rows);
 		foreach ($this->extra_data as $index => $extra) {
 			$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
 	    	
@@ -156,13 +158,10 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	    	$row = array('position' => $this->extra_pos[$index]);
 			tx_newspaper::updateRows($this->extra_table, 'uid = ' . $abstract_uid, $row);
 		}	
-		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
-		t3lib_div::debug($rows);
 	}
 	
 	private function removeExtras() {
 		$rows = tx_newspaper::selectRows('uid_foreign', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
-		t3lib_div::debug($rows);
 		foreach ($rows as $row) {
 			$abstract_uid = $row['uid_foreign'];
 			$extra = tx_newspaper::selectOneRow('extra_uid, extra_table', $this->extra_table, 'uid = ' . $abstract_uid);
