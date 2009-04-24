@@ -491,10 +491,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 	
 	private $source = null;			///< Source the Article is read from
-#	private $uid = '';				///< UID that identifies the article in the source
-	
-#	private $extra_uid = null;		///< article's UID in the abstract Extra table
-#	private $pagezone_uid = null;	///< article's UID in the abstract PageZone table
 
 	private $articleBehavior = null;	///< Object to delegate operations to
 	
