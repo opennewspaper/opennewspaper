@@ -685,6 +685,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->extras[$index];
 	}
 
+	public function getPageZoneUID() { return $this->pagezone_uid; }
+	public function getExtraUID() { return $this->extra_uid; }
+
  	protected $uid = 0;				///< The UID of the record in the concrete table
  	protected $pagezone_uid = 0;	///< The UID of the record in the abstract PageZone table
  	protected $extra_uid = 0;		///< The UID of the record in the abstract Extra table
