@@ -213,6 +213,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	/** \param $table SQL table to update
 	 *  \param $where SQL WHERE condition (typically 'uid = ...')
 	 *  \param $row Data as key=>value pairs
+	 *  \return number of affected rows
 	 */
 	public static function updateRows($table, $where, array $row) {
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);

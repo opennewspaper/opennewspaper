@@ -54,7 +54,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  safety net because currently it's not ensured that extras are 
 			 *  created consistently.
 			 */
-			tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
+			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
 		}
 	}
 	
@@ -670,29 +670,34 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
  	abstract protected function getExtra2PagezoneTable();
  	
+ 	/// Retrieve the array of Extras on the PageZone, sorted by position
 	protected function getExtras() {
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
 		return $this->extras; 
 	}
 
+	///	Retrieve a single Extra, defined by its index in the sequence
+	/** \param $index 
+	 *  \return The \p $index -th Extra on the PageZone 
+	 */
 	protected function getExtra($index) {
 		usort($this->extras, array(get_class($this), 'compareExtras'));
 		return $this->extras[$index];
 	}
 
- 	private $uid = 0;
+ 	protected $uid = 0;				///< The UID of the record in the concrete table
+ 	protected $pagezone_uid = 0;	///< The UID of the record in the abstract PageZone table
+ 	protected $extra_uid = 0;		///< The UID of the record in the abstract Extra table
  	
- 	protected $smarty = null;
+ 	protected $smarty = null;		///< Smarty object for rendering
  	
  	protected $attributes = array();	///< array of attributes
  	protected $extras = array();		///< array of tx_newspaper_Extra s
  	protected $pagezonetype = null;
  	
- 	protected $parent_page_id = 0;
- 	protected $parent_page = null;
- 	
-# 	static protected $table = 'tx_newspaper_pagezone';	///< SQL table for persistence
- 	 
+ 	protected $parent_page_id = 0;	///< UID of the parent Page
+ 	protected $parent_page = null;	///< Parent Page object
+ 	 	 
  	/// Default Smarty template for HTML rendering
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
  	
