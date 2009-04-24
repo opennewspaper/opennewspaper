@@ -11,13 +11,18 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 class test_PageZone_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);		
+		
+		# $this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
+		$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->article_table, $this->article_data);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		if (!$res) die("$query failed!");
+	        
+	    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+				
 		$rows = tx_newspaper::selectRows('*', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
 		t3lib_div::debug($rows);
 		
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
-		$rows = tx_newspaper::selectRows('*', $this->extra2pagezone_table, 'uid_local = ' . $this->uid);
-		t3lib_div::debug($rows);
 		
 		$this->createExtras();
 		
