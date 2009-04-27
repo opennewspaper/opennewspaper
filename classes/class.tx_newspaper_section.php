@@ -81,7 +81,19 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
-	/** \todo Internationalization */
+	
+	/// \return true if section can be accessed (FE/BE use enableFields)
+	function isValid() {
+		// check if section is valid
+		try {
+			$tmp = $this->getAttribute('uid'); // getAttribute forces the object to be read from database
+			return true;
+		} catch (tx_newspaper_EmptyResultException $e) {
+			return false;
+		}
+	}
+
+
 	public function getTitle() {
 		global $LANG;
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
