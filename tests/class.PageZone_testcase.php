@@ -161,63 +161,59 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 		
 	public function test_render() {
-		
+		$this->fail('test_render not yet implemented');
 	}
 	
 	public function test_getAbstractUid() {
-		
+		$this->fail('test_getAbstractUid not yet implemented');
 	}
 
 	public function test_getParentPage() {
-		
+		$this->fail('test_getParentPage not yet implemented');
 	}
 
 	public function test_setParentPage() {
-		
+		$this->fail('test_setParentPage not yet implemented');
 	}
 	
 	public function test_getParentForPlacement() {
-		
+		$this->fail('test_getParentForPlacement not yet implemented');
 	}
 	
 	public function test_getInheritanceHierarchyUp() {
-		
+		$this->fail('test_getInheritanceHierarchyUp not yet implemented');
 	}
 
 	public function test_getInheritanceHierarchyDown() {
-		
+		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
 	}
 	
 	public function test_insertInheritedExtraAfter() {
-		
+		$this->fail('test_insertInheritedExtraAfter not yet implemented');
 	}
 	
 	public function test_copyExtrasFrom() {
-		
+		$this->fail('test_copyExtrasFrom not yet implemented');
 	}
 	
 	public function test_insertExtraAfter() {
-		
+		$this->fail('test_insertExtraAfter not yet implemented');
 	}
 	
 	public function test_removeExtra() {
-		
+		$this->fail('test_removeExtra not yet implemented');
 	}
 
 	public function test_moveExtraAfter() {
-		
+		$this->fail('test_moveExtraAfter not yet implemented');
 	}
 	
 	public function test_setShow() {
-		
+		$this->fail('test_setShow not yet implemented');
 	}
 
 	public function test_setInherits() {
-		
-	}
-
-	public function test_ () {
-		
+		$this->fail('test_setInherits not yet implemented');
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
