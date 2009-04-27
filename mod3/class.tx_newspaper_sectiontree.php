@@ -25,6 +25,8 @@
 unset($MCONF);
 require_once('conf.php');
 
+t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $MCONF);
+
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
