@@ -27,6 +27,10 @@
  * Hint: use extdeveval to insert/update function index above.
  */
 
+//var_dump(debug_backtrace());
+//var_dump($_REQUEST);
+
+require_once('conf.php');
 
 $LANG->includeLLFile('EXT:newspaper/mod3/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
@@ -54,11 +58,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 					parent::init();
 
-					/*
-					if (t3lib_div::_GP('clear_all_cache'))	{
-						$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-					}
-					*/
+					$this->readUidList(); // get ids for section, page and pagezone
+
 				}
 
 				/**
@@ -89,13 +90,16 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 					// Access check!
 					// The page will show only if there is a valid page and if this page may be viewed by the user
-					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-					$access = is_array($this->pageinfo) ? 1 : 0;
-				
+					
+					
+//					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
+//					$access = is_array($this->pageinfo) ? 1 : 0;
+					$access = 1; /// \todo: maybe we should implement a more sophisticated version of this ;-)
+
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
+						$this->doc = t3lib_div::makeInstance('noDoc');
 						$this->doc->backPath = $BACK_PATH;
 						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
@@ -119,9 +123,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-						$this->content.=$this->doc->divider(5);
+//						$this->content.=$this->doc->spacer(5);
+//						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+//						$this->content.=$this->doc->divider(5);
 
 
 						// Render content:
@@ -164,28 +168,186 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				 *
 				 * @return	void
 				 */
-				function moduleContent()	{
-					switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1:
-							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).'mod3/index.php and edit it!
-								<hr />
-								<br />This is the GET/POST vars sent to the script:<br />'.
-								'GET:'.t3lib_div::view_array($_GET).'<br />'.
-								'POST:'.t3lib_div::view_array($_POST).'<br />'.
-								'';
-							$this->content.=$this->doc->section('Message #1:',$content,0,1);
-						break;
-						case 2:
-							$content='<div align=center><strong>Menu item #2...</strong></div>';
-							$this->content.=$this->doc->section('Message #2:',$content,0,1);
-						break;
-						case 3:
-							$content='<div align=center><strong>Menu item #3...</strong></div>';
-							$this->content.=$this->doc->section('Message #3:',$content,0,1);
-						break;
+				function moduleContent() {
+					global $LANG;
+#t3lib_div::devlog('mod_settings', 'newspaper', 0, $this->MOD_SETTINGS);
+				
+#debug($_REQUEST);
+					if (!$this->section_id) {
+						/// no section id found, just display message to choose a section from the section tree
+						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_chosen', false);
+					} else { 
+
+$content .= 'dummy #' . $this->section_id;
+//					$content= $this->renderBackendSmartyPageZone(
+//						tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->id))
+//					);
 					}
+					$this->content .= $this->doc->section('', $content, 0, 1);
 				}
+
+	
+	function readUidList() {
+		global $BE_USER;
+
+		/// \todo: check permissions
+		
+		/// process section id param
+		if ($this->id) {
+			$this->section_id = $this->id; // clicked in section tree
+		} else if (t3lib_div::_GP('section_id')) {
+			$this->section_id = t3lib_div::_GP('section_id');
+		} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id")){
+			$this->section_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id");
+		} else {
+			$this->section_id = 0; // nothing found
+		}
+		if ($this->section_id) {
+			$s = new tx_newspaper_Section(intval($this->section_id));
+			if (!$s->isValid()) {
+				// no valid section, nothing to show ...
+				$this->section_id = 0; 
+				$this->page_id = 0;
+				$this->pagezone_id = 0;
+			}
+		}
+//t3lib_div::debug($s);
+
+
+		/// process page id param
+		if ($this->section_id) {
+			if (t3lib_div::_GP('page_id')) {
+				$this->page_id = t3lib_div::_GP('page_id'); 
+			} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_id")){
+				$this->page_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_id"); 
+			} else {
+				$active_page = $s->getSubPages();
+				if (sizeof($active_page) > 0)
+					$this->page_id = $active_page[0]->getUid(); // use first assigned page initially
+				else
+					$this->page_id = 0; // nothing found
+			}
+		}
+		if ($this->page_id) {
+			$p = new tx_newspaper_Page();
+			$p->setUid(intval($this->page_id));
+			if (!$p->isValid($s)) {
+				// no valid page, only the section seems to be useful
+				$this->page_id = 0;
+				$this->pagezone_id = 0;
+			}
+		}
+t3lib_div::debug($p);
+
+	
+		if ($this->page_id) {
+			if (t3lib_div::_GP('pagezone_id')) {
+				$this->pagezone_id = t3lib_div::_GP('pagezone_id');
+			} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_id")){
+				$this->pagezone_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_id");
+			} else {
+
+				$active_pagezone = $p->getPageZones();
+				if (sizeof($active_pagezone) > 0)
+					$this->pagezone_id = $active_pagezone[0]->getUid(); // use first activated pagezone initally
+				else
+					$this->pagezone_id = 0; // nothing found
+			}
+		}
+		if ($this->pagezone_id) {
+			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id));
+t3lib_div::debug($pz);			
+		}
+
+
+
+		/// store ids for be user for later use
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/section_id", $this->section_id);
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_id", $this->page_id);
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_id", $this->pagezone_id);		
+		
+	}
+
+
+	function renderBackendSmartyPageZone(tx_newspaper_PageZone $pz) {
+		global $LANG;
+		
+ 		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+
+
+//t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
+////dummy data
+//for ($i=0; $i < sizeof($row); $i++) {
+//	$row[$i]['comment'] = 'oliver (2008-03-21 17:37): Dies ist ein Beispiel für die Anzeige des letzten Kommentars. Dies ist ein Beispiel für die Anzeige des letzten Kommentars.Dies ist ein Beispiel für die Anzeige des letzten Kommentars.Dies ist ein Beispiel für die Anzeige des letzten Kommentars.Dies ist ein Beispiel für die Anzeige des letzten Kommentars.Dies ist ein Beispiel für die Anzeige des letzten Kommentars.';
+//}
+//t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
+//
+//
+//		$smarty->assign('PAGE_PREV_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_prev', false));
+//		$smarty->assign('PAGE_NEXT_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_next', false));
+//		$smarty->assign('PAGE_HITS_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_hits', false));
+//
+//		$smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
+//		$smarty->assign('RANGE_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.range', false));
+//
+//		$smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdoen (for page browser)
+//		$smarty->assign('STEP_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.step_items_per_page', false));
+//		$smarty->assign('START_PAGE', t3lib_div::_GP('start_page'));
+//
+//		$smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
+//		$smarty->assign('HIDDEN_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.status_hidden', false));
+//
+//		$smarty->assign('MODERATION', $this->getModerationArray()); // add data for moderation dropdown
+//		$smarty->assign('MODERATION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.status_moderation', false));
+//
+//		$smarty->assign('AUTHOR_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.author', false));
+//		$smarty->assign('SECTION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.section', false));
+//		$smarty->assign('TEXTSEARCH_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.textsearch', false));
+//
+//		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
+//
+//		$smarty->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.hide', false)));
+//		$smarty->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.unhide', false)));
+//		$smarty->assign('ARTICLE_PREVIEW_ICON', tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)));
+//		$smarty->assign('ARTICLE_EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
+//		$smarty->assign('COMMENT_ICON', tx_newspaper_BE::renderIcon('gfx/zoom2.gif', '', '###COMMENT###'));
+//		$smarty->assign('TIME_HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/history.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
+//		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
+//
+//
+//		/// build browse sequence
+//		if (intval(t3lib_div::_GP('start_page')) > 0) {
+//			$smarty->assign('URL_PREV', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) - 1)));
+//		} else {
+//			$smarty->assign('URL_PREV', '');
+//		}
+//		if (sizeof($row) > intval(t3lib_div::_GP('step'))) {
+//			// so there's at least one next record
+//			$smarty->assign('URL_NEXT', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) + 1)));
+//			$row = array_slice($row, 0, intval(t3lib_div::_GP('step'))); // cut off entry from next page
+//		} else {
+//			$smarty->assign('URL_NEXT', '');
+//		}
+//		
+//		
+//		/// build url for switch visibility button
+//		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
+//		
+//
+//		$smarty->assign('DATA', $row);
+//
+//		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
+//
+//
+//		$smarty->assign('T3PATH', substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		
+		return $smarty->fetch('mod3_pagezone.tmpl');
+	}
+
+
+
+
 				
 		}
 

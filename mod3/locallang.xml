@@ -7,9 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Placement</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="message_section_placement_no_section_chosen">Please choose a section in the section tree.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>
