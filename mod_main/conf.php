@@ -12,5 +12,5 @@ $MLANG['default']['tabs_images']['tab'] = 'moduleicon.gif';
 $MLANG['default']['ll_ref']='LLL:EXT:newspaper/mod_main/locallang_mod.xml';
 
 
-$MCONF['navFrameScript']='class.tx_newspaper_SectionTree.php';
+$MCONF['navFrameScript']='../mod3/class.tx_newspaper_SectionTree.php';
 ?>
