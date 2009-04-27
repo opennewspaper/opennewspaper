@@ -155,6 +155,7 @@ class tx_newspaper_BE {
 
 	/// itemsProcFunc to fill templateset dropdowns
 	function addTemplateSetDropdownEntries(&$params, &$pObj) {
+		global $LANG; 
 		
 		$default_found = false;
 		
