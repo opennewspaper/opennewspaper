@@ -31,7 +31,7 @@
 //var_dump($_REQUEST);
 
 require_once('conf.php');
-t3lib_div::devlog('mod3 index mconf', 'newspaper', 0, $MCONF);
+//t3lib_div::devlog('mod3 index mconf', 'newspaper', 0, $MCONF);
 
 $LANG->includeLLFile('EXT:newspaper/mod3/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
@@ -43,7 +43,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'Placement' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver SchrÃ¶der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
