@@ -157,7 +157,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getModuleName() {
-		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone');
+		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
 	}
 		
 	public function test_render() {
