@@ -162,6 +162,28 @@ class tx_newspaper_Page
 		
 		return $this->getUid();		
 	}
+
+
+	/// \param tx_newspaper_Section $s section
+	/// \return true if page can be accessed and if assigned to given section(FE/BE use enableFields)
+	function isValid(tx_newspaper_Section $s) {
+		// check if page is valid
+		try {
+			$tmp = $this->getAttribute('uid'); // getAttribute forces the object to be read from database
+		} catch (tx_newspaper_EmptyResultException $e) {
+			return false;
+		}
+		
+		// check if page is assigned to section
+		$assigned_page = $s->getSubPages();
+		for ($i = 0; $i < sizeof($assigned_page); $i++) {
+			if ($assigned_page[$i]->getUid() == $this->getUid())
+				return true;
+		}
+			
+		return false;
+	}
+
 	
 	/** \todo Internationalization */
 	public function getTitle() {
