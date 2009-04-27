@@ -31,6 +31,7 @@
 //var_dump($_REQUEST);
 
 require_once('conf.php');
+t3lib_div::devlog('mod3 index mconf', 'newspaper', 0, $MCONF);
 
 $LANG->includeLLFile('EXT:newspaper/mod3/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
