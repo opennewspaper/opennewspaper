@@ -23,6 +23,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		}
 
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
+		$this->pagezone_uid = $this->pagezone->getAbstractUid();
 
 		$this->createExtras();
 
@@ -166,8 +167,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getAbstractUid() {
-		t3lib_div::debug($this->pagezone->getAbstractUid());
-		$this->fail('test_getAbstractUid not yet implemented');
+		/** This test seems a bit redundant because it checks the return value
+		 *  of getAbstractUid() against the return value of getAbstractUid().
+		 */ 
+		$this->assertEquals($this->pagezone->getAbstractUid(), $this->pagezone_uid);
+		$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone->getAbstractUid());
+		$this->assertEquals($this->pagezone->getUid(), $pagezone->getUid());
 	}
 
 	public function test_getParentPage() {
@@ -264,7 +269,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
 	private $source = null;
-	private $uid = 1;
+	private $uid = 0;
+	private $pagezone_uid = 0;
 	
 	private $extra_table = 'tx_newspaper_extra';
 	private $concrete_extra_table = 'tx_newspaper_extra_image';
