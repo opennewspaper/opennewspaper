@@ -25,8 +25,6 @@
 unset($MCONF);
 require_once('conf.php');
 
-t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $MCONF);
-
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
@@ -40,7 +38,7 @@ class tx_newspaper_SectionTree {
 	 */
 	function init() {
 		global $BE_USER,$BACK_PATH;
-		
+t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
 		// Create template object:
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->docType='xhtml_trans';
