@@ -134,10 +134,10 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		
+	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
-			if (TYPO3_OS != 'WIN' && $dir[0] != '/') $dir = $this->basepath . '/' . $dir;
+			$dir = tx_newspaper::createAbsolutePath($dir, $this->basepath);
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
