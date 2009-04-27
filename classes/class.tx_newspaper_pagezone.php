@@ -180,7 +180,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
-		if ($this->getParentPage()->getPagetype()) {
+		if ($this->getParentPage() && $this->getParentPage()->getPagetype()) {
 			$this->smarty->setPageType($this->getParentPage());
 		}
 		if ($this->getPageZoneType()) {
