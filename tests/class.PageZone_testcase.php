@@ -161,14 +161,17 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 		
 	public function test_render() {
+		t3lib_div::debug($this->pagezone->render());
 		$this->fail('test_render not yet implemented');
 	}
 	
 	public function test_getAbstractUid() {
+		t3lib_div::debug($this->pagezone->getAbstractUid());
 		$this->fail('test_getAbstractUid not yet implemented');
 	}
 
 	public function test_getParentPage() {
+		t3lib_div::debug($this->pagezone->getParentPage());
 		$this->fail('test_getParentPage not yet implemented');
 	}
 
@@ -177,14 +180,17 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getParentForPlacement() {
+		t3lib_div::debug($this->pagezone->getParentForPlacement());
 		$this->fail('test_getParentForPlacement not yet implemented');
 	}
 	
 	public function test_getInheritanceHierarchyUp() {
+		t3lib_div::debug($this->pagezone->getInheritanceHierarchyUp());
 		$this->fail('test_getInheritanceHierarchyUp not yet implemented');
 	}
 
 	public function test_getInheritanceHierarchyDown() {
+		t3lib_div::debug($this->pagezone->getInheritanceHierarchyDown());
 		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
 	}
 	
