@@ -92,6 +92,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->attributes[$attribute] = $value;
 	}
 	
+	/** \todo ensure page zone type is stored correctly
+	 *  \todo store Extras placed on $this
+	 */
 	public function store() {
 		
 		if ($this->getUid()) {

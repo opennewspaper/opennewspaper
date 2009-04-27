@@ -11,7 +11,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 class test_PageZone_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
-		
+
 		if (0) {
 			$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
 		} else {
@@ -20,12 +20,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			if (!$res) die("$query failed!");
 	        
 		    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
-		}			
-		
+		}
+
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
-		
+
 		$this->createExtras();
-		
+
 		$this->source = new tx_newspaper_DBSource();
 	}
 	
@@ -78,17 +78,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_DBException');
 		tx_newspaper_PageZone_Factory::getInstance()->create($this->bad_uid);
 	}
-	/*
-	public function test_store() {
-		$this->pagezone->store();
-		/// \todo check that record in DB equals data in memory
-		/// \todo change an attribute, store and check
-		/// \todo create an empty pagezone and write it. verify it's been written.
-		/// \see ArticleImpl_testcase
-		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
-	}	
-	*/
-	
+		
 	public function test_PageZoneType() {
 		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
 		foreach ($rows as $pzt) {
@@ -127,6 +117,11 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		}
 	}
 	
+	
+	////////////////////////////////////////////////////////////////////////////
+	//	still a lot of work to be done here
+	////////////////////////////////////////////////////////////////////////////
+	
 	/// \todo finish test
 	public function test_clone() {
 		$cloned = clone $this->pagezone;
@@ -138,7 +133,92 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		// ...
 		t3lib_div::debug("finish me!");
 	}
+	
+	public function test_store() {
+		$this->pagezone->store();
+		/// \todo check that record in DB equals data in memory
+		/// \todo change an attribute, store and check
+		/// \todo create an empty pagezone and write it. verify it's been written.
+		/// \see ArticleImpl_testcase
+		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
+	}	
 
+	public function test_getUid() {
+		$this->assertEquals($this->pagezone->getUid(), $this->uid);
+	}
+
+	public function test_setUid() {
+		
+	}
+	
+	public function test_getTable() {
+		
+	}
+	
+	public function test_getModuleName() {
+		
+	}
+		
+	public function test_render() {
+		
+	}
+	
+	public function test_getAbstractUid() {
+		
+	}
+
+	public function test_getParentPage() {
+		
+	}
+
+	public function test_setParentPage() {
+		
+	}
+	
+	public function test_getParentForPlacement() {
+		
+	}
+	
+	public function test_getInheritanceHierarchyUp() {
+		
+	}
+
+	public function test_getInheritanceHierarchyDown() {
+		
+	}
+	
+	public function test_insertInheritedExtraAfter() {
+		
+	}
+	
+	public function test_copyExtrasFrom() {
+		
+	}
+	
+	public function test_insertExtraAfter() {
+		
+	}
+	
+	public function test_removeExtra() {
+		
+	}
+
+	public function test_moveExtraAfter() {
+		
+	}
+	
+	public function test_setShow() {
+		
+	}
+
+	public function test_setInherits() {
+		
+	}
+
+	public function test_ () {
+		
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 
 	private function createExtras() {
