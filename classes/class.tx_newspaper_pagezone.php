@@ -280,7 +280,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		/// Step from parent to parent until a PageZone with matching type is found
 		$current_page = $this->getParentPage();
-		while ($current_page = $current_page->getParent()) {
+		if ($current_page) while ($current_page = $current_page->getParent()) {
 			foreach (self::getActivePageZones($current_page) as $parent_pagezone) {
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
 					return $parent_pagezone;
