@@ -148,15 +148,16 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_setUid() {
-		
+		$this->pagezone->setUid(1);
+		$this->assertEquals($this->pagezone->getUid(), 1);
 	}
 	
 	public function test_getTable() {
-		
+		$this->assertEquals($this->pagezone->getTable(), 'tx_newspaper_pagezone_page');
 	}
 	
 	public function test_getModuleName() {
-		
+		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone');
 	}
 		
 	public function test_render() {
