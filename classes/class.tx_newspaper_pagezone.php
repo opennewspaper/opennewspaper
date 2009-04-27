@@ -223,7 +223,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
 	/// \return uid of "parent" abstract pagezone record for given pagezone
-	public function getAbtractUid() {
+	public function getAbstractUid() {
 		$row = tx_newspaper::selectOneRow(
 			'uid',
 			'tx_newspaper_pagezone',
