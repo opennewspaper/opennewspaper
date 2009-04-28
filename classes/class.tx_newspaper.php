@@ -193,7 +193,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 				)
 			);
 			t3lib_div::debug($datamap);
-			die();
+#			die();
 			/// Process the datamap, inserting a new record into $table
 			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 			$tce->start($datamap, null);
