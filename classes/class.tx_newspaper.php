@@ -51,6 +51,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . self::enableFields($table), 
 			$groupBy, $orderBy, $limit);
@@ -74,6 +76,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . self::enableFields($table), 
 			$groupBy, $orderBy, $limit);
@@ -103,6 +107,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, 
 			$where . self::enableFields($table), 
@@ -170,6 +176,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		global $TCA;
 		t3lib_div::loadTCA($table);
 
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+
 		if (isset($TCA[$table])) {
 		/// process_datamap() dies if PID is not set
 /*		if (!isset($row['pid']) || !$row['pid']) {
@@ -216,7 +224,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return number of affected rows
 	 */
 	public static function updateRows($table, $where, array $row) {
-		if (!$GLOBALS['TYPO3_DB']) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
@@ -233,6 +241,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \param $uids Array of UIDs to delete
 	 */
 	public static function deleteRows($table, $uids_or_where) {
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		if (is_array($uids_or_where)) {
 			$cmdmap = array();
 			foreach ($uids_or_where as $uid) {
