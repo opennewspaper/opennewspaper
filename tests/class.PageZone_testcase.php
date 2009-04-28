@@ -6,6 +6,7 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.hierarchy.php');
 
 /// testsuite for class tx_newspaper_pagezone
 class test_PageZone_testcase extends tx_phpunit_testcase {
@@ -28,6 +29,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->createExtras();
 
 		$this->source = new tx_newspaper_DBSource();
+		$this->hierarchy = new tx_newspaper_hierarchy();
 	}
 	
 	function tearDown() {
@@ -246,7 +248,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	    	/// set position of extra
 	    	$row = array('position' => $this->extra_pos[$index]);
 			tx_newspaper::updateRows($this->extra_table, 'uid = ' . $abstract_uid, $row);
-		}	
+		}
 	}
 	
 	private function removeExtras() {
@@ -263,8 +265,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			tx_newspaper::deleteRows($this->concrete_extra_table, array($concrete_uid));
 		}
 	}
-	
-
 
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
 	private $pagezone = null;				///< the object
@@ -278,10 +278,11 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	private $pagezone_table = 'tx_newspaper_pagezone';
 	private $pagezone_page_table = 'tx_newspaper_pagezone_page';
 
+	
 	private $pagezone_page_data = array(
 		'pid'		=> '2476',
-		'tstamp'	=> '1233326263',
-		'crdate'	=> '1232376462', 		  	
+		'tstamp'	=> '1234567890',
+		'crdate'	=> '1234567890', 		  	
 		'cruser_id'	=> '1',
 		'sorting'	=> '256',
 		'deleted'	=> '0',
@@ -295,8 +296,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	private $extra_data = array(
 		array(
 			'pid' => 2573,
-			'tstamp' => 1234806796,
-			'crdate' => 1232647355,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
 			'cruser_id' => 1,
 			'deleted' => 0,
 			'hidden' => 0,
@@ -311,8 +312,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		),
 		array(
 			'pid' => 2573,
-			'tstamp' => 1234806796,
-			'crdate' => 1232647355,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
 			'cruser_id' => 1,
 			'deleted' => 0,
 			'hidden' => 0,
@@ -327,8 +328,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		),
 		array(
 			'pid' => 2573,
-			'tstamp' => 1234806796,
-			'crdate' => 1232647355,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
 			'cruser_id' => 1,
 			'deleted' => 0,
 			'hidden' => 0,
@@ -346,5 +347,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	private $extra_pos = array(
 		1024, 2048, 4096
 	);
+	
+	private $hierarchy = null;
 }
 ?>
