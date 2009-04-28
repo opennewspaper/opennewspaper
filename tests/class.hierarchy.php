@@ -35,15 +35,15 @@
 class tx_newspaper_hierarchy {
 
 	public function __construct() {
-		$this->createSectionHierarchy();
-		$this->createPages();
-		$this->createPageZones();
+#		$this->createSectionHierarchy();
+#		$this->createPages();
+#		$this->createPageZones();
 	}
 	
 	public function __destruct() {
-		$this->removePageZones();
-		$this->removePages();
-		$this->removeSectionHierarchy();
+#		$this->removePageZones();
+#		$this->removePages();
+#		$this->removeSectionHierarchy();
 	}
 	
 	public function getPageZones() {

@@ -29,7 +29,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->createExtras();
 
 		$this->source = new tx_newspaper_DBSource();
-#		$this->hierarchy = new tx_newspaper_hierarchy();
+		$this->hierarchy = new tx_newspaper_hierarchy();
 	}
 	
 	function tearDown() {
