@@ -73,7 +73,7 @@ class tx_newspaper_hierarchy {
 #				// $page['inherit_pagetype_id'] = ...?;
 #				$this->page_uids[] = tx_newspaper::insertRows($this->page_table, $page);
 #			}
-		}
+#		}
 	}
 
 	/** Create a number of page zones (one for each page zone type defined in
