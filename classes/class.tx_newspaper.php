@@ -216,6 +216,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	 *  \return number of affected rows
 	 */
 	public static function updateRows($table, $where, array $row) {
+		if (!$GLOBALS['TYPO3_DB']) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
