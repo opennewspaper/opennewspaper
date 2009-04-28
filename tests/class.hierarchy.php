@@ -36,7 +36,7 @@ class tx_newspaper_hierarchy {
 
 	public function __construct() {
 		$this->createSectionHierarchy();
-#		$this->createPages();
+		$this->createPages();
 #		$this->createPageZones();
 	}
 	
@@ -66,13 +66,13 @@ class tx_newspaper_hierarchy {
 		foreach ($this->pagetype_data as $pagetype) {
 			$this->pagetype_uids[] = tx_newspaper::insertRows($this->pagetype_table, $pagetype);
 		}
-		foreach ($this->section_uids as $section_uid) {
-			foreach ($this->page_data as $i => $page) {
-				$page['section'] = $section_uid;
-				$page['pagetype_id'] = $this->pagetype_uids[$i];
-				// $page['inherit_pagetype_id'] = ...?;
-				$this->page_uids[] = tx_newspaper::insertRows($this->page_table, $page);
-			}
+#		foreach ($this->section_uids as $section_uid) {
+#			foreach ($this->page_data as $i => $page) {
+#				$page['section'] = $section_uid;
+#				$page['pagetype_id'] = $this->pagetype_uids[$i];
+#				// $page['inherit_pagetype_id'] = ...?;
+#				$this->page_uids[] = tx_newspaper::insertRows($this->page_table, $page);
+#			}
 		}
 	}
 
