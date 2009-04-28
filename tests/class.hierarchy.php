@@ -36,7 +36,7 @@ class tx_newspaper_hierarchy {
 
 	public function __construct() {
 		$this->createSectionHierarchy();
-		$this->createPages();
+#		$this->createPages();
 #		$this->createPageZones();
 	}
 	
