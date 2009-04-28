@@ -95,7 +95,7 @@ class tx_newspaper_hierarchy {
 				$abstract_uid = $temp_pagezone->getPageZoneUID();
 				$this->pagezone_uids[] = $abstract_uid;
 				//  connect the abstract record to the page
-				tx_newspaper::update_rows($this->pagezone_table, "uid = $abstract_uid", array('page_id' => $page_uid));
+				tx_newspaper::updateRows($this->pagezone_table, "uid = $abstract_uid", array('page_id' => $page_uid));
 			}
 		}
 	}
