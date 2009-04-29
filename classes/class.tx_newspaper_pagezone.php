@@ -336,7 +336,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($including_myself) $hierarchy[] = $this;
 		if ($this->getParentForPlacement()) {
 			return $this->getParentForPlacement()->getInheritanceHierarchyUp(true, $hierarchy);			
-		}
+		} else return $hierarchy;
 	}
 	
 	/// Get the hierarchy of Page Zones inheriting placement from $this
@@ -372,6 +372,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */ 
 		$extra_after_which = null;
 		foreach ($this->getExtras() as $extra) {
+			/// \todo use getOriginUid()
 			if ($extra->getAttribute('origin_uid') == $origin_uid) {
 				$extra_after_which = $extra;
 				break;
@@ -432,6 +433,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
 			} 
 			$new_extra['show_extra'] = 1;
+			/// \todo use getOriginUid()
 			if (!$extra_to_copy->getAttribute('origin_uid')) {
 				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
 			}
