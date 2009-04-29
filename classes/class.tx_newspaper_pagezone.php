@@ -676,7 +676,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $index 
 	 *  \return The \p $index -th Extra on the PageZone 
 	 */
-	protected function getExtra($index) {
+	public function getExtra($index) {
 		usort($this->extras, array(get_class($this), 'compareExtras'));
 		return $this->extras[$index];
 	}
