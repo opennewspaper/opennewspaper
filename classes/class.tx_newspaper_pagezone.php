@@ -60,9 +60,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
-		return get_class($this) . '-object ' . "\n" .
-			   'attributes: ' . print_r($this->attributes, 1) . "\n" .
-			   'extras: ' . print_r($this->extras, 1) . "\n";
+		return get_class($this) . ' ' . $this->getUid() . ' (' . "\n" .
+				$this->getParentPage()->getPageType()->getAttribute('type_name'). '/' .
+				$this->getPageZoneType()->getAttribute('type_name') . ') ' .
+#			   ' attributes: ' . print_r($this->attributes, 1) . "\n" .
+#			   ' extras: ' . print_r($this->extras, 1) . 
+			   "\n";
+			   										 
+			   
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -254,14 +259,19 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->parent_page;
 	}
 	
-
 	/// Get the Page Zone from which the current object inherits the placement of its extras
-	/** \param $inherit_mode If negative, don't inherit at all; if positive, 
-	 * 		inherit from the page identified by the UID given (parameter 
-	 * 		misnomer ;-) ; if zero, find the page zone in the parent page or
-	 * 		higher up in the hierarchy with the same page zone type as $this.  
+	/** The page zone depends on attribute 'inherit_mode' (defined in pagezone_page
+	 *  and article):
+	 *  If negative, don't inherit at all; if positive,	inherit from the page 
+	 *  identified by the UID given (parameter misnomer ;-) ; if zero, find the 
+	 *  page zone in the parent page or higher up in the hierarchy with the same
+	 *  page zone type as $this.
+	 *   
 	 *  \return The PageZone object from which to copy the Extras and their 
-	 * 		placements. 
+	 * 		placements.
+	 *  \todo What if inherit_mode points to a non-existent PageZone? Currently
+	 * 		a DBException is thrown.
+	 *  \todo A recursive version of this function would be more elegant, I reckon
 	 */
 	public function getParentForPlacement() {
 		$inherit_mode = intval($this->getAttribute('inherits_from'));
@@ -272,12 +282,44 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		/// Step from parent to parent until a PageZone with matching type is found
 		$current_page = $this->getParentPage();
 		while ($current_page) {
-			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
+			/// First get parent section of the current page...
+			$parent_section = $current_page->getParentSection();
+			if ($parent_section instanceof tx_newspaper_Section) {
+				/// ... then get parent section of the current section
+				$parent_section = $parent_section->getParentSection();
+			} else {
+				//	Root of section tree reached
+				return null;
+			}
+			
+			if (!$parent_section instanceof tx_newspaper_Section) {
+				//	Root of section tree reached
+				return null;
+			}
+			
+			/// find page of same page type under parent section
+			$new_page = null;
+			foreach ($parent_section->getSubPages() as $page) {
+				if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
+					$new_page = $page;
+				}
+			}
+
+			$current_page = $new_page;
+			if (!$new_page) {
+				/// If page not active in parent section, look in the section further up
+				continue;
+			}
+		
+			/** Look for PageZone of the same type in the Page of the same page
+			 *  type in the parent section (phew). If no active PageZone is
+			 *  found, continue looking in the parent section.
+			 */	
+			foreach ($new_page->getActivePageZones() as $parent_pagezone) {
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
 					return $parent_pagezone;
 			}
-			$parent_section = $current_page->getParentSection();
-			$current_page = null;
+			
 		}
 		
 		return null;

@@ -51,7 +51,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			'extra_table = \'' . $this->pagezone_page_table . '\' AND extra_uid = ' . $this->uid
 		);
 
-		$this->hierarchy->removeAllJunkManually();
+#		$this->hierarchy->removeAllJunkManually();
 	}
 
 	public function test_createPageZone() {
@@ -219,10 +219,52 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	public function test_getParentForPlacement() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			t3lib_div::debug($pagezone->getParentForPlacement());
+			$parent = $pagezone->getParentForPlacement();
+			
+			/// Different inheritance modes are treated separately
+			if ($pagezone->getAttribute('inherits_from') < 0) {
+				//	Don't inherit at all
+				$this->assertEquals($parent, null,
+									'PageZone ' . $pagezone->getUid() .': ' .
+									'inheritance mode is set to no inheritance, but a parent (' .
+									print_r($parent, 1) . ') is returned. ');
+			} else if ($pagezone->getAttribute('inherits_from') > 0) {
+				//	Inherit from explicitly stated PageZone
+				$this->assertTrue($parent instanceof tx_newspaper_PageZone,
+								  'PageZone object expected, but ' .
+								  print_r($parent, 1) . ') is returned. ');
+				$this->assertEquals($parent->getUid(), 
+									$pagezone->getAttribute('inherits_from'),
+									'PageZone ' . $pagezone->getUid() .': ' .
+									'explicitly inherits from PageZone ' . $pagezone->getAttribute('inherits_from') .
+									' but PageZone ' . $parent->getUid() . ' is returned. ');
+			} else {
+				//	Normal inheritance mode: go up in the section tree
+				if ($parent) {
+					$this->assertTrue($parent instanceof tx_newspaper_PageZone,
+									  'PageZone object expected, but ' .
+									  print_r($parent, 1) . ') is returned. ');
+					$this->assertTrue($pagezone->getUid() != $parent->getUid(),
+									 'Pagezone ' . $pagezone->getUid() . ' has itself as parent. ');
+					$this->assertTrue($parent->getParentPage()->getParentSection()->getUid() != 
+									  $pagezone->getParentPage()->getParentSection()->getUid(),
+									  'Pagezone ' . $pagezone->getUid() . ' has a parent in the same Section (' .
+									  $pagezone->getParentPage()->getParentSection()->getUid() .
+									  '), but should not. ');
+					if (0) {
+						t3lib_div::debug($pagezone->__toString() . ': parent is ' . 
+										 $parent->__toString());
+					}					
+				} else {
+					if (0) {
+						t3lib_div::debug($pagezone->__toString() . ': no parent');
+					}
+				}
+			}
 		}
-		t3lib_div::debug($this->pagezone->getParentForPlacement());
-		$this->fail('test_getParentForPlacement not yet implemented');
+		
+		///	singularly created page zone has no parent
+		$this->assertEquals($this->pagezone->getParentForPlacement(), null);
 	}
 	
 	public function test_getInheritanceHierarchyUp() {

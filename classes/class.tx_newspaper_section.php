@@ -112,7 +112,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	function getParentSection() {
-		return new tx_newspaper_Section($this->getAttribute('parent_section'));
+		if ($this->getAttribute('parent_section')) {
+			return new tx_newspaper_Section($this->getAttribute('parent_section'));
+		} else return null;
 	}
 	
 	/// \return uid of parent abstract record for concrete article list associated with section

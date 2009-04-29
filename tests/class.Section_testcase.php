@@ -93,7 +93,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	
 	public function test_getParentSection() {
 		$parent = $this->section->getParentSection();
-		$this->assertEquals($parent->getUid(), 0);
+		$this->assertEquals($parent, null);
 		
 		$children = tx_newspaper_Section::getDescendantSections($this->section->getUid());
 		foreach ($children as $child_uid) {

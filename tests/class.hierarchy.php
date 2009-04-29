@@ -97,6 +97,10 @@ class tx_newspaper_hierarchy {
 	/** Create a number of page zones (one for each page zone type defined in
 	 *  $this->pagezonetype_data) for every page created above.
 	 *  The page zone types are created first.
+	 * 
+	 *  \todo Create page zones which explicitly inherit from another page zone
+	 *  	under the same Page
+	 *  \todo Create page zones which don't inherit from another page zone
 	 */
 	private function createPageZones() {
 		foreach ($this->pagezonetype_data as $pagezonetype) {
