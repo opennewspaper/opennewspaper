@@ -208,7 +208,13 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_setParentPage() {
-		$this->fail('test_setParentPage not yet implemented');
+		foreach ($this->hierarchy->getPages() as $page) {
+			$this->pagezone->setParentPage($page);
+			$this->assertEquals($this->pagezone->getParentPage()->getUid(), 
+								$page->getUid(),
+								'getParentPage() [' . $this->pagezone->getParentPage()->getUid() . ']' .
+								' != $page [' . $page->getUid() .']');
+		}
 	}
 	
 	public function test_getParentForPlacement() {
