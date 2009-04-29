@@ -98,8 +98,8 @@ class tx_newspaper_Page
  			   'condition: ' . $this->condition . " \n" .
  			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
  			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
- 			   (($this->pagetype && $this->pagetype instanceof tx_newspaper_PageType)? 
- 			   		('pagetype: ' . $this->pagetype->getAttribute('type_name') . " \n"): 
+ 			   (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
+ 			   		('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
 					'');
 		return $ret;
  	}
@@ -359,9 +359,19 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 	/// \return The tx_newspaper_Section under which this page lies
- 	public function getParentSection() { return $this->parentSection; }
+ 	public function getParentSection() { 
+ 		if (!$this->parentSection) {
+ 			$this->parentSection = new tx_newspaper_Section(intval($this->getAttribute('section')));
+ 		}
+ 		return $this->parentSection; 
+ 	}
  	
- 	public function getPageType() { return $this->pagetype; }
+ 	public function getPageType() {
+ 		if (!$this->pagetype) {
+ 			$this->pagetype = new tx_newspaper_PageType(intval($this->getAttribute('pagetype_id')));
+ 		} 
+ 		return $this->pagetype; 
+ 	}
  	
 	static function getModuleName() { return 'np_page'; }
 
