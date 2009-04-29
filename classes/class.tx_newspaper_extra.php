@@ -207,6 +207,22 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	/// This function is only public so unit tests can access it	
 	public function getExtraUid() { return intval($this->extra_uid); }
 
+	/// gets the origin uid of an extra 
+	/// \return int the origin uid of an extra (if 0 return abstract extra uid)
+	public function getOriginUid() {
+		if ($this->getAttribute('origin_uid'))
+			return intval($this->getAttribute('origin_uid'));
+		else
+			return intval($this->getExtraUid()); 
+	}
+
+	/// checks if this Extra was placed on this page zone 
+	/// \return boolean true if this Extra was placed on this page zone
+	public function isOriginExtra() {
+		return ($this->getAttribute('origin_uid') == 0); 
+	}
+
+
 	/// Finds the PageZone this Extra is placed upon
 	/** I'm afraid this raises several problems, so this function should be used
 	 *  with care.
