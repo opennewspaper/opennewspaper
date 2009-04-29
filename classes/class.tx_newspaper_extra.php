@@ -213,13 +213,14 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		if ($this->getAttribute('origin_uid'))
 			return intval($this->getAttribute('origin_uid'));
 		else
-			return intval($this->getExtraUid()); 
+			return intval($this->getExtraUid());
 	}
 
 	/// checks if this Extra was placed on this page zone 
 	/// \return boolean true if this Extra was placed on this page zone
 	public function isOriginExtra() {
-		return ($this->getAttribute('origin_uid') == 0); 
+		return (($this->getAttribute('origin_uid') == 0) || 
+				($this->getAttribute('origin_uid') == $this->getExtraUid())); 
 	}
 
 
