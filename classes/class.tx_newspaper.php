@@ -305,6 +305,25 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 	}
 
 
+	/// check if at least one records exists in given table (regarding enable fields for BE/FE)
+	/// \return boolean true, if at least one record availabe in given table
+	function atLeastOneRecord($table) {
+		try {
+			self::selectOneRow(
+				'uid',
+				$table,
+				'1',
+				'',
+				'',
+				1		
+			);
+			return true;
+		} catch (tx_newspaper_EmptyResultException $e) {
+			return false;
+		}
+	}
+
+
 	/// check if given class name is an abstract class
 	/// \param String $class class name
 	/// \return true if abstract class, false else (or if no class at all)
@@ -336,7 +355,8 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		if ($path2check == '') 
 			return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend 
 
-		// prepend absolute path			
+		$newpath = $path2check; 
+		// prepend absolute path, if needed			
 		if (TYPO3_OS == 'WIN') {
 			if ($path2check[1] != ':') {
 				// windows 
