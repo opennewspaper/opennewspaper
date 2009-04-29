@@ -8,6 +8,14 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_be
 /// Utility class which provides static functions. A namespace, so to speak.
 class tx_newspaper  {
 
+	/** If this constant is set to true, Typo3 command- or datamap functions are
+	 *  used wherever appropriate. 
+	 *  These functions have side effects which are not yet fully explored and 
+	 *  seem to make more trouble than they're worth. That's why they're turned
+	 *  off currently.  
+	 */
+	const use_datamap = false;
+	
 	/// add javascript (or other script parts) to extra form (basically containing an onunload script)
 	/** \param $PA typo3 standard for userFunc
 	  * \param $fobj typo3 standard for userFunc
@@ -17,7 +25,6 @@ class tx_newspaper  {
 #t3lib_div::devlog('tx_newspaper->getCodeForBackend', 'newspaper', 0);
 		return tx_newspaper_ExtraBE::getJsForExtraField();
 	}
-
 
 	/// add Extra list to backend form
 	/** \param $PA typo3 standard for userFunc
@@ -35,10 +42,6 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return tx_newspaper_ExtraBE::renderList($current_record['table'], $current_record['uid']);
 
 	}
-
-	
-	
-	
 
 	/// Execute a SELECT query, check the result, return zero or one record(s)
 	/** \param $fields Fields to SELECT
@@ -178,7 +181,7 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
-		if (isset($TCA[$table])) {
+		if (isset($TCA[$table]) && self::use_datamap) {
 		/// process_datamap() dies if PID is not set
 /*		if (!isset($row['pid']) || !$row['pid']) {
 			throw new tx_newspaper_IllegalUsageException('PID must be set, else process_datamap() will die! ' .
@@ -196,8 +199,6 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			/// Process the datamap, inserting a new record into $table
 			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 			$tce->start($datamap, null);
-			t3lib_div::debug($datamap);
-			die();
 			$tce->process_datamap();
 			
 			if (count($tce->errorLog)){
@@ -240,11 +241,11 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 
 	/// deletes a record using process_cmdmap(), which checks all needed fields and calls save hook
 	/** \param $table SQL table to delete a record from
-	 *  \param $uids Array of UIDs to delete
+	 *  \param $uids_or_where Array of UIDs to delete or a WHERE-condition as string
 	 */
 	public static function deleteRows($table, $uids_or_where) {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
-		if (is_array($uids_or_where)) {
+		if (self::use_datamap && is_array($uids_or_where)) {
 			$cmdmap = array();
 			foreach ($uids_or_where as $uid) {
 				$cmdmap[$table][$uid] = array('delete' => '');
@@ -260,6 +261,12 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 			global $TCA;
 			t3lib_div::loadTCA($table);
 
+			if (is_array($uids_or_where)) {
+				$uids_or_where = 'uid IN (' . implode(', ', $uids_or_where) . ')';
+			} else if (is_int($uids_or_where)) {
+				$uids_or_where = 'uid = ' . $uids_or_where;
+			}
+			
 			if (isset($TCA[$table])) {
 				self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $uids_or_where, array('deleted' => 1));
 			} else {		

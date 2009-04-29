@@ -91,6 +91,7 @@ class tx_newspaper_Page
  	}
  	
  	public function __toString() {
+ 		$this->getAttribute('uid');
  		$ret = $this->getTable() . ':' . " \n" .
  			   'UID: ' . $this->getUid() . " \n" .
 				($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
@@ -163,7 +164,6 @@ class tx_newspaper_Page
 		return $this->getUid();		
 	}
 
-
 	/// \param tx_newspaper_Section $s section
 	/// \return true if page can be accessed and if assigned to given section(FE/BE use enableFields)
 	function isValid(tx_newspaper_Section $s) {
@@ -183,7 +183,6 @@ class tx_newspaper_Page
 			
 		return false;
 	}
-
 	
 	/** \todo Internationalization */
 	public function getTitle() {
@@ -234,8 +233,8 @@ class tx_newspaper_Page
 	 */
  	public function render($template_set = '') {
 		/// Check the parent Section and own attributes whether to use a specific template set
- 		if ($this->getParent()->getAttribute('template_set')) {
-			$template_set = $this->getParent()->getAttribute('template_set');
+ 		if ($this->getParentSection()->getAttribute('template_set')) {
+			$template_set = $this->getParentSection()->getAttribute('template_set');
 		}
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
@@ -260,7 +259,6 @@ class tx_newspaper_Page
  		return $this->smarty->fetch($this);
  	}
 
-
  	static public function listPagesWithPageType(tx_newspaper_PageType $pt, $limit=10) {
 
 		$limit = intval($limit);
@@ -282,7 +280,6 @@ class tx_newspaper_Page
 		return $list;
 	}
  	
-
  	static public function listPagesWithPageZoneType(tx_newspaper_PageZoneType $pzt, $limit=10) {
 #t3lib_div::devlog('lPZWPZT', 'newspaper', 0, $pzt->getUid());
 		$limit = intval($limit);
@@ -336,8 +333,6 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return new tx_newspaper_Page(intval($row['page_id']));		
 	}
 
-
-
 	/// get active pages zone for this page
 	/// \return array active pages zone objects for given page
 	public function getActivePageZones() {
@@ -363,10 +358,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return $list;
 	}
 
-
-
 	/// \return The tx_newspaper_Section under which this page lies
- 	public function getParent() { return $this->parentSection; }
+ 	public function getParentSection() { return $this->parentSection; }
  	
  	public function getPageType() { return $this->pagetype; }
  	

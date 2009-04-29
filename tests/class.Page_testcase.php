@@ -85,8 +85,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 							 $pagezones[1]->getAttribute('name'));
 	}
 	
-	public function test_getParent() {
-		$this->assertEquals($this->page->getParent(), $this->section);
+	public function test_getParentSection() {
+		$this->assertEquals($this->page->getParentSection(), $this->section);
 	}
 	
 	public function test_getTable() {

@@ -37,13 +37,21 @@ class tx_newspaper_hierarchy {
 	public function __construct() {
 		$this->createSectionHierarchy();
 		$this->createPages();
-#		$this->createPageZones();
+		$this->createPageZones();
 	}
 	
-	public function __destruct() {
-#		$this->removePageZones();
+	/** For whatever reason, __destruct is not automatically called when the
+	 *  unit test is over. This function must be called explicitly to clean up.
+	 */
+	public function removeAllJunkManually() {
+		$this->removePageZones();
 		$this->removePages();
 		$this->removeSectionHierarchy();
+		///	Make sure you got all records
+		foreach ($this->delete_all_query as $query) {
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			$res || die('Aaaargh!');
+		}
 	}
 	
 	public function getPageZones() {
@@ -54,6 +62,16 @@ class tx_newspaper_hierarchy {
 		}
 		return $this->pagezones;
 	}
+	
+	public function getPages() {
+		if (!$this->pages) {
+			foreach ($this->page_uids as $uid) {
+				$this->pages[] = new tx_newspaper_Page(intval($uid));
+			}
+		}
+		return $this->pages;
+	}
+	////////////////////////////////////////////////////////////////////////////
 	
 	private function createSectionHierarchy() {
 		foreach ($this->section_data as $section) {
@@ -95,38 +113,39 @@ class tx_newspaper_hierarchy {
 				$abstract_uid = $temp_pagezone->getPageZoneUID();
 				$this->pagezone_uids[] = $abstract_uid;
 				//  connect the abstract record to the page
-				tx_newspaper::updateRows($this->pagezone_table, "uid = $abstract_uid", array('page_id' => $page_uid));
+				tx_newspaper::updateRows(
+					$this->pagezone_table, 
+					"uid = $abstract_uid", 
+					array('page_id' => $page_uid)
+				);
 			}
 		}
 	}
 	
 	private function removeSectionHierarchy() {
-		foreach ($this->section_uids as $uid) {
-			tx_newspaper::deleteRows($this->section_table, $uid);
-		}
+		tx_newspaper::deleteRows($this->section_table, $this->section_uids);
 	}
 	
 	private function removePages() {
-		foreach ($this->page_uids as $uid) {
-			tx_newspaper::deleteRows($this->page_table, $uid);
-		}
-		foreach ($this->pagetype_uids as $uid) {
-			tx_newspaper::deleteRows($this->pagetype_table, $uid);
-		}
+		tx_newspaper::deleteRows($this->page_table, $this->page_uids);
+		tx_newspaper::deleteRows($this->pagetype_table, $this->pagetype_uids);
 	}	
 
 	private function removePageZones() {
-		foreach ($this->pagezone_uids as $uid) {
-			tx_newspaper::deleteRows($this->pagezone_table, $uid);
-		}
-		foreach ($this->pagezone_page_uids as $uid) {
-			tx_newspaper::deleteRows($this->pagezone_page_table, $uid);
-		}
-		foreach ($this->pagezonetype_uids as $uid) {
-			tx_newspaper::deleteRows($this->pagezonetype_table, $uid);
-		}
+		tx_newspaper::deleteRows($this->pagezone_table, $this->pagezone_uids);
+		tx_newspaper::deleteRows($this->pagezone_page_table, $this->pagezone_page_uids);
+		tx_newspaper::deleteRows($this->pagezonetype_table, $this->pagezonetype_uids);
 	}	
 	
+	private $delete_all_query = array(
+		"DELETE FROM `tx_newspaper_section` WHERE section_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagetype` WHERE type_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_page` WHERE template_set LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagezonetype` WHERE type_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagezone_page` WHERE pagezone_id LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagezone` WHERE deleted"
+	);
+		
 	private $section_table = 'tx_newspaper_section';
 	private $section_uids = array();
 	/// A hierarchy of three sections is generated
@@ -138,7 +157,7 @@ class tx_newspaper_hierarchy {
 			'cruser_id' => '1',
 			'sorting' => '1024',
 			'deleted' => '0',
-			'section_name' => 'Big Daddy Section',
+			'section_name' => 'Unit Test - Big Daddy Section',
 			'parent_section' => '',
 			'articlelist' => '',
 			'template_set' => '',
@@ -183,7 +202,7 @@ class tx_newspaper_hierarchy {
 			'cruser_id' => '1',
 			'sorting' => '1024',
 			'deleted' => '0',
-			'type_name' => 'Seitentyp 1',
+			'type_name' => 'Unit Test - Seitentyp 1',
 			'normalized_name' => 'seitentyp_1',
 			'get_var' => '',
 			'get_value' => '',
@@ -195,7 +214,7 @@ class tx_newspaper_hierarchy {
 			'cruser_id' => '1',
 			'sorting' => '2048',
 			'deleted' => '0',
-			'type_name' => 'Seitentyp 2',
+			'type_name' => 'Unit Test - Seitentyp 2',
 			'normalized_name' => 'seitentyp_2',
 			'get_var' => 'blah',
 			'get_value' => '1',
@@ -215,7 +234,7 @@ class tx_newspaper_hierarchy {
 			'section' => '',
 			'pagetype_id' => '',
 			'inherit_pagetype_id' => '',
-			'template_set' => '',
+			'template_set' => 'Unit Test',
 		),
 		array(	
 			'pid' => '2474',
@@ -226,9 +245,12 @@ class tx_newspaper_hierarchy {
 			'section' => '',
 			'pagetype_id' => '',
 			'inherit_pagetype_id' => '',
-			'template_set' => '',
+			'template_set' => 'Unit Test',
 		),
 	);
+
+	/// The Pages in the hierarchy as a flat array of objects
+	private $pages = array();
 
 	private $pagezonetype_table = 'tx_newspaper_pagezonetype';
 	private $pagezonetype_data = array( 
@@ -239,7 +261,7 @@ class tx_newspaper_hierarchy {
 			'cruser_id' => '1',
 			'sorting' => '1024',
 			'deleted' => '0',
-			'type_name' => 'Ein Seitenbereich - z.B. die Hauptspalte',
+			'type_name' => 'Unit Test - Hauptspalte',
 			'normalized_name' => 'seitenbereich1',
 			'is_article' => '',
 		),
@@ -250,7 +272,7 @@ class tx_newspaper_hierarchy {
 			'cruser_id' => '1',
 			'sorting' => '1024',
 			'deleted' => '0',
-			'type_name' => 'Noch ein Seitenbereich, sagen wir die rechte Spalte',
+			'type_name' => 'Unit Test - Rechte Spalte',
 			'normalized_name' => 'seitenbereich2',
 			'is_article' => '',
 		),
@@ -268,7 +290,7 @@ class tx_newspaper_hierarchy {
 		'sorting'	=> '256',
 		'deleted'	=> '0',
 		'pagezonetype_id' => '',
-		'pagezone_id' => 'X',
+		'pagezone_id' => 'Unit Test',
 		'extras'	=> '',
 		'template_set' => '',
 		'inherits_from' => '0'

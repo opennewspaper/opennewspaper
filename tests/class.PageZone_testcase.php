@@ -50,6 +50,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			$this->extra_table, 
 			'extra_table = \'' . $this->pagezone_page_table . '\' AND extra_uid = ' . $this->uid
 		);
+
+		$this->hierarchy->removeAllJunkManually();
 	}
 
 	public function test_createPageZone() {
@@ -137,6 +139,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		t3lib_div::debug("finish me!");
 	}
 	
+	/// \todo finish test
 	public function test_store() {
 		$this->pagezone->store();
 		/// \todo check that record in DB equals data in memory
@@ -173,13 +176,35 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		 *  of getAbstractUid() against the return value of getAbstractUid().
 		 */ 
 		$this->assertEquals($this->pagezone->getAbstractUid(), $this->pagezone_uid);
+		/// Now we get real.
 		$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone->getAbstractUid());
 		$this->assertEquals($this->pagezone->getUid(), $pagezone->getUid());
 	}
 
 	public function test_getParentPage() {
-		t3lib_div::debug($this->pagezone->getParentPage());
-		$this->fail('test_getParentPage not yet implemented');
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			$this->assertTrue(is_object($pagezone),
+							  'PageZone in hierarchy->getPageZones() is not an object: ' .
+							  print_r($pagezone, 1));
+			$this->assertTrue($pagezone instanceof tx_newspaper_PageZone,
+							  'PageZone in hierarchy->getPageZones() is not a PageZone: ' .
+							  print_r($pagezone, 1));
+
+			$parent_page = $pagezone->getParentPage();
+			$this->assertTrue($parent_page instanceof tx_newspaper_Page,
+							  'getParentPage() is not a Page: ' .
+							  print_r($parent_page, 1));
+
+			$found = false;
+			foreach ($this->hierarchy->getPages() as $page) {
+				if ($parent_page->getUid() == $page->getUid()) $found = true;
+			}
+			$this->assertTrue($found, 
+							  'Parent page of PageZone ' . $pagezone->getUid() .
+							  ' (abstract PageZone '.$pagezone->getAbstractUid() . ')' .
+							  ' not found in array of pages: ' .
+							  print_r($this->hierarchy->getPages(), 1));
+		}
 	}
 
 	public function test_setParentPage() {
@@ -187,45 +212,75 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getParentForPlacement() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			t3lib_div::debug($pagezone->getParentForPlacement());
+		}
 		t3lib_div::debug($this->pagezone->getParentForPlacement());
 		$this->fail('test_getParentForPlacement not yet implemented');
 	}
 	
 	public function test_getInheritanceHierarchyUp() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		t3lib_div::debug($this->pagezone->getInheritanceHierarchyUp());
 		$this->fail('test_getInheritanceHierarchyUp not yet implemented');
 	}
 
 	public function test_getInheritanceHierarchyDown() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			t3lib_div::debug($pagezone->getInheritanceHierarchyDown());
+		}
 		t3lib_div::debug($this->pagezone->getInheritanceHierarchyDown());
 		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
 	}
 	
 	public function test_insertInheritedExtraAfter() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_insertInheritedExtraAfter not yet implemented');
 	}
 	
 	public function test_copyExtrasFrom() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_copyExtrasFrom not yet implemented');
 	}
 	
 	public function test_insertExtraAfter() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_insertExtraAfter not yet implemented');
 	}
 	
 	public function test_removeExtra() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_removeExtra not yet implemented');
 	}
 
 	public function test_moveExtraAfter() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_moveExtraAfter not yet implemented');
 	}
 	
 	public function test_setShow() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_setShow not yet implemented');
 	}
 
 	public function test_setInherits() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
 		$this->fail('test_setInherits not yet implemented');
 	}
 	
