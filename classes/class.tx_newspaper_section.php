@@ -135,6 +135,18 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		return $this->subPages;
  	}
  	
+ 	
+ 	/// gets an array of sections up the rootline
+	/// \return array tx_newspaper_Section objects, up the rootline
+	public function getSectionPath($path = array()) {
+		$path[] = $this;
+		if ($this->getParentSection()) {
+			return $this->getParentSection()->getSectionPath($path);			
+		} 
+		return $path;
+	}	
+	
+ 	
  	function getTable() {
 		return tx_newspaper::getTable($this);
 	}
