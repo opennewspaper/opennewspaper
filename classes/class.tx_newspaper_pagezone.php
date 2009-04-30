@@ -368,8 +368,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $origin_uid 
 	 *  \param $extra The new, fully instantiated Extra to insert
 	 */ 
-	public function insertExtraAfter($origin_uid, 
-									 tx_newspaper_Extra $insert_extra) {
+	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
+									 $origin_uid = 0) {
 		/** Find the Extra to insert after. If it is not deleted on this page,
 		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 		 */ 
@@ -477,7 +477,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
 		if ($this->removeExtra($move_extra)) {
-			$this->insertExtraAfter($origin_uid, $move_extra);
+			$this->insertExtraAfter($move_extra, $origin_uid);
 		} else {
 			throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
 														  ' to move was not found on the PageZone');

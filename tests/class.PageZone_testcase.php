@@ -321,7 +321,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 					$i++;
 					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 					$new_extra->setAttribute('title', "Inserted ${i}th");
-					$pagezone->insertExtraAfter($extra_after_which->getOriginUid(), $new_extra);
+					$pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
 				}
 			}
 			$this->assertEquals(
