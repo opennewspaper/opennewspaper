@@ -93,20 +93,38 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public function setAttribute($attribute, $value) {
 		if (!$this->extra_attributes) {
 			$this->extra_attributes = $this->getExtraUid()? 
-				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+				tx_newspaper::selectOneRow(
+					'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
 				array();
 		}
 		if (!$this->attributes) {
-			$this->attributes = tx_newspaper::selectOneRow(
-				'*', $this->getTable(), 'uid = ' . $this->getUid()
-			);
+			$this->attributes = $this->getUid()?
+				tx_newspaper::selectOneRow(
+					'*', $this->getTable(), 'uid = ' . $this->getUid()):
+				array();
 		}
 
+		/** Because we separated the attributes for the concrete Extra and the
+		 *  abstract superclass in two arrays, it is not trivial to decide where
+		 *  the new attribute should be set - in particular if we created an
+		 *  empty object and want to set a new attribute.
+		 * 
+		 *  The logic goes thus. If an attribute exists in either array, set it
+		 *  there (if it exists in both, set it in both). Else assume it is
+		 *  meant for the concrete Extra.
+		 * 
+		 *  This is consistent with the assumption made in store(), that the
+		 *  concrete record must exist before abstract attributes can be written.
+		 */
 		if (array_key_exists($attribute, $this->extra_attributes)) {
 			$this->extra_attributes[$attribute] = $value;
-		} else {	
+		} else {
 			$this->attributes[$attribute] = $value;
 		}
+		if (array_key_exists($attribute, $this->attributes)) {
+			$this->attributes[$attribute] = $value;
+		}
+		
 	}
 
 	/// checks if an Extra is registered
@@ -176,6 +194,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 					$this->getTable(), $this->attributes
 				)
 			);
+			if (!$this->getUid())
+				t3lib_div::debug(tx_newspaper::$query);
 			//	Write data for abstract Extra
 			$this->setExtraUid(
 				self::createExtraRecord($this->getUid(), $this->getTable())
@@ -240,6 +260,11 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	/// This function is only public so unit tests can access it	
 	public function getExtraUid() {
 		if (!$this->extra_uid) {
+			if (!$this->getUid()) {
+				return 0;
+#				t3lib_div::debug('tried to call getExtraUid() before there was a record written');
+#				t3lib_div::debug(debug_backtrace());
+			}
 			$this->extra_uid = self::createExtraRecord($this->getUid(), $this->getTable());
 		} 
 		return intval($this->extra_uid); 
