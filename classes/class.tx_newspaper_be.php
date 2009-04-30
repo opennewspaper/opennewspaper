@@ -38,7 +38,7 @@ class tx_newspaper_BE {
 					$pagezone_type_data[$i]['ACTIVE'] = true;
 					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
 #t3lib_div::devlog('gapz abstract uid 3', 'newspaper', 0, $active_pagezone->getAbtractUid());
-					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getAbtractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
