@@ -1,6 +1,4 @@
 <?php
-/// \todo: _tostring():  $this->getParentPage()->getPageType()->getAttribute('type_name') haut raus, wenn getPageType null zurückgibt ???
-
 
 /*
  * Created on Oct 27, 2008
