@@ -370,52 +370,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0) {
-		/** Find the Extra to insert after. If it is not deleted on this page,
-		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
-		 */ 
-		$extra_after_which = null;
-		foreach ($this->getExtras() as $extra) {
-			if ($extra->getOriginUid() == $origin_uid) {
-				$extra_after_which = $extra;
-				break;
-			} 
-		}
-		if (!$extra_after_which) {
-			/// \todo Deduce the $extra_after_which from the parent page(s)
-			/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
-			throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
-		}
-
-		/// Find Extra before which to insert the new Extra
-		$position_before_which = 0;
-		$position = $extra_after_which->getAttribute('position');
-		foreach ($this->getExtras() as $extra) {
-			/// \todo If $this is an article, handle paragraphs
-			if ($extra->getAttribute('position') > $position &&
-					(!$position_before_which ||
-					 $position_before_which > $extra->getAttribute('position')
-					)
-				) {
-				$position_before_which = $extra->getAttribute('position');
-				break;
-			} 
-		}
-		if (!$position_before_which) $position_before_which = 2*$position;
-		
-		if ($position_before_which-$position < 2) {
-			/// \todo Increase 'position' attribute for all extras after $extra_after_which 
-			throw new tx_newspaper_NotYetImplementedException('Rearranging extra positions if distance has shrunk to 1');			
-		}
-
-		/// Place Extra to insert between $extra_after and $extra_before (or at end)
-		$new_position = $position+($position_before_which-$position)/2;
-		$insert_extra->setAttribute('position', $new_position);
+		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		
 		/// Write Extra to DB
 		$insert_extra->store();
 		
 		$this->addExtra($insert_extra);
-	}
+	}	
 	
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,
@@ -476,12 +437,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			present on the PageZone
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
-		if ($this->removeExtra($move_extra)) {
-			$this->insertExtraAfter($move_extra, $origin_uid);
-		} else {
-			throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
-														  ' to move was not found on the PageZone');
-		}
+		///	Check that $move_extra is really on $this
+		$this->indexOfExtra($move_extra);
+		
+		$move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
+
+		/// Write Extra to DB
+		$move_extra->store();
+		
+		/** ... and that's it. We don't need to update the association table
+		 *  because we asserted that the Extra is already on the PageZone.
+		 */
 	}
 
 	/// Set whether an Extra is really displayed
@@ -590,30 +556,48 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return A position value which is halway between the found Extra and the
 	 * 			next Extra
 	 */
-	protected function findPositionAfter($origin_uid) {
+	protected function getInsertPosition($origin_uid) {
+		/** Find the Extra to insert after. If it is not deleted on this page,
+		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
+		 */ 
+		$extra_after_which = null;
+		foreach ($this->getExtras() as $extra) {
+			if ($extra->getOriginUid() == $origin_uid) {
+				$extra_after_which = $extra;
+				break;
+			} 
+		}
+		if (!$extra_after_which) {
+			/// \todo Deduce the $extra_after_which from the parent page(s)
+			/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
+			throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
+		}
 
-		//	define variables first (i'm never certain about blocks and scoping in PHP)		
-		$position_before = 0;
-		$position_after = 0;
-		$extra_after = null;
-
-		$extra_before = $this->findExtraByOriginUID($origin_uid);
+		/// Find Extra before which to insert the new Extra
+		$position_before_which = 0;
+		$position = $extra_after_which->getAttribute('position');
+		foreach ($this->getExtras() as $extra) {
+			/// \todo If $this is an article, handle paragraphs
+			if ($extra->getAttribute('position') > $position &&
+					(!$position_before_which ||
+					 $position_before_which > $extra->getAttribute('position')
+					)
+				) {
+				$position_before_which = $extra->getAttribute('position');
+				break;
+			} 
+		}
+		if (!$position_before_which) $position_before_which = 2*$position;
 		
-		if ($extra_before) {
-			$position_before = $extra_before->getAttribute('position');
-			$extra_after = $this->getExtra($this->indexOfExtra($extra_before)+1);
-		} else {
-			$position_before = 0;
-			$extra_after = $this->getExtra(0);
+		if ($position_before_which-$position < 2) {
+			/// \todo Increase 'position' attribute for all extras after $extra_after_which 
+			throw new tx_newspaper_NotYetImplementedException('Rearranging extra positions if distance has shrunk to 1');			
 		}
-		if ($extra_after) {
-			$position_after = $extra_after->getAttribute('position');
-		} else {
-			$position_after = 2*($position_before+2);
-		}
-		return floor(($position_before+$position_after)/2);
+
+		/// Place Extra to insert between $extra_after and $extra_before (or at end)
+		return $position+($position_before_which-$position)/2;
 	}
-	
+
 	/// Binary search for an Extra, assuming that $this->extras is ordered by position
 	/** This method must be overridden in the Article class because in articles
 	 *  Extras are ordered by paragraph first, position second
