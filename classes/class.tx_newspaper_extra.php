@@ -66,31 +66,47 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	public function getAttribute($attribute) {
 
-		if (!$this->attributes) {
-			$this->attributes = $this->getExtraUid()? 
+		if (!$this->extra_attributes) {
+			$this->extra_attributes = $this->getExtraUid()? 
 				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
 				array();
-			$this->attributes += tx_newspaper::selectOneRow(
+		}
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
 
- 		if (!array_key_exists($attribute, $this->attributes)) {
-        	throw new tx_newspaper_WrongAttributeException($attribute);
+ 		if (array_key_exists($attribute, $this->attributes)) {
+	 		return $this->attributes[$attribute];
+ 		}
+ 		if (array_key_exists($attribute, $this->extra_attributes)) {
+	 		return $this->extra_attributes[$attribute];
  		}
 
- 		return $this->attributes[$attribute];
+        throw new tx_newspaper_WrongAttributeException($attribute);
 	}
 
 	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
 	 *  attributes, even if they don't exist beforehand.
 	 */
 	public function setAttribute($attribute, $value) {
-		if (!$this->attributes) {
-			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
+		if (!$this->extra_attributes) {
+			$this->extra_attributes = $this->getExtraUid()? 
+				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+				array();
 		}
-		
-		$this->attributes[$attribute] = $value;
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), 'uid = ' . $this->getUid()
+			);
+		}
+
+		if (array_key_exists($attribute, $this->extra_attributes)) {
+			$this->extra_attributes[$attribute] = $value;
+		} else {	
+			$this->attributes[$attribute] = $value;
+		}
 	}
 
 	/// checks if an Extra is registered
@@ -126,30 +142,44 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public static function getModuleName() { return 'np_extra_default'; }
 
 	public function getTable() {
-		$class = tx_newspaper::getTable($this);
-		if ($class == 'tx_newspaper_extraimpl') $class = self::$table;
-		return $class;
+		return tx_newspaper::getTable($this);
 	}
 	
 	/// Write or overwrite Extra data in DB, return UID of stored record
 	public function store() {
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
-			if (!$this->attributes) { 
-				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
-			}
+			$this->getAttribute('uid');
 			
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
+			tx_newspaper::updateRows(
+				'tx_newspaper_extra',
+				'uid = ' . $this->getExtraUid(), 
+				$this->extra_attributes
+			);
 		} else {
+			
+			if ($this->extra_attributes) {
+				throw new tx_newspaper_InconsistencyException(
+					'Attributes for abstract Extra have been set before a concrete Extra exists. ' .
+					print_r($this->extra_attributes, 1)
+				);
+			}
+			
+			//	Make sure the Extra is stored in the correct SysFolder
 			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
+			//	Write data for concrete Extra
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
 				)
 			);
-			self::createExtraRecord($this->getUid(), $this->getTable());
+			//	Write data for abstract Extra
+			$this->setExtraUid(
+				self::createExtraRecord($this->getUid(), $this->getTable())
+			);
 		}
 		return $this->getUid();
 	}
@@ -183,21 +213,24 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
 			' AND extra_uid = ' . intval($uid)	
 		);
-		if ($row['uid']) return $row['uid'];
+		if ($row['uid']) {
+			return $row['uid'];		
+		} else {
 		
-		/// read typo3 fields to copy into extra table
-		$row = tx_newspaper::selectOneRow(
-			implode(', ', self::$fields_to_copy_into_extra_table),
-			$table,
-			'uid = ' . intval($uid)
-		);
-		
-		/// write the uid and table into extra table, with the values read above
-		$row['extra_uid'] = $uid;
-		$row['extra_table'] = $table;
-		$row['tstamp'] = time();				///< tstamp is set to now
-
-		return tx_newspaper::insertRows(self::$table, $row);		
+			/// read typo3 fields to copy into extra table
+			$row = tx_newspaper::selectOneRow(
+				implode(', ', self::$fields_to_copy_into_extra_table),
+				$table,
+				'uid = ' . intval($uid)
+			);
+			
+			/// write the uid and table into extra table, with the values read above
+			$row['extra_uid'] = $uid;
+			$row['extra_table'] = $table;
+			$row['tstamp'] = time();				///< tstamp is set to now
+	
+			return tx_newspaper::insertRows(self::$table, $row);
+		}
 	}
 
 	public function getUid() { return intval($this->uid); }
@@ -205,7 +238,12 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 
 	public function setExtraUid($uid) { $this->extra_uid = $uid; }
 	/// This function is only public so unit tests can access it	
-	public function getExtraUid() { return intval($this->extra_uid); }
+	public function getExtraUid() {
+		if (!$this->extra_uid) {
+			$this->extra_uid = self::createExtraRecord($this->getUid(), $this->getTable());
+		} 
+		return intval($this->extra_uid); 
+	}
 
 	/// gets the origin uid of an extra 
 	/// \return int the origin uid of an extra (if 0 return abstract extra uid)
@@ -222,7 +260,6 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		return (($this->getAttribute('origin_uid') == 0) || 
 				($this->getAttribute('origin_uid') == $this->getExtraUid())); 
 	}
-
 
 	/// Finds the PageZone this Extra is placed upon
 	/** I'm afraid this raises several problems, so this function should be used
@@ -259,7 +296,8 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	
 	private $uid = 0;
 
-	private $attributes = array();				///< attributes of the extra
+	private $attributes = array();				///< attributes of the concrete extra
+	private $extra_attributes = array();		///< attributes of the abstract extra
 
 	protected $smarty = null;
 

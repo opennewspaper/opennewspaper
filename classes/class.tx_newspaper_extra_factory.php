@@ -56,6 +56,7 @@ class tx_newspaper_Extra_Factory {
 	 *  \todo honor deleted and hidden flags
 	 */
 	public function create($uid) {
+		
 		/// Read actual type and UID of the Extra to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
 			'extra_table, extra_uid', self::$extra_table, "uid = $uid"
