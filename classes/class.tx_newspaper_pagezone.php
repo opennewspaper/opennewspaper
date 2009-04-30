@@ -559,7 +559,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// Find Extra before which to insert the new Extra
 		$position_before_which = 0;
-		$position = $extra_after_which->getAttribute('position');
+		if ($extra_after_which !== null)
+			$position = $extra_after_which->getAttribute('position');
+		else
+			$position = 0;
 		foreach ($this->getExtras() as $extra) {
 			/// \todo If $this is an article, handle paragraphs
 			if ($extra->getAttribute('position') > $position &&
