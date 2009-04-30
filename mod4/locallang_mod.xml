@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txnewspaperM4&quot; - header, description</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">Administration</label>
+			<label index="mlang_labels_tabdescr">Administration tasks for the Newspaper extension</label>
+			<label index="mlang_labels_tablabel">Newspaper Administration</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_tabs_tab">Administration</label>
+			<label index="mlang_labels_tabdescr">Administrationsaufgaben für die Newspaper-Extension</label>
+			<label index="mlang_labels_tablabel">Newspaper-Administration</label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -19,22 +19,28 @@ if (TYPO3_MODE == 'BE') {
 }
 
 
-//if (TYPO3_MODE == 'BE') {
-//	t3lib_extMgm::addModulePath('web_txnewspaperM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
-//		
-//}
-//
-//
-//if (TYPO3_MODE == 'BE') {
-//	t3lib_extMgm::addModulePath('web_txnewspaperM2', t3lib_extMgm::extPath($_EXTKEY) . 'mod2/');
-//		
-//}
-//
-//
-//if (TYPO3_MODE == 'BE') {
-//	t3lib_extMgm::addModulePath('web_txnewspaperM3', t3lib_extMgm::extPath($_EXTKEY) . 'mod3/');
-//		
-//}
+if (TYPO3_MODE == 'BE') {
+	t3lib_extMgm::addModulePath('web_txnewspaperM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+		
+}
+
+
+if (TYPO3_MODE == 'BE') {
+	t3lib_extMgm::addModulePath('web_txnewspaperM2', t3lib_extMgm::extPath($_EXTKEY) . 'mod2/');
+		
+}
+
+
+if (TYPO3_MODE == 'BE') {
+	t3lib_extMgm::addModulePath('web_txnewspaperM3', t3lib_extMgm::extPath($_EXTKEY) . 'mod3/');
+		
+}
+
+
+if (TYPO3_MODE == 'BE') {
+	t3lib_extMgm::addModulePath('web_txnewspaperM4', t3lib_extMgm::extPath($_EXTKEY) . 'mod4/');
+		
+}
 
 
 t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_image');
