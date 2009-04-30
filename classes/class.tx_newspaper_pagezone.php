@@ -367,8 +367,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $origin_uid 
 	 *  \param $extra The new, fully instantiated Extra to insert
 	 */ 
-	public function insertInheritedExtraAfter($origin_uid, 
-											  tx_newspaper_Extra $insert_extra) {
+	public function insertExtraAfter($origin_uid, 
+									 tx_newspaper_Extra $insert_extra) {
 		/** Find the Extra to insert after. If it is not deleted on this page,
 		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 		 */ 
@@ -412,6 +412,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		/// Write Extra to DB
 		$insert_extra->store();
+		
+		$this->addExtra($insert_extra);
 	}
 	
 	/// As the name says, copies Extras from another PageZone
@@ -439,21 +441,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			$extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
 			
-			$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
+			$this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
 		}
 	}
 
-	///	Insert an Extra after another Extra, defined by its origin UID
-	/** \param $new_extra The Extra to be inserted
-	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
-	 * 			will be inserted. If $origin_uid == 0, insert at the beginning.
-	 */	
-	public function insertExtraAfter(tx_newspaper_Extra $new_extra, $origin_uid = 0) {
-		$new_extra->setAttribute('position', $this->findPositionAfter($origin_uid));
-		$this->extras[] = $new_extra;
-		$this->store();
-	}
-	
 	///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
 	 *  \return false if $remove_extra was not found, true otherwise
@@ -621,7 +612,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** This method must be overridden in the Article class because in articles
 	 *  Extras are ordered by paragraph first, position second
 	 */
-	protected function indexOfExtra($extra) {
+	protected function indexOfExtra(tx_newspaper_Extra $extra) {
         $high = sizeof($this->getExtras())-1;
         $low = 0;
        
@@ -693,7 +684,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
  	static protected function compareExtras(tx_newspaper_Extra $extra1, 
  									 		tx_newspaper_Extra $extra2) {
- 		return $extra2->getAttribute('position')-$extra1->getAttribute('position');			 	
+ 		return $extra1->getAttribute('position')-$extra2->getAttribute('position');			 	
 	}
 	
 	/// Read Attributes from DB
@@ -736,6 +727,36 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $extras[$index];
 	}
 
+	/// Add an Extra to the PageZone, both in RAM and persistently
+	protected function addExtra(tx_newspaper_Extra $extra) {
+/*		$found = false;
+		foreach ($this->getExtras() as $present_extra) {
+			if ($extra->getExtraUid() == $present_extra->getExtraUid()) {
+				$found = true;
+				break;
+			}
+		}
+		if (!$found) 
+*/		$this->extras[] = $extra;
+
+/*		try {
+			tx_newspaper::selectOneRow(
+				'uid_local',
+				$this->getExtra2PagezoneTable(),
+				'uid_local = ' . $this->getUid() . 
+				' AND uid_foreign = ' . $extra->getExtraUid()
+			);
+		} catch (tx_newspaper_DBException $e) {
+*/			tx_newspaper::insertRows(
+				$this->getExtra2PagezoneTable(),
+				array(
+					'uid_local' => $this->getUid(),
+					'uid_foreign' => $extra->getExtraUid()
+				)
+			);
+//		}
+	}
+	
 	public function getPageZoneUid() { return $this->pagezone_uid; }
 	public function getExtraUid() { return $this->extra_uid; }
 

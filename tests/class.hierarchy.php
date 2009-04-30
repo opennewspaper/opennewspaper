@@ -38,12 +38,14 @@ class tx_newspaper_hierarchy {
 		$this->createSectionHierarchy();
 		$this->createPages();
 		$this->createPageZones();
+		$this->createExtras();
 	}
 	
 	/** For whatever reason, __destruct is not automatically called when the
 	 *  unit test is over. This function must be called explicitly to clean up.
 	 */
 	public function removeAllJunkManually() {
+		$this->removeExtras();
 		$this->removePageZones();
 		$this->removePages();
 		$this->removeSectionHierarchy();
@@ -71,6 +73,7 @@ class tx_newspaper_hierarchy {
 		}
 		return $this->pages;
 	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function createSectionHierarchy() {
@@ -126,6 +129,49 @@ class tx_newspaper_hierarchy {
 		}
 	}
 	
+	private function createExtras() {
+		foreach ($this->pagezone_uids as $pagezone_uid) {
+
+			$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($pagezone_uid);
+
+			foreach($this->extra_data as $i => $extra) {
+				$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
+				$this->extra_uids[] = $extra_uid;
+
+				$extra_object = new $this->concrete_extra_table($extra_uid);
+				tx_newspaper::updateRows(
+					$this->extra_table, 
+					'uid = ' . $extra_object->getExtraUid(), 
+					array('position' => $this->extra_pos[$i])
+				);
+			
+				tx_newspaper::insertRows(
+					$pagezone->getExtra2PagezoneTable(),
+					array(
+						'uid_local' => $pagezone->getUid(),
+						'uid_foreign' => $extra_object->getExtraUid()
+					));
+			}
+		}
+	}
+	
+	private function removeExtras() {
+		$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_uids[0]);
+
+		foreach ($this->extra_uids as $uid) {
+			$extra_object = new $this->concrete_extra_table($uid);
+			tx_newspaper::deleteRows(
+				$pagezone->getExtra2PagezoneTable(),
+				'uid_foreign = ' . $extra_object->getExtraUid()
+			);
+			tx_newspaper::deleteRows(
+				$this->extra_table, 
+				'uid = ' . $extra_object->getExtraUid()
+			);
+			tx_newspaper::deleteRows($this->concrete_extra_table, $uid);
+		}
+	}
+	
 	private function removeSectionHierarchy() {
 		tx_newspaper::deleteRows($this->section_table, $this->section_uids);
 	}
@@ -143,11 +189,19 @@ class tx_newspaper_hierarchy {
 	
 	private $delete_all_query = array(
 		"DELETE FROM `tx_newspaper_section` WHERE section_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_section` WHERE deleted",
 		"DELETE FROM `tx_newspaper_pagetype` WHERE type_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagetype` WHERE deleted",
 		"DELETE FROM `tx_newspaper_page` WHERE template_set LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_page` WHERE deleted",
 		"DELETE FROM `tx_newspaper_pagezonetype` WHERE type_name LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_pagezonetype` WHERE deleted",
 		"DELETE FROM `tx_newspaper_pagezone_page` WHERE pagezone_id LIKE 'Unit Test%'",
-		"DELETE FROM `tx_newspaper_pagezone` WHERE deleted"
+		"DELETE FROM `tx_newspaper_pagezone_page` WHERE deleted",
+		"DELETE FROM `tx_newspaper_pagezone` WHERE deleted",
+		"DELETE FROM `tx_newspaper_extra_image` WHERE title LIKE 'Unit Test%'",
+		"DELETE FROM `tx_newspaper_extra_image` WHERE deleted",
+		"DELETE FROM `tx_newspaper_extra` WHERE deleted"
 	);
 		
 	private $section_table = 'tx_newspaper_section';
@@ -302,5 +356,64 @@ class tx_newspaper_hierarchy {
 
 	/// The Page Zones in the hierarchy as a flat array of objects
 	private $pagezones = array();
+	
+	private $extra_table = 'tx_newspaper_extra';
+	private $concrete_extra_table = 'tx_newspaper_extra_image';
+	private $extra2pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';	
+	private $extra_data = array(
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
+			'cruser_id' => 1,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "",	
+			'title' => "Unit Test - Image Title 1",
+			'image' => "E3_033009T.jpg",	
+			'caption' => "Caption for image 3",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
+			'cruser_id' => 1,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "",	
+			'title' => "Unit Test - Image Title 2",	
+			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
+			'caption' => "Daemonic Gentoo",	
+			'template_set' => "",	
+		),
+		array(
+			'pid' => 2573,
+			'tstamp' => 1234567890,
+			'crdate' => 1234567890,
+			'cruser_id' => 1,
+			'deleted' => 0,
+			'hidden' => 0,
+			'starttime' => 0,
+			'endtime' => 0,
+			'fe_group' => 0,
+			'extra_field' => "extra_field[5]",	
+			'title' => "Unit Test - Image Title 3",	
+			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
+			'caption' => "caption[5]",	
+			'template_set' => "",	
+		),
+	);
+	
+	private $extra_pos = array(
+		1024, 2048, 4096
+	);
+	
 }
 ?>

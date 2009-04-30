@@ -310,20 +310,51 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->assertEquals(0, sizeof($this->pagezone->getInheritanceHierarchyUp(false)),
 						    $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
 	}
-
-	public function test_getInheritanceHierarchyDown() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			t3lib_div::debug($pagezone->getInheritanceHierarchyDown());
-		}
-		t3lib_div::debug($this->pagezone->getInheritanceHierarchyDown());
-		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
-	}
 	
-	public function test_insertInheritedExtraAfter() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+	public function test_insertExtraAfter() {
+#		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		$pagezone = array_pop($this->hierarchy->getPageZones()); {
+			$old_extras = $pagezone->getExtras();
+			foreach ($old_extras as $extra_after_which) {
+				$i = 0; 
+				foreach ($this->extra_abstract_uids as $uid) {
+					$i++;
+					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+					$new_extra->setAttribute('title', "Inserted ${i}th");
+					$pagezone->insertExtraAfter($extra_after_which->getOriginUid(), $new_extra);
+				}
+			}
+			$this->assertEquals(
+				sizeof($pagezone->getExtras()),
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+				'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+				sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
+				sizeof($pagezone->getExtras()) . '. '
+			);
+			
+			$row = tx_newspaper::selectOneRow(
+				'COUNT(*) AS num', 
+				$pagezone->getExtra2PagezoneTable(),
+				'uid_local = ' . $pagezone->getUid()
+			);
+			$this->assertEquals(
+				intval($row['num']), 
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+				'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+				'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
+				' but only ' . $row['num'] . ' are there.'
+			);
+
+			/// \todo see that the order is correct.
+			t3lib_div::debug($pagezone . '');
+			foreach ($pagezone->getExtras() as $extra) {
+				t3lib_div::debug($extra->getAttribute('title') . ', position: ' . $extra->getAttribute('position'));
+			}
+			t3lib_div::debug('---------------------------------------------   ');
+
+			/// \todo see that the Extras are inserted on inheriting PageZones.	
 		}
-		$this->fail('test_insertInheritedExtraAfter not yet implemented');
 	}
 	
 	public function test_copyExtrasFrom() {
@@ -331,13 +362,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 #			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
 		}
 		$this->fail('test_copyExtrasFrom not yet implemented');
-	}
-	
-	public function test_insertExtraAfter() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
-		}
-		$this->fail('test_insertExtraAfter not yet implemented');
 	}
 	
 	public function test_removeExtra() {
@@ -368,6 +392,15 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->fail('test_setInherits not yet implemented');
 	}
 	
+	public function test_getInheritanceHierarchyDown() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			$hierarchy = $pagezone->getInheritanceHierarchyDown();
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyDown());
+		}
+#		t3lib_div::debug($this->pagezone->getInheritanceHierarchyDown());
+		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 
 	private function createExtras() {
@@ -375,7 +408,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
 	    	
 	    	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $this->concrete_extra_table);
-
+			$this->extra_abstract_uids[] = $abstract_uid;
+			
 	    	///	link extra to article
 			tx_newspaper::insertRows(
 				$this->extra2pagezone_table,
@@ -486,6 +520,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	private $extra_pos = array(
 		1024, 2048, 4096
 	);
+	
+	private $extra_abstract_uids = array();
 	
 	private $hierarchy = null;
 }

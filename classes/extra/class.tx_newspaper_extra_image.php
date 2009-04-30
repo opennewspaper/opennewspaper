@@ -11,6 +11,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 //		$this->smarty = new tx_newspaper_Smarty();
 	}
 	
+	public function __toString() {
+		return 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid() .
+				' (Title: ' . $this->getAttribute('title') . ')';	
+	}
+	
 	/** Just a quick hack to see anything
 	 */
 	public function render($template_set = '') {

@@ -96,6 +96,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
 			$uid = $temp->store();
+			t3lib_div::debug('store() ok');
 			$this->assertEquals($uid, $temp->getUid());
 
 			/// check that record in DB equals data in memory
@@ -109,6 +110,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$time = time();
 			$temp->setAttribute('tstamp', $time);
 			$uid = $temp->store();
+			t3lib_div::debug('store() 2 ok');
 			$this->assertEquals($uid, $temp->getUid());
 			$data = tx_newspaper::selectOneRow(
 				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
@@ -118,6 +120,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$temp = new $extra_class();
 			$temp->setAttribute('tstamp', $time);
 			$uid = $temp->store();
+			t3lib_div::debug('store() 3 ok');
 			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
 			$this->assertEquals($data['tstamp'], $time);
 			
