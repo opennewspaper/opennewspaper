@@ -477,7 +477,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
 		if ($this->removeExtra($move_extra)) {
-			$this->insertExtraAfter($move_extra, $origin_uid);
+			$this->insertExtraAfter($origin_uid, $move_extra);
 		} else {
 			throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
 														  ' to move was not found on the PageZone');

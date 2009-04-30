@@ -312,8 +312,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_insertExtraAfter() {
-#		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-		$pagezone = array_pop($this->hierarchy->getPageZones()); {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#		$pagezone = array_pop($this->hierarchy->getPageZones()); {
 			$old_extras = $pagezone->getExtras();
 			foreach ($old_extras as $extra_after_which) {
 				$i = 0; 
@@ -347,11 +347,24 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			);
 
 			/// \todo see that the order is correct.
-			t3lib_div::debug($pagezone . '');
-			foreach ($pagezone->getExtras() as $extra) {
-				t3lib_div::debug($extra->getAttribute('title') . ', position: ' . $extra->getAttribute('position'));
-			}
-			t3lib_div::debug('---------------------------------------------   ');
+			/** Expected order: 
+			 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+			 *  'Unit Test - Image Title 2', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+			 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
+			 */
+			$extra = $pagezone->getExtras();
+			$this->assertTrue($extra[0]->getAttribute('title')  == 'Unit Test - Image Title 1');
+			$this->assertTrue($extra[1]->getAttribute('title')  == 'Inserted 3th');
+			$this->assertTrue($extra[2]->getAttribute('title')  == 'Inserted 2th');
+			$this->assertTrue($extra[3]->getAttribute('title')  == 'Inserted 1th');
+			$this->assertTrue($extra[4]->getAttribute('title')  == 'Unit Test - Image Title 2');
+			$this->assertTrue($extra[5]->getAttribute('title')  == 'Inserted 3th');
+			$this->assertTrue($extra[6]->getAttribute('title')  == 'Inserted 2th');
+			$this->assertTrue($extra[7]->getAttribute('title')  == 'Inserted 1th');
+			$this->assertTrue($extra[8]->getAttribute('title')  == 'Unit Test - Image Title 3');
+			$this->assertTrue($extra[9]->getAttribute('title')  == 'Inserted 3th');
+			$this->assertTrue($extra[10]->getAttribute('title') == 'Inserted 2th');
+			$this->assertTrue($extra[11]->getAttribute('title') == 'Inserted 1th');
 
 			/// \todo see that the Extras are inserted on inheriting PageZones.	
 		}
@@ -366,21 +379,54 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	public function test_removeExtra() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+			$old_extras = $pagezone->getExtras();
+			foreach ($old_extras as $extra_to_remove) {
+				$this->assertTrue(
+					$pagezone->removeExtra($extra_to_remove),
+					'Extra ' . $extra_to_remove . ' apparently wasn\'t on PageZone ' .
+					$pagezone . ' in the first place. '
+				);
+				$found = false;
+				foreach ($pagezone->getExtras() as $extra_still_there) {
+					if ($extra_to_remove->getExtraUid() == $extra_still_there->getExtraUid()) {
+						$this->fail($extra_to_remove . ' still on PageZone ' . $pagezone);
+					}
+				}
+				$row = tx_newspaper::selectOneRow(
+					'COUNT(*) AS num', 
+					$pagezone->getExtra2PagezoneTable(),
+					'uid_local = ' . $pagezone->getUid() . 
+					' AND uid_foreign = ' . $extra_to_remove->getExtraUid()
+				);
+				$this->assertEquals(intval($row['num']), 0,
+					'Still ' . $row['num'] . ' records linking Extra '. $extra_to_remove .
+					' to PageZone ' . $pagezone . ' in table ' . $pagezone->getExtra2PagezoneTable());
+			}
 		}
-		$this->fail('test_removeExtra not yet implemented');
 	}
 
 	public function test_moveExtraAfter() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+			$extras = $pagezone->getExtras();
+			$pagezone->moveExtraAfter($extras[0], $extras[1]->getOriginUid());
+			$new_extras = $pagezone->getExtras();
+			//	find $extra[0] and $extra[1] in $new_extras
+			for ($i = 0; $i < sizeof($new_extras); $i++) {
+				if ($new_extras[$i]->getAttribute('title') == $extras[0]->getAttribute('title')) {
+					$after_index = $i;
+				}
+				if ($new_extras[$i]->getAttribute('title') == $extras[1]->getAttribute('title')) {
+					$before_index = $i;
+				}
+			}
+			$this->assertEquals($after_index, $before_index+1);
 		}
-		$this->fail('test_moveExtraAfter not yet implemented');
+		/// \todo instantiate pagezone from DB and check it still works
 	}
 	
 	public function test_setShow() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
 		}
 		$this->fail('test_setShow not yet implemented');
 	}
@@ -395,9 +441,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	public function test_getInheritanceHierarchyDown() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$hierarchy = $pagezone->getInheritanceHierarchyDown();
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyDown());
 		}
-#		t3lib_div::debug($this->pagezone->getInheritanceHierarchyDown());
 		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
 	}
 
@@ -478,7 +522,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			'endtime' => 0,
 			'fe_group' => 0,
 			'extra_field' => "",	
-			'title' => "Image 3",
+			'title' => "Image 1",
 			'image' => "E3_033009T.jpg",	
 			'caption' => "Caption for image 3",	
 			'template_set' => "",	
@@ -494,7 +538,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			'endtime' => 0,
 			'fe_group' => 0,
 			'extra_field' => "",	
-			'title' => "Image 4",	
+			'title' => "Image 2",	
 			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
 			'caption' => "Daemonic Gentoo",	
 			'template_set' => "",	
@@ -510,7 +554,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			'endtime' => 0,
 			'fe_group' => 0,
 			'extra_field' => "extra_field[5]",	
-			'title' => "title[5]",	
+			'title' => "Image 3",	
 			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
 			'caption' => "caption[5]",	
 			'template_set' => "",	
