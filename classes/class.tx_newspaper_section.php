@@ -116,6 +116,24 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			return new tx_newspaper_Section($this->getAttribute('parent_section'));
 		} else return null;
 	}
+
+	/// Get all Sections which have $this as direct parent
+	/** \return Array of Section objects
+	 */
+	public function getChildSections() {
+
+		$row = tx_newspaper::selectRows(
+				'uid', $this->getTable(),
+				'parent_section = ' . $this->getUid()
+			);
+
+		$sections = array();
+		if ($row) foreach ($row as $section_uid) {
+			$sections[] = new tx_newspaper_Section($row['uid']);
+		}
+
+		return $sections;
+	}
 	
 	/// \return uid of parent abstract record for concrete article list associated with section
 	function getAbstractArticleListUid() {
@@ -135,6 +153,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		return $this->subPages;
  	}
  	
+ 	function getSubPage(tx_newspaper_PageType $type) {
+ 		foreach ($this->getSubPages() as $page) {
+ 			if ($page->getPageType()->getUid() == $type->getUid())
+ 				return $page;
+ 		}
+ 		///	\todo or throw?
+ 		return null;
+ 	}
  	
  	/// gets an array of sections up the rootline
 	/// \return array tx_newspaper_Section objects, up the rootline
@@ -155,7 +181,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	function getUid() { return $this->uid; }
 	
 	static function getModuleName() { return 'np_section'; }
-	
 	
 	
 	

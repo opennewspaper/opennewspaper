@@ -346,37 +346,61 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 				' but only ' . $row['num'] . ' are there.'
 			);
 
-			/// \todo see that the order is correct.
-			/** Expected order: 
-			 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
-			 *  'Unit Test - Image Title 2', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
-			 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
-			 */
-			$extra = $pagezone->getExtras();
-			$this->assertTrue($extra[0]->getAttribute('title')  == 'Unit Test - Image Title 1');
-			$this->assertTrue($extra[1]->getAttribute('title')  == 'Inserted 3th');
-			$this->assertTrue($extra[2]->getAttribute('title')  == 'Inserted 2th');
-			$this->assertTrue($extra[3]->getAttribute('title')  == 'Inserted 1th');
-			$this->assertTrue($extra[4]->getAttribute('title')  == 'Unit Test - Image Title 2');
-			$this->assertTrue($extra[5]->getAttribute('title')  == 'Inserted 3th');
-			$this->assertTrue($extra[6]->getAttribute('title')  == 'Inserted 2th');
-			$this->assertTrue($extra[7]->getAttribute('title')  == 'Inserted 1th');
-			$this->assertTrue($extra[8]->getAttribute('title')  == 'Unit Test - Image Title 3');
-			$this->assertTrue($extra[9]->getAttribute('title')  == 'Inserted 3th');
-			$this->assertTrue($extra[10]->getAttribute('title') == 'Inserted 2th');
-			$this->assertTrue($extra[11]->getAttribute('title') == 'Inserted 1th');
+			$this->checkPageZoneOrder($pagezone);
 
-			/// \todo see that the Extras are inserted on inheriting PageZones.	
+			/// Make sure the Extras are inserted on inheriting PageZones.
+t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
+			foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
+				t3lib_div::debug($sub_pagezone.'');
+				$this->assertEquals(
+					sizeof($sub_pagezone->getExtras()),
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+					'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+					sizeof($old_extras) . ' original Extras, so inheriting PageZone ' . $sub_pagezone . ' should now have ' .
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
+					sizeof($sub_pagezone->getExtras()) . '. '
+				);
+				
+				$row = tx_newspaper::selectOneRow(
+					'COUNT(*) AS num', 
+					$sub_pagezone->getExtra2PagezoneTable(),
+					'uid_local = ' . $sub_pagezone->getUid()
+				);
+				$this->assertEquals(
+					intval($row['num']), 
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+					'Entries in ' . $sub_pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+					'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
+					' but only ' . $row['num'] . ' are there.'
+				);
+
+				$this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
+			}
 		}
 	}
-	
-	public function test_copyExtrasFrom() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
-		}
-		$this->fail('test_copyExtrasFrom not yet implemented');
+
+	/** Make sure the order is correct. \n
+	 *  Expected order: \n 
+	 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+	 *  'Unit Test - Image Title 2', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+	 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
+	 */
+	private function checkPageZoneOrder(tx_newspaper_PageZone $pagezone, $message = '') {
+		$extra = $pagezone->getExtras();
+		$this->assertTrue($extra[0]->getAttribute('title')  == 'Unit Test - Image Title 1', $message);
+		$this->assertTrue($extra[1]->getAttribute('title')  == 'Inserted 3th', $message);
+		$this->assertTrue($extra[2]->getAttribute('title')  == 'Inserted 2th', $message);
+		$this->assertTrue($extra[3]->getAttribute('title')  == 'Inserted 1th', $message);
+		$this->assertTrue($extra[4]->getAttribute('title')  == 'Unit Test - Image Title 2', $message);
+		$this->assertTrue($extra[5]->getAttribute('title')  == 'Inserted 3th', $message);
+		$this->assertTrue($extra[6]->getAttribute('title')  == 'Inserted 2th', $message);
+		$this->assertTrue($extra[7]->getAttribute('title')  == 'Inserted 1th', $message);
+		$this->assertTrue($extra[8]->getAttribute('title')  == 'Unit Test - Image Title 3', $message);
+		$this->assertTrue($extra[9]->getAttribute('title')  == 'Inserted 3th', $message);
+		$this->assertTrue($extra[10]->getAttribute('title') == 'Inserted 2th', $message);
+		$this->assertTrue($extra[11]->getAttribute('title') == 'Inserted 1th', $message);
 	}
-	
+		
 	public function test_removeExtra() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$old_extras = $pagezone->getExtras();
@@ -424,13 +448,6 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		/// \todo instantiate pagezone from DB and check it still works
 	}
 	
-	public function test_setShow() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
-		}
-		$this->fail('test_setShow not yet implemented');
-	}
-
 	public function test_setInherits() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 #			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
@@ -440,9 +457,32 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	public function test_getInheritanceHierarchyDown() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			$hierarchy = $pagezone->getInheritanceHierarchyDown();
+			$hierarchy = $pagezone->getInheritanceHierarchyDown(false);
+t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
+			foreach ($hierarchy as $sub_pagezone) {
+				$this->assertTrue(
+					$sub_pagezone instanceof tx_newspaper_PageZone,
+					$sub_pagezone . ' is not a PageZone. '
+				);
+				$parent_pagezones = $sub_pagezone->getInheritanceHierarchyUp();
+				$found = false;
+				foreach ($parent_pagezones as $pagezone_to_check) {
+					if ($pagezone->getUid() == $pagezone_to_check->getUid())
+						$found = true;
+				}
+				$this->assertTrue($found,
+					'PageZone ' . $pagezone . ' not found in parents of ' . $sub_pagezone .
+					', which is listed as a descendant of ' . $pagezone);
+			}
 		}
-		$this->fail('test_getInheritanceHierarchyDown not yet implemented');
+	}
+
+	
+	public function test_copyExtrasFrom() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
+		$this->fail('test_copyExtrasFrom not yet implemented');
 	}
 
 	////////////////////////////////////////////////////////////////////////////

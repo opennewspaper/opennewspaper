@@ -339,31 +339,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		} else return $hierarchy;
 	}
 	
-	/// Get the hierarchy of Page Zones inheriting placement from $this
-	/** \param $including_myself If true, add $this to the list
-	 *  \param $hierarchy List of already found parents (for recursive calling) 
-	 *  \return Inheritance hierarchy of pages inheriting from the current Page 
-	 * 			Zone, ordered downwards, depth-first
-	 */
-	public function getInheritanceHierarchyDown($including_myself = true, 
-												$hierarchy = array()) {
-		if ($including_myself) $hierarchy[] = $this;
-		
-		//  look for inheriting page zones only of the same type as $this
-		$table = tx_newspaper::getTable($this);
-		$heirs = tx_newspaper::selectRows(
-			'uid', $table, 'inherits_from = ' . $this->getUid()
-		);
-		foreach ($heirs as $heir) {
-			$inheriting_pagezone = new $table($heir['uid']);
-			array_merge($hierarchy, $this->getInheritanceHierarchyDown(true, $inheriting_pagezone));
-		}
-
-		/// \todo look for page zones on pages in section down the section hierarchy
-		
-		return $hierarchy;
-	}
-
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
 	/** \param $origin_uid 
 	 *  \param $extra The new, fully instantiated Extra to insert
@@ -378,35 +353,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->addExtra($insert_extra);
 	}	
 	
-	/// As the name says, copies Extras from another PageZone
-	/** In particular, it copies the entry from the abstract Extra supertable,
-	 *  but not the data from the concrete Extra_* tables. I.e. it creates a
-	 *  new Extra which is a reference to a concrete Extra for each copyable
-	 *  Extra on the template PageZone.
-	 *  Also, it sets the origin_uid property on the copied Extras to reflect
-	 *  the origin of the Extra.
-	 */
-	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-		foreach ($parent_zone->getExtras() as $extra_to_copy) {
-			if (!$extra_to_copy->getAttribute('inheritable')) continue;
-			/// Clone $extra_to_copy
-			/** Not nice: because we're working on the abstract superclass here, we
-			 * 	can't clone the superclass entry because there's no object for it.
-			 */
-			$new_extra = array();
-			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
-				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
-			} 
-			$new_extra['show_extra'] = 1;
-			if (!$extra_to_copy->getOriginUid()) {
-				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
-			}
-			$extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
-			
-			$this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
-		}
-	}
-
 	///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
 	 *  \return false if $remove_extra was not found, true otherwise
@@ -450,28 +396,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */
 	}
 
-	/// Set whether an Extra is really displayed
-	/** Extras can be hidden on certain PageZones. This behavior is not inherited
-	 *  by the Extras on PageZones further down in the inheritance hierarchy.
-	 * 
-	 *  This is intended as an easy way to have PageZones inherit Extra 
-	 *  configuration even if the inheritance hierarchy is discontinued for some
-	 *  PageZones. 
-	 * 
-	 *  \param $extra The Extra to be shown or hidden
-	 *  \param $show Whether tho display the Extra or hide it
-	 *  \exception tx_newspaper_InconsistencyException If $extra is not present
-	 * 			on the PageZone
-	 */
-	public function setShow(tx_newspaper_Extra $extra, $show = true) {
-		
-		//	Check if the Extra is really present. An exception is thrown if not.
-		$this->indexOfExtra($extra);
-		
-		$extra->setAttribute('show_extra', $show);
-		$extra->store();
-	}
-
 	/// Set whether PageZones down the inheritance hierarchy inherit this Extra
 	/** If the inheritance mode is changed to false, the Extra must be removed 
 	 *  from all PageZones inheriting from $this (if it's  already present there).
@@ -494,6 +418,66 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		throw new tx_newspaper_NotYetImplementedException();
 	}
+
+	/// Get the hierarchy of Page Zones inheriting placement from $this
+	/** \param $including_myself If true, add $this to the list
+	 *  \param $hierarchy List of already found parents (for recursive calling) 
+	 *  \return Inheritance hierarchy of pages inheriting from the current Page 
+	 * 			Zone, ordered downwards, depth-first
+	 */
+	public function getInheritanceHierarchyDown($including_myself = true, 
+												$hierarchy = array()) {
+		if ($including_myself) $hierarchy[] = $this;
+		
+		///  look for inheriting page zones only of the same type as $this
+		$table = tx_newspaper::getTable($this);
+		$heirs = tx_newspaper::selectRows(
+			'uid', $table, 'inherits_from = ' . $this->getUid()
+		);
+		foreach ($heirs as $heir) {
+			$inheriting_pagezone = new $table($heir['uid']);
+			array_merge($hierarchy, $this->getInheritanceHierarchyDown(true, $inheriting_pagezone));
+		}
+
+		/// \todo look for page zones on pages in section down the section hierarchy
+		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
+			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
+			if ($page) {
+				$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
+			}
+		}
+		return $hierarchy;
+	}
+
+	/// As the name says, copies Extras from another PageZone
+	/** In particular, it copies the entry from the abstract Extra supertable,
+	 *  but not the data from the concrete Extra_* tables. I.e. it creates a
+	 *  new Extra which is a reference to a concrete Extra for each copyable
+	 *  Extra on the template PageZone.
+	 *  Also, it sets the origin_uid property on the copied Extras to reflect
+	 *  the origin of the Extra.
+	 */
+	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
+		foreach ($parent_zone->getExtras() as $extra_to_copy) {
+			if (!$extra_to_copy->getAttribute('inheritable')) continue;
+			/// Clone $extra_to_copy
+			/** Not nice: because we're working on the abstract superclass here, we
+			 * 	can't clone the superclass entry because there's no object for it.
+			 */
+			$new_extra = array();
+			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
+				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
+			} 
+			$new_extra['show_extra'] = 1;
+			if (!$extra_to_copy->getOriginUid()) {
+				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
+			}
+			$extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
+			
+			$this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
+		}
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -565,9 +549,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if ($extra->getOriginUid() == $origin_uid) {
 				$extra_after_which = $extra;
 				break;
-			} 
+			}
 		}
-		if (!$extra_after_which) {
+		if (!$extra_after_which && ($origin_uid > 0)) {
 			/// \todo Deduce the $extra_after_which from the parent page(s)
 			/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
 			throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');

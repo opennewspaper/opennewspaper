@@ -213,6 +213,15 @@ class tx_newspaper_Page
 		return $this->pageZones;
 	}
 	
+	function getPageZone(tx_newspaper_PageZoneType $type) {
+ 		foreach ($this->getPageZones() as $pagezone) {
+ 			if ($pagezone->getPageZoneType()->getUid() == $type->getUid())
+ 				return $pagezone;
+ 		}
+ 		///	\todo or throw?
+ 		return null;
+	}
+	
 	/// Render the page, containing all associated page areas
 	/** The correct template is found the following way.
 	 *  - the template set for the page is set via TSConfig
