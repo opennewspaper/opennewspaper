@@ -478,7 +478,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $sections[0];
 	}
 	
-	protected function getExtra2PagezoneTable() {
+	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
 

@@ -80,7 +80,7 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 
 	static function getModuleName() { return 'np_pagezone_page'; }
 
-	protected function getExtra2PagezoneTable() {
+	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
  	
