@@ -22,8 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-///TODO: implemention still very basic
-
+/// \todo: _request ->_gp
 
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
