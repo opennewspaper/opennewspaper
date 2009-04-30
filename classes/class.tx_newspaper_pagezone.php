@@ -136,8 +136,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		);
 		
 		/// \todo store Extras placed on $this
-		throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
-		
+		if ($this->getExtras()) {
+			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
+		}
 		
 		return $this->getUid();
 		
@@ -458,7 +459,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			return false;
 		}
 		unset($this->extras[$index]);
-		$this->store();
+		
+		tx_newspaper::deleteRows(
+				$this->getExtra2PagezoneTable(),
+				'uid_local = ' . $this->getUid() .
+				' AND uid_foreign = ' . $remove_extra->getExtraUid()
+			);
 		return true;
 	}
 	
