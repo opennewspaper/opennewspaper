@@ -16,6 +16,7 @@ class tx_newspaper_BE {
 	
 	private static $smarty = null;
 	
+	private static $backend_files_added = false; // are js/css files added for backend
 
 	public static function renderPageZoneList($PA, $fObj=null) {
 		global $LANG;
@@ -402,7 +403,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
 				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
 				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-				$this->backend_files_added = true;
+				self::$backend_files_added = true;
 			break;
 		}
 	}
