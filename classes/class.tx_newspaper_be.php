@@ -6,6 +6,11 @@
  *  \date Feb 27, 2009
  */
 
+define('BE_DISPLAY_MODE_IFRAME', 1);
+define('BE_DISPLAY_MODE_SUBMODAL', 2);
+
+
+
 /// function for adding newspaper functionality to the backend
 class tx_newspaper_BE {
 	
@@ -378,6 +383,33 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 			return $ahref . $html . '</a>'; // if linked wrap in link
 		return $html; // return image html code
 
+	}
+
+
+
+	/**
+	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
+	 * called by hook $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][]
+	 * \return true, if files were added
+	 */
+	public static function addAdditionalScriptToBackend() {
+		switch(self::getExtraBeDisplayMode()) {
+			case BE_DISPLAY_MODE_IFRAME:
+				// nothing to add for iframe mode
+			break;
+			case BE_DISPLAY_MODE_SUBMODAL:
+				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
+				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
+				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
+				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
+				$this->backend_files_added = true;
+			break;
+		}
+	}
+
+/// \todo: read from tsconfig
+	public static function getExtraBeDisplayMode() {
+		return BE_DISPLAY_MODE_SUBMODAL;
 	}
 
 
