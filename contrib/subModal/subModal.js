@@ -20,7 +20,7 @@ var gPopFrame = null;
 var gReturnFunc;
 var gPopupIsShown = false;
 //TODO path!?
-var gDefaultPage = "../typo3conf/ext/extra/contrib/subModal/loading.html";
+var gDefaultPage = "../typo3conf/ext/newspaper/contrib/subModal/loading.html";
 var gHideSelects = false;
 var gReturnVal = null;
 
@@ -49,7 +49,7 @@ function initPopUp() {
 			'<div id="popupTitleBar">' +
 				'<div id="popupTitle"></div>' +
 				'<div id="popupControls">' +
-					'<img src="../typo3conf/ext/extra/contrib/subModal/close.gif" onclick="hidePopWin(false);" id="popCloseBox" />' +
+					'<img src="../typo3conf/ext/newspaper/contrib/subModal/close.gif" onclick="hidePopWin(false);" id="popCloseBox" />' +
 				'</div>' +
 			'</div>' +
 			'<iframe src="'+ gDefaultPage +'" style="width:100%;height:100%;background-color:transparent;" scrolling="auto" frameborder="0" allowtransparency="true" id="popupFrame" name="popupFrame" width="100%" height="100%"></iframe>' +
