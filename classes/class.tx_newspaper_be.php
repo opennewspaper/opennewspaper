@@ -396,7 +396,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 	public static function addAdditionalScriptToBackend() {
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_DISPLAY_MODE_IFRAME:
-				// nothing to add for iframe mode
+				self::$backend_files_added = true; // nothing to add for iframe mode
 			break;
 			case BE_DISPLAY_MODE_SUBMODAL:
 				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
