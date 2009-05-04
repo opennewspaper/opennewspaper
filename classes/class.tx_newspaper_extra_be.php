@@ -187,50 +187,50 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 	 * (set as Page TSConfig tx_newspaper.extra_mode = modalbox|iframe or as User TSConfig page.tx_newspaper.extra_mode = ...)
 	 * \return String const value for display mode (modalbox is default)
 	 */
-	public static function getExtraBeDisplayMode() {
-
-		if (self::$be_mode)
-			return self::$be_mode; // be_mode already known
-
-		$value = '';
-		if (isset($GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'])) {
-			/// user tsconfig has higher priority than page tsconfig
-#t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
-			$value = $GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'];
-		}
-
-		if (!$value) {
-			/// check page tsconfig, if no use tsconfig was found
-			$sf = tx_newspaper_Sysfolder::getInstance();
-			$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
-#t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
-			if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
-				/// read tsconfig for Extra data		;
-				$value = $tsconfig['tx_newspaper.']['extra_mode'];
-			}
-		} 
-
-		$mode = EXTRA_DISPLAY_MODE_IFRAME; ///< set default
-		if ($value) {
-			switch(trim(strtolower($value))) {
-				case EXTRA_DISPLAY_MODE_MODAL:
-					$mode = EXTRA_DISPLAY_MODE_MODAL;
-				break;
-				case EXTRA_DISPLAY_MODE_IFRAME:
-				default:
-					$mode = EXTRA_DISPLAY_MODE_IFRAME;
-				break;
-				// other display modes can be added here (f. ex. another modal box script)
-				// those modes has to be defined (see top of this file) and integrated in all get[...]() and add[...] methods below
-				// additional scripts are to be added in a sub directory of the res diretory
-			}
-		}
-#t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
-
-		self::$be_mode = $mode; ///< store be_mode, so next access won't read tsconfig from database
-
-		return $mode;
-	}
+//	public static function getExtraBeDisplayMode() {
+//
+//		if (self::$be_mode)
+//			return self::$be_mode; // be_mode already known
+//
+//		$value = '';
+//		if (isset($GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'])) {
+//			/// user tsconfig has higher priority than page tsconfig
+//#t3lib_div::devlog('user ts', 'newspaper', 0, $GLOBALS['BE_USER']->userTS['tx_newspaper.']);
+//			$value = $GLOBALS['BE_USER']->userTS['tx_newspaper.']['extra_mode'];
+//		}
+//
+//		if (!$value) {
+//			/// check page tsconfig, if no use tsconfig was found
+//			$sf = tx_newspaper_Sysfolder::getInstance();
+//			$tsconfig = t3lib_BEfunc::getPagesTSconfig($sf->getPidRootfolder());
+//#t3lib_div::devlog('page tsc', 'newspaper', 0, $tsconfig);
+//			if (isset($tsconfig['tx_newspaper.']['extra_mode'])) {
+//				/// read tsconfig for Extra data		;
+//				$value = $tsconfig['tx_newspaper.']['extra_mode'];
+//			}
+//		} 
+//
+//		$mode = EXTRA_DISPLAY_MODE_IFRAME; ///< set default
+//		if ($value) {
+//			switch(trim(strtolower($value))) {
+//				case EXTRA_DISPLAY_MODE_MODAL:
+//					$mode = EXTRA_DISPLAY_MODE_MODAL;
+//				break;
+//				case EXTRA_DISPLAY_MODE_IFRAME:
+//				default:
+//					$mode = EXTRA_DISPLAY_MODE_IFRAME;
+//				break;
+//				// other display modes can be added here (f. ex. another modal box script)
+//				// those modes has to be defined (see top of this file) and integrated in all get[...]() and add[...] methods below
+//				// additional scripts are to be added in a sub directory of the res diretory
+//			}
+//		}
+//#t3lib_div::devlog('getExtraBeDisplayMode', 'newspaper', 0, $mode);
+//
+//		self::$be_mode = $mode; ///< store be_mode, so next access won't read tsconfig from database
+//
+//		return $mode;
+//	}
 
 	/**
 	 * return html code to include a js file to handle the AJAX call to open the Extra form (added to extra_field)
@@ -268,26 +268,26 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 
 
 	/**
-	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
-	 * uses this hook: $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = ...
-	 * \return true, if files were added
-	 */
-	function addAdditionalScriptToBackend() {
-		$files_added = false;
-		switch(self::getExtraBeDisplayMode()) {
-			case EXTRA_DISPLAY_MODE_IFRAME:
-				// nothing to add for iframe mode
-			break;
-			case EXTRA_DISPLAY_MODE_MODAL:
-				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
-				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
-				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
-				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-				$files_added = true;
-			break;
-		}
-		return $files_added;
-	}
+//	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
+//	 * uses this hook: $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = ...
+//	 * \return true, if files were added
+//	 */
+//	function addAdditionalScriptToBackend() {
+//		$files_added = false;
+//		switch(self::getExtraBeDisplayMode()) {
+//			case EXTRA_DISPLAY_MODE_IFRAME:
+//				// nothing to add for iframe mode
+//			break;
+//			case EXTRA_DISPLAY_MODE_MODAL:
+//				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
+//				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/common.js');
+//				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.js');
+//				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
+//				$files_added = true;
+//			break;
+//		}
+//		return $files_added;
+//	}
 
 
 }
