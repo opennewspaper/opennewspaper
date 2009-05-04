@@ -153,6 +153,12 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return false;
 	}
 	
+	/// \return array with (registered) Extra objects
+	static public function getRegisteredExtras() {
+		return self::$registeredExtra;
+	}
+	
+	
 	/// name of module
 	/** this is the default folder for data associated with newspaper etxension,
 	 *  overwrite in conrete Extras
