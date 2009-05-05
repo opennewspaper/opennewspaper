@@ -1,21 +1,30 @@
+var path = window.location.pathname;
+path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
-
-
-// source: http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
-var viewportwidth;
-var viewportheight;
-if (typeof document.innerWidth != 'undefined') {
-  // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
-  viewportwidth = document.innerWidth,
-  viewportheight = document.innerHeight
-} else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
-  // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
-  viewportwidth = document.documentElement.clientWidth,
-  viewportheight = document.documentElement.clientHeight
-} else {
-  // older versions of IE
-  viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
-  viewportheight = document.getElementsByTagName('body')[0].clientHeight
+function getViewportWidth() {
+	// source: http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
+	if (typeof document.innerWidth != 'undefined') {
+	  // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+	  return document.innerWidth;
+	}
+	if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+	  // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+	  return document.documentElement.clientWidth;
+	}
+	// older versions of IE
+	return document.getElementsByTagName('body')[0].clientWidth;
 }
-
-
+	
+function getViewportHeight() {
+//source: http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
+	if (typeof document.innerHeight != 'undefined') {
+	  // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+	  return document.innerHeight;
+	} 
+	if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientHeight != 'undefined' && document.documentElement.clientHeight != 0) {
+	  // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+	  return document.documentElement.clientHeight;
+	} 
+	// older versions of IE
+	return document.getElementsByTagName('body')[0].clientHeight;
+}
