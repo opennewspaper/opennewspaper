@@ -541,28 +541,28 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			next Extra
 	 */
 	protected function getInsertPosition($origin_uid) {
-		/** Find the Extra to insert after. If it is not deleted on this page,
-		 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
-		 */ 
-		$extra_after_which = null;
-		foreach ($this->getExtras() as $extra) {
-			if ($extra->getOriginUid() == $origin_uid) {
-				$extra_after_which = $extra;
-				break;
+		if ($origin_uid) {
+			/** Find the Extra to insert after. If it is not deleted on this page,
+			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
+			 */ 
+			$extra_after_which = null;
+			foreach ($this->getExtras() as $extra) {
+				if ($extra->getOriginUid() == $origin_uid) {
+					$extra_after_which = $extra;
+					break;
+				}
 			}
+			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
+				/// \todo Deduce the $extra_after_which from the parent page(s)
+				/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
+				throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
+			}
+			$position = $extra_after_which->getAttribute('position');
+		} else {
+			$position = 0;
 		}
-		if (!$extra_after_which && ($origin_uid > 0)) {
-			/// \todo Deduce the $extra_after_which from the parent page(s)
-			/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
-			throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
-		}
-
 		/// Find Extra before which to insert the new Extra
 		$position_before_which = 0;
-		if ($extra_after_which !== null)
-			$position = $extra_after_which->getAttribute('position');
-		else
-			$position = 0;
 		foreach ($this->getExtras() as $extra) {
 			/// \todo If $this is an article, handle paragraphs
 			if ($extra->getAttribute('position') > $position &&
@@ -574,7 +574,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				break;
 			} 
 		}
-		if (!$position_before_which) $position_before_which = 2*$position;
+		if (!$position_before_which) $position_before_which = 2*($position? $position: 1024);
 		
 		if ($position_before_which-$position < 2) {
 			/// \todo Increase 'position' attribute for all extras after $extra_after_which 
