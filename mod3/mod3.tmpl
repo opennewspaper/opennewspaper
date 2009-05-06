@@ -1,0 +1,170 @@
+{debug}
+<style type="text/css">
+table {ldelim}
+  table-layout: auto; 
+  border: 1px solid gray; 
+  padding: 0; 
+  margin: 0; 
+  border-collapse: collapse; 
+{rdelim}
+td {ldelim}
+  vertical-align: top;
+   border: 1px solid #e8e8e8;
+{rdelim}
+.bg1 {ldelim}
+  background-color: #f0f0f0;"
+{rdelim}
+.bg2 {ldelim}
+  background-color: #d0d0d0;
+{rdelim}
+.kicker {ldelim}
+  color: #c61940;
+{rdelim}
+.comment_box {ldelim}
+  display: none;
+  background-color: white;
+{rdelim} 
+.gray {ldelim}
+  color: #909090;
+{rdelim}
+</style> 
+
+<script language="javascript">
+	
+	function extra_insert_after(origin_uid, pagezone_uid) {ldelim}
+//alert(path + "typo3conf/ext/newspaper/mod3/index.php");
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_insert_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+
+	function subModal() {ldelim}
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50;
+		
+// param for close still missing
+// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
+		top.showPopWin(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1",
+			width, 
+			height, 
+			null, 
+			true
+		);
+	{rdelim}
+	
+	
+	function reload() {ldelim}
+	{rdelim}
+	
+	
+	
+</script>
+
+
+</head></body>
+<br />
+
+
+{section name=i loop=$EXTRA_DATA}
+<div style="margin-bottom: 7px;">
+<!--	<a href="javascript:modal_test(0, {$DATA[i].pagezone_id});">{$NEW_ICON}</a> -->
+	<a href="#" onclick="subModal(0, {$DATA[i].pagezone_id}); return false;">{$NEW_ICON}</a>
+	<a href="javascript:extra_insert_after(0, {$DATA[i].pagezone_id});">{$NEW_ICON}</a>
+ 	&nbsp; &nbsp; 
+	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+ 	&nbsp; &nbsp; 
+	<i>Seite:</i> {$DATA[i].page_type}
+	 &nbsp; &nbsp; 
+	<i>Seitenbereich:</i> {$DATA[i].pagezone_type}
+</div>
+
+
+<table style="margin-bottom: 21px;">
+<tr>
+<td>{$LABEL.extra}</td>
+<td align="center">{$LABEL.show}</td>
+<td align="center">{$LABEL.pass_down}</td>
+<td align="center">{$LABEL.inherits_from}</td>
+<td>{$LABEL.commands}</td>
+</tr>
+	{section name=j loop=$EXTRA_DATA[i]} 
+	{if ($smarty.section.j.index % 2 == 0)}
+		<tr class="bg1">
+	{else}
+		<tr class="bg2">
+	{/if}
+			<td> {$EXTRA_DATA[i][j].extra_type}<br /><span class="gray">{$EXTRA_DATA[i][j].title}</span> </td>
+			<td align="center">
+	{if $EXTRA_DATA[i][j].show == 0}
+	ja
+	{else}
+	nein
+	{/if}
+			</td>
+			<td align="center">
+	{if $EXTRA_DATA[i][j].pass_on == 0}
+	ja
+	{else}
+	nein
+	{/if}
+			</td>
+			<td> {$EXTRA_DATA[i][j].inherits_from} </td>
+	
+	
+			<td> 
+	{if $EXTRA_DATA[i][j].origin_placement == true} 
+	  {$EDIT_ICON}
+	{else}
+	  {$EMPTY_ICON}
+	{/if} 
+	
+	{$NEW_ICON} 
+	
+	
+	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
+	{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
+	
+	{*
+	  {$move_up_after_index}
+	  {$move_down_after_index}
+	  |{$EXTRA_DATA[$move_up_after_index].origin_uid}|
+	  |{$EXTRA_DATA[$move_down_after_index].origin_uid}|
+	*}
+	
+	{if $smarty.section.j.index == 0} 
+	  {$EMPTY_ICON}
+	{else}
+	  {if $move_up_after_index < 0}
+	    <a href="index.php?move_after&origin_uid=0&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> {* move to top *}
+	  {else}
+	    <a href="index.php?move_after&origin_uid={$EXTRA_DATA[$move_up_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a>
+	  {/if}
+	{/if}
+	{if $smarty.section.j.index < $smarty.section.j.total-1} 
+	  <a href="index.php?move_after&origin_uid={$EXTRA_DATA[$move_down_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_DOWN_ICON}</a>
+	{else}
+	  {$EMPTY_ICON}
+	{/if}
+	
+	
+	
+	
+	{if $EXTRA_DATA[i][j].origin_placement == true} 
+	  <a href="index.php?remove_extra&extra_uid={$EXTRA_DATA[i][j].uid}">{$DELETE_ICON}</a>
+	{else}
+	  {$EMPTY_ICON}
+	{/if} 
+	
+			</td>
+		</tr>
+	{/section}
+</table>
+{/section}
+\todo: pz_uid als ajax-param

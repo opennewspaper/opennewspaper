@@ -7,7 +7,23 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Placement</label>
+			<label index="label_extra">Extra</label>
+			<label index="label_show">Show</label>
+			<label index="label_pass_down">Pass down</label>
+			<label index="label_inherits_from">Inherits from</label>
+			<label index="label_commands">Commands</label>
+			<label index="label_edit_extra">Exit extra</label>
+			<label index="label_hide">Hide</label>
+			<label index="label_unhide">Unhide</label>
+			<label index="label_unhide">Unhide</label>
+			<label index="label_move_up">Move up</label>
+			<label index="label_move_down">Move down</label>
+			<label index="label_new">New extra</label>
+			<label index="label_delete">Remove extra</label>
 			<label index="message_section_placement_no_section_chosen">Please choose a section in the section tree.</label>
+			<label index="message_section_placement_no_section_available">Please create a section first.</label>
+			<label index="title_new_extra">New extra</label>
+			<label index="label_close">Close without saving</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>
