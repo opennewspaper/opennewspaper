@@ -9,7 +9,7 @@
 define('BE_DISPLAY_MODE_IFRAME', 1);
 define('BE_DISPLAY_MODE_SUBMODAL', 2);
 
-
+define('BE_ICON_CLOSE', '1');
 
 /// function for adding newspaper functionality to the backend
 class tx_newspaper_BE {
@@ -414,6 +414,19 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 		return BE_DISPLAY_MODE_SUBMODAL;
 	}
 
+	
+	public static function wrapInAhref($html, $type) {
+		switch ($type) {
+			case BE_ICON_CLOSE:
+				switch (self::getExtraBeDisplayMode()) {
+					case BE_DISPLAY_MODE_SUBMODAL:
+						$html = '<a href="#" onclick="top.hidePopWin(false);">' . $html . '</a>';
+					break;
+				}
+			break;
+		}
+		return $html;
+	}
 
 	
 }
