@@ -32,7 +32,6 @@ td {ldelim}
 <script language="javascript">
 	
 	function extra_insert_after(origin_uid, pagezone_uid) {ldelim}
-//alert(path + "typo3conf/ext/newspaper/mod3/index.php");
 		var request = new top.Ajax.Request(
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
  			{ldelim}
@@ -43,6 +42,16 @@ td {ldelim}
 		);
 	{rdelim}
 
+	function toggle_show_levels_above(checked) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "toggle_show_levels_above=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
 
 	function subModal() {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
@@ -72,6 +81,7 @@ td {ldelim}
 </head></body>
 <br />
 
+<input type="checkbox" {if ($SHOW_LEVEL_ABOVE)}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
 
 {section name=i loop=$EXTRA_DATA}
 <div style="margin-bottom: 7px;">
@@ -110,7 +120,7 @@ td {ldelim}
 	{/if}
 			</td>
 			<td align="center">
-	{if $EXTRA_DATA[i][j].pass_on == 0}
+	{if $EXTRA_DATA[i][j].pass_down == 0}
 	ja
 	{else}
 	nein
@@ -168,4 +178,3 @@ td {ldelim}
 	{/section}
 </table>
 {/section}
-\todo: pz_uid als ajax-param

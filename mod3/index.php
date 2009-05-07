@@ -52,6 +52,12 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  */
 class  tx_newspaper_module3 extends t3lib_SCbase {
 				var $pageinfo;
+				
+				private $section_id;
+				private $page_id;
+				private $pagezone_id;
+				private $show_levels_above;
+				
 
 				/**
 				 * Initializes the Module
@@ -82,6 +88,16 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				}
 
 
+	private function processToggleShowLevelsAbove($checked) {
+		global $BE_USER;
+		if (strtolower($checked) == 'true')
+			$checked = true;
+		else
+			$checked = false;
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/show_levels_above", $checked);
+		die();
+	}
+
 	private function processExtraInsertAfter($origin_uid, $pz_uid) {
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
@@ -95,11 +111,16 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function check4Ajax() {
 		// TODO check permissions
-//t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
+t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
+
+		if (t3lib_div::_GP('toggle_show_levels_above') == 1) {
+			$this->processToggleShowLevelsAbove(t3lib_div::_GP('checked')); 
+		}
 
 		if (t3lib_div::_GP('extra_insert_after') == 1) {
 			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
 		}
+
 		if (t3lib_div::_GP('chose_extra') == 1) {
 			die($this->getChoseExtraForm());	
 		}
@@ -280,6 +301,13 @@ $content .= 'dummy #' . $this->section_id;
 	/// fills $this->section_id, $this->page_id and $this->pagezone_id
 	/// \return void
 	function readUidList() {
+		global $BE_USER;
+		/// \todo: check permissions?
+				
+		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
+//		if ($this->show_levels_above != true) $this->show_levels_above = false; // make sure it's boolean
+t3lib_div::devlog('show levels above read from be_user', 'newspaper', 0, $this->show_levels_above);
+
 		
 /// \todo: remove hard coded uid !!!!!!!!!!!!!!!!!
 if (TYPO3_OS == 'WIN') {
@@ -298,10 +326,7 @@ return;
 		
 		
 		
-		global $BE_USER;
 
-		/// \todo: check permissions?
-		
 		/// process section id param
 		if ($this->id) {
 			$this->section_id = $this->id; // clicked in section tree
@@ -402,7 +427,7 @@ t3lib_div::debug($pz);
 				'uid' => $extra[$i]->getExtraUid(),
 				'title' => $extra[$i]->getAttribute('title'),
 				'show' => $extra[$i]->getAttribute('show_extra'),
-				'pass_on' => $extra[$i]->getAttribute('is_inheritable'),
+				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 'inherits_from' => 'to come ...', /// \todo: function missing here ...
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
@@ -431,10 +456,12 @@ t3lib_div::debug($pz);
 		$extra_data = array();
 
 		/// add upper level page zones and extras, if any		
-		$pz_up = $pz->getInheritanceHierarchyUp(false);
-		for ($i = 0; $i < sizeof($pz_up); $i++) {
-			$data[] = $this->extractData($pz_up[$i]);
-			$extra_data[] = $this->collectExtras($pz_up[$i]->getExtras());
+		if ($this->show_levels_above) {
+			$pz_up = $pz->getInheritanceHierarchyUp(false);
+			for ($i = 0; $i < sizeof($pz_up); $i++) {
+				$data[] = $this->extractData($pz_up[$i]);
+				$extra_data[] = $this->collectExtras($pz_up[$i]->getExtras());
+			}
 		}
 
 		/// add current page zone and extras		
@@ -453,10 +480,13 @@ t3lib_div::debug($pz);
 		$label['pass_down'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pass_down', false);
 		$label['inherits_from'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_inherits_from', false);
 		$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
+		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('EXTRA_DATA', $extra_data);
 		$smarty->assign('DATA', $data);
+
+		$smarty->assign('SHOW_LEVELS_ABOVE', $this->show_levels_above);
 
 		$smarty->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
 		$smarty->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
