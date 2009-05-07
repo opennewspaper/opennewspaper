@@ -31,6 +31,17 @@ td {ldelim}
 
 <script language="javascript">
 	
+	function toggle_show_levels_above(checked) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "toggle_show_levels_above=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
 	function extra_insert_after(origin_uid, pagezone_uid) {ldelim}
 		var request = new top.Ajax.Request(
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
@@ -42,16 +53,17 @@ td {ldelim}
 		);
 	{rdelim}
 
-	function toggle_show_levels_above(checked) {ldelim}
+	function extra_move_after(origin_uid, pz_uid, extra_uid) {ldelim}
 		var request = new top.Ajax.Request(
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
  			{ldelim}
 				method: 'get',
-				parameters: "toggle_show_levels_above=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				parameters: "extra_move_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
 				onSuccess: reload
 			{rdelim}
 		);
 	{rdelim}
+
 
 	function subModal() {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
@@ -137,28 +149,24 @@ td {ldelim}
 	
 	<a href="javascript:extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
 	
-	
+	{* calculate index for origin uid for moving extras up and down *}	
 	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
 	{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
-	
-	{*
-	  {$move_up_after_index}
-	  {$move_down_after_index}
-	  |{$EXTRA_DATA[$move_up_after_index].origin_uid}|
-	  |{$EXTRA_DATA[$move_down_after_index].origin_uid}|
-	*}
 	
 	{if $smarty.section.j.index == 0} 
 	  {$EMPTY_ICON}
 	{else}
 	  {if $move_up_after_index < 0}
-	    <a href="index.php?move_after&origin_uid=0&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> {* move to top *}
+	    <a href="javascript:extra_move_after(0, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
+{*	    <a href="index.php?move_after&origin_uid=0&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> *} 
 	  {else}
-	    <a href="index.php?move_after&origin_uid={$EXTRA_DATA[$move_up_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a>
+		<a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_up_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a>
+{*	    <a href="index.php?move_after&origin_uid={$EXTRA_DATA[i][$move_up_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> *}
 	  {/if}
 	{/if}
 	{if $smarty.section.j.index < $smarty.section.j.total-1} 
-	  <a href="index.php?move_after&origin_uid={$EXTRA_DATA[$move_down_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_DOWN_ICON}</a>
+	  <a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_down_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_DOWN_ICON}</a>
+{*	  <a href="index.php?move_after&origin_uid={$EXTRA_DATA[i][$move_down_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_DOWN_ICON}</a> *}
 	{else}
 	  {$EMPTY_ICON}
 	{/if}

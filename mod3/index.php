@@ -109,6 +109,16 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
+	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
+//t3lib_div::devlog('e', 'newspaper', 0, t3lib_div::view_array($e));	
+		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+//t3lib_div::devlog('pz', 'newspaper', 0, t3lib_div::view_array($pz));
+		$pz->moveExtraAfter($e, $origin_uid);
+		die();
+	}
+
+
 	private function check4Ajax() {
 		// TODO check permissions
 t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
@@ -119,6 +129,10 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		if (t3lib_div::_GP('extra_insert_after') == 1) {
 			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
+		}
+
+		if (t3lib_div::_GP('extra_move_after') == 1) {
+			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
 		}
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
@@ -498,32 +512,8 @@ t3lib_div::debug($pz);
 		$smarty->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
 		$smarty->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
-
-
-//		/// build browse sequence
-//		if (intval(t3lib_div::_GP('start_page')) > 0) {
-//			$smarty->assign('URL_PREV', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) - 1)));
-//		} else {
-//			$smarty->assign('URL_PREV', '');
-//		}
-//		if (sizeof($row) > intval(t3lib_div::_GP('step'))) {
-//			// so there's at least one next record
-//			$smarty->assign('URL_NEXT', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) + 1)));
-//			$row = array_slice($row, 0, intval(t3lib_div::_GP('step'))); // cut off entry from next page
-//		} else {
-//			$smarty->assign('URL_NEXT', '');
-//		}
-//		
-//		
-//		/// build url for switch visibility button
-//		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
-//
-//		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
-//
-//
-//		$smarty->assign('T3PATH', substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
-				$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
 		return $smarty->fetch('mod3.tmpl');
 	}
