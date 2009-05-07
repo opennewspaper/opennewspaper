@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_newspaper_extra_image'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra_image']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,extra_field,title,image,caption,template_set'
+		'showRecordFieldList' => 'hidden,starttime,endtime,extra_field,title,image,caption,template_set,pool'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra_image']['feInterface'],
 	'columns' => array (
@@ -91,9 +91,16 @@ $TCA['tx_newspaper_extra_image'] = array (
 				'size' => '30',
 			)
 		),
+		'pool' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.pool',		
+			'config' => array (
+				'type' => 'check',
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_field, title;;;;2-2-2, image;;;;3-3-3, caption, template_set')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_field, title;;;;2-2-2, image;;;;3-3-3, caption, template_set, pool')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
@@ -1279,5 +1286,4 @@ $TCA['tx_newspaper_articletype'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

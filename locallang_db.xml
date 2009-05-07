@@ -13,6 +13,7 @@
 			<label index="tx_newspaper_extra_image.image">Image</label>
 			<label index="tx_newspaper_extra_image.caption">Caption</label>
 			<label index="tx_newspaper_extra_image.template_set">Template set</label>
+			<label index="tx_newspaper_extra_image.pool">Add to pool</label>
 			<label index="tx_newspaper_section">Section</label>
 			<label index="tx_newspaper_section.section_name">Name of the section</label>
 			<label index="tx_newspaper_section.parent_section">Parent section</label>
@@ -97,6 +98,7 @@
 			<label index="tx_newspaper_extra_image.image">Bild</label>
 			<label index="tx_newspaper_extra_image.caption">Bildunterschrift</label>
 			<label index="tx_newspaper_extra_image.template_set">Satz an Vorlagen</label>
+			<label index="tx_newspaper_extra_image.pool">In den Vorlagen-Pool aufnehmen</label>
 			<label index="tx_newspaper_section">Ressort</label>
 			<label index="tx_newspaper_section.section_name">Name des Ressorts</label>
 			<label index="tx_newspaper_section.parent_section">Elternressort</label>

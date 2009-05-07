@@ -16,6 +16,7 @@ CREATE TABLE tx_newspaper_extra_image (
 	image text,
 	caption tinytext,
 	template_set tinytext,
+	pool tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -388,23 +389,4 @@ CREATE TABLE tt_content (
 CREATE TABLE pages (
 	tx_newspaper_associated_section int(11) DEFAULT '0' NOT NULL,
 	tx_newspaper_module tinytext
-);
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
 );
