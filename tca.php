@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA['tx_newspaper_extra_image'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra_image']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,extra_field,title,image,caption,template_set,pool'
+		'showRecordFieldList' => 'hidden,starttime,endtime,extra_field,pool,template_set,title,image,caption'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra_image']['feInterface'],
 	'columns' => array (
@@ -52,6 +52,21 @@ $TCA['tx_newspaper_extra_image'] = array (
 				'size' => '30',
 			)
 		),
+		'pool' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.pool',		
+			'config' => array (
+				'type' => 'check',
+			)
+		),
+		'template_set' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.template_set',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
 		'title' => array (		
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.title',		
@@ -83,24 +98,9 @@ $TCA['tx_newspaper_extra_image'] = array (
 				'size' => '30',
 			)
 		),
-		'template_set' => array (		
-			'exclude' => 1,		
-			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.template_set',		
-			'config' => array (
-				'type' => 'input',	
-				'size' => '30',
-			)
-		),
-		'pool' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.pool',		
-			'config' => array (
-				'type' => 'check',
-			)
-		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_field, title;;;;2-2-2, image;;;;3-3-3, caption, template_set, pool')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, extra_field, pool, template_set, title;;;;2-2-2, image;;;;3-3-3, caption')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
@@ -1286,5 +1286,85 @@ $TCA['tx_newspaper_articletype'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA['tx_newspaper_extra_typo3_ce'] = array (
+	'ctrl' => $TCA['tx_newspaper_extra_typo3_ce']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'hidden,starttime,endtime,pool,template_set,content_elements'
+	),
+	'feInterface' => $TCA['tx_newspaper_extra_typo3_ce']['feInterface'],
+	'columns' => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'starttime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'default'  => '0',
+				'checkbox' => '0'
+			)
+		),
+		'endtime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0',
+				'range'    => array (
+					'upper' => mktime(3, 14, 7, 1, 19, 2038),
+					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
+				)
+			)
+		),
+		'pool' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.pool',		
+			'config' => array (
+				'type' => 'check',
+			)
+		),
+		'template_set' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.template_set',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
+		'content_elements' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.content_elements',		
+			'config' => array (
+				'type' => 'select',	
+				'foreign_table' => 'tt_content',	
+				'foreign_table_where' => 'AND tt_content.pid=###STORAGE_PID### ORDER BY tt_content.uid',	
+				'size' => 5,	
+				'minitems' => 0,
+				'maxitems' => 32,
+			)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, pool, template_set, content_elements')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => 'starttime, endtime')
+	)
+);
 ?>
