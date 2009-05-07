@@ -171,6 +171,52 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+
+	/// A short description that makes an Extra uniquely identifiable in the BE
+	/** This function should be overridden in every class that can be pooled, to
+	 *  provide the BE user a way to find an Extra to create a new Extra from.
+	 */
+	public function getDescription() {
+		//	default implementation
+		return $this->getTitle() . ' ' . $this->getUid();
+	}
+	
+	/// Deletes the concrete Extras and all references to it
+	public function deleteIncludingReferences() {
+		throw new tx_newspaper_NotYetImplementedException();
+		/*
+		/// Find abstract records linking to the concrete Extra
+		$uids = tx_newspaper::selectRows(
+			'uid', self::$table, 
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
+			' AND extra_uid = ' . $this->getUid());
+
+		foreach ($uids as $uid) {
+			/// Delete entries in association tables linking to abstract record
+			tx_newspaper::deleteRows(
+				tx_newspaper_Article::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			tx_newspaper::deleteRows(
+				tx_newspaper_PageZone_Page::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			
+			/// Delete the abstract record
+			tx_newspaper::deleteRows(self::$table, 'uid = ' . intval($uid['uid']));
+		}
+		
+		/// delete the concrete record
+		tx_newspaper::deleteRows($this->getTable(), 'uid = ' . $this->getUid());
+		*/
+	}
+	
+	/// Lists Extras which are in the pool of master copies for new Extras
+	public static function getPooledExtras() {
+		throw new tx_newspaper_IllegalUsageException('PageZones cannot be pooled.');
+	}
+	
+
 	/// Render the page zone, containing all extras
 	/** \param $template_set the template set used to render this page (as 
 	 *  		passed down from tx_newspaper_Page::render() )
@@ -356,6 +402,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
 	 *  \return false if $remove_extra was not found, true otherwise
+	 *  \todo DELETE WHERE origin_uid = ...
+	 *  \todo inheritance
+	 *  \todo remove extra record, not just assoc record
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra) {
 		$index = -1;
