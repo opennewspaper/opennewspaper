@@ -403,7 +403,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $remove_extra Extra to be removed
 	 *  \return false if $remove_extra was not found, true otherwise
 	 *  \todo DELETE WHERE origin_uid = ...
-	 *  \todo inheritance
+	 *  \todo inheritanceremove extra record, not just assoc recordremove extra record, not just assoc record
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra) {
 		$index = -1;
@@ -651,8 +651,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if (!$position_before_which) $position_before_which = 2*($position? $position: 1024);
 		
 		if ($position_before_which-$position < 2) {
-			/// \todo Increase 'position' attribute for all extras after $extra_after_which 
-			throw new tx_newspaper_NotYetImplementedException('Rearranging extra positions if distance has shrunk to 1');			
+			/// Increase 'position' attribute for all extras after $extra_after_which 
+			foreach ($this->getExtras() as $extra_to_rearrange) {
+				if ($extra_to_rearrange->getAttribute('position') <= $position) continue;
+				$extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position')+1024);
+				$extra_to_rearrange->store();
+			}
 		}
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
