@@ -36,7 +36,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 			'dontCheckPid' => 1
 		);
 		$cObj = t3lib_div::makeInstance('tslib_cObj'); 
-		return 'tx_newspaper_Extra_Typo3_CE::render(): ' . $cObj->RECORDS($tt_content_conf); 		
+		return 'tx_newspaper_Extra_Typo3_CE::render(): ' . $cObj->RECORDS($tt_content_conf) . $this->__toString(); 		
 	}
 
 //TODO: getLLL
