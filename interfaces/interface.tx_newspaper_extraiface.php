@@ -26,7 +26,7 @@ interface tx_newspaper_ExtraIface
 		extends tx_newspaper_StoredObject, tx_newspaper_Renderable {
 
 	/// A short description that makes an Extra uniquely identifiable in the BE
-	public function getTitle();
+	public function getDescription();
 	
 	/// Deletes the concrete Extras and all references to it
 	/** These references are: 

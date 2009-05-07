@@ -131,9 +131,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	/** This function should be overridden in every class that can be pooled, to
 	 *  provide the BE user a way to find an Extra to create a new Extra from.
 	 */
-	public function getTitle() {
+	public function getDescription() {
 		//	default implementation
-		return get_class($this) . ' ' . $this->getUid();
+		return $this->getTitle() . ' ' . $this->getUid();
 	}
 	
 	/// Deletes the concrete Extras and all references to it
