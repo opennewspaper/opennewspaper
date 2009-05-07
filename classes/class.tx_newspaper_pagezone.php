@@ -404,7 +404,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return false if $remove_extra was not found, true otherwise
 	 *  \todo DELETE WHERE origin_uid = ...
 	 *  \todo inheritance
-	 *  \todo remove extra record, not just assoc record
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra) {
 		$index = -1;
@@ -421,6 +420,32 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_local = ' . $this->getUid() .
 				' AND uid_foreign = ' . $remove_extra->getExtraUid()
 			);
+			
+		/// Delete the abstract record
+		tx_newspaper::deleteRows(
+			tx_newspaper_Extra_Factory::getExtraTable(), 
+			array($remove_extra->getExtraUid())
+		);
+		
+		/** If abstract record was the last one linking to the concrete Extra,
+		 *  \em and the concrete Extra is not pooled, delete the concrete Extra
+		 *  too.
+		 */
+		try {
+			if (!$remove_extra->getAttribute('pool')) {
+				$count = tx_newspaper::selectOneRow(
+					'COUNT(*) AS num', 
+					tx_newspaper_Extra_Factory::getExtraTable(),
+					'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(
+						$remove_extra->getTable(), $remove_extra->getTable()) .
+					' AND extra_uid = ' . $remove_extra->getUid()
+				);
+				if (!intval($count['num'])) {
+					$remove_extra->deleteIncludingReferences();
+				}
+			}
+		} catch (tx_newspaper_WrongAttributeException $e) { }
+		
 		return true;
 	}
 	
