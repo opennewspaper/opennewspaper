@@ -48,6 +48,7 @@ $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['type'] = '
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['userFunc'] = 'tx_newspaper->getCodeForBackend';
 $TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['noTableWrapping'] = true;
 
+#t3lib_div::debug($TCA['tx_newspaper_extra_typo3_ce']['ctrl']);
 
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
@@ -62,5 +63,22 @@ $TCA["tx_newspaper_pagezone"]["columns"]["pagezone_uid"]["config"]["range"] = ar
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
+
+$TCA['tx_newspaper_extra_typo3_ce']['ctrl'] = array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY crdate',	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_typo3_ce.gif',
+	);
 
 ?>
