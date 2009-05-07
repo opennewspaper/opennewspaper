@@ -127,6 +127,58 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		
 	}
 
+	/// A short description that makes an Extra uniquely identifiable in the BE
+	/** This function should be overridden in every class that can be pooled, to
+	 *  provide the BE user a way to find an Extra to create a new Extra from.
+	 */
+	public function getTitle() {
+		//	default implementation
+		return get_class($this) . ' ' . $this->getUid();
+	}
+	
+	/// Deletes the concrete Extras and all references to it
+	public function deleteIncludingReferences() {
+		/// Find abstract records linking to the concrete Extra
+		$uids = tx_newspaper::selectRows(
+			'uid', self::$table, 
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
+			' AND extra_uid = ' . $this->getUid());
+
+		foreach ($uids as $uid) {
+			/// Delete entries in association tables linking to abstract record
+			tx_newspaper::deleteRows(
+				tx_newspaper_Article::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			tx_newspaper::deleteRows(
+				tx_newspaper_PageZone_Page::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			
+			/// Delete the abstract record
+			tx_newspaper::deleteRows(self::$table, 'uid = ' . intval($uid['uid']));
+		}
+		
+		/// delete the concrete record
+		tx_newspaper::deleteRows($this->getTable(), 'uid = ' . $this->getUid());
+	}
+	
+	/// Lists Extras which are in the pool of master copies for new Extras
+	public static function getPooledExtras() {
+		try {
+			$uids = tx_newspaper::selectRows(
+				'uid', $this->getTable(), 'pool', '', 'crdate DESC'
+			);
+		} catch (tx_newspaper_DBException $e) {
+			return array();
+		}
+		$pooled_extras = array();
+		foreach ($uids as $uid) {
+			$pooled_extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
+		}
+		return $pooled_extras;
+	}
+	
 	/// checks if an Extra is registered
 	/** \return true if the Extra is registered (else false)
 	 */
