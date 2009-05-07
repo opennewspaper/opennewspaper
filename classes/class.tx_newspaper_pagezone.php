@@ -657,6 +657,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position')+1024);
 				$extra_to_rearrange->store();
 			}
+			$position_before_which += 1024;
 		}
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
