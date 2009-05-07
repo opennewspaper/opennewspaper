@@ -1353,7 +1353,7 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 			'config' => array (
 				'type' => 'select',	
 				'foreign_table' => 'tt_content',	
-				'foreign_table_where' => 'AND tt_content.pid=###STORAGE_PID### ORDER BY tt_content.uid',	
+				'foreign_table_where' => 'ORDER BY tt_content.uid',	
 				'size' => 5,	
 				'minitems' => 0,
 				'maxitems' => 32,
@@ -1367,5 +1367,4 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 		'1' => array('showitem' => 'starttime, endtime')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
