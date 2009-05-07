@@ -85,9 +85,8 @@ td {ldelim}
 
 {section name=i loop=$EXTRA_DATA}
 <div style="margin-bottom: 7px;">
-<!--	<a href="javascript:modal_test(0, {$DATA[i].pagezone_id});">{$NEW_ICON}</a> -->
-	<a href="#" onclick="subModal(0, {$DATA[i].pagezone_id}); return false;">{$NEW_ICON}</a>
-	<a href="javascript:extra_insert_after(0, {$DATA[i].pagezone_id});">{$NEW_ICON}</a>
+	<a href="#" onclick="subModal(0, {$DATA[i].pagezone_id}); return false;">Test subModal</a>
+	<a href="javascript:extra_insert_after(0, {$DATA[i].pagezone_id});">{$NEW_TOP_ICON}</a>
  	&nbsp; &nbsp; 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
  	&nbsp; &nbsp; 
@@ -136,7 +135,7 @@ td {ldelim}
 	  {$EMPTY_ICON}
 	{/if} 
 	
-	{$NEW_ICON} 
+	<a href="javascript:extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
 	
 	
 	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
