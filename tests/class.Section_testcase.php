@@ -92,15 +92,12 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getParentSection() {
-$this->fail('tx_newspaper_Section::getDescendantSections removed - new test needed here ...');
-//		$parent = $this->section->getParentSection();
-//		$this->assertEquals($parent, null);
-//		
-//		$children = tx_newspaper_Section::getDescendantSections($this->section->getUid());
-//		foreach ($children as $child_uid) {
-//			$child_section = new tx_newspaper_Section($child_uid);
-//			$this->assertEquals($child_section->getParentSection()->getUid(), $this->section->getUid());
-//		}
+		$parent = $this->section->getParentSection();
+		$this->assertEquals($parent, null);
+		
+		foreach ($this->section->getChildSections() as $child_section) {
+			$this->assertEquals($child_section->getParentSection()->getUid(), $this->section->getUid());
+		}
 	}
 	
 	public function test_getSubPages() {
