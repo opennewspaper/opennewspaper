@@ -95,12 +95,6 @@ $TCA['tx_newspaper_page'] = array (
 	),
 );
 
-
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_pagezone');
-
-
-t3lib_extMgm::addToInsertRecords('tx_newspaper_pagezone');
-
 $TCA['tx_newspaper_pagezone'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone',		
@@ -148,12 +142,6 @@ $TCA['tx_newspaper_article'] = array (
 	),
 );
 
-
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_extra');
-
-
-t3lib_extMgm::addToInsertRecords('tx_newspaper_extra');
-
 $TCA['tx_newspaper_extra'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra',		
@@ -172,12 +160,6 @@ $TCA['tx_newspaper_extra'] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra.gif',
 	),
 );
-
-
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_extra_sectionlist');
-
-
-t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_sectionlist');
 
 $TCA['tx_newspaper_extra_sectionlist'] = array (
 	'ctrl' => array (
@@ -198,12 +180,6 @@ $TCA['tx_newspaper_extra_sectionlist'] = array (
 	),
 );
 
-
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_articlelist');
-
-
-t3lib_extMgm::addToInsertRecords('tx_newspaper_articlelist');
-
 $TCA['tx_newspaper_articlelist'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist',		
@@ -222,12 +198,6 @@ $TCA['tx_newspaper_articlelist'] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist.gif',
 	),
 );
-
-
-t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_articlelist_auto');
-
-
-t3lib_extMgm::addToInsertRecords('tx_newspaper_articlelist_auto');
 
 $TCA['tx_newspaper_articlelist_auto'] = array (
 	'ctrl' => array (
@@ -302,6 +272,12 @@ $TCA['tx_newspaper_articletype'] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articletype.gif',
 	),
 );
+
+
+t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_extra_typo3_ce');
+
+
+t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_typo3_ce');
 
 $TCA['tx_newspaper_extra_typo3_ce'] = array (
 	'ctrl' => array (

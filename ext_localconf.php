@@ -12,9 +12,6 @@ t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_page=1
 ');
 t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_pagezone=1
-');
-t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_article=1
 ');
 t3lib_extMgm::addPageTSConfig('
@@ -32,18 +29,6 @@ RTE.config.tx_newspaper_article.text {
     tags.font.nesting = global
   }
 }
-');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_extra=1
-');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_extra_sectionlist=1
-');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_articlelist=1
-');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_articlelist_auto=1
 ');
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_pagetype=1
