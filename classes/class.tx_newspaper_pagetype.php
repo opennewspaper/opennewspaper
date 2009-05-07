@@ -144,7 +144,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
 
  	private $uid = 0;
- 	private $condition = null;
+ 	private $condition = '1';
  	private $attributes = array();
 }
 ?>
