@@ -77,8 +77,8 @@ $TCA['tx_newspaper_extra_typo3_ce']['ctrl'] = array (
 			'starttime' => 'starttime',	
 			'endtime' => 'endtime',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_typo3_ce.gif',
+		'dynamicConfigFile' => t3lib_extMgm::extPath('newspaper').'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath('newspaper').'icon_tx_newspaper_extra_typo3_ce.gif',
 	);
 
 ?>

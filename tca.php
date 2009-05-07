@@ -1351,9 +1351,9 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.content_elements',		
 			'config' => array (
-				'type' => 'select',	
-				'foreign_table' => 'tt_content',	
-				'foreign_table_where' => 'ORDER BY tt_content.uid',	
+				'type' => 'group',	
+				'internal_type' => 'db',	
+				'allowed' => 'tt_content',	
 				'size' => 5,	
 				'minitems' => 0,
 				'maxitems' => 32,
@@ -1367,4 +1367,5 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 		'1' => array('showitem' => 'starttime, endtime')
 	)
 );
+require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
