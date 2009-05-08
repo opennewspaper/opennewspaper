@@ -29,17 +29,27 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 			 *  ce = RECORDS
 			 *  ce {
 			 *		tables = tt_content 
-			 *		source = ... [, ...] 
+			 *		source = ...  
 			 *		dontCheckPid = 1
 			 *	}
 			 *  \endcode
+			 *  I could render them all at once as a comma-separated list of 
+			 *  UIDs instead of in a foreach-loop, but I don't trust that 
+			 *  feature...
 			 */
 			$tt_content_conf = array(
 				'tables' => 'tt_content',
 				'source' => intval($ce_uid),
 				'dontCheckPid' => 1
 			);
-			$ret .= 'tx_newspaper_Extra_Typo3_CE::render($ce_uid): ' . $cObj->RECORDS($tt_content_conf);
+			if (TYPO3_MODE == 'BE') {
+				$row = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
+				$ret .= '<h2>' . $row['header'] . "</h2>\n" .
+					'<img src="uploads/pics/' . $row['image'] . '" />' . "\n" .
+					$row['text'] . "\n";
+			} else {
+				$ret .= $cObj->RECORDS($tt_content_conf);
+			}
 		}
 		return $ret;
 	}
