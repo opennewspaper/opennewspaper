@@ -132,7 +132,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		
 		$sections = array();
 		if ($row) foreach ($row as $section_uid) {
-			$sections[] = new tx_newspaper_Section($row['uid']);
+			$sections[] = new tx_newspaper_Section($section_uid['uid']);
 		}
 
 		return $sections;
