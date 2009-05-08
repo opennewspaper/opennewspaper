@@ -421,6 +421,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo inheritanceremove extra record, not just assoc recordremove extra record, not just assoc record
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
+
+		t3lib_div::devlog('', 'removeExtra()', 0, $remove_extra);
 		
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
