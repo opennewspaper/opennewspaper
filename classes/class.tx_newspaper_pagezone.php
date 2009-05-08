@@ -420,7 +420,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo DELETE WHERE origin_uid = ...
 	 *  \todo inheritanceremove extra record, not just assoc recordremove extra record, not just assoc record
 	 */
-	public function removeExtra(tx_newspaper_Extra $remove_extra) {
+	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
+		
+		if ($recursive) {
+			///	Remove Extra on inheriting PageZones first
+			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid());
+				$inheriting_pagezone->removeExtra($copied_extra, false);
+			}
+		}
+		
 		$index = -1;
 		try {
 			$index = $this->indexOfExtra($remove_extra);
