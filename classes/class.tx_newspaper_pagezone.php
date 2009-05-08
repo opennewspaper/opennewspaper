@@ -399,7 +399,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		$this->addExtra($insert_extra);
 		
-		if ($recursive) {
+		if (false) {
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$inheriting_pagezone->insertExtraAfter($insert_extra, $origin_uid, false);

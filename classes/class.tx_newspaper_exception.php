@@ -39,7 +39,7 @@ class tx_newspaper_Exception extends Exception {
         parent::__construct($message);
     }
     
-    const BACKTRACE_DEPTH = 8;
+    const BACKTRACE_DEPTH = 10;
 }
 
 /// This Exception is thrown when opening a Source fails
