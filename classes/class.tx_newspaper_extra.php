@@ -104,7 +104,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 		return $this->extra_attributes[$attribute];
  		}
 
-        throw new tx_newspaper_WrongAttributeException($attribute);
+        throw new tx_newspaper_WrongAttributeException($attribute . print_r($this->attributes, 1).print_r($this->extra_attributes, 1));
 	}
 
 	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
