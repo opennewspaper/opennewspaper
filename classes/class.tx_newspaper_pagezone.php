@@ -62,10 +62,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function __toString() {
 		return get_class($this) . ' ' . $this->getUid() . ' (' . "\n" .
 				($this->getParentPage() instanceof tx_newspaper_Page? $this->getParentPage()->getPageType()->getAttribute('type_name'). '/': '') .
-				$this->getPageZoneType()->getAttribute('type_name') . ') ' .
+				$this->getPageZoneType()->getAttribute('type_name') . ') '
 #			   ' attributes: ' . print_r($this->attributes, 1) . "\n" .
 #			   ' extras: ' . print_r($this->extras, 1) . 
-			   "\n";
+			   ;
 			   										 
 			   
 	}
@@ -526,10 +526,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 
 		/// \todo look for page zones on pages in section down the section hierarchy
-		$page = $this->getParentPage();
-		$section = $page->getParentSection();
-		$children = $section->getChildSections();
-		
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
 			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
 			if ($page) {
