@@ -126,8 +126,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				'uid', $this->getTable(),
 				'parent_section = ' . $this->getUid()
 			);
-
-		t3lib_div::devlog('$row', 'newspaper: getChildSections()', 0, $row);
 		
 		$sections = array();
 		if ($row) foreach ($row as $section_uid) {
