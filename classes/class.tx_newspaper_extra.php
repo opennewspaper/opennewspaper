@@ -26,6 +26,24 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$this->setUid($uid);
 	}
 
+	/// To clone an Extra, the concrete portion is left the same but the abstract record is written anew
+	public function __clone() {
+
+		/// read typo3 fields to copy into extra table
+		$row = tx_newspaper::selectOneRow(
+			implode(', ', self::$fields_to_copy_into_extra_table),
+			$this->getTable(),
+			'uid = ' . $this->getUid()
+		);
+			
+		/// write the uid and table into extra table, with the values read above
+		$row['extra_uid'] = $this->getUid();
+		$row['extra_table'] = $this->getTable();
+		$row['tstamp'] = time();				///< tstamp is set to now
+
+		tx_newspaper::insertRows(self::$table, $row);
+	}
+	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		return get_class($this) . '-object ' . "\n" .
