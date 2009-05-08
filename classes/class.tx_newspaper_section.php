@@ -37,6 +37,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/// Construct a tx_newspaper_Section given the UID of the SQL record
 	function __construct($uid = 0) {
+		t3lib_div::devlog('$uid', 'newspaper: __construct()', 0, $uid);
+		
 		if ($uid) {
 			$this->setUid($uid);
 		}
