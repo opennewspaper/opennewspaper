@@ -402,7 +402,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		$pz_down = $this->getInheritanceHierarchyDown(false);
 		t3lib_div::devlog('$pz_down', 'insertExtraAfter()', 0, $pz_down);
-		if (false && $recursive) {
+		if ($recursive) {
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$inheriting_pagezone->insertExtraAfter($insert_extra, $origin_uid, false);
