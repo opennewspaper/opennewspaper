@@ -64,6 +64,18 @@ td {ldelim}
 		);
 	{rdelim}
 
+	function extra_delete(pz_uid, extra_uid, message) {ldelim}
+		// user must confirm that he knows what he's doing
+		if (!confirm(message)) return;
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_delete=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
 
 	function subModal() {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
@@ -93,7 +105,7 @@ td {ldelim}
 </head></body>
 <br />
 
-<input type="checkbox" {if ($SHOW_LEVEL_ABOVE)}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
+<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
 
 {section name=i loop=$EXTRA_DATA}
 <div style="margin-bottom: 7px;">
@@ -152,30 +164,23 @@ td {ldelim}
 	{* calculate index for origin uid for moving extras up and down *}	
 	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
 	{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
-	
 	{if $smarty.section.j.index == 0} 
 	  {$EMPTY_ICON}
 	{else}
 	  {if $move_up_after_index < 0}
 	    <a href="javascript:extra_move_after(0, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
-{*	    <a href="index.php?move_after&origin_uid=0&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> *} 
 	  {else}
 		<a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_up_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a>
-{*	    <a href="index.php?move_after&origin_uid={$EXTRA_DATA[i][$move_up_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_UP_ICON}</a> *}
 	  {/if}
 	{/if}
 	{if $smarty.section.j.index < $smarty.section.j.total-1} 
 	  <a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_down_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_DOWN_ICON}</a>
-{*	  <a href="index.php?move_after&origin_uid={$EXTRA_DATA[i][$move_down_after_index].origin_uid}&extra_uid={$EXTRA_DATA[i][j].uid}">{$MOVE_DOWN_ICON}</a> *}
 	{else}
 	  {$EMPTY_ICON}
 	{/if}
 	
-	
-	
-	
 	{if $EXTRA_DATA[i][j].origin_placement == true} 
-	  <a href="index.php?remove_extra&extra_uid={$EXTRA_DATA[i][j].uid}">{$DELETE_ICON}</a>
+	  <a href="javascript:extra_delete({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
 	{else}
 	  {$EMPTY_ICON}
 	{/if} 

@@ -102,19 +102,22 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
 		$e->store();
-//t3lib_div::devlog('e', 'newspaper', 0, t3lib_div::view_array($e));		
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-//t3lib_div::devlog('pz', 'newspaper', 0, t3lib_div::view_array($pz));
 		$pz->insertExtraAfter($e, $origin_uid);
 		die();
 	}
 
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
-//t3lib_div::devlog('e', 'newspaper', 0, t3lib_div::view_array($e));	
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-//t3lib_div::devlog('pz', 'newspaper', 0, t3lib_div::view_array($pz));
 		$pz->moveExtraAfter($e, $origin_uid);
+		die();
+	}
+
+	private function processExtraDelete($pz_uid, $extra_uid) {
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
+		$pz->removeExtra($e);
 		die();
 	}
 
@@ -134,6 +137,11 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		if (t3lib_div::_GP('extra_move_after') == 1) {
 			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
 		}
+
+		if (t3lib_div::_GP('extra_delete') == 1) {
+			$this->processExtraDelete(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
+		}
+
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
 			die($this->getChoseExtraForm());	
@@ -319,7 +327,7 @@ $content .= 'dummy #' . $this->section_id;
 		/// \todo: check permissions?
 				
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
-//		if ($this->show_levels_above != true) $this->show_levels_above = false; // make sure it's boolean
+//		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
 t3lib_div::devlog('show levels above read from be_user', 'newspaper', 0, $this->show_levels_above);
 
 		
@@ -473,6 +481,7 @@ t3lib_div::debug($pz);
 		if ($this->show_levels_above) {
 			$pz_up = $pz->getInheritanceHierarchyUp(false);
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
+debug($pz_up[$i]->getUid(), 'pz_up');	
 				$data[] = $this->extractData($pz_up[$i]);
 				$extra_data[] = $this->collectExtras($pz_up[$i]->getExtras());
 			}
@@ -481,7 +490,7 @@ t3lib_div::debug($pz);
 		/// add current page zone and extras		
 		$data[] = $this->extractData($pz);
 		$extra_data[] = $this->collectExtras($pz->getExtras());
-		 
+
 //debug(t3lib_div::view_array($extra_data), 'extra data');
 //debug(t3lib_div::view_array($data), 'data');				
 		
@@ -495,6 +504,7 @@ t3lib_div::debug($pz);
 		$label['inherits_from'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_inherits_from', false);
 		$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
 		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
+		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('EXTRA_DATA', $extra_data);
@@ -511,6 +521,7 @@ t3lib_div::debug($pz);
 		$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
 		$smarty->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+//		$smarty->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
 		
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
