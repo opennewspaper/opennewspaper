@@ -62,10 +62,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function __toString() {
 		try {
 		return get_class($this) . ' ' . $this->getUid() . ' (' . "\n" .
-				($this->getParentPage() instanceof tx_newspaper_Page? $this->getParentPage()->getPageType()->getAttribute('type_name'). '/': '') .
+				($this->getParentPage() instanceof tx_newspaper_Page? 
+					$this->getParentPage()->getPageType()->getAttribute('type_name'). '/': 
+					'') .
 				$this->getPageZoneType()->getAttribute('type_name') . ') '
-#			   ' attributes: ' . print_r($this->attributes, 1) . "\n" .
-#			   ' extras: ' . print_r($this->extras, 1) . 
 			   ;
 		} catch (tx_newspaper_Exception $e) { return 'Duh, exception thrown: ' . $e; } 
 			   										 
@@ -742,7 +742,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         		try {
         			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 	        		$this->extras[] = $extra;
-        		} catch(tx_newspaper_DBException $e) { }
+        		} catch(tx_newspaper_Exception $e) { 
+        			/// \todo remove association table entry
+        		}
         	}
 		} 
 		# else t3lib_div::debug("readExtras($uid): Empty result for " . tx_newspaper::$query);
