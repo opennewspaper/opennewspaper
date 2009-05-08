@@ -742,7 +742,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         		try {
         			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 	        		$this->extras[] = $extra;
-        		} catch(tx_newspaper_Exception $e) { 
+        		} catch(Exception $e) { 
         			/// \todo remove association table entry
         		}
         	}
