@@ -37,8 +37,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/// Construct a tx_newspaper_Section given the UID of the SQL record
 	function __construct($uid = 0) {
-		t3lib_div::devlog('$uid', 'newspaper: __construct()', 0, $uid);
-		
 		if ($uid) {
 			$this->setUid($uid);
 		}
@@ -46,6 +44,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
+		$this->getAttribute('uid');
 		return get_class($this) . '-object ' . $this->getUid() . " \n" .
 			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
