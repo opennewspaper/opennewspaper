@@ -41,7 +41,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$row['extra_table'] = $this->getTable();
 		$row['tstamp'] = time();				///< tstamp is set to now
 
-		tx_newspaper::insertRows(self::$table, $row);
+		$this->setExtraUid(tx_newspaper::insertRows(self::$table, $row));
 	}
 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
