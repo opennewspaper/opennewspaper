@@ -19,25 +19,29 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid)
-		//  \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
-		/** Render the TypoScript equivalent of
-		 *  \code
-		 *  ce = RECORDS
-		 *  ce {
-		 *		tables = tt_content 
-		 *		source = ... [, ...] 
-		 *		dontCheckPid = 1
-		 *	}
-		 *  \endcode
-		 */
-		$tt_content_conf = array(
-			'tables' => 'tt_content',
-			'source' => intval($ce_uid),
-			'dontCheckPid' => 1
-		);
-		$cObj = t3lib_div::makeInstance('tslib_cObj'); 
-		return 'tx_newspaper_Extra_Typo3_CE::render(): ' . $cObj->RECORDS($tt_content_conf) . $this->__toString(); 		
+		$ret = '';
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+
+		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
+			//  \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
+			/** Render the TypoScript equivalent of
+			 *  \code
+			 *  ce = RECORDS
+			 *  ce {
+			 *		tables = tt_content 
+			 *		source = ... [, ...] 
+			 *		dontCheckPid = 1
+			 *	}
+			 *  \endcode
+			 */
+			$tt_content_conf = array(
+				'tables' => 'tt_content',
+				'source' => intval($ce_uid),
+				'dontCheckPid' => 1
+			);
+			$ret .= 'tx_newspaper_Extra_Typo3_CE::render($ce_uid): ' . $cObj->RECORDS($tt_content_conf);
+		}
+		return $ret;
 	}
 
 //TODO: getLLL
