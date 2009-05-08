@@ -511,8 +511,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getInheritanceHierarchyDown($including_myself = true, 
 												$hierarchy = array()) {
 
-		t3lib_div::devlog('getInheritanceHierarchyDown()', 'newspaper', 0);
-#		return;
 		if ($including_myself) $hierarchy[] = $this;
 		
 		///  look for inheriting page zones only of the same type as $this
@@ -529,13 +527,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$page = $this->getParentPage();
 		$section = $page->getParentSection();
 		$children = $section->getChildSections();
-#		foreach ($children as $child) { $child instanceof tx_newspaper_StoredObject && $child->getAttribute('uid'); }
-		t3lib_div::devlog('Children', 'newspaper: getInheritanceHierarchyDown()', 0, $children);
+#		t3lib_div::devlog('Children', 'newspaper: getInheritanceHierarchyDown()', 0, $children);
 		
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
-			try {
+			t3lib_div::devlog('$sub_section', 'getInheritanceHierarchyDown()', 0, $sub_section);
+#			try {
 				$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
-			} catch (tx_newspaper_DBException $e) { continue; }
+#			} catch (tx_newspaper_DBException $e) { continue; }
+			t3lib_div::devlog('$page', 'getInheritanceHierarchyDown()', 0, $page);
 			if ($page) {
 				$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
 			}
