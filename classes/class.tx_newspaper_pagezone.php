@@ -511,7 +511,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 												$hierarchy = array()) {
 
 		t3lib_div::devlog('getInheritanceHierarchyDown()', 'newspaper', 0, 1);
-		return;
+#		return;
 		if ($including_myself) $hierarchy[] = $this;
 		
 		///  look for inheriting page zones only of the same type as $this
