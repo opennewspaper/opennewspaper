@@ -392,7 +392,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
-		t3lib_div::devlog('insertExtraAfter()', 'newspaper', 0);
+		t3lib_div::devlog('', 'insertExtraAfter()', 0);
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		
 		/// Write Extra to DB
@@ -400,7 +400,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		$this->addExtra($insert_extra);
 		
-		t3lib_div::devlog('getInheritanceHierarchyDown()', 'newspaper', 0, $this->getInheritanceHierarchyDown(false));
+		$pz_down = $this->getInheritanceHierarchyDown(false);
+		t3lib_div::devlog('$pz_down', 'insertExtraAfter()', 0, $pz_down);
 		if (false && $recursive) {
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
