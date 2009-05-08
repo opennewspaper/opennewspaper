@@ -11,7 +11,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	}
 	
 	public function __toString() {
-		return 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid() .
+		return 'Extra: UID ' . $this->getExtraUid() . ', Typo3 CE Extra: UID ' . $this->getUid() .
 				' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';	
 	}
 	
@@ -19,6 +19,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
+		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid)
 		//  \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
 		/** Render the TypoScript equivalent of
 		 *  \code
@@ -32,7 +33,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		 */
 		$tt_content_conf = array(
 			'tables' => 'tt_content',
-			'source' => $this->getAttribute('content_elements'),
+			'source' => intval($ce_uid),
 			'dontCheckPid' => 1
 		);
 		$cObj = t3lib_div::makeInstance('tslib_cObj'); 
