@@ -388,16 +388,24 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
 	/** \param $origin_uid 
 	 *  \param $extra The new, fully instantiated Extra to insert
+	 *  \param $recursive If set, pass down the insertion to all inheriting PageZones
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
-									 $origin_uid = 0) {
+									 $origin_uid = 0, $recursive = true) {
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		
 		/// Write Extra to DB
 		$insert_extra->store();
 		
 		$this->addExtra($insert_extra);
-	}	
+		
+		if ($recursive) {
+			/// Pass down the insertion to PageZones inheriting from $this
+			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+				$inheriting_pagezone->insertExtraAfter($insert_extra, $origin_uid, false);
+			}
+		}
+	}
 	
 	///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
