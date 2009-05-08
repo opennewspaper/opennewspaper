@@ -739,11 +739,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		if ($uids) {
         	foreach ($uids as $uid) {
-        		$deleted = tx_newspaper::selectOneRow(
+				//  assembling the query manually here cuz we want to ignore enable fields
+				$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 					'deleted', 
 					tx_newspaper_Extra_Factory::getExtraTable(),
-					'uid = ' . $uid['uid_foreign']
-				);
+					'uid = ' . $uid['uid_foreign']);
+				$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				
 				if (!$deleted['deleted']) {
 
         			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
