@@ -739,12 +739,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		if ($uids) {
         	foreach ($uids as $uid) {
-        		try {
+        		$deleted = tx_newspaper::selectOneRow(
+					'deleted', 
+					tx_newspaper_Extra_Factory::getExtraTable(),
+					'uid = ' . $uid['uid_foreign']
+				);
+				if (!$deleted['deleted']) {
+
         			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 	        		$this->extras[] = $extra;
-        		} catch(Exception $e) { 
-        			/// \todo remove association table entry
-        		}
+				} else {
+					/// \todo remove association table entry
+				}
         	}
 		} 
 		# else t3lib_div::debug("readExtras($uid): Empty result for " . tx_newspaper::$query);
