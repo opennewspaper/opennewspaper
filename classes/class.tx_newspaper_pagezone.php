@@ -67,7 +67,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 #			   ' attributes: ' . print_r($this->attributes, 1) . "\n" .
 #			   ' extras: ' . print_r($this->extras, 1) . 
 			   ;
-		} catch (tx_newspaper_DBException $e) { return 'Duh, exception thrown: ' . $e; } 
+		} catch (tx_newspaper_Exception $e) { return 'Duh, exception thrown: ' . $e; } 
 			   										 
 			   
 	}
