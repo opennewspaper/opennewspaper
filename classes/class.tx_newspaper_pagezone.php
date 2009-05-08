@@ -524,7 +524,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// \todo look for page zones on pages in section down the section hierarchy
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
-			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
+			try {
+				$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
+			} catch (tx_newspaper_DBException $e) { continue; }
 			if ($page) {
 				$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
 			}
