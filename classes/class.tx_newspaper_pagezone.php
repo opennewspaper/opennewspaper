@@ -401,6 +401,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->addExtra($insert_extra);
 		
 		if ($recursive) {
+			t3lib_div::devlog('getInheritanceHierarchyDown()', 'newspaper', 0, $this->getInheritanceHierarchyDown(false));
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$inheriting_pagezone->insertExtraAfter($insert_extra, $origin_uid, false);
@@ -537,6 +538,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			t3lib_div::devlog('$page', 'getInheritanceHierarchyDown()', 0, $page);
 			if ($page) {
 				$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
+				array_merge($hierarchy, $this->getInheritanceHierarchyDown(true, $inheriting_pagezone));
 			}
 		}
 		return $hierarchy;
