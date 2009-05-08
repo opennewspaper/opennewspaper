@@ -332,9 +332,15 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	}
 
 	public function getUid() { return intval($this->uid); }
-	public function setUid($uid) { $this->uid = $uid; }
+	public function setUid($uid) { 
+		$this->uid = $uid; 
+		$this->attributes['uid'] = $uid; 
+	}
 
-	public function setExtraUid($uid) { $this->extra_uid = $uid; }
+	public function setExtraUid($uid) { 
+		$this->extra_uid = $uid;
+		$this->extra_attributes['uid'] = $uid; 
+	}
 	/// This function is only public so unit tests can access it	
 	public function getExtraUid() {
 		if (!$this->extra_uid) {
