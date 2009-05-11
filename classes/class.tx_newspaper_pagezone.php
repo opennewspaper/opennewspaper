@@ -483,6 +483,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 		t3lib_div::devlog('page zone', 'moveExtraAfter()', 0, $this);
 		t3lib_div::devlog('move extra', 'moveExtraAfter()', 0, $move_extra);
+		t3lib_div::devlog('origin uid', 'moveExtraAfter()', 0, $origin_uid);
+		t3lib_div::devlog('recursive', 'moveExtraAfter()', 0, intval($recursive));
 
 		///	Check that $move_extra is really on $this
 		$this->indexOfExtra($move_extra);
