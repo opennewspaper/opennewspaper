@@ -339,9 +339,9 @@ if (TYPO3_OS == 'WIN') {
 	$this->pagezone_id = 8;
 } else {
 // hel
-	$this->section_id = 1888;
-	$this->page_id = 3015;
-	$this->pagezone_id = 6428;
+	$this->section_id = 1892;
+	$this->page_id = 3023;
+	$this->pagezone_id = 6448;
 }	
 return;		
 		
