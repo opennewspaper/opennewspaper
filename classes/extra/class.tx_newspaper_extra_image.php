@@ -12,10 +12,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 	
 	public function __toString() {
+		$ret = '';
 		try{
-		return 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid() .
-				' (Title: ' . $this->getAttribute('title') . ')';
-		} catch (Exception $e) { return 'Exception: '.$e; }	
+			$ret .= 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid();
+			$ret .= ' (Title: ' . $this->getAttribute('title') . ')';
+		} catch (Exception $e) {  }
+		return $ret;	
 	}
 	
 	/** Just a quick hack to see anything
