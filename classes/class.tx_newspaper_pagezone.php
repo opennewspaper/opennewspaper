@@ -422,15 +422,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
-		t3lib_div::devlog('', 'removeExtra()', 0, $this);
-		t3lib_div::devlog('', 'removeExtra()', 0, $remove_extra);
+		t3lib_div::devlog('page zone', 'removeExtra()', 0, $this);
+		t3lib_div::devlog('remove extra', 'removeExtra()', 0, $remove_extra);
 		
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				t3lib_div::devlog('', 'removeExtra()', 0, $remove_extra->getOriginUid());
-				
+				t3lib_div::devlog('origin uid', 'removeExtra()', 0, $remove_extra->getOriginUid());
 				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid());
+				t3lib_div::devlog('copied extra', 'removeExtra()', 0, $copied_extra);
 				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
 			}
 		}
