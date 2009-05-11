@@ -495,10 +495,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$move_extra->store();
 		
 		if ($recursive) {
+			t3lib_div::devlog('recursive!', 'moveExtraAfter()', 0, intval($recursive));
 			///	Move Extra on inheriting PageZones
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				t3lib_div::devlog('origin uid', 'moveExtraAfter()', 0, $remove_extra->getOriginUid());
-				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid());
+				t3lib_div::devlog('origin uid', 'moveExtraAfter()', 0, $move_extra->getOriginUid());
+				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
 				t3lib_div::devlog('copied extra', 'moveExtraAfter()', 0, $copied_extra);
 				if ($copied_extra) $inheriting_pagezone->moveExtraAfter($copied_extra, $origin_uid, false);
 			}
