@@ -255,7 +255,7 @@ t3lib_div::devlog('renderListItem item', 'newspaper', 0, $item);
 	 */
 	public static function getJsForExtraField() {
 #t3lib_div::devlog('getJsForExtraField', 'newspaper', 0);
-		switch(self::getExtraBeDisplayMode()) {
+		switch(tx_newspaper_BE::getExtraBeDisplayMode()) {
 			case EXTRA_DISPLAY_MODE_IFRAME:
 				$js = '<script type="text/javascript" src="' . t3lib_extMgm::extRelPath('newspaper') . 'res/extra_form_iframe.js"></script>';
 			break;
