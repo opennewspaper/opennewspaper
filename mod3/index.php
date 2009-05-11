@@ -479,9 +479,9 @@ t3lib_div::debug($pz);
 
 		/// add upper level page zones and extras, if any		
 		if ($this->show_levels_above) {
-			$pz_up = $pz->getInheritanceHierarchyUp(false);
+			$pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
-debug($pz_up[$i]->getUid(), 'pz_up');	
+#debug($pz_up[$i]->getUid(), 'pz_up');	
 				$data[] = $this->extractData($pz_up[$i]);
 				$extra_data[] = $this->collectExtras($pz_up[$i]->getExtras());
 			}
