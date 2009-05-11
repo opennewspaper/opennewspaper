@@ -408,7 +408,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				t3lib_div::devlog('original extra', 'insertExtraAfter()', 0, $insert_extra);
 				$copied_extra = clone $insert_extra;
 				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
-#				$copied_extra->store();
 				t3lib_div::devlog('copied extra', 'insertExtraAfter()', 0, $copied_extra);
 				t3lib_div::devlog('copied extra - origin UID', 'insertExtraAfter()', 0, $copied_extra->getOriginUid());
 				
@@ -488,7 +487,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \exception tx_newspaper_InconsistencyException If $move_extra is not
 	 * 			present on the PageZone
 	 */	
-	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0) {
+	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 		///	Check that $move_extra is really on $this
 		$this->indexOfExtra($move_extra);
 		
@@ -496,6 +495,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// Write Extra to DB
 		$move_extra->store();
+		
+		if ($recursive) {
+			///	Move Extra on inheriting PageZones
+			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+				t3lib_div::devlog('origin uid', 'moveExtraAfter()', 0, $remove_extra->getOriginUid());
+				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid());
+				t3lib_div::devlog('copied extra', 'moveExtraAfter()', 0, $copied_extra);
+				if ($copied_extra) $inheriting_pagezone->moveExtraAfter($copied_extra, $origin_uid, false);
+			}
+		}
 		
 		/** ... and that's it. We don't need to update the association table
 		 *  because we asserted that the Extra is already on the PageZone.
