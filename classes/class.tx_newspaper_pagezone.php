@@ -405,9 +405,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($recursive) {
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				$copied_extra = clone $insert_extra;
 				t3lib_div::devlog('original extra', 'insertExtraAfter()', 0, $insert_extra);
+				$copied_extra = clone $insert_extra;
+				$copied_extra->setOriginUid($insert_extra->getOriginUid());
+				$copied_extra->store();
 				t3lib_div::devlog('copied extra', 'insertExtraAfter()', 0, $copied_extra);
+				t3lib_div::devlog('copied extra - origin UID', 'insertExtraAfter()', 0, $copied_extra->getOriginUid());
 				
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
 			}

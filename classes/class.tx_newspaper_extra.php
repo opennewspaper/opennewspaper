@@ -35,7 +35,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			$this->getTable(),
 			'uid = ' . $this->getUid()
 		);
-			
+		
 		/// write the uid and table into extra table, with the values read above
 		$row['extra_uid'] = $this->getUid();
 		$row['extra_table'] = $this->getTable();
