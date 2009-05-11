@@ -394,7 +394,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
-		t3lib_div::devlog('', 'insertExtraAfter()', 0);
+		t3lib_div::devlog('insert extra', 'insertExtraAfter()', 0, $insert_extra);
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		
 		/// Write Extra to DB
@@ -405,11 +405,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($recursive) {
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				t3lib_div::devlog('original extra', 'insertExtraAfter()', 0, $insert_extra);
 				$copied_extra = clone $insert_extra;
 				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
-				t3lib_div::devlog('copied extra', 'insertExtraAfter()', 0, $copied_extra);
-				t3lib_div::devlog('copied extra - origin UID', 'insertExtraAfter()', 0, $copied_extra->getOriginUid());
 				
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
 			}
@@ -424,15 +421,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
-		t3lib_div::devlog('page zone', 'removeExtra()', 0, $this);
-		t3lib_div::devlog('remove extra', 'removeExtra()', 0, $remove_extra);
 		
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				t3lib_div::devlog('origin uid', 'removeExtra()', 0, $remove_extra->getOriginUid());
 				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid());
-				t3lib_div::devlog('copied extra', 'removeExtra()', 0, $copied_extra);
 				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
 			}
 		}
@@ -488,6 +481,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			present on the PageZone
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
+		t3lib_div::devlog('page zone', 'moveExtraAfter()', 0, $this);
+		t3lib_div::devlog('move extra', 'moveExtraAfter()', 0, $move_extra);
+
 		///	Check that $move_extra is really on $this
 		$this->indexOfExtra($move_extra);
 		
