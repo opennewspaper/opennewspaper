@@ -24,7 +24,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
 		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
 			$raw_data = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
-			$ret .= "\n" . '<-- ' . print_r($raw_data, 1) . ' -->' . "\n";
+			$ret .= "\n" . '<!-- ' . print_r($raw_data, 1) . ' -->' . "\n";
 			
 			//  \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
 			/** Render the TypoScript equivalent of
