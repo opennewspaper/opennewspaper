@@ -44,6 +44,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
  */
 abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
+	const EXTRA_SPACING = 1024;
+	
 	/// Configure Smarty rendering engine
 	public function __construct($uid = 0) {
 		/// Configure Smarty rendering engine
@@ -526,9 +528,22 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		if ($inherits == $extra->getAttribute('is_inheritable')) return;
 		
-		throw new tx_newspaper_NotYetImplementedException();
-	}
+		/** Whenever the inheritance hierarchy is invalidated, inherited Extras
+		 *  are deleted and moved to the end 
+		 */
+		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
+			if ($copied_extra) {
+				$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
+				$copied_extra->setAttribute('deleted', 1);
+				$copied_extra->store();
+			}
+			/// \todo if no Extra is found, we can probably stop the loop.
+		}
 
+#		throw new tx_newspaper_NotYetImplementedException();
+	}
+	
 	/// Get the hierarchy of Page Zones inheriting placement from $this
 	/** \param $including_myself If true, add $this to the list
 	 *  \param $hierarchy List of already found parents (for recursive calling) 
@@ -590,7 +605,30 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 	}
 
+	public function getExtraOrigin(tx_newspaper_Extra $extra) {
+		if ($extra->isOriginExtra()) return $this;
+		
+		foreach ($this->getInheritanceHierarchyUp(false) as $origin_pagezone) {
+			foreach ($origin_pagezone->getExtras() as $potential_origin_extra) {
+				if ($potential_origin_extra->getExtraUid() == $extra->getOriginUid()) {
+					return $origin_pagezone;
+				}
+			}
+		}
+	}
 
+	public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
+		$original_pagezone = $this->getExtraOrigin($extra);
+		if (!$original_pagezone) return '---';
+		if ($original_pagezone->getUid() == $this->getUid()) return '---';
+		$page = $original_pagezone->getParentPage();
+		$section = $page->getParentSection();
+		if ($section->getUid() == $this->getParentPage()->getParentSection->getUid()) {
+			return $page->getPageType()->getAttribute('type_name');
+		}
+		return $section->getAttribute('section_name');
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	internal functions (public only to enable unit testing)
@@ -686,16 +724,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				break;
 			} 
 		}
-		if (!$position_before_which) $position_before_which = 2*($position? $position: 1024);
+		if (!$position_before_which) $position_before_which = 2*($position? $position: self::EXTRA_SPACING);
 		
 		if ($position_before_which-$position < 2) {
 			/// Increase 'position' attribute for all extras after $extra_after_which 
 			foreach ($this->getExtras() as $extra_to_rearrange) {
 				if ($extra_to_rearrange->getAttribute('position') <= $position) continue;
-				$extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position')+1024);
+				$extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position')+self::EXTRA_SPACING);
 				$extra_to_rearrange->store();
 			}
-			$position_before_which += 1024;
+			$position_before_which += self::EXTRA_SPACING;
 		}
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
@@ -730,6 +768,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
 		return null;
+	}
+
+	/// \return The position value of the last Extra on the PageZone
+	protected function findLastPosition() {
+		return $this->getExtra(sizeof($this->getExtras())-1)->getAttribute('position');
 	}
 	
 	/// Read Extras from DB
