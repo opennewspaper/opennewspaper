@@ -127,15 +127,18 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
+//t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra')));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
 		die();
 	}
 
-	private function processExtraSetPassDown($extra_uid, $pass_down) {
+	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
-		$e->setAttribute('is_inheritable', $pass_down);
-		$e->store();
+		$pz->setInherits($e, $pass_down);
+//		$e->setAttribute('is_inheritable', $pass_down);
+//		$e->store();
 		die();
 	}
 
@@ -165,7 +168,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		}
 
 		if (t3lib_div::_GP('extra_set_pass_down') == 1) {
-			$this->processExtraSetPassDown(t3lib_div::_GP('extra_uid'), t3lib_div::_GP('pass_down')); 
+			$this->processExtraSetPassDown(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('pass_down')); 
 		}
 
 
@@ -173,6 +176,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 			die($this->getChoseExtraForm());	
 		}
 //t3lib_div::devlog('_request mod3 ajax - NO ajax found', 'newspaper', 0);		
+//debug('no ajax');
 		return; // no ajax request found
 	}
 
@@ -516,6 +520,12 @@ t3lib_div::debug($pz);
 		/// add current page zone and extras		
 		$data[] = $this->extractData($pz);
 		$extra_data[] = $this->collectExtras($pz->getExtras());
+		$s = $pz->getParentPage()->getParentSection();
+		$page = $s->getSubPages(); // get activate pages for current section
+		$pagetype = array();
+		for ($i = 0; $i < sizeof($page); $i++) {
+			$pagetype[] = $page[$i]->getPageType(); 
+		}
 
 //debug(t3lib_div::view_array($extra_data), 'extra data');
 //debug(t3lib_div::view_array($data), 'data');				
@@ -535,6 +545,7 @@ t3lib_div::debug($pz);
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('EXTRA_DATA', $extra_data);
 		$smarty->assign('DATA', $data);
+		$smarty->assign('PAGETYPE', $pagetype);
 
 		$smarty->assign('SHOW_LEVELS_ABOVE', $this->show_levels_above);
 

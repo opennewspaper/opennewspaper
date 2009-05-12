@@ -93,12 +93,12 @@ td {ldelim}
 		);
 	{rdelim}
 
-	function extra_set_pass_down(extra_uid, pass_down) {ldelim}
+	function extra_set_pass_down(pz_uid, extra_uid, pass_down) {ldelim}
 		var request = new top.Ajax.Request(
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
  			{ldelim}
 				method: 'get',
-				parameters: "extra_set_pass_down=1&extra_uid=" + extra_uid + "&pass_down=" + pass_down + "&no_cache=" + new Date().getTime(),
+				parameters: "extra_set_pass_down=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&pass_down=" + pass_down + "&no_cache=" + new Date().getTime(),
 				onCreate: processing,
 				onSuccess: reload
 			{rdelim}
@@ -130,22 +130,19 @@ td {ldelim}
 		img.setAttributeNode(img_src);
 
 		layer_style = document.createAttribute('style');
-		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(128, 128, 128, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
+		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
 
 		layer = document.createElement('div');
 		layer.setAttributeNode(layer_style);
 
-		//spinner = document.createTextNode('processing ...');
-		//layer.appendChild(spinner);
 		layer.appendChild(img);
-		
-		//self.document.getElementsByTagName('body')[0].innerHTML = '';
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 	
 	function reload(data) {ldelim}
 		if (data.responseText == '') {ldelim}
 			// empty string, so no error message
+/// \todo: currently no_cache param are ADDED, must be REPLACED
 			self.location.href = self.location.href + "&no_cache=" + new Date().getTime();
 		{rdelim} else {ldelim}
 			// display error message
@@ -167,10 +164,20 @@ td {ldelim}
 	<a href="javascript:extra_insert_after(0, {$DATA[i].pagezone_id});">{$NEW_TOP_ICON}</a>
  	&nbsp; &nbsp; 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
- 	&nbsp; &nbsp; 
-	<i>Seite:</i> {$DATA[i].page_type}
-	 &nbsp; &nbsp; 
-	<i>Seitenbereich:</i> {$DATA[i].pagezone_type}
+	
+	
+	{* Dropdown for page and page zone for section only *}
+	{if $smarty.section.i.last} 
+	 	&nbsp; &nbsp; 
+		<i>Seite:</i> {$DATA[i].page_type}
+		{section name="j loop=$PAGES}
+			
+		{/section}
+		 &nbsp; &nbsp; 
+		<i>Seitenbereich:</i> {$DATA[i].pagezone_type}
+	{/if}
+
+
 </div>
 
 
@@ -198,9 +205,9 @@ td {ldelim}
 			</td>
 			<td align="center">
 	{if $EXTRA_DATA[i][j].pass_down == 0}
-	<input type="checkbox" onchange="extra_set_pass_down({$EXTRA_DATA[i][j].uid}, 1);" />
+	<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 1);" />
 	{else}
-	<input type="checkbox" onchange="extra_set_pass_down({$EXTRA_DATA[i][j].uid}, 1);" checked="checked" />
+	<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 1);" checked="checked" />
 	{/if}
 			</td>
 			<td> {$EXTRA_DATA[i][j].inherits_from} </td>
