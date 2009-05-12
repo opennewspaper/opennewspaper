@@ -101,6 +101,10 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private function processExtraInsertAfter($origin_uid, $pz_uid) {
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
+		$e->store();		
+		$e->setAttribute('show_extra', 1);
+		$e->setAttribute('is_inheritable', 1);
+		
 		$e->store();
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->insertExtraAfter($e, $origin_uid);
@@ -118,6 +122,20 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$pz->removeExtra($e);
+		die();
+	}
+
+	private function processExtraSetShow($extra_uid, $show) {
+		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
+		$e->setAttribute('show_extra', $show);
+		$e->store();
+		die();
+	}
+
+	private function processExtraSetPassDown($extra_uid, $pass_down) {
+		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
+		$e->setAttribute('is_inheritable', $pass_down);
+		$e->store();
 		die();
 	}
 
@@ -140,6 +158,14 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		if (t3lib_div::_GP('extra_delete') == 1) {
 			$this->processExtraDelete(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
+		}
+
+		if (t3lib_div::_GP('extra_set_show') == 1) {
+			$this->processExtraSetShow(t3lib_div::_GP('extra_uid'), t3lib_div::_GP('show')); 
+		}
+
+		if (t3lib_div::_GP('extra_set_pass_down') == 1) {
+			$this->processExtraSetPassDown(t3lib_div::_GP('extra_uid'), t3lib_div::_GP('pass_down')); 
 		}
 
 
@@ -179,7 +205,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		return $this->content;
 	}
 
-/// \todo: auslagern? extend template???
+/// \todo: auslagern? 
 	function getIconHeader() {
 		global $LANG;
 
@@ -334,9 +360,9 @@ t3lib_div::devlog('show levels above read from be_user', 'newspaper', 0, $this->
 /// \todo: remove hard coded uid !!!!!!!!!!!!!!!!!
 if (TYPO3_OS == 'WIN') {
 // localhost
-	$this->section_id = 2;
+	$this->section_id = 3;
 	$this->page_id = 3;
-	$this->pagezone_id = 8;
+	$this->pagezone_id = 1;
 } else {
 // hel
 	$this->section_id = 1892;

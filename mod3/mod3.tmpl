@@ -37,6 +37,7 @@ td {ldelim}
  			{ldelim}
 				method: 'get',
 				parameters: "toggle_show_levels_above=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
 				onSuccess: reload
 			{rdelim}
 		);
@@ -48,6 +49,7 @@ td {ldelim}
  			{ldelim}
 				method: 'get',
 				parameters: "extra_insert_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
 				onSuccess: reload
 			{rdelim}
 		);
@@ -59,6 +61,7 @@ td {ldelim}
  			{ldelim}
 				method: 'get',
 				parameters: "extra_move_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
 				onSuccess: reload
 			{rdelim}
 		);
@@ -72,10 +75,36 @@ td {ldelim}
  			{ldelim}
 				method: 'get',
 				parameters: "extra_delete=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
 				onSuccess: reload
 			{rdelim}
 		);
 	{rdelim}
+	
+	function extra_set_show(extra_uid, show) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function extra_set_pass_down(extra_uid, pass_down) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_set_pass_down=1&extra_uid=" + extra_uid + "&pass_down=" + pass_down + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
 
 	function subModal() {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
@@ -92,12 +121,37 @@ td {ldelim}
 		);
 	{rdelim}
 	
-	
-	function reload() {ldelim}
-		self.location.reload ();
+
+	function processing() {ldelim}
+
+		img = document.createElement('img');
+		img_src = document.createAttribute('src');
+		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
+		img.setAttributeNode(img_src);
+
+		layer_style = document.createAttribute('style');
+		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(128, 128, 128, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
+
+		layer = document.createElement('div');
+		layer.setAttributeNode(layer_style);
+
+		//spinner = document.createTextNode('processing ...');
+		//layer.appendChild(spinner);
+		layer.appendChild(img);
+		
+		//self.document.getElementsByTagName('body')[0].innerHTML = '';
+		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 	
-	
+	function reload(data) {ldelim}
+		if (data.responseText == '') {ldelim}
+			// empty string, so no error message
+			self.location.href = self.location.href + "&no_cache=" + new Date().getTime();
+		{rdelim} else {ldelim}
+			// display error message
+			self.document.getElementsByTagName('body')[0].innerHTML = data.responseText;
+		{rdelim}
+	{rdelim}
 	
 </script>
 
@@ -137,16 +191,16 @@ td {ldelim}
 			<td> {$EXTRA_DATA[i][j].extra_type}<br /><span class="gray">{$EXTRA_DATA[i][j].title}</span> </td>
 			<td align="center">
 	{if $EXTRA_DATA[i][j].show == 0}
-	ja
+	<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 0);" /> 
 	{else}
-	nein
+	<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 1);" checked="checked" />
 	{/if}
 			</td>
 			<td align="center">
 	{if $EXTRA_DATA[i][j].pass_down == 0}
-	ja
+	<input type="checkbox" onchange="extra_set_pass_down({$EXTRA_DATA[i][j].uid}, 1);" />
 	{else}
-	nein
+	<input type="checkbox" onchange="extra_set_pass_down({$EXTRA_DATA[i][j].uid}, 1);" checked="checked" />
 	{/if}
 			</td>
 			<td> {$EXTRA_DATA[i][j].inherits_from} </td>
