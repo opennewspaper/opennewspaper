@@ -518,6 +518,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			on the PageZone
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
+/// todo: derzeit nutzte ich noch setAttribute() um zu speichern.
+/// kannst du mir bescheid geben, wenn die methode fertig ist.
 
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
