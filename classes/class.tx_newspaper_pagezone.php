@@ -133,13 +133,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
-		/// ... and is attached to the correct page
-		tx_newspaper::updateRows(
-			'tx_newspaper_pagezone', 
-			'uid = ' . $pagezone_uid, 
-			array('page_id' => $this->getParentPage()->getUid())
-		);
 		
+		/// ... and is attached to the correct page
+		if ($this->getParentPage() instanceof tx_newspaper_Page) {
+			tx_newspaper::updateRows(
+				'tx_newspaper_pagezone', 
+				'uid = ' . $pagezone_uid, 
+				array('page_id' => $this->getParentPage()->getUid())
+			);
+		}
+				
 		/// \todo store Extras placed on $this
 		if ($this->getExtras()) {
 			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
