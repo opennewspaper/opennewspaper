@@ -111,7 +111,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if (!$this->attributes) {
 				$this->readAttributes($this->getTable(), $this->getUid());
 			}			
-				
+			
+			unset($this->attributes['query']);
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
