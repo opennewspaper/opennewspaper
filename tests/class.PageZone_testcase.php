@@ -52,7 +52,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			'extra_table = \'' . $this->pagezone_page_table . '\' AND extra_uid = ' . $this->uid
 		);
 
-#		$this->hierarchy->removeAllJunkManually();
+		$this->hierarchy->removeAllJunkManually();
 	}
 
 	public function test_createPageZone() {
