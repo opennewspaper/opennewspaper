@@ -75,12 +75,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	public function test_modulename() {
 		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
 	}
-	/*
-	public function test_readExtraItem() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-		$this->pagezone->readExtraItem(1, $this->pagezone->getTable());
-	}
-	*/
+
 	public function test_nonexistentZone() {
 		$this->setExpectedException('tx_newspaper_DBException');
 		tx_newspaper_PageZone_Factory::getInstance()->create($this->bad_uid);
@@ -345,7 +340,7 @@ t3lib_div::debug("inserting after $extra_after_which");
 				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
 				'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
 				'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
-				' but only ' . $row['num'] . ' are there.'
+				' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
 			);
 
 			$this->checkPageZoneOrder($pagezone);
