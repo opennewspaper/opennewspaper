@@ -142,7 +142,10 @@ class tx_newspaper_hierarchy {
 				tx_newspaper::updateRows(
 					$this->extra_table, 
 					'uid = ' . $extra_object->getExtraUid(), 
-					array('position' => $this->extra_pos[$i])
+					array(
+						'position' => $this->extra_pos[$i],
+						'origin_uid' => $extra_object->getExtraUid(),
+					)
 				);
 			
 				tx_newspaper::insertRows(
