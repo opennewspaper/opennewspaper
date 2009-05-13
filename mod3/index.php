@@ -378,20 +378,6 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
 		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
 		
-///// \todo: remove hard coded uid !!!!!!!!!!!!!!!!!
-//if (TYPO3_OS == 'WIN') {
-//// localhost
-//	$this->section_id = 3;
-//	$this->page_id = 3;
-//	$this->pagezone_id = 1;
-//} else {
-//// hel
-//	$this->section_id = 1892;
-//	$this->page_id = 3023;
-//	$this->pagezone_id = 6448;
-//}	
-//return;		
-		
 		// init
 		$this->section_id = 0;
 		$this->page_type_id = 0;
@@ -491,7 +477,8 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 
 
-	private function collectExtras(array $extra) {
+	private function collectExtras(tx_newspaper_PageZone $pz) {
+		$extra = $pz->getExtras();
 		$data = array();
 		for ($i = 0; $i < sizeof($extra); $i++) {
 		$data[] = array(
@@ -500,9 +487,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 				'title' => $extra[$i]->getAttribute('title'),
 				'show' => $extra[$i]->getAttribute('show_extra'),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
-'inherits_from' => 'to come ...', /// \todo: function missing here ...
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
+				'inherits_from' => $pz->getExtraOriginAsString($extra[$i])
 			);
 		}
 		return $data;
@@ -533,13 +520,13 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
 #debug($pz_up[$i]->getUid(), 'pz_up');	
 				$data[] = $this->extractData($pz_up[$i]);
-				$extra_data[] = $this->collectExtras($pz_up[$i]->getExtras());
+				$extra_data[] = $this->collectExtras($pz_up[$i]);
 			}
 		}
 
 		/// add current page zone and extras		
 		$data[] = $this->extractData($pz);
-		$extra_data[] = $this->collectExtras($pz->getExtras());
+		$extra_data[] = $this->collectExtras($pz);
 		
 		$s = $pz->getParentPage()->getParentSection();
 		$pages = $s->getSubPages(); // get activate pages for current section
