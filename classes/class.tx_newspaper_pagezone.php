@@ -701,8 +701,8 @@ t3lib_div::debug("getInsertPosition($origin_uid)");
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 			 */ 
 			$extra_after_which = null;
+t3lib_div::debug($this->getExtras());
 			foreach ($this->getExtras() as $extra) {
-t3lib_div::debug("$extra");
 				if ($extra->getOriginUid() == $origin_uid) {
 					$extra_after_which = $extra;
 					break;
