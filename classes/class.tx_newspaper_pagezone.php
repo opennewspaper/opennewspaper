@@ -696,6 +696,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	protected function getInsertPosition($origin_uid) {
 		if ($origin_uid) {
+t3lib_div::debug("getInsertPosition($origin_uid)");
 			/** Find the Extra to insert after. If it is not deleted on this page,
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 			 */ 
