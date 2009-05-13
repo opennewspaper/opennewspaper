@@ -77,6 +77,18 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 	public function store() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
+
+	/// \return true if pagezone type can be accessed (FE/BE use enableFields)
+	function isValid() {
+		// check if pagezone type is valid
+		try {
+			$this->getAttribute('uid'); // getAttribute forces the object to be read from database
+			return true;
+		} catch (tx_newspaper_EmptyResultException $e) {
+			return false;
+		}
+	}
+	
 	
 	/** \todo Internationalization */
 	public function getTitle() {
