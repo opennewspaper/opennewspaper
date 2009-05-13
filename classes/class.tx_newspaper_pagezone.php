@@ -901,11 +901,13 @@ t3lib_div::debug($this->getExtras());
 */		$this->extras[] = $extra;
 
 		try {
+t3lib_div::debug(
 			tx_newspaper::selectOneRow(
 				'uid_local',
 				$this->getExtra2PagezoneTable(),
 				'uid_local = ' . $this->getUid() . 
 				' AND uid_foreign = ' . $extra->getExtraUid()
+			)
 			);
 		} catch (tx_newspaper_EmptyResultException $e) {
 			tx_newspaper::insertRows(
