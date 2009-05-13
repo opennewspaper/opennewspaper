@@ -908,12 +908,14 @@ t3lib_div::debug(
 			)
 			);
 		} catch (tx_newspaper_EmptyResultException $e) {
+t3lib_div::debug(
 			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $this->getUid(),
 					'uid_foreign' => $extra->getExtraUid()
 				)
+			)
 			);
 		}
 	}
