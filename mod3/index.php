@@ -339,8 +339,8 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 
 					$this->readUidList(); // get ids for section, page and pagezone
-debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
-#debug($_REQUEST);
+//debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
+//debug($_REQUEST);
 
 					if (!$this->section_id) {
 						if (tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {	
@@ -350,9 +350,15 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 							/// no section id found, just display message to choose a section from the section tree
 							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_chosen', false);
 						}
+					} else if (!$this->page_id) {
+						/// no page has been activated for given section
+						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_page_available_for_section', false);
+					} else if (!$this->pagezone_id) {  
+						/// no pagezone has been activated for given page for given section
+						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available_for_page', false);
 					} else {
-$content .= 'dummy #' . $this->section_id;
-						$content= $this->renderBackendSmartyPageZone(
+						/// render form for pagezone
+						$content = $this->renderBackendSmartyPageZone(
 							tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id))
 						);
 					}
