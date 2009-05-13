@@ -907,7 +907,7 @@ t3lib_div::debug($this->getExtras());
 				'uid_local = ' . $this->getUid() . 
 				' AND uid_foreign = ' . $extra->getExtraUid()
 			);
-		} catch (tx_newspaper_DBException $e) {
+		} catch (tx_newspaper_EmptyResultException $e) {
 			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
