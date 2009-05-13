@@ -900,7 +900,7 @@ t3lib_div::debug($this->getExtras());
 		if (!$found) 
 */		$this->extras[] = $extra;
 
-/*		try {
+		try {
 			tx_newspaper::selectOneRow(
 				'uid_local',
 				$this->getExtra2PagezoneTable(),
@@ -908,7 +908,7 @@ t3lib_div::debug($this->getExtras());
 				' AND uid_foreign = ' . $extra->getExtraUid()
 			);
 		} catch (tx_newspaper_DBException $e) {
-*/			tx_newspaper::insertRows(
+			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $this->getUid(),
