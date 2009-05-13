@@ -34,7 +34,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	function tearDown() {
-		
+/*		
 		$this->removeExtras();
 		
 		//	delete pagezone_papge
@@ -53,6 +53,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		);
 
 		$this->hierarchy->removeAllJunkManually();
+*/
 	}
 
 	public function test_createPageZone() {
