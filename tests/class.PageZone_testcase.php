@@ -316,7 +316,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 #		$pagezone = array_pop($this->hierarchy->getPageZones()); {
 			$old_extras = $pagezone->getExtras();
 			foreach ($old_extras as $extra_after_which) {
-				$i = 0; 
+t3lib_div::debug("inserting after $extra_after_which");				
+				$i = 0;
 				foreach ($this->extra_abstract_uids as $uid) {
 					$i++;
 					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
