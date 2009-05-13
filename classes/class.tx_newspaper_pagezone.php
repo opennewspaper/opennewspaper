@@ -899,24 +899,23 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 */		$this->extras[] = $extra;
 
 		try {
-t3lib_div::debug(
 			tx_newspaper::selectOneRow(
 				'uid_local',
 				$this->getExtra2PagezoneTable(),
 				'uid_local = ' . $this->getUid() . 
 				' AND uid_foreign = ' . $extra->getExtraUid()
-			)
 			);
+t3lib_div::debug(tx_newspaper::$query);
+
 		} catch (tx_newspaper_EmptyResultException $e) {
-t3lib_div::debug(
 			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $this->getUid(),
 					'uid_foreign' => $extra->getExtraUid()
 				)
-			)
 			);
+t3lib_div::debug(tx_newspaper::$query);
 		}
 	}
 	
