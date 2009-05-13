@@ -489,7 +489,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
-				'inherits_from' => $pz->getExtraOriginAsString($extra[$i])
+				'inherits_from' => 'to come ...' // $pz->getExtraOriginAsString($extra[$i])
 			);
 		}
 		return $data;
