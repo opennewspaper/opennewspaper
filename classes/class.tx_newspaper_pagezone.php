@@ -702,6 +702,7 @@ t3lib_div::debug("getInsertPosition($origin_uid)");
 			 */ 
 			$extra_after_which = null;
 			foreach ($this->getExtras() as $extra) {
+t3lib_div::debug("$extra");
 				if ($extra->getOriginUid() == $origin_uid) {
 					$extra_after_which = $extra;
 					break;
