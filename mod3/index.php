@@ -56,6 +56,10 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				private $section_id;
 				private $page_id;
 				private $pagezone_id;
+
+				private $page_zone_id;
+				private $pagezone_type_id;
+				
 				private $show_levels_above;
 				
 
@@ -322,15 +326,22 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 				function moduleContent() {
 					global $LANG;
 
-if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {	
-	die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false));
-}
+					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {	
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false));
+					}
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagetype')) {	
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available', false));
+					}
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagezonetype')) {	
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
+					}
 
 
 					$this->readUidList(); // get ids for section, page and pagezone
-t3lib_div::devlog('mod3 ids', 'newspaper', 0, array($this->id, $this->section_id, $this->page_id, $this->pagezone_id));
-				
+debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
 #debug($_REQUEST);
+
 					if (!$this->section_id) {
 						if (tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {	
 							/// check if at least one section exists
@@ -339,13 +350,15 @@ t3lib_div::devlog('mod3 ids', 'newspaper', 0, array($this->id, $this->section_id
 							/// no section id found, just display message to choose a section from the section tree
 							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_chosen', false);
 						}
-					} else { 
+					} else {
 $content .= 'dummy #' . $this->section_id;
 						$content= $this->renderBackendSmartyPageZone(
 							tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id))
 						);
 					}
+					
 					$this->content .= $this->doc->section('', $content, 0, 1);
+				
 				}
 
 	
@@ -357,115 +370,116 @@ $content .= 'dummy #' . $this->section_id;
 		/// \todo: check permissions?
 				
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
-//		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
-t3lib_div::devlog('show levels above read from be_user', 'newspaper', 0, $this->show_levels_above);
+		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
+		
+///// \todo: remove hard coded uid !!!!!!!!!!!!!!!!!
+//if (TYPO3_OS == 'WIN') {
+//// localhost
+//	$this->section_id = 3;
+//	$this->page_id = 3;
+//	$this->pagezone_id = 1;
+//} else {
+//// hel
+//	$this->section_id = 1892;
+//	$this->page_id = 3023;
+//	$this->pagezone_id = 6448;
+//}	
+//return;		
+		
+		// init
+		$this->section_id = 0;
+		$this->page_type_id = 0;
+		$this->pagezone_type_id = 0;
+		
+		$this->page_type_id = 0;
+		$this->pagezone_type_id = 0;
 
-		
-/// \todo: remove hard coded uid !!!!!!!!!!!!!!!!!
-if (TYPO3_OS == 'WIN') {
-// localhost
-	$this->section_id = 3;
-	$this->page_id = 3;
-	$this->pagezone_id = 1;
-} else {
-// hel
-	$this->section_id = 1892;
-	$this->page_id = 3023;
-	$this->pagezone_id = 6448;
-}	
-return;		
-		
-		
-		
-		
 
-		/// process section id param
+		/// process section id 
 		if ($this->id) {
 			$this->section_id = $this->id; // clicked in section tree
-		} else if (t3lib_div::_GP('section_id')) {
-			$this->section_id = t3lib_div::_GP('section_id'); // _request param
 		} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id")){
 			$this->section_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"); // read from be user
-		} else {
-			$this->section_id = 0; // nothing found
-		}
+		} 
 		if ($this->section_id) {
 			$s = new tx_newspaper_Section(intval($this->section_id));
 			if (!$s->isValid()) {
 				// no valid section, nothing to show ...
 				$this->section_id = 0; 
-				$this->page_id = 0;
-				$this->pagezone_id = 0;
 			}
 		}
-//t3lib_div::debug($s);
+//debug(t3lib_div::view_array($s));
 
 
-		/// process page id param
+		/// process page type id 
 		if ($this->section_id) {
-			if (t3lib_div::_GP('page_id')) {
-				$this->page_id = t3lib_div::_GP('page_id'); // read from _request
-			} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id")){
-				// try to get the page of the last used page type
-				$page_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"); // read from be user
-				$pt = new tx_newspaper_PageType(intval($page_type_id));
+			$active_pages = $s->getSubPages(); /// get list of available pages for given section
+			if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id")) {
+				// check if page with stored page type is available for given section
+				$this->page_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"); // read from be user
+				$pt = new tx_newspaper_PageType(intval($this->page_type_id));
 				if ($pt->isValid()) {
-					// is that page type available for given section?
-					
-//...				
-					
-					
-					
-					
-					$active_page = $s->getSubPages();
-					if (sizeof($active_page) > 0)
-						$this->page_id = $active_page[0]->getUid(); // use first assigned page initially
-					else
-						$this->page_id = 0; // nothing found
+					/// get page with given page type
+					for ($i = 0; $i < sizeof($active_pages); $i++) {
+						if ($active_pages[$i]->getPageType()->getUid() == $this->page_type_id) {
+							$this->page_id = $active_pages[$i]->getUid();
+							$p = $active_pages[$i]; /// save page object, needed for page zone check
+							break;
+						}
+					}
 				} else {
 					// stored page type isn't valid
+					$this->page_type_id = 0;
 					$this->page_id = 0;
-					$this->pagezone_id = 0;
+				}
+			}
+			if (!$this->page_id) {
+				/// no page found so far, try to use first available page (as default value)
+				if (sizeof($active_pages) > 0) {
+					$this->page_type_id = $active_pages[0]->getPageType()->getUid();
+					$this->page_id = $active_pages[0]->getUid();
+					$p = $active_pages[0]; /// save page object, needed for page zone check
 				}
 			}
 		}
+//debug(t3lib_div::view_array($p));
+
+
+		/// processpage zone type id 
 		if ($this->page_id) {
-			$p = new tx_newspaper_Page();
-			$p->setUid(intval($this->page_id));
-			if (!$p->isValid($s)) {
-				// no valid page, only the section seems to be useful
-				$this->page_id = 0;
-				$this->pagezone_id = 0;
+			$active_pagezones = $p->getPageZones(); /// get list of available page zones for given page
+//debug(t3lib_div::view_array($active_pagezones[0]));
+			if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")) {
+				// check if page zone with stored pagezone type is available for given page
+				$this->pagezone_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id"); // read from be user
+				$pzt = new tx_newspaper_PageZoneType(intval($this->pagezone_type_id));
+				if ($pzt->isValid()) {
+					/// get pagezone with given pagezone type
+					for ($i = 0; $i < sizeof($active_pagezones); $i++) {
+						if ($active_pagezones[$i]->getPageZoneType()->getUid() == $this->pagezone_type_id) {
+							$this->pagezone_id = $active_pagezones[$i]->getAbstractUid();
+							break;
+						}
+					}
+				} else {
+					// stored pagezone type isn't valid
+					$this->pagezone_type_id = 0;
+					$this->pagezone_id = 0;
+				}
+			}
+			if (!$this->pagezone_id) {
+				/// no pagezone found so far, try to use first available pagezone (as default value)
+				if (sizeof($active_pagezones) > 0) {
+					$this->pagezone_type_id = $active_pagezones[0]->getPageZoneType()->getUid();
+					$this->pagezone_id = $active_pagezones[0]->getAbstractUid();
+				}
 			}
 		}
-t3lib_div::debug($p);
-
-	
-		if ($this->page_id) {
-			if (t3lib_div::_GP('pagezone_id')) {
-				$this->pagezone_id = t3lib_div::_GP('pagezone_id');
-			} else if ($BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_id")){
-				$this->pagezone_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_id");
-			} else {
-
-				$active_pagezone = $p->getPageZones();
-				if (sizeof($active_pagezone) > 0)
-					$this->pagezone_id = $active_pagezone[0]->getUid(); // use first activated pagezone initally
-				else
-					$this->pagezone_id = 0; // nothing found
-			}
-		}
-		if ($this->pagezone_id) {
-			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id));
-t3lib_div::debug($pz);			
-		}
-
-
 
 		/// store ids for be user for later use
 		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/section_id", $this->section_id);
-		#$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_id", $this->page_id);
-		#$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_id", $this->pagezone_id);		
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_id", $this->page_type_id);
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_id", $this->pagezone_type_id);		
 		
 	}
 
@@ -493,8 +507,8 @@ t3lib_div::debug($pz);
 //debug(t3lib_div::view_array($s), 's');
 		return array(
 				'section' => array_reverse($s->getSectionPath()), 
-				'page_type' => $pz->getParentPage()->getPageType()->getAttribute('type_name'),
-				'pagezone_type' => $pz->getPageZoneType()->getAttribute('type_name'),
+				'page_type' => $pz->getParentPage()->getPageType(),
+				'pagezone_type' => $pz->getPageZoneType(),
 				'pagezone_id' => $pz->getPagezoneUid(),
 			);
 	}
@@ -520,12 +534,20 @@ t3lib_div::debug($pz);
 		/// add current page zone and extras		
 		$data[] = $this->extractData($pz);
 		$extra_data[] = $this->collectExtras($pz->getExtras());
+		
 		$s = $pz->getParentPage()->getParentSection();
-		$page = $s->getSubPages(); // get activate pages for current section
+		$pages = $s->getSubPages(); // get activate pages for current section
 		$pagetype = array();
-		for ($i = 0; $i < sizeof($page); $i++) {
-			$pagetype[] = $page[$i]->getPageType(); 
+		for ($i = 0; $i < sizeof($pages); $i++) {
+			$pagetype[] = $pages[$i]->getPageType(); 
 		}
+		
+		$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
+		$pagezonetype = array();
+		for ($i = 0; $i < sizeof($pagezones); $i++) {
+			$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
+		}
+
 
 //debug(t3lib_div::view_array($extra_data), 'extra data');
 //debug(t3lib_div::view_array($data), 'data');				
@@ -541,11 +563,14 @@ t3lib_div::debug($pz);
 		$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
 		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
 		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
+		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
+		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('EXTRA_DATA', $extra_data);
 		$smarty->assign('DATA', $data);
 		$smarty->assign('PAGETYPE', $pagetype);
+		$smarty->assign('PAGEZONETYPE', $pagezonetype);
 
 		$smarty->assign('SHOW_LEVELS_ABOVE', $this->show_levels_above);
 

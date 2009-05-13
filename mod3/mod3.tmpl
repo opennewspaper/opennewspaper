@@ -149,6 +149,11 @@ td {ldelim}
 			self.document.getElementsByTagName('body')[0].innerHTML = data.responseText;
 		{rdelim}
 	{rdelim}
+
+	function page_pagezone_type_change(type, uid) {ldelim}
+/// \todo: per ajax be_user ändern, dann reload
+alert('to do ... type: ' + type + ', value: ' + uid); 		
+	{rdelim}
 	
 </script>
 
@@ -169,12 +174,27 @@ td {ldelim}
 	{* Dropdown for page and page zone for section only *}
 	{if $smarty.section.i.last} 
 	 	&nbsp; &nbsp; 
-		<i>Seite:</i> {$DATA[i].page_type}
-		{section name="j loop=$PAGES}
-			
+		{$LABEL.pagetype}: 
+		<select  onchange="page_pagezone_type_change('p', this.value)">
+		{section name="j loop=$PAGETYPE}
+			{if $PAGETYPE[j]->getUid() == $DATA[i].page_type->getUid()}
+				<option selected="selected" 
+			{else}
+				<option
+			{/if} value="{$PAGETYPE[j]->getUid()}">{$PAGETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
+		</select>
 		 &nbsp; &nbsp; 
-		<i>Seitenbereich:</i> {$DATA[i].pagezone_type}
+		{$LABEL.pagezonetype}: 
+		<select  onchange="page_pagezone_type_change('pz', this.value)">
+		{section name="j loop=$PAGEZONETYPE}
+			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
+				<option selected="selected" 
+			{else}
+				<option
+			{/if} value="{$PAGEZONETYPE[j]->getUid()}">{$PAGEZONETYPE[j]->getAttribute('type_name')}</option> 
+		{/section}
+		</select>
 	{/if}
 
 
