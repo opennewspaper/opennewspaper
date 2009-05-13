@@ -137,7 +137,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		tx_newspaper::updateRows(
 			'tx_newspaper_pagezone', 
 			'uid = ' . $pagezone_uid, 
-			array('page_id' => $this->parent_page->getUid())
+			array('page_id' => $this->getParentPage()->getUid())
 		);
 		
 		/// \todo store Extras placed on $this
