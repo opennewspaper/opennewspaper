@@ -107,7 +107,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
-	/// \return true if section can be accessed (FE/BE use enableFields)
+	/// \return true if page type can be accessed (FE/BE use enableFields)
 	function isValid() {
 		// check if page type is valid
 		try {
