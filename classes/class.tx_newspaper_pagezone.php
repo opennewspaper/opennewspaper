@@ -423,7 +423,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $remove_extra Extra to be removed
 	 *  \return false if $remove_extra was not found, true otherwise
 	 *  \todo DELETE WHERE origin_uid = ...
-	 *  \todo inheritanceremove extra record, not just assoc recordremove extra record, not just assoc record
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 	
@@ -524,8 +523,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			on the PageZone
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
-/// todo: derzeit nutzte ich noch setAttribute() um zu speichern.
-/// kannst du mir bescheid geben, wenn die methode fertig ist.
 
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
@@ -709,9 +706,18 @@ t3lib_div::debug($this->getExtras());
 				}
 			}
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
-				/// \todo Deduce the $extra_after_which from the parent page(s)
-				/// \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt 
-				throw new tx_newspaper_NotYetImplementedException('Finding insert position after a deleted extra');
+				/** Deduce the $extra_after_which from the parent page(s)
+				 *  \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt
+				 */
+				$parent = $this->getParentForPlacement();
+				if (!$parent instanceof tx_newspaper_PageZone) {
+					throw new tx_newspaper_IllegalUsageException(
+						'Tried to insert an Extra with an origin uid which is neither in the current' .
+						' PageZone nor in any of the parents.'
+						);
+				} else {
+					return $parent->getInsertPosition($origin_uid);
+				}	
 			}
 			$position = $extra_after_which->getAttribute('position');
 		} else {
