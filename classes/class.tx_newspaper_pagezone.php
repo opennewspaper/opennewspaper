@@ -915,7 +915,7 @@ t3lib_div::debug($this->getExtras());
 					'uid_foreign' => $extra->getExtraUid()
 				)
 			);
-//		}
+		}
 	}
 	
 	public function getPageZoneUid() { return $this->pagezone_uid; }
