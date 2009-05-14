@@ -31,6 +31,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
+	/// A short description that makes an Extra uniquely identifiable in the BE
+	public function getDescription() {
+		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')';
+	}
+
 //TODO: getLLL
 	public function getTitle() {
 		return 'Image';
