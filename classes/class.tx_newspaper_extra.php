@@ -192,9 +192,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		} catch (tx_newspaper_DBException $e) {
 			return array();
 		}
+
 		$pooled_extras = array();
 		foreach ($uids as $uid) {
-			$pooled_extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
+			$class = $this->getTable();
+			$pooled_extras[] = new $class(intval($uid['uid']));
 		}
 		return $pooled_extras;
 	}
