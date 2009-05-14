@@ -51,45 +51,38 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module3 extends t3lib_SCbase {
-				var $pageinfo;
-				
-				private $section_id;
-				private $page_id;
-				private $pagezone_id;
+	var $pageinfo;
+	
+	private $section_id;
+	private $page_id;
+	private $pagezone_id;
+	
+	private $page_zone_id;
+	private $pagezone_type_id;
+	
+	private $show_levels_above;
+	
+	
+	/**
+	 * Initializes the Module
+	 * @return	void
+	 */
+	function init()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	
+		parent::init();
+	
+	}
 
-				private $page_zone_id;
-				private $pagezone_type_id;
-				
-				private $show_levels_above;
-				
-
-				/**
-				 * Initializes the Module
-				 * @return	void
-				 */
-				function init()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-
-					parent::init();
-
-				}
-
-				/**
-				 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-				 *
-				 * @return	void
-				 */
-				function menuConfig()	{
-					global $LANG;
-//					$this->MOD_MENU = Array (
-//						'function' => Array (
-//							'1' => $LANG->getLL('function1'),
-//							'2' => $LANG->getLL('function2'),
-//							'3' => $LANG->getLL('function3'),
-//						)
-//					);
-					parent::menuConfig();
-				}
+	/**
+	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	 *
+	 * @return	void
+	 */
+	function menuConfig()	{
+		global $LANG;
+		parent::menuConfig();
+	}
 
 
 	private function processToggleShowLevelsAbove($checked) {
@@ -102,7 +95,32 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
+	private function processPageTypeChange($pt_uid) {
+		global $BE_USER;
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_type_id", intval($pt_uid));
+		die();
+	}
+
+	private function processPageZoneTypeChange($pzt_uid) {
+		global $BE_USER;
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_type_id", intval($pzt_uid));
+		die();
+	}
+
 	private function processExtraInsertAfter($origin_uid, $pz_uid) {
+		$e = new tx_newspaper_Extra_Image();
+		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
+		$e->store();		
+		$e->setAttribute('show_extra', 1);
+		$e->setAttribute('is_inheritable', 1);
+		
+		$e->store();
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+		$pz->insertExtraAfter($e, $origin_uid);
+		die();
+	}
+	private function processExtraInsertAfterDummy($origin_uid, $pz_uid) {
+/// \todo: remove after testing
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
 		$e->store();		
@@ -158,6 +176,11 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		if (t3lib_div::_GP('extra_insert_after') == 1) {
 			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
 		}
+		if (t3lib_div::_GP('extra_insert_after_dummy') == 1) {
+/// \todo: remove after testing
+			$this->processExtraInsertAfterDummy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
+		}
+
 
 		if (t3lib_div::_GP('extra_move_after') == 1) {
 			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
@@ -174,20 +197,34 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		if (t3lib_div::_GP('extra_set_pass_down') == 1) {
 			$this->processExtraSetPassDown(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('pass_down')); 
 		}
+		
+		if (t3lib_div::_GP('extra_page_type_change') == 1) {
+			$this->processPageTypeChange(t3lib_div::_GP('pt_uid')); 
+		}
+		
+		if (t3lib_div::_GP('extra_pagezone_type_change') == 1) {
+			$this->processPageZoneTypeChange(t3lib_div::_GP('pzt_uid')); 
+		}
 
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
-			die($this->getChoseExtraForm());	
+			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid')));	
 		}
+		if (t3lib_div::_GP('chose_extra_from_pool') == 1) {
+			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra')));	
+		}
+		
+		
+		
+		
 //t3lib_div::devlog('_request mod3 ajax - NO ajax found', 'newspaper', 0);		
 //debug('no ajax');
 		return; // no ajax request found
 	}
 
 
-	private function getChoseExtraForm() {
+	private function getChoseExtraForm($origin_uid) {
 		global $LANG;
-
 
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -196,22 +233,59 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		$this->content .= $this->getIconHeader();
 				
-//$this->content .= $this->doc->header($LANG->getLL('title'));
-/// \todo: warum geht das nicht?
 		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra', false));
-		$this->content .= $this->doc->header('New extra');
 
-		$html = '';		
+ 	 	$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+
+		$label['new_extra_new'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_new', false);
+		$label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
+		$message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
+
 		$extra = tx_newspaper_Extra::getRegisteredExtras();
-		for ($i = 0; $i < sizeof($extra); $i++) {
-			$html .= $extra[$i]->getTitle() . '<br />';
-		}
+		
+		$smarty->assign('LABEL', $label);
+		$smarty->assign('MESSAGE', $message);
+		$smarty->assign('EXTRA', $extra); // list of extras
+		$smarty->assign('LIST_SIZE', min(12, sizeof($extra)));
+		$smarty->assign('ORIGIN_UID', intval($origin_uid));
+		
+		$html = $smarty->fetch('mod3_new_extra.tmpl');
 
 		$this->content .= $this->doc->section('', $html, 0, 1);
-		$this->content.=$this->doc->endPage();
+		$this->content .= $this->doc->endPage();
 		
 		return $this->content;
 	}
+
+	private function getChoseExtraFromPoolForm($origin_uid, $classname) {
+		global $LANG;
+		
+		$this->doc = t3lib_div::makeInstance('template');
+		$this->doc->backPath = $GLOBALS['BACK_PATH'];
+		
+		$this->content .= $this->doc->startPage('');
+
+		$this->content .= $this->getIconHeader();
+		
+		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra_from_pool', false));
+		
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+		
+//debug($classname);
+		$e = new $classname();
+//		$smarty->assign('EXTRA_POOLED', call_user_func($classname, getPooledExtras()));
+		$smarty->assign('EXTRA_POOLED', $e->getPooledExtras());
+		
+		$html = $smarty->fetch('mod3_new_extra_from_pool.tmpl');
+		
+		$this->content .= $this->doc->section('', $html, 0, 1);
+		$this->content .= $this->doc->endPage();
+		
+		return $this->content;
+	}
+
 
 /// \todo: auslagern? 
 	function getIconHeader() {
@@ -274,7 +348,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 							</script>
 						';
 
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
+						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />' . $LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
 
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
@@ -337,9 +411,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
 					}
 
-
+global $BE_USER; debug(array('section id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"), 'page type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"), 'pagezone type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")));
 					$this->readUidList(); // get ids for section, page and pagezone
-//debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
+debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
 //debug($_REQUEST);
 
 					if (!$this->section_id) {
@@ -489,7 +563,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
-				'inherits_from' => 'to come ...' // $pz->getExtraOriginAsString($extra[$i])
+'inherits_from' => 'to come ...' // $pz->getExtraOriginAsString($extra[$i])
 			);
 		}
 		return $data;
@@ -576,6 +650,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
 		$smarty->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 //		$smarty->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
 		

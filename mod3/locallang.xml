@@ -33,6 +33,10 @@
 			<label index="message_delete_confirm">Do you really want to delete this extra?</label>
 			<label index="label_pagetype">Page</label>
 			<label index="label_pagezonetype">Page zone</label>
+			<label index="label_new_extra_new">New extra</label>
+			<label index="label_new_extra_from_pool">From pool</label>
+			<label index="message_no_extra_selected">Please seletc an extra to proceed.</label>
+			<label index="title_new_extra_from_pool">New extra - chose from pool</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>

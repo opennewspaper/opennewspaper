@@ -54,6 +54,19 @@ td {ldelim}
 			{rdelim}
 		);
 	{rdelim}
+	function extra_insert_after_dummy(origin_uid, pagezone_uid) {ldelim}
+/// \todo: remove after testing
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_insert_after_dummy=1&origin_uid=" + origin_uid + "&pz_uid=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
 
 	function extra_move_after(origin_uid, pz_uid, extra_uid) {ldelim}
 		var request = new top.Ajax.Request(
@@ -105,15 +118,37 @@ td {ldelim}
 		);
 	{rdelim}
 
+	function page_type_change(pt_uid) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_page_type_change=1&pt_uid=" + pt_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
 
-	function subModal() {ldelim}
+	function pagezone_type_change(pzt_uid) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_pagezone_type_change=1&pzt_uid=" + pzt_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function subModal(origin_uid) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-		
-// param for close still missing
-// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
+/// \todo:  param for close still missing
+/// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1",
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid,
 			width, 
 			height, 
 			null, 
@@ -121,6 +156,12 @@ td {ldelim}
 		);
 	{rdelim}
 	
+	
+	function extra_insert_after_START(origin_uid) {ldelim}
+/// \todo: add be_mode
+		subModal(origin_uid);
+	{rdelim}
+
 
 	function processing() {ldelim}
 
@@ -150,11 +191,6 @@ td {ldelim}
 		{rdelim}
 	{rdelim}
 
-	function page_pagezone_type_change(type, uid) {ldelim}
-/// \todo: per ajax be_user ändern, dann reload
-alert('to do ... type: ' + type + ', value: ' + uid); 		
-	{rdelim}
-	
 </script>
 
 
@@ -165,8 +201,9 @@ alert('to do ... type: ' + type + ', value: ' + uid);
 
 {section name=i loop=$EXTRA_DATA}
 <div style="margin-bottom: 7px;">
-	<a href="#" onclick="subModal(0, {$DATA[i].pagezone_id}); return false;">Test subModal</a>
-	<a href="javascript:extra_insert_after(0, {$DATA[i].pagezone_id});">{$NEW_TOP_ICON}</a>
+
+	<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
+	<a href="#" onclick="extra_insert_after_START(0, {$DATA[i].pagezone_id}); return false;">{$NEW_TOP_ICON}</a>
  	&nbsp; &nbsp; 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	
@@ -175,7 +212,7 @@ alert('to do ... type: ' + type + ', value: ' + uid);
 	{if $smarty.section.i.last} 
 	 	&nbsp; &nbsp; 
 		{$LABEL.pagetype}: 
-		<select  onchange="page_pagezone_type_change('p', this.value)">
+		<select  onchange="page_type_change(this.value)">
 		{section name="j loop=$PAGETYPE}
 			{if $PAGETYPE[j]->getUid() == $DATA[i].page_type->getUid()}
 				<option selected="selected" 
@@ -186,7 +223,7 @@ alert('to do ... type: ' + type + ', value: ' + uid);
 		</select>
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezonetype}: 
-		<select  onchange="page_pagezone_type_change('pz', this.value)">
+		<select  onchange="pagezone_type_change(this.value)">
 		{section name="j loop=$PAGEZONETYPE}
 			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
 				<option selected="selected" 
@@ -240,7 +277,7 @@ alert('to do ... type: ' + type + ', value: ' + uid);
 	  {$EMPTY_ICON}
 	{/if} 
 	
-	<a href="javascript:extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
+	<a href="#" onclick="extra_insert_after_START({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
 	
 	{* calculate index for origin uid for moving extras up and down *}	
 	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}

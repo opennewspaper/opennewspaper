@@ -1,0 +1,28 @@
+<script language="javascript">
+
+	function getChosenExtra() {ldelim}
+		if (document.getElementById('extra_list').selectedIndex < 0) {ldelim}
+			alert('{$MESSAGE.no_extra_selected}');
+			return false;
+		{rdelim}
+		return document.getElementById('extra_list').value;
+	{rdelim}
+
+	function extra_insert_after_POOL(origin_uid, extra_class) {ldelim}
+		extra_class = getChosenExtra();
+		self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class 
+	{rdelim}
+
+</script>
+
+
+{* render list with registered extras *}
+<select id="extra_list" size="{$LIST_SIZE}">';
+{section name=i loop=$EXTRA}
+	<option value="{$EXTRA[i]->getTable()}">{$EXTRA[i]->getTitle()}</option>
+{/section}
+</select>
+<br /><br />
+
+<input type="button" value="{$LABEL.new_extra_new}" />
+<input onclick="extra_insert_after_POOL({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />
