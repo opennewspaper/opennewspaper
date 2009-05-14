@@ -184,10 +184,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 	
 	/// Lists Extras which are in the pool of master copies for new Extras
-	public static function getPooledExtras() {
+	public function getPooledExtras() {
 		try {
 			$uids = tx_newspaper::selectRows(
-				'uid', self::getTable(), 'pool', '', 'crdate DESC'
+				'uid', $this->getTable(), 'pool', '', 'crdate DESC'
 			);
 		} catch (tx_newspaper_DBException $e) {
 			return array();

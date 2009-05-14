@@ -45,7 +45,7 @@ interface tx_newspaper_ExtraIface
 	 * 
 	 *  \return A list of Extras of the current class which are in this pool.
 	 */
-	public static function getPooledExtras();
+	public function getPooledExtras();
 	
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);

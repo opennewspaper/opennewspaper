@@ -220,7 +220,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	/// Lists Extras which are in the pool of master copies for new Extras
-	public static function getPooledExtras() {
+	public function getPooledExtras() {
 		throw new tx_newspaper_IllegalUsageException('PageZones cannot be pooled.');
 	}
 	
