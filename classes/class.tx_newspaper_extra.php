@@ -187,7 +187,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public static function getPooledExtras() {
 		try {
 			$uids = tx_newspaper::selectRows(
-				'uid', $this->getTable(), 'pool', '', 'crdate DESC'
+				'uid', self::getTable(), 'pool', '', 'crdate DESC'
 			);
 		} catch (tx_newspaper_DBException $e) {
 			return array();
