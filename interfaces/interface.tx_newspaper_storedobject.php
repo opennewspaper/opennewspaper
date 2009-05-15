@@ -60,6 +60,10 @@
 	 *  Specification: np_* (max. 255 char); should not contain "phpunit"
 	 */
 	public static function getModuleName(); 
+	
+	/// \return int pid of sysfolder to store extra records in
+/// \todo: implement in section, pagezone, articlelist etc.
+//	public function getSysfolderPid();
 
 }
 ?>

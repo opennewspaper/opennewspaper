@@ -239,6 +239,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	public static function getModuleName() { return 'np_extra_default'; }
 
+	/// \return pid of sysfolder to store extra records in
+	public function getSysfolderPid() {
+		return tx_newspaper_Sysfolder::getInstance()->getPid($this);
+	}
+
 	public function getTable() {
 		return tx_newspaper::getTable($this);
 	}
