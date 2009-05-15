@@ -28,3 +28,11 @@ function getViewportHeight() {
 	// older versions of IE
 	return document.getElementsByTagName('body')[0].clientHeight;
 }
+
+function splitAtPipe(str, pos) {
+	part = str.split("|");
+	if (part.length >= pos -1)
+		return part[pos];
+	else
+		return false;
+}
