@@ -242,7 +242,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
 		$message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
 
+		/// list of registered extras
 		$extra = tx_newspaper_Extra::getRegisteredExtras();
+//debug($extra, 'e');
 		
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
@@ -258,8 +260,11 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		return $this->content;
 	}
 
+
 	private function getChoseExtraFromPoolForm($origin_uid, $classname) {
 		global $LANG;
+
+		$e = new $classname(); // het instance of concrete extra
 		
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -268,15 +273,22 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		$this->content .= $this->getIconHeader();
 		
-		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra_from_pool', false));
+		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra_from_pool', false) . ': ' . $e->getTitle());
 		
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
 		
-//debug($classname);
-		$e = new $classname();
-//		$smarty->assign('EXTRA_POOLED', call_user_func($classname, getPooledExtras()));
-		$smarty->assign('EXTRA_POOLED', $e->getPooledExtras());
+		$label['extra_copy_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra_copy_from_pool', false);
+		$label['extra_reference_from_pool'] =  $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra_reference_from_pool', false);
+		$message['pool_is_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pool_is_empty', false);
+		$message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
+		
+
+		$pooled = $e->getPooledExtras();
+		$smarty->assign('EXTRA_POOLED', $pooled);
+		$smarty->assign('LABEL', $label);
+		$smarty->assign('MESSAGE', $message);
+		$smarty->assign('LIST_SIZE', min(12, sizeof($pooled)));
 		
 		$html = $smarty->fetch('mod3_new_extra_from_pool.tmpl');
 		

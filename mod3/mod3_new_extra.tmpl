@@ -8,9 +8,33 @@
 		return document.getElementById('extra_list').value;
 	{rdelim}
 
-	function extra_insert_after_POOL(origin_uid, extra_class) {ldelim}
-		extra_class = getChosenExtra();
-		self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class 
+
+	function extra_insert_after_NEW(origin_uid) {ldelim}
+		extra_class_sysfolder = getChosenExtra();
+		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+		extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
+		if (extra_class == false || extra_sysfolder == false) {ldelim}
+			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
+			return false;
+		{rdelim}
+		extra_sysfolder = parseInt(extra_sysfolder);
+//alert('new ' + origin_uid + ', ' + extra_class);
+		if (extra_class != false) {ldelim}
+/// \todo: close.html ....
+			self.location.href = "/taz426/typo3/alt_doc.php?returnUrl=close.html&edit[" + extra_class + "][" + extra_sysfolder + "]=new"
+		{rdelim} 
+	{rdelim}
+
+	function extra_insert_after_POOL(origin_uid) {ldelim}
+		extra_class_sysfolder = getChosenExtra();
+		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+		if (extra_class == false) {ldelim}
+			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
+			return false;
+		{rdelim}
+		if (extra_class != false) {ldelim}
+			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class
+		{rdelim} 
 	{rdelim}
 
 </script>
@@ -19,10 +43,10 @@
 {* render list with registered extras *}
 <select id="extra_list" size="{$LIST_SIZE}">';
 {section name=i loop=$EXTRA}
-	<option value="{$EXTRA[i]->getTable()}">{$EXTRA[i]->getTitle()}</option>
+	<option value="{$EXTRA[i]->getTable()}|{$EXTRA[i]->getSysfolderPid()}">{$EXTRA[i]->getTitle()}</option>
 {/section}
 </select>
 <br /><br />
 
-<input type="button" value="{$LABEL.new_extra_new}" />
+<input onclick="extra_insert_after_NEW({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_new}" />
 <input onclick="extra_insert_after_POOL({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />

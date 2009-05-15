@@ -2,29 +2,43 @@
 <script language="javascript">
 
 	function getChosenExtra() {ldelim}
-		if (document.getElementById('extra_list').selectedIndex < 0) {ldelim}
+		if (document.getElementById('extra_list_pooled').selectedIndex < 0) {ldelim}
 			alert('{$MESSAGE.no_extra_selected}');
 			return false;
 		{rdelim}
- 		return document.getElementById('extra_list_from_pool').value;
+ 		return document.getElementById('extra_list_pooled').value;
 	{rdelim}
 
-	function extra_insert_after_POOL(origin_uid) {ldelim}
-		extra_class = getChosenExtra();
-		self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid
+	function extra_insert_after_POOL_copy(origin_uid) {ldelim}
+		extra_uid = getChosenExtra();
+		if (extra_uid != false) {ldelim}
+//			self.location.href = "index.php?XXXXXXX=1&origin_uid=" + origin_uid
+alert('copy from pool: #' + extra_uid);
+		{rdelim}
 	{rdelim}
+	function extra_insert_after_POOL_ref(origin_uid) {ldelim}
+		extra_uid = getChosenExtra();
+		if (extra_uid != false) {ldelim}
+//			self.location.href = "index.php?XXXXXXX=1&origin_uid=" + origin_uid
+alert('ref pool: #' + extra_uid);
+		{rdelim}
+	{rdelim}
+
 
 </script>
 
 
 {* render list with pooled extras *}
-<select id="extra_list_pooled" size="{$LIST_SIZE}">';
-{section name=i loop=$EXTRA_POOLED}
-	<option value="{$EXTRA_POOLED[i]->getTable()}">{$EXTRA_POOLED[i]->getTitle()}</option>
-{/section}
-</select>
+{if sizeof($EXTRA_POOLED) > 0}
+	<select id="extra_list_pooled" size="{$LIST_SIZE}">';
+	{section name=i loop=$EXTRA_POOLED}
+		<option value="{$EXTRA_POOLED[i]->getUid()}">{$EXTRA_POOLED[i]->getDescription()}</option>
+	{/section}
+	</select>
+{else}
+	{$MESSAGE.pool_is_empty}
+{/if}
 <br /><br />
-<!-- 
-<input type="button" value="{$LABEL.new_extra_new}" />
-<input onclick="extra_insert_after_POOL({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />
--->
+
+<input onclick="extra_insert_after_POOL_copy({$ORIGIN_UID})" type="button" value="{$LABEL.extra_copy_from_pool}" />
+<input onclick="extra_insert_after_POOL_ref({$ORIGIN_UID})" type="button" value="{$LABEL.extra_reference_from_pool}" />
