@@ -30,6 +30,7 @@ function getViewportHeight() {
 }
 
 function splitAtPipe(str, pos) {
+	str = str + '';
 	part = str.split("|");
 	if (part.length > pos) {
 		return part[pos];
