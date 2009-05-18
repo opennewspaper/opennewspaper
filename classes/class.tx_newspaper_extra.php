@@ -267,6 +267,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				'uid = ' . $this->getExtraUid(), 
 				$this->extra_attributes
 			);
+t3lib_div::devlog('extra::store()', 'newspaper', 0, array($this->attributes, $this->extra_attributes));
+			
 		} else {
 			
 			if ($this->extra_attributes) {
