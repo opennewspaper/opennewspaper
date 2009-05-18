@@ -374,6 +374,16 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 		}
 	}
 
+	public function test_getExtraOrigin() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			foreach($pagezone->getExtras() as $extra) {
+				t3lib_div::debug($pagezone->getExtraOrigin($extra));
+				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+			}
+		}
+		
+		$this->fail('test_getExtraOrigin() not yet implemented.');
+	}
 	/** Make sure the order is correct. \n
 	 *  Expected order: \n 
 	 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
