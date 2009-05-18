@@ -38,7 +38,7 @@ class tx_newspaper_SectionTree {
 	 */
 	function init() {
 		global $BE_USER,$BACK_PATH;
-t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
+//t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
 		// Create template object:
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->docType='xhtml_trans';
@@ -146,7 +146,7 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 		}
 		
 		$html .= '<br />';
-t3lib_div::devlog('gst row', 'newspaper', 0, array($html, $row));		
+//t3lib_div::devlog('gst row', 'newspaper', 0, array($html, $row));		
 		return $html;
 	}
 

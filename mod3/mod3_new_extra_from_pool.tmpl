@@ -35,10 +35,9 @@ alert('ref pool: #' + extra_uid);
 		<option value="{$EXTRA_POOLED[i]->getUid()}">{$EXTRA_POOLED[i]->getDescription()}</option>
 	{/section}
 	</select>
+	<br /><br />
+	<input onclick="extra_insert_after_POOL_copy({$ORIGIN_UID})" type="button" value="{$LABEL.extra_copy_from_pool}" />
+	<input onclick="extra_insert_after_POOL_ref({$ORIGIN_UID})" type="button" value="{$LABEL.extra_reference_from_pool}" />
 {else}
 	{$MESSAGE.pool_is_empty}
 {/if}
-<br /><br />
-
-<input onclick="extra_insert_after_POOL_copy({$ORIGIN_UID})" type="button" value="{$LABEL.extra_copy_from_pool}" />
-<input onclick="extra_insert_after_POOL_ref({$ORIGIN_UID})" type="button" value="{$LABEL.extra_reference_from_pool}" />

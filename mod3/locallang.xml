@@ -12,7 +12,7 @@
 			<label index="label_pass_down">Pass down</label>
 			<label index="label_inherits_from">Inherits from</label>
 			<label index="label_commands">Commands</label>
-			<label index="label_edit_extra">Exit extra</label>
+			<label index="label_edit_extra">Edit extra</label>
 			<label index="label_hide">Hide</label>
 			<label index="label_unhide">Unhide</label>
 			<label index="label_unhide">Unhide</label>

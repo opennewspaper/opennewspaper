@@ -9,7 +9,7 @@
 	{rdelim}
 
 
-	function extra_insert_after_NEW(origin_uid) {ldelim}
+	function extra_insert_after_NEW(origin_uid, pz_uid) {ldelim}
 		extra_class_sysfolder = getChosenExtra();
 		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
 		extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
@@ -18,14 +18,12 @@
 			return false;
 		{rdelim}
 		extra_sysfolder = parseInt(extra_sysfolder);
-//alert('new ' + origin_uid + ', ' + extra_class);
 		if (extra_class != false) {ldelim}
-/// \todo: close.html ....
-			self.location.href = "/taz426/typo3/alt_doc.php?returnUrl=close.html&edit[" + extra_class + "][" + extra_sysfolder + "]=new"
+			self.location.href = top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + extra_class + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid
 		{rdelim} 
 	{rdelim}
 
-	function extra_insert_after_POOL(origin_uid) {ldelim}
+	function extra_insert_after_POOL(origin_uid, pz_uid) {ldelim}
 		extra_class_sysfolder = getChosenExtra();
 		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
 		if (extra_class == false) {ldelim}
@@ -33,7 +31,7 @@
 			return false;
 		{rdelim}
 		if (extra_class != false) {ldelim}
-			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class
+			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pool_extra_pz_uid=" + pz_uid + "&pool_extra_after_origin_uid=" + origin_uid
 		{rdelim} 
 	{rdelim}
 
@@ -48,5 +46,5 @@
 </select>
 <br /><br />
 
-<input onclick="extra_insert_after_NEW({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_new}" />
-<input onclick="extra_insert_after_POOL({$ORIGIN_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />
+<input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID})" type="button" value="{$LABEL.new_extra_new}" />
+<input onclick="extra_insert_after_POOL({$ORIGIN_UID}, {$PZ_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />

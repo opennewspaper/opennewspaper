@@ -149,7 +149,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
-t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra'), $show));
+//t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra')));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
 		die();
@@ -208,7 +208,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
-			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid')));	
+			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')));	
 		}
 		if (t3lib_div::_GP('chose_extra_from_pool') == 1) {
 			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra')));	
@@ -223,7 +223,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 	}
 
 
-	private function getChoseExtraForm($origin_uid) {
+	private function getChoseExtraForm($origin_uid, $pz_uid) {
 		global $LANG;
 
 		$this->doc = t3lib_div::makeInstance('template');
@@ -249,8 +249,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
 		$smarty->assign('EXTRA', $extra); // list of extras
-		$smarty->assign('LIST_SIZE', min(12, sizeof($extra)));
+		$smarty->assign('LIST_SIZE', max(2, min(12, sizeof($extra)))); /// size at least 2, otherwise list would be rendered as dropdown
 		$smarty->assign('ORIGIN_UID', intval($origin_uid));
+		$smarty->assign('PZ_UID', intval($pz_uid));
 		
 		$html = $smarty->fetch('mod3_new_extra.tmpl');
 
@@ -288,7 +289,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$smarty->assign('EXTRA_POOLED', $pooled);
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
-		$smarty->assign('LIST_SIZE', min(12, sizeof($pooled)));
+		$smarty->assign('LIST_SIZE', max(2, min(12, sizeof($pooled)))); /// size at least 2, otherwise list would be rendered as dropdown
 		
 		$html = $smarty->fetch('mod3_new_extra_from_pool.tmpl');
 		
