@@ -377,7 +377,10 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 	public function test_getExtraOrigin() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			foreach($pagezone->getExtras() as $extra) {
-				t3lib_div::debug($pagezone->getExtraOrigin($extra));
+#				t3lib_div::debug(
+					$pagezone->getExtraOrigin($extra)
+#				)
+				;
 				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
 			}
 		}
