@@ -143,7 +143,8 @@ td {ldelim}
 		);
 	{rdelim}
 
-	function subModal(origin_uid, pz_uid) {ldelim}
+
+	function subModalExtraInsertAfter(origin_uid, pz_uid) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
 /// \todo:  param for close still missing
@@ -156,11 +157,30 @@ td {ldelim}
 			true
 		);
 	{rdelim}
-	
-	
 	function extra_insert_after(origin_uid, pz_uid) {ldelim}
 /// \todo: add be_mode
-		subModal(origin_uid, pz_uid);
+		subModalExtraInsertAfter(origin_uid, pz_uid);
+	{rdelim}
+
+
+	function subModalExtraEdit(table, uid) {ldelim}
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50;
+/// \todo:  param for close still missing
+/// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
+//	top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid,
+//	top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid
+		top.showPopWin(
+			top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + uid + "]=edit",
+			width, 
+			height, 
+			null, 
+			true
+		);
+	{rdelim}
+	function extra_edit(table, uid) {ldelim}
+/// \todo: add be_mode
+		subModalExtraEdit(table, uid);
 	{rdelim}
 
 
@@ -273,7 +293,7 @@ td {ldelim}
 	
 			<td> 
 	{if $EXTRA_DATA[i][j].origin_placement == true} 
-	  {$EDIT_ICON}
+	  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i][j].concrete_table}', {$EXTRA_DATA[i][j].concrete_uid});">{$EDIT_ICON}</a>
 	{else}
 	  {$EMPTY_ICON}
 	{/if} 

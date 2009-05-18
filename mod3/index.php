@@ -571,11 +571,13 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		$data[] = array(
 				'extra_type' => $extra[$i]->getTitle(),
 				'uid' => $extra[$i]->getExtraUid(),
-				'title' => $extra[$i]->getAttribute('title'),
+				'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
 				'show' => $extra[$i]->getAttribute('show_extra'),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
+				'concrete_table' => $extra[$i]->getTable(),
+				'concrete_uid' => $extra[$i]->getUid(),
 'inherits_from' => 'to come ...' // $pz->getExtraOriginAsString($extra[$i])
 			);
 		}
