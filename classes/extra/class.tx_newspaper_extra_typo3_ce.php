@@ -64,6 +64,13 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		return 'Typo3 Content Element(s)';
 	}
 
+	public function getDescription() {
+		$row = tx_newspaper::selectOneRow('*', 'tt_content', 'uid = ' . $this->getAttribute('content_elements'));
+		if ($row['header']) return $row['header'];
+		if ($row['titleText']) return $row['titleText'];
+		return 'Content Element ' . $this->getAttribute('content_elements');
+	}
+
 // title for module
 	static function getModuleName() {
 		return 'np_typo3_ce';
