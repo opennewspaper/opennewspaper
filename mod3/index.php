@@ -149,7 +149,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
-//t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra')));
+t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra'), $show));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
 		die();
