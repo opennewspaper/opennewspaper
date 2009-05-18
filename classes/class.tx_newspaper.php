@@ -427,6 +427,19 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return $child_list;	
 	}
 
+
+	/// \return true if given class implentes given interface
+	public static function classImplementsInterface($class, $interface) {
+		if (!class_exists($class))
+			return false;
+		$tmp_impl = class_implements($class);
+		if (isset($tmp_impl[$interface])) {
+			return true;
+		}
+		return false;
+	}
+
+
 	/// Get a list of all the attributes/DB fields an object (or class) has
 	/** \param $object An object of the desired class, or the class name as string
 	 *  \return The list of attributes
