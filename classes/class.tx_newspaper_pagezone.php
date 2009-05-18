@@ -813,22 +813,26 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		if ($uids) {
         	foreach ($uids as $uid) {
-				//  assembling the query manually here cuz we want to ignore enable fields
-				$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-					'deleted', 
-					tx_newspaper_Extra_Factory::getExtraTable(),
-					'uid = ' . $uid['uid_foreign']);
-				$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		
-		        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				
-				if (!$deleted['deleted']) {
-
-        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
-	        		$this->extras[] = $extra;
-				} else {
-					/// \todo remove association table entry
-				}
+        		try {
+					//  assembling the query manually here cuz we want to ignore enable fields
+					$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+						'deleted', 
+						tx_newspaper_Extra_Factory::getExtraTable(),
+						'uid = ' . $uid['uid_foreign']);
+					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			
+			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+					
+					if (!$deleted['deleted']) {
+	
+	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+		        		$this->extras[] = $extra;
+					} else {
+						/// \todo remove association table entry
+					}
+        		} catch (tx_newspaper_EmptyResultException $e) {
+        			/// \todo remove association table entry
+        		}
         	}
 		} 
 		# else t3lib_div::debug("readExtras($uid): Empty result for " . tx_newspaper::$query);
