@@ -376,11 +376,15 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 
 	public function test_getExtraOrigin() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			$hierarchy_root = array_pop($pagezone->getInheritanceHierarchyUp());
+			$some_origin_extra = array_pop($hierarchy_root->getExtras());
 			foreach($pagezone->getExtras() as $extra) {
 #				t3lib_div::debug(
 					$pagezone->getExtraOrigin($extra)
 #				)
 				;
+				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+				$extra->setAttribute('origin_uid', $some_origin_extra->getUid());
 				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
 			}
 		}
