@@ -51,6 +51,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 #			   'attributes: ' . print_r($this->attributes, 1)
 			 . "\n";
 	}
+	
+	public function duplicate() {
+		/// \todo copy concrete extra data and write a new abstract record
+		return $this;
+	}
 
 	protected function prepare_render(&$template_set = '') {
 		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
