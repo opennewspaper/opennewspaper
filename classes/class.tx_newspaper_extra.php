@@ -360,7 +360,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 		if (!$this->extra_uid) {
 			if (!$this->getUid()) {
 				return 0;
-#				t3lib_div::debug('tried to call getExtraUid() before there was a record written');
+#				t3lib_div::debug('tried to call getExtraUid() before a record was written');
 #				t3lib_div::debug(debug_backtrace());
 			}
 			$this->extra_uid = self::createExtraRecord($this->getUid(), $this->getTable());

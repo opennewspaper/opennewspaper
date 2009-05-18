@@ -55,7 +55,7 @@ class tx_newspaper_SaveHook {
 
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
-/// ßtodo: remove code if checkPageZoneWithIsArticleFlagAllowed() is tested
+/// ï¿½todo: remove code if checkPageZoneWithIsArticleFlagAllowed() is tested
 //		$pzt = new tx_newspaper_PageZoneType(); 
 //		if  ($table == $pzt->getTable() && 
 //			isset($fieldArray['is_article']) && 
@@ -205,7 +205,7 @@ t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $p
 			// create abstract records
 			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table);
 
-			$e = new $table($abstract_uid);
+			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 			$e->store();
