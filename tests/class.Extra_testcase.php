@@ -228,6 +228,17 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		/// \todo check if all fields are consistent
 	}
 	
+	public function test_duplicate() {
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);
+			$time = time();
+			$temp->setAttribute('crdate', $time);
+		
+			$that = $temp->duplicate();
+			t3lib_div::debug($this); t3lib_div::debug($that);
+		}
+	}
+	
 	/// Section which contains the objects to be tested
 	private $section_uid = 1;	
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist

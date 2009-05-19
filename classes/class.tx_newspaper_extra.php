@@ -53,8 +53,22 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 	
 	public function duplicate() {
-		/// \todo copy concrete extra data and write a new abstract record
-		return $this;
+		$this->getAttribute('uid');			///< read attributes from DB
+
+		/// Copy concrete extra data
+		$temp_attributes = $this->attributes;
+
+		//	Make sure the Extra is stored in the correct SysFolder
+		$temp_attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+
+		//	Write data for concrete Extra		
+		$uid = tx_newspaper::insertRows($this->getTable(), $temp_attributes);
+		
+		$class = get_class($this);
+		$that = new $class($uid);
+		$that->getExtraUid();	///< Write abstract Extra record
+		 
+		return $that;
 	}
 
 	protected function prepare_render(&$template_set = '') {
@@ -109,7 +123,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 		return $this->extra_attributes[$attribute];
  		}
 
-        throw new tx_newspaper_WrongAttributeException($attribute . print_r($this->attributes, 1).print_r($this->extra_attributes, 1));
+        throw new tx_newspaper_WrongAttributeException(
+        	$attribute . 
+        	' [ ' . print_r($this->attributes, 1) . ',' .
+        	print_r($this->extra_attributes, 1) . ' ]');
 	}
 
 	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
