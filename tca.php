@@ -112,7 +112,7 @@ $TCA['tx_newspaper_extra_image'] = array (
 $TCA['tx_newspaper_section'] = array (
 	'ctrl' => $TCA['tx_newspaper_section']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'section_name,parent_section,articlelist,template_set,pagetype_pagezone'
+		'showRecordFieldList' => 'section_name,parent_section,default_articletype,articlelist,template_set,pagetype_pagezone'
 	),
 	'feInterface' => $TCA['tx_newspaper_section']['feInterface'],
 	'columns' => array (
@@ -136,6 +136,18 @@ $TCA['tx_newspaper_section'] = array (
 				),
 				'foreign_table' => 'tx_newspaper_section',	
 				'foreign_table_where' => 'ORDER BY tx_newspaper_section.uid',	
+				'size' => 1,	
+				'minitems' => 0,
+				'maxitems' => 1,
+			)
+		),
+		'default_articletype' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.default_articletype',		
+			'config' => array (
+				'type' => 'group',	
+				'internal_type' => 'db',	
+				'allowed' => 'tx_newspaper_articletype',	
 				'size' => 1,	
 				'minitems' => 0,
 				'maxitems' => 1,
@@ -178,7 +190,7 @@ $TCA['tx_newspaper_section'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'section_name;;;;1-1-1, parent_section, articlelist, template_set, pagetype_pagezone')
+		'0' => array('showitem' => 'section_name;;;;1-1-1, parent_section, default_articletype, articlelist, template_set, pagetype_pagezone')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -1367,5 +1379,4 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 		'1' => array('showitem' => 'starttime, endtime')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
