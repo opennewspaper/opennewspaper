@@ -578,8 +578,8 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 				'origin_uid' => $extra[$i]->getOriginUid(),
 				'concrete_table' => $extra[$i]->getTable(),
 				'concrete_uid' => $extra[$i]->getUid(),
-//'inherits_from' => 'to come ...' // $pz->getExtraOriginAsString($extra[$i])
-'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i])
+//'inherits_from' => 'to come ...',
+				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i])
 			);
 		}
 		return $data;
