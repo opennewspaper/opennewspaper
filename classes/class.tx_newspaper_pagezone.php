@@ -533,7 +533,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 *  are deleted and moved to the end 
 		 */
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
+			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
 				$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
 				$copied_extra->setAttribute('deleted', 1);
