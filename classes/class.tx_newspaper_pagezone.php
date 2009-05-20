@@ -536,7 +536,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
 				$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
-				$copied_extra->setAttribute('deleted', 1);
+				$copied_extra->setAttribute('hidden', 1);
 				$copied_extra->store();
 			}
 			/// \todo if no Extra is found, we can probably stop the loop.
@@ -823,16 +823,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			
 			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-					
 					if (!$deleted['deleted']) {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
 					} else {
 						/// \todo remove association table entry
+						t3lib_div::debug($uid . ': deleted!');
 					}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
+					t3lib_div::debug($uid . ': EmptyResult!');
         		}
         	}
 		} 
