@@ -16,6 +16,11 @@ class tx_newspaper  {
 	 */
 	const use_datamap = false;
 	
+	/// The GET parameter which determines the article UID
+	const article_get_parameter = 'art';
+	///	The GET parameter which determines which page type is displayed
+	const pagetype_get_parameter = 'page';
+	
 	/// add javascript (or other script parts) to extra form (basically containing an onunload script)
 	/** \param $PA typo3 standard for userFunc
 	  * \param $fobj typo3 standard for userFunc
@@ -451,6 +456,15 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return array_keys($TCA[$object]['columns']);
 	}
 	
+	/// The GET parameter which determines the article UID
+	public static function GET_article() {
+		return self::article_get_parameter;
+	}
+
+	///	The GET parameter which determines which page type is displayed
+	public static function GET_pagetype() {
+		return self::pagetype_get_parameter;
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	

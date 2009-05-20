@@ -192,7 +192,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			 *  (formerly Extra_ArticleRenderer)
 			 */
 			$ret = '';
-			$article = new tx_newspaper_article(t3lib_div::_GP('art'));
+			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
 			$ret = $article->render($template_set);
 			
 		} else {

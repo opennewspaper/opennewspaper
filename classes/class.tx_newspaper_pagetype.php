@@ -52,14 +52,13 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 			if (TYPO3_MODE == 'BE') {
 				$this->condition = 'uid=' . $this->getUid();
 			}
- 		} else if ($get['art']) {
- 			$this->condition = 'get_var = \'art\'';
- 		} else {
- 			if ($get['page']) { 
-				$this->condition = 'get_var = \'page\' AND get_value = '.intval($get['page']);
- 			} else {
- 				$this->condition = 'NOT get_var';
- 			}
+ 		} else if ($get[tx_newspaper::GET_pagetype()]) { 
+				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
+					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
+ 		} else if ($get[tx_newspaper::GET_article()]) {
+ 			$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
+		} else {
+			$this->condition = 'NOT get_var';
  		}
   	}
  	

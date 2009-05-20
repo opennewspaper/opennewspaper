@@ -529,15 +529,23 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->indexOfExtra($extra);
 
 		if ($inherits == $extra->getAttribute('is_inheritable')) return;
-		
-		/** Whenever the inheritance hierarchy is invalidated, inherited Extras
-		 *  are deleted and moved to the end 
-		 */
+	
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
-				$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
-				$copied_extra->setAttribute('hidden', 1);
+				if ($inherits == false) {	
+					/** Whenever the inheritance hierarchy is invalidated, 
+					 *  inherited Extras are hidden and moved to the end. 
+					 */
+					$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
+					$copied_extra->setAttribute('hidden', 1);
+				} else {
+					/** Whenever the inheritance hierarchy is restored, 
+					 *  inherited Extras are unhidden, but they remain at the
+					 *  end of the page zone. 
+					 */
+					$copied_extra->setAttribute('hidden', 0);
+				}
 				$copied_extra->store();
 				t3lib_div::devlog('$copied_extra', 'newspaper', 0, array($copied_extra));
 			}
