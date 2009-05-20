@@ -571,6 +571,7 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		$data[] = array(
 				'extra_type' => $extra[$i]->getTitle(),
 				'uid' => $extra[$i]->getExtraUid(),
+				'hidden' => $extra[$i]->getAttribute('hidden'),
 				'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
 				'show' => $extra[$i]->getAttribute('show_extra'),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
