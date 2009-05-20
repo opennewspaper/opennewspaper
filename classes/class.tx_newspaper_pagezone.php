@@ -543,7 +543,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			/// \todo if no Extra is found, we can probably stop the loop.
 		}
-
+		$extra->setAttribute('is_inheritable', $inherits);
+		$extra->store();
 #		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
