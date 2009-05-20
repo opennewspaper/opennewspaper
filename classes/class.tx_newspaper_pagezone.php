@@ -539,6 +539,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
 				$copied_extra->setAttribute('hidden', 1);
 				$copied_extra->store();
+				t3lib_div::devlog('$copied_extra', 'newspaper', 0, array($copied_extra));
 			}
 			/// \todo if no Extra is found, we can probably stop the loop.
 		}
