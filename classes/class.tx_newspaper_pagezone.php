@@ -829,11 +829,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		        		$this->extras[] = $extra;
 					} else {
 						/// \todo remove association table entry
-						t3lib_div::debug($uid . ': deleted!');
+						t3lib_div::debug($uid['uid_foreign'] . ': deleted!');
 					}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
-					t3lib_div::debug($uid . ': EmptyResult!');
+					t3lib_div::debug($uid['uid_foreign'] . ': EmptyResult!');
         		}
         	}
 		} 
