@@ -524,6 +524,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
+		t3lib_div::devlog('setInherits', 'newspaper', 0, array($extra, $inherits));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
@@ -829,11 +830,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		        		$this->extras[] = $extra;
 					} else {
 						/// \todo remove association table entry
-						t3lib_div::debug($uid['uid_foreign'] . ': deleted!');
+						t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': deleted!');
 					}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
-					t3lib_div::debug($uid['uid_foreign'] . ': EmptyResult!');
+					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult!');
         		}
         	}
 		} 
