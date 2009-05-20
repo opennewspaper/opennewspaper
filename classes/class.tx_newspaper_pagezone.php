@@ -624,6 +624,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($original_pagezone->getUid() == $this->getUid()) return '---';
 		$page = $original_pagezone->getParentPage();
 		$section = $page->getParentSection();
+		if (!$section instanceof tx_newspaper_Section) return '< error >';
 		if ($section->getUid() == $this->getParentPage()->getParentSection->getUid()) {
 			return $page->getPageType()->getAttribute('type_name');
 		}
