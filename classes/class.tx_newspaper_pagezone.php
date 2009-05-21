@@ -524,7 +524,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
-		t3lib_div::devlog('setInherits', 'newspaper', 0, array($extra, $inherits));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
@@ -536,7 +535,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
-				t3lib_div::devlog('$copied_extra', 'newspaper', 0, array($copied_extra));
 				if ($inherits == false) {	
 					/** Whenever the inheritance hierarchy is invalidated, 
 					 *  inherited Extras are hidden and moved to the end. 
@@ -555,7 +553,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			/// \todo if no Extra is found, we can probably stop the loop.
 		}
-#		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
 	/// Get the hierarchy of Page Zones inheriting placement from $this
