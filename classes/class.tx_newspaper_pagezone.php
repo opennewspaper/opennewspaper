@@ -529,16 +529,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->indexOfExtra($extra);
 
 		if ($inherits == $extra->getAttribute('is_inheritable')) return;
+
+		$extra->setAttribute('is_inheritable', $inherits);
+		$extra->store();
 	
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
-				t3lib_div::devlog('$copied_extra before', 'newspaper', 0, array($copied_extra));
+				t3lib_div::devlog('$copied_extra', 'newspaper', 0, array($copied_extra));
 				if ($inherits == false) {	
 					/** Whenever the inheritance hierarchy is invalidated, 
 					 *  inherited Extras are hidden and moved to the end. 
 					 */
-					$copied_extra->setAttribute('position', $this->findLastPosition()+self::EXTRA_SPACING);
+					$copied_extra->setAttribute('position', 
+						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
 					$copied_extra->setAttribute('hidden', 1);
 				} else {
 					/** Whenever the inheritance hierarchy is restored, 
@@ -548,12 +552,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					$copied_extra->setAttribute('hidden', 0);
 				}
 				$copied_extra->store();
-				t3lib_div::devlog('$copied_extra after', 'newspaper', 0, array($copied_extra));
 			}
 			/// \todo if no Extra is found, we can probably stop the loop.
 		}
-		$extra->setAttribute('is_inheritable', $inherits);
-		$extra->store();
 #		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
