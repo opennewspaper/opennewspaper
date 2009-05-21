@@ -116,11 +116,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			);
 		}
 
- 		if (array_key_exists($attribute, $this->attributes)) {
-	 		return $this->attributes[$attribute];
- 		}
  		if (array_key_exists($attribute, $this->extra_attributes)) {
 	 		return $this->extra_attributes[$attribute];
+ 		}
+ 		if (array_key_exists($attribute, $this->attributes)) {
+	 		return $this->attributes[$attribute];
  		}
 
         throw new tx_newspaper_WrongAttributeException(
@@ -161,9 +161,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		if (array_key_exists($attribute, $this->extra_attributes)) {
 			$this->extra_attributes[$attribute] = $value;
 		} else {
-			$this->attributes[$attribute] = $value;
-		}
-		if (array_key_exists($attribute, $this->attributes)) {
 			$this->attributes[$attribute] = $value;
 		}
 		
