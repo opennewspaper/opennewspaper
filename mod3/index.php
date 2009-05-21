@@ -41,7 +41,7 @@ require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-
+define('DEBUG_POSITION', true);
 
 /**
  * Module 'Placement' for the 'newspaper' extension.
@@ -568,20 +568,21 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		$extra = $pz->getExtras();
 		$data = array();
 		for ($i = 0; $i < sizeof($extra); $i++) {
-		$data[] = array(
-				'extra_type' => $extra[$i]->getTitle(),
-				'uid' => $extra[$i]->getExtraUid(),
-				'hidden' => $extra[$i]->getAttribute('hidden'),
-				'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
-				'show' => $extra[$i]->getAttribute('show_extra'),
-				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
-				'origin_placement' => $extra[$i]->isOriginExtra(),
-				'origin_uid' => $extra[$i]->getOriginUid(),
-				'concrete_table' => $extra[$i]->getTable(),
-				'concrete_uid' => $extra[$i]->getUid(),
-//'inherits_from' => 'to come ...',
-				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i])
-			);
+			$extra_data = array(
+					'extra_type' => $extra[$i]->getTitle(),
+					'uid' => $extra[$i]->getExtraUid(),
+					'hidden' => $extra[$i]->getAttribute('hidden'),
+					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
+					'show' => $extra[$i]->getAttribute('show_extra'),
+					'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
+					'origin_placement' => $extra[$i]->isOriginExtra(),
+					'origin_uid' => $extra[$i]->getOriginUid(),
+					'concrete_table' => $extra[$i]->getTable(),
+					'concrete_uid' => $extra[$i]->getUid(),
+					'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
+				);
+			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
+			$data[] = $extra_data;
 		}
 		return $data;
 	} 
