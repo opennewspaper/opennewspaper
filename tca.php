@@ -1379,5 +1379,83 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 		'1' => array('showitem' => 'starttime, endtime')
 	)
 );
+
+
+
+$TCA['tx_newspaper_extra_articlelist'] = array (
+	'ctrl' => $TCA['tx_newspaper_extra_articlelist']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'description,articlelist,first_article,num_articles,template_set'
+	),
+	'feInterface' => $TCA['tx_newspaper_extra_articlelist']['feInterface'],
+	'columns' => array (
+		'description' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.description',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
+		'articlelist' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.articlelist',		
+			'config' => array (
+				'type' => 'group',	
+				'internal_type' => 'db',	
+				'allowed' => 'tx_newspaper_articlelist',	
+				'size' => 1,	
+				'minitems' => 0,
+				'maxitems' => 1,
+			)
+		),
+		'first_article' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.first_article',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '4',
+				'max'      => '4',
+				'eval'     => 'int',
+				'checkbox' => '0',
+				'range'    => array (
+					'upper' => '1000',
+					'lower' => '10'
+				),
+				'default' => 0
+			)
+		),
+		'num_articles' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.num_articles',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '4',
+				'max'      => '4',
+				'eval'     => 'int',
+				'checkbox' => '0',
+				'range'    => array (
+					'upper' => '1000',
+					'lower' => '10'
+				),
+				'default' => 0
+			)
+		),
+		'template_set' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template_set',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'description;;;;1-1-1, articlelist, first_article, num_articles, template_set')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => '')
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

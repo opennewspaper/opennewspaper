@@ -91,6 +91,12 @@
 			<label index="tx_newspaper_extra_typo3_ce.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_typo3_ce.template_set">Template set</label>
 			<label index="tx_newspaper_extra_typo3_ce.content_elements">Typo3 Content Elements to display</label>
+			<label index="tx_newspaper_extra_articlelist">Extra: Article list</label>
+			<label index="tx_newspaper_extra_articlelist.description">Description</label>
+			<label index="tx_newspaper_extra_articlelist.articlelist">Article list</label>
+			<label index="tx_newspaper_extra_articlelist.first_article">First article to display (number)</label>
+			<label index="tx_newspaper_extra_articlelist.num_articles">Number of articles to display</label>
+			<label index="tx_newspaper_extra_articlelist.template_set">Template set</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -181,6 +187,12 @@
 			<label index="tx_newspaper_extra_typo3_ce.pool">In den Vorlagen-Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_typo3_ce.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_typo3_ce.content_elements">Anzuzeigende Typo3-Inhaltselemente</label>
+			<label index="tx_newspaper_extra_articlelist">Extra: Artikelliste</label>
+			<label index="tx_newspaper_extra_articlelist.description">Beschreibung</label>
+			<label index="tx_newspaper_extra_articlelist.articlelist">Artikelliste</label>
+			<label index="tx_newspaper_extra_articlelist.first_article">Erster anzuzeigender Artikel (Zahl)</label>
+			<label index="tx_newspaper_extra_articlelist.num_articles">Anzahl anzuzeigender Artikel</label>
+			<label index="tx_newspaper_extra_articlelist.template_set">Satz an Designvorlagen</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

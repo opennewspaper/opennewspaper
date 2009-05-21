@@ -298,6 +298,20 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 	),
 );
 
+$TCA['tx_newspaper_extra_articlelist'] = array (
+	'ctrl' => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY crdate',	
+		'delete' => 'deleted',	
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_articlelist.gif',
+	),
+);
+
 $tempColumns = array (
 	'tx_newspaper_extra' => array (		
 		'exclude' => 1,		
