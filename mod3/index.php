@@ -650,8 +650,11 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
 		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
 		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
+		
+		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
 
 		$smarty->assign('LABEL', $label);
+		$smarty->assign('MESSAGE', $message);
 		$smarty->assign('EXTRA_DATA', $extra_data);
 		$smarty->assign('DATA', $data);
 		$smarty->assign('PAGETYPE', $pagetype);

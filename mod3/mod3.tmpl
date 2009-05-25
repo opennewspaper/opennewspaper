@@ -46,18 +46,7 @@ td {ldelim}
 		);
 	{rdelim}
 
-/// \todo: check: is unused???
-//	function extra_insert_after(origin_uid, pagezone_uid) {ldelim}
-//		var request = new top.Ajax.Request(
-// 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
-// 			{ldelim}
-//				method: 'get',
-//				parameters: "extra_insert_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
-//				onCreate: processing,
-//				onSuccess: reload
-//			{rdelim}
-//		);
-//	{rdelim}
+
 	function extra_insert_after_dummy(origin_uid, pagezone_uid) {ldelim}
 /// \todo: remove after testing
 		var request = new top.Ajax.Request(
@@ -151,7 +140,6 @@ td {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
 /// \todo:  param for close still missing
-/// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
 		top.showPopWin(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid,
 			width, 
@@ -170,9 +158,6 @@ td {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
 /// \todo:  param for close still missing
-/// top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/res/extra/close_extra_submodal.html", 
-//	top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid,
-//	top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid
 		top.showPopWin(
 			top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + uid + "]=edit",
 			width, 
@@ -261,79 +246,82 @@ td {ldelim}
 
 </div>
 
-
-<table style="margin-bottom: 21px;">
-<tr>
-<td>{$LABEL.extra}</td>
-<td align="center">{$LABEL.show}</td>
-<td align="center">{$LABEL.pass_down}</td>
-<td align="center">{$LABEL.inherits_from}</td>
-<td>{$LABEL.commands}</td>
-</tr>
-	{section name=j loop=$EXTRA_DATA[i]} 
-	{if ($smarty.section.j.index % 2 == 0)}
-		<tr class="bg1">
-	{else}
-		<tr class="bg2">
-	{/if}
-			<td> {$EXTRA_DATA[i][j].extra_type}<br /><span class="gray">{$EXTRA_DATA[i][j].title}</span> </td>
-			<td align="center">
-	{if $EXTRA_DATA[i][j].show == 0}
-	<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 1);" /> 
-	{else}
-	<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 0);" checked="checked" />
-	{/if}
-			</td>
-			<td align="center">
-	{if $EXTRA_DATA[i][j].pass_down == 0}
-	<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 1);" />
-	{else}
-	<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 0);" checked="checked" />
-	{/if}
-			</td>
-			<td> {$EXTRA_DATA[i][j].inherits_from} </td>
-	
-	
-			<td> 
-	{if $EXTRA_DATA[i][j].origin_placement == true} 
-	  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i][j].concrete_table}', {$EXTRA_DATA[i][j].concrete_uid});">{$EDIT_ICON}</a>
-	{else}
-	  {$EMPTY_ICON}
-	{/if} 
-
-	<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
-	
-	{* calculate index for origin uid for moving extras up and down *}	
-	{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
-	{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
-	{if $smarty.section.j.index == 0} 
-	  {$EMPTY_ICON}
-	{else}
-	  {if $move_up_after_index < 0}
-	    <a href="javascript:extra_move_after(0, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
-	  {else}
-		<a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_up_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a>
-	  {/if}
-	{/if}
-	{if $smarty.section.j.index < $smarty.section.j.total-1} 
-	  <a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_down_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_DOWN_ICON}</a>
-	{else}
-	  {$EMPTY_ICON}
-	{/if}
-	
-	{if $EXTRA_DATA[i][j].origin_placement == true} 
-	  <a href="javascript:extra_delete({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
-	{else}
-	  {$EMPTY_ICON}
-	{/if} 
-	
-			</td>
-	
-	{if $EXTRA_DATA[i][j].position}
-		<td>{$EXTRA_DATA[i][j].position}</td>
-		<td>{$EXTRA_DATA[i][j].uid}</td>
-	{/if}
-		</tr>
-	{/section}
-</table>
+{if sizeof($EXTRA_DATA[i]) == 0}
+	<div>{$MESSAGE.pagezone_empty}</div>
+{else}
+	<table style="margin-bottom: 21px;">
+	<tr>
+	<td>{$LABEL.extra}</td>
+	<td align="center">{$LABEL.show}</td>
+	<td align="center">{$LABEL.pass_down}</td>
+	<td align="center">{$LABEL.inherits_from}</td>
+	<td>{$LABEL.commands}</td>
+	</tr>
+		{section name=j loop=$EXTRA_DATA[i]} 
+		{if ($smarty.section.j.index % 2 == 0)}
+			<tr class="bg1">
+		{else}
+			<tr class="bg2">
+		{/if}
+				<td> {$EXTRA_DATA[i][j].extra_type}<br /><span class="gray">{$EXTRA_DATA[i][j].title}</span> </td>
+				<td align="center">
+		{if $EXTRA_DATA[i][j].show == 0}
+		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 1);" /> 
+		{else}
+		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i][j].uid}, 0);" checked="checked" />
+		{/if}
+				</td>
+				<td align="center">
+		{if $EXTRA_DATA[i][j].pass_down == 0}
+		<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 1);" />
+		{else}
+		<input type="checkbox" onchange="extra_set_pass_down({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, 0);" checked="checked" />
+		{/if}
+				</td>
+				<td> {$EXTRA_DATA[i][j].inherits_from} </td>
+		
+		
+				<td> 
+		{if $EXTRA_DATA[i][j].origin_placement == true} 
+		  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i][j].concrete_table}', {$EXTRA_DATA[i][j].concrete_uid});">{$EDIT_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if} 
+		
+		<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
+		
+		{* calculate index for origin uid for moving extras up and down *}	
+		{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
+		{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
+		{if $smarty.section.j.index == 0} 
+		  {$EMPTY_ICON}
+		{else}
+		  {if $move_up_after_index < 0}
+		    <a href="javascript:extra_move_after(0, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
+		  {else}
+			<a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_up_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_UP_ICON}</a>
+		  {/if}
+		{/if}
+		{if $smarty.section.j.index < $smarty.section.j.total-1} 
+		  <a href="javascript:extra_move_after({$EXTRA_DATA[i][$move_down_after_index].origin_uid}, {$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid});">{$MOVE_DOWN_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if}
+		
+		{if $EXTRA_DATA[i][j].origin_placement == true} 
+		  <a href="javascript:extra_delete({$DATA[i].pagezone_id}, {$EXTRA_DATA[i][j].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if} 
+		
+				</td>
+		
+		{if $EXTRA_DATA[i][j].position}
+			<td>{$EXTRA_DATA[i][j].position}</td>
+			<td>{$EXTRA_DATA[i][j].uid}</td>
+		{/if}
+			</tr>
+		{/section}
+	</table>
+{/if}	
 {/section}
