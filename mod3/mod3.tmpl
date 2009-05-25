@@ -301,13 +301,6 @@ td {ldelim}
 	  {$EMPTY_ICON}
 	{/if} 
 
-	{* TODO: replace with real icons, functionality and stuff *}
-	{if $EXTRA_DATA[i][j].hidden} 
-	  [show]
-	{else}
-	  [hide]
-	{/if} 
-	
 	<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i][j].origin_uid}, {$DATA[i].pagezone_id});">{$NEW_BELOW_ICON}</a>
 	
 	{* calculate index for origin uid for moving extras up and down *}	
