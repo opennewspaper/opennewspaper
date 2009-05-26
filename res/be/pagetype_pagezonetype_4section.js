@@ -20,15 +20,15 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
 
 	function activatePageType(section_id, pagetype_id, message) {
-		
+/*
 		if (message == undefined) {
 			alert('Illegal function call');
 			return;
 		}
-		
 		// user must confirm that he knows what he's doing
 		if (!confirm(message)) return; 
-		
+*/
+
 		/// ajax call: activate page type 
 		var request = new Ajax.Request(
 			path + "typo3conf/ext/newspaper/mod1/index.php",
@@ -80,15 +80,15 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 	
 
 	function activatePageZoneType(section_id, page_id, pagezone_type, message) {
-		
+/*		
 		if (message == undefined) {
 			alert('Illegal function call');
 			return;
 		}
-		
 		// user must confirm that he knows what he's doing
 		if (!confirm(message)) return; 
-		
+*/
+
 		/// ajax call: active page zone type 
 		var request = new Ajax.Request(
 			path + "typo3conf/ext/newspaper/mod1/index.php",
