@@ -519,10 +519,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 
 	 *  \param $extra The Extra whose inheritance status is changed
 	 *  \param $inherits Whether to pass the Extra down the hierarchy
+	 *  \param $delete_subextras If true, the Extras on the inheriting PageZones
+	 * 		   are deleted (default behavior). Else, their parameter show_extra
+	 * 		   is set to false and they are moved to the end of the PageZone
+	 * 		   (used if a PageZone is moved to another Section).
 	 *  \exception tx_newspaper_InconsistencyException If $extra is not present
 	 * 			on the PageZone
 	 */
-	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
+	public function setInherits(tx_newspaper_Extra $extra, $inherits = true, 
+								$delete_subextras = true) {
 
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
@@ -535,13 +540,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
-				if ($inherits == false) {	
-					/** Whenever the inheritance hierarchy is invalidated, 
-					 *  inherited Extras are hidden and moved to the end. 
-					 */
-					$copied_extra->setAttribute('position', 
-						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
-					$copied_extra->setAttribute('hidden', 1);
+				if ($inherits == false) {
+					if ($delete_subextras) {
+						$copied_extra->setAttribute('deleted', 1);
+					} else {
+						/** Whenever the inheritance hierarchy is invalidated, 
+						 *  inherited Extras are hidden and moved to the end. 
+						 */
+						$copied_extra->setAttribute('position', 
+							$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
+						$copied_extra->setAttribute('hidden', 1);
+					}
 				} else {
 					/** Whenever the inheritance hierarchy is restored, 
 					 *  inherited Extras are unhidden, but they remain at the
