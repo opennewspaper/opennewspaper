@@ -177,13 +177,14 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 							$f = $this->getListOfDbConsistencyChecks();
 							for ($i = 0; $i < sizeof($f); $i++) {
 								$content .= '<b>' . $f[$i]['title'] . '</b><br />';
+								$tmp = call_user_func_array($f[$i]['function'], $f[$i]['param']);
+								if ($tmp === true) {
+									$content .= 'No problems found<br />';
+								} else {
+									$content .= $tmp;
+								}
 							}
-							$tmp = call_user_func_array($f[0]['function'], $f[0]['param']);
-							if ($tmp === true) {
-								$content .= 'No problems found<br />';
-							} else {
-								$content .= $tmp;
-							}
+
 								
 							$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
 						break;
@@ -212,7 +213,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 	}
 	
 	/// searches abstract extras where the related concrete extra is missing or deleted
-	static function checkAbstractExtraConcreteExtraMissing($a=1, $b='#') {
+	static function checkAbstractExtraConcreteExtraMissing() {
 		$msg = '';
 		// get all concrete extra table where records should exist
 		$abstract_extra_type_row = tx_newspaper::selectRows(
