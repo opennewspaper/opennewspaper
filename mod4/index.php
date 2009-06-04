@@ -176,7 +176,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 								
 							$f = $this->getListOfDbConsistencyChecks();
 							for ($i = 0; $i < sizeof($f); $i++) {
-								$content .= '<b>' . $f[$i]['title'] . '</b><br />';
+								$content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
 								$tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
 								if ($tmp === true) {
 									$content .= 'No problems found<br />';
@@ -207,9 +207,38 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				'title' => 'Abstract extra: concrete extra missing',
 				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraConcreteExtraMissing'),
 				'param' => array()
+			),
+			array(
+				'title' => 'Section: multiple pages with same page type for a section',
+				'class_function' => array('tx_newspaper_module4', 'checkSectionWithMultipleButSamePageType'),
+				'param' => array()
 			)
+			
 		);
 		return $f;
+	}
+	
+	static function checkSectionWithMultipleButSamePageType() {
+		$msg = '';
+		$GLOBALS['TYPO3_DB']->debugOutput = true;
+//		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+//			'section, pagetype_id, deleted, count(*) AS c',
+//			'tx_newspaper_page',
+//			'',
+//			'section, pagetype_id, deleted',
+//			'(c>1 AND deleted=0)'
+//		);
+		$res = $GLOBALS['TYPO3_DB']->sql_query('SELECT section, pagetype_id, deleted, count(*) AS c FROM tx_newspaper_page GROUP BY section, pagetype_id,deleted HAVING (c>1 AND deleted=0)');
+		if (!$res)
+			die('Could not read table tx_newspaper_page');
+        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        	$msg .= 'Section uid ' . $row['section'] . ' has ' . $row['c'] . ' pages of page type uid ' . $row['pagetype_id'] . '<br />';
+        }
+        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+
+		if ($msg != '')
+			return $msg;
+		return true;
 	}
 	
 	/// searches abstract extras where the related concrete extra is missing or deleted
