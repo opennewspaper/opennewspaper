@@ -177,7 +177,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 							$f = $this->getListOfDbConsistencyChecks();
 							for ($i = 0; $i < sizeof($f); $i++) {
 								$content .= '<b>' . $f[$i]['title'] . '</b><br />';
-								$tmp = call_user_func_array($f[$i]['function'], $f[$i]['param']);
+								$tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
 								if ($tmp === true) {
 									$content .= 'No problems found<br />';
 								} else {
@@ -205,7 +205,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		$f = array(
 			array(
 				'title' => 'Abstract extra: concrete extra missing',
-				'function' => 'tx_newspaper_module4::checkAbstractExtraConcreteExtraMissing',
+				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraConcreteExtraMissing'),
 				'param' => array()
 			)
 		);
