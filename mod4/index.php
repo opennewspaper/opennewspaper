@@ -71,8 +71,8 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 					$this->MOD_MENU = Array (
 						'function' => Array (
 							'1' => $LANG->getLL('function1'),
-							'2' => $LANG->getLL('function2'),
-							'3' => $LANG->getLL('function3'),
+//							'2' => $LANG->getLL('function2'),
+//							'3' => $LANG->getLL('function3'),
 						)
 					);
 					parent::menuConfig();
@@ -120,7 +120,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
 						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+						$this->content.=$this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 						$this->content.=$this->doc->divider(5);
 
 
@@ -164,17 +164,28 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				 *
 				 * @return	void
 				 */
-				function moduleContent()	{
+				function moduleContent() {
 					switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1:
-							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).'mod4/index.php and edit it!
-								<hr />
-								<br />This is the GET/POST vars sent to the script:<br />'.
-								'GET:'.t3lib_div::view_array($_GET).'<br />'.
-								'POST:'.t3lib_div::view_array($_POST).'<br />'.
-								'';
-							$this->content.=$this->doc->section('Message #1:',$content,0,1);
+							$content = '
+								The database is checked for inconsistent data.
+								<hr />';
+//								GET:'.t3lib_div::view_array($_GET).'<br />'.
+//								'POST:'.t3lib_div::view_array($_POST).'<br />'.
+								
+								
+							$f = $this->getListOfDbConsistencyChecks();
+							for ($i = 0; $i < sizeof($f); $i++) {
+								$content .= '<b>' . $f[$i]['title'] . '</b><br />';
+							}
+							$tmp = call_user_func_array($f[0]['function'], $f[0]['param']);
+							if ($tmp === true) {
+								$content .= 'No problems found<br />';
+							} else {
+								$content .= $tmp;
+							}
+								
+							$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
 						break;
 						case 2:
 							$content='<div align=center><strong>Menu item #2...</strong></div>';
@@ -186,8 +197,84 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 						break;
 					}
 				}
-				
+
+
+	
+	function getListOfDbConsistencyChecks() {
+		$f = array(
+			array(
+				'title' => 'Abstract extra: concrete extra missing',
+				'function' => 'tx_newspaper_module4::checkAbstractExtraConcreteExtraMissing',
+				'param' => array()
+			)
+		);
+		return $f;
+	}
+	
+	/// searches abstract extras where the related concrete extra is missing or deleted
+	static function checkAbstractExtraConcreteExtraMissing($a=1, $b='#') {
+		$msg = '';
+		// get all concrete extra table where records should exist
+		$abstract_extra_type_row = tx_newspaper::selectRows(
+			'DISTINCT extra_table',
+			'tx_newspaper_extra'
+		);
+		for($i = 0; $i < sizeof($abstract_extra_type_row); $i++) {
+//t3lib_div::debug($abstract_extra_type_row[$i]['extra_table']);
+
+			// get all concrete uid for this extra (from abstract table)
+			$abstract_row = array();
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid,extra_uid',
+				'tx_newspaper_extra',
+				'deleted=0 AND extra_table="' . $abstract_extra_type_row[$i]['extra_table'] . '"'
+			);
+			if (!$res)
+				die('Could not read extra abstract rows for table ' . $abstract_extra_type_row[$i]['extra_table']);
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	$abstract_row[$row['extra_uid']] = $row['uid']; // key = uid of concrete extra, value = uid of abstract extra
+	        }
+	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+//t3lib_div::debug($abstract_row);
+
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid, deleted',
+				$abstract_extra_type_row[$i]['extra_table'],
+				'1'
+			);
+			if (!$res)
+				die('Could not read extra concrete rows for extra ' . $row[$i]['extra_table']);
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	if (isset($abstract_row[$row['uid']])) {
+	        		// so an abstract extra exsits for this concrete extra (it's ok if no abstract record is available)
+	        		unset($abstract_row[$row['uid']]); // concrete extra for this abstract extra found, it's deleted, so only inconsistent records will remain
+	        	}
+	        }
+	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+
+
+			if (sizeof($abstract_row) > 0) {
+				if ($msg != '')
+					$msg .= '<br /><br >';
+				$msg = 'Problem(s) found for table ' . $abstract_extra_type_row[$i]['extra_table'] . ':<br />';
+				foreach($abstract_row as $key => $value) {
+					$msg .= 'Abstract record uid ' . $value . ' is linked to non-existing concrete uid ' . $key . '<br />'; 
+				}
+			}
+			
+			
+			
 		}
+		
+		if ($msg != '')
+			return $msg;
+		return true; // no problöems found
+	}
+	
+	
+	
+
+}
 
 
 

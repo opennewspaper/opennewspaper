@@ -7,9 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Administration</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="function1">DB consistency checks</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Administration</label>
