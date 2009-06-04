@@ -72,6 +72,7 @@
 			<label index="tx_newspaper_pagetype">Page type</label>
 			<label index="tx_newspaper_pagetype.type_name">Type name</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Path name for Smarty templates</label>
+			<label index="tx_newspaper_pagetype.is_article_page">Pages of this type are the default article pages</label>
 			<label index="tx_newspaper_pagetype.get_var">Associated GET variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Value of associated GET variable</label>
 			<label index="tx_newspaper_pagezonetype">Page zone type</label>
@@ -168,6 +169,7 @@
 			<label index="tx_newspaper_pagetype">Seitentyp</label>
 			<label index="tx_newspaper_pagetype.type_name">Typname</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Pathname für Smarty-Templates</label>
+			<label index="tx_newspaper_pagetype.is_article_page">Seiten dieses Typs sind Artikelseiten</label>
 			<label index="tx_newspaper_pagetype.get_var">Zugeordnete GET-Variable</label>
 			<label index="tx_newspaper_pagetype.get_value">Wert der zugeordneten GET-Variable</label>
 			<label index="tx_newspaper_pagezonetype">Seitenbereichstyp</label>

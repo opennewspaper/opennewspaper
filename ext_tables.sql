@@ -304,6 +304,7 @@ CREATE TABLE tx_newspaper_pagetype (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	type_name tinytext,
 	normalized_name tinytext,
+	is_article_page tinyint(3) DEFAULT '0' NOT NULL,
 	get_var tinytext,
 	get_value int(11) DEFAULT '0' NOT NULL,
 	

@@ -1091,7 +1091,7 @@ $TCA['tx_newspaper_articlelist_auto'] = array (
 $TCA['tx_newspaper_pagetype'] = array (
 	'ctrl' => $TCA['tx_newspaper_pagetype']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'type_name,normalized_name,get_var,get_value'
+		'showRecordFieldList' => 'type_name,normalized_name,is_article_page,get_var,get_value'
 	),
 	'feInterface' => $TCA['tx_newspaper_pagetype']['feInterface'],
 	'columns' => array (
@@ -1111,6 +1111,13 @@ $TCA['tx_newspaper_pagetype'] = array (
 				'type' => 'input',	
 				'size' => '30',	
 				'eval' => 'alphanum,nospace',
+			)
+		),
+		'is_article_page' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.is_article_page',		
+			'config' => array (
+				'type' => 'check',
 			)
 		),
 		'get_var' => array (		
@@ -1139,7 +1146,7 @@ $TCA['tx_newspaper_pagetype'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'type_name;;;;1-1-1, normalized_name, get_var, get_value')
+		'0' => array('showitem' => 'type_name;;;;1-1-1, normalized_name, is_article_page, get_var, get_value')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
