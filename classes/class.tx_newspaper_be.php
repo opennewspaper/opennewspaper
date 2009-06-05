@@ -345,7 +345,6 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 
 
 
-/// \todo: remove from class.tx_newspaper_extra_be.php!
 	/// get html for this icon (may include an anchor) 
 	/** \param $image path to icon
 	 *  \param $id 
