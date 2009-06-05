@@ -21,7 +21,7 @@ $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] =
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPageList';
 
 
-/// add article liste dropdown
+/// add article list dropdown
 unset($TCA['tx_newspaper_section']['columns']['articlelist']['config']);
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
@@ -40,7 +40,7 @@ $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc
 
 // /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
-$TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper->renderList';
+$TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
 
 /// \to do: is there a better way to include the js to the backend (without creating a field); otherwise all Extras MUST have this field
 unset($TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']);
