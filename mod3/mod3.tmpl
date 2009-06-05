@@ -141,7 +141,7 @@ td {ldelim}
 		var height = top.getViewportHeight() - 50;
 /// \todo:  param for close still missing
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid,
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
 			width, 
 			height, 
 			null, 
@@ -157,7 +157,6 @@ td {ldelim}
 	function subModalExtraEdit(table, uid) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-/// \todo:  param for close still missing
 		top.showPopWin(
 			top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + uid + "]=edit",
 			width, 
