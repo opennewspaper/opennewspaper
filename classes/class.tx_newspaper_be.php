@@ -333,7 +333,40 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 
 
 
+	function renderExtraInArticle($PA, $fobj) {
+t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
+		if ($PA['row']['articletype_id'] == 0)
+			return 'Ohne Artikeltyp keine Defaultbestückung';
+		$current_record['table'] = $PA['table'];
+		$current_record['uid'] = $PA['row']['uid'];
+debug($PA['row']);	
+
+
+		
+
+		$settings = $this->readArticleTypeSettings();
+
+
+		return '###';
+	}
+
+
+
+function readArticleTypeSettings() {
+	
+	$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article());
+	$tsc = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+	
+
+	if (!isset($tsc['newspaper.']['articletype.']))
+		return array(); // no setting found
+
+	$setting = array();
+
+
+debug(t3lib_div::view_array($tsc['newspaper.']['articletype.']));	
+}
 
 
 
