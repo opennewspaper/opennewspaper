@@ -205,7 +205,7 @@ class tx_newspaper_Page
 			} else {
 				/*  no page zones under this page - pagezones attribute is set 
 				 *  to true so it is not read again.
-				 */ 
+				 */
 				$this->pageZones = true; 
 			}
 		}

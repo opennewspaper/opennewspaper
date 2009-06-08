@@ -36,7 +36,7 @@
 class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/// Construct a tx_newspaper_Section given the UID of the SQL record
-	function __construct($uid = 0) {
+	public function __construct($uid = 0) {
 		if ($uid) {
 			$this->setUid($uid);
 		}
@@ -49,7 +49,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
 
-	function getAttribute($attribute) {
+	public function getAttribute($attribute) {
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid() 
@@ -83,7 +83,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	
 	/// \return true if section can be accessed (FE/BE use enableFields)
-	function isValid() {
+	public function isValid() {
 		// check if section is valid
 		try {
 			$tmp = $this->getAttribute('uid'); // getAttribute forces the object to be read from database
@@ -100,7 +100,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				tx_newspaper::getTable($this), false);
 	}
 
-	function getArticleList() {
+	public function getArticleList() {
 		if (!$this->articlelist) { 
 			$list = tx_newspaper::selectOneRow(
 				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
@@ -111,7 +111,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $this->articlelist; 
 	}
 	
-	function getParentSection() {
+	public function getParentSection() {
 		if ($this->getAttribute('parent_section')) {
 			return new tx_newspaper_Section($this->getAttribute('parent_section'));
 		} else return null;
@@ -136,11 +136,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	/// \return uid of parent abstract record for concrete article list associated with section
-	function getAbstractArticleListUid() {
+	public function getAbstractArticleListUid() {
 		return $this->getAttribute('articlelist');
 	}
 	
-	function getSubPages() {
+	public function getSubPages() {
         if (!$this->subPages) {
             $row = tx_newspaper::selectRows(
                 'uid', 'tx_newspaper_page',
@@ -153,7 +153,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		return $this->subPages;
  	}
  	
- 	function getSubPage(tx_newspaper_PageType $type) {
+ 	public function getSubPage(tx_newspaper_PageType $type) {
  		foreach ($this->getSubPages() as $page) {
  			if ($page->getPageType()->getUid() == $type->getUid())
  				return $page;
@@ -175,7 +175,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	/** \return the Article PageZone (PageZoneType has is_article set) on the 
 	 * 		Page marked as the Article Page
 	 */ 
-	function getDefaultArticle() {
+	protected function getDefaultArticle() {
 		foreach ($this->getSubPages() as $sub_page) {
 			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
@@ -194,14 +194,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		);
 	}
  	
- 	function getTable() {
+ 	public function getTable() {
 		return tx_newspaper::getTable($this);
 	}
 	
-	function setUid($uid) { $this->uid = $uid; }
-	function getUid() { return $this->uid; }
+	public function setUid($uid) { $this->uid = $uid; }
+	public function getUid() { return $this->uid; }
 	
-	static function getModuleName() { return 'np_section'; }
+	static public function getModuleName() { return 'np_section'; }
 	
 	
 	
