@@ -172,6 +172,27 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $path;
 	}	
 	
+	/** \return the Article PageZone (PageZoneType has is_article set) on the 
+	 * 		Page marked as the Article Page
+	 */ 
+	function getDefaultArticle() {
+		foreach ($this->getSubPages() as $sub_page) {
+			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
+				foreach ($sub_page->getActivePageZones() as $pagezone) {
+					if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
+						return $pagezone;
+					}
+				}
+			}
+		}
+		
+		/// \todo Print the names of the article page type and page zone type
+		throw new tx_newspaper_IllegalUsageException('There must be one page under section ' .
+			$this->getAttribute('section_name') . ' that has the page type which is marked ' .
+			'as Article Page. Additionally, this page must have a page zone which is marked' .
+			' as the Article Page Zone'
+		);
+	}
  	
  	function getTable() {
 		return tx_newspaper::getTable($this);
