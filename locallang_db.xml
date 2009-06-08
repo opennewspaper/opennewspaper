@@ -8,7 +8,6 @@
 		<languageKey index="default" type="array">
 			<label index="tt_content.list_type_pi1">Display Ressorts/Articles</label>
 			<label index="tx_newspaper_extra_image">Extra: Image</label>
-			<label index="tx_newspaper_extra_image.extra_field">Extra field</label>
 			<label index="tx_newspaper_extra_image.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_image.template_set">Template set</label>
 			<label index="tx_newspaper_extra_image.title">Title</label>
@@ -106,7 +105,6 @@
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">Ressorts/Artikel anzeigen</label>
 			<label index="tx_newspaper_extra_image">Extra: Bild</label>
-			<label index="tx_newspaper_extra_image.extra_field">Extra field</label>
 			<label index="tx_newspaper_extra_image.pool">In den Vorlagen-Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_image.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_image.title">Titel</label>
