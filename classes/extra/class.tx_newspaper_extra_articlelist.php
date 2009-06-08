@@ -20,22 +20,30 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		}
 	}
 	
-	/** Just a quick hack to see anything
-	 *  \todo everything
+	/** Assign the list of articles to a Smarty template. The template must 
+	 *  contain all the logic to display the articles.
 	 */
 	public function render($template_set = '') {
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article'));
+		$template = $this->getAttribute('template');
+		if ($template) {
+			if (strpos($template, '.tmpl') === false) $template .= '.tmpl';
+		} else {
+			$template = $this;
+		}
 		
 		$this->smarty->assign('articles', $articles);
+		
+		return $this->smarty->fetch($template);
 	}
 
 	public function getTitle() {
-		return 'SectionList';
+		return 'ArticleList';
 	}
 
 	static function getModuleName() {
-		return 'np_sect_ls'; 
+		return 'np_artlist'; 
 	}
 	
 	private $articlelist;
