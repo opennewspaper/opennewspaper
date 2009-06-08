@@ -19,15 +19,6 @@ class tx_newspaper  {
 	///	The GET parameter which determines which page type is displayed
 	const pagetype_get_parameter = 'page';
 	
-	/// add javascript (or other script parts) to extra form (basically containing an onunload script)
-	/** \param $PA typo3 standard for userFunc
-	  * \param $fobj typo3 standard for userFunc
-	  * \return String html code to be placed in the html header <script ...></script>
-	  */
-	public function getCodeForBackend($PA, $fobj) {
-#t3lib_div::devlog('tx_newspaper->getCodeForBackend', 'newspaper', 0);
-		return tx_newspaper_ExtraBE::getJsForExtraField();
-	}
 
 	/// add Extra list to backend form
 	/** \param $PA typo3 standard for userFunc

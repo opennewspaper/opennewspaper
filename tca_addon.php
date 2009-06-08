@@ -42,11 +42,6 @@ $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
 
-/// \to do: is there a better way to include the js to the backend (without creating a field); otherwise all Extras MUST have this field
-unset($TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']);
-$TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['type'] = 'user';
-$TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['userFunc'] = 'tx_newspaper->getCodeForBackend';
-$TCA['tx_newspaper_extra_image']['columns']['extra_field']['config']['noTableWrapping'] = true;
 
 #t3lib_div::debug($TCA['tx_newspaper_extra_typo3_ce']['ctrl']);
 
