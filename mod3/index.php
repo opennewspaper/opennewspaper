@@ -532,7 +532,7 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 				// check if page zone with stored pagezone type is available for given page
 				$this->pagezone_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id"); // read from be user
 				$pzt = new tx_newspaper_PageZoneType(intval($this->pagezone_type_id));
-				if (is_array($active_pagezones) && $pzt->isValid()) { ///  if no active pagezone are available, true is returned!
+				if (is_array($active_pagezones) && $pzt->isValid()) { ///  if no active pagezone is available, true is returned!
 					/// get pagezone with given pagezone type
 					for ($i = 0; $i < sizeof($active_pagezones); $i++) {
 						if ($active_pagezones[$i]->getPageZoneType()->getUid() == $this->pagezone_type_id) {
