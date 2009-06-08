@@ -414,6 +414,7 @@ CREATE TABLE tx_newspaper_extra_articlelist (
 	first_article int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	template_set tinytext,
+	template tinytext,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

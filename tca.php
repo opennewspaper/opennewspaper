@@ -1392,7 +1392,7 @@ $TCA['tx_newspaper_extra_typo3_ce'] = array (
 $TCA['tx_newspaper_extra_articlelist'] = array (
 	'ctrl' => $TCA['tx_newspaper_extra_articlelist']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'description,articlelist,first_article,num_articles,template_set'
+		'showRecordFieldList' => 'description,articlelist,first_article,num_articles,template_set,template'
 	),
 	'feInterface' => $TCA['tx_newspaper_extra_articlelist']['feInterface'],
 	'columns' => array (
@@ -1456,9 +1456,17 @@ $TCA['tx_newspaper_extra_articlelist'] = array (
 				'size' => '30',
 			)
 		),
+		'template' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'description;;;;1-1-1, articlelist, first_article, num_articles, template_set')
+		'0' => array('showitem' => 'description;;;;1-1-1, articlelist, first_article, num_articles, template_set, template')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

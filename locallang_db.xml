@@ -98,6 +98,7 @@
 			<label index="tx_newspaper_extra_articlelist.first_article">First article to display (number)</label>
 			<label index="tx_newspaper_extra_articlelist.num_articles">Number of articles to display</label>
 			<label index="tx_newspaper_extra_articlelist.template_set">Template set</label>
+			<label index="tx_newspaper_extra_articlelist.template">Display template</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -195,6 +196,7 @@
 			<label index="tx_newspaper_extra_articlelist.first_article">Erster anzuzeigender Artikel (Zahl)</label>
 			<label index="tx_newspaper_extra_articlelist.num_articles">Anzahl anzuzeigender Artikel</label>
 			<label index="tx_newspaper_extra_articlelist.template_set">Satz an Designvorlagen</label>
+			<label index="tx_newspaper_extra_articlelist.template">Designvorlage</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite yugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
