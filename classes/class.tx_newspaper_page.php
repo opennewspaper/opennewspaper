@@ -260,7 +260,7 @@ class tx_newspaper_Page
 		/// Pass the page zones on this page, already rendered, to Smarty
  		$rendered = array(); 
  		foreach ($this->getPageZones() as $zone) {
- 			$rendered[$zone->getAttribute('name')] = $zone->render($template_set);
+ 			$rendered[$zone->getPageZoneType()->getAttribute('type_name')] = $zone->render($template_set);
  		}
 		$this->smarty->assign('page_zones', $rendered);
 		
