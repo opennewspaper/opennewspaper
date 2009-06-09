@@ -338,16 +338,12 @@ $tempColumns = array (
 		'exclude' => 1,		
 		'label' => 'LLL:EXT:newspaper/locallang_db.xml:pages.tx_newspaper_associated_section',		
 		'config' => array (
-			'type'     => 'input',
-			'size'     => '4',
-			'max'      => '4',
-			'eval'     => 'int',
-			'checkbox' => '0',
-			'range'    => array (
-				'upper' => '1000',
-				'lower' => '10'
-			),
-			'default' => 0
+			'type' => 'group',	
+			'internal_type' => 'db',	
+			'allowed' => 'tx_newspaper_section',	
+			'size' => 1,	
+			'minitems' => 0,
+			'maxitems' => 1,
 		)
 	),
 	'tx_newspaper_module' => array (		
