@@ -267,6 +267,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
+	public static function dependsOnArticle() { return false; }	
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	class tx_newspaper_PageZone
