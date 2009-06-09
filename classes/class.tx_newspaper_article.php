@@ -26,7 +26,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	////////////////////////////////////////////////////////////////////////////
 	//
-	//	magic methods ( http://php.net/manual/cs/language.oop5.magic.php )
+	//	magic methods ( http://php.net/manual/language.oop5.magic.php )
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
@@ -357,11 +357,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		return $this->extras; 
 	}
-
+/*
 	public function addExtra(tx_newspaper_Extra $newExtra) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-
+*/
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	class tx_newspaper_PageZone
@@ -382,6 +382,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	class tx_newspaper_Article
 	//
 	////////////////////////////////////////////////////////////////////////////
+	
+	public function clearExtras() {
+		$this->extras = array();	
+	}
 	
 	static public function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
 		

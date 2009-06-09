@@ -190,9 +190,68 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		throw new tx_newspaper_IllegalUsageException('There must be one page under section ' .
 			$this->getAttribute('section_name') . ' that has the page type which is marked ' .
 			'as Article Page. Additionally, this page must have a page zone which is marked' .
-			' as the Article Page Zone'
+			' as the Article Page Zone.'
 		);
 	}
+ 	
+ 	/** Create a new article from the article with the default placement as 
+ 	 *  specified in the Article PageZone of the Article Page of the Section.
+ 	 * 
+ 	 *  Extras which are mandatory for an Article in this Section (specified in
+ 	 *  TSConfig for the Typo3 page in which the current Section lies) are 
+ 	 *  created. If the Extra is placed in the default placement Article, it is
+ 	 *  copied. Else, a new Extra of the specified class is created hidden with
+ 	 *  paragraph and position set to (0,0).
+ 	 * 
+ 	 *  \param $must_have_extras The list of Extras which an Article in this
+ 	 * 			Section must have by default, as specified in TSConfig. These
+ 	 * 			are supplied as class names.
+ 	 */
+ 	public function copyDefaultArticle(array $must_have_extras) {
+ 		$new_article = $this->getDefaultArticle();
+ 		$default_extras = $new_article->getExtras();
+ 		
+ 		$new_article->clearExtras();
+ 		
+ 		$new_article->setAttribute('is_template', 0);
+
+ 		$new_article->setAttribute('crdate', time());
+ 		$new_article->setAttribute('tstamp', time());
+
+		///	Copy the must-have Extras from default placement
+		foreach($default_extras as $key => $default_extra) {
+			if (in_array(get_class($default_extra), $must_have_extras)) {
+				$new_article->addExtra(clone $default_extra);
+				unset($default_extras[$key]);
+			}
+		}
+		
+		/**	Add must-have Extras which are not in default placement:
+		 *  empty, hidden, at first position before first paragraph
+		 */
+		foreach($default_extras as $key => $default_extra) {
+			$new_extra = new $default_extra;
+			
+			//	I think this is needed here. Not sure. Anyway, BSTS.
+			$new_extra->store();
+			
+	 		$new_extra->setAttribute('crdate', time());
+	 		$new_extra->setAttribute('tstamp', time());
+			
+			$new_extra->setAttribute('hidden', 1);
+			$new_extra->setAttribute('paragraph', 0);
+			$new_extra->setAttribute('position', 0);
+			
+			$new_extra->store();						//	Final store()
+		}
+ 		
+		//	zeroing the UID causes the article to be written to DB as a new object.
+ 		$new_article->setAttribute('uid', 0);
+ 		$new_article->setUid(0);
+ 		$new_article->store();
+
+ 		return $new_article;
+ 	}
  	
  	public function getTable() {
 		return tx_newspaper::getTable($this);
