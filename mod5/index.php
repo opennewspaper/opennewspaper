@@ -67,14 +67,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				 * @return	void
 				 */
 				function menuConfig()	{
-					global $LANG;
-					$this->MOD_MENU = Array (
-						'function' => Array (
-							'1' => $LANG->getLL('function1'),
-							'2' => $LANG->getLL('function2'),
-							'3' => $LANG->getLL('function3'),
-						)
-					);
 					parent::menuConfig();
 				}
 
@@ -93,6 +85,12 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					$access = is_array($this->pageinfo) ? 1 : 0;
 				
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
+//debug(t3lib_div::_GP('type4newarticle'));
+//debug(t3lib_div::_GP('section'));
+//debug(t3lib_div::_GP('articletype'));
+//debug($_REQUEST);
+
+						$this->checkIfNewArticle();
 
 							// Draw the header.
 						$this->doc = t3lib_div::makeInstance('mediumDoc');
@@ -115,7 +113,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 							</script>
 						';
 
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
+						$headerSection = ''; //$this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
 
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
@@ -165,29 +163,95 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				 * @return	void
 				 */
 				function moduleContent()	{
-					switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1:
-							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).'mod5/index.php and edit it!
-								<hr />
-								<br />This is the GET/POST vars sent to the script:<br />'.
-								'GET:'.t3lib_div::view_array($_GET).'<br />'.
-								'POST:'.t3lib_div::view_array($_POST).'<br />'.
-								'';
-							$this->content.=$this->doc->section('Message #1:',$content,0,1);
-						break;
-						case 2:
-							$content='<div align=center><strong>Menu item #2...</strong></div>';
-							$this->content.=$this->doc->section('Message #2:',$content,0,1);
-						break;
-						case 3:
-							$content='<div align=center><strong>Menu item #3...</strong></div>';
-							$this->content.=$this->doc->section('Message #3:',$content,0,1);
-						break;
-					}
+					$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
 				}
+		
+		
+		
+	private function renderBackendSmarty() {
+		global $LANG;
+
+		
+ 		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+
+		$label['new_article'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false);
+		$label['new_article_button'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false);
+		$label['new_article_typo3'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false);
+		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
+		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
+	
+		$message['demo'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_demo', false);
+
+		$smarty->assign('LABEL', $label);
+		$smarty->assign('MESSAGE', $message);
+
+
+
+
+/// \todo:		$new_article = x::getRegisteredSources()
+		$new_article = array(new source_demo1(), new source_demo2());
+		$smarty->assign('IMPORT_SOURCE', $new_article);
+		
+		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
+		
+		$smarty->assign('SECTION', tmp_section::getSections());
+
+		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		
+		return $smarty->fetch('mod5.tmpl');
+	}		
+		
+		
+	private function checkIfNewArticle() {
+		$type4newarticle = t3lib_div::_GP('type4newarticle');
+		$section = intval(t3lib_div::_GP('section'));
+		$articletype = intval(t3lib_div::_GP('articletype'));
+debug(array($type4newarticle, $section, $articletype));	
+		if ((strlen($type4newarticle) == 0) || $section <= 0 || $articletype <= 0)
+			return false;
+	  
+		/// so a new article should be created
+		
+		if ($type4newarticle == 'newarticle') {
+			/// just a plain typo3 article, no import ('newarticle' is set as a convention for this case)
+			$s = new tx_newspaper_Section($section);
+			$at = new tx_newspaper_ArticleType($articletype);
+			
+			$new_article = new tx_newspaper_Article();
+			$new_article->setAttribute('articletype_id', $articletype);
+//$new_article->setSection(array($s));
+			$new_article->store();
+
+/// \todo: muss-extras anlegen
+//debug($at->getTSConfigSettings(), '####');
+//t3lib_div::debug($_SERVER); die();
+			$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+
+			$url = 'http://localhost/taz426/typo3/alt_doc.php?returnUrl=/taz426/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
+			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' . $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
+			header('Location: ' . $url);		
+			 
+		} else {
+			die('import new article from source');	
+		}
+		
+		
+		
+		
+	}	
+		
+		
 				
 		}
+
+
+
+
+
+
+
+
 
 
 
@@ -207,5 +271,47 @@ foreach($SOBE->include_once as $INC_FILE)	include_once($INC_FILE);
 
 $SOBE->main();
 $SOBE->printContent();
+
+
+
+
+/// \todo: remove after testing
+class source_demo1 {
+	function getTitle() {
+		return 'Import from RedSys';
+	}	
+	function getClass() {
+		return get_class($this);
+	}	
+}
+class source_demo2 {
+	function getTitle() {
+		return 'Import from archive';
+	}	
+	function getClass() {
+		return get_class($this);
+	}	
+}
+
+
+class tmp_section {
+	public static function getSections() {
+		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_section',
+			'pid=' . $pid,
+			'',
+			'section_name'
+		);
+		$s = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
+		}
+		return $s;
+	}
+}
+
+
 
 ?>

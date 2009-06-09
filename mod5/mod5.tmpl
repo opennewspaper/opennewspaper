@@ -1,0 +1,131 @@
+{debug}
+<style type="text/css">
+body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {ldelim}
+  overflow: auto;
+{rdelim}
+table {ldelim}
+  table-layout: auto; 
+  border: 1px solid gray; 
+  padding: 0; 
+  margin: 0; 
+  border-collapse: collapse; 
+{rdelim}
+td {ldelim}
+  vertical-align: top;
+   border: 1px solid #e8e8e8;
+{rdelim}
+.bg1 {ldelim}
+  background-color: #f0f0f0;"
+{rdelim}
+.bg2 {ldelim}
+  background-color: #d0d0d0;
+{rdelim}
+.kicker {ldelim}
+  color: #c61940;
+{rdelim}
+.comment_box {ldelim}
+  display: none;
+  background-color: white;
+{rdelim} 
+.gray {ldelim}
+  color: #909090;
+{rdelim}
+</style> 
+
+<script language="javascript">
+	
+	
+	/// when section is changed the assigned default article type gets selected
+	function setDefaultArticletype(section_id) {ldelim}
+		switch(parseInt(section_id)) {ldelim}
+{section name=i loop=$SECTION}
+{if $SECTION[i]->getAttribute('default_articletype') > 0}
+			case {$SECTION[i]->getUid()}:
+				d_at = {$SECTION[i]->getAttribute('default_articletype')};
+			break;
+{/if}
+{/section}
+			default:
+				d_at = 0;
+		{rdelim}
+		if (d_at > 0) {ldelim}
+			document.getElementById('articletype').value = d_at;
+		{rdelim}
+	{rdelim}
+
+	function switch_new_article(show_article) {ldelim}
+		if (show_article) {ldelim}
+			document.getElementById('dashboard').style.display = 'none';
+			document.getElementById('div_new_article').style.display = 'block';
+		{rdelim} else {ldelim}
+			document.getElementById('dashboard').style.display = 'block';
+			document.getElementById('div_new_article').style.display = 'none';
+		{rdelim}
+	{rdelim}
+
+
+
+	function processing() {ldelim}
+		img = document.createElement('img');
+		img_src = document.createAttribute('src');
+		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
+		img.setAttributeNode(img_src);
+
+		layer_style = document.createAttribute('style');
+		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
+
+		layer = document.createElement('div');
+		layer.setAttributeNode(layer_style);
+
+		layer.appendChild(img);
+		self.document.getElementsByTagName('body')[0].appendChild(layer);
+	{rdelim}
+
+</script>
+
+<div id="dashboard" style="display: block">
+	<a href="#" onclick="switch_new_article(true); return false;">NEUER ARTIKEL</a><br />
+	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">MODERATIONSLISTE</a><br />
+	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">PLATZIERUNG</a><br />
+</div>
+
+<div id="div_new_article" style="display: none">
+  <a href="#" onclick="switch_new_article(false); return false;">ZURÜCK ZUM DASHBOARD</a><br />
+  <form action="index.php">
+    <div>{$LABEL.new_article}</div>
+    <div>
+      <input checked="checked" type="radio" name="type4newarticle" value="newarticle"> {$LABEL.new_article_typo3}<br />
+{section name=i loop=$IMPORT_SOURCE}
+      <input type="radio" name="type" value="{$IMPORT_SOURCE[i]->getClass()}"> {$IMPORT_SOURCE[i]->getTitle()}<br /> 
+{/section}
+    </div>
+
+	<div><br />
+	  {$LABEL.section}:<br />
+      <select name="section" size="1" onchange="setDefaultArticletype(this.value)">
+{section name=i loop=$SECTION}
+    	  <option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option> 
+{/section}
+      </select>
+    </div>
+
+	<div><br />
+	  {$LABEL.articletype}:<br /> 
+      <select id="articletype" name="articletype" size="1">
+{section name=i loop=$ARTICLETYPE}
+{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
+          <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
+{else}
+    	  <option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
+{/if}
+{/section}
+      </select>
+    </div>
+	<input type="submit" value="{$LABEL.new_article_button}" />
+
+	</form>
+
+
+
+
+</div>
