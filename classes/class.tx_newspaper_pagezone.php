@@ -932,7 +932,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			);
 #t3lib_div::debug(tx_newspaper::$query);
 
-		} catch (tx_newspaper_DBException $e) {
+		} catch (tx_newspaper_EmptyResultException $e) {
 			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
