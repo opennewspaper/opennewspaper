@@ -7,11 +7,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 
 // overwrite data set in ext_tables.php
 
-// make Extra field (created by kickstrater) a userFunc field (displaying a list of associated Extras)
-# might be needed if Extras will be available for tt_content too
-#$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['type'] = 'user';
-#$TCA['tt_content']['columns']['tx_newspaper_extra']['config']['userFunc'] = 'tx_newspaper->renderList';
-
 $TCA['tx_newspaper_extra_image']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_image.gif';
 $TCA['tx_newspaper_section']['ctrl']['iconfile'] =
@@ -50,6 +45,7 @@ if (TYPO3_MODE == 'BE') {
 
 	// add main module 'newspaper', add sub modules
 	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/'); // main
+	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM5','',t3lib_extMgm::extPath($_EXTKEY).'mod5/'); // dash board
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/'); // AJAX stuff
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM2','',t3lib_extMgm::extPath($_EXTKEY).'mod2/'); // moderation list (workflow)
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM3','',t3lib_extMgm::extPath($_EXTKEY).'mod3/'); // placement
@@ -62,7 +58,6 @@ if (TYPO3_MODE == 'BE') {
 	
 	/// add icon for newspaper sysfolders
 	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
-
 
 }
 
