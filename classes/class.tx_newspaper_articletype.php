@@ -98,7 +98,22 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	
 	static function getModuleName() { return 'np_articletype'; }
 	
-	
+	/// \return (sorted) list of all available article types
+	public static function getArticleTypes() {
+		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_ArticleType());
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_articletype',
+			'pid=' . $pid,
+			'',
+			'sorting'
+		);
+		$at = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$at[] = new tx_newspaper_ArticleType(intval($row[$i]['uid']));
+		}
+		return $at;
+	}	
 	
 	private $uid = ''; ///< UID that identifies the article type
 }
