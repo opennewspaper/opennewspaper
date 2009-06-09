@@ -42,9 +42,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 
 // title for module
-	static function getModuleName() {
+	public static function getModuleName() {
 		return 'np_image';
 	}
+	
+	public static function dependsOnArticle() { return false; }
+	
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_image());

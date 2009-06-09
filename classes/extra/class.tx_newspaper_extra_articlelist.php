@@ -42,10 +42,12 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		return 'ArticleList';
 	}
 
-	static function getModuleName() {
+	public static function getModuleName() {
 		return 'np_artlist'; 
 	}
 	
+	public static function dependsOnArticle() { return false; }
+		
 	private $articlelist;
 }
 

@@ -50,5 +50,10 @@ interface tx_newspaper_ExtraIface
 	/// \return Array with tx_newspaper_Extra data for given uid
 	public static function readExtraItem($uid, $table);
 
+	/// Per-class flag designating whether extra is article-dependent
+	/** \return whether this Extra class displays content which depends on the
+	 *  Article currently displayed
+	 */
+	public static function dependsOnArticle();
 }
 ?>

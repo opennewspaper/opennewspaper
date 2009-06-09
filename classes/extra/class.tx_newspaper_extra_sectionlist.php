@@ -28,9 +28,12 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		return 'SectionList';
 	}
 
-	static function getModuleName() {
+	public static function getModuleName() {
 		return 'np_sect_ls'; 
 	}
+
+	public static function dependsOnArticle() { return false; }
+	
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SectionList());
