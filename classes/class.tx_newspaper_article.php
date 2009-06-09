@@ -355,6 +355,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				}
 			}
 		}
+		
+		usort($this->extras, array(get_class($this), 'compareExtras')); 
+		
 		return $this->extras; 
 	}
 /*
