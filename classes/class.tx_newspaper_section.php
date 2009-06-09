@@ -232,7 +232,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		foreach($default_extras as $key => $default_extra) {
 			$new_extra = new $default_extra;
 			
-			//	I think this is needed here. Not sure. Anyway, BSTS.
+			//	I think this is needed before i can safely setAttribute(). Not sure. Anyway, BSTS.
 			$new_extra->store();
 			
 	 		$new_extra->setAttribute('crdate', time());
