@@ -503,7 +503,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return self::$extra_2_pagezone_table;
 	}
 
-	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_article_extras_mm';
+	static protected $extra_2_pagezone_table = 'tx_newspaper_article_extras_mm';
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
