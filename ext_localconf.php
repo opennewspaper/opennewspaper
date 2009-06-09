@@ -11,9 +11,6 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_page=1
 ');
-t3lib_extMgm::addUserTSConfig('
-	options.saveDocNew.tx_newspaper_article=1
-');
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
@@ -39,5 +36,4 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_articletype=1
 ');
-require_once(PATH_typo3conf . 'ext/newspaper/ext_localconf_addon.php');
 ?>
