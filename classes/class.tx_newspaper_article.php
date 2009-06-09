@@ -24,6 +24,12 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articleb
 class tx_newspaper_Article extends tx_newspaper_PageZone 
 	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	magic methods ( http://php.net/manual/cs/language.oop5.magic.php )
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 		$this->smarty = new tx_newspaper_Smarty();
@@ -44,6 +50,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 
+	///	Things to do after an article is \p clone d
+	/** This magic function is called after all attributes of a tx_newspaper_Article
+	 *  have been copied, when the PHP operation \p clone is executed on a 
+	 *  tx_newspaper_Article. 
+	 * 
+	 * 	It ensures that all attributes are read from DB, crdate and tstamp are
+	 *  updated, and the new Article is written to DB. Also, the Extras of the 
+	 *  Article are \p clone d. 
+	 */
 	public function __clone() {
  		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
  		 *  called here because maybe the content is already there and it would
@@ -57,6 +72,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
  		$this->setAttribute('crdate', time());
  		$this->setAttribute('tstamp', time());
+ 		
+ 		$this->store();
  		
  		/// \todo clone extras
  		$old_extras = $this->getExtras();
