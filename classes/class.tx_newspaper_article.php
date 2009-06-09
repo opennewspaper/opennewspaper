@@ -503,11 +503,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return self::$extra_2_pagezone_table;
 	}
 
+ 	/// Ordering function to keep Extras in the order in which they appear on the PageZone
+ 	/** Supplied as parameter to usort() in getExtras().
+ 	 *  \param $extra1 first Extra to compare
+ 	 *  \param $extra2 second Extra to compare
+ 	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
+ 	 * 			== 0 if their position is the same 
+ 	 */
+ 	static protected function compareExtras(tx_newspaper_Extra $extra1, 
+ 									 		tx_newspaper_Extra $extra2) {
+ 		return $extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph')?
+ 			$extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph'):
+ 			$extra1->getAttribute('position')-$extra2->getAttribute('position');
+	}
+
 	static protected $extra_2_pagezone_table = 'tx_newspaper_article_extras_mm';
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
-	//	private data membersxxx
+	//	private data members
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
