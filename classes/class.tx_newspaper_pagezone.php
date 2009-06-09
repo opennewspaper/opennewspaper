@@ -402,6 +402,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 									 $origin_uid = 0, $recursive = true) {
 
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
+		$insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
 		
 		/// Write Extra to DB
 		$insert_extra->store();
@@ -706,7 +707,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	////////////////////////////////////////////////////////////////////////////
 
 	/// Find next free position after the Extra whose origin_uid attribute matches $origin_uid
-	/** \param $origin_uid The origin_uid of the Extra after which a free place
+	/** Side effect: finds the paragraph of the Extra matching \p $origin_uid
+	 *  and stores it in \p $this->paragraph_for_insert
+	 * 
+	 *  \param $origin_uid The origin_uid of the Extra after which a free place
 	 *  				   is wanted
 	 *  \return A position value which is halway between the found Extra and the
 	 * 			next Extra
@@ -738,6 +742,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				}	
 			}
 			$position = $extra_after_which->getAttribute('position');
+			$this->paragraph_for_insert = intval($extra_after_which->getAttribute('paragraph'));
 		} else {
 			$position = 0;
 		}
@@ -959,10 +964,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	
  	protected $parent_page_id = 0;	///< UID of the parent Page
  	protected $parent_page = null;	///< Parent Page object
- 	 	 
+
  	/// Default Smarty template for HTML rendering
  	static protected $defaultTemplate = 'tx_newspaper_pagezone.tmpl';
- 	
+
+	/// Temporary variable to store the paragraph of Extras after which a new Extra is inserted
+	private $paragraph_for_insert = 0; 	
+
  	private static $fields_to_copy_into_pagezone_table = array(
 		'pid', 'crdate', 'cruser_id', 'deleted', 
 	);
