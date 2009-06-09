@@ -582,6 +582,7 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 					'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
 				);
 			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
+			if (DEBUG_POSITION) $extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
 			$data[] = $extra_data;
 		}
 		return $data;
