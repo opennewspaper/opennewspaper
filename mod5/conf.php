@@ -1,7 +1,7 @@
 <?php
 
 	// DO NOT REMOVE OR CHANGE THESE 2 LINES:
-$MCONF['name'] = 'web_txnewspaperM5';
+$MCONF['name'] = 'txnewspaperMmain_txnewspaperM5';
 $MCONF['script'] = '_DISPATCH';
 	
 $MCONF['access'] = 'user,group';
