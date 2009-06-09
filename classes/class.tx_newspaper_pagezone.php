@@ -912,7 +912,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
 	/// Add an Extra to the PageZone, both in RAM and persistently
-	protected function addExtra(tx_newspaper_Extra $extra) {
+	public function addExtra(tx_newspaper_Extra $extra) {
 /*		$found = false;
 		foreach ($this->getExtras() as $present_extra) {
 			if ($extra->getExtraUid() == $present_extra->getExtraUid()) {
