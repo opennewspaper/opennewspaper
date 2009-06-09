@@ -515,7 +515,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  	 */
  	static protected function compareExtras(tx_newspaper_Extra $extra1, 
  									 		tx_newspaper_Extra $extra2) {
- 		t3lib_div::debug("article::compareExtras");
  		return $extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph')?
  			$extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph'):
  			$extra1->getAttribute('position')-$extra2->getAttribute('position');
