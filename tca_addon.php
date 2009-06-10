@@ -58,6 +58,9 @@ $TCA["tx_newspaper_pagezone"]["columns"]["pagezone_uid"]["config"]["range"] = ar
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
+$TCA['tx_newspaper_pagetype']['columns']['get_value']['config']['range'] = array(
+	"lower" => "1"
+);
 
 $TCA['tx_newspaper_extra_typo3_ce']['ctrl'] = array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce',		
