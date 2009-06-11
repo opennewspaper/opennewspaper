@@ -90,6 +90,11 @@ td {ldelim}
 	Letze Artikel:<br />
 	{$ARTICLELIST}<br />
 	
+	Shortcuts:<br />
+	{section name=i loop=$SHORTCUT}
+	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT[i].description}</a><br />
+	{/section}<br />
+	
 	
 	Shortcuts:<br />
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">MODERATIONSLISTE</a><br />

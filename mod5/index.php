@@ -190,13 +190,19 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
 
-		
+		/// latest articles		
  		$smarty_article = new tx_newspaper_Smarty();
 		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 		$smarty_article->assign('ARTICLE', $this->getLatestArticles());
 		$smarty_article->assign('ARTICLE_EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
 		$smarty_article->assign('T3PATH', substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		$smarty->assign('ARTICLELIST', $smarty_article->fetch('mod5_latestarticles.tmpl'));
+
+
+		/// sys_be_shortcut
+		$smarty->assign('SHORTCUT', $this->getShortcuts());
+
+
 
 /// \todo:		$new_article = x::getRegisteredSources()
 		$new_article = array(new source_demo1(), new source_demo2());
@@ -211,10 +217,22 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		return $smarty->fetch('mod5.tmpl');
 	}		
 		
+	
+	private function getShortcuts() {
+		return tx_newspaper::selectRows(
+			'*',
+			'sys_be_shortcuts',
+			'userid=' . $GLOBALS['BE_USER']->user['uid'] . ' AND sc_group=5',
+			'',
+			'sorting'
+		);
+	}	
+		
 		
 	/// \return array of latest tx_newspaper_article's
-	public function getLatestArticles() {
+	private function getLatestArticles() {
 /// \todo: set limit per tsconfig or for each user individually
+/// \todo: move to tx_newspaper_article?
 		
 		$row = tx_newspaper::selectRows(
 			'uid',
