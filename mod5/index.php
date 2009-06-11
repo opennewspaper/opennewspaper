@@ -79,10 +79,14 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+					// a valid page for permissions check is needed - use newspaper root folder
+					$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
+
 					// Access check!
 					// The page will show only if there is a valid page and if this page may be viewed by the user
 					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
 					$access = is_array($this->pageinfo) ? 1 : 0;
+
 				
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 //debug(t3lib_div::_GP('type4newarticle'));
@@ -126,10 +130,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						$this->moduleContent();
 
 
-						// ShortCut
-						if ($BE_USER->mayMakeShortcut())	{
-							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-						}
+//						// ShortCut
+//						if ($BE_USER->mayMakeShortcut())	{
+//							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
+//						}
 
 						$this->content.=$this->doc->spacer(10);
 					} else {
@@ -186,8 +190,13 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
 
-
-
+		
+ 		$smarty_article = new tx_newspaper_Smarty();
+		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty_article->assign('ARTICLE', $this->getLatestArticles());
+		$smarty_article->assign('ARTICLE_EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
+		$smarty_article->assign('T3PATH', substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('ARTICLELIST', $smarty_article->fetch('mod5_latestarticles.tmpl'));
 
 /// \todo:		$new_article = x::getRegisteredSources()
 		$new_article = array(new source_demo1(), new source_demo2());
@@ -201,6 +210,29 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		return $smarty->fetch('mod5.tmpl');
 	}		
+		
+		
+	/// \return array of latest tx_newspaper_article's
+	public function getLatestArticles() {
+/// \todo: set limit per tsconfig or for each user individually
+		
+		$row = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_article',
+			'1',
+			'',
+			'tstamp DESC',
+			'10'
+		);
+	
+		$article = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$article[] = new tx_newspaper_Article(intval($row[$i]['uid']));
+		}
+		
+		return $article;
+		
+	}
 		
 		
 	private function checkIfNewArticle() {
