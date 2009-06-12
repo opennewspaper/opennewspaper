@@ -249,6 +249,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setAttribute('uid', 0);
  		$new_article->setUid(0);
  		$new_article->store();
+ 		
+ 		// set main section
+ 		$new_article->addSection($this);
+ 		$new_article->store();
 
  		return $new_article;
  	}
