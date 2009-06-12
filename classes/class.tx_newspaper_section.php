@@ -264,6 +264,24 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function setUid($uid) { $this->uid = $uid; }
 	public function getUid() { return $this->uid; }
 	
+	/// \return array section, sorted alphabetically
+	public static function getAllSections() {
+		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_section',
+			'pid=' . $pid,
+			'',
+			'section_name'
+		);
+		$s = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
+		}
+		return $s;
+	}
+	
+	
 	static public function getModuleName() { return 'np_section'; }
 	
 	
