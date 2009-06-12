@@ -308,6 +308,19 @@ t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
 		return '';		
 	}
 
+	/// gets sorting position for next element in a mm table 
+	/// \param String $table name of mm table
+	/// \param int $uid_local
+	/// \return int sorting position of element inserted as last element
+	public static function getLastPosInMmTable($table, $uid_local) {
+		$row = self::selectRows(
+			'MAX(sorting) AS max_sorting',
+			$table,
+			'uid_local=' . intval($uid_local)
+		);
+		return intval($row[0]['max_sorting']);
+	}
+
 
 	/// check if at least one records exists in given table (regarding enable fields for BE/FE)
 	/// \return boolean true, if at least one record availabe in given table
