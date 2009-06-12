@@ -185,6 +185,28 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	static public function getModuleName() {
 		return 'np_article';
 	}
+	
+	
+	/// adds sections to article (will be inserted after existing sections)
+	/// \param section object
+	public function addSection(tx_newspaper_Section $s) {
+/// \todo: if ($this->getuid() == 0) throw e OR 		
+/// \todo: just collect here and store sections later in article::store()
+		
+		// get pos of next element 
+		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getuid()) + 1;
+		
+		tx_newspaper::insertRows(
+			'tx_newspaper_article_sections_mm',
+			array(
+				'uid_local' => $this->getUid(),
+				'uid_foreign' => $s->getUid(),
+				'sorting' => $p
+			)
+		);
+		
+	}
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	//
