@@ -268,9 +268,9 @@ debug(array($type4newarticle, $section, $articletype));
 			$s = new tx_newspaper_Section($section);
 			$at = new tx_newspaper_ArticleType($articletype);
 			
-			$new_article = new tx_newspaper_Article();
+			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings());
 			$new_article->setAttribute('articletype_id', $articletype);
-//$new_article->setSection(array($s));
+
 			$new_article->store();
 
 /// \todo: muss-extras anlegen
