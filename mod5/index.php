@@ -210,7 +210,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 		
-		$smarty->assign('SECTION', tmp_section::getSections());
+		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
 
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
@@ -342,26 +342,5 @@ class source_demo2 {
 		return get_class($this);
 	}	
 }
-
-
-class tmp_section {
-	public static function getSections() {
-		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
-		$row = tx_newspaper::selectRows(
-			'*',
-			'tx_newspaper_section',
-			'pid=' . $pid,
-			'',
-			'section_name'
-		);
-		$s = array();
-		for ($i = 0; $i < sizeof($row); $i++) {
-			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
-		}
-		return $s;
-	}
-}
-
-
 
 ?>
