@@ -522,15 +522,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 
 	 *  \param $extra The Extra whose inheritance status is changed
 	 *  \param $inherits Whether to pass the Extra down the hierarchy
-	 *  \param $delete_subextras If true, the Extras on the inheriting PageZones
-	 * 		   are deleted (default behavior). Else, their parameter show_extra
-	 * 		   is set to false and they are moved to the end of the PageZone
-	 * 		   (used if a PageZone is moved to another Section).
 	 *  \exception tx_newspaper_InconsistencyException If $extra is not present
 	 * 			on the PageZone
 	 */
-	public function setInherits(tx_newspaper_Extra $extra, $inherits = true, 
-								$delete_subextras = true) {
+	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
@@ -541,29 +536,30 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$extra->store();
 	
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
-			if ($copied_extra) {
-				if ($inherits == false) {
-					if ($delete_subextras) {
-						$copied_extra->setAttribute('deleted', 1);
-					} else {
-						/** Whenever the inheritance hierarchy is invalidated, 
-						 *  inherited Extras are hidden and moved to the end. 
-						 */
-						$copied_extra->setAttribute('position', 
-							$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
-						$copied_extra->setAttribute('hidden', 1);
-					}
-				} else {
-					/** Whenever the inheritance hierarchy is restored, 
-					 *  inherited Extras are unhidden, but they remain at the
-					 *  end of the page zone. 
-					 */
-					$copied_extra->setAttribute('hidden', 0);
+			if ($inherits == false) {
+				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
+				if ($copied_extra) {
+					/// \todo delete associations; or define and call Extra::delete()
+					$copied_extra->setAttribute('deleted', 1);
+					$copied_extra->store();
 				}
-				$copied_extra->store();
+				/// \todo if no Extra is found, we can probably stop the loop.
+			} else {
+				/** Whenever inheritance is reenabled, the Extra is inserted
+				 *  on all inheriting page zones.
+				 * 
+				 *  Remarks:
+				 *  - Finding the origin UID of the preceding extra is unneccessary,
+				 * 	  because insertExtraAfter() searches for the origin UID on the 
+				 *    parent PageZones if it's not present on the current one. That
+				 * 	  leads to the correct position.
+				 *  - insertExtraAfter is called non-recursively on every inheriting
+				 *    PageZone. The alternative is finding only the first tier of 
+				 * 	  heirs and call it recursively. That would be a pain and we 
+				 *    already know \em all heirs, so there. 
+				 */
+				$inheriting_pagezone->insertExtraAfter($extra, $extra->getOriginUid(), false);
 			}
-			/// \todo if no Extra is found, we can probably stop the loop.
 		}
 	}
 	
