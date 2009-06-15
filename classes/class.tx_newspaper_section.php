@@ -227,8 +227,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			}
 		}
 		
-		debug($default_extras, 'default extras');
-		debug($must_have_extras, 'must have extras');
+		debug($default_extras, 'default extras', __LINE__, __FILE__);
+		debug($must_have_extras, 'must have extras', __LINE__, __FILE__);
 		
 		/**	Add must-have Extras which are not in default placement:
 		 *  empty, hidden, at first position before first paragraph
