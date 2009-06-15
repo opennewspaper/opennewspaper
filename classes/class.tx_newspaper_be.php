@@ -346,10 +346,14 @@ debug($PA['row']);
 		
 
 		$a = new tx_newspaper_Article(intval($PA['row']['uid']));
-debug(t3lib_div::view_array($a->getExtras()), 'getExtras()');
+		$e = $a->getExtras();
+debug($e, 'getExtras()');
+		$content = 'Extra list demo:<br />';
+		for ($i = 0; $i < sizeof($e); $i++) {
+			$content .= $e[$i]->getDescription() . '<br />';
+		}
 
-
-		return '###';
+		return $content;
 	}
 
 
