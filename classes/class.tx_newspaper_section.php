@@ -219,17 +219,18 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setAttribute('tstamp', time());
 
 		///	Copy the must-have Extras from default placement
-		foreach($default_extras as $key => $default_extra) {
-			if (in_array(get_class($default_extra), $must_have_extras)) {
+		foreach($default_extras as $default_extra) {
+			$key = array_search(get_class($default_extra), $must_have_extras);
+			if ($key !== false) {
 				$new_article->addExtra(clone $default_extra);
-				unset($default_extras[$key]);
+				unset($must_have_extras[$key]);
 			}
 		}
 		
 		/**	Add must-have Extras which are not in default placement:
 		 *  empty, hidden, at first position before first paragraph
 		 */
-		foreach($default_extras as $key => $default_extra) {
+		foreach($must_have_extras as $key => $default_extra) {
 			$new_extra = new $default_extra;
 			
 			//	I think this is needed before i can safely setAttribute(). Not sure. Anyway, BSTS.
@@ -238,7 +239,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 		$new_extra->setAttribute('crdate', time());
 	 		$new_extra->setAttribute('tstamp', time());
 			
-			$new_extra->setAttribute('hidden', 1);
+			$new_extra->setAttribute('show_extra', 0);
 			$new_extra->setAttribute('paragraph', 0);
 			$new_extra->setAttribute('position', 0);
 			
