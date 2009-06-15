@@ -268,7 +268,7 @@ debug(array($type4newarticle, $section, $articletype));
 			$s = new tx_newspaper_Section($section);
 			$at = new tx_newspaper_ArticleType($articletype);
 			
-			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings());
+			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 			$new_article->setAttribute('articletype_id', $articletype);
 
 			$new_article->store();
