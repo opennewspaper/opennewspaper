@@ -345,28 +345,13 @@ debug($PA['row']);
 
 		
 
-		$settings = $this->readArticleTypeSettings();
+		$a = new tx_newspaper_Article(intval($PA['row']['uid']));
+debug(t3lib_div::view_array($a->getExtras()), 'getExtras()');
 
 
 		return '###';
 	}
 
-
-
-function readArticleTypeSettings() {
-	
-	$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article());
-	$tsc = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-	
-
-	if (!isset($tsc['newspaper.']['articletype.']))
-		return array(); // no setting found
-
-	$setting = array();
-
-
-debug(t3lib_div::view_array($tsc['newspaper.']['articletype.']));	
-}
 
 
 
