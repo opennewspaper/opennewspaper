@@ -41,7 +41,7 @@ require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-define('DEBUG_POSITION', true);
+define('DEBUG_POSITION', false);
 
 /**
  * Module 'Placement' for the 'newspaper' extension.
