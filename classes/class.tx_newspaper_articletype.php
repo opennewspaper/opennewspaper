@@ -93,18 +93,17 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		$this->uid = $uid;
 	}
 	
+/// \todo: param: type -> ARRAY!!!
 	/// \return TSConfig setting for this article type (array: musthave, shouldhave, etc.)
-	public function getTSConfigSettings() {
+	public function getTSConfigSettings($type) {
 	
 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()); /// check tsconfig in article sysfolder
 		$tsc = t3lib_BEfunc::getPagesTSconfig($sysfolder);
 
-		if (!isset($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.']))
+		if (!isset($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]))
 			return array(); // no settings found
 
-//debug(t3lib_div::view_array($tsc['newspaper.']['articletype.']));
-//debug(t3lib_div::view_array($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.']));
-		$setting = $tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'];
+		$setting = explode(',', $tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]);
 
 		return $setting;
 	}
