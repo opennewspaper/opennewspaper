@@ -1,0 +1,294 @@
+{* debug *}
+<!--
+<style type="text/css">
+body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {ldelim}
+  overflow: auto;
+{rdelim}
+table {ldelim}
+  table-layout: auto; 
+  border: 1px solid gray; 
+  padding: 0; 
+  margin: 0; 
+  border-collapse: collapse; 
+{rdelim}
+td {ldelim}
+  vertical-align: top;
+   border: 1px solid #e8e8e8;
+{rdelim}
+.bg1 {ldelim}
+  background-color: #f0f0f0;"
+{rdelim}
+.bg2 {ldelim}
+  background-color: #d0d0d0;
+{rdelim}
+.kicker {ldelim}
+  color: #c61940;
+{rdelim}
+.comment_box {ldelim}
+  display: none;
+  background-color: white;
+{rdelim} 
+.gray {ldelim}
+  color: #909090;
+{rdelim}
+</style> 
+
+<script language="javascript">
+	
+	function toggle_show_levels_above(checked) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "toggle_show_levels_above=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+
+	function extra_insert_after_dummy(origin_uid, pagezone_uid) {ldelim}
+/// \todo: remove after testing
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_insert_after_dummy=1&origin_uid=" + origin_uid + "&pz_uid=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+
+	function extra_move_after(origin_uid, pz_uid, extra_uid) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_move_after=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function extra_delete(pz_uid, extra_uid, message) {ldelim}
+		// user must confirm that he knows what he's doing
+		if (!confirm(message)) return;
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_delete=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+	
+	function extra_set_show(extra_uid, show) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function extra_set_pass_down(pz_uid, extra_uid, pass_down) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_set_pass_down=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&pass_down=" + pass_down + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function page_type_change(pt_uid) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_page_type_change=1&pt_uid=" + pt_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+	function pagezone_type_change(pzt_uid) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_pagezone_type_change=1&pzt_uid=" + pzt_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
+
+	function subModalExtraInsertAfter(origin_uid, pz_uid) {ldelim}
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50;
+/// \todo:  param for close still missing
+		top.showPopWin(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
+			width, 
+			height, 
+			null, 
+			true
+		);
+	{rdelim}
+	function extra_insert_after(origin_uid, pz_uid) {ldelim}
+/// \todo: add be_mode
+		subModalExtraInsertAfter(origin_uid, pz_uid);
+	{rdelim}
+
+
+	function subModalExtraEdit(table, uid) {ldelim}
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50;
+		top.showPopWin(
+			top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + uid + "]=edit",
+			width, 
+			height, 
+			null, 
+			true
+		);
+	{rdelim}
+	function extra_edit(table, uid) {ldelim}
+/// \todo: add be_mode
+		subModalExtraEdit(table, uid);
+	{rdelim}
+
+
+	function processing() {ldelim}
+
+		img = document.createElement('img');
+		img_src = document.createAttribute('src');
+		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
+		img.setAttributeNode(img_src);
+
+		layer_style = document.createAttribute('style');
+		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
+
+		layer = document.createElement('div');
+		layer.setAttributeNode(layer_style);
+
+		layer.appendChild(img);
+		self.document.getElementsByTagName('body')[0].appendChild(layer);
+	{rdelim}
+	
+	function reload(data) {ldelim}
+		if (data.responseText == '') {ldelim}
+			// empty string, so no error message
+/// \todo: currently no_cache param are ADDED, must be REPLACED
+			self.location.href = self.location.href + "&no_cache=" + new Date().getTime();
+		{rdelim} else {ldelim}
+			// display error message
+			self.document.getElementsByTagName('body')[0].innerHTML = data.responseText;
+		{rdelim}
+	{rdelim}
+
+</script>
+-->
+
+
+<div style="margin-bottom: 7px;">
+
+	<a href="javascript:extra_insert_after_dummy(0, {$DATA.pagezone_id});">{$DUMMY_ICON}</a> 
+	<a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}); return false;">{$NEW_TOP_ICON}</a>
+	
+
+</div>
+
+{if sizeof($EXTRA_DATA) == 0}
+	<div>{$MESSAGE.pagezone_empty}</div>
+{else}
+	<table style="margin-bottom: 21px;">
+	<tr>
+	<td>{$LABEL.extra}</td>
+	<td align="center">{$LABEL.show}</td>
+	<td align="center">{$LABEL.pass_down}</td>
+	<td align="center">{$LABEL.inherits_from}</td>
+	<td>{$LABEL.commands}</td>
+	</tr>
+		{section name=j loop=$EXTRA_DATA} 
+		{if ($smarty.section.j.index % 2 == 0)}
+			<tr class="bg1">
+		{else}
+			<tr class="bg2">
+		{/if}
+				<td> {$EXTRA_DATA[j].extra_type}<br /><span class="gray">{$EXTRA_DATA[j].title}</span> </td>
+				<td align="center">
+		{if $EXTRA_DATA[j].show == 0}
+		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[j].uid}, 1);" /> 
+		{else}
+		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[j].uid}, 0);" checked="checked" />
+		{/if}
+				</td>
+				<td align="center">
+		{if $EXTRA_DATA[j].pass_down == 0}
+		<input type="checkbox" onchange="extra_set_pass_down({$DATA.pagezone_id}, {$EXTRA_DATA[j].uid}, 1);" />
+		{else}
+		<input type="checkbox" onchange="extra_set_pass_down({$DATA.pagezone_id}, {$EXTRA_DATA[j].uid}, 0);" checked="checked" />
+		{/if}
+				</td>
+				<td> {$EXTRA_DATA[j].inherits_from} </td>
+		
+		
+				<td> 
+		{if $EXTRA_DATA[j].origin_placement == true} 
+		  <a href="#" onclick="extra_edit('{$EXTRA_DATA[j].concrete_table}', {$EXTRA_DATA[j].concrete_uid});">{$EDIT_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if} 
+		
+		<a href="#" onclick="extra_insert_after({$EXTRA_DATA[j].origin_uid}, {$DATA.pagezone_id});">{$NEW_BELOW_ICON}</a>
+		
+		{* calculate index for origin uid for moving extras up and down *}	
+		{math assign="move_up_after_index" equation="x-2" x=$smarty.section.j.index}
+		{math assign="move_down_after_index" equation="x+1" x=$smarty.section.j.index}
+		{if $smarty.section.j.index == 0} 
+		  {$EMPTY_ICON}
+		{else}
+		  {if $move_up_after_index < 0}
+		    <a href="javascript:extra_move_after(0, {$DATA.pagezone_id}, {$EXTRA_DATA[j].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
+		  {else}
+			<a href="javascript:extra_move_after({$EXTRA_DATA[$move_up_after_index].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[j].uid});">{$MOVE_UP_ICON}</a>
+		  {/if}
+		{/if}
+		{if $smarty.section.j.index < $smarty.section.j.total-1} 
+		  <a href="javascript:extra_move_after({$EXTRA_DATA[$move_down_after_index].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[j].uid});">{$MOVE_DOWN_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if}
+		
+		{if $EXTRA_DATA[j].origin_placement == true} 
+		  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[j].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
+		{else}
+		  {$EMPTY_ICON}
+		{/if} 
+		
+				</td>
+		
+		{if $EXTRA_DATA[j].position}
+			<td>{$EXTRA_DATA[j].paragraph}</td>
+			<td>{$EXTRA_DATA[j].position}</td>
+			<td>{$EXTRA_DATA[j].uid}</td>
+		{/if}
+			</tr>
+		{/section}
+	</table>
+{/if}	
+
