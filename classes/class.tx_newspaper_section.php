@@ -209,6 +209,15 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	 */
  	public function copyDefaultArticle(array $must_have_extras) {
  		$new_article = $this->getDefaultArticle();
+
+		//	zeroing the UID causes the article to be written to DB as a new object.
+ 		$new_article->setAttribute('uid', 0);
+ 		$new_article->setUid(0);
+ 		$new_article->store();
+
+		debug($new_article, 'new_article',  __LINE__, __FILE__);
+		debug($new_article->getUid(), 'new_article UID',  __LINE__, __FILE__);
+		debug($new_article->getExtraUid(), 'new_article Extra UID',  __LINE__, __FILE__);
  		$default_extras = $new_article->getExtras();
  		
  		$new_article->clearExtras();
@@ -229,7 +238,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		
 		debug($default_extras, 'default extras', __LINE__, __FILE__);
 		debug($must_have_extras, 'must have extras', __LINE__, __FILE__);
-		
 		/**	Add must-have Extras which are not in default placement:
 		 *  empty, hidden, at first position before first paragraph
 		 */
@@ -247,13 +255,17 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$new_extra->setAttribute('position', 0);
 			
 			$new_extra->store();						//	Final store()
+			
+			/// Write association table entry article -> extra
+			tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
+				array(
+					'uid_local' => $new_article->getUid(),
+					'uid_foreign' => $new_extra->getUid(),
+					));
 		}
- 		
-		//	zeroing the UID causes the article to be written to DB as a new object.
- 		$new_article->setAttribute('uid', 0);
- 		$new_article->setUid(0);
- 		$new_article->store();
- 		
+#		debug($new_article->getExtras(), 'getExtras() '.$key, __LINE__, __FILE__);
+#		die();
+ 		 		
  		// set main section
  		$new_article->addSection($this);
  		$new_article->store();

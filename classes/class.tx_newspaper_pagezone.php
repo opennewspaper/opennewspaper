@@ -399,6 +399,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $origin_uid 
 	 *  \param $extra The new, fully instantiated Extra to insert
 	 *  \param $recursive If set, pass down the insertion to all inheriting PageZones
+	 *  \return DOCUMENT_ME
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
@@ -420,6 +421,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
 			}
 		}
+		return $insert_extra;
 	}
 	
 	///	Remove a given Extra from the PageZone
@@ -535,31 +537,42 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
 	
-		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-			if ($inherits == false) {
+		if ($inherits == false) {
+			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 				if ($copied_extra) {
-					/// \todo delete associations; or define and call Extra::delete()
 					$copied_extra->setAttribute('deleted', 1);
 					$copied_extra->store();
+					/// \todo delete associations; or define and call Extra::delete()
 				}
-				/// \todo if no Extra is found, we can probably stop the loop.
-			} else {
-				/** Whenever inheritance is reenabled, the Extra is inserted
-				 *  on all inheriting page zones.
-				 * 
-				 *  Remarks:
-				 *  - Finding the origin UID of the preceding extra is unneccessary,
-				 * 	  because insertExtraAfter() searches for the origin UID on the 
-				 *    parent PageZones if it's not present on the current one. That
-				 * 	  leads to the correct position.
-				 *  - insertExtraAfter is called non-recursively on every inheriting
-				 *    PageZone. The alternative is finding only the first tier of 
-				 * 	  heirs and call it recursively. That would be a pain and we 
-				 *    already know \em all heirs, so there. 
-				 */
-				$inheriting_pagezone->insertExtraAfter($extra, $extra->getOriginUid(), false);
 			}
+		} else {
+			/** Whenever inheritance is reenabled, the Extra is inserted
+			 *  on all inheriting page zones.
+			 */
+			foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
+				$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
+				if ($page) {
+					$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
+					if ($inheriting_pagezone) {
+						/** Finding the origin UID of the preceding extra is 
+						 *  unneccessary, because insertExtraAfter() searches 
+						 *  for the origin UID on the parent PageZones if it's
+						 *  not present on the current one. That leads to the
+						 *  correct position.
+						 */
+						$inserted = $inheriting_pagezone->insertExtraAfter($extra, $extra->getOriginUid());
+						/** Now the origin UIDs of the Extra on the inheriting 
+						 *  page zone must be reset to $extra->getOriginUid(), 
+						 *  because the Extra has been inserted as new, not
+						 *  inherited.
+						 */
+						$inserted->setAttribute('origin_uid', $extra->getUid());
+						$inserted->store();
+					}
+				}
+			}
+			 
 		}
 	}
 	
@@ -584,7 +597,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
 
-		/// \todo look for page zones on pages in section down the section hierarchy
+		/// look for page zones on pages in section down the section hierarchy
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
 			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
 			if ($page) {
@@ -869,8 +882,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
  	 * 			== 0 if their position is the same 
  	 */
- 	static protected function compareExtras(tx_newspaper_Extra $extra1, 
- 									 		tx_newspaper_Extra $extra2) {
+ 	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
+ 									 		tx_newspaper_ExtraIface $extra2) {
  		return $extra1->getAttribute('position')-$extra2->getAttribute('position');			 	
 	}
 	
@@ -948,7 +961,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	public function getPageZoneUid() { return $this->pagezone_uid; }
+	
 	public function getExtraUid() { return $this->extra_uid; }
+
+	public function setExtraUid($uid) { 
+		$this->extra_uid = intval($uid);
+		if ($this->extra_attributes) 
+			$this->extra_attributes['uid'] = intval($uid); 
+	}
 
  	protected $uid = 0;				///< The UID of the record in the concrete table
  	protected $pagezone_uid = 0;	///< The UID of the record in the abstract PageZone table
