@@ -110,8 +110,8 @@ td {ldelim}
 
 <div class="box_hl">Wizards </div>
 <div class="box">	
-	<a href="#" onclick="switch_new_article(true); return false;"><img src="/taz426/typo3/sysext/t3skin/icons/gfx/wizard_rte2.gif" />  New article</a><br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/wizard_rte2.gif" /> Create image gallery (DEMO LINK)<br />
+	<a href="#" onclick="switch_new_article(true); return false;">{$WIZARD_ICON} New article</a><br />
+	{$WIZARD_ICON} Create image gallery (DEMO LINK)<br />
 </div>
 <br />	
 
@@ -131,32 +131,26 @@ td {ldelim}
 <div class="box_hl">Shortcuts </div>	
 <div class="box">	
 	{section name=i loop=$SHORTCUT}
-	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT[i].description}</a><br />
+	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT_BE_ICON} {$SHORTCUT[i].description}</a><br />
 	{/section}
-<!--
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/edit2.gif" /> Kommentarteaser Startseite<br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/edit2.gif" /> Kommentarteaser Politik<br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/edit2.gif" /> Kommentarteaser Deutschland<br />	
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/edit2.gif" /> Platzierung Deutschland<br />
--->
 </div>	
 <br />
 
 
 <div class="box_hl">Manage user comments (DEMO ONLY)</div>	
 <div class="box">		
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/zoom.gif" /> US-Klimapolitik (Hans, 12.06.2009, 12:45:23)</a><br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/zoom.gif" /> Kitas (Petra, 12.06.2009, 12:43:23)</a><br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/zoom.gif" /> Zensursula (Michael, 12.06.2009, 12:41:15)</a><br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/zoom.gif" /> Datenschutz (Monika, 12.06.2009, 12:40:57)</a><br />
+	{$MANAGE_USERCOMMENTS_ICON} US-Klimapolitik (Hans, 12.06.2009, 12:45:23)</a><br />
+	{$MANAGE_USERCOMMENTS_ICON} Kitas (Petra, 12.06.2009, 12:43:23)</a><br />
+	{$MANAGE_USERCOMMENTS_ICON} Zensursula (Michael, 12.06.2009, 12:41:15)</a><br />
+	{$MANAGE_USERCOMMENTS_ICON} Datenschutz (Monika, 12.06.2009, 12:40:57)</a><br />
 </div>
 <br />
 	
 	
 <div class="box_hl">Newspaper functions </div>	
 <div class="box">		
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/turn_right.gif" /> <a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">Publishing workflow</a><br />
-	<img src="/taz426/typo3/sysext/t3skin/icons/gfx/turn_right.gif" /> <a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">Placement</a><br />
+	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Publishing workflow</a><br />
+	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
 </div>
 <br />
 
