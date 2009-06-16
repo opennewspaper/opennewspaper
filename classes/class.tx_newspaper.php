@@ -20,22 +20,22 @@ class tx_newspaper  {
 	const pagetype_get_parameter = 'page';
 	
 
-	/// add Extra list to backend form
-	/** \param $PA typo3 standard for userFunc
-	  * \param $fobj typo3 standard for userFunc
-	  * \return String html code: list of assiciated Extras
-	  */
-	function renderList($PA, $fobj) {
-t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
-
-/// \to do: can/should articles be hard-coded here? Or: throw exception if table is not tx_newspaper_article
-		// get table and uid of current record
-		$current_record['table'] = $PA['table'];
-		$current_record['uid'] = $PA['row']['uid'];
-
-		return tx_newspaper_ExtraBE::renderList($current_record['table'], $current_record['uid']);
-
-	}
+/// \todo: remove if not needed
+//	/// add Extra list to backend form
+//	/** \param $PA typo3 standard for userFunc
+//	  * \param $fobj typo3 standard for userFunc
+//	  * \return String html code: list of assiciated Extras
+//	  */
+//	function renderList($PA, $fobj) {
+//t3lib_div::devlog('tx_newspaper->renderList pa', 'newspaper', 0, $PA);
+//
+//		// get table and uid of current record
+//		$current_record['table'] = $PA['table'];
+//		$current_record['uid'] = $PA['row']['uid'];
+//
+//		return tx_newspaper_ExtraBE::renderList($current_record['table'], $current_record['uid']);
+//
+//	}
 
 	/// Execute a SELECT query, check the result, return zero or one record(s)
 	/** \param $fields Fields to SELECT
