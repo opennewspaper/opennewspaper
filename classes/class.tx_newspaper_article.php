@@ -377,6 +377,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				}
 			}
 		}
+		debug($this->getUid(), 'Article::UID ', __LINE__, __FILE__);
+		debug($this->extras, 'Article::getExtras() ', __LINE__, __FILE__);
+#		die();
 		
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
 		
@@ -535,8 +538,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
  	 * 			== 0 if their position is the same 
  	 */
- 	static protected function compareExtras(tx_newspaper_Extra $extra1, 
- 									 		tx_newspaper_Extra $extra2) {
+ 	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
+ 									 		tx_newspaper_ExtraIface $extra2) {
  		return $extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph')?
  			$extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph'):
  			$extra1->getAttribute('position')-$extra2->getAttribute('position');
