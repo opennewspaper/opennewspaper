@@ -11,6 +11,8 @@ define('BE_DISPLAY_MODE_SUBMODAL', 2);
 
 define('BE_ICON_CLOSE', '1');
 
+define('DEBUG_POSITION', false);
+
 /// function for adding newspaper functionality to the backend
 class tx_newspaper_BE {
 	
@@ -331,9 +333,32 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 
 
 
-
+/// \todo: URGENT move to NEW class -> placement pz and placement article WILL USE!
+	private function collectExtras(tx_newspaper_PageZone $pz) {
+		$extra = $pz->getExtras();
+		$data = array();
+		for ($i = 0; $i < sizeof($extra); $i++) {
+			$extra_data = array(
+					'extra_type' => $extra[$i]->getTitle(),
+					'uid' => $extra[$i]->getExtraUid(),
+					'hidden' => $extra[$i]->getAttribute('hidden'),
+					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
+					'show' => $extra[$i]->getAttribute('show_extra'),
+					'paragraph' => $extra[$i]->getAttribute('paragraph'),
+					'origin_placement' => $extra[$i]->isOriginExtra(),
+					'origin_uid' => $extra[$i]->getOriginUid(),
+					'concrete_table' => $extra[$i]->getTable(),
+					'concrete_uid' => $extra[$i]->getUid(),
+				);
+			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
+			if (DEBUG_POSITION) $extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
+			$data[] = $extra_data;
+		}
+		return $data;
+	} 
 
 	function renderExtraInArticle($PA, $fobj) {
+		global $LANG;
 t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
@@ -343,16 +368,65 @@ t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 debug($PA['row']);	
 
 
-		
 
+		$label['extra'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra', false);
+		$label['show'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show', false);
+		$label['pass_down'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pass_down', false);
+		$label['inherits_from'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_inherits_from', false);
+		$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
+		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
+		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
+		
+		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
+		
 		$a = new tx_newspaper_Article(intval($PA['row']['uid']));
 		$e = $a->getExtras();
+		
+		$e = $this->collectExtras($a);
+		
 debug($e, 'getExtras()');
+debug($e[0], 'getExtras [0]');
+
+ 		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates/'));
+
+/// \todo: check title flags
+/// \todo: move to array (like $label)
+		$smarty->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
+		$smarty->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
+		$smarty->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_edit_extra', false)));
+		$smarty->assign('MOVE_UP_ICON', tx_newspaper_BE::renderIcon('gfx/button_up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_up', false)));
+		$smarty->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_down', false)));
+		$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+		$smarty->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
+		$smarty->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+//		$smarty->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+		$smarty->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
+
+
+		$smarty->assign('EXTRA_DATA', $e);
+		$smarty->assign('LABEL', $label);
+		$smarty->assign('MESSAGE', $message);
+
+
+		return $smarty->fetch('pagezone_extra_in_article.tmpl');
+
+
+
+
+
+
+
+
+
+
+
+
 		$content = 'Extra list demo:<br />';
 		for ($i = 0; $i < sizeof($e); $i++) {
 			$content .= $e[$i]->getDescription() . '<br />';
 		}
-
 		return $content;
 	}
 
