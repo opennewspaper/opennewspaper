@@ -40,7 +40,8 @@
 		{else}
 		  {$EMPTY_ICON}
 		{/if} 
-		
+
+{* \todo: move up/down for same paragraph only! *}		
 		{* calculate index for origin uid for moving extras up and down *}	
 		{math assign="move_up_after_index" equation="x-2" x=$smarty.section.i.index}
 		{math assign="move_down_after_index" equation="x+1" x=$smarty.section.i.index}
