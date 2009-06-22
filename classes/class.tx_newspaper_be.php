@@ -345,12 +345,27 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 #					'hidden' => $extra[$i]->getAttribute('hidden'),
 					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
 #					'show' => $extra[$i]->getAttribute('show_extra'),
-					'paragraph' => $extra[$i]->getAttribute('paragraph'),
+#					'paragraph' => $extra[$i]->getAttribute('paragraph'),
 					'origin_placement' => $extra[$i]->isOriginExtra(),
 					'origin_uid' => $extra[$i]->getOriginUid(),
 					'concrete_table' => $extra[$i]->getTable(),
 					'concrete_uid' => $extra[$i]->getUid(),
 				);
+			try {
+				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				
+			}
+			try {
+				$extra_data['show'] = $extra[$i]->getAttribute('show_extra');
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				
+			}
+			try {
+				$extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				
+			}
 			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
 			if (DEBUG_POSITION) $extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
 			$data[] = $extra_data;
