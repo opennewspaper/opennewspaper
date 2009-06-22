@@ -216,9 +216,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setUid(0);
  		$new_article->store();
 
-		debug($new_article, 'new_article',  __LINE__, __FILE__);
-		debug($new_article->getUid(), 'new_article UID',  __LINE__, __FILE__);
-		debug($new_article->getExtraUid(), 'new_article Extra UID',  __LINE__, __FILE__);
+		t3lib_div::devlog('new_article', 'newspaper', 0, $new_article);
+		t3lib_div::devlog('new_article UID', 'newspaper', 0, $new_article->getUid());
+		t3lib_div::devlog('new_article Extra UID', 'newspaper', 0, $new_article->getExtraUid());
  		$default_extras = $new_article->getExtras();
  		
  		$new_article->clearExtras();
