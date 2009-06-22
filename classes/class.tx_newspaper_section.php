@@ -208,6 +208,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	 * 			are supplied as class names.
  	 */
  	public function copyDefaultArticle(array $must_have_extras) {
+ 		t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, $must_have_extras);
  		$new_article = $this->getDefaultArticle();
 
 		//	zeroing the UID causes the article to be written to DB as a new object.
