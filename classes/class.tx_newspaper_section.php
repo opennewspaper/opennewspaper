@@ -237,6 +237,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			}
 		}
 		
+		t3lib_div::devlog('extras', 'newspaper', 0, $new_article->getExtras());
 		t3lib_div::devlog('default extras', 'newspaper', 0, $default_extras);
 		t3lib_div::devlog('must have extras', 'newspaper', 0, $must_have_extras);
 		/**	Add must-have Extras which are not in default placement:
