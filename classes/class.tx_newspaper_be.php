@@ -344,7 +344,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 					'uid' => $extra[$i]->getExtraUid(),
 #					'hidden' => $extra[$i]->getAttribute('hidden'),
 					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
-					'show' => $extra[$i]->getAttribute('show_extra'),
+#					'show' => $extra[$i]->getAttribute('show_extra'),
 					'paragraph' => $extra[$i]->getAttribute('paragraph'),
 					'origin_placement' => $extra[$i]->isOriginExtra(),
 					'origin_uid' => $extra[$i]->getOriginUid(),
