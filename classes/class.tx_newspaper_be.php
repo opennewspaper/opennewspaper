@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_be.php
  *
- *  \author Oliver Schröder <newspaper@schroederbros.de>
+ *  \author Oliver Schrï¿½der <newspaper@schroederbros.de>
  *  \date Feb 27, 2009
  */
 
@@ -338,10 +338,11 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 		$extra = $pz->getExtras();
 		$data = array();
 		for ($i = 0; $i < sizeof($extra); $i++) {
+			
 			$extra_data = array(
 					'extra_type' => $extra[$i]->getTitle(),
 					'uid' => $extra[$i]->getExtraUid(),
-					'hidden' => $extra[$i]->getAttribute('hidden'),
+#					'hidden' => $extra[$i]->getAttribute('hidden'),
 					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
 					'show' => $extra[$i]->getAttribute('show_extra'),
 					'paragraph' => $extra[$i]->getAttribute('paragraph'),
@@ -362,7 +363,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
-			return 'Ohne Artikeltyp keine Defaultbestückung';
+			return 'Ohne Artikeltyp keine Defaultbestï¿½ckung';
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
 debug($PA['row']);	
