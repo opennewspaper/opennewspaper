@@ -11,8 +11,12 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	}
 	
 	public function __toString() {
+		try {
 		return 'Extra: UID ' . $this->getExtraUid() . ', Typo3 CE Extra: UID ' . $this->getUid() .
-				' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';	
+				' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';
+		} catch(Exception $e) {
+			return "Typo3 CE: Exception thrown!" . $e;
+		}	
 	}
 	
 	/** Just a quick hack to see anything
