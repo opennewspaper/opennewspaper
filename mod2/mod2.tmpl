@@ -1,3 +1,4 @@
+{* debug *}
 <style type="text/css">
 table {ldelim}
   table-layout: auto; 
@@ -141,6 +142,7 @@ td {ldelim}
 
 <table>
 <tr>
+<td></td>
 <td>No. </td>
 <td>Article</td>
 <td>Author</td>
@@ -156,6 +158,11 @@ td {ldelim}
 {else}
 	<tr class="bg2">
 {/if}
+		<td>
+		{if $LOCKED_ARTICLE[i].username != ''}
+			{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg}
+		{/if}
+		</td>
 		<td align="right"> {math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step} </td>
 		<td> 
 			<div title="{$DATA[i].teaser}"><span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})</div>

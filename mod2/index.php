@@ -156,7 +156,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		global $LANG;
 		
 		$this->processGP();
-		$this->processGPVisibility(); // check if an article is hiudden/unhidden
+		$this->processGPVisibility(); // check if an article is hidden/unhidden
 		
 		/// build where part for filter
 		$where = $this->createWherePart(); // get conditions for sql statement
@@ -184,7 +184,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/'));
-
 
 t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
 //dummy data
@@ -224,6 +223,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 		$smarty->assign('COMMENT_ICON', tx_newspaper_BE::renderIcon('gfx/zoom2.gif', '', '###COMMENT###'));
 		$smarty->assign('TIME_HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/history.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
+		$smarty->assign('RECORD_LOCKED_ICON', tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false));
 
 
 		/// build browse sequence
@@ -243,7 +243,19 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 		
 		/// build url for switch visibility button
 		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
+
 		
+		$locked_article = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$t = t3lib_BEfunc::isRecordLocked('tx_newspaper_article', $row[$i]['uid']);
+			if (isset($t['record_uid'])) {
+				$locked_article[$i] = array(
+					'username' => $t['username'],
+					'msg' => $t['msg']
+				);
+			}
+		}
+		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 
 		$smarty->assign('DATA', $row);
 
