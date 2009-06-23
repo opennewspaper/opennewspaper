@@ -437,7 +437,7 @@ $TCA['tx_newspaper_pagezone_page'] = array (
 $TCA['tx_newspaper_article'] = array (
 	'ctrl' => $TCA['tx_newspaper_article']['ctrl'],
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status,inherits_from'
+		'showRecordFieldList' => 'hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,workflow_status,inherits_from,publish_date,modification_user,modification_time'
 	),
 	'feInterface' => $TCA['tx_newspaper_article']['feInterface'],
 	'columns' => array (
@@ -722,9 +722,45 @@ $TCA['tx_newspaper_article'] = array (
 				'default' => 0
 			)
 		),
+		'publish_date' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.publish_date',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0'
+			)
+		),
+		'modification_user' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.modification_user',		
+			'config' => array (
+				'type' => 'group',	
+				'internal_type' => 'db',	
+				'allowed' => 'be_users',	
+				'size' => 1,	
+				'minitems' => 0,
+				'maxitems' => 1,
+			)
+		),
+		'modification_time' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.modification_time',		
+			'config' => array (
+				'type'     => 'input',
+				'size'     => '12',
+				'max'      => '20',
+				'eval'     => 'datetime',
+				'checkbox' => '0',
+				'default'  => '0'
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status, inherits_from')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, workflow_status, inherits_from, publish_date, modification_user, modification_time')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime')
@@ -1464,5 +1500,4 @@ $TCA['tx_newspaper_extra_articlelist'] = array (
 		'1' => array('showitem' => '')
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
