@@ -315,7 +315,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_article_extras_mm mm, tx_newspaper_extra e',
-			'mm.uid_foreign=e.uid AND (e.extra_table="tx_newspaper_pagezone_page" OR e.extra_table="tx_newspaper_article")'
+			'mm.uid_foreign=e.uid AND (e.extra_table="tx_newspaper_pagezone_page" OR e.extra_table="tx_newspaper_article" OR e.extra_table="tx_newspaper_pagezone")'
 		);
 		
 		$msg = '';
