@@ -48,39 +48,16 @@ class tx_newspaper_SaveHook {
 
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+
+		/// add modifications user and time if  tx_newspaper_Article is updated
+		$this->addModificationUserDataIfArticle($status, $table, $id, $fieldArray);
 
 		/// check if an article list was changed for a section
 		$this->checkArticleListChangedInSection($fieldArray, $table, $id);
 
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
-/// �todo: remove code if checkPageZoneWithIsArticleFlagAllowed() is tested
-//		$pzt = new tx_newspaper_PageZoneType(); 
-//		if  ($table == $pzt->getTable() && 
-//			isset($fieldArray['is_article']) && 
-//			$fieldArray['is_article'] == 1 &&
-//			($status = 'new' || $status == 'update')
-//		) {
-//			/// make sure no other page zone type with is_article flag set exists
-//			$sf = tx_newspaper_Sysfolder::getInstance();
-//			$pid = $sf->getPid($pzt);
-//			$where = 'pid=' . $pid . ' AND deleted=0 AND is_article=1';
-//			if ($status != 'new') { /// no uid if new record (NEW49b018c614878)
-//				$where .= ' AND uid !=' . $id; 				
-//			}
-//			$row = tx_newspaper::selectRows(
-//				'uid, type_name',
-//				$pzt->getTable(),
-//				$where
-//			);
-//#t3lib_div::devlog('pzt: is_article', 'newspaper', 0, array('pid' => $pzt->getTable(), 'where' => $where, 'row' => $row));
-//			if (count($row) > 0) {
-///// \to do: add to log file - but which?
-//				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
-//			}
-//		}
-
 
 		if (!tx_newspaper::isAbstractClass($table) && class_exists($table)) { ///<newspaper specification: table name = class name
 
@@ -175,14 +152,40 @@ class tx_newspaper_SaveHook {
 	}
 
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray, $_REQUEST));
-t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
-		
+//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray)); // , $_REQUEST
+//t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
+				
 		/// If a new section has been created, create default article list
 		$this->addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that);
 		
 		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 	}
+
+
+
+	/// add modification user and modification time when updating tx_newspaper_article
+	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
+		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
+			return;
+			
+		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
+		$fieldArray['modification_time'] = time(); 
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
@@ -255,64 +258,7 @@ t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $p
 
 
 
-/// \todo: remove, including newSection call
 
-	/// Stuff to do when a new section is created
-	/** - pages, page zones and extras are copied from the parent section
-	 *  - an automatic article list is created and associated with the section
-	 * 
-	 *  \param $id The UID assigned to the new record by Typo3 - usually NEW....
-	 *  \param $fieldarray The data which have already been written to the new record
-	 */
-//	private function newSection($id, array $fieldArray) {
-//		
-//		$section = new tx_newspaper_Section($this->getSectionID($fieldArray));
-//		t3lib_div::debug($section);
-//
-//		if ($fieldArray['inheritance_mode'] != 'dont_inherit') 
-//			$this->copyPagesFromParent($section);
-//
-//		$this->generateArticleList($section);
-//	}
-
-	/// Determine the UID of a newly written section
-	/** Typo3 apparently provides no reliable way to determine the UID of the 
-	 *  record which has just been written to the 
-	 *  processDatamap_afterDatabaseOperations() hook. Therefore, the only way
-	 *  to find the identity of the new record is to search for the written data
-	 *  in the DB.
-	 * 
-	 *  \param $fieldarray The data written to DB
-	 */
-//	private function getSectionID(array $fieldArray) {
-//		$where = 1;
-//		foreach ($fieldArray as $key => $value) {
-//			$where .= " AND $key = '$value'";
-//		}
-//		$row = tx_newspaper::selectOneRow('uid', 'tx_newspaper_section', $where);
-//		return intval($row['uid']);		
-//	}
-//
-//	/// Copy active pages and their content from parent section
-//	/** - copies the active pages from the parent section
-//	 *  - copies the page zones on those pages
-//	 *  - copies the Extras on those page zones
-//	 */	
-//	private function copyPagesFromParent(tx_newspaper_Section $section) {
-//		$parent = $section->getParentSection();
-//
-//		foreach ($parent->getSubPages() as $page) {
-//			/// clone page, set parent section to new section and store it
-//			$new_page = clone $page;
-//			$new_page->setAttribute('section', $section->getAttribute('uid'));
-//			$new_page->store();
-//		}
-//	}
-//
-//	/// Generate an automatically filled article list and link it to the section
-//	private function generateArticleList(tx_newspaper_Section $section) {
-//		throw new tx_newspaper_NotYetImplementedException();
-//	}
 	
 	
 	
