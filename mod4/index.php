@@ -212,8 +212,12 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				'title' => 'Section: multiple pages with same page type for a section',
 				'class_function' => array('tx_newspaper_module4', 'checkSectionWithMultipleButSamePageType'),
 				'param' => array()
-			)
-			
+			),
+				array(
+				'title' => 'Extra in Article: article or pagezone set as Extra',
+				'class_function' => array('tx_newspaper_module4', 'checkExtraInArticleIsArticleOrPagezone'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
@@ -298,11 +302,32 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		
 		if ($msg != '')
 			return $msg;
-		return true; // no problöems found
+		return true; // no problems found
 	}
 	
 	
-	
+
+	/// searches abstract extras where the related concrete extra is missing or deleted
+	static function checkExtraInArticleIsArticleOrPagezone() {
+		$msg = '';
+		// get all concrete extra table where records should exist
+		
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_article_extras_mm mm, tx_newspaper_extra e',
+			'mm.uid_foreign=e.uid AND (e.extra_table="tx_newspaper_pagezone_page" OR e.extra_table="tx_newspaper_article")'
+		);
+		
+		$msg = '';
+		for($i = 0; $i < sizeof($row); $i++) {
+			$msg .= 'Article #' . $row[$i]['uid_local'] . ', abstract Extra #' . $row[$i]['uid_foreign'] . 
+				' is stored in table ' . $row[$i]['extra_table'] . ' with #' . $row[$i]['extra_uid'] . '<br />';
+		}
+		
+		if ($msg != '')
+			return $msg;
+		return true; // no problems found
+	}
 
 }
 
