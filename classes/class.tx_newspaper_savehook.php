@@ -53,6 +53,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $
 		/// add modifications user and time if  tx_newspaper_Article is updated
 		$this->addModificationUserDataIfArticle($status, $table, $id, $fieldArray);
 
+		/// check if publish_date is to be added
+		$this->addPublishDateIfNotSet($status, $table, $id, &$fieldArray);
+
 		/// check if an article list was changed for a section
 		$this->checkArticleListChangedInSection($fieldArray, $table, $id);
 
@@ -166,15 +169,25 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $
 	/// add modification user and modification time when updating tx_newspaper_article
 	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
-			return;
+			return false;
 			
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
-		$fieldArray['modification_time'] = time(); 
+		$fieldArray['modification_time'] = time();
+		return true; 
 
 	}
 
 
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set 
+	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
+debug($fieldArray);
+			$fieldArray['publish_date'] = time(); // change publish_date
+			return true;
+		}
+		return false; // publish_date remained unchanged
 
+	}
 
 
 
