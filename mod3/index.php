@@ -424,9 +424,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
 					}
 
-global $BE_USER; debug(array('section id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"), 'page type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"), 'pagezone type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")));
+//global $BE_USER; debug(array('section id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"), 'page type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"), 'pagezone type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")));
 					$this->readUidList(); // get ids for section, page and pagezone
-debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
+//debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
 //debug($_REQUEST);
 
 					if (!$this->section_id) {
@@ -580,9 +580,10 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 					'concrete_table' => $extra[$i]->getTable(),
 					'concrete_uid' => $extra[$i]->getUid(),
 					'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
+					'paragraph' => $extra[$i]->getAttribute('paragraph'),
 				);
 			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
-			if (DEBUG_POSITION) $extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
+
 			$data[] = $extra_data;
 		}
 		return $data;
@@ -635,7 +636,7 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		}
 
 
-//debug(t3lib_div::view_array($extra_data), 'extra data');
+debug(t3lib_div::view_array($extra_data), 'extra_data'); 
 //debug(t3lib_div::view_array($data), 'data');				
 		
 		
@@ -651,32 +652,55 @@ debug(array('section id' => $this->section_id, 'page type id' => $this->page_typ
 		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
 		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
 		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
+		$label['paragraph'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_paragraph', false);
 		
 		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
-		$smarty->assign('EXTRA_DATA', $extra_data);
+//		$smarty->assign('EXTRA_DATA', $extra_data);
 		$smarty->assign('DATA', $data);
 		$smarty->assign('PAGETYPE', $pagetype);
 		$smarty->assign('PAGEZONETYPE', $pagezonetype);
 
 		$smarty->assign('SHOW_LEVELS_ABOVE', $this->show_levels_above);
 
-/// \todo: move to array (like $label)
-		$smarty->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
-		$smarty->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
-		$smarty->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_edit_extra', false)));
-		$smarty->assign('MOVE_UP_ICON', tx_newspaper_BE::renderIcon('gfx/button_up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_up', false)));
-		$smarty->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_down', false)));
 		$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
-		$smarty->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
-		$smarty->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
-//		$smarty->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
-		$smarty->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
+
 		
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+
+/// \todo: clean up code after moving pagezone rendering to a separate smarty template
+		/// render pagezones
+ 		$smarty_pz = new tx_newspaper_Smarty();
+		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+
+/// \todo: move to array (like $label)
+		$smarty_pz->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
+		$smarty_pz->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
+		$smarty_pz->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_edit_extra', false)));
+		$smarty_pz->assign('MOVE_UP_ICON', tx_newspaper_BE::renderIcon('gfx/button_up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_up', false)));
+		$smarty_pz->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_down', false)));
+		$smarty_pz->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
+		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+//		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+		$smarty_pz->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
+
+		$smarty_pz->assign('LABEL', $label);
+		$smarty_pz->assign('MESSAGE', $message);
+		
+		$pagezone = array();
+		for ($i = 0; $i < sizeof($extra_data); $i++) {
+			$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
+			if ($data[$i]['pagezone_type']->getAttribute('is_article') == 0)
+				$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_page.tmpl');
+			else
+				$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl');
+		}
+		
+		$smarty->assign('PAGEZONE', $pagezone);
+//debug($pagezone, 'pz');
 		
 		return $smarty->fetch('mod3.tmpl');
 	}

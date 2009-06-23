@@ -41,6 +41,7 @@
 			<label index="label_extra_copy_from_pool">Copy extra from pool</label>
 			<label index="label_extra_reference_from_pool">Use reference of extra</label>
 			<label index="message_pagezone_empty">No extra has been added so far</label>
+			<label index="label_paragraph">Paragraph</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>
