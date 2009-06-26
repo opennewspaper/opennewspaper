@@ -212,7 +212,7 @@ td {ldelim}
 <div style="margin-bottom: 7px;">
 
 	<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}); return false;">{$NEW_TOP_ICON}</a>
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}); return false;">{$NEW_TOP_ICON}</a> {* differs depending on type pagezone_apge and article *}
  	&nbsp; &nbsp; 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	

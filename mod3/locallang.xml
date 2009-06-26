@@ -18,6 +18,7 @@
 			<label index="label_unhide">Unhide</label>
 			<label index="label_move_up">Move up</label>
 			<label index="label_move_down">Move down</label>
+			<label index="label_new_extra">New extra</label>
 			<label index="label_new_top">New extra at top of list</label>
 			<label index="label_new_below">New extra below this extra</label>
 			<label index="label_delete">Remove extra</label>

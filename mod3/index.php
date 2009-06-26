@@ -662,11 +662,14 @@ debug(t3lib_div::view_array($extra_data), 'extra_data');
 		$smarty->assign('DATA', $data);
 		$smarty->assign('PAGETYPE', $pagetype);
 		$smarty->assign('PAGEZONETYPE', $pagezonetype);
-
 		$smarty->assign('SHOW_LEVELS_ABOVE', $this->show_levels_above);
-
-		$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+
+		/// "new to top" buttons varies for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
+		if ($data[0]['pagezone_type']->getAttribute('is_article') == 0)
+			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+		else
+			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra', false)));
 
 		
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
@@ -690,6 +693,7 @@ debug(t3lib_div::view_array($extra_data), 'extra_data');
 		$smarty_pz->assign('LABEL', $label);
 		$smarty_pz->assign('MESSAGE', $message);
 		
+		// pagezones are render by a separate smarty templae - because 2 versions (pagezone_page or article) can be rendered
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
