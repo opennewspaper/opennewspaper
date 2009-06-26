@@ -239,9 +239,8 @@ td {ldelim}
 			{/if} value="{$PAGEZONETYPE[j]->getUid()}">{$PAGEZONETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
 		</select>
-{* dummy button *}&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
-		
 	{/if}
+{* dummy button *}&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
 </div>
 
 {$PAGEZONE[i]} {* pagezones are rendered separately *}
