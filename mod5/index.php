@@ -277,7 +277,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$s = new tx_newspaper_Section($section);
 			$at = new tx_newspaper_ArticleType($articletype);
 			
-			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
+			$new_article = $s->copyDefaultArticle(new tx_newspaper_ArticleType()); // $at->getTSConfigSettings('musthave'));
 			$new_article->setAttribute('articletype_id', $articletype);
 
 			$new_article->store();
