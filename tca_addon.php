@@ -42,6 +42,11 @@ $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
 
+// /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying buttons according to workflow_status and be_group permission)
+unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
+$TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
+$TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
+
 
 #t3lib_div::debug($TCA['tx_newspaper_extra_typo3_ce']['ctrl']);
 
