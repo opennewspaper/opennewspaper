@@ -333,22 +333,22 @@ function findElementsByName(name, type) {
 
 
 
-/// \todo: URGENT move to NEW class -> placement pz and placement article WILL USE!
-	private function collectExtras(tx_newspaper_PageZone $pz) {
+// \todo: move to pagezone?
+	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
 		$data = array();
 		for ($i = 0; $i < sizeof($extra); $i++) {
 			
 			$extra_data = array(
-					'extra_type' => $extra[$i]->getTitle(),
-					'uid' => $extra[$i]->getExtraUid(),
-					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
-					'origin_placement' => $extra[$i]->isOriginExtra(),
-					'origin_uid' => $extra[$i]->getOriginUid(),
-					'concrete_table' => $extra[$i]->getTable(),
-					'concrete_uid' => $extra[$i]->getUid(),
-					'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
-				);
+				'extra_type' => $extra[$i]->getTitle(),
+				'uid' => $extra[$i]->getExtraUid(),
+				'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
+				'origin_placement' => $extra[$i]->isOriginExtra(),
+				'origin_uid' => $extra[$i]->getOriginUid(),
+				'concrete_table' => $extra[$i]->getTable(),
+				'concrete_uid' => $extra[$i]->getUid(),
+				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
+			);
 			// the following attributes aren't always available 
 			try {
 				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
@@ -369,6 +369,7 @@ function findElementsByName(name, type) {
 		}
 		return $data;
 	} 
+	
 
 	function renderExtraInArticle($PA, $fobj) {
 		global $LANG;
@@ -395,7 +396,7 @@ function findElementsByName(name, type) {
 		$a = new tx_newspaper_Article(intval($PA['row']['uid']));
 		$e = $a->getExtras();
 		
-		$e = $this->collectExtras($a);
+		$e = self::collectExtras($a);
 		
 //debug($e, 'getExtras()');
 //debug($e[0], 'getExtras [0]');
@@ -524,7 +525,6 @@ $content .= '<input              name="_savedok_check"                width="16"
 		}
 		return false;
 	}
-
 
 
 
