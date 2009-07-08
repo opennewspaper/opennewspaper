@@ -397,8 +397,8 @@ function findElementsByName(name, type) {
 		
 		$e = $this->collectExtras($a);
 		
-debug($e, 'getExtras()');
-debug($e[0], 'getExtras [0]');
+//debug($e, 'getExtras()');
+//debug($e[0], 'getExtras [0]');
 
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates/'));
@@ -424,17 +424,6 @@ debug($e[0], 'getExtras [0]');
 
 
 		return $smarty->fetch('pagezone_extra_in_article.tmpl');
-
-
-
-
-
-
-
-
-
-
-
 
 		$content = 'Extra list demo:<br />';
 		for ($i = 0; $i < sizeof($e); $i++) {
