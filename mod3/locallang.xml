@@ -43,6 +43,8 @@
 			<label index="label_extra_reference_from_pool">Use reference of extra</label>
 			<label index="message_pagezone_empty">No extra has been added so far</label>
 			<label index="label_paragraph">Paragraph</label>
+			<label index="label_save_extra">Save change in this extra</label>
+			<label index="label_undo_extra">Undo change in this extra</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>
