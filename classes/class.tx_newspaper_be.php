@@ -435,6 +435,95 @@ function findElementsByName(name, type) {
 
 
 
+	function getWorkflowButtons($PA, $fobj) {
+		global $LANG;
+//t3lib_div::devlog('button tsc', 'newspaper', 0, $PA['fieldTSConfig']);		
+		
+		$hidden = $PA['row']['hidden'];
+		$workflow = intval($PA['row']['workflow_status']);
+		
+		$button = array(); // init with false ...
+		$button['hide'] = false;
+		$button['publish'] = false; // show
+		$button['check'] = false;
+		$button['revise'] = false;
+		$button['place'] = false;
+
+		// hide or publish button is available for every workflow status
+		if (!$hidden)
+			$button['hide'] = $this->isButtonVisible('hide', $PA['fieldTSConfig']['hide']);
+		else
+			$button['publish'] = $this->isButtonVisible('publish', $PA['fieldTSConfig']['publish']);
+
+		switch($workflow) {
+			case 0:
+				$button['check'] = $this->isButtonVisible('check', $PA['fieldTSConfig']['check']);
+				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
+			break;
+			case 1:
+				$button['revise'] = $this->isButtonVisible('revise', $PA['fieldTSConfig']['revise']);
+				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
+			break;
+			case 2:
+				// no functionality right now; might take injunction button later ...
+			break;
+			default:
+				die('todo: throw exception');
+		}
+//t3lib_div::devlog('button', 'newspaper', 0, $button);
+		return $this->renderWorkflowButtons($hidden, $button);
+	}
+
+	private function renderWorkflowButtons($hidden, $button) {
+		$content = '';
+//$content .= '<input width="16" type="image" height="16" title="Save document" src="sysext/t3skin/icons/gfx/savedok.gif" name="_savedok" class="c-inputButton"/> <input width="16" type="image" height="16" title="Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok" class="c-inputButton"/><br />';
+//$content .= ' <input width="16" type="image" height="16" title="CHECK: Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok_CHECK" class="c-inputButton"/>';
+$content .= '<input              name="_savedok_check"                width="16" type="image" height="16" title="Save document AND SEND TO CvD" src="sysext/t3skin/icons/gfx/savedok.gif" class="c-inputButton"/>';
+
+//t3lib_div::devlog('button', 'newspaper', 0, $button);	
+		/// hide / publish
+		if (!$hidden && $button['hide']) {
+			$content .= 'hide<br />';
+		} elseif ($hidden && $button['publish']) {
+			$content .= 'publish<br />';
+		}
+		
+		/// check / revise
+		if ($button['check']) {
+			$content .= 'check';
+			if (!$hidden && $button['hide'])
+				$content .= ' check&hide';
+			elseif ($hidden && $button['publish'])
+				$content .= 'check&publish';
+			$content .= '<br />';
+		} elseif ($button['revise']) {
+			$content .= 'revise';
+			if (!$hidden && $button['hide'])
+				$content .= ' revise&hide';
+			elseif ($hidden && $button['publish'])
+				$content .= ' revise&publish';
+			$content .= '<br />';
+		}
+
+		/// place
+/// \todo 		
+
+		return $content;
+	}
+
+
+	/// \param String $button (internal) name of button
+	/// \param String $be_groups uids of allowed be_groups (comma separated)
+	/// \return Boolean is be_user member of one of given be_groups
+	private function isButtonVisible($button, $be_config) {
+//t3lib_div::devlog('button', 'newspaper', 0, array($GLOBALS['BE_USER'], $button, $be_config));
+		$be_group = explode(',', $be_config);
+		for ($i = 0; $i < sizeof($be_group); $i++) {
+			if ($GLOBALS['BE_USER']->isMemberOfGroup($be_group[$i]))
+				return true;
+		}
+		return false;
+	}
 
 
 
