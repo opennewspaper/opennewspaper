@@ -271,7 +271,7 @@ function findElementsByName(name, type) {
 		
 		
 		global $LANG;
-t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);		
+//t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);		
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
@@ -351,6 +351,7 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 					'concrete_table' => $extra[$i]->getTable(),
 					'concrete_uid' => $extra[$i]->getUid(),
 				);
+			// the following attributes aren't always available 
 			try {
 				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
 			} catch (tx_newspaper_WrongAttributeException $e) {
@@ -375,13 +376,13 @@ t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);
 
 	function renderExtraInArticle($PA, $fobj) {
 		global $LANG;
-t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
+//t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
-			return 'Ohne Artikeltyp keine Defaultbestï¿½ckung';
+			return 'Ohne Artikeltyp keine Defaultbestückung'; /// \todo: ...
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
-debug($PA['row']);	
+//debug($PA['row']);	
 
 
 
