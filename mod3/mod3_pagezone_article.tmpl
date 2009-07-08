@@ -1,4 +1,10 @@
 {* debug *}
+<script language="javascript" >
+	{section name=i loop=$EXTRA_DATA} {* store default values for paragraphs *}
+		document.def[{$EXTRA_DATA[i].uid}] = {$EXTRA_DATA[i].paragraph};
+	{/section}
+</script>
+
 <table style="margin-bottom: 21px;">
 <tr>
 	<td>{$LABEL.extra}</td>
@@ -9,7 +15,7 @@
 	<td>{$LABEL.commands}</td>
 </tr>
 	{section name=i loop=$EXTRA_DATA} 
-		{if ($smarty.section.i.index % 2 == 0)}
+		{if ($EXTRA_DATA[i].bg_color_type == 0)}
 			<tr class="bg1">
 		{else}
 			<tr class="bg2">
@@ -31,9 +37,11 @@
 				</td>
 				<td> {$EXTRA_DATA[i].inherits_from} </td>
 		
-<td align="center"><input style="width: 30px" type="text" name="todo" value="{$EXTRA_DATA[i].paragraph}" /></td>
+				<td id="para_td_{$EXTRA_DATA[i].uid}" align="center">
+					<input id="para_{$EXTRA_DATA[i].uid}" onChange="changeParagraph({$EXTRA_DATA[i].uid}); return false;" style="width: 30px" type="text" value="{$EXTRA_DATA[i].paragraph}" />
+					<span style="display: none" id="save_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveParagraph({$EXTRA_DATA[i].uid}); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoParagraph({$EXTRA_DATA[i].uid}); return false;">{$UNDO_ICON}</a></span> 
+				</td>
 
-		
 				<td> 
 		{if $EXTRA_DATA[i].origin_placement == true} 
 		  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid});">{$EDIT_ICON}</a>
@@ -65,8 +73,7 @@
 		  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
 		{else}
 		  {$EMPTY_ICON}
-		{/if} 
-		
+		{/if}
 				</td>
 		
 		{if $EXTRA_DATA[i].position}

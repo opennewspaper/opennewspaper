@@ -1,4 +1,11 @@
-{* debug *}
+{debug}
+
+{* include js for paragraph saving for articles *}
+{if $DATA[0].pagezone_type->getAttribute('is_article') == 1}
+{include file="js_article.js"}
+{/if}
+
+
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {ldelim}
   overflow: auto;
@@ -33,6 +40,19 @@ td {ldelim}
 </style> 
 
 <script language="javascript">
+
+	function extra_save_para(extra_uid, value) {ldelim}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{ldelim}
+				method: 'get',
+				parameters: "extra_save_para=1&extra_uid=" + extra_uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			{rdelim}
+		);
+	{rdelim}
+
 	
 	function toggle_show_levels_above(checked) {ldelim}
 		var request = new top.Ajax.Request(
@@ -243,6 +263,9 @@ td {ldelim}
 {* dummy button *}&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
 </div>
 
-{$PAGEZONE[i]} {* pagezones are rendered separately *}
-
+{if $PAGEZONE[i] != false}
+	{$PAGEZONE[i]} {* pagezones are rendered separately *}
+{else}
+	<div style="margin-bottom: 22px;">{$MESSAGE.pagezone_empty}</div>
+{/if}
 {/section}
