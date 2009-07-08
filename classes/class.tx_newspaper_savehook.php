@@ -15,7 +15,7 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
-//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id));
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 	}
 
 
@@ -178,15 +178,15 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $
 	}
 
 
-	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set 
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
 	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+/// \todo: timestart - alle kombinationen abfangen!!!
 		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
 debug($fieldArray);
 			$fieldArray['publish_date'] = time(); // change publish_date
 			return true;
 		}
 		return false; // publish_date remained unchanged
-
 	}
 
 
