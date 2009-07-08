@@ -38,7 +38,7 @@ unset($TCA['tx_newspaper_article']['columns']['template_set']['config']['items']
 $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 
 
-// /switch Extra field 'extras' in article (created by kickstrater) to a userFunc field (displaying a list of associated Extras)
+// /switch Extra field 'extras' in article (created by kickstarter) to a userFunc field (displaying a list of associated Extras)
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
 
