@@ -342,14 +342,12 @@ function findElementsByName(name, type) {
 			$extra_data = array(
 					'extra_type' => $extra[$i]->getTitle(),
 					'uid' => $extra[$i]->getExtraUid(),
-#					'hidden' => $extra[$i]->getAttribute('hidden'),
 					'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
-#					'show' => $extra[$i]->getAttribute('show_extra'),
-#					'paragraph' => $extra[$i]->getAttribute('paragraph'),
 					'origin_placement' => $extra[$i]->isOriginExtra(),
 					'origin_uid' => $extra[$i]->getOriginUid(),
 					'concrete_table' => $extra[$i]->getTable(),
 					'concrete_uid' => $extra[$i]->getUid(),
+					'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
 				);
 			// the following attributes aren't always available 
 			try {
@@ -367,8 +365,6 @@ function findElementsByName(name, type) {
 			} catch (tx_newspaper_WrongAttributeException $e) {
 				
 			}
-			if (DEBUG_POSITION) $extra_data['position'] = $extra[$i]->getAttribute('position');
-			if (DEBUG_POSITION) $extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
 			$data[] = $extra_data;
 		}
 		return $data;
