@@ -348,6 +348,7 @@ function findElementsByName(name, type) {
 				'concrete_table' => $extra[$i]->getTable(),
 				'concrete_uid' => $extra[$i]->getUid(),
 				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
+				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 			);
 			// the following attributes aren't always available 
 			try {
