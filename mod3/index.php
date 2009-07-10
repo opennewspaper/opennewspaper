@@ -220,7 +220,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
-			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')));	
+			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
 		}
 		if (t3lib_div::_GP('chose_extra_from_pool') == 1) {
 			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra')));	
@@ -235,8 +235,9 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 	}
 
 
-	private function getChoseExtraForm($origin_uid, $pz_uid) {
+	private function getChoseExtraForm($origin_uid, $pz_uid, $paragraph) {
 		global $LANG;
+//debug(array($origin_uid, $pz_uid, $paragraph));
 
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -264,6 +265,14 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$smarty->assign('LIST_SIZE', max(2, min(12, sizeof($extra)))); /// size at least 2, otherwise list would be rendered as dropdown
 		$smarty->assign('ORIGIN_UID', intval($origin_uid));
 		$smarty->assign('PZ_UID', intval($pz_uid));
+
+		if ($paragraph === 'false') {
+			// the param is received as string, not boolean ...
+			$smarty->assign('PARAGRAPH_USED', false);
+		} else {
+			$smarty->assign('PARAGRAPH_USED', true);
+			$smarty->assign('PARAGRAPH', intval($paragraph));
+		}
 		
 		$html = $smarty->fetch('mod3_new_extra.tmpl');
 

@@ -1,4 +1,4 @@
-{debug}
+{* debug *}
 
 {* include js for paragraph saving for articles *}
 {if $DATA[0].pagezone_type->getAttribute('is_article') == 1}
@@ -156,21 +156,21 @@ td {ldelim}
 	{rdelim}
 
 
-	function subModalExtraInsertAfter(origin_uid, pz_uid) {ldelim}
+	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
 /// \todo:  param for close still missing
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
 			width, 
 			height, 
 			null, 
 			true
 		);
 	{rdelim}
-	function extra_insert_after(origin_uid, pz_uid) {ldelim}
+	function extra_insert_after(origin_uid, pz_uid, paragraph) {ldelim}
 /// \todo: add be_mode
-		subModalExtraInsertAfter(origin_uid, pz_uid);
+		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph);
 	{rdelim}
 
 
@@ -230,8 +230,8 @@ td {ldelim}
 
 {section name=i loop=$DATA}
 <div style="margin-bottom: 7px;">
-
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}); return false;">{$NEW_TOP_ICON}</a> {* differs depending on type pagezone_apge and article *}
+{* paragraph: use 0 (insert to top, when pagezone_tzype article is displayed), use false, when pagezone_page (no paragraph needed ...) *}
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}); return false;">{$NEW_TOP_ICON}</a> {* differs depending on type pagezone_apge and article *}
  	&nbsp;  
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	

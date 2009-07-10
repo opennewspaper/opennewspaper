@@ -1,3 +1,4 @@
+{* debug *}
 <script language="javascript">
 
 	function getChosenExtra() {ldelim}
@@ -45,6 +46,15 @@
 {/section}
 </select>
 <br /><br />
+
+
+{* \todo continue here ... *}
+{if ($PARAGRAPH_USED == true)}
+Paragraph: {$PARAGRAPH}
+{else}
+No paragraph used - Pagezone page ...
+{/if}<br />
+
 
 <input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID})" type="button" value="{$LABEL.new_extra_new}" />
 <input onclick="extra_insert_after_POOL({$ORIGIN_UID}, {$PZ_UID})" type="button" value="{$LABEL.new_extra_from_pool}" />

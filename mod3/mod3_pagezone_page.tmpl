@@ -38,7 +38,7 @@
 		  {$EMPTY_ICON}
 		{/if} 
 		
-		<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id});">{$NEW_BELOW_ICON}</a>
+		<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, false);">{$NEW_BELOW_ICON}</a>
 		
 		{* calculate index for origin uid for moving extras up and down *}	
 		{math assign="move_up_after_index" equation="x-2" x=$smarty.section.i.index}
