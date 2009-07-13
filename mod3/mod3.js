@@ -167,8 +167,8 @@
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 	
+	// direct reload (no popup/modalbox involved ...)
 	function reload(data) {ldelim}
-//alert(data);
 		if (data.responseText == '') {ldelim}
 			// empty string, so no error message
 /// \todo: currently no_cache param are ADDED, must be REPLACED
