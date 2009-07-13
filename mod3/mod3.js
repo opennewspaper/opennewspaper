@@ -118,7 +118,6 @@
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-/// \todo:  param for close still missing
 		top.showPopWin(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
 			width, 
@@ -126,6 +125,7 @@
 			null, 
 			true
 		);
+
 	{rdelim}
 	function extra_insert_after(origin_uid, pz_uid, paragraph) {ldelim}
 /// \todo: add be_mode
@@ -144,6 +144,7 @@
 			true
 		);
 	{rdelim}
+
 	function extra_edit(table, uid) {ldelim}
 /// \todo: add be_mode
 		subModalExtraEdit(table, uid);
