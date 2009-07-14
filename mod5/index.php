@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Helge Preuss, Oliver Schr��der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'Dashboard' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schr��der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
@@ -278,6 +278,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$at = new tx_newspaper_ArticleType($articletype);
 			
 			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
+			
+		t3lib_div::devlog('new_article returned by copyDefaultArticle()', 'newspaper', 0, $new_article);
+			
 			$new_article->setAttribute('articletype_id', $articletype);
 
 			// add creation date and user
