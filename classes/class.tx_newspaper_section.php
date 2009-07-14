@@ -210,6 +210,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	public function copyDefaultArticle(array $must_have_extras) {
  		t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, $must_have_extras);
  		$new_article = $this->getDefaultArticle();
+		t3lib_div::devlog('default article', 'newspaper', 0, $new_article);
 
 		//	zeroing the UID causes the article to be written to DB as a new object.
  		$new_article->setAttribute('uid', 0);
@@ -238,7 +239,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		}
 		
 		t3lib_div::devlog('extras', 'newspaper', 0, $new_article->getExtras());
-		t3lib_div::devlog('default extras', 'newspaper', 0, $default_extras);
+		t3lib_div::devlog('default extras', 'newspaper', 0, $this->getDefaultArticle()->getExtras());
+		t3lib_div::devlog('copied default extras', 'newspaper', 0, $default_extras);
 		t3lib_div::devlog('must have extras', 'newspaper', 0, $must_have_extras);
 		/**	Add must-have Extras which are not in default placement:
 		 *  empty, hidden, at first position before first paragraph
