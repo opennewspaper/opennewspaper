@@ -421,7 +421,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function relateExtra2Article(tx_newspaper_ExtraIface $extra) {
 		
 		$extra_table = tx_newspaper::getTable($extra);
-		$extra_uid = $extra->getAttribute('uid');
+		$extra_uid = $extra->getUid();
 		$article_uid = $this->getUid();
 
 		t3lib_div::devlog('relateExtra2Article()', 'newspaper', 0, array($extra_table, $extra_uid, $article_uid));
