@@ -279,8 +279,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			
 			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 			
-		t3lib_div::devlog('new_article returned by copyDefaultArticle()', 'newspaper', 0, $new_article);
-			
 			$new_article->setAttribute('articletype_id', $articletype);
 
 			// add creation date and user
@@ -295,6 +293,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
 			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' . $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
+		t3lib_div::devlog('new_article returned by copyDefaultArticle()', 'newspaper', 0, $new_article);
+			
 			header('Location: ' . $url);		
 			 
 		} else {
