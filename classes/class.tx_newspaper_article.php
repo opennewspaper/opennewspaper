@@ -175,7 +175,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function setUid($uid) { 
 		$this->uid = $uid;
-		if ($this->attributes) $this->attributes['source_id'] = $uid;
+		if ($this->attributes) {
+			$this->attributes['source_id'] = $uid;
+			$this->attributes['uid'] = $uid;
+		}
 	}
 
 	public public function getTable() {
