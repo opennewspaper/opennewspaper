@@ -53,21 +53,23 @@
 		
 		{* calculate index for origin uid for moving extras up and down *}	
 		{math assign="index_minus_one" equation="x-1" x=$smarty.section.i.index}
+		{math assign="index_minus_two" equation="x-2" x=$smarty.section.i.index}
 		{math assign="index_plus_one" equation="x+1" x=$smarty.section.i.index}
 
 {* |i-1:{$EXTRA_DATA[$index_plus_one].paragraph}|i:{$EXTRA_DATA[i].paragraph}| *}
+{* |{$EXTRA_DATA[$index_minus_one].origin_uid}|{$EXTRA_DATA[$index_minus_two].origin_uid}| *}
 		{if $EXTRA_DATA[$index_minus_one].paragraph != $EXTRA_DATA[i].paragraph} 
 		  {$EMPTY_ICON}
 		{else}
-		  {if $move_up_after_index < 0}
+		  {if !$EXTRA_DATA[$index_minus_two].origin_uid}
 		    <a href="javascript:extra_move_after(0, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
 		  {else}
-			<a href="javascript:extra_move_after({$EXTRA_DATA[$move_up_after_index].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_UP_ICON}</a>
+			<a href="javascript:extra_move_after({$EXTRA_DATA[$index_minus_two].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_UP_ICON}</a>
 		  {/if}
 		{/if}
 
 		{if $EXTRA_DATA[$index_plus_one].paragraph == $EXTRA_DATA[i].paragraph} 
-		  <a href="javascript:extra_move_after({$EXTRA_DATA[$move_down_after_index].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_DOWN_ICON}</a>
+		  <a href="javascript:extra_move_after({$EXTRA_DATA[$index_plus_one].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_DOWN_ICON}</a>
 		{else}
 		  {$EMPTY_ICON}
 		{/if}
