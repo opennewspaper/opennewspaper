@@ -420,6 +420,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	static public function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
 		
+		t3lib_div::devlog('relateExtra2Article()', 'newspaper', 0, array($extra_table, $extra_uid, $article_uid));
+		
 		$extra_table = strtolower($extra_table);
 		
 		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
