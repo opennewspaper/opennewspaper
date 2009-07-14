@@ -294,6 +294,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' . $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
 		t3lib_div::devlog('new_article returned by copyDefaultArticle()', 'newspaper', 0, $new_article);
+		t3lib_div::devlog('assoc table entries', 'newspaper', 0, 
+						  tx_newspaper::selectRows('*', 
+												   'tx_newspaper_article_extras_mm', 
+												   'uid_local = '.$new_article->getUid()));
 			
 			header('Location: ' . $url);		
 			 
