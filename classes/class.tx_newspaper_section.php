@@ -228,17 +228,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		///	Copy the must-have Extras from default placement
 		foreach($default_extras as $i => $default_extra) {
 			
-			t3lib_div::devlog('default extra '.$i, 'newspaper', 0, $default_extra);
-			t3lib_div::devlog('default extra '.$i. ' class', 'newspaper', 0, tx_newspaper::getTable($default_extra));
 			$key = array_search(tx_newspaper::getTable($default_extra), $must_have_extras);
 			if ($key !== false) {
-				t3lib_div::devlog('key', 'newspaper', 0, $key);
 				$new_article->addExtra(clone $default_extra);
 				unset($must_have_extras[$key]);
 			}
 		}
 		
-		t3lib_div::devlog('extras', 'newspaper', 0, $new_article->getExtras());
 		t3lib_div::devlog('default extras', 'newspaper', 0, $default_extras);
 		t3lib_div::devlog('must have extras', 'newspaper', 0, $must_have_extras);
 		/**	Add must-have Extras which are not in default placement:
@@ -260,13 +256,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$new_extra->store();						//	Final store()
 			
 			/// Write association table entry article -> extra
+			/// \todo $new_article->relateExtra2Article($new_extra)
 			tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $new_article->getUid(),
 					'uid_foreign' => $new_extra->getUid(),
 					));
 		}
-		t3lib_div::devlog('extras again!', 'newspaper', 0, $new_article->getExtras());
+		t3lib_div::devlog('extras', 'newspaper', 0, $new_article->getExtras());
  		 		
  		// set main section
  		$new_article->addSection($this);
