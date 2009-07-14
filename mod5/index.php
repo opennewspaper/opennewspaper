@@ -280,6 +280,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 			$new_article->setAttribute('articletype_id', $articletype);
 
+			// add creation date and user
+			$new_article->setAttribute('crdate', time());
+			$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+
 			$new_article->store();
 
 /// \todo: muss-extras anlegen
@@ -287,7 +291,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //t3lib_div::debug($_SERVER); die();
 			$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
-			$url = 'http://localhost/taz426/typo3/alt_doc.php?returnUrl=/taz426/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
 			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' . $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' . $new_article->getUid() . ']=edit';
 			header('Location: ' . $url);		
 			 
