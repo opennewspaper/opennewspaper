@@ -439,6 +439,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			' AND uid_foreign = ' . intval($abstract_uid)	
 		);
 		t3lib_div::devlog('row', 'newspaper', 0, $row);
+		t3lib_div::devlog('uid', 'newspaper', 0, $article_uid);
 		if ($row['uid_local'] != $article_uid || 
 			$row['uid_foreign'] != $abstract_uid) {
 			if (!tx_newspaper::insertRows(
