@@ -156,6 +156,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// store all extras and make sure they are in the MM relation table
 		if ($this->extras) foreach ($this->extras as $extra) {
 			$extra_uid = $extra->store();
+			// or maybe rather...
+			$extra_uid = $extra->getAttribute('uid');
 			$extra_table = $extra->getTable();
 			self::relateExtra2Article($extra_table, $extra_uid, $this->getUid());
 		}
