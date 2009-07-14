@@ -269,6 +269,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 					));
 		}
 		t3lib_div::devlog('extras again!', 'newspaper', 0, $new_article->getExtras());
+		t3lib_div::devlog('assoc table entries', 'newspaper', 0, 
+						  tx_newspaper::selectRows('*', 
+												   'tx_newspaper_article_extras_mm', 
+												   'uid_local = '.$new_article->getUid()));
  		 		
  		// set main section
  		$new_article->addSection($this);
