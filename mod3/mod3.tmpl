@@ -47,7 +47,10 @@
 		{/section}
 		</select>
 	{/if}
-{* dummy button *}&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
+{if $DATA[0].pagezone_type->getAttribute('is_article') == 0}
+{* dummy button for pagezone_page only *}
+&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
+{/if}
 </div>
 
 {if $PAGEZONE[i] != false}
