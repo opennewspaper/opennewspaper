@@ -432,7 +432,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		/// \todo write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid_local, uid foreign', 
+			'uid_local, uid_foreign', 
 			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 			'uid_local = ' . intval($article_uid) .
 			' AND uid_foreign = ' . intval($abstract_uid)	
