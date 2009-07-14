@@ -107,9 +107,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
-	private function processExtraInsertAfter($origin_uid, $pz_uid) {
+	private function processExtraInsertAfter($origin_uid, $pz_uid, $paragraph=false) {
+		if ($paragraph == 'false') {
+			$paragraph = false;
+		} else {
+			$paragraph = intval($paragraph);
+		}
+		
 		$e = new tx_newspaper_Extra_Image();
-		$e->setAttribute('title', 'Dummy ' . rand(1, 1000));
+		$e->setAttribute('title', '');
 		$e->store();		
 		$e->setAttribute('show_extra', 1);
 		$e->setAttribute('is_inheritable', 1);
@@ -175,7 +181,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function check4Ajax() {
 		// TODO check permissions
-t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
+//t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		if (t3lib_div::_GP('toggle_show_levels_above') == 1) {
 			$this->processToggleShowLevelsAbove(t3lib_div::_GP('checked')); 
@@ -220,7 +226,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 
 		if (t3lib_div::_GP('chose_extra') == 1) {
-			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
+			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('new_at_top')));	
 		}
 		if (t3lib_div::_GP('chose_extra_from_pool') == 1) {
 			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra')));	
@@ -235,9 +241,22 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 	}
 
 
-	private function getChoseExtraForm($origin_uid, $pz_uid, $paragraph) {
+	private function getChoseExtraForm($origin_uid, $pz_uid, $paragraph=false, $new_at_top=false) {
 		global $LANG;
 //debug(array($origin_uid, $pz_uid, $paragraph));
+
+		// convert params, sent by js, so flase is given as string, not a boolean
+		if ($new_at_top == 'false') {
+			$new_at_top = false;
+		} else {
+			$new_at_top = true;
+		}
+		if ($paragraph == 'false') {
+			$paragraph = false;
+		} else {
+			$paragraph = intval($paragraph);
+		}
+
 
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -266,13 +285,21 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		$smarty->assign('ORIGIN_UID', intval($origin_uid));
 		$smarty->assign('PZ_UID', intval($pz_uid));
 
-		if ($paragraph === 'false') {
-			// the param is received as string, not boolean ...
+		if ($paragraph === false) {
+			// the param is received as string, not boolean ... sent with js
 			$smarty->assign('PARAGRAPH_USED', false);
 		} else {
 			$smarty->assign('PARAGRAPH_USED', true);
 			$smarty->assign('PARAGRAPH', intval($paragraph));
 		}
+		
+		if ($new_at_top === false) {
+			// the param is received as string, not boolean ... sent with js
+			$smarty->assign('NEW_AT_TOP', false);
+		} else {
+			$smarty->assign('NEW_AT_TOP', true);
+		}
+		
 		
 		$html = $smarty->fetch('mod3_new_extra.tmpl');
 
