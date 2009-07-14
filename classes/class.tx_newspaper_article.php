@@ -426,7 +426,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 		t3lib_div::devlog('relateExtra2Article()', 'newspaper', 0, array($extra_table, $extra_uid, $article_uid));
 		
-		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
+		$abstract_uid = $extra->getExtraUid();
+		t3lib_div::devlog('abstract uid', 'newspaper', 0, $abstract_uid);
+		if (!$abstract_uid)	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
+		t3lib_div::devlog('abstract uid is now...', 'newspaper', 0, $abstract_uid);
 		
 		/// \todo write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
