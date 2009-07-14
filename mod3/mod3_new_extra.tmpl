@@ -9,8 +9,15 @@
 		return document.getElementById('extra_list').value;
 	{rdelim}
 
+	function getParagraph() {ldelim}
+		return parseInt(document.getElementById('paragraph').value);
+	{rdelim}
 
 	function extra_insert_after_NEW(origin_uid, pz_uid) {ldelim}
+{if ($PARAGRAPH_USED == true)}
+		{* todo: move logic from smarty to js *}
+		paragraph = getParagraph();
+{/if}
 		extra_class_sysfolder = getChosenExtra();
 		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
 		extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
@@ -20,6 +27,8 @@
 		{rdelim}
 		extra_sysfolder = parseInt(extra_sysfolder);
 		if (extra_class != false) {ldelim}
+// todo: ajax call: create extra, edit created etxra
+//alert('o: ' + origin_uid + ', pz: ' + pz_uid + ', p: ' + paragraph + ', pid: ' + extra_sysfolder + 'class: ' + extra_class);
 			self.location.href = top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + extra_class + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid
 		{rdelim} 
 	{rdelim}
@@ -48,12 +57,16 @@
 <br /><br />
 
 
-{* \todo continue here ... *}
+{* add input field for paragraph (if article) *}
 {if ($PARAGRAPH_USED == true)}
-Paragraph: {$PARAGRAPH}
-{else}
-No paragraph used - Pagezone page ...
-{/if}<br />
+Paragraph: 
+	{if ($NEW_AT_TOP == true)}
+<input id="paragraph" name="paragraph" value="{$PARAGRAPH}" type="text" />
+	{else}
+<input id="paragraph" name="paragraph" value="{$PARAGRAPH}" type="hidden" /> {$PARAGRAPH}
+	{/if}
+<br /><br />
+{/if}
 
 
 <input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID})" type="button" value="{$LABEL.new_extra_new}" />
