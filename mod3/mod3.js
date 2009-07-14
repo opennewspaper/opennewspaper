@@ -115,11 +115,12 @@
 	{rdelim}
 
 
-	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph) {ldelim}
+	// new at top = show input field for paragraph
+	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html",
 			width, 
 			height, 
 			null, 
@@ -127,9 +128,9 @@
 		);
 
 	{rdelim}
-	function extra_insert_after(origin_uid, pz_uid, paragraph) {ldelim}
+	function extra_insert_after(origin_uid, pz_uid, paragraph, new_at_top) {ldelim}
 /// \todo: add be_mode
-		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph);
+		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top);
 	{rdelim}
 
 
