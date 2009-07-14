@@ -213,21 +213,34 @@ debug($fieldArray);
 			if (!$pz_uid) {
 				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
 			}
-//t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid));
-/// \todo: write records ...
-			
+t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid, $_REQUEST));
+
+			// get uid of new concrete extra (that was just stored)
 			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
 			
-			// create abstract records
+			// create abstract record
 			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table);
+
+			// create pagezone
+			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
 			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 			$e->store();
 			
-			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 			$pz->insertExtraAfter($e, $after_origin_uid);
+
+/// \todo: currently the paragraph gets set in pagezone::insertExtraAfter()
+/// so this hack is used to overwrite the paragraph with the correct value
+/// move this code BEFORE first $e->store() call after the problem in insertExtraAfter() is solved
+			// add paragraph if set
+			if (isset($_REQUEST['paragraph']) ) {
+				$e->setAttribute('paragraph', intval(t3lib_div::_GP('paragraph')));	
+				$e->setAttribute('position', 0);	
+			}
+			$e->store();
+
 			
 		}
 	}
