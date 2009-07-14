@@ -424,21 +424,17 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$extra_uid = $extra->getUid();
 		$article_uid = $this->getUid();
 
-		t3lib_div::devlog('relateExtra2Article()', 'newspaper', 0, array($extra_table, $extra_uid, $article_uid));
-		
 		$abstract_uid = $extra->getExtraUid();
 		if (!$abstract_uid)	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
-		t3lib_div::devlog('abstract uid', 'newspaper', 0, $abstract_uid);
 		
-		/// \todo write entry in MM table (if not exists)
+		/// Write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid_local, uid_foreign', 
 			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 			'uid_local = ' . intval($article_uid) .
 			' AND uid_foreign = ' . intval($abstract_uid)	
 		);
-		t3lib_div::devlog('row', 'newspaper', 0, $row);
-		t3lib_div::devlog('uid', 'newspaper', 0, $article_uid);
+
 		if ($row['uid_local'] != $article_uid || 
 			$row['uid_foreign'] != $abstract_uid) {
 			if (!tx_newspaper::insertRows(

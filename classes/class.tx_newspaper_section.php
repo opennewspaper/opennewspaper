@@ -215,9 +215,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setAttribute('uid', 0);
  		$new_article->setUid(0);
  		$new_article->store();
-
-		t3lib_div::devlog('new_article', 'newspaper', 0, $new_article);
-
+ 		
  		$default_extras = $this->getDefaultArticle()->getExtras();
  		
  		$new_article->clearExtras();
@@ -269,20 +267,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 					));
 		}
 		t3lib_div::devlog('extras again!', 'newspaper', 0, $new_article->getExtras());
-		t3lib_div::devlog('assoc table entries', 'newspaper', 0, 
-						  tx_newspaper::selectRows('*', 
-												   'tx_newspaper_article_extras_mm', 
-												   'uid_local = '.$new_article->getUid()));
  		 		
  		// set main section
  		$new_article->addSection($this);
  		$new_article->store();
 
-		t3lib_div::devlog('new_article again!', 'newspaper', 0, $new_article);
-		t3lib_div::devlog('assoc table entries', 'newspaper', 0, 
-						  tx_newspaper::selectRows('*', 
-												   'tx_newspaper_article_extras_mm', 
-												   'uid_local = '.$new_article->getUid()));
  		return $new_article;
  	}
  	
