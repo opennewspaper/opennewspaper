@@ -6,7 +6,7 @@ class tx_newspaper_SaveHook {
 	/// tceform hooks (well, those aren't really save hooks ...)
 
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
-//t3lib_div::devlog('th pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
+//t3lib_div::devlog('sh pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
@@ -15,7 +15,7 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 	}
 
 
@@ -48,7 +48,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $ta
 
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+//t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
 
 		/// add modifications user and time if  tx_newspaper_Article is updated
 		$this->addModificationUserDataIfArticle($status, $table, $id, $fieldArray);
@@ -207,13 +207,13 @@ debug($fieldArray);
 			return; // abstract class, nothing to do
 	
 		if ($status == 'new' and tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-t3lib_div::devlog('save hook reached', 'newspaper', 0);			
+//t3lib_div::devlog('save hook reached', 'newspaper', 0);			
 			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
 			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
 			if (!$pz_uid) {
 				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
 			}
-t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid));
+//t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid));
 /// \todo: write records ...
 			
 			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
