@@ -28,6 +28,16 @@
  */
 
 
+/// \todo:
+/**
+ * Inconsistency check für Extras:
+ * alle PZs auslesen
+ * dazu alle Extra auslesen und indexOfExtra() aufrufen (try catch)
+ */
+
+
+
+
 $LANG->includeLLFile('EXT:newspaper/mod4/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
