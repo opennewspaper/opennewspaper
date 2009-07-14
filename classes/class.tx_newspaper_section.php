@@ -231,9 +231,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		foreach($default_extras as $i => $default_extra) {
 			
 			t3lib_div::devlog('default extra '.$i, 'newspaper', 0, $default_extra);
-			t3lib_div::devlog('default extra '.$i. ' class', 'newspaper', 0, get_class($default_extra));
-			$key = array_search(get_class($default_extra), $must_have_extras);
+			t3lib_div::devlog('default extra '.$i. ' class', 'newspaper', 0, tx_newspaper::getTable($default_extra));
+			$key = array_search(tx_newspaper::getTable($default_extra), $must_have_extras);
 			if ($key !== false) {
+				t3lib_div::devlog('key', 'newspaper', 0, $key);
 				$new_article->addExtra(clone $default_extra);
 				unset($must_have_extras[$key]);
 			}
