@@ -156,10 +156,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// store all extras and make sure they are in the MM relation table
 		if ($this->extras) foreach ($this->extras as $extra) {
 			$extra_uid = $extra->store();
-			// or maybe rather...
-			$extra_uid = $extra->getAttribute('uid');
 			$extra_table = $extra->getTable();
-			self::relateExtra2Article($extra_table, $extra_uid, $this->getUid());
+			$this->relateExtra2Article($extra);
 		}
 		
 		return $this->getUid();		
@@ -420,11 +418,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->extras = array();	
 	}
 	
-	static public function relateExtra2Article($extra_table, $extra_uid, $article_uid) {
+	public function relateExtra2Article(tx_newspaper_ExtraIface $extra) {
 		
+		$extra_table = tx_newspaper::getTable($extra);
+		$extra_uid = $extra->getAttribute('uid');
+		$article_uid = $this->getUid();
+
 		t3lib_div::devlog('relateExtra2Article()', 'newspaper', 0, array($extra_table, $extra_uid, $article_uid));
-		
-		$extra_table = strtolower($extra_table);
 		
 		$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
 		

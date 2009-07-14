@@ -47,7 +47,7 @@ interface tx_newspaper_ArticleIface
 	 *  \param $article_uid UID of article the extra is linked to
 	 *  \return UID of entry in abstract extra table
 	 */
-	public static function relateExtra2Article($extra_table, $extra_uid, $article_uid);
+	public function relateExtra2Article(tx_newspaper_ExtraIface $extra);
 #	public static function relateExtra2Article(tx_newspaper_Extra $extra, tx_newspaper_Article $article);
 }
 ?>
