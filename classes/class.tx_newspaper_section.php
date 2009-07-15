@@ -226,6 +226,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setAttribute('tstamp', time());
 
 		///	Copy the must-have Extras from default placement
+		/// \todo does not work for multiple extras of the same class
 		foreach($default_extras as $i => $default_extra) {
 			
 			$key = array_search(tx_newspaper::getTable($default_extra), $must_have_extras);
