@@ -324,37 +324,44 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 	/** This is probably necessary because a concrete Extra has been freshly
 	 *  created.
 	 * 
-	 *  Does nothing if the concrete Extra is already linked in the abstract table. 
+	 *  By default, does nothing if the concrete Extra is already linked in the
+	 *  abstract table. That way createExtraRecord() can be called on already 
+	 *  existing Extras with no effect.
+	 * 
+	 *  If $force is set, creates an entry in the abstract table anyway. This is
+	 *  useful for making new references to already existing Extras.  
 	 * 
 	 *  \param $uid UID of the Extra in the table of concrete Extras
 	 *  \param $table Table of concrete Extras
+	 *  \param $force If set, create an abstract record in any case. 
 	 *  \return UID of abstract Extra record
 	 */ 
-	public static function createExtraRecord($uid, $table) {
-		/// Check if record is already present in extra table
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid', self::$table, 
-			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
-			' AND extra_uid = ' . intval($uid)	
-		);
-		if ($row['uid']) {
-			return $row['uid'];		
-		} else {
-		
-			/// read typo3 fields to copy into extra table
-			$row = tx_newspaper::selectOneRow(
-				implode(', ', self::$fields_to_copy_into_extra_table),
-				$table,
-				'uid = ' . intval($uid)
+	public static function createExtraRecord($uid, $table, $force = false) {
+		if (!$force) {
+			/// Check if record is already present in extra table
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'uid', self::$table, 
+				'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($table, $table) .
+				' AND extra_uid = ' . intval($uid)	
 			);
-			
-			/// write the uid and table into extra table, with the values read above
-			$row['extra_uid'] = $uid;
-			$row['extra_table'] = $table;
-			$row['tstamp'] = time();				///< tstamp is set to now
-	
-			return tx_newspaper::insertRows(self::$table, $row);
+			if ($row['uid']) {
+				return $row['uid'];
+			}
 		}
+		
+		/// read typo3 fields to copy into extra table
+		$row = tx_newspaper::selectOneRow(
+			implode(', ', self::$fields_to_copy_into_extra_table),
+			$table,
+			'uid = ' . intval($uid)
+		);
+			
+		/// write the uid and table into extra table, with the values read above
+		$row['extra_uid'] = $uid;
+		$row['extra_table'] = $table;
+		$row['tstamp'] = time();				///< tstamp is set to now
+	
+		return tx_newspaper::insertRows(self::$table, $row);
 	}
 
 	public function getUid() { return intval($this->uid); }
