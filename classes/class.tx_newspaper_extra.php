@@ -26,7 +26,13 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$this->setUid($uid);
 	}
 
-	/// To clone an Extra, the concrete portion is left the same but the abstract record is written anew
+	/// Creates a new reference to a concrete Extra ("shallow copy" in the DB)
+	/** To clone an Extra, the concrete portion is left the same but the 
+	 *  abstract record is written anew.
+	 * 
+	 *  (I don't know whether "shallow copy" is the right term for this when 
+	 *  dealing with DBs, but the concept is the same.)
+	 */
 	public function __clone() {
 
 		/// read typo3 fields to copy into extra table
@@ -52,6 +58,13 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			 . "\n";
 	}
 	
+	/// Makes a "deep copy" of an Extra in the DB
+	/** Copies the concrete portion of an Extra as well as giving it a new
+	 *  abstract record.
+	 * 
+	 *  (I don't know whether "deep copy" is the right term for this when 
+	 *  dealing with DBs, but the concept is the same.)
+	 */
 	public function duplicate() {
 		$this->getAttribute('uid');			///< read attributes from DB
 
