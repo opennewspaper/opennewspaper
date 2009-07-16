@@ -231,7 +231,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			
 			$key = array_search(tx_newspaper::getTable($default_extra), $must_have_extras);
 			if ($key !== false) {
-				$new_article->addExtra(clone $default_extra);
+				$new_article->addExtra($default_extra->duplicate());
 				unset($must_have_extras[$key]);
 			}
 		}
