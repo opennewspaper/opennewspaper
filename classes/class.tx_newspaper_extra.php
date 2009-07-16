@@ -80,10 +80,15 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		//	Write data for concrete Extra		
 		$uid = tx_newspaper::insertRows($this->getTable(), $temp_attributes);
 		
-		$class = get_class($this);
-		$that = new $class($uid);
-		$that->getExtraUid();	///< Write abstract Extra record
-		 
+		/// Manually copy all extra attributes instead of writing them automatically
+		$temp_extra_attributes = $this->extra_attributes;
+		$temp_extra_attributes['extra_uid'] = $uid;
+		unset ($temp_extra_attributes['uid']);
+
+		//	Write data for abstract Extra		
+		$extra_uid = tx_newspaper::insertRows(self::$table, $temp_extra_attributes);
+		
+		$that = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);		 
 		return $that;
 	}
 
