@@ -74,6 +74,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		//	Make sure the Extra is stored in the correct SysFolder
 		$temp_attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
 
+		//	clear UID so a new entry can be written
+		unset $temp_attributes['uid'];
+		
 		//	Write data for concrete Extra		
 		$uid = tx_newspaper::insertRows($this->getTable(), $temp_attributes);
 		
