@@ -539,12 +539,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$extra->store();
 	
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			t3lib_div::devlog('$inheriting_pagezone', 'newspaper', 0, array(
-					$inheriting_pagezone->getPageZoneUid(),
-					$inheriting_pagezone->getUid()
+					'abstract pagezone uid' => $inheriting_pagezone->getPageZoneUid(),
+					'concrete pagezone uid' => $inheriting_pagezone->getUid(),
+					'copied extra' => $copied_extra
 				)
 			);
-			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
 			if ($copied_extra) {
 				if ($inherits == false) {	
 					/** Whenever the inheritance hierarchy is invalidated, 
