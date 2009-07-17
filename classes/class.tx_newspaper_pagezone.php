@@ -529,11 +529,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
-		t3lib_div::devlog('setInherits()', 'newspaper', 0, intval($inherits));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
 		if ($inherits == $extra->getAttribute('is_inheritable')) return;
+		t3lib_div::devlog('setInherits()', 'newspaper', 0, intval($inherits));
 
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
