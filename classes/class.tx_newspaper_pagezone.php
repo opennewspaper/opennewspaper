@@ -495,6 +495,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		///	Check that $move_extra is really on $this
 		$this->indexOfExtra($move_extra);
 		
+		t3lib_div::devlog('moveExtraAfter()', 'newspaper', 0, array(
+			'move_extra' => $move_extra,
+			'origin_uid' => $origin_uid
+		));
 		$move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 
 		/// Write Extra to DB
