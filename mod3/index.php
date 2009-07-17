@@ -46,7 +46,7 @@ define('DEBUG_POSITION', true);
 /**
  * Module 'Placement' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
@@ -618,8 +618,10 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		return array(
 				'section' => array_reverse($s->getSectionPath()), 
 				'page_type' => $pz->getParentPage()->getPageType(),
+				'page_id' => $pz->getParentPage()->getUid(),
 				'pagezone_type' => $pz->getPageZoneType(),
 				'pagezone_id' => $pz->getPagezoneUid(),
+				'pagezone_concrete_id' => $pz->getUid(),
 			);
 	}
 
@@ -709,6 +711,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 		
 		$smarty->assign('PAGEZONE', $pagezone);
+		
+		// admins can see a little more ...
+		$smarty->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());			
 		
 		return $smarty->fetch('mod3.tmpl');
 	}
