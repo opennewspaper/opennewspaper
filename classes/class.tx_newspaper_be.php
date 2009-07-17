@@ -333,7 +333,8 @@ function findElementsByName(name, type) {
 
 
 
-// \todo: move to pagezone?
+/// \todo: move to pagezone?
+/// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
 		$data = array();
@@ -365,6 +366,11 @@ function findElementsByName(name, type) {
 				$extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
 			} catch (tx_newspaper_WrongAttributeException $e) {
 				
+			}
+			try {
+				$extra_data['position'] = $extra[$i]->getAttribute('position');
+			} catch (tx_newspaper_WrongAttributeException $e) {
+			
 			}
 			$data[] = $extra_data;
 		}
