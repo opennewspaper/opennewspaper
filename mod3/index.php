@@ -688,6 +688,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 		// pagezones are render by a separate smarty templae - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = $this->getPagezoneSmartyObject();
+		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available

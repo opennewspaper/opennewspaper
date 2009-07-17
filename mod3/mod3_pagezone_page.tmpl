@@ -6,6 +6,10 @@
 	<td align="center">{$LABEL.pass_down}</td>
 	<td align="center">{$LABEL.inherits_from}</td>
 	<td>{$LABEL.commands}</td>
+	{if $DEBUG_OUTPUT}
+		<td align="center">pos</td>
+		<td align="center">uid</td>
+	{/if}
 </tr>
 	{section name=i loop=$EXTRA_DATA} 
 		{if ($smarty.section.i.index % 2 == 0)}
@@ -67,6 +71,7 @@
 				</td>
 		
 		{if $DEBUG_OUTPUT}
+			{* if td's are added here, add them to in the table header *}
 			<td>{$EXTRA_DATA[i].position}</td>
 			<td>{$EXTRA_DATA[i].uid}</td>
 		{/if}

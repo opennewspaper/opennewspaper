@@ -13,6 +13,10 @@
 	<td align="center">{$LABEL.inherits_from}</td>
 	<td align="center">{$LABEL.paragraph}</td>
 	<td>{$LABEL.commands}</td>
+	{if $DEBUG_OUTPUT}
+		<td align="center">pos</td>
+		<td align="center">uid</td>
+	{/if}
 </tr>
 	{section name=i loop=$EXTRA_DATA} 
 		{if ($EXTRA_DATA[i].bg_color_type == 0)}
@@ -83,6 +87,7 @@
 				</td>
 		
 		{if $DEBUG_OUTPUT}
+			{* if td's are added here, add them to in the table header *}
 			<td>{$EXTRA_DATA[i].position}</td>
 			<td>{$EXTRA_DATA[i].uid}</td>
 		{/if}
