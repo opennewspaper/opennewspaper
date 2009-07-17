@@ -51,6 +51,6 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	private $articlelist;
 }
 
-tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SectionList());
+tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_ArticleList());
 
 ?>
