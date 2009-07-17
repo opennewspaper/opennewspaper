@@ -12,6 +12,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_w
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlebehavior.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 /// An article for the online newspaper
 /** \todo The names for the functions are not defined yet. The interface
