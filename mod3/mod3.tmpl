@@ -35,6 +35,9 @@
 			{/if} value="{$PAGETYPE[j]->getUid()}">{$PAGETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
 		</select>
+		{if ($ADMIN)}
+			[{$DATA[i].page_id}]
+		{/if}
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezonetype}: 
 		<select  onchange="pagezone_type_change(this.value)">
@@ -46,6 +49,9 @@
 			{/if} value="{$PAGEZONETYPE[j]->getUid()}">{$PAGEZONETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
 		</select>
+		{if ($ADMIN)}
+			[{$DATA[i].pagezone_id}|{$DATA[i].pagezone_concrete_id}]
+		{/if}
 	{/if}
 {if $DATA[0].pagezone_type->getAttribute('is_article') == 0}
 {* dummy button for pagezone_page only *}
