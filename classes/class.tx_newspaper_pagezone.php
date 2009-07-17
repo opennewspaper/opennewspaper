@@ -492,13 +492,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 
-		///	Check that $move_extra is really on $this
-		$this->indexOfExtra($move_extra);
-		
 		t3lib_div::devlog('moveExtraAfter()', 'newspaper', 0, array(
 			'move_extra' => $move_extra,
 			'origin_uid' => $origin_uid
 		));
+		///	Check that $move_extra is really on $this
+		$this->indexOfExtra($move_extra);
+		
 		$move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 
 		/// Write Extra to DB
@@ -717,6 +717,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 			next Extra
 	 */
 	protected function getInsertPosition($origin_uid) {
+		t3lib_div::devlog('getInsertPosition()', 'newspaper', 0, array(
+			'origin_uid' => $origin_uid
+		));
+		
 		if ($origin_uid) {
 			/** Find the Extra to insert after. If it is not deleted on this page,
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
