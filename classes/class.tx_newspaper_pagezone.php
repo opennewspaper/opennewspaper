@@ -741,6 +741,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$position = $extra_after_which->getAttribute('position');
 			$this->paragraph_for_insert = intval($extra_after_which->getAttribute('paragraph'));
 		} else {
+			foreach ($this->getExtras() as $extra) {
+				$extra->setAttribute('position', $extra->getAttribute('position')+self::EXTRA_SPACING);
+				$extra->store();
+			}
 			$position = 0;
 		}
 		/// Find Extra before which to insert the new Extra
