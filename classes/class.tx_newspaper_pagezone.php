@@ -537,39 +537,22 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
 	
-		if ($inherits == false) {
-			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
-				if ($copied_extra) {
-					$copied_extra->setAttribute('deleted', 1);
-					$copied_extra->store();
-					/// \todo delete associations; or define and call Extra::delete()
-				}
-			}
-		} else {
-			/** Whenever inheritance is reenabled, the Extra is inserted
-			 *  on all inheriting page zones.
-			 */
-			foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
-				$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
-				if ($page) {
-					$inheriting_pagezone = $page->getPageZone($this->getPageZoneType());
-					if ($inheriting_pagezone) {
-						/** Finding the origin UID of the preceding extra is 
-						 *  unneccessary, because insertExtraAfter() searches 
-						 *  for the origin UID on the parent PageZones if it's
-						 *  not present on the current one. That leads to the
-						 *  correct position.
-						 */
-						$inserted = $inheriting_pagezone->insertExtraAfter($extra, $extra->getOriginUid());
-						/** Now the origin UIDs of the Extra on the inheriting 
-						 *  page zone must be reset to $extra->getOriginUid(), 
-						 *  because the Extra has been inserted as new, not
-						 *  inherited.
-						 */
-						$inserted->setAttribute('origin_uid', $extra->getUid());
-						$inserted->store();
-					}
+		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
+			if ($copied_extra) {
+				if ($inherits == false) {	
+					/** Whenever the inheritance hierarchy is invalidated, 
+					 *  inherited Extras are hidden and moved to the end. 
+					 */
+					$copied_extra->setAttribute('position', 
+						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
+					$copied_extra->setAttribute('show_extra', 0);
+				} else {
+					/** Whenever the inheritance hierarchy is restored, 
+					 *  inherited Extras are unhidden, but they remain at the
+					 *  end of the page zone. 
+					 */
+					$copied_extra->setAttribute('show_extra', 1);
 				}
 			}
 			 
