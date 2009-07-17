@@ -663,6 +663,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 }
 
-tx_newspaper_Extra::registerExtra(new tx_newspaper_Article());
+#tx_newspaper_Extra::registerExtra(new tx_newspaper_Article());
 
 ?>
