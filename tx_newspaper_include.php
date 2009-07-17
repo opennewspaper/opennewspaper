@@ -57,4 +57,6 @@ if (TYPO3_MODE == 'BE')	{
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php');
 }
 
+tx_newspaper_Extra::registerExtra(new tx_newspaper_Article());
+
 ?>
