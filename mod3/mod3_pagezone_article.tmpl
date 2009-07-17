@@ -13,8 +13,9 @@
 	<td align="center">{$LABEL.inherits_from}</td>
 	<td align="center">{$LABEL.paragraph}</td>
 	<td>{$LABEL.commands}</td>
-	{if $DEBUG_OUTPUT && $ADMIN}
+	{if ($DEBUG_OUTPUT && $ADMIN)}
 		<td align="center">pos</td>
+		<td align="center">origin</td>
 		<td align="center">uid</td>
 	{/if}
 </tr>
@@ -86,9 +87,10 @@
 		{/if}
 				</td>
 		
-		{if $DEBUG_OUTPUT && $ADMIN}
+		{if ($DEBUG_OUTPUT && $ADMIN)}
 			{* if td's are added here, add them to in the table header *}
 			<td>{$EXTRA_DATA[i].position}</td>
+			<td>{$EXTRA_DATA[i].origin_uid}</td>
 			<td>{$EXTRA_DATA[i].uid}</td>
 		{/if}
 			</tr>
