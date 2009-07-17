@@ -570,6 +570,32 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
+	
+	/// Binary search for an Extra, assuming that $this->extras is ordered by paragraph and position 
+	protected function indexOfExtra(tx_newspaper_Extra $extra) {
+        $high = sizeof($this->getExtras())-1;
+        $low = 0;
+       
+        while ($high >= $low) {
+            $index_to_check = floor(($high+$low)/2);
+            $comparison = $this->getExtra($index_to_check)->getAttribute('paragraph') -
+            			  $extra->getAttribute('paragraph');
+            if ($comparison < 0) $low = $index_to_check+1;
+            elseif ($comparison > 0) $high = $index_to_check-1;
+            else {
+	            $comparison = $this->getExtra($index_to_check)->getAttribute('position') -
+	            			  $extra->getAttribute('position');
+	            if ($comparison < 0) $low = $index_to_check+1;
+	            elseif ($comparison > 0) $high = $index_to_check-1;
+	            else return $index_to_check;
+            }
+        }
+		
+		// Loop ended without a match
+		throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
+													  ' not found in array of Extras!');		
+	}
+	
 
  	/// Ordering function to keep Extras in the order in which they appear on the PageZone
  	/** Supplied as parameter to usort() in getExtras().

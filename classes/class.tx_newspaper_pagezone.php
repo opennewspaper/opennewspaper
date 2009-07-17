@@ -784,7 +784,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $position+($position_before_which-$position)/2;
 	}
 
-	/// Binary search for an Extra, assuming that $this->extras is ordered by position
+ 	/// Binary search for an Extra, assuming that $this->extras is ordered by position
 	/** This method must be overridden in the Article class because in articles
 	 *  Extras are ordered by paragraph first, position second
 	 */
