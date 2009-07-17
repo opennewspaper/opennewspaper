@@ -561,6 +561,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					 */
 					$copied_extra->setAttribute('show_extra', 1);
 				}
+				$copied_extra->store();
 			}
 			 
 		}
