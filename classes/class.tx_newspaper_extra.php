@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_extraimpl.php
+ *  \file class.tx_newspaper_extra.php
  *
  *  \author Oliver Schroeder <newspaper@schroederbros.de>
  *  \date Dec 12, 2008
