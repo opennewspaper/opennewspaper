@@ -102,10 +102,18 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			);
 		}
 
-		if (!array_key_exists($attribute, $this->attributes)) {
-			throw new tx_newspaper_WrongAttributeException($attribute);
-		}
-		return $this->attributes[$attribute];
+
+ 		if (array_key_exists($attribute, $this->abstract_attributes)) {
+	 		return $this->abstract_attributes[$attribute];
+ 		}
+ 		if (array_key_exists($attribute, $this->attributes)) {
+	 		return $this->attributes[$attribute];
+ 		}
+
+        throw new tx_newspaper_WrongAttributeException(
+        	$attribute . 
+        	' [ ' . print_r($this->attributes, 1) . ',' .
+        	print_r($this->abstract_attributes, 1) . ' ]');
 	}
 
 	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
