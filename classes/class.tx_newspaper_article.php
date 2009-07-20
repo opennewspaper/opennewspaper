@@ -507,7 +507,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return tx_newspaper::typolink_url(
 			array(
 				'id' => $typo3page,
-				tx_newspaper::article_get_parameter = $this->getUid()
+				tx_newspaper::article_get_parameter => $this->getUid()
 		));
 	}
 	
