@@ -487,6 +487,22 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 	
+	public function getLink(tx_newspaper_Section $section = null, 
+							tx_newspaper_PageType $pagetype = null) {
+		if ($section) {
+			throw new tx_newspaper_NotYetImplementedException(
+				'Links to articles in sections other than their primary section'
+			);
+		}
+		$section = $this->getPrimarySection();
+		$typo3page = $section->getTypo3PageID();
+		
+		return tx_newspaper::typolink_url(
+			array(
+				'id' => $typo3page
+		));
+	}
+	
 	static public function getAttributeList() { return self::$attribute_list; }
 	
 	

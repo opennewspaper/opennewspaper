@@ -468,6 +468,78 @@ class tx_newspaper  {
 		return self::pagetype_get_parameter;
 	}
 
+	/// create a typolink-compatible link with text and link
+	/** \param  $text the text to be displayed
+	 *  \param  $params target and optional GET parameters
+	 *  \param  $conf optional TypoScript configuration array, if present
+	 *  \return array ['text'], ['href']									  */
+    public static function typolink($text, array $params = array(), array $conf = array()) {
+		//  a tslib_cObj object is needed to call the typolink_URL() function
+		if (!self::$local_cObj) {
+	        self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
+    	    self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
+		}
+
+		//	make sure $params is an associative array
+		if (!is_array($params)) {
+			$params_temp = explode('&', $params, 2);
+			$params = array('id' => $params_temp[0]);
+			$params_temp = explode('&', $params_temp[1]);
+
+			foreach ($params_temp as $param) {
+				$param = explode('=', $param);
+				$params[$param[0]] = $param[1];
+			}
+		}
+
+		//  make sure $params is a one-dimensional array
+		foreach ($params as $key => $param) {
+			if (is_array($param)) {
+				foreach ($param as $subkey => $value) {
+					$params[$key.'['.$subkey.']'] = $value;
+				}
+				unset($params[$key]);
+			}
+		}
+
+		//	set TypoScript config array
+		if ($conf) $temp_conf = $conf;
+		else $temp_conf = array();
+
+		if ($params['id']) $temp_conf['parameter'] = $params['id'];
+	    else $temp_conf['parameter.']['current'] = 1;
+	    unset($params['id']);
+
+	    $no_cache = false;
+   		$sep = '&';
+	    if (sizeof($params) > 0) {
+	    	foreach ($params as $key => $value) {
+				if ($key == 'no_cache' && $value != 0) $no_cache = true;
+				if ($key != 'cHash') {
+    	    		$temp_conf['additionalParams'] .= "$sep$key=$value";
+    	    		$sep = '&';
+				}
+        	}
+	    }
+        if (!$no_cache) $temp_conf['useCacheHash'] = 1;
+
+    	//	call typolink_URL() and return data
+    	$data = array();
+    	$data['text'] = $text;
+    	$data['href'] = self::$local_cObj->typolink_URL($temp_conf);
+
+		return $data;
+	}
+
+	/** get a typolink-compatible URL
+	 *  @param  $params target and optional GET parameters
+	 *  @param  $conf optional TypoScript configuration array, if present
+	 *  @return generated URL										  */
+	public static function typolink_url(array $params = array(), array $conf = array()) {
+		$link = self::typolink('', $params, $conf);
+		return $link['href'];
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 

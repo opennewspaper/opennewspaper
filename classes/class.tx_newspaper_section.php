@@ -172,6 +172,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $path;
 	}	
 	
+	/// \return The UID of the associated Typo3 page 
+	public function getTypo3PageID() {
+		$row = tx_newspaper::selectOneRow('uid', 'pages', 
+										  'tx_newspaper_associated_section = ' . $this->getUid());
+		return intval($row['uid']);
+	}
+	
 	/** \return the Article PageZone (PageZoneType has is_article set) on the 
 	 * 		Page marked as the Article Page
 	 */ 
