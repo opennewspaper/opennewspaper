@@ -77,11 +77,7 @@ class tx_newspaper_SaveHook {
 
 			/// check if a newspaper record action should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
-//t3lib_div::debug('log ...');
-//t3lib_div::debug($status);
-//t3lib_div::debug($table);
-//t3lib_div::debug($id);
-//t3lib_div::debug($fieldArray);
+t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fieldArray, $_REQUEST));
 			}
 			
 		}
@@ -202,6 +198,7 @@ debug($fieldArray);
 
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
+/// \todo: explain in detail what's happening here!
 	private function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
 		if (tx_newspaper::isAbstractClass($table))
 			return; // abstract class, nothing to do
