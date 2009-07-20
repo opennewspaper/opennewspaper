@@ -31,6 +31,8 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 				'article list' => $this->articlelist
 			)
 		);
+
+		$this->prepare_render($template_set);
 		
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article'));
