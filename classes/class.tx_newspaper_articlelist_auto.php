@@ -35,6 +35,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
+		
+		if (!$this->section instanceof tx_newspaper_Section) {
+			throw new tx_newspaper_InconsistencyException('articlelist_auto needs a section object: \'' . $this->section . '\'');
+		}
 		$articles = array();
 		$results = tx_newspaper::selectMMQuery(
 				'tx_newspaper_article.uid',
