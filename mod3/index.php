@@ -245,7 +245,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		global $LANG;
 //debug(array($origin_uid, $pz_uid, $paragraph));
 
-		// convert params, sent by js, so flase is given as string, not a boolean
+		// convert params, sent by js, so false is given as string, not a boolean
+/// \todo: find a better way ...
 		if ($new_at_top == 'false') {
 			$new_at_top = false;
 		} else {
