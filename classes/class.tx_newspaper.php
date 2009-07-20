@@ -546,7 +546,10 @@ class tx_newspaper  {
 	 *  accessed for debugging from outside the function if a query does not  
 	 *  return the desired result.
 	 */ 
-	static $query = ''; 
+	public static $query = ''; 
+	
+	/// a tslib_cObj object used to generate typolinks
+	private static $local_cObj = null;
 }
 
 ?>
