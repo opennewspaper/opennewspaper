@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -140,7 +140,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
-		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
+		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
 		die();
