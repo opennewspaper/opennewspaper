@@ -3,13 +3,18 @@
 
 {* Article
    Variables:
-   $articles	array()
+   $articles	array(
+   					0 => tx_newspaper_Article object,
+   					1 => tx_newspaper_Article object,
+   					...
+   				)
    $template_set	template set used, if any
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
 
 {section name=i loop=$articles}
+	<h2>{$articles[i]->getAttribute('kicker')}</h2>
 	<h1>{$articles[i]->getAttribute('title')}</h1>
 {/section}
 
