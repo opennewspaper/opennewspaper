@@ -46,8 +46,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		if ($section) {
 			$this->section = $section;
 		} elseif ($this->getUid()) {
+			try {
 			if ($this->getAttribute('section_id')) {
 				$this->section = new tx_newspaper_Section($this->getAttribute('section_id'));
+			}
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				t3lib_div::devlog($e);
 			}
 		}
 	}
@@ -79,6 +83,14 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
+		if (!$this->articlelist_attributes) {
+			/*
+			$this->extra_attributes = $this->getExtraUid()? 
+				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+				array();
+			*/
+		}
+
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
@@ -209,6 +221,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	private $uid = 0;
 
 	protected $attributes = array();
+	protected $articlelist_attributes = array();
 	protected $section = null;
 	protected $abstract_uid = 0;
 
