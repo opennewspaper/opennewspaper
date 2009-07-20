@@ -15,7 +15,7 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
 		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
 	}
@@ -233,7 +233,6 @@ debug($fieldArray);
 			if (!$pz_uid) {
 				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
 			}
-//t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid, $_REQUEST));
 
 			// get uid of new concrete extra (that was just stored)
 			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
@@ -241,26 +240,23 @@ debug($fieldArray);
 			// create abstract record
 			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table);
 
-			// create pagezone
+			// create pagezone (pagezone_page or article)
 			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
 			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
-			$e->store();
-//t3lib_div::devlog('after origin uid', 'newspaper', 0, $after_origin_uid);			
-			$pz->insertExtraAfter($e, $after_origin_uid);
 
-/// \todo: currently the paragraph gets set in pagezone::insertExtraAfter()
-/// so this hack is used to overwrite the paragraph with the correct value
-/// move this code BEFORE first $e->store() call after the problem in insertExtraAfter() is solved
-			// add paragraph if set
-			if (isset($_REQUEST['paragraph']) ) {
-				$e->setAttribute('paragraph', intval(t3lib_div::_GP('paragraph')));	
-			}
-			$e->store();
 
+			$pz->insertExtraAfter($e, $after_origin_uid); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
 			
+			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
+				// set paragraph la
+				$pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
+			} else {
+				$e->store(); // call store() only if changeExtraParagraph() wasn't called
+			}
+
 		}
 	}
 
