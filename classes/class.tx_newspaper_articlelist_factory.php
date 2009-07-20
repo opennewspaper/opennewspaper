@@ -52,7 +52,7 @@ class tx_newspaper_ArticleList_Factory {
 		return self::$instance;
 	}
 	
-	public function create($uid, tx_newspaper_Section $section) {
+	public function create($uid, tx_newspaper_Section $section = null) {
 		/// Read actual type and UID of the ArticleList to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
 			'list_table, list_uid', self::$list_table, "uid = $uid"

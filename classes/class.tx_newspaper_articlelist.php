@@ -46,7 +46,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		if ($section) {
 			$this->section = $section;
 		} else {
-			$this->section = new tx_newspaper_Section($this->attributes['section_id']);
+			if ($this->getAttribute('section_id')) {
+				$this->section = new tx_newspaper_Section($this->getAttribute('section_id'));
+			}
 		}
 	}
 
@@ -107,6 +109,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function store() {
 
 		if ($this->getUid()) {
+			
 			// read attributes initially
 			if (!$this->attributes) {
 				$this->readAttributes($this->getTable(), $this->getUid());
