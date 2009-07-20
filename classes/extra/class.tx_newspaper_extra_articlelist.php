@@ -24,6 +24,14 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	 *  contain all the logic to display the articles.
 	 */
 	public function render($template_set = '') {
+		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0, 
+			array(
+				'uid' => $this->getUid(), 
+				'extra uid' => $this->getExtraUid(),
+				'article list' => $this->articlelist
+			)
+		);
+		
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article'));
 		$template = $this->getAttribute('template');
