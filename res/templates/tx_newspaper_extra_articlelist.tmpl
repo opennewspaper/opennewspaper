@@ -1,0 +1,16 @@
+
+<!-- start res/templates/tx_newspaper_extra_articlelist.tmpl -->
+
+{* Article
+   Variables:
+   $articles	array()
+   $template_set	template set used, if any
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+
+{section name=i loop=$articles}
+	<h1>$articles[i]->getAttribute('title')</h1>
+{/section}
+
+<!--  end  res/templates/tx_newspaper_extra_articlelist.tmpl -->
