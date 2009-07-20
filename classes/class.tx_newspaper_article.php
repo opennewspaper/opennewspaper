@@ -487,6 +487,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 	
+	/// Generate a URL which links to the Article on the correct Page
+	/** \param $section Section from which the link is generated
+	 *  \param $pagetype PageType of the wanted page
+	 *  \todo Handle links to articles in sections other than their primary section
+	 *  \todo Handle PageType other than article page
+	 *  \todo Check if target page has an Article display Extra 
+	 */
 	public function getLink(tx_newspaper_Section $section = null, 
 							tx_newspaper_PageType $pagetype = null) {
 		if ($section) {
@@ -499,7 +506,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		return tx_newspaper::typolink_url(
 			array(
-				'id' => $typo3page
+				'id' => $typo3page,
+				tx_newspaper::article_get_parameter = $this->getUid()
 		));
 	}
 	
