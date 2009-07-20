@@ -89,12 +89,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
-		if (!$this->articlelist_attributes) {
-			/*
-			$this->extra_attributes = $this->getExtraUid()? 
-				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+		if (!$this->abstract_attributes) {
+			$this->abstract_attributes = $this->getAbstractUid()? 
+				tx_newspaper::selectOneRow('*', self::$table, 'uid = ' . $this->getAbstractUid()): 
 				array();
-			*/
 		}
 
 		if (!$this->attributes) {
@@ -203,7 +201,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			
 		// add section to query if this article list is assigned to a section
 		$where = '';
-		if ($this->section) 
+		if ($this->section instanceof tx_newspaper_Section) 
 			$where = ' AND section_id = ' . intval($this->section->getUid());
 
 		$row = tx_newspaper::selectZeroOrOneRows(
@@ -217,6 +215,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $this->abstract_uid;
 	}
 	
+	public function setAbstractUid($uid) {
+		$this->abstract_uid = $uid;
+	}
 	
 	public function getTitle() {
 		global $LANG;
@@ -225,11 +226,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	}
 
 	private $uid = 0;
+	protected $abstract_uid = 0;
 
 	protected $attributes = array();
-	protected $articlelist_attributes = array();
+	protected $abstract_attributes = array();
 	protected $section = null;
-	protected $abstract_uid = 0;
 
 	/// SQL table for persistence
 	static protected $table = 'tx_newspaper_articlelist';

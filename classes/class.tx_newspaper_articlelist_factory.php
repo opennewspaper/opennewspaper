@@ -72,7 +72,10 @@ class tx_newspaper_ArticleList_Factory {
         									   $row);
         }
 		
-		return new $row['list_table']($row['list_uid'], $section);
+		$articlelist = new $row['list_table']($row['list_uid'], $section);
+		$articlelist->setAbstractUid($uid);
+		
+		return $articlelist;
 	}
 	
 	/// Protected constructor, tx_newspaper_ArticleList_Factory cannot be created freely
