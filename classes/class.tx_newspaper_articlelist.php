@@ -37,7 +37,7 @@
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
-		if ($uid) {
+		if (intval($uid)) {
 			$this->setUid($uid);
 	 		$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), "uid = $uid"

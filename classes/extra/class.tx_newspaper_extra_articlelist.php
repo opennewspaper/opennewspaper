@@ -5,7 +5,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
 	public function __construct($uid = 0) { 
-		if ($uid) {
+		if (intval($uid)) {
 			parent::__construct($uid); 
 			$this->attributes = $this->readExtraItem($uid, $this->getTable());
 			$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
