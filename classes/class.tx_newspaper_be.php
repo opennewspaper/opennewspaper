@@ -355,7 +355,7 @@ function findElementsByName(name, type) {
 			try {
 				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
 			} catch (tx_newspaper_WrongAttributeException $e) {
-				
+			
 			}
 			try {
 				$extra_data['show'] = $extra[$i]->getAttribute('show_extra');
@@ -449,20 +449,37 @@ function findElementsByName(name, type) {
 		
 		$hidden = $PA['row']['hidden'];
 		$workflow = intval($PA['row']['workflow_status']);
-		
+
+		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
+		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" /><input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />' . $workflow;
+
+		// add javascript \todo: move to extrnal file
+		$html .= '<script language="javascript" type="text/javascript">
+function changeWorkflowStatus(status) {
+	status = parseInt(status);
+	if (status == 0 || status == 1 || status == 2) {
+		// valid status found
+//alert(document.getElementById("workflow_status").value);
+		document.getElementById("workflow_status").value = status;
+//alert(document.getElementById("workflow_status").value);		
+		return false;	
+	}
+}
+</script>
+';
+
+		// chosen buttons to be displayed
 		$button = array(); // init with false ...
 		$button['hide'] = false;
 		$button['publish'] = false; // show
 		$button['check'] = false;
 		$button['revise'] = false;
 		$button['place'] = false;
-
 		// hide or publish button is available for every workflow status
 		if (!$hidden)
 			$button['hide'] = $this->isButtonVisible('hide', $PA['fieldTSConfig']['hide']);
 		else
 			$button['publish'] = $this->isButtonVisible('publish', $PA['fieldTSConfig']['publish']);
-
 		switch($workflow) {
 			case 0:
 				$button['check'] = $this->isButtonVisible('check', $PA['fieldTSConfig']['check']);
@@ -476,40 +493,63 @@ function findElementsByName(name, type) {
 				// no functionality right now; might take injunction button later ...
 			break;
 			default:
-				die('todo: throw exception');
+				die('todo: throw exception unknown workflow status: ' . $workflow);
 		}
 //t3lib_div::devlog('button', 'newspaper', 0, $button);
-		return $this->renderWorkflowButtons($hidden, $button);
+		$html .= $this->renderWorkflowButtons($hidden, $button);
+		
+		/// add workflow comment (using smarty)
+ 		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
+
+		// add data rows
+//		self::$smarty->assign('DATA', $pagezone_type_data);
+
+		// add skinned icons
+//		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_activated_pagezone_in_section', false)));
+//		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_pagezone_in_section', false)));
+//		self::$smarty->assign('CLOSE_ICON', self::renderIcon('gfx/goback.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_close_pagezone_in_section', false)));
+//		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_pagezone_in_section', false)));
+
+
+		// add title and message
+//		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_pagezone_in_section', false));
+		
+		$html .= $smarty->fetch('workflow_comment.tmpl');
+
+		
+		return $html;
 	}
 
 	private function renderWorkflowButtons($hidden, $button) {
 		$content = '';
 //$content .= '<input width="16" type="image" height="16" title="Save document" src="sysext/t3skin/icons/gfx/savedok.gif" name="_savedok" class="c-inputButton"/> <input width="16" type="image" height="16" title="Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok" class="c-inputButton"/><br />';
 //$content .= ' <input width="16" type="image" height="16" title="CHECK: Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok_CHECK" class="c-inputButton"/>';
-$content .= '<input              name="_savedok_check"                width="16" type="image" height="16" title="Save document AND SEND TO CvD" src="sysext/t3skin/icons/gfx/savedok.gif" class="c-inputButton"/>';
+//$content .= '<input              name="_savedok_check"                width="16" type="image" height="16" title="Save document AND SEND TO CvD" src="sysext/t3skin/icons/gfx/savedok.gif" class="c-inputButton"/>';
 
 //t3lib_div::devlog('button', 'newspaper', 0, $button);	
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
-			$content .= 'hide<br />';
+			$content .= $this->renderWorkflowButton(false, 'hide');
 		} elseif ($hidden && $button['publish']) {
-			$content .= 'publish<br />';
+			$content .= $content .= $this->renderWorkflowButton(false, 'publish');
 		}
+		$content .= '<br />';
 		
 		/// check / revise
 		if ($button['check']) {
-			$content .= 'check';
+			$content .= $this->renderWorkflowButton(1, 'check');
 			if (!$hidden && $button['hide'])
-				$content .= ' check&hide';
+				$content .= $this->renderWorkflowButton(1, 'check&hide');
 			elseif ($hidden && $button['publish'])
-				$content .= 'check&publish';
+				$content .= $this->renderWorkflowButton(1, 'check&publish');
 			$content .= '<br />';
 		} elseif ($button['revise']) {
-			$content .= 'revise';
+			$content .= $this->renderWorkflowButton(0, 'revise');
 			if (!$hidden && $button['hide'])
-				$content .= ' revise&hide';
+				$content .= $this->renderWorkflowButton(0, 'revise&hide');
 			elseif ($hidden && $button['publish'])
-				$content .= ' revise&publish';
+				$content .= $this->renderWorkflowButton(2, 'revise&publish');
 			$content .= '<br />';
 		}
 
@@ -517,6 +557,20 @@ $content .= '<input              name="_savedok_check"                width="16"
 /// \todo 		
 
 		return $content;
+	}
+	
+	
+	private function renderWorkflowButton($new_status, $title) {
+		if ($new_status !== false)
+			$js = 'changeWorkflowStatus(' . intval($new_status) . ')';
+		else
+			$js = 'changeWorkflowStatus(-1)';
+		$html = '<input title="' . $title . '" onclick="' . $js .'" name="_saveandclosedok" width="16" type="image" height="16" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" class="c-inputButton"/>';
+
+// variante ohne schlieﬂen - besser zum testen
+$html = '<input title="' . $title . '" onclick="' . $js .'" name="_savedok" width="16" type="image" height="16" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" class="c-inputButton"/>';
+#$html = '<a href="#" onclick="' . $js . '">' . $title . '</a> '; 
+		return $html;
 	}
 
 
@@ -533,6 +587,13 @@ $content .= '<input              name="_savedok_check"                width="16"
 		return false;
 	}
 
+
+	public static function getWorkflowActionTitle($new, $old) {
+		$new = intval($new);
+		$old = intval($old);
+/// \todo: in abh‰ngigkeit von new und old einen string zur¸ckgeben
+		return 'to come ...';		
+	}
 
 
 

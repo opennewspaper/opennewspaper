@@ -14,8 +14,31 @@ class tx_newspaper_SaveHook {
 
 	/// save hook: new and update
 
-	function processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that) {
-//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
+		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
+	}
+
+	private function checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $request) {
+		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']) || !isset($request['workflow_comment']))
+			return;
+		if (isset($request['workflow_comment'])) {
+			$action = tx_newspaper_BE::getWorkflowActionTitle($request['workflow_status'], $request['workflow_status_ORG']);
+t3lib_div::devlog('action', 'newspaper', 0, $action);
+		}
+	}
+
+	private function checkIfWorkflowCommentIsToBeStored(&$incomingFieldArray, $table, $id, $request) {
+		if ($table != 'tx_newspaper_article')
+			return;
+		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
+			return;
+		if ($request['workflow_status'] == $request['workflow_status_ORG'])
+			return; // status wasn't changed, so don't store value
+		$incomingFieldArray['workflow_status'] = $request['workflow_status'];
+/// \todo: log entry schreiben
+/// uid, pid, tstamp, crdate (raus), cruser_id, table_name, table_uid, be_user (raus), action, comment
 	}
 
 
@@ -210,7 +233,7 @@ debug($fieldArray);
 			if (!$pz_uid) {
 				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
 			}
-t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid, $_REQUEST));
+//t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $pz_uid, $_REQUEST));
 
 			// get uid of new concrete extra (that was just stored)
 			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
@@ -225,7 +248,7 @@ t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $p
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 			$e->store();
-			
+//t3lib_div::devlog('after origin uid', 'newspaper', 0, $after_origin_uid);			
 			$pz->insertExtraAfter($e, $after_origin_uid);
 
 /// \todo: currently the paragraph gets set in pagezone::insertExtraAfter()
@@ -234,7 +257,6 @@ t3lib_div::devlog('origin / pz uid', 'newspaper', 0, array($after_origin_uid, $p
 			// add paragraph if set
 			if (isset($_REQUEST['paragraph']) ) {
 				$e->setAttribute('paragraph', intval(t3lib_div::_GP('paragraph')));	
-				$e->setAttribute('position', 0);	
 			}
 			$e->store();
 
