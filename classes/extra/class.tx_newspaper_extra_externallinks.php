@@ -36,7 +36,7 @@ class tx_newspaper_ExternalLink {
 	private $url = null;
 	private $target = null;
 	
-	private static $table = 'tx_newspaper_extra_externallinks';
+	private static $table = 'tx_newspaper_externallinks';
 }
 
 class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
