@@ -22,7 +22,7 @@ class tx_newspaper_ExternalLink {
 		return $this->text? $this->text: $this->url; 
 	}
 	
-	public function getLink() {
+	public function getURL() {
 		return $this->url;
 	}
 	
