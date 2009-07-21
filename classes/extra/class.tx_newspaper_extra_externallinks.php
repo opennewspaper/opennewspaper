@@ -88,7 +88,7 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	
 	private function getLinks() {
 		if (!$this->links) {
-			foreach (explode(trim($this->getAttribute('links'))) as $link_uid) {
+			foreach (explode(',', trim($this->getAttribute('links'))) as $link_uid) {
 				$this->links[] = new tx_newspaper_ExternalLink($link_uid);
 			}
 		}
