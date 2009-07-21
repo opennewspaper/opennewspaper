@@ -12,10 +12,10 @@ CREATE TABLE tx_newspaper_extra_image (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
-	template_set tinytext,
-	title tinytext,
-	image text,
-	caption tinytext,
+	template_set tinytext NOT NULL,
+	title tinytext NOT NULL,
+	image blob NOT NULL,
+	caption tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -34,12 +34,12 @@ CREATE TABLE tx_newspaper_section (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	section_name tinytext,
+	section_name tinytext NOT NULL,
 	parent_section int(11) DEFAULT '0' NOT NULL,
 	default_articletype int(11) DEFAULT '0' NOT NULL,
 	articlelist int(11) DEFAULT '0' NOT NULL,
 	template_set int(11) DEFAULT '0' NOT NULL,
-	pagetype_pagezone tinytext,
+	pagetype_pagezone tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -57,8 +57,8 @@ CREATE TABLE tx_newspaper_page (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	section text,
-	pagetype_id text,
+	section blob NOT NULL,
+	pagetype_id blob NOT NULL,
 	inherit_pagetype_id int(11) DEFAULT '0' NOT NULL,
 	template_set int(11) DEFAULT '0' NOT NULL,
 	
@@ -79,9 +79,9 @@ CREATE TABLE tx_newspaper_pagezone (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	name tinytext,
-	page_id text,
-	pagezone_table tinytext,
+	name tinytext NOT NULL,
+	page_id blob NOT NULL,
+	pagezone_table tinytext NOT NULL,
 	pagezone_uid int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -117,7 +117,7 @@ CREATE TABLE tx_newspaper_pagezone_page (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
-	pagezone_id tinytext,
+	pagezone_id tinytext NOT NULL,
 	extras int(11) DEFAULT '0' NOT NULL,
 	template_set int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
@@ -174,23 +174,23 @@ CREATE TABLE tx_newspaper_article (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	articletype_id int(11) DEFAULT '0' NOT NULL,
-	title tinytext,
-	kicker tinytext,
-	teaser text,
-	text text,
-	author tinytext,
-	source_id tinytext,
-	source_object text,
+	title tinytext NOT NULL,
+	kicker tinytext NOT NULL,
+	teaser text NOT NULL,
+	text text NOT NULL,
+	author tinytext NOT NULL,
+	source_id tinytext NOT NULL,
+	source_object blob NOT NULL,
 	extras int(11) DEFAULT '0' NOT NULL,
 	sections int(11) DEFAULT '0' NOT NULL,
-	name tinytext,
+	name tinytext NOT NULL,
 	is_template tinyint(3) DEFAULT '0' NOT NULL,
 	template_set int(11) DEFAULT '0' NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
 	publish_date int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
-	modification_user text,
+	modification_user blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -211,7 +211,7 @@ CREATE TABLE tx_newspaper_extra (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	extra_table tinytext,
+	extra_table tinytext NOT NULL,
 	extra_uid int(11) DEFAULT '0' NOT NULL,
 	position int(11) DEFAULT '0' NOT NULL,
 	paragraph int(11) DEFAULT '0' NOT NULL,
@@ -239,7 +239,7 @@ CREATE TABLE tx_newspaper_extra_sectionlist (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext,
+	template_set tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -261,9 +261,9 @@ CREATE TABLE tx_newspaper_articlelist (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	list_table tinytext,
+	list_table tinytext NOT NULL,
 	list_uid int(11) DEFAULT '0' NOT NULL,
-	section_id text,
+	section_id blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -303,10 +303,10 @@ CREATE TABLE tx_newspaper_pagetype (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	type_name tinytext,
-	normalized_name tinytext,
+	type_name tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	is_article_page tinyint(3) DEFAULT '0' NOT NULL,
-	get_var tinytext,
+	get_var tinytext NOT NULL,
 	get_value int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -326,8 +326,8 @@ CREATE TABLE tx_newspaper_pagezonetype (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	type_name tinytext,
-	normalized_name tinytext,
+	type_name tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	is_article tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -345,11 +345,11 @@ CREATE TABLE tx_newspaper_log (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	table_name tinytext,
+	table_name tinytext NOT NULL,
 	table_uid int(11) DEFAULT '0' NOT NULL,
-	be_user text,
-	action tinytext,
-	comment text,
+	be_user blob NOT NULL,
+	action tinytext NOT NULL,
+	comment text NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -368,8 +368,8 @@ CREATE TABLE tx_newspaper_articletype (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	title tinytext,
-	normalized_name tinytext,
+	title tinytext NOT NULL,
+	normalized_name tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -391,8 +391,8 @@ CREATE TABLE tx_newspaper_extra_typo3_ce (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
-	template_set tinytext,
-	content_elements text,
+	template_set tinytext NOT NULL,
+	content_elements blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -410,12 +410,12 @@ CREATE TABLE tx_newspaper_extra_articlelist (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	description tinytext,
-	articlelist text,
+	description tinytext NOT NULL,
+	articlelist blob NOT NULL,
 	first_article int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext,
-	template tinytext,
+	template_set tinytext NOT NULL,
+	template tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -433,9 +433,10 @@ CREATE TABLE tx_newspaper_extra_textbox (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	template_set tinytext,
-	title tinytext,
-	text text,
+	template_set tinytext NOT NULL,
+	title tinytext NOT NULL,
+	text text NOT NULL,
+	pool tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -447,7 +448,7 @@ CREATE TABLE tx_newspaper_extra_textbox (
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
-	tx_newspaper_extra tinytext
+	tx_newspaper_extra tinytext NOT NULL
 );
 
 
@@ -456,8 +457,8 @@ CREATE TABLE tt_content (
 # Table structure for table 'pages'
 #
 CREATE TABLE pages (
-	tx_newspaper_associated_section text,
-	tx_newspaper_module tinytext
+	tx_newspaper_associated_section blob NOT NULL,
+	tx_newspaper_module tinytext NOT NULL
 );
 # Modifications for table 'tx_newspaper_section'
 CREATE TABLE tx_newspaper_section (

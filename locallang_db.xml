@@ -104,6 +104,7 @@
 			<label index="tx_newspaper_extra_textbox.template_set">Template set</label>
 			<label index="tx_newspaper_extra_textbox.title">Title</label>
 			<label index="tx_newspaper_extra_textbox.text">Text</label>
+			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -207,6 +208,7 @@
 			<label index="tx_newspaper_extra_textbox.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_textbox.title">Titel</label>
 			<label index="tx_newspaper_extra_textbox.text">Text</label>
+			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
