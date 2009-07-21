@@ -444,22 +444,6 @@ CREATE TABLE tx_newspaper_extra_textbox (
 
 
 
-
-#
-# Table structure for table 'tx_newspaper_extra_externallinks_links_mm'
-# 
-#
-CREATE TABLE tx_newspaper_extra_externallinks_links_mm (
-  uid_local int(11) DEFAULT '0' NOT NULL,
-  uid_foreign int(11) DEFAULT '0' NOT NULL,
-  tablenames varchar(30) DEFAULT '' NOT NULL,
-  sorting int(11) DEFAULT '0' NOT NULL,
-  KEY uid_local (uid_local),
-  KEY uid_foreign (uid_foreign)
-);
-
-
-
 #
 # Table structure for table 'tx_newspaper_extra_externallinks'
 #
@@ -472,7 +456,7 @@ CREATE TABLE tx_newspaper_extra_externallinks (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	template_set tinytext NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
-	links int(11) DEFAULT '0' NOT NULL,
+	links blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

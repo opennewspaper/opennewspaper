@@ -1572,8 +1572,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				"allowed" => "tx_newspaper_externallinks",	
 				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 10,	
-				"MM" => "tx_newspaper_extra_externallinks_links_mm",
+				"maxitems" => 10,
 			)
 		),
 	),
