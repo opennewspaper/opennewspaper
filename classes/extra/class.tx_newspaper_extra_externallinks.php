@@ -67,8 +67,7 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return '<strong>' . $this->getAttribute('title') . '</strong> ' .
-			$this->getAttribute('text');
+		return '<strong>' . $this->getAttribute('links') . '</strong> ';
 	}
 
 	/// title for module
