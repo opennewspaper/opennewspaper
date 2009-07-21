@@ -23,7 +23,9 @@ class tx_newspaper_ExternalLink {
 	}
 	
 	public function getURL() {
-		return $this->url;
+		if (strpos($this->url, '://') !== false)
+			return $this->url;
+		return 'http://' . $this->url;
 	}
 	
 	public function getTarget() {
