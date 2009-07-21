@@ -11,9 +11,9 @@
 <h3>{$title}</h3>
 <p>
 {section name=i loop=$links}
-	{$links[i].getTitle()}
-	{$links[i].getUrl()}
-	{$links[i].getTarget()}
+	{$links[i]->getTitle()}
+	{$links[i]->getUrl()}
+	{$links[i]->getTarget()}
 {/section}
 </p>
 
