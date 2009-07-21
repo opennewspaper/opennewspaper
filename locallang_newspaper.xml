@@ -32,6 +32,14 @@
 			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
 			<label index="entry_templateset_inherit">Inherit template set from upper level</label>
 			<label index="message_title_sectiontree">Section tree</label>
+			<label index="label_workflow_hide">Hide</label>
+			<label index="label_workflow_publish">Publish</label>
+			<label index="label_workflow_check">Check</label>
+			<label index="label_workflow_check_hide">Check &amp; hide</label>
+			<label index="label_workflow_check_publish">Check &amp; publish</label>
+			<label index="label_workflow_revise">Revise</label>
+			<label index="label_workflow_revise_hide">Revise &amp; hide</label>
+			<label index="label_workflow_revise_publish">Revise &amp; publish</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
