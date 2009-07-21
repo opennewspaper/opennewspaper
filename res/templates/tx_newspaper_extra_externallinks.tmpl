@@ -3,14 +3,16 @@
 
 {* Text box
    Variables:
-   $links
+   $links			array
    $template_set	template set used, if any
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
 <h3>{$title}</h3>
 <p>
-{$links}
+{section name=i loop=$links}
+	{$links[i]}
+{/section}
 </p>
 
 <!--  end  res/templates/tx_newspaper_extra_externallinks.tmpl -->
