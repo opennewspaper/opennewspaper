@@ -3,12 +3,19 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
 class tx_newspaper_ExternalLink {
-	public function __construct($uid ) {
+	public function __construct($uid) {
 		$this->text = 'dummy text';
 		$this->url = 'dummy URL';
 		$this->target = '';
 		
 		/// \todo select from DB
+		$row = tx_newspaper::selectOneRow(
+			'*', self::$table, 'uid = ' . intval($uid)
+		);
+		
+		$this->text = $row['text'];
+		$this->url = $row['url'];
+		$this->target = $row['target'];
 	}
 	
 	public function getText() { 
@@ -53,10 +60,9 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-
 		$this->prepare_render($template_set);
 
-		$this->smarty->assign('links', $this->getAttribute('links'));
+		$this->smarty->assign('links', $this->getLinks());
 	
 		return $this->smarty->fetch($this);
 	}
@@ -76,6 +82,18 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	}
 	
 	public static function dependsOnArticle() { return true; }
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	private function getLinks() {
+		if (!$this->links) {
+			foreach (explode(trim($this->getAttribute('links'))) as $link_uid) {
+				$this->links[] = new tx_newspaper_ExternalLink($link_uid);
+			}
+		}
+		
+		return $this->links;
+	}
 	
 	private $links = array();
 	
