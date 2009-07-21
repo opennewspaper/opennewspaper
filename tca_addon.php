@@ -67,21 +67,5 @@ $TCA['tx_newspaper_pagetype']['columns']['get_value']['config']['range'] = array
 	"lower" => "1"
 );
 
-$TCA['tx_newspaper_extra_typo3_ce']['ctrl'] = array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce',		
-		'label'     => 'uid',	
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',
-		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath('newspaper').'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath('newspaper').'icon_tx_newspaper_extra_typo3_ce.gif',
-	);
 
 ?>
