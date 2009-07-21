@@ -377,14 +377,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 					/// remove mm-table entry if the extra pointed to doesn't exist
 					$query = $GLOBALS['TYPO3_DB']->DELETEquery(
 						'tx_newspaper_article_extras_mm', 'uid_foreign = ' . intval($extra['uid_foreign']));
-					t3lib_div::debug($query);
 					$GLOBALS['TYPO3_DB']->sql_query($query);
 				}
 			}
 		}
-		debug($this->getUid(), 'Article::UID ', __LINE__, __FILE__);
-		debug($this->extras, 'Article::getExtras() ', __LINE__, __FILE__);
-#		die();
 		
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
 		
