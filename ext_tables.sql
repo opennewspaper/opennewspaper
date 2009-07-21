@@ -444,6 +444,62 @@ CREATE TABLE tx_newspaper_extra_textbox (
 
 
 
+
+#
+# Table structure for table 'tx_newspaper_extra_externallinks_links_mm'
+# 
+#
+CREATE TABLE tx_newspaper_extra_externallinks_links_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_extra_externallinks'
+#
+CREATE TABLE tx_newspaper_extra_externallinks (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	template_set tinytext NOT NULL,
+	pool tinyint(3) DEFAULT '0' NOT NULL,
+	links int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_externallinks'
+#
+CREATE TABLE tx_newspaper_externallinks (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	text tinytext NOT NULL,
+	url tinytext NOT NULL,
+	target varchar(6) DEFAULT '' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
 #
 # Table structure for table 'tt_content'
 #
