@@ -1488,5 +1488,48 @@ $TCA['tx_newspaper_extra_articlelist'] = array (
 		'1' => array('showitem' => '')
 	)
 );
+
+
+
+$TCA['tx_newspaper_extra_textbox'] = array (
+	'ctrl' => $TCA['tx_newspaper_extra_textbox']['ctrl'],
+	'interface' => array (
+		'showRecordFieldList' => 'template_set,title,text'
+	),
+	'feInterface' => $TCA['tx_newspaper_extra_textbox']['feInterface'],
+	'columns' => array (
+		'template_set' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.template_set',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
+		'title' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.title',		
+			'config' => array (
+				'type' => 'input',	
+				'size' => '30',
+			)
+		),
+		'text' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.text',		
+			'config' => array (
+				'type' => 'text',
+				'cols' => '30',
+				'rows' => '5',
+			)
+		),
+	),
+	'types' => array (
+		'0' => array('showitem' => 'template_set;;;;1-1-1, title;;;;2-2-2, text;;;richtext[];3-3-3')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => '')
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
