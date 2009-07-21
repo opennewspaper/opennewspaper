@@ -108,6 +108,7 @@
 			<label index="tx_newspaper_extra_externallinks">Extra: External links</label>
 			<label index="tx_newspaper_extra_externallinks.template_set">Template set</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Add to Pool</label>
+			<label index="tx_newspaper_extra_externallinks.title">Title</label>
 			<label index="tx_newspaper_extra_externallinks.links">Links</label>
 			<label index="tx_newspaper_externallinks">External Links</label>
 			<label index="tx_newspaper_externallinks.text">Link text</label>
@@ -222,6 +223,7 @@
 			<label index="tx_newspaper_extra_externallinks">Extra: Externe Links</label>
 			<label index="tx_newspaper_extra_externallinks.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Zum Pool hinzufügen</label>
+			<label index="tx_newspaper_extra_externallinks.title">Titel</label>
 			<label index="tx_newspaper_extra_externallinks.links">Links</label>
 			<label index="tx_newspaper_externallinks">Externe Links</label>
 			<label index="tx_newspaper_externallinks.text">Linktext</label>

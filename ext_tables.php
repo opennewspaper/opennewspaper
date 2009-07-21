@@ -386,7 +386,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_externallinks.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "template_set, pool, links",
+		"fe_admin_fieldList" => "template_set, pool, title, links",
 	)
 );
 

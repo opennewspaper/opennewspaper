@@ -456,6 +456,7 @@ CREATE TABLE tx_newspaper_extra_externallinks (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	template_set tinytext NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
+	title tinytext NOT NULL,
 	links blob NOT NULL,
 	
 	PRIMARY KEY (uid),
