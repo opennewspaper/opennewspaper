@@ -44,7 +44,7 @@
 		
 				<td id="para_td_{$EXTRA_DATA[i].uid}" align="center">
 					<input id="para_{$EXTRA_DATA[i].uid}" onChange="changeParagraph({$EXTRA_DATA[i].uid}); return false;" style="width: 30px" type="text" value="{$EXTRA_DATA[i].paragraph}" />
-					<span style="display: none" id="save_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveParagraph({$EXTRA_DATA[i].uid}); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoParagraph({$EXTRA_DATA[i].uid}); return false;">{$UNDO_ICON}</a></span> 
+					<span style="display: none" id="save_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveParagraph({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoParagraph({$EXTRA_DATA[i].uid}); return false;">{$UNDO_ICON}</a></span> 
 				</td>
 
 				<td> 

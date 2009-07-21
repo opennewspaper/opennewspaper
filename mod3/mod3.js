@@ -1,11 +1,11 @@
 <script language="javascript">
 
-	function extra_save_para(extra_uid, value) {ldelim}
+	function extra_save_para(pz_uid, extra_uid, value) {ldelim}
 		var request = new top.Ajax.Request(
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
  			{ldelim}
 				method: 'get',
-				parameters: "extra_save_para=1&extra_uid=" + extra_uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+				parameters: "extra_save_para=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
 				onCreate: processing,
 				onSuccess: reload
 			{rdelim}

@@ -170,11 +170,13 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
-	private function processSaveExtraParagraph($extra_uid, $value) {
+	private function processSaveExtraParagraph($pz_uid, $extra_uid, $paragraph) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
-		$e->setAttribute('paragraph', intval($value));
 		$e->setAttribute('position', 0); // move as first element to new paragraph
-		$e->store();
+		
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // this is an article (as this option isn't available for pagezone_apge objects)
+		$pz->changeExtraParagraph($e, intval($paragraph)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
+		
 		die(); 
 	}
 
@@ -221,7 +223,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 		
 		if (t3lib_div::_GP('extra_save_para') == 1) {
-			$this->processSaveExtraParagraph(t3lib_div::_GP('extra_uid'), t3lib_div::_GP('value'));
+			$this->processSaveExtraParagraph(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('value'));
 		}
 
 
