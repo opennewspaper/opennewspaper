@@ -351,7 +351,9 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 			'tx_newspaper_extra',
 			'NOT uid in (SELECT uid_foreign FROM `tx_newspaper_pagezone_page_extras_mm`) 
 			 AND NOT uid in (SELECT uid_foreign FROM `tx_newspaper_article_extras_mm`) 
-			 AND NOT deleted',
+			 AND NOT deleted 
+			 AND NOT extra_table = "tx_newspaper_article" 
+			 AND NOT extra_table = "tx_newspaper_pagezone_page" ',
 			 '', 'uid'
 		);
 		
