@@ -1682,5 +1682,24 @@ $TCA["tx_newspaper_externallinks"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_extra_displayarticles"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_displayarticles"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => ""
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_displayarticles"]["feInterface"],
+	"columns" => array (
+		
+	),
+	"types" => array (
+		"0" => array("showitem" => "")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
