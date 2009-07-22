@@ -4,7 +4,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
-	const description_length = 100; 
+	const description_length = 60; 
 
 	public function __construct($uid = 0) {
 		if ($uid) {
