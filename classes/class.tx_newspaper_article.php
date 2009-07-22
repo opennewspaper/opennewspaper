@@ -235,9 +235,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			/** Handle case where $this is a placeholder for an actual article
 			 *  (formerly Extra_ArticleRenderer)
 			 */
-			$ret = '';
-			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
-			$ret = $article->render($template_set);
+#			$ret = '';
+#			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
+#			$ret = $article->render($template_set);
 			
 		} else {
 		
