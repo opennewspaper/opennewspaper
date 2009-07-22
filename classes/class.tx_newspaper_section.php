@@ -182,7 +182,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	/** \return the Article PageZone (PageZoneType has is_article set) on the 
 	 * 		Page marked as the Article Page
 	 */ 
-	protected function getDefaultArticle() {
+	public function getDefaultArticle() {
 		foreach ($this->getSubPages() as $sub_page) {
 			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
