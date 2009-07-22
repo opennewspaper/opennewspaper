@@ -221,6 +221,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	/// Renders an article
 	public function render($template_set = '') {
+
+		/// Default articles should never contain text that is displayed.
+		if ($this->getAttribute('is_template')) return;
 		
 		/** Check whether to use a specific template set.
 		 *	This must be done regardless if this is a template used to define
@@ -229,84 +232,73 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
-
-		if ($this->getAttribute('is_template')) {
 		
-			/** Handle case where $this is a placeholder for an actual article
-			 *  (formerly Extra_ArticleRenderer)
-			 */
-#			$ret = '';
-#			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
-#			$ret = $article->render($template_set);
-			
-		} else {
-		
-			/// Configure Smarty rendering engine
-			if ($template_set) {
-				$this->smarty->setTemplateSet($template_set);
-			}
-			if ($this->getCurrentPage()->getUID() && $this->getCurrentPage()->getPageType()) {
-				$this->smarty->setPageType($this->getCurrentPage());
-			}
-			if ($this->getPageZoneType()) {
-				$this->smarty->setPageZoneType($this);
-			}
+		/// Configure Smarty rendering engine
+		if ($template_set) {
+			$this->smarty->setTemplateSet($template_set);
+		}
+		if ($this->getCurrentPage()->getUID() && $this->getCurrentPage()->getPageType()) {
+			$this->smarty->setPageType($this->getCurrentPage());
+		}
+		if ($this->getPageZoneType()) {
+			$this->smarty->setPageZoneType($this);
+		}
 
-			$this->smarty->assign('kicker', $this->getAttribute('kicker'));
-			$this->smarty->assign('title', $this->getAttribute('title'));
-			$this->smarty->assign('teaser', $this->getAttribute('teaser'));
-			$this->smarty->assign('author', $this->getAttribute('author'));
-			$this->smarty->assign('text', $this->getAttribute('text'));
+		$this->smarty->assign('kicker', $this->getAttribute('kicker'));
+		$this->smarty->assign('title', $this->getAttribute('title'));
+		$this->smarty->assign('teaser', $this->getAttribute('teaser'));
+		$this->smarty->assign('author', $this->getAttribute('author'));
+		$this->smarty->assign('text', $this->getAttribute('text'));
 
-			/** Assemble the text paragraphs and extras in an array of the form:
-			 *  \code
-			 *  array(
-			 *  	$paragraph_number => array(
-			 * 			"text" => $text_of_paragraph,
-			 *          "extras" => array(
-			 * 				$position => $rendered_extra,
-			 * 				...
-			 * 			)
-			 * 		),
-			 * 		...
-			 *  )
-			 *  \endcode
-			 */
-			$text_paragraphs = $this->splitIntoParagraphs();
-			$paragraphs = array();
-			foreach ($text_paragraphs as $index => $text_paragraph) {
-				$paragraph = array();
-				if ($text_paragraph) $paragraph['text'] = $text_paragraph;
-				foreach ($this->getExtras() as $extra) {
-					if ($extra->getAttribute('paragraph') == $index ||
-						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
-						$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render($template_set);
-					}
-				}
-				/*  Braindead PHP does not sort arrays automatically, even if
-				 *  the keys are integers. So if you, e.g., insert first $a[4]
-				 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
-				 *  Thus, you must call ksort.
-				 */
-				if ($paragraph['extras']) ksort($paragraph['extras']);
-				$paragraphs[] = $paragraph;
-			}
-			
-			/** Make sure all extras are rendered, even those whose 'paragraph'
-			 *  attribute is greater than the number of text paragraphs or less
-			 *  than its negative.
-			 */ 		
+		/** Assemble the text paragraphs and extras in an array of the form:
+		 *  \code
+		 *  array(
+		 *  	$paragraph_number => array(
+		 * 			"text" => $text_of_paragraph,
+		 *          "extras" => array(
+		 * 				$position => $rendered_extra,
+		 * 				...
+		 * 			)
+		 * 		),
+		 * 		...
+		 *  )
+		 *  \endcode
+		 */
+		$text_paragraphs = $this->splitIntoParagraphs();
+		$paragraphs = array();
+		foreach ($text_paragraphs as $index => $text_paragraph) {
+			$paragraph = array();
+			if ($text_paragraph) $paragraph['text'] = $text_paragraph;
 			foreach ($this->getExtras() as $extra) {
-				if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
-					$paragraphs[0]['extras'][] = $extra->render($template_set);
-				} else if ($extra->getAttribute('paragraph') > sizeof($text_paragraphs)) {
-					$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
+				if ($extra->getAttribute('paragraph') == $index ||
+					sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
+					$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render($template_set);
 				}
 			}
+			/*  Braindead PHP does not sort arrays automatically, even if
+			 *  the keys are integers. So if you, e.g., insert first $a[4]
+			 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
+			 *  Thus, you must call ksort.
+			 */
+			if ($paragraph['extras']) ksort($paragraph['extras']);
+			$paragraphs[] = $paragraph;
+		}
+			
+		/** Make sure all extras are rendered, even those whose 'paragraph'
+		 *  attribute is greater than the number of text paragraphs or less
+		 *  than its negative.
+		 */ 		
+		foreach ($this->getExtras() as $extra) {
+			if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
+				$paragraphs[0]['extras'][] = $extra->render($template_set);
+			} else if ($extra->getAttribute('paragraph') > sizeof($text_paragraphs)) {
+				$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
+			}
+		}
 
-			$this->smarty->assign('paragraphs', $paragraphs);
-			$ret = $this->smarty->fetch($this);
-		} 
+		$this->smarty->assign('paragraphs', $paragraphs);
+		$ret = $this->smarty->fetch($this);
+
 		return $ret;
 	}
 
