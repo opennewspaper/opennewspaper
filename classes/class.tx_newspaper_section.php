@@ -192,7 +192,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 					}
 #				}
 			}
-			$sub_page = null;
+#			$sub_page = null;
 		}
 
 		/// \todo Print the names of the article page type and page zone type
