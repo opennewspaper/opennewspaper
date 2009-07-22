@@ -186,7 +186,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		t3lib_div::devlog('Section::getSubPages()', 'newspaper', 0, $this->getSubPages());
 		foreach ($this->getSubPages() as $sub_page) {
 			t3lib_div::devlog('subPage', 'newspaper', 0, array($sub_page, $sub_page->getPageType()));
-			debug(array($sub_page, $sub_page->getPageType()));
+			t3lib_div::debug(array($sub_page, $sub_page->getPageType()));
 			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
 				t3lib_div::devlog('article page:', 'newspaper', 1, $sub_page);
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
