@@ -117,6 +117,7 @@
 			<label index="tx_newspaper_externallinks.target.I.1">Open new Window</label>
 			<label index="tx_newspaper_externallinks.target">Link target</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Display articles</label>
+			<label index="tx_newspaper_extra_displayarticles.todo">To do: find a better solution ;-)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -233,6 +234,7 @@
 			<label index="tx_newspaper_externallinks.target.I.1">Neues Fenster öffnen</label>
 			<label index="tx_newspaper_externallinks.target">Linkziel</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Artikelanzeige</label>
+			<label index="tx_newspaper_extra_displayarticles.todo">To do: bessere Lösung finden ;-)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

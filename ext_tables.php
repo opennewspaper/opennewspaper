@@ -420,7 +420,7 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_displayarticles.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "",
+		"fe_admin_fieldList" => "todo",
 	)
 );
 
