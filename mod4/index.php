@@ -30,7 +30,7 @@
 
 /// \todo:
 /**
- * Inconsistency check für Extras:
+ * Inconsistency check fï¿½r Extras:
  * alle PZs auslesen
  * dazu alle Extra auslesen und indexOfExtra() aufrufen (try catch)
  */
@@ -223,9 +223,14 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				'class_function' => array('tx_newspaper_module4', 'checkSectionWithMultipleButSamePageType'),
 				'param' => array()
 			),
-				array(
+			array(
 				'title' => 'Extra in Article: article or pagezone set as Extra',
 				'class_function' => array('tx_newspaper_module4', 'checkExtraInArticleIsArticleOrPagezone'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Free Extras: Extras which belong to np PageZone or Article',
+				'class_function' => array('tx_newspaper_module4', 'checkFreeExtras'),
 				'param' => array()
 			),
 		);
@@ -332,6 +337,26 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		for($i = 0; $i < sizeof($row); $i++) {
 			$msg .= 'Article #' . $row[$i]['uid_local'] . ', abstract Extra #' . $row[$i]['uid_foreign'] . 
 				' is stored in table ' . $row[$i]['extra_table'] . ' with #' . $row[$i]['extra_uid'] . '<br />';
+		}
+		
+		if ($msg != '')
+			return $msg;
+		return true; // no problems found
+	}
+
+	/// searches for extras which don't belong to either a pagezone or an article
+	static function checkFreeExtras() {		
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_extra',
+			'NOT uid in (SELECT uid_foreign FROM `tx_newspaper_pagezone_page_extras_mm`) 
+			 AND NOT uid in (SELECT uid_foreign FROM `tx_newspaper_article_extras_mm`) 
+			 AND NOT deleted'
+		);
+		
+		$msg = '';
+		for($i = 0; $i < sizeof($row); $i++) {
+			$msg .= 'Extra #' . $row[$i]['uid'] . ' is not connected to either an article or a page zone.<br />';
 		}
 		
 		if ($msg != '')
