@@ -15,7 +15,7 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
 		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
 	}
