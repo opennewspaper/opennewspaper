@@ -229,8 +229,8 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				'param' => array()
 			),
 			array(
-				'title' => 'Free Extras: Extras which belong to no PageZone or Article',
-				'class_function' => array('tx_newspaper_module4', 'checkFreeExtras'),
+				'title' => 'Orphaned Extras: Extras which belong to no PageZone or Article',
+				'class_function' => array('tx_newspaper_module4', 'checkOrphanedExtras'),
 				'param' => array()
 			),
 		);
@@ -345,7 +345,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 	}
 
 	/// searches for extras which don't belong to either a pagezone or an article
-	static function checkFreeExtras() {		
+	static function checkOrphanedExtras() {		
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_extra',
