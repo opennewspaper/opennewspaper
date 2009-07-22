@@ -376,9 +376,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  	}
  	
  	public function getPageType() {
- 		if (!$this->pagetype) {
+# 		if (!$this->pagetype) {
  			$this->pagetype = new tx_newspaper_PageType(intval($this->getAttribute('pagetype_id')));
- 		} 
+# 		} 
  		return $this->pagetype; 
  	}
  	
