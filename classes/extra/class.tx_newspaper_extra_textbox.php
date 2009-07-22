@@ -4,6 +4,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
+	const description_length = 100; 
+
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
@@ -38,8 +40,9 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return '<strong>' . $this->getAttribute('title') . '</strong> ' .
-			$this->getAttribute('text');
+		return substr(
+			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('text'), 
+			0, self::description_length+2*strlen('<strong>')+1);
 	}
 
 	/// title for module
