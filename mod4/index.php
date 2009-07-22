@@ -229,7 +229,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				'param' => array()
 			),
 			array(
-				'title' => 'Free Extras: Extras which belong to np PageZone or Article',
+				'title' => 'Free Extras: Extras which belong to no PageZone or Article',
 				'class_function' => array('tx_newspaper_module4', 'checkFreeExtras'),
 				'param' => array()
 			),
