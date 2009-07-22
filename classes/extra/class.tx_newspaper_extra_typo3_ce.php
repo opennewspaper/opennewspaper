@@ -69,9 +69,12 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		$row = tx_newspaper::selectOneRow('*', 'tt_content', 'uid = ' . $this->getAttribute('content_elements'));
-		if ($row['header']) return $row['header'];
-		if ($row['titleText']) return $row['titleText'];
+		try {
+			$row = tx_newspaper::selectOneRow('*', 'tt_content', 'uid = ' . $this->getAttribute('content_elements'));
+			if ($row['header']) return $row['header'];
+			if ($row['titleText']) return $row['titleText'];
+		} catch (tx_newspaper_DBException $e) { }
+		
 		return 'Content Element ' . $this->getAttribute('content_elements');
 	}
 
