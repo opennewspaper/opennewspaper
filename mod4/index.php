@@ -362,20 +362,20 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			 '', 'uid'
 		);
 		
+		if (!$row) return true; // no problems found
+		
 		$msg = sizeof($row) . ' problems found.<br />';
 		for($i = 0; $i < sizeof($row); $i++) {
-/*			$concrete = tx_newspaper::selectOneRow(
+			$concrete = tx_newspaper::selectOneRow(
 				'*', $row[$i]['extra_table'],
 				'uid = ' . $row[$i]['extra_uid']
 			);
-*/			$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
+			$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
 					' #' . $row[$i]['extra_uid'] . ')'. 
-					' is not connected to either an article or a page zone.<br />';
+					' is not connected to either an article or a page zone. ' . print_r($concrete, 1) . '<br />';
 		}
 		
-		if ($row)
-			return $msg;
-		return true; // no problems found
+		return $msg;
 	}
 
 }
