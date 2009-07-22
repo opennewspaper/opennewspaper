@@ -178,6 +178,11 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 					switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1:
 							$content = '
+<style type="text/css">
+body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
+  overflow: auto;
+}
+</style>
 								The database is checked for inconsistent data.
 								<hr />';
 //								GET:'.t3lib_div::view_array($_GET).'<br />'.
