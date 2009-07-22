@@ -357,7 +357,13 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		
 		$msg = '';
 		for($i = 0; $i < sizeof($row); $i++) {
-			$msg .= 'Extra #' . $row[$i]['uid'] . ' is not connected to either an article or a page zone.<br />';
+			$concrete = tx_newspaper::selectOneRow(
+				'*', $row[$i]['extra_table'],
+				'uid = ' . $row[$i]['extra_uid']
+			);
+			$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
+					' #' . $row[$i]['extra_uid'] . ')'. 
+					' is not connected to either an article or a page zone.<br />';
 		}
 		
 		if ($msg != '')
