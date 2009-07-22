@@ -357,7 +357,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 			 '', 'uid'
 		);
 		
-		$msg = '';
+		$msg = sizeof($row) . ' problems found.<br />';
 		for($i = 0; $i < sizeof($row); $i++) {
 /*			$concrete = tx_newspaper::selectOneRow(
 				'*', $row[$i]['extra_table'],
@@ -368,7 +368,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 					' is not connected to either an article or a page zone.<br />';
 		}
 		
-		if ($msg != '')
+		if ($row)
 			return $msg;
 		return true; // no problems found
 	}
