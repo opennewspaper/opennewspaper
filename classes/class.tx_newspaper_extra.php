@@ -425,6 +425,16 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 				($this->getAttribute('origin_uid') == $this->getExtraUid())); 
 	}
 
+	public function getReferenceCount() {
+		$row = tx_newspaper::selectOneRow(
+			'COUNT(*) AS c', 
+			self::$table,
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
+			' AND extra_uid = ' . $this->getUid()	
+		);
+		return intval($row['c']);
+	}
+	
 	/// Finds the PageZone this Extra is placed upon
 	/** I'm afraid this raises several problems, so this function should be used
 	 *  with care.
