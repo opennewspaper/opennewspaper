@@ -372,7 +372,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			);
 			$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
 					' #' . $row[$i]['extra_uid'] . ')'. 
-					' is not connected to either an article or a page zone. ' . print_r($concrete, 1) . '<br />';
+					' is not connected to either an article or a page zone:<br /> ' . print_r($concrete, 1) . '<br />';
 		}
 		
 		return $msg;
