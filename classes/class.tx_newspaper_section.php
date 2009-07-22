@@ -183,16 +183,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 * 		Page marked as the Article Page
 	 */ 
 	public function getDefaultArticle() {
-		t3lib_div::devlog('Section::getSubPages()', 'newspaper', 1, $this->getSubPages());
-		$debug = array();
+		t3lib_div::devlog('Section::getSubPages()', 'newspaper', 0, $this->getSubPages());
 		foreach ($this->getSubPages() as $sub_page) {
-			$debug[$sub_page->getPageType()->getAttribute('type_name')] = array();
+			t3lib_div::devlog('subPage', 'newspaper', 0, $sub_page);
 			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
+				t3lib_div::devlog('article page:', 'newspaper', 1, $sub_page);
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
-					$debug[$sub_page->getPageType()->getAttribute('type_name')][$pagezone->getPageZoneType()->getAttribute('type_name')] = array(
-						'uid' => $pagezone->getPageZoneType()->getAttribute('uid'),
-						'is_article' => $pagezone->getPageZoneType()->getAttribute('is_article'),
-					);
+					t3lib_div::devlog('pagezone', 'newspaper', 0, $pagezone);
 					
 					if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
 						return $pagezone;
@@ -200,8 +197,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				}
 			}
 		}
-		
-		t3lib_div::devlog('Section::getDefaultArticle()', 'newspaper', 1, $debug);
+
 		/// \todo Print the names of the article page type and page zone type
 		throw new tx_newspaper_IllegalUsageException('There must be one page under section "' .
 			$this->getAttribute('section_name') . '" that has the page type which is marked ' .
