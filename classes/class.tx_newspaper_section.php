@@ -183,6 +183,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 * 		Page marked as the Article Page
 	 */ 
 	public function getDefaultArticle() {
+		t3lib_div::devlog('Section::getSubPages()', 'newspaper', 1, $this->getSubPages());
 		$debug = array();
 		foreach ($this->getSubPages() as $sub_page) {
 			$debug[$sub_page->getPageType()->getAttribute('type_name')] = array();
