@@ -183,9 +183,16 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 * 		Page marked as the Article Page
 	 */ 
 	public function getDefaultArticle() {
+		$debug = array();
 		foreach ($this->getSubPages() as $sub_page) {
+			$debug[$sub_page->getPageType()->getAttribute('type_name')] = array();
 			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
+					$debug[$sub_page->getPageType()->getAttribute('type_name')][$pagezone->getPageZoneType()->getAttribute('type_name')] = array(
+						'uid' => $pagezone->getPageZoneType()->getAttribute('uid'),
+						'is_article' => $pagezone->getPageZoneType()->getAttribute('is_article'),
+					);
+					
 					if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
 						return $pagezone;
 					}
@@ -193,9 +200,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			}
 		}
 		
+		t3lib_div::devlog('Section::getDefaultArticle()', 'newspaper', 1, $debug);
 		/// \todo Print the names of the article page type and page zone type
-		throw new tx_newspaper_IllegalUsageException('There must be one page under section ' .
-			$this->getAttribute('section_name') . ' that has the page type which is marked ' .
+		throw new tx_newspaper_IllegalUsageException('There must be one page under section "' .
+			$this->getAttribute('section_name') . '" that has the page type which is marked ' .
 			'as Article Page. Additionally, this page must have a page zone which is marked' .
 			' as the Article Page Zone.'
 		);
