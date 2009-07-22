@@ -184,15 +184,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 */ 
 	public function getDefaultArticle() {
 		foreach ($this->getSubPages() as $sub_page) {
-#			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
-				t3lib_div::devlog('article page:', 'newspaper', 1, $sub_page);
-				foreach ($sub_page->getActivePageZones() as $pagezone) {
-					if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
-						return $pagezone;
-					}
-#				}
+			foreach ($sub_page->getActivePageZones() as $pagezone) {
+				if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
+					return $pagezone;
+				}
 			}
-#			$sub_page = null;
 		}
 
 		/// \todo Print the names of the article page type and page zone type
