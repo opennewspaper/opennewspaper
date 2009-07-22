@@ -183,19 +183,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 * 		Page marked as the Article Page
 	 */ 
 	public function getDefaultArticle() {
-		t3lib_div::devlog('Section::getSubPages()', 'newspaper', 0, $this->getSubPages());
 		foreach ($this->getSubPages() as $sub_page) {
-			$sub_page->getAttribute('uid');
-			t3lib_div::devlog('subPage', 'newspaper', 0, array($sub_page, $sub_page->getPageType()));
-			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
+#			if ($sub_page->getPageType()->getAttribute('is_article_page')) {
 				t3lib_div::devlog('article page:', 'newspaper', 1, $sub_page);
 				foreach ($sub_page->getActivePageZones() as $pagezone) {
-					t3lib_div::devlog('pagezone', 'newspaper', 0, $pagezone);
-					
 					if ($pagezone->getPageZoneType()->getAttribute('is_article')) {
 						return $pagezone;
 					}
-				}
+#				}
 			}
 			$sub_page = null;
 		}
