@@ -7,8 +7,17 @@
    $title
    $teaser
    $author
-   $text		...
-   $paragraphs	array(...)
+   $text		the raw text as stored in the DB
+   $paragraphs	array(
+					$paragraph_number => array(
+		 				"text" => $text_of_paragraph,
+						"extras" => array(
+		  					$position => $rendered_extra,
+		  					...
+		 	 			)
+		  			),
+		  			...
+		  		)
    $template_set	template set used, if any
 *}
 
