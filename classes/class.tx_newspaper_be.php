@@ -352,6 +352,7 @@ function findElementsByName(name, type) {
 				'concrete_uid' => $extra[$i]->getUid(),
 				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
+				'gui_hidden' => $extra[$i]->getAttribute('gui_hidden'),
 			);
 			// the following attributes aren't always available 
 			try {
@@ -385,7 +386,7 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
-			return 'Ohne Artikeltyp keine Defaultbestückung'; /// \todo: ...
+			return 'Ohne Artikeltyp keine Defaultbestï¿½ckung'; /// \todo: ...
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
 //debug($PA['row']);	
@@ -591,7 +592,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhängigkeit von new und old einen string zurückgeben
+/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
 		return 'to come ...';		
 	}
 
