@@ -32,26 +32,24 @@
 
 <p> 
 	{if $paragraphs}
-		<ul>
-			{section name=i loop=$paragraphs}
-				{if $paragraphs[i].text}
-					<p>{$paragraphs[i].text}</p>
-				{/if}
+		{section name=i loop=$paragraphs}
+			{if $paragraphs[i].text}
+				<p>{$paragraphs[i].text}</p>
+			{/if}
 
-				{if $paragraphs[i].extras}
-					{foreach from=$paragraphs[i].extras item=extra}
-						<div class="{$extra.extra_name}">
-							{$extra.content}
-						</div>
-					{/foreach}					
-				{/if}				
+			{if $paragraphs[i].extras}
+				{foreach from=$paragraphs[i].extras item=extra}
+					<div class="{$extra.extra_name}">
+						{$extra.content}
+					</div>
+				{/foreach}					
+			{/if}				
 
-				{if $paragraphs[i].spacing}
-					<p>{$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if}</p>
-				{/if}
+			{if $paragraphs[i].spacing}
+				<p>{$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if}</p>
+			{/if}
 
-			{/section}
-		</ul>
+		{/section}
 	{else}
 		{$text}
 	{/if}		
