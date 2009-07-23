@@ -352,7 +352,6 @@ function findElementsByName(name, type) {
 				'concrete_uid' => $extra[$i]->getUid(),
 				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
-				'gui_hidden' => $extra[$i]->getAttribute('gui_hidden'),
 			);
 			// the following attributes aren't always available 
 			try {
@@ -375,7 +374,10 @@ function findElementsByName(name, type) {
 			} catch (tx_newspaper_WrongAttributeException $e) {
 			
 			}
-			$data[] = $extra_data;
+			
+			//	don't display extras for which attribute gui_hidden is set
+			if (!$extra[$i]->getAttribute('gui_hidden'))
+				$data[] = $extra_data;
 		}
 		return $data;
 	} 
