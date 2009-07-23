@@ -550,15 +550,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					/** Whenever the inheritance hierarchy is invalidated, 
 					 *  inherited Extras are hidden and moved to the end. 
 					 */
-					$copied_extra->setAttribute('position', 
-						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
-					$copied_extra->setAttribute('show_extra', 0);
+#					$copied_extra->setAttribute('position', 
+#						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
+					$copied_extra->setAttribute('gui_hidden', 0);
 				} else {
 					/** Whenever the inheritance hierarchy is restored, 
 					 *  inherited Extras are unhidden, but they remain at the
 					 *  end of the page zone. 
 					 */
-					$copied_extra->setAttribute('show_extra', 1);
+					$copied_extra->setAttribute('gui_hidden', 1);
 				}
 				$copied_extra->store();
 			}

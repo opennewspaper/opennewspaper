@@ -745,6 +745,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
+
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			if ($data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
