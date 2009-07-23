@@ -74,6 +74,10 @@ class tx_newspaper_PageZone_Factory {
 		return new $row['pagezone_table']($row['pagezone_uid']);
 	}
 
+	///	Create a new PageZone instead reading one from DB
+	/** \todo Check whether a PageZone of type \p $type is already present on
+	 *  page \p $page
+	 */
 	public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
 		$pagezone = null;
 		if ($type->getAttribute('is_article')) {
@@ -84,6 +88,9 @@ class tx_newspaper_PageZone_Factory {
 		}
 		$pagezone->setParentPage($page);
 		$pagezone->setPageZoneType($type);
+		
+		///	copy Extras from appropriate page zone
+		$pagezone->copyExtrasFrom($pagezone->getParentForPlacement());
 		
 		$pagezone->store();
 		
