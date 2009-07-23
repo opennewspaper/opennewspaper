@@ -272,6 +272,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$paragraphs = array();
 		$spacing = 0;
 		foreach ($text_paragraphs as $index => $text_paragraph) {
+t3lib_div::devlog('$text_paragraph', 'newspaper', 0, "'".$text_paragraph."'");
 			$paragraph = array();
 			if ($text_paragraph) {
 				$paragraph['text'] = $text_paragraph;
