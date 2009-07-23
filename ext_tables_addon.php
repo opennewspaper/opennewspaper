@@ -38,7 +38,7 @@ $TCA['tx_newspaper_articletype']['ctrl']['iconfile'] =
 
 
 if (TYPO3_MODE == 'BE') {
-/// \to do: hide sysfolder (with user tsconfig): options.hideRecords.pages	
+/// \todo: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 	
 	$tempColumns["tx_newspaper_associated_section"]["config"]["range"] = array();
 	t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
