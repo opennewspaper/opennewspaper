@@ -425,6 +425,7 @@ t3lib_div::devlog('ExtraImpl: readExtraItem - reached!', 'newspaper', 0, array($
 				($this->getAttribute('origin_uid') == $this->getExtraUid())); 
 	}
 
+	/// Returns the number of abstract records pointing to the current concrete record
 	public function getReferenceCount() {
 		$row = tx_newspaper::selectOneRow(
 			'COUNT(*) AS c', 
