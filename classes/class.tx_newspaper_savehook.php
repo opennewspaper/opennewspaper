@@ -15,31 +15,36 @@ class tx_newspaper_SaveHook {
 	/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+
+// move to writesLog check
 		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
-		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
+//		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
 	}
 
-	private function checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $request) {
-		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']) || !isset($request['workflow_comment']))
-			return;
-		if (isset($request['workflow_comment'])) {
-			$action = tx_newspaper_BE::getWorkflowActionTitle($request['workflow_status'], $request['workflow_status_ORG']);
-t3lib_div::devlog('action', 'newspaper', 0, $action);
+	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
+t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
+		
+		if (isset($request['hidden_status']) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
+			$incomingFieldArray['hidden'] = $request['hidden_status'];
 		}
-	}
-
-	private function checkIfWorkflowCommentIsToBeStored(&$incomingFieldArray, $table, $id, $request) {
-		if ($table != 'tx_newspaper_article')
-			return;
+	
 		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
-			return;
+			return; // value not set, so can't decide if the status changed 
 		if ($request['workflow_status'] == $request['workflow_status_ORG'])
 			return; // status wasn't changed, so don't store value
-		$incomingFieldArray['workflow_status'] = $request['workflow_status'];
-/// \todo: log entry schreiben
-/// uid, pid, tstamp, crdate (raus), cruser_id, table_name, table_uid, be_user (raus), action, comment
+		$incomingFieldArray['workflow_status'] = $request['workflow_status']; // change workflow status
 	}
+
+//	private function checkIfWorkflowCommentIsToBeStored(&$incomingFieldArray, $table, $id, $request) {
+//		if ($table != 'tx_newspaper_article')
+//			return;
+//		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
+//			return;
+//
+/// ... log entry schreiben ...
+/// uid, pid, tstamp, crdate (raus), cruser_id, table_name, table_uid, be_user (raus), action, comment
+//	}
 
 
 	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
@@ -71,6 +76,7 @@ t3lib_div::devlog('action', 'newspaper', 0, $action);
 
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+		global $LANG;
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
 
 		/// add modifications user and time if  tx_newspaper_Article is updated
@@ -91,6 +97,7 @@ t3lib_div::devlog('action', 'newspaper', 0, $action);
 
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
 			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) { 
+/// \todo: move to function
 				/// tx_newspaper_StoredObject is implemented, so record is to be stored in a special sysfolder
 				$sf = tx_newspaper_Sysfolder::getInstance();
 				$pid = $sf->getPid($np_obj);
@@ -101,8 +108,58 @@ t3lib_div::devlog('action', 'newspaper', 0, $action);
 			/// check if a newspaper record action should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
 t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fieldArray, $_REQUEST));
+/// \todo: move to function
+
+				/// checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
+				
+				/// check if auto log entry for hiding/publishing newspaper record should be written
+				if (isset($fieldArray['hidden'])) {
+					if ($table == 'tx_newspaper_article') {
+						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_published', false);
+					} else {
+						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_published', false);
+					}
+					tx_newspaper::insertRows('tx_newspaper_log', array(
+						'pid' => $fieldArray['pid'],
+						'tstamp' => time(),
+						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
+						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'table_name' => $table, 
+						'table_uid' => $id,
+						'action' => $action,
+						'comment' => ''
+					));
+				}
+				
+				/// check if auto log entry for change of workflow status should be written (article only)
+				if ($table == 'tx_newspaper_article' & isset($fieldArray['workflow_status']) && isset($_REQUEST['workflow_status_ORG'])) {
+					tx_newspaper::insertRows('tx_newspaper_log', array(
+						'pid' => $fieldArray['pid'],
+						'tstamp' => time(),
+						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
+						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'table_name' => $table, 
+						'table_uid' => $id,
+						'action' => tx_newspaper_BE::getWorkflowStatusActionTitle(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG'])),
+						'comment' => ''
+					));
+				}
+				
+				/// check if manual comment should be written (this log record should always be written last)
+				if (isset($_REQUEST['workflow_comment'])) {
+					tx_newspaper::insertRows('tx_newspaper_log', array(
+						'pid' => $fieldArray['pid'],
+						'tstamp' => time(),
+						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
+						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'table_name' => $table, 
+						'table_uid' => $id,
+						'action' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_user_entry', false),
+						'comment' => $_REQUEST['workflow_comment']
+					));
+				}
+
 			}
-			
 		}
 	}
 	
@@ -189,11 +246,8 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
 			return false;
-			
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
-		$fieldArray['modification_time'] = time();
 		return true; 
-
 	}
 
 
@@ -201,7 +255,7 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
 /// \todo: timestart - alle kombinationen abfangen!!!
 		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
-debug($fieldArray);
+//debug($fieldArray);
 			$fieldArray['publish_date'] = time(); // change publish_date
 			return true;
 		}

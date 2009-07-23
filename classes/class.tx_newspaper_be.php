@@ -196,7 +196,7 @@ class tx_newspaper_BE {
 //		try {
 //			$al_active = $s->getArticleList();	
 //		} catch (tx_newspaper_EmptyResultException $e) {
-//t3lib_div::devlog('remove try/catch later', 'newspaper', 0); /// \todo
+//t3lib_div::devlog('remove try/catch later', 'newspaper', 0);
 //			$al_active = null;
 //		};
 //
@@ -453,17 +453,21 @@ function findElementsByName(name, type) {
 		$workflow = intval($PA['row']['workflow_status']);
 
 		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
-		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" /><input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />' . $workflow;
+		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
+		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
+		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
 
 		// add javascript \todo: move to external file
 		$html .= '<script language="javascript" type="text/javascript">
-function changeWorkflowStatus(status) {
+function changeWorkflowStatus(status, hidden_status) {
 	status = parseInt(status);
+	hidden_status = parseInt(hidden_status);
 	if (status == 0 || status == 1 || status == 2) {
-		// valid status found
-		document.getElementById("workflow_status").value = status;
-		return false;	
+		document.getElementById("workflow_status").value = status; // valid status found
 	}
+	document.getElementById("hidden_status").value = hidden_status;
+//alert(document.getElementById("hidden_status").value);
+	return false;
 }
 </script>
 ';
@@ -490,52 +494,37 @@ function changeWorkflowStatus(status) {
 				$button['revise'] = $this->isButtonVisible('revise', $PA['fieldTSConfig']['revise']);
 				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
 			break;
-			case 2:
-				// no functionality right now; might take injunction button later ...
-			break;
+//			case 2:
+// 				might take injunction button later ...
+//			break;
 			default:
 				die('todo: throw exception unknown workflow status: ' . $workflow);
 		}
-//t3lib_div::devlog('button', 'newspaper', 0, $button);
-		$html .= $this->renderWorkflowButtons($hidden, $button, $hidden);
+//t3lib_div::devlog('button', 'newspaper', 0, array($hidden, $button));
+		$html .= $this->renderWorkflowButtons($hidden, $button);
 		
-		/// add workflow comment (using smarty)
+		/// add workflow comment field (using smarty)
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 
-		// add data rows
-//		self::$smarty->assign('DATA', $pagezone_type_data);
-
-		// add skinned icons
-//		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_activated_pagezone_in_section', false)));
-//		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_pagezone_in_section', false)));
-//		self::$smarty->assign('CLOSE_ICON', self::renderIcon('gfx/goback.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_close_pagezone_in_section', false)));
-//		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_pagezone_in_section', false)));
-
-
-		// add title and message
-//		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_pagezone_in_section', false));
-		
 		$html .= $smarty->fetch('workflow_comment.tmpl');
 
-		
 		return $html;
 	}
 
+	/// \param hidden
+	/// \param $button array stating (boolean) if the button for the various states should be displayed
 	private function renderWorkflowButtons($hidden, $button) {
 		GLOBAL $LANG;
 		
 		$content = '';
-//$content .= '<input width="16" type="image" height="16" title="Save document" src="sysext/t3skin/icons/gfx/savedok.gif" name="_savedok" class="c-inputButton"/> <input width="16" type="image" height="16" title="Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok" class="c-inputButton"/><br />';
-//$content .= ' <input width="16" type="image" height="16" title="CHECK: Save and close document" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" name="_saveandclosedok_CHECK" class="c-inputButton"/>';
-//$content .= '<input              name="_savedok_check"                width="16" type="image" height="16" title="Save document AND SEND TO CvD" src="sysext/t3skin/icons/gfx/savedok.gif" class="c-inputButton"/>';
 
 //t3lib_div::devlog('button', 'newspaper', 0, $button);	
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
 			$content .= $this->renderWorkflowButton(false, 'hide', $hidden);
 		} elseif ($hidden && $button['publish']) {
-			$content .= $content .= $this->renderWorkflowButton(false, 'publish', $hidden);
+			$content .= $this->renderWorkflowButton(false, 'publish', $hidden);
 		}
 		$content .= '<br />';
 		
@@ -562,12 +551,13 @@ function changeWorkflowStatus(status) {
 		return $content;
 	}
 	
-	
+	/// \param $new_status true indicates a workflow status change
 	private function renderWorkflowButton($new_status, $title, $hidden) {
+		$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
 		if ($new_status !== false) {
 			$js = 'changeWorkflowStatus(' . intval($new_status) . ', ' . $hidden . ')';
 		} else {
-			$js = 'changeWorkflowStatus(-1, -1)'; // new - workflow buttons aren't needed
+			$js = 'changeWorkflowStatus(-1, ' . $hidden . ')'; 
 		}
 		
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '" onclick="' . $js . '" ';
@@ -584,7 +574,7 @@ function changeWorkflowStatus(status) {
 
 	/// \param String $button (internal) name of button
 	/// \param String $be_groups uids of allowed be_groups (comma separated)
-	/// \return Boolean is be_user member of one of given be_groups
+	/// \return boolean is be_user member of one of given be_groups
 	private function isButtonVisible($button, $be_config) {
 //t3lib_div::devlog('button', 'newspaper', 0, array($GLOBALS['BE_USER'], $button, $be_config));
 		$be_group = explode(',', $be_config);
@@ -598,7 +588,7 @@ function changeWorkflowStatus(status) {
 	}
 
 
-	public static function getWorkflowActionTitle($new, $old) {
+	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
 /// \todo: in abhängigkeit von new und old einen string zurückgeben
@@ -620,7 +610,7 @@ function changeWorkflowStatus(status) {
 	 */
 	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false) {
 
-/// \to do: read width and height from file? or hardcode 16x16px?
+/// \todo: read width and height from file? or hardcode 16x16px?
 		$width = 16;
 		$height = 16;
 
