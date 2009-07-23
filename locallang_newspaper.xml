@@ -40,6 +40,11 @@
 			<label index="label_workflow_revise">Revise</label>
 			<label index="label_workflow_revise_hide">Revise &amp; hide</label>
 			<label index="label_workflow_revise_publish">Revise &amp; publish</label>
+			<label index="log_record_hidden">Record hidden</label>
+			<label index="log_record_published">Record published</label>
+			<label index="log_article_hidden">Article hidden</label>
+			<label index="log_article_published">Article published</label>
+			<label index="log_user_entry">User comment</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
