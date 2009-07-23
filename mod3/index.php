@@ -108,11 +108,12 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 	private function processExtraInsertAfter($origin_uid, $pz_uid, $paragraph=false) {
-		if ($paragraph == 'false') {
-			$paragraph = false;
-		} else {
-			$paragraph = intval($paragraph);
-		}
+/// \todo: remove if not needed
+//		if ($paragraph == 'false') {
+//			$paragraph = false;
+//		} else {
+//			$paragraph = intval($paragraph);
+//		}
 		
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', '');
@@ -122,9 +123,43 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 		$e->store();
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-		$pz->insertExtraAfter($e, $origin_uid);
+		$pz->insertExtraAfter($e, intval($origin_uid));
 		die();
 	}
+	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph) {
+		$origin_uid = intval($origin_uid);
+		$pooled_extra_uid = intval($pooled_extra_uid);
+		$pz_uid = intval($pz_uid);
+//		$paragraph = intval($paragraph); // \todo: needed???
+		
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create($pz_uid); // create pagezone or article
+
+		$e = new $extra_class($pooled_extra_uid);
+		$copied_extra = $e->duplicate();
+		$copied_extra->setAttribute('pool', false);
+		$copied_extra->store();	
+
+		$pz->insertExtraAfter($copied_extra, $origin_uid);
+
+		die();
+	}
+	private function processExtraInsertAfterFromPoolReference($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph) {
+		$origin_uid = intval($origin_uid);
+		$pooled_extra_uid = intval($pooled_extra_uid);
+		$pz_uid = intval($pz_uid);
+//		$paragraph = intval($paragraph); // \todo: needed???
+
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create($pz_uid); // create pagezone or article
+		
+		$abstract_uid = tx_newspaper_Extra::createExtraRecord($pooled_extra_uid, $extra_class, true); // true = force new record to be written
+		$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
+		
+		$pz->insertExtraAfter($e, $origin_uid);		
+
+		die();
+	}	
+	
+	
 	private function processExtraInsertAfterDummy($origin_uid, $pz_uid) {
 /// \todo: remove after testing
 		$e = new tx_newspaper_Extra_Image();
@@ -182,7 +217,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 
 	private function check4Ajax() {
-		// TODO check permissions
+		/// \todo: check permissions
 //t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		if (t3lib_div::_GP('toggle_show_levels_above') == 1) {
@@ -231,10 +266,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			die($this->getChoseExtraForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('new_at_top')));	
 		}
 		if (t3lib_div::_GP('chose_extra_from_pool') == 1) {
-			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra')));	
+			die($this->getChoseExtraFromPoolForm(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
 		}
 		
-		
+		if (t3lib_div::_GP('extra_insert_after_from_pool_copy') == 1) {
+			die($this->processExtraInsertAfterFromPoolCopy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
+		}
+		if (t3lib_div::_GP('extra_insert_after_from_pool_ref') == 1) {
+			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
+		}
 		
 		
 //t3lib_div::devlog('_request mod3 ajax - NO ajax found', 'newspaper', 0);		
@@ -313,10 +353,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 
-	private function getChoseExtraFromPoolForm($origin_uid, $classname) {
+	private function getChoseExtraFromPoolForm($origin_uid, $classname, $pz_uid, $paragraph) {
 		global $LANG;
 
-		$e = new $classname(); // het instance of concrete extra
+		$origin_uid = intval($origin_uid);
+		$pz_uid = intval($pz_uid);
+		$paragraph = intval($paragraph);
+
+
+		$e = new $classname(); // instance of a concrete extra
 		
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->backPath = $GLOBALS['BACK_PATH'];
@@ -337,9 +382,14 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 
 		$pooled = $e->getPooledExtras();
+		
 		$smarty->assign('EXTRA_POOLED', $pooled);
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
+		$smarty->assign('PARAGRAPH', $paragraph);
+		$smarty->assign('EXTRA_CLASS', $classname);
+		$smarty->assign('PZ_UID', $pz_uid);
+		$smarty->assign('ORIGIN_UID', $origin_uid);
 		$smarty->assign('LIST_SIZE', max(2, min(12, sizeof($pooled)))); /// size at least 2, otherwise list would be rendered as dropdown
 		
 		$html = $smarty->fetch('mod3_new_extra_from_pool.tmpl');
