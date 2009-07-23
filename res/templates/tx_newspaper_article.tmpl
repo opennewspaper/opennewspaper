@@ -9,14 +9,18 @@
    $author
    $text		the raw text as stored in the DB
    $paragraphs	array(
-					$paragraph_number => array(
+				  	$paragraph_number => array(
 		 				"text" => $text_of_paragraph,
-						"extras" => array(
-		  					$position => $rendered_extra,
-		  					...
-		 	 			)
-		  			),
-		  			...
+		    			"spacing" => {0, 1, 2, ...},	// fuer leere absaetze hinterm text
+		          		"extras" => array(
+							$position => array(
+        						"extra_name" => get_class(),
+	         					"content" => $rendered_extra
+    	   					),
+			 		 		...
+		 				)
+		 			),
+			 		...
 		  		)
    $template_set	template set used, if any
 *}
@@ -33,11 +37,19 @@
 				{if $paragraphs[i].text}
 					<p>{$paragraphs[i].text}</p>
 				{/if}
+
 				{if $paragraphs[i].extras}
 					{foreach from=$paragraphs[i].extras item=extra}
-						{$extra}
+						<div class="{$extra.extra_name}">
+							{$extra.content}
+						</div>
 					{/foreach}					
 				{/if}				
+
+				{if $paragraphs[i].spacing}
+					<p>{$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if}</p>
+				{/if}
+
 			{/section}
 		</ul>
 	{else}

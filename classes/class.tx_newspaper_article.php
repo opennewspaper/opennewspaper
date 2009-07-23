@@ -255,9 +255,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		 *  array(
 		 *  	$paragraph_number => array(
 		 * 			"text" => $text_of_paragraph,
+		 *    		"spacing" => {0, 1, 2, ...},             // fuer leere absaetze hinterm text
 		 *          "extras" => array(
-		 * 				$position => $rendered_extra,
-		 * 				...
+		 *				$position => array(
+         *					"extra_name" => get_class(),
+         * 					"content" => $rendered_extra
+       	 *				),
+		 * 		 		...
 		 * 			)
 		 * 		),
 		 * 		...
@@ -266,22 +270,32 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		 */
 		$text_paragraphs = $this->splitIntoParagraphs();
 		$paragraphs = array();
+		$spacing = 0;
 		foreach ($text_paragraphs as $index => $text_paragraph) {
 			$paragraph = array();
-			if ($text_paragraph) $paragraph['text'] = $text_paragraph;
-			foreach ($this->getExtras() as $extra) {
-				if ($extra->getAttribute('paragraph') == $index ||
-					sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
-					$paragraph['extras'][$extra->getAttribute('position')] .= $extra->render($template_set);
+			if ($text_paragraph) {
+				$paragraph['text'] = $text_paragraph;
+				$paragraph['spacing'] = intval($spacing);
+				$spacing = 0;
+				foreach ($this->getExtras() as $extra) {
+					if ($extra->getAttribute('paragraph') == $index ||
+						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
+						$paragraph['extras'][$extra->getAttribute('position')] = array();
+						$paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
+						$paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
+					}
 				}
+				/*  Braindead PHP does not sort arrays automatically, even if
+				 *  the keys are integers. So if you, e.g., insert first $a[4]
+				 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
+				 *  Thus, you must call ksort.
+				 */
+				if ($paragraph['extras']) ksort($paragraph['extras']);
+				$paragraphs[] = $paragraph;
+			} else {
+				//	empty paragraph, increase spacing value to next paragraph
+				$spacing++;
 			}
-			/*  Braindead PHP does not sort arrays automatically, even if
-			 *  the keys are integers. So if you, e.g., insert first $a[4]
-			 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
-			 *  Thus, you must call ksort.
-			 */
-			if ($paragraph['extras']) ksort($paragraph['extras']);
-			$paragraphs[] = $paragraph;
 		}
 			
 		/** Make sure all extras are rendered, even those whose 'paragraph'
