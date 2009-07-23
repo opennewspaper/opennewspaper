@@ -59,7 +59,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_image.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, template_set, title, image, caption",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, title, image, caption",
 	)
 );
 
@@ -174,7 +174,7 @@ $TCA["tx_newspaper_extra"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, extra_table, extra_uid, position, paragraph, origin_uid, is_inheritable, show_extra",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, extra_table, extra_uid, position, paragraph, origin_uid, is_inheritable, show_extra, gui_hidden, notes, template_set",
 	)
 );
 
@@ -196,7 +196,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_sectionlist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, template_set",
+		"fe_admin_fieldList" => "hidden, starttime, endtime",
 	)
 );
 
@@ -335,7 +335,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_typo3_ce.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, template_set, content_elements",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, content_elements",
 	)
 );
 
@@ -352,7 +352,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_articlelist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "description, articlelist, first_article, num_articles, template_set, template",
+		"fe_admin_fieldList" => "description, articlelist, first_article, num_articles, template",
 	)
 );
 
@@ -369,7 +369,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_textbox.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "template_set, title, text, pool",
+		"fe_admin_fieldList" => "title, text, pool",
 	)
 );
 
@@ -386,7 +386,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_externallinks.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "template_set, pool, title, links",
+		"fe_admin_fieldList" => "pool, title, links",
 	)
 );
 

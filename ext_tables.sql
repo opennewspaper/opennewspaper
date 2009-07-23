@@ -12,7 +12,6 @@ CREATE TABLE tx_newspaper_extra_image (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	title tinytext NOT NULL,
 	image blob NOT NULL,
 	caption tinytext NOT NULL,
@@ -218,6 +217,9 @@ CREATE TABLE tx_newspaper_extra (
 	origin_uid int(11) DEFAULT '0' NOT NULL,
 	is_inheritable tinyint(3) DEFAULT '0' NOT NULL,
 	show_extra tinyint(3) DEFAULT '0' NOT NULL,
+	gui_hidden tinyint(3) DEFAULT '0' NOT NULL,
+	notes text NOT NULL,
+	template_set tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -239,7 +241,6 @@ CREATE TABLE tx_newspaper_extra_sectionlist (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -391,7 +392,6 @@ CREATE TABLE tx_newspaper_extra_typo3_ce (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	content_elements blob NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -414,7 +414,6 @@ CREATE TABLE tx_newspaper_extra_articlelist (
 	articlelist blob NOT NULL,
 	first_article int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	template tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -433,7 +432,6 @@ CREATE TABLE tx_newspaper_extra_textbox (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	title tinytext NOT NULL,
 	text text NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
@@ -454,7 +452,6 @@ CREATE TABLE tx_newspaper_extra_externallinks (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	template_set tinytext NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	links blob NOT NULL,
