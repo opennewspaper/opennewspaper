@@ -540,20 +540,35 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
 	
+	/// Split the text into an array, one entry for each paragraph
+	/** The functionality of this function depends on the way the RTE stores
+	 *  line breaks. Currently it breaks the text at "<p>/</p>"-pairs and also
+	 *  at line breaks ("\n").
+	 * 
+	 *  \attention If the format of line breaks changes, this function must be
+	 * 	altered.
+	 */
 	protected function splitIntoParagraphs() {
 		/** A text usually starts with a <p>, in that case the first paragraph
 		 *  must be removed. It may not be the case though, if so, the first
 		 *  paragraph is meaningful and must be kept.
 		 */
-		$paragraphs = explode('<p', $this->getAttribute('text'));		
+		$temp_paragraphs = explode('<p', $this->getAttribute('text'));
+		$paragraphs = array();		
 		
-		foreach ($paragraphs as $index => $paragraph) {
+		foreach ($temp_paragraphs as $paragraph) {
 			/// remove the test of the <p>-tag from every line
-			$paragraphs[$index] = trim(substr($paragraph, strpos($paragraph, '>')+1));
+			$paragraph = trim(substr($paragraph, strpos($paragraph, '>')+1));
 			/** each paragraph now should end with a </p>. If it doesn't, the
 			 *  text is not well-formed. In any case, we must remove the </p>.
 			 */
-			$paragraphs[$index] = str_replace('</p>', '', $paragraphs[$index]);
+			$paragraph = str_replace('</p>', '', $paragraph);
+			
+			/// Now we split the paragraph at line breaks.
+			$sub_paragraphs = explode("\n", $paragraph);
+			
+			/// Store the pieces in one flat array
+			foreach($sub_paragraphs as $sub_paragraph) $paragraphs[] = $sub_paragraph;
 		}
 
 		return $paragraphs;	
