@@ -429,7 +429,7 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,title,kicker,teaser,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,inherits_from,publish_date,workflow_status,modification_user"
+		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,title,title_list,kicker,kicker_list,teaser,teaser_list,text,author,source_id,source_object,extras,sections,name,is_template,template_set,pagezonetype_id,inherits_from,publish_date,workflow_status,modification_user"
 	),
 	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
 	"columns" => array (
@@ -490,6 +490,14 @@ $TCA["tx_newspaper_article"] = array (
 				"eval" => "required",
 			)
 		),
+		"title_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title_list",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"kicker" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker",		
@@ -499,6 +507,14 @@ $TCA["tx_newspaper_article"] = array (
 				"eval" => "required",
 			)
 		),
+		"kicker_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker_list",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"teaser" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser",		
@@ -506,6 +522,14 @@ $TCA["tx_newspaper_article"] = array (
 				"type" => "text",
 				"cols" => "40",	
 				"rows" => "5",
+			)
+		),
+		"teaser_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser_list",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"text" => Array (		
@@ -718,7 +742,7 @@ $TCA["tx_newspaper_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, kicker;;;;3-3-3, teaser, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, inherits_from, publish_date, workflow_status, modification_user")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, title;;;;2-2-2, title_list;;;;3-3-3, kicker, kicker_list, teaser, teaser_list, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, inherits_from, publish_date, workflow_status, modification_user")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
