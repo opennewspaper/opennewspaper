@@ -310,7 +310,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			}
 		}
 
-t3lib_div::devlog('$paragraphs', 'newspaper', 0. $paragraphs);
+t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 		$this->smarty->assign('paragraphs', $paragraphs);
 		$ret = $this->smarty->fetch($this);
 
