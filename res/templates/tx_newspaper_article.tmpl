@@ -6,15 +6,18 @@
    $kicker
    $title
    $teaser
+   $kicker_list	kicker displayed in list view of article, if different
+   $title_list	title displayed in list view of article, if different
+   $teaser_list	teaser displayed in list view of article, if different
    $author
    $text		the raw text as stored in the DB
    $paragraphs	array(
 				  	$paragraph_number => array(
 		 				"text" => $text_of_paragraph,
-		    			"spacing" => {0, 1, 2, ...},	// fuer leere absaetze hinterm text
+		    			"spacing" => $number_of_empty_paragraphs_before_this,
 		          		"extras" => array(
 							$position => array(
-        						"extra_name" => get_class(),
+        						"extra_name" => $class_of_extra,
 	         					"content" => $rendered_extra
     	   					),
 			 		 		...
@@ -33,6 +36,13 @@
 <p> 
 	{if $paragraphs}
 		{section name=i loop=$paragraphs}
+			{if $paragraphs[i].spacing}
+				{*  You might want this information to display a slightly larger
+				   	spacing below the previous paragraph... writing a HTML
+				   	comment instead is a bogus example. *}
+				<!-- {$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if} -->
+			{/if}
+
 			{if $paragraphs[i].text}
 				<p>{$paragraphs[i].text}</p>
 			{/if}
@@ -44,10 +54,6 @@
 					</div>
 				{/foreach}					
 			{/if}				
-
-			{if $paragraphs[i].spacing}
-				<p>{$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if}</p>
-			{/if}
 
 		{/section}
 	{else}
