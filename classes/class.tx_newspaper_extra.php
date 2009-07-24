@@ -113,6 +113,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				$this->smarty->setPageZoneType($this->getPageZone());
 			}
 		}
+		$this->smarty->assign('attributes', $this->attributes);
+		$this->smarty->assign('extra_attributes', $this->extra_attributes);
 	}
 	
 	/// \todo remove before launch
