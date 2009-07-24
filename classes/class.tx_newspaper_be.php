@@ -111,7 +111,8 @@ class tx_newspaper_BE {
 		$page_type_data = array(); // to collect information for be rendering
 
 		// add data to active page types
-		foreach(tx_newspaper_Page::getActivePages(new tx_newspaper_Section($section_uid)) as $active_page) {
+		$section = new tx_newspaper_Section($section_uid);
+		foreach($section->getActivePages() as $active_page) {
 			for ($i = 0; $i < sizeof($page_type); $i++) {
 				if ($page_type[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
 					$page_type_data[$i]['ACTIVE'] = true;
