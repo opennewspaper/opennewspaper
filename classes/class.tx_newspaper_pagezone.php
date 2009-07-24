@@ -850,13 +850,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         		try {
 					//  assembling the query manually here cuz we want to ignore enable fields
 					$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-						'deleted', 
+						'deleted, gui_hidden', 
 						tx_newspaper_Extra_Factory::getExtraTable(),
 						'uid = ' . $uid['uid_foreign']);
 					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			
 			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-					if (!$deleted['deleted']) {
+					if (!$deleted['deleted'] && !$deleted['gui_hidden']) {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
