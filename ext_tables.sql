@@ -503,6 +503,78 @@ CREATE TABLE tx_newspaper_extra_displayarticles (
 
 
 
+
+#
+# Table structure for table 'tx_newspaper_articlelist_manual_articles_mm'
+# 
+#
+CREATE TABLE tx_newspaper_articlelist_manual_articles_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_articlelist_manual'
+#
+CREATE TABLE tx_newspaper_articlelist_manual (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	articles int(11) DEFAULT '0' NOT NULL,
+	sql_condition tinytext NOT NULL,
+	sql_order_by tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+
+#
+# Table structure for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
+# 
+#
+CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_articlelist_semiautomatic'
+#
+CREATE TABLE tx_newspaper_articlelist_semiautomatic (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	articles int(11) DEFAULT '0' NOT NULL,
+	sql_condition tinytext NOT NULL,
+	sql_order_by tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
 #
 # Table structure for table 'tt_content'
 #

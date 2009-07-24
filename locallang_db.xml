@@ -73,7 +73,7 @@
 			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID of the list</label>
 			<label index="tx_newspaper_articlelist.section_id">ID of associated Section</label>
-			<label index="tx_newspaper_articlelist_auto">Automatically filled list of articles</label>
+			<label index="tx_newspaper_articlelist_auto">Article list: Automatic</label>
 			<label index="tx_newspaper_pagetype">Page type</label>
 			<label index="tx_newspaper_pagetype.type_name">Type name</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Path name for Smarty templates</label>
@@ -118,6 +118,14 @@
 			<label index="tx_newspaper_externallinks.target">Link target</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Display articles</label>
 			<label index="tx_newspaper_extra_displayarticles.todo">To do: find a better solution ;-)</label>
+			<label index="tx_newspaper_articlelist_manual">Article List: Manual</label>
+			<label index="tx_newspaper_articlelist_manual.articles">Articles</label>
+			<label index="tx_newspaper_articlelist_manual.sql_condition">SQL Condition for pre-selecting articles</label>
+			<label index="tx_newspaper_articlelist_manual.sql_order_by">SQL expression for ordering pre-selected articles</label>
+			<label index="tx_newspaper_articlelist_semiautomatic">Article List: Semiautomatic</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.articles">Articles</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.sql_condition">SQL Condition for listed Articles</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.sql_order_by">SQL expression to sort listed articles</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -190,7 +198,7 @@
 			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID der Liste</label>
 			<label index="tx_newspaper_articlelist.section_id">ID des zugehörigen Ressorts</label>
-			<label index="tx_newspaper_articlelist_auto">Automatisch bestückte Artikelliste</label>
+			<label index="tx_newspaper_articlelist_auto">Artikelliste: Automatisch</label>
 			<label index="tx_newspaper_pagetype">Seitentyp</label>
 			<label index="tx_newspaper_pagetype.type_name">Typname</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Pathname für Smarty-Templates</label>
@@ -235,6 +243,14 @@
 			<label index="tx_newspaper_externallinks.target">Linkziel</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Artikelanzeige</label>
 			<label index="tx_newspaper_extra_displayarticles.todo">To do: bessere Lösung finden ;-)</label>
+			<label index="tx_newspaper_articlelist_manual">Artikelliste: Manuell</label>
+			<label index="tx_newspaper_articlelist_manual.articles">Artikel</label>
+			<label index="tx_newspaper_articlelist_manual.sql_condition">SQL-Bedingung zur Vorauswahl der Artikel</label>
+			<label index="tx_newspaper_articlelist_manual.sql_order_by">SQL-Ausdruck zum Sortieren der vorausgewählten Artikel</label>
+			<label index="tx_newspaper_articlelist_semiautomatic">Artikelliste: Halbautomatisch</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.articles">Artikel</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.sql_condition">SQL-Bedingung für aufgelistete Artikel</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.sql_order_by">SQL-Ausdruck zum Sortieren aufgelisteter Artikel</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

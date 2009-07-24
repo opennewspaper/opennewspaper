@@ -1685,5 +1685,99 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_articlelist_manual"] = array (
+	"ctrl" => $TCA["tx_newspaper_articlelist_manual"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "articles,sql_condition,sql_order_by"
+	),
+	"feInterface" => $TCA["tx_newspaper_articlelist_manual"]["feInterface"],
+	"columns" => array (
+		"articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.articles",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,	
+				"MM" => "tx_newspaper_articlelist_manual_articles_mm",
+			)
+		),
+		"sql_condition" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.sql_condition",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.sql_order_by",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
+
+
+
+$TCA["tx_newspaper_articlelist_semiautomatic"] = array (
+	"ctrl" => $TCA["tx_newspaper_articlelist_semiautomatic"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "articles,sql_condition,sql_order_by"
+	),
+	"feInterface" => $TCA["tx_newspaper_articlelist_semiautomatic"]["feInterface"],
+	"columns" => array (
+		"articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,	
+				"MM" => "tx_newspaper_articlelist_semiautomatic_articles_mm",
+			)
+		),
+		"sql_condition" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.sql_condition",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.sql_order_by",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
