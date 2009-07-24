@@ -26,6 +26,8 @@
 			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
+			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
+			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
 			<label index="title_tx_newspaper_section">Section</label>
 			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
 			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
@@ -49,6 +51,8 @@
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
+			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
+			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 		</languageKey>
 	</data>
