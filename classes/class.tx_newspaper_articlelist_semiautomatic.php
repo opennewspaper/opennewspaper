@@ -32,41 +32,20 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
 /// A list of tx_newspaper_Article s
-class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
+class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
 		
-		if (!$this->section instanceof tx_newspaper_Section) {
-			throw new tx_newspaper_InconsistencyException('articlelist_auto needs a section object: \'' . $this->section . '\'');
-		}
 		$articles = array();
-		$results = tx_newspaper::selectMMQuery(
-				'tx_newspaper_article.uid',
-				'tx_newspaper_article',
-				'tx_newspaper_article_sections_mm',
-				'tx_newspaper_section',
-				' AND tx_newspaper_article_sections_mm.uid_foreign = ' . intval($this->section->getAttribute('uid')) .
-				' AND NOT tx_newspaper_article.is_template',
-				'',
-				'',
-				"$start, $number"
-		);
 
-		foreach ($results as $row) {
-			$articles[] = new tx_newspaper_Article($row['uid']);
-		}
 		return $articles;
 	}
 	
-	public function setSection(tx_newspaper_Section $section) {
-		$this->section = $section;
-	}
+	static public function getModuleName() { return 'np_al_semiauto'; }
 	
-	static public function getModuleName() { return 'np_al_auto'; }
-	
-	static protected $table = 'tx_newspaper_articlelist_auto';	///< SQL table for persistence
+	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
 }
 
-tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Auto());
+tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Semiautomatic());
 
 ?>
