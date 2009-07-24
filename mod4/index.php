@@ -350,7 +350,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	}
 
 	/// searches for extras which don't belong to either a pagezone or an article
-	static function checkOrphanedExtras() {		
+	static function checkOrphanedExtras() {
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_extra',
@@ -376,6 +376,25 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 					t3lib_div::view_array ($concrete) . '<br />';
 		}
 		
+		return $msg;
+	}
+	
+	static function checkLinksToDeletedExtras() {
+		$row = tx_newspaper::selectRows(
+			'*',
+			'tx_newspaper_extra
+			 INNER JOIN tx_newspaper_pagezone_page_extras_mm 
+			 ON tx_newspaper_extra.uid = tx_newspaper_pagezone_page_extras_mm.uid_foreign',
+			'tx_newspaper_extra.deleted',
+			 '', 'uid'
+		);
+		if (!$row) return true; // no problems found
+
+		$msg = sizeof($row) . ' problems found.<br />';
+		for($i = 0; $i < sizeof($row); $i++) {
+			// ...
+		}
+
 		return $msg;
 	}
 
