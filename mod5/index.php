@@ -246,7 +246,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_article',
-			'1',
+			'NOT is_template AND NOT deleted',
 			'',
 			'tstamp DESC',
 			'10'
