@@ -861,12 +861,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
 					} else {
-						/// \todo remove association table entry
+						/// \todo remove association table entry, but only if really deleted
 #						t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': deleted!');
 					}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
-					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult!');
+					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
         		}
         	}
 		} 
