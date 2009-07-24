@@ -90,7 +90,11 @@ class tx_newspaper_PageZone_Factory {
 		$pagezone->setPageZoneType($type);
 		
 		///	copy Extras from appropriate page zone
-		$pagezone->copyExtrasFrom($pagezone->getParentForPlacement());
+		/** \todo make this work. currently a WrongAttributeException is thrown
+		 *  because the attributes array is empty at this time. probably just
+		 *  move this line to after store().
+		 */
+#		$pagezone->copyExtrasFrom($pagezone->getParentForPlacement());
 		
 		$pagezone->store();
 		
