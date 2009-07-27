@@ -3,32 +3,55 @@
 class tx_newspaper_SaveHook {
 
 
-	/// tceform hooks (well, those aren't really save hooks ...)
+
+
+
+
+/// tceform hooks (well, those aren't really save hooks ...)
 
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
 //t3lib_div::devlog('sh pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
+	/// the checkbox is_article in pagezonetype can't be unchecked later!
+	/** \param string $table table name in hook
+	 *  \param string $field name of single field currently processed in hook 
+	 *  \param array $row data to be written
+	 *  \return void 
+	 */
+	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {
+		if ($table == 'tx_newspaper_pagezonetype' && $field == 'is_article' && $row['is_article'] == 1) {
+			t3lib_div::loadTCA($table); // Make sure full $TCA array for table 'tx_newspaper_pagezonetype' is loaded
+			// once the checkbox is checked, it can't be undone!
+			unset($GLOBALS['TCA'][$table]['columns']['is_article']['config']['type']);
+			$GLOBALS['TCA'][$table]['columns']['is_article']['config']['type'] = 'none';
+		}
+	}
 
 
-	/// save hook: new and update
+
+
+
+
+
+
+
+
+/// save hook: new and update
 
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 
-// move to writesLog check
+// \todo: move to writesLog check ???
 		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
-//		$this->checkIfWorkflowCommentIsToBeStored($incomingFieldArray, $table, $id, $_REQUEST);
 	}
 
 	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
-t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
-		
+//t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
 		if (isset($request['hidden_status']) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$incomingFieldArray['hidden'] = $request['hidden_status'];
 		}
-	
 		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
 			return; // value not set, so can't decide if the status changed 
 		if ($request['workflow_status'] == $request['workflow_status_ORG'])
@@ -36,43 +59,8 @@ t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, 
 		$incomingFieldArray['workflow_status'] = $request['workflow_status']; // change workflow status
 	}
 
-//	private function checkIfWorkflowCommentIsToBeStored(&$incomingFieldArray, $table, $id, $request) {
-//		if ($table != 'tx_newspaper_article')
-//			return;
-//		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
-//			return;
-//
-/// ... log entry schreiben ...
-/// uid, pid, tstamp, crdate (raus), cruser_id, table_name, table_uid, be_user (raus), action, comment
-//	}
 
 
-	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
-		$pzt = new tx_newspaper_PageZoneType(); 
-		if  ($table == $pzt->getTable() && 
-			isset($fieldArray['is_article']) && 
-			$fieldArray['is_article'] == 1 &&
-			($status = 'new' || $status == 'update')
-		) {
-			/// make sure no other page zone type with is_article flag set exists
-			$sf = tx_newspaper_Sysfolder::getInstance();
-			$pid = $sf->getPid($pzt);
-			$where = 'pid=' . $pid . ' AND deleted=0 AND is_article=1';
-			if ($status != 'new') { /// no uid if new record (NEW49b018c614878)
-				$where .= ' AND uid !=' . $id; 				
-			}
-			$row = tx_newspaper::selectRows(
-				'uid, type_name',
-				$pzt->getTable(),
-				$where
-			);
-#t3lib_div::devlog('pzt: is_article', 'newspaper', 0, array('pid' => $pzt->getTable(), 'where' => $where, 'row' => $row));
-			if (count($row) > 0) {
-				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
-			}
-		}
-	}
-		
 
 
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
@@ -107,10 +95,10 @@ t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, 
 
 			/// check if a newspaper record action should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
-t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fieldArray, $_REQUEST));
-/// \todo: move to function
+				
+/// \todo: move to function - move to log class?
 
-				/// checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
+				/// IMPORTANT: checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
 				
 				/// check if auto log entry for hiding/publishing newspaper record should be written
 				if (isset($fieldArray['hidden'])) {
@@ -162,9 +150,82 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 			}
 		}
 	}
-	
-	
-	/// save hook: delete
+
+	/// add modification user and modification time when updating tx_newspaper_article
+	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
+		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
+			return false;
+		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
+		return true; 
+	}
+
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
+	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+/// \todo: timestart - alle kombinationen abfangen!!!
+		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
+//debug($fieldArray);
+			$fieldArray['publish_date'] = time(); // change publish_date
+			return true;
+		}
+		return false; // publish_date remained unchanged
+	}
+
+	private function checkArticleListChangedInSection(array &$fieldArray, $table, $id) {
+		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
+		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
+t3lib_div::devlog('al1 fiealdArray[al]', 'np', 0, array($fieldArray, $table, $id));
+		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
+			$al = new $fieldArray['articlelist'](); // create new article list
+			if ($al instanceof tx_newspaper_articlelist) {
+t3lib_div::devlog('al 2 instanceof al', 'np', 0);
+
+				// delete all (abstract) article lists assigned to this section, before writing the new one
+				tx_newspaper::updateRows(
+					'tx_newspaper_articlelist',
+					'section_id=' . $id,
+					array('deleted' => 1)
+				);
+
+				// articlelist was changed to another valid articlelist type, so store new abstract article list
+				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
+				$new_al->store();
+ 				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list; will be stored in section
+
+			}
+		}
+	}
+
+	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
+		$pzt = new tx_newspaper_PageZoneType(); 
+		if  ($table == $pzt->getTable() && 
+			isset($fieldArray['is_article']) && 
+			$fieldArray['is_article'] == 1 &&
+			($status = 'new' || $status == 'update')
+		) {
+			/// make sure no other page zone type with is_article flag set exists
+			$sf = tx_newspaper_Sysfolder::getInstance();
+			$pid = $sf->getPid($pzt);
+			$where = 'pid=' . $pid . ' AND deleted=0 AND is_article=1';
+			if ($status != 'new') { /// no uid if new record (NEW49b018c614878)
+				$where .= ' AND uid !=' . $id; 				
+			}
+			$row = tx_newspaper::selectRows(
+				'uid, type_name',
+				$pzt->getTable(),
+				$where
+			);
+#t3lib_div::devlog('pzt: is_article', 'newspaper', 0, array('pid' => $pzt->getTable(), 'where' => $where, 'row' => $row));
+			if (count($row) > 0) {
+				die('Fatal error: Only one page zone type can have the "is article" flag set. You change was not saved.<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
+			}
+		}
+	}
+
+
+
+
+
+/// save hook: delete
 	
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array($command, $id, $value));
@@ -222,57 +283,40 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 			}
 		}
 
-
 /// \todo: check if articles are assigned to section
 /// \todo: check if pages are assigned to section
 		
-		
-		
 	}
+
+
+
+
 
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray)); // , $_REQUEST
 //t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
 				
-		/// If a new section has been created, create default article list
+		/// If a new section has been created ...
 		$this->addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that);
+		$this->copyPlacementIfNewSection($status, $table, $id, $fieldArray, $that);
 		
+		/// if a new extra was placed on a pagezone, write abstract record
 		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 	}
 
-
-
-	/// add modification user and modification time when updating tx_newspaper_article
-	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
-		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
-			return false;
-		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
-		return true; 
+	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
+			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
+			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
+			$al->store();
+		} 
 	}
-
-
-	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
-	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-/// \todo: timestart - alle kombinationen abfangen!!!
-		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
-//debug($fieldArray);
-			$fieldArray['publish_date'] = time(); // change publish_date
-			return true;
-		}
-		return false; // publish_date remained unchanged
+	private function copyPlacementIfNewSection($status, $table, $id, $fieldArray, $that) {
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
+			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
+/// \todo: $this->newSection($id, $fieldArray); /// copy placement ...
+		} 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
 /// \todo: explain in detail what's happening here!
@@ -301,79 +345,18 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 
-
 			$pz->insertExtraAfter($e, $after_origin_uid); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
 			
 			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
-				// set paragraph la
+				// set paragraph
 				$pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
 			} else {
-				$e->store(); // call store() only if changeExtraParagraph() wasn't called
+				$e->store(); // call store() only if changeExtraParagraph() wasn't called (see above)
 			}
 
 		}
 	}
 
-
-	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
-		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
-			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
-			$al->store();
-/// \todo: $this->newSection($id, $fieldArray); /// copy placement ...
-		} 
-	}
-
-
-	private function checkArticleListChangedInSection(array &$fieldArray, $table, $id) {
-		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
-		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
-
-		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
-			$al = new $fieldArray['articlelist']();
-			if ($al instanceof tx_newspaper_articlelist) {
-				// so articlelist was changed to another valid articlelist type
-				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
-				$new_al->store();
-				// delete all other article lists assigned to this section
-				tx_newspaper::updateRows(
-					'tx_newspaper_articlelist',
-					'section_id=' . $id . ' AND list_table<>"' . $new_al->getTable() . '"',
-					array('deleted' => 1)
-				);
-
- 				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list
-			}
-		}
-	}
-
-
-
-
-
-
-
-
-	
-	
-	
-	/// the checkbox is_article in pagezonetype can't be unchecked later!
-	/** \param string $table table name in hook
-	 *  \param string $field name of single field currently processed in hook 
-	 *  \param array $row data to be written
-
-	 *  \return void 
-	 */
-	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {
-		$obj = new tx_newspaper_PageZoneType();
-		if ($table == $obj->getTable() && $field == 'is_article' && $row['is_article'] == 1) {
-			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
-			/// if field 'normalized_name' is filled, just display the value, but the value can't be edited
-			unset($GLOBALS['TCA'][$table]['columns']['is_article']['config']['type']);
-			$GLOBALS['TCA'][$table]['columns']['is_article']['config']['type'] = 'none';
-		}
-	}
-	
 	
 	
 	/// check if a UNIQUE normlized_name was already entered - if yes, display value as non-editable field
@@ -383,6 +366,8 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 	 *  \param tx_newspaper_StoredObject object type to check
 	 *  \return void 
 	 */
+/*
+\todo: still needed?
 	private function checkNormalizedNameUniqueField($table, $field, $row, tx_newspaper_StoredObject $obj) {
 		if ($table == $obj->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
 			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
@@ -391,6 +376,7 @@ t3lib_div::devlog('writes log', 'newspaper', 0, array($status, $table, $id, $fie
 			$GLOBALS['TCA'][$table]['columns']['normalized_name']['config']['type'] = 'none';
 		}
 	}
+*/
 	
 	
 	
