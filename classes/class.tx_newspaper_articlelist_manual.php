@@ -36,6 +36,20 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {		
 		$articles = array(new tx_newspaper_Article(81), new tx_newspaper_Article(84), new tx_newspaper_Article(85));
+		
+		$results = tx_newspaper::selectMMQuery(
+				'tx_newspaper_article.uid',
+				'tx_newspaper_articlelist_manual',
+				'tx_newspaper_articlelist_manual_articles_mm',
+				'tx_newspaper_article',
+				' AND tx_newspaper_articlelist_manual_articles_mm.uid_foreign = ' . intval($this->getAttribute('uid')),
+				'',
+				'tx_newspaper_articlelist_manual_articles_mm.sorting DESC',
+				"$start, $number"
+		);
+		t3lib_div::devlog('MM query', 'newspaper', 0, tx_newspaper::$query);
+		t3lib_div::devlog('MM query result', 'newspaper', 0, $result);
+				
 		return $articles;
 	}
 	
