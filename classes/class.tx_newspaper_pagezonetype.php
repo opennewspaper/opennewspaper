@@ -113,7 +113,7 @@ class tx_newspaper_PageZoneType implements tx_newspaper_StoredObject {
 			$pzt->getTable(),
 			'deleted=0 AND pid=' . $sf->getPid($pzt) 
 		);
-t3lib_div::devlog('gapzt row', 'newspaper', 0, $row);
+//t3lib_div::devlog('gapzt row', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new tx_newspaper_PageZoneType(intval($row[$i]['uid']));
