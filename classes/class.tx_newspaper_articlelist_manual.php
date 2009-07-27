@@ -43,8 +43,6 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 				'sorting ASC',
 				"$start, $number"
 		);
-		t3lib_div::devlog('MM query', 'newspaper', 0, tx_newspaper::$query);
-		t3lib_div::devlog('MM query result', 'newspaper', 0, $results);
 		
 		$articles = array();
 		foreach ($results as $row) {
