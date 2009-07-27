@@ -509,7 +509,15 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 			);
 		}
 		$section = $this->getPrimarySection();
-		$typo3page = $section->getTypo3PageID();
+		if (!$section instanceof tx_newspaper_Section) {
+			throw new tx_newspaper_NotYetImplementedException(
+				'Links to articles with no primary section'
+			);
+			
+		}
+		else {
+			$typo3page = $section->getTypo3PageID();	
+		}
 		
 		return tx_newspaper::typolink_url(
 			array(
