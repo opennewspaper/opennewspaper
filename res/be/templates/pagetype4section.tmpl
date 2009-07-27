@@ -1,3 +1,4 @@
+{* debug *}
 {*
 	$TITLE
 	$AJAX_CALL
@@ -8,18 +9,33 @@
 	$DELETE_ICON
 *}
 
+{*
 {if $AJAX_CALL}
+*}
 <script language="javascript" src="../typo3conf/ext/newspaper/res/be/pagetype_pagezonetype_4section.js"> </script>
-<div id="pagetype_pagezone">
+<div id="pagetype_pagezonetype">
+{*
 {/if}
+*}
 {if $TITLE}{$TITLE}<br />{/if}
 {section name=i loop=$DATA}
 {if $DATA[i].ACTIVE == 1}
-	<a href="{$DATA[i].AJAX_URL}">{$EDIT_ICON}</a> {$DATA[i].type_name} <a href="{$DATA[i].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
+	{$OK_ICON} <strong>{$DATA[i].type_name}</strong> <a href="{$DATA[i].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
+	<div style="margin-bottom: 10px; margin-left: 30px;">
+	{section name=j loop=$DATA[i].pagezones}
+		{if $DATA[i].pagezones[j].ACTIVE == 1}
+			{$OK_ICON} {$DATA[i].pagezones[j].type_name} <a href="{$DATA[i].pagezones[j].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
+		{else}
+			<a href="{$DATA[i].pagezones[j].AJAX_ACTIVATE_URL}">{$ADD_ICON}</a> {$DATA[i].pagezones[j].type_name}<br />
+		{/if}
+	{/section}
+	</div>
 {else}
-	<a href="{$DATA[i].AJAX_URL}">{$ADD_ICON}</a> {$DATA[i].type_name}<br />
+	<a href="{$DATA[i].AJAX_ACTIVATE_URL}">{$ADD_ICON}</a> <strong>{$DATA[i].type_name}</strong><br />
 {/if}
 {/section}
+{*
 {if $AJAX_CALL}
 </div>
 {/if}
+*}

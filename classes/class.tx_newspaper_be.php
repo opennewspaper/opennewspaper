@@ -22,118 +22,75 @@ class tx_newspaper_BE {
 	
 	private static $backend_files_added = false; // are js/css files added for backend
 
-	public static function renderPageZoneList($PA, $fObj=null) {
-		global $LANG;
-#t3lib_div::devlog('pa in index.rPZL', 'newspaper', 0, $PA);		
-
-		if (!isset($PA['SECTION'])) {
-			t3lib_div::devlog('renderPZL: no section', 'newspaper', 3, $PA); exit(); /// \todo replace with exception
-		}
-		$section_uid = $PA['SECTION'];
-
-		$pagezone_type = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page  zone type objects
-
-		$pagezone_type_data = array(); // to collect information for rendering
-
-		$page_uid = $PA['row']['uid'];
-		$p = new tx_newspaper_Page(intval($page_uid));
-#t3lib_div::debug($p);
-		// add data to active pagezone types
-		foreach($p->getActivePageZones() as $active_pagezone) {
-#t3lib_div::debug($active_pagezone);
-#t3lib_div::devlog('gapz uid', 'newspaper', 0, $active_pagezone->getUid());
-			/// get page zone type id for this active page
-			for ($i = 0; $i < sizeof($pagezone_type); $i++) {
-				if ($pagezone_type[$i]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
-					$pagezone_type_data[$i]['ACTIVE'] = true;
-					$pagezone_type_data[$i]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
-#t3lib_div::devlog('gapz abstract uid 3', 'newspaper', 0, $active_pagezone->getAbtractUid());
-					$pagezone_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $page_uid . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
-					break;
-				}
-			}
-		}
-
-		// add ajax call to each row
-		for ($i = 0; $i < sizeof($pagezone_type); $i++) {
-			$pagezone_type_data[$i]['type_name'] = $pagezone_type[$i]->getAttribute('type_name');
-			// no edit icon needed - nothing to edit here
-			if (!isset($pagezone_type_data[$i]['ACTIVE'])) {
-				$pagezone_type_data[$i]['ACTIVE'] = false;
-				$pagezone_type_data[$i]['AJAX_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $page_uid . ', ' . $pagezone_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_pagezone_in_page', false)) . '\');';
-			}
-		}
-#t3lib_div::devlog('pzt ajax inserted', 'newspaper', 0, $pagezone_type_data);
-
-		/// generate be html code using smarty
- 		self::$smarty = new tx_newspaper_Smarty();
-		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
-
-		// add data rows
-		self::$smarty->assign('DATA', $pagezone_type_data);
-
-		// add skinned icons
-		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_activated_pagezone_in_section', false)));
-		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_pagezone_in_section', false)));
-		self::$smarty->assign('CLOSE_ICON', self::renderIcon('gfx/goback.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_close_pagezone_in_section', false)));
-		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_pagezone_in_section', false)));
 
 
-		// add title and message
-		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_pagezone_in_section', false));
-		
-		self::$smarty->assign('AJAX_RETURN_URL', 'javascript:listPages(' . $section_uid . ');');
-		self::$smarty->assign('RETURN_TO_PAGETYPES', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_close_pagezone_in_section', false));
 
-		$html = self::$smarty->fetch('pagezonetype4section.tmpl');
 
-		return $html;
-	}
-	
-	
-	
-	
-	/// render list of pages for section backend
+	/// backend: render list of pages and pagezones for section
 	/// either called by userfunc in be or ajax
-	public static function renderPageList($PA, $fObj=null) {
+	public static function renderPagePageZoneList($PA, $fObj=null) {
 		global $LANG;
-#t3lib_div::devlog('rpl pa', 'newspaper', 0, $PA);
-
+//t3lib_div::devlog('render ppzlist $pa', 'np', 0, $PA);
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_page', false);
 		}
 		$section_uid = intval($PA['row']['uid']);
-#t3lib_div::devlog('rpl section id', 'newspaper', 0, $section_uid);
 		
-		$page_type = tx_newspaper_PageType::getAvailablePageTypes();
+		$page_types = tx_newspaper_PageType::getAvailablePageTypes(); // get page type objects
+		$pagezone_types = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page zone type objects
+		
+		$data = array(); // information for be rendering
 
-		$page_type_data = array(); // to collect information for be rendering
-
-		// add data to active page types
+		// add data for ACTIVE page types
 		$section = new tx_newspaper_Section($section_uid);
 		foreach($section->getActivePages() as $active_page) {
-			for ($i = 0; $i < sizeof($page_type); $i++) {
-				if ($page_type[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
-					$page_type_data[$i]['ACTIVE'] = true;
-					$page_type_data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
-					$page_type_data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+			for ($i = 0; $i < sizeof($page_types); $i++) {
+				if ($page_types[$i]->getUid() == $active_page->getAttribute('pagetype_id')) {
+					// active page type found
+					$data[$i]['ACTIVE'] = true;
+					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
+					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
 					break;
 				}
 			}
 		}
 
-		// add ajax call to each row
-		for ($i = 0; $i < sizeof($page_type); $i++) {
-			$page_type_data[$i]['type_name'] = $page_type[$i]->getAttribute('type_name');
-			if (isset($page_type_data[$i]['ACTIVE'])) {
-				$page_type_data[$i]['AJAX_URL'] = 'javascript:editActivePage(' . $section_uid . ' , ' . $page_type_data[$i]['ACTIVE_PAGE_ID'] . ');';
+		// add delete ajax call to each activated page, add activate ajax call to each non-activated page
+		// add delete ajax call to each activated pagezone, add activate ajax call to each non-activated pagezone 
+		// and add page type name
+		for ($i = 0; $i < sizeof($page_types); $i++) {
+			$data[$i]['type_name'] = $page_types[$i]->getAttribute('type_name');
+			if (isset($data[$i]['ACTIVE']) && $data[$i]['ACTIVE'] == true) {
+				// page is activated, so add pagezone list
+				$p = new tx_newspaper_Page(intval($data[$i]['ACTIVE_PAGE_ID']));
+				foreach($p->getActivePageZones() as $active_pagezone) {
+					/// get ACTIVE page zone type id for ACTIVE page in loop
+					for ($j = 0; $j < sizeof($pagezone_types); $j++) {
+						if ($pagezone_types[$j]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
+							// active pagezone type found
+							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
+							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
+							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+							break;
+						}
+					}
+				}
+				// add ajax call to each non-activated pagezone type (and add pagezone type name)
+				for ($j = 0; $j < sizeof($pagezone_types); $j++) {
+					$data[$i]['pagezones'][$j]['type_name'] = $pagezone_types[$j]->getAttribute('type_name');
+					if (!isset($data[$i]['pagezones'][$j]['ACTIVE'])) {
+						$data[$i]['pagezones'][$j]['ACTIVE'] = false;
+						$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_pagezone_in_page', false)) . '\');';
+					}
+				}
 			} else {
-				$page_type_data[$i]['ACTIVE'] = false;
-				$page_type_data[$i]['AJAX_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_type[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_page_in_section', false)) . '\');';
+				// not active, so no pagezones
+				$data[$i]['ACTIVE'] = false;
+				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_types[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_page_in_section', false)) . '\');';
 			}
 		}
-
+//t3lib_div::devlog('data apz', 'np', 0, $data);
 		/// generate be html code using smarty 
  		self::$smarty = new tx_newspaper_Smarty();
 		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
@@ -142,13 +99,15 @@ class tx_newspaper_BE {
 		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_page_in_section', false)));
 		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_page_in_section', false)));
 		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_page_in_section', false)));
+		self::$smarty->assign('CLEAR_ICON', self::renderIcon('', '', '', '', true));
+		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', ''));
 		
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_page_in_section', false));
 
 		/// add data rows
-		self::$smarty->assign('DATA', $page_type_data);
+		self::$smarty->assign('DATA', $data);
 		
 		$html = '';
 		if (!$PA['AJAX_CALL']) {
@@ -161,7 +120,12 @@ class tx_newspaper_BE {
 		
 		return $html;
 
-	}
+	}	
+	
+	
+	
+	
+	
 	
 
 	/// itemsProcFunc to fill templateset dropdowns
@@ -389,7 +353,7 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
-			return 'Ohne Artikeltyp keine Defaultbestï¿½ckung'; /// \todo: ...
+			return 'Ohne Artikeltyp keine Defaultbestückung'; /// \todo: ...
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
 //debug($PA['row']);	
@@ -595,7 +559,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
+/// \todo: in abhängigkeit von new und old einen string zurückgeben
 		return 'to come ...';		
 	}
 

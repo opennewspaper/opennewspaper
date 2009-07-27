@@ -18,7 +18,7 @@ $TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_tab
 /// add user function for page type and page zone type in section records 
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
-$TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPageList';
+$TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPagePageZoneList';
 
 
 /// add article list dropdown

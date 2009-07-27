@@ -148,13 +148,15 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		return $param;
 	}
 
+
+
 //new stuff for section
 	function processListPageTypes() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true; 
-		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
@@ -169,19 +171,18 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		);
 		$dummy = $p->store(); 
 #t3lib_div::devlog('papt after store', 'newspaper', 0, $dummy);
-		$PA['row']['uid'] = $param['section']; // set section id to show
+		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true; 
-		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
 	function processEditPageType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
-		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
-		$PA['SECTION'] = $param['section']; 
-		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
@@ -190,9 +191,9 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		$param = $this->splitParams();
 #t3lib_div::devlog('papt param', 'newspaper', 0, $param);
 		tx_newspaper::deleteRows('tx_newspaper_page', array(intval($param['page'])));
-		$PA['row']['uid'] = $param['section']; // set section id to show
+		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true; 
-		$tmp['html'] = tx_newspaper_BE::renderPageList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}	
@@ -201,16 +202,15 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processActivatePageZoneType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
-#t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+//t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
 		tx_newspaper_PageZone_Factory::getInstance()->createNew(
 			new tx_newspaper_Page(intval($param['page'])), 
 			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
 		);
 		
-		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
-		$PA['SECTION'] = $param['section']; 
-		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
@@ -220,10 +220,9 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 #t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
 		tx_newspaper::deleteRows('tx_newspaper_pagezone', array(intval($param['pagezone'])));
 		
-		$PA['row']['uid'] = $param['page']; // simulate call from be
+		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
-		$PA['SECTION'] = $param['section']; 
-		$tmp['html'] = tx_newspaper_BE::renderPageZoneList($PA);
+		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
