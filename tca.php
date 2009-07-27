@@ -1749,9 +1749,9 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"type" => "group",	
 				"internal_type" => "db",	
 				"allowed" => "tx_newspaper_article",	
-				"size" => 1,	
+				"size" => 10,	
 				"minitems" => 0,
-				"maxitems" => 1,	
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_articlelist_semiautomatic_articles_mm",
 			)
 		),
