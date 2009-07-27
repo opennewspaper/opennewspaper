@@ -42,7 +42,7 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 				'tx_newspaper_articlelist_manual',
 				'tx_newspaper_articlelist_manual_articles_mm',
 				'tx_newspaper_article',
-				' AND tx_newspaper_articlelist_manual_articles_mm.uid_foreign = ' . intval($this->getUid()),
+				' AND tx_newspaper_articlelist_manual_articles_mm.uid_local = ' . intval($this->getUid()),
 				'',
 				'tx_newspaper_articlelist_manual_articles_mm.sorting DESC',
 				"$start, $number"
