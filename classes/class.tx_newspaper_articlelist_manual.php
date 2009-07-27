@@ -42,13 +42,13 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 				'tx_newspaper_articlelist_manual',
 				'tx_newspaper_articlelist_manual_articles_mm',
 				'tx_newspaper_article',
-				' AND tx_newspaper_articlelist_manual_articles_mm.uid_foreign = ' . intval($this->getAttribute('uid')),
+				' AND tx_newspaper_articlelist_manual_articles_mm.uid_foreign = ' . intval($this->getUid()),
 				'',
 				'tx_newspaper_articlelist_manual_articles_mm.sorting DESC',
 				"$start, $number"
 		);
 		t3lib_div::devlog('MM query', 'newspaper', 0, tx_newspaper::$query);
-		t3lib_div::devlog('MM query result', 'newspaper', 0, $result);
+		t3lib_div::devlog('MM query result', 'newspaper', 0, $results);
 				
 		return $articles;
 	}
