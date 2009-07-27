@@ -35,8 +35,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {		
-		$articles = array(new tx_newspaper_Article(9), new tx_newspaper_Article(10), new tx_newspaper_Article(11));
-		
 		$results = tx_newspaper::selectMMQuery(
 				'tx_newspaper_article.uid',
 				'tx_newspaper_articlelist_manual',
@@ -49,7 +47,13 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 		);
 		t3lib_div::devlog('MM query', 'newspaper', 0, tx_newspaper::$query);
 		t3lib_div::devlog('MM query result', 'newspaper', 0, $results);
-				
+		
+		$articles = array();
+		// new tx_newspaper_Article(9), new tx_newspaper_Article(10), new tx_newspaper_Article(11)
+		foreach ($results as $row) {
+			$articles[] = new tx_newspaper_Article($row['uid']);
+		}
+		
 		return $articles;
 	}
 	
