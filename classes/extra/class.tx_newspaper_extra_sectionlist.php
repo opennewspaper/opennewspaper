@@ -17,6 +17,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	public function render($template_set = '') {
 		$list = tx_newspaper::getSection()->getArticleList();
 		foreach ($list->getArticles(10) as $article) {
+			t3lib_div::devlog('article', 'newspaper', 0, $article);			
 			$ret .= '<a href="' . $article->getLink() . '">';
 			$ret .= "<h1>".$article->getAttribute('title')."</h1>\n";
 			$ret .= "<p>".$article->getAttribute('teaser')."</p>\n";
