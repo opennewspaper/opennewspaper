@@ -48,8 +48,6 @@ $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = '
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
 
 
-#t3lib_div::debug($TCA['tx_newspaper_extra_typo3_ce']['ctrl']);
-
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"lower" => "1"
@@ -63,9 +61,16 @@ $TCA["tx_newspaper_pagezone"]["columns"]["pagezone_uid"]["config"]["range"] = ar
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
-$TCA['tx_newspaper_pagetype']['columns']['get_value']['config']['range'] = array(
+$TCA["tx_newspaper_pagetype"]["columns"]["get_value"]["config"]["range"] = array(
 	"lower" => "1"
 );
 
+
+// modify some other values
+$TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["size"] = "10";
+$TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["maxitems"] = "100";
+
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["size"] = "10";
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["maxitems"] = "100";
 
 ?>
