@@ -145,10 +145,48 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				
 		/// \todo store Extras placed on $this
 		if ($this->getExtras()) {
-			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
+			foreach ($this->extras as $extra) {
+				$extra_uid = $extra->store();
+				$extra_table = $extra->getTable();
+				$this->relateExtra2Pagezone($extra);
+			}
 		}
 		
 		return $this->getUid();
+		
+	}
+	
+	public function relateExtra2Pagezone(tx_newspaper_ExtraIface $extra) {
+		
+		$extra_table = tx_newspaper::getTable($extra);
+		$extra_uid = $extra->getUid();
+		$article_uid = $this->getUid();
+
+		$abstract_uid = $extra->getExtraUid();
+		if (!$abstract_uid)	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
+		
+		/// Write entry in MM table (if not exists)
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid_local, uid_foreign', 
+			tx_newspaper_Extra_Factory::getExtra2PagezoneTable(),
+			'uid_local = ' . intval($article_uid) .
+			' AND uid_foreign = ' . intval($abstract_uid)	
+		);
+
+		if ($row['uid_local'] != $article_uid || 
+			$row['uid_foreign'] != $abstract_uid) {
+			if (!tx_newspaper::insertRows(
+					tx_newspaper_Extra_Factory::getExtra2PagezoneTable(),
+					array(
+						'uid_local' => $article_uid,
+						'uid_foreign' => $abstract_uid)
+					)
+				) {
+				return false;					
+			}
+		} 
+		
+		return $abstract_uid;
 		
 	}
 	
