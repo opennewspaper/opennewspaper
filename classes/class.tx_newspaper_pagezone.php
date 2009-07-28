@@ -155,7 +155,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->getUid();
 		
 	}
-	
+	/*
 	public function relateExtra2Pagezone(tx_newspaper_ExtraIface $extra) {
 		
 		$extra_table = tx_newspaper::getTable($extra);
@@ -189,7 +189,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $abstract_uid;
 		
 	}
-	
+	*/
 	/** \todo Internationalization */
 	public function getTitle() {
 		return 'PageZone';
