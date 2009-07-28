@@ -39,12 +39,14 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$results = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
 		);
+		t3lib_div::devlog('$results', 'newspaper', 0, $results);			
 		
 		$offsets = tx_newspaper::selectRows(
 			'uid_foreign, offset',
 			'tx_newspaper_articlelist_semiautomatic_articles_mm',
 			'uid_local = ' . intval($this->getUid())
 		);
+		t3lib_div::devlog('$offsets', 'newspaper', 0, $offsets);			
 		
 		$articles = array();
 		foreach ($results as $row) {
