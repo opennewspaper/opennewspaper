@@ -51,8 +51,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$articles[] = new tx_newspaper_Article($row['uid_foreign']);
 		}
 		
-		$articles = array();
-
 		return $articles;
 	}
 	
