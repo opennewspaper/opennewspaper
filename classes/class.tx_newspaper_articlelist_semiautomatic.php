@@ -36,6 +36,21 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
 		
+		$results = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
+		);
+		
+		$offsets = tx_newspaper::selectRows(
+			'uid_foreign, offset',
+			'tx_newspaper_articlelist_semiautomatic_articles_mm',
+			'uid_local = ' . intval($this->getUid())
+		);
+		
+		$articles = array();
+		foreach ($results as $row) {
+			$articles[] = new tx_newspaper_Article($row['uid_foreign']);
+		}
+		
 		$articles = array();
 
 		return $articles;
