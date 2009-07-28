@@ -146,8 +146,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		/// \todo store Extras placed on $this
 		if ($this->getExtras()) {
 			foreach ($this->extras as $extra) {
-				$extra_uid = $extra->store();
-				$extra_table = $extra->getTable();
+				t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
+#				$extra_uid = $extra->store();
+#				$extra_table = $extra->getTable();
 #				$this->relateExtra2Article($extra);
 			}
 #			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
