@@ -48,6 +48,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 		$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), "uid = $uid"
 			);
+			t3lib_div::devlog('getTable()', 'newspaper', 0, $this->getTable());
+			t3lib_div::devlog('attributes', 'newspaper', 0, $this->attributes);
+			
 		}
 		if ($section) {
 			$this->section = $section;
