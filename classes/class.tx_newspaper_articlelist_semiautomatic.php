@@ -56,6 +56,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 	
+	public function displayListedArticles($PA, $fobj) {
+		t3lib_div::devlog('PA', 'newspaper', 0, $PA);
+		$articles = $this->getArticles(0, 20);
+		return "<p>Hier ist das User-Field</p>";
+	}
+	
 	static public function getModuleName() { return 'np_al_semiauto'; }
 	
 	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence

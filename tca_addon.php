@@ -47,21 +47,57 @@ unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
 
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['type'] = 'user';
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
+
 
 // fix ranges artificially imposed by kickstarter
-$TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
-	"lower" => "1"
-);
-$TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
+$TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array (
 	"lower" => "1"
 );
 $TCA["tx_newspaper_pagezone"]["columns"]["pagezone_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
+$TCA["tx_newspaper_pagezone_page"]["columns"]["inherits_from"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra"]["columns"]["position"]["config"]["range"] = array (
+	"lower" => "0"
+);
+$TCA["tx_newspaper_extra"]["columns"]["paragraph"]["config"]["range"] = array (
+	"lower" => "0"
+);
+$TCA["tx_newspaper_extra"]["columns"]["origin_uid"]["config"]["range"] = array (
+	"lower" => "0"
+);
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
 $TCA["tx_newspaper_pagetype"]["columns"]["get_value"]["config"]["range"] = array(
+	"lower" => "1"
+);
+$TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra_articlelist"]["columns"]["first_article"]["config"]["range"] = array (
+	"lower" => "0"
+);
+$TCA["tx_newspaper_extra_articlelist"]["columns"]["num_articles"]["config"]["range"] = array (
+	"lower" => "0"
+);
+$TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"lower" => "1"
 );
 
