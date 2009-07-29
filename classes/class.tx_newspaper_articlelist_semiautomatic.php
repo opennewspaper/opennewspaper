@@ -36,10 +36,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
 		
-		$results = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
-		);
-		t3lib_div::devlog('$results', 'newspaper', 0, $results);			
+		$results = $this->getRawArticleUIDs($number, $start);
 		
 		$offsets = tx_newspaper::selectRows(
 			'uid_foreign, offset',
@@ -56,11 +53,58 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 	
+	/** \param $PA \code array(
+	 *    altName => 
+	 * 	  palette =>
+	 * 	  extra => 
+	 * 	  pal => 
+	 * 	  fieldConf => array (
+	 * 		exclude =>
+	 * 		label => LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles
+	 * 		config => array(
+	 * 		  type => user
+	 * 		  internal_type => db
+	 * 		  allowed => tx_newspaper_article
+	 * 		  size => 10
+	 * 		  minitems => 0
+	 * 		  maxitems => 100
+	 * 		  MM => tx_newspaper_articlelist_semiautomatic_articles_mm
+	 * 		  userFunc => tx_newspaper_articlelist_semiautomatic->displayListedArticles
+	 * 		  form_type => user
+	 * 		)
+	 * 	  )
+	 * 	  fieldTSConfig => 
+	 * 	  itemFormElName => 
+	 *    itemFormElName_file => 
+	 *    itemFormElValue => 
+	 * 	  itemFormElID => 
+	 * 	  onFocus => 
+	 * 	  label => 
+	 * 	  fieldChangeFunc => array(
+	 * 		TBE_EDITOR_fieldChanged => 
+	 * 		alert => 
+	 * 	  )
+	 * 	  table => tx_newspaper_articlelist_semiautomatic
+	 * 	  field => articles
+	 * 	  row => array(
+	 * 		uid =>
+	 * 		... (other attributes of tx_newspaper_articlelist_semiautomatic)
+	 * 	  )
+	 * 	  pObj =>
+	 *  )\endcode
+	 */
 	public function displayListedArticles($PA, $fobj) {
-		t3lib_div::devlog('PA', 'newspaper', 0, $PA);
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic($PA['row']['uid']);
-		$articles = $current_artlist->getArticles(0, $current_artlist->getAttribute('num_articles'));
+		$articles = $current_artlist->getRawArticleUIDs(0, $current_artlist->getAttribute('num_articles'));
 		return "<p>Hier ist das User-Field</p>" . t3lib_div::view_array($articles);
+	}
+	
+	private function getRawArticleUIDs($number, $start = 0) {
+		$results = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
+		);
+		t3lib_div::devlog('$results', 'newspaper', 0, $results);			
+		return $results;
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
