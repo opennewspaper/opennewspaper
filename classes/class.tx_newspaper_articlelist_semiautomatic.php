@@ -101,6 +101,14 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			);
 		}
 
+		$articles_sorted = $current_artlist->sortArticles($articles);
+
+ 	 	$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+
+		$smarty->assign('articles', $articles_sorted);
+		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
+/*
 		$return = '<table>';
 		foreach($articles as $article_data) {
 			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
@@ -109,7 +117,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 		$return .= '</table>';
 		
-		$articles_sorted = $current_artlist->sortArticles($articles);
 		
 		$return .= '<hr />';
 		$return .= '<table>';
@@ -119,8 +126,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				$article_data['article']->getUid() . ')</td>' . '</tr>';
 		}
 		$return .= '</table>';
-
 		return $return;
+*/		
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }

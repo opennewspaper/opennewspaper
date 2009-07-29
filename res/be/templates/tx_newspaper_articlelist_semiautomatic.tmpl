@@ -1,0 +1,13 @@
+
+<table>
+	{section name=i loop=$articles}
+		<tr>
+			<td>
+				<strong>{$articles[i].article->getAttribute('title')}</strong>(#{$articles[i].article->getUid()})
+			</td>
+			<td>
+				{$articles[i].offset}
+			</td>
+		</tr>
+	{/section}
+</table>
