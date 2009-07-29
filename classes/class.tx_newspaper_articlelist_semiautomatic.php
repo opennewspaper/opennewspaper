@@ -111,6 +111,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		$articles_sorted = $current_artlist->sortArticles($articles);
 		
+		$return .= '<hr />';
 		$return .= '<table>';
 		foreach($articles_sorted as $article_data) {
 			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
@@ -174,7 +175,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				 *  every article at and after that index one place down,  
 				 *  starting with the last.
 				 */
-				foreach(rsort(array_keys($new_articles)) as $old_index) {
+				$keys = array_keys($new_articles);
+				rsort($keys);
+				foreach($keys as $old_index) {
 					if ($old_index < $new_index) break;
 					$new_articles[$old_index+1] = $new_articles[$old_index];
 					unset($new_articles[$old_index]);
