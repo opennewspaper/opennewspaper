@@ -283,7 +283,7 @@ function findElementsByName(name, type) {
 	function renderEditIcon4ArticleList(tx_newspaper_Articlelist $al) {
 		global $LANG;
 		$html .= '<span id="edit_articlelist">';
-		$html .= '<a target="np" href="alt_doc.php?returnUrl=close.html&edit[' . $al->getTable() . '][' . $al->getUid() . ']=edit">';
+		$html .= '<a target="np" href="alt_doc.php?returnUrl=../typo3conf/ext/newspaper/res/be/just_close.html&edit[' . $al->getTable() . '][' . $al->getUid() . ']=edit">';
 		$html .= self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_articlelist_in_section', false));
 		$html .= '</a>';
 		$html .= '</span>';
