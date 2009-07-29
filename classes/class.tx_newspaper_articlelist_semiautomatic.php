@@ -168,7 +168,19 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
 			$article['article']->getAttribute('uid');
-			$new_articles[$i-$article['offset']] = $article;
+			$new_index = $i-$article['offset'];
+			if (isset($new_articles[$new_index])) {
+				/*  if the new index is already populated, we need to shift 
+				 *  every article at and after that index one place down,  
+				 *  starting with the last.
+				 */
+				foreach(rsort(array_keys($new_articles)) as $old_index) {
+					if ($old_index < $new_index) break;
+					$new_articles[$old_index+1] = $new_articles[$old_index];
+					unset($new_articles[$old_index]);
+				}
+			}
+			$new_articles[$new_index] = $article;
 		}
 		ksort($new_articles);
 		return $new_articles;
