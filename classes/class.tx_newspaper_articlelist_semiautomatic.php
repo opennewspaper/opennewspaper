@@ -152,6 +152,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	private function sortArticles($articles) {
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
+			$article->getAttribute('uid');
 			$new_articles[$i-$article['offset']] = $article;
 		}
 		ksort($new_articles);
