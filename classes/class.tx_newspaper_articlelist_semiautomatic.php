@@ -31,19 +31,34 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
-/// A list of tx_newspaper_Article s
+/// A list of tx_newspaper_Article s defined by a SQL WHERE condition, ordered 
+/// by an ORDER BY statement and optionally reordered by the user.
+/** The WHERE condition and the ORDER BY statement are attributes of the list.
+ *  The manual reordering is stored with the MM relation table.
+ *  
+ *  Articles which have not been manually reordered don't have an entry in the 
+ *  MM table. For moved articles the value 'offset' is stored in the MM table.
+ *  Every article recorded in the MM table is moved 'offset' places up (or down,
+ *  if 'offset' is negative) in the list. 'offset' can be greater than the 
+ *  length of the list, making articles sticky, or moving them off the end of
+ *  the list.
+ * 
+ *  \todo Implement the ORDER BY statement.
+ *  \todo I'm not certain if the number of articles in the list is correct when
+ * 		articles have been dropped from the list.
+ *  \todo There is no BE which allows reordering articles - currently it's all
+ * 		done with PHPMyAdmin. This would require either some AJAX magic or a
+ * 		function in the save hook (tx_newspaper_Savehook), or both.
+ */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
 		
-		$uids = $this->getRawArticleUIDs($number, $start);
-		
-		$offsets = $this->getOffsets($uids);
-		t3lib_div::devlog('$offsets', 'newspaper', 0, $offsets);			
+		$articles_sorted = $this->getSortedArticles($number, $start);
 		
 		$articles = array();
-		foreach ($uids as $uid) {
-			$articles[] = new tx_newspaper_Article($uid);
+		foreach ($articles_sorted as $article) {
+			$articles[] = $article['article'];
 		}
 		
 		return $articles;
@@ -51,6 +66,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	
 	/// User function called from the BE to display the articles on the list
 	/** Also, to sort articles on the list up and down.
+	 * 
+	 *  This function is called by TCEForms with a default-constructed article
+	 *  list object. Therefore it must create its own article list, the UID of
+	 *  which it reads from \p $PA.
 	 * 
 	 *  \param $PA \code array(
 	 *    altName => 
@@ -97,18 +116,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  \link tx_newspaper_articlelist_semiautomatic.tmpl
 	 */
 	public function displayListedArticles($PA, $fobj) {
-		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic($PA['row']['uid']);
-		$uids = $current_artlist->getRawArticleUIDs(0, $current_artlist->getAttribute('num_articles'));
-		$offsets = $current_artlist->getOffsets($uids);
-		$articles = array();
-		foreach ($uids as $uid) {
-			$articles[] = array(
-				'article' => new tx_newspaper_Article($uid),
-				'offset' => intval($offsets[$uid])
-			);
-		}
 
-		$articles_sorted = $current_artlist->sortArticles($articles);
+		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic($PA['row']['uid']);
+
+		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getAttribute('num_articles'));
 
  	 	$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
@@ -120,20 +131,64 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	static public function getModuleName() { return 'np_al_semiauto'; }
 
 	////////////////////////////////////////////////////////////////////////////
+	
+	/// Get the articles sorted by their offsets, including offset values
+	/** \param $number Number of articles to return
+	 *  \param $start Index of first article sought
+	 *  \return \code array(
+	 * 	  array(
+	 * 		'article' => tx_newspaper_Article object
+	 * 		'offset' => original offset
+	 * 	  ),
+	 * 	  ...
+	 * )
+	 */
+	private function getSortedArticles($number, $start = 0) {
+		$uids = $this->getRawArticleUIDs($number, $start);
 		
+		$offsets = $this->getOffsets($uids);
+		
+		$articles = array();
+		foreach ($uids as $uid) {
+			$articles[] = array(
+				'article' => new tx_newspaper_Article($uid),
+				'offset' => intval($offsets[$uid])
+			);
+		}
+
+		$articles_sorted = $this->sortArticles($articles);
+
+		return $articles_sorted;		
+	}
+
+	/// Get the UIDs of articles found by the SQL condition defining the list
+	/** \param $number Number of articles to return
+	 *  \param $start Index of first article sought
+	 *  \return array of UIDs in the order in which they should appear
+	 *  \todo Implement ORDER BY
+	 */
 	private function getRawArticleUIDs($number, $start = 0) {
+
 		$results = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
 		);
+
 		$uids = array();
 		foreach ($results as $result) {
 			if (intval($result['uid'])) $uids[] = intval($result['uid']);
 		}
-		t3lib_div::devlog('$uids', 'newspaper', 0, $uids);	
+
 		return $uids;
 	}
 	
-	private function getOffsets($uids) {
+	/// Get all offsets for the supplied UIDs
+	/** \param $uids The UIDs for which to look up the offsets
+	 *  \return \code array(
+	 *    $uid => $offset,
+	 * 	  ...
+	 *  ) \endcode
+	 */
+	private function getOffsets(array $uids) {
 		$results = tx_newspaper::selectRows(
 			'uid_foreign, offset',
 			'tx_newspaper_articlelist_semiautomatic_articles_mm',
@@ -146,10 +201,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			if (intval($result['uid_foreign']) && intval($result['offset']))
 				$offsets[intval($result['uid_foreign'])] = intval($result['offset']);
 		}
-		t3lib_div::devlog('$offsets', 'newspaper', 0, $offsets);
+
 		return $offsets;
 	}
 	
+	/// Sort articles, taking their offsets into account
 	/** \param $articles array(
 	 * 		array(
 	 * 			'article' => tx_newspaper_Article object
@@ -159,7 +215,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  \return $articles sorted, taking offsets into account
 	 *  \attention repeatedly calling this function will garble the results!
 	 */
-	private function sortArticles($articles) {
+	private function sortArticles(array $articles) {
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
 			$article['article']->getAttribute('uid');
