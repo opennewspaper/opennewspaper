@@ -100,11 +100,26 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				'offset' => intval($offsets[$uid])
 			);
 		}
+
+		$return = '<table>';
+		foreach($articles as $article_data) {
+			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
+				'<td>' . $article_data['article']->getAttribute('title') . ' (#' .
+				$article_data['article']->getUid() . ')</td>' . '</tr>';
+		}
+		$return .= '</table>';
 		
 		$articles_sorted = $current_artlist->sortArticles($articles);
 		
-		$view_articles = array();
-		return t3lib_div::view_array($articles).'->'.t3lib_div::view_array($articles_sorted);
+		$return .= '<table>';
+		foreach($articles_sorted as $article_data) {
+			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
+				'<td>' . $article_data['article']->getAttribute('title') . ' (#' .
+				$article_data['article']->getUid() . ')</td>' . '</tr>';
+		}
+		$return .= '</table>';
+
+		return $return;
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
