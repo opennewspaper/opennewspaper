@@ -122,10 +122,12 @@
 			<label index="tx_newspaper_articlelist_manual.articles">Articles</label>
 			<label index="tx_newspaper_articlelist_manual.sql_condition">SQL Condition for pre-selecting articles</label>
 			<label index="tx_newspaper_articlelist_manual.sql_order_by">SQL expression for ordering pre-selected articles</label>
+			<label index="tx_newspaper_articlelist_manual.num_articles">Maximum number of managed articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic">Article List: Semiautomatic</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.articles">Articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.sql_condition">SQL Condition for listed Articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.sql_order_by">SQL expression to sort listed articles</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.num_articles">Maximum number of articles to manage</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -247,10 +249,12 @@
 			<label index="tx_newspaper_articlelist_manual.articles">Artikel</label>
 			<label index="tx_newspaper_articlelist_manual.sql_condition">SQL-Bedingung zur Vorauswahl der Artikel</label>
 			<label index="tx_newspaper_articlelist_manual.sql_order_by">SQL-Ausdruck zum Sortieren der vorausgewählten Artikel</label>
+			<label index="tx_newspaper_articlelist_manual.num_articles">Maximale Anzahl verwalteter Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic">Artikelliste: Halbautomatisch</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.articles">Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.sql_condition">SQL-Bedingung für aufgelistete Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.sql_order_by">SQL-Ausdruck zum Sortieren aufgelisteter Artikel</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.num_articles">Maximale Anzahl verwalteter Artikel</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

@@ -437,7 +437,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist_manual.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by",
+		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by, num_articles",
 	)
 );
 
@@ -454,7 +454,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist_semiautomatic.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by",
+		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by, num_articles",
 	)
 );
 

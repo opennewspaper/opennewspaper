@@ -1691,7 +1691,7 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 $TCA["tx_newspaper_articlelist_manual"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist_manual"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "articles,sql_condition,sql_order_by"
+		"showRecordFieldList" => "articles,sql_condition,sql_order_by,num_articles"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_manual"]["feInterface"],
 	"columns" => array (
@@ -1724,9 +1724,25 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 				"size" => "30",
 			)
 		),
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.num_articles",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by")
+		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by, num_articles")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1738,7 +1754,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist_semiautomatic"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "articles,sql_condition,sql_order_by"
+		"showRecordFieldList" => "articles,sql_condition,sql_order_by,num_articles"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_semiautomatic"]["feInterface"],
 	"columns" => array (
@@ -1771,9 +1787,25 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"size" => "30",
 			)
 		),
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.num_articles",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by")
+		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by, num_articles")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

@@ -532,6 +532,7 @@ CREATE TABLE tx_newspaper_articlelist_manual (
 	articles int(11) DEFAULT '0' NOT NULL,
 	sql_condition tinytext NOT NULL,
 	sql_order_by tinytext NOT NULL,
+	num_articles int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -568,6 +569,7 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic (
 	articles int(11) DEFAULT '0' NOT NULL,
 	sql_condition tinytext NOT NULL,
 	sql_order_by tinytext NOT NULL,
+	num_articles int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -591,31 +593,6 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section blob NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic (
-	offset INT(11) NOT NULL DEFAULT 0
-);
-
 # Modifications for table 'tx_newspaper_section'
 CREATE TABLE tx_newspaper_section (
 	template_set tinytext NOT NULL
