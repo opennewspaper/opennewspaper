@@ -100,9 +100,17 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				'offset' => intval($offsets[$uid])
 			);
 		}
-		return t3lib_div::view_array($articles);
+		
+		$articles_sorted = $current_artlist->sortArticles($articles);
+		
+		$view_articles = array();
+		return t3lib_div::view_array($articles).'->'.t3lib_div::view_array($articles_sorted);
 	}
 	
+	static public function getModuleName() { return 'np_al_semiauto'; }
+
+	////////////////////////////////////////////////////////////////////////////
+		
 	private function getRawArticleUIDs($number, $start = 0) {
 		$results = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
@@ -132,7 +140,23 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $offsets;
 	}
 	
-	static public function getModuleName() { return 'np_al_semiauto'; }
+	/** \param $articles array(
+	 * 		array(
+	 * 			'article' => tx_newspaper_Article object
+	 * 			'offset' => offset to move article up or down in array
+	 * 		)
+	 * ...)
+	 *  \return $articles sorted, taking offsets into account
+	 *  \attention repeatedly calling this function will garble the results!
+	 */
+	private function sortArticles($articles) {
+		$new_articles = array();
+		foreach ($articles as $i => $article) {
+			$new_articles[$i-$article['offset']] = $article;
+		}
+		ksort($new_articles);
+		return $new_articles;
+	}
 	
 	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
 }
