@@ -49,7 +49,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 	
-	/** \param $PA \code array(
+	/// User function called from the BE to display the articles on the list
+	/** Also, to sort articles on the list up and down.
+	 * 
+	 *  \param $PA \code array(
 	 *    altName => 
 	 * 	  palette =>
 	 * 	  extra => 
@@ -88,6 +91,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 	  )
 	 * 	  pObj =>
 	 *  )\endcode
+	 *  \param $fobj reference to the parent object (instance of t3lib_TCEforms)
+	 *  \return List of articles currently on the list, with controls to 
+	 *  	rearrange the articles
+	 *  \link tx_newspaper_articlelist_semiautomatic.tmpl
 	 */
 	public function displayListedArticles($PA, $fobj) {
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic($PA['row']['uid']);
@@ -105,29 +112,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
  	 	$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
-
 		$smarty->assign('articles', $articles_sorted);
+
 		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
-/*
-		$return = '<table>';
-		foreach($articles as $article_data) {
-			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
-				'<td>' . $article_data['article']->getAttribute('title') . ' (#' .
-				$article_data['article']->getUid() . ')</td>' . '</tr>';
-		}
-		$return .= '</table>';
-		
-		
-		$return .= '<hr />';
-		$return .= '<table>';
-		foreach($articles_sorted as $article_data) {
-			$return .= '<tr>' . '<td>' . $article_data['offset'] . '</td>' .
-				'<td>' . $article_data['article']->getAttribute('title') . ' (#' .
-				$article_data['article']->getUid() . ')</td>' . '</tr>';
-		}
-		$return .= '</table>';
-		return $return;
-*/		
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
