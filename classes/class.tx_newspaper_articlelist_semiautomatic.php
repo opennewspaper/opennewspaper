@@ -36,18 +36,14 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	public function getArticles($number, $start = 0) {
 		
-		$results = $this->getRawArticleUIDs($number, $start);
+		$uids = $this->getRawArticleUIDs($number, $start);
 		
-		$offsets = tx_newspaper::selectRows(
-			'uid_foreign, offset',
-			'tx_newspaper_articlelist_semiautomatic_articles_mm',
-			'uid_local = ' . intval($this->getUid())
-		);
+		$offsets = $this->getOffsets($uids);
 		t3lib_div::devlog('$offsets', 'newspaper', 0, $offsets);			
 		
 		$articles = array();
-		foreach ($results as $row) {
-			$articles[] = new tx_newspaper_Article($row['uid']);
+		foreach ($uids as $uid) {
+			$articles[] = new tx_newspaper_Article($uid);
 		}
 		
 		return $articles;
@@ -95,16 +91,45 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function displayListedArticles($PA, $fobj) {
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic($PA['row']['uid']);
-		$articles = $current_artlist->getRawArticleUIDs(0, $current_artlist->getAttribute('num_articles'));
-		return "<p>Hier ist das User-Field</p>" . t3lib_div::view_array($articles);
+		$uids = $current_artlist->getRawArticleUIDs(0, $current_artlist->getAttribute('num_articles'));
+		$offsets = $current_artlist->getOffsets($uids);
+		$articles = array();
+		foreach ($uids as $uid) {
+			$articles[] = array(
+				'article' => new tx_newspaper_Article($uid),
+				'offset' => intval($offsets[$uid])
+			);
+		}
+		return t3lib_div::view_array($articles);
 	}
 	
 	private function getRawArticleUIDs($number, $start = 0) {
 		$results = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
 		);
-		t3lib_div::devlog('$results', 'newspaper', 0, $results);			
-		return $results;
+		$uids = array();
+		foreach ($results as $result) {
+			if (intval($result['uid'])) $uids[] = intval($result['uid']);
+		}
+		t3lib_div::devlog('$uids', 'newspaper', 0, $uids);	
+		return $uids;
+	}
+	
+	private function getOffsets($uids) {
+		$results = tx_newspaper::selectRows(
+			'uid_foreign, offset',
+			'tx_newspaper_articlelist_semiautomatic_articles_mm',
+			'uid_local = ' . intval($this->getUid()) . 
+			' AND uid_foreign IN (' . implode(',', $uids) . ')'
+		);
+		
+		$offsets = array();
+		foreach	($results as $result) {
+			if (intval($result['uid_foreign']) && intval($result['offset']))
+				$offsets[intval($result['uid_foreign'])] = intval($result['offset']);
+		}
+		t3lib_div::devlog('$offsets', 'newspaper', 0, $offsets);
+		return $offsets;
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
