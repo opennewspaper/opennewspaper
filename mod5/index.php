@@ -43,40 +43,44 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module5 extends t3lib_SCbase {
-				var $pageinfo;
+	
+	const number_of_latest_articles = 10;
+	const shortcut_group = 5;
+	
+	var $pageinfo;
 
-				/**
-				 * Initializes the Module
-				 * @return	void
-				 */
-				function init()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/**
+	 * Initializes the Module
+	 * @return	void
+	 */
+	function init()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					parent::init();
+		parent::init();
 
-					/*
-					if (t3lib_div::_GP('clear_all_cache'))	{
-						$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-					}
-					*/
-				}
+		/*
+		if (t3lib_div::_GP('clear_all_cache'))	{
+			$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
+		}
+		*/
+	}
 
-				/**
-				 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-				 *
-				 * @return	void
-				 */
-				function menuConfig()	{
-					parent::menuConfig();
-				}
+	/**
+	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	 *
+	 * @return	void
+	 */
+	function menuConfig()	{
+		parent::menuConfig();
+	}
 
-				/**
-				 * Main function of the module. Write the content to $this->content
-				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
-				 */
-				function main()	{
+	/**
+	 * Main function of the module. Write the content to $this->content
+	 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
+	 *
+	 * @return	[type]		...
+	 */
+	function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					// a valid page for permissions check is needed - use newspaper root folder
@@ -148,27 +152,27 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						$this->content.=$this->doc->spacer(10);
 					}
 				
-				}
+	}
 
-				/**
-				 * Prints out the module HTML
-				 *
-				 * @return	void
-				 */
-				function printContent()	{
+	/**
+	 * Prints out the module HTML
+	 *
+	 * @return	void
+	 */
+	function printContent()	{
 
-					$this->content.=$this->doc->endPage();
-					echo $this->content;
-				}
+		$this->content.=$this->doc->endPage();
+		echo $this->content;
+	}
 
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent()	{
-					$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
-				}
+	/**
+	 * Generates the module content
+	 *
+	 * @return	void
+	 */
+	function moduleContent()	{
+		$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
+	}
 		
 		
 		
@@ -231,7 +235,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		return tx_newspaper::selectRows(
 			'*',
 			'sys_be_shortcuts',
-			'userid=' . $GLOBALS['BE_USER']->user['uid'] . ' AND sc_group=5',
+			'userid=' . $GLOBALS['BE_USER']->user['uid'] . ' AND sc_group = ' . self::shortcut_group,
 			'',
 			'sorting'
 		);
@@ -249,7 +253,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'NOT is_template AND NOT deleted',
 			'',
 			'tstamp DESC',
-			'10'
+			self::number_of_latest_articles
 		);
 	
 		$article = array();
