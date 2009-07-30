@@ -12,13 +12,13 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	}
 	
 	/** Just a quick hack to see anything
-	 *  \todo everything
+	 *  \todo make number of articles displayed variable
+	 *  \todo smarty template
 	 */
 	public function render($template_set = '') {
 		$list = tx_newspaper::getSection()->getArticleList();
-		t3lib_div::devlog('articles', 'newspaper', 0, $list->getArticles(10));			
+
 		foreach ($list->getArticles(10) as $article) {
-			t3lib_div::devlog('article', 'newspaper', 0, $article->getUid());			
 			$ret .= '<a href="' . $article->getLink() . '">';
 			$ret .= "<h1>".$article->getAttribute('title')."</h1>\n";
 			$ret .= "<p>".$article->getAttribute('teaser')."</p>\n";
