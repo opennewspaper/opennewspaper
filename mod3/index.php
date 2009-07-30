@@ -126,7 +126,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->insertExtraAfter($e, intval($origin_uid));
 		die();
 	}
-	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph) {
+	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
 		$origin_uid = intval($origin_uid);
 		$pooled_extra_uid = intval($pooled_extra_uid);
 		$pz_uid = intval($pz_uid);
@@ -141,9 +141,10 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 		$pz->insertExtraAfter($copied_extra, $origin_uid);
 
+		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
 		die();
 	}
-	private function processExtraInsertAfterFromPoolReference($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph) {
+	private function processExtraInsertAfterFromPoolReference($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
 		$origin_uid = intval($origin_uid);
 		$pooled_extra_uid = intval($pooled_extra_uid);
 		$pz_uid = intval($pz_uid);
@@ -156,6 +157,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 		$pz->insertExtraAfter($e, $origin_uid);		
 
+		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
 		die();
 	}	
 	
@@ -270,10 +272,11 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 		
 		if (t3lib_div::_GP('extra_insert_after_from_pool_copy') == 1) {
-			die($this->processExtraInsertAfterFromPoolCopy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
+			die($this->processExtraInsertAfterFromPoolCopy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
 		if (t3lib_div::_GP('extra_insert_after_from_pool_ref') == 1) {
-			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));	
+t3lib_div::devlog('r', 'np', 0, $_REQUEST);
+			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
 		
 		
