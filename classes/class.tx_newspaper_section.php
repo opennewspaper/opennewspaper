@@ -264,12 +264,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			
 			/// Write association table entry article -> extra
 			/// \todo $new_article->relateExtra2Article($new_extra)
-			tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
+/*			tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $new_article->getUid(),
 					'uid_foreign' => $new_extra->getUid(),
 					));
-		}
+*/		}
 		t3lib_div::devlog('extras', 'newspaper', 0, $new_article->getExtras());
  		 		
  		// set main section
