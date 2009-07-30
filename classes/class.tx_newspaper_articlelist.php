@@ -37,20 +37,12 @@
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
-		t3lib_div::devlog('tx_newspaper_ArticleList::__construct()', 'newspaper', 0, 
-			array(
-				'uid' => $uid, 
-				'section' => $section
-			)
-		);
+
 		if (intval($uid)) {
 			$this->setUid($uid);
 	 		$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), "uid = $uid"
 			);
-			t3lib_div::devlog('getTable()', 'newspaper', 0, $this->getTable());
-			t3lib_div::devlog('attributes', 'newspaper', 0, $this->attributes);
-			
 		}
 		if ($section) {
 			$this->section = $section;
