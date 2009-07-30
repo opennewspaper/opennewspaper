@@ -287,24 +287,46 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function getUid() { return $this->uid; }
 	
 	/// get active pages for current Section
-	/** \return array uids of active pages objects for given section
-	 */
+	/// \return array uids of active pages objects for given section
 	public function getActivePages() {
 		$sf = tx_newspaper_Sysfolder::getInstance();
-#t3lib_div::devlog('gap', 'newspaper', 0);
+//t3lib_div::devlog('gap', 'newspaper', 0);
 		$p = new tx_newspaper_Page($this);
 		$row = tx_newspaper::selectRows(
 			'uid',
 			$p->getTable(),
 			'pid=' . $sf->getPid($p) . ' AND section=' . $this->getUid()
 		);
-#t3lib_div::devlog('gap row', 'newspaper', 0, $row);
+//t3lib_div::devlog('gap row', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new tx_newspaper_Page(intval($row[$i]['uid']));
 		}
 		return $list;
 	}
+	
+	
+	public function getArticles($limit = 10) {
+		$limit = intval($limit);
+		$row = tx_newspaper::selectRows(
+			'uid_local',
+			'tx_newspaper_article_sections_mm',
+			'uid_foreign=' . $this->getUid()
+		);
+//t3lib_div::devlog('s getArticles row', 'newspaper', 0, $row);
+		$list = array();
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$a = new tx_newspaper_Article(intval($row[$i]['uid_local']));
+			if ($a->getAttribute('deleted') == 0) {
+				$list[] = $a;
+				if (sizeof($list) == $limit) {
+					return $list;
+				}	
+			} 
+		}
+		return $list;
+	}
+	
 	
 	/// \return array section, sorted alphabetically
 	public static function getAllSections() {
