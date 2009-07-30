@@ -230,27 +230,81 @@ t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array($command, $id, $value));
 
-		/// check if it is allowed to delete an article type
-		if ($command == 'delete' && $table == 'tx_newspaper_articletype') {
-			$list = tx_newspaper_Article::listArticlesWithArticletype(new tx_newspaper_ArticleType($id), 3);
+		if ($command == 'delete') {
+			$this->checkIfArticletypeCanBeDeleted($table, $id);
+			$this->checkIfSectionCanBeDeleted($table, $id);
+			$this->checkIfPageTypeCanBeDeleted($table, $id);
+			$this->checkIfPageZoneTypeCanBeDeleted($table, $id);
+/// \todo: check if articles are assigned to section
+/// \todo: check if pages are assigned to section
+		}
+	}
+
+	private function checkIfSectionCanBeDeleted($table, $id) {
+		if ($table == 'tx_newspaper_section') {
+			$id = intval($id);
+			
+			// look for child sections
+			$s = new tx_newspaper_section($id);
+			$children = $s->getChildSections();
+			if (sizeof($children) > 0) {
+				$content = 'This section can\'t be deleted, because of existing child sections:<br />';
+				for ($i = 0; $i < sizeof($children); $i++) {
+					$content .= '- ' . $children[$i]->getAttribute('section_name') . '<br /';
+				}	
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
+				die($content);
+			}
+			
+			// look for pages assigned to this section
+			$pages = $s->getActivePages();
+			if (sizeof($pages) > 0) {
+				$content = 'This section can\'t be deleted, because assigned pages are existing:<br />';
+				for ($i = 0; $i < sizeof($pages); $i++) {
+					$content .= '- ' . $pages[$i]->getPageType()->getAttribute('type_name') . '<br />';
+				}	
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
+				die($content);
+			}			 
+			
+			// look for articles assigned to section
+			$articles = $s->getArticles(5);
+			if (sizeof($articles) > 0) {
+				$content = 'This section can\'t be deleted, because assigned articles are existing:<br />';
+				for ($i = 0; $i < sizeof($articles); $i++) {
+					$content .= '- ' . $articles[$i]->getDescription() . '<br />';
+				}	
+				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
+				die($content);
+			}				
+			
+		}
+	}
+
+	private function  checkIfArticletypeCanBeDeleted($table, $id) {
+		if ($table == 'tx_newspaper_articletype') {
+			$id = intval($id);
+			$list = tx_newspaper_Article::listArticlesWithArticletype(new tx_newspaper_ArticleType($id), 5);
 			if (sizeof($list) > 0) {
 				/// assigned articles found, so this article type can't be deleted
 				$content = 'This article type can\'t be deleted, because at least one article is using this article type. Find examples below (list might be much longer)<br /><br />';
 				for ($i = 0; $i < sizeof($list); $i++) {
+/// \todo: try catch for getAttribute calls?
 					$content .= ($i+1) . '. ' . $list[$i]->getAttribute('kicker') . ': ' . $list[$i]->getAttribute('title') . ' (#'. $list[$i]->getAttribute('uid') . ')<br />';  
 				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
 			}
 		}
+	}
 
-
-		/// check if it is allowed to delete an page type
-		if ($command == 'delete' && $table == 'tx_newspaper_pagetype') {
-			$list = tx_newspaper_Page::listPagesWithPageType(new tx_newspaper_PageType($id, 3));
+	private function checkIfPageTypeCanBeDeleted($table, $id) {
+		if ($table == 'tx_newspaper_pagetype') {
+			$id = intval($id);
+			$list = tx_newspaper_Page::listPagesWithPageType(new tx_newspaper_PageType($id, 5));
 			if (sizeof($list) > 0) {
-				/// assigned articles found, so this article type can't be deleted
-				$content = 'This page type can\'t be deleted, because at least one page is using this page type. Find examples below (list might be much longer)<br /><br />';
+				/// pages using this page type are assigned to sections, so this page type can't be deleted
+				$content = 'This page type can\'t be deleted, because at least one section is using this page type. Find examples below (list might be much longer)<br /><br />';
 				for ($i = 0; $i < sizeof($list); $i++) {
 					$content .= ($i+1) . '. Section <i>';
 					$tmp_section = new tx_newspaper_Section(intval($list[$i]->getAttribute('section')));
@@ -261,13 +315,13 @@ t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 				die($content);
 			}
 		}
-		
-		
-		/// check if it is allowed to delete an page zone type
-		if ($command == 'delete' && $table == 'tx_newspaper_pagezonetype') {
-			$list = tx_newspaper_Page::listPagesWithPageZoneType(new tx_newspaper_PageZoneType($id, 3));
+	}
+
+	private function checkIfPageZoneTypeCanBeDeleted($table, $id) {
+		if ($table == 'tx_newspaper_pagezonetype') {
+			$list = tx_newspaper_Page::listPagesWithPageZoneType(new tx_newspaper_PageZoneType($id), 5); // try to get 5 pages with the pagezone type assigned  
 			if (sizeof($list) > 0) {
-				/// assigned articles found, so this article type can't be deleted
+				/// pagezones using this pagezone type are assigned to pages, so this pagezone type can't be deleted
 				$content = 'This page zone type can\'t be deleted, because at least one page is using this page zone type. Find examples below (list might be much longer)<br /><br />';
 				for ($i = 0; $i < sizeof($list); $i++) {
 					$content .= ($i+1) . '. Section <i>';
@@ -281,13 +335,8 @@ t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
 			}
-		}
-
-/// \todo: check if articles are assigned to section
-/// \todo: check if pages are assigned to section
-		
+		}		
 	}
-
 
 
 
