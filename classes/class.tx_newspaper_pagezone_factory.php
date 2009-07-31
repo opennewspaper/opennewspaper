@@ -91,21 +91,28 @@ class tx_newspaper_PageZone_Factory {
 
 		t3lib_div::devlog('new page zone', 'newspaper', 0, $pagezone);
 		//	store pagezone once so that it has a UID
-		$pagezone->store();
-				
+		$uid = $pagezone->store();
+		
 		///	copy Extras from appropriate page zone
 		/** \todo make this work. currently a WrongAttributeException is thrown
 		 *  because the attributes array is empty at this time. probably just
 		 *  move this line to after store().
 		 */
 		t3lib_div::devlog('stored page zone', 'newspaper', 0, $pagezone);
-		$parent = $pagezone->getParentForPlacement();
-		t3lib_div::devlog('parent', 'newspaper', 0, $parent);
-		$pagezone->copyExtrasFrom($parent);
-
-		$pagezone->store();
 		
-		return $pagezone;
+		if ($type->getAttribute('is_article')) {
+			$pagezone_reborn = new tx_newspaper_Article($uid);
+		} else {
+			$pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
+		}
+		
+		$parent = $pagezone_reborn->getParentForPlacement();
+		t3lib_div::devlog('parent', 'newspaper', 0, $parent);
+		$pagezone_reborn->copyExtrasFrom($parent);
+
+		$pagezone_reborn->store();
+		
+		return $pagezone_reborn;
 	}
 
 	/// Protected constructor, tx_newspaper_PageZone_Factory cannot be created freely
