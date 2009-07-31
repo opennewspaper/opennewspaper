@@ -12,28 +12,41 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_w
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlebehavior.php');
 
 /// This is the interface that every Article class must implement
-/** Basically I created this class because I want an intermediate stage for the
- *  deployment of tt_newspaper on taz.de. The Source interface returns objects
+/** Additional functions that an Article needs to implement in addition to an
+ *  tx_newspaper_ExtraIface.
+ * 
+ *  Historical notes:\n
+ *  Basically I created this class because I want an intermediate stage for the
+ *  deployment of tx_newspaper on taz.de. The Source interface returns objects
  *  of class Article, which I can implement in the class taz_article used
  *  in taz 1.0. If Source returned objects of class Article, that would be
  *  incompatible with taz 1.0, and thus messier to migrate.
+ * 
+ *  As it stands, a separate interface between tx_newspaper_ExtraIface and
+ *  tx_newspaper_Article does not seem necessary any more.
  *
+ *  \todo Check if this interface can be thrown out altogether.
  *  \todo Actually define the interface. The current functions are just
- *  preliminary notes.
+ *  	preliminary notes.
  */
 interface tx_newspaper_ArticleIface
 	extends tx_newspaper_ExtraIface, tx_newspaper_WithSource {
+	/// \todo Throw out.	
 	public function importieren(tx_newspaper_Source $quelle);
+	/// \todo Throw out.	
 	public function exportieren(tx_newspaper_Source $quelle);
+	/// \todo Throw out.	
 	public function laden();
+	/// \todo Throw out.	
 	public function vergleichen();
+	/// \todo Throw out.	
 	public function extraAnlegen();
 
-	/// \return The list of Extra s associated with this Article
+	/// \return The list of Extra s associated with this tx_newspaper_ArticleIface
 	public function getExtras();
 	public function addExtra(tx_newspaper_Extra $newExtra);
 
-	/// \return List of attributes this Extra has
+	/// \return List of attributes this tx_newspaper_ArticleIface has
 	public static function getAttributeList();
 	
 	/// Store the relation of an Extra to a concrete Article (used from BE)

@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_articleimpl.php
+ *  \file class.tx_newspaper_article.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
@@ -15,13 +15,17 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 /// An article for the online newspaper
-/** \todo The names for the functions are not defined yet. The interface
- *  (Article) is not yet ready either.
- *  \todo take over all functionality from tx_newspaper_PageZone_Article. that includes:
- *  - generate a record in tx_newspaper_pagezone in addition to tx_newspaper_exra
- *  - remove pagezone_article and extra_articlerenderer and replace with articleimpl everywhere
- *  - rename to article and interface to articleiface
- *  - make sure it works as generic page zone (when assembling pages) as well as concrete article 
+/** The article is the central entity in a newspaper. All other functionalities
+ *  deal with displaying articles, lists of articles or additional information
+ *  linked to articles.
+ * 
+ *  Data-wise, an article consists of the minimum set of fields that every
+ *  article must have. All additional data connected to an article (e.g. images,
+ *  links, tags, media, ...) are called "Extra" and linked to an article. The
+ *  class representing Extras is tx_newspaper_Extra and its descendants.
+ * 
+ *  The Extras must be placed in an Article or in a PageZone. 
+ *  \todo finish me!
  */
 class tx_newspaper_Article extends tx_newspaper_PageZone 
 	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {

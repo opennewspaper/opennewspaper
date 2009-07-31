@@ -104,7 +104,7 @@ class tx_newspaper_Extra_Factory {
 	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Article
 	static function getExtra2ArticleTable() { return self::$extra2article_table; } 
 
-	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Pagezone_Page
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_PageZone_Page
 	static function getExtra2PagezoneTable() { return self::$extra2pagezone_table; } 
 	
 	/// Protected constructor, tx_newspaper_Extra_Factory cannot be created freely
@@ -122,7 +122,7 @@ class tx_newspaper_Extra_Factory {
 	private static $extra_table = 'tx_newspaper_extra';
 	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Article
 	private static $extra2article_table =  'tx_newspaper_article_extras_mm';
-	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Pagezone_Page
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_PageZone_Page
 	private static $extra2pagezone_table =  'tx_newspaper_pagezone_page_extras_mm';
  	
 }

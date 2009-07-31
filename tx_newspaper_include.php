@@ -29,6 +29,17 @@
  *  \date Jan 9, 2009
  */
  
+/** \mainpage tx_newspaper - an editing system for an online newspaper
+ * 
+ *   Concepts:
+ *   - article
+ * 	 - section
+ *   - extra
+ *   - page zone
+ * 
+ *  \todo Write me!
+ */
+ 
 #t3lib_div::debug($TYPO3_CONF_VARS['EXT']['extList']);
 #t3lib_div::debug(t3lib_extMgm::isLoaded('newspaper')? "np": "nonp");
 #t3lib_div::debug(t3lib_extMgm::isLoaded('smarty')? "sm": "nosm");
