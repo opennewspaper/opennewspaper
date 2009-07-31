@@ -18,10 +18,15 @@
  */
  interface tx_newspaper_StoredObject {
 
+	/// Returns an attribute
 	/** \param $attribute_name Name of the requested attribute
 	 *	\return Value of the requested attribute
+	 *  \throw tx_newspaper_WrongAttributeException If \p $attribute_name does
+	 * 		not exist.
 	 */
 	public function getAttribute($attribute_name);
+
+	///	Sets an attribute
 	/** \param $attribute_name Name of the requested attribute
 	 *	\param $value New value of the requested attribute
 	 */
@@ -29,7 +34,8 @@
 
 	/// Write or overwrite Extra data in DB
 	/** Of course, a StoredObject needs a store() procedure ;-)
-	/*  If the object is new, creates the record and sets the UID to the result.
+	 * 
+	 *  If the object is new, creates the record and sets the UID to the result.
 	 *  Else overwrites the existing record.
 	 *
 	 *  Associated records, such as relation tables and sub-records, are written

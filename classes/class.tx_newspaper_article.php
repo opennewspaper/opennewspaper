@@ -35,7 +35,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	magic methods ( http://php.net/manual/language.oop5.magic.php )
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
+	/// Create a tx_newspaper_Article
+	/** Initializes the tx_newspaper_ArticleBehavior and tx_newspaper_Smarty
+	 *  used as auxiliaries.
+	 * 
+	 *  Ensures that the current object has a record identifying it in the 
+	 *  persistent storage as tx_newspaper_Extra and tx_newspaper_PageZone.
+	 */
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 		$this->smarty = new tx_newspaper_Smarty();
@@ -43,15 +50,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($uid) {
 			$this->setUid($uid);
 			
-			/** \todo I'm not sure whether the following line should remain. It's a
-			 *  safety net because currently it's not ensured that extras are 
-			 *  created consistently.
+			/** \todo I'm not sure whether the following lines should remain. 
+			 *  They're a safety net because currently it's not ensured that 
+			 *  extras are created consistently.
 			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
-/// \todo: can this be done this way???
-#if (TYPO3_MODE == 'FE') {
 			$this->pagezone_uid = $this->createPageZoneRecord();
-#}
 		}
 		
 	}
@@ -81,7 +85,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		
  		$this->store();
  		
- 		/// \todo clone extras
+ 		/// clone extras, creating new abstract references to the concrete records
  		$old_extras = $this->getExtras();
  		$this->extras = array();
  		foreach ($old_extras as $old_extra) {
@@ -102,7 +106,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 
-	/// returns an actual member (-> Extra)
 	public function getAttribute($attribute) {
 				
 		if (!$this->attributes) {
@@ -118,7 +121,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		return $this->attributes[$attribute];
 	}
 
-	/// sets a member (-> Extra)
 	public function setAttribute($attribute, $value) {
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
