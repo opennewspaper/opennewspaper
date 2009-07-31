@@ -336,8 +336,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo A recursive version of this function would be more elegant, I reckon
 	 */
 	public function getParentForPlacement() {
+		try {
 		$inherit_mode = intval($this->getAttribute('inherits_from'));
-		
+		} catch (Exception $e) {
+			t3lib_devlog('attributes', 'newspaper', 1, $this->attributes);
+			throw $e;
+		}
 		if ($inherit_mode < 0) return null;
 		if ($inherit_mode > 0) 
 			return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
