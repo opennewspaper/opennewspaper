@@ -338,8 +338,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getParentForPlacement() {
 		try {
 		$inherit_mode = intval($this->getAttribute('inherits_from'));
-		} catch (Exception $e) {
-			t3lib_devlog('attributes', 'newspaper', 1, $this->attributes);
+		} catch (tx_newspaper_Exception $e) {
+			t3lib_div::devlog('attributes', 'newspaper', 1, $this->attributes);
 			throw $e;
 		}
 		if ($inherit_mode < 0) return null;
