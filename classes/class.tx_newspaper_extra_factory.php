@@ -57,7 +57,19 @@ class tx_newspaper_Extra_Factory {
 		return self::$instance;
 	}
 	
-	/** \todo rename: instantiate()
+	/// Create a concrete tx_newspaper_Extra object from an abstract UID
+	/** Reads the concrete Extra pointed at by the abstract record \p $uid, 
+	 *  instantiates and returns it.
+	 *  
+	 *  \param $uid The UID of the tx_newspaper_Extra in the abstract Extra table
+	 *  \return A fully instantiated concrete Extra of the correct type
+	 *  \throw tx_newspaper_DBException If a DB operation goes wrong, e.g. when
+	 * 		the abstract UID is not present or hidden by 
+	 * 		tx_newspaper::enableFields(), or if the abstract record is corrupted
+	 *  \throw tx_newspaper_WrongClassException If the class stored in the 
+	 * 		abstract record does not exist
+	 *  
+	 *  \todo rename: instantiate()?
 	 *  \todo honor deleted and hidden flags
 	 */
 	public function create($uid) {
@@ -86,8 +98,13 @@ class tx_newspaper_Extra_Factory {
 		return $extra;
 	}
 	
+	///	Table in which tx_newspaper_Extra s are stored
 	static function getExtraTable() { return self::$extra_table; } 
+
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Article
 	static function getExtra2ArticleTable() { return self::$extra2article_table; } 
+
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Pagezone_Page
 	static function getExtra2PagezoneTable() { return self::$extra2pagezone_table; } 
 	
 	/// Protected constructor, tx_newspaper_Extra_Factory cannot be created freely
@@ -103,7 +120,9 @@ class tx_newspaper_Extra_Factory {
 	
 	/// Extra table must be defined here because tx_newspaper_Extra is an interface
 	private static $extra_table = 'tx_newspaper_extra';
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Article
 	private static $extra2article_table =  'tx_newspaper_article_extras_mm';
+	///	MM association table linking tx_newspaper_Extra to tx_newspaper_Pagezone_Page
 	private static $extra2pagezone_table =  'tx_newspaper_pagezone_page_extras_mm';
  	
 }

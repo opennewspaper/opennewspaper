@@ -94,6 +94,8 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	}
 
 	/// A description to identify the link list in the BE
+	/** \todo Show at least one of the actual links
+	 */
 	public function getDescription() {
 		return '<strong>' . $this->getAttribute('links') . '</strong> ';
 	}
