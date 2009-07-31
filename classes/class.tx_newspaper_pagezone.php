@@ -618,7 +618,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
 		foreach ($parent_zone->getExtras() as $extra_to_copy) {
-			if (!$extra_to_copy->getAttribute('inheritable')) continue;
+			if (!$extra_to_copy->getAttribute('is_inheritable')) continue;
 			/// Clone $extra_to_copy
 			/** Not nice: because we're working on the abstract superclass here, we
 			 * 	can't clone the superclass entry because there's no object for it.
