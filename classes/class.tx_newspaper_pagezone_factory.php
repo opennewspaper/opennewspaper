@@ -102,7 +102,6 @@ class tx_newspaper_PageZone_Factory {
 		
 		///	copy Extras from appropriate page zone
 		$parent = $pagezone_reborn->getParentForPlacement();
-		t3lib_div::devlog('parent', 'newspaper', 0, $parent);
 		$pagezone_reborn->copyExtrasFrom($parent);
 
 		$pagezone_reborn->store();
