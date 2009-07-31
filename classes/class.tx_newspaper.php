@@ -4,10 +4,15 @@
 
 
 /// Utility class which provides static functions. A namespace, so to speak.
+/** \todo Reorder according to functionality (e.g. DB operations, class logic 
+ * 		etc.)
+ */
 class tx_newspaper  {
 
+	///	Whether to use Typo3's command- and datamap functions for DB operations
 	/** If this constant is set to true, Typo3 command- or datamap functions are
 	 *  used wherever appropriate. 
+	 * 
 	 *  These functions have side effects which are not yet fully explored and 
 	 *  seem to make more trouble than they're worth. That's why they're turned
 	 *  off currently.  
@@ -21,13 +26,17 @@ class tx_newspaper  {
 	
 
 	/// Execute a SELECT query, check the result, return zero or one record(s)
-	/** \param $fields Fields to SELECT
+	/** enableFields() are taken into account.
+	 * 
+	 *  \param $fields Fields to SELECT
 	 *  \param $table Table to SELECT FROM
 	 *  \param $where WHERE-clause (defaults to selecting all records)
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
 	 *  \return The result of the query as associative array
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
@@ -46,13 +55,19 @@ class tx_newspaper  {
 	}
 
 	/// Execute a SELECT query, check the result, return \em exactly one record
-	/** \param $fields Fields to SELECT
+	/** enableFields() are taken into account.
+	 * 
+	 *  \param $fields Fields to SELECT
 	 *  \param $table Table to SELECT FROM
 	 *  \param $where WHERE-clause (defaults to selecting all records)
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
 	 *  \return The result of the query as associative array
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
+	 *  \throw tx_newspaper_EmptyResultException if the SQL query returns no 
+	 * 		result
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
@@ -77,13 +92,17 @@ class tx_newspaper  {
 	}
 
 	/// Execute a SELECT query, check the result, return all records
-	/** \param $fields Fields to SELECT
+	/** enableFields() are taken into account.
+	 * 
+	 *  \param $fields Fields to SELECT
 	 *  \param $table Table to SELECT FROM
 	 *  \param $where WHERE-clause (defaults to selecting all records)
 	 *  \param $groupBy Fields to GROUP BY
 	 *  \param $orderBy Fields to ORDER BY
 	 *  \param $limit Maximum number of records to SELECT
 	 *  \return The result of the query as 2-dimensional associative array
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
@@ -106,7 +125,8 @@ class tx_newspaper  {
 	
 	/// Execute a SELECT query on M-M related tables
 	/** Copied and adapted from t3lib_db::exec_SELECT_mm_query so that the 
-	 *	SQL query is retained for debugging.
+	 *	SQL query is retained for debugging as tx_newspaper::$query.
+	 *
 	 *	\param $select Field list for SELECT
 	 *  \param $local_table Tablename, local table
 	 *  \param $mm_table Tablename, relation table
@@ -119,6 +139,8 @@ class tx_newspaper  {
 	 *  \param $orderBy Optional ORDER BY field(s), if none, supply blank string.
 	 *  \param $limit Optional LIMIT value ([begin,]max), if none, supply blank string.
 	 *  \return The result of the query as 2-dimensional associative array
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
 	 */
 	public static function selectMMQuery($select, $local_table, $mm_table, $foreign_table,
 										 $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
@@ -146,10 +168,18 @@ class tx_newspaper  {
 		);
 	}
 
-	/// inserts a record using process_datamap, which fills in all needed fields and calls save hook
-	/** \param $table SQL table to insert into
+	/// Inserts a record into a SQL table
+	/** If the class constant tx_newspaper::use_datamap is set, the data is 
+	 *  written using process_datamap(), which fills in all needed fields and
+	 *  calls the save hook. Otherwise, $GLOBALS['TYPO3_DB']->INSERTquery() is
+	 *  called. 
+	 * 
+	 *  \param $table SQL table to insert into
 	 *  \param $row Data as key=>value pairs
 	 *  \return uid of inserted record
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
+	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function insertRows($table, array $row) {
 
@@ -159,11 +189,11 @@ class tx_newspaper  {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		if (isset($TCA[$table]) && self::use_datamap) {
-		/// process_datamap() dies if PID is not set
-/*		if (!isset($row['pid']) || !$row['pid']) {
-			throw new tx_newspaper_IllegalUsageException('PID must be set, else process_datamap() will die! ' .
-														 print_r($row, 1));
-		}
+			/// process_datamap() dies if PID is not set
+/*			if (!isset($row['pid']) || !$row['pid']) {
+				throw new tx_newspaper_IllegalUsageException('PID must be set, else process_datamap() will die! ' .
+															 print_r($row, 1));
+			}
 */		
 			///	Assemble a datamap with a new UID
 			$new_id = 'NEW'.uniqid('');
@@ -197,11 +227,13 @@ class tx_newspaper  {
 		}
 	}
 
-	/// updates a record using T3 API
+	/// Updates a record using the Typo3 API
 	/** \param $table SQL table to update
 	 *  \param $where SQL WHERE condition (typically 'uid = ...')
 	 *  \param $row Data as key=>value pairs
 	 *  \return number of affected rows
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
 	 */
 	public static function updateRows($table, $where, array $row) {
 		
@@ -219,9 +251,19 @@ class tx_newspaper  {
         
 	}
 
-	/// deletes a record using process_cmdmap(), which checks all needed fields and calls save hook
-	/** \param $table SQL table to delete a record from
+	/// Deletes a record from a DB table
+	/** If the class constant tx_newspaper::use_datamap is set, the operation
+	 *  uses process_cmdmap(), which checks all needed fields and calls the save
+	 *  hook. Otherwise, if \p $table is recorded in $TCA, its field 'deleted'
+	 *  is set to 1. If \p $table is not recorded in $TCA (which is the case for
+	 *  MM tables), an SQL DELETE query is executed.
+	 * 
+	 *  \param $table SQL table to delete a record from
 	 *  \param $uids_or_where Array of UIDs to delete or a WHERE-condition as string
+	 *  \return number of affected rows
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
+	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function deleteRows($table, $uids_or_where) {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
@@ -264,10 +306,16 @@ class tx_newspaper  {
 	}
 
 
-	/// Returns a part of a WHERE clause which will filter out records with start/end times, deleted flag set, or hidden flag set (if hidden should be included used); switch for BE/FE is included 
-	/** \param String $table name of db table to check
-	 *  \param int [0|1] specifies if hidden records are to be included (ignored if in FE)
-	 *  \return WHERE part of an SQL statement starting with AND or empty string
+	/// WHERE clause to filter out unwanted records 
+	/** Returns a part of a WHERE clause which will filter out records with
+	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
+	 *  be included used); switch for BE/FE is included.
+	 * 
+	 *  \param String $table name of db table to check
+	 *  \param int [0|1] specifies if hidden records are to be included 
+	 * 		(ignored if in FE)
+	 *  \return WHERE part of an SQL statement starting with AND; or an empty 
+	 * 		string, if not applicable.
 	 */
 	static public function enableFields($table, $show_hidden = 1) {
 		global $TCA;
@@ -291,10 +339,11 @@ class tx_newspaper  {
 		return '';		
 	}
 
-	/// gets sorting position for next element in a mm table 
-	/// \param String $table name of mm table
-	/// \param int $uid_local
-	/// \return int sorting position of element inserted as last element
+	/// Gets sorting position for next element in a mm table 
+	/** \param $table name of mm table
+	 *  \param $uid_local
+	 *  \return sorting position of element inserted as last element
+	 */
 	public static function getLastPosInMmTable($table, $uid_local) {
 		$row = self::selectRows(
 			'MAX(sorting) AS max_sorting',
@@ -305,9 +354,12 @@ class tx_newspaper  {
 	}
 
 
-	/// check if at least one records exists in given table (regarding enable fields for BE/FE)
-	/// \return boolean true, if at least one record availabe in given table
-	function atLeastOneRecord($table) {
+	/// Check if at least one record exists in given table
+	/**  Enable fields for BE/FE are taken into account.
+	 *  
+	 *  \return boolean true, if at least one record availabe in given table
+	 */
+	public static function atLeastOneRecord($table) {
 		try {
 			self::selectOneRow(
 				'uid',
@@ -324,9 +376,10 @@ class tx_newspaper  {
 	}
 
 
-	/// check if given class name is an abstract class
-	/// \param String $class class name
-	/// \return true if abstract class, false else (or if no class at all)
+	/// Check if given class name is an abstract class
+	/** \param $class class name
+	 *  \return true if abstract class, false else (or if no class at all)
+	 */
 	public static function isAbstractClass($class) {
 		$abstract = false;
 		if (class_exists($class)) {
@@ -338,12 +391,14 @@ class tx_newspaper  {
 
 
 	/// prepends the given absulte path part if path to check is no absolute path
-	/** \param string $path2check path to check if it's an absolute path
-	 *  \param string $absolutePath this path is prepended to $path2check; no check, if this path is absolute
-	 *  \return string absolute path (either absolute string was prepended or path to check was absolute already); WIN: backslashes are converted to slashes
+	/** \param $path2check path to check if it's an absolute path
+	 *  \param $absolutePath this path is prepended to $path2check; no
+	 * 		check, if this path is absolute
+	 *  \return absolute path (either absolute string was prepended or path to
+	 * 		check was absolute already); WIN: backslashes are converted to slashes
+	 *  \todo: throw exception if created path does not exist???
 	 */
 	public static function createAbsolutePath($path2check, $absolutePath) {
-/// \todo: throw exception if created path does not exist???
 
 		// windows uses the backslash character as path delimiter - make sure slashes are used only
 		$path2check = str_replace('\\', '/', $path2check);
@@ -373,11 +428,13 @@ class tx_newspaper  {
 	
 
 	/// Get the tx_newspaper_Section object of the page currently displayed
-	/** Currently, that means it returns the ressort record which lies on the
-	 *  current Typo3 page. This implementation may change, but this function
-	 *  is required to always return the correct tx_newspaper_Section.
+	/** Currently, that means it returns the tx_newspaper_Section record which
+	 *  lies on the current Typo3 page. This implementation may change, but this
+	 *  function is required to always return the correct tx_newspaper_Section.
 	 * 
 	 *  \return The tx_newspaper_Section object the plugin currently works on
+	 *  \throw tx_newspaper_IllegalUsageException if the current page is not 
+	 * 		associated with a tx_newspaper_Section.
 	 */
 	public static function getSection() {
 		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
@@ -390,9 +447,10 @@ class tx_newspaper  {
 	}
 	
 	
-	/// Return the name of the SQL table \p $class resides in
+	/// Return the name of the SQL table \p $class is persistently stored in
 	/** \param $class either object or a class name to find the SQL table for
-	 *  \return The lower-cased class name of \p $class (= name of associated db table; newspaper convention)
+	 *  \return The lower-cased class name of \p $class (= name of associated
+	 * 		db table; newspaper convention)
 	 */
 	public static function getTable($class) {
 		if (is_object($class)) {
@@ -401,11 +459,11 @@ class tx_newspaper  {
 		return strtolower($class);
 	}
 
-	/// get all child classes (but child only, no grand children etc.)
-	/** basically used to get concrete classes extending an abstract class
-	 *  \param $class_name name of class to look for child classes
-	 *  \return array list of child classes
-	 */ 
+	/// Get all child classes (but child only, no grand children etc.)
+	/** Basically used to get concrete classes which extend an abstract class
+	 *  \param $class_name Name of class to look for child classes
+	 *  \return List of child classes
+	 */
 	public static function getChildClasses($class_name) {
 		if ($class_name == '') return array();
 		$class_name = strtolower($class_name);
@@ -418,7 +476,11 @@ class tx_newspaper  {
 	}
 
 
-	/// \return true if given class implentes given interface
+	/// Check if a given class implements a given interface
+	/** \param $class PHP class to check if it implements \p $interface
+	 *  \param $interface PHP interface to check if it is implemented by \p $class
+	 *  \return true if given \p $class implentes given \p $interface
+	 */
 	public static function classImplementsInterface($class, $interface) {
 		if (!class_exists($class))
 			return false;
@@ -451,28 +513,17 @@ class tx_newspaper  {
 		return self::pagetype_get_parameter;
 	}
 
-	/// create a typolink-compatible link with text and link
+	/// Create a HTML link with text and URL using the typolink() API function 
 	/** \param  $text the text to be displayed
-	 *  \param  $params target and optional GET parameters
-	 *  \param  $conf optional TypoScript configuration array, if present
-	 *  \return array ['text'], ['href']									  */
+	 *  \param  $params target and optional GET parameters as parameter => value
+	 *  \param  $conf optional TypoScript configuration array
+	 *  \return array ['text'], ['href']				
+	 */
     public static function typolink($text, array $params = array(), array $conf = array()) {
 		//  a tslib_cObj object is needed to call the typolink_URL() function
 		if (!self::$local_cObj) {
 	        self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
     	    self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
-		}
-
-		//	make sure $params is an associative array
-		if (!is_array($params)) {
-			$params_temp = explode('&', $params, 2);
-			$params = array('id' => $params_temp[0]);
-			$params_temp = explode('&', $params_temp[1]);
-
-			foreach ($params_temp as $param) {
-				$param = explode('=', $param);
-				$params[$param[0]] = $param[1];
-			}
 		}
 
 		//  make sure $params is a one-dimensional array
@@ -515,9 +566,9 @@ class tx_newspaper  {
 	}
 
 	/** get a typolink-compatible URL
-	 *  @param  $params target and optional GET parameters
-	 *  @param  $conf optional TypoScript configuration array, if present
-	 *  @return generated URL										  */
+	 *  \param  $params target and optional GET parameters
+	 *  \param  $conf optional TypoScript configuration array, if present
+	 *  \return generated URL										  */
 	public static function typolink_url(array $params = array(), array $conf = array()) {
 		$link = self::typolink('', $params, $conf);
 		return $link['href'];
