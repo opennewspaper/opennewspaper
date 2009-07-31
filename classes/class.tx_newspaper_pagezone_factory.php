@@ -88,13 +88,17 @@ class tx_newspaper_PageZone_Factory {
 		}
 		$pagezone->setParentPage($page);
 		$pagezone->setPageZoneType($type);
+
+		t3lib_div::devlog('new page zone', 'newspaper', 0, $pagezone);
+		//	store pagezone once so that it has a UID
+		$pagezone->store();
 				
 		///	copy Extras from appropriate page zone
 		/** \todo make this work. currently a WrongAttributeException is thrown
 		 *  because the attributes array is empty at this time. probably just
 		 *  move this line to after store().
 		 */
-		t3lib_div::devlog('new page zone', 'newspaper', 0, $pagezone);
+		t3lib_div::devlog('stored page zone', 'newspaper', 0, $pagezone);
 		$parent = $pagezone->getParentForPlacement();
 		t3lib_div::devlog('parent', 'newspaper', 0, $parent);
 		$pagezone->copyExtrasFrom($parent);
