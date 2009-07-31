@@ -22,6 +22,10 @@
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
+	/// Create a tx_newspaper_Extra
+	/** Only the UID of the corresponding DB record is set. All attributes are
+	 *  only read if and when they are needed.
+	 */
 	public function __construct($uid) {
 		$this->setUid($uid);
 	}
@@ -117,7 +121,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$this->smarty->assign('extra_attributes', $this->extra_attributes);
 	}
 	
-	/// \todo remove before launch
+	///	Default implementation of the render() function
+	/** \todo Remove before launch - or shouldn't we?
+	 */
 	public function render($template_set = '') {
 		$this->prepare_render($template_set);
 		return '<p>' .

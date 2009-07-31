@@ -2,13 +2,19 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
+/// A HTML link with a text, a target URL and a target frame
+/** These links are intended for pages outside of Typo3/newspaper, whose text
+ *  can not be deduced by other means. Of course, they can be used for internal
+ *  links just as well.
+ * 
+ *  \todo Instead of explicit member variables, just use an attributes array.
+ *  \todo Use tx_newspaper::getTable() instead of tx_newspaper_ExternalLink::$table
+ */
 class tx_newspaper_ExternalLink {
+	
+	///	Create a tx_newspaper_ExternalLink from a DB record
 	public function __construct($uid) {
-		$this->text = 'dummy text';
-		$this->url = 'dummy URL';
-		$this->target = '';
-		
-		/// \todo select from DB
+
 		$row = tx_newspaper::selectOneRow(
 			'*', self::$table, 'uid = ' . intval($uid)
 		);
@@ -18,37 +24,48 @@ class tx_newspaper_ExternalLink {
 		$this->target = $row['target'];
 	}
 	
+	/// \return The text displayed under the link
 	public function getText() { 
 		return $this->text? $this->text: $this->url; 
 	}
 	
+	/// \return The URL pointed to
 	public function getURL() {
 		if (strpos($this->url, '://') !== false)
 			return $this->url;
 		return 'http://' . $this->url;
 	}
 	
+	/// \return The target frame
 	public function getTarget() {
 		return $this->target;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	private $text = null;
-	private $url = null;
-	private $target = null;
+	private $text = null; 		///< The text displayed under the link
+	private $url = null;		///< The URL pointed to
+	private $target = null;		///< The target frame
 	
+	/// SQL table for persistence
 	private static $table = 'tx_newspaper_externallinks';
 }
 
+///	An Extra displaying a list of HTML links pointing to external sources
+/** These links are intended for pages outside of Typo3/newspaper, whose text
+ *  can not be deduced by other means. Of course, they can be used for internal
+ *  links just as well.
+ */
 class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 
+	/// Create a tx_newspaper_Extra_ExternalLinks
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
 		}
 	}
 	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		try {
 		return 'Extra: UID ' . $this->getExtraUid() . ', External Links Extra: UID ' . $this->getUid() .
@@ -58,8 +75,7 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Just a quick hack to see anything
-	 */
+	/// Display the list of links
 	public function render($template_set = '') {
 
 		$this->prepare_render($template_set);
@@ -70,24 +86,29 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	/// \todo getLLL
+	///	A description to identify the Extra class in the BE
+	/** \todo getLLL)()
+	 */
 	public function getTitle() {
 		return 'External Links';
 	}
 
+	/// A description to identify the link list in the BE
 	public function getDescription() {
 		return '<strong>' . $this->getAttribute('links') . '</strong> ';
 	}
 
-	/// title for module
+	/// Title for module/SysFolder
 	public static function getModuleName() {
 		return 'np_textbox';
 	}
 	
+	///	This Extra may be different for every article
 	public static function dependsOnArticle() { return true; }
 	
 	////////////////////////////////////////////////////////////////////////////
 	
+	/// Return and (if needed) read the links displayed in this list
 	private function getLinks() {
 		if (!$this->links) {
 			foreach (explode(',', trim($this->getAttribute('links'))) as $link_uid) {
@@ -97,8 +118,10 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		
 		return $this->links;
 	}
+
+	////////////////////////////////////////////////////////////////////////////
 	
-	private $links = array();
+	private $links = array();	///< The links displayed in this list
 	
 }
 
