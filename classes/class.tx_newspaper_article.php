@@ -106,7 +106,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 
-	/// \see tx_newspaper_StoredObject
 	public function getAttribute($attribute) {
 				
 		if (!$this->attributes) {
