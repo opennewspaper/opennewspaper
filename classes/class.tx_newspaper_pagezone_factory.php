@@ -94,7 +94,8 @@ class tx_newspaper_PageZone_Factory {
 		 *  because the attributes array is empty at this time. probably just
 		 *  move this line to after store().
 		 */
-		$pagezone->copyExtrasFrom($pagezone->getParentForPlacement());
+		$parent = $pagezone->getParentForPlacement();
+		$pagezone->copyExtrasFrom($parent);
 
 		$pagezone->store();
 		
