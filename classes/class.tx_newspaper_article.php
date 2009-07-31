@@ -106,6 +106,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	/// \see tx_newspaper_StoredObject
 	public function getAttribute($attribute) {
 				
 		if (!$this->attributes) {
@@ -121,6 +122,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		return $this->attributes[$attribute];
 	}
 
+	/// \see tx_newspaper_StoredObject
 	public function setAttribute($attribute, $value) {
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
@@ -129,6 +131,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->attributes[$attribute] = $value;
 	}
 
+	/// \see tx_newspaper_StoredObject
 	public function store() {
 		
 		/// insert article data (if uid == 0) or update if uid > 0
@@ -171,16 +174,18 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $this->getUid();		
 	}
 
-	/** \todo Internationalization */
+	/// \see tx_newspaper_StoredObject
 	public function getTitle() {
 		return 'Article';
 	}
 
+	/// \see tx_newspaper_StoredObject
 	public function getUid() { 
 		if (!intval($this->uid)) $this->uid = $this->attributes['uid'];
 		return intval($this->uid);
 	}
 
+	/// \see tx_newspaper_StoredObject
 	public function setUid($uid) { 
 		$this->uid = $uid;
 		if ($this->attributes) {
@@ -189,36 +194,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 
+	/// \see tx_newspaper_StoredObject
 	public public function getTable() {
 		return 'tx_newspaper_article';
 	}
 
+	/// \see tx_newspaper_StoredObject
 	static public function getModuleName() {
 		return 'np_article';
 	}
 	
-	
-	/// adds sections to article (will be inserted after existing sections)
-	/// \param section object
-	public function addSection(tx_newspaper_Section $s) {
-/// \todo: if ($this->getuid() == 0) throw e OR 		
-/// \todo: just collect here and store sections later in article::store()
-		
-		// get pos of next element 
-		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getuid()) + 1;
-		
-		tx_newspaper::insertRows(
-			'tx_newspaper_article_sections_mm',
-			array(
-				'uid_local' => $this->getUid(),
-				'uid_foreign' => $s->getUid(),
-				'sorting' => $p
-			)
-		);
-		
-	}
-	
-
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	interface tx_newspaper_ExtraIface
@@ -560,8 +545,27 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 		}
 		return $list;
 	}
-	
 
+	/// adds sections to article (will be inserted after existing sections)
+	/// \param section object
+	public function addSection(tx_newspaper_Section $s) {
+/// \todo: if ($this->getuid() == 0) throw e OR 		
+/// \todo: just collect here and store sections later in article::store()
+		
+		// get pos of next element 
+		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getuid()) + 1;
+		
+		tx_newspaper::insertRows(
+			'tx_newspaper_article_sections_mm',
+			array(
+				'uid_local' => $this->getUid(),
+				'uid_foreign' => $s->getUid(),
+				'sorting' => $p
+			)
+		);
+		
+	}
+		
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	protected functions
