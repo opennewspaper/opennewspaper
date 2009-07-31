@@ -94,7 +94,9 @@ class tx_newspaper_PageZone_Factory {
 		 *  because the attributes array is empty at this time. probably just
 		 *  move this line to after store().
 		 */
+		t3lib_div::devlog('new page zone', 'newspaper', 0, $pagezone);
 		$parent = $pagezone->getParentForPlacement();
+		t3lib_div::devlog('parent', 'newspaper', 0, $parent);
 		$pagezone->copyExtrasFrom($parent);
 
 		$pagezone->store();
