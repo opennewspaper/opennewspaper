@@ -495,13 +495,15 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 							tx_newspaper_PageType $pagetype = null) {
 		if ($section) {
 			throw new tx_newspaper_NotYetImplementedException(
-				'Links to articles in sections other than their primary section'
+				'Links to articles in sections other than their primary section' .
+				' (uid ' . $this->getUid() . ')'
 			);
 		}
 		$section = $this->getPrimarySection();
 		if (!$section instanceof tx_newspaper_Section) {
 			throw new tx_newspaper_NotYetImplementedException(
-				'Links to articles with no primary section'
+				'Links to articles with no primary section' .
+				' (uid ' . $this->getUid() . ')'
 			);
 			
 		}
