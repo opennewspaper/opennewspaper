@@ -1,4 +1,19 @@
 #
+# Table structure for table 'tx_newspaper_extra_image_tags_mm'
+# 
+#
+CREATE TABLE tx_newspaper_extra_image_tags_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
+#
 # Table structure for table 'tx_newspaper_extra_image'
 #
 CREATE TABLE tx_newspaper_extra_image (
@@ -15,6 +30,13 @@ CREATE TABLE tx_newspaper_extra_image (
 	title tinytext NOT NULL,
 	image blob NOT NULL,
 	caption tinytext NOT NULL,
+	normalized_filename tinytext NOT NULL,
+	kicker tinytext NOT NULL,
+	credit tinytext NOT NULL,
+	source tinytext NOT NULL,
+	type int(11) DEFAULT '0' NOT NULL,
+	alttext tinytext NOT NULL,
+	tags int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -159,6 +181,22 @@ CREATE TABLE tx_newspaper_article_sections_mm (
 
 
 
+
+#
+# Table structure for table 'tx_newspaper_article_tags_mm'
+# 
+#
+CREATE TABLE tx_newspaper_article_tags_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
 #
 # Table structure for table 'tx_newspaper_article'
 #
@@ -193,6 +231,7 @@ CREATE TABLE tx_newspaper_article (
 	publish_date int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
 	modification_user blob NOT NULL,
+	tags int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -570,6 +609,24 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic (
 	sql_condition tinytext NOT NULL,
 	sql_order_by tinytext NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_tag'
+#
+CREATE TABLE tx_newspaper_tag (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	tag tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
