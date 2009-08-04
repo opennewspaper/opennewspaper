@@ -62,7 +62,7 @@ class tx_newspaper_SaveHook {
 
 
 
-
+	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		global $LANG;
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
@@ -79,6 +79,9 @@ class tx_newspaper_SaveHook {
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
 
+		/// handle uploads of tx_newspaper_Extra_Image
+		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
+		
 		if (!tx_newspaper::isAbstractClass($table) && class_exists($table)) { ///<newspaper specification: table name = class name
 
 			$np_obj = new $table();
@@ -223,6 +226,9 @@ class tx_newspaper_SaveHook {
 		}
 	}
 
+	private function handleImageUploads($status, $table, $id, &$fieldArray, $that) {
+		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+	}
 
 
 
