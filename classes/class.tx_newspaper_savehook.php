@@ -173,11 +173,11 @@ class tx_newspaper_SaveHook {
 	private function checkArticleListChangedInSection(array &$fieldArray, $table, $id) {
 		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
 		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
-t3lib_div::devlog('al1 fiealdArray[al]', 'np', 0, array($fieldArray, $table, $id));
+//t3lib_div::devlog('al1 fiealdArray[al]', 'np', 0, array($fieldArray, $table, $id));
 		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
 			$al = new $fieldArray['articlelist'](); // create new article list
 			if ($al instanceof tx_newspaper_articlelist) {
-t3lib_div::devlog('al 2 instanceof al', 'np', 0);
+//t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 
 				// delete all (abstract) article lists assigned to this section, before writing the new one
 				tx_newspaper::updateRows(
@@ -188,6 +188,9 @@ t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 
 				// articlelist was changed to another valid articlelist type, so store new abstract article list
 				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
+				$new_al->store();
+				$new_al->setAttribute('crdate', time());
+				$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 				$new_al->store();
  				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list; will be stored in section
 
@@ -356,7 +359,11 @@ t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
+			/// \todo make default article list configurable
 			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
+			$al->store();
+			$al->setAttribute('crdate', time());
+			$al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 			$al->store();
 		} 
 	}
