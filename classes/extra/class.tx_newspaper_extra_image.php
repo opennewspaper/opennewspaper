@@ -168,7 +168,6 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
 
     /** where uploaded images are stored */
     static protected $baseurl = '/uploads/tx_hptazarticle/';
-    static protected $basepath = BASEPATH;
 
     /** path to convert(1) */
     static protected $convert = '/usr/bin/convert';
