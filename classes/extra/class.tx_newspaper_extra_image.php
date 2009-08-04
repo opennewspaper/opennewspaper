@@ -22,7 +22,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			parent::__construct($uid); 
 		}
 //		$this->smarty = new tx_newspaper_Smarty();
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+/*	wtf?! look at that:
+Fatal error: Call to a member function exec_SELECTquery() on a non-object in 
+/var/lib/httpd/onlinetaz/typo3_src-4.2.6/t3lib/class.t3lib_befunc.php on line 1238
+ */
+#		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$this->basepath = $TSConfig['newspaper.']['image']['basepath'];
 		$this->sizes =  $TSConfig['newspaper.']['image']['size'];
 	}
