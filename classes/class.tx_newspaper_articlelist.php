@@ -115,7 +115,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	  *  attributes, even if they don't exist beforehand.
 	  */
 	public function setAttribute($attribute, $value) {
-		if (!$this->attributes) {
+		if (!$this->attributes && $this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
