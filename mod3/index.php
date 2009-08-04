@@ -788,6 +788,7 @@ private function getPagezoneSmartyObject() {
 	$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
 	$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
 	$label['paragraph'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_paragraph', false);
+	$label['notes'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_notes', false);
 
 	$smarty_pz = new tx_newspaper_Smarty();
 	$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
