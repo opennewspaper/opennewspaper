@@ -179,7 +179,7 @@ class tx_newspaper_SaveHook {
 			if ($al instanceof tx_newspaper_articlelist) {
 //t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 
-				// delete all (abstract) article lists assigned to this section, before writing the new one
+				// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
 				tx_newspaper::updateRows(
 					'tx_newspaper_articlelist',
 					'section_id=' . $id,
@@ -188,7 +188,6 @@ class tx_newspaper_SaveHook {
 
 				// articlelist was changed to another valid articlelist type, so store new abstract article list
 				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
-				$new_al->store();
 				$new_al->setAttribute('crdate', time());
 				$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 				$new_al->store();
@@ -361,7 +360,6 @@ class tx_newspaper_SaveHook {
 			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
 			/// \todo make default article list configurable
 			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
-			$al->store();
 			$al->setAttribute('crdate', time());
 			$al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 			$al->store();
