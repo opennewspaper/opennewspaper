@@ -1,37 +1,65 @@
 <script language="javascript" >
 	document.change_para = false; // if set to false, a paragraph might be changed
-	document.def = new Array(); // stores the current value for all paragraphs being displayed
+	document.def_para = new Array(); // stores the current value for all paragraphs being displayed
+	document.change_notes = false; // if set to false, a note might be changed
+	document.def_notes = new Array(); // stores the current value for all notes being displayed
 
-	function changeParagraph(extra_uid) {ldelim}
-		if (document.change_para) {ldelim}
-			alert('todo: message ... erst speichern ... ' + extra_uid + ',' + document.def[extra_uid]);
-			document.getElementById('para_' + extra_uid).value = document.def[extra_uid]; // undo
+	
+	
+	function changeField(extra_uid, type) {ldelim}
+		if (eval("document.change_" + type)) {ldelim}
+			alert('todo: message ... erst speichern ... ' + extra_uid + ',' + eval("document.def_" + type + "[extra_uid]"));
+			document.getElementById(type + '_' + extra_uid).value = eval("document.def_" + type + "[extra_uid]"); // undo
 			return false;
 		{rdelim}
 
-		// \todo: integer check ...
+		// \todo: type check ...
 		
-		document.getElementById('para_td_' + extra_uid).style.backgroundColor = 'red';
-		document.getElementById('save_' + extra_uid).style.display = 'inline';
-
-		document.change_para = true;
+		document.getElementById(type + '_td_' + extra_uid).style.backgroundColor = 'red';
+		document.getElementById('save_' + type + '_' + extra_uid).style.display = 'inline';
 		
-	{rdelim}
-
-	function undoParagraph(extra_uid) {ldelim}
-		document.getElementById('para_td_' + extra_uid).style.backgroundColor = '';
-		document.getElementById('save_' + extra_uid).style.display = 'none';
-
-		document.getElementById('para_' + extra_uid).value = document.def[extra_uid];
-
-		document.change_para = false;
+		switch(type) {ldelim}
+			case 'para':
+				document.change_para = true;
+			break;
+			case 'notes':
+				document.change_notes = true;
+			break;
+		{rdelim}
 		
 	{rdelim}
 
-	function saveParagraph(pz_uid, extra_uid) {ldelim}
-		value = document.getElementById('para_' + extra_uid).value;
-		extra_save_para(pz_uid, extra_uid, value);
-		document.def[extra_uid] = value; // store this value as new default (not needed if page is reloaded ...)
+	function undoField(extra_uid, type) {ldelim}
+		document.getElementById(type + '_td_' + extra_uid).style.backgroundColor = '';
+		document.getElementById('save_' + type + '_' + extra_uid).style.display = 'none';
+
+		document.getElementById(type + '_' + extra_uid).value = eval("document.def_" + type + "[extra_uid]");
+
+		switch(type) {ldelim}
+			case 'para':
+				document.change_para = false;
+			break;
+			case 'notes':
+				document.change_notes = false;
+			break;
+		{rdelim}
+		
+	{rdelim}
+
+	function saveField(pz_uid, extra_uid, type) {ldelim}
+		value = document.getElementById(type + '_' + extra_uid).value;
+		extra_save_field(pz_uid, extra_uid, value, type);
+		
+		// store this value as new default (not needed if page is reloaded ...)
+		switch(type) {ldelim}
+			case 'para':
+				document.def_para[extra_uid] = value;
+			break;
+			case 'notes':
+				document.def_notes[extra_uid] = value;
+			break;
+		{rdelim}
+		
 	{rdelim}
 
 

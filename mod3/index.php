@@ -207,13 +207,23 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
-	private function processSaveExtraParagraph($pz_uid, $extra_uid, $paragraph) {
+	private function processSaveExtraField($pz_uid, $extra_uid, $value, $type) {
+
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
-		$e->setAttribute('position', 0); // move as first element to new paragraph
 		
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // this is an article (as this option isn't available for pagezone_apge objects)
-		$pz->changeExtraParagraph($e, intval($paragraph)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
-		
+		switch(strtolower($type)) {
+			case 'para':
+				$e->setAttribute('position', 0); // move as first element to new paragraph
+				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
+			break;
+			case 'notes':
+				$e->setAttribute('notes', $value);
+				$e->store();
+			break;
+			default:
+				die('Unknown type when saving field: ' + $type);
+		}
 		die(); 
 	}
 
@@ -259,8 +269,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			$this->processPageZoneTypeChange(t3lib_div::_GP('pzt_uid')); 
 		}
 		
-		if (t3lib_div::_GP('extra_save_para') == 1) {
-			$this->processSaveExtraParagraph(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('value'));
+		if (t3lib_div::_GP('extra_save_field') == 1) {
+			$this->processSaveExtraField(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('value'), t3lib_div::_GP('type'));
 		}
 
 
