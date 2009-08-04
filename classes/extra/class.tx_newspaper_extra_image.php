@@ -22,13 +22,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			parent::__construct($uid); 
 		}
 //		$this->smarty = new tx_newspaper_Smarty();
-/*	wtf?! look at that:
-Fatal error: Call to a member function exec_SELECTquery() on a non-object in 
-/var/lib/httpd/onlinetaz/typo3_src-4.2.6/t3lib/class.t3lib_befunc.php on line 1238
- */
-#		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$this->basepath = $TSConfig['newspaper.']['image']['basepath'];
-		$this->sizes =  $TSConfig['newspaper.']['image']['size'];
 	}
 	
 	public function __toString() {
@@ -90,58 +83,36 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
 		t3lib_div::devlog('image save hook', 'newspaper', 0, 
 			array('status' => $status, 'table' => $table, 'id' => $id, 
 				  'fieldArray' => $fieldArray, 'that' => $that));
+				  
+		self::resizeImages($fieldArray['image']);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	protected function resizeImages($fieldArray) {
-		foreach (
-			array(
-				'article_mainteaser_image',
-				'plugin_photo_1_img',
-				'plugin_photo_2_img')
-			as $key) {
-			if ($fieldArray[$key]) $this->resizeImg($fieldArray[$key]);
-		}
-	}
+	/** If image needs resizing, resize it to all sizes defined in TSConfig
+	 */
+	protected static function resizeImages($image) {
+/*	wtf?! look at that:
+Fatal error: Call to a member function exec_SELECTquery() on a non-object in 
+/var/lib/httpd/onlinetaz/typo3_src-4.2.6/t3lib/class.t3lib_befunc.php on line 1238
+ */
+ 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); /// check tsconfig in article sysfolder
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+		t3lib_div::devlog('TSConfig', 'newspaper', 0, $TSConfig);
+		
+		self::basepath = $TSConfig['newspaper.']['image']['basepath'];
+		self::sizes =  $TSConfig['newspaper.']['image']['size'];
 
-
-	/** if image needs resizing, do it (using imagemagick)					  */
-    protected function resizeImg($img) {
 		foreach (self::$imgSizes as $key => $dimension) {
-	    	if ($this->imgIsResized($img, $key)) continue;
-			taz_base::resizeImage(self::$imgSizes[$key]['width'], self::$imgSizes[$key]['height'],
-							  self::$basepath.self::$baseurl.$img,
-							  self::$basepath.self::$baseurl.$this->imgResizedName($img, $key));
+	    	if ($this->imgIsResized($image, $key)) continue;
+			self::resizeImage(self::$imgSizes[$key]['width'], self::$imgSizes[$key]['height'],
+							  self::$basepath.self::$baseurl.$image,
+							  self::$basepath.self::$baseurl.$this->imgResizedName($image, $key));
 		}
-    }
-
-	/** copy $basedir to $targetPath on $targetHost	*/
-	protected function rsync($basedir, $targetHost, $targetPath) {
-		$command = "rsync ".self::$rsyncOpts." \"$basedir\" \"$targetHost:$targetPath\" 2>&1"; // "..." -> space in path
-		$output = array();
-		$return = 0;
-		exec($command, $output, $return);
-		exec("date >> ".self::$rsyncLog);
-        $f = fopen(self::$rsyncLog, "a+");
-        fwrite ($f, "$basedir\n");
-        fwrite ($f, print_r($output,1));
-        fclose($f);
-
-        if ($return) {
-			taz_base::degub("Achtung: das Uebertragen der hochgeladenen Bilder auf den Live-Server ist fehlgeschlagen!");
-			taz_base::degub("Es kann sein, dass Bilder fuer diesen Artikel nicht angekommen sind. Vergewissere Dich bitte, bevor Du den Artikel sichtbar stellst.");
-			taz_base::degub("Im folgenden etwas Debug-Information, die Dir vielleicht weiterhilft, und die du an ".self::$devAddress." schicken kannst, um das Problem zu beheben.");
-			taz_base::degub($command,0);
-			taz_base::degub($output,0);
-			taz_base::degub($return,0);
-		}
-
 	}
-
 
     /** if image needs resizing, do it (using imagemagick)					  */
-    static function resizeImage($width, $height, $source, $target) {
+    protected static function resizeImage($width, $height, $source, $target) {
     	if (!file_exists(dirname($target))) {
     		if(!mkdir(dirname($target))) {
     			die('Couldn\'t mkdir('.dirname($target).')');
@@ -168,6 +139,29 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
     protected function imgResizedName($img, $key) {
     	return taz_base::imageResizedName($img, self::$imgSizes[$key]['name']);
     }
+
+	/** copy $basedir to $targetPath on $targetHost	*/
+	protected function rsync($basedir, $targetHost, $targetPath) {
+		$command = "rsync ".self::$rsyncOpts." \"$basedir\" \"$targetHost:$targetPath\" 2>&1"; // "..." -> space in path
+		$output = array();
+		$return = 0;
+		exec($command, $output, $return);
+		exec("date >> ".self::$rsyncLog);
+        $f = fopen(self::$rsyncLog, "a+");
+        fwrite ($f, "$basedir\n");
+        fwrite ($f, print_r($output,1));
+        fclose($f);
+
+        if ($return) {
+			taz_base::degub("Achtung: das Uebertragen der hochgeladenen Bilder auf den Live-Server ist fehlgeschlagen!");
+			taz_base::degub("Es kann sein, dass Bilder fuer diesen Artikel nicht angekommen sind. Vergewissere Dich bitte, bevor Du den Artikel sichtbar stellst.");
+			taz_base::degub("Im folgenden etwas Debug-Information, die Dir vielleicht weiterhilft, und die du an ".self::$devAddress." schicken kannst, um das Problem zu beheben.");
+			taz_base::degub($command,0);
+			taz_base::degub($output,0);
+			taz_base::degub($return,0);
+		}
+
+	}
 
     /** where uploaded images are stored */
     static protected $baseurl = '/uploads/tx_hptazarticle/';
@@ -201,7 +195,9 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
     	//	main teaser image
         IMAGE_SIZE_MAINTEA => array('width' => 424, 'height' => 212, 'name' => 'mtea'));
 
-	
+
+	private static $basepath = null;
+	private static $sizes = array();	
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_image());
