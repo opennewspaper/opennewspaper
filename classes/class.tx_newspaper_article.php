@@ -396,6 +396,8 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 	 */
 	public function getExtra($extra_class) {
 
+		t3lib_div::devlog('getExtra()', 'newspaper', 0, $extra_class);
+		
 		if ($extra_class instanceof tx_newspaper_Extra) {
 			$extra_class = tx_newspaper::getTable($extra_class);
 		}
