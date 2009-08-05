@@ -33,6 +33,14 @@ require_once($BACK_PATH . 'init.php');
 require_once($BACK_PATH . 'template.php');
 
 
+// width: 100%
+class fullWidthDoc extends template {
+	var $divClass = 'typo3-fullWidthDoc';
+}
+
+
+
+
 //var_dump(debug_backtrace());
 //debug($_REQUEST, '_reuqest');
 
@@ -489,7 +497,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('noDoc');
+						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 						$this->doc->backPath = $BACK_PATH;
 						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
@@ -523,9 +531,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 
 						// ShortCut
-						if ($BE_USER->mayMakeShortcut())	{
-							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-						}
+//						if ($BE_USER->mayMakeShortcut())	{
+//							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
+//						}
 
 						$this->content.=$this->doc->spacer(10);
 					} else {
