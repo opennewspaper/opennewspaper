@@ -163,33 +163,6 @@ t3lib_div::devlog('t set dropdown', 'np', $params);
 
 
 
-/// \todo: remove if really not needed
-//	function addArticlelistDropdownEntries(&$params, &$pObj) {
-//		$s = new tx_newspaper_Section(intval($params['row']['uid']));
-//		try {
-//			$al_active = $s->getArticleList();	
-//		} catch (tx_newspaper_EmptyResultException $e) {
-//t3lib_div::devlog('remove try/catch later', 'newspaper', 0);
-//			$al_active = null;
-//		};
-//
-//		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
-//		for ($i = 0; $i < sizeof($al_available); $i++) {
-//			if ($al_available[$i]->getUid() > 0) 
-//				$value = $al_available[$i]->getUid();
-//			else 
-//				$value = $al_available[$i]->getTable(); // -($i+1);
-//			$params['items'][] = array($al_available[$i]->getTitle(), $value);
-//		}
-//		
-//t3lib_div::devlog('al dropdown', 'newspaper', 0, $params);
-//	}
-
-
-
-
-
-
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
