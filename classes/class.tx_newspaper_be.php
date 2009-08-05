@@ -206,12 +206,6 @@ echo "
  		
  }
 
-function editArticleList() {
-
-
-
-}
-
 function findElementsByName(name, type) {
     var res = document.getElementsByTagName(type || '*');
     var ret = [];
@@ -221,9 +215,6 @@ function findElementsByName(name, type) {
 };
 
 </script>
-<!--
-		<a href='javascript:test();'>Test AL</a>
--->
 ";
 		
 		
