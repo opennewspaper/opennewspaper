@@ -27,7 +27,7 @@
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
-	<img src="{$basepath}/200x100/{$attributes.image}" 
+	<img src="{$basepath}/{$sizes.micro}/{$attributes.image}" 
 		 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
 {if $attributes.caption}<p>{$attributes.caption}</p>{/if}
 
