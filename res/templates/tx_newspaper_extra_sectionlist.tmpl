@@ -27,6 +27,9 @@
 {*				 height="{$image->getHeights().preview}" width="{$image->getWidths().preview}"	*}
 				 alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
 		{/if}
+
+		{$articles[i]->getAttribute('teaser')}
+
 	</a>
 {/section}
 

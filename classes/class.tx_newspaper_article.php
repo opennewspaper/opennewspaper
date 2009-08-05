@@ -387,6 +387,28 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 		
 		return $this->extras; 
 	}
+	
+	/// Find the first tx_newspaper_Extra of a given type
+	/** \param $extra_class The desired type of Extra, either as object or as
+	 *  	class name
+	 *  \return The first Extra of the given class (by appearance in article),
+	 * 		or null.
+	 */
+	public function getExtra($extra_class) {
+
+		if ($extra_class instanceof tx_newspaper_Extra) {
+			$extra_class = tx_newspaper::getTable($extra_class);
+		}
+		
+		foreach ($this->getExtras() as $extra) {
+			if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
+				return $extra;
+			}
+		}
+		
+		return null;
+	}
+	
 /*
 	public function addExtra(tx_newspaper_Extra $newExtra) {
 		throw new tx_newspaper_NotYetImplementedException();
