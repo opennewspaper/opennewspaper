@@ -44,6 +44,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$this->smarty->assign('basepath', self::$basepath);
 		$this->smarty->assign('sizes', self::$sizes);
 		
+		$this->smarty->assign('title', $this->getAttribute('title'));
+		$this->smarty->assign('image', $this->getAttribute('image'));
+		$this->smarty->assign('caption', $this->getAttribute('caption'));
+		
 		return $this->smarty->fetch($this);
 	}
 
