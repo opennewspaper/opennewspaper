@@ -100,8 +100,8 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
 		t3lib_div::devlog('TSConfig', 'newspaper', 0, $TSConfig);
 		
-		self::$basepath = $TSConfig['newspaper.']['image']['basepath'];
-		self::$sizes =  $TSConfig['newspaper.']['image']['size'];
+		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
+		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
 
 		t3lib_div::devlog('basepath', 'newspaper', 0, self::$basepath);
 		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
