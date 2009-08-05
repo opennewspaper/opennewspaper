@@ -22,6 +22,14 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			parent::__construct($uid); 
 		}
 //		$this->smarty = new tx_newspaper_Smarty();
+		/// Check TSConfig in Extra_Image sysfolder
+ 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); 
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
+		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
+
+		t3lib_div::devlog('basepath', 'newspaper', 0, self::$basepath);
+		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
 	}
 	
 	public function __toString() {
@@ -46,7 +54,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	/// A short description that makes an Extra uniquely identifiable in the BE
 	public function getDescription() {
-		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')';
+		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
+			'<img src="' . self::$basepath . '" />';
 	}
 
 //TODO: getLLL
@@ -102,17 +111,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 *  \param $image Name of the uploaded image file
 	 */
 	protected static function resizeImages($image) {
-		/// Check TSConfig in Extra_Image sysfolder
- 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); 
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
-		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
-
-		t3lib_div::devlog('basepath', 'newspaper', 0, self::$basepath);
-		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
 
 		foreach (self::$sizes as $key => $dimension) {
+
 	    	if (self::imgIsResized($image, $dimension)) continue;
+
 	    	$wxh = explode('x', $dimension);
 	    	$width = intval($wxh[0]);
 	    	$height = intval($wxh[1]);
