@@ -28,14 +28,10 @@
 			<tr class="bg2">
 		{/if}
 				<td> {$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span> </td>
-
-		
 				<td id="notes_td_{$EXTRA_DATA[i].uid}">
 					<input id="notes_{$EXTRA_DATA[i].uid}" onChange="changeField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
 					<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes'); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
 				</td>
-				
-				
 				<td align="center">
 		{if $EXTRA_DATA[i].show == 0}
 		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 1);" /> 
