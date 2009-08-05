@@ -83,8 +83,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		t3lib_div::devlog('image save hook', 'newspaper', 0, 
 			array('status' => $status, 'table' => $table, 'id' => $id, 
 				  'fieldArray' => $fieldArray, 'that' => $that));
-				  
-		self::resizeImages($fieldArray['image']);
+
+		if ($fieldArray['image']) self::resizeImages($fieldArray['image']);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
