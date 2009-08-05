@@ -117,7 +117,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	    	$width = intval($wxh[0]);
 	    	$height = intval($wxh[1]);
 	    	if (!$width || !$height) {
-	    		throw new tx_newspaper_IllegalUsageException();
+	    		throw new tx_newspaper_IllegalUsageException(
+	    			'TSConfig usage: "newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}". ' . "\n" .
+	    			'Actual TSConfig for this line: ' . 'newspaper.image.size.' . $key . ' = ' . $dimension
+	    		);
 	    	}
 			self::resizeImage($width, $height,
 							  self::$basepath.self::$baseurl.$image,
@@ -127,9 +130,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
     /** if image needs resizing, do it (using imagemagick)					  */
     protected static function resizeImage($width, $height, $source, $target) {
+
+		t3lib_div::devlog('resizeImage()', 'newspaper', 0, array('width' => $width, 'height' => $height, 'source' => $source, 'target' => $target));
     	if (!file_exists(dirname($target))) {
     		if(!mkdir(dirname($target))) {
-    			die('Couldn\'t mkdir('.dirname($target).')');
+				throw new tx_newspaper_Exception('Couldn\'t mkdir('.dirname($target).')');
     		}
     	}
     	if (!file_exists($target)) {
@@ -171,36 +176,13 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	}
 
-    /** where uploaded images are stored */
-    static protected $baseurl = '/uploads/tx_hptazarticle/';
-
     /** path to convert(1) */
     static protected $convert = '/usr/bin/convert';
-    /** path to montage(1) */
-    static protected $montage = '/usr/bin/montage';
 
 	/** options to convert */
 	static protected $convertoptions = '-quality 90';
 //    static protected $convertoptions = '-quality '.
 //    	(intval($TYPO3_CONF_VARS['GFX']['jpg_quality'])? intval($TYPO3_CONF_VARS['GFX']['jpg_quality']): 90);
-
-    /** definition of fixed image sizes as array(width, height, name)
-        name designates the extension to the image filename resized images will get */
-    static protected $imgSizes = array(
-    	//	shorty image
-    	IMAGE_SIZE_SHUFFLE => array('width' =>  52, 'height' =>  26, 'name' => 'shuf'),
-    	//	shorty image
-    	IMAGE_SIZE_SMALL   => array('width' => 132, 'height' => 132, 'name' => 'smal'),
-    	//	column inside article
-    	IMAGE_SIZE_NORMAL  => array('width' => 212, 'height' => 106, 'name' => 'norm'),
-    	//	full width inside article
-    	IMAGE_SIZE_FULL    => array('width' => 424, 'height' => 212, 'name' => 'full'),
-    	//	maximum size (in a popup)
-    	IMAGE_SIZE_XL      => array('width' => 684, 'height' => 342, 'name' => 'xl'),
-    	//	teaser image ("ressort teaser"... the name is old, but no reason to change it)
-    	IMAGE_SIZE_RESTEA  => array('width' => 136, 'height' =>  68, 'name' => 'rtea'),
-    	//	main teaser image
-        IMAGE_SIZE_MAINTEA => array('width' => 424, 'height' => 212, 'name' => 'mtea'));
 
 
 	private static $basepath = null;
