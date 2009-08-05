@@ -16,16 +16,16 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	 *  \todo smarty template
 	 */
 	public function render($template_set = '') {
+		$this->prepare_render($template_set);
+		
 		$list = tx_newspaper::getSection()->getArticleList();
 
-		foreach ($list->getArticles(10) as $article) {
-			$ret .= '<a href="' . $article->getLink() . '">';
-			$ret .= "<h1>".$article->getAttribute('title')."</h1>\n";
-			$ret .= "<p>".$article->getAttribute('teaser')."</p>\n";
-			$ret .= "</a>\n";
-			$ret .= "<hr>\n";
-		}
-		return "<h1>Section List Plugin - coming soon to a page near you</h1>\n".$ret;
+		$articles = $list->getArticles($this->getAttribute('num_articles'), 
+									   $this->getAttribute('first_article'));
+		
+		$this->smarty->assign('articles', $articles);
+		
+		return $this->smarty->fetch($this);
 	}
 
 	public function getTitle() {
