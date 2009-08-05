@@ -68,6 +68,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		self::getTSConfig();
 		return self::$sizes;
 	}
+
+	/// Get the path from root to the images directory, as registered in TSConfig
+	public function getBasepath() {
+		self::getTSConfig();
+		return self::$basepath;
+	}
 	
 // title for module
 	public static function getModuleName() {
