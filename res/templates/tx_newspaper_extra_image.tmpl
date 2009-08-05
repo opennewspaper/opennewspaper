@@ -28,7 +28,7 @@
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
 	<img src="{$basepath}/200x100/{$attributes.image}" 
-		 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}" />
+		 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
 {if $attributes.caption}<p>{$attributes.caption}</p>{/if}
 
 <!--  end  res/templates/tx_newspaper_extra_image.tmpl -->
