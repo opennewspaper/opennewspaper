@@ -135,7 +135,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			array('width' => $width, 'height' => $height, 'source' => $source, 'target' => $target)
 		);
     	if (!file_exists(dirname(PATH_site . $target))) {
-    		if(!mkdir(dirname(PATH_site . $target))) {
+    		if(!mkdir(dirname(PATH_site . $target), 0770, true)) {
 				throw new tx_newspaper_Exception('Couldn\'t mkdir(' . dirname(PATH_site . $target) . ')');
     		}
     	}
