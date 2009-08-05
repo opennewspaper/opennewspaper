@@ -23,14 +23,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			parent::__construct($uid); 
 		}
 //		$this->smarty = new tx_newspaper_Smarty();
-		/// Check TSConfig in Extra_Image sysfolder
- 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); 
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
-		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
-
-		t3lib_div::devlog('basepath', 'newspaper', 0, self::$basepath);
-		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
 	}
 	
 	public function __toString() {
@@ -45,6 +37,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/** Just a quick hack to see anything
 	 */
 	public function render($template_set = '') {
+		self::getTSConfig();
+
 		$this->prepare_render($template_set);
 		
 		$this->smarty->assign('title', $this->getAttribute('title'));
@@ -55,6 +49,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	/// A short description that makes an Extra uniquely identifiable in the BE
 	public function getDescription() {
+		self::getTSConfig();
 		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
 			'<img src="' . self::$basepath . '" />';
 	}
@@ -80,6 +75,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public static function processDatamap_postProcessFieldArray(
 		$status, $table, $id, &$fieldArray, $that
 	) {
+		
+		self::getTSConfig();
+		
 		/*  in a static function, there is no object to call. prior to PHP 5.3,
 		 *  there is no way to find out which class we are in.
 		 */
@@ -187,6 +185,18 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	}
 
+	private static function getTSConfig() {
+		/// Check TSConfig in Extra_Image sysfolder
+ 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); 
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
+		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
+
+		t3lib_div::devlog('basepath', 'newspaper', 0, self::$basepath);
+		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
+
+		return $TSConfig;		
+	}
 	const uploads_folder = 'uploads/tx_newspaper';
 	
     /** path to convert(1) */
