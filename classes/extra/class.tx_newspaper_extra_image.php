@@ -63,6 +63,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return 'Image';
 	}
 
+	/// Get the array of possible image sizes registered in TSConfig
+	public function getSizes() {
+		self::getTSConfig();
+		return self::$sizes;
+	}
+	
 // title for module
 	public static function getModuleName() {
 		return 'np_image';
