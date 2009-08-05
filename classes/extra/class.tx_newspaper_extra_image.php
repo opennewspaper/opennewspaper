@@ -89,17 +89,22 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	/** If image needs resizing, resize it to all sizes defined in TSConfig
+	/** If image needs resizing, resize it to all sizes defined in TSConfig as
+	 *  \code
+	 *  newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}
+	 *  \endcode
+	 *  and move the resized image to the folder {WIDTH}x{HEIGHT} located under 
+	 *  \p self::$basepath as defined via TSCONFIG as
+	 *  \code
+	 *  newspaper.image.basepath = {BASEPATH}
+	 *  \endcode
+	 * 
+	 *  \param $image Name of the uploaded image file
 	 */
 	protected static function resizeImages($image) {
-/*	wtf?! look at that:
-Fatal error: Call to a member function exec_SELECTquery() on a non-object in 
-/var/lib/httpd/onlinetaz/typo3_src-4.2.6/t3lib/class.t3lib_befunc.php on line 1238
- */
- 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); /// check tsconfig in article sysfolder
+		/// Check TSConfig in Extra_Image sysfolder
+ 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_Image()); 
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-		t3lib_div::devlog('TSConfig', 'newspaper', 0, $TSConfig);
-		
 		self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
 		self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
 
@@ -107,10 +112,16 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
 		t3lib_div::devlog('sizes', 'newspaper', 0, self::$sizes);
 
 		foreach (self::$sizes as $key => $dimension) {
-	    	if ($this->imgIsResized($image, $key)) continue;
-			self::resizeImage(self::$imgSizes[$key]['width'], self::$imgSizes[$key]['height'],
+	    	if (self::imgIsResized($image, $dimension)) continue;
+	    	$wxh = explode('x', $dimension);
+	    	$width = intval($wxh[0]);
+	    	$height = intval($wxh[1]);
+	    	if (!$width || !$height) {
+	    		throw new tx_newspaper_IllegalUsageException();
+	    	}
+			self::resizeImage($width, $height,
 							  self::$basepath.self::$baseurl.$image,
-							  self::$basepath.self::$baseurl.$this->imgResizedName($image, $key));
+							  self::$basepath.self::$baseurl.$this->imageResizedName($image, $dimension));
 		}
 	}
 
@@ -128,19 +139,13 @@ Fatal error: Call to a member function exec_SELECTquery() on a non-object in
     }
 
     /** @return name of resized image										  */
-    protected static function imageResizedName($img, $name) {
-    	$nameparts = self::splitExtension($img);
-    	return '../'.RESIZED_MARKER.$name.'/'.$img;
+    protected static function imageResizedName($img, $dimension) {
+    	return '../'.RESIZED_MARKER.$dimension.'/'.$img;
     }
 
     /** @return whether resized image already exists					 	  */
-    protected function imgIsResized($img, $key) {
-    	return file_exists($this->imgResizedName($img, $key));
-    }
-
-    /** @return name of resized image										  */
-    protected function imgResizedName($img, $key) {
-    	return taz_base::imageResizedName($img, self::$imgSizes[$key]['name']);
+    protected static function imgIsResized($img, $dimension) {
+    	return file_exists(self::imgResizedName($img, $dimension));
     }
 
 	/** copy $basedir to $targetPath on $targetHost	*/
