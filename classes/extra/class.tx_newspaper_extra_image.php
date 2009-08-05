@@ -124,7 +124,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	    	}
 			self::resizeImage($width, $height,
 							  self::uploads_folder . '/'. $image,
-							  self::$basepath . self::imageResizedName($image, $dimension));
+							  self::$basepath . '/' . self::imageResizedName($image, $dimension));
 		}
 	}
 
@@ -140,9 +140,13 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     		}
     	}
     	if (!file_exists(PATH_site . $target)) {
-    		system(self::$convert . ' ' . self::$convertoptions .
+    		$convert = self::$convert . ' ' . self::$convertoptions .
 				' -geometry ' . $width . /*'x'.$height.*/ ' ' .
-				PATH_site . $source . ' ' . PATH_site . $target);
+				PATH_site . $source . ' ' . PATH_site . $target;
+			$return = array();
+    		t3lib_div::devlog('convert', 'newspaper', 0, $convert);
+    		exec($convert, $return);
+    		t3lib_div::devlog('convert output', 'newspaper', 0, $return);
     	}
     }
 
