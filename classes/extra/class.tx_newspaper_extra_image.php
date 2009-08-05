@@ -141,8 +141,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     	}
     	if (!file_exists(PATH_site . $target)) {
     		$convert = self::$convert . ' ' . self::$convertoptions .
-				' -geometry ' . $width . /*'x'.$height.*/ ' ' .
-				PATH_site . $source . ' ' . PATH_site . $target;
+				' -geometry ' . $width . /*'x'.$height.*/ ' \'' .
+				PATH_site . $source . '\' \'' . PATH_site . $target . '\'';
 			$return = array();
     		t3lib_div::devlog('convert', 'newspaper', 0, $convert);
     		exec($convert, $return);
