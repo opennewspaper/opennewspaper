@@ -4,24 +4,31 @@
 {* Image
    Variables:
 
-   $title	title to be displayed above the image
-   $image	image file (uploaded under uploads/tx_newspaper)
-   $caption	caption line to be displayed under the image, doubles as alt text
-
-   $basepath	path to the image directories
-   $sizes		list of the present sizes
+   $basepath		path to the image directories
+   $sizes			list of the present sizes
    $template_set	template set used, if any
 
-   $attributes	attributes as stored in DB
+   $attributes		attributes as stored in DB. notable attributes include:
+   	 	title		title to be displayed above the image
+	 	image		name of image file  
+	 	caption		caption line to be displayed under the image
+	 	normalized_filename
+	 	kicker  
+	 	credit  
+	 	source  
+	 	type  	
+	 	alttext
+	 	tags 
+
    $extra_attributes	attributes for abstract extra record as stored in DB
 
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
-<h4>{$attributes.title}</h4>
-<p>
-	<img src="{$basepath}/200x100/{$attributes.image}" alt="{$attributes.caption}" />
-</p>
-{$attributes.caption}
+{if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
+{if $attributes.title}<h4>{$attributes.title}</h4>{/if}
+	<img src="{$basepath}/200x100/{$attributes.image}" 
+		 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}" />
+{if $attributes.caption}<p>{$attributes.caption}</p>{/if}
 
 <!--  end  res/templates/tx_newspaper_extra_image.tmpl -->
