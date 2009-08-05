@@ -1,6 +1,7 @@
 <?php
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
