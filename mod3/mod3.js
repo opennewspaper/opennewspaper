@@ -188,7 +188,7 @@
 	
 	
 	
-/// handling paragraph, notes in pagezone_page and article	
+/// handling paragraphs and notes in pagezone_page and article	
 	
 	document.change_para = false; // if set to false, a paragraph might be changed
 	document.def_para = new Array(); // stores the current value for all paragraphs being displayed
@@ -250,5 +250,25 @@
 		{rdelim}
 		
 	{rdelim}
+	
+	
+	
+	
+	
+	
+/// template set dropdown handling
+	
+	function storeTemplateSet(table, uid, value) {ldelim}
+		uid = parseInt(uid);
+		var request = new top.Ajax.Request(
+				top.path + "typo3conf/ext/newspaper/mod3/index.php",
+				{ldelim}
+				method: 'get',
+				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+			{rdelim}
+		);
+	{rdelim}				
+	
+	
 	
 </script>

@@ -155,10 +155,18 @@ class tx_newspaper_BE {
 	
 	
 	/// create html code for a template set dropdown (including AJAX call in onchange event)
-	function createTemplateSetDropdown() {
+	/// assumes that js function storeTemplateSet() is available
+	public static function createTemplateSetDropdown($table, $uid, $default_value='') {
 		$params = array();
-		$this->readTemplateSetItems($params);
-t3lib_div::devlog('t set dropdown', 'np', $params);
+		self::readTemplateSetItems($params); // call by reference ...
+
+		$html = '<select id="templateset_' . $uid . '" onchange="storeTemplateSet(\'' . $table . '\', ' . $uid . ', this.options[this.selectedIndex].value); return false;">'; //         
+		foreach($params['items'] as $item) {
+			$selected = ($item[1] == $default_value)? ' selected="selected"' : ''; // item[0] = title, item[1] = value to store
+			$html .= '<option value="' . $item[1] . '"' . $selected . '>' . $item[0] . '</option>';
+		}
+		$html .= '</select>';
+		return $html;
 	}
 
 
@@ -299,6 +307,7 @@ function findElementsByName(name, type) {
 				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 				'notes' => $extra[$i]->getAttribute('notes'),
+				'template_set' => $extra[$i]->getAttribute('template_set'),
 			);
 			// the following attributes aren't always available 
 			try {
@@ -322,9 +331,13 @@ function findElementsByName(name, type) {
 			
 			}
 			
+			// render html dropdown and add to array
+			$extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);
+			
 			//	don't display extras for which attribute gui_hidden is set
-			if (!$extra[$i]->getAttribute('gui_hidden'))
+			if (!$extra[$i]->getAttribute('gui_hidden')) {
 				$data[] = $extra_data;
+			}
 		}
 		return $data;
 	} 
@@ -335,7 +348,7 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('renderExtraInArticl np_e_be', 'newspaper', 0, $PA);
 
 		if ($PA['row']['articletype_id'] == 0)
-			return 'Ohne Artikeltyp keine Defaultbestï¿½ckung'; /// \todo: ...
+			return 'Ohne Artikeltyp keine Defaultbestückung'; /// \todo: ...
 		$current_record['table'] = $PA['table'];
 		$current_record['uid'] = $PA['row']['uid'];
 //debug($PA['row']);	
@@ -541,7 +554,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
+/// \todo: in abhängigkeit von new und old einen string zurückgeben
 		return 'to come ...';		
 	}
 

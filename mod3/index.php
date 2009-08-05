@@ -192,7 +192,6 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
-//t3lib_div::devlog('show', 'newspaper', 0, array($e->__toString(), $e->getAttribute('show_extra')));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
 		die();
@@ -226,6 +225,33 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 		die(); 
 	}
+
+	private function processTemplateSetDropdownStore($table, $uid, $value) {
+		$uid = intval($uid);
+		
+		switch(strtolower($table)) {
+			case 'tx_newspaper_extra':
+				$obj = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+			break;
+			default:
+				die('Unknown table for template set: ' . $table);
+		}
+		$obj->setAttribute('template_set', $value);
+		$obj->store();
+		die();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	private function check4Ajax() {
@@ -285,10 +311,12 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			die($this->processExtraInsertAfterFromPoolCopy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
 		if (t3lib_div::_GP('extra_insert_after_from_pool_ref') == 1) {
-t3lib_div::devlog('r', 'np', 0, $_REQUEST);
 			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
-		
+
+		if (t3lib_div::_GP('templateset_dropdown_store') == 1) {
+			die($this->processTemplateSetDropdownStore(t3lib_div::_GP('table'), t3lib_div::_GP('uid'), t3lib_div::_GP('value')));	
+		}
 		
 //t3lib_div::devlog('_request mod3 ajax - NO ajax found', 'newspaper', 0);		
 //debug('no ajax');
@@ -758,7 +786,6 @@ t3lib_div::devlog('r', 'np', 0, $_REQUEST);
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
-
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			if ($data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
@@ -766,16 +793,16 @@ t3lib_div::devlog('r', 'np', 0, $_REQUEST);
 					$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
 					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_page.tmpl');
 				} else {
-					// message "no extra so far" will be displayed in mod3.tmpl
-					$pagezone[$i] = false;
+					$pagezone[$i] = false; // message "no extra so far" will be displayed in mod3.tmpl
 				}
 			} else {
 				$tmp = $this->processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp);
-				if ($tmp == false)
+				if ($tmp == false) {
 					$pagezone[$i] = false; // indicates "no extra so far" message
-				else 
-					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone 
+				} else { 
+					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
+				} 
 			}
 		}
 		
@@ -799,6 +826,7 @@ private function getPagezoneSmartyObject() {
 	$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
 	$label['paragraph'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_paragraph', false);
 	$label['notes'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_notes', false);
+	$label['templateset'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_templateset', false);
 
 	$smarty_pz = new tx_newspaper_Smarty();
 	$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));

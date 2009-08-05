@@ -46,6 +46,7 @@
 			<label index="label_save_extra">Save change in this extra</label>
 			<label index="label_undo_extra">Undo change in this extra</label>
 			<label index="label_notes">Notes</label>
+			<label index="label_templateset">Template set</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Bestückung</label>
