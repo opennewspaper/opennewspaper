@@ -123,7 +123,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	    		);
 	    	}
 			self::resizeImage($width, $height,
-							  self::$basepath . $image,
+							  self::uploads_folder . '/'. $image,
 							  self::$basepath . self::imageResizedName($image, $dimension));
 		}
 	}
@@ -131,15 +131,18 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     /** if image needs resizing, do it (using imagemagick)					  */
     protected static function resizeImage($width, $height, $source, $target) {
 
-		t3lib_div::devlog('resizeImage()', 'newspaper', 0, array('width' => $width, 'height' => $height, 'source' => $source, 'target' => $target));
-    	if (!file_exists(dirname($target))) {
-    		if(!mkdir(dirname($target))) {
-				throw new tx_newspaper_Exception('Couldn\'t mkdir('.dirname($target).')');
+		t3lib_div::devlog('resizeImage()', 'newspaper', 0, 
+			array('width' => $width, 'height' => $height, 'source' => $source, 'target' => $target)
+		);
+    	if (!file_exists(dirname(PATH_site . $target))) {
+    		if(!mkdir(dirname(PATH_site . $target))) {
+				throw new tx_newspaper_Exception('Couldn\'t mkdir(' . dirname(PATH_site . $target) . ')');
     		}
     	}
-    	if (!file_exists($target)) {
-    		system(self::$convert.' '.self::$convertoptions.
-				' -geometry '.$width./*'x'.$height.*/' '.$source.' '.$target);
+    	if (!file_exists(PATH_site . $target)) {
+    		system(self::$convert . ' ' . self::$convertoptions .
+				' -geometry ' . $width . /*'x'.$height.*/ ' ' .
+				PATH_site . $source . ' ' . PATH_site . $target);
     	}
     }
 
@@ -176,6 +179,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	}
 
+	const uploads_folder = 'uploads/tx_newspaper';
+	
     /** path to convert(1) */
     static protected $convert = '/usr/bin/convert';
 
