@@ -51,7 +51,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public function getDescription() {
 		self::getTSConfig();
 		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
-			'<img src="' . self::$basepath . '" />';
+			'<img src="' . self::$basepath . self::$sizes['preview'] . $this->getAttribute('image') . '" />';
 	}
 
 //TODO: getLLL
