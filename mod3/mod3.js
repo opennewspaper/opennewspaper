@@ -256,7 +256,7 @@
 	
 	
 	
-/// template set dropdown handling
+/// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
 	
 	function storeTemplateSet(table, uid, value) {ldelim}
 		uid = parseInt(uid);

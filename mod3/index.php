@@ -233,6 +233,12 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			case 'tx_newspaper_extra':
 				$obj = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 			break;
+			case 'tx_newspaper_page':
+				$obj = new tx_newspaper_page($uid);
+			break;
+			case 'tx_newspaper_pagezone':
+				$obj = tx_newspaper_PageZone_Factory::getInstance()->create($uid);
+			break;
 			default:
 				die('Unknown table for template set: ' . $table);
 		}

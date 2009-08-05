@@ -51,6 +51,7 @@ class tx_newspaper_BE {
 					$data[$i]['ACTIVE'] = true;
 					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
 					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+					$data[$i]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_page', $active_page->getUid(), $active_page->getAttribute('template_set'));
 					break;
 				}
 			}
@@ -72,6 +73,7 @@ class tx_newspaper_BE {
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
 							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+							$data[$i]['pagezones'][$j]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_pagezone', $active_pagezone->getUid(), $active_pagezone->getAttribute('template_set'));
 							break;
 						}
 					}
