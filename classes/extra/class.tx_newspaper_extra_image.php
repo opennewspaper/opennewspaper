@@ -148,7 +148,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
     /** @return name of resized image										  */
     protected static function imageResizedName($img, $dimension) {
-    	return '../'.RESIZED_MARKER.$dimension.'/'.$img;
+    	return $dimension . '/' . $img;
     }
 
     /** @return whether resized image already exists					 	  */
