@@ -123,8 +123,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	    		);
 	    	}
 			self::resizeImage($width, $height,
-							  self::$basepath.self::$baseurl.$image,
-							  self::$basepath.self::$baseurl.self::imageResizedName($image, $dimension));
+							  self::$basepath . $image,
+							  self::$basepath . self::imageResizedName($image, $dimension));
 		}
 	}
 
