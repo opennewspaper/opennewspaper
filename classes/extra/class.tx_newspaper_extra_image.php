@@ -145,7 +145,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
     /** @return whether resized image already exists					 	  */
     protected static function imgIsResized($img, $dimension) {
-    	return file_exists(self::imgResizedName($img, $dimension));
+    	return file_exists(self::imageResizedName($img, $dimension));
     }
 
 	/** copy $basedir to $targetPath on $targetHost	*/
