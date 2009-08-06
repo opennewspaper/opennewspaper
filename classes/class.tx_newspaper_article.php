@@ -210,6 +210,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 		
 	/// Renders an article
+	/** \todo document me
+	 *  \todo only pass the attributes array to Smarty, instead of individal attributes
+	 */
 	public function render($template_set = '') {
 
 		/// Default articles should never contain text that is displayed.
@@ -411,17 +414,18 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 		return null;
 	}
 	
-/*
-	public function addExtra(tx_newspaper_Extra $newExtra) {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-*/
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	class tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	/// Get the tx_newspaper_PageZoneType associated with this Article
+	/** \return The tx_newspaper_PageZoneType associated with this Article. If
+	 * 		this is not the one where Attribute \p is_article is set, there
+	 * 		is something weird going on.
+	 *  \todo Check for \p is_article. 
+	 */
 	public function getPageZoneType() {
 		if (!$this->pagezonetype) {
 			$pzt = tx_newspaper::selectOneRow('uid', 'tx_newspaper_pagezonetype', 'is_article');
@@ -437,6 +441,7 @@ t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
+	/// Delete all Extras
 	public function clearExtras() {
 		$this->extras = array();	
 	}

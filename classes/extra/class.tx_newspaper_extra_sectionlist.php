@@ -2,6 +2,15 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
+/// tx_newspaper_Extra displaying articles belonging to a tx_newspaper_Section
+/** This Extra displays articles belonging to the Section that belongs to the 
+ *  page on which this Extra is inserted. 
+ *
+ *  Insert this Extra on all Page Zones which show an overview of the articles 
+ *  in th current Section.
+ *  
+ *  \todo  make number of articles displayed variable
+ */
 class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
 	public function __construct($uid = 0) { 
@@ -11,9 +20,9 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		}
 	}
 	
-	/** Just a quick hack to see anything
+	/** Display articles belonging to the current section.
 	 *  \todo make number of articles displayed variable
-	 *  \todo smarty template
+	 *  \todo WHat if the current section has no article list? (is this even possible?)
 	 */
 	public function render($template_set = '') {
 		$this->prepare_render($template_set);

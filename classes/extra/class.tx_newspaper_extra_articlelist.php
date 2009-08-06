@@ -2,8 +2,19 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
+/// A tx_newspaper_Extra that can display a tx_newspaper_ArticleList
+/** A rather generic class that displays an article list using a specified 
+ *  smarty template.
+ * 
+ *  This Extra must be inserted on a Page Zone wherever a list of Articles is
+ *  displayed, except for the cases which have specialized Extras:
+ *  - tx_newspaper_Extra_SectionList: The list of articles belonging to a
+ * 		tx_newspaper_Section 
+ */
 class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
+	/// Boa Constructor ;-)
+	/** Instantiates the associated Article List too. */
 	public function __construct($uid = 0) { 
 		if (intval($uid)) {
 			parent::__construct($uid); 
@@ -22,6 +33,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	
 	/** Assign the list of articles to a Smarty template. The template must 
 	 *  contain all the logic to display the articles.
+	 *  \param $template_set Template set to use
 	 */
 	public function render($template_set = '') {
 		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0, 

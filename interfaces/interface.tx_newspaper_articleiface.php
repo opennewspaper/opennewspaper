@@ -44,6 +44,15 @@ interface tx_newspaper_ArticleIface
 
 	/// \return The list of Extra s associated with this tx_newspaper_ArticleIface
 	public function getExtras();
+
+	/// Find the first tx_newspaper_Extra of a given type
+	/** \param $extra_class The desired type of Extra, either as object or as
+	 *  	class name
+	 *  \return The first Extra of the given class (by appearance in article),
+	 * 		or null.
+	 */
+	public function getExtra($extra_class);	
+
 	public function addExtra(tx_newspaper_Extra $newExtra);
 
 	/// \return List of attributes this tx_newspaper_ArticleIface has

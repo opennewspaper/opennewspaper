@@ -2,7 +2,7 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
-/// A HTML link with a text, a target URL and a target frame
+/// An HTML link with a text, a target URL and a target frame
 /** These links are intended for pages outside of Typo3/newspaper, whose text
  *  can not be deduced by other means. Of course, they can be used for internal
  *  links just as well.
@@ -55,6 +55,9 @@ class tx_newspaper_ExternalLink {
 /** These links are intended for pages outside of Typo3/newspaper, whose text
  *  can not be deduced by other means. Of course, they can be used for internal
  *  links just as well.
+ * 
+ *  Insert this Extra in a Page Zone or an Article wherever a list of Links is
+ *  wanted.
  */
 class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 

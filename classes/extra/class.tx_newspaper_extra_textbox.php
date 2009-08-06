@@ -2,6 +2,11 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
+/// tx_newspaper_Extra displaying a text.
+/** Insert this Extra in Articles or Page Zones which have a box containing some
+ *  text. 
+ * 
+ */
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
 	const description_length = 50; 
@@ -21,7 +26,8 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Just a quick hack to see anything
+	/** Assigns stuff to the smarty template and renders it.
+	 *  \todo Just assign the attributes array, not specific attributes
 	 */
 	public function render($template_set = '') {
 
@@ -39,6 +45,8 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 		return 'Text Box';
 	}
 
+	/** Displays the title and the beginning of the text.
+	 */
 	public function getDescription() {
 		return substr(
 			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('text'), 

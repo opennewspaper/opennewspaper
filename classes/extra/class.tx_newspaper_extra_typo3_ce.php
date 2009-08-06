@@ -2,6 +2,11 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
+/// tx_newspaper_Extra displaying one or several Typo3 Content Elements
+/** Insert this Extra on Page Zones (or Articles, if you find a use for that) to
+ *  display an existing Typo3 Content Element. Content Elements can be grouped 
+ *  to show more than one CE.
+ */
 class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
 	public function __construct($uid = 0) {
@@ -19,7 +24,11 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Just a quick hack to see anything
+	/** Use TypoScript to render the selected Content Elements
+	 *  \param $template_set Ignored
+	 *  \todo It's probably not wise to print the whole content of the DB records
+	 *  	inside a HTML comment.
+	 *  \todo What is that <tt>TYPO3_MODE == 'BE'</tt> branch for again?
 	 */
 	public function render($template_set = '') {
 
@@ -68,6 +77,10 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		return 'Typo3 Content Element(s)';
 	}
 
+	/** If the CE has a header, display the header. Else if it has a titleText,
+	 *  display that. Else just display its UID. 
+	 *  \todo This could probably be improved, especially for multiple CEs.
+	 */
 	public function getDescription() {
 		try {
 			$row = tx_newspaper::selectOneRow('*', 'tt_content', 'uid = ' . $this->getAttribute('content_elements'));
