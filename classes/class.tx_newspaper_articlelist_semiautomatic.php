@@ -169,8 +169,62 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	private function getRawArticleUIDs($number, $start = 0) {
 
+		$table = $this->getAttribute('filter_sql_table');
+		if (!$table) $table = 'tx_newspaper_article';
+		
+		$where = $this->getAttribute('filter_sql_where');
+		if (!$where) $where = '1';
+
+		if ($this->getAttribute('filter_sections')) {
+			$sections = array();
+			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
+				$sections[] = $section_uid;
+				//	add subsections to search clause
+				$section = new tx_newspaper_Section($section_uid);
+				$child_sections = $section->getChildSections(true);
+				if ($child_sections) {
+					foreach ($child_sections as $child_section) {
+						$sections[] = $child_section->getUid();
+					}
+				}
+			}
+			$table .= ' JOIN tx_newspaper_article_sections_mm' .
+					  '   ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local';
+
+			$where .= ' AND tx_newspaper_article_sections_mm.uid_foreign IN (' . 
+							implode(', ', $sections) .')';
+		}
+		
+		if ($this->getAttribute('filter_tags_include')) {
+
+			$table .= ' JOIN tx_newspaper_article_tags_mm' .
+					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
+
+			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign IN (' . 
+							$this->getAttribute('filter_tags_include') .')';
+		}
+		
+		if ($this->getAttribute('filter_tags_exclude')) {
+
+			$table .= ' JOIN tx_newspaper_article_tags_mm' .
+					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
+
+			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign NOT IN (' . 
+							$this->getAttribute('filter_tags_exclude') .')';
+		}
+
+		/// \todo: Factor in \p filter_articlelist_exclude. This must be done separately from the SQL query.
+		
+		t3lib_div::devlog('tx_newspaper_articlelist_semiautomatic: $query', 'newspaper',
+						  0, array('table' => $table, 'where' => $where));
+						  
 		$results = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_article', $this->getAttribute('sql_condition')
+			'uid', 
+			$table,
+			$where,
+			'',
+			$this->getAttribute('filter_sql_order_by'),
+			intval($start) . ', ' . intval($number)
 		);
 
 		$uids = array();
