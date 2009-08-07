@@ -44,6 +44,7 @@ class tx_newspaper_Sysfolder {
  	private $sysfolder = array(); ///< sysfolder are read only once
  	
  	private static $rootfolder_modulename = 'newspaper'; /// module name for root sysfolder
+ 	private static $rootfolder_sysfolder_name = 'Newspaper'; /// Sysfolder name for root sysfolder
  	
  	protected function __clone() {} // singleton pattern
  	
@@ -65,7 +66,7 @@ class tx_newspaper_Sysfolder {
  		
  		/// make sure root sysfolder exists
  		if (!isset($this->sysfolder[self::getRootSysfolderModuleName()])) {
- 			$this->createSysfolder(self::getRootSysfolderModuleName());
+ 			$this->createSysfolder(self::getRootSysfolderModuleName(), self::$rootfolder_sysfolder_name);
  		}
  		
  	}
@@ -75,7 +76,7 @@ class tx_newspaper_Sysfolder {
   	/// creates a sysfolder (in Typo3 table pages)
  	/** \param $module_name name of module
  	 */	
-	private function createSysfolder($module_name) {
+	private function createSysfolder($module_name, $sysfolder_name) {
 		
 		$module_name = strtolower($module_name);
 		
@@ -90,7 +91,7 @@ class tx_newspaper_Sysfolder {
 		}
 		$fields['module'] = 'newspaper'; // for plugin-list in pages
 		$fields['tx_newspaper_module'] = $module_name;
-		$fields['title'] = $module_name;
+		$fields['title'] = $sysfolder_name;
 		$fields['doktype'] = 254;
 		$fields['perms_user'] = 31;
 		$fields['perms_group'] = 31;
@@ -129,25 +130,24 @@ class tx_newspaper_Sysfolder {
  	 *  \return $pid of sysfolder (sysfolder is created if not existing)
  	 */
  	public function getPid(tx_newspaper_StoredObject $obj) {
- 		$module_name = strtolower($obj->getModuleName());
-		return $this->getPidFromArray($module_name);
+		return $this->getPidFromArray($obj->getModuleName(), $obj->getTitle());
  	}
  	 
  	/// as no object for the root sysfolder exists, the pid for this folder is handled separately
  	/// \return pid of root sysfolder
  	public function getPidRootfolder() {
- 		$module_name = strtolower(self::getRootSysfolderModuleName());
-		return $this->getPidFromArray($module_name);
+		return $this->getPidFromArray(self::getRootSysfolderModuleName(), self::$rootfolder_sysfolder_name);
  	}
  	
  	/// read pid from local array or create sysfolder and return that uid
  	/// \return pid of sysfolder for given module name
-	private function getPidFromArray($module_name) {
+	private function getPidFromArray($module_name, $sysfolder_name) {
+		$module_name = strtolower($module_name);
 		self::checkModuleName($module_name);
 
 		// check if sysfolder exists (and create, if not)
  		if (!isset($this->sysfolder[$module_name])) {
- 			$this->createSysfolder($module_name); // create and store uid in $this->sysfolder
+ 			$this->createSysfolder($module_name, $sysfolder_name); // create and store uid in $this->sysfolder
  		}
  		
  		return $this->sysfolder[$module_name];
