@@ -1,14 +1,14 @@
 
 <table>
-	{section name=i loop=$articles}
+	{foreach from=$articles item=$article}
 		<tr>
 			<td>
-				<strong>{$articles[i].article->getAttribute('title')}</strong>
-				(#{$articles[i].article->getUid()})
+				<strong>{$article.article->getAttribute('title')}</strong>
+				(#{$article.article->getUid()})
 			</td>
 			<td>
-				{$articles[i].offset}
+				{$article.offset}
 			</td>
 		</tr>
-	{/section}
+	{/foreach}
 </table>
