@@ -1772,7 +1772,7 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 $TCA["tx_newspaper_articlelist_manual"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist_manual"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "articles,sql_condition,sql_order_by,num_articles"
+		"showRecordFieldList" => "articles,num_articles,filter_sections,filter_tags_include,filter_tags_exclude,filter_articlelist_exclude,filter_sql_table,filter_sql_where,filter_sql_order_by"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_manual"]["feInterface"],
 	"columns" => array (
@@ -1787,22 +1787,6 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 				"minitems" => 0,
 				"maxitems" => 100,	
 				"MM" => "tx_newspaper_articlelist_manual_articles_mm",
-			)
-		),
-		"sql_condition" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.sql_condition",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
-		"sql_order_by" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.sql_order_by",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
 			)
 		),
 		"num_articles" => Array (		
@@ -1821,9 +1805,83 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 				"default" => 0
 			)
 		),
+		"filter_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sections",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_tags_include" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_include",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_tags_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_exclude",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_articlelist_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_articlelist_exclude",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_articlelist",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_sql_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_table",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
+		"filter_sql_where" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_where",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
+		"filter_sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_order_by",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by, num_articles")
+		"0" => array("showitem" => "articles;;;;1-1-1, num_articles, filter_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1835,7 +1893,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist_semiautomatic"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "articles,sql_condition,sql_order_by,num_articles"
+		"showRecordFieldList" => "articles,num_articles,filter_sections,filter_tags_include,filter_tags_exclude,filter_articlelist_exclude,filter_sql_table,filter_sql_where,filter_sql_order_by"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_semiautomatic"]["feInterface"],
 	"columns" => array (
@@ -1850,22 +1908,6 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"minitems" => 0,
 				"maxitems" => 100,	
 				"MM" => "tx_newspaper_articlelist_semiautomatic_articles_mm",
-			)
-		),
-		"sql_condition" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.sql_condition",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
-		"sql_order_by" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.sql_order_by",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
 			)
 		),
 		"num_articles" => Array (		
@@ -1884,9 +1926,83 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"default" => 0
 			)
 		),
+		"filter_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sections",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_tags_include" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_include",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_tags_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_exclude",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_articlelist_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_articlelist_exclude",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_articlelist",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"filter_sql_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_table",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
+		"filter_sql_where" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_where",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
+		"filter_sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_order_by",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "articles;;;;1-1-1, sql_condition, sql_order_by, num_articles")
+		"0" => array("showitem" => "articles;;;;1-1-1, num_articles, filter_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

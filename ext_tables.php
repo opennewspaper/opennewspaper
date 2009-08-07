@@ -437,7 +437,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist_manual.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by, num_articles",
+		"fe_admin_fieldList" => "articles, num_articles, filter_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by",
 	)
 );
 
@@ -454,7 +454,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist_semiautomatic.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "articles, sql_condition, sql_order_by, num_articles",
+		"fe_admin_fieldList" => "articles, num_articles, filter_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by",
 	)
 );
 
