@@ -117,10 +117,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		} else return null;
 	}
 
-	/// Get all Sections which have $this as direct parent
-	/** \return Array of Section objects
+	/// Get all Sections which have $this as ancestor
+	/** \param $recursive If true, return all inheriting sections down to the
+	 * 		leaves. Otherwise, return the direct children of this Section.
+	 *  \return Array of Section objects under \p $this. parental relations are
+	 * 		\em not preserved.
 	 */
-	public function getChildSections() {
+	public function getChildSections($recursive = false) {
 
 		$row = tx_newspaper::selectRows(
 				'uid', $this->getTable(),
@@ -129,7 +132,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		
 		$sections = array();
 		if ($row) foreach ($row as $section_uid) {
-			$sections[] = new tx_newspaper_Section($section_uid['uid']);
+			$child =  new tx_newspaper_Section($section_uid['uid']);
+			$sections[] = $child;
+			if ($recursive) {
+				$sections = array_merge($sections, 
+										$child->getChildSections($recursive));
+			}
 		}
 
 		return $sections;
