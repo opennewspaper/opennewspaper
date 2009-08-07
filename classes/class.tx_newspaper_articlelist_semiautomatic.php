@@ -174,7 +174,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		$where = $this->getAttribute('filter_sql_where');
 		if (!$where) $where = '1';
-
+		$where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
+		
 		if ($this->getAttribute('filter_sections')) {
 			$sections = array();
 			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
