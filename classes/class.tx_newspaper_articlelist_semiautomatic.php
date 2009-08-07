@@ -170,7 +170,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	private function getRawArticleUIDs($number, $start = 0) {
 
 		$table = $this->getAttribute('filter_sql_table');
-		if (!$table) $table = 'tx_newspaper_article';
+		if (!$table) $table = 'DISTINCT tx_newspaper_article';
 		
 		$where = $this->getAttribute('filter_sql_where');
 		if (!$where) $where = '1';
@@ -220,7 +220,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 						  0, array('table' => $table, 'where' => $where));
 						  
 		$results = tx_newspaper::selectRows(
-			'uid', 
+			'tx_newspaper_article.uid', 
 			$table,
 			$where,
 			'',
