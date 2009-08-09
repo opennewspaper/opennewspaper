@@ -31,9 +31,25 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
-/// A list of tx_newspaper_Article s
+/// A list of tx_newspaper_Article s ordered manually
+/** This tx_newspaper_ArticleList contains Articles which have been manually 
+ *  added to the list and manually placed.
+ * 
+ *  The selection of articles from which the list can be filled in the BE is 
+ *  done by the attributes <tt>filter_section</tt>, <tt>filter_tags_include</tt>,
+ *  <tt>filter_tags_exclude</tt>, <tt>filter_sql_table</tt> and
+ *  <tt>filter_sql_where</tt>. The order in which the article selection is
+ *  displayed can be determined by <tt>filter_sql_order_by</tt>.
+ * 
+ * \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
+ */
 class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
+	/// Returns a number of tx_newspaper_Article s from the list
+	/** \param $number Number of Articles to return
+	 *  \param $start Index of first Article to return (starts with 0)
+	 *  \return The \p $number Articles starting with \p $start
+	 */
 	public function getArticles($number, $start = 0) {		
 		$results = tx_newspaper::selectRows(
 				'uid_foreign',

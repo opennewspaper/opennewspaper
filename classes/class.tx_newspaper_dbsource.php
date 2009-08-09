@@ -11,7 +11,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_a
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sourcebehavior.php');
 
-/// A Source which reads articles from the taz redaktionssystem
+/// A Source which reads articles from a SQL DB
 class tx_newspaper_DBSource implements tx_newspaper_Source {
 
 	public function __construct() {

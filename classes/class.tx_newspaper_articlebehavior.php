@@ -6,7 +6,13 @@
  *  \date Nov 19, 2008
  */
 
-/// Behavior class to factor out code common to more or less all Article implementations
+/** Behavior class to factor out code common to more or less all 
+ *  tx_newspaper_ArticleIface implementations.
+ * 
+ *  \todo This class seems rather obsolete because I decided that there is only
+ * 		one Article implementation, tx_newspaper_Article. Merge this class with
+ * 		tx_newspaper_Article.
+ */
 class tx_newspaper_ArticleBehavior {
 	
 	/** \param $parent The tx_newspaper_Article object using this Behavior

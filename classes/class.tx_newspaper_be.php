@@ -16,6 +16,8 @@ define('DEBUG_POSITION', false);
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', true); // if set to true the workflow buttons don't close the form (better for testing)
 
 /// function for adding newspaper functionality to the backend
+/** \todo Oliver: document me!
+ */
 class tx_newspaper_BE {
 	
 	private static $smarty = null;
@@ -676,7 +678,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhängigkeit von new und old einen string zurückgeben
+/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
 		return 'to come ...';		
 	}
 

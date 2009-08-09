@@ -31,19 +31,32 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
-/// A list of tx_newspaper_Article s defined by a SQL WHERE condition, ordered 
-/// by an ORDER BY statement and optionally reordered by the user.
-/** The WHERE condition and the ORDER BY statement are attributes of the list.
- *  The manual reordering is stored with the MM relation table.
- *  
- *  Articles which have not been manually reordered don't have an entry in the 
- *  MM table. For moved articles the value 'offset' is stored in the MM table.
- *  Every article recorded in the MM table is moved 'offset' places up (or down,
- *  if 'offset' is negative) in the list. 'offset' can be greater than the 
- *  length of the list, making articles sticky, or moving them off the end of
- *  the list.
+/// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
+/** The Articles contained in the list are automatically determined by the
+ *  filter attributes. If the user doesn't interact, these Articles are
+ *  displayed fully automatic.
  * 
- *  \todo Implement the ORDER BY statement.
+ *  The user can move Articles up and down in the list, though. By moving
+ *  Articles up by a large amount, past the top Article, an Article can be made
+ *  "sticky". By moving it down a large amount an Article can be made to
+ *  disappear from the list. 
+ * 
+ *  The selection of articles from which the list id filled dynamically is 
+ *  done by the attributes <tt>filter_section</tt>, <tt>filter_tags_include</tt>,
+ *  <tt>filter_tags_exclude</tt>, <tt>filter_sql_table</tt> and
+ *  <tt>filter_sql_where</tt>. The order in which the article selection is
+ *  displayed can be determined by <tt>filter_sql_order_by</tt>.
+ *
+ *  The manual reordering is stored with the MM relation table,
+ *  <tt>tx_newspaper_articlelist_semiautomatic_articles_mm</tt>.
+ *  Articles which have not been manually reordered don't have an entry in the 
+ *  MM table. For moved articles the value <tt>offset</tt> is stored in the MM
+ *  table. Every article recorded in the MM table is moved <tt>offset</tt>
+ *  places up (or down, if <tt>offset</tt> is negative) in the list. 
+ *  <tt>offset</tt> can be greater than the length of the list, making articles
+ *  sticky, or moving them off the end of the list.
+ * 
+ *  \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
  *  \todo I'm not certain if the number of articles in the list is correct when
  * 		articles have been dropped from the list.
  *  \todo There is no BE which allows reordering articles - currently it's all
@@ -52,6 +65,11 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
+	/// Returns a number of tx_newspaper_Article s from the list
+	/** \param $number Number of Articles to return
+	 *  \param $start Index of first Article to return (starts with 0)
+	 *  \return The \p $number Articles starting with \p $start
+	 */
 	public function getArticles($number, $start = 0) {
 		
 		$articles_sorted = $this->getSortedArticles($number, $start);
@@ -162,11 +180,14 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles_sorted;		
 	}
 
-	/// Get the UIDs of articles found by the SQL condition defining the list
+	/// Get the UIDs of articles found by the conditions defining the list
 	/** \param $number Number of articles to return
 	 *  \param $start Index of first article sought
 	 *  \return array of UIDs in the order in which they should appear
-	 *  \todo Implement ORDER BY
+	 * 
+	 *  \todo Factor out the code to create the SQL statement so it can be used
+	 *  	as filter for tx_newspaper_ArticleList_Manual. Possibly factor out
+	 * 		the code to subtract another ArticleList too.
 	 */
 	private function getRawArticleUIDs($number, $start = 0) {
 
@@ -215,7 +236,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 							$this->getAttribute('filter_tags_exclude') .')';
 		}
 
-		/// \todo: Factor in \p filter_articlelist_exclude. This must be done separately from the SQL query.
+		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 		
 		t3lib_div::devlog('tx_newspaper_articlelist_semiautomatic: $query', 'newspaper',
 						  0, array('table' => $table, 'where' => $where));
@@ -295,7 +316,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $new_articles;
 	}
 	
-	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
+	///< SQL table for persistence
+	static protected $table = 'tx_newspaper_articlelist_semiautomatic';
 }
 
 tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Semiautomatic());

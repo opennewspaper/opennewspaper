@@ -30,12 +30,35 @@
  */
  
  /// A list of tx_newspaper_Article s
- /**  
-  *  abstract functions:
+ /** An Article List returns an array of Articles on request. Which Articles are
+  *  returned is defined by the logic of the ArticleList.
+  * 
+  *  Typical examples include:
+  *   - All Articles belonging to a specified tx_newspaper_Section
+  *   - All Articles tagged with a specified tx_newspaper_Tag
+  *   - All Articles written by a specified author
+  *   - or any other condition for Articles that can be specified as an SQL
+  * 	statement
+  * 
+  *  This is the abstract base class which every concrete Article List must
+  *  extend.
+  *  
+  *  Abstract functions which the concrete class must implement:
   *  - function getArticles($number, $start)
   *	 - public static function getModuleName()
+  *
+  * Currently the important classes which implement tx_newspaper_ArticleList
+  * are tx_newspaper_ArticleList_Manual and tx_newspaper_ArticleList_Semiautomatic.
+  * 
+  * \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
+	
+	/// Construct a tx_newspaper_ArticleList
+	/** \param $uid UID of the record in the corresponding SQL table
+	 *  \param $section tx_newspaper_Section to which this ArticleList is
+	 * 		bound.
+	 */
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
 
 		if (intval($uid)) {
@@ -64,21 +87,44 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			   'abstract attributes: ' . print_r($this->abstract_attributes, 1);
 	}
 
+	/// Get a single tx_newspaper_Article at place \p $index in the List
+	/** \param $index The place in the list at which the Article is wanted,
+	 * 		starting with 0.
+	 *  \return The Article at place \p $index.
+	 */
 	public function getArticle($index) {
 		$articles = $this->getArticles(1, $index);
 		return $articles[0];
 	}
 
+	/// Returns a number of tx_newspaper_Article s from the list
+	/** \param $number Number of Articles to return
+	 *  \param $start Index of first Article to return (starts with 0)
+	 *  \return The \p $number Articles starting with \p $start
+	 */
 	abstract function getArticles($number, $start = 0);
 
 	public function getTable() { return tx_newspaper::getTable($this); }
 	public function getUid() { return intval($this->uid); }
 	public function setUid($uid) { $this->uid = $uid; }
 
+	/// Register a type of Article List so the system knows about it
+	/** The registered Article Lists are used so a BE user can select the type
+	 *  of Article List they need.
+	 * 
+	 *  registerArticleList() must be called from the definition file of all
+	 *  Article List classes which should be usable by the BE user.
+	 * 
+	 *  \param $newList A (default constructed) object of the Article List type
+	 * 		to be registered.
+	 */
 	static public function registerArticleList(tx_newspaper_ArticleList $newList) {
 		self::$registered_articlelists[] = $newList;
 	}
 
+	/// Get the list of registered Article List types
+	/** \return The list of registered Article List types.
+	 */
 	static public function getRegisteredArticleLists() {
 		return self::$registered_articlelists;
 	}
@@ -197,8 +243,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	}
 
 
-	/// get uid of abtract article list
-	/// \return UID of abstract ArticleList record, or 0 if no record was found
+	/// Get UID of abtract article list
+	/** \return UID of abstract ArticleList record, or 0 if no record was found
+	 */
 	public function getAbstractUid() {
 		if ($this->abstract_uid)
 			return $this->abstract_uid;
@@ -219,6 +266,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $this->abstract_uid;
 	}
 	
+	/// Set UID of abtract article list
+	/** \param $uid New UID of abstract ArticleList record
+	 */
 	public function setAbstractUid($uid) {
 		$this->abstract_uid = $uid;
 	}
@@ -229,25 +279,28 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 						 tx_newspaper::getTable($this), false);
 	}
 
-	private $uid = 0;
-	protected $abstract_uid = 0;
+	private $uid = 0;				///< UID of concrete record
+	protected $abstract_uid = 0;	///< UID of abstract record
 
+	///	Attributes of concrete record
 	protected $attributes = array();
+	///	Attributes of abstract record
 	protected $abstract_attributes = array();
+	/// tx_newspaper_Section this Article List is associated with, if any
 	protected $section = null;
 
-	/// SQL table for persistence
+	/// SQL table for persistence for the abstract record
 	static protected $table = 'tx_newspaper_articlelist';
 	/// SQL table for tx_newspaper_Section objects	
 	static protected $section_table = 'tx_newspaper_section';
 	/// Array for registered article lists (subclasses of tx_newspaper_ArticleList)
 	static protected $registered_articlelists = array();
 	
+	///	Fields which should be copied from the concrete to the abstract record
 	private static $fields_to_copy_into_articlelist_table = array(
 		'pid', 'crdate', 'cruser_id'
 	);
 
 }
-
 
 ?>

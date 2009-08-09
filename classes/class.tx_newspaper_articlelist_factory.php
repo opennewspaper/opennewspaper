@@ -33,7 +33,6 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_auto.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_manual.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_semiautomatic.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_test.php');
 
 /// Factory class to create the correct kind of tx_newspaper_ArticleList from a UID
 /** Problem: The tx_newspaper_ArticleList is stored in a table for the abstract
@@ -43,6 +42,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  *  Solution: This factory class.
  * 
  *  This class is implemented as a Singleton.
+ * 
+ *  Usage: tx_newspaper_ArticleList_Factory::getInstance()->create($uid)
  */
 class tx_newspaper_ArticleList_Factory {
 	
@@ -89,6 +90,7 @@ class tx_newspaper_ArticleList_Factory {
 	/// The only instance of the tx_newspaper_ArticleList_Factory Singleton
 	private static $instance = null;
 	
+	/// SQL table storing the abstract tx_newspaper_ArticleList records
 	private static $list_table = 'tx_newspaper_articlelist';
 }
  

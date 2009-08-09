@@ -29,7 +29,21 @@
  *  \date Mar 25, 2009
  */
  
-/// \todo: description
+/// Type of tx_newspaper_Article
+/** Articles can have several types, which determine the way the Articles are
+ *  displayed and also which tx_newspaper_Extras should be present in an Article
+ *  by default. 
+ * 
+ *  This is best explained by an Example.
+ *  - Standard Articles should always have an Image with them.
+ *  - Columns don't necessarily have an Image (but they may), but they need a
+ * 	  list of links.
+ *  - Editorials should be displayed in a different design.
+ * 
+ *  Article Types must be defined previous to using them. This is done via the 
+ *  Typo3 list module. Once an Article Type is defined, its properties can be
+ *  set in TSConfig.
+ */
 class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	
 	public function __construct($uid = 0) {
@@ -45,7 +59,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
 	
-	function getAttribute($attribute) {
+	public function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
@@ -93,11 +107,16 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		$this->uid = $uid;
 	}
 	
-/// \todo: param: type -> ARRAY!!!
-	/// \return TSConfig setting for this article type (array: musthave, shouldhave, etc.)
+	/// Get TSConfig setting for this article type
+	/** \param $type The name of the Article Type in TSConfig
+	 *  \return TSConfig setting for this article type (array: musthave,
+	 * 		shouldhave, etc.)
+	 *  \todo param: type -> ARRAY!!!
+	 *  \todo Oliver: Fix this documentation! I don't get it!
+	 */
 	public function getTSConfigSettings($type) {
-	
-		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()); /// check tsconfig in article sysfolder
+		/// check tsconfig in article sysfolder
+		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()); 
 		$tsc = t3lib_BEfunc::getPagesTSconfig($sysfolder);
 
 		if (!isset($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]))
@@ -112,10 +131,10 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	/// \return Name of the database table the object's data are stored in
 	public function getTable() { return tx_newspaper::getTable($this); }
 	
-	static function getModuleName() { return 'np_articletype'; }
+	static public function getModuleName() { return 'np_articletype'; }
 	
-	/// \return (sorted) list of all available article types
-	public static function getArticleTypes() {
+	/// \return Sorted list of all available article types
+	static public function getArticleTypes() {
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_ArticleType());
 		$row = tx_newspaper::selectRows(
 			'*',
@@ -130,6 +149,8 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		}
 		return $at;
 	}	
+	
+	////////////////////////////////////////////////////////////////////////////
 	
 	private $uid = ''; ///< UID that identifies the article type
 }
