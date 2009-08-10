@@ -266,6 +266,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  ) \endcode
 	 */
 	private function getOffsets(array $uids) {
+		
+		if (!$uids) return array();
+		
 		$results = tx_newspaper::selectRows(
 			'uid_foreign, offset',
 			'tx_newspaper_articlelist_semiautomatic_articles_mm',
