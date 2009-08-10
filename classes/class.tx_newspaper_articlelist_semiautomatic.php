@@ -247,7 +247,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$where,
 			'',
 			$this->getAttribute('filter_sql_order_by'),
-			intval($start) . ', ' . intval($number)
+			intval($number) . ', ' .intval($start) 
 		);
 
 		t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, tx_newspaper::$query);
