@@ -1053,7 +1053,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 $TCA["tx_newspaper_articlelist"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,list_table,list_uid,section_id"
+		"showRecordFieldList" => "hidden,starttime,endtime,list_table,list_uid,section_id,notes"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist"]["feInterface"],
 	"columns" => array (
@@ -1130,9 +1130,17 @@ $TCA["tx_newspaper_articlelist"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"notes" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.notes",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, list_table, list_uid, section_id")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, list_table, list_uid, section_id, notes")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")

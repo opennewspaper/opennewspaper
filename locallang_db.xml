@@ -85,6 +85,7 @@
 			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID of the list</label>
 			<label index="tx_newspaper_articlelist.section_id">ID of associated Section</label>
+			<label index="tx_newspaper_articlelist.notes">Notes</label>
 			<label index="tx_newspaper_articlelist_auto">Article list: Automatic</label>
 			<label index="tx_newspaper_pagetype">Page type</label>
 			<label index="tx_newspaper_pagetype.type_name">Type name</label>
@@ -236,6 +237,7 @@
 			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID der Liste</label>
 			<label index="tx_newspaper_articlelist.section_id">ID des zugehörigen Ressorts</label>
+			<label index="tx_newspaper_articlelist.notes">Notizen</label>
 			<label index="tx_newspaper_articlelist_auto">Artikelliste: Automatisch</label>
 			<label index="tx_newspaper_pagetype">Seitentyp</label>
 			<label index="tx_newspaper_pagetype.type_name">Typname</label>

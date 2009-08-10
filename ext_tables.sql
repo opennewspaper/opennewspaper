@@ -307,6 +307,7 @@ CREATE TABLE tx_newspaper_articlelist (
 	list_table tinytext NOT NULL,
 	list_uid int(11) DEFAULT '0' NOT NULL,
 	section_id blob NOT NULL,
+	notes tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
