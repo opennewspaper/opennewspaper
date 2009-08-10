@@ -69,16 +69,30 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 	}
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
-		foreach ($this->getArticles($this->getAttribute('num_articles')) as $present_article) {
-			if ($article->getUid() == $present_article->getUid()) {
-				throw new tx_newspaper_NotYetImplementedException(
-					'rearranging anrticles already in the list'
+		tx_newspaper::deleteRows(
+			'tx_newspaper_articlelist_manual_articles_mm',
+			'uid_local = ' . intval($this->getUid()) .
+				' AND uid_foreign = ' . $article->getUid()
+		);
+		
+		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
+			if ($i >= $pos) {
+				tx_newspaper::updateRows(
+					'tx_newspaper_articlelist_manual_articles_mm',
+					'uid_local = ' . intval($this->getUid()) .
+						' AND uid_foreign = ' . $present_article->getUid(),
+					array ('sorting' => 'sorting + 1')
 				);
 			}
 		}
 		
-		throw new tx_newspaper_NotYetImplementedException(
-			'inserting a new article'
+		tx_newspaper::insertRows(
+			'tx_newspaper_articlelist_manual_articles_mm',
+			array(
+				'uid_local' =>  intval($this->getUid()),
+				'uid_foreign' => $article->getUid(),
+				'sorting' => $pos+1
+			)
 		);
 	}
 
