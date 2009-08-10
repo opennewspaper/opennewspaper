@@ -163,7 +163,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * )
 	 */
 	private function getSortedArticles($number, $start = 0) {
-		$uids = $this->getRawArticleUIDs($number, $start);
+		$uids = $this->getRawArticleUIDs(2*$number, $start);
 		
 		$offsets = $this->getOffsets($uids);
 		
@@ -177,7 +177,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		$articles_sorted = $this->sortArticles($articles);
 
-		return $articles_sorted;		
+		return array_slice($articles_sorted, 0, $number);
 	}
 
 	/// Get the UIDs of articles found by the conditions defining the list
