@@ -250,6 +250,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			intval($start) . ', ' . intval($number)
 		);
 
+		t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, tx_newspaper::$query);
+
 		$uids = array();
 		foreach ($results as $result) {
 			if (intval($result['uid'])) $uids[] = intval($result['uid']);
