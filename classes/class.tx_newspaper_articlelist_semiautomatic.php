@@ -147,6 +147,20 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 	}
 	
+	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
+		foreach ($this->getArticles($this->getAttribute('num_articles')) as $present_article) {
+			if ($article->getUid() == $present_article->getUid()) {
+				throw new tx_newspaper_NotYetImplementedException(
+					'rearranging anrticles already in the list'
+				);
+			}
+		}
+		
+		throw new tx_newspaper_NotYetImplementedException(
+			'inserting a new article'
+		);		
+	}
+	
 	static public function getModuleName() { return 'np_al_semiauto'; }
 
 	////////////////////////////////////////////////////////////////////////////

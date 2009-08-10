@@ -45,7 +45,8 @@
   *  
   *  Abstract functions which the concrete class must implement:
   *  - function getArticles($number, $start)
-  *	 - public static function getModuleName()
+  *	 - static function getModuleName()
+  *  - function insertArticleAtPosition($pos)
   *
   * Currently the important classes which implement tx_newspaper_ArticleList
   * are tx_newspaper_ArticleList_Manual and tx_newspaper_ArticleList_Semiautomatic.
@@ -278,6 +279,35 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
 						 tx_newspaper::getTable($this), false);
 	}
+
+	public function getDescription() {
+		return $this->getTitle() . (
+			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): '' 
+		);
+	}
+
+	abstract function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0);
+
+	public function getArticlePosition(tx_newspaper_ArticleIface $article) {
+		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
+			if ($article->getUid() == $present_article->getUid()) {
+				return $i;
+			}
+		}
+		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
+	}
+
+	///	Check if current Article List is associated with a tx_newspaper_Section
+	/** \return true, if \p $this is associated with a valid Section
+	 */
+	public function isSectionList() {
+		try {
+			$section= new tx_newspaper_Section($this->getAttribute('section_id'));
+			return true;
+		} catch (tx_newspaper_Exception $e) {
+			return false;
+		}
+	} 
 
 	private $uid = 0;				///< UID of concrete record
 	protected $abstract_uid = 0;	///< UID of abstract record
