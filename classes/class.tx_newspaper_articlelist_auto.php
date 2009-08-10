@@ -65,6 +65,9 @@ class tx_newspaper_ArticleList_Auto extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 	
+	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
+	}
+		
 	public function setSection(tx_newspaper_Section $section) {
 		$this->section = $section;
 	}
