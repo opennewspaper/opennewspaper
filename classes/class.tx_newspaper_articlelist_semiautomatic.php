@@ -163,6 +163,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * )
 	 */
 	private function getSortedArticles($number, $start = 0) {
+		
+		/*	Because articles may be moved off the bottom of the list, we need a
+		 *  safety margin. Twice as many articles as required should be enough.
+		 */
 		$uids = $this->getRawArticleUIDs(2*$number, $start);
 		
 		$offsets = $this->getOffsets($uids);
