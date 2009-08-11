@@ -29,7 +29,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		
 		$list = tx_newspaper::getSection()->getArticleList();
 
-		$articles = $list->getArticles(0, 10);
+		$articles = $list->getArticles(10, 0);
 		
 		$this->smarty->assign('articles', $articles);
 		
