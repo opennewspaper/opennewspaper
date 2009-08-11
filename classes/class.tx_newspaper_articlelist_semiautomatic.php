@@ -148,17 +148,23 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
-		foreach ($this->getArticles($this->getAttribute('num_articles')) as $present_article) {
+		
+		$articles = $this->getArticles($this->getAttribute('num_articles'));
+		
+		//  If article already in list, move it to position $pos
+		foreach ($articles as $i => $present_article) {
 			if ($article->getUid() == $present_article->getUid()) {
-				throw new tx_newspaper_NotYetImplementedException(
-					'rearranging anrticles already in the list'
+				tx_newspaper::updateRows(
+					'tx_newspaper_articlelist_semiautomatic_articles_mm',
+					'uid_local = ' . intval($this->getUid()) .
+						' AND uid_foreign = ' . $present_article->getUid(),
+					array ('offset' => 'offset + ' . $i-$pos)
 				);
+				return;
 			}
 		}
 		
-		throw new tx_newspaper_NotYetImplementedException(
-			'inserting a new article'
-		);		
+		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
 	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
