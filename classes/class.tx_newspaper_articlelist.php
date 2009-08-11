@@ -48,10 +48,17 @@
   *	 - static function getModuleName()
   *  - function insertArticleAtPosition($pos)
   *
-  * Currently the important classes which implement tx_newspaper_ArticleList
-  * are tx_newspaper_ArticleList_Manual and tx_newspaper_ArticleList_Semiautomatic.
+  *  Currently the important classes which implement tx_newspaper_ArticleList
+  *  are tx_newspaper_ArticleList_Manual and 
+  *  tx_newspaper_ArticleList_Semiautomatic.
   * 
-  * \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
+  *  If you want to write a new type of Article List, you must register your
+  *  class by calling 
+  *  \code
+  *  tx_newspaper_ArticleList::registerArticleList(new <your class>());
+  *  \endcode
+  *  after defining the class. See tx_newspaper_ArticleList_Manual for an
+  *  example.
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
@@ -88,48 +95,13 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			   'abstract attributes: ' . print_r($this->abstract_attributes, 1);
 	}
 
-	/// Get a single tx_newspaper_Article at place \p $index in the List
-	/** \param $index The place in the list at which the Article is wanted,
-	 * 		starting with 0.
-	 *  \return The Article at place \p $index.
-	 */
-	public function getArticle($index) {
-		$articles = $this->getArticles(1, $index);
-		return $articles[0];
-	}
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	interface tx_newspaper_StoredObject
+	//
+	////////////////////////////////////////////////////////////////////////////
 
-	/// Returns a number of tx_newspaper_Article s from the list
-	/** \param $number Number of Articles to return
-	 *  \param $start Index of first Article to return (starts with 0)
-	 *  \return The \p $number Articles starting with \p $start
-	 */
-	abstract function getArticles($number, $start = 0);
-
-	public function getTable() { return tx_newspaper::getTable($this); }
-	public function getUid() { return intval($this->uid); }
-	public function setUid($uid) { $this->uid = $uid; }
-
-	/// Register a type of Article List so the system knows about it
-	/** The registered Article Lists are used so a BE user can select the type
-	 *  of Article List they need.
-	 * 
-	 *  registerArticleList() must be called from the definition file of all
-	 *  Article List classes which should be usable by the BE user.
-	 * 
-	 *  \param $newList A (default constructed) object of the Article List type
-	 * 		to be registered.
-	 */
-	static public function registerArticleList(tx_newspaper_ArticleList $newList) {
-		self::$registered_articlelists[] = $newList;
-	}
-
-	/// Get the list of registered Article List types
-	/** \return The list of registered Article List types.
-	 */
-	static public function getRegisteredArticleLists() {
-		return self::$registered_articlelists;
-	}
-
+	/// \see tx_newspaper_StoredObject
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->abstract_attributes) {
@@ -158,9 +130,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
         	print_r($this->abstract_attributes, 1) . ' ]');
 	}
 
-	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
-	  *  attributes, even if they don't exist beforehand.
-	  */
+	/// \see tx_newspaper_StoredObject
 	public function setAttribute($attribute, $value) {
 		if (!$this->attributes && $this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
@@ -171,8 +141,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$this->attributes[$attribute] = $value;
 	}
 
-
-	/// Write or overwrite article list in DB, return UID of stored record 
+	/// \see tx_newspaper_StoredObject
 	public function store() {
 
 		if ($this->getUid()) {
@@ -202,6 +171,85 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $this->getUid();
 	}
 
+	public function getTitle() {
+		global $LANG;
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
+						 tx_newspaper::getTable($this), false);
+	}
+
+	public function getUid() { return intval($this->uid); }
+
+	public function setUid($uid) { $this->uid = $uid; }
+
+	public function getTable() { return tx_newspaper::getTable($this); }
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	class tx_newspaper_ArticleList
+	//
+	////////////////////////////////////////////////////////////////////////////
+
+	/// Inserts an Article at a specified position in the list
+	/** \param $article Article to insert
+	 *  \param $pos Position to insert zp $article at
+	 *  \throw tx_newspaper_ArticleNotFoundException if \p $article could not be
+	 * 		inserted for some reason
+	 */
+	abstract function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0);
+
+	/// Returns a number of tx_newspaper_Article s from the list
+	/** \param $number Number of Articles to return
+	 *  \param $start Index of first Article to return (starts with 0)
+	 *  \return The \p $number Articles starting with \p $start
+	 */
+	abstract function getArticles($number, $start = 0);
+
+	/// Get a single tx_newspaper_Article at place \p $index in the List
+	/** \param $index The place in the list at which the Article is wanted,
+	 * 		starting with 0.
+	 *  \return The Article at place \p $index.
+	 */
+	public function getArticle($index) {
+		$articles = $this->getArticles(1, $index);
+		return $articles[0];
+	}
+
+	/// Get the position of an Article in the List
+	/** \param $article The Article to look for in \p $this
+	 *  \return The position of an Article in the List
+	 *  \throw tx_newspaper_ArticleNotFoundException if \p $article is not in
+	 * 		\p $this.
+	 */
+	public function getArticlePosition(tx_newspaper_ArticleIface $article) {
+		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
+			if ($article->getUid() == $present_article->getUid()) {
+				return $i;
+			}
+		}
+		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
+	}
+	
+	/// A short description that makes an Article List identifiable in the BE
+	/** This function might be overridden in every implementation. Here it gives
+	 *  a reasonable default: Name of the Article List and any notes.
+	 */
+	public function getDescription() {
+		return $this->getTitle() . (
+			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): '' 
+		);
+	}
+
+	///	Check if current Article List is associated with a tx_newspaper_Section
+	/** \return true, if \p $this is associated with a valid Section
+	 */
+	public function isSectionList() {
+		try {
+			$section= new tx_newspaper_Section($this->getAttribute('section_id'));
+			return true;
+		} catch (tx_newspaper_Exception $e) {
+			return false;
+		}
+	} 
 
  	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
 	/** This is probably necessary because a concrete ArticleList has been freshly
@@ -211,6 +259,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \param $uid UID of the ArticleList in the table of concrete ArticleList
 	 *  \param $table Table of concrete ArticleList
 	 *  \return UID of abstract ArticleList record
+	 *  \todo Does it need to be public?
 	 */ 
 	public function createArticleListRecord($uid, $table) {
 		/// read typo3 fields to copy into article list super table
@@ -243,9 +292,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $al_uid; 		
 	}
 
-
 	/// Get UID of abtract article list
 	/** \return UID of abstract ArticleList record, or 0 if no record was found
+	 *  \todo Does it need to be public?
 	 */
 	public function getAbstractUid() {
 		if ($this->abstract_uid)
@@ -269,45 +318,34 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
 	/// Set UID of abtract article list
 	/** \param $uid New UID of abstract ArticleList record
+	 *  \todo Does it need to be public?
 	 */
 	public function setAbstractUid($uid) {
 		$this->abstract_uid = $uid;
 	}
 	
-	public function getTitle() {
-		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
-						 tx_newspaper::getTable($this), false);
-	}
-
-	public function getDescription() {
-		return $this->getTitle() . (
-			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): '' 
-		);
-	}
-
-	abstract function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0);
-
-	public function getArticlePosition(tx_newspaper_ArticleIface $article) {
-		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
-			if ($article->getUid() == $present_article->getUid()) {
-				return $i;
-			}
-		}
-		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
-	}
-
-	///	Check if current Article List is associated with a tx_newspaper_Section
-	/** \return true, if \p $this is associated with a valid Section
+	/// Register a type of Article List so the system knows about it
+	/** The registered Article Lists are used so a BE user can select the type
+	 *  of Article List they need.
+	 * 
+	 *  registerArticleList() must be called from the definition file of all
+	 *  Article List classes which should be usable by the BE user.
+	 * 
+	 *  \param $newList A (default constructed) object of the Article List type
+	 * 		to be registered.
 	 */
-	public function isSectionList() {
-		try {
-			$section= new tx_newspaper_Section($this->getAttribute('section_id'));
-			return true;
-		} catch (tx_newspaper_Exception $e) {
-			return false;
-		}
-	} 
+	static public function registerArticleList(tx_newspaper_ArticleList $newList) {
+		self::$registered_articlelists[] = $newList;
+	}
+
+	/// Get the list of registered Article List types
+	/** \return The list of registered Article List types.
+	 */
+	static public function getRegisteredArticleLists() {
+		return self::$registered_articlelists;
+	}
+
+
 
 	private $uid = 0;				///< UID of concrete record
 	protected $abstract_uid = 0;	///< UID of abstract record
