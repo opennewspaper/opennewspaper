@@ -200,6 +200,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 
 		$articles_sorted = $this->sortArticles($articles);
+		t3lib_div::devlog('sorted articles', 'newspaper', 0, $articles_sorted);
 
 		return array_slice($articles_sorted, 0, $number);
 	}
@@ -262,9 +263,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 		
-		t3lib_div::devlog('tx_newspaper_articlelist_semiautomatic: $query', 'newspaper',
-						  0, array('table' => $table, 'where' => $where));
-						  
 		$results = tx_newspaper::selectRows(
 			'DISTINCT tx_newspaper_article.uid', 
 			$table,
