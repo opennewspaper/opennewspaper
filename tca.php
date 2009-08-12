@@ -2114,5 +2114,67 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_comment_cache"] = array (
+	"ctrl" => $TCA["tx_newspaper_comment_cache"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,article,kicker,title,author"
+	),
+	"feInterface" => $TCA["tx_newspaper_comment_cache"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.article",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"kicker" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.kicker",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"author" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.author",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, article, kicker, title;;;;2-2-2, author;;;;3-3-3")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

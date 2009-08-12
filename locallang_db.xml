@@ -158,6 +158,11 @@
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Number of displayed articles</label>
 			<label index="tx_newspaper_extra_mostcommented.display_num">Display number of comments</label>
 			<label index="tx_newspaper_extra_mostcommented.display_time">Display time actually used</label>
+			<label index="tx_newspaper_comment_cache">Comment cache</label>
+			<label index="tx_newspaper_comment_cache.article">Article</label>
+			<label index="tx_newspaper_comment_cache.kicker">Kicker</label>
+			<label index="tx_newspaper_comment_cache.title">Title</label>
+			<label index="tx_newspaper_comment_cache.author">Author</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -315,6 +320,11 @@
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Anzahl angezeigter Favoriten</label>
 			<label index="tx_newspaper_extra_mostcommented.display_num">Anzahl der Kommentare anzeigen</label>
 			<label index="tx_newspaper_extra_mostcommented.display_time">Tatsaechlich gerechnete Zeit anzeigen</label>
+			<label index="tx_newspaper_comment_cache">Kommentar-cache</label>
+			<label index="tx_newspaper_comment_cache.article">Artikel</label>
+			<label index="tx_newspaper_comment_cache.kicker">Dachzeile</label>
+			<label index="tx_newspaper_comment_cache.title">Titel</label>
+			<label index="tx_newspaper_comment_cache.author">Autor</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
