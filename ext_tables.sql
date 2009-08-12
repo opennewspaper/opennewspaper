@@ -646,6 +646,28 @@ CREATE TABLE tx_newspaper_tag (
 
 
 #
+# Table structure for table 'tx_newspaper_extra_mostcommented'
+#
+CREATE TABLE tx_newspaper_extra_mostcommented (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	hours int(11) DEFAULT '0' NOT NULL,
+	num_favorites int(11) DEFAULT '0' NOT NULL,
+	display_num tinyint(3) DEFAULT '0' NOT NULL,
+	display_time tinyint(3) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
