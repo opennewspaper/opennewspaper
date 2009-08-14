@@ -64,6 +64,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	
 	public function getTitle() {
 		global $LANG;
+		if (!$LANG instanceof language) {
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 	
