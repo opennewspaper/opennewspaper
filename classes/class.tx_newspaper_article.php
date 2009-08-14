@@ -25,7 +25,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
  *  class representing Extras is tx_newspaper_Extra and its descendants.
  * 
  *  The Extras must be placed in an Article or in a PageZone. 
- *  \todo finish me!
  */
 class tx_newspaper_Article extends tx_newspaper_PageZone 
 	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
@@ -50,10 +49,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($uid) {
 			$this->setUid($uid);
 			
-			/** \todo I'm not sure whether the following lines should remain. 
-			 *  They're a safety net because currently it's not ensured that 
-			 *  extras are created consistently.
-			 */
 			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
 			$this->pagezone_uid = $this->createPageZoneRecord();
 		}
@@ -171,22 +166,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		
 		return $this->getUid();		
-	}
-
-	/// \return (Internationalized) short description if the object type
-	/** This is (probably) used only in the BE, where the user needs to know
-	 *	which kind of object she is handling.
-	 *  
-	 *  \todo remove and see if it's properly inherited from tx_newspaper_PageZone
-	 */
-	public function getTitle() {
-		global $LANG;
-		if (!($LANG instanceof language)) {
-			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
-			$LANG = t3lib_div::makeInstance('language');
-			$LANG->init('default');
-		}
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 
 	/// \see tx_newspaper_StoredObject
