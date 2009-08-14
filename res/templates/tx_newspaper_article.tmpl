@@ -30,7 +30,6 @@
    $extra_attributes	attributes for abstract extra record as stored in DB
 *}
 
-{foreach from=$attributes key=name item=value}<p>{$name} = {$value}{/foreach}
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
 <h2>{$attributes.kicker}</h2>
 <h1>{$attributes.title}</h1>
@@ -63,6 +62,5 @@
 		{$attributes.text}
 	{/if}		
 </p>
-{debug}
 
 <!--  end  res/templates/tx_newspaper_article.tmpl -->
