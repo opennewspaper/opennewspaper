@@ -6,34 +6,17 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="entry_templateset_inherit">Inherit from upper level</label>
+			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
+			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
 			<label index="flag_extra_edit">Edit extra</label>
 			<label index="flag_extra_hide">Hide extra</label>
 			<label index="flag_extra_unhide">Unhide extra</label>
 			<label index="flag_extra_delete">Delete extra</label>
-			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
-			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
-			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
 			<label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
 			<label index="flag_new_page_in_section">Activate this page type for this section</label>
-			<label index="message_check_new_page_in_section">Do you really want to activate this page type?</label>
-			<label index="message_delete_page_in_section">Delete this page</label>
-			<label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
 			<label index="flag_activated_pagezone_in_section">This page zone is activated</label>
 			<label index="flag_new_pagezone_in_section">Activate this page zone type for this section and page</label>
-			<label index="message_check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
-			<label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
-			<label index="message_close_pagezone_in_section">Return to list of page types</label>
-			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
-			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
-			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
-			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
-			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
-			<label index="title_tx_newspaper_section">Section</label>
-			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
-			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
-			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
-			<label index="entry_templateset_inherit">Inherit from upper level</label>
-			<label index="message_title_sectiontree">Section tree</label>
 			<label index="label_workflow_hide">Hide</label>
 			<label index="label_workflow_publish">Publish</label>
 			<label index="label_workflow_check">Check</label>
@@ -47,12 +30,45 @@
 			<label index="log_article_hidden">Article hidden</label>
 			<label index="log_article_published">Article published</label>
 			<label index="log_user_entry">User comment</label>
+			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
+			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
+			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
+			<label index="message_check_new_page_in_section">Do you really want to activate this page type?</label>
+			<label index="message_delete_page_in_section">Delete this page</label>
+			<label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
+			<label index="message_check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
+			<label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
+			<label index="message_close_pagezone_in_section">Return to list of page types</label>
+			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
+			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
+			<label index="message_title_sectiontree">Section tree</label>
+			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
+			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
+			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
+			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
+			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
+			<label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
+			<label index="title_tx_newspaper_extra_externallinks">External links</label>
+			<label index="title_tx_newspaper_extra_image">Image</label>
+			<label index="title_tx_newspaper_extra_mostcommented">Most commented articles</label>
+			<label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
+			<label index="title_tx_newspaper_extra_textbox">Text box</label>
+			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
+			<label index="title_tx_newspaper_section">Section</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
+			<label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
+			<label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
+			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
+			<label index="title_tx_newspaper_extra_image">Bild</label>
+			<label index="title_tx_newspaper_extra_mostcommented">Meistkommentierte Artikel</label>
+			<label index="title_tx_newspaper_extra_sectionlist">Ressortuebersicht</label>
+			<label index="title_tx_newspaper_extra_textbox">Textkasten</label>
+			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 		</languageKey>
 	</data>
