@@ -201,7 +201,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	/// Renders an article with all of its Extras
 	/** \param $template_set Template set to use
-	 *  \todo only pass the attributes array to Smarty, instead of individal attributes
 	 */
 	public function render($template_set = '') {
 
@@ -226,15 +225,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getPageZoneType()) {
 			$this->smarty->setPageZoneType($this);
 		}
-
-		$this->smarty->assign('kicker', $this->getAttribute('kicker'));
-		$this->smarty->assign('title', $this->getAttribute('title'));
-		$this->smarty->assign('teaser', $this->getAttribute('teaser'));
-		$this->smarty->assign('kicker_list', $this->getAttribute('kicker_list'));
-		$this->smarty->assign('title_list', $this->getAttribute('title_list'));
-		$this->smarty->assign('teaser_list', $this->getAttribute('teaser_list'));
-		$this->smarty->assign('author', $this->getAttribute('author'));
-		$this->smarty->assign('text', $this->getAttribute('text'));
 
 		/** Assemble the text paragraphs and extras in an array of the form:
 		 *  \code

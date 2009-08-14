@@ -3,14 +3,6 @@
 
 {* Article
    Variables:
-   $kicker
-   $title
-   $teaser
-   $kicker_list	kicker displayed in list view of article, if different
-   $title_list	title displayed in list view of article, if different
-   $teaser_list	teaser displayed in list view of article, if different
-   $author
-   $text		the raw text as stored in the DB
    $paragraphs	array(
 				  	$paragraph_number => array(
 		 				"text" => $text_of_paragraph,
@@ -26,14 +18,22 @@
 			 		...
 		  		)
    $template_set	template set used, if any
-   $attributes	attributes as stored in DB
+   $attributes	attributes as stored in DB. for example:
+   		kicker
+   		title
+   		teaser
+   		kicker_list	kicker displayed in list view of article, if different
+   		title_list	title displayed in list view of article, if different
+   		teaser_list	teaser displayed in list view of article, if different
+   		author
+   		text		the raw text as stored in the DB
    $extra_attributes	attributes for abstract extra record as stored in DB
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
-<h2> {$kicker} </h2>
-<h1> {$title} </h1>
-<h3> {$teaser} {if $author}VON {$author}{/if} </h3>
+<h2> {$attribute.kicker} </h2>
+<h1> {$attribute.title} </h1>
+<h3> {$attribute.teaser} {if $attribute.author}VON {$attribute.author}{/if} </h3>
 
 <p> 
 	{if $paragraphs}
@@ -59,7 +59,7 @@
 
 		{/section}
 	{else}
-		{$text}
+		{$attributes.text}
 	{/if}		
 </p>
 
