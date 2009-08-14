@@ -173,9 +173,20 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $this->getUid();		
 	}
 
-	/// \see tx_newspaper_StoredObject
+	/// \return (Internationalized) short description if the object type
+	/** This is (probably) used only in the BE, where the user needs to know
+	 *	which kind of object she is handling.
+	 *  
+	 *  \todo remove and see if it's properly inherited from tx_newspaper_PageZone
+	 */
 	public function getTitle() {
-		return 'Article';
+		global $LANG;
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 
 	/// \see tx_newspaper_StoredObject

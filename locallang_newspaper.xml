@@ -42,10 +42,12 @@
 			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
 			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
 			<label index="message_title_sectiontree">Section tree</label>
+			<label index="title_tx_newspaper_article">Article</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatic article list</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
+			<label index="title_tx_newspaper_articletype">Article type</label>
 			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
 			<label index="title_tx_newspaper_extra_externallinks">External links</label>
@@ -54,13 +56,19 @@
 			<label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
 			<label index="title_tx_newspaper_extra_textbox">Text box</label>
 			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
+			<label index="title_tx_newspaper_page">Page</label>
+			<label index="title_tx_newspaper_pagetype">Page type</label>
+			<label index="title_tx_newspaper_pagezone_page">Page zone</label>
+			<label index="title_tx_newspaper_pagezonetype">Page zone type</label>
 			<label index="title_tx_newspaper_section">Section</label>
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="title_tx_newspaper_article">Artikel</label>
 			<label index="title_tx_newspaper_articlelist_auto">Automatische Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
+			<label index="title_tx_newspaper_articletype">Artikeltyp</label>
 			<label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
 			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
@@ -69,6 +77,10 @@
 			<label index="title_tx_newspaper_extra_sectionlist">Ressortuebersicht</label>
 			<label index="title_tx_newspaper_extra_textbox">Textkasten</label>
 			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
+			<label index="title_tx_newspaper_page">Seite</label>
+			<label index="title_tx_newspaper_pagetype">Seitentyp</label>
+			<label index="title_tx_newspaper_pagezone_page">Seitenbereich</label>
+			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 		</languageKey>
 	</data>

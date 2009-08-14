@@ -158,9 +158,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 	}
 	
-	/** \todo Internationalization */
 	public function getTitle() {
-		return 'PageZone';
+		global $LANG;
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 	
 	function getUid() { 

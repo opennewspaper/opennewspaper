@@ -95,8 +95,12 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 
 	public function getTitle() {
 		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' .
-						 tx_newspaper::getTable($this), false);
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 
 	public function getUid() {
