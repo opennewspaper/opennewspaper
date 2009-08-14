@@ -62,6 +62,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			 . "\n";
 	}
 	
+	public function getTitle() {
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
+	}
+	
 	/// Makes a "deep copy" of an Extra in the DB
 	/** Copies the concrete portion of an Extra as well as giving it a new
 	 *  abstract record.

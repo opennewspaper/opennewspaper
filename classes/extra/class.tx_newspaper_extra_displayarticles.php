@@ -42,11 +42,6 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 		return $article->render($template_set);
 	}
 
-	/// \todo getLLL
-	public function getTitle() {
-		return 'Display Articles';
-	}
-
 	public function getDescription() {
 		return 'Display Articles';
 	}

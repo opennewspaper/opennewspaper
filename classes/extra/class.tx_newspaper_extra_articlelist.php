@@ -60,11 +60,6 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		return $this->smarty->fetch($template);
 	}
 
-	public function getTitle() {
-#		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);	
-		return 'ArticleList';
-	}
-
 	public static function getModuleName() {
 		return 'np_artlist'; 
 	}

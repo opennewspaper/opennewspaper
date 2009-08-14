@@ -89,13 +89,6 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	///	A description to identify the Extra class in the BE
-	/** \todo getLLL)()
-	 */
-	public function getTitle() {
-		return 'External Links';
-	}
-
 	/// A description to identify the link list in the BE
 	/** \todo Show at least one of the actual links
 	 */

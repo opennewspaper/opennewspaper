@@ -36,10 +36,6 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	public function getTitle() {
-		return 'SectionList';
-	}
-
 	public static function getModuleName() {
 		return 'np_sect_ls'; 
 	}
@@ -47,7 +43,6 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return false; }
 	
 }
-
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SectionList());
 
 ?>

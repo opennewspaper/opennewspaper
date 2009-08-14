@@ -40,11 +40,6 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	/// \todo getLLL
-	public function getTitle() {
-		return 'Text Box';
-	}
-
 	/** Displays the title and the beginning of the text.
 	 */
 	public function getDescription() {

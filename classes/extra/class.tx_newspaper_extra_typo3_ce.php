@@ -72,11 +72,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		return $ret;
 	}
 
-//TODO: getLLL
-	public function getTitle() {
-		return 'Typo3 Content Element(s)';
-	}
-
 	/** If the CE has a header, display the header. Else if it has a titleText,
 	 *  display that. Else just display its UID. 
 	 *  \todo This could probably be improved, especially for multiple CEs.

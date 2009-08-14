@@ -41,11 +41,6 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 		return $this->smarty->fetch($template);
 	}
 
-	public function getTitle() {
-#		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);	
-		return 'Most Commented Articles';
-	}
-
 	public static function getModuleName() {
 		return 'np_mostcommented'; 
 	}

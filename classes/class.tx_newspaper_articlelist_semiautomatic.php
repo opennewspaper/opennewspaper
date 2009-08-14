@@ -214,6 +214,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  \todo Factor out the code to create the SQL statement so it can be used
 	 *  	as filter for tx_newspaper_ArticleList_Manual. Possibly factor out
 	 * 		the code to subtract another ArticleList too.
+	 *  \todo Figure out how to preview hidden articles
 	 */
 	private function getRawArticleUIDs($number, $start = 0) {
 

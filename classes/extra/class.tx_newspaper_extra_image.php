@@ -67,11 +67,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			 		  '/' . $this->getAttribute('image') . '" />';
 	}
 
-//TODO: getLLL
-	public function getTitle() {
-		return 'Image';
-	}
-
 // title for module
 	public static function getModuleName() {
 		return 'np_image';
