@@ -82,6 +82,9 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	}	
 
 	public function test_render() {
+		
+		$this->fail('test not yet ready!');
+		
 		/// set an article ID for article renderer extra
 		$_GET['art'] = 1;
 		foreach($this->extras_to_test as $extra_class) {
