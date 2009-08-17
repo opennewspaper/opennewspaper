@@ -51,6 +51,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	
 	public function testPageTypes() {
 		
+		$pagetype = new tx_newspaper_PageType();
 		$pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
 		$pagetype = new tx_newspaper_PageType($pagetype_uid);
 		
