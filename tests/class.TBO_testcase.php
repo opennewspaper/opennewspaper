@@ -43,7 +43,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	/// Test whether the PI returns the correct pages.
 	/** Content of the page zones and extras is tested below */
 	public function test_main() {
-		$this->fail('not yet ready!');
+		$this->fail('test not yet ready!');
 		$this->doTestContains($this->pi->main('', null), 'Testressort');
 		
 		$this->doTestContains($this->pi->main('', null), 'Ressortseite');
@@ -57,7 +57,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_PageZone_ressort() {
-		$this->fail('not yet ready!');
+		$this->fail('test not yet ready!');
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 1');
 		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
@@ -102,6 +102,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_Extras_ressort() {
+		$this->fail('test not yet ready!');
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Image 1');
 		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/BSD_-_Daemon_tux_thumb');
