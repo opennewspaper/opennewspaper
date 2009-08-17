@@ -50,8 +50,10 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function testPageTypes() {
-		$pagetype = new tx_newspaper_PageType(array('page' => 100));
-		tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
+		
+		$pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
+		$pagetype = new tx_newspaper_PageType($pagetype_uid);
+		
 		$this->page = new tx_newspaper_Page($this->section, 
 											$pagetype);
 		$this->page->store();											
@@ -60,6 +62,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));						    
 
+		t3lib_div::debug('ressortseite ok');
+
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
 		/// set an article ID for article renderer extra
 		$_GET['art'] = 1;		
@@ -67,9 +71,12 @@ class test_Page_testcase extends tx_phpunit_testcase {
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
 						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
+
+		t3lib_div::debug('artikelseite ok');
 		
 		/// \todo tx_newspaper_PageType::getAvailablePageTypes()
 		
+		tx_newspaper::deleteRows($pagetype->getTable(), $pagetype_uid);
 	}
 	
 	public function testEmptyPageZones() {
