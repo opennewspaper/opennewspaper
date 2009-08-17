@@ -21,6 +21,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$table =  $this->article->sourceTable($this->source);
 		foreach($this->sourceData as $data) {
 			$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $data);
+			$query = str_replace('INSERT', 'REPLACE', $query);
 			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			if (!$res) die("$query failed!");
 		}
