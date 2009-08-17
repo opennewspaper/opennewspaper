@@ -162,15 +162,19 @@ class tx_newspaper_hierarchy {
 		$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_uids[0]);
 
 		foreach ($this->extra_uids as $uid) {
-			$extra_object = new $this->concrete_extra_table($uid);
-			tx_newspaper::deleteRows(
-				$pagezone->getExtra2PagezoneTable(),
-				'uid_foreign = ' . $extra_object->getExtraUid()
-			);
-			tx_newspaper::deleteRows(
-				$this->extra_table, 
-				'uid = ' . $extra_object->getExtraUid()
-			);
+			$abstract_uids = tx_newspaper::selectRows(
+				'uid', $this->extra_table, 
+				'extra_table = ' . $this->concrete_extra_table . ' AND extra_uid = ' . $uid);
+			foreach ($abstract_uids as $abstract_uid) {
+				tx_newspaper::deleteRows(
+					$pagezone->getExtra2PagezoneTable(),
+					'uid_foreign = ' . $abstract_uid
+				);
+				tx_newspaper::deleteRows(
+					$this->extra_table, 
+					'uid = ' . $abstract_uid
+				);
+			}
 			tx_newspaper::deleteRows($this->concrete_extra_table, $uid);
 		}
 	}
