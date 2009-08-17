@@ -344,7 +344,6 @@ t3lib_div::debug("inserting after $extra_after_which");
 			$this->checkPageZoneOrder($pagezone);
 
 			/// Make sure the Extras are inserted on inheriting PageZones.
-t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 			foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
 				t3lib_div::debug($sub_pagezone.'');
 				$this->assertEquals(
@@ -383,9 +382,9 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 					$pagezone->getExtraOrigin($extra)
 #				)
 				;
-				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
 				$extra->setAttribute('origin_uid', $some_origin_extra->getUid());
-				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
 			}
 		}
 		
@@ -470,7 +469,7 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(false));
 	public function test_getInheritanceHierarchyDown() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$hierarchy = $pagezone->getInheritanceHierarchyDown(false);
-t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
+
 			foreach ($hierarchy as $sub_pagezone) {
 				$this->assertTrue(
 					$sub_pagezone instanceof tx_newspaper_PageZone,

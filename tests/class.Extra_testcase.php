@@ -240,6 +240,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$that = $temp->duplicate();
 			t3lib_div::debug($this); t3lib_div::debug($that);
 		}
+		$this->fail('test not yet ready!');
 	}
 	
 	/// Section which contains the objects to be tested
