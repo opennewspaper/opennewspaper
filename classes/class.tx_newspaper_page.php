@@ -147,6 +147,9 @@ class tx_newspaper_Page
 					$this->getTable(), $this->attributes
 				)
 			);
+			
+			//	empty attributes array so it can be read in full at next access
+			$this->attributes = array(); 
 		}
 		
 		/// store all page zones and set the page_id of their respective pagezone superclass entry
