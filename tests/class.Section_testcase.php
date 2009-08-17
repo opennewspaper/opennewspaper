@@ -58,7 +58,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	public function test_getArticleList() {
 		$list = $this->section->getArticleList();
 		$this->assertEquals($list, 
-							tx_newspaper_ArticleList_Factory::getInstance()->create(1, $this->section));
+							tx_newspaper_ArticleList_Factory::getInstance()->create(self::articlelist_uid, $this->section));
 		
 		$this->assertEquals($list->getTitle(), 'Automatic article list');
 		$this->assertEquals($list->getUid(), 1);
@@ -112,6 +112,7 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	private $section_uid = 1;					///< uid of stored object
 	private $pid = 2828;						///< pid of stored object
 	private $section_name = 'Testressort';		///< section_name of stored object
+	const articlelist_uid = 25;
 	
 }
 ?>
