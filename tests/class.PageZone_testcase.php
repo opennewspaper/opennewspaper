@@ -415,7 +415,7 @@ t3lib_div::debug("inserting after $extra_after_which");
 	public function test_removeExtra() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$old_extras = $pagezone->getExtras();
-			t3lib_div::debug($pagezone);
+			t3lib_div::debug($pagezone->getUid() . ': ' . $pagezone->getAttribute('pagezone_id'));
 			t3lib_div::debug($old_extras);
 			foreach ($old_extras as $extra_to_remove) {
 				$this->assertTrue(
