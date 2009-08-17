@@ -147,7 +147,8 @@ class tx_newspaper_NoResException extends tx_newspaper_DBException {
 class tx_newspaper_EmptyResultException extends tx_newspaper_DBException { 
 
 	public function __construct() {
-        tx_newspaper_DBException::__construct('Result empty');
+						  
+        tx_newspaper_DBException::__construct('Result empty' . print_r(array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH), 1));
     }
 }
 
