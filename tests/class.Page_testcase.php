@@ -16,23 +16,28 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		$this->section = new tx_newspaper_Section($this->section_uid);
-		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
+		$this->page->store();
 	}
 
 	function tearDown() {
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
-		unset($_GET['type']);		
+		unset($_GET['type']);
+		tx_newspaper::deleteRows($this->page->getTable(), $this->page->getUid());
+		
 	}
 
 	public function test_createPage() {
-		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));
-		$this->assertTrue(is_object($temp));
-		$this->assertTrue($temp instanceof tx_newspaper_Page);
-		$temp = new tx_newspaper_Page(1);
-		$this->assertEquals($temp->getUid(), 1);
-		$this->assertEquals($temp->getAttribute('uid'), 1);
+		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));		
+		$uid= $temp->store();		
+		$this->assertTrue(is_object($temp), 'page-object is no object');
+		$this->assertTrue($temp instanceof tx_newspaper_Page, 'created object is not of type '.get_class(tx_newspaper_Page));
+		$this->assertEquals($temp->getUid(), $uid, 'method getUid does not return uid');
+		$this->assertEquals($temp->getAttribute('uid'), $uid, 'method getAttribute does not return uid');		
+		tx_newspaper::deleteRows($this->page->getTable(), $uid);
+		
 		$this->setExpectedException('tx_newspaper_IllegalUsageException');
 		$temp = new tx_newspaper_Page('I\'m a string!');
 	}
@@ -46,8 +51,10 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	
 	public function testPageTypes() {
 		$pagetype = new tx_newspaper_PageType(array('page' => 100));
+		tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
 		$this->page = new tx_newspaper_Page($this->section, 
 											$pagetype);
+		$this->page->store();											
 		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
@@ -69,6 +76,7 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		/// This test page is guaranteed to have no page zones
 		$this->page = new tx_newspaper_Page($this->section, 
 											new tx_newspaper_PageType(array('page' => 666)));
+		$this->page->store();											
 		$this->assertFalse(is_array($this->page->getPageZones()));
 		$this->assertTrue($this->page->getPageZones());
 	}
@@ -117,5 +125,6 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	private $section = null;
 	private $page = null;					///< the object
 	private $section_uid = 1;
+	private $page_uid = null;				///< id of create page
 }
 ?>

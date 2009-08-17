@@ -10,7 +10,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_fa
 /// testsuite for all extras belonging to the newspaper extension
 class test_Extra_testcase extends tx_phpunit_testcase {
 
-	function setUp() {
+	function setUp() {		
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
@@ -20,7 +20,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
-		unset($_GET['type']);		
+		unset($_GET['type']);
 	}
 
 	public function test_getExtraTable() {
@@ -134,12 +134,12 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		$article_uid = 1;
 		$article = new tx_newspaper_Article($article_uid);
 		foreach($this->extras_to_test as $extra_class) {
-			/// create a new extra, call relateExtra2Article() on a known article 
+			/// create a new extra, call relateExtra2Article() on a known article
 			$extra = new $extra_class();
 			$crdate = time();
 			$extra->setAttribute('crdate', $crdate);
 			$extra_uid = $extra->store();
-			$abstract_uid = tx_newspaper_Article::relateExtra2Article($extra_class, $extra_uid, $article_uid);
+			$abstract_uid = $article->relateExtra2Article($extra, $extra_uid, $article_uid);
 
 			/// check that entry for Extra supertable has been written and is equal to new Extra
 			$data = tx_newspaper::selectOneRow(
@@ -264,6 +264,9 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			'tx_newspaper_Extra_SectionList' => 'np_sect_ls',
 		),
 	);
+	
+	/// Helper for common setUp Tasks
+	private $testHelper = null;
 	/// Table which stores the Extra superclass
 	private $extras_table = 'tx_newspaper_extra';
 	/// Extra which is used to test createExtraRecord()

@@ -16,6 +16,15 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->article = new tx_newspaper_Article();
 		$this->field = 'text';
 		$this->fieldList = array('title', 'text');
+		
+		//insert source data
+		$table =  $this->article->sourceTable($this->source);
+		foreach($this->sourceData as $data) {
+			$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $data);
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			if (!$res) die("$query failed!");
+		}
+		
 		// "Diktatur des Proletariats" from July 17 '07
 		$this->uid = new tx_newspaper_SourcePath(2008);
 		// A couple of randomly selected articles
@@ -28,6 +37,15 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		// manually defined as the required fields for an article object
 		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
 	}
+	
+	function tearDown() {
+		$table =  $this->article->sourceTable($this->source);
+		foreach($this->uidList as $uid) {
+			$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, 'uid = ' . $uid->getID());
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			if (!$res) die("$query failed!");
+		}
+	}
 
 	public function test_createSource() {
 		$temp = new tx_newspaper_DBSource();
@@ -39,7 +57,7 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->source->readField($this->article, $this->field, $this->uid);
 		$this->assertRegExp('/.*einzigen Bushaltestelle im Umkreis von zwei Kilometern.*/', 
 						  $this->article->getAttribute('text'),
-						  'readField(Text) returned text: '.$this->article->getAttribute('text'));
+						  'readField(Text) returned text: \''.$this->article->getAttribute('text').'\'');
 	}
 
 	public function test_readFields() {
@@ -135,13 +153,13 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			'*',
 			$this->article->sourceTable($this->source),
-			"uid = ".intval($this->uid)
+			"uid = ".intval($this->uid->getID())
 		);
 		$res =  $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) $this->fail("Couldn't retrieve article #$uid");
+        if (!$res) $this->fail("Couldn't retrieve article #$this->uid");
 
         $row =  $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row) $this->fail("Article #$uid has no article_id field");
+        if (!$row) $this->fail("Article #$this->uid has no article_id field");
 
 		$failed = array();
         foreach ($row as $field => $value) {
@@ -182,5 +200,37 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 	private $red_cfg = '/redonline/digitaz/etc/redonline.cfg';
 	private $article;
 	private $reqFields = array();
+	
+	private $sourceData = array(
+		array(
+			'uid' => 2008,
+			'article_id' => '2008',
+			'article_manualtitle' => 'Die Diktatur des Proletariats',
+			'article_title2' => 'Spannung bis zur letzten Zeile',
+			'article_manualtext' => 'Hielten sie an der einzigen Bushaltestelle im Umkreis von zwei Kilometern.',
+			'ressort' => 'Kultur',
+		),
+		array(
+			'uid' => 4017,
+			'article_manualtitle' => 'Die Diktatur des Proletariats',
+			'article_title2' => 'Spannung bis zur letzten Zeile',
+			'article_manualtext' => 'Hielten sie an der einzigen Bushaltestelle im Umkreis von zwei Kilometern.',
+			'ressort' => 'Kultur',
+		),
+		array(
+			'uid' => 8032,
+			'article_manualtitle' => 'Die Diktatur des Proletariats',
+			'article_title2' => 'Spannung bis zur letzten Zeile',
+			'article_manualtext' => 'Hielten sie an der einzigen Bushaltestelle im Umkreis von zwei Kilometern.',
+			'ressort' => 'Kultur',
+		),
+		array(
+			'uid' => 16064,
+			'article_manualtitle' => 'Die Diktatur des Proletariats',
+			'article_title2' => 'Spannung bis zur letzten Zeile',
+			'article_manualtext' => 'Hielten sie an der einzigen Bushaltestelle im Umkreis von zwei Kilometern.',
+			'ressort' => 'Kultur',
+		),
+	);
 }
 ?>

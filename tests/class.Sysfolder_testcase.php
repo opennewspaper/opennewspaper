@@ -86,23 +86,16 @@ class test_Sysfolder_testcase extends tx_phpunit_testcase {
 	
 	public function testCreateSysfolder() {
 		
-		// delete sysfolder for np_phpunit_testcase_4 (test must create this folder)
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
-			'pages',
-			'tx_newspaper_module="np_phpunit_testcase_4"'
-		);
-		
 		$t = new tx_newspaper_Sysfolder_test('np_phpunit_testcase_4');
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pid = $sf->getPid($t); // get pid (sysfolder should have been created by this getPid call)
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'uid',
-			'pages', 
-			'tx_newspaper_module="np_phpunit_testcase_4" AND title="np_phpunit_testcase_4" AND module="newspaper" AND doktype=254'
-		);
-		if (!$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$this->fail('sysfolder for module "np_phpunit_testcase_4" wasn\'t created.');
-		}
+		
+		$created = tx_newspaper::selectOneRow('tx_newspaper_module, title, module, doktype', 'pages', 'uid ='.$pid);
+		
+		$this->assertEquals('np_phpunit_testcase_4', $created['tx_newspaper_module'], 'Field tx_newspaper_module wrong');
+		$this->assertEquals('newspaper', $created['module'], 'Field module wrong');
+		$this->assertEquals('254', $created['doktype'], 'Field doktype wrong');
+		$this->assertEquals('np_phpunit_testcase_4', $created['title'], 'Field title wrong');
 	}
 	
 

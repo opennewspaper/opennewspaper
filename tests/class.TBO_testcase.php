@@ -37,7 +37,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 
 	/// \todo finish
 	public function test_getPage() {
-		$this->assertTrue($this->pi->getPage(new tx_newspaper_Section($this->section_uid) instanceof tx_newspaper_page));
+		$this->assertTrue($this->pi->getPage(new tx_newspaper_Section($this->section_uid)) instanceof tx_newspaper_page);
 	}
 	
 	/// Test whether the PI returns the correct pages.

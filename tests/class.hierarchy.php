@@ -279,7 +279,7 @@ class tx_newspaper_hierarchy {
 			'normalized_name' => 'seitentyp_2',
 			'get_var' => 'blah',
 			'get_value' => '1',
-		),
+		),			
 	);
 	
 	private $page_table = 'tx_newspaper_page';
@@ -307,7 +307,7 @@ class tx_newspaper_hierarchy {
 			'pagetype_id' => '',
 			'inherit_pagetype_id' => '',
 			'template_set' => 'Unit Test',
-		),
+		),		
 	);
 
 	/// The Pages in the hierarchy as a flat array of objects
@@ -348,7 +348,6 @@ class tx_newspaper_hierarchy {
 		'tstamp'	=> '1234567890',
 		'crdate'	=> '1234567890', 		  	
 		'cruser_id'	=> '1',
-		'sorting'	=> '256',
 		'deleted'	=> '0',
 		'pagezonetype_id' => '',
 		'pagezone_id' => 'Unit Test',
@@ -373,12 +372,9 @@ class tx_newspaper_hierarchy {
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "",	
 			'title' => "Unit Test - Image Title 1",
 			'image' => "E3_033009T.jpg",	
 			'caption' => "Caption for image 3",	
-			'template_set' => "",	
 		),
 		array(
 			'pid' => 2573,
@@ -389,12 +385,9 @@ class tx_newspaper_hierarchy {
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "",	
 			'title' => "Unit Test - Image Title 2",	
 			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
 			'caption' => "Daemonic Gentoo",	
-			'template_set' => "",	
 		),
 		array(
 			'pid' => 2573,
@@ -405,12 +398,9 @@ class tx_newspaper_hierarchy {
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "extra_field[5]",	
 			'title' => "Unit Test - Image Title 3",	
 			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
 			'caption' => "caption[5]",	
-			'template_set' => "",	
 		),
 	);
 	

@@ -14,7 +14,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 
 	function setUp() {
 
-		if (0) {
+		if (false) {
 			$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
 		} else {
 			$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->pagezone_page_table, $this->pagezone_page_data);
@@ -553,7 +553,6 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
 		'tstamp'	=> '1234567890',
 		'crdate'	=> '1234567890', 		  	
 		'cruser_id'	=> '1',
-		'sorting'	=> '256',
 		'deleted'	=> '0',
 		'pagezonetype_id' => '2',
 		'pagezone_id' => 'X',
@@ -572,12 +571,9 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "",	
 			'title' => "Image 1",
 			'image' => "E3_033009T.jpg",	
 			'caption' => "Caption for image 3",	
-			'template_set' => "",	
 		),
 		array(
 			'pid' => 2573,
@@ -588,12 +584,9 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "",	
 			'title' => "Image 2",	
 			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
 			'caption' => "Daemonic Gentoo",	
-			'template_set' => "",	
 		),
 		array(
 			'pid' => 2573,
@@ -604,12 +597,9 @@ t3lib_div::debug($pagezone->getInheritanceHierarchyDown(true));
 			'hidden' => 0,
 			'starttime' => 0,
 			'endtime' => 0,
-			'fe_group' => 0,
-			'extra_field' => "extra_field[5]",	
 			'title' => "Image 3",	
 			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
 			'caption' => "caption[5]",	
-			'template_set' => "",	
 		),
 	);
 	
