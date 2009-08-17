@@ -112,6 +112,9 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	public function test_cloneAndStore() {
 		/// clone current page
 		$temp_page = clone $this->page;
+		
+		t3lib_div::debug('clone ok');
+		
 		$this->assertGreaterThan($this->page->getAttribute('crdate'), $temp_page->getAttribute('crdate'));
 		$this->assertGreaterThan($this->page->getAttribute('tstamp'), $temp_page->getAttribute('tstamp'));
 		$this->assertEquals($temp_page->getUid(), 0);
