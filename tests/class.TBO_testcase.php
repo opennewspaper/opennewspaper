@@ -73,6 +73,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_PageZone_rss() {
+		$this->fail('test not yet ready!');
 		$_GET['page'] = 100;
 		// The following tests page header, not zone, and is therefore disabled
 		// $this->doTestContains($this->pi->main('', null), 'Class: tx_newspaper_PageZone_Page');
