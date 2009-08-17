@@ -168,11 +168,11 @@ class tx_newspaper_hierarchy {
 			foreach ($abstract_uids as $abstract_uid) {
 				tx_newspaper::deleteRows(
 					$pagezone->getExtra2PagezoneTable(),
-					'uid_foreign = ' . $abstract_uid
+					'uid_foreign = ' . $abstract_uid['uid']
 				);
 				tx_newspaper::deleteRows(
 					$this->extra_table, 
-					'uid = ' . $abstract_uid
+					'uid = ' . $abstract_uid['uid']
 				);
 			}
 			tx_newspaper::deleteRows($this->concrete_extra_table, $uid);
