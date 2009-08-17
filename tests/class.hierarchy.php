@@ -164,7 +164,7 @@ class tx_newspaper_hierarchy {
 		foreach ($this->extra_uids as $uid) {
 			$abstract_uids = tx_newspaper::selectRows(
 				'uid', $this->extra_table, 
-				'extra_table = ' . $this->concrete_extra_table . ' AND extra_uid = ' . $uid);
+				'extra_table = \'' . $this->concrete_extra_table . '\' AND extra_uid = ' . $uid);
 			foreach ($abstract_uids as $abstract_uid) {
 				tx_newspaper::deleteRows(
 					$pagezone->getExtra2PagezoneTable(),
