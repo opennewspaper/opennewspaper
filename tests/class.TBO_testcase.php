@@ -57,6 +57,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_PageZone_ressort() {
+		$this->fail('not yet ready!');
 		$output = $this->pi->main('', null);
 		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 1');
 		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
