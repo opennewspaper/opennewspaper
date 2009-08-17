@@ -110,6 +110,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_cloneAndStore() {
+		$this->fail('test not yet ready');
+		
 		/// clone current page
 		$temp_page = clone $this->page;
 		
