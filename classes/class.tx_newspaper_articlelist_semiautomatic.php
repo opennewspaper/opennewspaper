@@ -167,6 +167,58 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
 	}
+
+	/// A short description that makes an Article List identifiable in the BE
+	public function getDescription() {
+		
+		global $LANG;
+		
+		$ret = $this->getTitle();
+		
+		if ($this->getAttribute('filter_sections')) {
+			$ret .= "<br />\n" . 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_included_sections', false) . ':';
+			$sep = '';
+			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
+				$section = new tx_newspaper_Section($section_uid);
+				$ret .=  $sep . $section->getAttribute('section_name');
+				$sep = ', ';
+			}
+		}
+		
+		if ($this->getAttribute('filter_tags_include')) {
+			$ret .= "<br />\n" . 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_included_tags', false) . ':';
+			$sep = '';
+			foreach (explode(',', $this->getAttribute('filter_tags_include')) as $tag_uid) {
+				$ret .= new tx_newspaper_Tag($tag_uid);
+				$sep = ', ';
+			}
+		}
+
+		if ($this->getAttribute('filter_tags_exclude')) {
+			$ret .= "<br />\n" . 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_excluded_tags', false) . ':';
+			$sep = '';
+			foreach (explode(',', $this->getAttribute('filter_tags_exclude')) as $tag_uid) {
+				$ret .= new tx_newspaper_Tag($tag_uid);
+				$sep = ', ';
+			}
+		}
+
+		if ($this->getAttribute('filter_articlelist_exclude')) {
+			$ret .= "<br />\n" . 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_excluded_articlelist', false) . ':';
+			$articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create($this->getAttribute('filter_articlelist_exclude'));
+			$ret .= $articlelist->getDescription();
+		}
+
+		if($this->getAttribute('notes')) { 
+			$ret .= "<br />\n" . $this->getAttribute('notes');
+		}
+		
+		return $ret;
+	}
 	
 	static public function getModuleName() { return 'np_al_semiauto'; }
 
