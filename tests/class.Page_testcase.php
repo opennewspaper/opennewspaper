@@ -30,12 +30,12 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 
 	public function test_createPage() {
-#		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));		
-		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
+		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));		
 		$uid= $temp->store();		
 		$this->assertTrue(is_object($temp), 'page-object is no object');
 		$this->assertTrue($temp instanceof tx_newspaper_Page, 'created object is not of type '.get_class(tx_newspaper_Page));
 		$this->assertEquals($temp->getUid(), $uid, 'method getUid does not return uid');
+		t3lib_div::debug($temp);
 		$this->assertEquals($temp->getAttribute('uid'), $uid, 'method getAttribute does not return uid');		
 		tx_newspaper::deleteRows($this->page->getTable(), $uid);
 		
