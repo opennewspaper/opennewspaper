@@ -43,7 +43,7 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return 'Display Articles';
+		return $this->getTitle();
 	}
 
 	/// title for module
