@@ -57,7 +57,7 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 			$this->getAttribute('hours') <= self::FAVORITES_MAXAGE) {
 
 			$hits = tx_newspaper::selectRows(
-				    'COUNT(*) as num_comments, article, kicker, title, author, crdate', 
+				    'COUNT(*) as num_comments,' . implode (',', self::$comment_fields), 
 				    self::comment_cache_table,
 					(string)(time()-intval($this->getAttribute('hours'))*60*60).' <= crdate',
 					'article',
@@ -105,6 +105,9 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 
 	const FAVORITES_MAXAGE = 1200; // 50 days
 	const comment_cache_table = 'tx_newspaper_comment_cache';
+	protected static $comment_fields = array(
+		'article', 'kicker', 'title', 'author', 'crdate'
+	);
 	
 }
 
