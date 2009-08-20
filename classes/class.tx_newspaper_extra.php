@@ -291,7 +291,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	
 	/// \return array with (registered) Extra objects
 	static public function getRegisteredExtras() {
-		foreach(self::$registeredExtra as $extra) t3lib_div::devlog('registerExtra', 'newspaper', 1, get_class($extra));
+		foreach(self::$registeredExtra as $extra) t3lib_div::devlog('registeredExtra', 'newspaper', 1, get_class($extra));
 			
 		return self::$registeredExtra;
 	}
