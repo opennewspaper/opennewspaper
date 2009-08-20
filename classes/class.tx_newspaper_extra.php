@@ -283,6 +283,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	public static function registerExtra(tx_newspaper_Extra $extra) {
 t3lib_div::devlog('registerExtra', 'newspaper', 0, get_class($extra));
+t3lib_div::debug( get_class($extra));
 		if (!self::isRegisteredExtra($extra)) {
 			self::$registeredExtra[] = $extra; // add this Extra to list
 			return true;
