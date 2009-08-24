@@ -55,6 +55,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         t3lib_div::loadTCA($this->table);
         $this->setTreeName();
         $this->parentField = 'parent_section';
+        $this->fieldArray = array('uid', 'section_name');
         t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
 	}
  
