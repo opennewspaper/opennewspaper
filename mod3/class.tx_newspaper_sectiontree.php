@@ -58,7 +58,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->fieldArray = array('uid', 'section_name');
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
-        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
+#        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
 	}
  
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
@@ -226,7 +226,7 @@ get more information about a possible cause.',0);
                 return $c;
         }
 */
-
+/*
 	        function getDataInit($parentId,$subCSSclass='') {
                 if (is_array($this->data)) {
                         if (!is_array($this->dataLookup[$parentId][$this->subLevelID])) {
@@ -262,7 +262,7 @@ get more information about a possible cause.',0);
                         return $res;
                 }
         }
-	
+*/
 
 }
 
