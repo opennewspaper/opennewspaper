@@ -161,7 +161,7 @@ class treeview_module {
 		$this->content .= $this->doc->startPage('userTree');
 
 		// add tree 
-		$this->treeview->getTree();
+		$this->treeview->getTree(0);
 		$this->content .= $this->treeview->printTree();
 	
 		// Outputting refresh-link
