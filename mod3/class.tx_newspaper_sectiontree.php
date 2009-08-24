@@ -37,12 +37,12 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
  parentField = $this->parentField
  clause = $this->clause
  orderByFields = $this->orderByFields
- fieldArray = $this->fieldArray
- defaultList = $this->defaultList
+ fieldArray = " . print_r($this->fieldArray, 1) ."
+ defaultList =" . print_r($this->defaultList, 1) ."
  treeName = $this->treeName
  data = $this->data
  dataLookup = $this->dataLookup
- tree = $this->tree";
+ tree = " . print_r($this->tree, 1);
 	}
 	
 	/// Initialize the tree class. Will set ->fieldsArray, ->backPath and ->clause
