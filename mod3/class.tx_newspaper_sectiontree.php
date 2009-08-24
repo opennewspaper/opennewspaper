@@ -58,6 +58,36 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->fieldArray = array('uid', 'section_name');
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
+        $this->thisScript = '<script language="javascript">
+/*<![CDATA[*/
+top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
+		///taz426/typo3/../typo3conf/ext/newspaper/mod3/class.tx_newspaper_SectionTree.php?&currentSubScript=mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3
+		
+		// setting prefs for pagetree and drag & drop
+//		Tree.highlightClass = "active";
+
+		// Function, loading the list frame from navigation tree:
+		function jumpTo(id, linkObj, highlightID, bank)	{ //
+			//var theUrl = top.currentSubScript;
+			var theUrl = top.TS.PATH_typo3 + top.currentSubScript ;
+			if (theUrl.indexOf("?") != -1) {
+				theUrl += "&id=" + id
+			} else {
+				theUrl += "?id=" + id		    	
+			}	
+			top.fsMod.currentBank = bank;
+
+			if (top.condensedMode) {
+				top.content.location.href = theUrl;
+			} else {
+				parent.list_frame.location.href=theUrl;
+			}
+
+			return false;
+		}
+/*]]>*/
+</script>';
+        
 #        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
 	}
  
