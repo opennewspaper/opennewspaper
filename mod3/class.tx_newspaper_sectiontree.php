@@ -31,6 +31,20 @@ require_once($BACK_PATH.'template.php');
 
 class tx_newspaper_SectionTree extends t3lib_treeView {
 
+	function __toString() {
+		return 
+" table = $this->table
+ parentField = $this->parentField
+ clause = $this->clause
+ orderByFields = $this->orderByFields
+ fieldArray = $this->fieldArray
+ defaultList = $this->defaultList
+ treeName = $this->treeName
+ data = $this->data
+ dataLookup = $this->dataLookup
+ tree = $this->tree";
+	}
+	
 	/// Initialize the tree class. Will set ->fieldsArray, ->backPath and ->clause
 	/** \param $clause 	record WHERE clause
 	 *  \param $orderByFields record ORDER BY field
