@@ -41,7 +41,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         t3lib_div::loadTCA($this->table);
         $this->setTreeName();
         $this->parentField = 'parent_section';
-        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, this); 
+        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this); 
 	}
  
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
@@ -50,7 +50,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
 	 */
 	public function printTree($treeArr = '') {
 		$ret = parent::printTree($treeArr);
-        t3lib_div::devlog('tx_newspaper_SectionTree::printTree()', 'newspaper', 0, this); 
+        t3lib_div::devlog('tx_newspaper_SectionTree::printTree()', 'newspaper', 0, $this); 
 		return $ret;
 #		return $this->getSectionTree();
 	}
