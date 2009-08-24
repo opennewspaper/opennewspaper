@@ -31,9 +31,25 @@ require_once($BACK_PATH.'template.php');
 
 class tx_newspaper_SectionTree extends t3lib_treeView {
 
-	public function printTree($treeArr = '') {
-		return $this->getSectionTree();
+	/// Initialize the tree class. Will set ->fieldsArray, ->backPath and ->clause
+	/** \param $clause 	record WHERE clause
+	 *  \param $orderByFields record ORDER BY field
+	 */
+	function init($clause='', $orderByFields='')    {
+        parent::init();
+        $this->table = 'tx_newspaper_section';
+        t3lib_div::loadTCA($this->table);
+        $this->setTreeName();
+        $this->parentField = 'parent_section'; 
 	}
+ 
+	/// Compiles the HTML code for displaying the structure found inside the ->tree array
+	/** \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
+	 *  \todo make this function conform to \p t3lib_treeView standards
+	 */
+#	public function printTree($treeArr = '') {
+#		return $this->getSectionTree();
+#	}
 
 	private function getSectionTree(){
 		global $LANG;
@@ -114,6 +130,7 @@ class treeview_module {
 		$this->doc->backPath = $BACK_PATH;
 
 		$this->treeview = t3lib_div::makeInstance('tx_newspaper_SectionTree');
+		$this->treeview->init();
 	}
 
 
