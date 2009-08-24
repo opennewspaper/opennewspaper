@@ -131,6 +131,7 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 		return $html;
 	}
 
+/*
 	        function getTree($uid, $depth=999, $depthData='',$blankLineCode='',$subCSSclass='')     {
 
                         // Buffer for id hierarchy is reset:
@@ -213,8 +214,43 @@ get more information about a possible cause.',0);
                 $this->buffer_idH=$idH;
                 return $c;
         }
+*/
 
-
+	        function getDataInit($parentId,$subCSSclass='') {
+                if (is_array($this->data)) {
+                        if (!is_array($this->dataLookup[$parentId][$this->subLevelID])) {
+                                $parentId = -1;
+                        } else {
+                                reset($this->dataLookup[$parentId][$this->subLevelID]);
+                        }
+                        return $parentId;
+                } else {
+                        t3lib_div::devlog(
+                        	"getDataInit($parentId,$subCSSclass)",
+                        	'newspaper', 0,
+                        	$GLOBALS['TYPO3_DB']->SELECTquery(
+                                                implode(',',$this->fieldArray),
+                                                $this->table,
+                                                $this->parentField.'='.$GLOBALS['TYPO3_DB']->fullQuoteStr($parentId, $this->table).
+                                                        t3lib_BEfunc::deleteClause($this->table).
+                                                        t3lib_BEfunc::versioningPlaceholderClause($this->table).
+                                                        $this->clause,  // whereClauseMightContainGroupOrderBy
+                                                '',
+                                                $this->orderByFields
+                                        ));
+                        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                                                implode(',',$this->fieldArray),
+                                                $this->table,
+                                                $this->parentField.'='.$GLOBALS['TYPO3_DB']->fullQuoteStr($parentId, $this->table).
+                                                        t3lib_BEfunc::deleteClause($this->table).
+                                                        t3lib_BEfunc::versioningPlaceholderClause($this->table).
+                                                        $this->clause,  // whereClauseMightContainGroupOrderBy
+                                                '',
+                                                $this->orderByFields
+                                        );
+                        return $res;
+                }
+        }
 	
 
 }
