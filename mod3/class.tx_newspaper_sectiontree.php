@@ -28,25 +28,18 @@ require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
+require_once (PATH_t3lib.'class.t3lib_treeview.php');
 
+/// A treeView class for displaying and browsing in tx_newspaper_Section s.
+/** 
+ *  \todo expand and collapse branches of sections
+ */
 class tx_newspaper_SectionTree extends t3lib_treeView {
-
-	function __toString() {
-		return 
-" table = $this->table
- parentField = $this->parentField
- clause = $this->clause
- orderByFields = $this->orderByFields
- fieldArray = " . print_r($this->fieldArray, 1) ."
- defaultList =" . print_r($this->defaultList, 1) ."
- treeName = $this->treeName
- data = $this->data
- dataLookup = $this->dataLookup
- tree = " . print_r($this->tree, 1);
-	}
 	
-	/// Initialize the tree class. Will set ->fieldsArray, ->backPath and ->clause
-	/** \param $clause 	record WHERE clause
+	/// Initialize the tree class. 
+	/** Sets \p $this->table, \p $this->fieldArray, \p $this->parentField,
+	 *  \p $this->expandAll and \p $this->titleAttrib
+	 *  \param $clause 	record WHERE clause
 	 *  \param $orderByFields record ORDER BY field
 	 */
 	function init($clause='', $orderByFields='')    {
@@ -58,12 +51,14 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->fieldArray = array('uid', 'section_name');
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
-#        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
 	}
  
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
-	/** \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
-	 *  \todo make this function conform to \p t3lib_treeView standards
+	/** init() already sets up all parameters for the tree to display correctly,
+	 *  we only need to supply the JavaScript jumpTo() function, which tells
+	 *  the browser what to do when a node is clicked.
+	 * 
+	 *  \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
 	 */
 	public function printTree($treeArr = '') {
 		$ret = '<script language="javascript">
@@ -96,11 +91,22 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 /*]]>*/
 </script>' .
 		parent::printTree($treeArr);
-        t3lib_div::devlog('tx_newspaper_SectionTree::printTree()', 'newspaper', 0, $this->__toString()); 
+
 		return $ret;
-#		return $this->getSectionTree();
 	}
 
+	///	Returns the title for the input record.
+	/** If blank, a "no title" label (localized) will be returned. Do NOT
+	 *  htmlspecialchar the string from this function - has already been done.
+	 * 
+	 *  This function must be overridden because the field which is displayed is
+	 *  hardcoded in the base class to 'title'. That's a bit braindead, and what
+	 *  do you know, I use the same braindead approach here.
+	 *  
+	 *  \param $row The input row array (where the key "section_name" is used
+	 * 		for the title)
+	 *  \param $titleLen Title length (30)
+	 */
 	function getTitleStr($row, $titleLen=30) {
 		$title = (!strcmp(trim($row['section_name']),'')) ? 
 			'<em>['.$GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:labels.no_title',1).']</em>' : 
