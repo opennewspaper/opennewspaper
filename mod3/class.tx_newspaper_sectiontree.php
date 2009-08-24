@@ -56,7 +56,6 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->setTreeName();
         $this->parentField = 'parent_section';
         $this->fieldArray = array('uid', 'section_name');
-        $this->titleAttrib = 'section_name';
         t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
 	}
  
@@ -69,6 +68,13 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         t3lib_div::devlog('tx_newspaper_SectionTree::printTree()', 'newspaper', 0, $this->__toString()); 
 		return $ret;
 #		return $this->getSectionTree();
+	}
+
+	function getTitleStr($row,$titleLen=30) {
+		$title = (!strcmp(trim($row['section_name']),'')) ? 
+			'<em>['.$GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:labels.no_title',1).']</em>' : 
+			htmlspecialchars(t3lib_div::fixed_lgd_cs($row['title'],$titleLen));
+		return $title;
 	}
 
 	private function getSectionTree(){
