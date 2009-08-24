@@ -58,7 +58,15 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->fieldArray = array('uid', 'section_name');
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
-        $this->thisScript = '<script language="javascript">
+#        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
+	}
+ 
+	/// Compiles the HTML code for displaying the structure found inside the ->tree array
+	/** \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
+	 *  \todo make this function conform to \p t3lib_treeView standards
+	 */
+	public function printTree($treeArr = '') {
+		$ret = '<script language="javascript">
 /*<![CDATA[*/
 top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 		///taz426/typo3/../typo3conf/ext/newspaper/mod3/class.tx_newspaper_SectionTree.php?&currentSubScript=mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3
@@ -86,17 +94,8 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 			return false;
 		}
 /*]]>*/
-</script>';
-        
-#        t3lib_div::devlog('tx_newspaper_SectionTree::init()', 'newspaper', 0, $this->__toString()); 
-	}
- 
-	/// Compiles the HTML code for displaying the structure found inside the ->tree array
-	/** \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
-	 *  \todo make this function conform to \p t3lib_treeView standards
-	 */
-	public function printTree($treeArr = '') {
-		$ret = parent::printTree($treeArr);
+</script>' .
+		parent::printTree($treeArr);
         t3lib_div::devlog('tx_newspaper_SectionTree::printTree()', 'newspaper', 0, $this->__toString()); 
 		return $ret;
 #		return $this->getSectionTree();
