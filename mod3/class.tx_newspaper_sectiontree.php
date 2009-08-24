@@ -29,64 +29,11 @@ require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
 
-class tx_newspaper_SectionTree {
+class tx_newspaper_SectionTree extends t3lib_treeView {
 
-	/**
-	 * Initialize the page template
-	 *
-	 * @return	void
-	 */
-	function init() {
-		global $BE_USER,$BACK_PATH;
-//t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
-		// Create template object:
-		$this->doc = t3lib_div::makeInstance('template');
-		$this->doc->docType='xhtml_trans';
-
-		// Setting backPath
-		$this->doc->backPath = $BACK_PATH;
-
+	public function printTree($treeArr = '') {
+		return $this->getSectionTree();
 	}
-
-
-	/**
-	 * Main function, rendering the SA user tree
-	 *
-	 * @return	void
-	 */
-	function main()	{
-
-		global $LANG,$CLIENT;
-
-		// Start page:
-		$this->content = '';
-		$this->content .= $this->doc->startPage('userTree');
-
-		// add tree 
-		$this->content .= $this->getSectionTree();
-	
-		// Outputting refresh-link
-		$refreshUrl = t3lib_div::getIndpEnv('REQUEST_URI');
-		$this->content .= '
-			<p class="c-refresh">
-				<a href="'.htmlspecialchars($refreshUrl).'">'.
-				'<img'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/refresh_n.gif','width="14" height="14"').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.refresh',1).'" alt="" />'.
-				'</a><a href="'.htmlspecialchars($refreshUrl).'">'.
-				$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.refresh',1).'</a>
-			</p>
-			<br />';
-	}
-
-	/**
-	 * Outputting the accumulated content to screen
-	 *
-	 * @return	void
-	 */
-	function printContent()	{
-		$this->content.= $this->doc->endPage();
-		echo $this->content;
-	}
-
 
 	private function getSectionTree(){
 		global $LANG;
@@ -153,6 +100,59 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 
 }
 
+class treeview_module {
+
+	/// Initialize the page template
+	function init() {
+		global $BE_USER,$BACK_PATH;
+//t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
+		// Create template object:
+		$this->doc = t3lib_div::makeInstance('template');
+		$this->doc->docType='xhtml_trans';
+
+		// Setting backPath
+		$this->doc->backPath = $BACK_PATH;
+
+		$this->treeview = t3lib_div::makeInstance('tx_newspaper_SectionTree');
+	}
+
+
+	/// Main function, rendering the SA user tree
+	function main()	{
+
+		global $LANG,$CLIENT;
+
+		// Start page:
+		$this->content .= $this->doc->startPage('userTree');
+
+		// add tree 
+		$this->content .= $this->treeview->printTree();
+	
+		// Outputting refresh-link
+		$refreshUrl = t3lib_div::getIndpEnv('REQUEST_URI');
+		$this->content .= '
+			<p class="c-refresh">
+				<a href="'.htmlspecialchars($refreshUrl).'">'.
+				'<img'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/refresh_n.gif','width="14" height="14"').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.refresh',1).'" alt="" />'.
+				'</a><a href="'.htmlspecialchars($refreshUrl).'">'.
+				$LANG->sL('LLL:EXT:lang/locallang_core.php:labels.refresh',1).'</a>
+			</p>
+			<br />';
+	}
+
+	/// Outputting the accumulated content to screen
+	function printContent()	{
+		$this->content.= $this->doc->endPage();
+		echo $this->content;
+	}
+
+	////////////////////////////////////////////////////////////////////////////
+	
+	private $doc = null;
+	private $treeview = null;
+	private $content = '';
+}
+
 // Include extension?
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod3/class.tx_newspaper_sectiontree.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod3/class.tx_newspaper_sectiontree.php']);
@@ -163,7 +163,7 @@ if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspap
 
 // Make instance:
 
-$SOBE = t3lib_div::makeInstance('tx_newspaper_SectionTree');
+$SOBE = t3lib_div::makeInstance('treeview_module');
 $SOBE->init();
 $SOBE->main();
 $SOBE->printContent();
