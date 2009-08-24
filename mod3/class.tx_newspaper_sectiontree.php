@@ -71,7 +71,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
 	}
 
 	function getTitleStr($row, $titleLen=30) {
-		t3lib_div::devlog('tx_newspaper_SectionTree::getTitleStr()', 'newspaper', 0, $);
+		t3lib_div::devlog('tx_newspaper_SectionTree::getTitleStr()', 'newspaper', 0, $row);
 		$title = (!strcmp(trim($row['section_name']),'')) ? 
 			'<em>['.$GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:labels.no_title',1).']</em>' : 
 			htmlspecialchars(t3lib_div::fixed_lgd_cs($row['title'],$titleLen));
