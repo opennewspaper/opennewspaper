@@ -64,8 +64,17 @@ remove_line "ext_tables.php" \
 
 change_main_module
 
+replace "tca.php" \
+		"require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');" \
+		'?>'
 
 svn ci -m "auto-fixed changes from kickstarter"
+
+for addon in ../newspaper?*; do 
+	if [ -x ${addon}/util/replace.sh; then
+		${addon}/util/replace.sh
+	fi
+done
 
 echo "###"
 echo "###"

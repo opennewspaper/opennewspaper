@@ -100,6 +100,18 @@ $TCA["tx_newspaper_extra_articlelist"]["columns"]["num_articles"]["config"]["ran
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"lower" => "1"
 );
+$TCA["tx_newspaper_articlelist_manual"]["columns"]["num_articles"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["num_articles"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra_mostcommented"]["columns"]["hours"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra_mostcommented"]["columns"]["num_favorites"]["config"]["range"] = array (
+	"lower" => "1"
+);
 
 
 // modify some other values
