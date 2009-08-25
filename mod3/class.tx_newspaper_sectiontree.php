@@ -133,7 +133,7 @@ class treeview_module {
 	/// Initialize the page template
 	function init() {
 		global $BE_USER,$BACK_PATH;
-//t3lib_div::devlog('mod3 st mconf', 'newspaper', 0, $GLOBALS['MCONF']);		
+
 		// Create template object:
 		$this->doc = t3lib_div::makeInstance('template');
 		$this->doc->docType='xhtml_trans';
@@ -142,7 +142,6 @@ class treeview_module {
 		$this->doc->backPath = $BACK_PATH;
 
 		$this->treeview = t3lib_div::makeInstance('tx_newspaper_SectionTree');
-#		$this->treeview->init();
 	}
 
 
@@ -155,7 +154,6 @@ class treeview_module {
 		$this->content .= $this->doc->startPage('userTree');
 
 		// add tree 
-#		$this->treeview->getTree(0);
 		$this->content .= $this->treeview->printTree();
 	
 		// Outputting refresh-link
