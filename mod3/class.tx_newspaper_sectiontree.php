@@ -36,6 +36,17 @@ require_once (PATH_t3lib.'class.t3lib_treeview.php');
  */
 class tx_newspaper_SectionTree extends t3lib_treeView {
 	
+	/// Constructor which fully initializes the tree view
+	/** I mean, come on, hey. Constructing an object, then manually assigning
+	 *  all sorts of properties, then calling init() and then getTree(), as it
+	 *  is done in the original \p t3lib_treeView, is just unneccessary. We'll
+	 *  just do it all in the c'tor. </rant>
+	 */
+	public function __construct() {
+		$this->init();
+		$this->getTree(0);
+	}
+	
 	/// Initialize the tree class. 
 	/** Sets \p $this->table, \p $this->fieldArray, \p $this->parentField,
 	 *  \p $this->expandAll and \p $this->titleAttrib
@@ -116,6 +127,7 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 
 }
 
+/// This class encapsulates the behavior of the old tx_newspaper_SectionTree
 class treeview_module {
 
 	/// Initialize the page template
@@ -130,7 +142,7 @@ class treeview_module {
 		$this->doc->backPath = $BACK_PATH;
 
 		$this->treeview = t3lib_div::makeInstance('tx_newspaper_SectionTree');
-		$this->treeview->init();
+#		$this->treeview->init();
 	}
 
 
@@ -143,7 +155,7 @@ class treeview_module {
 		$this->content .= $this->doc->startPage('userTree');
 
 		// add tree 
-		$this->treeview->getTree(0);
+#		$this->treeview->getTree(0);
 		$this->content .= $this->treeview->printTree();
 	
 		// Outputting refresh-link
