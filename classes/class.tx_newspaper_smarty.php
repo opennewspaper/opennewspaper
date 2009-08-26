@@ -231,8 +231,7 @@ class tx_newspaper_Smarty extends Smarty {
 
 		foreach (explode(',', $TYPO3_CONF_VARS['EXT']['extList']) as $ext) {
 			if (substr($ext, 0, 9) == 'newspaper') {
-				t3lib_div::devlog('$TYPO3_CONF_VARS[EXT][extList]', 'newspaper', 0, $ext);
-				
+				$temporary_searchpath[] = PATH_typo3conf . 'ext/' . $ext . '/res/templates';
 			}
 		}
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
