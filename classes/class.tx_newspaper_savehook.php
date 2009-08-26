@@ -384,7 +384,8 @@ class tx_newspaper_SaveHook {
 		if (tx_newspaper::isAbstractClass($table))
 			return; // abstract class, nothing to do
 	
-		if ($status == 'new' and tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
+		// exclude new articles - articles are extras but shouldn't be treated like extras here!
+		if ($status == 'new' && $table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
 //t3lib_div::devlog('save hook reached', 'newspaper', 0);			
 			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
 			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
