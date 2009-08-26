@@ -46,6 +46,53 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  *  store templates in per instance. For that reason, you must instantiate a 
  *  separate Smarty object per template folder, and set the folder manually.
  *  Because that process is somewhat tedious, this class does it in the c'tor.
+ * 
+ *  tx_newspaper_Smarty looks for templates which describe how objects are
+ *  rendered in the following directories:
+ *  -# if a parameter \p $template_set is set, look under the 
+ * 		\p template_sets/$template_set subdirectory under the base directory for
+ * 		templates, which is defined in the TSConfig parameter 
+ * 		\p newspaper.defaultTemplate.
+ * 		-# first look in the directory \p $pagezone_type under the directory
+ * 			\p $page_type under \p template_sets/$template_set, where
+ * 			\p $page_type is the normalized name (all lowercase, special
+ * 		    characters and whitespace replaced with an underscore) of the 
+ * 			tx_newspaper_PageType of the tx_newspaper_Page currently displayed,
+ * 			and \p $pagezone_type is the normalized name of the 
+ * 			tx_newspaper_PageZoneType of the tx_newspaper_PageZone currently
+ * 			rendered.
+ * 		-# next look in the directory \p $page_type under
+ * 			\p template_sets/$template_set.
+ * 		-# then look under the template set root folder, 
+ * 			\p template_sets/$template_set.
+ * 	-# if no smarty template is found for the rendered object in the desired
+ * 		template set, look for the template under the default template set,
+ * 		in the same sequence:
+ * 		-# \p template_sets/default/$page_type/$pagezone_type
+ * 		-# \p template_sets/default/$page_type
+ * 		-# \p template_sets/default
+ * 	-# finally, if no template is found in any of the folders under the 
+ * 		template folder, look in the \p res/templates folder of the
+ * 		\em newspaper extension and in  the \p res/templates folder of all
+ * 		other installed extensions whose names start with \em newspaper.
+ *  The name of the smarty template is the lowercased class name of the object,
+ *  suffixed by \p ".tmpl".
+ * 
+ *  For example, say you want to render a \p tx_newspaper_Extra_Image on the
+ *  \p Content page zone on the \p Article page. Your
+ *  \p newspaper.defaultTemplate folder is \p "fileadmin/templates". The
+ *  template set that is asked for is called, um, \p "whatever".
+ *  In that case, the following files are checked for existence:
+ *  - \p fileadmin/templates/template_sets/whatever/article/content/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/whatever/article/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/whatever/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/default/article/content/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/default/article/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/default/tx_newspaper_extra_image.tmpl
+ *  - \p typo3conf/ext/newspaper/res/templates/tx_newspaper_extra_image.tmpl
+ *  - file \p res/templates/tx_newspaper_extra_image.tmpl in any other extension
+ * 		folder, where the extension key starts with \em "newspaper", in random
+ * 		order.
  */
 class tx_newspaper_Smarty extends Smarty {
 	
