@@ -270,6 +270,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  			$temp_extras[] = $extra->render($template_set);
  		}
  		$this->smarty->assign('extras', $temp_extras);
+		t3lib_div::devlog('$TYPO3_CONF_VARS[EXT][extList]', 'newspaper', 0, $TYPO3_CONF_VARS['EXT']['extList']);
 
  		return $this->smarty->fetch($this);
  	}
