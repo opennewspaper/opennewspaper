@@ -174,6 +174,7 @@ class tx_newspaper_Smarty extends Smarty {
 	 *  \endcode
 	 */
 	private function assembleSearchPath() {
+		global $TYPO3_CONF_VARS;
 		$temporary_searchpath = array();
 		if ($this->templateset &&
 			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
@@ -228,6 +229,7 @@ class tx_newspaper_Smarty extends Smarty {
 		//  default templates delivered with the newspaper extension
 		$temporary_searchpath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
 
+		t3lib_div::devlog('$TYPO3_CONF_VARS[EXT][extList]', 'newspaper', 0, $TYPO3_CONF_VARS['EXT']['extList']);
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
 	}
 
