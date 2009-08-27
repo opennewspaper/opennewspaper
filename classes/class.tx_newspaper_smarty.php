@@ -45,7 +45,8 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
 /** Smarty suffers from the limitation that you can only have \em one folder to
  *  store templates in per instance. For that reason, you must instantiate a 
  *  separate Smarty object per template folder, and set the folder manually.
- *  Because that process is somewhat tedious, this class does it in the c'tor.
+ *  Because that process is somewhat tedious, this class does it automatically
+ *  in the constructor.
  * 
  *  tx_newspaper_Smarty looks for templates which describe how objects are
  *  rendered in the following directories:
@@ -78,7 +79,7 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  *  The name of the smarty template is the lowercased class name of the object,
  *  suffixed by \p ".tmpl".
  * 
- *  For example, say you want to render a \p tx_newspaper_Extra_Image on the
+ *  For example, say you want to render a tx_newspaper_Extra_Image on the
  *  \p Content page zone on the \p Article page. Your
  *  \p newspaper.defaultTemplate folder is \p "fileadmin/templates". The
  *  template set that is asked for is called, um, \p "whatever".
