@@ -43,6 +43,9 @@
  * 		- page zone type
  *   - smarty templates (see tx_newspaper_Smarty)
  *  
+ *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system
+ *  	can lead to serious frustration and is not recommended!
+ *  
  *  \todo Write me!
  */
  
