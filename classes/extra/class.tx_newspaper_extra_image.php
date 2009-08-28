@@ -23,6 +23,15 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolde
  *  \code
  *  	<img src="{$basepath}/{$sizes.article}/{$attributes.filename}" \> 
  *  \endcode
+ * 
+ *  The following member functions are especially useful in a Smarty template:
+ *  - getBasepath()
+ *  - getSizes()
+ *  - getWidths()
+ *  - getHeights() 
+ *  - getAttributes('filename')
+ *  - getAttributes('alttext')
+ *  - getAttributes('caption')
  */
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
@@ -77,6 +86,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/// Get the array of possible image sizes registered in TSConfig
 	public function getSizes() {
 		self::getTSConfig();
+		t3lib_div::devlog('getSizes()', 'newspaper', 0, self::$sizes);
 		return self::$sizes;
 	}
 
@@ -288,7 +298,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 	/// Name of the size for thumbnail images displayed in the BE
 	const thumbnail_name = 'thumbnail';
-	/// Size for thumbnail images displayed in the BE
+	/// Default size for thumbnail images displayed in the BE (overridable with TSConfig)
 	const thumbnail_size = '64x64';
 
 	/// Default quality for JPEG compression. 
