@@ -185,8 +185,17 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/// \return The UID of the associated Typo3 page 
 	public function getTypo3PageID() {
-		$row = tx_newspaper::selectOneRow('uid', 'pages', 
-										  'tx_newspaper_associated_section = ' . $this->getUid());
+		try{
+			$row = tx_newspaper::selectOneRow('uid', 'pages', 
+											  'tx_newspaper_associated_section = ' . $this->getUid());
+		} catch (tx_newspaper_DBException $e) {
+			throw new tx_newspaper_IllegalUsageException(
+				'Section number ' . $this->getUid() . ', ' . $this->getAttribute('section_name') .
+				', appears to have no Typo3 page associated with it. Please create a page and ' .
+				' choose Section ' . $this->getUid() . ' in the "Extended" tab of the' .
+				' "Page Properties" of that Typo3 page.'
+			);
+		}
 		return intval($row['uid']);
 	}
 	
