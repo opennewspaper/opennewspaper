@@ -20,6 +20,11 @@
 	<h2>{$articles[i]->getAttribute('kicker')}</h2>
 	<h1>{$articles[i]->getAttribute('title')}</h1>
 
+	{* Because smarty (and PHP) cannot cope with a construct such as 
+		$article->getExtra('tx_newspaper_Extra_Image')->getBasepath()
+	   we must assign the image object to a temporary variable.
+	   The <img> tag is also more readable that way.
+	*}
 	{assign var=image value=$article->getExtra('tx_newspaper_Extra_Image')}
 	<img src="{$image->getBasepath()}/{$image->getSizes().micro}/{$image->getAttributes('filename')}"
 		 height="{$image->getHeights().micro}" 
