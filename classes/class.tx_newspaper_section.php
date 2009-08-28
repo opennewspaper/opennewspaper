@@ -339,6 +339,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $list;
 	}
 	
+	///	Generate a URL which links to the "section overview" page of the Section
+	public function getLink() {
+		return tx_newspaper::typolink_url(
+			array('id' => $this->getTypo3PageID())
+		);
+	}
 	
 	/// \return array section, sorted alphabetically
 	public static function getAllSections() {
