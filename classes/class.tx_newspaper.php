@@ -573,6 +573,16 @@ class tx_newspaper  {
 		$link = self::typolink('', $params, $conf);
 		return $link['href'];
 	}
+	
+	/// Find out whether we are displaying a tx_newpaper_Article right now
+	/** \return true, if on an Article tx_newspaper_Page
+	 */
+	public static function onArticlePage() {
+		$pagetype = new tx_newspaper_PageType($_GET);
+		$is_article_page = $pagetype->getAttribute('is_article_page');
+		return $is_article_page;
+	}
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	
