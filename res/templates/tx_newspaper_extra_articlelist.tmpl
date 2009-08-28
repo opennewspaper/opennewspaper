@@ -27,9 +27,9 @@
 	*}
 	{assign var=image value=$article->getExtra('tx_newspaper_Extra_Image')}
 	<img src="{$image->getBasepath()}/{$image->getSizes().micro}/{$image->getAttributes('filename')}"
-		 width="{$image->getWidths().micro}" 
+{*		 width="{$image->getWidths().micro}" 
 		 height="{$image->getHeights().micro}" 
-		 alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
+*}		 alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
 	</a>
 {/section}
 
