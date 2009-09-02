@@ -49,7 +49,7 @@ class tx_newspaper_ExternalLink {
 			} 
 		}
         $html_options = "href=\"$href\"" .
-        				$target? "target=\"$target\"": '';
+        				($target? "target=\"$target\"": '');
         t3lib_div::devlog('getURL()', 'newspaper', 0, $html_options);
 		return $html_options;
 	}
