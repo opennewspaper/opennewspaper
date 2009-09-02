@@ -34,6 +34,7 @@ class tx_newspaper_ExternalLink {
 		$temp_params = explode(' ', $this->url);
 		$params = array('parameter' => $temp_params[0]);
 		if (sizeof($temp_params) > 0) {
+			unset($temp_params[0]);
 			foreach ($temp_params as $param) {
 				if ($param) {
 					$params['extTarget'] = trim($param);
