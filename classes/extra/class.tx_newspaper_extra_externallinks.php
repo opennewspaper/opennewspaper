@@ -31,7 +31,7 @@ class tx_newspaper_ExternalLink {
 	
 	/// \return The URL pointed to
 	public function getURL() {
-		$temp_params = explode(' ', $this->url);
+/*		$temp_params = explode(' ', $this->url);
 
         if (strpos($temp_params[0], 'http://') !== false) {
 			$params = array(
@@ -51,7 +51,8 @@ class tx_newspaper_ExternalLink {
 				}
 			} 
 		}
-		
+*/
+		$params = array('parameter' => $this->url);		
 		return tx_newspaper::typolink_url($params); 
 		if (strpos($this->url, '://') !== false)
 			return $this->url;
