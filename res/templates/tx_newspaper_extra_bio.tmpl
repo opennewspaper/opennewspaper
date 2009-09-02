@@ -1,0 +1,19 @@
+
+<!-- start res/templates/tx_newspaper_extra_bio.tmpl -->
+
+{* Article
+   Variables:
+   $template_set		template set used, if any
+   $attributes			attributes as stored in DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+
+{$attributes.author_name}
+{$attributes.bio_text}
+<img src="{$photo_file} />
+Foto: {$attributes.photo_source}
+
+
+<!--  end  res/templates/tx_newspaper_extra_bio.tmpl -->
