@@ -1697,7 +1697,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 $TCA["tx_newspaper_externallinks"] = array (
 	"ctrl" => $TCA["tx_newspaper_externallinks"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "text,url,target"
+		"showRecordFieldList" => "text,url"
 	),
 	"feInterface" => $TCA["tx_newspaper_externallinks"]["feInterface"],
 	"columns" => array (
@@ -1728,22 +1728,9 @@ $TCA["tx_newspaper_externallinks"] = array (
 				"eval" => "required",
 			)
 		),
-		"target" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_externallinks.target",		
-			"config" => Array (
-				"type" => "select",
-				"items" => Array (
-					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_externallinks.target.I.0", "_top"),
-					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_externallinks.target.I.1", "_blank"),
-				),
-				"size" => 1,	
-				"maxitems" => 1,
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "text;;;richtext[*];1-1-1, url, target")
+		"0" => array("showitem" => "text;;;richtext[*];1-1-1, url")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

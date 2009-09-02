@@ -403,7 +403,7 @@ $TCA["tx_newspaper_externallinks"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_externallinks.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "text, url, target",
+		"fe_admin_fieldList" => "text, url",
 	)
 );
 
