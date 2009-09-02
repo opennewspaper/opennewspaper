@@ -21,7 +21,6 @@ class tx_newspaper_ExternalLink {
 		
 		$this->text = $row['text'];
 		$this->url = $row['url'];
-		$this->target = $row['target'];
 	}
 	
 	/// \return The text displayed under the link
@@ -39,6 +38,12 @@ class tx_newspaper_ExternalLink {
 			$href = 'http://' . $temp_params[0];
         }
         
+		return $href;
+	}
+	
+	/// \return The target frame
+	public function getTarget() {
+		$temp_params = explode(' ', $this->url);
 		if (sizeof($temp_params) > 0) {
 			unset($temp_params[0]);
 			foreach ($temp_params as $param) {
@@ -48,22 +53,13 @@ class tx_newspaper_ExternalLink {
 				}
 			} 
 		}
-        $html_options = "href=\"$href\"" .
-        				($target? "target=\"$target\"": '');
-        t3lib_div::devlog('getURL()', 'newspaper', 0, $html_options);
-		return $html_options;
-	}
-	
-	/// \return The target frame
-	public function getTarget() {
-		return $this->target;
+		return $target;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	
 	private $text = null; 		///< The text displayed under the link
 	private $url = null;		///< The URL pointed to
-	private $target = null;		///< The target frame
 	
 	/// SQL table for persistence
 	const table = 'tx_newspaper_externallinks';
