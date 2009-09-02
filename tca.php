@@ -1619,7 +1619,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 $TCA["tx_newspaper_extra_externallinks"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_externallinks"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "pool,title,links"
+		"showRecordFieldList" => "pool,title,links,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_externallinks"]["feInterface"],
 	"columns" => array (
@@ -1647,7 +1647,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
 				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 10,	
+				"maxitems" => 100,	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -1683,9 +1683,17 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				),
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "pool;;;;1-1-1, title;;;;2-2-2, links;;;;3-3-3")
+		"0" => array("showitem" => "pool;;;;1-1-1, title;;;;2-2-2, links;;;;3-3-3, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2163,6 +2171,85 @@ $TCA["tx_newspaper_comment_cache"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_extra_bio"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_bio"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,photo_file,photo_source"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.template_set",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"pool" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.pool",		
+			"config" => Array (
+				"type" => "check",
+			)
+		),
+		"author_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"author_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_id",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"photo_file" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.photo_file",		
+			"config" => Array (
+				"type" => "group",
+				"internal_type" => "file",
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
+				"uploadfolder" => "uploads/tx_newspaper",
+				"show_thumbs" => 1,	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"photo_source" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.photo_source",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, photo_file, photo_source")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>

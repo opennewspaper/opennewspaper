@@ -690,6 +690,30 @@ CREATE TABLE tx_newspaper_comment_cache (
 
 
 #
+# Table structure for table 'tx_newspaper_extra_bio'
+#
+CREATE TABLE tx_newspaper_extra_bio (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	template_set tinytext NOT NULL,
+	pool tinyint(3) DEFAULT '0' NOT NULL,
+	author_name tinytext NOT NULL,
+	author_id tinytext NOT NULL,
+	photo_file blob NOT NULL,
+	photo_source tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
