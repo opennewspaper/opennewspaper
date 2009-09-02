@@ -39,8 +39,6 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 	}
 	
 	public static function dependsOnArticle() { return true; }
-		
-	private $articlelist;
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Bio());
