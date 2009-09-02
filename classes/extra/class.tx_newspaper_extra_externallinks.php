@@ -16,7 +16,7 @@ class tx_newspaper_ExternalLink {
 	public function __construct($uid) {
 
 		$row = tx_newspaper::selectOneRow(
-			'*', self::$table, 'uid = ' . intval($uid)
+			'*', self::table, 'uid = ' . intval($uid)
 		);
 		
 		$this->text = $row['text'];
@@ -31,6 +31,18 @@ class tx_newspaper_ExternalLink {
 	
 	/// \return The URL pointed to
 	public function getURL() {
+		$temp_params = explode(' ', $this->url);
+		$params = array('parameter' => $temp_params[0]);
+		if (sizeof($temp_params) > 0) {
+			foreach ($temp_params as $param) {
+				if ($param) {
+					$params['extTarget'] = trim($param);
+					break;
+				}
+			} 
+		}
+		
+		return tx_newspaper::typolink_url($params); 
 		if (strpos($this->url, '://') !== false)
 			return $this->url;
 		return 'http://' . $this->url;
@@ -48,7 +60,7 @@ class tx_newspaper_ExternalLink {
 	private $target = null;		///< The target frame
 	
 	/// SQL table for persistence
-	private static $table = 'tx_newspaper_externallinks';
+	const table = 'tx_newspaper_externallinks';
 }
 
 ///	An Extra displaying a list of HTML links pointing to external sources
