@@ -32,7 +32,16 @@ class tx_newspaper_ExternalLink {
 	/// \return The URL pointed to
 	public function getURL() {
 		$temp_params = explode(' ', $this->url);
-		$params = array('parameter' => $temp_params[0]);
+
+        if (strpos($temp_params[0], 'http://') !== false) {
+			$params = array(
+				'parameter' => $temp_params[0]
+			);
+        } else {
+			$params = array(
+				'parameter' => 'http://' . $temp_params[0]
+			);
+        }
 		if (sizeof($temp_params) > 0) {
 			unset($temp_params[0]);
 			foreach ($temp_params as $param) {
