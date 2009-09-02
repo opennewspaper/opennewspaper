@@ -15,7 +15,10 @@
 {section name=i loop=$links}
 	<li>
 		<a href="{$links[i]->getURL()}" 
-		   target="{$links[i]->getTarget()}">{$links[i]->getText()}</a>
+			{if $links[i]->getTarget()}
+		   		target="{$links[i]->getTarget()}"
+		   	{/if}
+		   	>{$links[i]->getText()}</a>
 	</li>
 {/section}
 </ul>
