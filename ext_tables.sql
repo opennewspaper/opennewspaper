@@ -706,6 +706,7 @@ CREATE TABLE tx_newspaper_extra_bio (
 	author_id tinytext NOT NULL,
 	photo_file blob NOT NULL,
 	photo_source tinytext NOT NULL,
+	bio_text tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -168,6 +168,7 @@
 			<label index="tx_newspaper_extra_bio.author_id">Author ID</label>
 			<label index="tx_newspaper_extra_bio.photo_file">Photo fole</label>
 			<label index="tx_newspaper_extra_bio.photo_source">Photo source</label>
+			<label index="tx_newspaper_extra_bio.bio_text">Bio text</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -335,6 +336,7 @@
 			<label index="tx_newspaper_extra_bio.author_id">Autorenkürzel</label>
 			<label index="tx_newspaper_extra_bio.photo_file">Fotodatei</label>
 			<label index="tx_newspaper_extra_bio.photo_source">Bildquelle</label>
+			<label index="tx_newspaper_extra_bio.bio_text">Bio-Text</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

@@ -2177,7 +2177,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 $TCA["tx_newspaper_extra_bio"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_bio"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,photo_file,photo_source"
+		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,photo_file,photo_source,bio_text"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
 	"columns" => array (
@@ -2243,14 +2243,21 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				"size" => "30",
 			)
 		),
+		"bio_text" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.bio_text",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, photo_file, photo_source")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, photo_file, photo_source, bio_text")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>

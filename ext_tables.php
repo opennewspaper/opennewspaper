@@ -531,7 +531,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_bio.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, template_set, pool, author_name, author_id, photo_file, photo_source",
+		"fe_admin_fieldList" => "hidden, template_set, pool, author_name, author_id, photo_file, photo_source, bio_text",
 	)
 );
 
