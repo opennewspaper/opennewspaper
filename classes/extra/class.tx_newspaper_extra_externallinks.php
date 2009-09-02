@@ -31,32 +31,26 @@ class tx_newspaper_ExternalLink {
 	
 	/// \return The URL pointed to
 	public function getURL() {
-/*		$temp_params = explode(' ', $this->url);
+		$temp_params = explode(' ', $this->url);
 
         if (strpos($temp_params[0], 'http://') !== false) {
-			$params = array(
-				'parameter' => $temp_params[0]
-			);
+			$href = $temp_params[0];
         } else {
-			$params = array(
-				'parameter' => 'http://' . $temp_params[0]
-			);
+			$href = 'http://' . $temp_params[0];
         }
+        
 		if (sizeof($temp_params) > 0) {
 			unset($temp_params[0]);
 			foreach ($temp_params as $param) {
 				if ($param) {
-					$params['extTarget'] = trim($param);
+					$target = trim($param);
 					break;
 				}
 			} 
 		}
-*/
-		$params = array('parameter' => $this->url);		
-		return tx_newspaper::typolink_url($params); 
-		if (strpos($this->url, '://') !== false)
-			return $this->url;
-		return 'http://' . $this->url;
+        $html_options = "href=\"$href\"" .
+        				$target? "target=\"$target\"": '';
+		return $html_options;
 	}
 	
 	/// \return The target frame
