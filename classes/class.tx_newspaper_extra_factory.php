@@ -30,13 +30,15 @@
  */
 
 /// \todo All extra definitions must be known to this class, even those which are not part of tx_newspaper 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_sectionlist.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_articlelist.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_typo3_ce.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_textbox.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_bio.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_displayarticles.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_mostcommented.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_sectionlist.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_textbox.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_typo3_ce.php');
 
 /// Factory class to create the correct kind of tx_newspaper_Extra from a UID
 /** Problem: The tx_newspaper_Extra is stored in a table for the abstract
