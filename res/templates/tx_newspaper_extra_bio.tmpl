@@ -11,12 +11,12 @@
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
 
 <strong>{$attributes.author_name}</strong>
-{$attributes.bio_text}
-<img src="{$basepath}/{$sizes.teaser}/{$attributes.image_file}" 
-	 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
-
-{$attributes.photo_file}
-Foto: {$attributes.photo_source}
+<p>{$attributes.bio_text}</p>
+<p>
+    <img src="{$basepath}/{$sizes.teaser}/{$attributes.image_file}" 
+	     alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+	Foto: {$attributes.photo_source}
+</p>
 
 
 <!--  end  res/templates/tx_newspaper_extra_bio.tmpl -->
