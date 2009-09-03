@@ -28,7 +28,7 @@ CREATE TABLE tx_newspaper_extra_image (
 	endtime int(11) DEFAULT '0' NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
-	image blob NOT NULL,
+	image_file blob NOT NULL,
 	caption tinytext NOT NULL,
 	normalized_filename tinytext NOT NULL,
 	kicker tinytext NOT NULL,
@@ -704,9 +704,9 @@ CREATE TABLE tx_newspaper_extra_bio (
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	author_name tinytext NOT NULL,
 	author_id tinytext NOT NULL,
-	photo_file blob NOT NULL,
+	image_file blob NOT NULL,
 	photo_source tinytext NOT NULL,
-	bio_text tinytext NOT NULL,
+	bio_text text NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_newspaper_extra_image"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,pool,title,image,caption,normalized_filename,kicker,credit,source,type,alttext,tags"
+		"showRecordFieldList" => "hidden,starttime,endtime,pool,title,image_file,caption,normalized_filename,kicker,credit,source,type,alttext,tags"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
@@ -59,9 +59,9 @@ $TCA["tx_newspaper_extra_image"] = array (
 				"size" => "30",
 			)
 		),
-		"image" => Array (		
+		"image_file" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image_file",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
@@ -152,7 +152,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, title;;;;2-2-2, image;;;;3-3-3, caption, normalized_filename, kicker, credit, source, type, alttext, tags")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, title;;;;2-2-2, image_file;;;;3-3-3, caption, normalized_filename, kicker, credit, source, type, alttext, tags")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2177,7 +2177,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 $TCA["tx_newspaper_extra_bio"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_bio"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,photo_file,photo_source,bio_text"
+		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,image_file,photo_source,bio_text"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
 	"columns" => array (
@@ -2220,9 +2220,9 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				"size" => "30",
 			)
 		),
-		"photo_file" => Array (		
+		"image_file" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.photo_file",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.image_file",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
@@ -2247,18 +2247,29 @@ $TCA["tx_newspaper_extra_bio"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.bio_text",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "text",
+				"cols" => "30",
+				"rows" => "5",
+				"wizards" => Array(
+					"_PADDING" => 2,
+					"RTE" => array(
+						"notNewRecords" => 1,
+						"RTEonly" => 1,
+						"type" => "script",
+						"title" => "Full screen Rich Text Editing|Formatteret redigering i hele vinduet",
+						"icon" => "wizard_rte2.gif",
+						"script" => "wizard_rte.php",
+					),
+				),
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, photo_file, photo_source, bio_text")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, image_file, photo_source, bio_text;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts]")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
