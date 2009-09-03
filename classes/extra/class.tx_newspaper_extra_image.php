@@ -111,9 +111,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public static function processDatamap_postProcessFieldArray(
 		$status, $table, $id, &$fieldArray, $that
 	) {
-		t3lib_div::devlog('image save hook', 'newspaper', 0, 
-			array('status' => $status, 'table' => $table, 'id' => $id, 
-				  'fieldArray' => $fieldArray, 'that' => $that));
 		
 		self::getTSConfig();
 		
@@ -127,7 +124,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		}
 		if ($table instanceof $extra_table) return;
 		
-		t3lib_div::devlog('image save hook', 'newspaper', 0, $extra_table);
+		t3lib_div::devlog('image save hook', 'newspaper', 0, 
+			array('status' => $status, 'table' => $table, 'id' => $id, 
+				  'fieldArray' => $fieldArray, 'that' => $that));
 
 		if ($fieldArray[self::image_file_field]) { 
 			self::resizeImages($fieldArray[self::image_file_field]);
@@ -216,7 +215,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     		
     		t3lib_div::devlog('command line for convert', 'newspaper', 0, 
     						  $convert);
-    		t3lib_div::devlog('convert output', 'newspaper', 0, $return);
+    		if ($return) t3lib_div::devlog('convert output', 'newspaper', 0, $return);
     	}
     }
 
