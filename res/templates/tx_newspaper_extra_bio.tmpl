@@ -12,7 +12,10 @@
 
 {$attributes.author_name}
 {$attributes.bio_text}
-<img src="{$attributes.photo_file}" />
+<img src="{$basepath}/{$sizes.artikel}/{$attributes.image}" 
+	 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+
+{$attributes.photo_file}
 Foto: {$attributes.photo_source}
 
 
