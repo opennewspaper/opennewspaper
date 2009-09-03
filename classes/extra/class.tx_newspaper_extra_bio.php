@@ -1,6 +1,6 @@
 <?php
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_image.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
 
 /// A tx_newspaper_Extra that displays a bio for a contributor
 /** A photo of an author is displayed along with some biographical text.
