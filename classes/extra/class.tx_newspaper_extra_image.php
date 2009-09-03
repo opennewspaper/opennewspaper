@@ -73,7 +73,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		self::getTSConfig();
 		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
 			'<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
-			 		  '/' . $this->getAttribute('image') . '" />';
+			 		  '/' . $this->getAttribute(self::image_file_field) . '" />';
 	}
 
 // title for module
@@ -128,7 +128,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			array('status' => $status, 'table' => $table, 'id' => $id, 
 				  'fieldArray' => $fieldArray, 'that' => $that));
 
-		if ($fieldArray['image']) self::resizeImages($fieldArray['image']);
+		if ($fieldArray[self::image_file_field]) { 
+			self::resizeImages($fieldArray[self::image_file_field]);
+		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -168,7 +170,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 
     /// If image needs resizing, do it (using ImageMagick)
-    /*  This function is called with the path of the resized image. If the 
+    /** This function is called with the path of the resized image. If the 
      *  directory which contains the resized image does not exist, it is
      *  created.
      * 
@@ -289,6 +291,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		return $TSConfig;		
 	}
+	
+	/// The field which carries the image file
+	const image_file_field = 'image_file';
 	
 	///	Where Typo3 stores uploaded images
 	const uploads_folder = 'uploads/tx_newspaper';
