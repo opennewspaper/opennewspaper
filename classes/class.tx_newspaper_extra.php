@@ -123,7 +123,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-		t3lib_div::devlog('prepare_render()', 'newspaper', 0, $this->attributes);
 		
 		/// Check whether to use a specific template set.
 		if ($this->getAttribute('template_set')) {
@@ -145,7 +144,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		}
 		$this->smarty->assign('attributes', $this->attributes);
 		$this->smarty->assign('extra_attributes', $this->extra_attributes);
-		t3lib_div::devlog('prepare_render()', 'newspaper', 0, $this->smarty);
 	}
 	
 	///	Default implementation of the render() function
