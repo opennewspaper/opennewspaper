@@ -52,6 +52,7 @@
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
 			<label index="title_tx_newspaper_articletype">Article type</label>
 			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
+			<label index="title_tx_newspaper_extra_bio">Bio box</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
 			<label index="title_tx_newspaper_extra_externallinks">External links</label>
 			<label index="title_tx_newspaper_extra_image">Image</label>
@@ -77,6 +78,7 @@
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
 			<label index="title_tx_newspaper_articletype">Artikeltyp</label>
 			<label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
+			<label index="title_tx_newspaper_extra_bio">Biokasten</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
 			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
 			<label index="title_tx_newspaper_extra_image">Bild</label>
