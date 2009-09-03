@@ -113,6 +113,17 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	protected function prepare_render(&$template_set = '') {
 		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
 		
+		if (!$this->extra_attributes) {
+			$this->extra_attributes = $this->getExtraUid()? 
+				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
+				array();
+		}
+		if (!$this->attributes) {
+			$this->attributes = tx_newspaper::selectOneRow(
+				'*', $this->getTable(), 'uid = ' . $this->getUid()
+			);
+		}
+		
 		/// Check whether to use a specific template set.
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
