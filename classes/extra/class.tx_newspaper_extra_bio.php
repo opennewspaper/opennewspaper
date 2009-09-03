@@ -35,7 +35,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 	}
 
 	public static function getModuleName() {
-		return 'np_artlist'; 
+		return 'np_bio'; 
 	}
 	
 	public static function dependsOnArticle() { return true; }
