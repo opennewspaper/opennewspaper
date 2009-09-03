@@ -7,7 +7,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  \todo Import the box automatically from the pool when the Article is
  * 		imported.
  */
-class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
+class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 
 	const description_length = 50; 
 
@@ -21,7 +21,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 	/** Assign the attributes to a Smarty template.
 	 *  \param $template_set Template set to use
 	 */
-	public function render($template_set = '') {
+/*	public function render($template_set = '') {
 		t3lib_div::devlog('tx_newspaper_extra_Bio::render()', 'newspaper', 0, 
 			array(
 				'uid' => $this->getUid(), 
@@ -35,7 +35,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 		
 		return $this->smarty->fetch($this);
 	}
-
+*/
 	/// A description to identify the bio box in the BE
 	/** Shows the author's name and the start of the text.
 	 */
