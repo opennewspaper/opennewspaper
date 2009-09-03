@@ -253,7 +253,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 
 		$articles_sorted = $this->sortArticles($articles);
-		t3lib_div::devlog('sorted articles', 'newspaper', 0, $articles_sorted);
+#t3lib_div::devlog('sorted articles', 'newspaper', 0, $articles_sorted);
 
 		return array_slice($articles_sorted, 0, $number);
 	}
@@ -326,7 +326,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			intval($start) . ', ' . intval($number)
 		);
 
-		t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, tx_newspaper::$query);
+#t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, tx_newspaper::$query);
 
 		$uids = array();
 		foreach ($results as $result) {
