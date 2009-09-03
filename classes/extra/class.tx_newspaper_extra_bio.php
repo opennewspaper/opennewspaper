@@ -9,6 +9,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
+	const description_length = 50; 
+
 	/// Boa Constructor ;-)
 	public function __construct($uid = 0) { 
 		if (intval($uid)) {
@@ -32,6 +34,16 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 		// ...
 		
 		return $this->smarty->fetch($this);
+	}
+
+	/// A description to identify the bio box in the BE
+	/** Shows the author's name and the start of the text.
+	 */
+	public function getDescription() {
+		return substr(
+			'<strong>' . $this->getAttribute('author_name') . '</strong> ' .
+				$this->getAttribute('bio_text'), 
+			0, self::description_length+2*strlen('<strong>')+1);
 	}
 
 	public static function getModuleName() {

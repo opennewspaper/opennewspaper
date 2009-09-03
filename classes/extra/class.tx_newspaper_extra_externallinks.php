@@ -106,21 +106,19 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		return $this->smarty->fetch($template);
 	}
 
-	/// A description to identify the link list in the BE
-	/** \todo Show at least one of the actual links
-	 */
+	/// A description to identify the link list in the BE, shows the link texts
 	public function getDescription() {
 		$sep = $ret = '';
 		foreach ($this->getLinks() as $link) {
 			$ret .= $sep . $link->getText();
 			$sep = ', ';
 		}
-		return  '<strong>' . $ret . '</strong> ';
+		return $ret;
 	}
 
 	/// Title for module/SysFolder
 	public static function getModuleName() {
-		return 'np_textbox';
+		return 'np_extlinks';
 	}
 	
 	///	This Extra may be different for every article
