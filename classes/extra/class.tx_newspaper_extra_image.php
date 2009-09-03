@@ -122,7 +122,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		} else {
 			$extra_table = 'tx_newspaper_extra_image';
 		}
-		if ($table != $extra_table) return;
+		if ($table instanceof $extra_table) return;
 		
 		t3lib_div::devlog('image save hook', 'newspaper', 0, 
 			array('status' => $status, 'table' => $table, 'id' => $id, 
