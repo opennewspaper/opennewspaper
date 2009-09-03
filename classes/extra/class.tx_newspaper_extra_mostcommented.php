@@ -112,7 +112,7 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 }
 
 ///	"Leserforum" from old onlinetaz. Maybe this is not needed, i copied it to have to code in one place, just in case.
-class tx_newspaper_ReadersForum extends tx_newspaper_MostCommented {
+class tx_newspaper_ReadersForum extends tx_newspaper_Extra_MostCommented {
 	
 	/** reimplemented from tx_hptazfavorites_pi2, called via late binding from
 	 *  tx_hptazfavorites_pi2::displayMostCommented()
