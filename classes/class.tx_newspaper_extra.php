@@ -124,6 +124,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			);
 		}
 		t3lib_div::devlog('prepare_render()', 'newspaper', 0, $this->attributes);
+		t3lib_div::devlog('prepare_render()', 'newspaper', 0, $this->smarty);
 		
 		/// Check whether to use a specific template set.
 		if ($this->getAttribute('template_set')) {
