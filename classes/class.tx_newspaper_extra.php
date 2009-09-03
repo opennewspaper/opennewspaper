@@ -123,6 +123,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
+		t3lib_div::devlog('prepare_render()', 'newspaper', 0, $this->attributes);
 		
 		/// Check whether to use a specific template set.
 		if ($this->getAttribute('template_set')) {

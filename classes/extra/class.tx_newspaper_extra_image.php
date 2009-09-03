@@ -63,7 +63,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$this->smarty->assign('basepath', self::$basepath);
 		$this->smarty->assign('sizes', self::$sizes);
 		
-		t3lib_div::devlog('Image::render()', 'newspaper', 0, $this->smarty);
+		t3lib_div::devlog('Image::render()', 'newspaper', 0, $this->attributes);
 		return $this->smarty->fetch($this);
 	}
 
