@@ -26,9 +26,6 @@
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
 
-{foreach from=$attributes key=name item=value}
-   <p>{$name}: {$value}</p>
-{/foreach}
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
 	<img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}" 
