@@ -22,7 +22,7 @@ class tx_newspaper  {
 	/// The GET parameter which determines the article UID
 	const article_get_parameter = 'art';
 	///	The GET parameter which determines which page type is displayed
-	const pagetype_get_parameter = 'page';
+	const pagetype_get_parameter = 'pagetype';
 	
 
 	/// Execute a SELECT query, check the result, return zero or one record(s)
