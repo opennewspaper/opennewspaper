@@ -44,49 +44,53 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module6 extends t3lib_SCbase {
-				var $pageinfo;
+	
+	var $pageinfo;
+				
+	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
+				
 
-				/**
-				 * Initializes the Module
-				 * @return	void
-				 */
-				function init()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/**
+	 * Initializes the Module
+	 * @return	void
+	 */
+	function init()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					parent::init();
+		parent::init();
 
-					/*
-					if (t3lib_div::_GP('clear_all_cache'))	{
-						$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-					}
-					*/
-				}
+		/*
+		if (t3lib_div::_GP('clear_all_cache'))	{
+			$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
+		}
+		*/
+	}
 
-				/**
-				 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-				 *
-				 * @return	void
-				 */
-				function menuConfig()	{
-					global $LANG;
-					$this->MOD_MENU = Array (
-						'function' => Array (
-							'1' => $LANG->getLL('function1'),
-							'2' => $LANG->getLL('function2'),
-							'3' => $LANG->getLL('function3'),
-						)
-					);
-					parent::menuConfig();
-				}
+	/**
+	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	 *
+	 * @return	void
+	 */
+	function menuConfig()	{
+		global $LANG;
+		$this->MOD_MENU = Array (
+			'function' => Array (
+				'1' => $LANG->getLL('function1'),
+				'2' => $LANG->getLL('function2'),
+				'3' => $LANG->getLL('function3'),
+			)
+		);
+		parent::menuConfig();
+	}
 
-				/**
-				 * Main function of the module. Write the content to $this->content
-				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
-				 */
-				function main()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/**
+	 * Main function of the module. Write the content to $this->content
+	 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
+	 *
+	 * @return	[type]		...
+	 */
+	function main()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					// Access check!
 					// The page will show only if there is a valid page and if this page may be viewed by the user
@@ -146,36 +150,62 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 						$this->content.=$this->doc->spacer(5);
 						$this->content.=$this->doc->spacer(10);
 					}
+	}
+
+	/**
+	 * Prints out the module HTML
+	 *
+	 * @return	void
+	 */
+	function printContent()	{
+		$this->content.=$this->doc->endPage();
+		echo $this->content;
+	}
+
+	/**
+	 * Generates the module content
+	 *
+	 * @return	void
+	 */
+	function moduleContent()	{
+		global $LANG;
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
+					
+		switch((string)$this->MOD_SETTINGS['function'])	{
+			case 1:
+				$content = '';
+				$data = tx_newspaper::selectRows(
+					'*', self::controltag_to_extra_table
+				);
+							
+				if ($data) {
+					$content .= '<table><th>';
+					foreach($data[0] as $key => $dummy) {
+						if ($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $key, false)) {
+							$content .= '<td>' . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $key, false) . '</td>';
+						} else {
+							$content .= '<td>' . $key . '</td>';
+						}
+					}
+					$content .= '</th>' . "\n";
+					
+					foreach ($data as $row) {
+						$content .= '<tr>';
+						foreach ($row as $key => $value) {
+							$content .= '<td>' . $value . '</td>';
+						}
+						$content .= '</tr>' . "\n";
+					}
+					
+					$content .= '</table>' . "\n";
 				}
-
-				/**
-				 * Prints out the module HTML
-				 *
-				 * @return	void
-				 */
-				function printContent()	{
-
-					$this->content.=$this->doc->endPage();
-					echo $this->content;
-				}
-
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent()	{
-					switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1:
-							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
-								<hr />
-								<br />This is the GET/POST vars sent to the script:<br />'.
-								'GET:'.t3lib_div::view_array($_GET).'<br />'.
-								'POST:'.t3lib_div::view_array($_POST).'<br />'.
-								'';
-							$this->content.=$this->doc->section('Message #1:',$content,0,1);
-						break;
+							
+				$this->content .= $this->doc->section('Message #1:',$content,0,1);
+				break;
 						case 2:
 							$content='<div align=center><strong>Menu item #2...</strong></div>';
 							$this->content.=$this->doc->section('Message #2:',$content,0,1);
