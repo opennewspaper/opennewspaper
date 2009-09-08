@@ -39,6 +39,11 @@ if (TYPO3_MODE == 'BE')	{
 }
 
 
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
 t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_image');
 
 $TCA["tx_newspaper_extra_image"] = array (
