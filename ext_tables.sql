@@ -638,6 +638,7 @@ CREATE TABLE tx_newspaper_tag (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	tag tinytext NOT NULL,
+	tag_type tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -2017,7 +2017,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 $TCA["tx_newspaper_tag"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "tag"
+		"showRecordFieldList" => "tag,tag_type"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
@@ -2029,9 +2029,17 @@ $TCA["tx_newspaper_tag"] = array (
 				"size" => "30",
 			)
 		),
+		"tag_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "tag;;;;1-1-1")
+		"0" => array("showitem" => "tag;;;;1-1-1, tag_type")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2272,5 +2280,4 @@ $TCA["tx_newspaper_extra_bio"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
