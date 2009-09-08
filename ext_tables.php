@@ -203,7 +203,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 $TCA["tx_newspaper_articlelist"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist',		
-		'label'     => 'uid',	
+		'label'     => 'notes',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -342,7 +342,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 $TCA["tx_newspaper_extra_articlelist"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist',		
-		'label'     => 'uid',	
+		'label'     => 'description',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -376,7 +376,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 $TCA["tx_newspaper_extra_externallinks"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks',		
-		'label'     => 'uid',	
+		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -431,6 +431,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
+		'type' => 'filter_sections',	
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
@@ -444,7 +445,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic',		
-		'label'     => 'uid',	
+		'label'     => 'filter_sections',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -498,7 +499,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 $TCA["tx_newspaper_comment_cache"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache',		
-		'label'     => 'uid',	
+		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -518,7 +519,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 $TCA["tx_newspaper_extra_bio"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio',		
-		'label'     => 'uid',	
+		'label'     => 'author_name',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -532,6 +533,26 @@ $TCA["tx_newspaper_extra_bio"] = array (
 	),
 	"feInterface" => array (
 		"fe_admin_fieldList" => "hidden, template_set, pool, author_name, author_id, image_file, photo_source, bio_text",
+	)
+);
+
+$TCA["tx_newspaper_tag_zone"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_zone',		
+		'label'     => 'name',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => "ORDER BY crdate",	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_tag_zone.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden, name",
 	)
 );
 

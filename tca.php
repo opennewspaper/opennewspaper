@@ -2279,6 +2279,39 @@ $TCA["tx_newspaper_extra_bio"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_tag_zone"] = array (
+	"ctrl" => $TCA["tx_newspaper_tag_zone"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,name"
+	),
+	"feInterface" => $TCA["tx_newspaper_tag_zone"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_zone.name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, name")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
