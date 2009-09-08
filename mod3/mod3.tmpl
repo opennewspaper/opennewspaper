@@ -6,17 +6,24 @@
 </head></body>
 <br />
 
-<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
+{if (!$IS_CONCRETE_ARTICLE)}<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />{/if}
 
 {section name=i loop=$DATA}
 <div style="margin-bottom: 7px;">
-{* paragraph: use 0 (insert to top, when pagezone_tzype article is displayed), use false, when pagezone_page (no paragraph needed ...) *}
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}); return false;">{$NEW_TOP_ICON}</a> {* differs depending on type pagezone_apge and article *}
+{* paragraph: use 0 (insert to top, when pagezone_type article is displayed), use false, when pagezone_page (no paragraph needed ...) *}
+
+{* differs depending on type pagezone_page and article: *}
+{if (!$IS_CONCRETE_ARTICLE)}
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}); return false;">{$NEW_TOP_ICON}</a> 
+{else}
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, 0); return false;">{$NEW_TOP_ICON}</a> 
+{/if}
+
  	&nbsp;  
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	
-	{* Dropdown for page and page zone for section only *}
-	{if $smarty.section.i.last} 
+	{* Dropdown for page and page zone for last (=selected) section only *}
+	{if !$IS_CONCRETE_ARTICLE && $smarty.section.i.last} 
 	 	&nbsp; &nbsp; 
 		{$LABEL.pagetype}: 
 		<select  onchange="page_type_change(this.value)">
@@ -46,10 +53,10 @@
 			[{$DATA[i].pagezone_id}|{$DATA[i].pagezone_concrete_id}]
 		{/if}
 	{/if}
-{if $DATA[0].pagezone_type->getAttribute('is_article') == 0}
-{* dummy button for pagezone_page only *}
-&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
-{/if}
+{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
+	{* dummy button for pagezone_page only *}
+	&nbsp; &nbsp;<a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a> 
+{/if}	
 </div>
 
 {if $PAGEZONE[i] != false}

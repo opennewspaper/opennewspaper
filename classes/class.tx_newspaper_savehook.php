@@ -386,10 +386,11 @@ class tx_newspaper_SaveHook {
 	
 		// exclude new articles - articles are extras but shouldn't be treated like extras here!
 		if ($status == 'new' && $table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-//t3lib_div::devlog('save hook reached', 'newspaper', 0);			
+//t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone()', 'newspaper', 0, array($table, $id, $_REQUEST));	die();		
 			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
 			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
 			if (!$pz_uid) {
+				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): Illegal value for pagezone uid: #', 'newspaper', 3, array($table, $id, $pz_uid));
 				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
 			}
 
@@ -406,7 +407,7 @@ class tx_newspaper_SaveHook {
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 
-			$pz->insertExtraAfter($e, $after_origin_uid); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
+			$pz->insertExtraAfter($e, $after_origin_uid, false); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
 			
 			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
 				// set paragraph

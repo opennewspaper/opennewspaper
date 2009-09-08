@@ -289,7 +289,6 @@ function findElementsByName(name, type) {
 		$extra = $pz->getExtras();
 		$data = array();
 		for ($i = 0; $i < sizeof($extra); $i++) {
-			
 			$extra_data = array(
 				'extra_type' => $extra[$i]->getTitle(),
 				'uid' => $extra[$i]->getExtraUid(),
@@ -345,7 +344,11 @@ function findElementsByName(name, type) {
 /// \todo: move locallang and smarty templaes from mod3 to res/be/...
 
 	function renderExtraInArticle($PA, $fobj) {
-return 'to come ...';
+
+		// create article
+		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
+//t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
+		return self::renderBackendSmartyPageZone($article, false);
 	}
 
 
@@ -365,23 +368,30 @@ return 'to come ...';
 			}
 		}
 
-		/// add current page zone and extras		
+		$is_concrete_article = false; // init
+		/// add current page zone and extras
 		$data[] = self::extractData($pz);
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
-		
-		$s = $pz->getParentPage()->getParentSection();
-		$pages = $s->getSubPages(); // get activate pages for current section
-		$pagetype = array();
-		for ($i = 0; $i < sizeof($pages); $i++) {
-			$pagetype[] = $pages[$i]->getPageType(); 
+		if (sizeof($data) > 1 || sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
+			// so it's no concrete article 
+			
+			$s = $pz->getParentPage()->getParentSection();
+			$pages = $s->getSubPages(); // get activate pages for current section
+			$pagetype = array();
+			for ($i = 0; $i < sizeof($pages); $i++) {
+				$pagetype[] = $pages[$i]->getPageType(); 
+			}
+			
+			$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
+			$pagezonetype = array();
+			for ($i = 0; $i < sizeof($pagezones); $i++) {
+				$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
+			}
+		} else {
+			$is_concrete_article = true;
+			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage  
 		}
-		
-		$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
-		$pagezonetype = array();
-		for ($i = 0; $i < sizeof($pagezones); $i++) {
-			$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
-		}
-
+//t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array($pz, $data));
 		
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
@@ -398,25 +408,27 @@ return 'to come ...';
 		$smarty->assign('PAGEZONETYPE', $pagezonetype);
 		$smarty->assign('SHOW_LEVELS_ABOVE', $show_levels_above);
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 
-		/// "new to top" buttons varies for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
-		if ($data[0]['pagezone_type']->getAttribute('is_article') == 0)
+		/// "new to top" buttons vary for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
+		if ($data[0]['pagezone_type'] instanceof tx_newspaper_article && $data[0]['pagezone_type']->getAttribute('is_article') == 0) {
 			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
-		else
+		} else {
 			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra', false)));
+		}
 
 		
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 
 		
-		// pagezones are render by a separate smarty templae - because 2 versions (pagezone_page or article) can be rendered
+		// pagezones are rendered by a separate smarty template - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = self::getPagezoneSmartyObject();
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
-			if ($data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
+			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available 
 					$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
@@ -427,6 +439,7 @@ return 'to come ...';
 			} else {
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp);
+				$smarty_pz->assign('IS_CONCRETE_ARTICLE', true);
 				if ($tmp == false) {
 					$pagezone[$i] = false; // indicates "no extra so far" message
 				} else { 
@@ -437,15 +450,23 @@ return 'to come ...';
 		
 		$smarty->assign('PAGEZONE', $pagezone);
 		
-		// admins can see a little more ...
+		// admins might see a little more ...
 		$smarty->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		
 		return $smarty->fetch('mod3.tmpl');
 	}
 
+	/// read data for non concrete article pagezones
 	private static function extractData(tx_newspaper_PageZone $pz) {
+		if (!$pz || !($pz->getUid())) {
+			return array(); // no data needed article was newly created in t3 list module
+		}
+
+		if ($pz instanceof tx_newspaper_article && $pz->getAttribute('is_template') == 0) { 
+			return array(); // no data needed if concrete article
+		}
+		
 		$s = $pz->getParentPage()->getParentSection();
-//debug(t3lib_div::view_array($s), 's');
 		return array(
 				'section' => array_reverse($s->getSectionPath()), 
 				'page_type' => $pz->getParentPage()->getPageType(),
@@ -484,7 +505,7 @@ return 'to come ...';
 		$smarty_pz->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_down', false)));
 		$smarty_pz->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
 		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
-	//		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+//		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty_pz->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
 	
 		return $smarty_pz;
@@ -678,7 +699,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
+/// \todo: in abhängigkeit von new und old einen string zurückgeben
 		return 'to come ...';		
 	}
 
