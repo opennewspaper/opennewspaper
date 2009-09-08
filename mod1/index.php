@@ -37,6 +37,18 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 
 
 
+
+
+
+
+/// \todo: CLEANUP NEEDED - many functions deprecated!!!
+
+
+
+
+
+
+
 /**
  * Module 'AJAX' for the 'newspaper' extension.
  *
@@ -311,6 +323,9 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 						$this->processDeletePageZone(); // AJAX call
 
 
+					/// as the module is used for ajax only so far, why not use it as the shortcut for the section list module?
+//<a onclick="return jumpTo('2',this,'pages2',0);" href="#">np_section</a>
+//top.goToModule('web_list');this.blur();return false;
 					
 					return false; // if processing was successful, the script died after the AJAX request was answered; if param weren't valid return false anyway
 
