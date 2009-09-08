@@ -39,7 +39,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'Control Tag Control' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * \author	Helge Preuss <helge.preuss@gmail.com>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
