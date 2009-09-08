@@ -2371,6 +2371,87 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_controltag_to_extra"] = array (
+	"ctrl" => $TCA["tx_newspaper_controltag_to_extra"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,tag,tag_type,tag_zone,extra_table,extra_uid"
+	),
+	"feInterface" => $TCA["tx_newspaper_controltag_to_extra"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"tag" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"tag_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_type",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"tag_zone" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_zone",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag_zone",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+		"extra_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_table",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"extra_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_uid",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, tag, tag_type, tag_zone, extra_table, extra_uid")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>

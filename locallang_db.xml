@@ -176,6 +176,12 @@
 			<label index="tx_newspaper_extra_controltagzone.tag_zone">Tag zone</label>
 			<label index="tx_newspaper_extra_controltagzone.tag_type">Tag type</label>
 			<label index="tx_newspaper_extra_controltagzone.default_extra">Default extra(s) - shown when no tag present</label>
+			<label index="tx_newspaper_controltag_to_extra">Map of Extras to control tags and tag zones</label>
+			<label index="tx_newspaper_controltag_to_extra.tag">Tag</label>
+			<label index="tx_newspaper_controltag_to_extra.tag_type">Tag type</label>
+			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tag zone</label>
+			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra type</label>
+			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra UID</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -351,6 +357,12 @@
 			<label index="tx_newspaper_extra_controltagzone.tag_zone">Tagzone</label>
 			<label index="tx_newspaper_extra_controltagzone.tag_type">Tagart</label>
 			<label index="tx_newspaper_extra_controltagzone.default_extra">Defaultextra(s) - angezeigt wenn es kein Steuertag gibt</label>
+			<label index="tx_newspaper_controltag_to_extra">Zuordnung von Extras zu Steuertags und Tagzonen</label>
+			<label index="tx_newspaper_controltag_to_extra.tag">Tag</label>
+			<label index="tx_newspaper_controltag_to_extra.tag_type">Tagart</label>
+			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tagzone</label>
+			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra-Typ</label>
+			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra-UID</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
