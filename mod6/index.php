@@ -186,9 +186,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 					$content .= '<table><tr>';
 					foreach($data[0] as $key => $dummy) {
 						if ($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $key, false)) {
-							$content .= '<td>' . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $key, false) . '</td>';
+							$content .= '<td><strong>' . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $key, false) . '</strong></td>';
 						} else {
-							$content .= '<td>' . $key . '</td>';
+							$content .= '<td><strong>' . $key . '</strong></td>';
 						}
 					}
 					$content .= '</tr>' . "\n";
