@@ -198,9 +198,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 							'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
 						);
 						$data[$index]['tag_zone'] = $tag_zone['name'];
+						
+						$extra = new $row['extra_table']($row['extra_uid']);
+						$data[$index]['extra_uid'] = $extra->getDescription();
+						
 						foreach (self::$excluded_fields as $field) {
 							unset($data[$index][$field]);
-						} 
+						}
+						 
 					}
 					$this->smarty->assign('data', $data);
 							
