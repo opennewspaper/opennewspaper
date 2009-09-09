@@ -51,7 +51,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
 				
-	const excluded_fields = array(
+	private static $excluded_fields = array(
 		'uid', 'pid', 'tstamp', 'crdate', 'cruser_id'
 	);
 
@@ -198,7 +198,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 							'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
 						);
 						$data[$index]['tag_zone'] = $tag_zone['name'];
-						foreach (self::excluded_fields as $field) unset($data[$index]); 
+						foreach (self::$excluded_fields as $field) unset($data[$index]); 
 					}
 					$this->smarty->assign('data', $data);
 							
