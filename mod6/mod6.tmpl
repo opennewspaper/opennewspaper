@@ -1,0 +1,23 @@
+<!-- begin mod6/mod6.tmpl -->
+
+{* Variables:
+   $data		content of the control tag to extra mapping table
+*}
+
+{if $data}
+	<table>
+		<tr>
+			{foreach from=$data[0] key=key item=dummy}
+				<td><strong>{$key}</strong></td>
+			{/foreach}
+		</tr>
+		{foreach from=$data item=row}
+			<tr>
+				{foreach from=$row item=value}
+					<td>$value</td>
+				{/foreach}
+			<tr>
+		{/foreach}
+	<table>
+{/if}
+<!-- end mod6/mod6.tmpl -->
