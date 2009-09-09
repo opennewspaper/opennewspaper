@@ -207,6 +207,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				);
 				$this->smarty->assign('tags', $tags);				
 
+				$extra_types = array();
+				foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
+					$extra_types[] = array(
+						'table' => $registered_extra->getTable(), 
+						'title' =>$registered_extra->getTitle()
+					);
+				}
+				$this->smarty->assign('extra_types', $extra_types);				
+				
 				$data = tx_newspaper::selectRows(
 					'*', self::controltag_to_extra_table
 				);

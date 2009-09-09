@@ -3,11 +3,16 @@
 {include file="../mod3/mod3.css"}
 
 {* Variables:
-	$tags		list of control tags, form:
-					array('uid' => uid, 'name' => tag text)
-	$tag_zones	list of tag zones in the system, form:
-					array('uid' => uid, 'name' => tag zone name)
-	$data		content of the control tag to extra mapping table
+	$tags			list of control tags, form:
+						array('uid' => uid, 'name' => tag text)
+	$tag_zones		list of tag zones in the system, form:
+						array('uid' => uid, 'name' => tag zone name)
+	$extra_types	list of extra classes
+						array(
+							'table' => lowercased class name, 
+							'title' => internationalized name of extra
+						)
+	$data			content of the control tag to extra mapping table
 *}
 
 <form action="">
@@ -40,7 +45,13 @@
 				</select>
 			</td>
 			<td>
-				<input name="extra_table[0]">
+				<select name="extra_table[0]">
+					{foreach from=$extra_types item=extra_type}
+						<option value="{$extra_types.table}">
+							{$extra_types.title}
+						</option>
+					{/foreach}
+				</select>
 			</td>
 			<td><input name="extra_uid[0]"></td>
 		</tr>
