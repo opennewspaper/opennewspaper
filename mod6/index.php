@@ -186,6 +186,16 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				);
 				
 				if ($data) {
+					foreach ($data as $row) {
+						$tag = tx_newspaper::selectOneRow(
+							'tag', 'tx_newspaper_tag', 'uid = ' . $row['tag']
+						);
+						$row['tag'] = $tag['tag'];
+						$tag_zone = tx_newspaper::selectOneRow(
+							'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
+						);
+						$row['tag_zone'] = $tag_zone['name'];
+					}
 					$this->smarty->assign('data', $data);
 							
 					$this->content .= $this->doc->section('Message #1:', $this->smarty->fetch('mod6.tmpl'),0,1);
