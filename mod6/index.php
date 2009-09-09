@@ -203,7 +203,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 				$tags = tx_newspaper::selectRows(
 					'uid, tag', self::tag_table,
-					'type = ' . self::getControlTagType()
+					'type = \'' . self::getControlTagType() . '\''
 				);
 				$this->smarty->assign('tags', $tags);				
 
