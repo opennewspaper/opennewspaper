@@ -66,7 +66,7 @@
 				{/if}
 					
 					<td>
-						<select name="tag[{$i}]">
+						<select name="tag[{$row.uid}]">
 							{foreach from=$tags item=tag}
 								<option value="{$tag.uid}"
 									{if $tag.tag == $row.tag}
@@ -79,7 +79,7 @@
 					</td>
 					<td>{$row.tag_type}</td>
 					<td>
-						<select name="tag_zone[{$i}]">
+						<select name="tag_zone[{$row.uid}]">
 							{foreach from=$tag_zones item=tag_zone}
 								<option value="{$tag_zone.uid}"
 									{if $tag_zone.name == $row.tag_zone}
@@ -91,7 +91,7 @@
 						</select>
 					</td>
 					<td>
-						<select name="extra_table[{$i}]">
+						<select name="extra_table[{$row.uid}]">
 							{foreach from=$extra_types item=extra_type}
 								<option value="{$extra_type.table}"
 									{if $extra_type.table == $row.extra_table}
