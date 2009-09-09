@@ -193,7 +193,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init('default');
 		}
-
+		
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
 				$tag_zones = tx_newspaper::selectRows(
@@ -255,7 +255,10 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			case 3:
 				$content='<div align=center><strong>Menu item #3...</strong></div>';
 				$this->content.=$this->doc->section('Message #3:',$content,0,1);
-			break;
+			break;			
+		}
+		if ($_POST) {
+			$this->content .= print_r($_POST, 1);			
 		}
 	}
 	
