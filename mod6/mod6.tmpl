@@ -16,14 +16,23 @@
 			{/foreach}
 		</tr>
 
+		{* row to enter a new tag/tag zone/extra combination *}
+		<tr class="bg1">
+			{foreach from=$data[0] key=key item=dummy}
+				<td>
+					<input name="{$key}" value="">
+				</td>
+			{/foreach}
+		</tr>
+
 		{* already present tag/tag zone/extra combinations *}
 		{if $data}
 			{foreach from=$data item=row key=i}
-					{if ($i % 2 == 0)}
-						<tr class="bg1">
-					{else}
-						<tr class="bg2">
-					{/if}
+				{if ($i % 2 == 0)}
+					<tr class="bg2">
+				{else}
+					<tr class="bg1">
+				{/if}
 					
 					<td>{$row.tag}</td>
 					<td>{$row.tag_type}</td>
@@ -47,14 +56,6 @@
 			{/foreach}
 		{/if}
 
-		{* row to enter a new tag/tag zone/extra combination *}
-		<tr>
-			{foreach from=$data[0] key=key item=dummy}
-				<td>
-					<input name="{$key}" value="">
-				</td>
-			{/foreach}
-		</tr>
 
 	<table>
 <form>
