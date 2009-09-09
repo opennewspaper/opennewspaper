@@ -253,7 +253,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			break;			
 		}
 		if ($_POST) {
-			$this->content .= print_r($_POST, 1);			
+			foreach ($_POST as $field => $rows) {
+				$this->content .= "<strong>$field</strong>" . print_r($rows, 1);
+			}
 		}
 	}
 	
