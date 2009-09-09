@@ -257,11 +257,17 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			break;			
 		}
 		if ($_POST) {
+			$data_by_uid = array();
 			foreach ($_POST as $field => $rows) {
 				if (in_array($field, self::$writable_fields)) {
-					$this->content .= "<p><strong>$field</strong>" . print_r($rows, 1) . "</p>";
+					$this->content .= "<p><strong>$field</strong> " . print_r($rows, 1) . "</p>";
+					foreach ($rows as $uid => $row) {
+						if (!$data_by_uid[$uid]) $data_by_uid[$uid] = array();
+						$data_by_uid[$uid][$field] = $row;
+					}
 				}
 			}
+			$this->content .= print_r($data_by_uid, 1);
 		}
 	}
 	
