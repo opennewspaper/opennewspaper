@@ -69,7 +69,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	private static $writable_fields = array(
 		'tag', 'tag_zone', 'extra_table', 'extra_uid'
-	)
+	);
 
 
 	/**
