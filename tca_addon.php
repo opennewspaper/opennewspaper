@@ -85,9 +85,6 @@ $TCA["tx_newspaper_extra"]["columns"]["origin_uid"]["config"]["range"] = array (
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
-$TCA["tx_newspaper_pagetype"]["columns"]["get_value"]["config"]["range"] = array(
-	"lower" => "1"
-);
 $TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
