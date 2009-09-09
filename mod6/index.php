@@ -58,6 +58,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	///	Table listing the possible tag zones
 	const tag_zone_table = 'tx_newspaper_tag_zone';
+
+	///	Table listing the possible tags
+	const tag_table = 'tx_newspaper_tag';
 	
 	///	Fields in the controltag_to_extra_table not to display (system fields)
 	private static $excluded_fields = array(
