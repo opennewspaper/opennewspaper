@@ -505,7 +505,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	private $attributes = array();				///< attributes of the concrete extra
 	private $extra_attributes = array();		///< attributes of the abstract extra
 
-	protected $smarty = null;
+	protected $smarty = null;					///< tx_newspaper_Smarty rendering engine
 
 	private static $registeredExtra = array();	///< list of registered Extras
 

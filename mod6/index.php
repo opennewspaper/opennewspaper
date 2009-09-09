@@ -51,10 +51,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	var $pageinfo;
 
-	private $smarty = null;
+	private $smarty = null;				///< tx_newspaper_Smarty rendering engine
 	
+	///	Table mapping tx_newspaper_Extra s to tag zones and tx_newspaper_Tag s
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
-				
+	
+	///	Table listing the possible tag zones
+	const tag_zone_table = 'tx_newspaper_tag_zone';
+	
+	///	Fields in the controltag_to_extra_table not to display (system fields)
 	private static $excluded_fields = array(
 		'uid', 'pid', 'tstamp', 'crdate', 'cruser_id'
 	);
@@ -188,6 +193,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 					
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
+				$tag_zones = tx_newspaper::selectRows(
+					'uid, name', self::tag_zone_table
+				);
+				$this->smarty->assign('tag_zones', $tag_zones);
+				
+
 				$data = tx_newspaper::selectRows(
 					'*', self::controltag_to_extra_table
 				);

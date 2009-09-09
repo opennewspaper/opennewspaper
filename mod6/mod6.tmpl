@@ -3,7 +3,9 @@
 {include file="../mod3/mod3.css"}
 
 {* Variables:
-   $data		content of the control tag to extra mapping table
+	$tag_zones	list of tag zones in the system, form:
+					array('uid' => uid, 'name' => tag zone name)
+	$data		content of the control tag to extra mapping table
 *}
 
 {if $data}
@@ -19,8 +21,24 @@
 				{else}
 					<tr class="bg2">
 				{/if}
-				{foreach from=$row item=value}
-					<td>{$value}</td>
+				
+				<td>{$row.tag}</td>
+				<td>{$row.tag_type}</td>
+				<td>
+					<select>
+						{foreach from=$tag_zones item=tag_zone}
+							<option value="{$tag_zone.uid}"
+								{if $tag_zone.name=$row.tag_zone}
+									selected="selected"
+								{/if}>
+									{$tag_zone.name}
+							</option>
+						{/foreach}
+					</select>
+					{$row.tag_zone}
+				</td>
+				<td>{$row.extra_table}</td>
+				<td>{$row.extra_uid}</td>
 				{/foreach}
 			<tr>
 		{/foreach}
