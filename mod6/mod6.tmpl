@@ -19,7 +19,6 @@
 	<table>
 		<tr>
 			<td>tag</td>
-			<td>tag_type</td>
 			<td>tag_zone</td>
 			<td>extra_table</td>
 			<td>extra_uid</td>
@@ -36,7 +35,6 @@
 					{/foreach}
 				</select>
 			</td>
-			<td><input name="tag_type[0]"></td>
 			<td>
 				<select name="tag_zone[0]">
 					{foreach from=$tag_zones item=tag_zone}
@@ -79,7 +77,6 @@
 							{/foreach}
 						</select>
 					</td>
-					<td>{$row.tag_type}</td>
 					<td>
 						<select name="tag_zone[{$row.uid}]">
 							{foreach from=$tag_zones item=tag_zone}
