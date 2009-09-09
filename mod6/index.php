@@ -113,7 +113,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 			// Draw the header.
-			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="POST">';
 
