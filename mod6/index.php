@@ -186,15 +186,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				);
 				
 				if ($data) {
-					foreach ($data as $row) {
+					foreach ($data as $index => $row) {
 						$tag = tx_newspaper::selectOneRow(
 							'tag', 'tx_newspaper_tag', 'uid = ' . $row['tag']
 						);
-						$row['tag'] = $tag['tag'];
+						$data[$index]['tag'] = $tag['tag'];
 						$tag_zone = tx_newspaper::selectOneRow(
 							'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
 						);
-						$row['tag_zone'] = $tag_zone['name'];
+						$data[$index]['tag_zone'] = $tag_zone['name'];
 					}
 					$this->smarty->assign('data', $data);
 							
