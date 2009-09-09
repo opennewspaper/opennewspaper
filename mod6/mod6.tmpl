@@ -28,7 +28,7 @@
 					<select>
 						{foreach from=$tag_zones item=tag_zone}
 							<option value="{$tag_zone.uid}"
-								{if $tag_zone.name=$row.tag_zone}
+								{if $tag_zone.name == $row.tag_zone}
 									selected="selected"
 								{/if}>
 									{$tag_zone.name}
