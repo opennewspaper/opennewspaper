@@ -387,7 +387,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \return The first Extra of the given class (by appearance in article),
 	 * 		or null.
 	 */
-	public function getExtra($extra_class) {
+	public function getFirstExtraOf($extra_class) {
 
 		if ($extra_class instanceof tx_newspaper_Extra) {
 			$extra_class = tx_newspaper::getTable($extra_class);

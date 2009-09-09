@@ -20,7 +20,7 @@
 		<h2>{$articles[i]->getAttribute('kicker')}</h2>
 		<h1>{$articles[i]->getAttribute('title')}</h1>
 	
-		{assign var=image value=$articles[i]->getExtra('tx_newspaper_Extra_Image')}
+		{assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
 		{if $image}
 			{assign var=sizes value=$image->getSizes()}
 			<img src="{$image->getBasepath()}/{$sizes.preview}/{$image->getAttribute('image')}"

@@ -23,7 +23,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	const description_length = 50; 
 	
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
-
+	
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
