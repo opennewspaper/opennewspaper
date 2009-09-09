@@ -18,11 +18,21 @@
 
 		{* row to enter a new tag/tag zone/extra combination *}
 		<tr class="bg1">
-			{foreach from=$data[0] key=key item=dummy}
-				<td>
-					<input name="{$key}" value="">
-				</td>
-			{/foreach}
+			<td><input name="tag[0]"></td>
+			<td><input name="tag_type[0]"></td>
+			<td>
+				<select>
+					{foreach from=$tag_zones item=tag_zone}
+						<option value="{$tag_zone.uid}">
+							{$tag_zone.name}
+						</option>
+					{/foreach}
+				</select>
+			</td>
+			<td>
+				<input name="extra_table[0]">
+			</td>
+			<td><input name="extra_uid[0]"></td>
 		</tr>
 
 		{* already present tag/tag zone/extra combinations *}
@@ -49,7 +59,7 @@
 						</select>
 					</td>
 					<td>
-						<input name="extra_table" value="{$row.extra_table}">
+						<input name="extra_table[{$i}]" value="{$row.extra_table}">
 					</td>
 					<td>{$row.extra_uid}</td>
 				<tr>
