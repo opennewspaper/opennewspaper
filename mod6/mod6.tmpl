@@ -28,6 +28,7 @@
 						</option>
 					{/foreach}
 				</select>
+			</td>
 			<td><input name="tag_type[0]"></td>
 			<td>
 				<select name="tag_zone[0]">
@@ -53,7 +54,15 @@
 					<tr class="bg1">
 				{/if}
 					
-					<td>{$row.tag}</td>
+					<td>
+						<select name="tag[{$i}]">
+							{foreach from=$tags item=tag}
+								<option value="{$tag.uid}">
+									{$tag.tag}
+								</option>
+							{/foreach}
+						</select>
+					</td>
 					<td>{$row.tag_type}</td>
 					<td>
 						<selectname="tag_zone[{$i}]">
