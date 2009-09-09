@@ -8,39 +8,54 @@
 	$data		content of the control tag to extra mapping table
 *}
 
-{if $data}
+<form action="">
 	<table>
 		<tr>
 			{foreach from=$data[0] key=key item=dummy}
 				<td><strong>{$key}</strong></td>
 			{/foreach}
 		</tr>
-		{foreach from=$data item=row key=i}
-				{if ($i % 2 == 0)}
-					<tr class="bg1">
-				{else}
-					<tr class="bg2">
-				{/if}
-				
-				<td>{$row.tag}</td>
-				<td>{$row.tag_type}</td>
+
+		{* already present tag/tag zone/extra combinations *}
+		{if $data}
+			{foreach from=$data item=row key=i}
+					{if ($i % 2 == 0)}
+						<tr class="bg1">
+					{else}
+						<tr class="bg2">
+					{/if}
+					
+					<td>{$row.tag}</td>
+					<td>{$row.tag_type}</td>
+					<td>
+						<select>
+							{foreach from=$tag_zones item=tag_zone}
+								<option value="{$tag_zone.uid}"
+									{if $tag_zone.name == $row.tag_zone}
+										selected="selected"
+									{/if}>
+										{$tag_zone.name}
+								</option>
+							{/foreach}
+						</select>
+					</td>
+					<td>
+						<input name="extra_table" value="{$row.extra_table}">
+					</td>
+					<td>{$row.extra_uid}</td>
+				<tr>
+			{/foreach}
+		{/if}
+
+		{* row to enter a new tag/tag zone/extra combination *}
+		<tr>
+			{foreach from=$data[0] key=key item=dummy}
 				<td>
-					<select>
-						{foreach from=$tag_zones item=tag_zone}
-							<option value="{$tag_zone.uid}"
-								{if $tag_zone.name == $row.tag_zone}
-									selected="selected"
-								{/if}>
-									{$tag_zone.name}
-							</option>
-						{/foreach}
-					</select>
-					{$row.tag_zone}
+					<input name="{$key}" value="">
 				</td>
-				<td>{$row.extra_table}</td>
-				<td>{$row.extra_uid}</td>
-			<tr>
-		{/foreach}
+			{/foreach}
+		</tr>
+
 	<table>
-{/if}
+<form>
 <!-- end mod6/mod6.tmpl -->
