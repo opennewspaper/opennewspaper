@@ -66,6 +66,10 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	private static $excluded_fields = array(
 		'uid', 'pid', 'tstamp', 'crdate', 'cruser_id'
 	);
+	
+	private static $writable_fields = array(
+		'tag', 'tag_zone', 'extra_table', 'extra_uid'
+	)
 
 
 	/**
@@ -254,7 +258,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 		if ($_POST) {
 			foreach ($_POST as $field => $rows) {
-				$this->content .= "<p><strong>$field</strong>" . print_r($rows, 1)."<\p>";
+				if (in_array($field, self::$writable_fields)) {
+					$this->content .= "<p><strong>$field</strong>" . print_r($rows, 1) . "</p>";
+				}
 			}
 		}
 	}
