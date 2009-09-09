@@ -3,6 +3,8 @@
 {include file="../mod3/mod3.css"}
 
 {* Variables:
+	$tags		list of control tags, form:
+					array('uid' => uid, 'name' => tag text)
 	$tag_zones	list of tag zones in the system, form:
 					array('uid' => uid, 'name' => tag zone name)
 	$data		content of the control tag to extra mapping table
@@ -18,10 +20,17 @@
 
 		{* row to enter a new tag/tag zone/extra combination *}
 		<tr class="bg1">
-			<td><input name="tag[0]"></td>
+			<td>
+				<select name="tag[0]">
+					{foreach from=$tags item=tag}
+						<option value="{$tag.uid}">
+							{$tag.tag}
+						</option>
+					{/foreach}
+				</select>
 			<td><input name="tag_type[0]"></td>
 			<td>
-				<select>
+				<select name="tag_zone[0]">
 					{foreach from=$tag_zones item=tag_zone}
 						<option value="{$tag_zone.uid}">
 							{$tag_zone.name}
@@ -47,7 +56,7 @@
 					<td>{$row.tag}</td>
 					<td>{$row.tag_type}</td>
 					<td>
-						<select>
+						<selectname="tag_zone[{$i}]">
 							{foreach from=$tag_zones item=tag_zone}
 								<option value="{$tag_zone.uid}"
 									{if $tag_zone.name == $row.tag_zone}

@@ -190,14 +190,19 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init('default');
 		}
-					
+
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
 				$tag_zones = tx_newspaper::selectRows(
 					'uid, name', self::tag_zone_table
 				);
 				$this->smarty->assign('tag_zones', $tag_zones);
-				
+
+				$tags = tx_newspaper::selectRows(
+					'uid, tag', self::tag_table,
+					'type = ' . self::getControlTagType()
+				);
+				$this->smarty->assign('tags', $tags);				
 
 				$data = tx_newspaper::selectRows(
 					'*', self::controltag_to_extra_table
@@ -240,6 +245,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				$this->content.=$this->doc->section('Message #3:',$content,0,1);
 			break;
 		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	
+	static private function getControlTagType() {
+		return 'control';
 	}
 }
 
