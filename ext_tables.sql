@@ -764,8 +764,6 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	tag blob NOT NULL,
 	tag_type tinytext NOT NULL,
 	tag_zone blob NOT NULL,

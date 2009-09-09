@@ -589,15 +589,11 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',
-		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_controltag_to_extra.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, tag, tag_type, tag_zone, extra_table, extra_uid",
+		"fe_admin_fieldList" => "tag, tag_type, tag_zone, extra_table, extra_uid",
 	)
 );
 

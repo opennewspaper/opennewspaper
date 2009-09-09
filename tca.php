@@ -2377,18 +2377,10 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 $TCA["tx_newspaper_controltag_to_extra"] = array (
 	"ctrl" => $TCA["tx_newspaper_controltag_to_extra"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,tag,tag_type,tag_zone,extra_table,extra_uid"
+		"showRecordFieldList" => "tag,tag_type,tag_zone,extra_table,extra_uid"
 	),
 	"feInterface" => $TCA["tx_newspaper_controltag_to_extra"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
 		"tag" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag",		
@@ -2447,12 +2439,11 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, tag, tag_type, tag_zone, extra_table, extra_uid")
+		"0" => array("showitem" => "tag;;;;1-1-1, tag_type, tag_zone, extra_table, extra_uid")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
