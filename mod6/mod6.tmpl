@@ -91,7 +91,16 @@
 						</select>
 					</td>
 					<td>
-						<input name="extra_table[{$i}]" value="{$row.extra_table}">
+						<select name="extra_table[{$i}]">
+							{foreach from=$extra_types item=extra_type}
+								<option value="{$extra_type.table}"
+									{if $extra_type.title == $row.extra_table}
+										selected="selected"
+									{/if}>
+									{$extra_type.title}
+								</option>
+							{/foreach}
+						</select>
 					</td>
 					<td>{$row.extra_uid}</td>
 				<tr>
