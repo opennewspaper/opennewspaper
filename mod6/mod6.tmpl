@@ -47,8 +47,8 @@
 			<td>
 				<select name="extra_table[0]">
 					{foreach from=$extra_types item=extra_type}
-						<option value="{$extra_types.table}">
-							{$extra_types.title}
+						<option value="{$extra_type.table}">
+							{$extra_type.title}
 						</option>
 					{/foreach}
 				</select>
@@ -68,7 +68,10 @@
 					<td>
 						<select name="tag[{$i}]">
 							{foreach from=$tags item=tag}
-								<option value="{$tag.uid}">
+								<option value="{$tag.uid}"
+									{if $tag.tag == $row.tag}
+										selected="selected"
+									{/if}>
 									{$tag.tag}
 								</option>
 							{/foreach}
