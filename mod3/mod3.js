@@ -72,8 +72,6 @@
  			{ldelim}
 				method: 'get',
 				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime(),
-				onCreate: processing,
-				onSuccess: reload
 			{rdelim}
 		);
 	{rdelim}
