@@ -1,5 +1,7 @@
 <!-- begin mod6/mod6.tmpl -->
 
+{include file="../mod3/mod3.css"}
+
 {* Variables:
    $data		content of the control tag to extra mapping table
 *}
@@ -11,8 +13,12 @@
 				<td><strong>{$key}</strong></td>
 			{/foreach}
 		</tr>
-		{foreach from=$data item=row}
-			<tr>
+		{foreach from=$data item=row key=i}
+				{if ($i % 2 == 0)}
+					<tr class="bg1">
+				{else}
+					<tr class="bg2">
+				{/if}
 				{foreach from=$row item=value}
 					<td>{$value}</td>
 				{/foreach}
