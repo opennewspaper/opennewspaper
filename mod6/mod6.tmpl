@@ -65,7 +65,7 @@
 					</td>
 					<td>{$row.tag_type}</td>
 					<td>
-						<selectname="tag_zone[{$i}]">
+						<select name="tag_zone[{$i}]">
 							{foreach from=$tag_zones item=tag_zone}
 								<option value="{$tag_zone.uid}"
 									{if $tag_zone.name == $row.tag_zone}
