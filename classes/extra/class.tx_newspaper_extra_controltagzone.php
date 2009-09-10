@@ -87,7 +87,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *  \todo implement
 	 */
 	private function getControlTags() {
-		return array(1,2);
+		return array(1,2,3,4);
 	}
 	
 	private function getExtras(array $control_tags) {
