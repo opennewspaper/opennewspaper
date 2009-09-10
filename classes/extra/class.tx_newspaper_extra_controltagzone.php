@@ -47,6 +47,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
+		t3lib_devlog('render()', 'newspaper', 0, $extras);
 		if (!$extras) return;
 		
 		$rendered_extras = array();
@@ -99,6 +100,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
 			);
+			t3lib_div::devlog('getExtras()', 'newspaper', tx_newspaper::$query);
 			if ($extra_data) {
 				$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				break;
@@ -111,7 +113,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				foreach (explode(',', $this->getAttribute('default_extra')) as $extra_uid) {
 					$extra[] = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
 				}
-			} else return;
+			} else {
+				return;
+			}
 		}
 	}
 }
