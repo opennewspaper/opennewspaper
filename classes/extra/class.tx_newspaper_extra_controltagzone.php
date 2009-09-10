@@ -105,6 +105,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				foreach ($extras_data as $extra_data) {
 					$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				}
+				t3lib_div::devlog('Extras', 'newspaper', 0, $extra);
 				break;
 			}
 		}
