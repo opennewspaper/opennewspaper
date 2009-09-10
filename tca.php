@@ -1247,16 +1247,8 @@ $TCA["tx_newspaper_pagetype"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_value",		
 			"config" => Array (
-				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
-				"eval"     => "int",
-				"checkbox" => "0",
-				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
-				),
-				"default" => 0
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 	),
@@ -2337,7 +2329,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 			"config" => Array (
 				"type" => "group",	
 				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_extra_controltagzone",	
+				"allowed" => "tx_newspaper_tag_zone",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -2446,5 +2438,4 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>

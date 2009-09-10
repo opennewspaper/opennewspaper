@@ -351,7 +351,7 @@ CREATE TABLE tx_newspaper_pagetype (
 	normalized_name tinytext NOT NULL,
 	is_article_page tinyint(3) DEFAULT '0' NOT NULL,
 	get_var tinytext NOT NULL,
-	get_value int(11) DEFAULT '0' NOT NULL,
+	get_value tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
