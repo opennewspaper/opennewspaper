@@ -120,9 +120,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				return;
 			}
 		}
+		return $extra;
 	}
 	
-	return $extra;
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_ControlTagZone());
