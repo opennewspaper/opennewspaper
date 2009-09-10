@@ -275,7 +275,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
        				$this->content .= $GLOBALS['TYPO3_DB']->INSERTquery(self::controltag_to_extra_table, $values);
        			} else {
 		   			// update otherwise
-       				$this->content .= $GLOBALS['TYPO3_DB']->INSERTquery(self::controltag_to_extra_table, 'uid = ' . $uid, $values);       				
+       				$this->content .= $GLOBALS['TYPO3_DB']->UPDATEquery(self::controltag_to_extra_table, 'uid = ' . $uid, $values);       				
        			}
 			}
 		}
