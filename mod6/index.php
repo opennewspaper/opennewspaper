@@ -201,68 +201,40 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 		$this->handlePOST();
 		
-		switch((string)$this->MOD_SETTINGS['function'])	{
-			case 1:
-				$tag_zones = tx_newspaper::selectRows(
-					'uid, name', self::tag_zone_table
-				);
-				$this->smarty->assign('tag_zones', $tag_zones);
-
-				$tags = tx_newspaper::selectRows(
-					'uid, tag', self::tag_table,
-					'tag_type = \'' . self::getControlTagType() . '\''
-				);
-				$this->smarty->assign('tags', $tags);				
-
-				$extra_types = array();
-				foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
-					$extra_types[] = array(
-						'table' => $registered_extra->getTable(), 
-						'title' =>$registered_extra->getTitle()
-					);
-				}
-				$this->smarty->assign('extra_types', $extra_types);				
+		$this->smarty->assign('tag_zones', self::getAvailableTagZones());
+		$this->smarty->assign('tags', self::getAvailableTags());
+		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());				
 				
-				$data = tx_newspaper::selectRows(
-					'*', self::controltag_to_extra_table
-				);
+		$data = tx_newspaper::selectRows(
+			'*', self::controltag_to_extra_table, '', 'uid DESC'
+		);
 				
-				if ($data) {
-					foreach ($data as $index => $row) {
-						$tag = tx_newspaper::selectOneRow(
-							'tag', 'tx_newspaper_tag', 'uid = ' . $row['tag']
-						);
-						$data[$index]['tag'] = $tag['tag'];
-						$tag_zone = tx_newspaper::selectOneRow(
-							'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
-						);
-						$data[$index]['tag_zone'] = $tag_zone['name'];
+		if ($data) {
+			foreach ($data as $index => $row) {
+				$tag = tx_newspaper::selectOneRow(
+					'tag', 'tx_newspaper_tag', 'uid = ' . $row['tag']
+				);
+				$data[$index]['tag'] = $tag['tag'];
+				$tag_zone = tx_newspaper::selectOneRow(
+					'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
+				);
+				$data[$index]['tag_zone'] = $tag_zone['name'];
 						
-						try {
-							$extra = new $row['extra_table']($row['extra_uid']);
-							$data[$index]['extra_uid'] = $extra->getDescription();
-						} catch (tx_newspaper_EmptyResultException $e) {
-							$data[$index]['extra_uid'] = 
-								'<input name="extra_uid[' . $data[$index]['uid'] . ']" />';
-						}
-					}
-					$this->smarty->assign('data', $data);
-							
-					$this->content .= $this->doc->section(
-						'Message #1:', 
-						$this->smarty->fetch('mod6.tmpl'),
-						0, 1
-					);
+				try {
+					$extra = new $row['extra_table']($row['extra_uid']);
+					$data[$index]['extra_uid'] = $extra->getDescription();
+				} catch (tx_newspaper_EmptyResultException $e) {
+					$data[$index]['extra_uid'] = 
+						'<input name="extra_uid[' . $data[$index]['uid'] . ']" />';
 				}
-				break;
-			case 2:
-				$content='<div align=center><strong>Menu item #2...</strong></div>';
-				$this->content.=$this->doc->section('Message #2:',$content,0,1);
-			break;
-			case 3:
-				$content='<div align=center><strong>Menu item #3...</strong></div>';
-				$this->content.=$this->doc->section('Message #3:',$content,0,1);
-			break;			
+			}
+			$this->smarty->assign('data', $data);
+							
+			$this->content .= $this->doc->section(
+				'Message #1:', 
+				$this->smarty->fetch('mod6.tmpl'),
+				0, 1
+			);
 		}
 	}
 	
@@ -293,6 +265,31 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 		}		
 	}
+	
+	static private function getAvailableTagZones() {
+		return tx_newspaper::selectRows(
+			'uid, name', self::tag_zone_table
+		);
+	}
+
+	static private function getAvailableTags() {
+		return tx_newspaper::selectRows(
+			'uid, tag', self::tag_table,
+			'tag_type = \'' . self::getControlTagType() . '\''
+		);
+	}
+
+	static private function getAvailableExtraTypes() {
+		$extra_types = array();
+		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
+			$extra_types[] = array(
+				'table' => $registered_extra->getTable(), 
+				'title' =>$registered_extra->getTitle()
+			);
+		}
+		return $extra_types;
+	}
+	
 	static private function getControlTagType() {
 		return 'control';
 	}
