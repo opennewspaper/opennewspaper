@@ -89,6 +89,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *  \todo implement
 	 */
 	private function getControlTags() {
+		$tag_uids = array();
+		
 		if (intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
 			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
 			$tags = tx_newspaper::selectRows(
@@ -100,8 +102,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				' AND ' . self::tag_table . '.tag_type = \'' . self::control_tag_type .'\''
 			);
 			t3lib_div::devlog('getControlTags()', 'newspaper', 0, $tags);
+			foreach ($tags as $tag) $tag_uids[] = $tag['uid']; 
 		}
-		return array(1,2,3,4);
+		return $tag_uids;
 	}
 	
 	private function getExtras(array $control_tags) {
