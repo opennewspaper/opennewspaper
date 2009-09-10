@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_articlelist_auto.php
+ *  \file class.tx_newspaper_articlelist_emiautomatic.php
  * 
  *  This file is part of the TYPO3 extension "newspaper".
  * 

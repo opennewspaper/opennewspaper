@@ -133,46 +133,6 @@ CREATE TABLE `tx_newspaper_articlelist` (
   KEY `parent` (`pid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `tx_newspaper_articlelist`
---
-
-LOCK TABLES `tx_newspaper_articlelist` WRITE;
-/*!40000 ALTER TABLE `tx_newspaper_articlelist` DISABLE KEYS */;
-INSERT INTO `tx_newspaper_articlelist` VALUES (1,2483,1233332697,1233331971,1,256,0,0,0,0,0,'tx_newspaper_articlelist_auto',1,'1');
-/*!40000 ALTER TABLE `tx_newspaper_articlelist` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tx_newspaper_articlelist_auto`
---
-
-DROP TABLE IF EXISTS `tx_newspaper_articlelist_auto`;
-CREATE TABLE `tx_newspaper_articlelist_auto` (
-  `uid` int(11) NOT NULL auto_increment,
-  `pid` int(11) NOT NULL default '0',
-  `tstamp` int(11) NOT NULL default '0',
-  `crdate` int(11) NOT NULL default '0',
-  `cruser_id` int(11) NOT NULL default '0',
-  `sorting` int(10) NOT NULL default '0',
-  `deleted` tinyint(4) NOT NULL default '0',
-  `hidden` tinyint(4) NOT NULL default '0',
-  `starttime` int(11) NOT NULL default '0',
-  `endtime` int(11) NOT NULL default '0',
-  `fe_group` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`uid`),
-  KEY `parent` (`pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `tx_newspaper_articlelist_auto`
---
-
-LOCK TABLES `tx_newspaper_articlelist_auto` WRITE;
-/*!40000 ALTER TABLE `tx_newspaper_articlelist_auto` DISABLE KEYS */;
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (1,2484,1233331927,1233331927,1,256,0,0,0,0,0);
-/*!40000 ALTER TABLE `tx_newspaper_articlelist_auto` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tx_newspaper_articletype`
