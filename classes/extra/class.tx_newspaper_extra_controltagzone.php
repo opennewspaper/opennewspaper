@@ -47,8 +47,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Assigns extras to be rendered to the smarty template and renders it.
-	 *  If no Extras match, returns nothing.
+	/// Assigns extras to be rendered to the smarty template and renders it.
+	/** If no Extras match, returns nothing.
 	 */
 	public function render($template_set = '') {
 		
@@ -68,8 +68,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	/** Displays the Tag Yone operating on.
-	 */
+	/// Displays the Tag Zone operating on.
 	public function getDescription() {
 		$tag_zone = tx_newspaper::selectOneRow(
 			'name', self::tag_zone_table, 
@@ -78,7 +77,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $this->getTitle() . '(' . $tag_zone['name'] . ')';
 	}
 
-	/// title for module
 	public static function getModuleName() {
 		return 'np_control_tag_extra';
 	}
