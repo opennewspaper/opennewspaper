@@ -235,6 +235,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	public function copyDefaultArticle(array $must_have_extras) {
 
  		$new_article = $this->getDefaultArticle();
+ 		if (!$new_article instanceof tx_newspaper_Article) {
+ 			throw new tx_newspaper_InconsistencyException('getDefaultArticle() did not return an Article!');
+ 		}
 
 		//	zeroing the UID causes the article to be written to DB as a new object.
  		$new_article->setAttribute('uid', 0);
