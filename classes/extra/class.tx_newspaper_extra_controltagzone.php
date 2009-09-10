@@ -96,7 +96,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		foreach ($control_tags as $control_tag) {
 			$extra_data = tx_newspaper::selectZeroOrOneRows(
 				'extra_uid, extra_table', self::controltag_to_extra_table,
-				'tag = ' . $this->getAttribute('tag') .
+				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
 			);
 			if ($extra_data) {
