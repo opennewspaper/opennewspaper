@@ -199,10 +199,10 @@ CREATE TABLE tx_newspaper_article_tags_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_more_mm'
+# Table structure for table 'tx_newspaper_article_related_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_more_mm (
+CREATE TABLE tx_newspaper_article_related_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -248,7 +248,7 @@ CREATE TABLE tx_newspaper_article (
 	workflow_status int(11) DEFAULT '0' NOT NULL,
 	modification_user blob NOT NULL,
 	tags int(11) DEFAULT '0' NOT NULL,
-	more int(11) DEFAULT '0' NOT NULL,
+	related int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -325,27 +325,6 @@ CREATE TABLE tx_newspaper_articlelist (
 	list_uid int(11) DEFAULT '0' NOT NULL,
 	section_id blob NOT NULL,
 	notes tinytext NOT NULL,
-	
-	PRIMARY KEY (uid),
-	KEY parent (pid)
-);
-
-
-
-#
-# Table structure for table 'tx_newspaper_articlelist_auto'
-#
-CREATE TABLE tx_newspaper_articlelist_auto (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	sorting int(10) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	starttime int(11) DEFAULT '0' NOT NULL,
-	endtime int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -786,6 +765,28 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 	tag_zone blob NOT NULL,
 	extra_table tinytext NOT NULL,
 	extra_uid int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_extra_articlelinks'
+#
+CREATE TABLE tx_newspaper_extra_articlelinks (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	show_related_articles tinyint(3) DEFAULT '0' NOT NULL,
+	other_articles blob NOT NULL,
+	internal_links blob NOT NULL,
+	external_links blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

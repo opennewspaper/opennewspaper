@@ -157,7 +157,7 @@ $TCA["tx_newspaper_article"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_article.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, articletype_id, title, title_list, kicker, kicker_list, teaser, teaser_list, text, author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, inherits_from, publish_date, workflow_status, modification_user, tags, more",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, articletype_id, title, title_list, kicker, kicker_list, teaser, teaser_list, text, author, source_id, source_object, extras, sections, name, is_template, template_set, pagezonetype_id, inherits_from, publish_date, workflow_status, modification_user, tags, related",
 	)
 );
 
@@ -224,28 +224,6 @@ $TCA["tx_newspaper_articlelist"] = array (
 	),
 	"feInterface" => array (
 		"fe_admin_fieldList" => "hidden, starttime, endtime, list_table, list_uid, section_id, notes",
-	)
-);
-
-$TCA["tx_newspaper_articlelist_auto"] = array (
-	"ctrl" => array (
-		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_auto',		
-		'label'     => 'uid',	
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'sortby' => 'sorting',	
-		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',	
-			'starttime' => 'starttime',	
-			'endtime' => 'endtime',
-		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_articlelist_auto.gif',
-	),
-	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime",
 	)
 );
 
@@ -594,6 +572,26 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 	),
 	"feInterface" => array (
 		"fe_admin_fieldList" => "tag, tag_type, tag_zone, extra_table, extra_uid",
+	)
+);
+
+$TCA["tx_newspaper_extra_articlelinks"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelinks',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => "ORDER BY crdate",	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_articlelinks.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden, show_related_articles, other_articles, internal_links, external_links",
 	)
 );
 
