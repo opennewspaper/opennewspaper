@@ -23,6 +23,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	const description_length = 50; 
 	
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
+	const tag_zone_table = 'tx_newspaper_tag_zone';
 	
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -32,8 +33,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
 	public function __toString() {
 		try {
-		return 'Extra: UID ' . $this->getExtraUid() . ', Textbox Extra: UID ' . $this->getUid() .
-				' (Title: ' . $this->getAttribute('title') . ')';
+		return 'Extra: UID ' . $this->getExtraUid() . ', Control tag Extra: UID ' . $this->getUid() .
+				' (Tag zone: ' . $this->getAttribute('tag_zone') . ')';
 		} catch(Exception $e) {
 			return "ControlTagZone: Exception thrown!" . $e;
 		}	
@@ -63,9 +64,11 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	/** Displays the title and the beginning of the text.
 	 */
 	public function getDescription() {
-		return substr(
-			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('text'), 
-			0, self::description_length+2*strlen('<strong>')+1);
+		$tag_zone = tx_newspaper::selectOneRow(
+			'name', self::tag_zone_table, 
+			'uid = ' . $this->getAttribute('tag_zone')
+		);
+		return $this->getTitle() . '(' . $tag_zone['name'] . ')';
 	}
 
 	/// title for module
