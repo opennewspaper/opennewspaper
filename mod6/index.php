@@ -208,6 +208,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$data = tx_newspaper::selectRows(
 			'*', self::controltag_to_extra_table, '', 'uid DESC'
 		);
+		$this->content .= '<p>' . tx_newspaper::$query . '</p>';
 				
 		if ($data) {
 			foreach ($data as $index => $row) {
