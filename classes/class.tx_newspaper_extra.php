@@ -307,8 +307,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	
 	
 	/// The module name for the newspaper sysfolder
-	/** this is the default folder for data associated with newspaper etxension,
-	 *  overwrite in conrete Extras.
+	/** For the base class tx_newspaper_Extra this is set to the default folder
+	 *  for data associated with newspaper etxension.
+	 * 
+	 *  Overwrite this function in conrete Extras.
+	 * 
 	 *  \return Value for the \p tx_newspaper_module field in the \p pages table
 	 *  	of the SysFolder which stores objects of this class.
 	 */

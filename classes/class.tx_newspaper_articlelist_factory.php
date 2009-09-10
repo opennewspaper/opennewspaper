@@ -30,7 +30,6 @@
  */
 
 /// \todo All articlelist definitions must be known to this class, even those which are not part of tx_newspaper 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_auto.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_manual.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_semiautomatic.php');
 
