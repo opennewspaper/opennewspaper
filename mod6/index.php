@@ -206,7 +206,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());				
 				
 		$data = tx_newspaper::selectRows(
-			'*', self::controltag_to_extra_table, '', 'uid DESC'
+			'*', self::controltag_to_extra_table, '', '', 'uid DESC'
 		);
 		$this->content .= '<p>' . tx_newspaper::$query . '</p>';
 				
