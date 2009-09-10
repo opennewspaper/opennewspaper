@@ -81,6 +81,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 		$this->smarty = new tx_newspaper_Smarty();
 		$this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod6/'));
+
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
 		
 		parent::init();
 
@@ -192,35 +198,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	 */
 	function moduleContent()	{
 		global $LANG;
-		if (!($LANG instanceof language)) {
-			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
-			$LANG = t3lib_div::makeInstance('language');
-			$LANG->init('default');
-		}
 
-		if ($_POST) {
-			//	reorder $_POST so it is arranged as an array (
-			//		UIDs => array (field names => field values))
-			$data_by_uid = array();
-			foreach ($_POST as $field => $rows) {
-				if (in_array($field, self::$writable_fields)) {
-					foreach ($rows as $uid => $row) {
-						if (!$data_by_uid[$uid]) $data_by_uid[$uid] = array();
-						$data_by_uid[$uid][$field] = $row;
-					}
-				}
-			}
-			foreach ($data_by_uid as $uid => $values) {
-       			if ($uid == 0) {
-	       			// insert the shit if uid == 0
-					tx_newspaper::insertRows(self::controltag_to_extra_table, $values);
-       			} else {
-		   			// update otherwise
-					tx_newspaper::updateRows(self::controltag_to_extra_table, 'uid = ' . $uid, $values);
-       			}
-   				$this->content .= '<p>' . tx_newspaper::$query . '</p>';
-			}
-		}
+		$this->handlePOST();
 		
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
@@ -259,8 +238,13 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 						);
 						$data[$index]['tag_zone'] = $tag_zone['name'];
 						
-						$extra = new $row['extra_table']($row['extra_uid']);
-						$data[$index]['extra_uid'] = $extra->getDescription();
+						try {
+							$extra = new $row['extra_table']($row['extra_uid']);
+							$data[$index]['extra_uid'] = $extra->getDescription();
+						} catch (tx_newspaper_EmptyResultException $e) {
+							$data[$index]['extra_uid'] = 
+								'<input name="extra_uid[' . $data[$index]['uid'] . ']" />';
+						}
 					}
 					$this->smarty->assign('data', $data);
 							
@@ -284,6 +268,31 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	////////////////////////////////////////////////////////////////////////////
 	
+	private function handlePOST() {
+		if ($_POST) {
+			//	reorder $_POST so it is arranged as an array (
+			//		UIDs => array (field names => field values))
+			$data_by_uid = array();
+			foreach ($_POST as $field => $rows) {
+				if (in_array($field, self::$writable_fields)) {
+					foreach ($rows as $uid => $row) {
+						if (!$data_by_uid[$uid]) $data_by_uid[$uid] = array();
+						$data_by_uid[$uid][$field] = $row;
+					}
+				}
+			}
+			foreach ($data_by_uid as $uid => $values) {
+       			if ($uid == 0) {
+	       			// insert the shit if uid == 0
+					tx_newspaper::insertRows(self::controltag_to_extra_table, $values);
+       			} else {
+		   			// update otherwise
+					tx_newspaper::updateRows(self::controltag_to_extra_table, 'uid = ' . $uid, $values);
+       			}
+   				$this->content .= '<p>' . tx_newspaper::$query . '</p>';
+			}
+		}		
+	}
 	static private function getControlTagType() {
 		return 'control';
 	}
