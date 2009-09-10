@@ -256,8 +256,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 			foreach ($data_by_uid as $uid => $values) {
        			if ($uid == 0) {
-	       			// insert the shit if uid == 0
-					tx_newspaper::insertRows(self::controltag_to_extra_table, $values);
+	       			// insert the shit if uid == 0 and an Extra is selected
+	       			if (intval($values['extra_uid']))
+						tx_newspaper::insertRows(self::controltag_to_extra_table, $values);
        			} else {
 		   			// update otherwise
 					tx_newspaper::updateRows(self::controltag_to_extra_table, 'uid = ' . $uid, $values);
