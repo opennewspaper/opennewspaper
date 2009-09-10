@@ -365,7 +365,7 @@ class tx_newspaper_SaveHook {
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
 			/// \todo make default article list configurable
-			$al = new tx_newspaper_ArticleList_Auto(0, new tx_newspaper_Section($section_uid));
+			$al = new tx_newspaper_ArticleList_Semiautomatic(0, new tx_newspaper_Section($section_uid));
 			$al->setAttribute('crdate', time());
 			$al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 			$al->store();
