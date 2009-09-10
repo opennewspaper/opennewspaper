@@ -132,46 +132,7 @@ CREATE TABLE `tx_newspaper_articlelist` (
 -- Dumping data for table `tx_newspaper_articlelist`
 -- 
 
-INSERT INTO `tx_newspaper_articlelist` VALUES (1, 2997, 1248449732, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 1, 0x31);
-INSERT INTO `tx_newspaper_articlelist` VALUES (2, 2997, 1248450028, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 2, 0x32);
-INSERT INTO `tx_newspaper_articlelist` VALUES (3, 2997, 1248450042, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 3, 0x33);
-INSERT INTO `tx_newspaper_articlelist` VALUES (4, 2997, 1248450058, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 4, 0x34);
-INSERT INTO `tx_newspaper_articlelist` VALUES (5, 2997, 1248450082, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 5, 0x35);
-INSERT INTO `tx_newspaper_articlelist` VALUES (6, 2997, 1248450099, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 6, 0x36);
-INSERT INTO `tx_newspaper_articlelist` VALUES (7, 2997, 1248450130, 0, 0, 0, 0, 0, 0, 0, 'tx_newspaper_articlelist_auto', 7, 0x37);
 
--- --------------------------------------------------------
-
--- 
--- Table structure for table `tx_newspaper_articlelist_auto`
--- 
-
-CREATE TABLE `tx_newspaper_articlelist_auto` (
-  `uid` int(11) NOT NULL auto_increment,
-  `pid` int(11) NOT NULL default '0',
-  `tstamp` int(11) NOT NULL default '0',
-  `crdate` int(11) NOT NULL default '0',
-  `cruser_id` int(11) NOT NULL default '0',
-  `sorting` int(10) NOT NULL default '0',
-  `deleted` tinyint(4) NOT NULL default '0',
-  `hidden` tinyint(4) NOT NULL default '0',
-  `starttime` int(11) NOT NULL default '0',
-  `endtime` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`uid`),
-  KEY `parent` (`pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
-
--- 
--- Dumping data for table `tx_newspaper_articlelist_auto`
--- 
-
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (1, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (2, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (3, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (4, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (5, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (6, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `tx_newspaper_articlelist_auto` VALUES (7, 2997, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
