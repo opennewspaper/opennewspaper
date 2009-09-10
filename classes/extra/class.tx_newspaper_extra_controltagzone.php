@@ -95,7 +95,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		
 		///	Check if an Extra is assigned for the current tag zone for any control tag
 		foreach ($control_tags as $control_tag) {
-			$extras_data = tx_newspaper::selectRow(
+			$extras_data = tx_newspaper::selectRows(
 				'extra_uid, extra_table', self::controltag_to_extra_table,
 				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
@@ -106,6 +106,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 					$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				}
 			}
+			break;
 		}
 		
 		///	Check if default Extra(s) are set
