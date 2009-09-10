@@ -270,7 +270,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 			foreach ($data_by_uid as $uid => $values) {
 				$this->content .= "<p><strong>$uid</strong> " . print_r($values, 1) . "</p>";
-       			if ($uid = 0) {
+       			if ($uid == 0) {
 	       			// insert the shit if uid == 0
        				$this->content .= $GLOBALS['TYPO3_DB']->INSERTquery(self::controltag_to_extra_table, $values);
        			} else {
