@@ -257,17 +257,27 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			break;			
 		}
 		if ($_POST) {
+			//	reorder $_POST so it is arranged as an array (
+			//		UIDs => array (field names => field values))
 			$data_by_uid = array();
 			foreach ($_POST as $field => $rows) {
 				if (in_array($field, self::$writable_fields)) {
-					$this->content .= "<p><strong>$field</strong> " . print_r($rows, 1) . "</p>";
 					foreach ($rows as $uid => $row) {
 						if (!$data_by_uid[$uid]) $data_by_uid[$uid] = array();
 						$data_by_uid[$uid][$field] = $row;
 					}
 				}
 			}
-			$this->content .= print_r($data_by_uid, 1);
+			foreach ($data_by_uid as $uid => $values) {
+				$this->content .= "<p><strong>$uid</strong> " . print_r($values, 1) . "</p>";
+       			if ($uid = 0) {
+	       			// insert the shit if uid == 0
+       				$this->content .= $GLOBALS['TYPO3_DB']->INSERTquery(self::controltag_to_extra_table, $values);
+       			} else {
+		   			// update otherwise
+       				$this->content .= $GLOBALS['TYPO3_DB']->INSERTquery(self::controltag_to_extra_table, 'uid = ' . $uid, $values);       				
+       			}
+			}
 		}
 	}
 	
