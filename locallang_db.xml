@@ -69,6 +69,7 @@
 			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.tags">Tags</label>
+			<label index="tx_newspaper_article.more">More articles on the topic</label>
 			<label index="tx_newspaper_extra">Extra (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
@@ -250,6 +251,7 @@
 			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.tags">Schlagworte</label>
+			<label index="tx_newspaper_article.more">Weitere Artikel zum Thema</label>
 			<label index="tx_newspaper_extra">Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>

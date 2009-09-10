@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext: "newspaper"
 #
-# Auto generated 10-09-2009 14:02
+# Auto generated 10-09-2009 14:38
 #
 # Manual updates:
 # Only the data in the array - anything else is removed by next write.

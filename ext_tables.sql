@@ -197,6 +197,22 @@ CREATE TABLE tx_newspaper_article_tags_mm (
 
 
 
+
+#
+# Table structure for table 'tx_newspaper_article_more_mm'
+# 
+#
+CREATE TABLE tx_newspaper_article_more_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+  uid_foreign int(11) DEFAULT '0' NOT NULL,
+  tablenames varchar(30) DEFAULT '' NOT NULL,
+  sorting int(11) DEFAULT '0' NOT NULL,
+  KEY uid_local (uid_local),
+  KEY uid_foreign (uid_foreign)
+);
+
+
+
 #
 # Table structure for table 'tx_newspaper_article'
 #
@@ -232,6 +248,7 @@ CREATE TABLE tx_newspaper_article (
 	workflow_status int(11) DEFAULT '0' NOT NULL,
 	modification_user blob NOT NULL,
 	tags int(11) DEFAULT '0' NOT NULL,
+	more int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
