@@ -100,7 +100,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
 			);
-			t3lib_div::devlog('getExtras()', 'newspaper', 0, tx_newspaper::$query);
+			t3lib_div::devlog('getExtras()', 'newspaper', 0, array('query'=>tx_newspaper::$query, 'result'=>$extra_data));
 			if ($extra_data) {
 				$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				break;
