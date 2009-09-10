@@ -25,8 +25,6 @@ $TCA['tx_newspaper_extra_sectionlist']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_sectionlist.gif';
 $TCA['tx_newspaper_articlelist']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articlelist.gif';
-$TCA['tx_newspaper_articlelist_auto']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articlelist_auto.gif';
 $TCA['tx_newspaper_pagetype']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_pagetype.gif';
 $TCA['tx_newspaper_pagezonetype']['ctrl']['iconfile'] =
