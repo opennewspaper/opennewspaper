@@ -20,11 +20,16 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
+	///	SQL table matching tx_newspaer_Extra s to Control Tags and Tag Zones
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
+	///	SQL table n which Tag Zones are stored
 	const tag_zone_table = 'tx_newspaper_tag_zone';
+	///	SQL table in which tx_newspaper_Tag s are stored
 	const tag_table = 'tx_newspaper_tag';
+	///	SQL table associating tx_newspaper_Tag s with tx_newspaper_Article s 
 	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
 
+	///	\p tag_type field's value for Control Tags
 	const control_tag_type = 'control';
 		
 	public function __construct($uid = 0) {
@@ -42,14 +47,13 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Assigns stuff to the smarty template and renders it.
-	 *  \todo Just assign the attributes array, not specific attributes
+	/** Assigns extras to be rendered to the smarty template and renders it.
+	 *  If no Extras match, returns nothing.
 	 */
 	public function render($template_set = '') {
 		
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
-		t3lib_div::devlog('render()', 'newspaper', 0, array('control tags' => $control_tags, 'extras' => $extras));
 		if (!$extras) return;
 		
 		$rendered_extras = array();
@@ -64,7 +68,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $this->smarty->fetch($this);
 	}
 
-	/** Displays the title and the beginning of the text.
+	/** Displays the Tag Yone operating on.
 	 */
 	public function getDescription() {
 		$tag_zone = tx_newspaper::selectOneRow(
@@ -84,9 +88,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	////////////////////////////////////////////////////////////////////////////
 	
 	/// Find out which control tags are currently active
-	/** Just a dummy version for now
+	/** Reads the Control Tags associated with the currently displayed Article
+	 *  from the article_tag_mm_table.
 	 *  \return UIDs of control tags for the currently displayed Article
-	 *  \todo implement
 	 */
 	private function getControlTags() {
 		$tag_uids = array();
@@ -101,12 +105,19 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				self::article_tag_mm_table . '.uid_local = ' . $article->getUid() .
 				' AND ' . self::tag_table . '.tag_type = \'' . self::control_tag_type .'\''
 			);
-			t3lib_div::devlog('getControlTags()', 'newspaper', 0, $tags);
+
 			foreach ($tags as $tag) $tag_uids[] = $tag['uid']; 
 		}
 		return $tag_uids;
 	}
 	
+	///	Returns the Extras displayed for the Tag Zone of the object
+	/** \param $control_tags Control tags present
+	 *  \return Array of Extras which have been set up for the Tag Zone of the 
+	 * 		tx_newspaper_Extra_ControlTagZone object and any of the control tags
+	 * 		in \p $control_tags. Extras for the first matching tag are returned,
+	 * 		the following tags are ignored.
+	 */
 	private function getExtras(array $control_tags) {
 		$extra = array();
 		
@@ -117,12 +128,11 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
 			);
-			t3lib_div::devlog('getExtras()', 'newspaper', 0, array('query'=>tx_newspaper::$query, 'result'=>$extras_data));
+
 			if ($extras_data) {
 				foreach ($extras_data as $extra_data) {
 					$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				}
-				t3lib_div::devlog('Extras', 'newspaper', 0, $extra);
 				break;
 			}
 		}
