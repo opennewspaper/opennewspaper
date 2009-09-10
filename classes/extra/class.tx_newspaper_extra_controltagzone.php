@@ -19,14 +19,14 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  \p mod6, tx_newspaper_module6.
  */
 class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
-
-	const description_length = 50; 
 	
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
 	const tag_zone_table = 'tx_newspaper_tag_zone';
 	const tag_table = 'tx_newspaper_tag';
 	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
-	
+
+	const control_tag_type = 'control';
+		
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
@@ -92,11 +92,12 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		if (intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
 			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
 			$tags = tx_newspaper::selectRows(
-				'*', 
+				self::tag_table . '.uid',
 				self::tag_table . 
 					' JOIN ' . self::article_tag_mm_table . 
 					' ON ' . self::tag_table . '.uid = ' . self::article_tag_mm_table . '.uid_foreign',
-				self::article_tag_mm_table . '.uid_local = ' . $article->getUid()
+				self::article_tag_mm_table . '.uid_local = ' . $article->getUid() .
+				' AND ' . self::tag_table . '.tag_type = \'' . self::control_tag_type .'\''
 			);
 			t3lib_div::devlog('getControlTags()', 'newspaper', 0, $tags);
 		}
