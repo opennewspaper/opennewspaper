@@ -123,6 +123,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 * 		  fails silently. 
 			 */
 			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+			unset($this->attributes['query']);
 
 			$this->setUid(
 				tx_newspaper::insertRows(
