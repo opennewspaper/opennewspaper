@@ -24,6 +24,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
 	const tag_zone_table = 'tx_newspaper_tag_zone';
+	const tag_table = 'tx_newspaper_tag';
+	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
 	
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -87,6 +89,17 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *  \todo implement
 	 */
 	private function getControlTags() {
+		if (intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
+			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
+			$tags = tx_newspaper::selectRows(
+				'*', 
+				self::tag_table . 
+					' JOIN ' . self::article_tag_mm_table . 
+					' ON ' . self::tag_table . '.uid = ' . self::article_tag_mm_table . '.uid_foreign',
+				self::article_tag_mm_table . '.uid_local = ' . $article->getUid()
+			);
+			t3lib_div::devlog('getControlTags()', 'newspaper', 0, $tags);
+		}
 		return array(1,2,3,4);
 	}
 	
