@@ -95,15 +95,16 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		
 		///	Check if an Extra is assigned for the current tag zone for any control tag
 		foreach ($control_tags as $control_tag) {
-			$extra_data = tx_newspaper::selectZeroOrOneRows(
+			$extras_data = tx_newspaper::selectRow(
 				'extra_uid, extra_table', self::controltag_to_extra_table,
 				'tag = ' . $control_tag .
 				' AND tag_zone = ' . $this->getAttribute('tag_zone')
 			);
-			t3lib_div::devlog('getExtras()', 'newspaper', 0, array('query'=>tx_newspaper::$query, 'result'=>$extra_data));
-			if ($extra_data) {
-				$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
-				break;
+			t3lib_div::devlog('getExtras()', 'newspaper', 0, array('query'=>tx_newspaper::$query, 'result'=>$extras_data));
+			if ($extras_data) {
+				foreach ($extras_data as $extra_data) {
+					$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
+				}
 			}
 		}
 		
