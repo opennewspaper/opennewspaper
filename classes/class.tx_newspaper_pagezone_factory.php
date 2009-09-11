@@ -102,8 +102,12 @@ class tx_newspaper_PageZone_Factory {
 		
 		///	copy Extras from appropriate page zone
 		$parent = $pagezone_reborn->getParentForPlacement();
-		$pagezone_reborn->copyExtrasFrom($parent);
-
+		
+		if ($parent) {
+			/// copy iff parent section exists
+			$pagezone_reborn->copyExtrasFrom($parent);
+		}
+		
 		$pagezone_reborn->store();
 		
 		return $pagezone_reborn;
