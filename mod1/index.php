@@ -199,6 +199,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		exit();
 	}
 	function processDeletePage() {
+/// \todo: delete subsequent page zones too!
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
 #t3lib_div::devlog('papt param', 'newspaper', 0, $param);
