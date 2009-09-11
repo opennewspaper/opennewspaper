@@ -726,13 +726,13 @@ function changeWorkflowStatus(status, hidden_status) {
 			$id = ' id="' . $id . '" '; // if id is set, set build attribute id="..."
 		}
 
+		$backPath = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT'])) . 'typo3/'; // build bach path
 		if ($ahref == '' && $replaceWithCleargifIfEmpty) {
 			// hide icon (= replace with clear.gif)
-			$html = '<img' . $id . t3lib_iconWorks::skinImg('', 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
+			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
 		} else {
 			// show icon
-			//$html = '<img' . $id . t3lib_iconWorks::skinImg('', $image, 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
-			$html = '<img' . $id . t3lib_iconWorks::skinImg('', $image) . ' title="' . $title . '" alt="" />';
+			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
 		}
 		if ($ahref)
 			return $ahref . $html . '</a>'; // if linked wrap in link
