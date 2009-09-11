@@ -727,6 +727,9 @@ function changeWorkflowStatus(status, hidden_status) {
 		}
 
 		$backPath = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT'])) . 'typo3/'; // build bach path
+		if (substr($backPath, 0, 1) != '/') {
+			$backPath = '/' . $backPath;
+		}
 		if ($ahref == '' && $replaceWithCleargifIfEmpty) {
 			// hide icon (= replace with clear.gif)
 			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
