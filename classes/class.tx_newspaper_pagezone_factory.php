@@ -103,6 +103,7 @@ class tx_newspaper_PageZone_Factory {
 		///	copy Extras from appropriate page zone
 		$parent = $pagezone_reborn->getParentForPlacement();
 		
+/// \todo Helge: alternative: getParentForPlacement() could return an empty pagezone instead of null - would that be better??? 
 		if ($parent) {
 			/// copy iff parent section exists
 			$pagezone_reborn->copyExtrasFrom($parent);
