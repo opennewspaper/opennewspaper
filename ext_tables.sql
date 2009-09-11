@@ -832,5 +832,5 @@ CREATE TABLE tx_newspaper_article (
 
 # Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
 CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset INT(11) NOT NULL DEFAULT 0
+	offset int(11) DEFAULT '0' NOT NULL
 );
