@@ -722,25 +722,17 @@ function changeWorkflowStatus(status, hidden_status) {
 		$width = 16;
 		$height = 16;
 
-		// modify path if script in typo3conf/ext is called -> probably in a module
-		$backPath = '';
-		if (strpos($_SERVER['SCRIPT_FILENAME'], 'typo3conf/ext') > 0 && 
-			substr(PATH_typo3, 0, strlen($_SERVER['DOCUMENT_ROOT'])) == $_SERVER['DOCUMENT_ROOT']
-		) {
-/// \todo: build correct backpath
-			$backPath = ((TYPO3_OS == 'WIN')? '' : '/') . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']));
-		}
-	
-		if ($id)
+		if ($id) {
 			$id = ' id="' . $id . '" '; // if id is set, set build attribute id="..."
+		}
 
 		if ($ahref == '' && $replaceWithCleargifIfEmpty) {
 			// hide icon (= replace with clear.gif)
-			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
+			$html = '<img' . $id . t3lib_iconWorks::skinImg('', 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
 		} else {
 			// show icon
 			//$html = '<img' . $id . t3lib_iconWorks::skinImg('', $image, 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
-			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
+			$html = '<img' . $id . t3lib_iconWorks::skinImg('', $image) . ' title="' . $title . '" alt="" />';
 		}
 		if ($ahref)
 			return $ahref . $html . '</a>'; // if linked wrap in link
