@@ -668,6 +668,33 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $section->getAttribute('section_name');
 	}
 	
+	
+
+	/// returns true if pagezone is an article
+	public function isArticle() {
+		return $this instanceof tx_newspaper_article;
+	}
+	/// returns true if pagezone is a pagezone_page
+	public function isPagezonePage() {
+		return !($this->isArticle());
+	}
+	/// returns true if pagezone is a default article
+	public function isDefaultArticle() {
+		if ($this->isPagezonePage()) {
+			return false;
+		}
+		return ($this->getAttribute('is_template') == 1);
+	}
+	/// returns true if pagezone is a concrete article
+	public function isConcreteArticle() {
+		if ($this->isPagezonePage()) {
+			return false;
+		}
+		return ($this->getAttribute('is_template') == 0);
+	}
+	
+	
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	internal functions (public only to enable unit testing)
