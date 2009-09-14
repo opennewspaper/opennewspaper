@@ -1,11 +1,6 @@
 {* debug *}
 {* tx_newspaper_be->renderExtraInArticle generates extra backend within article *}
 
-{if ($IS_CONCRETE_ARTICLE)}
-	{* render top new icon for concrete article here, because the icon has to be generated every time the list of extras is updated *}
-	<a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true); return false;">{$NEW_TOP_ICON}</a> 
-{/if}
-
 {if ($IS_CONCRETE_ARTICLE)}<div id="extras">{/if} {* only list of extra will be reloaded in article *}
 <script language="javascript" >
 	{section name=i loop=$EXTRA_DATA} {* store default values for paragraphs *}

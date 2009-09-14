@@ -353,7 +353,7 @@ function findElementsByName(name, type) {
 
 
 
-	public static function renderBackendSmartyPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false) {
+	public static function renderBackendSmartyPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
 		global $LANG;
 
 		$data = array();
@@ -410,6 +410,7 @@ function findElementsByName(name, type) {
 		$smarty->assign('SHOW_LEVELS_ABOVE', $show_levels_above);
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
+		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
 
 		/// "new to top" buttons vary for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
 		if ($data[0]['pagezone_type'] instanceof tx_newspaper_article && $data[0]['pagezone_type']->getAttribute('is_article') == 0) {
@@ -439,7 +440,7 @@ function findElementsByName(name, type) {
 					$pagezone[$i] = false; // message "no extra so far" will be displayed in mod3.tmpl
 				}
 			} else {
-				// nneded for concrete articles
+				// needed for concrete articles
 				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 	
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);

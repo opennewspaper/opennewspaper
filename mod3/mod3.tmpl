@@ -5,10 +5,12 @@
 
 </head></body>
 <br />
-
 {if (!$IS_CONCRETE_ARTICLE)}
 	{* checkbox: show levels above for pagezone_page and default article *}
 	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
+{/if}
+{if ($IS_CONCRETE_ARTICLE && !$IS_CONCRETE_ARTICLE_RELOAD) }
+	<a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true); return false;">{$NEW_TOP_ICON}</a>
 {/if}
 
 {section name=i loop=$DATA}

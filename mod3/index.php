@@ -198,7 +198,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->moveExtraAfter($e, $origin_uid);
 				
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false, true);
 		}
 		
 		die();
@@ -215,7 +215,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->removeExtra($e);
 				
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false, true);
 		}
 		
 		die();
