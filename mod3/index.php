@@ -71,57 +71,54 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private $show_levels_above;
 	
 	
-	/**
-	 * Initializes the Module
-	 * @return	void
-	 */
-	function init()	{
-		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/// functions call by ajax calls //////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
-		parent::init();
 	
-	}
-
-	/**
-	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-	 *
-	 * @return	void
-	 */
-	function menuConfig()	{
-		global $LANG;
-		parent::menuConfig();
-	}
-
-
 	private function processToggleShowLevelsAbove($checked) {
 		global $BE_USER;
-		if (strtolower($checked) == 'true')
+		if (strtolower($checked) == 'true') {
 			$checked = true;
-		else
+		} else {
 			$checked = false;
-		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/show_levels_above", $checked);
+		}
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/show_levels_above", $checked); // store status of checkbox for be_user
 		die();
 	}
 
 	private function processPageTypeChange($pt_uid) {
 		global $BE_USER;
-		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_type_id", intval($pt_uid));
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_type_id", intval($pt_uid)); // store page type for be_user
 		die();
 	}
 
 	private function processPageZoneTypeChange($pzt_uid) {
 		global $BE_USER;
-		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_type_id", intval($pzt_uid));
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_type_id", intval($pzt_uid)); // store pagezone type for be_user
 		die();
 	}
 
+	/// called via ajax: insert extra on pagezone (if concrete article html code with list of extras is returned)
+	/** \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
+	 *  \param $extra_uid uid of extra
+	 */
 	private function processExtraInsertAfter($origin_uid, $pz_uid, $paragraph=false) {
-/// \todo: remove if not needed
-//		if ($paragraph == 'false') {
-//			$paragraph = false;
-//		} else {
-//			$paragraph = intval($paragraph);
-//		}
 		
 		$e = new tx_newspaper_Extra_Image();
 		$e->setAttribute('title', '');
@@ -132,6 +129,11 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e->store();
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->insertExtraAfter($e, intval($origin_uid));
+		
+		if ($pz->isConcreteArticle()) {
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+		}
+		
 		die();
 	}
 	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
@@ -164,7 +166,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
 		
 		$pz->insertExtraAfter($e, $origin_uid);		
-
+//\todo: close.html/close_in_afrticle.html
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
 		die();
 	}	
@@ -181,20 +183,41 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e->store();
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->insertExtraAfter($e, $origin_uid);
+		
 		die();
 	}
 
+	/// called via ajax: move extra on pagezone (if concrete article html code with list of extras is returned)
+	/** \param $origin_uid uid of extra AFTER that the extra to be moved is moved to
+	 *  \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
+	 *  \param $extra_uid uid of extra
+	 */
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
+				
+		if ($pz->isConcreteArticle()) {
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+		}
+		
 		die();
 	}
 
+	/// called via ajax: delete extra on pagezone (if concrete article html code with list of extras is returned)
+	/** \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
+	 *  \param $extra_uid uid of extra
+	 */
 	private function processExtraDelete($pz_uid, $extra_uid) {
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$pz->removeExtra($e);
+				
+		if ($pz->isConcreteArticle()) {
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+		}
+		
 		die();
 	}
 
@@ -272,26 +295,41 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		/// \todo: check permissions
 //t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
+		// delete etxra
+		if (t3lib_div::_GP('extra_delete') == 1) {
+			$this->processExtraDelete(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
+		}
+
+		// insert extra
+		if (t3lib_div::_GP('extra_insert_after') == 1) {
+			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
+		}
+
+		// move etxra
+		if (t3lib_div::_GP('extra_move_after') == 1) {
+			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
+		}
+
+
+
+
+
+
+
+
 		if (t3lib_div::_GP('toggle_show_levels_above') == 1) {
 			$this->processToggleShowLevelsAbove(t3lib_div::_GP('checked')); 
 		}
 
-		if (t3lib_div::_GP('extra_insert_after') == 1) {
-			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
-		}
 		if (t3lib_div::_GP('extra_insert_after_dummy') == 1) {
 /// \todo: remove after testing
 			$this->processExtraInsertAfterDummy(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid')); 
 		}
 
 
-		if (t3lib_div::_GP('extra_move_after') == 1) {
-			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
-		}
 
-		if (t3lib_div::_GP('extra_delete') == 1) {
-			$this->processExtraDelete(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
-		}
+
+
 
 		if (t3lib_div::_GP('extra_set_show') == 1) {
 			$this->processExtraSetShow(t3lib_div::_GP('extra_uid'), t3lib_div::_GP('show')); 
@@ -338,12 +376,12 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 
-	private function getChoseExtraForm($origin_uid, $pz_uid, $paragraph=false, $new_at_top=false) {
+	private function getChoseExtraForm($origin_uid, $pz_uid, $paragraph=false, $new_at_top=0) {
 		global $LANG;
 //debug(array($origin_uid, $pz_uid, $paragraph));
 
 		// convert params, sent by js, so false is given as string, not a boolean
-/// \todo: find a better way ...
+/// \todo: switch to 0/1 instead of false/true 
 		if ($new_at_top == 'false') {
 			$new_at_top = false;
 		} else {
@@ -398,6 +436,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			$smarty->assign('NEW_AT_TOP', true);
 		}
 		
+		
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+		$smarty->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
 		
 		$html = $smarty->fetch('mod3_new_extra.tmpl');
 
@@ -717,6 +758,33 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_id", $this->page_type_id);
 		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_id", $this->pagezone_type_id);		
 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Initializes the Module
+	 * @return	void
+	 */
+	function init()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	
+		parent::init();
+	
+	}
+
+	/**
+	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	 *
+	 * @return	void
+	 */
+	function menuConfig()	{
+		global $LANG;
+		parent::menuConfig();
 	}
 
 }

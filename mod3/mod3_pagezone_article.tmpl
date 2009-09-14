@@ -1,4 +1,12 @@
 {* debug *}
+{* tx_newspaper_be->renderExtraInArticle generates extra backend within article *}
+
+{if ($IS_CONCRETE_ARTICLE)}
+	{* render top new icon for concrete article here, because the icon has to be generated every time the list of extras is updated *}
+	<a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true); return false;">{$NEW_TOP_ICON}</a> 
+{/if}
+
+{if ($IS_CONCRETE_ARTICLE)}<div id="extras">{/if} {* only list of extra will be reloaded in article *}
 <script language="javascript" >
 	{section name=i loop=$EXTRA_DATA} {* store default values for paragraphs *}
 		document.def_para[{$EXTRA_DATA[i].uid}] = {$EXTRA_DATA[i].paragraph};
@@ -59,44 +67,46 @@
 					<span style="display: none" id="save_para_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'para'); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'para'); return false;">{$UNDO_ICON}</a></span> 
 				</td>
 
-				<td> 
+				<td>
+{* edit *}
 					{if $EXTRA_DATA[i].origin_placement == true} 
 					  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid});">{$EDIT_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
 					{/if} 
 					
-					<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].paragraph}, false);">{$NEW_BELOW_ICON}</a>
-					
+{* new after *}
+					<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].paragraph}, false, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$NEW_BELOW_ICON}</a>
+
+{* move up/down *}					
 					{* calculate index for origin uid for moving extras up and down *}	
 					{math assign="index_minus_one" equation="x-1" x=$smarty.section.i.index}
 					{math assign="index_minus_two" equation="x-2" x=$smarty.section.i.index}
 					{math assign="index_plus_one" equation="x+1" x=$smarty.section.i.index}
 {* |i-1:{$EXTRA_DATA[$index_plus_one].paragraph}|i:{$EXTRA_DATA[i].paragraph}| *}
 {* |{$EXTRA_DATA[$index_minus_one].origin_uid}|{$EXTRA_DATA[$index_minus_two].origin_uid}| *}
-
 					{if $EXTRA_DATA[$index_minus_one].paragraph != $EXTRA_DATA[i].paragraph} 
 					  {$EMPTY_ICON}
 					{else}
 					  {if !$EXTRA_DATA[$index_minus_two].origin_uid}
-					    <a href="javascript:extra_move_after(0, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_UP_ICON}</a> {* move to top *}
+					    <a href="javascript:extra_move_after(0, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$MOVE_UP_ICON}</a> {* move to top *}
 					  {else}
-						<a href="javascript:extra_move_after({$EXTRA_DATA[$index_minus_two].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_UP_ICON}</a>
+						<a href="javascript:extra_move_after({$EXTRA_DATA[$index_minus_two].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$MOVE_UP_ICON}</a>
 					  {/if}
 					{/if}
-			
 					{if $EXTRA_DATA[$index_plus_one].paragraph == $EXTRA_DATA[i].paragraph} 
-					  <a href="javascript:extra_move_after({$EXTRA_DATA[$index_plus_one].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid});">{$MOVE_DOWN_ICON}</a>
+					  <a href="javascript:extra_move_after({$EXTRA_DATA[$index_plus_one].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$MOVE_DOWN_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
 					{/if}
 			
-			
+{* delete *}
 					{if $EXTRA_DATA[i].origin_placement == true} 
-					  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}');">{$DELETE_ICON}</a>
+					  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$DELETE_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
 					{/if}
+
 				</td>
 		
 			{if ($DEBUG_OUTPUT && $ADMIN)}
@@ -108,3 +118,4 @@
 			</tr>
 	{/section}
 </table>
+{if ($IS_CONCRETE_ARTICLE)}</div> {/if}

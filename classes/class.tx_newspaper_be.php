@@ -341,7 +341,7 @@ function findElementsByName(name, type) {
 
 
 /// function to render extras (article or pagezone_page)
-/// \todo: move locallang and smarty templaes from mod3 to res/be/...
+/// \todo: move locallang and smarty templates from mod3 to res/be/...
 
 	function renderExtraInArticle($PA, $fobj) {
 
@@ -359,7 +359,7 @@ function findElementsByName(name, type) {
 		$data = array();
 		$extra_data = array();
 
-		/// add upper level page zones and extras, if any		
+		/// add upper level page zones and extras, if any
 		if ($show_levels_above) {
 			$pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
@@ -368,11 +368,12 @@ function findElementsByName(name, type) {
 			}
 		}
 
-		$is_concrete_article = false; // init
+		$is_concrete_article = 0; // init
 		/// add current page zone and extras
-		$data[] = self::extractData($pz);
+		$data[] = self::extractData($pz); // empty array if concrete article
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
-		if (sizeof($data) > 1 || sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
+//t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, $data);
+		if (sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
 			// so it's no concrete article 
 			
 			$s = $pz->getParentPage()->getParentSection();
@@ -388,7 +389,7 @@ function findElementsByName(name, type) {
 				$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
 			}
 		} else {
-			$is_concrete_article = true;
+			$is_concrete_article = 1; // render list of extras for a concrete article
 			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage  
 		}
 //t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array($pz, $data));
@@ -428,6 +429,7 @@ function findElementsByName(name, type) {
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
+			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available 
@@ -437,9 +439,11 @@ function findElementsByName(name, type) {
 					$pagezone[$i] = false; // message "no extra so far" will be displayed in mod3.tmpl
 				}
 			} else {
+				// nneded for concrete articles
+				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+	
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp);
-				$smarty_pz->assign('IS_CONCRETE_ARTICLE', true);
 				if ($tmp == false) {
 					$pagezone[$i] = false; // indicates "no extra so far" message
 				} else { 

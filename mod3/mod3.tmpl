@@ -6,23 +6,23 @@
 </head></body>
 <br />
 
-{if (!$IS_CONCRETE_ARTICLE)}<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />{/if}
+{if (!$IS_CONCRETE_ARTICLE)}
+	{* checkbox: show levels above for pagezone_page and default article *}
+	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
+{/if}
 
 {section name=i loop=$DATA}
 <div style="margin-bottom: 7px;">
 {* paragraph: use 0 (insert to top, when pagezone_type article is displayed), use false, when pagezone_page (no paragraph needed ...) *}
 
-{* differs depending on type pagezone_page and article: *}
+{* insert at top position, differs depending on type pagezone_page and article; icon for concrete article is set in mod3_pagezone_article.tmpl *}
 {if (!$IS_CONCRETE_ARTICLE)}
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}); return false;">{$NEW_TOP_ICON}</a> 
-{else}
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, 0); return false;">{$NEW_TOP_ICON}</a> 
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false); return false;">{$NEW_TOP_ICON}</a> 
 {/if}
 
- 	&nbsp;  
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	
-	{* Dropdown for page and page zone for last (=selected) section only *}
+	{* Dropdown for page and page zone for last (=selected) section only (and if NOT concrete article) *}
 	{if !$IS_CONCRETE_ARTICLE && $smarty.section.i.last} 
 	 	&nbsp; &nbsp; 
 		{$LABEL.pagetype}: 
