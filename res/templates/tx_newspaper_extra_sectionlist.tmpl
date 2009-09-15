@@ -23,7 +23,7 @@
 		{assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
 		{if $image}
 			{assign var=sizes value=$image->getSizes()}
-			<img src="{$image->getBasepath()}/{$sizes.preview}/{$image->getAttribute('image')}"
+			<img src="{$image->getBasepath()}/{$sizes.preview}/{$image->getAttribute('image_file')}"
 {*				 height="{$image->getHeights().preview}" width="{$image->getWidths().preview}"	*}
 				 alt="{if $image->getAttribute('alttext')}{$image->getAttribute('alttext')}{else}{$image->getAttribute('caption')}{/if}" />
 		{/if}
