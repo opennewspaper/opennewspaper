@@ -352,7 +352,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 	/// get active pages zone for this page
-	/// \return array active pages zone objects for given page
+	/** \return array of active pages zone objects for given page
+	 */
 	public function getActivePageZones() {
 
 		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');

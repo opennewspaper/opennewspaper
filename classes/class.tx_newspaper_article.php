@@ -535,7 +535,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	/// Generate a URL which links to the Article on the correct Page
-	/** \param $section Section from which the link is generated
+	/** \param $section Section from which the link is generated. Defaults to
+	 * 		using the article's primary section
 	 *  \param $pagetype PageType of the wanted page
 	 *  \todo Handle links to articles in sections other than their primary section
 	 *  \todo Handle PageType other than article page
@@ -543,19 +544,18 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 */
 	public function getLink(tx_newspaper_Section $section = null, 
 							tx_newspaper_PageType $pagetype = null) {
-		if ($section) {
-			throw new tx_newspaper_NotYetImplementedException(
-				'Links to articles in sections other than their primary section' .
-				' (uid ' . $this->getUid() . ')'
-			);
+		if (!$section) {
+			$section = $this->getPrimarySection();
 		}
-		$section = $this->getPrimarySection();
+		
 		if (!$section instanceof tx_newspaper_Section) {
-			throw new tx_newspaper_NotYetImplementedException(
-				'Links to articles with no primary section' .
-				' (uid ' . $this->getUid() . ')'
+			//	find section at the root of the section tree
+			//	uses the first section without a parent section
+			$section_data = tx_newspaper::selectOneRow(
+				'uid', tx_newspaper::getTable('tx_newspaper_Section'),
+				'NOT parent_section', '', 'uid'
 			);
-			
+			$section = new tx_newspaper_Section($section_data['uid']);
 		}
 		else {
 			$typo3page = $section->getTypo3PageID();	
