@@ -262,6 +262,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		/// Pass global attributes to Smarty
  		$this->smarty->assign('class', get_class($this));
  		$this->smarty->assign('attributes', $this->attributes);
+ 		$this->smarty->assign('normalized_name', $this->getPageZoneType()->getAttribute('normalized_name'));
  		
 		/** Pass the Extras on this page zone, already rendered, to Smarty
 		 *  \todo blockweise zusammenfuehren von extras gleiches layout (nicht vor taz launch)
