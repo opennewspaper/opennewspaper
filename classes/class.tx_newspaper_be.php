@@ -344,7 +344,6 @@ function findElementsByName(name, type) {
 /// \todo: move locallang and smarty templates from mod3 to res/be/...
 
 	function renderExtraInArticle($PA, $fobj) {
-
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
 //t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
@@ -388,9 +387,11 @@ function findElementsByName(name, type) {
 			for ($i = 0; $i < sizeof($pagezones); $i++) {
 				$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
 			}
+			$data[0]['article_id'] = -1; // only needed for concrete article
 		} else {
 			$is_concrete_article = 1; // render list of extras for a concrete article
-			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage  
+			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage
+			$data[0]['article_id'] = $pz->getUid(); // store article uid for backend buttons usage (edit)
 		}
 //t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array($pz, $data));
 		
@@ -756,6 +757,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	 * \return true, if files were added
 	 */
 	public static function addAdditionalScriptToBackend() {
+		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/util.js');
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_DISPLAY_MODE_IFRAME:
 				self::$backend_files_added = true; // nothing to add for iframe mode

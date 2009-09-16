@@ -13,8 +13,9 @@
 		return parseInt(document.getElementById('paragraph').value);
 	{rdelim}
 
-	function extra_insert_after_NEW(origin_uid, pz_uid, in_article) {ldelim}
-		var closehtml = (in_article)? "close.html" : "close_in_article.html";
+	function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article) {ldelim}
+		target_uid = article_uid > 0? article_uid : pz_uid; 
+		var closehtml = (in_article)? escape("close_reload_in_concrete_article.html?pz_uid=" + target_uid) : "close.html";
 		new_extra_paragraph_position_data = '';
 {if ($PARAGRAPH_USED == true)}
 		{* todo: move logic from smarty to js *}
@@ -34,7 +35,7 @@
 	{rdelim}
 
 	function extra_insert_after_POOL(origin_uid, pz_uid, in_article) {ldelim}
-if (in_article) alert("pool: in article not yet implemented");	
+if (in_article) alert("pool: in article not yet implemented");
 		new_extra_paragraph_position_data = '';
 {if ($PARAGRAPH_USED == true)}
 		{* todo: move logic from smarty to js *}
@@ -76,5 +77,5 @@ Paragraph:
 {/if}
 
 
-<input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_new}" />
+<input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID}, {$ARTICLE_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_new}" />
 <input onclick="extra_insert_after_POOL({$ORIGIN_UID}, {$PZ_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_from_pool}" />

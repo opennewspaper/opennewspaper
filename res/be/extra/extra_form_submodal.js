@@ -1,7 +1,11 @@
+/// \todo: deprecated??? 
+
+
 // FIXME: IE and Opera not running!!! 
 
 
-// TODO: naming modalbox|iframe var name: rename so modalbox/iframe version look more similar (identical???)
+
+//  TODO: naming modalbox|iframe var name: rename so modalbox/iframe version look more similar (identical???)
 
 
 

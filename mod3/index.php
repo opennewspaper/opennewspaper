@@ -114,6 +114,20 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
+
+
+	/// called via ajax: render list of extras for concrete article
+	/// \param $article_uid uid of concrete(!) article
+	private function processReloadExtaInConcreteArticle($article_uid) {
+		$a = new tx_newspaper_article($article_uid);
+		if ($a->isConcreteArticle()) {
+			echo tx_newspaper_be::renderBackendSmartyPageZone($a, false, true);
+		} 
+		die();
+	}
+
+
+
 	/// called via ajax: insert extra on pagezone (if concrete article html code with list of extras is returned)
 	/** \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
 	 *  \param $extra_uid uid of extra
@@ -136,6 +150,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 		die();
 	}
+	
 	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
 		$origin_uid = intval($origin_uid);
 		$pooled_extra_uid = intval($pooled_extra_uid);
@@ -221,6 +236,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
+	/// called via ajax: toggle show checkbox for extra on pagezone
+	/// \param $extra_uid uid of extra
+	/// \param $show boolean value wheater to show or not this extra
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));	
 		$e->setAttribute('show_extra', $show);
@@ -238,10 +256,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 	private function processSaveExtraField($pz_uid, $extra_uid, $value, $type) {
-
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
-		
 		switch(strtolower($type)) {
 			case 'para':
 				$e->setAttribute('position', 0); // move as first element to new paragraph
@@ -254,6 +270,11 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			default:
 				die('Unknown type when saving field: ' + $type);
 		}
+
+		if ($pz->isConcreteArticle()) {
+			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+		}
+
 		die(); 
 	}
 
@@ -310,6 +331,10 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
 		}
 
+		// reload list of extras (for concrete article)
+		if (t3lib_div::_GP('reload_extra_in_concrete_article') == 1) {
+			$this->processReloadExtaInConcreteArticle(t3lib_div::_GP('pz_uid')); 
+		}
 
 
 
@@ -439,6 +464,11 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$smarty->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
+		if ($pz->isConcreteArticle()) {
+			$smarty->assign('ARTICLE_UID', $pz->getUid()); // add article uid to smarty data (needed for reloading after inserting an extra)	
+		} else {
+			$smarty->assign('ARTICLE_UID', -1); 
+		}
 		
 		$html = $smarty->fetch('mod3_new_extra.tmpl');
 

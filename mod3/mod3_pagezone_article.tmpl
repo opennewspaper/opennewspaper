@@ -31,14 +31,17 @@
 		{else}
 			<tr class="bg2">
 		{/if}
+{* note *}
 				<td> {$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span> </td>
 				{if (!$IS_CONCRETE_ARTICLE)}
 					<td id="notes_td_{$EXTRA_DATA[i].uid}">
 						<input id="notes_{$EXTRA_DATA[i].uid}" onChange="changeField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
-						<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes'); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
+						<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes', 0); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
 					</td>
 				{/if}
+{* template set *}				
 				<td>{$EXTRA_DATA[i].template_set_HTML}</td>
+{* show *}
 				<td align="center">
 					{if $EXTRA_DATA[i].show == 0}
 					<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 1);" /> 
@@ -47,6 +50,7 @@
 					{/if}
 				</td>
 				{if (!$IS_CONCRETE_ARTICLE)}
+{* pass down *}
 					<td align="center">
 						{if $EXTRA_DATA[i].pass_down == 0}
 						<input type="checkbox" onchange="extra_set_pass_down({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 1);" />
@@ -56,22 +60,22 @@
 					</td>
 				{/if}
 				{if (!$IS_CONCRETE_ARTICLE)}<td> {$EXTRA_DATA[i].inherits_from} </td> {/if}
-		
+{* paragraph *}		
 				<td id="para_td_{$EXTRA_DATA[i].uid}" align="center">
 					<input id="para_{$EXTRA_DATA[i].uid}" onChange="changeField({$EXTRA_DATA[i].uid}, 'para'); return false;" style="width: 30px" type="text" value="{$EXTRA_DATA[i].paragraph}" />
-					<span style="display: none" id="save_para_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'para'); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'para'); return false;">{$UNDO_ICON}</a></span> 
+					<span style="display: none" id="save_para_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'para', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if}); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'para'); return false;">{$UNDO_ICON}</a></span> 
 				</td>
 
 				<td>
 {* edit *}
 					{if $EXTRA_DATA[i].origin_placement == true} 
-					  <a href="#" onclick="extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid});">{$EDIT_ICON}</a>
+					  <a href="javascript:extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid}, {$DATA.article_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$EDIT_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
 					{/if} 
 					
 {* new after *}
-					<a href="#" onclick="extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].paragraph}, false, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$NEW_BELOW_ICON}</a>
+					<a href="javascript:extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, {$EXTRA_DATA[i].paragraph}, false, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$NEW_BELOW_ICON}</a>
 
 {* move up/down *}					
 					{* calculate index for origin uid for moving extras up and down *}	

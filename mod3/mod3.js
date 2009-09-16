@@ -1,15 +1,21 @@
 <script language="javascript">
 
-// these function assume prototype to be available
+// these function assume prototype (ajax) be available
 
 //utility functions //////////////////////////////////////////////////////////
 
+function test() {ldelim}
+alert('test function found');
+{rdelim}
+
+	/// returns the reload type for ajax call depending on the flag "is_concrete_article"
 	function get_onSuccess_function(is_concrete_article) {ldelim}
 		if (is_concrete_article)
-			return 'reload_in_article';
+			return 'response_in_article';
 		else
 			return 'reload_page';
 	{rdelim}
+	/// returns the "processing spinner" type for ajax call depending on the flag "is_concrete_article"
 	function get_onCreate_function(is_concrete_article) {ldelim}
 		if (is_concrete_article)
 			return 'processing_in_article';
@@ -54,12 +60,24 @@
 		{rdelim}
 	{rdelim}
 
-	function reload_in_article(data) {ldelim}
+	/// just display the ajax response as extra list in concrete article
+	function response_in_article(data) {ldelim}
 		document.getElementById('extras').innerHTML = data.responseText;
 	{rdelim}
 	
-	
-	
+	/// the list of extras has to be reloaded from the server (needed for modal box or saveField ajax calls)
+	function reload_in_article(pz_uid) {ldelim}
+		var request = new top.Ajax.Request(
+				top.path + "typo3conf/ext/newspaper/mod3/index.php",
+				{ldelim}
+				method: 'get',
+				parameters: "reload_extra_in_concrete_article=1&pz_uid=" + pz_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: top.content.list_frame.processing_in_article,
+				onSuccess: response_in_article
+			{rdelim}
+		);
+	{rdelim}	
+		
 	
 	// functions for placement module only ////////////////////////////////////////
 	
@@ -108,12 +126,6 @@
 		);
 	{rdelim}
 	
-	/// prepare AJAX call in modal box: insert extra on pagezone_page or article
-	function extra_insert_after(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {ldelim}
-/// \todo: add be_mode
-		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article);
-	{rdelim}
-
 	/// AJAX call: move extra on pagezone_page or article
 	function extra_move_after(origin_uid, pz_uid, extra_uid, is_concrete_article) {ldelim}
 		var request = new top.Ajax.Request(
@@ -127,8 +139,31 @@
 		);
 	{rdelim}
 	
+	/// prepare AJAX call in modal box: edit extra on pagezone_page or article
+	function extra_edit(table, uid, pz_uid, is_concrete_article) {ldelim}
+/// \todo: add be_mode
+			subModalExtraEdit(table, uid, pz_uid, is_concrete_article);
+	{rdelim}
+
+	/// prepare AJAX call in modal box: insert extra on pagezone_page or article
+	function extra_insert_after(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {ldelim}
+/// \todo: add be_mode
+		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article);
+	{rdelim}	
 	
 	
+	/// store data in field (if field is changed a undo/store option is added to field; one field editable at a time)
+	function extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article) {ldelim}
+		var request = new top.Ajax.Request(
+				top.path + "typo3conf/ext/newspaper/mod3/index.php",
+				{ldelim}
+				method: 'get',
+				parameters: "extra_save_field=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&value=" + value + "&type=" + type + "&no_cache=" + new Date().getTime(),
+				onCreate: eval(get_onCreate_function(is_concrete_article)),
+				onSuccess: response_in_article
+			{rdelim}
+		);
+	{rdelim}
 	
 	
 /// modal box functions
@@ -137,7 +172,7 @@
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-		var closehtml = (is_concrete_article)? top.path + "typo3conf/ext/newspaper/mod3/close_in_concrete_article.html" : top.path + "typo3conf/ext/newspaper/mod3/close.html"; 
+		var closehtml = (is_concrete_article)? escape(top.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : top.path + "typo3conf/ext/newspaper/mod3/close.html"; 
 		top.showPopWin(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&returnUrl=" + closehtml,
 			width, 
@@ -147,7 +182,19 @@
 		);
 	{rdelim}
 	
-	
+	function subModalExtraEdit(table, uid, pz_uid, is_concrete_article) {ldelim}
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50;
+		var closehtml = (is_concrete_article)? escape(top.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : top.path + "typo3conf/ext/newspaper/mod3/close.html";
+		top.showPopWin(
+			top.path + "typo3/alt_doc.php?returnUrl=" + closehtml + "&edit[" + table + "][" + uid + "]=edit",
+			width, 
+			height, 
+			null, 
+			true
+		);
+	{rdelim}
+
 	
 	
 	
@@ -191,18 +238,7 @@
 	
 	
 	
-	
-	function extra_save_field(pz_uid, extra_uid, value, type) {ldelim}
-		var request = new top.Ajax.Request(
-				top.path + "typo3conf/ext/newspaper/mod3/index.php",
-				{ldelim}
-				method: 'get',
-				parameters: "extra_save_field=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&value=" + value + "&type=" + type + "&no_cache=" + new Date().getTime(),
-				onCreate: processing,
-				onSuccess: reload
-			{rdelim}
-		);
-	{rdelim}
+
 	
 
 
@@ -268,24 +304,7 @@
 	{rdelim}
 
 
-	function subModalExtraEdit(table, uid) {ldelim}
-		var width = Math.min(700, top.getViewportWidth() - 100); 
-		var height = top.getViewportHeight() - 50;
-		top.showPopWin(
-			top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/close.html&edit[" + table + "][" + uid + "]=edit",
-			width, 
-			height, 
-			null, 
-			true
-		);
-	{rdelim}
-
-	function extra_edit(table, uid) {ldelim}
-/// \todo: add be_mode
-		subModalExtraEdit(table, uid);
-	{rdelim}
-
-
+/// \to do: remove after all call are swicthed to page/article version
 	function processing() {ldelim}
 
 		img = document.createElement('img');
@@ -369,9 +388,9 @@
 		
 	{rdelim}
 
-	function saveField(pz_uid, extra_uid, type) {ldelim}
+	function saveField(pz_uid, extra_uid, type, is_concrete_article) {ldelim}
 		value = document.getElementById(type + '_' + extra_uid).value;
-		extra_save_field(pz_uid, extra_uid, value, type);
+		extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article);
 		
 		// store this value as new default (not needed if page is reloaded ...)
 		switch(type) {ldelim}
