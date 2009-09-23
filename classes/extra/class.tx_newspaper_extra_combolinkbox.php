@@ -37,7 +37,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	
 	/// Assigns Articles and Links to the smarty template and renders it.
 	/** Smarty template:
-	 *  \include ../../res/templates/tx_newspaper_extra_combolinkbox.tmpl
+	 *  \include res/templates/tx_newspaper_extra_combolinkbox.tmpl
 	 */
 	public function render($template_set = '') {
 		
