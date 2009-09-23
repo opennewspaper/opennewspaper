@@ -4,6 +4,20 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
 
 /// A tx_newspaper_Extra that displays a bio for a contributor
 /** A photo of an author is displayed along with some biographical text.
+ *  
+ *  Attributes:
+ *  - \p template_set (string)
+ *  - \p pool (bool)
+ *  - \p author_name (string)
+ *  - \p author_id (string)
+ *  - \p image_file (string)
+ *  - \p photo_source (string)
+ *  - \p bio_text (string)
+ * 
+ *	The render() function is inherited from tx_newspaper_Extra_Image, but of
+ *  course uses tx_newspaper_extra_bio.tmpl. Ah, the joys of inheritance...
+ *  \include res/templates/tx_newspaper_extra_bio.tmpl
+ * 
  *  \todo Import the box automatically from the pool when the Article is
  * 		imported.
  */
@@ -18,24 +32,8 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 		}
 	}
 	
-	/** Assign the attributes to a Smarty template.
-	 *  \param $template_set Template set to use
-	 */
-/*	public function render($template_set = '') {
-		t3lib_div::devlog('tx_newspaper_extra_Bio::render()', 'newspaper', 0, 
-			array(
-				'uid' => $this->getUid(), 
-				'extra uid' => $this->getExtraUid(),
-			)
-		);
-
-		$this->prepare_render($template_set);
-		
-		// ...
-		
-		return $this->smarty->fetch($this);
-	}
-*/
+	
+	
 	/// A description to identify the bio box in the BE
 	/** Shows the author's name and the start of the text.
 	 */

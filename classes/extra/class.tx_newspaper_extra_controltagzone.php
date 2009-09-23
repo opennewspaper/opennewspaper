@@ -17,6 +17,11 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  * 
  *  The correlation from Extras to Control Tags is done in the Backend Module
  *  \p mod6, tx_newspaper_module6.
+ * 
+ *  Attributes:
+ *  - \p tag_zone (UID of tx_newspaper_tag_zone record)
+ *  - \p tag_type (string)
+ *  - \p default_extra (UIDs of tx_newspaper_Extra records)
  */
 class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
@@ -49,6 +54,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
 	/// Assigns extras to be rendered to the smarty template and renders it.
 	/** If no Extras match, returns nothing.
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_controltagzone.tmpl
 	 */
 	public function render($template_set = '') {
 		
