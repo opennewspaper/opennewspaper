@@ -29,6 +29,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
 class tx_newspaper_Article extends tx_newspaper_PageZone 
 	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
+	const article_related_table = 'tx_newspaper_article_related_mm';
+	
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	magic methods ( http://php.net/manual/language.oop5.magic.php )
