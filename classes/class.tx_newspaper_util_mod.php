@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_util_mod.php
  *
- *  \author Oliver Schröder <newspaper@schroederbros.de>
+ *  \author Oliver Schrï¿½der <newspaper@schroederbros.de>
  *  \date Mar 21, 2009
  */
 
@@ -11,8 +11,8 @@ class tx_newspaper_UtilMod {
 	
 	
 	/// converts $_POST data to an url encoded query string
-	/** \param array $overwrite entries is this array overwrite the current $_POST item
-	  * \return string querystring (some entries might have been overwritten)
+	/** \param $overwrite entries is this array overwrite the current $_POST item
+	  * \return querystring (some entries might have been overwritten)
 	  */ 
 	static public function convertPost2Querystring(array $overwrite=array()) {
 		$item = array();

@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *  
- *  \author Oliver Schröder <typo3@schroederbros.de>
+ *  \author Oliver Schrï¿½der <typo3@schroederbros.de>
  *  \date Feb 9, 2009
  */
 
@@ -75,6 +75,7 @@ class tx_newspaper_Sysfolder {
  
   	/// creates a sysfolder (in Typo3 table pages)
  	/** \param $module_name name of module
+ 	/** \param $sysfolder_name Title of sys folder
  	 */	
 	private function createSysfolder($module_name, $sysfolder_name) {
 		

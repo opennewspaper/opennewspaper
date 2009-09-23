@@ -15,9 +15,9 @@ class tx_newspaper_SaveHook {
 	}
 
 	/// the checkbox is_article in pagezonetype can't be unchecked later!
-	/** \param string $table table name in hook
-	 *  \param string $field name of single field currently processed in hook 
-	 *  \param array $row data to be written
+	/** \param $table table name in hook
+	 *  \param $field name of single field currently processed in hook 
+	 *  \param $row data to be written
 	 *  \return void 
 	 */
 	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {

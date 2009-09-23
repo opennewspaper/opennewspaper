@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Oliver Schröder <typo3@schroederbros.de>
+*  (c) 2008 Oliver Schrï¿½der <typo3@schroederbros.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -52,9 +52,8 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'AJAX' for the 'newspaper' extension.
  *
- * @author	Oliver Schröder <typo3@schroederbros.de>
+ * @author	Oliver Schrï¿½der <typo3@schroederbros.de>
  * @package	TYPO3
- * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module1 extends t3lib_SCbase {
 				var $pageinfo;

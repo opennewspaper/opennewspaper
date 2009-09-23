@@ -117,7 +117,9 @@ class tx_newspaper_ReadersForum extends tx_newspaper_Extra_MostCommented {
 	/** reimplemented from tx_hptazfavorites_pi2, called via late binding from
 	 *  tx_hptazfavorites_pi2::displayMostCommented()
 	 *
-	 *	@param uid uid of the corresponding article							  */
+	 *	\param $uid uid of the corresponding article
+	 *  \param $total Total number of comments for article \p $uid
+	 */
 	protected function getLatestComments($uid, $total) {
 
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
