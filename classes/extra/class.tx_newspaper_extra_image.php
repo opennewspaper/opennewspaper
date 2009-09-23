@@ -298,7 +298,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	///	Where Typo3 stores uploaded images
 	const uploads_folder = 'uploads/tx_newspaper';
 	
-    /// path to <tt>convert(1)<tt>
+    /// path to <tt>convert(1)</tt>
     const convert = '/usr/bin/convert';
 
 	/// Name of the size for thumbnail images displayed in the BE
@@ -325,7 +325,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	
 }
 
-tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_image());
+tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image());
 
 //  Popups displaying enlarged images are handled here
 if ($_GET['bild_fuer_artikel']) { 

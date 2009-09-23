@@ -127,8 +127,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 
 	/// called via ajax: insert extra on pagezone (if concrete article html code with list of extras is returned)
-	/** \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
-	 *  \param $extra_uid uid of extra
+	/** \param $origin_uid origin UID of Extra after which to insert a new one
+	 *  \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
+	 *  \param $paragraph If in an Article, paragraph in which to insert
 	 */
 	private function processExtraInsertAfter($origin_uid, $pz_uid, $paragraph=false) {
 		

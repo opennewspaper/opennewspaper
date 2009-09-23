@@ -134,8 +134,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 
 	 *  \return List of articles currently on the list, with controls to 
 	 *  	rearrange the articles
-	 * 
-	 *  \link res/templates/tx_newspaper_articlelist_semiautomatic.tmpl
 	 */
 	public function displayListedArticles($PA, $fobj) {
 

@@ -47,8 +47,9 @@ class tx_newspaper_Page
 		implements tx_newspaper_StoredObject, tx_newspaper_Renderable {
 	
 	/// Construct a page from DB
-	/** \param $parent The newspaper section the page is in
-	 *  \param $condition SQL WHERE condition to further specify the page
+	/** \param $parent Either the newspaper section the page is in, or the UID
+	 * 		of the page in the DB
+	 *  \param $type page type of which a page is created
 	 */
 	public function __construct($parent = null, tx_newspaper_PageType $type = null) {
 		if ($parent instanceof tx_newspaper_Section) {
@@ -167,8 +168,9 @@ class tx_newspaper_Page
 		return $this->getUid();		
 	}
 
-	/// \param tx_newspaper_Section $s section
-	/// \return true if page can be accessed and if assigned to given section(FE/BE use enableFields)
+	/** \param $s section
+	 *  \return true if page can be accessed and if assigned to given section(FE/BE use enableFields)
+	 */
 	function isValid(tx_newspaper_Section $s) {
 		// check if page is valid
 		try {
@@ -235,9 +237,9 @@ class tx_newspaper_Page
 	 *  - the template set for the page is set via TSConfig
 	 *  - the name for the page is found via its page type
 	 *  - if the template <tt>tx_newspaper_page.tmpl</tt> exists under directory
-	 *    <tt><template_set>/<page_type></tt>, use it
+	 *    <tt>template_set/page_type</tt>, use it
 	 *  - else, if <tt>tx_newspaper_page.tmpl</tt> exists under directory
-	 *    <tt><template_set></tt>, use it
+	 *    <tt>template_set</tt>, use it
 	 *  - else, use the default template under 
 	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>
 	 * 
@@ -337,8 +339,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 	/// get page zone object for given page zone page object
-	/** \param tx_newspaper_PageZone_Page $pzp page zone page object
-	 *  \return tx_newspaper_PageZone parent page zone object
+	/** \param $pzp page zone page object
+	 *  \return parent page zone object
 	 */
 	public static function getPageOfPageZonePage(tx_newspaper_PageZone_Page $pzp) {
 #t3lib_div::devlog('get pzp', 'newspaper', 0, $pzp->getAttribute('uid'));

@@ -289,7 +289,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	/// register an Extra
 	/**
 	 * every Extra has to register to be used
-	 * \param tx_newspaper_Extra $extra concrete Extra object
+	 * \param $extra concrete Extra object
 	 * \return true if this Extra was registered or false if Extra was registered already
 	 */
 	public static function registerExtra(tx_newspaper_Extra $extra) {

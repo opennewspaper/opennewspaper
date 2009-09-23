@@ -411,7 +411,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
 	/** \param $origin_uid 
-	 *  \param $extra The new, fully instantiated Extra to insert
+	 *  \param $insert_extra The new, fully instantiated Extra to insert
 	 *  \param $recursive If set, pass down the insertion to all inheriting PageZones
 	 *  \return DOCUMENT_ME
 	 */ 
@@ -440,6 +440,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
+	 *  \param $recursive if true, remove \p $remove_extra on inheriting page zones
 	 *  \return false if $remove_extra was not found, true otherwise
 	 *  \todo DELETE WHERE origin_uid = ...
 	 */
@@ -500,6 +501,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** \param $move_extra The Extra to be moved
 	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
 	 * 			will be inserted. If $origin_uid == 0, insert at the beginning.
+	 *  \param $recursive if true, move \p $move_extra after Extra with origin
+	 *  		UID \p $origin_uid on inheriting page zones
 	 *  \exception tx_newspaper_InconsistencyException If $move_extra is not
 	 * 			present on the PageZone
 	 */	
@@ -708,8 +711,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 * 
 	 *  Does nothing if the concrete PageZone is already linked in the abstract table. 
 	 * 
-	 *  \param $uid UID of the PageZone in the table of concrete PageZone
-	 *  \param $table Table of concrete PageZone
 	 *  \return UID of abstract PageZone record
 	 */ 
 	public function createPageZoneRecord() {
