@@ -187,6 +187,11 @@
 			<label index="tx_newspaper_extra_articlelinks.other_articles">Other articles</label>
 			<label index="tx_newspaper_extra_articlelinks.internal_links">Internal links</label>
 			<label index="tx_newspaper_extra_articlelinks.external_links">External links</label>
+			<label index="tx_newspaper_extra_combolinkbox">Extra: ombo Link Box</label>
+			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Show related articles</label>
+			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manually selected articles</label>
+			<label index="tx_newspaper_extra_combolinkbox.internal_links">Internal links</label>
+			<label index="tx_newspaper_extra_combolinkbox.external_links">External links</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -373,6 +378,11 @@
 			<label index="tx_newspaper_extra_articlelinks.other_articles">Andere Artikel</label>
 			<label index="tx_newspaper_extra_articlelinks.internal_links">Interne Links</label>
 			<label index="tx_newspaper_extra_articlelinks.external_links">Externe Links</label>
+			<label index="tx_newspaper_extra_combolinkbox">Extra: Kombi-Linkkasten</label>
+			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Verwandte Artikel anzeigen</label>
+			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manuell ausgewählte Artikel</label>
+			<label index="tx_newspaper_extra_combolinkbox.internal_links">Interne Links</label>
+			<label index="tx_newspaper_extra_combolinkbox.external_links">Externe Links</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
