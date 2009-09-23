@@ -116,9 +116,9 @@
 			<label index="tx_newspaper_extra_articlelist.num_articles">Number of articles to display</label>
 			<label index="tx_newspaper_extra_articlelist.template">Display template</label>
 			<label index="tx_newspaper_extra_textbox">Extra: Text box</label>
+			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_textbox.title">Title</label>
 			<label index="tx_newspaper_extra_textbox.text">Text</label>
-			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: External links</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Add to Pool</label>
 			<label index="tx_newspaper_extra_externallinks.title">Title</label>
@@ -302,9 +302,9 @@
 			<label index="tx_newspaper_extra_articlelist.num_articles">Anzahl anzuzeigender Artikel</label>
 			<label index="tx_newspaper_extra_articlelist.template">Designvorlage</label>
 			<label index="tx_newspaper_extra_textbox">Extra: Textkasten</label>
+			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_textbox.title">Titel</label>
 			<label index="tx_newspaper_extra_textbox.text">Text</label>
-			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: Externe Links</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Zum Pool hinzufügen</label>
 			<label index="tx_newspaper_extra_externallinks.title">Titel</label>

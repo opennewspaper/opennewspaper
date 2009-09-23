@@ -471,9 +471,9 @@ CREATE TABLE tx_newspaper_extra_textbox (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	pool tinyint(3) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	text text NOT NULL,
-	pool tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

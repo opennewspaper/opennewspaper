@@ -1528,10 +1528,17 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 $TCA["tx_newspaper_extra_textbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_textbox"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "title,text,pool"
+		"showRecordFieldList" => "pool,title,text"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_textbox"]["feInterface"],
 	"columns" => array (
+		"pool" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.pool",		
+			"config" => Array (
+				"type" => "check",
+			)
+		),
 		"title" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.title",		
@@ -1549,16 +1556,9 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				"rows" => "5",
 			)
 		),
-		"pool" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.pool",		
-			"config" => Array (
-				"type" => "check",
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "title;;;;2-2-2, text;;;richtext[*];3-3-3, pool")
+		"0" => array("showitem" => "pool;;;;1-1-1, title;;;;2-2-2, text;;;richtext[*];3-3-3")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2466,5 +2466,4 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
