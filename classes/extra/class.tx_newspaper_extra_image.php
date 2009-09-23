@@ -29,9 +29,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolde
  *  - getSizes()
  *  - getWidths()
  *  - getHeights() 
- *  - getAttributes('filename')
- *  - getAttributes('alttext')
- *  - getAttributes('caption')
+ *  - getAttribute('filename')
+ *  - getAttribute('alttext')
+ *  - getAttribute('caption')
  * 
  *  Attributes:
  *  - \p pool (bool)
