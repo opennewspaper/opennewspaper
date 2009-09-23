@@ -104,7 +104,7 @@ EXCLUDE_PATTERNS       = */.svn/* \
                          */scratchpad/* \
                          */doc/*
 EXCLUDE_SYMBOLS        = 
-EXAMPLE_PATH           = 
+EXAMPLE_PATH           = .
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = 
