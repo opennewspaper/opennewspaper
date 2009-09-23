@@ -773,28 +773,6 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 
 
 #
-# Table structure for table 'tx_newspaper_extra_articlelinks'
-#
-CREATE TABLE tx_newspaper_extra_articlelinks (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	show_related_articles tinyint(3) DEFAULT '0' NOT NULL,
-	other_articles blob NOT NULL,
-	internal_links blob NOT NULL,
-	external_links blob NOT NULL,
-	
-	PRIMARY KEY (uid),
-	KEY parent (pid)
-);
-
-
-
-#
 # Table structure for table 'tx_newspaper_extra_combolinkbox'
 #
 CREATE TABLE tx_newspaper_extra_combolinkbox (

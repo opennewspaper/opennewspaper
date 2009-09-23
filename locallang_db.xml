@@ -182,12 +182,7 @@
 			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tag zone</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra type</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra UID</label>
-			<label index="tx_newspaper_extra_articlelinks">Extra: Article Links</label>
-			<label index="tx_newspaper_extra_articlelinks.show_related_articles">Show related articles</label>
-			<label index="tx_newspaper_extra_articlelinks.other_articles">Other articles</label>
-			<label index="tx_newspaper_extra_articlelinks.internal_links">Internal links</label>
-			<label index="tx_newspaper_extra_articlelinks.external_links">External links</label>
-			<label index="tx_newspaper_extra_combolinkbox">Extra: ombo Link Box</label>
+			<label index="tx_newspaper_extra_combolinkbox">Extra: Combo Link Box</label>
 			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Show related articles</label>
 			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manually selected articles</label>
 			<label index="tx_newspaper_extra_combolinkbox.internal_links">Internal links</label>
@@ -373,11 +368,6 @@
 			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tagzone</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra-Typ</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra-UID</label>
-			<label index="tx_newspaper_extra_articlelinks">Extra: Links zum Artikel</label>
-			<label index="tx_newspaper_extra_articlelinks.show_related_articles">Artikel zum Thema anzeigen</label>
-			<label index="tx_newspaper_extra_articlelinks.other_articles">Andere Artikel</label>
-			<label index="tx_newspaper_extra_articlelinks.internal_links">Interne Links</label>
-			<label index="tx_newspaper_extra_articlelinks.external_links">Externe Links</label>
 			<label index="tx_newspaper_extra_combolinkbox">Extra: Kombi-Linkkasten</label>
 			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Verwandte Artikel anzeigen</label>
 			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manuell ausgewählte Artikel</label>

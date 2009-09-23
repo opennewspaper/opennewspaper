@@ -2399,75 +2399,6 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 
 
 
-$TCA["tx_newspaper_extra_articlelinks"] = array (
-	"ctrl" => $TCA["tx_newspaper_extra_articlelinks"]["ctrl"],
-	"interface" => array (
-		"showRecordFieldList" => "hidden,show_related_articles,other_articles,internal_links,external_links"
-	),
-	"feInterface" => $TCA["tx_newspaper_extra_articlelinks"]["feInterface"],
-	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
-		"show_related_articles" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelinks.show_related_articles",		
-			"config" => Array (
-				"type" => "check",
-			)
-		),
-		"other_articles" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelinks.other_articles",		
-			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_article",	
-				"size" => 3,	
-				"minitems" => 0,
-				"maxitems" => 100,
-			)
-		),
-		"internal_links" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelinks.internal_links",		
-			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_externallinks",	
-				"size" => 3,	
-				"minitems" => 0,
-				"maxitems" => 100,
-			)
-		),
-		"external_links" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelinks.external_links",		
-			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_externallinks",	
-				"size" => 3,	
-				"minitems" => 0,
-				"maxitems" => 100,
-			)
-		),
-	),
-	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, show_related_articles, other_articles, internal_links, external_links")
-	),
-	"palettes" => array (
-		"1" => array("showitem" => "")
-	)
-);
-
-
-
 $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_combolinkbox"]["ctrl"],
 	"interface" => array (
@@ -2535,5 +2466,4 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
