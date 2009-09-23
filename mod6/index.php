@@ -44,8 +44,6 @@ class fullWidthDoc extends template {
  * Module 'Control Tag Control' for the 'newspaper' extension.
  *
  * \author	Helge Preuss <helge.preuss@gmail.com>
- * @package	TYPO3
- * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module6 extends t3lib_SCbase {
 	

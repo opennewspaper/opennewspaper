@@ -39,8 +39,6 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * Module 'Moderation list' for the 'newspaper' extension.
  *
  * @author	Helge Preuss, Oliver Schr√∂der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
- * @package	TYPO3
- * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module2 extends t3lib_SCbase {
 	var $pageinfo;
@@ -188,7 +186,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
 //dummy data
 for ($i=0; $i < sizeof($row); $i++) {
-	$row[$i]['comment'] = 'oliver (2008-03-21 17:37): Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars. Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f¸r die Anzeige des letzten Kommentars.';
+	$row[$i]['comment'] = 'oliver (2008-03-21 17:37): Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars. Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars.Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars.Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars.Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars.Dies ist ein Beispiel fÔøΩr die Anzeige des letzten Kommentars.';
 }
 t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 

@@ -39,8 +39,6 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * Module 'Dashboard' for the 'newspaper' extension.
  *
  * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
- * @package	TYPO3
- * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module5 extends t3lib_SCbase {
 	

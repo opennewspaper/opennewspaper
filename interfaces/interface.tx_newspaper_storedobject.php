@@ -19,18 +19,18 @@
  interface tx_newspaper_StoredObject {
 
 	/// Returns an attribute
-	/** \param $attribute_name Name of the requested attribute
+	/** \param $attribute Name of the requested attribute
 	 *	\return Value of the requested attribute
 	 *  \throw tx_newspaper_WrongAttributeException If \p $attribute_name does
 	 * 		not exist.
 	 */
-	public function getAttribute($attribute_name);
+	public function getAttribute($attribute);
 
 	///	Sets an attribute
-	/** \param $attribute_name Name of the requested attribute
+	/** \param $attribute Name of the requested attribute
 	 *	\param $value New value of the requested attribute
 	 */
-	public function setAttribute($attribute_name, $value);
+	public function setAttribute($attribute, $value);
 
 	/// Write or overwrite Extra data in DB
 	/** Of course, a StoredObject needs a store() procedure ;-)

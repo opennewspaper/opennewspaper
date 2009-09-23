@@ -129,10 +129,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 	  )
 	 * 	  pObj =>
 	 *  )\endcode
+	 * 
 	 *  \param $fobj reference to the parent object (instance of t3lib_TCEforms)
+	 * 
 	 *  \return List of articles currently on the list, with controls to 
 	 *  	rearrange the articles
-	 *  \link tx_newspaper_articlelist_semiautomatic.tmpl
+	 * 
+	 *  \link res/templates/tx_newspaper_articlelist_semiautomatic.tmpl
 	 */
 	public function displayListedArticles($PA, $fobj) {
 
