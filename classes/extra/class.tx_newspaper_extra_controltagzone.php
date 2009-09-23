@@ -54,6 +54,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	
 	/// Assigns extras to be rendered to the smarty template and renders it.
 	/** If no Extras match, returns nothing.
+	 * 
 	 *  Smarty template:
 	 *  \include res/templates/tx_newspaper_extra_controltagzone.tmpl
 	 */

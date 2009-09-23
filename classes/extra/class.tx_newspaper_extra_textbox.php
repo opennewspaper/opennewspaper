@@ -6,6 +6,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 /** Insert this Extra in Articles or Page Zones which have a box containing some
  *  text. 
  * 
+ *  Attributes:
+ *  - \p pool
+ *  - \p title
+ *  - \p text
  */
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
@@ -27,6 +31,10 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	}
 	
 	/** Assigns stuff to the smarty template and renders it.
+	 * 
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_textbox.tmpl
+	 * 
 	 *  \todo Just assign the attributes array, not specific attributes
 	 */
 	public function render($template_set = '') {

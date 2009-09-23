@@ -6,6 +6,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 /** Insert this Extra on Page Zones (or Articles, if you find a use for that) to
  *  display an existing Typo3 Content Element. Content Elements can be grouped 
  *  to show more than one CE.
+ * 
+ *  Attributes:
+ *  - \p pool (bool)
+ *  - \p content_elements (UIDs to table \p tt_content)
  */
 class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
@@ -25,10 +29,11 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	}
 	
 	/** Use TypoScript to render the selected Content Elements
+	 * 
 	 *  \param $template_set Ignored
+	 * 
 	 *  \todo It's probably not wise to print the whole content of the DB records
 	 *  	inside a HTML comment.
-	 *  \todo What is that <tt>TYPO3_MODE == 'BE'</tt> branch for again?
 	 */
 	public function render($template_set = '') {
 
@@ -60,6 +65,8 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 				'source' => intval($ce_uid),
 				'dontCheckPid' => 1
 			);
+			
+			//	In BE (for unit tests), RECORDS() can't be used. Just show something.
 			if (TYPO3_MODE == 'BE') {
 				$row = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
 				$ret .= '<h2>' . $row['header'] . "</h2>\n" .

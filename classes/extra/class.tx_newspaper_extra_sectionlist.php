@@ -7,7 +7,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  page on which this Extra is inserted. 
  *
  *  Insert this Extra on all Page Zones which show an overview of the articles 
- *  in th current Section.
+ *  in the current Section.
+ * 
+ *  Attributes:
  *  
  *  \todo  make number of articles displayed variable
  */
@@ -21,6 +23,10 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	}
 	
 	/** Display articles belonging to the current section.
+	 * 
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_sectionlist.tmpl
+	 * 
 	 *  \todo make number of articles displayed variable
 	 *  \todo WHat if the current section has no article list? (is this even possible?)
 	 */

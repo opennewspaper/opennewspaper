@@ -3,7 +3,13 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 
 /// A tx_newspaper_Extra displaying articles that got the most comments recently
-/** Depends on a patched version of sk_pagecomments 
+/** Depends on a patched version of \p sk_pagecomments. 
+ * 
+ *  Attributes:
+ *  - \p hours (int)
+ *  - \p num_favorites (int)
+ *  - \p display_num (bool)
+ *  - \p display_time (bool)
  */
 class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 
@@ -17,7 +23,11 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 	
 	/** Assign the list of articles to a Smarty template. The template must 
 	 *  contain all the logic to display the articles.
+	 * 
 	 *  \param $template_set Template set to use
+	 * 
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_mostcommented.tmpl
 	 */
 	public function render($template_set = '') {
 		t3lib_div::devlog('tx_newspaper_extra_MostCommented::render()', 'newspaper', 0, 

@@ -5,6 +5,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 /// tx_newspaper_Extra that displays the contents of an article
 /** This Extra must be inserted on a Page Zone wherever an Article must be 
  *  displayed.
+ *  Attributes:
+ *  - \p todo (bool) (dummy)
  */  
 class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 

@@ -72,6 +72,12 @@ class tx_newspaper_ExternalLink {
  * 
  *  Insert this Extra in a Page Zone or an Article wherever a list of Links is
  *  wanted.
+ * 
+ *  Attributes:
+ *  - \p pool (bool)
+ *  - \p title (string)
+ *  - \p links (UIDs of tx_newspaper_ExternalLink)
+ *  - \p template (string)
  */
 class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 
@@ -93,6 +99,9 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	}
 	
 	/// Display the list of links
+	/** Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_externallinks.tmpl
+	 */	
 	public function render($template_set = '') {
 
 		$this->prepare_render($template_set);

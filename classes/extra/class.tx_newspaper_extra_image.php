@@ -32,6 +32,19 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolde
  *  - getAttributes('filename')
  *  - getAttributes('alttext')
  *  - getAttributes('caption')
+ * 
+ *  Attributes:
+ *  - \p pool (bool)
+ *  - \p title (string)
+ *  - \p image_file (string)
+ *  - \p caption (string)
+ *  - \p normalized_filename (string)
+ *  - \p kicker (string)
+ *  - \p credit (string)
+ *  - \p source (string)
+ *  - \p type (int index to select tag)
+ *  - \p alttext (string)
+ *  - \p tags (UIDs of tx_newspaper_Tag)
  */
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
@@ -54,6 +67,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	
 	/** Assigns image attributes and TSConfig parameters to smarty template,
 	 *  then renders it.
+	 *  
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_image.tmpl
 	 */
 	public function render($template_set = '') {
 		self::getTSConfig();
