@@ -4,7 +4,20 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
 
 /// tx_newspaper_Extra displaying a box of links of various type
-/** 
+/** Contains links:
+ *  - to Articles which are grouped with the current article automatically
+ *  - to manually selected Articles
+ *  - to links on the same site which are not to Articles
+ *  - to external URLs.
+ *  Articles which are grouped as "related" are selected in the GUI for every
+ *  Article. Internal and external links are technically the same, but separated
+ *  for layout reasons.
+ * 
+ *  Attributes:
+ *  - show_related_articles (bool)
+ *  - manually_selected_articles (comma-separated list of article UIDs)
+ *  - internal_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
+ *  - external_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
  */
 class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 		
@@ -22,7 +35,10 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/// Assigns extras to be rendered to the smarty template and renders it.
+	/// Assigns Articles and Links to the smarty template and renders it.
+	/** Smarty template:
+	 *  \include ../../res/templates/tx_newspaper_extra_combolinkbox.tmpl
+	 */
 	public function render($template_set = '') {
 		
 		$this->prepare_render($template_set);
