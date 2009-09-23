@@ -14,10 +14,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
  *  for layout reasons.
  * 
  *  Attributes:
- *  - show_related_articles (bool)
- *  - manually_selected_articles (comma-separated list of article UIDs)
- *  - internal_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
- *  - external_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
+ *  - \p show_related_articles (bool)
+ *  - \p manually_selected_articles (comma-separated list of article UIDs)
+ *  - \p internal_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
+ *  - \p external_links (comma-separated list of tx_newspaper_ExternalLink UIDs)
  */
 class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 		

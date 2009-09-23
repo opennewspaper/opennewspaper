@@ -10,6 +10,13 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  displayed, except for the cases which have specialized Extras:
  *  - tx_newspaper_Extra_SectionList: The list of articles belonging to a
  * 		tx_newspaper_Section 
+ *  
+ *  Attributes:
+ *  - \p description (string)
+ *  - \p articlelist (UID of abstract record for displayed article list)
+ *  - \p first_article (int)
+ *  - \p num_articles (int)
+ *  - \p template (string)
  */
 class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
@@ -34,6 +41,9 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	/** Assign the list of articles to a Smarty template. The template must 
 	 *  contain all the logic to display the articles.
 	 *  \param $template_set Template set to use
+	 * 
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_articlelist.tmpl
 	 */
 	public function render($template_set = '') {
 		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0, 
