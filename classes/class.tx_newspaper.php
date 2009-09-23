@@ -311,8 +311,8 @@ class tx_newspaper  {
 	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
 	 *  be included used); switch for BE/FE is included.
 	 * 
-	 *  \param String $table name of db table to check
-	 *  \param int [0|1] specifies if hidden records are to be included 
+	 *  \param $table name of db table to check
+	 *  \param $show_hidden [0|1] specifies if hidden records are to be included 
 	 * 		(ignored if in FE)
 	 *  \return WHERE part of an SQL statement starting with AND; or an empty 
 	 * 		string, if not applicable.

@@ -38,7 +38,7 @@
  * 		- article lists
  *   - extra
  *   - page
- * 		-page type
+ * 		- page type
  *   - page zone
  * 		- page zone type
  *   - smarty templates (see tx_newspaper_Smarty)

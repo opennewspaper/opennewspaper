@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file interface.tx_newspaper_extra.php
+ *  \file interface.tx_newspaper_storedobject.php
  *
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Feb 09, 2009

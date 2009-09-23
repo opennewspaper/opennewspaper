@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_page.php
+ *  \file class.tx_newspaper_pagezone.php
  * 
  *  This file is part of the TYPO3 extension "newspaper".
  * 

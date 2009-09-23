@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file interface.tx_newspaper_article.php
+ *  \file interface.tx_newspaper_articleiface.php
  *
  *  \author Helge Preuss <helge.preuss@gmx.net>
  *  \date Oct 27, 2008
@@ -64,9 +64,7 @@ interface tx_newspaper_ArticleIface
 	 *  - Link the Extra to the given article in the MM-table
 	 *  \todo Do we take strings and ints as UIDs here, or can we already work
 	 * 	with full objects?
-	 *  \param $extra_table SQL table/class of concrete extra to link
-	 *  \param $extra_uid UID of concrete extra
-	 *  \param $article_uid UID of article the extra is linked to
+	 *  \param $extra concrete extra
 	 *  \return UID of entry in abstract extra table
 	 */
 	public function relateExtra2Article(tx_newspaper_ExtraIface $extra);

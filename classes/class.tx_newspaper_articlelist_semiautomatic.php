@@ -1,6 +1,6 @@
 <?php
 /**
- *  \file class.tx_newspaper_articlelist_emiautomatic.php
+ *  \file class.tx_newspaper_articlelist_semiautomatic.php
  * 
  *  This file is part of the TYPO3 extension "newspaper".
  * 
@@ -90,7 +90,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  list object. Therefore it must create its own article list, the UID of
 	 *  which it reads from \p $PA.
 	 * 
-	 *  \param $PA \code array(
+	 *  \param $PA Array: \code array(
 	 *    altName => 
 	 * 	  palette =>
 	 * 	  extra => 
@@ -234,6 +234,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 	  ),
 	 * 	  ...
 	 * )
+	 *  \endcode
 	 */
 	private function getSortedArticles($number, $start = 0) {
 		
