@@ -28,7 +28,10 @@
 	public function getAttribute($attribute);
 
 	///	Sets an attribute
-	/** \param $attribute Name of the requested attribute
+	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
+	 *  attributes, even if they don't exist beforehand.
+	 *
+	 *  \param $attribute Name of the requested attribute
 	 *	\param $value New value of the requested attribute
 	 */
 	public function setAttribute($attribute, $value);

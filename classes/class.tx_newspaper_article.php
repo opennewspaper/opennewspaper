@@ -662,7 +662,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  can be found.
 	 *   
 	 *  The functionality of this function depends on the way the RTE stores
-	 *  line breaks. Currently it breaks the text at \c "<p>/</p>"-pairs and 
+	 *  line breaks. Currently it breaks the text at \c "<p>/</p>" -pairs and 
 	 *  also at line breaks \c ("\n").
 	 * 
 	 *  \attention If the format of line breaks changes, this function must be
@@ -677,7 +677,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$paragraphs = array();		
 		
 		foreach ($temp_paragraphs as $paragraph) {
-			/// Remove the test of the \c "<p>" - tag from every line
+			/// Remove the test of the \c "<p>" - tag from every line.
 			$paragraph = trim(substr($paragraph, strpos($paragraph, '>')+1));
 			/** Each paragraph now should end with a \c "</p>". If it doesn't, the
 			 *  text is not well-formed. In any case, we must remove the \c "</p>".
@@ -695,7 +695,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	/// Get the list of tx_newspaper_Section s to which the current article belongs
-	/** \param $limit Maximum number of Sections to find
+	/** \param $limit Maximum number of tx_newspaper_Section s to find
 	 *  \return List of tx_newspaper_Section s to which the current article belongs
 	 */
 	protected function getSections($limit = 0) {
@@ -717,13 +717,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	
 	/// Get the index of the provided tx_newspaper_Extra in the Extra array
-	/** Binary search for an Extra, assuming that \p $this->extras is ordered by
+	/** Binary search for an Extra, assuming that \c $this->extras is ordered by
 	 *  paragraph first and position second.
 	 * 
 	 *  \param $extra tx_newspaper_Extra to find
-	 *  \return Index of \p $extra in \p $this->extras
+	 *  \return Index of \p $extra in \c $this->extras
 	 *  \throw tx_newspaper_InconsistencyException if \p $extra is not present
-	 * 		in \p $this->extras
+	 * 		in \c $this->extras
 	 */ 
 	protected function indexOfExtra(tx_newspaper_Extra $extra) {
         $high = sizeof($this->getExtras())-1;
@@ -751,10 +751,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 
  	/// Ordering function to keep Extras in the same order as they appear on the PageZone
- 	/** Supplied as parameter to usort() in getExtras().
- 	 *  \param $extra1 first Extra to compare
- 	 *  \param $extra2 second Extra to compare
- 	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
+ 	/** Supplied as parameter to \c usort() in getExtras().
+ 	 *  \param $extra1 first tx_newspaper_Extra to compare
+ 	 *  \param $extra2 second tx_newspaper_Extra to compare
+ 	 *  \return < 0 if \p $extra1 comes before \p $extra2, > 0 if it comes after, 
  	 * 			== 0 if their position is the same 
  	 */
  	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
@@ -764,7 +764,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  			$extra1->getAttribute('position')-$extra2->getAttribute('position');
 	}
 
-	/// SQL table which associates tx_newspaper_Extra s with Page Zones
+	/// SQL table which associates tx_newspaper_Extra s with tx_newspaper_PageZone s
 	static protected $extra_2_pagezone_table = 'tx_newspaper_article_extras_mm';
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -773,9 +773,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
-	private $source = null;			///< Source the Article is read from
-
-	private $articleBehavior = null;	///< Object to delegate operations to
+	///< tx_newspaper_Source the tx_newspaper_Article is read from
+	private $source = null;
+	/// Object to delegate operations to
+	private $articleBehavior = null;	
 	
 	///	List of attributes that together constitute an Article
 	/** \todo update */
@@ -783,7 +784,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		'title', 'teaser', 'text', 'ressort'
 	);
 	
-	/// Mapping of the attributes to the names they have in the Source for each supported Source type
+	/// Mapping of the attributes to the names they have in the tx_newspaper_Source for each supported tx_newspaper_Source type
 	/** Form of the array:
 	 *  \code
 	 *  source_class_name => array (

@@ -8,9 +8,9 @@
 
 /// An Extra for the online newspaper
 /** This is an abstract class which implements most of the methods defined in
- *  interface tx_newspaper_Extra, except those that must be overridden in a
+ *  interface tx_newspaper_ExtraIface, except those that must be overridden in a
  *  concrete Extra anyway. All Extras (except tx_newspaper_Article and 
- *  tx_newspaper_Pagezone) inherit from this class.
+ *  tx_newspaper_PageZone) inherit from this class.
  * 
  *  abstract functions:
  *	- static function getTitle()
@@ -19,6 +19,8 @@
  *  - __construct()
  *  - render()
  *  - getModuleName()
+ * 
+ *  \todo Explain about the division into an abstract and a concrete portion
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
@@ -62,10 +64,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			 . "\n";
 	}
 	
-	/// \return (Internationalized) short description if the object type
-	/** This is (probably) used only in the BE, where the user needs to know
-	 *	which kind of object she is handling.
-	 */
 	public function getTitle() {
 		global $LANG;
 		if (!($LANG instanceof language)) {
@@ -76,9 +74,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 	
-	/// Makes a "deep copy" of an Extra in the DB
-	/** Copies the concrete portion of an Extra as well as giving it a new
-	 *  abstract record.
+	/// Makes a "deep copy" of a tx_newspaper_Extra in the DB
+	/** Copies the concrete portion of an tx_newspaper_Extra as well as giving
+	 *  it a new abstract record.
 	 * 
 	 *  (I don't know whether "deep copy" is the right term for this when 
 	 *  dealing with DBs, but the concept is the same.)
@@ -110,6 +108,14 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $that;
 	}
 
+	/// Prepare for rendering. Should be called in every implementation of render().
+	/** This function initializes the tx_newspaper_Smarty object and sets the
+	 *  correct template search path. It also ensures that all attributes to the
+	 *  tx_newspaper_Extra are read from DB and passed to smarty as smarty
+	 *  variables \c $attributes and \c $extra_attributes.
+	 * 
+	 *  \param template_set The template set used to render.
+	 */
 	protected function prepare_render(&$template_set = '') {
 		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
 		
@@ -183,9 +189,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         	print_r($this->extra_attributes, 1) . ' ]\'');
 	}
 
-	/** No tx_newspaper_WrongAttributeException here. We want to be able to set
-	 *  attributes, even if they don't exist beforehand.
-	 */
 	public function setAttribute($attribute, $value) {
 		if (!$this->extra_attributes) {
 			$this->extra_attributes = $this->getExtraUid()? 
@@ -229,7 +232,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $this->getTitle() . ' ' . $this->getUid();
 	}
 	
-	/// Deletes the concrete Extras and all references to it
 	public function deleteIncludingReferences() {
 		/// Find abstract records linking to the concrete Extra
 		$uids = tx_newspaper::selectRows(
@@ -256,8 +258,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		tx_newspaper::deleteRows($this->getTable(), 'uid = ' . $this->getUid());
 	}
 	
-	/// Lists Extras which are in the pool of master copies for new Extras
-	/// \return array of pooled Extras or false if pool option isn't available for Extra
+	/// Lists Extras which are in the pool of master copies for new Extras.
+	/** \return Array of pooled Extras or \c false if pool option isn't
+	 *  available for this Extra.
+	 */
 	public function getPooledExtras() {
 		try {
 			$uids = tx_newspaper::selectRows(
@@ -275,8 +279,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $pooled_extras;
 	}
 	
-	/// checks if an Extra is registered
-	/** \return true if the Extra is registered (else false)
+	/// Checks if a tx_newspaper_Extra is registered.
+	/** \param $extra tx_newspaper_Extra of the type to be checked.
+	 *  \return \c true if \p $extra is registered (else \c false).
 	 */
 	public static function isRegisteredExtra(tx_newspaper_Extra $extra) {
 		for ($i = 0; $i < sizeof(self::$registeredExtra); $i++) {
@@ -286,11 +291,12 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return false;
 	}
 
-	/// register an Extra
-	/**
-	 * every Extra has to register to be used
-	 * \param $extra concrete Extra object
-	 * \return true if this Extra was registered or false if Extra was registered already
+	/// Register a tx_newspaper_Extra.
+	/** Every class derived from tx_newspaper_Extra has to register to be used.
+	 * 
+	 * \param $extra A concrete tx_newspaper_Extra object.
+	 * \return \c true if this tx_newspaper_Extra class was registered
+	 *  	successfully or \c false if the class was registered already.
 	 */
 	public static function registerExtra(tx_newspaper_Extra $extra) {
 		if (!self::isRegisteredExtra($extra)) {
@@ -300,7 +306,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return false;
 	}
 	
-	/// \return array with (registered) Extra objects
+	/// Get list of registered tx_newspaper_Extra classes.
+	/** \return Array with (registered) Extra objects (\em not class names).
+	 */
 	static public function getRegisteredExtras() {
 		return self::$registeredExtra;
 	}
@@ -310,14 +318,15 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	/** For the base class tx_newspaper_Extra this is set to the default folder
 	 *  for data associated with newspaper etxension.
 	 * 
-	 *  Overwrite this function in conrete Extras.
+	 *  Overwrite this function in conrete tx_newspaper_Extra implementations.
 	 * 
-	 *  \return Value for the \p tx_newspaper_module field in the \p pages table
+	 *  \return Value for the \c tx_newspaper_module field in the \c pages table
 	 *  	of the SysFolder which stores objects of this class.
 	 */
 	public static function getModuleName() { return 'np_extra_default'; }
 
-	/// \return pid of sysfolder to store extra records in
+	///  PID of SysFolder to store tx_newspaper_Extra records in.
+	/// \return PID of SysFolder to store tx_newspaper_Extra records in.
 	public function getSysfolderPid() {
 		return tx_newspaper_Sysfolder::getInstance()->getPid($this);
 	}
@@ -326,7 +335,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return tx_newspaper::getTable($this);
 	}
 	
-	/// Write or overwrite Extra data in DB, return UID of stored record
 	public function store() {
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
@@ -367,9 +375,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $this->getUid();
 	}
 	
-	/// Read data of Extra
+	/// Read data of tx_newspaper_Extra
 	/** \param $uid uid of record in given table
-	 *  \param $table name of table (f.ex tx_newspaper_extra_image)
+	 *  \param $table name of table (f.ex \c tx_newspaper_extra_image)
 	 *  \return Array row with Extra data for given uid and table
 	 */
 	public static function readExtraItem($uid, $table) {
@@ -378,8 +386,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
 	}
 	
-	/// Create the record for a concrete Extra in the table of abstract Extras
-	/** This is probably necessary because a concrete Extra has been freshly
+	/// Create the record for a concrete tx_newspaper_Extra in the table of abstract Extras
+	/** This is probably necessary because a concrete tx_newspaper_Extra has been freshly
 	 *  created.
 	 * 
 	 *  By default, does nothing if the concrete Extra is already linked in the
@@ -428,11 +436,18 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		if ($this->attributes) $this->attributes['uid'] = $uid; 
 	}
 
+	/// Assign a new UID to the abstract portion of the tx_newspaper_Extra.
+	/** \param $uid New UID for the abstract record
+	 */
 	public function setExtraUid($uid) { 
 		$this->extra_uid = $uid;
 		if ($this->extra_attributes) $this->extra_attributes['uid'] = $uid; 
 	}
-	/// This function is only public so unit tests can access it	
+	
+	/// Get UID for the abstract portion of the tx_newspaper_Extra.
+	/** \attention This function is only public so unit tests can access it.
+	 *  \return UID for the abstract portion of the tx_newspaper_Extra.
+	 */	
 	public function getExtraUid() {
 		if (!$this->extra_uid) {
 			if (!$this->getUid()) {
@@ -445,8 +460,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return intval($this->extra_uid); 
 	}
 
-	/// gets the origin uid of an extra 
-	/// \return int the origin uid of an extra (if 0 return abstract extra uid)
+	/// Gets the origin uid of a tx_newspaper_Extra.
+	/** \todo Explain origin UIDs! Either here or in the class description.
+	 *  \return int the origin uid of an extra (if 0 return abstract extra uid)
+	 */ 
 	public function getOriginUid() {
 		if ($this->getAttribute('origin_uid'))
 			return intval($this->getAttribute('origin_uid'));
@@ -454,14 +471,19 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			return intval($this->getExtraUid());
 	}
 
-	/// checks if this Extra was placed on this page zone 
-	/// \return boolean true if this Extra was placed on this page zone
+	/// Checks if this tx_newspaper_Extra was placed on this page zone
+	/** \return \c true if this tx_newspaper_Extra was placed on this page zone
+	 *  \todo Honestly, I don't know what "this page zone" means. Oliver?
+	 */
 	public function isOriginExtra() {
 		return (($this->getAttribute('origin_uid') == 0) || 
 				($this->getAttribute('origin_uid') == $this->getExtraUid())); 
 	}
 
-	/// Returns the number of abstract records pointing to the current concrete record
+	/// Gets the number of abstract records pointing to the current concrete record.
+	/** \return  The number of abstract records pointing to the current concrete
+	 *  	record.
+	 */
 	public function getReferenceCount() {
 		$row = tx_newspaper::selectOneRow(
 			'COUNT(*) AS c', 
@@ -472,22 +494,25 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return intval($row['c']);
 	}
 	
-	/// Finds the PageZone this Extra is placed upon
+	/// Finds the tx_newspaper_PageZone this tx_newspaper_Extra is placed upon.
 	/** I'm afraid this raises several problems, so this function should be used
 	 *  with care.
-	 *  - What if an Extra is placed on more than one PageZone?
-	 *  - What if an Extra is not placed on any PageZone at all (perhaps because
-	 *    it is a template from which other Extras are copied)
-	 *  - We must manually select the Extras from all Extra to PageZone-MM-tables
-	 *    there are. 
-	 *    - These are currently limited to two (for Articles and normal
-	 *      Page Zones), but there is no guarantee that that stays this way
-	 *      (although it is highly likely). When that happens, this function
-	 *      must be changed. Bad software design!
-	 *    - The order in which these MM-tables are checked for the Extra is
-	 *      pretty arbitrary.
+	 *  - What if a tx_newspaper_Extra is placed on more than one 
+	 *    tx_newspaper_PageZone?
+	 *  - What if a tx_newspaper_Extra is not placed on any tx_newspaper_PageZone
+	 *    at all (perhaps because it is a template from which other 
+	 *    tx_newspaper_Extras are copied)?
+	 *  - We must manually select the tx_newspaper_Extra from all
+	 *    Extra-to-PageZone-MM-tables there are. 
+	 *    - These are currently limited to two (for tx_newspaper_Article and
+	 *      tx_newspaper_PageZone_Page), but there is no guarantee that that
+	 *      stays this way (although it is highly likely). When that happens, 
+	 *      this function must be changed. Bad software design!
+	 *    - The order in which these MM-tables are checked for the 
+	 *      tx_newspaper_Extra is pretty arbitrary.
 	 *      
-	 *	\return The PageZone this Extra is placed upon, or null
+	 *	\return The tx_newspaper_PageZone this tx_newspaper_Extra is placed
+	 *      upon, or \c null
 	 */
 	protected function getPageZone() {
 		/// Check if the Extra is associated with an article...
@@ -505,18 +530,18 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return null;
 	}
 	
-	private $uid = 0;
+	private $uid = 0;			///< Extra's UID in the concrete Extra table
+	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
 
 	private $attributes = array();				///< attributes of the concrete extra
 	private $extra_attributes = array();		///< attributes of the abstract extra
 
 	protected $smarty = null;					///< tx_newspaper_Smarty rendering engine
 
-	private static $registeredExtra = array();	///< list of registered Extras
+	private static $registeredExtra = array();	///< list of registered tx_newspaper_Extra
 
-	protected $extra_uid = 0;	///< article's UID in the abstract Extra table
 
-	/// Extra table must be defined here because tx_newspaper_Extra is an interface
+	/// Extra table must be defined here because tx_newspaper_ExtraIface is an interface
 	/** \todo this table is defined in tx_newspaper_Extra_Factory too. decide
 	 *		  on one class to store it!
 	 */
