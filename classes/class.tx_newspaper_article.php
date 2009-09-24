@@ -677,17 +677,17 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$paragraphs = array();		
 		
 		foreach ($temp_paragraphs as $paragraph) {
-			/// remove the test of the <p>-tag from every line
+			/// Remove the test of the \c <p> - tag from every line
 			$paragraph = trim(substr($paragraph, strpos($paragraph, '>')+1));
-			/** each paragraph now should end with a </p>. If it doesn't, the
-			 *  text is not well-formed. In any case, we must remove the </p>.
+			/** Each paragraph now should end with a \c </p>. If it doesn't, the
+			 *  text is not well-formed. In any case, we must remove the \c </p>.
 			 */
 			$paragraph = str_replace('</p>', '', $paragraph);
 			
 			/// Now we split the paragraph at line breaks.
 			$sub_paragraphs = explode("\n", $paragraph);
 			
-			/// Store the pieces in one flat array
+			/// Store the pieces in one flat array.
 			foreach($sub_paragraphs as $sub_paragraph) $paragraphs[] = $sub_paragraph;
 		}
 
