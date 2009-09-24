@@ -666,7 +666,10 @@ function changeWorkflowStatus(status, hidden_status) {
 		return $content;
 	}
 	
-	/// \param $new_status true indicates a workflow status change
+	/** \param $new_status true indicates a workflow status change
+	 *  \param $title Title displayed on the button
+	 *  \param $hidden ?
+	 */
 	private function renderWorkflowButton($new_status, $title, $hidden) {
 		$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
 		if ($new_status !== false) {
@@ -687,9 +690,11 @@ function changeWorkflowStatus(status, hidden_status) {
 	}
 
 
-	/// \param String $button (internal) name of button
-	/// \param String $be_groups uids of allowed be_groups (comma separated)
-	/// \return boolean is be_user member of one of given be_groups
+	/**
+	 *  \param String $button (internal) name of button
+	 *  \param String $be_groups uids of allowed be_groups (comma separated)
+	 *  \return boolean is be_user member of one of given be_groups
+	 */
 	private function isButtonVisible($button, $be_config) {
 //t3lib_div::devlog('button', 'newspaper', 0, array($GLOBALS['BE_USER'], $button, $be_config));
 		$be_group = explode(',', $be_config);
