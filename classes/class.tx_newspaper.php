@@ -124,17 +124,18 @@ class tx_newspaper  {
 	}
 	
 	/// Execute a \c SELECT query on M-M related tables
-	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query so that the 
+	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the 
 	 *	SQL query is retained for debugging as \c tx_newspaper::$query.
 	 *
 	 *	\param $select Field list for \c SELECT
 	 *  \param $local_table Tablename, local table
 	 *  \param $mm_table Tablename, relation table
 	 *  \param $foreign_table Tablename, foreign table
-	 *  \param $whereClause Optional additional \c WHERE clauses put in the end of
-	 *  	   the query. NOTICE: You must escape values in this argument with
-	 *  	   \c $this->fullQuoteStr() yourself! DO NOT PUT IN GROUP BY, ORDER BY
-	 *  	   or LIMIT! You have to prepend 'AND ' to this parameter yourself!
+	 *  \param $whereClause Optional additional \c WHERE clauses put in the end
+	 *  	   of the query. \b NOTICE: You must escape values in this argument
+	 *  	   with \c $GLOBALS['TYPO3_DB']->fullQuoteStr() yourself! DO NOT PUT
+	 *  	   IN \c GROUP \c BY, \c ORDER \c BY or \c LIMIT! You have to prepend
+	 *  	   \c 'AND ' to this parameter yourself!
 	 *  \param $groupBy Optional \c GROUP \c BY field(s), if none, supply blank string.
 	 *  \param $orderBy Optional \c ORDER \c BY field(s), if none, supply blank string.
 	 *  \param $limit Optional \c LIMIT value ([begin,]max), if none, supply blank string.
