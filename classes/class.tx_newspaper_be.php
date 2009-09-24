@@ -626,8 +626,9 @@ function changeWorkflowStatus(status, hidden_status) {
 		return $html;
 	}
 
-	/// \param hidden
-	/// \param $button array stating (boolean) if the button for the various states should be displayed
+	/** \param $hidden
+	 *  \param $button array stating (boolean) if the button for the various states should be displayed
+	 */
 	private function renderWorkflowButtons($hidden, $button) {
 		GLOBAL $LANG;
 		
@@ -705,7 +706,7 @@ function changeWorkflowStatus(status, hidden_status) {
 	public static function getWorkflowStatusActionTitle($new, $old) {
 		$new = intval($new);
 		$old = intval($old);
-/// \todo: in abhängigkeit von new und old einen string zurückgeben
+/// \todo: in abhï¿½ngigkeit von new und old einen string zurï¿½ckgeben
 		return 'to come ...';		
 	}
 
