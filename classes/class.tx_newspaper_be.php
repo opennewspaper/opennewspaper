@@ -692,7 +692,7 @@ function changeWorkflowStatus(status, hidden_status) {
 
 	/**
 	 *  \param $button (internal) name of button
-	 *  \param $be_groups uids of allowed be_groups (comma separated)
+	 *  \param $be_config uids of allowed be_groups (comma separated)
 	 *  \return boolean is be_user member of one of given be_groups
 	 */
 	private function isButtonVisible($button, $be_config) {
