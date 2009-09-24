@@ -283,6 +283,9 @@ class tx_newspaper_Page
  		return $this->smarty->fetch($this);
  	}
 
+ 	///	Lists all Pages with the given PageType
+ 	/** \todo move to tx_newspaper_PageType
+ 	 */
  	static public function listPagesWithPageType(tx_newspaper_PageType $pt, $limit=10) {
 
 		$limit = intval($limit);
@@ -304,6 +307,9 @@ class tx_newspaper_Page
 		return $list;
 	}
  	
+ 	///	Lists all Pages which contain a PageZone with the given PageZoneType
+ 	/** \todo move to tx_newspaper_PageZoneType
+ 	 */
  	static public function listPagesWithPageZoneType(tx_newspaper_PageZoneType $pzt, $limit=10) {
 #t3lib_div::devlog('lPZWPZT', 'newspaper', 0, $pzt->getUid());
 		$limit = intval($limit);
