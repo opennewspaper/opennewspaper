@@ -46,12 +46,15 @@
 	 */
 	public function store();
 
+	/// UID of the record that contains the object in the DB
 	/** \return UID of the record that contains the object in the DB */
 	public function getUid();
 
+	/// set the UID of the record that contains the object in the DB
 	/** \param $uid new UID of the record that contains the object in the DB */
 	public function setUid($uid);
 	
+	/// Name of the database table the object's data are stored in
 	/** \return Name of the database table the object's data are stored in */
 	public function getTable();
 

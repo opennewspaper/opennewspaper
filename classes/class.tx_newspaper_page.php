@@ -76,6 +76,7 @@ class tx_newspaper_Page
 		$this->smarty = new tx_newspaper_Smarty();
  	}
  	
+ 	///	Create a deep copy of an object 
  	public function __clone() {
  		/*  ensure attributes are loaded from DB. readAttributesFromDB() isn't  
  		 *  called here because maybe the content is already there and it would
@@ -100,6 +101,7 @@ class tx_newspaper_Page
 		}
  	}
  	
+	/// Convert object to string to make it visible in stack backtraces, devlog etc.
  	public function __toString() {
  		$this->getAttribute('uid');
  		$ret = $this->getTable() . ':' . " \n" .
@@ -427,6 +429,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return $list;
 	}
 
+	///	The tx_newspaper_Section under which this tx_newspaper_Page lies
 	/** \return The tx_newspaper_Section under which this tx_newspaper_Page lies
 	 */
  	public function getParentSection() { 
@@ -436,6 +439,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  		return $this->parentSection; 
  	}
  	
+ 	/// tx_newspaper_PageType of the current tx_newspaper_Page
  	/** \return tx_newspaper_PageType of the current tx_newspaper_Page
  	 */
  	public function getPageType() {
