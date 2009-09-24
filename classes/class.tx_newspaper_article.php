@@ -351,7 +351,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->articleBehavior->extraAnlegen();
 	}
 
-	/// Get the list of Extra s associated with this Article in sorted order
+	/// Get the list of tx_newspaper_Extra associated with this Article in sorted order
 	/** The Extras are sorted by attribute \c paragraph first and
 	 *  \c position second.
 	 */
@@ -365,7 +365,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
 					$this->extras[] = $new_extra;
 				} catch(tx_newspaper_EmptyResultException $e) {
-					/// remove mm-table entry if the extra pointed to doesn't exist
+					/// Remove mm-table entry if the extra pointed to doesn't exist
 					$query = $GLOBALS['TYPO3_DB']->DELETEquery(
 						'tx_newspaper_article_extras_mm', 'uid_foreign = ' . intval($extra['uid_foreign']));
 					$GLOBALS['TYPO3_DB']->sql_query($query);
@@ -379,10 +379,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	/// Find the first tx_newspaper_Extra of a given type
-	/** \param $extra_class The desired type of Extra, either as object or as
-	 *  	class name
-	 *  \return The first Extra of the given class (by appearance in article),
-	 * 		or null.
+	/** \param $extra_class The desired type of tx_newspaper_Extra, either as
+	 *  	object or as class name
+	 *  \return The first tx_newspaper_Extra of the given class (by appearance
+	 * 		in article), or \c null.
 	 */
 	public function getFirstExtraOf($extra_class) {
 
@@ -407,9 +407,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	/// Get the tx_newspaper_PageZoneType associated with this Article
 	/** \return The tx_newspaper_PageZoneType associated with this Article. If
-	 * 		this is not the one where Attribute \p is_article is set, there
+	 * 		this is not the one where attribute \p is_article is set, there
 	 * 		is something weird going on.
-	 *  \todo Check for \p is_article. 
+	 *  \todo Check for \p is_article. No idea how to handle errors though.
 	 */
 	public function getPageZoneType() {
 		if (!$this->pagezonetype) {
@@ -441,7 +441,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  association between the Article's UID and the UID in the abstract Extra
 	 *  table.
 	 * 
-	 *  \param $extra The tx_newspaper_Extra to add to \p $this.
+	 *  \param $extra The tx_newspaper_Extra to add to \c $this.
 	 * 
 	 *  \return The UID of \p $extra in the abstract Extra table.
 	 */	
@@ -490,7 +490,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \p $extra is moved to the first position in the new paragraph, because
 	 * 	otherwise the operation would result in a random position. Extras
 	 *  already present in the target paragraph might have to be moved. That
-	 *  adds further complications to this functions.
+	 *  adds further complications to this function.
 	 * 
 	 *  \todo Replace with a generic function to set attributes recursively.
 	 * 
@@ -505,8 +505,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$extra->setAttribute('position', $this->getInsertPosition(0));
 			$extra->store();
 			
-			/** change the paragraph in inheriting page zones too
-			 *  \todo optional: only overwrite paragraph in inheriting pagezones
+			/** Change the paragraph in inheriting page zones too.
+			 *  \todo Optional: only overwrite paragraph in inheriting pagezones
 			 *  if it has not been changed manually there.
 			 */
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
@@ -531,13 +531,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 	
-	/// Generate a URL which links to the Article on the correct Page
+	/// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
 	/** \param $section Section from which the link is generated. Defaults to
-	 * 		using the article's primary section
-	 *  \param $pagetype PageType of the wanted page
-	 *  \todo Handle links to articles in sections other than their primary section
-	 *  \todo Handle PageType other than article page
-	 *  \todo Check if target page has an Article display Extra 
+	 * 		using the article's primary section.
+	 *  \param $pagetype tx_newspaper_PageType of the wanted tx_newspaper_Page.
+	 *  \todo Handle links to articles in sections other than their primary section.
+	 *  \todo Handle PageType other than article page.
+	 *  \todo Check if target page has an Article display Extra,
+	 * 		tx_newspaper_Extra_DisplayArticles. 
 	 */
 	public function getLink(tx_newspaper_Section $section = null, 
 							tx_newspaper_PageType $pagetype = null) {
@@ -567,11 +568,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	/// Get a list of all attributes in the tx_newspaper_Article table.
 	/** \return All attributes in the tx_newspaper_Article table.
+	 *  \todo A static attribute list sucks. Determine it dynamically.
 	 */
 	static public function getAttributeList() { return self::$attribute_list; }
 	
 	
-	/// gets a list of tx_newspaper_Article objects assigned to given article type
+	/// Gets a list of tx_newspaper_Article objects assigned to given article type
 	/** \param $at tx_newspaper_ArticleType object
 	 *  \param $limit max number of records to read (default: 10), if negative no limit is used
 	 *  \return array with tx_newspaper_Article objects 
@@ -599,8 +601,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $list;
 	}
 
-	/// adds sections to article (will be inserted after existing sections)
-	/** The Article is listed in tx_newspaper_Section \p $s afterwards.
+	/// Adds a tx_newspaper_Section to the tx_newspaper_Article.
+	/** The new tx_newspaper_Section will be inserted after existing sections.
+	 *  The Article is listed in tx_newspaper_Section \p $s afterwards.
 	 * 
 	 *  \param $s New Section
 	 */
@@ -622,16 +625,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 
-	/// Get the primary tx_newspaper_Section of an Article
-	/** \return The Section in which \p $this is displayed by default, if no
-	 * 		Section context is given. 
+	/// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
+	/** \return The tx_newspaper_Section in which \p $this is displayed by
+	 *  	default, if no Section context is given. 
 	 */		
 	public function getPrimarySection() {
 		$sections = $this->getSections(1);
 		return $sections[0];
 	}
 	
-	/// Get the SQL table which associates tx_newspaper_Extra s with Page Zones.
+	/// Get the SQL table which associates tx_newspaper_Extra with tx_newspaper_PageZone.
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
@@ -643,8 +646,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 	
 	/// Find out which tx_newspaper_Page is currently displayed
-	/** Uses $_GET to find out which tx_newspaper_PageType is requested on the
-	 *  current tx_newspaper_Section.
+	/** Uses \c $_GET to find out which tx_newspaper_PageType is requested on
+	 *  the current tx_newspaper_Section.
 	 * 
 	 *  \return The currently displayed tx_newspaper_Page.
 	 */
@@ -653,8 +656,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
 	
-	/// Split the text into an array, one entry for each paragraph
-	/** The functionality of this function depends on the way the RTE stores
+	/// Split the article's text into an array, one entry for each paragraph
+	/** tx_newspaper_Extra are inserted before or after paragraphs. This
+	 *  function splits the article text so the position of a tx_newspaper_Extra
+	 *  can be found.
+	 *   
+	 *  The functionality of this function depends on the way the RTE stores
 	 *  line breaks. Currently it breaks the text at "<p>/</p>"-pairs and also
 	 *  at line breaks ("\n").
 	 * 
@@ -662,7 +669,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 * 	altered.
 	 */
 	protected function splitIntoParagraphs() {
-		/** A text usually starts with a <p>, in that case the first paragraph
+		/** A text usually starts with a \c <p>, in that case the first paragraph
 		 *  must be removed. It may not be the case though, if so, the first
 		 *  paragraph is meaningful and must be kept.
 		 */
