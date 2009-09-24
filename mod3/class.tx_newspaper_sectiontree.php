@@ -40,7 +40,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
 	/** I mean, come on, hey. Constructing an object, then manually assigning
 	 *  all sorts of properties, then calling init() and then getTree(), as it
 	 *  is done in the original \p t3lib_treeView, is just unneccessary. We'll
-	 *  just do it all in the c'tor. </rant>
+	 *  just do it all in the c'tor.
 	 */
 	public function __construct() {
 		$this->init();
