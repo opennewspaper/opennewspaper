@@ -57,14 +57,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 
-	///	Things to do after an article is \p clone d
-	/** This magic function is called after all attributes of a tx_newspaper_Article
-	 *  have been copied, when the PHP operation \p clone is executed on a 
-	 *  tx_newspaper_Article. 
+	///	Things to do after an article is cloned
+	/** This magic function is called after all attributes of a
+	 *  tx_newspaper_Article have been copied, when the PHP operation \p clone 
+	 *  is executed on a tx_newspaper_Article. 
 	 * 
-	 * 	It ensures that all attributes are read from DB, crdate and tstamp are
-	 *  updated, and the new Article is written to DB. Also, the Extras of the 
-	 *  Article are \p clone d. 
+	 * 	It ensures that all attributes are read from DB, \c crdate and \c tstamp
+	 *  are updated, and the new tx_newspaper_Article is written to DB. Also, 
+	 *  the tx_newspaper_Extra objects associated with the tx_newspaper_Article
+	 *  are \p clone d. 
 	 */
 	public function __clone() {
  		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
@@ -118,7 +119,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  		return $this->attributes[$attribute];
 	}
 
-	/// \see tx_newspaper_StoredObject
 	public function setAttribute($attribute, $value) {
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
@@ -127,7 +127,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->attributes[$attribute] = $value;
 	}
 
-	/// \see tx_newspaper_StoredObject
 	public function store() {
 		
 		/// insert article data (if uid == 0) or update if uid > 0
@@ -170,13 +169,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $this->getUid();		
 	}
 
-	/// \see tx_newspaper_StoredObject
 	public function getUid() { 
 		if (!intval($this->uid)) $this->uid = $this->attributes['uid'];
 		return intval($this->uid);
 	}
 
-	/// \see tx_newspaper_StoredObject
 	public function setUid($uid) { 
 		$this->uid = $uid;
 		if ($this->attributes) {
@@ -185,12 +182,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 
-	/// \see tx_newspaper_StoredObject
 	public public function getTable() {
 		return 'tx_newspaper_article';
 	}
 
-	/// \see tx_newspaper_StoredObject
 	static public function getModuleName() {
 		return 'np_article';
 	}
