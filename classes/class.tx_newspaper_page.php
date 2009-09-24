@@ -34,22 +34,31 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 
-/// A page type for an online edition of a newspaper
-/** Examples include:
+/// A page of a certain type for an online edition of a newspaper
+/** Under every tx_newspaper_Section there lie pages of different types. 
+ *  Whenever a certain type is required, the corresponding tx_newspaper_Page is
+ *  displayed.
+ * 
+ *  Examples for page types include:
  *  - List view of the most recent articles in a section
  *  - Article view, displays an article
  *  - Comments page, shows the comments to an article (or a section page)
  *  - RSS feed for list view or article page
  *  - Mobile versions of any of the above
  *  - Whatever else you can think of
+ * 
+ *  tx_newspaper_Page implements the objects that are instantiated once for
+ *  every needed page type/section combination.
+ * 
+ *  \see tx_newspaper_Section, tx_newspaper_PageType
  */
 class tx_newspaper_Page
 		implements tx_newspaper_StoredObject, tx_newspaper_Renderable {
 	
-	/// Construct a page from DB
-	/** \param $parent Either the newspaper section the page is in, or the UID
-	 * 		of the page in the DB
-	 *  \param $type page type of which a page is created
+	/// Construct a tx_newspaper_Page from DB
+	/** \param $parent Either the tx_newspaper_Section the tx_newspaper_Page is
+	 * 		in, or the UID of the page in the DB
+	 *  \param $type tx_newspaper_PageType of which a tx_newspaper_Page is created
 	 */
 	public function __construct($parent = null, tx_newspaper_PageType $type = null) {
 		if ($parent instanceof tx_newspaper_Section) {
@@ -125,7 +134,6 @@ class tx_newspaper_Page
 		$this->attributes[$attribute] = $value;
 	}
 	
-	/// insert page data (if uid == 0) or update if uid > 0
 	public function store() {
 
 		if ($this->getUid()) {
@@ -168,8 +176,10 @@ class tx_newspaper_Page
 		return $this->getUid();		
 	}
 
-	/** \param $s section
-	 *  \return true if page can be accessed and if assigned to given section(FE/BE use enableFields)
+	///	Check if the tx_newspaper_Page belongs to a tx_newspaper_Section
+	/** \param $s tx_newspaper_Section to check against
+	 *  \return \c true if current page can be accessed and is assigned to \p $s
+	 * 		(FE/BE use enableFields)
 	 */
 	function isValid(tx_newspaper_Section $s) {
 		// check if page is valid
@@ -199,6 +209,16 @@ class tx_newspaper_Page
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 
+	///	Get all  tx_newspaper_PageZone s on the current tx_newspaper_Page
+	/** \return array of tx_newspaper_PageZone s on the current 
+	 * 		tx_newspaper_Page, or \c true if ther is none.
+	 * 
+	 *  \attention \c true is used as a sentinel value to denote that there are
+	 * 		no tx_newspaper_PageZone s under this tx_newspaper_Page, so that SQL
+	 * 		queries are not performed unnecessarily. The return value must not 
+	 * 		be tested if it evaluates to true, rather use \c is_array() to
+	 * 		check it!
+	 */
 	function getPageZones() {
  		/// Get tx_newspaper_PageZone list for current page at first call
 		if (!$this->pageZones) {
@@ -223,6 +243,15 @@ class tx_newspaper_Page
 		return $this->pageZones;
 	}
 	
+	///	Get the tx_newspaper_PageZone of the desired tx_newspaper_PageZoneType
+	/** There can be only one tx_newspaper_PageZone of any
+	 *  tx_newspaper_PageZoneType on every  tx_newspaper_Page. If it is found on
+	 *  \c $this, it is returned. Otherwise, \c null is returned.
+	 * 
+	 *  \param $type Wanted tx_newspaper_PageZoneType.
+	 * 
+	 *  \return tx_newspaper_PageZone of type \p $type, or \c null.
+	 */
 	function getPageZone(tx_newspaper_PageZoneType $type) {
  		foreach ($this->getPageZones() as $pagezone) {
  			if ($pagezone->getPageZoneType()->getUid() == $type->getUid())
@@ -232,16 +261,17 @@ class tx_newspaper_Page
  		return null;
 	}
 	
-	/// Render the page, containing all associated page areas
+	/// Render the page, containing all associated tx_newspaper_PageZone s
 	/** The correct template is found the following way.
 	 *  - the template set for the page is set via TSConfig
-	 *  - the name for the page is found via its page type
+	 *  - the name for the page is found via its tx_newspaper_PageType
 	 *  - if the template \c tx_newspaper_page.tmpl exists under directory
-	 *    \c template_set/page_type, use it
+	 *    \c $template_set/$page_type, use it
 	 *  - else, if \c tx_newspaper_page.tmpl exists under directory
-	 *    \c template_set, use it
+	 *    \c $template_set, use it
 	 *  - else, use the default template under 
-	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>
+	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>, ie. the one
+	 *    delivered with \c tx_newspaper.
 	 * 
 	 *  Default smarty template:
 	 *  \include res/templates/tx_newspaper_page.tmpl
@@ -283,8 +313,11 @@ class tx_newspaper_Page
  		return $this->smarty->fetch($this);
  	}
 
- 	///	Lists all Pages with the given PageType
- 	/** \todo move to tx_newspaper_PageType
+ 	///	Lists all tx_newspaper_Page s with the given tx_newspaper_PageType
+ 	/** \param $pt tx_newspaper_PageType of which tx_newspaper_Page s are wanted
+ 	 *  \param $limit Maximum number of tx_newspaper_Page s returned
+ 	 * 
+ 	 *  \todo move to tx_newspaper_PageType
  	 */
  	static public function listPagesWithPageType(tx_newspaper_PageType $pt, $limit=10) {
 
@@ -307,8 +340,11 @@ class tx_newspaper_Page
 		return $list;
 	}
  	
- 	///	Lists all Pages which contain a PageZone with the given PageZoneType
- 	/** \todo move to tx_newspaper_PageZoneType
+ 	///	Lists all tx_newspaper_Page s containing a tx_newspaper_PageZone with the given tx_newspaper_PageZoneType
+ 	/** \param $pzt tx_newspaper_PageZoneType required on tx_newspaper_Page s
+ 	 *  \param $limit Maximum number of tx_newspaper_Page s returned
+ 	 *  
+ 	 *  \todo move to tx_newspaper_PageZoneType
  	 */
  	static public function listPagesWithPageZoneType(tx_newspaper_PageZoneType $pzt, $limit=10) {
 #t3lib_div::devlog('lPZWPZT', 'newspaper', 0, $pzt->getUid());
@@ -348,9 +384,10 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return $list;
 	}
 
-	/// get page zone object for given page zone page object
-	/** \param $pzp page zone page object
-	 *  \return parent page zone object
+	/// Get tx_newspaper_Page object for given tx_newspaper_PageZone_Page object
+	/** \param $pzp tx_newspaper_PageZone_Page object
+	 *  \return \p $pzp's parent tx_newspaper_Page object
+	 *  \todo Move to tx_newspaper_PageZone_Page
 	 */
 	public static function getPageOfPageZonePage(tx_newspaper_PageZone_Page $pzp) {
 #t3lib_div::devlog('get pzp', 'newspaper', 0, $pzp->getAttribute('uid'));
@@ -363,8 +400,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return new tx_newspaper_Page(intval($row['page_id']));		
 	}
 
-	/// get active pages zone for this page
-	/** \return array of active pages zone objects for given page
+	/// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
+	/** \return array of active tx_newspaper_PageZone objects for given
+	 *  	tx_newspaper_Page.
 	 */
 	public function getActivePageZones() {
 
@@ -389,7 +427,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return $list;
 	}
 
-	/** \return The tx_newspaper_Section under which this page lies
+	/** \return The tx_newspaper_Section under which this tx_newspaper_Page lies
 	 */
  	public function getParentSection() { 
  		if (!$this->parentSection) {
@@ -416,8 +454,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	/// Read the record for this object from DB
 	/** Because a page can be constructed both with a UID and a combination of
 	 *  parent section and page type to uniquely define it, reading the record
-	 *  is a bit more complicated than for other objects. Thus, I have factored
-	 *  it out here.
+	 *  is a bit more complicated than for other objects. Thus, it is factored
+	 *  out here.
 	 */
 	protected function readAttributesFromDB() {
 		if ($this->getUid()) {
@@ -434,16 +472,23 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 
- 	private $uid = 0;								///< UID of record in the DB
+	/// UID of record in the DB
+ 	private $uid = 0;								
  	
- 	private $smarty = null;							///< Smarty object for HTML rendering
- 	private $parentSection = null;					///< Newspaper section this page is in
- 	private $condition = null;						///< WHERE-condition used to find current page
- 	private $pageZones = array();					///< Page zones on this page
- 	private $attributes = array();					///< The member variables
- 	private $pagetype = null;						///< tx_newspaper_PageType of the current page
+ 	/// tx_newspaper_Smarty object for HTML rendering
+ 	private $smarty = null;							
+ 	/// tx_newspaper_Section this page is in
+ 	private $parentSection = null;					
+ 	/// tx_newspaper_PageType of the current page
+ 	private $pagetype = null;						
+ 	/// WHERE-condition used to find current page
+ 	private $condition = null;						
+ 	/// tx_newspaper_PageZone s on this page
+ 	private $pageZones = array();					
+ 	/// The member variables
+ 	private $attributes = array();					
  	
- 	/// Default Smarty template for HTML rendering
+ 	/// Default tx_newspaper_Smarty template for HTML rendering
  	/** \todo get rid of this variable */
  	static private $defaultTemplate = 'tx_newspaper_page.tmpl';
  	

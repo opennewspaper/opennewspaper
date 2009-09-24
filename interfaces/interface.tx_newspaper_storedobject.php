@@ -64,10 +64,10 @@
 	public function getTitle();
 
 	/// The name of the Typo3 SysFolder used to store objects of this type
-	/** Needed to fill field "tx_newspaper_module" in table pages to find/create
-	 *  a storage folder for a storable object.
+	/** Needed to fill field \c tx_newspaper_module in table \c pages to
+	 *  find/create a storage folder for a storable object.
 	 * 
-	 *  \attention Specification: np_* (max. 255 char); should not contain "phpunit"
+	 *  \b Specification: \c np_* (max. 255 char); must not contain \c "phpunit"
 	 * 
 	 *  \return The name of the newspaper sysfolder
 	 */
