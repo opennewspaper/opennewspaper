@@ -662,14 +662,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  can be found.
 	 *   
 	 *  The functionality of this function depends on the way the RTE stores
-	 *  line breaks. Currently it breaks the text at "<p>/</p>"-pairs and also
-	 *  at line breaks ("\n").
+	 *  line breaks. Currently it breaks the text at \c "<p>/</p>"-pairs and 
+	 *  also at line breaks \c ("\n").
 	 * 
 	 *  \attention If the format of line breaks changes, this function must be
 	 * 	altered.
 	 */
 	protected function splitIntoParagraphs() {
-		/** A text usually starts with a \c <p>, in that case the first paragraph
+		/** A text usually starts with a \c "<p>", in that case the first paragraph
 		 *  must be removed. It may not be the case though, if so, the first
 		 *  paragraph is meaningful and must be kept.
 		 */
@@ -677,10 +677,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$paragraphs = array();		
 		
 		foreach ($temp_paragraphs as $paragraph) {
-			/// Remove the test of the \c <p> - tag from every line
+			/// Remove the test of the \c "<p>" - tag from every line
 			$paragraph = trim(substr($paragraph, strpos($paragraph, '>')+1));
-			/** Each paragraph now should end with a \c </p>. If it doesn't, the
-			 *  text is not well-formed. In any case, we must remove the \c </p>.
+			/** Each paragraph now should end with a \c "</p>". If it doesn't, the
+			 *  text is not well-formed. In any case, we must remove the \c "</p>".
 			 */
 			$paragraph = str_replace('</p>', '', $paragraph);
 			
