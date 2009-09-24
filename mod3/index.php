@@ -33,9 +33,9 @@ require_once($BACK_PATH . 'init.php');
 require_once($BACK_PATH . 'template.php');
 
 
-// width: 100%
+/// Class to generate a BE module with 100% width
 class fullWidthDoc extends template {
-	var $divClass = 'typo3-fullWidthDoc';
+	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
 

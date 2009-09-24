@@ -19,21 +19,21 @@ class tx_newspaper  {
 	 */
 	const use_datamap = false;
 	
-	/// The GET parameter which determines the article UID
+	/// The \c GET parameter which determines the article UID
 	const article_get_parameter = 'art';
-	///	The GET parameter which determines which page type is displayed
+	///	The \c GET parameter which determines which page type is displayed
 	const pagetype_get_parameter = 'pagetype';
 	
 
-	/// Execute a SELECT query, check the result, return zero or one record(s)
+	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 * 
-	 *  \param $fields Fields to SELECT
-	 *  \param $table Table to SELECT FROM
-	 *  \param $where WHERE-clause (defaults to selecting all records)
-	 *  \param $groupBy Fields to GROUP BY
-	 *  \param $orderBy Fields to ORDER BY
-	 *  \param $limit Maximum number of records to SELECT
+	 *  \param $fields Fields to \c SELECT
+	 *  \param $table Table to \c SELECT \c FROM
+	 *  \param $where \c WHERE - clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to \c GROUP \c BY
+	 *  \param $orderBy Fields to \c ORDER \c BY
+	 *  \param $limit Maximum number of records to \c SELECT
 	 *  \return The result of the query as associative array
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
@@ -54,15 +54,15 @@ class tx_newspaper  {
         return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
 
-	/// Execute a SELECT query, check the result, return \em exactly one record
+	/// Execute a \c SELECT query, check the result, return \em exactly one record
 	/** enableFields() are taken into account.
 	 * 
-	 *  \param $fields Fields to SELECT
-	 *  \param $table Table to SELECT FROM
-	 *  \param $where WHERE-clause (defaults to selecting all records)
-	 *  \param $groupBy Fields to GROUP BY
-	 *  \param $orderBy Fields to ORDER BY
-	 *  \param $limit Maximum number of records to SELECT
+	 *  \param $fields Fields to \c SELECT
+	 *  \param $table Table to \c SELECT \c FROM
+	 *  \param $where \c WHERE - clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to \c GROUP \c BY
+	 *  \param $orderBy Fields to \c ORDER \c BY
+	 *  \param $limit Maximum number of records to \c SELECT
 	 *  \return The result of the query as associative array
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
@@ -91,15 +91,15 @@ class tx_newspaper  {
 		return $row;		
 	}
 
-	/// Execute a SELECT query, check the result, return all records
+	/// Execute a \c SELECT query, check the result, return all records
 	/** enableFields() are taken into account.
 	 * 
-	 *  \param $fields Fields to SELECT
-	 *  \param $table Table to SELECT FROM
-	 *  \param $where WHERE-clause (defaults to selecting all records)
-	 *  \param $groupBy Fields to GROUP BY
-	 *  \param $orderBy Fields to ORDER BY
-	 *  \param $limit Maximum number of records to SELECT
+	 *  \param $fields Fields to \c SELECT
+	 *  \param $table Table to \c SELECT \c FROM
+	 *  \param $where \c WHERE - clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to \c GROUP \c BY
+	 *  \param $orderBy Fields to \c ORDER \c BY
+	 *  \param $limit Maximum number of records to \c SELECT
 	 *  \return The result of the query as 2-dimensional associative array
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
@@ -123,21 +123,21 @@ class tx_newspaper  {
 		} else throw new tx_newspaper_NoResException(self::$query);
 	}
 	
-	/// Execute a SELECT query on M-M related tables
-	/** Copied and adapted from t3lib_db::exec_SELECT_mm_query so that the 
-	 *	SQL query is retained for debugging as tx_newspaper::$query.
+	/// Execute a \c SELECT query on M-M related tables
+	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query so that the 
+	 *	SQL query is retained for debugging as \c tx_newspaper::$query.
 	 *
-	 *	\param $select Field list for SELECT
+	 *	\param $select Field list for \c SELECT
 	 *  \param $local_table Tablename, local table
 	 *  \param $mm_table Tablename, relation table
 	 *  \param $foreign_table Tablename, foreign table
-	 *  \param $whereClause Optional additional WHERE clauses put in the end of
+	 *  \param $whereClause Optional additional \c WHERE clauses put in the end of
 	 *  	   the query. NOTICE: You must escape values in this argument with
-	 *  	   $this->fullQuoteStr() yourself! DO NOT PUT IN GROUP BY, ORDER BY
+	 *  	   \c $this->fullQuoteStr() yourself! DO NOT PUT IN GROUP BY, ORDER BY
 	 *  	   or LIMIT! You have to prepend 'AND ' to this parameter yourself!
-	 *  \param $groupBy Optional GROUP BY field(s), if none, supply blank string.
-	 *  \param $orderBy Optional ORDER BY field(s), if none, supply blank string.
-	 *  \param $limit Optional LIMIT value ([begin,]max), if none, supply blank string.
+	 *  \param $groupBy Optional \c GROUP \c BY field(s), if none, supply blank string.
+	 *  \param $orderBy Optional \c ORDER \c BY field(s), if none, supply blank string.
+	 *  \param $limit Optional \c LIMIT value ([begin,]max), if none, supply blank string.
 	 *  \return The result of the query as 2-dimensional associative array
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
@@ -169,9 +169,9 @@ class tx_newspaper  {
 	}
 
 	/// Inserts a record into a SQL table
-	/** If the class constant tx_newspaper::use_datamap is set, the data is 
-	 *  written using process_datamap(), which fills in all needed fields and
-	 *  calls the save hook. Otherwise, $GLOBALS['TYPO3_DB']->INSERTquery() is
+	/** If the class constant \c tx_newspaper::use_datamap is set, the data is 
+	 *  written using \c process_datamap(), which fills in all needed fields and
+	 *  calls the save hook. Otherwise, \c $GLOBALS['TYPO3_DB']->INSERTquery() is
 	 *  called. 
 	 * 
 	 *  \param $table SQL table to insert into
@@ -229,7 +229,7 @@ class tx_newspaper  {
 
 	/// Updates a record using the Typo3 API
 	/** \param $table SQL table to update
-	 *  \param $where SQL WHERE condition (typically 'uid = ...')
+	 *  \param $where SQL \c WHERE condition (typically 'uid = ...')
 	 *  \param $row Data as key=>value pairs
 	 *  \return number of affected rows
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
@@ -252,14 +252,14 @@ class tx_newspaper  {
 	}
 
 	/// Deletes a record from a DB table
-	/** If the class constant tx_newspaper::use_datamap is set, the operation
-	 *  uses process_cmdmap(), which checks all needed fields and calls the save
-	 *  hook. Otherwise, if \p $table is recorded in $TCA, its field 'deleted'
-	 *  is set to 1. If \p $table is not recorded in $TCA (which is the case for
-	 *  MM tables), an SQL DELETE query is executed.
+	/** If the class constant \c tx_newspaper::use_datamap is set, the operation
+	 *  uses \c process_cmdmap(), which checks all needed fields and calls the save
+	 *  hook. Otherwise, if \p $table is recorded in \c $TCA, its field 'deleted'
+	 *  is set to 1. If \p $table is not recorded in \c $TCA (which is the case for
+	 *  MM tables), an SQL \c DELETE query is executed.
 	 * 
 	 *  \param $table SQL table to delete a record from
-	 *  \param $uids_or_where Array of UIDs to delete or a WHERE-condition as string
+	 *  \param $uids_or_where Array of UIDs to delete or a \c WHERE condition as string
 	 *  \return number of affected rows
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
@@ -306,16 +306,16 @@ class tx_newspaper  {
 	}
 
 
-	/// WHERE clause to filter out unwanted records 
-	/** Returns a part of a WHERE clause which will filter out records with
+	/// \c WHERE clause to filter out unwanted records 
+	/** Returns a part of a \c WHERE clause which will filter out records with
 	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
 	 *  be included used); switch for BE/FE is included.
 	 * 
 	 *  \param $table name of db table to check
 	 *  \param $show_hidden [0|1] specifies if hidden records are to be included 
 	 * 		(ignored if in FE)
-	 *  \return WHERE part of an SQL statement starting with AND; or an empty 
-	 * 		string, if not applicable.
+	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an  
+	 * 		empty string, if not applicable.
 	 */
 	static public function enableFields($table, $show_hidden = 1) {
 		global $TCA;
@@ -339,8 +339,8 @@ class tx_newspaper  {
 		return '';		
 	}
 
-	/// Gets sorting position for next element in a mm table 
-	/** \param $table name of mm table
+	/// Gets sorting position for next element in a MM table 
+	/** \param $table name of MM table
 	 *  \param $uid_local
 	 *  \return sorting position of element inserted as last element
 	 */
@@ -357,7 +357,7 @@ class tx_newspaper  {
 	/// Check if at least one record exists in given table
 	/**  Enable fields for BE/FE are taken into account.
 	 *  
-	 *  \return boolean true, if at least one record availabe in given table
+	 *  \return \c true, if at least one record availabe in given table
 	 */
 	public static function atLeastOneRecord($table) {
 		try {
@@ -378,7 +378,7 @@ class tx_newspaper  {
 
 	/// Check if given class name is an abstract class
 	/** \param $class class name
-	 *  \return true if abstract class, false else (or if no class at all)
+	 *  \return \c true if abstract class, \c false else (or if no class at all)
 	 */
 	public static function isAbstractClass($class) {
 		$abstract = false;
@@ -503,21 +503,21 @@ class tx_newspaper  {
 		return array_keys($TCA[$object]['columns']);
 	}
 	
-	/// The GET parameter which determines the article UID
+	/// The \c GET parameter which determines the article UID
 	public static function GET_article() {
 		return self::article_get_parameter;
 	}
 
-	///	The GET parameter which determines which page type is displayed
+	///	The \c GET parameter which determines which page type is displayed
 	public static function GET_pagetype() {
 		return self::pagetype_get_parameter;
 	}
 
-	/// Create a HTML link with text and URL using the typolink() API function 
+	/// Create a HTML link with text and URL using the \c typolink() API function 
 	/** \param  $text the text to be displayed
-	 *  \param  $params target and optional GET parameters as parameter => value
+	 *  \param  $params target and optional \c GET parameters as parameter => value
 	 *  \param  $conf optional TypoScript configuration array
-	 *  \return array ['text'], ['href']				
+	 *  \return array ['text'], ['href']		
 	 */
     public static function typolink($text, array $params = array(), array $conf = array()) {
 		//  a tslib_cObj object is needed to call the typolink_URL() function
@@ -565,10 +565,13 @@ class tx_newspaper  {
 		return $data;
 	}
 
-	/** get a typolink-compatible URL
-	 *  \param  $params target and optional GET parameters
-	 *  \param  $conf optional TypoScript configuration array, if present
-	 *  \return generated URL										  */
+	/// Get a typolink-compatible URL
+	/** \param  $params Target and optional \c GET parameters. See the TSRef for
+	 * 		details, eg. http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
+	 *  \param  $conf Optional TypoScript configuration array, if present. See
+	 * 		TSRef.
+	 *  \return Generated URL										  
+	 */
 	public static function typolink_url(array $params = array(), array $conf = array()) {
 		$link = self::typolink('', $params, $conf);
 		return $link['href'];
@@ -592,7 +595,7 @@ class tx_newspaper  {
 	 */ 
 	public static $query = ''; 
 	
-	/// a tslib_cObj object used to generate typolinks
+	/// a \c tslib_cObj object used to generate typolinks
 	private static $local_cObj = null;
 }
 

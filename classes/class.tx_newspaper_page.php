@@ -55,8 +55,15 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
 class tx_newspaper_Page
 		implements tx_newspaper_StoredObject, tx_newspaper_Renderable {
 	
-	/// Construct a tx_newspaper_Page from DB
-	/** \param $parent Either the tx_newspaper_Section the tx_newspaper_Page is
+	/// Construct a tx_newspaper_Page, either read from DB or create a new one
+	/** If the tx_newspaper_Page already exists and is stored in DB, just pass
+	 *  the UID of the record containing the data to the constructor.
+	 * 
+	 *  To create a new tx_newspaper_Page, give the constructor the
+	 *  tx_newspaper_Section the tx_newspaper_Page lies under, and the
+	 *  tx_newspaper_PageType of the tx_newspaper_Page to be.
+	 *  
+	 *  \param $parent Either the tx_newspaper_Section the tx_newspaper_Page is
 	 * 		in, or the UID of the page in the DB
 	 *  \param $type tx_newspaper_PageType of which a tx_newspaper_Page is created
 	 */
@@ -84,14 +91,14 @@ class tx_newspaper_Page
  		 */
 		$this->getAttribute('uid');
 		
-		///  unset the UID so the object can be written to a new DB record.
+		/// Unset the UID so the object can be written to a new DB record.
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
  		
  		$this->setAttribute('crdate', time());
  		$this->setAttribute('tstamp', time());
  		
- 		/// clone page zones contained on page
+ 		/// Clone tx_newspaper_PageZone s contained on tx_newspaper_Page.
  		$old_pagezones = $this->getPageZones();
 		$this->pageZones = array();
 		if (is_array($old_pagezones) && sizeof($old_pagezones) > 0) {
@@ -213,16 +220,20 @@ class tx_newspaper_Page
 
 	///	Get all  tx_newspaper_PageZone s on the current tx_newspaper_Page
 	/** \return array of tx_newspaper_PageZone s on the current 
-	 * 		tx_newspaper_Page, or \c true if ther is none.
+	 * 		tx_newspaper_Page, or \c true if there is none.
 	 * 
 	 *  \attention \c true is used as a sentinel value to denote that there are
 	 * 		no tx_newspaper_PageZone s under this tx_newspaper_Page, so that SQL
 	 * 		queries are not performed unnecessarily. The return value must not 
-	 * 		be tested if it evaluates to true, rather use \c is_array() to
+	 * 		be tested if it evaluates to \c true, rather use \c is_array() to
 	 * 		check it!
+	 * 
+	 *  \todo Use another member variable instead of misappropriating
+	 *  	\c $this->pageZones. Might have to rewrite functions which call
+	 * 		getPageZones() though.
 	 */
 	function getPageZones() {
- 		/// Get tx_newspaper_PageZone list for current page at first call
+ 		/// Cache tx_newspaper_PageZone list for current page at first call.
 		if (!$this->pageZones) {
 			$uids = tx_newspaper::selectRows(
 	 			'uid', 'tx_newspaper_pagezone', 
@@ -259,19 +270,19 @@ class tx_newspaper_Page
  			if ($pagezone->getPageZoneType()->getUid() == $type->getUid())
  				return $pagezone;
  		}
- 		///	\todo or throw?
+ 		///	\todo Maybe throw exception if none found? Not sure what's better.
  		return null;
 	}
 	
 	/// Render the page, containing all associated tx_newspaper_PageZone s
 	/** The correct template is found the following way.
-	 *  - the template set for the page is set via TSConfig
-	 *  - the name for the page is found via its tx_newspaper_PageType
-	 *  - if the template \c tx_newspaper_page.tmpl exists under directory
+	 *  - The template set for the page is set via TSConfig.
+	 *  - The name for the page is found via its tx_newspaper_PageType.
+	 *  - If the template \c tx_newspaper_page.tmpl exists under directory
 	 *    \c $template_set/$page_type, use it
-	 *  - else, if \c tx_newspaper_page.tmpl exists under directory
+	 *  - Else, if \c tx_newspaper_page.tmpl exists under directory
 	 *    \c $template_set, use it
-	 *  - else, use the default template under 
+	 *  - Else, use the default template under 
 	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>, ie. the one
 	 *    delivered with \c tx_newspaper.
 	 * 
@@ -279,10 +290,10 @@ class tx_newspaper_Page
 	 *  \include res/templates/tx_newspaper_page.tmpl
 	 * 
 	 *  \todo implement this template-finding logic by calling 
-	 * 		  $this->smarty-setTemplateSearchPath()
+	 * 		  \c $this->smarty->setTemplateSearchPath()
 	 * 
 	 *  \param $template_set the template set used to render this page (as 
-	 *  		passed down from The Big One - should be always empty.
+	 *  		passed down from tx_newspaper_pi1 - should be always empty.
 	 * 
 	 *  \return The rendered page as HTML (or whatever your template does) 
 	 */

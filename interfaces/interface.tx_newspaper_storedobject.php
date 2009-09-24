@@ -50,7 +50,7 @@
 	/** \return UID of the record that contains the object in the DB */
 	public function getUid();
 
-	/// set the UID of the record that contains the object in the DB
+	/// Set the UID of the record that contains the object in the DB
 	/** \param $uid new UID of the record that contains the object in the DB */
 	public function setUid($uid);
 	
