@@ -206,13 +206,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		/** Check whether to use a specific template set.
 		 *	This must be done regardless if this is a template used to define
-		 *	default placements for articles, or an actual article
+		 *	default placements for articles, or an actual article.
 		 */
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
 		
-		/// Configure Smarty rendering engine
+		/// Configure Smarty rendering engine.
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
@@ -228,7 +228,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		 *  array(
 		 *  	$paragraph_number => array(
 		 * 			"text" => $text_of_paragraph,
-		 *    		"spacing" => {0, 1, 2, ...},             // fuer leere absaetze hinterm text
+		 *    		"spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
 		 *          "extras" => array(
 		 *				$position => array(
          *					"extra_name" => get_class(),
@@ -272,7 +272,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			}
 		}
 			
-		/** Make sure all extras are rendered, even those whose 'paragraph'
+		/** Make sure all extras are rendered, even those whose \c paragraph
 		 *  attribute is greater than the number of text paragraphs or less
 		 *  than its negative.
 		 */ 		

@@ -18,27 +18,29 @@
  */
  interface tx_newspaper_WithSource {
 
-	/// \return The Source object associated with this Article (if any)
+	///  The tx_newspaper_Source object associated with this object.
+	/** \return The tx_newspaper_Source object associated with this object (if any)
+	 */
 	public function getSource();
-	/// Set the Source object associated with this Article
-	/** \param $source The new Source */
+	/// Set the tx_newspaper_Source object associated with this object
+	/** \param $source The new tx_newspaper_Source
+	 */
 	public function setSource(tx_newspaper_Source $source);
 
-	/// Definition of attributes and their mapping to implementation fields
-	/// for all supported Sources
-	/** \note For every new Source that is defined, if the Extra must support
-	 * 		  that Source, you must alter this function to contain the mapping
-	 * 		  to the new Source type. Usually that will require to add fields to
-	 * 		  a static array.
+	/// Definition of attributes and their mapping to implementation fields for all supported Sources
+	/** \note For every new tx_newspaper_Source that is defined, if the
+	 * 		  tx_newspaper_WithSource must support that Source, you must alter
+	 * 		  this function to contain the mapping to the new Source type.
+	 * 		  Usually that will require to add fields to a static array.
 	 *  \param $fieldname Name of the attribute which must be mapped
-	 *  \param $source The Source for which the mapping is wanted
-	 *  \return The name of attribute \p $fieldname in Source \p $source
+	 *  \param $source The tx_newspaper_Source for which the mapping is wanted
+	 *  \return The name of attribute \p $fieldname in tx_newspaper_Source \p $source
 	 *  \throw WrongClassException If the mapping for class \p $source is not
 	 * 							   configured
 	 */
 	static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source);
 
-	/// Additional info needed to instantiate an Extra, such as a SQL table
+	/// Additional info needed to instantiate a tx_newspaper_WithSource object, such as a SQL table
 	static public function sourceTable(tx_newspaper_Source $source);
 }
 ?>
