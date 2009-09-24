@@ -36,10 +36,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  *  added to the list and manually placed.
  * 
  *  The selection of articles from which the list can be filled in the BE is 
- *  done by the attributes <tt>filter_section</tt>, <tt>filter_tags_include</tt>,
- *  <tt>filter_tags_exclude</tt>, <tt>filter_sql_table</tt> and
- *  <tt>filter_sql_where</tt>. The order in which the article selection is
- *  displayed can be determined by <tt>filter_sql_order_by</tt>.
+ *  done by the attributes \c filter_section, \c filter_tags_include,
+ *  \c filter_tags_exclude, \c filter_sql_table and \c filter_sql_where. The
+ *  order in which the article selection is displayed can be determined by
+ *  \c filter_sql_order_by.
  * 
  * \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()
  */

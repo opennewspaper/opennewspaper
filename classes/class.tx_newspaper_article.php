@@ -357,8 +357,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// Get the list of Extra s associated with this Article in sorted order
-	/** The Extras are sorted by attribute <tt>paragraph</tt> first and
-	 *  <tt>position</tt> second.
+	/** The Extras are sorted by attribute \c paragraph first and
+	 *  \c position second.
 	 */
 	public function getExtras() { 
 		if (!$this->extras) {
@@ -440,9 +440,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/** The MM table record is only written if it did not exist beforehand.
 	 * 
 	 *  If \p $extra did not have a record in the abstract Extra table
-	 *  (<tt>tx_newspaper_extra</tt>), the record is created.
+	 *  (\c tx_newspaper_extra ), the record is created.
 	 * 
-	 *  The MM-table <tt>tx_newspaper_article_extra_mm</tt> will contain an
+	 *  The MM-table \c tx_newspaper_article_extra_mm will contain an
 	 *  association between the Article's UID and the UID in the abstract Extra
 	 *  table.
 	 * 
@@ -487,7 +487,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/// Change the paragraph of an Extra recursively on inheriting Articles
 	/** This function is used to change the paragraph of an Extra on Articles
 	 *  that serve as templates for the placement of Articles in Sections
-	 *  ("Default Articles"). Because the <tt>paragraph</tt> attribute must be
+	 *  ("Default Articles"). Because the \c paragraph attribute must be
 	 *  changed in the default articles of Sections that inherit from the 
 	 *  current Section, this operation is non-trivial and cannot be performed
 	 *  by a simple setAttribute().

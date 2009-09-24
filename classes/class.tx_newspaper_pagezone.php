@@ -869,7 +869,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
 	 *  class c'tor instead of every descendant to minimize code duplication.
 	 * 
-	 *  Problem: The descendant c'tor calls <tt>parent::__construct()</tt>. The
+	 *  Problem: The descendant c'tor calls \c parent::__construct(). The
 	 *  base c'tor knows only its own class, not the concrete class which is 
 	 *  intantiated. Every function call in the base c'tor therefore calls 
 	 *  functions in the base class. Late binding is impossible.

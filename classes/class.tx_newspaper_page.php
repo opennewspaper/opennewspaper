@@ -236,18 +236,22 @@ class tx_newspaper_Page
 	/** The correct template is found the following way.
 	 *  - the template set for the page is set via TSConfig
 	 *  - the name for the page is found via its page type
-	 *  - if the template <tt>tx_newspaper_page.tmpl</tt> exists under directory
-	 *    <tt>template_set/page_type</tt>, use it
-	 *  - else, if <tt>tx_newspaper_page.tmpl</tt> exists under directory
-	 *    <tt>template_set</tt>, use it
+	 *  - if the template \c tx_newspaper_page.tmpl exists under directory
+	 *    \c template_set/page_type, use it
+	 *  - else, if \c tx_newspaper_page.tmpl exists under directory
+	 *    \c template_set, use it
 	 *  - else, use the default template under 
 	 * 	  <tt>PATH_typo3conf . 'ext/newspaper/res/templates'</tt>
+	 * 
+	 *  Default smarty template:
+	 *  \include res/templates/tx_newspaper_page.tmpl
 	 * 
 	 *  \todo implement this template-finding logic by calling 
 	 * 		  $this->smarty-setTemplateSearchPath()
 	 * 
 	 *  \param $template_set the template set used to render this page (as 
 	 *  		passed down from The Big One - should be always empty.
+	 * 
 	 *  \return The rendered page as HTML (or whatever your template does) 
 	 */
  	public function render($template_set = '') {

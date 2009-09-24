@@ -41,6 +41,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
  * 
  *  Class tx_newspaper_PageZone implements the tx_newspaper_Extra interface,
  *  because a PageZone can be placed like an Extra.
+ * 
+ *  Default smarty template:
+ *  \include res/templates/tx_newspaper_pagezone_page.tmpl
  */
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		

@@ -192,7 +192,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
      * 
      *  If the resized file already exists, it is not re-created.
      * 
-     *  \todo Launch the <tt>convert</tt>-process in the background, returning
+     *  \todo Launch the \c convert - process in the background, returning
      * 		immediately.
      *  \todo clean up this function
      * 
@@ -314,7 +314,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	///	Where Typo3 stores uploaded images
 	const uploads_folder = 'uploads/tx_newspaper';
 	
-    /// path to <tt>convert(1)</tt>
+    /// path to \c convert(1)
     const convert = '/usr/bin/convert';
 
 	/// Name of the size for thumbnail images displayed in the BE
@@ -327,7 +327,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 */
 	const default_jpeg_quality = 90;
 	
-	/// Other options to <tt>convert(1)</tt>
+	/// Other options to \c convert(1)
 	const convert_options = '';
 
 	/// Whether to keep aspect ratio when resizing images 

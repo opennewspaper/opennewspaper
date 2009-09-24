@@ -42,18 +42,18 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  *  disappear from the list. 
  * 
  *  The selection of articles from which the list id filled dynamically is 
- *  done by the attributes <tt>filter_section</tt>, <tt>filter_tags_include</tt>,
- *  <tt>filter_tags_exclude</tt>, <tt>filter_sql_table</tt> and
- *  <tt>filter_sql_where</tt>. The order in which the article selection is
- *  displayed can be determined by <tt>filter_sql_order_by</tt>.
+ *  done by the attributes \c filter_section , \c filter_tags_include ,
+ *  \c filter_tags_exclude , \c filter_sql_table  and
+ *  \c filter_sql_where . The order in which the article selection is
+ *  displayed can be determined by \c filter_sql_order_by .
  *
  *  The manual reordering is stored with the MM relation table,
- *  <tt>tx_newspaper_articlelist_semiautomatic_articles_mm</tt>.
+ *  \c tx_newspaper_articlelist_semiautomatic_articles_mm .
  *  Articles which have not been manually reordered don't have an entry in the 
- *  MM table. For moved articles the value <tt>offset</tt> is stored in the MM
- *  table. Every article recorded in the MM table is moved <tt>offset</tt>
- *  places up (or down, if <tt>offset</tt> is negative) in the list. 
- *  <tt>offset</tt> can be greater than the length of the list, making articles
+ *  MM table. For moved articles the value \c offset  is stored in the MM
+ *  table. Every article recorded in the MM table is moved \c offset 
+ *  places up (or down, if \c offset  is negative) in the list. 
+ *  \c offset  can be greater than the length of the list, making articles
  *  sticky, or moving them off the end of the list.
  * 
  *  \todo indexOfArticle(), isSectionList(), insertArticleAtPosition()

@@ -25,8 +25,8 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/// Display the article denoted by <tt>$_GET['art']</tt>
-	/** ...or more accurately, <tt>$_GET[tx_newspaper::GET_article()]</tt>,
+	/// Display the article denoted by \c $_GET['art']
+	/** ...or more accurately, \c$_GET[tx_newspaper::GET_article()],
 	 *  where \p tx_newspaper::GET_article() defaults to 'art'.
 	 *  
 	 *  \param template_set The template set used to render. This is overridden
