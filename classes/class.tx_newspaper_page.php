@@ -389,7 +389,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		return $list;
 	}
 
-	/// \return The tx_newspaper_Section under which this page lies
+	/** \return The tx_newspaper_Section under which this page lies
+	 */
  	public function getParentSection() { 
  		if (!$this->parentSection) {
  			$this->parentSection = new tx_newspaper_Section(intval($this->getAttribute('section')));
@@ -397,6 +398,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  		return $this->parentSection; 
  	}
  	
+ 	/** \return tx_newspaper_PageType of the current tx_newspaper_Page
+ 	 */
  	public function getPageType() {
 # 		if (!$this->pagetype) {
  			$this->pagetype = new tx_newspaper_PageType(intval($this->getAttribute('pagetype_id')));
@@ -431,16 +434,17 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 
- 	private $uid = 0;
+ 	private $uid = 0;								///< UID of record in the DB
  	
  	private $smarty = null;							///< Smarty object for HTML rendering
  	private $parentSection = null;					///< Newspaper section this page is in
  	private $condition = null;						///< WHERE-condition used to find current page
  	private $pageZones = array();					///< Page zones on this page
  	private $attributes = array();					///< The member variables
- 	private $pagetype = null;
+ 	private $pagetype = null;						///< tx_newspaper_PageType of the current page
  	
  	/// Default Smarty template for HTML rendering
+ 	/** \todo get rid of this variable */
  	static private $defaultTemplate = 'tx_newspaper_page.tmpl';
  	
 }

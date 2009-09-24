@@ -14,14 +14,15 @@
  *  Of course, every stored object resides in a DB table and has a UID. Getters
  *  for DB table and UID and a setter for the UID must be provided.
  *
- *  Additional functionality is supplied for 
+ *  Additional functionality is supplied for printing the type name of the
+ *  object in a user-readable way via getTitle(). 
  */
  interface tx_newspaper_StoredObject {
 
 	/// Returns an attribute
 	/** \param $attribute Name of the requested attribute
 	 *	\return Value of the requested attribute
-	 *  \throw tx_newspaper_WrongAttributeException If \p $attribute_name does
+	 *  \throw tx_newspaper_WrongAttributeException If \p $attribute does
 	 * 		not exist.
 	 */
 	public function getAttribute($attribute);
@@ -32,7 +33,7 @@
 	 */
 	public function setAttribute($attribute, $value);
 
-	/// Write or overwrite Extra data in DB
+	/// Write or overwrite object data in DB
 	/** Of course, a StoredObject needs a store() procedure ;-)
 	 * 
 	 *  If the object is new, creates the record and sets the UID to the result.
@@ -45,31 +46,32 @@
 	 */
 	public function store();
 
-	/// \return UID of the object
+	/** \return UID of the record that contains the object in the DB */
 	public function getUid();
 
-	/// \param $uid new UID of the object
+	/** \param $uid new UID of the record that contains the object in the DB */
 	public function setUid($uid);
 	
-	/// \return Name of the database table the object's data are stored in
+	/** \return Name of the database table the object's data are stored in */
 	public function getTable();
 
-	/// \return (Internationalized) short description if the object type
+	///	Short description of the object type
 	/** This is (probably) used only in the BE, where the user needs to know
 	 *	which kind of object she is handling.
+	 *
+	 *  \return (Internationalized) short description if the object type
 	 */
 	public function getTitle();
 
-	/// \return String the name of the newspaper sysfolder
+	/// The name of the Typo3 SysFolder used to store objects of this type
 	/** Needed to fill field "tx_newspaper_module" in table pages to find/create
-	 *  a storage folder for an Extra etc.
-	 *  Specification: np_* (max. 255 char); should not contain "phpunit"
+	 *  a storage folder for a storable object.
+	 * 
+	 *  \attention Specification: np_* (max. 255 char); should not contain "phpunit"
+	 * 
+	 *  \return The name of the newspaper sysfolder
 	 */
 	public static function getModuleName(); 
-	
-	/// \return int pid of sysfolder to store extra records in
-/// \todo: implement in section, pagezone, articlelist etc.
-//	public function getSysfolderPid();
 
 }
 ?>
