@@ -81,7 +81,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	////////////////////////////////////////////////////////////////////////////
 
  	
- 	/// returns an actual member (-> Extra)
 	function getAttribute($attribute) {
 		/** For reasons explained in readExtras() the attributes are read in the
 		 *  constructor, so we don't read the attributes here 
@@ -93,7 +92,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->attributes[$attribute];
 	}
 
-	/// sets a member (-> Extra)
 	function setAttribute($attribute, $value) {
 		/** For reasons explained in readExtras() the attributes are read in the
 		 *  constructor, so we don't read the attributes here 

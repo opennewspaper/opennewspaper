@@ -46,10 +46,10 @@ interface tx_newspaper_ArticleIface
 	public function getExtras();
 
 	/// Find the first tx_newspaper_Extra of a given type
-	/** \param $extra_class The desired type of Extra, either as object or as
-	 *  	class name
-	 *  \return The first Extra of the given class (by appearance in article),
-	 * 		or null.
+	/** \param $extra_class The desired type of tx_newspaper_Extra, either as
+	 *  	 object or as class name.
+	 *  \return The first tx_newspaper_Extra of the given class (by appearance
+	 * 		 in article), or \c null.
 	 */
 	public function getExtra($extra_class);	
 
@@ -59,11 +59,11 @@ interface tx_newspaper_ArticleIface
 	public static function getAttributeList();
 	
 	/// Store the relation of an Extra to a concrete Article (used from BE)
-	/** - Write the entry in the abstract Extra table, if the Extra has been 
+	/**
+	 *  - Write the entry in the abstract Extra table, if the Extra has been 
 	 *    freshly created
 	 *  - Link the Extra to the given article in the MM-table
-	 *  \todo Do we take strings and ints as UIDs here, or can we already work
-	 * 	with full objects?
+	 * 
 	 *  \param $extra concrete extra
 	 *  \return UID of entry in abstract extra table
 	 */
