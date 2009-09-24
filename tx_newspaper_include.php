@@ -33,14 +33,14 @@
  * 
  *   Concepts:
  *   - article
- * 		- article type
- * 	 - section
- * 		- article lists
+ *     - article type
+ *   - section
+ *     - article lists
  *   - extra
  *   - page
- * 		- page type
+ *     - page type
  *   - page zone
- * 		- page zone type
+ *     - page zone type
  *   - smarty templates (see tx_newspaper_Smarty)
  *  
  *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system
