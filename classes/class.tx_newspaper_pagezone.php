@@ -99,10 +99,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->attributes[$attribute] = $value;
 	}
 	
-	/** \todo ensure page zone type is stored correctly
-	 *  \todo store Extras placed on $this
-	 */
 	public function store() {
+		/** \todo ensure page zone type is stored correctly
+		 *  \todo store Extras placed on $this
+		 */
 		
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, now would be a good time to read them 
