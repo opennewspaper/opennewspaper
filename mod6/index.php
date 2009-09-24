@@ -34,14 +34,20 @@ require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-// width: 100%
+/// Class to generate a BE module with 100% width
 class fullWidthDoc extends template {
-	var $divClass = 'typo3-fullWidthDoc';
+	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
 
-/**
- * Module 'Control Tag Control' for the 'newspaper' extension.
+/// Module 'Control Tag Control' for the 'newspaper' extension. 
+/** A BE for assigning shown tx_newspaper_Extra s to a combination of
+ *  tx_newspaper_Tag and tx_newspaper_TagZone. By placing a
+ *  tx_newspaper_Extra_ControlTagZone Extra and assigning it a tag zone, a
+ *  dossier can be supplied with Extras shown only with tx_newspaper_Article s
+ *  which are tagged with a specific tx_newspaper_Tag.
+ * 
+ *  The central function which handles all the action is moduleContent().
  *
  * \author	Helge Preuss <helge.preuss@gmail.com>
  */
@@ -70,9 +76,11 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	);
 
 
-	/**
-	 * Initializes the Module
-	 * @return	void
+	/// Initializes the Module
+	/** Initializes a tx_newspaper_Smarty instance and a \c language object for
+	 *  internationalization of BE messages.
+	 * 
+	 * \return	void
 	 */
 	function init()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
@@ -88,18 +96,11 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		
 		parent::init();
 
-		/*
-		if (t3lib_div::_GP('clear_all_cache'))	{
-			$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-		}
-		*/
 	}
 
-	/**
-	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-	 *
-	 * @return	void
-	 */
+	/// Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	/** \todo Make a real menu. Options: manage dossiers, create new tags.
+	 */ 
 	function menuConfig()	{
 		global $LANG;
 		$this->MOD_MENU = Array (
@@ -112,11 +113,10 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		parent::menuConfig();
 	}
 
-	/**
-	 * Main function of the module. Write the content to $this->content
-	 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-	 *
-	 * @return	[type]		...
+	/// Main function of the module. Writes the content to \c $this->content.
+	/** If you chose "web" as main module, you will need to consider the
+	 *  \c $this->id parameter which will contain the uid-number of the page
+	 *  clicked in the page tree.
 	 */
 	function main()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
@@ -179,20 +179,19 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 	}
 
-	/**
-	 * Prints out the module HTML
-	 *
-	 * @return	void
-	 */
+	/// Prints out the module HTML
 	function printContent()	{
 		$this->content.=$this->doc->endPage();
 		echo $this->content;
 	}
 
-	/**
-	 * Generates the module content
-	 *
-	 * @return	void
+	/// Generates the module content, depending on the menu values chosen.
+	/** Prints a list of present tag zone/tag/extra combinations and enables the
+	 *  user to select each of those.
+	 * 
+	 *  \todo Create new tags if the function menu is thus selected
+	 *  \todo paging of entries
+	 *  \todo don't create a new combination on every POST
 	 */
 	function moduleContent()	{
 		global $LANG;
@@ -239,6 +238,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	
 	////////////////////////////////////////////////////////////////////////////
 	
+	/// Handle user input
+	/** Creates a new tag zone/tag/extra combination if the user entered one.
+	 */
 	private function handlePOST() {
 		if ($_POST) {
 			//	reorder $_POST so it is arranged as an array (
@@ -266,12 +268,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}		
 	}
 	
+	///	Returns all tag zones
 	static private function getAvailableTagZones() {
 		return tx_newspaper::selectRows(
 			'uid, name', self::tag_zone_table
 		);
 	}
 
+	///	Returns all tx_newspaper_Tag s
 	static private function getAvailableTags() {
 		return tx_newspaper::selectRows(
 			'uid, tag', self::tag_table,
@@ -279,6 +283,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		);
 	}
 
+	///	Returns all classes which have registered as a tx_newspaper_Extra
 	static private function getAvailableExtraTypes() {
 		$extra_types = array();
 		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
@@ -290,6 +295,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		return $extra_types;
 	}
 	
+	/// Value for field \c tag_type of table \c tx_newspaper_tag denoting dossier tags
 	static private function getControlTagType() {
 		return 'control';
 	}

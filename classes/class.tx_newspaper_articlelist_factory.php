@@ -54,6 +54,12 @@ class tx_newspaper_ArticleList_Factory {
 		return self::$instance;
 	}
 	
+	/// Create a tx_newspaper_ArticleList given a UID
+	/** \param $uid UID of the abstract tx_newspaper_ArticleList record in DB
+	 *  \param $section optional: tx_newspaper_Section the tx_newspaper_ArticleList
+	 * 		belongs to
+	 *  \return A concrete object of a class derived from tx_newspaper_ArticleList
+	 */
 	public function create($uid, tx_newspaper_Section $section = null) {
 		/// Read actual type and UID of the ArticleList to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
