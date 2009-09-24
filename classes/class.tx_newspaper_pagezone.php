@@ -779,7 +779,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s)
-				 *  \see http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt
+				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)#Beispiel_-_.C3.84nderung_Ebene_1.2C_aber_Referenzelement_wird_nicht_vererbt
 				 */
 				$parent = $this->getParentForPlacement();
 				if (!$parent instanceof tx_newspaper_PageZone) {
