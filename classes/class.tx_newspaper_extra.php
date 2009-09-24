@@ -21,6 +21,7 @@
  *  - getModuleName()
  * 
  *  \todo Explain about the division into an abstract and a concrete portion
+ *  \todo explain about registration, or more broaly, how to implement a new Extra
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
@@ -41,17 +42,18 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	public function __clone() {
 
-		/// read typo3 fields to copy into extra table
+		/// Read Typo3 fields to copy into extra table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_extra_table),
 			$this->getTable(),
 			'uid = ' . $this->getUid()
 		);
 		
-		/// write the uid and table into extra table, with the values read above
+		/// Write the uid and table into extra table, with the values read above
 		$row['extra_uid'] = $this->getUid();
 		$row['extra_table'] = $this->getTable();
-		$row['tstamp'] = time();				///< tstamp is set to now
+		/// \c tstamp is set to now
+		$row['tstamp'] = time();				
 
 		$this->setExtraUid(tx_newspaper::insertRows(self::$table, $row));
 	}
@@ -82,7 +84,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *  dealing with DBs, but the concept is the same.)
 	 */
 	public function duplicate() {
-		$this->getAttribute('uid');			///< read attributes from DB
+		$this->getAttribute('uid');			/// Read attributes from DB
 
 		/// Copy concrete extra data
 		$temp_attributes = $this->attributes;
@@ -108,7 +110,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $that;
 	}
 
-	/// Prepare for rendering. Should be called in every implementation of render().
+	/// Prepare for rendering. Should be called in every reimplementation of render().
 	/** This function initializes the tx_newspaper_Smarty object and sets the
 	 *  correct template search path. It also ensures that all attributes to the
 	 *  tx_newspaper_Extra are read from DB and passed to smarty as smarty
@@ -135,7 +137,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			$template_set = $this->getAttribute('template_set');
 		}
 		
-		/// Configure Smarty rendering engine
+		/// Configure Smarty rendering engine.
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
@@ -326,7 +328,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public static function getModuleName() { return 'np_extra_default'; }
 
 	///  PID of SysFolder to store tx_newspaper_Extra records in.
-	/// \return PID of SysFolder to store tx_newspaper_Extra records in.
+	/** \return PID of Typo3 SysFolder to store tx_newspaper_Extra records in.
+	 */
 	public function getSysfolderPid() {
 		return tx_newspaper_Sysfolder::getInstance()->getPid($this);
 	}
@@ -379,6 +382,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	/** \param $uid uid of record in given table
 	 *  \param $table name of table (f.ex \c tx_newspaper_extra_image)
 	 *  \return Array row with Extra data for given uid and table
+	 *  \todo explain why this is needed.
 	 */
 	public static function readExtraItem($uid, $table) {
 		if (!$uid) return array();
@@ -415,17 +419,17 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			}
 		}
 		
-		/// read typo3 fields to copy into extra table
+		/// Read Typo3 fields to copy into extra table
 		$row = tx_newspaper::selectOneRow(
 			implode(', ', self::$fields_to_copy_into_extra_table),
 			$table,
 			'uid = ' . intval($uid)
 		);
 			
-		/// write the uid and table into extra table, with the values read above
+		/// Write the uid and table into extra table, with the values read above
 		$row['extra_uid'] = $uid;
 		$row['extra_table'] = $table;
-		$row['tstamp'] = time();				///< tstamp is set to now
+		$row['tstamp'] = time();				/// \c tstamp is set to now
 	
 		return tx_newspaper::insertRows(self::$table, $row);
 	}
@@ -501,7 +505,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *    tx_newspaper_PageZone?
 	 *  - What if a tx_newspaper_Extra is not placed on any tx_newspaper_PageZone
 	 *    at all (perhaps because it is a template from which other 
-	 *    tx_newspaper_Extras are copied)?
+	 *    tx_newspaper_Extra are copied)?
 	 *  - We must manually select the tx_newspaper_Extra from all
 	 *    Extra-to-PageZone-MM-tables there are. 
 	 *    - These are currently limited to two (for tx_newspaper_Article and
@@ -533,12 +537,12 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	private $uid = 0;			///< Extra's UID in the concrete Extra table
 	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
 
-	private $attributes = array();				///< attributes of the concrete extra
-	private $extra_attributes = array();		///< attributes of the abstract extra
+	private $attributes = array();				///< Attributes of the concrete extra
+	private $extra_attributes = array();		///< Attributes of the abstract extra
 
 	protected $smarty = null;					///< tx_newspaper_Smarty rendering engine
 
-	private static $registeredExtra = array();	///< list of registered tx_newspaper_Extra
+	private static $registeredExtra = array();	///< List of registered tx_newspaper_Extra
 
 
 	/// Extra table must be defined here because tx_newspaper_ExtraIface is an interface
@@ -547,6 +551,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	private static $table = 'tx_newspaper_extra';
 
+	/// \todo document!
 	private static $fields_to_copy_into_extra_table = array(
 		'pid', 'crdate', 'cruser_id', 'deleted',  
 	);
