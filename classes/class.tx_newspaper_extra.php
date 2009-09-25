@@ -28,14 +28,23 @@
  *     associated with the class tx_newspaper_Extra and stored in the SQL table
  *     \c tx_newspaper_extra. These data are called the \em abstract portion of
  *     an Extra.
- *  Whenever the words \c "abstract" or \c "concrete" appear throughout the 
+ * 
+ *  Whenever the words \em "abstract" or \em "concrete" appear throughout the 
  *  documentation, they refer to these aspects of an Extra.
  *  Inside the object, the member variable \c $uid stores the UID of the
- *  concrete record and $extra_uid the UID of the abstract record. The
+ *  concrete record and \c $extra_uid the UID of the abstract record. The
  *  attributes for the concrete and abstract records are stored in the arrays
  *  \c $attributes and \c $extra_attributes, respectively.
  * 
- *  \todo explain about registration, or more broadly, how to implement a new Extra
+ *  \par Creating Extra implementations
+ *  - Creating the SQL table
+ *  - Creating the PHP class
+ *    - implementing render()
+ *    - implementing getTitle(), getDescription() and getModuleName()
+ *  - registering the PHP class
+ *  - including the class definition
+ * 
+ *  \todo Finish the implementation guide
  *  \todo origin uids
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
