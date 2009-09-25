@@ -12,14 +12,12 @@
  *  concrete Extra anyway. All Extras (except tx_newspaper_Article and 
  *  tx_newspaper_PageZone) inherit from this class.
  * 
- *  abstract functions:
- *	- static function getTitle()
- *
- *  generic functions which should be overridden:
+ *  Generic functions which should be overridden:
  *  - __construct()
  *  - render()
  *  - getModuleName()
  * 
+ *  \par Technical notes
  * 	Technically, every Extra consists of two parts: 
  *  -# The data for the \em concrete Extra, an object of a class derived from
  *     tx_newspaper_Extra, which are stored in a SQL table associated with the
@@ -29,7 +27,7 @@
  *     \c tx_newspaper_extra. These data are called the \em abstract portion of
  *     an Extra.
  * 
- *  \par Technical notes
+ *  \par
  *  Whenever the words \em "abstract" or \em "concrete" appear throughout the 
  *  documentation, they refer to these aspects of an Extra.
  *  Inside the object, the member variable \c $uid stores the UID of the
@@ -50,14 +48,28 @@
  *    called \c tx_newspaper_extra_image. \n
  *    The SQL table can be created using the Typo3 Extension Kickstarter. In
  *    fact, using the Kickstarter is highly recommended.
- *  - <b>Creating the PHP class:</b> 
- *    - implementing render()
- *    - implementing getTitle(), getDescription() and getModuleName()
+ *  - <b>Creating the PHP class:</b> This generates the business logic of your
+ *    Extra.
+ *    - Implementing the render() function: render() provides the core
+ *      functionality for the Extra. It displays the values, that are stored in
+ *      the DB for every Extra record, in the frontend. An implementation of
+ *      render() typically consists of three steps:
+ *      - Call prepare_render() to initialize the tx_newspaper_Smarty rendering
+ *        engine and assign the attributes as Smarty variables.
+ *      - Assign additional variables to the tx_newspaper_Smarty rendering
+ *        engine, if needed.
+ *      - call \c fetch() on \c $this->smarty, thus rendering the Extra, and
+ *        return the obtained string.
+ *      For examples on how to create and use a tx_newspaper_Smarty template,
+ *      please refer to concrete Extra implementations, e.g.
+ *      class.tx_newspaper_extra_image.php and tx_newspaper_extra_image.tmpl.
+ *    - Implementing getTitle(), getDescription() and getModuleName(): These
+ *      functions are used to make the Extra recognizable for the backend user.
  *  - <b>Registering the PHP class:</b> For the new Extra to appear in 
  *    newspaper's menus, a registration must be performed. Preferrably in the
  *    PHP file defining the Extra class, include a call to 
  *    \c tx_newspaper_Extra::registerExtra(). For example: \code
- *    tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image()); 
+ *    tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_Image()); 
  *    \endcode
  *  - <b>Including the class definition:</b> Because neither Typo3 nor the
  *    newspaper extension uses autoloading at this point (Typo3 4.2), the class
