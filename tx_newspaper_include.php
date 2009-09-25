@@ -31,28 +31,28 @@
  
 /** \mainpage tx_newspaper - an editing system for an online newspaper
  * 
- *   \section Concepts
- *   \subsection Article
+ *   \section Concepts Concepts
+ *   \subsection Articles Articles
  *   see tx_newspaper_Article
- *   \subsubsection Article type
+ *   \subsubsection Article_type Article types
  *   see tx_newspaper_ArticleType
- *   \subsection Section
+ *   \subsection Sections Sections
  *   see tx_newspaper_Section
- *   \subsubsection Article lists
+ *   \subsubsection Article_lists Article lists
  *   see tx_newspaper_ArticleList
- *   \subsection Extra
+ *   \subsection Extras Extras
  *   see tx_newspaper_Extra
- *   \subsection Page
+ *   \subsection Pages Pages
  *   see tx_newspaper_Page
- *   \subsubsection Page type
+ *   \subsubsection Page_types Page types
  *   see tx_newspaper_PageType
- *   \subsection Page zone
+ *   \subsection Page_zones Page Zones
  *   see tx_newspaper_PageZone
- *   \subsubsection Placement and inheritance
+ *   \subsubsection Placement Placement and inheritance
  *   see ...
- *   \subsubsection Page zone type
+ *   \subsubsection Page_zone_types Page zone types
  *   see tx_newspaper_PageZoneType
- *   \subsection Display templates 
+ *   \subsection Templates Display templates 
  *   see tx_newspaper_Smarty
  *  
  *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system

@@ -95,8 +95,6 @@
  *    definition for the new Extra class must be \c include() 'd manually. The
  *    best way to do that is from the \c ext_localconf.php for your Typo3
  *    extension.
- * 
- *  \todo origin uids
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
