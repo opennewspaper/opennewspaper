@@ -36,7 +36,7 @@
  *  \c $attributes and \c $extra_attributes, respectively.
  * 
  *  \par
- *  For the inheritance of particular Extras on Page Zones it is essential that
+ *  For the \ref Placement inheritance of particular Extras on Page Zones it is essential that
  *  the Extra on the current Page Zone knows from which original Extra it is
  *  inherited. For that end, the so called Origin UID is stored with every Extra
  *  (in the abstract portion of the Extra). It contains the abstract UID of the
