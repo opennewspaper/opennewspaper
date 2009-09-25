@@ -2437,24 +2437,90 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.internal_links",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_externallinks",	
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_externallinks",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
 				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
+				"wizards" => Array(
+					"_PADDING" => 2,
+					"_VERTICAL" => 1,
+					"add" => Array(
+						"type" => "script",
+						"title" => "Create new record",
+						"icon" => "add.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_externallinks",
+							"pid" => "###CURRENT_PID###",
+							"setValue" => "prepend"
+						),
+						"script" => "wizard_add.php",
+					),
+					"list" => Array(
+						"type" => "script",
+						"title" => "List",
+						"icon" => "list.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_externallinks",
+							"pid" => "###CURRENT_PID###",
+						),
+						"script" => "wizard_list.php",
+					),
+					"edit" => Array(
+						"type" => "popup",
+						"title" => "Edit",
+						"script" => "wizard_edit.php",
+						"popup_onlyOpenIfSelected" => 1,
+						"icon" => "edit2.gif",
+						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
+					),
+				),
 			)
 		),
 		"external_links" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.external_links",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_externallinks",	
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_externallinks",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
 				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
+				"wizards" => Array(
+					"_PADDING" => 2,
+					"_VERTICAL" => 1,
+					"add" => Array(
+						"type" => "script",
+						"title" => "Create new record",
+						"icon" => "add.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_externallinks",
+							"pid" => "###CURRENT_PID###",
+							"setValue" => "prepend"
+						),
+						"script" => "wizard_add.php",
+					),
+					"list" => Array(
+						"type" => "script",
+						"title" => "List",
+						"icon" => "list.gif",
+						"params" => Array(
+							"table"=>"tx_newspaper_externallinks",
+							"pid" => "###CURRENT_PID###",
+						),
+						"script" => "wizard_list.php",
+					),
+					"edit" => Array(
+						"type" => "popup",
+						"title" => "Edit",
+						"script" => "wizard_edit.php",
+						"popup_onlyOpenIfSelected" => 1,
+						"icon" => "edit2.gif",
+						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
+					),
+				),
 			)
 		),
 	),
@@ -2466,5 +2532,4 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
-require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
