@@ -20,8 +20,23 @@
  *  - render()
  *  - getModuleName()
  * 
- *  \todo Explain about the division into an abstract and a concrete portion
- *  \todo explain about registration, or more broaly, how to implement a new Extra
+ * 	Technically, every Extra consists of two parts: 
+ *  -# The data for the \em concrete Extra, an object of a class derived from
+ *     tx_newspaper_Extra, which are stored in a SQL table associated with the
+ *     concrete Extra class.
+ *  -# Data fields which are the same for every implementation of Extra,
+ *     associated with the class tx_newspaper_Extra and stored in the SQL table
+ *     \c tx_newspaper_extra. These data are called the \em abstract portion of
+ *     an Extra.
+ *  Whenever the words \c "abstract" or \c "concrete" appear throughout the 
+ *  documentation, they refer to these aspects of an Extra.
+ *  Inside the object, the member variable \c $uid stores the UID of the
+ *  concrete record and $extra_uid the UID of the abstract record. The
+ *  attributes for the concrete and abstract records are stored in the arrays
+ *  \c $attributes and \c $extra_attributes, respectively.
+ * 
+ *  \todo explain about registration, or more broadly, how to implement a new Extra
+ *  \todo origin uids
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
@@ -551,7 +566,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	private static $table = 'tx_newspaper_extra';
 
-	/// \todo document!
+	/// When a new reference to an Extra is made, these fields are copied
 	private static $fields_to_copy_into_extra_table = array(
 		'pid', 'crdate', 'cruser_id', 'deleted',  
 	);
