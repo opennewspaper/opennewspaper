@@ -31,31 +31,59 @@
  
 /** \mainpage tx_newspaper - an editing system for an online newspaper
  * 
- *   \section concepts Concepts
+ *  \section concepts Concepts
  *
  *    \subsection articles Articles
- *   see tx_newspaper_Article
+ * 
+ *    Any newspaper consists of a number of articles. The article is the basic 
+ *    building block of a newspaper.
+ * 
+ *    A typical article consists of a header, a kicker, a teaser and/or an
+ *    introduction, and the article text. However, any article, especially
+ *    online articles, can consist of many more elements. In tx_newspaper these
+ *    elements are called \ref extras. These Extras are placed in an article
+ *    before or after paragraphs of text. Placing Extras in an article is called
+ *    Placement.
+ * 
+ *    \sa tx_newspaper_Article
+ * 
+ *      \subsubsection article_import Article import
+ * 
+ *      An online newspaper typically is just a department of a traditional
+ *      print newspaper. The articles displayed in the online edition are taken
+ *      from the editing software the editors for the print edition use. Getting
+ *      an article from the print editing software into tx_newspaper is called
+ *      "import".
+ * 
+ *      \subsubsection default_placement Default placement for articles
  *
- *    \subsubsection article_type Article types
- *   see tx_newspaper_ArticleType
+ *      \subsubsection article_type Article types
+ *      See tx_newspaper_ArticleType
  * 
- *   \subsection sections Sections
- *   see tx_newspaper_Section
+ *    \subsection sections Sections
  * 
- *   \subsubsection article_lists Article lists
- *   see tx_newspaper_ArticleList
+ *    \ref articles are grouped into Sections. When the reader visits a landing
+ *    page for a section on the website, he or she expects to see a list of
+ *    \ref articles belonging to that section.
  * 
- *   \subsection extras Extras
- *   see tx_newspaper_Extra
+ *    The articles belonging to a Section are managed in \ref article_lists.
  * 
- *   \subsection pages Pages
- *   see tx_newspaper_Page
+ *    See tx_newspaper_Section.
  * 
- *   \subsubsection page_types Page types
- *   see tx_newspaper_PageType
+ *      \subsubsection article_lists Article lists
+ *      See tx_newspaper_ArticleList
  * 
- *   \subsection page_zones Page Zones
- *   see tx_newspaper_PageZone
+ *    \subsection extras Extras
+ *    See tx_newspaper_Extra
+ * 
+ *    \subsection pages Pages
+ *    See tx_newspaper_Page
+ * 
+ *      \subsubsection page_types Page types
+ *      See tx_newspaper_PageType
+ * 
+ *    \subsection page_zones Page Zones
+ *    See tx_newspaper_PageZone
  * 
  *   \subsubsection placement Placement and inheritance
  *   see ...
