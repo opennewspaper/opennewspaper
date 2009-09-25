@@ -46,15 +46,24 @@
  *  - <b>Creating the SQL table:</b> You must define a SQL table used by your 
  *    extension that stores the persistent data for your Extra. The table must
  *    have the same name as the PHP class implementing the Extra, but lowercased.
- *    For Example, the table for the Extra class tx_newspaper_Extra_Image is
+ *    For example, the table for the Extra class tx_newspaper_Extra_Image is
  *    called \c tx_newspaper_extra_image. \n
  *    The SQL table can be created using the Typo3 Extension Kickstarter. In
  *    fact, using the Kickstarter is highly recommended.
- *  - Creating the PHP class
+ *  - <b>Creating the PHP class:</b> 
  *    - implementing render()
  *    - implementing getTitle(), getDescription() and getModuleName()
- *  - registering the PHP class
- *  - including the class definition
+ *  - <b>Registering the PHP class:</b> For the new Extra to appear in 
+ *    newspaper's menus, a registration must be performed. Preferrably in the
+ *    PHP file defining the Extra class, include a call to 
+ *    \c tx_newspaper_Extra::registerExtra(). For example: \code
+ *    tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image()); 
+ *    \endcode
+ *  - <b>Including the class definition:</b> Because neither Typo3 nor the
+ *    newspaper extension uses autoloading at this point (Typo3 4.2), the class
+ *    definition for the new Extra class must be \c include() 'd manually. The
+ *    best way to do that is from the \c ext_localconf.php for your Typo3
+ *    extension.
  * 
  *  \todo Finish the implementation guide
  *  \todo origin uids
