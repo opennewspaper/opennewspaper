@@ -31,32 +31,60 @@
  
 /** \mainpage tx_newspaper - an editing system for an online newspaper
  * 
- *   \section Concepts Concepts
- *   \subsection Articles Articles
+ *   \section concepts Concepts
+ *
+ *    \subsection articles Articles
  *   see tx_newspaper_Article
- *   \subsubsection Article_type Article types
+ *
+ *    \subsubsection article_type Article types
  *   see tx_newspaper_ArticleType
- *   \subsection Sections Sections
+ * 
+ *   \subsection sections Sections
  *   see tx_newspaper_Section
- *   \subsubsection Article_lists Article lists
+ * 
+ *   \subsubsection article_lists Article lists
  *   see tx_newspaper_ArticleList
- *   \subsection Extras Extras
+ * 
+ *   \subsection extras Extras
  *   see tx_newspaper_Extra
- *   \subsection Pages Pages
+ * 
+ *   \subsection pages Pages
  *   see tx_newspaper_Page
- *   \subsubsection Page_types Page types
+ * 
+ *   \subsubsection page_types Page types
  *   see tx_newspaper_PageType
- *   \subsection Page_zones Page Zones
+ * 
+ *   \subsection page_zones Page Zones
  *   see tx_newspaper_PageZone
- *   \subsubsection Placement Placement and inheritance
+ * 
+ *   \subsubsection placement Placement and inheritance
  *   see ...
- *   \subsubsection Page_zone_types Page zone types
+ * 
+ *   \subsubsection page_zone_types Page zone types
  *   see tx_newspaper_PageZoneType
- *   \subsection Templates Display templates 
+ * 
+ *   \subsection templates Display templates 
  *   see tx_newspaper_Smarty
  *  
+ *  \section usage Using tx_newspaper
+ * 
+ *  \section administration Administering tx_newspaper
+ *  
+ *  \subsection install Installation
+ * 
+ *  \subsubsection requirements Requirements
+ * 
+ *  - Typo3 >= 4.2
+ *  - Required extensions should be installed automatically
+ * 
  *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system
  *  	can lead to serious frustration and is not recommended!
+ *
+ *  \subsubsection install_templates Smarty templates
+ * 
+ *  \subsubsection install_articletypes Article types
+ *   
+ *  \subsection Troubleshooting Troubleshooting
  *  
  *  \todo Write me!
  */
