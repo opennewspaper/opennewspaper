@@ -56,9 +56,27 @@
  *      "import".
  * 
  *      \subsubsection default_placement Default placement for articles
+ * 
+ *      Usually, an article should have a certain number of predefined  
+ *      \ref extras. For example every article could be required to have an
+ *      image. The Extras required for articles might change depending on the
+ *      \ref sections the article is in - in the commentary section articles may
+ *      have no image.
+ * 
+ *      For that reason it is possible to define the Extras that are associated
+ *      with an article by default, per section. The position of the Extras in
+ *      the article is also defined per section.
  *
  *      \subsubsection article_type Article types
- *      See tx_newspaper_ArticleType
+ * 
+ *      Not only does the default placement depend on the section an article is
+ *      in, but also on the type of article. For instance, an interview might be
+ *      required to always display a short biography of the interview partner,
+ *      while a standard article would not. To distinguish the type of article
+ *      and subsequently the correct default placement, the user can define an
+ *      article type and the corresponding default placement.
+ * 
+ *      \sa tx_newspaper_ArticleType
  * 
  *    \subsection sections Sections
  * 
@@ -68,51 +86,82 @@
  * 
  *    The articles belonging to a Section are managed in \ref article_lists.
  * 
- *    See tx_newspaper_Section.
+ *    Sections can be arranged in a tree-like structure. The "Politics" Section
+ *    may have national and international politics as subsections. Only Articles
+ *    from the "National" section can appear on the landing page for the
+ *    "National" section, but articles from both "National" and "International"
+ *    can appear on the "Politics" landing page.
+ *   
+ *    All sections are usually grouped under a root section. The landing page of
+ *    the "root" section is the "Start" or "Home" page of the online newspaper.
+ *    Articles from all sections can appear on the "Home" page.
+ * 
+ *    An article can belong to more than one section, if required. That way an
+ *    article can appear both in the "Politics" and "Culture" sections, for
+ *    example. 
+ * 
+ *    \sa tx_newspaper_Section.
  * 
  *      \subsubsection article_lists Article lists
- *      See tx_newspaper_ArticleList
+ *      
+ *      Which articles actually appear on a section landing page, is a matter of
+ *      editorial decision. The articles and their order are managed in article
+ *      lists.
+ *  
+ *      Often the articles should appear simply in the order in which they were
+ *      published, with the newest at the top. But even in this case it may be
+ *      necessary to tweak the order in which they appear. For that reason these
+ *      lists are called semiautomatic. In other cases the order of articles is
+ *      determined entirely by the editor. These article lists are called
+ *      manual.
+ * 
+ *      \sa tx_newspaper_ArticleList, tx_newspaper_ArticleList_Manual, 
+ *          tx_newspaper_ArticleList_Semiautomatic
  * 
  *    \subsection extras Extras
- *    See tx_newspaper_Extra
+ * 
+ *    A newspaper page consists not only of \ref articles and \ref article_lists,
+ *    but has many other elements: Text boxes, images, videos, ads, etc. 
+ * 
+ *    \sa tx_newspaper_Extra
  * 
  *    \subsection pages Pages
- *    See tx_newspaper_Page
+ *    \sa tx_newspaper_Page
  * 
  *      \subsubsection page_types Page types
- *      See tx_newspaper_PageType
+ *      \sa tx_newspaper_PageType
  * 
  *    \subsection page_zones Page Zones
- *    See tx_newspaper_PageZone
+ *    \sa tx_newspaper_PageZone
  * 
- *   \subsubsection placement Placement and inheritance
- *   see ...
+ *      \subsubsection placement Placement and inheritance
+ *      see ...
  * 
- *   \subsubsection page_zone_types Page zone types
- *   see tx_newspaper_PageZoneType
+ *      \subsubsection page_zone_types Page zone types
+ *      \sa tx_newspaper_PageZoneType
  * 
- *   \subsection templates Display templates 
- *   see tx_newspaper_Smarty
+ *    \subsection templates Display templates 
+ *    \sa tx_newspaper_Smarty
  *  
  *  \section usage Using tx_newspaper
  * 
  *  \section administration Administering tx_newspaper
  *  
- *  \subsection install Installation
+ *    \subsection install Installation
  * 
- *  \subsubsection requirements Requirements
+ *      \subsubsection requirements Requirements
  * 
- *  - Typo3 >= 4.2
- *  - Required extensions should be installed automatically
+ *      - Typo3 >= 4.2
+ *      - Required extensions should be installed automatically
  * 
- *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system
- *  	can lead to serious frustration and is not recommended!
+ *      \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) 
+ *  	    system can lead to serious frustration and is not recommended!
  *
- *  \subsubsection install_templates Smarty templates
+ *      \subsubsection install_templates Smarty templates
  * 
- *  \subsubsection install_articletypes Article types
+ *      \subsubsection install_articletypes Article types
  *   
- *  \subsection Troubleshooting Troubleshooting
+ *    \subsection Troubleshooting Troubleshooting
  *  
  *  \todo Write me!
  */
