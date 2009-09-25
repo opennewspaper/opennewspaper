@@ -29,6 +29,7 @@
  *     \c tx_newspaper_extra. These data are called the \em abstract portion of
  *     an Extra.
  * 
+ *  \par Technical notes
  *  Whenever the words \em "abstract" or \em "concrete" appear throughout the 
  *  documentation, they refer to these aspects of an Extra.
  *  Inside the object, the member variable \c $uid stores the UID of the
@@ -36,8 +37,19 @@
  *  attributes for the concrete and abstract records are stored in the arrays
  *  \c $attributes and \c $extra_attributes, respectively.
  * 
+ *  \par
+ *  Origin UIDs...
+ * 
  *  \par Creating Extra implementations
- *  - Creating the SQL table
+ *  To implement an Extra for the newspaper extension you have to follow these
+ *  steps:
+ *  - <b>Creating the SQL table:</b> You must define a SQL table used by your 
+ *    extension that stores the persistent data for your Extra. The table must
+ *    have the same name as the PHP class implementing the Extra, but lowercased.
+ *    For Example, the table for the Extra class tx_newspaper_Extra_Image is
+ *    called \c tx_newspaper_extra_image. \n
+ *    The SQL table can be created using the Typo3 Extension Kickstarter. In
+ *    fact, using the Kickstarter is highly recommended.
  *  - Creating the PHP class
  *    - implementing render()
  *    - implementing getTitle(), getDescription() and getModuleName()
