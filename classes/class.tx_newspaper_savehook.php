@@ -178,24 +178,34 @@ class tx_newspaper_SaveHook {
 		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
 //t3lib_div::devlog('al1 fiealdArray[al]', 'np', 0, array($fieldArray, $table, $id));
 		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
-			$al = new $fieldArray['articlelist'](); // create new article list
+			$al = new $fieldArray['articlelist'](); // create new article list, the value in the backend dropdown is the name of the article list class
 			if ($al instanceof tx_newspaper_articlelist) {
 //t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 
+				// "delete" (= set deleted flag) previous concrete article list before writing the new one
+				// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
+				$s = new tx_newspaper_Section(intval($id));
+				$current_al = $s->getArticleList();
+				tx_newspaper::updateRows(
+					$current_al->getTable(),
+					'uid=' . $current_al->getUid(),
+					array('deleted' => 1)
+				);
+
 				// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
+				// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
 				tx_newspaper::updateRows(
 					'tx_newspaper_articlelist',
 					'section_id=' . $id,
 					array('deleted' => 1)
 				);
-
-				// articlelist was changed to another valid articlelist type, so store new abstract article list
-				$new_al = new $fieldArray['articlelist'](0, new tx_newspaper_Section(intval($id)));
+				
+				// store new article list
+				$new_al = new $fieldArray['articlelist'](0, $s);
 				$new_al->setAttribute('crdate', time());
 				$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 				$new_al->store();
  				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list; will be stored in section
-
 			}
 		}
 	}
