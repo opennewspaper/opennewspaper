@@ -36,7 +36,13 @@
  *  \c $attributes and \c $extra_attributes, respectively.
  * 
  *  \par
- *  Origin UIDs...
+ *  For the inheritance of particular Extras on Page Zones it is essential that
+ *  the Extra on the current Page Zone knows from which original Extra it is
+ *  inherited. For that end, the so called Origin UID is stored with every Extra
+ *  (in the abstract portion of the Extra). It contains the abstract UID of the
+ *  Extra at the top of the inheritance hierarchy. If it is zero or equal to the
+ *  abstract UID of the current Extra, this Extra starts the inheritance
+ *  hierarchy.
  * 
  *  \par Creating Extra implementations
  *  To implement an Extra for the newspaper extension you have to follow these
@@ -65,6 +71,19 @@
  *      class.tx_newspaper_extra_image.php and tx_newspaper_extra_image.tmpl.
  *    - Implementing getTitle(), getDescription() and getModuleName(): These
  *      functions are used to make the Extra recognizable for the backend user.
+ *      tx_newspaper_Extra provides default implementations for each of them.
+ *      - getTitle() should be overridden if you provide your Extra as part of
+ *        a Typo3 extension other than tx_newspaper (which will usually be the
+ *        case). It provides a user-understandable name for the Extra. For an
+ *        example using the Typo3 internationalization API, look at the default
+ *        implementation in tx_newspaper_Extra.
+ *      - getDescription() provides a description for an individual Extra, to
+ *        make it recognizable in the backend. It makes sense to print some
+ *        distinguishing attributes of this Extra class (such as image file name,
+ *        text box title etc.)
+ *      - getModuleName() determines the name of the Typo3 System Folder where
+ *        Extras of this type are stored. Choose a unique string starting with
+ *        the letters \c "np_".
  *  - <b>Registering the PHP class:</b> For the new Extra to appear in 
  *    newspaper's menus, a registration must be performed. Preferrably in the
  *    PHP file defining the Extra class, include a call to 
@@ -77,7 +96,6 @@
  *    best way to do that is from the \c ext_localconf.php for your Typo3
  *    extension.
  * 
- *  \todo Finish the implementation guide
  *  \todo origin uids
  */ 
 abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {

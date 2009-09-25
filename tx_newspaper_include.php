@@ -31,17 +31,29 @@
  
 /** \mainpage tx_newspaper - an editing system for an online newspaper
  * 
- *   Concepts:
- *   - article
- *     - article type
- *   - section
- *     - article lists
- *   - extra
- *   - page
- *     - page type
- *   - page zone
- *     - page zone type
- *   - smarty templates (see tx_newspaper_Smarty)
+ *   \section Concepts
+ *   \subsection Article
+ *   see tx_newspaper_Article
+ *   \subsubsection Article type
+ *   see tx_newspaper_ArticleType
+ *   \subsection Section
+ *   see tx_newspaper_Section
+ *   \subsubsection Article lists
+ *   see tx_newspaper_ArticleList
+ *   \subsection Extra
+ *   see tx_newspaper_Extra
+ *   \subsection Page
+ *   see tx_newspaper_Page
+ *   \subsubsection Page type
+ *   see tx_newspaper_PageType
+ *   \subsection Page zone
+ *   see tx_newspaper_PageZone
+ *   \subsubsection Placement and inheritance
+ *   see ...
+ *   \subsubsection Page zone type
+ *   see tx_newspaper_PageZoneType
+ *   \subsection Display templates 
+ *   see tx_newspaper_Smarty
  *  
  *  \attention Installing \p newspaper with Typo3 4.1 on a Windows(TM) system
  *  	can lead to serious frustration and is not recommended!
@@ -49,11 +61,6 @@
  *  \todo Write me!
  */
  
-#t3lib_div::debug($TYPO3_CONF_VARS['EXT']['extList']);
-#t3lib_div::debug(t3lib_extMgm::isLoaded('newspaper')? "np": "nonp");
-#t3lib_div::debug(t3lib_extMgm::isLoaded('smarty')? "sm": "nosm");
-#t3lib_div::debug(PATH_typo3conf);
-
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_exception.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
