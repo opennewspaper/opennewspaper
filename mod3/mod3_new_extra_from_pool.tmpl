@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 <script language="javascript">
 
 	function getChosenExtra() {ldelim}
@@ -26,7 +26,7 @@
 
 
 {* render list with pooled extras *}
-{if sizeof($EXTRA_POOLED) > 0}
+{if sizeof($EXTRA_POOLED) > 0 && $EXTRA_POOLED != false	}
 	<select id="extra_list_pooled" size="{$LIST_SIZE}">';
 	{section name=i loop=$EXTRA_POOLED}
 		<option value="{$EXTRA_POOLED[i]->getUid()}">{$EXTRA_POOLED[i]->getDescription()}</option>
