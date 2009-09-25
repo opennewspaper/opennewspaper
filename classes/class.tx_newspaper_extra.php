@@ -36,12 +36,12 @@
  *  \c $attributes and \c $extra_attributes, respectively.
  * 
  *  \par
- *  For the \ref Placement inheritance of particular Extras on Page Zones it is essential that
- *  the Extra on the current Page Zone knows from which original Extra it is
- *  inherited. For that end, the so called Origin UID is stored with every Extra
- *  (in the abstract portion of the Extra). It contains the abstract UID of the
- *  Extra at the top of the inheritance hierarchy. If it is zero or equal to the
- *  abstract UID of the current Extra, this Extra starts the inheritance
+ *  For the \ref placement of particular Extras on Page Zones it is essential
+ *  that the Extra on the current Page Zone knows from which original Extra it
+ *  is inherited. For that end, the so called Origin UID is stored with every
+ *  Extra (in the abstract portion of the Extra). It contains the abstract UID
+ *  of the Extra at the top of the inheritance hierarchy. If it is zero or equal
+ *  to the abstract UID of the current Extra, this Extra starts the inheritance
  *  hierarchy.
  * 
  *  \par Creating Extra implementations
