@@ -180,7 +180,6 @@ class tx_newspaper_SaveHook {
 		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
 			$al = new $fieldArray['articlelist'](); // create new article list, the value in the backend dropdown is the name of the article list class
 			if ($al instanceof tx_newspaper_articlelist) {
-//t3lib_div::devlog('al 2 instanceof al', 'np', 0);
 
 				// "delete" (= set deleted flag) previous concrete article list before writing the new one
 				// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
@@ -204,8 +203,17 @@ class tx_newspaper_SaveHook {
 				$new_al = new $fieldArray['articlelist'](0, $s);
 				$new_al->setAttribute('crdate', time());
 				$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+				
+				// check if current section is to be assigned to newly created semi automatic article list (default behavior)
+/// \todo: move to class tx_newspaper_articlelist_semiautomatic?
+				/// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
+				if (strtolower($fieldArray['articlelist']) == 'tx_newspaper_articlelist_semiautomatic') {
+					$new_al->setAttribute('filter_sections', $s->getUid());
+				}
+				
 				$new_al->store();
  				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list; will be stored in section
+//t3lib_div::devlog('al 2 instanceof al: s, new_al, fieldArray', 'np', 0, array($s, $new_al, $fieldArray));
 			}
 		}
 	}
