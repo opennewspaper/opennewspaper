@@ -1,0 +1,8 @@
+# cat=basic/enable; type=boolean; label=Log db access: log all INSERT, UPDATE and DELETE SQL statements into file logDbFile 
+logDbInsertUpdateDelete = 0
+
+# cat=basic/enable; type=boolean; label=Log db access: log all SELECT SQL statements into file logDbFile (NOT YET IMPLEMENTED) 
+logDbSelect = 0
+
+# cat=basic/enable; type=string; label=Log db access: set file for logging data when executing db SQL statements (configured by setting logDbInsertUpdateDelete and logDbSelect) 
+logDbFile = 

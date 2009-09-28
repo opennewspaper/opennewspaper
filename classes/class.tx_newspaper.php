@@ -183,6 +183,11 @@ class tx_newspaper  {
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function insertRows($table, array $row) {
+		$message = 'insertRows
+table: ' . $table . '
+row: 
+' . var_export($row, true); 
+		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);
 
 		global $TCA;
 		t3lib_div::loadTCA($table);
@@ -237,6 +242,12 @@ class tx_newspaper  {
 	 * 		to a SQL syntax error
 	 */
 	public static function updateRows($table, $where, array $row) {
+		$message = 'updateRows
+table: ' . $table . '
+where: ' . $where . '
+row: 
+' . var_export($row, true); 
+		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);		
 		
 		unset ($row['uid']);
 		
@@ -267,6 +278,12 @@ class tx_newspaper  {
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function deleteRows($table, $uids_or_where) {
+		$message = 'deleteRows
+table: ' . $table . '
+uids_or_where: 
+' . (is_array($uids_or_where)? var_export($uids_or_where, true) : $uids_or_where); 
+		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);
+		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		if (self::use_datamap && is_array($uids_or_where)) {
 			$cmdmap = array();
@@ -375,6 +392,72 @@ class tx_newspaper  {
 			return false;
 		}
 	}
+
+	/// write newspaper log entry
+	/** \param $type type configured in extension manager (f.ex. logDBInsertUpdateDelete)
+	 *  \param $message string to be added to log file
+	 *  \return \c true if log entry was written \c false else
+	 */		
+	private static function writeNewspaperLogEntry($type, $message) {
+		if (!$logfile = self::getNewspaperLogfile($type)) {
+			return false;
+		}
+
+		/// build message
+		$message = '
+Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLOBALS['BE_USER']->user['uid'] . '
+' . $message . '
+';
+
+		if (!$fp = @fopen($logfile, 'a')) {
+			return false;
+		} 
+		if (!@fwrite($fp, $message)) {
+			return false;
+		}
+		!@fclose($fp);
+		return true;
+	}
+	
+	/// find out which newspaper log file should be used
+	/** \param $type type configured in extension manager (f.ex. logDBInsertUpdateDelete)
+	 *  \return \c file name of log file if log should be written and can be written, \c false else
+	 */	
+	private static function getNewspaperLogfile($type) {
+		/// get em configuration
+		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
+		
+		if (!isset($em_conf[$type]) || !$em_conf[$type]) {
+			return false; // unknown type or type not set to true
+		}
+	
+		/// get log file name 
+		switch($type) {
+			case 'logDbInsertUpdateDelete':
+			case 'logDbSelect':
+				$logfile = $em_conf['logDbFile'];
+			break;
+			default:
+				return false; // couldn't determine log file
+		}
+
+		/// check if log file exists
+		if (!@file_exists($logfile)) {
+			if (!@touch($logfile)) {
+				return false;
+			}
+		}
+
+		
+		/// check if log file can be used
+		if (!@is_writable($logfile)) {
+			return false; /// \todo: throw error
+		}
+		
+		return $logfile; // log should be written, log file is configured and writable
+		
+	}
+
 
 
 	/// Check if given class name is an abstract class
