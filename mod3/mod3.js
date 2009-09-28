@@ -32,7 +32,7 @@ alert('test function found');
 	
 	/// "processing spinner" over whole page
 	function processing_page() {ldelim}
-		document.createElement('img');
+		img = document.createElement('img');
 		img_src = document.createAttribute('src');
 		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
 		img.setAttributeNode(img_src);
