@@ -40,6 +40,16 @@ class tx_newspaper  {
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
+		$message = 'selectZeroOrOneRows
+fields: ' . $fields . '
+table: ' . $table . '
+where: ' . $where . '
+groupBy: ' . $groupBy . '
+orderBy: ' . $orderBy . '
+limit: ' . $limit . '
+'; 
+		self::writeNewspaperLogEntry('logDbSelect', $message);
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -50,6 +60,8 @@ class tx_newspaper  {
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
+        
+        self::writeNewspaperLogEntry('logDbSelect', 'selectZeroOrOneRows, success');
         
         return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
@@ -71,6 +83,16 @@ class tx_newspaper  {
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
+		$message = 'selectOneRow
+fields: ' . $fields . '
+table: ' . $table . '
+where: ' . $where . '
+groupBy: ' . $groupBy . '
+orderBy: ' . $orderBy . '
+limit: ' . $limit . '
+'; 
+		self::writeNewspaperLogEntry('logDbSelect', $message);
+		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -87,6 +109,8 @@ class tx_newspaper  {
 		if (!$row) {
 			throw new tx_newspaper_EmptyResultException(self::$query);
 		}
+
+		self::writeNewspaperLogEntry('logDbSelect', 'selectOneRow, success');
 
 		return $row;		
 	}
@@ -106,6 +130,16 @@ class tx_newspaper  {
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
+		$message = 'selectRows
+fields: ' . $fields . '
+table: ' . $table . '
+where: ' . $where . '
+groupBy: ' . $groupBy . '
+orderBy: ' . $orderBy . '
+limit: ' . $limit . '
+'; 
+		self::writeNewspaperLogEntry('logDbSelect', $message);
+		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -117,8 +151,12 @@ class tx_newspaper  {
 
 		if ($res) {
 	        $rows = array();
-	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	$rows[] = $row;
+	        }
+	        
+	        self::writeNewspaperLogEntry('logDbSelect', 'selectRows, #results: ' . sizeof($rows));
+	        
 			return $rows;
 		} else throw new tx_newspaper_NoResException(self::$query);
 	}
@@ -145,6 +183,18 @@ class tx_newspaper  {
 	 */
 	public static function selectMMQuery($select, $local_table, $mm_table, $foreign_table,
 										 $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
+		$message = 'selectMMQuery
+select: ' . $select . '
+local_table: ' . $local_table . '
+local_table: ' . $local_table . '
+mm_table: ' . $mm_table . '
+whereClause: ' . $whereClause . '
+groupBy: ' . $groupBy . '
+orderBy: ' . $orderBy . '
+limit: ' . $limit . '
+'; 
+		self::writeNewspaperLogEntry('logDbSelect', $message);
+		
 		if($foreign_table == $local_table) {
 			$foreign_table_as = $foreign_table . uniqid('_join');
 		}
