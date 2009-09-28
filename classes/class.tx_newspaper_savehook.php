@@ -382,10 +382,11 @@ class tx_newspaper_SaveHook {
 	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
-			/// \todo make default article list configurable
-			$al = new tx_newspaper_ArticleList_Semiautomatic(0, new tx_newspaper_Section($section_uid));
+			$s = new tx_newspaper_Section($section_uid);
+			$al = new tx_newspaper_ArticleList_Semiautomatic(0, $s);
 			$al->setAttribute('crdate', time());
 			$al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+			$al->setAttribute('filter_sections', $s->getUid()); // current section is default filter
 			$al->store();
 		} 
 	}
