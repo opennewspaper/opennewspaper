@@ -56,7 +56,7 @@ class tx_newspaper_Sysfolder {
 		return self::$instance;
  	}
  	
- 	/// constructor fills arary $this->sysfolder mapping module names to uid in table pages
+ 	/// constructor fills array $this->sysfolder mapping module names to uid in table pages
  	protected function __construct() {
  		/// read and store all tx_newspaper sysfolders
  		$row = tx_newspaper::selectRows('uid, tx_newspaper_module', 'pages', '(tx_newspaper_module="newspaper" OR tx_newspaper_module LIKE "np_%") AND module="newspaper" AND deleted=0 AND doktype=254');
@@ -143,6 +143,11 @@ class tx_newspaper_Sysfolder {
  	/// read pid from local array or create sysfolder and return that uid
  	/// \return pid of sysfolder for given module name
 	private function getPidFromArray($module_name, $sysfolder_name) {
+		
+		if (!$sysfolder_name) {
+			$sysfolder_name = $module_name; // use module name as fallback if no title available
+		}
+		
 		$module_name = strtolower($module_name);
 		self::checkModuleName($module_name);
 
