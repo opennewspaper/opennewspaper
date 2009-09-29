@@ -1,6 +1,6 @@
 <?php
 
-class tx_newspaper_SaveHook {
+class tx_newspaper_Typo3Hook {
 
 
 

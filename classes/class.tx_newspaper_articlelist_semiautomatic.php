@@ -61,7 +61,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  * 		articles have been dropped from the list.
  *  \todo There is no BE which allows reordering articles - currently it's all
  * 		done with PHPMyAdmin. This would require either some AJAX magic or a
- * 		function in the save hook (tx_newspaper_Savehook), or both.
+ * 		function in the save hook (tx_newspaper_Typo3Hook), or both.
  */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
