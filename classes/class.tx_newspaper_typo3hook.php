@@ -1,13 +1,25 @@
 <?php
 
-class tx_newspaper_Typo3Hook {
+require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehook.php');
+
+
+class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
+
+/// list module hook
+
+	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
+		if (strtolower($table) == 'tx_newspaper_article') {
+			// hide default articles in list module
+			$additionalWhereClause .= ' AND is_template=0';
+		}
+	}
 
 
 
 
 
 
-/// tceform hooks (well, those aren't really save hooks ...)
+/// tceform hooks
 
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
 //t3lib_div::devlog('sh pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
@@ -38,7 +50,7 @@ class tx_newspaper_Typo3Hook {
 
 
 
-/// save hook: new and update
+/// save hooks: new and update
 
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
