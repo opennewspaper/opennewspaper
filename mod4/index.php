@@ -60,6 +60,9 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 				function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+					// display db errors
+					$GLOBALS['TYPO3_DB']->debugOutput=true;
+
 					parent::init();
 
 					/*
@@ -222,6 +225,21 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'param' => array()
 			),
 			array(
+				'title' => 'Orphaned Extras: Extras which belong to no PageZone or Article',
+				'class_function' => array('tx_newspaper_module4', 'checkOrphanedExtras'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Abstract article list: concrete article list missing',
+				'class_function' => array('tx_newspaper_module4', 'checkAbstractArticleListConcreteArticleListMissing'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Concrete article list: abstract article list missing',
+				'class_function' => array('tx_newspaper_module4', 'checkConcreteArticleListAbstractArticleListMissing'),
+				'param' => array()
+			),
+			array(
 				'title' => 'Section: multiple pages with same page type for a section',
 				'class_function' => array('tx_newspaper_module4', 'checkSectionWithMultipleButSamePageType'),
 				'param' => array()
@@ -231,11 +249,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkExtraInArticleIsArticleOrPagezone'),
 				'param' => array()
 			),
-			array(
-				'title' => 'Orphaned Extras: Extras which belong to no PageZone or Article',
-				'class_function' => array('tx_newspaper_module4', 'checkOrphanedExtras'),
-				'param' => array()
-			),
+
 		);
 		return $f;
 	}
@@ -254,7 +268,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		if (!$res)
 			die('Could not read table tx_newspaper_page');
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-        	$msg .= 'Section uid ' . $row['section'] . ' has ' . $row['c'] . ' pages of page type uid ' . $row['pagetype_id'] . '<br />';
+        	$msg .= 'Section uid #' . $row['section'] . ' has ' . $row['c'] . ' pages of page type uid #' . $row['pagetype_id'] . '<br />';
         }
         $GLOBALS['TYPO3_DB']->sql_free_result($res);
 
@@ -272,49 +286,47 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'tx_newspaper_extra'
 		);
 		for($i = 0; $i < sizeof($abstract_extra_type_row); $i++) {
-//t3lib_div::debug($abstract_extra_type_row[$i]['extra_table']);
+//debug($abstract_extra_type_row[$i]['extra_table']);
 
-			// get all concrete uid for this extra (from abstract table)
+			// get all concrete uids for this extra (from abstract table)
 			$abstract_row = array();
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid,extra_uid',
 				'tx_newspaper_extra',
 				'deleted=0 AND extra_table="' . $abstract_extra_type_row[$i]['extra_table'] . '"'
 			);
-			if (!$res)
+			if (!$res) {
 				die('Could not read extra abstract rows for table ' . $abstract_extra_type_row[$i]['extra_table']);
+			}
 	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	$abstract_row[$row['extra_uid']] = $row['uid']; // key = uid of concrete extra, value = uid of abstract extra
 	        }
 	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-//t3lib_div::debug($abstract_row);
-
+//debug($abstract_row);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'uid, deleted',
+				'uid',
 				$abstract_extra_type_row[$i]['extra_table'],
-				'1'
+				'deleted=0'
 			);
-			if (!$res)
+			if (!$res) {
 				die('Could not read extra concrete rows for extra ' . $row[$i]['extra_table']);
+			}
 	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	if (isset($abstract_row[$row['uid']])) {
-	        		// so an abstract extra exsits for this concrete extra (it's ok if no abstract record is available)
-	        		unset($abstract_row[$row['uid']]); // concrete extra for this abstract extra found, it's deleted, so only inconsistent records will remain
+	        		// so an abstract extra exists for this concrete extra
+	        		unset($abstract_row[$row['uid']]);
 	        	}
 	        }
 	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-
 
 			if (sizeof($abstract_row) > 0) {
 				if ($msg != '')
 					$msg .= '<br /><br >';
 				$msg = 'Problem(s) found for table ' . $abstract_extra_type_row[$i]['extra_table'] . ':<br />';
 				foreach($abstract_row as $key => $value) {
-					$msg .= 'Abstract record uid ' . $value . ' is linked to non-existing concrete uid ' . $key . '<br />'; 
+					$msg .= 'Abstract record uid #' . $value . ' is linked to non-existing concrete uid #' . $key . '<br />'; 
 				}
 			}
-			
-			
 			
 		}
 		
@@ -323,6 +335,94 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		return true; // no problems found
 	}
 	
+
+	/// searches concrete article lists where the related abstract article list is missing or deleted
+	static function checkConcreteArticleListAbstractArticleListMissing() {
+		$msg = '';
+		$article_lists = tx_newspaper_ArticleList::getRegisteredArticleLists();
+		foreach($article_lists as $al) {
+			// get all (undeleted) concrete article lists of current type
+			$concrete_al_row = tx_newspaper::selectRows(
+				'uid',
+				$al->getTable(),
+				'deleted=0'
+			);
+			for ($i = 0; $i < sizeof($concrete_al_row); $i++) {
+				$abstract_al = tx_newspaper::selectRows(
+					'uid',
+					'tx_newspaper_articlelist',
+					'deleted=0 AND list_table="' . $al->getTable() . '" AND list_uid=' . $concrete_al_row[$i]['uid'] 
+				);
+				if (sizeof($abstract_al) == 0) {
+					$msg .= 'Concrete record uid #' . $concrete_al_row[$i]['uid'] . ' isn\'t linked to any abstract article list record.<br />'; 
+				}
+			}
+		}
+		if ($msg) {
+			$msg = 'Problem(s) found:<br />' . $msg;
+		}
+		return $msg;
+	}
+
+	
+	
+	/// searches abstract article lists where the related concrete article list is missing or deleted
+	static function checkAbstractArticleListConcreteArticleListMissing() {
+		$msg = '';
+		// get all concrete article list tables where records should exist
+		$abstract_al_type_row = tx_newspaper::selectRows(
+			'DISTINCT list_table',
+			'tx_newspaper_articlelist'
+		);
+		for($i = 0; $i < sizeof($abstract_al_type_row); $i++) {
+//debug($abstract_al_type_row[$i]['list_table']);
+
+			// get all concrete uid for this article list (from abstract table)
+			$abstract_row = array();
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid, list_uid',
+				'tx_newspaper_articlelist',
+				'deleted=0 AND list_table="' . $abstract_al_type_row[$i]['list_table'] . '"'
+			);
+			if (!$res) {
+				die('Could not read article list abstract rows for table ' . $abstract_al_type_row[$i]['list_table']);
+			}
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	$abstract_row[$row['list_uid']] = $row['uid']; // key = uid of concrete article list, value = uid of abstract article list
+	        }
+	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+//debug($abstract_row);
+
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid',
+				$abstract_al_type_row[$i]['list_table'],
+				'deleted=0'
+			);
+			if (!$res) {
+				die('Could not read article list concrete rows for article list ' . $row[$i]['list_table']);
+			}
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	if (isset($abstract_row[$row['uid']])) {
+	        		unset($abstract_row[$row['uid']]); // so an abstract article list exists for this concrete article list
+	        	}
+	        }
+	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+
+			if (sizeof($abstract_row) > 0) {
+				if ($msg != '')
+					$msg .= '<br /><br >';
+				$msg = 'Problem(s) found for table ' . $abstract_al_type_row[$i]['list_table'] . ':<br />';
+				foreach($abstract_row as $key => $value) {
+					$msg .= 'Abstract record uid #' . $value . ' is linked to non-existing concrete uid #' . $key . '<br />'; 
+				}
+			}
+			
+		}
+		
+		if ($msg != '')
+			return $msg;
+		return true; // no problems found
+	}
 	
 
 	/// searches abstract extras where the related concrete extra is missing or deleted
