@@ -245,6 +245,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'param' => array()
 			),
 			array(
+				'title' => 'Section: no or deleted (abstract) article list',
+				'class_function' => array('tx_newspaper_module4', 'checkSectionWithActiveArticleList'),
+				'param' => array()
+			),
+			array(
 				'title' => 'Extra in Article: article or pagezone set as Extra',
 				'class_function' => array('tx_newspaper_module4', 'checkExtraInArticleIsArticleOrPagezone'),
 				'param' => array()
@@ -446,6 +451,32 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			return $msg;
 		return true; // no problems found
 	}
+	
+	
+	
+	
+	/// searches section with no or deleted abstract article list
+	static function checkSectionWithActiveArticleList() {
+		$msg = '';
+		$row = tx_newspaper::selectRows(
+			'uid, articlelist',
+			'tx_newspaper_section s',
+			's.articlelist NOT IN (SELECT uid FROM tx_newspaper_articlelist al WHERE al.deleted=0) AND deleted=0'
+		);
+		
+		$msg = '';
+		for($i = 0; $i < sizeof($row); $i++) {
+			$msg .= 'Section #' . $row[$i]['uid'] . ', abstract article list #' . $row[$i]['articlelist'] . '<br />';
+		}
+		
+		if ($msg != '') {
+			return $msg;
+		}
+		return true; // no problems found
+	}
+	
+	
+	
 
 	/// searches for extras which don't belong to either a pagezone or an article
 	static function checkOrphanedExtras() {
