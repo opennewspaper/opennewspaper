@@ -39,12 +39,16 @@ class tx_newspaper_hierarchy {
 		$this->createPages();
 		$this->createPageZones();
 		$this->createExtras();
+		$this->createArticleList();
+		$this->createArticle();
 	}
 	
 	/** For whatever reason, __destruct is not automatically called when the
 	 *  unit test is over. This function must be called explicitly to clean up.
 	 */
 	public function removeAllJunkManually() {
+		$this->removeArticle();
+		$this->removeArticleList();
 		$this->removeExtras();
 		$this->removePageZones();
 		$this->removePages();
@@ -54,6 +58,7 @@ class tx_newspaper_hierarchy {
 			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			$res || die('Aaaargh!');
 		}
+		
 	}
 	
 	public function getPageZones() {
@@ -65,6 +70,10 @@ class tx_newspaper_hierarchy {
 		return $this->pagezones;
 	}
 	
+	public function getPageZonePageUid() {
+		return $this->pagezone_page_uids[0];
+	}
+	
 	public function getPages() {
 		if (!$this->pages) {
 			foreach ($this->page_uids as $uid) {
@@ -72,6 +81,38 @@ class tx_newspaper_hierarchy {
 			}
 		}
 		return $this->pages;
+	}
+	
+	public function getParentSectionUid() {
+		return $this->section_uids[0];
+	}
+	
+	public function getParentSectionPid() {
+		return $this->section_data[0]['pid'];
+	}
+	
+	public function getParentSectionName() {
+		return $this->section_data[0]['section_name'];
+	}
+	
+	public function getArticlelistUid() {
+		return $this->articlelist_id;
+	}
+	
+	public function getAbstractArticlelistUid() {
+		return $this->abstract_articlelist_id;
+	}
+	
+	public function getArticleUid(){
+		return $this->article_uid;
+	}
+	
+	public function getExtraUid() {
+		return $this->extra_uids[0];
+	}
+	
+	public function getPageUid() {
+		return $this->page_uids[0];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -82,6 +123,35 @@ class tx_newspaper_hierarchy {
 			$this->section_uids[] = tx_newspaper::insertRows($this->section_table, $section);
 		}
 	}
+	
+	private function createArticleList() {
+			$this->articlelist_id = tx_newspaper::insertRows($this->articlelistauto_table, $this->articlelistauto_data);
+		
+			$this->articlelist_data['section_id'] = $this->getParentSectionUid();
+			$this->articlelist_data['list_uid'] = $this->articlelist_id;
+			$this->articlelist_data['list_table'] = $this->articlelistauto_table;	
+			$this->abstract_articlelist_id = tx_newspaper::insertRows($this->articlelist_table, $this->articlelist_data);
+	}
+	
+	private function removeArticleList() {
+		$this->delete($this->articlelistauto_table, $this->articlelist_id);		
+		$this->delete($this->articlelist_table, 'list_uid = '.$this->articlelist_id);
+	}
+	
+	private function createArticle() {
+		$this->article_uid = tx_newspaper::insertRows($this->article_table, $this->article_data);
+		$this->article2section_uid = tx_newspaper::insertRows(
+			'tx_newspaper_article_sections_mm',
+			array(
+				'uid_local' => $this->article_uid,
+				'uid_foreign' => $this->getParentSectionUid()
+			));
+	}
+	
+	private function removeArticle() {
+		$this->delete($this->article_table, $this->article_uid);
+		$this->delete('tx_newspaper_article_sections_mm', 'uid_local ='.$this->article_uid.' and uid_foreign = '.$this->getParentSectionUid());
+	}	
 	
 	private function createPages() {
 		foreach ($this->pagetype_data as $pagetype) {
@@ -116,7 +186,6 @@ class tx_newspaper_hierarchy {
 				$this->pagezone_page_uids[] = $concrete_uid;
 				//	the c'tor creates the parent record as well
 				$temp_pagezone = new tx_newspaper_Pagezone_Page($concrete_uid);
-				
 				$abstract_uid = $temp_pagezone->getPageZoneUID();
 				$this->pagezone_uids[] = $abstract_uid;
 				//  connect the abstract record to the page
@@ -166,32 +235,32 @@ class tx_newspaper_hierarchy {
 				'uid', $this->extra_table, 
 				'extra_table = \'' . $this->concrete_extra_table . '\' AND extra_uid = ' . $uid);
 			foreach ($abstract_uids as $abstract_uid) {
-				tx_newspaper::deleteRows(
+				$this->delete(
 					$pagezone->getExtra2PagezoneTable(),
 					'uid_foreign = ' . $abstract_uid['uid']
 				);
-				tx_newspaper::deleteRows(
+				$this->delete(
 					$this->extra_table, 
 					'uid = ' . $abstract_uid['uid']
 				);
 			}
-			tx_newspaper::deleteRows($this->concrete_extra_table, $uid);
+			$this->delete($this->concrete_extra_table, $uid);
 		}
 	}
 	
 	private function removeSectionHierarchy() {
-		tx_newspaper::deleteRows($this->section_table, $this->section_uids);
+		$this->delete($this->section_table, $this->section_uids);
 	}
 	
 	private function removePages() {
-		tx_newspaper::deleteRows($this->page_table, $this->page_uids);
-		tx_newspaper::deleteRows($this->pagetype_table, $this->pagetype_uids);
+		$this->delete($this->page_table, $this->page_uids);
+		$this->delete($this->pagetype_table, $this->pagetype_uids);
 	}	
 
 	private function removePageZones() {
-		tx_newspaper::deleteRows($this->pagezone_table, $this->pagezone_uids);
-		tx_newspaper::deleteRows($this->pagezone_page_table, $this->pagezone_page_uids);
-		tx_newspaper::deleteRows($this->pagezonetype_table, $this->pagezonetype_uids);
+		$this->delete($this->pagezone_table, $this->pagezone_uids);
+		$this->delete($this->pagezone_page_table, $this->pagezone_page_uids);
+		$this->delete($this->pagezonetype_table, $this->pagezonetype_uids);
 	}	
 	
 	private $delete_all_query = array(
@@ -210,6 +279,15 @@ class tx_newspaper_hierarchy {
 		"DELETE FROM `tx_newspaper_extra_image` WHERE deleted",
 		"DELETE FROM `tx_newspaper_extra` WHERE deleted"
 	);
+	
+	private function delete($table, $uids_or_where) {
+		if(is_array($uids_or_where)) {
+			$uids_or_where = 'uid IN (' . implode(', ', $uids_or_where) . ')';
+		} else if(is_int($uids_or_where)) {
+			$uids_or_where = 'uid = '.$uids_or_where;
+		}
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery($table, $uids_or_where);
+	}
 		
 	private $section_table = 'tx_newspaper_section';
 	private $section_uids = array();
@@ -255,6 +333,34 @@ class tx_newspaper_hierarchy {
 			'pagetype_pagezone' => ''
 		),
 	);
+	
+	private $articlelist_table = 'tx_newspaper_articlelist';
+	private $articlelist_id = null;
+	private $abstract_articlelist_id = null;
+	private $articlelistauto_table = 'tx_newspaper_articlelist_auto';
+	private $articlelist_data = array(
+		'pid' => '2827',
+		'tstamp' => '1234567890',
+		'crdate' => '1234567890',
+		'cruser_id' => '1',
+		'sorting' => '1024',
+		'deleted' => '0',
+		'hidden' => '0',
+		'starttime' => '0',
+		'endtime' => '0',		
+	);
+	
+	private $articlelistauto_data = array (
+		'pid' => '2827',
+		'tstamp' => '1234567890',
+		'crdate' => '1234567890',
+		'cruser_id' => '1',
+		'sorting' => '1024',
+		'deleted' => '0',
+		'hidden' => '0',
+		'starttime' => '0',
+		'endtime' => '0',
+		);
 	
 	private $pagetype_table = 'tx_newspaper_pagetype';
 	private $pagetype_uids = array();
@@ -377,7 +483,7 @@ class tx_newspaper_hierarchy {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Unit Test - Image Title 1",
-			'image' => "E3_033009T.jpg",	
+			'image_file' => "E3_033009T.jpg",	
 			'caption' => "Caption for image 3",	
 		),
 		array(
@@ -390,7 +496,7 @@ class tx_newspaper_hierarchy {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Unit Test - Image Title 2",	
-			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
+			'image_file' => "120px-GentooFreeBSD-logo.svg_02.png",	
 			'caption' => "Daemonic Gentoo",	
 		),
 		array(
@@ -403,9 +509,37 @@ class tx_newspaper_hierarchy {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Unit Test - Image Title 3",	
-			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
+			'image_file' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
 			'caption' => "caption[5]",	
 		),
+	);
+	
+	private $article_table = 'tx_newspaper_article';
+	private $article2section_table = 'tx_newspaper_article_sections_mm';
+	private $article_uid = null;
+	public $article_data = array(
+		'pid' => 2574,
+		'tstamp' => 1234806796,
+		'crdate' => 1232647355,
+		'cruser_id' => 1,
+		'deleted' => 0,
+		'hidden' => 0,
+		'starttime' => 0,
+		'endtime' => 0,
+		'title' => "Nummer eins!",
+		'extras' => 0,
+		'teaser' => "Hey, ein neuer Artikel ist im Lande!",
+		'text' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
+		'author' => "Test Text",
+		'sections' => 1,
+		'source_id' => 1,
+		'source_object' => "",
+		'name' => "",
+		'is_template' => 0,
+		'pagezonetype_id' => 1,
+		'workflow_status' => 0,
+		'articletype_id' => 0,
+		'inherits_from' => 0,
 	);
 	
 	private $extra_pos = array(

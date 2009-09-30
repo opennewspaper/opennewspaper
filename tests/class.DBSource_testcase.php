@@ -7,11 +7,13 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dbsource.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class taz_RedsysSource
-class test_DBSource_testcase extends tx_phpunit_testcase {
+class test_DBSource_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
+		parent::setUp();
 		$this->source = new tx_newspaper_DBSource();
 		$this->article = new tx_newspaper_Article();
 		$this->field = 'text';
@@ -39,15 +41,6 @@ class test_DBSource_testcase extends tx_phpunit_testcase {
 		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
 	}
 	
-	function tearDown() {
-		$table =  $this->article->sourceTable($this->source);
-		foreach($this->uidList as $uid) {
-			$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, 'uid = ' . $uid->getID());
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			if (!$res) die("$query failed!");
-		}
-	}
-
 	public function test_createSource() {
 		$temp = new tx_newspaper_DBSource();
 		$this->assertTrue(is_object($this->source));

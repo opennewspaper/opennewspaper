@@ -6,66 +6,30 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
-
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_pagezone
-class test_Article_testcase extends tx_phpunit_testcase {
+class test_Article_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
-		$query = $GLOBALS['TYPO3_DB']->INSERTquery($this->article_table, $this->article_data);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");
-	        
-	    $this->uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
-		
-		$query = $GLOBALS['TYPO3_DB']->INSERTquery(
-			'tx_newspaper_article_sections_mm',
-//			$this->article2section_table,
-			array(
-				'uid_local' => $this->uid,
-				'uid_foreign' => $this->section_uid
-			));
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");
-
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+		parent::setUp();
 
-		$this->createExtras();
-			
+		$this->uid = $this->fixture->getArticleUid();
 		$this->article = new tx_newspaper_Article($this->uid);
-		$this->source = new tx_newspaper_DBSource();
 	}
 	
 	function tearDown() {
-		
-		$this->removeExtras();
-		
-		//	delete article
-		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article_table, 'uid = ' . $this->uid);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");		
-
-		//	delete association with section
-		$query = $GLOBALS['TYPO3_DB']->DELETEquery($this->article2section_table, 'uid_local = ' . $this->uid);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");		
-
-		//	delete page zone entry for article
-		$query = $GLOBALS['TYPO3_DB']->DELETEquery(
-			$this->pagezone_table, 
-			'pagezone_table = \'' . $this->article_table . '\' AND pagezone_uid = ' . $this->uid
-		);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");		
-		
-		//	delete extra entry for article
-		$query = $GLOBALS['TYPO3_DB']->DELETEquery(
-			$this->extra_table, 
-			'extra_table = \'' . $this->article_table . '\' AND extra_uid = ' . $this->uid
-		);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		if (!$res) die("$query failed!");		
+		parent::tearDown();
 	}
+	
+	private $typo3db = null;
+	
+	public function test_nooop() {
+		//dev test for setup and tear down.
+	}
+	
+	private $oldDbConn = null;
 
 	public function test_createArticle() {
 		$temp = new tx_newspaper_Article($this->uid);
@@ -73,7 +37,6 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertTrue($temp instanceof tx_newspaper_Article);
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 		$this->assertTrue($temp instanceof tx_newspaper_ExtraIface);
-		
 		$this->checkOutput($temp->render());
 	}
 	
@@ -173,7 +136,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 				$extra->getAttribute('pid') . ' != ' .
 				$sf->getPid($extra));
 */			if ($extra instanceof tx_newspaper_Extra_Image) {
-				$this->assertTrue($extra->getAttribute('image') != '');
+				$this->assertTrue($extra->getAttribute('image_file') != '');
 				$this->assertTrue($extra->getAttribute('title') != '');
 				$this->assertTrue($extra->getAttribute('caption') != '');
 			} else if ($extra instanceof tx_newspaper_Extra_ArticleRenderer) { 
@@ -193,8 +156,9 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	public function test_getSource() {
 		/// No source should be returned, because none has been set
 		$this->assertNull($this->article->getSource());
-		$this->article->setSource($this->source);
-		$this->assertEquals($this->article->getSource(), $this->source);
+		$source = new tx_newspaper_DBSource();
+		$this->article->setSource($source);
+		$this->assertEquals($this->article->getSource(), $source);
 	}
 	public function test_getUid() {
 		$this->assertEquals($this->article->getUid(), $this->uid);
@@ -254,14 +218,14 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	public function test_getSections() {
 		$section = $this->article->getPrimarySection();
 		$this->assertTrue($section instanceof tx_newspaper_Section);
-		$this->assertEquals($section->getUid(), 1);
+		$this->assertEquals($section->getUid(), $this->fixture->getParentSectionUid());
 	}
 	
 	public function test_listArticlesWithArticletype() {
 		/// many articles are articletype 0 because it's a field that was introduced late
 		$articletype = new tx_newspaper_ArticleType(0);
 		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
-		$this->assertTrue(sizeof($articles) == 10);
+		$this->assertEquals(7, sizeof($articles), "Expected number of articles in list wrong");
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 		}
@@ -331,8 +295,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 	}
 	
 	private function doTestContains($string, $word) {
-		$this->assertRegExp("/.*$word.*/", $string, 
-							"Plugin output (expected $word): $string");
+		$this->assertRegExp("/.*$word.*/", $string);
 	}
 	
 	private function checkComesBefore($text, $first_string, $second_string) {
@@ -343,10 +306,11 @@ class test_Article_testcase extends tx_phpunit_testcase {
 		$this->assertTrue($pos1 < $pos2, "$first_string should be before $second_string");
 	}
 	
+//	private $fixture = null;			///< test-data
+	
 	private $section_uid = 1;			///< section we assign new articles to. \todo create my own new section
 	private $article = null;			///< the object
-	private $uid = 0;					///< The article we use as test object
-	private $source = null;				///< dummy source object
+	private $uid = null;					///< The article we use as test object
 	private $extra = null;
 	private $extra_uid = 1;
 	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
@@ -394,7 +358,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 1",	
-			'image' => "BSD_-_Daemon_tux_thumb_02.jpg",	
+			'image_file' => "BSD_-_Daemon_tux_thumb_02.jpg",	
 			'caption' => "Caption for image 1",	
 		),
 		array(
@@ -407,7 +371,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 2 Titel",	
-			'image' => "kari.080524.gif",	
+			'image_file' => "kari.080524.gif",	
 			'caption' => "Image 2 Caption",	
 		),
 		array(
@@ -420,7 +384,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 3",
-			'image' => "E3_033009T.jpg",	
+			'image_file' => "E3_033009T.jpg",	
 			'caption' => "Caption for image 3",	
 		),
 		array(
@@ -433,7 +397,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 4",	
-			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
+			'image_file' => "120px-GentooFreeBSD-logo.svg_02.png",	
 			'caption' => "Daemonic Gentoo",	
 		),
 		array(
@@ -446,7 +410,7 @@ class test_Article_testcase extends tx_phpunit_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "title[5]",	
-			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
+			'image_file' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
 			'caption' => "caption[5]",	
 		),
 	);

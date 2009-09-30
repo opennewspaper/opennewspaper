@@ -6,22 +6,27 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/pi1/class.tx_newspaper_pi1.php');
-
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_pi1 (also known as "The Big One" or "TBO")
-class test_TBO_testcase extends tx_phpunit_testcase {
+class test_TBO_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
-		$this->pi = new tx_newspaper_pi1();
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
+		parent::setUp();		
+		$this->section_uid = $this->fixture->getParentSectionUid();
+		$this->article_uid = $this->fixture->getArticleUid();
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+		$this->pi = new tx_newspaper_pi1();
+		
 	}
 	
 	function tearDown() {
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
-		unset($_GET['page']);		
+		unset($_GET['page']);
+		parent::tearDown();
 	}
 
 	public function test_createPlugin() {
@@ -84,7 +89,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_PageZone_article() {
-		$_GET['art'] = $this->article_uid;
+		$_GET['art'] = $this->fixture->getArticleUid();
 		$output = $this->pi->main('', null);
 
 		$this->doTestContains($output, 'Test-Seitenbereich auf Artikelseite - 1');
@@ -151,5 +156,7 @@ class test_TBO_testcase extends tx_phpunit_testcase {
 	private $article_uid = 1;			///< The article we use as test object
 	private $pi = null;					///< the plugin object
 	private $old_page; 					///< temp storage for $GLOBALS['TSFE']->page
+	private $page_table = 'tx_newspaper_page';
+	private $page_uid = null;			///< id of created page
 }
 ?>

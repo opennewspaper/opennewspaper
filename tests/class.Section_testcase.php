@@ -6,13 +6,16 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_section.php');
-
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_department
-class test_Section_testcase extends tx_phpunit_testcase {
+class test_Section_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
-		$this->section = new tx_newspaper_Section($this->section_uid);
+		parent::setUp();
+//		$this->fixture = new tx_newspaper_hierarchy();
+		$this->section = new tx_newspaper_Section($this->fixture->getParentSectionUid());
 	}
+	
 
 	public function test_createSection() {
 		$temp = new tx_newspaper_Section($this->section_uid);
@@ -21,9 +24,9 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_getAttribute() {
-		$this->assertEquals($this->section->getAttribute('uid'), 1);
-		$this->assertEquals($this->section->getAttribute('pid'), $this->pid);
-		$this->assertEquals($this->section->getAttribute('section_name'), $this->section_name);
+		$this->assertEquals($this->section->getAttribute('uid'), $this->fixture->getParentSectionUid());
+		$this->assertEquals($this->section->getAttribute('pid'), $this->fixture->getParentSectionPid());
+		$this->assertEquals($this->section->getAttribute('section_name'), $this->fixture->getParentSectionName());
 		$this->setExpectedException('tx_newspaper_Exception');
 		$this->section->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
@@ -58,22 +61,22 @@ class test_Section_testcase extends tx_phpunit_testcase {
 	public function test_getArticleList() {
 		$list = $this->section->getArticleList();
 		$this->assertEquals($list, 
-							tx_newspaper_ArticleList_Factory::getInstance()->create(self::articlelist_uid, $this->section));
+							tx_newspaper_ArticleList_Factory::getInstance()->create($this->fixture->getAbstractArticlelistUid(), $this->section));
 		
 		$this->assertEquals($list->getTitle(), 'Automatic article list');
-		$this->assertEquals($list->getUid(), 1);
+		$this->assertEquals($list->getAbstractUid(), $this->fixture->getAbstractArticlelistUid());
 		
-		// section 1 has currently 7 articles associated with it.
-		$articles = $list->getArticles(7);
-		$this->assertTrue(sizeof($articles) == 7);
+		// section 1 has currently 1 article associated with it.
+		$articles = $list->getArticles(1);
+		$this->assertEquals(1, sizeof($articles), "Less than expected articles in article list");
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 			t3lib_div::debug($article->getAttribute('title'));
 		}
 		
-		$article = $list->getArticle(1);
+		$article = $list->getArticle(0);
 		$this->assertTrue($article instanceof tx_newspaper_Article);
-		$this->assertEquals($article->getAttribute('title'), 'Nummer zwei');
+		$this->assertEquals($article->getAttribute('title'), $this->fixture->article_data['title']);
 		
 		$list->store();
 		t3lib_div::debug('to do: test storing a list');
@@ -85,8 +88,8 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		
 		$list = $this->section->getArticleList();
 		$list->setAttribute('new attribute', 1);
-		$this->assertEquals($list->getAttribute('new attribute'), 1);
-		$this->assertEquals($list->getAttribute('uid'), 1);
+		$this->assertEquals(1, $list->getAttribute('new attribute'), '\'new attribute\' not set');
+		$this->assertEquals($this->fixture->getAbstractArticlelistUid(),  $list->getAttribute('uid'));
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$list->getAttribute('wrong attribute');
 	}
@@ -104,15 +107,11 @@ class test_Section_testcase extends tx_phpunit_testcase {
 		$subpages = $this->section->getSubPages();
 		foreach ($subpages as $page) {
 			$this->assertTrue($page instanceof tx_newspaper_Page);
-			$this->assertEquals($page->getAttribute('section'), 1);
+			$this->assertEquals($page->getAttribute('section'), $this->section->getUid());
 		}
 	}
 
 	private $section = null;					///< the object
-	private $section_uid = 1;					///< uid of stored object
-	private $pid = 2828;						///< pid of stored object
-	private $section_name = 'Testressort';		///< section_name of stored object
-	const articlelist_uid = 25;
 	
 }
 ?>

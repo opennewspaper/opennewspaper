@@ -8,12 +8,13 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.hierarchy.php');
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class tx_newspaper_pagezone
-class test_PageZone_testcase extends tx_phpunit_testcase {
+class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
-
+		parent::setUp();
 		if (false) {
 			$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
 		} else {
@@ -27,31 +28,10 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
 		$this->pagezone_uid = $this->pagezone->getAbstractUid();
 
-		$this->createExtras();
+//		$this->createExtras();
 
-		$this->source = new tx_newspaper_DBSource();
-		$this->hierarchy = new tx_newspaper_hierarchy();
-	}
-	
-	function tearDown() {
-		$this->removeExtras();
-		
-		//	delete pagezone_papge
-		tx_newspaper::deleteRows($this->pagezone_page_table, 'uid = ' . $this->uid);
-
-		//	delete page zone entry for pagezone_page
-		tx_newspaper::deleteRows(
-			$this->pagezone_table,
-			'pagezone_table = \'' . $this->pagezone_page_table . '\' AND pagezone_uid = ' . $this->uid
-		);
-		
-		//	delete extra entry for pagezone_page
-		tx_newspaper::deleteRows(
-			$this->extra_table, 
-			'extra_table = \'' . $this->pagezone_page_table . '\' AND extra_uid = ' . $this->uid
-		);
-
-		$this->hierarchy->removeAllJunkManually();
+//		$this->source = new tx_newspaper_DBSource();
+		$this->hierarchy = $this->fixture;
 	}
 
 	public function test_createPageZone() {
@@ -67,7 +47,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_Title() {
-		$this->assertEquals($this->pagezone->getTitle(), 'PageZone');
+		$this->assertEquals('Page zone', $this->pagezone->getTitle());
 	}
 	
 	public function test_modulename() {
@@ -87,7 +67,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 			}
 			$this->assertEquals($pzt->getTable(), 'tx_newspaper_pagezonetype');
 			$this->assertEquals($pzt->getModuleName(), 'np_pagezonetype');
-			$this->assertEquals($pzt->getTitle(), 'Page Zone Type');
+			$this->assertEquals('Page zone type', $pzt->getTitle());
 			
 			$pzt->setAttribute('uid', 0);
 			$this->assertEquals($pzt->getAttribute('uid'), 0);
@@ -136,12 +116,12 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	
 	/// \todo finish test
 	public function test_store() {
+		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
 		$this->pagezone->store();
 		/// \todo check that record in DB equals data in memory
 		/// \todo change an attribute, store and check
 		/// \todo create an empty pagezone and write it. verify it's been written.
 		/// \see ArticleImpl_testcase
-		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
 	}	
 
 	public function test_getUid() {
@@ -162,8 +142,8 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 	}
 		
 	public function test_render() {
-		t3lib_div::debug($this->pagezone->render());
 		$this->fail('test_render not yet implemented');
+		t3lib_div::debug($this->pagezone->render());
 	}
 	
 	public function test_getAbstractUid() {
@@ -310,7 +290,7 @@ class test_PageZone_testcase extends tx_phpunit_testcase {
 #		$pagezone = array_pop($this->hierarchy->getPageZones()); {
 			$old_extras = $pagezone->getExtras();
 			foreach ($old_extras as $extra_after_which) {
-t3lib_div::debug("inserting after $extra_after_which");				
+				t3lib_div::debug("inserting after $extra_after_which");				
 				$i = 0;
 				foreach ($this->extra_abstract_uids as $uid) {
 					$i++;
@@ -319,6 +299,7 @@ t3lib_div::debug("inserting after $extra_after_which");
 					$pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
 				}
 			}
+			
 			$this->assertEquals(
 				sizeof($pagezone->getExtras()),
 				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
@@ -398,18 +379,20 @@ t3lib_div::debug("inserting after $extra_after_which");
 	 */
 	private function checkPageZoneOrder(tx_newspaper_PageZone $pagezone, $message = '') {
 		$extra = $pagezone->getExtras();
-		$this->assertTrue($extra[0]->getAttribute('title')  == 'Unit Test - Image Title 1', $message);
-		$this->assertTrue($extra[1]->getAttribute('title')  == 'Inserted 3th', $message);
-		$this->assertTrue($extra[2]->getAttribute('title')  == 'Inserted 2th', $message);
-		$this->assertTrue($extra[3]->getAttribute('title')  == 'Inserted 1th', $message);
-		$this->assertTrue($extra[4]->getAttribute('title')  == 'Unit Test - Image Title 2', $message);
-		$this->assertTrue($extra[5]->getAttribute('title')  == 'Inserted 3th', $message);
-		$this->assertTrue($extra[6]->getAttribute('title')  == 'Inserted 2th', $message);
-		$this->assertTrue($extra[7]->getAttribute('title')  == 'Inserted 1th', $message);
-		$this->assertTrue($extra[8]->getAttribute('title')  == 'Unit Test - Image Title 3', $message);
-		$this->assertTrue($extra[9]->getAttribute('title')  == 'Inserted 3th', $message);
-		$this->assertTrue($extra[10]->getAttribute('title') == 'Inserted 2th', $message);
-		$this->assertTrue($extra[11]->getAttribute('title') == 'Inserted 1th', $message);
+		$this->assertEquals('Unit Test - Image Title 1', $extra[0]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[1]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[2]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[3]->getAttribute('title'), $message);
+		
+		$this->assertEquals('Unit Test - Image Title 2', $extra[4]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[5]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[6]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[7]->getAttribute('title'), $message);
+		
+		$this->assertEquals('Unit Test - Image Title 3', $extra[8]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[9]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[10]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[11]->getAttribute('title'), $message);
 	}
 		
 	public function test_removeExtra() {
@@ -608,7 +591,6 @@ t3lib_div::debug("inserting after $extra_after_which");
 	);
 	
 	private $extra_abstract_uids = array();
-	
 	private $hierarchy = null;
 }
 ?>

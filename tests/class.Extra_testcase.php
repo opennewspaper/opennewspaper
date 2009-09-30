@@ -6,17 +6,20 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for all extras belonging to the newspaper extension
-class test_Extra_testcase extends tx_phpunit_testcase {
+class test_Extra_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {		
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+		parent::setUp();
 	}
 
 	function tearDown() {
+		parent::tearDown();	
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
@@ -39,7 +42,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$this->assertTrue($temp instanceof tx_newspaper_Extra);
 			$this->assertTrue($temp instanceof $extra_class);
 			if ($this->attributes_to_test['title'][$extra_class])
-				$this->assertEquals($temp->getTitle(), 
+				$this->assertEquals($temp->getTitle(),
 								    $this->attributes_to_test['title'][$extra_class]);
 			if ($this->attributes_to_test['modulename'][$extra_class])
 				$this->assertEquals($temp->getModuleName(),
@@ -47,10 +50,19 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 		}
 	}
 	
-	public function test_getAttribute() {
+	public function test_getAttributeUid() {
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
-			$this->assertEquals($temp->getAttribute('uid'), 1);
+			$this->assertEquals(1, $temp->getAttribute('uid'), 'uid passed in on object creation does not match with the attribute uid.');
+		}
+	}
+	
+	public function test_getAttribute() {
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);			
+			if($this->attributes_to_test['title'][$extra_class]) {
+				$this->assertEquals($this->attributes_to_test['title'][$extra_class], $temp->getAttribute('title'));
+			}
 		}
 
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
@@ -232,6 +244,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	}
 	
 	public function test_duplicate() {
+		$this->fail('test not yet ready!');
 		foreach($this->extras_to_test as $extra_class) {
 			$temp = new $extra_class(1);
 			$time = time();
@@ -240,7 +253,6 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 			$that = $temp->duplicate();
 			t3lib_div::debug($this); t3lib_div::debug($that);
 		}
-		$this->fail('test not yet ready!');
 	}
 	
 	/// Section which contains the objects to be tested
@@ -260,8 +272,7 @@ class test_Extra_testcase extends tx_phpunit_testcase {
 	/// Attributes to test in test_createExtra() and their expected values
 	private $attributes_to_test = array(
 		'title' => array(
-			'tx_newspaper_Extra_Image' => 'Image',
-			'tx_newspaper_Extra_SectionList' => 'SectionList',
+			'tx_newspaper_Extra_Image' => 'Unit Test - Image Title 1',
 		),
 		'modulename' => array(
 			'tx_newspaper_Extra_Image' => 'np_image',

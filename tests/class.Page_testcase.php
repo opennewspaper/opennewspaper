@@ -7,17 +7,20 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
-
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_page
-class test_Page_testcase extends tx_phpunit_testcase {
+class test_Page_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+		parent::setUp();
 		$this->section = new tx_newspaper_Section($this->section_uid);
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
-		$this->page->store();
+//		$this->page->store();
+//		$pages = $this->fixture->getPages();
+//		$this->page = $pages[0];
 	}
 
 	function tearDown() {
@@ -25,13 +28,14 @@ class test_Page_testcase extends tx_phpunit_testcase {
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
 		unset($_GET['type']);
-		tx_newspaper::deleteRows($this->page->getTable(), $this->page->getUid());
+		parent::tearDown();
+//		tx_newspaper::deleteRows($this->page->getTable(), $this->page->getUid());
 		
 	}
 
 	public function test_createPage() {
 		$temp = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array()));		
-		$uid= $temp->store();
+		$uid = $temp->store();
 		$this->assertTrue(is_object($temp), 'page-object is no object');
 		$this->assertTrue($temp instanceof tx_newspaper_Page, 'created object is not of type '.get_class(tx_newspaper_Page));
 		$this->assertEquals($temp->getUid(), $uid, 'method getUid does not return uid');
@@ -90,8 +94,8 @@ class test_Page_testcase extends tx_phpunit_testcase {
 	}
 
 	public function testPageZones() {
-		$this->assertTrue(is_array($this->page->getPageZones()));
-		$this->assertTrue(sizeof($this->page->getPageZones()) > 0);
+		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
+		$this->assertTrue(sizeof($this->page->getPageZones()) > 0, "Expected at least two pagezones");
 		$pagezones = $this->page->getPageZones();
 		$this->assertEquals($pagezones[0]->getAttribute('name'), 
 							'Test-Seitenbereich auf Ressortseite - 1',
