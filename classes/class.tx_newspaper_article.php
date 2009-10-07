@@ -398,6 +398,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		return null;
 	}
+
+	/// Get article type of article
+	/// \return tx_newspaper_articletype assigned to this article, or \c null.
+	/// \todo: @Helge: add this method to the article interface??
+	public function getArticleType() {
+		if (!$this->getAttribute('articletype_id')) {
+			return null;
+		}
+		return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
+	}
+	
+	
+	
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
