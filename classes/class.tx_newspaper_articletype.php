@@ -110,23 +110,24 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	public function setUid($uid) {
 		$this->uid = $uid;
 	}
-	
+
+
+/// \todo: move tsconfig access to tx_newspaper class	
 	/// Get TSConfig setting for this article type
-	/** \param $type The name of the Article Type in TSConfig
-	 *  \return TSConfig setting for this article type (array: musthave,
-	 * 		shouldhave, etc.)
-	 *  \todo param: type -> ARRAY!!!
-	 *  \todo Oliver: Fix this documentation! I don't get it!
+	/** \param $type article type configured in TSConfig, currently
+	 *      available: musthave, shouldhave
+	 *  \return array containing extra class names
 	 */
 	public function getTSConfigSettings($type) {
 		/// check tsconfig in article sysfolder
 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()); 
 		$tsc = t3lib_BEfunc::getPagesTSconfig($sysfolder);
 
-		if (!isset($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]))
+		if (!isset($tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type])) {
 			return array(); // no settings found
+		}
 
-		$setting = explode(',', $tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]);
+		$setting = t3lib_div::trimExplode(',', $tsc['newspaper.']['articletype.'][$this->getAttribute('normalized_name') . '.'][$type]);
 
 		return $setting;
 	}
