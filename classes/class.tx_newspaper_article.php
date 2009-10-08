@@ -772,9 +772,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  	 */
  	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
  									 		tx_newspaper_ExtraIface $extra2) {
- 		return $extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph')?
- 			$extra1->getAttribute('paragraph')-$extra2->getAttribute('paragraph'):
- 			$extra1->getAttribute('position')-$extra2->getAttribute('position');
+ 		$paragraph1 = $extra1->getAttribute('paragraph');
+ 		$paragraph2 = $extra2->getAttribute('paragraph');
+ 		
+ 		if ($paragraph1 == $paragraph2) {
+ 			return $extra1->getAttribute('position')-$extra2->getAttribute('position');
+ 		}
+ 		
+ 		/**	Negative paragraphs are sorted at the end, in reverse order.
+ 		 *  So, a negative paragraph comes AFTER a positive paragraph. If both
+ 		 *  are negative though, it's the usual order: The smaller value (higher
+ 		 *  negative value) comes first.
+ 		 */ 
+ 		if ($paragraph1*$paragraph2 < 0) return $paragraph2-$paragraph1;
+ 		else return $paragraph1-$paragraph2;
+ 			
 	}
 
 	/// SQL table which associates tx_newspaper_Extra s with tx_newspaper_PageZone s
