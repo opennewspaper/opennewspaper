@@ -23,7 +23,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	
 	public function __toString() {
 		try {
-		return 'Extra: UID ' . $this->getExtraUid() . ', Textbox Extra: UID ' . $this->getUid() .
+			return 'Extra: UID ' . $this->getExtraUid() . ', Textbox Extra: UID ' . $this->getUid() .
 				' (Title: ' . $this->getAttribute('title') . ')';
 		} catch(Exception $e) {
 			return "Textbox: Exception thrown!" . $e;

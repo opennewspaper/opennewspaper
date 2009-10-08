@@ -234,7 +234,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  a reasonable default: Name of the Article List and any notes.
 	 */
 	public function getDescription() {
-		return $this->getTitle() . (
+		if ($this->isSectionList()) {
+			$section = new tx_newspaper_Section($this->getAttribute('section_id'));
+			$name = $section->getAttribute('section_name');
+		}
+		return $this->getTitle() . 
+		($name? '[' . $name . ']': '') . (
 			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): '' 
 		);
 	}
@@ -244,7 +249,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	public function isSectionList() {
 		try {
-			$section= new tx_newspaper_Section($this->getAttribute('section_id'));
+			$section = new tx_newspaper_Section($this->getAttribute('section_id'));
 			return true;
 		} catch (tx_newspaper_Exception $e) {
 			return false;
