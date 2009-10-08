@@ -172,6 +172,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		//	clear UID so a new entry can be written
 		unset ($temp_attributes['uid']);
 		
+		// store origin uid in order to find out later where the newly created  
+		// extra was copied from originally 
+		$temp_attributes['origin_uid'] = $this->getOriginUid()? 
+			$this->getOriginUid() : $this->getExtraUid();
+		
 		//	Write data for concrete Extra		
 		$uid = tx_newspaper::insertRows($this->getTable(), $temp_attributes);
 		
