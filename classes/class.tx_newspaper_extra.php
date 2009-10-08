@@ -146,7 +146,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init('default');
 		}
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
+		$title = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);
+		if (!$title) {
+			$title = $this->getTable(); // fallback
+		}
+		return $title;	
 	}
 	
 	/// Makes a "deep copy" of a tx_newspaper_Extra in the DB
