@@ -43,9 +43,9 @@
  *    online articles, can consist of many more elements. In tx_newspaper these
  *    elements are called \ref extras. These Extras are placed in an article
  *    before or after paragraphs of text. Placing Extras in an article is called
- *    Placement.
+ *    \ref placement.
  * 
- *    \sa tx_newspaper_Article
+ *    \sa tx_newspaper_Article.
  * 
  *      \subsubsection article_import Article import
  * 
@@ -76,7 +76,7 @@
  *      and subsequently the correct default placement, the user can define an
  *      article type and the corresponding default placement.
  * 
- *      \sa tx_newspaper_ArticleType
+ *      \sa tx_newspaper_ArticleType.
  * 
  *    \subsection sections Sections
  * 
@@ -91,6 +91,9 @@
  *    from the "National" section can appear on the landing page for the
  *    "National" section, but articles from both "National" and "International"
  *    can appear on the "Politics" landing page.
+ * 
+ *    A section is comprised not only of a landing page, but also of other
+ *    \ref pages.
  *   
  *    All sections are usually grouped under a root section. The landing page of
  *    the "root" section is the "Start" or "Home" page of the online newspaper.
@@ -116,32 +119,36 @@
  *      manual.
  * 
  *      \sa tx_newspaper_ArticleList, tx_newspaper_ArticleList_Manual, 
- *          tx_newspaper_ArticleList_Semiautomatic
+ *          tx_newspaper_ArticleList_Semiautomatic.
  * 
  *    \subsection extras Extras
  * 
  *    A newspaper page consists not only of \ref articles and \ref article_lists,
- *    but has many other elements: Text boxes, images, videos, ads, etc. 
+ *    but has many other elements: Text boxes, images, videos, ads, etc. These
+ *    elements are called Extras. An Extra can be placed in an article or on any
+ *    page.
  * 
- *    \sa tx_newspaper_Extra
+ *    \sa tx_newspaper_Extra.
+ * 
+ *      \subsubsection placement Placement
  * 
  *    \subsection pages Pages
- *    \sa tx_newspaper_Page
+ *    \sa tx_newspaper_Page.
  * 
  *      \subsubsection page_types Page types
- *      \sa tx_newspaper_PageType
+ *      \sa tx_newspaper_PageType.
  * 
  *    \subsection page_zones Page Zones
- *    \sa tx_newspaper_PageZone
+ *    \sa tx_newspaper_PageZone.
  * 
  *      \subsubsection placement Placement and inheritance
  *      see ...
  * 
  *      \subsubsection page_zone_types Page zone types
- *      \sa tx_newspaper_PageZoneType
+ *      \sa tx_newspaper_PageZoneType.
  * 
  *    \subsection templates Display templates 
- *    \sa tx_newspaper_Smarty
+ *    \sa tx_newspaper_Smarty.
  *  
  *  \section usage Using tx_newspaper
  * 
