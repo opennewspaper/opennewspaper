@@ -191,12 +191,26 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	/// Inserts an Article at a specified position in the list
 	/** \param $article Article to insert
-	 *  \param $pos Position to insert zp $article at
+	 *  \param $pos Position to insert \p $article at
 	 *  \throw tx_newspaper_ArticleNotFoundException if \p $article could not be
 	 * 		inserted for some reason
 	 */
 	abstract function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0);
 
+	///	Removes an Article from the list
+	/** \param $article Article to insert
+	 */
+	abstract function deleteArticle(tx_newspaper_ArticleIface $article);
+
+	///	Moves an Article up or down in the list
+	/** \param $article Article to move
+	 * 	\param $offset Positions to relocate \p $article - negative for up,
+	 * 		positive for down 
+	 *  \throw tx_newspaper_ArticleNotFoundException if \p $article could not be
+	 * 		found in the list
+	 */
+	abstract function moveArticle(tx_newspaper_ArticleIface $article, $offset);
+		
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)

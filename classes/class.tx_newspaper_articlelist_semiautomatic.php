@@ -65,6 +65,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
+	///	Offset behind top position with which an article counts as deleted.
+	const offset_deleted = 1000;
+	
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
@@ -160,7 +163,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					'tx_newspaper_articlelist_semiautomatic_articles_mm',
 					'uid_local = ' . intval($this->getUid()) .
 						' AND uid_foreign = ' . $present_article->getUid(),
-					array ('offset' => 'offset + ' . $i-$pos)
+					array (
+						'offset' => 'offset' . ($pos < $i? (' + ' . $i-$pos): (' - ' . $pos - $i))
+					)
 				);
 				return;
 			}
@@ -168,6 +173,42 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
 	}
+	
+	public function deleteArticle(tx_newspaper_ArticleIface $article) {
+		$this->insertArticleAtPosition($article, self::offset_deleted);
+	}
+
+	public function moveArticle(tx_newspaper_ArticleIface $article, $offset) {
+		$this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
+		if ($this->getArticlePosition($article)+$offset < 0) {
+			tx_newspaper::updateRows(
+				'tx_newspaper_articlelist_semiautomatic_articles_mm',
+				'uid_local = ' . intval($this->getUid()) .
+					' AND uid_foreign = ' . $present_article->getUid(),
+				array (
+					'offset' => 'offset - ' . abs($this->getArticlePosition($article)+$offset)
+				)
+			);
+		}
+	}
+	
+	/// Tells how much an Article is moved from its chronological list position
+	/** \param $article Article whose offset is required
+	 *  \return The offset of \p $article relative to its original position in
+	 *  	the list. If \p $article is not in the list, returns zero.
+	 */
+	public function getOffset(tx_newspaper_ArticleIface $article) {
+	
+		$result = tx_newspaper::selectZeroOrOneRow(
+			'offset',
+			'tx_newspaper_articlelist_semiautomatic_articles_mm',
+			'uid_local = ' . intval($this->getUid()) . 
+				' AND uid_foreign = ' . $article->getUid()
+		);
+		if (!$result) return 0;
+		return intval($result['offset']);
+	}
+
 
 	/// A short description that makes an Article List identifiable in the BE
 	public function getDescription() {

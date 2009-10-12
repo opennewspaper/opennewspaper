@@ -69,12 +69,8 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 	}
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
-		tx_newspaper::deleteRows(
-			'tx_newspaper_articlelist_manual_articles_mm',
-			'uid_local = ' . intval($this->getUid()) .
-				' AND uid_foreign = ' . $article->getUid()
-		);
-		
+		$this->deleteArticle ($article);
+			
 		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
 			if ($i >= $pos) {
 				tx_newspaper::updateRows(
@@ -94,6 +90,18 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 				'sorting' => $pos+1
 			)
 		);
+	}
+
+	public function deleteArticle(tx_newspaper_ArticleIface $article) {
+		tx_newspaper::deleteRows(
+			'tx_newspaper_articlelist_manual_articles_mm',
+			'uid_local = ' . intval($this->getUid()) .
+				' AND uid_foreign = ' . $article->getUid()
+		);
+	}
+
+	public function moveArticle(tx_newspaper_ArticleIface $article, $offset) {
+		$this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
 	}
 
 	static public function getModuleName() { return 'np_al_manual'; }
