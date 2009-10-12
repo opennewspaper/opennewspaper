@@ -187,6 +187,10 @@
 			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manually selected articles</label>
 			<label index="tx_newspaper_extra_combolinkbox.internal_links">Internal links</label>
 			<label index="tx_newspaper_extra_combolinkbox.external_links">External links</label>
+			<label index="tx_newspaper_extra_searchresults">Extra: Search results</label>
+			<label index="tx_newspaper_extra_searchresults.sections">Section to restrict the search to</label>
+			<label index="tx_newspaper_extra_searchresults.search_term">Preset search term</label>
+			<label index="tx_newspaper_extra_searchresults.tags">Preset tags</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -373,6 +377,10 @@
 			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manuell ausgewählte Artikel</label>
 			<label index="tx_newspaper_extra_combolinkbox.internal_links">Interne Links</label>
 			<label index="tx_newspaper_extra_combolinkbox.external_links">Externe Links</label>
+			<label index="tx_newspaper_extra_searchresults">Extra: Suchresultate</label>
+			<label index="tx_newspaper_extra_searchresults.sections">Suche auf Ressorts einschränken</label>
+			<label index="tx_newspaper_extra_searchresults.search_term">Voreingestellter Suchbegriff</label>
+			<label index="tx_newspaper_extra_searchresults.tags">Voreingestellte Tags</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

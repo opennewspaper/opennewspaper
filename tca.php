@@ -2531,6 +2531,55 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-//\todo: remove from shell script ... require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_extra_searchresults"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_searchresults"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "sections,search_term,tags"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_searchresults"]["feInterface"],
+	"columns" => array (
+		"sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.sections",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 2,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+		"search_term" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.search_term",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"tags" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.tags",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 2,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "sections;;;;1-1-1, search_term, tags")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

@@ -795,6 +795,25 @@ CREATE TABLE tx_newspaper_extra_combolinkbox (
 
 
 #
+# Table structure for table 'tx_newspaper_extra_searchresults'
+#
+CREATE TABLE tx_newspaper_extra_searchresults (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	sections blob NOT NULL,
+	search_term tinytext NOT NULL,
+	tags blob NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
@@ -810,206 +829,6 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section blob NOT NULL,
 	tx_newspaper_module tinytext NOT NULL
 );
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_section'
-CREATE TABLE tx_newspaper_section (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_page'
-CREATE TABLE tx_newspaper_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_pagezone_page'
-CREATE TABLE tx_newspaper_pagezone_page (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_article'
-CREATE TABLE tx_newspaper_article (
-	template_set tinytext NOT NULL
-);
-
-# Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
-CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
-	offset int(11) DEFAULT '0' NOT NULL
-);
-
 # Modifications for table 'tx_newspaper_section'
 CREATE TABLE tx_newspaper_section (
 	template_set tinytext NOT NULL
