@@ -720,6 +720,21 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $is_article_page;
 	}
 	
+	///	Is the logged in user an editor (allowed to edit articles)?
+	/** \todo finish: read group of logged in user and compare it to the
+	 *  	TSConfig-defined user group of editors.
+	 */
+	public static function isEditor() {
+		return true;
+	}
+	
+	///	Is the logged in user an editor in chief (allowed to publish articles)?
+	/** \todo finish: read group of logged in user and compare it to the
+	 *  	TSConfig-defined user group of chief editors.
+	 */
+	public static function isChief() {
+		return true;
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	
