@@ -209,7 +209,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return intval($result['offset']);
 	}
 
-
 	/// A short description that makes an Article List identifiable in the BE
 	public function getDescription() {
 		
