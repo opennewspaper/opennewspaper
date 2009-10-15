@@ -736,6 +736,13 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return true;
 	}
 
+	public static function currentURL() {
+		$hostname = $_SERVER['SERVER_NAME'];
+		$baseURI = explode($hostname, t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
+		$https = $_SERVER['HTTPS'];
+		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 
