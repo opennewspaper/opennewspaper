@@ -422,7 +422,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		$insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
 		
-		t3lib_div::devlog('insertExtraAfter(..., ' . $origin_uid . ', ' . intval($recursive) . ')', 'newspaper', 0, $insert_extra);
+		if (false) t3lib_div::devlog(
+			'insertExtraAfter()', 'newspaper', 0, 
+			array('$insert_extra' => $insert_extra,
+				'$origin_uid' => $origin_uid,
+				'$recursive' => intval($recursive)) 
+			);
 		
 		/// Write Extra to DB
 		$insert_extra->store();
