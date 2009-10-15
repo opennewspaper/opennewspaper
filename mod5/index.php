@@ -298,10 +298,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			/*	volle URL muss angegeben werden, weil manche browser sonst 
 			 *  'http://' davorhaengen.
 			 */			
-			$url_parts = explode('?', tx_newspaper::currentURL());
+			$url_parts = explode('/typo3', tx_newspaper::currentURL());
 			$base_url = $url_parts[0];
 
-			$url = $base_url . '?returnUrl=' . $path2installation .
+			$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
 					'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
 					$new_article->getUid() . ']=edit';
 /*
