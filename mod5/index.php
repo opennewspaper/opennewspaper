@@ -298,7 +298,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			/*	volle URL muss angegeben werden, weil manche browser sonst 
 			 *  'http://' davorhaengen.
 			 */			
-			$url_parts = explode('?', tx_newspaper::currenttURL());
+			$url_parts = explode('?', tx_newspaper::currentURL());
 			$base_url = $url_parts[0];
 
 			$url = $base_url . '?returnUrl=' . $path2installation .
