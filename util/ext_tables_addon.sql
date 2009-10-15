@@ -17,17 +17,13 @@ CREATE TABLE tx_newspaper_pagezone_page (
 # Modifications for table 'tx_newspaper_article'
 CREATE TABLE tx_newspaper_article (
 	template_set tinytext NOT NULL
+	FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`)
+	FULLTEXT KEY `text` (`teaser`, `teaser_list`, `text`, `author`)
 );
 
 # Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
 CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
 	offset int(11) DEFAULT '0' NOT NULL
-);
-
-# Fulltext indices for articles
-CREATE TABLE `tx_newspaper_article` (
-  FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`)
-  FULLTEXT KEY `text` (`teaser`, `teaser_list`, `text`, `author`)
 );
 
 # Fulltext index for Extra: Image
