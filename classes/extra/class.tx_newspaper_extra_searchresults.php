@@ -14,24 +14,38 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  - \p search_term (string)
  *  - \p tags (UIDs of tx_newspaper_Tag)
  *  
- *  \todo Ensure there is a fulltext index on all required fields
- *  \todo a lot more
+ *  \todo log searches
+ *  \todo search order (publishing date or relevance)
+ *  \todo number of results
  */
 class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
-	/// Article attributes counted as title (higher score when searching).
-	private static $title_fields = array('title', 'kicker', 'title_list', 'kicker_list');
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	Configuration parameters
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
+	/// GET parameter used to pass search term
+	const search_GET_var = 'search';
+
+	/// GET parameter used to page the search results
+	const page_GET_var = 'search_page';
 	
 	///	How much higher matches on title fields are rated.
-	const title_score_factor = 2.0;
+	const title_score_weight = 2.0;
+
+	///	How much higher (or lower) matches on Extra fields are rated.
+	const extra_score_weight = 0.5;
 
 	/// Above which score a match is considered as good enough
 	const score_limit = 0.1;
 	
-	///	Table storing tx_newspaper_Article
-	const article_table = 'tx_newspaper_article';
-	const article_section_mm = 'tx_newspaper_article_sections_mm';
-	const article_tag_mm = 'tx_newspaper_article_tags_mm';
+	/// Number of results stored in memory
+	const max_search_results = 1000;
+	
+	/// Article attributes counted as title (higher score when searching).
+	private static $title_fields = array('title', 'kicker', 'title_list', 'kicker_list');
 	
 	///	Article attributes also searched for the search term (in addition to \p $title_fields).
 	private static $text_fields = array('teaser', 'teaser_list', 'text', 'author');
@@ -43,11 +57,26 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		'tx_newspaper_extra_bio' => array('author_name', 'bio_text'),
 	);
 
+	///	Table storing tx_newspaper_Article
+	const article_table = 'tx_newspaper_article';
+	
+	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Section
+	const article_section_mm = 'tx_newspaper_article_sections_mm';
+	
+	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Tag
+	const article_tag_mm = 'tx_newspaper_article_tags_mm';
+	
 	/// Definition of umlauts which MySQL cannot match case-insensitively
 	private static $umlauts = array (
 		'ä' => 'Ä', 'ö' => 'Ö', 'ü' => 'Ü', 'Ä' => 'ä', 'Ö' => 'ö', 'Ü' => 'ü'
 	);
-		
+
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	Internal variables. Editing is useless.
+	//
+	////////////////////////////////////////////////////////////////////////////
+			
 	/// Section the search is restricted to, if any.
 	private $section = '';
 	
@@ -71,12 +100,29 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	/// Words for which may not be searched.
 	/** Either because they're too frequent or because they're legal trouble */
 	private $excluded_words = '';	
+
+	///	Number of results returned by the search
+	private $num_results = 0;
 	
-	/** \todo Populate class members from $_GET */
+	/// Search term
+	private $search = '';
+
+	////////////////////////////////////////////////////////////////////////////	
+	
+	/** \todo Populate class members from $_GET - section restriction */
 	public function __construct($uid = 0) { 
 		if ($uid) {
 			parent::__construct($uid); 
 		}
+		
+		$this->search = t3lib_div::_GP(self::search_GET_var);
+		
+		if (t3lib_div::_GP('start_day')) $this->start_day = t3lib_div::_GP('start_day');
+		if (t3lib_div::_GP('start_month')) $this->start_month = t3lib_div::_GP('start_month');
+		if (t3lib_div::_GP('start_year')) $this->start_year = t3lib_div::_GP('start_year');
+		if (t3lib_div::_GP('end_day')) $this->end_day = t3lib_div::_GP('end_day');
+		if (t3lib_div::_GP('end_month')) $this->end_month = t3lib_div::_GP('end_month');
+		if (t3lib_div::_GP('end_year')) $this->end_year = t3lib_div::_GP('end_year');
 	}
 	
 	/** Display results of the search leading to the current page.
@@ -88,8 +134,12 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		$this->prepare_render($template_set);
 		
 	    // add special hits to smarty array
-	    $this->searchSpecialHits($search_term);
+	    $this->smarty->assign('special', $this->searchSpecialHits($this->search));
 		
+		// perform the search on all articles
+		$this->smarty->assign('articles', $this->searchArticles($this->search));
+		
+		$this->logSearch();
 		
 		return $this->smarty->fetch($this);
 	}
@@ -99,15 +149,41 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	}
 
 	public static function dependsOnArticle() { return false; }
-	
+
+	///	Performs the search on all articles.
+	/** Also searches the configured Extras (as in \c self::$extra_fields) for
+	 *  the term. The search ist executed once for every configured Extra table
+	 *  and the found results are then sorted in PHP. 
+	 * 
+	 *  That implies that all search results must be read from DB (at least
+	 *  their UIDs), so that the sorting of results where the Extras differ can
+	 *  be inserted into the list of results and sorted.
+	 * 
+	 *  The following attributes, member variables and GET variables are
+	 *  relevant for this function:
+	 *  - evaluated in getSections():
+	 *    - attribute 'sections'	(set in BE)
+	 *    - $this->section		(GET parameter, read in constructor)
+	 *  - attribute 'tags'		(set in BE)
+	 *  - evaluated in searchWhereClause():
+	 *    - $this->search_lifetime
+	 *    - $this->start_day || $this->start_month || $this->start_year
+	 *    - $this->end_day || $this->end_month || $this->end_year
+	 *    - $this->isExcludedWord()
+	 *    - evaluated in 
+	 * 
+	 *  \param $search_term The word(s) for which the search is performed
+	 *  \return Array of tx_newspaper_Article
+	 */	
 	protected function searchArticles($search_term) {
 
 		$table = self::article_table;
 		$where = '1';
-		$fields = 'MATCH (' . implode(', ', self::$title_fields).') ' .
-					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS titlescore, '.
+		$fields = self::article_table . '.uid, ' .
+				  'MATCH (' . implode(', ', self::$title_fields).') ' .
+					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS title_score, '.
 				  'MATCH (' . implode(', ', self::$text_fields).') ' .
-					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS score,';
+					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS text_score, ';
 
 		if ($this->getSections()) {
 			$table .= ' JOIN ' . self::article_section_mm .
@@ -124,32 +200,72 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 							$this->getAttribute('tags') .')';
 			
 		}
-		
-		$where .= $this->searchWhereClause($search_term);
-		
-		$row = tx_newspaper::selectRows('COUNT(*) AS number', $table, $where);
 
-		$num_articles = intval($row['number']);
-	    if (!$num_articles) {
-	        $GLOBALS['smarty']->assign('num_results', 0);
-	    } else {
+		$where .= ' AND ( ' . $this->searchWhereClause($search_term, self::$title_fields) . 
+				  ' OR ' . $this->searchWhereClause($search_term, self::$text_fields) . ' )';
 
-			$page = $this->getResultPage();
+		$table .= ' JOIN ' . self::article_extra_mm .
+				  '   ON ' . self::article_table . '.uid = ' . self::article_extra_mm . '.uid_local' .
+				  ' JOIN ' . self::extra_table .
+				  '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';		
+		
+		$articles = array();
+		
+		foreach (self::$extra_fields as $extra_table => $fields) {
+			$current_table = $table .
+				' JOIN ' . self::article_tag_mm .
+				'   ON ' . self::extra_table . '.extra_uid = ' . $extra_table . '.uid' .
+				'     AND ' . self::extra_table . '.extra_table = \'' . $extra_table . '\'';
+
+			$current_fields = $fields .
+				'MATCH (' . implode(', ', $fields).') ' .
+				'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS extra_score ';
+
+			$current_where = $where .
+				' AND ( ' . $this->searchWhereClause($search_term, $fields) . 
+				' OR ' . $this->searchWhereClause($search_term, $fields) . ' )';
 			
-	        $query = $GLOBALS['TYPO3_DB']->SELECTquery(
-				$fields . ',' . self::article_table . '.uid',
-				self::article_table,
-				$where,
+			$row = tx_newspaper::selectRows('COUNT(*) AS number', $current_table, $current_where);
+			t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
+			
+			$num_articles = intval($row['number']);
+			if (!$num_articles) continue;
+			
+	        $results = tx_newspaper::selectRows(
+				$current_fields,
+				$current_table,
+				$current_where,
 				'',
-				($this->searchOrder == 'crdate'?
-					'crdate':
-					$this->titleWeight.'*titlescore + '.$this->textWeight.'*score').
-					' DESC',
-				$page*self::$resultListLength.', '.self::$resultListLength
+				$this->getOrderBy(),
+				'0, ' . self::max_search_results
 			);
+			t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
+			
+			foreach ($results as $result) {
+				foreach ($articles as $article) {
+					if (intval($article['uid']) == intval($result['uid'])) {
+						$article['extra_score'] += $result['extra_score'];
+						continue 2;		//	continue outer loop
+					}
+				}
+				$articles[] = $result;
+					
+			}
+		}
+		
+    	$this->num_results = sizeof($articles);
+		$return = array();
+    	 
+	    if ($this->num_results > 0) {
+			usort($articles, array(get_class($this), 'compareArticles'));
 
-		    $res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			foreach (array_slice($articles, $this->getResultPage(), $this->getNumResultsPerPage())
+					 as $article) {
+				$return[] = new tx_newspaper_Article($article['uid']);
+			}
 	    }
+	    
+		return $return;
 	}
 
 	/// Gets sections the search is restricted to as comma-separated list
@@ -165,11 +281,34 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		return '';
 	}
 	
-	protected function searchExtras($search_term) {
-		throw new tx_newspaper_NotYetImplementedException();
+	///	Page of search results currently displayed
+	/** \return Page of search results currently displayed
+	 */
+	protected function getResultPage() {
+		return intval(t3lib_div::_GP(self::page_GET_var));
 	}
 
-	protected function getResultPage() {
+	/// How many search results to display per page
+	/** \return Number of search results per page
+	 *  \todo More sophisticated solution ;-)
+	 */
+	protected function getNumResultsPerPage() {
+		return 10;
+	}
+	
+	/// SQL \c ORDER \c BY clause
+	/** \return String used as SQL \c ORDER \c BY clause
+	 *  \todo make it possible to sort by relevance or date
+	 */
+	protected function getOrderBy() {
+		return 'crdate DESC';
+		// self::title_score_weight . '*titlescore+score';
+	}
+	
+	///	Write the requested search term to a log file.
+	/** \param $message message to be logged.
+	 */
+	protected function logSearch($search_term) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
 	
@@ -267,6 +406,34 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	}
 	
 	
+ 	/// Determine which tx_newspaper_Article comes first in search results.
+ 	/** Supplied as parameter to \c usort() in searchArticles().
+ 	 *  This function may be overridden or reimplemented to reflect changing 
+ 	 *  requirements for the sorting of articles. 
+ 	 * 
+ 	 *  \param $art1 first tx_newspaper_Article to compare in the form \code
+ 	 * 		array(
+ 	 * 			'uid' => tx_newspaper_Article UID
+ 	 * 			'title_score' => MATCH score on self::$title_fields 
+ 	 * 			'text_score' => MATCH score on self::$text_fields
+ 	 * 			'extra_score' => MATCH score on self::$extra_fields
+ 	 * 		) \endcode
+ 	 *  \param $art2 second tx_newspaper_Article to compare, as \p $art1
+ 	 *  \return < 0 if \p $art1 comes before \p $art2, > 0 if it comes after, 
+ 	 * 			== 0 if their position is the same 
+ 	 * 
+ 	 *  \todo take into account the possibility to sort by publishing date
+ 	 */
+	private static function compareArticles(array $art1,
+											array $art2) {
+		return self::total_score($art2)-self::total_score($art1);
+	}
+	
+	private static function total_score(array $article) {
+		return self::title_score_factor*$article['title_score'] +
+				$article['text_score'] +
+				self::extra_score_factor*$article['extra_score'];
+	}
 }
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SearchResults());
 
