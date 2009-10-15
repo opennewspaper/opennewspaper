@@ -438,7 +438,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 
-			$pz->insertExtraAfter($e, $after_origin_uid, false); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
+			$pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
 			
 			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
 				// set paragraph
