@@ -86,7 +86,8 @@ FILE_PATTERNS          = *.php \
                          *.inc \
                          *.PHP \
                          *.PHP3 \
-                         *.tmpl
+                         *.tmpl \
+                         *.sql
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
