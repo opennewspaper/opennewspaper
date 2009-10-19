@@ -53,8 +53,16 @@ interface tx_newspaper_ArticleIface
 	 */
 	public function getExtra($extra_class);	
 
-	public function addExtra(tx_newspaper_Extra $newExtra);
+	/// Add an Extra to the Article
+	/** \param $extra tx_newspaper_Extra to be added
+	 */
+	public function addExtra(tx_newspaper_Extra $extra);
 
+	/// Get article type of article
+	/** \return tx_newspaper_ArticleType assigned to this Article, or \c null.
+	 */
+	public function getArticleType();
+	
 	/// \return List of attributes this tx_newspaper_ArticleIface has
 	public static function getAttributeList();
 	
