@@ -5,8 +5,7 @@ require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehoo
 
 class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
-/// list module hook
-
+	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
 		if (strtolower($table) == 'tx_newspaper_article') {
 			// hide default articles in list module
@@ -19,8 +18,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 
 
-/// tceform hooks
-
+	/// TCEForm hooks
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
 //t3lib_div::devlog('sh pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
@@ -50,8 +48,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 
 
-/// save hooks: new and update
-
+	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
 
@@ -263,8 +260,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 
 
-/// save hook: delete
-	
+	/// save hook: delete
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array($command, $id, $value));
 
