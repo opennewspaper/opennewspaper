@@ -286,6 +286,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	///	The tx_newspaper_PageZoneType of the current PageZone.
+	/** \return The tx_newspaper_PageZoneType of \c $this.
+	 */
 	public function getPageZoneType() {
 		if (!$this->pagezonetype) {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
@@ -294,7 +297,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $this->pagezonetype; 
 	}
 
-	/// \return uid of "parent" abstract pagezone record for given pagezone
+	/// Get the UID of the abstract record for this PageZone.
+	/** \return UID of the record containing the data for the abstract portion
+	 *  	of the given pagezone - the one from the table
+	 *  	\c tx_newspaper_pagezone.
+	 */
 	public function getAbstractUid() {
 		$row = tx_newspaper::selectOneRow(
 			'uid',
@@ -305,6 +312,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return intval($row['uid']);
 	}
 
+	///	Get the tx_newspaper_Page on which the PageZone lies.
+	/** \return The tx_newspaper_Page on which the PageZone lies.
+	 */
 	public function getParentPage() {
 		if (!$this->parent_page) {
 			if (!$this->parent_page_id) {
@@ -325,35 +335,74 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		return $this->parent_page;
 	}
+
+	///	Get a list of Page Zones to which the inheritance of \p $this can change.
+	/** The parent, from which the current Page Zone inherits its Extras, can be
+	 *  altered. This function lists the Zones it can be altered to:
+	 *  - The PageZone of the same type in the tx_newspaper_Section which is the
+	 *    parent of the current Section (this is the default)
+	 *  - Any PageZone of the same tx_newspaper_PageZoneType as \c $this which
+	 *    lies under a tx_newspaper_Page in the same tx_newspaper_Section as
+	 *    \c $this.
+	 * 
+	 *  \return List of Page Zones to which the inheritance of \p $this can
+	 *  	change.
+	 */
+	public function getPossibleParents() {
+
+		$zones = array();
+
+		$parent_zone = $this->getParentForPlacement(true);
+		if ($parent_zone) $zones[] = $parent_zone;
+		
+		$sister_pages = $this->getParentPage()->getParentSection()->getActivePages();
+		foreach ($sister_pages as $page) {
+			if ($sister_zone = $page->getPageZone($this->getPageZoneType())) {
+				$zones[] = $sister_zone;
+			}
+		}
+		
+		return $zones;	
+	}
 	
-	/// Get the Page Zone from which the current object inherits the placement of its extras
-	/** The page zone depends on attribute 'inherit_mode' (defined in pagezone_page
-	 *  and article):
+	/// The Page Zone from which \c $this inherits the placement of its Extras
+	/** The page zone depends on attribute \c 'inherit_mode' (defined in 
+	 *  pagezone_page and article):
+	 * 
 	 *  If negative, don't inherit at all; if positive,	inherit from the page 
 	 *  identified by the UID given (parameter misnomer ;-) ; if zero, find the 
 	 *  page zone in the parent page or higher up in the hierarchy with the same
-	 *  page zone type as $this.
+	 *  page zone type as \c $this.
 	 *   
-	 *  \return The PageZone object from which to copy the Extras and their 
-	 * 		placements.
+	 *  \param $structure_only Ignore the value of \c 'inherit_mode', base the
+	 * 		return value only on the structure of the tx_newspaper_Section tree.
+	 * 
+	 *  \return The tx_newspaper_PageZone object from which to copy the
+	 *  	tx_newspaper_Extra s and their placements.
+	 * 
 	 *  \todo What if inherit_mode points to a non-existent PageZone? Currently
 	 * 		a DBException is thrown.
-	 *  \todo A recursive version of this function would be more elegant, I reckon
+	 *  \todo A recursive version of this function would be more elegant, I reckon.
 	 */
-	public function getParentForPlacement() {
-		$inherit_mode = intval($this->getAttribute('inherits_from'));
+	public function getParentForPlacement($structure_only = false) {
 
-		if ($inherit_mode < 0) return null;
-		if ($inherit_mode > 0) 
-			return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
+		if (!$structure_only) { 
+			$inherit_mode = intval($this->getAttribute('inherits_from'));
+	
+			if ($inherit_mode < 0) return null;
+			if ($inherit_mode > 0) 
+				return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
+		}
 		
-		/// Step from parent to parent until a PageZone with matching type is found
+		/** Step from parent to parent until a PageZone with matching type is
+		 *  found.
+		 */
 		$current_page = $this->getParentPage();
 		while ($current_page) {
-			/// First get parent section of the current page...
+			/** First get parent section of the current page...	*/
 			$parent_section = $current_page->getParentSection();
 			if ($parent_section instanceof tx_newspaper_Section) {
-				/// ... then get parent section of the current section
+				/** ... then get parent section of the current section.	*/
 				$parent_section = $parent_section->getParentSection();
 			} else {
 				//	Root of section tree reached
@@ -365,7 +414,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				return null;
 			}
 			
-			/// find page of same page type under parent section
+			/** Find page of same page type under parent section.	*/
 			$new_page = null;
 			foreach ($parent_section->getSubPages() as $page) {
 				if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
@@ -375,7 +424,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 			$current_page = $new_page;
 			if (!$new_page) {
-				/// If page not active in parent section, look in the section further up
+				/** If page not active in parent section, look in the section
+				 *  further up.
+				 */
 				continue;
 			}
 		
@@ -408,10 +459,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
-	/** \param $origin_uid 
-	 *  \param $insert_extra The new, fully instantiated Extra to insert
-	 *  \param $recursive If set, pass down the insertion to all inheriting PageZones
-	 *  \return DOCUMENT_ME
+	/** \param $insert_extra The new, fully instantiated Extra to insert
+	 *  \param $origin_uid UID of \p $insert_extra on the PageZone where it was
+	 * 		originally added. 
+	 *  \param $recursive If set, pass down the insertion to all inheriting
+	 *  	PageZones.
+	 *  \return \p $insert_extra
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
@@ -429,7 +482,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'$recursive' => intval($recursive)) 
 			);
 		
-		/// Write Extra to DB
+		/** Write Extra to DB	*/
 		$insert_extra->store();
 		
 		$this->addExtra($insert_extra);
@@ -680,16 +733,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $section->getAttribute('section_name');
 	}
 	
-	
-
 	/// returns true if pagezone is an article
 	public function isArticle() {
-		return $this instanceof tx_newspaper_article;
+		return $this instanceof tx_newspaper_Article;
 	}
+
 	/// returns true if pagezone is a pagezone_page
 	public function isPagezonePage() {
-		return !($this->isArticle());
+		return $this instanceof tx_newspaper_PageZone_Page;
 	}
+
 	/// returns true if pagezone is a default article
 	public function isDefaultArticle() {
 		if ($this->isPagezonePage()) {
@@ -697,6 +750,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		return ($this->getAttribute('is_template') == 1);
 	}
+
 	/// returns true if pagezone is a concrete article
 	public function isConcreteArticle() {
 		if ($this->isPagezonePage()) {
@@ -704,8 +758,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		return ($this->getAttribute('is_template') == 0);
 	}
-	
-	
+		
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
