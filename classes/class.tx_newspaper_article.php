@@ -351,6 +351,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->articleBehavior->extraAnlegen();
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	class tx_newspaper_PageZone
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
 	/// Get the list of tx_newspaper_Extra associated with this Article in sorted order
 	/** The Extras are sorted by attribute \c paragraph first and
 	 *  \c position second.
@@ -377,6 +383,38 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		return $this->extras; 
 	}
+
+	/// Add an extra after the Extra which is on the original page zone as $origin_uid
+	/** Reimplemented from tx_newspaper_PageZone because Articles don't have
+	 *  PageZones which inherit from them. Setting \p $recursive on an Article 
+	 *  would result in an error.
+	 */
+	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
+									 $origin_uid = 0, $recursive = true) {
+		tx_newspaper_PageZone::insertExtraAfter($insert_extra, $origin_uid, false);
+	}
+
+	/// Get the tx_newspaper_PageZoneType associated with this Article
+	/** \return The tx_newspaper_PageZoneType associated with this Article. If
+	 * 		this is not the one where attribute \p is_article is set, there
+	 * 		is something weird going on.
+	 *  \todo Check for \p is_article. No idea how to handle errors though.
+	 */
+	public function getPageZoneType() {
+		if (!$this->pagezonetype) {
+			$pzt = tx_newspaper::selectOneRow('uid', 'tx_newspaper_pagezonetype', 'is_article');
+			$pagezonetype_id = $pzt['uid'];
+			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
+		}
+		return $this->pagezonetype; 
+	}
+
+	
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	class tx_newspaper_Article
+	//
+	////////////////////////////////////////////////////////////////////////////
 	
 	/// Find the first tx_newspaper_Extra of a given type
 	/** \param $extra_class The desired type of tx_newspaper_Extra, either as
@@ -400,44 +438,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// Get article type of article
-	/// \return tx_newspaper_articletype assigned to this article, or \c null.
-	/// \todo: @Helge: add this method to the article interface??
+	/** \return tx_newspaper_ArticleType assigned to this Article, or \c null.
+	 */
 	public function getArticleType() {
 		if (!$this->getAttribute('articletype_id')) {
 			return null;
 		}
 		return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
 	}
-	
-	
-	
-	
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//	class tx_newspaper_PageZone
-	//
-	////////////////////////////////////////////////////////////////////////////
-
-	/// Get the tx_newspaper_PageZoneType associated with this Article
-	/** \return The tx_newspaper_PageZoneType associated with this Article. If
-	 * 		this is not the one where attribute \p is_article is set, there
-	 * 		is something weird going on.
-	 *  \todo Check for \p is_article. No idea how to handle errors though.
-	 */
-	public function getPageZoneType() {
-		if (!$this->pagezonetype) {
-			$pzt = tx_newspaper::selectOneRow('uid', 'tx_newspaper_pagezonetype', 'is_article');
-			$pagezonetype_id = $pzt['uid'];
-			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
-		}
-		return $this->pagezonetype; 
-	}
-
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//	class tx_newspaper_Article
-	//
-	////////////////////////////////////////////////////////////////////////////
 	
 	/// Delete all Extras
 	public function clearExtras() {
@@ -663,6 +671,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  the current tx_newspaper_Section.
 	 * 
 	 *  \return The currently displayed tx_newspaper_Page.
+	 * 
+	 *  \todo make static, move to tx_newspaper
 	 */
 	protected function getCurrentPage() {
 		$section = tx_newspaper::getSection();
@@ -727,7 +737,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		return $sections;
 	}
-	
 	
 	/// Get the index of the provided tx_newspaper_Extra in the Extra array
 	/** Binary search for an Extra, assuming that \c $this->extras is ordered by
