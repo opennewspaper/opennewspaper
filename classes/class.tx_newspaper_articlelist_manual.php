@@ -67,7 +67,20 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 		
 		return $articles;
 	}
-	
+
+	function assembleFromUIDs(array $uids) {
+		$this->clearList();
+		for($i = 0; $i < sizeof($uids); $i++) {
+			if (!intval($uids[$i])) {
+				throw new tx_newspaper_InconsistencyException(
+					'Manual article list needs UID array to consist of integers,
+					 but no int was given: ' . $uids[$i]
+				);				
+			}
+			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i); 
+		}
+	}
+		
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		$this->deleteArticle ($article);
 			
@@ -106,6 +119,18 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
 	static public function getModuleName() { return 'np_al_manual'; }
 	
+	///	Remove all articles from the list.
+	/** This function should be an abstract function. But it also should be
+	 *  protected or private, and PHP doesn't allow abstract functions to be
+	 *  anything but public. Well, sucks to be PHP! So i have to declar the
+	 *  function and make sure it is never called.
+	 */
+	protected function clearArticles() {
+		throw new tx_newspaper_InconsistencyException(
+			'clearArticles() should never be called. Override it in the child classes!'
+		);
+	}
+
 	static protected $table = 'tx_newspaper_articlelist_manual';	///< SQL table for persistence
 }
 

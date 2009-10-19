@@ -85,6 +85,30 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		return $articles;
 	}
+
+	function assembleFromUIDs(array $uids) {
+		$this->clearList();
+		for($i = 0; $i < sizeof($uids); $i++) {
+			if (!is_array($uids[$i]) || sizeof($uids[$i]) < 2) {
+				throw new tx_newspaper_InconsistencyException(
+					'Semiautomatic article list needs UID array to have members
+					 of the form: array(uid, offset), but no array was given: ' .
+					 print_r($uids[$i])
+				);
+			}
+			$article = new tx_newspaper_Article($uids[$i][0]);
+			$this->insertArticleAtPosition($article, $i);
+			if ($this->getOffset($article) != $uids[$i][1]) {
+				
+				tx_newspaper::updateRows(
+					'tx_newspaper_articlelist_semiautomatic_articles_mm',
+					'uid_local = ' . intval($this->getUid()) . 
+						' AND uid_foreign = ' . $article->getUid(),
+					array('offset' => $uids[$i][1])
+				);
+			}
+		}
+	}
 	
 	/// User function called from the BE to display the articles on the list
 	/** Also, to sort articles on the list up and down.
@@ -264,6 +288,18 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	static public function getModuleName() { return 'np_al_semiauto'; }
 
 	////////////////////////////////////////////////////////////////////////////
+
+	///	Remove all articles from the list.
+	/** This function should be an abstract function. But it also should be
+	 *  protected or private, and PHP doesn't allow abstract functions to be
+	 *  anything but public. Well, sucks to be PHP! So i have to declar the
+	 *  function and make sure it is never called.
+	 */
+	protected function clearArticles() {
+		throw new tx_newspaper_InconsistencyException(
+			'clearArticles() should never be called. Override it in the child classes!'
+		);
+	}
 	
 	/// Get the articles sorted by their offsets, including offset values
 	/** \param $number Number of articles to return

@@ -189,6 +189,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+	///	Generate the list from an array of unique identifiers
+	/** \param $uids List of identifiers; currently these may be a list of UIDs
+	 * 		or the UIDs may be paired with an offset value.
+	 */
+	abstract function assembleFromUIDs(array $uids);
+	
 	/// Inserts an Article at a specified position in the list
 	/** \param $article Article to insert
 	 *  \param $pos Position to insert \p $article at
@@ -364,6 +370,17 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return self::$registered_articlelists;
 	}
 
+	///	Remove all articles from the list.
+	/** This function should be an abstract function. But it also should be
+	 *  protected or private, and PHP doesn't allow abstract functions to be
+	 *  anything but public. Well, sucks to be PHP! So i have to declar the
+	 *  function and make sure it is never called.
+	 */
+	protected function clearArticles() {
+		throw new tx_newspaper_InconsistencyException(
+			'clearArticles() should never be called. Override it in the child classes!'
+		);
+	}
 
 
 	private $uid = 0;				///< UID of concrete record
