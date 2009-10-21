@@ -109,13 +109,15 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	
 	/// Given a partial tag, return all possible completions for that tag
 	/** \param $fragment A string to interpret as a part of a tag
+	 *  \param $max Maximum number of hints returned
 	 *  \param $start_only If true, returns only tags beginning with \p $fragment
 	 *  \return Array of tags (as strings, not UIDs) that match \p $fragment
 	 */
-	static public function getCompletions($fragment, $start_only = false) {
+	static public function getCompletions($fragment, $max = 0, $start_only = false) {
 		$results = tx_newspaper::selectRows(
 			'tag', 'tx_newspaper_tag',
-			'tag LIKE ' . ($start_only? '': '%') . $fragment . '%'
+			'tag LIKE ' . ($start_only? '': '%') . $fragment . '%',
+			'', '', ($max? ('0, ' . $max): '')
 		);
 
 		$return = array();
