@@ -45,6 +45,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
  */
 class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
+	/// SQL table storing the relations between list and articles
+	const mm_table = 'tx_newspaper_articlelist_manual_articles_mm';
+
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
@@ -53,7 +56,7 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 	public function getArticles($number, $start = 0) {		
 		$results = tx_newspaper::selectRows(
 				'uid_foreign',
-				'tx_newspaper_articlelist_manual_articles_mm',
+				self::mm_table,
 				'uid_local = ' . intval($this->getUid()),
 				'',
 				'sorting ASC',
@@ -87,7 +90,7 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
 			if ($i >= $pos) {
 				tx_newspaper::updateRows(
-					'tx_newspaper_articlelist_manual_articles_mm',
+					self::mm_table,
 					'uid_local = ' . intval($this->getUid()) .
 						' AND uid_foreign = ' . $present_article->getUid(),
 					array ('sorting' => 'sorting + 1')
@@ -96,7 +99,7 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 		}
 		
 		tx_newspaper::insertRows(
-			'tx_newspaper_articlelist_manual_articles_mm',
+			self::mm_table,
 			array(
 				'uid_local' =>  intval($this->getUid()),
 				'uid_foreign' => $article->getUid(),
@@ -107,7 +110,7 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
 	public function deleteArticle(tx_newspaper_ArticleIface $article) {
 		tx_newspaper::deleteRows(
-			'tx_newspaper_articlelist_manual_articles_mm',
+			self::mm_table,
 			'uid_local = ' . intval($this->getUid()) .
 				' AND uid_foreign = ' . $article->getUid()
 		);
@@ -120,15 +123,9 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 	static public function getModuleName() { return 'np_al_manual'; }
 	
 	///	Remove all articles from the list.
-	/** This function should be an abstract function. But it also should be
-	 *  protected or private, and PHP doesn't allow abstract functions to be
-	 *  anything but public. Well, sucks to be PHP! So i have to declar the
-	 *  function and make sure it is never called.
-	 */
-	protected function clearArticles() {
-		throw new tx_newspaper_InconsistencyException(
-			'clearArticles() should never be called. Override it in the child classes!'
-		);
+	protected function clearList() {
+		tx_newspaper::deleteRows(self::mm_table,
+								 'uid_local = ' . intval($this->getUid()));
 	}
 
 	static protected $table = 'tx_newspaper_articlelist_manual';	///< SQL table for persistence

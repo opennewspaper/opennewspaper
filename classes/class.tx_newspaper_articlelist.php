@@ -376,9 +376,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  anything but public. Well, sucks to be PHP! So i have to declar the
 	 *  function and make sure it is never called.
 	 */
-	protected function clearArticles() {
+	protected function clearList() {
 		throw new tx_newspaper_InconsistencyException(
-			'clearArticles() should never be called. Override it in the child classes!'
+			'clearList() should never be called. Override it in the child classes!'
 		);
 	}
 

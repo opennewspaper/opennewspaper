@@ -315,13 +315,14 @@ row:
 
 	/// Deletes a record from a DB table
 	/** If the class constant \c tx_newspaper::use_datamap is set, the operation
-	 *  uses \c process_cmdmap(), which checks all needed fields and calls the save
-	 *  hook. Otherwise, if \p $table is recorded in \c $TCA, its field 'deleted'
-	 *  is set to 1. If \p $table is not recorded in \c $TCA (which is the case for
-	 *  MM tables), an SQL \c DELETE query is executed.
+	 *  uses \c process_cmdmap(), which checks all needed fields and calls the
+	 *  save hook. Otherwise, if \p $table is recorded in \c $TCA, its field
+	 *  'deleted' is set to 1. If \p $table is not recorded in \c $TCA (which is
+	 *  the case for MM tables), an SQL \c DELETE query is executed.
 	 * 
 	 *  \param $table SQL table to delete a record from
-	 *  \param $uids_or_where Array of UIDs to delete or a \c WHERE condition as string
+	 *  \param $uids_or_where Array of UIDs to delete, a single UID to delete
+	 *  	(must be an integer), or a \c WHERE condition as string
 	 *  \return number of affected rows
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error

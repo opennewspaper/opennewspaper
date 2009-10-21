@@ -68,6 +68,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	///	Offset behind top position with which an article counts as deleted.
 	const offset_deleted = 1000;
 	
+	/// SQL table storing the relations between list and articles
+	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
+	
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
@@ -101,7 +104,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			if ($this->getOffset($article) != $uids[$i][1]) {
 				
 				tx_newspaper::updateRows(
-					'tx_newspaper_articlelist_semiautomatic_articles_mm',
+					self::mm_table,
 					'uid_local = ' . intval($this->getUid()) . 
 						' AND uid_foreign = ' . $article->getUid(),
 					array('offset' => $uids[$i][1])
@@ -184,7 +187,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		foreach ($articles as $i => $present_article) {
 			if ($article->getUid() == $present_article->getUid()) {
 				tx_newspaper::updateRows(
-					'tx_newspaper_articlelist_semiautomatic_articles_mm',
+					self::mm_table,
 					'uid_local = ' . intval($this->getUid()) .
 						' AND uid_foreign = ' . $present_article->getUid(),
 					array (
@@ -206,7 +209,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
 		if ($this->getArticlePosition($article)+$offset < 0) {
 			tx_newspaper::updateRows(
-				'tx_newspaper_articlelist_semiautomatic_articles_mm',
+				self::mm_table,
 				'uid_local = ' . intval($this->getUid()) .
 					' AND uid_foreign = ' . $present_article->getUid(),
 				array (
@@ -222,15 +225,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  	the list. If \p $article is not in the list, returns zero.
 	 */
 	public function getOffset(tx_newspaper_ArticleIface $article) {
-	
-		$result = tx_newspaper::selectZeroOrOneRow(
-			'offset',
-			'tx_newspaper_articlelist_semiautomatic_articles_mm',
-			'uid_local = ' . intval($this->getUid()) . 
-				' AND uid_foreign = ' . $article->getUid()
-		);
-		if (!$result) return 0;
-		return intval($result['offset']);
+		$offset = $this->getOffsets(array($article->getUid()));
+		if (sizeof($offset) < 1) return 0;
+		return intval($offset[$article->getUid()]);
 	}
 
 	/// A short description that makes an Article List identifiable in the BE
@@ -290,15 +287,15 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	////////////////////////////////////////////////////////////////////////////
 
 	///	Remove all articles from the list.
-	/** This function should be an abstract function. But it also should be
-	 *  protected or private, and PHP doesn't allow abstract functions to be
-	 *  anything but public. Well, sucks to be PHP! So i have to declar the
-	 *  function and make sure it is never called.
+	/** Deletes all articles that are presently on the list. Older articles are
+	 *  untouched.
 	 */
-	protected function clearArticles() {
-		throw new tx_newspaper_InconsistencyException(
-			'clearArticles() should never be called. Override it in the child classes!'
-		);
+	protected function clearList() {		
+		$article_uids = array();
+		foreach ($this->getArticles($this->getAttribute('num_articles')) as $article) {
+			$article_uids[] = $article->getUid();
+		}
+		tx_newspaper::deleteRows(self::mm_table, $article_uids);
 	}
 	
 	/// Get the articles sorted by their offsets, including offset values
@@ -427,15 +424,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		$results = tx_newspaper::selectRows(
 			'uid_foreign, offset',
-			'tx_newspaper_articlelist_semiautomatic_articles_mm',
+			self::mm_table,
 			'uid_local = ' . intval($this->getUid()) . 
 			' AND uid_foreign IN (' . implode(',', $uids) . ')'
 		);
 		
 		$offsets = array();
 		foreach	($results as $result) {
-			if (intval($result['uid_foreign']) && intval($result['offset']))
+			if (intval($result['uid_foreign']) && intval($result['offset'])) {
 				$offsets[intval($result['uid_foreign'])] = intval($result['offset']);
+			}
 		}
 
 		return $offsets;
@@ -475,8 +473,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $new_articles;
 	}
 	
-	///< SQL table for persistence
-	static protected $table = 'tx_newspaper_articlelist_semiautomatic';
+	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
+	
 }
 
 tx_newspaper_ArticleList::registerArticleList(new tx_newspaper_ArticleList_Semiautomatic());
