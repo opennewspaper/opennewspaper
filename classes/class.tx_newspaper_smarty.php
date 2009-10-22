@@ -258,25 +258,33 @@ class tx_newspaper_Smarty extends Smarty {
 			$page_name = $this->pagetype->getAttribute('normalized_name')?
 				$this->pagetype->getAttribute('normalized_name'):
 				strtolower($this->pagetype->getAttribute('type_name'));
-			if ($this->pagezonetype) {
-				$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
-					$this->pagezonetype->getAttribute('normalized_name'):
-					strtolower($this->pagezonetype->getAttribute('type_name'));
-				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
-					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
-				   ) {
-					$temporary_searchpath[] = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
-				}
-			}
-			if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
-				is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
+		} else {
+			$page_name = self::pagename_for_all_pagezones;
+		}
+		
+		//	first look for the page zone specific templates
+		if ($this->pagezonetype) {
+			$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
+				$this->pagezonetype->getAttribute('normalized_name'):
+				strtolower($this->pagezonetype->getAttribute('type_name'));
+			if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
+				is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 			   ) {
-				$temporary_searchpath[] = 'template_sets/default/'. $page_name;
+				$temporary_searchpath[] = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
 			}
 		}
+
+		//	then for the page specific ones
+		if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
+			is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
+		   ) {
+			$temporary_searchpath[] = 'template_sets/default/'. $page_name;
+		}
+
+		//	finally those common for all pages and page zones
 		$temporary_searchpath[] = 'template_sets/default';
 		
-		//  default templates delivered with the newspaper extension
+		//  and the default templates delivered with the newspaper extension
 		$temporary_searchpath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
 
 		foreach (explode(',', $TYPO3_CONF_VARS['EXT']['extList']) as $ext) {
