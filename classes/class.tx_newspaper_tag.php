@@ -141,5 +141,5 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	
 	////////////////////////////////////////////////////////////////////////////
 	
-	private $uid = ''; ///< UID that identifies the article type
+	private $uid = ''; ///< UID that identifies the tag in the DB
 }
