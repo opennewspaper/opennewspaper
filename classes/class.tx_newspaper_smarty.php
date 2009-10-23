@@ -99,6 +99,8 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
 	
+	const pagename_for_all_pagezones = 'common';
+	
 	public function __construct() {
 
 		$tmp = PATH_site . 'typo3temp/';
