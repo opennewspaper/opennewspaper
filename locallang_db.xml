@@ -191,6 +191,8 @@
 			<label index="tx_newspaper_extra_searchresults.sections">Section to restrict the search to</label>
 			<label index="tx_newspaper_extra_searchresults.search_term">Preset search term</label>
 			<label index="tx_newspaper_extra_searchresults.tags">Preset tags</label>
+			<label index="tx_newspaper_extra_container">Extra: Container for Extras</label>
+			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -381,6 +383,8 @@
 			<label index="tx_newspaper_extra_searchresults.sections">Suche auf Ressorts einschränken</label>
 			<label index="tx_newspaper_extra_searchresults.search_term">Voreingestellter Suchbegriff</label>
 			<label index="tx_newspaper_extra_searchresults.tags">Voreingestellte Tags</label>
+			<label index="tx_newspaper_extra_container">Extra: Extra-Container</label>
+			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

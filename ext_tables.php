@@ -16,31 +16,43 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM2','',t3lib_extMgm::extPath($_EXTKEY).'mod2/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM3','',t3lib_extMgm::extPath($_EXTKEY).'mod3/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM4','',t3lib_extMgm::extPath($_EXTKEY).'mod4/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM5','',t3lib_extMgm::extPath($_EXTKEY).'mod5/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('txnewspaperM6','','',t3lib_extMgm::extPath($_EXTKEY).'mod6/');
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+	t3lib_extMgm::addModule('web','txnewspaperM7','',t3lib_extMgm::extPath($_EXTKEY).'mod7/');
 }
 
 
@@ -611,6 +623,26 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 	)
 );
 
+$TCA["tx_newspaper_extra_container"] = array (
+	"ctrl" => array (
+		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container',		
+		'label'     => 'uid',	
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => "ORDER BY crdate",	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'disabled' => 'hidden',
+		),
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_container.gif',
+	),
+	"feInterface" => array (
+		"fe_admin_fieldList" => "hidden, extras",
+	)
+);
+
 $tempColumns = Array (
 	"tx_newspaper_extra" => Array (		
 		"exclude" => 1,		
@@ -653,5 +685,4 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 ?>

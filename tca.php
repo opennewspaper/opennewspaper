@@ -2581,5 +2581,42 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+
+
+
+$TCA["tx_newspaper_extra_container"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_container"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,extras"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_container"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.extras",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra",	
+				"size" => 4,	
+				"minitems" => 0,
+				"maxitems" => 100,
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, extras")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 ?>
