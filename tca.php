@@ -2620,4 +2620,5 @@ $TCA["tx_newspaper_extra_container"] = array (
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
+require_once(PATH_typo3conf . 'ext/newspaper_taz/tca_addon.php');
 ?>
