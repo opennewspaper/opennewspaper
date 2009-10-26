@@ -274,6 +274,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		return $this->smarty->fetch($this);
  	}
 	
+/// \todo: oliver: deprecated? probably yes
 	static function readExtraItem($uid, $table) {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
