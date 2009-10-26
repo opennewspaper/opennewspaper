@@ -1,16 +1,12 @@
 {* debug *}
 
-{include file="mod3.css"}
-{include file="mod3.js"} {* js for extra processing extras *}
+{include file="mod3.css"} {* css for processin extras *}
+{include file="mod3.js"}  {* js for extra processing extras *}
 
-</head></body>
-<br />
 {if (!$IS_CONCRETE_ARTICLE)}
+	<br />
 	{* checkbox: show levels above for pagezone_page and default article *}
 	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
-{/if}
-{if ($IS_CONCRETE_ARTICLE && !$IS_CONCRETE_ARTICLE_RELOAD) }
-	<a href="#" onclick="extra_insert_after(0, {$DATA[0].pagezone_id}, 0, true, 1); return false;">{$NEW_TOP_ICON}</a>
 {/if}
 
 {section name=i loop=$DATA}
@@ -61,7 +57,8 @@
 {/if}	
 </div>
 
-{if $PAGEZONE[i] != false}
+{if $PAGEZONE[i] != false || $IS_CONCRETE_ARTICLE}
+	{* always render for concrete articles, even if empty because shortcuts for extras might be rendered *}
 	{$PAGEZONE[i]} {* pagezones are rendered separately *}
 {else}
 	<div style="margin-bottom: 22px;">{$MESSAGE.pagezone_empty}</div>

@@ -2,7 +2,8 @@
 
 // these function assume prototype (ajax) be available
 
-//utility functions //////////////////////////////////////////////////////////
+
+/// utility functions //////////////////////////////////////////////////////////
 
 function test() {ldelim}
 alert('test function found');
@@ -79,7 +80,10 @@ alert('test function found');
 	{rdelim}	
 		
 	
-	// functions for placement module only ////////////////////////////////////////
+	
+	
+	
+/// functions for placement module only ////////////////////////////////////////
 	
 	/// toggle checkbox "Show levels above"
 	function toggle_show_levels_above(checked) {ldelim}
@@ -98,19 +102,32 @@ alert('test function found');
 
 	
 	
-	// functions for placement pagezone_page //////////////////////////////////////
+/// functions for placement pagezone_page //////////////////////////////////////
 	
 	
 	
 	
 	
-	// functions for placement article ////////////////////////////////////////////	
+/// functions for placement (default) article //////////////////////////////////	
+		
+	/// AJAX call: create extra on article, started by shortcut link
+	function extra_shortcut_create(article_uid, extra_class, extra_uid) {ldelim}
+		var request = new top.Ajax.Request(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{ldelim}
+				method: 'get',
+				parameters: "extra_shortcut_create=1&article_uid=" + article_uid + "&extra_class=" + extra_class + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: eval(get_onCreate_function(1)),
+				onSuccess: eval(get_onSuccess_function(1))
+			{rdelim}
+		);
+	{rdelim}
 		
 		
 		
-		
-		
-	// functions for placement article AND concrete article ///////////////////////
+
+	
+/// functions for placement article AND concrete article ///////////////////////
 	
 	/// AJAX call: delete extra on pagezone_page or article
 	function extra_delete(pz_uid, extra_uid, message, is_concrete_article) {ldelim}
@@ -164,6 +181,18 @@ alert('test function found');
 			{rdelim}
 		);
 	{rdelim}
+	
+	
+
+	
+
+/// functions for concrete articles only /////////////////////////////////////////
+	
+	
+	
+	
+	
+	
 	
 	
 /// modal box functions

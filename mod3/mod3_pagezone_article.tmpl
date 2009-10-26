@@ -1,7 +1,27 @@
 {* debug *}
-{* tx_newspaper_be->renderExtraInArticle generates extra backend within article *}
+{* tx_newspaper_be->renderExtraInArticle generates extra backend in article *}
 
-{if ($IS_CONCRETE_ARTICLE)}<div id="extras">{/if} {* only list of extra will be reloaded in article *}
+{if ($IS_CONCRETE_ARTICLE)}
+<div id="extras"> {* only list of extras will be reloaded in article *}
+	{if $SHORTCUT}
+		<div style="margin-bottom: 7px;">
+		{$LABEL.shortcuts}<br />
+		{section name=i loop=$SHORTCUT}
+			{if ($SHORTCUT[i]->getUid() > 0)}
+				{* duplicate extra placed on default article *}
+				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', {$SHORTCUT[i]->getOriginUid()});">{$SHORTCUT_DEFAULTEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
+			{else}
+				{* create new empty extra configured in tsconfig *}
+				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', 0);">{$SHORTCUT_NEWEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
+			{/if}
+			<br />
+	 	{/section}
+	 	</div>
+	 {/if}
+
+	<a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true, 1); return false;">{$NEW_TOP_ICON}</a><br />
+
+{/if}
 <script language="javascript" >
 	{section name=i loop=$EXTRA_DATA} {* store default values for paragraphs *}
 		document.def_para[{$EXTRA_DATA[i].uid}] = {$EXTRA_DATA[i].paragraph};
@@ -9,6 +29,7 @@
 	{/section}
 </script>
 
+{if $EXTRA_DATA}
 <table style="margin-bottom: 21px;">
 <tr>
 	<td>{$LABEL.extra}</td>
@@ -68,7 +89,7 @@
 
 				<td>
 {* edit *}
-					{if $EXTRA_DATA[i].origin_placement == true} 
+					{if $EXTRA_DATA[i].origin_placement == true || $IS_CONCRETE_ARTICLE} 
 					  <a href="javascript:extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid}, {$DATA.article_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$EDIT_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
@@ -100,7 +121,7 @@
 					{/if}
 			
 {* delete *}
-					{if $EXTRA_DATA[i].origin_placement == true} 
+					{if $EXTRA_DATA[i].origin_placement == true || $IS_CONCRETE_ARTICLE} 
 					  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$DELETE_ICON}</a>
 					{else}
 					  {$EMPTY_ICON}
@@ -117,4 +138,7 @@
 			</tr>
 	{/section}
 </table>
+{else}
+	<div style="margin-bottom: 22px;">{$MESSAGE.pagezone_empty}</div>
+{/if}
 {if ($IS_CONCRETE_ARTICLE)}</div> {/if}

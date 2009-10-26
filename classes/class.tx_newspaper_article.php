@@ -654,6 +654,84 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$sections = $this->getSections(1);
 		return $sections[0];
 	}
+
+
+	/// Gets a list of (configured but) missing extras in the article
+	/** It is checked if extras placed on the default article are missing in
+	 *  the concrete article and if extras configured as must-have or should-
+	 *  have are missing in the article
+	 */  
+	/// \return array of Extra objects (either existing extras or newly created empty extras) 
+	public function getMissingDefaultExtras() {
+
+		$shortcuts = array();
+
+		// get must-have/should-have configuration 
+		$at = $this->getArticleType(); 
+		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
+//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras));
+
+		// get extras on default article for the primary section of this article
+		$defaultExtras = $this->getPrimarySection()->getDefaultArticle()->getExtras();
+//t3lib_div::devlog('getMissingDefaultExtras() defafult extras', 'newspaper', 0, array('de' => $defaultExtras));
+		if (is_array($defaultExtras)) {
+			// get extras assigned to this article
+			$concreteExtras = $this->getExtras();
+			/// check which default extras are already assigned to this article
+			foreach($defaultExtras as $keyDefault => $defaultExtra) {
+				foreach($concreteExtras as $keyConcrete => $concreteExtra) {
+					if ($defaultExtra->getOriginUid() == $concreteExtra->getOriginUid()) {
+						/// default extra found in concrete article, so no shortcut needed
+						unset($defaultExtras[$keyDefault]);
+
+						// check if this extra type is a must or should have extra 
+						$key = array_search($defaultExtra->getTable(), $must_should_have_extras);
+						if ($key !== false) {
+							// an extra of this type was found, so no shortcut needed for this extra type
+							unset($must_should_have_extras[$key]);
+						}
+					}
+				}
+			}
+		}
+//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 2', 'newspaper', 0, array('mse' => $must_should_have_extras));
+		
+		/// search for extras that are already assigned to the article (and are configured as must-have or should-have extra but are NOT placed in the default article)
+		foreach($concreteExtras as $keyConcrete => $concreteExtra) {
+			$key = array_search($concreteExtra->getTable(), $must_should_have_extras);
+			if ($key !== false) {
+				// an extra of this type was found, so no shortcut needed for this extra type
+				unset($must_should_have_extras[$key]);
+			}
+		}
+		
+
+		/// create shortcuts for missing "default" extras in the concrete article
+		foreach($defaultExtras as $defaultExtra) {
+			$shortcuts[] = $defaultExtra;
+			// check if this extra type is a must or should have extra 
+			$key = array_search($defaultExtra->getTable(), $must_should_have_extras);
+			if ($key !== false) {
+				// an extra of this type was found, so no shortcut needed
+				unset($must_should_have_extras[$key]);
+			}
+		}
+//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 3', 'newspaper', 0, array('mse' => $must_should_have_extras, 's' => $shortcuts));
+
+		/// create shortcuts for remaining must-have / should-have extras
+		// the array holds extra class names, not objects!
+		foreach($must_should_have_extras as $extra_class) {
+			if (class_exists($extra_class)) {
+				$shortcuts[] = new $extra_class();
+			} else {
+				t3lib_div::devlog('tx_newspaper_Article::getMissingDefaultExtras()', 'newspaper', 2, array('Class ' . $extra_class . ' unknown. Was set as must-have or should-have extra for article type ' . $at->getAttribute('title') . ' in section ' . $this->getPrimarySection()->getAttribute('section_name')));
+			}
+		}
+//t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));		
+		return $shortcuts;
+
+	}
+
 	
 	/// Get the SQL table which associates tx_newspaper_Extra with tx_newspaper_PageZone.
 	public function getExtra2PagezoneTable() {

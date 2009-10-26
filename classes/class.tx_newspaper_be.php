@@ -347,12 +347,12 @@ function findElementsByName(name, type) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
 //t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
-		return self::renderBackendSmartyPageZone($article, false);
+		return self::renderBackendPageZone($article, false);
 	}
 
 
 
-	public static function renderBackendSmartyPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
+	public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
 		global $LANG;
 
 		$data = array();
@@ -394,7 +394,13 @@ function findElementsByName(name, type) {
 			$data[0]['article_id'] = $pz->getUid(); // store article uid for backend buttons usage (edit)
 		}
 //t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array($pz, $data));
-		
+
+
+		// if concrete article: add shortcuts for missing should-have and must-have extras
+		$shortcuts = $is_concrete_article? $pz->getMissingDefaultExtras() : array();
+//t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
+
+
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
 
@@ -443,14 +449,15 @@ function findElementsByName(name, type) {
 			} else {
 				// needed for concrete articles
 				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+				
+				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_defaultextra_in_article', false)));
+				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_in_article', false)));
 	
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp);
-				if ($tmp == false) {
-					$pagezone[$i] = false; // indicates "no extra so far" message
-				} else { 
-					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
-				} 
+				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
+				$smarty_pz->assign('MESSAGE', $message);
+				$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
 			}
 		}
 		
@@ -495,6 +502,7 @@ function findElementsByName(name, type) {
 		$label['paragraph'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_paragraph', false);
 		$label['notes'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_notes', false);
 		$label['templateset'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_templateset', false);
+		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_shortcuts', false);
 	
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));

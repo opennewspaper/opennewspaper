@@ -119,7 +119,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private function processReloadExtaInConcreteArticle($article_uid) {
 		$a = new tx_newspaper_article($article_uid);
 		if ($a->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($a, false, true);
+			echo tx_newspaper_be::renderBackendPageZone($a, false, true);
 		} 
 		die();
 	}
@@ -144,7 +144,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->insertExtraAfter($e, intval($origin_uid));
 		
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+			echo tx_newspaper_be::renderBackendPageZone($pz, false);
 		}
 		
 		die();
@@ -212,7 +212,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->moveExtraAfter($e, $origin_uid);
 				
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false, true);
+			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
 		}
 		
 		die();
@@ -229,7 +229,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->removeExtra($e);
 				
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false, true);
+			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
 		}
 		
 		die();
@@ -244,6 +244,36 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e->store();
 		die();
 	}
+	
+	/// called via ajax: create an extra (using a shortcut link in "extra in article")
+	/// \param $article_uid article uid
+	/// \param $extra_class name of extra class (needed if $extra_uid is 0)
+	/// \param $extra_uid if not 0 the uid of the abstract extra to be duplicated	
+	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid) {
+t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid));
+		$extra_uid = intval($extra_uid);
+		$article = new tx_newspaper_Article(intval($article_uid));
+		if ($extra_uid) {
+			// extra uid is set, so duplicate this extra
+			$article->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid)->duplicate());
+		} else {
+			// no extra uid set, so create new and empty extra
+			if (class_exists($extra_class)) {
+				$e = new $extra_class();
+				$e->setAttribute('crdate', time());
+	 			$e->setAttribute('tstamp', time());
+				$e->store();
+				$article->addExtra($e);
+			} else {
+				throw new tx_newspaper_WrongClassException('Unknown Extra class: ' . $extra_class);
+			}
+		}
+		echo tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
+		die();
+	}
+	
+	
+	
 
 	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
@@ -271,7 +301,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 
 		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendSmartyPageZone($pz, false);
+			echo tx_newspaper_be::renderBackendPageZone($pz, false);
 		}
 
 		die(); 
@@ -313,7 +343,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function check4Ajax() {
 		/// \todo: check permissions
-//t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
+t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 
 		// delete etxra
 		if (t3lib_div::_GP('extra_delete') == 1) {
@@ -330,12 +360,19 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid')); 
 		}
 
+		// create extra using a shortcut link in extra in article
+		if (t3lib_div::_GP('extra_shortcut_create') == 1) {
+			$this->processExtraShortcutCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('extra_uid')); 
+		}
+		
+
+
 		// reload list of extras (for concrete article)
 		if (t3lib_div::_GP('reload_extra_in_concrete_article') == 1) {
 			$this->processReloadExtaInConcreteArticle(t3lib_div::_GP('pz_uid')); 
 		}
 
-
+		
 
 
 
@@ -671,7 +708,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available_for_page', false);
 					} else {
 						/// render form for pagezone
-						$content = tx_newspaper_BE::renderBackendSmartyPageZone(
+						$content = tx_newspaper_BE::renderBackendPageZone(
 							tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id)), 
 							$this->show_levels_above
 						);
