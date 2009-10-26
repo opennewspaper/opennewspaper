@@ -3,7 +3,7 @@
 	// DO NOT REMOVE OR CHANGE THESE 3 LINES:
 define('TYPO3_MOD_PATH', 'ext/newspaper/mod7/');
 $BACK_PATH='../../../';
-$MCONF['name']='web_txnewspaperM7';
+$MCONF['name']='txnewspaperMmain_txnewspaperM7';
 
 	
 $MCONF['access']='user,group';
