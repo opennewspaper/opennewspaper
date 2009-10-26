@@ -41,7 +41,7 @@ function change_main_module() {
 }	
 
 
-set -xv
+set +xv
 replace "tca.php" \
 		"require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');" \
 		'?>'
