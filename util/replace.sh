@@ -72,7 +72,9 @@ svn ci -m "auto-fixed changes from kickstarter"
 
 for addon in ../newspaper_?*; do 
 	if [ -x ${addon}/util/replace.sh ]; then
-		${addon}/util/replace.sh
+		cd ${addon}
+		./util/replace.sh
+		cd ../newspaper
 	fi
 done
 
