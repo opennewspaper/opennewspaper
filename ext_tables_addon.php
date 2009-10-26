@@ -73,6 +73,7 @@ if (TYPO3_MODE == 'BE') {
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM3','',t3lib_extMgm::extPath($_EXTKEY).'mod3/'); // placement
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM6','',t3lib_extMgm::extPath($_EXTKEY).'mod6/'); // control tags
 	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM4','',t3lib_extMgm::extPath($_EXTKEY).'mod4/'); // admin tools
+	t3lib_extMgm::addModule('txnewspaperMmain','txnewspaperM7','',t3lib_extMgm::extPath($_EXTKEY).'mod7/'); // placing articles in article lists
 
 
 	/// add newspaper to Plugin-in list
