@@ -280,7 +280,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$at = new tx_newspaper_ArticleType($articletype);
 			
 			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
-			
+t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
+t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
 			$new_article->setAttribute('articletype_id', $articletype);
 
 			// add creation date and user
@@ -288,10 +289,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 
 			$new_article->store();
-
-/// \todo: muss-extras anlegen
-//debug($at->getTSConfigSettings(), '####');
-//t3lib_div::debug($_SERVER); die();
 
 			$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
