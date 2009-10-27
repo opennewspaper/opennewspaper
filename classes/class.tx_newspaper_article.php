@@ -646,6 +646,27 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 	}
 
+	/// Get the list of tx_newspaper_Section s to which the current article belongs
+	/** \param $limit Maximum number of tx_newspaper_Section s to find
+	 *  \return List of tx_newspaper_Section s to which the current article belongs
+	 */
+	public function getSections($limit = 0) {
+		$section_ids = tx_newspaper::selectRows(
+			'uid_foreign',
+			'tx_newspaper_article_sections_mm',
+			'uid_local = '.$this->getUid(),
+			'',
+			'',
+			$limit? "0, $limit": ''
+		);
+		
+		$sections = array();
+		foreach ($section_ids as $id) {
+			$sections[] = new tx_newspaper_Section($id['uid_foreign']);
+		}
+		return $sections;
+	}
+
 	/// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
 	/** \return The tx_newspaper_Section in which \p $this is displayed by
 	 *  	default, if no Section context is given. 
@@ -794,28 +815,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 		return $paragraphs;	
 	}
-	
-	/// Get the list of tx_newspaper_Section s to which the current article belongs
-	/** \param $limit Maximum number of tx_newspaper_Section s to find
-	 *  \return List of tx_newspaper_Section s to which the current article belongs
-	 */
-	protected function getSections($limit = 0) {
-		$section_ids = tx_newspaper::selectRows(
-			'uid_foreign',
-			'tx_newspaper_article_sections_mm',
-			'uid_local = '.$this->getUid(),
-			'',
-			'',
-			$limit? "0, $limit": ''
-		);
 		
-		$sections = array();
-		foreach ($section_ids as $id) {
-			$sections[] = new tx_newspaper_Section($id['uid_foreign']);
-		}
-		return $sections;
-	}
-	
 	/// Get the index of the provided tx_newspaper_Extra in the Extra array
 	/** Binary search for an Extra, assuming that \c $this->extras is ordered by
 	 *  paragraph first and position second.
