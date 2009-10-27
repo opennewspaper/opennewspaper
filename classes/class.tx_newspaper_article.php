@@ -648,9 +648,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	/// Get the list of tx_newspaper_Section s to which the current article belongs
 	/** \param $limit Maximum number of tx_newspaper_Section s to find
+	 *  \param $sorted If set, the sections gets sorted level-wise
 	 *  \return List of tx_newspaper_Section s to which the current article belongs
 	 */
-	public function getSections($limit = 0) {
+	public function getSections($limit = 0, $sorted=false) {
 		$section_ids = tx_newspaper::selectRows(
 			'uid_foreign',
 			'tx_newspaper_article_sections_mm',
