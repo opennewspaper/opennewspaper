@@ -6,13 +6,22 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Article placement</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="title">Artikel-Platzierung</label>
+			<label index="kicker">Dachzeile</label>
+			<label index="headline">Überschrift</label>
+			<label index="author">Autor</label>
+			<label index="editedby">Bearbeitet von</label>
+			<label index="online">Online</label>
+			<label index="placed">Platziert</label>s
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
+			<label index="kicker">Dachzeile</label>
+			<label index="headline">Überschrift</label>
+			<label index="author">Autor</label>
+			<label index="editedby">Bearbeitet von</label>
+			<label index="online">Online</label>
+			<label index="placed">Platziert</label>
 		</languageKey>
 	</data>
 </T3locallang>

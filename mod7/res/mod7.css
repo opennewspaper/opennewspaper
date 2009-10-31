@@ -1,0 +1,13 @@
+.tx-newspaper-mod7. table { table-layout: auto; border: 1px solid gray; padding: 0; 
+  margin: 0; border-collapse: collapse; }
+.tx-newspaper-mod7 table th { font-size:10px; text-align: left; }
+.tx-newspaper-mod7 .multiple-select { width: 100%; }
+.tx-newspaper-mod7 .ressort-select { width: 325px; }
+.tx-newspaper-mod7 table td,
+.tx-newspaper-mod7 table th { padding: 2px; }
+.tx-newspaper-mod7 table.sections {	width: 650px; }
+.tx-newspaper-mod7 table.articles {	width: 300px; }
+.tx-newspaper-mod7 td.level {width: 360px; }
+.tx-newspaper-mod7 div.level { float: left; display: inline; }
+.tx-newspaper-mod7 h2 { height: 13px; padding-top: 3px; }
+.tx-newspaper-mod7 #progress { display: none; vertical-align: middle; }
