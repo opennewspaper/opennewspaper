@@ -385,13 +385,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
-	/** Reimplemented from tx_newspaper_PageZone because Articles don't have
-	 *  PageZones which inherit from them. Setting \p $recursive on an Article 
+	/** Reimplemented from tx_newspaper_PageZone because concrete Articles don't 
+	 *  have PageZones which inherit from them; default article are to be 
+	 *  treated like PageZones. Setting \p $recursive on an concrete Article 
 	 *  would result in an error.
 	 */
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
-		tx_newspaper_PageZone::insertExtraAfter($insert_extra, $origin_uid, false);
+		tx_newspaper_PageZone::insertExtraAfter($insert_extra, $origin_uid, $this->isDefaultArticle());
 	}
 
 	/// Get the tx_newspaper_PageZoneType associated with this Article
@@ -445,6 +446,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			return null;
 		}
 		return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
+	}
+
+	/// checks if article is a default article or a concrete article
+	/// \return \c true if article is a default article (else \c false).
+	public function isDefaultArticle() {
+		return $this->getAttribute('is_template');
 	}
 	
 	/// Delete all Extras
