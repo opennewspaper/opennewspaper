@@ -132,7 +132,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						
 						#@todo: insert real id here
 						// grab data of article to display
-						$fakeArticleId = 38;
+						$fakeArticleId = 19;
 						$article = $this->getArticleByArticleId($fakeArticleId);
 						$sections = $this->getSectionsByArticleId($fakeArticleId);						
 
