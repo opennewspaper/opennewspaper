@@ -317,9 +317,17 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 			case 'tx_newspaper_page':
 				$obj = new tx_newspaper_page($uid);
 			break;
-			case 'tx_newspaper_pagezone':
-				$obj = tx_newspaper_PageZone_Factory::getInstance()->create($uid);
+// \todo (oliver) remove if not needed (replaced with pz_p and article; see below)
+//			case 'tx_newspaper_pagezone':
+//				$obj = tx_newspaper_PageZone_Factory::getInstance()->create($uid);
+//			break;
+			case 'tx_newspaper_pagezone_page':
+				$obj = new tx_newspaper_pagezone_page($uid);
 			break;
+			case 'tx_newspaper_article':
+				$obj = new tx_newspaper_article($uid);
+			break;
+
 			default:
 				die('Unknown table for template set: ' . $table);
 		}
