@@ -652,6 +652,30 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		);
 		
 	}
+	
+	///	Sets the sections of an article to exactly the input sections
+	/** \param $uids UIDs of the tx_newspaper_Section s which \c $this will
+	 *  	belong to.
+	 */
+	public function setSections(array $uids) {
+		// 	Ensure that it's reasonably safe to delete Article-Section relations
+		foreach ($uids as $uid) {
+			if (!$uid instanceof tx_newspaper_Section) {
+				if (!intval($uid)) {
+					throw new tx_newspaper_IllegalUsageException('Section UID is not an integer');
+				}
+			}
+		}
+		
+		tx_newspaper::deleteRows(
+			'tx_newspaper_article_sections_mm',
+			'uid_local = ' . $this->getUid()
+		);
+		
+		foreach ($uids as $uid) {
+			$this->addSection(new tx_newspaper_Section($uid));
+		}
+	}
 
 	/// Get the list of tx_newspaper_Section s to which the current article belongs
 	/** \param $limit Maximum number of tx_newspaper_Section s to find
