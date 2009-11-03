@@ -307,7 +307,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return tx_newspaper::getTable($this);
 	}
 	
-	public function setUid($uid) { $this->uid = $uid; }
+	public function setUid($uid) { $this->uid = intval($uid); }
 	public function getUid() { return $this->uid; }
 	
 	/// get active pages for current Section
