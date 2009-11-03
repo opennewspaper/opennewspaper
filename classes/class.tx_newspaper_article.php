@@ -673,7 +673,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		);
 		
 		foreach ($uids as $uid) {
-			$this->addSection(new tx_newspaper_Section($uid));
+			if (!$uid instanceof tx_newspaper_Section) {
+				$uid = new tx_newspaper_Section($uid);
+			}
+			$this->addSection($uid);
 		}
 	}
 
