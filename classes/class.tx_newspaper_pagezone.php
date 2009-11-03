@@ -1017,7 +1017,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	/// Retrieve the array of Extras on the PageZone, sorted by position
 	public function getExtras() {
 		if (!$this->extras) {
-			$this->readExtras($this->getPagezoneUid());
+			$this->readExtras($this->getUid());
 		}
 
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
