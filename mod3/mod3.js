@@ -203,7 +203,7 @@ alert('test function found');
 		var height = top.getViewportHeight() - 50;
 		var closehtml = (is_concrete_article)? escape(top.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : top.path + "typo3conf/ext/newspaper/mod3/close.html"; 
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&returnUrl=" + closehtml,
+			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&is_concrete_article=" + is_concrete_article + "&returnUrl=" + closehtml,
 			width, 
 			height, 
 			null, 

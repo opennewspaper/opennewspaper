@@ -15,7 +15,7 @@
 
 {* insert at top position, differs depending on type pagezone_page and article; icon for concrete article is set in mod3_pagezone_article.tmpl *}
 {if (!$IS_CONCRETE_ARTICLE)}
-	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false); return false;">{$NEW_TOP_ICON}</a> 
+	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a> 
 {/if}
 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}

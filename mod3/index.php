@@ -381,6 +381,12 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 		}
 
 		
+		
+		
+		// store template set 
+		if (t3lib_div::_GP('templateset_dropdown_store') == 1) {
+			die($this->processTemplateSetDropdownStore(t3lib_div::_GP('table'), t3lib_div::_GP('uid'), t3lib_div::_GP('value')));	
+		}
 
 
 
@@ -435,9 +441,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
 			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
 
-		if (t3lib_div::_GP('templateset_dropdown_store') == 1) {
-			die($this->processTemplateSetDropdownStore(t3lib_div::_GP('table'), t3lib_div::_GP('uid'), t3lib_div::_GP('value')));	
-		}
+
 		
 //t3lib_div::devlog('_request mod3 ajax - NO ajax found', 'newspaper', 0);		
 //debug('no ajax');
