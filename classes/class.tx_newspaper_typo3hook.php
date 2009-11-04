@@ -411,9 +411,10 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		if (tx_newspaper::isAbstractClass($table))
 			return; // abstract class, nothing to do
 	
+		/// check if a new extra is stored
 		// exclude new articles - articles are extras but shouldn't be treated like extras here!
 		if ($status == 'new' && $table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-//t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone()', 'newspaper', 0, array($table, $id, $_REQUEST));	die();		
+//t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone()', 'newspaper', 0, array($table, $id, $_REQUEST));		
 			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
 			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
 			if (!$pz_uid) {
@@ -424,18 +425,21 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 			// get uid of new concrete extra (that was just stored)
 			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
 			
-			// create abstract record
-			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table);
+			// create abstract record for this concrete extra
+			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table, true); // $force=true, there's no abstract record for this extra existing (for this is a totally new extra)
 
-			// create pagezone (pagezone_page or article)
+			// get pagezone (pagezone_page or article)
 			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
+			// get extra ...
 			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
+			// .... add set some default values
 			$e->setAttribute('show_extra', 1);
 			$e->setAttribute('is_inheritable', 1);
 
+			// insert extra on pagezone
 			$pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
-			
+
 			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
 				// set paragraph
 				$pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
