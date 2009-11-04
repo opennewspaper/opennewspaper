@@ -87,6 +87,9 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
+		
+		/// check if the combination of get param name and value is unique
+		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
 		/// handle uploads of tx_newspaper_Extra_Image
 		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
@@ -162,6 +165,52 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 			}
 		}
 	}
+
+
+	/// checks if the combination of get_var and get_value is unique for every page type
+	private function checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id) {
+		if ($table == 'tx_newspaper_pagetype') {
+			
+			// get values for get_var and get_value and check if current record id is to be added to sql statement
+			if (substr($id, 0, 3) == 'NEW') {
+				// new record, so all fields are available in $fieldArray
+				$param = $fieldArray['get_var'];
+				$value = $fieldArray['get_value']; 
+				$where['id'] = ''; // new record, so don't exclude this record from sql statement
+			} else {
+				$where['id'] = ' AND uid<>' . $id . ' '; // exclude current record from sql statement
+				
+				if (isset($fieldArray['get_var']) && isset($fieldArray['get_value'])) {
+					// existing record and both fields needed are set in $fieldArray 
+					$param = $fieldArray['get_var'];
+					$value = $fieldArray['get_value']; 
+				} else {
+					// at least one value is missing in $fieldArray (for existing records), so read data from record
+					$row = tx_newspaper::selectOneRow(
+						'get_var, get_value',
+						$table,
+						'uid=' . $id
+					);
+					$param = (isset($fieldArray['get_var']))? $fieldArray['get_var'] : $row['get_var'];
+					$value = (isset($fieldArray['get_value']))? $fieldArray['get_value'] : $row['get_value'];
+				}
+			}
+			
+			// check if the values for get_var and get_values that are to be saved are unique in the database
+			$row = tx_newspaper::selectRows(
+				'uid,type_name',
+				$table,
+				'deleted=0 ' . $where['id'] . ' AND get_var="' . $param . '" AND get_value="' . $value . '"'
+			);
+			
+			if (sizeof($row) > 0) {
+				die('Error: the combination of get variable and value must be unique. The used combination is already assigned to page type #' . 
+					$row[0]['uid'] . ' (' . $row[0]['type_name'] . ').<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
+			}
+
+		}
+	}
+
 
 	/// add modification user and modification time when updating tx_newspaper_article
 	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
@@ -273,6 +322,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 /// \todo: check if pages are assigned to section
 		}
 	}
+
 
 	private function checkIfSectionCanBeDeleted($table, $id) {
 		if ($table == 'tx_newspaper_section') {
