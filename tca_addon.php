@@ -37,6 +37,13 @@ $TCA['tx_newspaper_pagezone_page']['columns']['template_set']['config']['itemsPr
 unset($TCA['tx_newspaper_article']['columns']['template_set']['config']['items']['0']);
 $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 
+/// add entries for template set dropdowns for Extras
+unset($TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']);
+$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
+$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['size'] = 1;	
+$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['maxitems'] = 1;
+$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['type'] = 'select';
+
 
 // /switch Extra field 'extras' in article (created by kickstarter) to a userFunc field (displaying a list of associated Extras)
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
