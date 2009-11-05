@@ -365,7 +365,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 */
 	public static function getAllSections($sort_by = 'sorting') {
 		global $TYPO3_CONF_VARS;
-		t3lib_div::debug($TYPO3_CONF_VARS['BE']);
+		t3lib_div::devlog('BE', 'newspaper', 0, $TYPO3_CONF_VARS['BE']);
 		
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
 		$row = tx_newspaper::selectRows(
