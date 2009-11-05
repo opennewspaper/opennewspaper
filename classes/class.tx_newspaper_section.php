@@ -358,16 +358,19 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		);
 	}
 	
-	/// \return sorted array of all available sections
-	public static function getAllSections() {
+	///	Get all tx_newspaper_Section records in the DB.
+	/** \param $sort_by Field of the \c tx_newspaper_section SQL table to sort 
+	 * 		results by.
+	 *  \return tx_newspaper_Section objects in the DB.
+	 */
+	public static function getAllSections($sort_by = 'sorting') {
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
 		$row = tx_newspaper::selectRows(
-			'*',
+			'uid',
 			'tx_newspaper_section',
 			'pid=' . $pid,
 			'',
-#			'section_name'
-			'sorting'
+			$sort_by
 		);
 		$s = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
