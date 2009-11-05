@@ -418,7 +418,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 	  ...
 	 *  ) \endcode
 	 */
-	private function getOffsets(array $uids) {
+	public function getOffsets(array $uids) {
 		
 		if (!$uids) return array();
 		
@@ -430,11 +430,15 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		);
 		
 		$offsets = array();
-		foreach	($results as $result) {
-			if (intval($result['uid_foreign']) && intval($result['offset'])) {
-				$offsets[intval($result['uid_foreign'])] = intval($result['offset']);
+		foreach ($uids as $uid) {
+			foreach	($results as $result) {
+				if (intval($result['uid_foreign']) == intval($uid)) {
+					$offsets[intval($uid)] = $result['offset'];
+					break;
+				} 
 			}
-		}
+			if (!isset($offsets[intval($uid)])) $offsets[intval($uid)] = 0;
+ 		}
 
 		return $offsets;
 	}
