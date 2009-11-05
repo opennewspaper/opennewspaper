@@ -44,7 +44,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
-		$this->getAttribute('uid');
+		try {
+			$this->getAttribute('uid');
+		} catch (tx_newspaper_Exception $e) { }
 		return get_class($this) . '-object ' . $this->getUid() . " \n" .
 			   'attributes: ' . print_r($this->attributes, 1) . "\n";
 	}
