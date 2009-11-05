@@ -366,7 +366,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'tx_newspaper_section',
 			'pid=' . $pid,
 			'',
-			'section_name'
+#			'section_name'
+			'sorting'
 		);
 		$s = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
