@@ -295,7 +295,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		foreach ($this->getArticles($this->getAttribute('num_articles')) as $article) {
 			$article_uids[] = $article->getUid();
 		}
-		tx_newspaper::deleteRows(self::mm_table, $article_uids);
+		if ($article_uids) tx_newspaper::deleteRows(self::mm_table, $article_uids);
 	}
 	
 	/// Get the articles sorted by their offsets, including offset values
