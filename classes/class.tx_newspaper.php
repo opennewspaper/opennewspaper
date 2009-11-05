@@ -329,6 +329,9 @@ row:
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function deleteRows($table, $uids_or_where) {
+		
+		if (!$uids_or_where) return;
+		
 		$message = 'deleteRows
 table: ' . $table . '
 uids_or_where: 
