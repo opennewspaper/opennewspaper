@@ -358,7 +358,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		);
 	}
 	
-	/// \return array section, sorted alphabetically
+	/// \return sorted array of all available sections
 	public static function getAllSections() {
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
 		$row = tx_newspaper::selectRows(
