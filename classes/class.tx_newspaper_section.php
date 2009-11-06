@@ -368,6 +368,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public static function getAllSections($sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
 		$excluded = $TSConfig['newspaper']['excluded_sections'];
+		t3lib_div::devlog('TSConfig', 'newspaper', 0, $TSConfig);
 		t3lib_div::devlog('excluded', 'newspaper', 0, $excluded);
 		
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
