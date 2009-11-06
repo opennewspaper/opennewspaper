@@ -135,7 +135,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$fakeArticleId = 19;
 						$article = $this->getArticleByArticleId($fakeArticleId);
 						$sections = $this->getSectionsByArticleId($fakeArticleId);						
-
+						t3lib_div::devlog('sections', 'newspaper',0, $sections);
+						
 						// render
 						$smarty->assign('input', $input);						
 						$smarty->assign('article', $article);
@@ -160,7 +161,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// place an article
+				/// place an article
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function placeArticle ($input) {
 					$article = $this->getArticleByArticleId ($input['articleid']);
 					$article->setAttribute('workflow_status', 2);
@@ -169,7 +173,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// send article further to chief of duty
+				/// send article further to chief of duty
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function sendArticleToChiefOfDuty ($input) {
 					$article = $this->getArticleByArticleId ($input['articleid']);
 					$article->setAttribute('workflow_status', 1);
@@ -177,7 +184,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// send article back to editor
+				/// send article back to editor
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function sendArticleToEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['articleid']);
 					$article->setAttribute('workflow_status', 0);
@@ -185,7 +195,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// set article status to online
+				/// set article status to online
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function putArticleOnline ($input) {
 					$article = $this->getArticleByArticleId ($input['articleid']);
 					$article->setAttribute('hidden', 0);
@@ -193,7 +206,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// set article status to offline
+				/// set article status to offline
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function putArticleOffline ($input) {
 					$article = $this->getArticleByArticleId ($input['articleid']);
 					$article->setAttribute('hidden', 1);
@@ -201,7 +217,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// save all the articles of a single section
+				/// save all the articles of a single section
+				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return \c true
+				 */
 				function saveSection ($input) {
 					$articleIds = explode('|', $input['articleids']);
 					$offsets = array();
@@ -233,20 +252,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 									(isset($offsets[$i])) ? $offsets[$i] : '0'
 								);
 							}
-							#@todo: tell helge this:
-							/*
-							Fatal error: Uncaught exception 'tx_newspaper_NoResException' with message 'SQL query: 
-							DELETE FROM tx_newspaper_articlelist_semiautomatic_articles_mm
-											WHERE
-												uid IN () 
-							failed with message: 
-							No result set found ' in /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/classes/class.tx_newspaper.php:370
-							Stack trace:
-							#0 /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/classes/class.tx_newspaper_articlelist_semiautomatic.php(298): tx_newspaper::deleteRows('tx_newspaper_ar...', Array)
-							#1 /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/classes/class.tx_newspaper_articlelist_semiautomatic.php(93): tx_newspaper_ArticleList_Semiautomatic->clearList()
-							#2 /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/mod7/index.php(188): tx_newspaper_ArticleList_Semiautomatic->assembleFromUIDs(Array)
-							#3 /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/mod7/index.php(119): tx_newspaper_module7->save in /hsphere/local/home/newspaper/dev.newspaper-typo3.org/typo3conf/ext/newspaper/classes/class.tx_newspaper.php on line 370
-							 */
+
 							$result = $section->getArticleList()->assembleFromUIDs(
 								array ($articleIdsAndOffsets)  
 							);
@@ -257,8 +263,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// check several article lists if they have been modified in database 
-				// in comparison the the displayed ones in the form
+				/// check several article lists if they have been modified in database 
+				/** in comparison the the displayed ones in the form
+				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return ?
+				 */
 				function checkArticleListsForUpdates ($input) {
 					$input['sections'] = explode('|', $input['sections']);
 					$articleLists = array();
@@ -294,7 +303,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// render the placement editors according to sections selected for article
+				/// render the placement editors according to sections selected for article
+				/** in comparison the the displayed ones in the form
+				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+				 *  \return ?
+				 */
 				function renderPlacement ($input) {
 					$selection = $input['sections_selected'];
 					
@@ -312,7 +325,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// get article and offset lists for a set of sections
+				/// get article and offset lists for a set of sections
+				/**
+				 * 
+				 */
 				function fillPlacementWithData ($tree, $articleId) {
 					for ($i = 0; $i < count($tree); ++$i) {
 						for ($j = 0; $j < count($tree[$i]); ++$j) {
@@ -331,7 +347,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// extract just the article-uids from an article list
+				/// extract just the article-uids from an article list
+				/**
+				 * 
+				 */
 				function getArticleIdsFromArticleList ($articleList) {
 					#collect all article uids
 					$articleUids = array();
@@ -342,7 +361,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// calculate a "minimal" (tree-)list of sections
+				/// calculate a "minimal" (tree-)list of sections
+				/**
+				 * 
+				 */
 				function calculatePlacementTreeFromSelection ($selection) {
 					$result = array();
 										
@@ -361,7 +383,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// get a list of articles by a section id
+				/// get a list of articles by a section id
+				/**
+				 * 
+				 */
 				function getArticleListBySectionId ($sectionId, $articleId = false) {
 					
 					$result = array();
@@ -395,8 +420,16 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// grab all sections that a article can be placed in
-				// semiautomatic lists get their article uid prepended with the article offset
+				/// grab all sections that a article can be placed in
+				/** semiautomatic lists get their article uid prepended with the article offset
+				 * 
+				 * 	\param $articleId UID of the tx_newspaper_Article
+				 *  \return \code array (
+				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
+				 * 		...,
+				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
+				 *  )
+				 */
 				function getSectionsByArticleId ($articleId) {
 					$result = array();
 					
@@ -418,8 +451,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// extract the section uid out of the select elements mames that are
-				// like "placer_10_11_12" where we need the "12" out of it
+				/// extract the section uid out of the select elements mames that are
+				/** like "placer_10_11_12" where we need the "12" out of it
+				 * 
+				 */
 				function extractSectionId ($sectionId) {
 					if (strstr($sectionId, '_')) {
 						$sectionId = explode('_', $sectionId);
@@ -429,7 +464,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				// grab a single article by its id
+				/// grab a single article by its id
+				/** \param $articleId UID of the tx_newspaper_Article
+				 *  \return the instantiated tx_newspaper_Article object
+				 */
 				function getArticleByArticleId ($articleId) {
 					return new tx_newspaper_article($articleId);
 				}
