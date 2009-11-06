@@ -11,3 +11,5 @@
 .tx-newspaper-mod7 div.level { float: left; display: inline; }
 .tx-newspaper-mod7 h2 { height: 13px; padding-top: 3px; }
 .tx-newspaper-mod7 #progress { display: none; vertical-align: middle; }
+.tx-newspaper-mod7 select#sections_available {margin-top: 5px;}
+.tx-newspaper-mod7 i.noaccess {height: 88px; display: block;}

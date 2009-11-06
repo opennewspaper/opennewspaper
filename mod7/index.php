@@ -23,7 +23,7 @@
 ***************************************************************/
 
 
-	// DEFAULT initialization of a module [BEGIN]
+// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
 require_once('conf.php');
 require_once($BACK_PATH.'init.php');
@@ -77,22 +77,20 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 												
-						#@todo: comment out later
+						//@todo: comment out later
 						ini_set('display_errors',  'on');
 						
-						#@todo: make it all locallang
-						#@todo: cater for backend access variations
-						#@todo: clarify single-mode/needed api and implement it
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged('tx_newspaper_mod7');
 						
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
-							case 'showplacement' :
+							case 'showplacementandsave' :
+								$this->saveSectionsForArticle($input);
 								die($this->renderPlacement($input));
 								break;
 							case 'updatearticlelist' :
-								die(json_encode($this->getArticleListBySectionId($input['section'], $input['articleid'])));
+								die(json_encode($this->getArticleListBySectionId($input['section'], $input['placearticleuid'])));
 								break;
 							case 'checkarticlelistsforupdates' :
 								die(json_encode($this->checkArticleListsForUpdates($input)));
@@ -117,36 +115,28 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 								break;
 						}
 						
-						// instanciate smarty
-						$smarty = new tx_newspaper_Smarty();
-						$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-						
-						// get ll labels 
-						$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $LANG->lang);
-						$localLang = $localLang[$LANG->lang];
-						
 						// draw the header
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 						$this->doc->backPath = $BACK_PATH;
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
+						$this->content .= $this->doc->startPage($LANG->getLL('title'));
 						
-						#@todo: insert real id here
-						// grab data of article to display
-						$fakeArticleId = 19;
-						$article = $this->getArticleByArticleId($fakeArticleId);
-						$sections = $this->getSectionsByArticleId($fakeArticleId);						
-						t3lib_div::devlog('sections', 'newspaper',0, $sections);
+						if (!isset($input['articleid'])) {
+							$input['articleid'] = 38;
+						}
+						// @todo: single mode comes later 				
 						
-						// render
-						$smarty->assign('input', $input);						
-						$smarty->assign('article', $article);
-						$smarty->assign('sections', $sections);
-						$smarty->assign('lang', $localLang);
-						$html = $smarty->fetch('mod7_module.tpl');
-						$this->content .= $this->doc->section('', $html, 0, 1);
+						switch ($input['controller']) {
+							case 'preview' :
+								$output = $this->renderPreview($input['articleid']);
+								break;
+							default :
+								$output = $this->renderModule($input);
+								break;
+						}
 
+						$this->content .= $this->doc->section('', $output, 0, 1);
 						$this->moduleContent();
-						$this->content.=$this->doc->spacer(10);
+						$this->content .= $this->doc->spacer(10);
 					} else {
 						// If no access or if ID == zero
 
@@ -159,14 +149,75 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->content.=$this->doc->spacer(10);
 					}
 				}
+
+
+				// render a frontend preview of an article
+				function renderPreview ($articleId) {
+					$article = new tx_newspaper_article($articleId);
+					// @todo: does not work:
+					return $article->render();
+				}
 				
 				
+				// render the main / full module
+				function renderModule ($input) {
+					// get data
+					$article = $this->getArticleByArticleId($input['articleid']);
+					$sections = $this->getSectionsByArticleId($input['articleid']);	
+					// get ll labels 
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
+					$localLang = $localLang[$GLOBALS['LANG']->lang];					
+
+					// instanciate smarty
+					$smarty = new tx_newspaper_Smarty();
+					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
+					$smarty->assign('input', $input);						
+					$smarty->assign('article', $article);
+					$smarty->assign('sections', $sections);
+					$smarty->assign('lang', $localLang);
+					return $smarty->fetch('mod7_module.tpl');
+				}
+				
+				
+				function userIsChiefOfDuty () {
+					// @todo: use later
+					// return tx_newspaper::isChief();
+					return true;
+				}
+
+
+				function userIsEditor () {
+					// @todo: use later
+					// return tx_newspaper::isEditor();
+					return false;
+				}
+				
+				
+				// save all the selected sections for an article
+				function saveSectionsForArticle ($input) {
+					$sectionIds = array();
+					// we take all the sections out of the strings like 10|11|12, 10|14|17, ...
+					if (is_array($input['sections_selected'])) {
+						foreach ($input['sections_selected'] as $sectionCombination) {
+							$sectionCombination = explode('|', $sectionCombination);
+							foreach ($sectionCombination as $section) {
+								if (!in_array($section, $sectionIds)) {
+									$sectionIds[] = $section;
+								}
+							}
+						}
+						$article = new tx_newspaper_article($input['placearticleuid']);
+						return $article->setSections($sectionIds);
+					}
+				}
+				
+
 				/// place an article
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
 				function placeArticle ($input) {
-					$article = $this->getArticleByArticleId ($input['articleid']);
+					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', 2);
 					$article->setAttribute('is_placed', 1);
 					return true;
@@ -178,7 +229,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToChiefOfDuty ($input) {
-					$article = $this->getArticleByArticleId ($input['articleid']);
+					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', 1);
 					return true;
 				}
@@ -189,7 +240,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToEditor ($input) {
-					$article = $this->getArticleByArticleId ($input['articleid']);
+					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', 0);
 					return true;
 				}
@@ -200,7 +251,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOnline ($input) {
-					$article = $this->getArticleByArticleId ($input['articleid']);
+					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 0);
 					return true;
 				}
@@ -211,7 +262,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOffline ($input) {
-					$article = $this->getArticleByArticleId ($input['articleid']);
+					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 1);
 					return true;	
 				}
@@ -252,7 +303,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 									(isset($offsets[$i])) ? $offsets[$i] : '0'
 								);
 							}
-
 							$result = $section->getArticleList()->assembleFromUIDs(
 								array ($articleIdsAndOffsets)  
 							);
@@ -278,11 +328,22 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$articleLists[$section] = $this->getArticleListBySectionId($section, $input['placearticleuid']);
 					}
 					
+					// explode selected values ourselves as we must not use pivars any more
+					$selectValues = array();
+					$input['sectionvalues'] = explode('/', $input['sectionvalues']);
+					for ($i = 0; $i < count($input['sectionvalues']) ; ++$i) {
+						$input['sectionvalues'][$i] = explode(':', $input['sectionvalues'][$i]);
+						$selectValues[$input['sectionvalues'][$i][0]] = explode('|', $input['sectionvalues'][$i][1]);
+					}
+					
 					// do a comparison (length and order) between form input and database
+					$i = 0;
 					foreach ($articleLists as $articleListKey => $articleList) {
 						$renderedUids = array();
-						if (isset($input[$articleListKey])) {
-							$renderedUids = array_values($input[$articleListKey]);
+						foreach ($selectValues[$articleListKey] as $value) {
+							if ($value != '') {
+								$renderedUids[] = $value;
+							}
 						}
 						$currentUids = array_keys($articleList);
 						$result[$articleListKey] = true;
@@ -297,6 +358,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 								}
 							}
 						}
+						++$i;
 					}
 										
 					return $result;
@@ -315,12 +377,17 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$tree = $this->calculatePlacementTreeFromSelection($selection);
 					// grab the data for all the places we need to display
 					$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
-					#print_r($tree);
 					
+					// get ll labels 
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
+					$localLang = $localLang[$GLOBALS['LANG']->lang];	
+										
 					// render
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
 					$smarty->assign('tree', $tree);
+					$smarty->assign('lang', $localLang);
+					$smarty->assign('iscod', $this->userIsChiefOfDuty());
 					return $smarty->fetch('mod7_placement.tpl');
 				}
 				
@@ -352,7 +419,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 * 
 				 */
 				function getArticleIdsFromArticleList ($articleList) {
-					#collect all article uids
+					// collect all article uids
 					$articleUids = array();
 					foreach ($articleList as $article) {
 						$articleUids[] = $article->getAttribute('uid');
@@ -404,16 +471,16 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					// prepend the article we are working on to list for semiautomatic lists
 					if ($listType == 'tx_newspaper_ArticleList_Semiautomatic' && $articleId) {
 						$article = $this->getArticleByArticleId($articleId);
-						$result['0_' . $article->getAttribute('uid')] = $article->getAttribute('title');
+						$result['0_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 					}
 					
 					// fill the section placers from their articlelists
 					foreach ($articleList as $article) {
 						if ($listType == 'tx_newspaper_ArticleList_Manual') {
-							$result[$article->getAttribute('uid')] = $article->getAttribute('title');
+							$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 						}
 						if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
-							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('title');
+							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 						}
 					}
 					return $result;
@@ -430,14 +497,15 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
 				 *  )
 				 */
-				function getSectionsByArticleId ($articleId) {
+				 function getSectionsByArticleId ($articleId) {
 					$result = array();
 					
 					$article = new tx_newspaper_article($articleId);
-					$sections = $article->getSections(0);
+					$sections = tx_newspaper_section::getAllSections();
 					foreach ($sections as $section) {
 						$sectionPathes =  $section->getSectionPath();
-						$uids = $titles = array();
+						$uids = array();
+						$titles = array();
 						foreach ($sectionPathes as $sectionPath) {
 							$uids[] = $sectionPath->getAttribute('uid');
 							$titles[] = $sectionPath->getAttribute('section_name');

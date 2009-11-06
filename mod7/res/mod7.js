@@ -8,6 +8,27 @@ function hideProgress () {
 }
 
 
+function showArticlePreview () {
+	window.open(
+		"/typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
+		"preview", 
+		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
+	);
+}
+
+
+function filterAvailableSections () {
+	filter = $("#filter").val();
+	$("select#sections_available option").each(function(index, item){
+		if ($(item).text() != "" && $(item).text().toLowerCase().indexOf(filter.toLowerCase()) == -1) {
+			$(item).css("display", "none");
+		} else {
+			$(item).css("display", "");
+		}
+	});
+}
+
+
 function insertArticle (elementId) {
 	$("#" + elementId).addOption(
 		$("#placearticleuid").val(), 
@@ -18,7 +39,7 @@ function insertArticle (elementId) {
 }
 
 
-//@todo: could be optimised by doing it all in a single request
+//could be optimised by doing it all in a single request
 function saveAllSections () {
 	$("select.placement-select").each(function(index, item){
 		saveSection (item.id, false);
@@ -37,7 +58,7 @@ function saveSection (elementId, async) {
 		url: "index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
 		success: function (data) {
 			if (!data) {
-				alert("Das Speichern hat nicht funktoniert.");
+				alert(langSavedidnotwork);
 			}
 			$("#" + elementId).unselectAllOptions();
 			hideProgress();
@@ -61,7 +82,7 @@ function closePlacement (noConfirmation) {
 		noConfirmation = false;
 	}
 	
-	if (noConfirmation || confirm("Wirklich abbrechen und alle Aenderungen verwerfen?")) {	
+	if (noConfirmation || confirm(langReallycancel)) {	
 		$("#placement").html("");
 		$("#sections_selected").removeOption(/./);
 		$("#sections_available").unselectAllOptions();
@@ -71,27 +92,40 @@ function closePlacement (noConfirmation) {
 
 function checkForRefresh () {
 	allSections = collectSections();
-	$("select.placement-select").each(function(index, item){
-		$(item).selectAllOptions();		
-	});
-	showProgress();
-	$.getJSON(
-		"index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sections]=" + sections.join("|"), 
-		$("#placementform").serialize(), 
-		function (data) {
-			$.each(data, function(index, item) {
-				if (!item) {
-					$("input.refresh[title=" + index + "]").css("color", "red");
-				} else {
-					$("input.refresh[title=" + index + "]").css("color", "black");
-				}
-			});
-			$("select.placement-select").each(function(index, item){
-				$(item).unselectAllOptions();		
-			});
-			hideProgress();
+	if (allSections.length > 0) {
+		
+		//we collect the values of the selects manually so that we do not have
+		//to select and unselect all options visually when the user is working
+		//on them we build them as the following string:
+		//placer_x_y:12|23|1212/player_a_b:1234|-2/...
+		//and unpack all this in php - there seems no better way to achieve this
+		//without real associative arrays in javascript that are serialisable
+		var allSelectValues = new Array();
+		for (i = 0; i < allSections.length; ++i) {
+			selectValues = new Array();
+			$("select#" + allSections[i] + " option").each(function(index, item) {
+				selectValues.push($(item).val());
+			});		
+			selectValues = allSections[i] + ":" + selectValues.join("|")	
+			allSelectValues.push(selectValues);
 		}
-	);
+		allSelectValues = allSelectValues.join("/");
+		
+		showProgress();
+		$.getJSON(
+			"index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
+			$("#placementform").serialize(), 
+			function(data) {
+				$.each(data, function(index, item){
+					if (!item) {
+						$("input.refresh[title=" + index + "]").css("color", "red");
+					} else {
+						$("input.refresh[title=" + index + "]").css("color", "black");
+					}
+				});
+				hideProgress();
+			});
+	}
 }
 
 
@@ -105,7 +139,7 @@ function executeFinalAction (action) {
 				saveAllSections();
 				closePlacement(true);
 			} else {
-				alert ("Diese Aktion hat leider nicht funktioniert.");
+				alert (langActiondidnotwork);
 			}
 			hideProgress();
 		}
@@ -137,13 +171,13 @@ function connectPlacementEvents () {
 	
 	
 	$(".refresh").click(function() {
-		if (confirm("Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.")) {
+		if (confirm(langReallyrefresh)) {
 			$("#" + this.title).selectAllOptions();
 			$("#" + this.title).removeOption(/./, true);
 			showProgress();
 			$("#" + this.title).ajaxAddOption(
 				"index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist",
-				{"tx_newspaper_mod7[section]" : this.title, "tx_newspaper_mod7[articleid]" : $("#placearticleuid").val()}, 
+				{"tx_newspaper_mod7[section]" : this.title, "tx_newspaper_mod7[placearticleuid]" : $("#placearticleuid").val()}, 
 				false,
 				hideProgress
 			);	
@@ -163,13 +197,13 @@ $(document).ready(function(){
 	connectPlacementEvents();
 	
 	
-	$("#preview").click(function() {
+	$("#save").click(function() {
 		
 		elementId = this.title;
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
-			"index.php?tx_newspaper_mod7[ajaxcontroller]=showplacement", 
+			"index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsave", 
 			$("#placementform").serialize(), 
 			function (data) {
 				$("#placement").html(data);
@@ -181,11 +215,9 @@ $(document).ready(function(){
 		
   	});
 	
-	
-	// good idea?
 	var refreshCheck = window.setInterval("checkForRefresh()", 15000);
 	// window.clearInterval(refreshCheck);
-	// alternative:
+
 	$("#checkrefresh").click(function() {
 		checkForRefresh();
 	});
@@ -227,5 +259,14 @@ $(document).ready(function(){
 		executeFinalAction("putarticleoffline");
 	});	
 	
+	
+	$("#filter").keyup(function () {
+		filterAvailableSections();
+	});
+	
+	
+	$("#preview").click(function () {
+		showArticlePreview();
+	});
 	
 });

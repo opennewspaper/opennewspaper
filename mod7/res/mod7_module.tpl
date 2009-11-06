@@ -3,17 +3,24 @@
 <script src="res/jquery.selectboxes.js" type="text/javascript"></script>
 <script src="res/mod7.js" type="text/javascript"></script>
 
+<script type="text/javascript" language="javascript">
+var langSavedidnotwork = "{$lang.savedidnotwork}";
+var langReallycancel = "{$lang.reallycancel}";
+var langActiondidnotwork = "{$lang.actiondidnotwork}";
+var langReallyrefresh = "{$lang.reallyrefresh}";
+</script>
+
 <div class="tx-newspaper-mod7">
 
 	<h2>
-		{$lang.title}  
+		{$lang.title} 
 		<img src="res/move-spinner.gif" alt="" id="progress" />
 	</h2>
 	<div style="padding-top: 5px;" />
 	<hr style="margin-top: 5px; margin-bottom: 5px;" />
 	<div style="padding-top: 5px;" />
 	
-	<table border="0" cellspacing="0" cellpadding="0" class="sections">
+	<table border="0" cellspacing="0" cellpadding="0" class="sections" id="articleinfo">
 	  <tr>
 	    <td align="left">
 			<table width="300" border="0" cellspacing="0" cellpadding="0">
@@ -36,15 +43,18 @@
 			  <tr>
 			    <th scope="row">{$lang.editedby}:</th>
 			    <td>{$article->getAttribute("modification_user")}</td>
+			    <td rowspan="3" valign="top">
+			    	<input type="button" id="preview" value="{$lang.preview}" />
+				</td>
 			  </tr>
 			  <tr>
 			    <th scope="row">{$lang.online}:</th>
-			    <td>{if $article->getAttribute("hidden")}ja{else}nein{/if}</td>
-			  </tr>
+			    <td>{if $article->getAttribute("hidden")}{$lang.yes}{else}{$lang.no}{/if}</td>
+		      </tr>
 			  <tr>
 			    <th scope="row">{$lang.placed}:</th>
-			    <td>{* {if $article->getAttribute("is_placed")}ja{else}nein{/if} *}</td>
-			  </tr>
+			    <td>{* {if $article->getAttribute("is_placed")}{$lang.yes}{else}{$lang.no}{/if} *}</td>
+		      </tr>
 			</table>
 		</td>
 	  </tr>
@@ -53,17 +63,16 @@
 	<br />
 	
 	<form action="" method="post" id="placementform">
-		<input type="hidden" name="tx_newspaper_mod7[articleid]" value="{$article->getAttribute("uid")}" />
 		<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
 		<input type="hidden" value="{$article->getAttribute("title")}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
 
 		<table border="0" cellspacing="0" cellpadding="0" class="sections">
 		  <tr>
-		    <th scope="col" colspan="3">Ressort</th>
+		    <th scope="col" colspan="3">{$lang.section}</th>
 		  </tr>
 		  <tr>
 		    <td>
-				<select name="tx_newspaper_mod7[sections_selected][]" id="sections_selected" multiple="multiple" size="7" class="multiple-select ressort-select">
+				<select name="tx_newspaper_mod7[sections_selected][]" id="sections_selected" multiple="multiple" size="9" class="multiple-select ressort-select">
 				</select>
 			</td>
 			<td valign="top" width="16">
@@ -80,6 +89,9 @@
 				</a>
 			</td>
 			<td>
+				<label for="filter">{$lang.filtersections}:</label>
+				<input type="text" name="tx_newspaper_mod7[filter]" id="filter" value="" />
+				<br />
 				<select name="tx_newspaper_mod7[sections_available][]" title="sections_selected" id="sections_available" multiple="multiple" size="7" class="multiple-select ressort-select addresort">
 					{html_options options=$sections}
 				</select>
@@ -88,33 +100,33 @@
 		</table>
 		
 		<div align="right" style="width: 674px;">
-			<input type="button" value="Aktualisierungen &uuml;berpr&uuml;fen" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
-			<input type="button" value="Vorschau" name="tx_newspaper_mod7[submit]" id="preview" title="sections_selected" />
+			<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
+			<input type="button" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="save" title="sections_selected" />
 		</div>
 	
 	<br />
 	
 	<div id="buttons">
 		{if $article->getAttribute('workflow_status') == 0}
-			<input type="button" value="Zum CVD" class="sendtocod" />
-			<input type="button" value="Online stellen" class="putonline" />
-			<input type="button" value="Offline stellen" class="putoffline" />
-			<input type="button" value="Abbrechen" class="cancel" />
+			<input type="button" value="{$lang.tocod}" class="sendtocod" />
+			<input type="button" value="{$lang.putonline}" class="putonline" />
+			<input type="button" value="{$lang.putoffline}" class="putoffline" />
+			<input type="button" value="{$lang.cancel}" class="cancel" />
 		{/if}
 		{if $article->getAttribute('workflow_status') == 1}
-			<input type="button" value="Platzieren" class="place" />
-			<input type="button" value="Zurück zum Redakteur" class="sendtoeditor" />
-			<input type="button" value="Online stellen" class="putonline" />
-			<input type="button" value="Offline stellen" class="putoffline" />
-			<input type="button" value="Abbrechen" class="cancel" />
+			<input type="button" value="{$lang.place}" class="place" />
+			<input type="button" value="{$lang.backtoeditor}" class="sendtoeditor" />
+			<input type="button" value="{$lang.putonline}" class="putonline" />
+			<input type="button" value="{$lang.putoffline}" class="putoffline" />
+			<input type="button" value="{$lang.cancel}" class="cancel" />
 		{/if}
 	</div>
 	
 	<br />
 	
-	{* {if $article->getAttribute('workflow_status') == 1} *}
+	{if $article->getAttribute('workflow_status') == 1}
 		<div id="placement"></div>
-	{* {/if} *}
+	{/if}
 	
 	</form>
 

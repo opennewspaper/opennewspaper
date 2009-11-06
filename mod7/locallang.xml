@@ -12,7 +12,25 @@
 			<label index="author">Autor</label>
 			<label index="editedby">Bearbeitet von</label>
 			<label index="online">Online</label>
-			<label index="placed">Platziert</label>s
+			<label index="placed">Platziert</label>
+			<label index="section">Ressort</label>
+			<label index="filtersections">Ressorts filtern</label>
+			<label index="save">Speichern</label>
+			<label index="checkforupdates">Aktualisierungen überprüfen</label>
+			<label index="tocod">Zum CVD</label>
+			<label index="putonline">Online stellen</label>
+			<label index="putoffline">Offline stellen</label>
+			<label index="cancel">Abbrechen</label>
+			<label index="place">Platzieren</label>
+			<label index="backtoeditor">Zurück zum Redakteur</label>
+			<label index="yes">ja</label>
+			<label index="no">nein</label>
+			<label index="preview">Vorschau</label>
+			<label index="refresh">Aktualisieren</label>
+			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
+			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
+			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
+			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -22,6 +40,24 @@
 			<label index="editedby">Bearbeitet von</label>
 			<label index="online">Online</label>
 			<label index="placed">Platziert</label>
+			<label index="section">Ressort</label>
+			<label index="filtersections">Ressorts filtern</label>
+			<label index="save">Speichern</label>
+			<label index="checkforupdates">Aktualisierungen überprüfen</label>
+			<label index="tocod">Zum CVD</label>
+			<label index="putonline">Online stellen</label>
+			<label index="putoffline">Offline stellen</label>
+			<label index="cancel">Abbrechen</label>
+			<label index="place">Platzieren</label>
+			<label index="backtoeditor">Zurück zum Redakteur</label>
+			<label index="yes">ja</label>
+			<label index="no">nein</label>
+			<label index="preview">Vorschau</label>
+			<label index="refresh">Aktualisieren</label>
+			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
+			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
+			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
+			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
 		</languageKey>
 	</data>
 </T3locallang>
