@@ -96,6 +96,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
 
+			if (isset($_REQUEST['new_article']))
+				$this->new_article();
+
 			if (isset($_REQUEST['browse_path']))
 				$this->browse_path(); // AJAX call for browsing in source
 		
@@ -266,7 +269,30 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 	}
 		
+	private function new_article() {
+ 		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+
+
+		$sources = tx_newspaper::getRegisteredSources();
+		$smarty->assign('IMPORT_SOURCE', $sources);
 		
+		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
+		
+		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
+
+		if ($this->browse_path) {
+			$smarty->assign('BROWSE_PATH', $this->browse_path);
+		}
+
+		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		
+		echo $smarty->fetch('mod5_newarticle.tmpl');
+		
+		die('NEW ARTICLE');
+
+	}
+	
 	private function checkIfNewArticle() {
 		$type = t3lib_div::_GP('type');
 		$section = intval(t3lib_div::_GP('section'));

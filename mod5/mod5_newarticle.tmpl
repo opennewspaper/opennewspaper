@@ -107,66 +107,7 @@ td {ldelim}
 
 <div id="dashboard" style="display: block">
 
-
-<div class="box_hl">Wizards </div>
-<div class="box">	
-	<a href="index.php?new_article=1">{$WIZARD_ICON} New article</a><br />
-	{$WIZARD_ICON} Create image gallery (DEMO LINK)<br />
-</div>
-<br />	
-
-
-
-	
-	
-	
-<div class="box_hl">Latest articles </div>
-<div class="box">	
-	{$ARTICLELIST}
-</div>
-<br />
-
-
-	
-<div class="box_hl">Shortcuts </div>	
-<div class="box">	
-	{section name=i loop=$SHORTCUT}
-	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT_BE_ICON} {$SHORTCUT[i].description}</a><br />
-	{/section}
-</div>	
-<br />
-
-
-<div class="box_hl">Manage user comments (DEMO ONLY)</div>	
-<div class="box">		
-	{$MANAGE_USERCOMMENTS_ICON} US-Klimapolitik (Hans, 12.06.2009, 12:45:23)</a><br />
-	{$MANAGE_USERCOMMENTS_ICON} Kitas (Petra, 12.06.2009, 12:43:23)</a><br />
-	{$MANAGE_USERCOMMENTS_ICON} Zensursula (Michael, 12.06.2009, 12:41:15)</a><br />
-	{$MANAGE_USERCOMMENTS_ICON} Datenschutz (Monika, 12.06.2009, 12:40:57)</a><br />
-</div>
-<br />
-	
-	
-<div class="box_hl">Newspaper functions </div>	
-<div class="box">		
-	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Publishing workflow</a><br />
-	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
-</div>
-<br />
-
-<div class="box_hl">Logged in users (DEMO ONLY)</div>	
-<div class="box">		
-	meier (CvD)<br />
-	schulze (Redakteur)<br />
-	schmidt (Praktikant)<br />
-	fischer (Praktikant)<br />
-</div>
-<br />
-
-</div>
-
-<div id="div_new_article" style="display: none">
-  <a href="#" onclick="switch_new_article(false); return false;">BACK TO DASHBOARD</a><br />
+  <a href="index.php">BACK TO DASHBOARD</a><br />
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>
