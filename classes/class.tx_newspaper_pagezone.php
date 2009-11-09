@@ -1052,7 +1052,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_local = ' . $this->getUid() . 
 				' AND uid_foreign = ' . $extra->getExtraUid()
 			);
-#t3lib_div::debug(tx_newspaper::$query);
+//t3lib_div::devlog('addExtra query 1', 'newspaper', 0, array(tx_newspaper::$query));
 
 		} catch (tx_newspaper_EmptyResultException $e) {
 			tx_newspaper::insertRows(
@@ -1062,7 +1062,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					'uid_foreign' => $extra->getExtraUid()
 				)
 			);
-#t3lib_div::debug(tx_newspaper::$query);
+//t3lib_div::devlog('addExtra query 2', 'newspaper', 0, array(tx_newspaper::$query));		
 		}
 	}
 	
