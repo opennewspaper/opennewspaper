@@ -270,6 +270,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 		
 	private function new_article() {
+		
+		t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);
+		
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
