@@ -747,9 +747,13 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
 	}
 	
+	public static function registerSource(tx_newspaper_Source $new_source) {
+		if (!in_arry(self::$registered_sources, $new_source)) {
+			self::$registered_sources[] = $new_source;
+		}
+	}
 	public static function getRegisteredSources() {
-		global $registered_sources;
-		return $registered_sources;
+		return self::$registered_sources;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
@@ -762,6 +766,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	
 	/// a \c tslib_cObj object used to generate typolinks
 	private static $local_cObj = null;
+	
+	private static $registered_sources = array();
+	
 }
 
 ?>
