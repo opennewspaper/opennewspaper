@@ -747,6 +747,13 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
 	}
 	
+	public static function getRegisteredSources() {
+		return array(
+			new tx_newspaper_DBSource(),
+			new tx_newspaper_taz_RedsysSource()
+		);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 

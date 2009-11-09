@@ -215,9 +215,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 
 
-/// \todo:		$new_article = x::getRegisteredSources()
-		$new_article = array(new source_demo1(), new source_demo2());
-		$smarty->assign('IMPORT_SOURCE', $new_article);
+/// \todo:		$new_article = x::
+		$sources = tx_newspaper::getRegisteredSources();
+		$smarty->assign('IMPORT_SOURCE', $sources);
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 		
