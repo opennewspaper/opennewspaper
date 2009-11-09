@@ -756,7 +756,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 
 	public static function getRegisteredSource($key) {
-		return self::$registered_sources;
+		return self::$registered_sources[$key];
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
