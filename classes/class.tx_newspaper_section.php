@@ -384,7 +384,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				$additional_where .= ' AND uid NOT IN (';
 				$separator = '';
 				foreach ($excluded_sections as $excluded_section) {
-					$additional_where .= $excluded_section->getUid() . $separator;
+					$additional_where .= $separator . $excluded_section->getUid();
 					$separator = ', ';
 				}
 				$additional_where .= ')';
