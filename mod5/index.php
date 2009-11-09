@@ -79,32 +79,32 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	 * @return	[type]		...
 	 */
 	function main()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					// a valid page for permissions check is needed - use newspaper root folder
-					$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
+		// a valid page for permissions check is needed - use newspaper root folder
+		$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
 
-					// Access check!
-					// The page will show only if there is a valid page and if this page may be viewed by the user
-					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-					$access = is_array($this->pageinfo) ? 1 : 0;
+		// Access check!
+		// The page will show only if there is a valid page and if this page may be viewed by the user
+		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
+		$access = is_array($this->pageinfo) ? 1 : 0;
 
 				
-					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
+		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 //debug(t3lib_div::_GP('type4newarticle'));
 //debug(t3lib_div::_GP('section'));
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
 
-						$this->checkIfNewArticle();
+			$this->checkIfNewArticle();
 
-							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+			// Draw the header.
+			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc->backPath = $BACK_PATH;
+			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
-							// JavaScript
-						$this->doc->JScode = '
+			// JavaScript
+			$this->doc->JScode = '
 							<script language="javascript" type="text/javascript">
 								script_ended = 0;
 								function jumpToUrl(URL)	{
@@ -112,24 +112,23 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 								}
 							</script>
 						';
-						$this->doc->postCode='
+			$this->doc->postCode='
 							<script language="javascript" type="text/javascript">
 								script_ended = 1;
 								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
 							</script>
 						';
 
-						$headerSection = ''; //$this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
+			$headerSection = ''; //$this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
 
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-						$this->content.=$this->doc->divider(5);
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+			$this->content.=$this->doc->spacer(5);
+			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+			$this->content.=$this->doc->divider(5);
 
-
-						// Render content:
-						$this->moduleContent();
+			// Render content:
+			$this->moduleContent();
 
 
 //						// ShortCut
@@ -137,18 +136,18 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
 //						}
 
-						$this->content.=$this->doc->spacer(10);
-					} else {
-							// If no access or if ID == zero
+			$this->content.=$this->doc->spacer(10);
+		} else {
+			// If no access or if ID == zero
 
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
+			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc->backPath = $BACK_PATH;
 
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
-					}
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+			$this->content.=$this->doc->spacer(5);
+			$this->content.=$this->doc->spacer(10);
+		}
 				
 	}
 
@@ -171,8 +170,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	function moduleContent()	{
 		$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
 	}
-		
-		
+				
 		
 	private function renderBackendSmarty() {
 		global $LANG;
@@ -311,31 +309,15 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		} else {
 			die('import new article from source');	
 		}
+	
+	}			
 		
-		
-		
-		
-	}	
-		
-		
-				
-		}
-
-
-
-
-
-
-
-
-
+}
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php']);
 }
-
-
 
 
 // Make instance:
@@ -348,25 +330,5 @@ foreach($SOBE->include_once as $INC_FILE)	include_once($INC_FILE);
 $SOBE->main();
 $SOBE->printContent();
 
-
-
-
-/// \todo: remove after testing
-class source_demo1 {
-	function getTitle() {
-		return 'Import from RedSys';
-	}	
-	function getClass() {
-		return get_class($this);
-	}	
-}
-class source_demo2 {
-	function getTitle() {
-		return 'Import from archive';
-	}	
-	function getClass() {
-		return get_class($this);
-	}	
-}
 
 ?>
