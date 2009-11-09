@@ -170,10 +170,10 @@ td {ldelim}
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>
-      <input checked="checked" type="radio" name="type4newarticle" value="newarticle"> {$LABEL.new_article_typo3}<br />
-{section name=i loop=$IMPORT_SOURCE}
-      <input type="radio" name="type" value="{$IMPORT_SOURCE[i]->getClass()}"> {$IMPORT_SOURCE[i]->getTitle()}<br /> 
-{/section}
+      <input checked="checked" type="radio" name="type" value="newarticle"> {$LABEL.new_article_typo3}<br />
+	  {section name=i loop=$IMPORT_SOURCE}
+      	<input type="radio" name="type" value="{$IMPORT_SOURCE[i]->getClass()}"> {$IMPORT_SOURCE[i]->getTitle()}<br /> 
+	  {/section}
     </div>
 
 	<div><br />
