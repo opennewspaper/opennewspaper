@@ -128,4 +128,12 @@ $TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["maxite
 $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["size"] = "10";
 $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["maxitems"] = "100";
 
+
+
+// normalized name should be required and uniqueInPid too
+// \todo: remove after adding the conf in kickstarter
+$TCA['tx_newspaper_pagetype']['columns']['normalized_name']['config']['eval'] = 'required,uniqueInPid,alphanum,nospace';
+$TCA['tx_newspaper_pagezonetype']['columns']['normalized_name']['config']['eval'] = 'required,uniqueInPid,alphanum,nospace';
+
+
 ?>
