@@ -749,7 +749,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	
 	public static function getRegisteredSources() {
 		return array(
-			new tx_newspaper_DBSource(),
+#			new tx_newspaper_DBSource(),
 			new tx_newspaper_taz_RedsysSource()
 		);
 	}
