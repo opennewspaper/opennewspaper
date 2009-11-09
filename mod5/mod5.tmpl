@@ -171,8 +171,11 @@ td {ldelim}
     <div>{$LABEL.new_article}</div>
     <div>
       <input checked="checked" type="radio" name="type" value="newarticle"> {$LABEL.new_article_typo3}<br />
+      
+      {* read registered sources *}
 	  {section name=i loop=$IMPORT_SOURCE}
-      	<input type="radio" name="type" value="{$IMPORT_SOURCE[i]->getClass()}"> {$IMPORT_SOURCE[i]->getTitle()}<br /> 
+      	<input type="radio" name="type" value="{get_class($IMPORT_SOURCE[i])}"> 
+      	  {get_class($IMPORT_SOURCE[i])} {* {$IMPORT_SOURCE[i]->getTitle()} *} <br /> 
 	  {/section}
     </div>
 
