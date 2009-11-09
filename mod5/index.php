@@ -316,11 +316,8 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 	}
 	
 	function importArticle($section, $articletype, $source_id) {
-		t3lib_div::devlog('importArticle', 'newspaper', 0, array($section, $articletype, $source_id));
-		t3lib_div::devlog('registeredSources', 'newspaper', 0, tx_newspaper::getRegisteredSources());
-		
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		t3lib_div::devlog('Source', 'newspaper', 0, $source);
+		t3lib_div::devlog('/', 'newspaper', 0, $source->browse(new tx_newspaper_SourcePath('')));
 		
 		die('import new article from source '.$source->getTitle());			
 	}
