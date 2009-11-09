@@ -375,7 +375,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		if ($excluded) {
 			foreach (explode(',', $excluded) as $excluded_section_uid) {
 				$excluded_section = new tx_newspaper_Section($excluded_section_uid);
-				$excluded_sections = array_merge($excluded_sections, $excluded_section->getChildSections(true));
+				$excluded_sections = array_merge(
+					$excluded_sections, 
+					array($excluded_section),
+					$excluded_section->getChildSections(true));
 			}
 			if ($excluded_sections) {
 				$additional_where .= ' AND uid NOT IN (';
