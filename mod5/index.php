@@ -316,7 +316,7 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 	}
 	
 	function importArticle($section, $articletype, $source) {
-		die('import new article from source '.$type);			
+		die('import new article from source '.$source);			
 	}
 		
 }
