@@ -263,54 +263,61 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		
 	private function checkIfNewArticle() {
-		$type4newarticle = t3lib_div::_GP('type');
+		$type = t3lib_div::_GP('type');
 		$section = intval(t3lib_div::_GP('section'));
 		$articletype = intval(t3lib_div::_GP('articletype'));
 //debug(array($type4newarticle, $section, $articletype));	
-		if ((strlen($type4newarticle) == 0) || $section <= 0 || $articletype <= 0)
+		if ((strlen($type) == 0) || $section <= 0 || $articletype <= 0)
 			return false;
 	  
 		/// so a new article should be created
 		
-		if ($type4newarticle == 'newarticle') {
-			/// just a plain typo3 article, no import ('newarticle' is set as a convention for this case)
-			$s = new tx_newspaper_Section($section);
-			$at = new tx_newspaper_ArticleType($articletype);
+		if ($type == 'newarticle') {
+			$this->createNewArticle($section, $articletype);
+		} else {
+			$this->importArticle($section, $articletype, $type);
+		}
+	
+	}
+	
+	private function createNewArticle($section, $articletype) {
+		/// just a plain typo3 article, no import ('newarticle' is set as a convention for this case)
+		$s = new tx_newspaper_Section($section);
+		$at = new tx_newspaper_ArticleType($articletype);
 			
-			$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
+		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
 t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
-			$new_article->setAttribute('articletype_id', $articletype);
+		$new_article->setAttribute('articletype_id', $articletype);
 
-			// add creation date and user
-			$new_article->setAttribute('crdate', time());
-			$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		// add creation date and user
+		$new_article->setAttribute('crdate', time());
+		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 
-			$new_article->store();
+		$new_article->store();
 
-			$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+		$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
-			/*	volle URL muss angegeben werden, weil manche browser sonst 
-			 *  'http://' davorhaengen.
-			 */			
-			$url_parts = explode('/typo3', tx_newspaper::currentURL());
-			$base_url = $url_parts[0];
+		/*	volle URL muss angegeben werden, weil manche browser sonst 
+		 *  'http://' davorhaengen.
+		 */			
+		$url_parts = explode('/typo3', tx_newspaper::currentURL());
+		$base_url = $url_parts[0];
 
-			$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-					'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
-					$new_article->getUid() . ']=edit';
+		$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
+				'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+				$new_article->getUid() . ']=edit';
 /*
 			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' .
 			 	   $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
 			 	   $new_article->getUid() . ']=edit';
 */
-			header('Location: ' . $url);		
-			 
-		} else {
-			die('import new article from source');	
-		}
+		header('Location: ' . $url);				
+	}
 	
-	}			
+	function importArticle($section, $articletype, $source) {
+		die('import new article from source '.$type);			
+	}
 		
 }
 
