@@ -747,12 +747,15 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
 	}
 	
-	public static function registerSource(tx_newspaper_Source $new_source) {
-		if (!in_array(self::$registered_sources, $new_source)) {
-			self::$registered_sources[] = $new_source;
-		}
+	public static function registerSource($key, tx_newspaper_Source $new_source) {
+		self::$registered_sources[$key] = $new_source;
 	}
+
 	public static function getRegisteredSources() {
+		return self::$registered_sources;
+	}
+
+	public static function getRegisteredSource($key) {
 		return self::$registered_sources;
 	}
 	
