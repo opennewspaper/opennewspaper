@@ -368,17 +368,36 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public static function getAllSections($sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
 		$excluded = $TSConfig['newspaper.']['excluded_sections'];
-		t3lib_div::devlog('TSConfig', 'newspaper', 0, $TSConfig);
 		t3lib_div::devlog('excluded', 'newspaper', 0, $excluded);
 		
-		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section());
+		$excluded_sections = array();
+		$additional_where = '';
+		if ($excluded) {
+			foreach (explode(',', $excluded) as $excluded_section_uid) {
+				$excluded_section = new tx_newspaper_Section($excluded_section_uid);
+				$excluded_sections = array_merge($excluded_sections, $excluded_section->getChildSections(true));
+			}
+			if ($excluded_sections) {
+				$additional_where .= ' AND uid NOT IN (';
+				$separator = '';
+				foreach ($excluded_sections as $excluded_section) {
+					$additional_where .= $excluded_section->getUid();
+					$separator = ', ';
+				}
+				$additional_where .= ')';
+			}
+		}
+		
+		t3lib_div::devlog('$additional_where', 'newspaper', 0, $additional_where);
+		
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
-			'pid=' . $pid,
+			$additional_where,
 			'',
 			$sort_by
 		);
+		
 		$s = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
