@@ -320,6 +320,8 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		t3lib_div::devlog('registeredSources', 'newspaper', 0, tx_newspaper::getRegisteredSources());
 		
 		$source = tx_newspaper::getRegisteredSource($source_id);
+		t3lib_div::devlog('Source', 'newspaper', 0, $source);
+		
 		die('import new article from source '.$source->getTitle());			
 	}
 		
