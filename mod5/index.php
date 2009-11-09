@@ -326,6 +326,8 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		$this->browse_path = $source->browse(new tx_newspaper_SourcePath(''));
 		t3lib_div::devlog('/', 'newspaper', 0, $this->browse_path);
 		
+		$this->renderBackendSmarty();
+		
 		die('import new article from source '.$source->getTitle());			
 	}
 	
