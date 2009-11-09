@@ -265,7 +265,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		
 	private function checkIfNewArticle() {
-		$type4newarticle = t3lib_div::_GP('type4newarticle');
+		$type4newarticle = t3lib_div::_GP('type');
 		$section = intval(t3lib_div::_GP('section'));
 		$articletype = intval(t3lib_div::_GP('articletype'));
 //debug(array($type4newarticle, $section, $articletype));	
