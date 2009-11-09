@@ -748,7 +748,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 	
 	public static function registerSource(tx_newspaper_Source $new_source) {
-		if (!in_arry(self::$registered_sources, $new_source)) {
+		if (!in_array(self::$registered_sources, $new_source)) {
 			self::$registered_sources[] = $new_source;
 		}
 	}
