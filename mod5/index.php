@@ -329,7 +329,7 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		$this->moduleContent();
 		#$this->renderBackendSmarty();
 		
-		die('import new article from source '.$source->getTitle());			
+		# die('import new article from source '.$source->getTitle());			
 	}
 	
 	function browse_path() {
