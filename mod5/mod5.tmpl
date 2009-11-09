@@ -178,6 +178,12 @@ td {ldelim}
 	  {/foreach}
     </div>
 
+	{if $BROWSE_PATH}
+	   {foreach from=$BROWSE_PATH item=path}
+	     <p>{$path}</p>
+	   {/foreach}
+	{/if}
+
 	<div><br />
 	  {$LABEL.section}:<br />
       <select name="section" size="1" onchange="setDefaultArticletype(this.value)">

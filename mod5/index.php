@@ -96,6 +96,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
 
+			if (isset($_REQUEST['browse_path']))
+				$this->browse_path(); // AJAX call for browsing in source
+		
 			$this->checkIfNewArticle();
 
 			// Draw the header.
@@ -212,14 +215,16 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('SHORTCUT', $this->getShortcuts());
 
 
-
-/// \todo:		$new_article = x::
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 		
 		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
+
+		if ($this->browse_path) {
+			$smarty->assign('BROWSE_PATH', $this->browse_path);
+		}
 
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
@@ -317,9 +322,16 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 	
 	function importArticle($section, $articletype, $source_id) {
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		t3lib_div::devlog('/', 'newspaper', 0, $source->browse(new tx_newspaper_SourcePath('')));
+		
+		$this->browse_path = $source->browse(new tx_newspaper_SourcePath(''));
+		t3lib_div::devlog('/', 'newspaper', 0, $this->browse_path);
 		
 		die('import new article from source '.$source->getTitle());			
+	}
+	
+	function browse_path() {
+		$this->browse_path = $source->browse(new tx_newspaper_SourcePath($_REQUEST['browse_path']));
+		
 	}
 		
 }
