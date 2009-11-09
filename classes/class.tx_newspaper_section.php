@@ -393,7 +393,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
-			$additional_where,
+			'1' . $additional_where,
 			'',
 			$sort_by
 		);
