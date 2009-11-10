@@ -380,7 +380,8 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		# die('import new article from source '.$source->getTitle());			
 	}
 	
-	function browse_path() {
+	function browse_path($input) {
+		t3lib_div::devlog('browse_path', 'newspaper', 0, $input);
 		echo print_r($source->browse(new tx_newspaper_SourcePath(/* $_REQUEST['browse_path']*/ '')));
 		
 	}

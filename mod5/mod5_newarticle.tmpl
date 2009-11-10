@@ -105,6 +105,17 @@ td {ldelim}
 
 	function changeSource(source_id) {ldelim}
 		alert(source_id);
+		
+		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var height = top.getViewportHeight() - 50; 
+		top.showPopWin(
+			top.path + "typo3conf/ext/newspaper/mod5/index.php?tx_newspaper_mod7[ajaxcontroller]=browse_path",
+			width, 
+			height, 
+			null, 
+			true
+		);
+		
 	{rdelim}
 </script>
 
