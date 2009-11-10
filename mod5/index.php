@@ -391,7 +391,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		$ret = '';
 		foreach ($return_paths as $entry) {
-			$ret .= '<p><a href="#" onclick=changesource(' . $source_id . ',' . $entry .')' . '>' . $entry . '</a></p>' . "\n";  
+			$ret .= '<a href="#" onclick=changesource(\'' . $source_id . '\',\'' . $entry .'\')' . '>' . $entry . '</a>' . "<br />\n";  
 		}
 		echo $ret;
 		
