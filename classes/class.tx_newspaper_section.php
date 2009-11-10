@@ -368,7 +368,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public static function getAllSections($sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
 		$excluded = $TSConfig['newspaper.']['excluded_sections'];
-		t3lib_div::devlog('excluded', 'newspaper', 0, $excluded);
 		
 		$excluded_sections = array();
 		$additional_where = '';
@@ -390,8 +389,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				$additional_where .= ')';
 			}
 		}
-		
-		t3lib_div::devlog('$additional_where', 'newspaper', 0, $additional_where);
 		
 		$row = tx_newspaper::selectRows(
 			'uid',
