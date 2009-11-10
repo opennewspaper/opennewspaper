@@ -104,11 +104,12 @@ td {ldelim}
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
-	  alert(response.responseText);
-	  
-	  var container = $('source_browser');
       var content = response.responseText;
-      container.update(content);
+	  alert(content);
+	  
+//	  var container = $('source_browser');
+//      container.update(content);
+      document.getElementById('source_browser').innerHTML = data.responseText;
 	{rdelim}
 	
 	function changeSource(source_id, path) {ldelim}
