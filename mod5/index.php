@@ -84,6 +84,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	function main()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+
 		// a valid page for permissions check is needed - use newspaper root folder
 		$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
 
@@ -101,6 +102,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
+		t3lib_div::devlog('$_REQ', 'newspaper', 0, $_REQUEST);
+		t3lib_div::devlog('$_SER', 'newspaper', 0, $_SERVER);
+		t3lib_div::devlog('$_GET', 'newspaper', 0, $_GET);
 		t3lib_div::devlog('$input', 'newspaper', 0, $input);
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
