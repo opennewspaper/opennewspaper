@@ -104,7 +104,7 @@ td {ldelim}
 	{rdelim}
 
 	function changeSource(source_id) {ldelim}
-		// alert(source_id);
+		alert(source_id);
 	{rdelim}
 </script>
 
@@ -118,7 +118,7 @@ td {ldelim}
       
       {* read registered sources *}
 	  {foreach from=$IMPORT_SOURCE item=source key=key}
-      	<input type="radio" name="type" value="{$key}" onfocus="changeSource('{$key}')"> {$source->getTitle()}<br /> 
+      	<input type="radio" name="type" value="{$key}" onclick="changeSource('{$key}')"> {$source->getTitle()}<br /> 
 	  {/foreach}
     </div>
 
