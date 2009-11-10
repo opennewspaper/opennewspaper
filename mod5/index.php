@@ -95,12 +95,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //debug(t3lib_div::_GP('section'));
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
-
-			if (isset($_REQUEST['new_article']))
-				$this->new_article();
-
-			if (isset($_REQUEST['browse_path']))
-				$this->browse_path(); // AJAX call for browsing in source
 		
 			$this->checkIfNewArticle();
 
@@ -132,6 +126,12 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$this->content.=$this->doc->spacer(5);
 			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 			$this->content.=$this->doc->divider(5);
+
+			if (isset($_REQUEST['new_article']))
+				$this->new_article();
+
+			if (isset($_REQUEST['browse_path']))
+				$this->browse_path(); // AJAX call for browsing in source
 
 			// Render content:
 			$this->moduleContent();
