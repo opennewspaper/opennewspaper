@@ -103,29 +103,29 @@ td {ldelim}
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 
-	function ajaxRequest(url,data) {
+	function ajaxRequest(url,data) {ldelim}
 	  var aj = new Ajax.Request(
-	  url, {
+	  url, {ldelim}
 	   method:'get', 
 	   parameters: data, 
 	   onComplete: getResponse
-	   }
+	   {rdelim}
 	  );
-	}
+	{rdelim}
 
-	function getResponse(oReq) {
+	function getResponse(oReq) {ldelim}
 	  $('source_browser').innerHTML = oReq.responseText;
-	}
+	{rdelim}
 
 	function changeSource(source_id) {ldelim}
 
 	  var aj = new Ajax.Request(
 	    top.path + "typo3conf/ext/newspaper/mod5/index.php?tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=",
-		{
+		{ldelim}
 		  method:'get', 
 		  parameters: data, 
 		  onComplete: getResponse
-		}
+		{rdelim}
 	  );
 	/*
 		var width = Math.min(700, top.getViewportWidth() - 100); 
