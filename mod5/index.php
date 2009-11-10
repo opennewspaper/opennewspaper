@@ -382,11 +382,16 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		# die('import new article from source '.$source->getTitle());			
 	}
 	
-	function browse_path($input) {
+	function browse_path(array $input) {
 		t3lib_div::devlog('browse_path', 'newspaper', 0, $input);
 		$source_id = $input['source_id'];
+		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		echo print_r($source->browse(new tx_newspaper_SourcePath(/* $_REQUEST['browse_path']*/ '')));
+		$return_paths = array();
+		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $subdir) {
+			$return_paths[] = subdir.getId();
+		}
+		echo print_r($return_paths);
 		
 	}
 		
