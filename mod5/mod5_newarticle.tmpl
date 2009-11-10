@@ -103,6 +103,9 @@ td {ldelim}
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 
+	function changeSource(source_id) {
+		alert(source_id);
+	}
 </script>
 
 <div id="dashboard" style="display: block">
@@ -115,7 +118,7 @@ td {ldelim}
       
       {* read registered sources *}
 	  {foreach from=$IMPORT_SOURCE item=source key=key}
-      	<input type="radio" name="type" value="{$key}"> {$source->getTitle()}<br /> 
+      	<input type="radio" name="type" value="{$key}" onChange="changeSource({$key})"> {$source->getTitle()}<br /> 
 	  {/foreach}
     </div>
 
