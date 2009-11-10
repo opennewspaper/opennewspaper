@@ -103,43 +103,18 @@ td {ldelim}
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 
-	function ajaxRequest(url,data) {ldelim}
-	  var aj = new Ajax.Request(
-	  url, {ldelim}
-	   method:'get', 
-	   parameters: data, 
-	   onComplete: getResponse
-	   {rdelim}
-	  );
-	{rdelim}
-
-	function getResponse(oReq) {ldelim}
-		alert(oReq.responseText);
-	  $('source_browser').innerHTML = oReq.responseText;
-	{rdelim}
-
 	function changeSource(source_id) {ldelim}
 
-	  var params = "tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=";
-	  var aj = new Ajax.Request(
-	    top.path + "typo3conf/ext/newspaper/mod5/index.php",
+	  var target_id = 'source_browser';
+	  var url = 'typo3conf/ext/newspaper/mod5/index.php';
+	  var params = 'tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]=';
+	  var aj = new Ajax.Updater(
+	    target_id, url,
 		{ldelim}
 		  method:'get', 
-		  parameters: params, 
-		  onComplete: getResponse
+		  parameters: params
 		{rdelim}
 	  );
-	/*
-		var width = Math.min(700, top.getViewportWidth() - 100); 
-		var height = top.getViewportHeight() - 50; 
-		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod5/index.php?tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=",
-			width, 
-			height, 
-			null, 
-			true
-		);
-	*/
 	{rdelim}
 </script>
 
