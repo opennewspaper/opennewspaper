@@ -80,7 +80,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	 */
 	function main()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-t3lib_div::devlog('_request mod5 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_name]' => $_SERVER['SCRIPT_NAME']));
+t3lib_div::devlog('_request mod5 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server' => $_SERVER));
 		// a valid page for permissions check is needed - use newspaper root folder
 		$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
 
