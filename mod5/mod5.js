@@ -30,9 +30,9 @@
 	function updateSourceBrowser(response) {ldelim}
       var content = response.responseText;
 	  
-	  var container = $('source_browser');
-      container.update(content);
-//      document.getElementById('source_browser').innerHTML = content;
+//	  var container = $('source_browser');
+//	  container.update(content);
+      document.getElementById('source_browser').innerHTML = content;
 	{rdelim}
 	
 	function changeSource(source_id, path) {ldelim}
