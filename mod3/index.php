@@ -351,7 +351,7 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 
 	private function check4Ajax() {
 		/// \todo: check permissions
-t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, $_REQUEST);
+t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_filename]' => $_SERVER['SCRIPT_FILENAME']));
 
 		// delete etxra
 		if (t3lib_div::_GP('extra_delete') == 1) {
