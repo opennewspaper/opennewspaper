@@ -95,7 +95,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //debug(t3lib_div::_GP('section'));
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
-		
+t3lib_div::devlog('_request mod5 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_name]' => $_SERVER['SCRIPT_NAME']));
 			$this->checkIfNewArticle();
 
 			// Draw the header.
