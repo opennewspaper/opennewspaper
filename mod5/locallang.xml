@@ -13,11 +13,13 @@
 			<label index="label_section">Section</label>
 			<label index="label_articletype">Article type</label>
 			<label index="label_back_to_dashboard">Back to Dashboard</label>
+			<label index="label_error_browsing">Error browsing source</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Start</label>
 			<label index="label_new_article">Neuer Artikel</label>
 			<label index="label_back_to_dashboard">Zurück zum Dashboard</label>
+			<label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
 		</languageKey>
 	</data>
 </T3locallang>

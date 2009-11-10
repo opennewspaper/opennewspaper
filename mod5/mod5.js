@@ -27,12 +27,13 @@
 		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
 	{rdelim}
 
+	/// Error message in source_browser div
+	function failed() {ldelim}
+		document.getElementById('source_browser').innerHTML = '<span color="ff0000">{$LABEL.error_browsing}</span>';
+	{rdelim}
+
 	function updateSourceBrowser(response) {ldelim}
-      var content = response.responseText;
-	  
-//	  var container = $('source_browser');
-//	  container.update(content);
-      document.getElementById('source_browser').innerHTML = content;
+      document.getElementById('source_browser').innerHTML = response.responseText;
 	{rdelim}
 	
 	function changeSource(source_id, path) {ldelim}
@@ -44,7 +45,8 @@
 		    method:'get', 
 		    parameters: params,
 			onCreate: processing,
-		    onSuccess: updateSourceBrowser
+		    onSuccess: updateSourceBrowser,
+		    onFailure: failed
 		  {rdelim}
 	    );
 	  {rdelim}

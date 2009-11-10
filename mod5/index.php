@@ -294,6 +294,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
 		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
 		$label['back_to_dashboard'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_dashboard', false);
+		$label['error_browsing'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false);
 		$smarty->assign('LABEL', $label);
 
 		$sources = tx_newspaper::getRegisteredSources();
@@ -309,10 +310,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 
 		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
-		echo $smarty->fetch('mod5_newarticle.tmpl');
-		
-		die('NEW ARTICLE');
-
+		die($smarty->fetch('mod5_newarticle.tmpl'));
 	}
 	
 	private function checkIfNewArticle() {
@@ -396,8 +394,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		foreach ($return_paths as $entry) {
 			$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $entry .'\')' . '>' . $entry . '</a>' . "<br />\n";  
 		}
-		echo $ret;
 		
+		die($ret);
 	}
 		
 }
