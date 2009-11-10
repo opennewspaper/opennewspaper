@@ -383,16 +383,14 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		$return_paths = array();
-		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $subdir) {
-			$return_paths[] = $subdir->getId();
-		}
 		
 		$ret = '';
 		$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</a>' . "<br />\n";
-		$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $path . '\')' . '>' . $path . '</a>' . "<br />\n";
-		foreach ($return_paths as $entry) {
-			$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $entry .'\')' . '>' . $entry . '</a>' . "<br />\n";  
+		$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $path->getID() . '\')' . '>' . 
+				$path->getTitle() . '</a>' . "<br />\n";
+		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
+			$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+					$entry->getTitle() . ($entry->isText()? ' [Text]': '') . '</a>' . "<br />\n";  
 		}
 		
 		die($ret);
