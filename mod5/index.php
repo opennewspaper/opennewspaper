@@ -102,10 +102,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
-		t3lib_div::devlog('$_REQ', 'newspaper', 0, $_REQUEST);
-		t3lib_div::devlog('$_SER', 'newspaper', 0, $_SERVER);
-		t3lib_div::devlog('$_GET', 'newspaper', 0, $_GET);
-		t3lib_div::devlog('$input', 'newspaper', 0, $input);
+			t3lib_div::devlog('$input', 'newspaper', 0, $input);
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
@@ -387,6 +384,8 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 	
 	function browse_path($input) {
 		t3lib_div::devlog('browse_path', 'newspaper', 0, $input);
+		$source_id = $input['source_id'];
+		$source = tx_newspaper::getRegisteredSource($source_id);
 		echo print_r($source->browse(new tx_newspaper_SourcePath(/* $_REQUEST['browse_path']*/ '')));
 		
 	}
