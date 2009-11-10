@@ -274,6 +274,8 @@ t3lib_div::devlog('_request mod5 ajax', 'newspaper', 0, array('request' => $_REQ
 		
 	private function new_article() {
 		
+		global $LANG;
+		
 		t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);
 		
  		$smarty = new tx_newspaper_Smarty();
