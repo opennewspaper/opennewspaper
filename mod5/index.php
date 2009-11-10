@@ -293,6 +293,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$label['new_article_typo3'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false);
 		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
 		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
+		$label['back_to_dashboard'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_dashboard', false);
 		$smarty->assign('LABEL', $label);
 
 		$sources = tx_newspaper::getRegisteredSources();

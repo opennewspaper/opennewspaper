@@ -1,116 +1,13 @@
 {* debug *}
-<style type="text/css">
-body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {ldelim}
-  overflow: auto;
-{rdelim}
-table {ldelim}
-  table-layout: auto; 
-  border: 1px solid gray; 
-  padding: 0; 
-  margin: 0; 
-  border-collapse: collapse; 
-{rdelim}
-td {ldelim}
-  vertical-align: top;
-   border: 1px solid #e8e8e8;
-{rdelim}
-.bg1 {ldelim}
-  background-color: #f0f0f0;"
-{rdelim}
-.bg2 {ldelim}
-  background-color: #d0d0d0;
-{rdelim}
-.kicker {ldelim}
-  color: #c61940;
-{rdelim}
-.comment_box {ldelim}
-  display: none;
-  background-color: white;
-{rdelim} 
-.gray {ldelim}
-  color: #909090;
-{rdelim}
 
 
-.box {ldelim}
-  width: 300px;
-  background-color: white;
-  margin: 5px;
-  padding: 5px;
-  margin-top: 0px;
-  padding-top: 0px;
-{rdelim}
-.box_hl {ldelim}
-  color: black;
-  font-weigth: bold;
-  width: 300px;
-  background-color: #d0d0d0;
-  margin: 5px;
-  padding: 5px;
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-{rdelim}
+{include file="mod5.css"} {* css for importing articles *}
+{include file="mod5.js"}  {* js for importing articles *}
 
-
-</style> 
-
-<script language="javascript">
-	
-	/// returns the "processing spinner" type for ajax call depending on the flag "is_concrete_article"
-	function get_onCreate_function(is_concrete_article) {ldelim}
-		return 'processing_page';
-	{rdelim}
-	
-	/// "processing spinner" over whole page
-	function processing_page() {ldelim}
-		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
-	{rdelim}
-	
-	/// when section is changed the assigned default article type gets selected
-	function setDefaultArticletype(section_id) {ldelim}
-		switch(parseInt(section_id)) {ldelim}
-{section name=i loop=$SECTION}
-{if $SECTION[i]->getAttribute('default_articletype') > 0}
-			case {$SECTION[i]->getUid()}:
-				d_at = {$SECTION[i]->getAttribute('default_articletype')};
-			break;
-{/if}
-{/section}
-			default:
-				d_at = 0;
-		{rdelim}
-		if (d_at > 0) {ldelim}
-			document.getElementById('articletype').value = d_at;
-		{rdelim}
-	{rdelim}
-
-	function updateSourceBrowser(response) {ldelim}
-      var content = response.responseText;
-//	  alert(content);
-	  
-//	  var container = $('source_browser');
-//      container.update(content);
-      document.getElementById('source_browser').innerHTML = content;
-	{rdelim}
-	
-	function changeSource(source_id, path) {ldelim}
-		var params = 'tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
-
-	    var request = new top.Ajax.Request(
-	      top.path + "typo3conf/ext/newspaper/mod5/index.php",
-		  {ldelim}
-		    method:'get', 
-		    parameters: params,
-			onCreate: processing_page,
-		    onSuccess: updateSourceBrowser
-		  {rdelim}
-	    );
-	  {rdelim}
-</script>
-
-<div id="dashboard" style="display: block">
+<div id="create_article">
 
   <a href="index.php">BACK TO DASHBOARD</a><br />
+  
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>
@@ -122,40 +19,33 @@ td {ldelim}
 	  {/foreach}
     </div>
 
+	{* here the source browser is inserted via AJAX *}
 	<div id="source_browser">
-	{if $BROWSE_PATH}
-	   {foreach from=$BROWSE_PATH item=path}
-	     <p>{$path}</p>
-	   {/foreach}
-	{/if}
 	</div>
 
 	<div><br />
 	  {$LABEL.section}:<br />
       <select name="section" size="1" onchange="setDefaultArticletype(this.value)">
-{section name=i loop=$SECTION}
+		{section name=i loop=$SECTION}
     	  <option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option> 
-{/section}
+		{/section}
       </select>
     </div>
 
 	<div><br />
 	  {$LABEL.articletype}:<br /> 
       <select id="articletype" name="articletype" size="1">
-{section name=i loop=$ARTICLETYPE}
-{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
-          <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
-{else}
-    	  <option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
-{/if}
-{/section}
+		{section name=i loop=$ARTICLETYPE}
+		  {if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
+            <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
+		  {else}
+    	    <option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
+		  {/if}
+		{/section}
       </select>
     </div>
 	<input type="submit" value="{$LABEL.new_article_button}" />
 
 	</form>
-
-
-
 
 </div>
