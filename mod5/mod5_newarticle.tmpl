@@ -103,7 +103,7 @@ td {ldelim}
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 
-	function changeSource(source_id) {ldelim}
+	function changeSource(source_id, path) {ldelim}
 
       var url = 'typo3conf/ext/newspaper/mod5/index.php';
 	  var params = 'tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]=';
@@ -141,7 +141,7 @@ td {ldelim}
       
       {* read registered sources *}
 	  {foreach from=$IMPORT_SOURCE item=source key=key}
-      	<input type="radio" name="type" value="{$key}" onclick="changeSource('{$key}')"> {$source->getTitle()}<br /> 
+      	<input type="radio" name="type" value="{$key}" onclick="changeSource('{$key}', '')"> {$source->getTitle()}<br /> 
 	  {/foreach}
     </div>
 

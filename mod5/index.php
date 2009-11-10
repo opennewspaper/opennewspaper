@@ -143,9 +143,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			if (isset($_REQUEST['new_article']))
 				$this->new_article();
 
-			if (isset($_REQUEST['browse_path']))
-				$this->browse_path(); // AJAX call for browsing in source
-
 			// Render content:
 			$this->moduleContent();
 
@@ -391,7 +388,12 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $subdir) {
 			$return_paths[] = $subdir->getId();
 		}
-		echo print_r($return_paths);
+		
+		$ret = '';
+		foreach ($return_paths as $entry) {
+			$ret .= '<p><a href="#" onclick=changesource(' . $source_id . ',' . $entry .')' . '>' . $entry . '</a></p>' . "\n";  
+		}
+		echo $ret;
 		
 	}
 		
