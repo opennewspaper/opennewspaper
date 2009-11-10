@@ -120,11 +120,12 @@ td {ldelim}
 
 	function changeSource(source_id) {ldelim}
 
+	  var params = "tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=";
 	  var aj = new Ajax.Request(
-	    top.path + "typo3conf/ext/newspaper/mod5/index.php?tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=",
+	    top.path + "typo3conf/ext/newspaper/mod5/index.php
 		{ldelim}
 		  method:'get', 
-//		  parameters: params, 
+		  parameters: params, 
 		  onComplete: getResponse
 		{rdelim}
 	  );
