@@ -103,9 +103,31 @@ td {ldelim}
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
 
+	function ajaxRequest(url,data) {
+	  var aj = new Ajax.Request(
+	  url, {
+	   method:'get', 
+	   parameters: data, 
+	   onComplete: getResponse
+	   }
+	  );
+	}
+
+	function getResponse(oReq) {
+	  $('source_browser').innerHTML = oReq.responseText;
+	}
+
 	function changeSource(source_id) {ldelim}
-		alert(source_id);
-		
+
+	  var aj = new Ajax.Request(
+	    top.path + "typo3conf/ext/newspaper/mod5/index.php?tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]="+source_id+"&tx_newspaper_mod5[path]=",
+		{
+		  method:'get', 
+		  parameters: data, 
+		  onComplete: getResponse
+		}
+	  );
+	/*
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50; 
 		top.showPopWin(
@@ -115,7 +137,7 @@ td {ldelim}
 			null, 
 			true
 		);
-		
+	*/
 	{rdelim}
 </script>
 
@@ -133,11 +155,13 @@ td {ldelim}
 	  {/foreach}
     </div>
 
+	<div id="source_browser">
 	{if $BROWSE_PATH}
 	   {foreach from=$BROWSE_PATH item=path}
 	     <p>{$path}</p>
 	   {/foreach}
 	{/if}
+	</div>
 
 	<div><br />
 	  {$LABEL.section}:<br />
