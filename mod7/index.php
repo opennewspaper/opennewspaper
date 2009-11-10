@@ -458,6 +458,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					
 					$result = array();
 					$sectionId = $this->extractSectionId($sectionId);
+					if (!$sectionId) $sectionId = 1;	// temporary safeguard so i [helge] can work with this
 					$section = new tx_newspaper_section($sectionId);
 					$listType = get_class($section->getArticleList());
 					$articleList = $section->getArticleList()->getArticles(9999);
