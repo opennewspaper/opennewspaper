@@ -99,6 +99,14 @@ t3lib_div::devlog('_request mod5 ajax', 'newspaper', 0, array('request' => $_REQ
 //debug(t3lib_div::_GP('articletype'));
 //debug($_REQUEST);
 
+			// get "pi"vars
+			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
+			switch ($input['ajaxcontroller']) {
+				case 'browse_path' :
+					die($this->browse_path($input));
+					break;
+			}				
+
 			$this->checkIfNewArticle();
 
 			// Draw the header.
@@ -373,7 +381,7 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 	}
 	
 	function browse_path() {
-		$this->browse_path = $source->browse(new tx_newspaper_SourcePath($_REQUEST['browse_path']));
+		echo print_r($source->browse(new tx_newspaper_SourcePath(/* $_REQUEST['browse_path']*/ '')));
 		
 	}
 		
