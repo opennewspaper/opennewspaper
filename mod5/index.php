@@ -390,6 +390,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		}
 		
 		$ret = '';
+		$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</a>' . "<br />\n";
+		$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $path . '\')' . '>' . $path . '</a>' . "<br />\n";
 		foreach ($return_paths as $entry) {
 			$ret .= '<a href="#" onclick=changeSource(\'' . $source_id . '\',\'' . $entry .'\')' . '>' . $entry . '</a>' . "<br />\n";  
 		}
