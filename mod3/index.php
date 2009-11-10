@@ -70,24 +70,6 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	
 	
 	/// functions call by ajax calls //////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	
 	private function processToggleShowLevelsAbove($checked) {
 		global $BE_USER;
