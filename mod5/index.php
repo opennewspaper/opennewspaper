@@ -389,7 +389,7 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		$return_paths = array();
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $subdir) {
-			$return_paths[] = subdir.getId();
+			$return_paths[] = $subdir->getId();
 		}
 		echo print_r($return_paths);
 		
