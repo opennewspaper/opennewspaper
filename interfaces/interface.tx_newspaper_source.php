@@ -8,14 +8,21 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_a
  */
 class tx_newspaper_SourcePath {
 
-	public function __construct($path) { $this->path = $path; }
+	public function __construct($path, $title = '', $is_text = false) { 
+		$this->path = $path; 
+		$this->title = $title;
+		$this->is_text = $is_text;
+	}
 	
-	public function __toString() { return strval($this->path); }
+	public function __toString() { return strval($this->getTitle()); }
 
 	public function getID() { return $this->path; }
+	public function getTitle() { return $this->title? $this->title: $this->path; }
+	public function isText() { return $this->is_text; }
 
 	private $path = null;
-
+	private $title = '';
+	private $is_text = false;
 }
 
  /// A source, from which articles are read
