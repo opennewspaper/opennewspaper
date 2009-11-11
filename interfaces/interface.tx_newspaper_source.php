@@ -130,6 +130,20 @@ interface tx_newspaper_Source {
     
     public function writeArticle(tx_newspaper_ArticleIface $article, tx_newspaper_SourcePath $uid);
     public function writeExtra(tx_newspaper_ExtraIface $extra, tx_newspaper_SourcePath $uid);
+   
+   	///	Split a tx_newspaper_SourcePath into the segments constituting the path.
+   	/** This enables a browser that displays all the levels currently displayed.
+   	 *  E.g. the path consists of \c <root>/date/page/article, this function 
+   	 *  returns an \code 
+   	 *  array (<root>, <root>/date, <root>/date/page, <root>/date/page/article)
+   	 * \endcode
+   	 * 
+   	 *  \param $path Path to split up
+   	 *  \return array of tx_newspaper_SourcePath
+   	 */
+    public function getPathSegments(tx_newspaper_SourcePath $path);
+    
+    public function getTitle();
     
     public function browse(tx_newspaper_SourcePath $path);
     
