@@ -71,8 +71,9 @@ interface tx_newspaper_Source {
 	public function readFields(tx_newspaper_ExtraIface $extra, array $fieldList, tx_newspaper_SourcePath $uid);
 
 	/// Creates and reads a full article with the specified UID
-	/** \param $articleclass The class name for the article; must implement 
-	 * 		   				 Article
+	/** \param $articleclass Either, the class name for the article (must 
+	 * 		implement tx_newspaper_ArticleIface), or an already instantiated
+	 * 		object of a class implementing tx_newspaper_ArticleIface.
 	 *  \param $uid A unique key to locate the article in the given source
 	 *  \return A newly created Article object
 	 *  \throw WrongClassException If \p $articleclass is not the name of a 

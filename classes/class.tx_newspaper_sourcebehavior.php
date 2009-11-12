@@ -38,8 +38,9 @@ class tx_newspaper_SourceBehavior {
 	}
 
 	/// Creates and reads a full article with the specified UID
-	/** \param $articleclass The class name for the article; must implement 
-	 * 		   				 Article
+	/** \param $articleclass Either, the class name for the article (must 
+	 * 		implement tx_newspaper_ArticleIface), or an already instantiated
+	 * 		object of a class implementing tx_newspaper_ArticleIface.
 	 *  \param $uid A unique key to locate the article in the given source
 	 *  \return A newly created Article object
 	 *  \throw WrongClassException If \p $articleclass is not the name of a 
@@ -49,7 +50,7 @@ class tx_newspaper_SourceBehavior {
 		$article = null;
 		
 		/// $article is set to an object of an appropriate class
-		if (is_a($articleclass, 'tx_newspaper_Article')) {
+		if ($articleclass instanceof tx_newspaper_ArticleIface) {
 			$article = $articleclass;
 			$articleclass = get_class($article);	// to throw meaningful exception
 		} else {
@@ -58,7 +59,7 @@ class tx_newspaper_SourceBehavior {
 		}
 		
 		/// If that didn't work, throw up
-		if (!is_a($article, 'tx_newspaper_Article')) {
+		if (!$articleclass instanceof tx_newspaper_ArticleIface) {
 			throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		

@@ -414,16 +414,33 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$source->readField($article, 'text', new tx_newspaper_SourcePath($path));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 
-		$import_button = '<input type="button" value="Import" onclick="importArticle(\'' . $source_id . '\',\'' . $path .'\')" />';
-		
-		die('<div>' .$article->getAttribute('text') . '</div>' . '<div>' . $import_button . '</div>' . "\n");
+//		$import_button = '<input type="button" value="Import" onclick="importArticle(\'' . $source_id . '\',\'' . $path .'\')" />';
+	
+		$import_info = '<input type="hidden" name="source_id" value="' . $source_id . '" />' .
+					   '<input type="hidden" name="source_path" value="' . $path . '" />';	
+		die('<div>' .$article->getAttribute('text') . '</div>' . '<div>' . $import_info . '</div>' . "\n");
 	}
 
 	function import_article(array $input) {
-		$source_id = $input['source_id'];
-		$path = $input['path'];
+
+		$section = intval(t3lib_div::_GP('section'));
+		$articletype = intval(t3lib_div::_GP('articletype'));
+
+		$source_id = t3lib_div::_GP('source_id');
+		$path = t3lib_div::_GP('source_path');
+		
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		t3lib_div::devlog('import_article', 'newspaper', 0);
+		t3lib_div::devlog('import_article', 'newspaper', 0, 
+			array(
+				'$section' => $section,
+				'$articletype' => $articletype,
+				'$source_id' => $source_id,
+				'$path' => $path,
+			)
+		);
+		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
+		$new_article->setAttribute('articletype_id', $articletype);
+
 	}
 	
 }
