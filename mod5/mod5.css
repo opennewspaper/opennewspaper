@@ -29,7 +29,9 @@ td {ldelim}
 .gray {ldelim}
   color: #909090;
 {rdelim}
-.article_text {ldelim}
+
+#article_text {ldelim}
+  font-size: 8px;
   background-color: white;
 {rdelim} 
 
