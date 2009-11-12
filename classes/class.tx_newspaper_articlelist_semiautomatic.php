@@ -31,9 +31,6 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
-/// The backend module containing AJAX BE for automatic article lists
-require_once(PATH_typo3conf . 'ext/newspaper/mod7/index.php');
-
 /// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
 /** The Articles contained in the list are automatically determined by the
  *  filter attributes. If the user doesn't interact, these Articles are
@@ -185,6 +182,32 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$be_renderer = new tx_newspaper_module7();
 			return $be_renderer->renderPlacement(array());
 		}
+	}
+	
+	/// render the placement editors according to sections selected for article
+	/** in comparison the the displayed ones in the form
+		\param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+		\return ?
+	*/
+	function renderPlacement ($input) {
+		$selection = $input['sections_selected'];
+					
+		// calculate which / how many placers to show
+		$tree = $this->calculatePlacementTreeFromSelection($selection);
+		// grab the data for all the places we need to display
+		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
+					
+		// get ll labels 
+		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
+		$localLang = $localLang[$GLOBALS['LANG']->lang];	
+										
+		// render
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
+		$smarty->assign('tree', $tree);
+		$smarty->assign('lang', $localLang);
+		$smarty->assign('iscod', $this->userIsChiefOfDuty());
+		return $smarty->fetch('mod7_placement.tpl');
 	}
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
