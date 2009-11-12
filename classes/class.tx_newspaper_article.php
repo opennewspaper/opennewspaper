@@ -928,7 +928,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	///	List of attributes that together constitute an Article
 	/** \todo update */
 	private static $attribute_list = array(
-		'title', 'teaser', 'text'
+		'title', 'teaser', 'text', 'author'
 	);
 	
 	/// Mapping of the attributes to the names they have in the tx_newspaper_Source for each supported tx_newspaper_Source type
@@ -948,13 +948,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	    	'title' => 'Titel',
 	    	'teaser' => 'Titel2',
 	    	'text' => 'Text',
-	    	'ressort' => 'OnRes' 
+	    	'ressort' => 'OnRes',
+	    	'author' => 'Autor'
 		),
 		'tx_newspaper_DBSource' => array(
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
-	    	'ressort' => 'ressort' 
+	    	'ressort' => 'ressort', 
+	    	'author' => 'author'
 		)
 	);
 	
