@@ -928,7 +928,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	///	List of attributes that together constitute an Article
 	/** \todo update */
 	private static $attribute_list = array(
-		'title', 'teaser', 'text', 'ressort'
+		'title', 'teaser', 'text'
 	);
 	
 	/// Mapping of the attributes to the names they have in the tx_newspaper_Source for each supported tx_newspaper_Source type
