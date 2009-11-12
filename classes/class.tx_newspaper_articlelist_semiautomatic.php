@@ -179,8 +179,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 		} else {
-			$be_renderer = new tx_newspaper_module7();
-			return $be_renderer->renderPlacement(array());
+			return $this->renderPlacement(array());
 		}
 	}
 	
