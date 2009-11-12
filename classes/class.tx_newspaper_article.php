@@ -311,7 +311,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function getSource() { return $this->source; }
 
-	public function setSource(tx_newspaper_Source $source) {
+	public function setSource(array $source) {
 		$this->source = $source;
 		$this->setAttribute('source_object', serialize($source)); 
 	}

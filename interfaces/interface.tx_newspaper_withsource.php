@@ -23,9 +23,12 @@
 	 */
 	public function getSource();
 	/// Set the tx_newspaper_Source object associated with this object
-	/** \param $source The new tx_newspaper_Source
+	/** \param $source array (
+	 * 			The new tx_newspaper_Source object,
+	 * 			UID of current object in the source
+	 * 		)
 	 */
-	public function setSource(tx_newspaper_Source $source);
+	public function setSource(array $source);
 
 	/// Definition of attributes and their mapping to implementation fields for all supported Sources
 	/** \note For every new tx_newspaper_Source that is defined, if the
