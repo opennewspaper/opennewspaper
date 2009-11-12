@@ -251,6 +251,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					return $tree;
 				}
 	
+				function userIsChiefOfDuty () {
+					// @todo: use later
+					// return tx_newspaper::isChief();
+					return true;
+				}
+	
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		
