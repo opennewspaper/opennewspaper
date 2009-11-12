@@ -406,9 +406,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		die($ret);
 	}
 		
-}
-
-	function load_article($input) {
+	function load_article(array $input) {
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
@@ -417,6 +415,9 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 		die($article->getAttribute('title') . $article->getAttribute('teaser') . $article->getAttribute('text'));
 	}
+
+}
+
 	
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php']);
