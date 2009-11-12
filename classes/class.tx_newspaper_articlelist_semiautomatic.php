@@ -31,6 +31,9 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
+/// The backend module containing AJAX BE for automatic article lists
+require_once(PATH_typo3conf . 'ext/newspaper/mod7/index.php');
+
 /// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
 /** The Articles contained in the list are automatically determined by the
  *  filter attributes. If the user doesn't interact, these Articles are
@@ -172,11 +175,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getAttribute('num_articles'));
 		t3lib_div::devlog('articles', 'newspaper', 0, $articles_sorted);
 
+		if (false) {
  	 	$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
 		$smarty->assign('articles', $articles_sorted);
 
 		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
+		} else {
+			$be_renderer = new tx_newspaper_module7();
+			return $be_renderer->renderPlacement(array());
+		}
 	}
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
