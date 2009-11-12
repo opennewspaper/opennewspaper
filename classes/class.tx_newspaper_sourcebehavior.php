@@ -69,8 +69,7 @@ class tx_newspaper_SourceBehavior {
 		}
 
 		/// And tell the Article the truth: "I'm your father, Luke"
-		$article->setSource($this->parentSource);
-		$article->setUid($uid);
+		$article->setSource(array($this->parentSource, $uid));
 						 
 		return $article;
 	}
