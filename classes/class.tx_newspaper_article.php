@@ -313,7 +313,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	public function setSource(array $source) {
 		$this->source = $source;
-		$this->setAttribute('source_object', serialize($source)); 
+		foreach ($source as $part) {
+			if ($part instanceof tx_newspaper_Source) {
+				$this->setAttribute('source_object', serialize($part)); 
+			} else if ($part instanceof tx_newspaper_SourcePath) {
+				$this->setAttribute('source_id', serialize($part));
+			}
+		} 
 	}
 
 	static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
