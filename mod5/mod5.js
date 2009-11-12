@@ -36,8 +36,24 @@
       document.getElementById('source_browser').innerHTML = response.responseText;
 	{rdelim}
 	
-	function import(source_id, path) {ldelim}
-		alert('import('+source_id+', '+path+')');
+	function setArticlePreview(response)  {ldelim}
+		alert('setArticlePreview(' + response.responseText + ')');
+	{rdelim}
+	 
+	function loadArticle(source_id, path) {ldelim}
+		alert('loadArticle('+source_id+', '+path+')');
+		var params = 'tx_newspaper_mod5[ajaxcontroller]=load_article&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
+
+	    var request = new top.Ajax.Request(
+	      top.path + "typo3conf/ext/newspaper/mod5/index.php",
+		  {ldelim}
+		    method:'get', 
+		    parameters: params,
+			onCreate: processing,
+		    onSuccess: setArticlePreview,
+		    onFailure: failed
+		  {rdelim}
+	    );
 	{rdelim}
 	
 	function changeSource(source_id, path) {ldelim}

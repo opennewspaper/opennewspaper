@@ -54,10 +54,6 @@ unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
 
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['type'] = 'user';
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
-
-
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array (
 	"lower" => "1"
@@ -128,6 +124,8 @@ $TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["maxite
 $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["size"] = "10";
 $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["maxitems"] = "100";
 
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['type'] = 'user';
+$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
 
 // normalized name should be required and uniqueInPid too

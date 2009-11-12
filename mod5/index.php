@@ -107,6 +107,9 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 				case 'browse_path' :
 					die($this->browse_path($input));
 					break;
+				case 'load_article' :
+					die($this->load_article($input));
+					break;
 			}				
 
 			$this->checkIfNewArticle();
@@ -391,7 +394,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= '<option onclick=import(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
+				$ret .= '<option onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
 					$entry->getTitle() . '</option>' . "\n";
 			} else {
 				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
@@ -405,7 +408,16 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 }
 
-
+	function load_article($input) {
+		$source_id = $input['source_id'];
+		$path = $input['path'];
+		$source = tx_newspaper::getRegisteredSource($source_id);
+		$article = new tx_newspaper_Article();
+		$source->readFields($article, array('title', 'teaser', 'text'), $path);
+		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
+		die($article->getAttribute('title') . $article->getAttribute('teaser') . $article->getAttribute('text'));
+	}
+	
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php']);
 }
