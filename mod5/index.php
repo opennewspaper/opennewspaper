@@ -437,6 +437,30 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 				'$new_article' => $new_article,
 			)
 		);
+
+		// add creation date and user
+		$new_article->setAttribute('crdate', time());
+		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+
+		$new_article->store();
+
+		$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+
+		/*	volle URL muss angegeben werden, weil manche browser sonst 
+		 *  'http://' davorhaengen.
+		 */			
+		$url_parts = explode('/typo3', tx_newspaper::currentURL());
+		$base_url = $url_parts[0];
+
+		$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
+				'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+				$new_article->getUid() . ']=edit';
+/*
+			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' .
+			 	   $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+			 	   $new_article->getUid() . ']=edit';
+*/
+		header('Location: ' . $url);				
 		
 	}
 	
