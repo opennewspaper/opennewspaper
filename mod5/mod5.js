@@ -43,7 +43,6 @@
 	{rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
-		alert('setArticlePreview(): ' + response.responseText);
       	document.getElementById('article_text').innerHTML = response.responseText;
 	{rdelim}
 	 
