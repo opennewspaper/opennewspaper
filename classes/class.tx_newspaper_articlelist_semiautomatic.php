@@ -173,11 +173,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		t3lib_div::devlog('articles', 'newspaper', 0, $articles_sorted);
 
 		if (false) {
- 	 	$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
-		$smarty->assign('articles', $articles_sorted);
-
-		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
+	 	 	$smarty = new tx_newspaper_Smarty();
+			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+			$smarty->assign('articles', $articles_sorted);
+	
+			return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 		} else {
 			return $this->renderPlacement(array());
 		}
@@ -193,8 +193,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					
 		// calculate which / how many placers to show
 		$tree = $this->calculatePlacementTreeFromSelection($selection);
+		t3lib_div::devlog('tree 1', 'newspaper', 0, $tree);
 		// grab the data for all the places we need to display
 		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
+		t3lib_div::devlog('tree 2', 'newspaper', 0, $tree);
 					
 		// get ll labels 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
