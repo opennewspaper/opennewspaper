@@ -414,7 +414,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$source->readField($article, 'text', new tx_newspaper_SourcePath($path));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 
-		$import_button = '<button onclick="importArticle(\'' . $source_id . '\',\'' . $path .'\')" value="Import" />';
+		$import_button = '<input type="button" value="Import" onclick="importArticle(\'' . $source_id . '\',\'' . $path .'\')" />';
+		
 		die('<div>' .$article->getAttribute('text') . '</div>' . '<div>' . $import_button . '</div>' . "\n");
 	}
 
