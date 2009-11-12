@@ -632,8 +632,7 @@ $TCA["tx_newspaper_article"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_id",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "none",
 			)
 		),
 		"source_object" => Array (		
