@@ -25,17 +25,21 @@
 	/// "processing spinner" in source_browser div
 	function processing() {ldelim}
 		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
-		document.getElementById('article_text').innerHTML = '';
 	{rdelim}
 
 	/// "processing spinner" in article_text div
-	function processing() {ldelim}
+	function processing_preview() {ldelim}
 		document.getElementById('article_text').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
 	{rdelim}
 
 	/// Error message in source_browser div
 	function failed() {ldelim}
 		document.getElementById('source_browser').innerHTML = '<span color="ff0000">{$LABEL.error_browsing}</span>';
+	{rdelim}
+
+	function clearSourceBrowser() {ldelim}
+      document.getElementById('source_browser').innerHTML = '';
+	  document.getElementById('article_text').innerHTML = '';
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
@@ -47,6 +51,17 @@
 	{rdelim}
 	
 	function importArticle(source_id, path) {ldelim}
+		var params = 'tx_newspaper_mod5[ajaxcontroller]=import_article&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
+	    var request = new top.Ajax.Request(
+	      top.path + "typo3conf/ext/newspaper/mod5/index.php",
+		  {ldelim}
+		    method:'get', 
+		    parameters: params,
+			onCreate: processing,
+		    onSuccess: setArticlePreview,
+		    onFailure: failed
+		  {rdelim}
+	    );
 		alert('importArticle()');
 	{rdelim}
 		
@@ -59,7 +74,7 @@
 		  {ldelim}
 		    method:'get', 
 		    parameters: params,
-			onCreate: processing,
+			onCreate: processing_preview,
 		    onSuccess: setArticlePreview,
 		    onFailure: failed
 		  {rdelim}

@@ -10,7 +10,7 @@
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>
-      <input checked="checked" type="radio" name="type" value="newarticle"> {$LABEL.new_article_typo3}<br />
+      <input checked="checked" type="radio" name="type" onclick="clearSourceBrowser()" value="newarticle"> {$LABEL.new_article_typo3}<br />
       
       {* read registered sources *}
 	  {foreach from=$IMPORT_SOURCE item=source key=key}

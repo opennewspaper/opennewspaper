@@ -106,10 +106,10 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
-					break;
 				case 'load_article' :
 					die($this->load_article($input));
-					break;
+				case 'import_article' :
+					die($this->import_article($input));
 			}				
 
 			$this->checkIfNewArticle();
@@ -329,7 +329,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		if ($type == 'newarticle') {
 			$this->createNewArticle($section, $articletype);
 		} else {
-			$this->importArticle($section, $articletype, $type);
+			$this->import_article($section, $articletype, $type);
 		}
 	
 	}
@@ -419,6 +419,13 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		die('<div>' .$article->getAttribute('text') . '</div>' . '<div>' . $import_button . '</div>' . "\n");
 	}
 
+	function import_article(array $input) {
+		$source_id = $input['source_id'];
+		$path = $input['path'];
+		$source = tx_newspaper::getRegisteredSource($source_id);
+		t3lib_div::devlog('import_article', 'newspaper', 0);
+	}
+	
 }
 
 	
