@@ -640,14 +640,7 @@ $TCA["tx_newspaper_article"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_object",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "file",
-				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
-				"max_size" => 500,	
-				"uploadfolder" => "uploads/tx_newspaper",
-				"size" => 1,	
-				"minitems" => 0,
-				"maxitems" => 1,
+				"type" => "none",
 			)
 		),
 		"extras" => Array (		

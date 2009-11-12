@@ -236,7 +236,7 @@ CREATE TABLE tx_newspaper_article (
 	text text NOT NULL,
 	author tinytext NOT NULL,
 	source_id tinytext NOT NULL,
-	source_object blob NOT NULL,
+	source_object tinytext NOT NULL,
 	extras int(11) DEFAULT '0' NOT NULL,
 	sections int(11) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
