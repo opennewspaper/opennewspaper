@@ -209,6 +209,49 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $smarty->fetch('mod7_placement.tpl');
 	}
 	
+				/// calculate a "minimal" (tree-)list of sections
+				/**
+				 * 
+				 */
+				function calculatePlacementTreeFromSelection ($selection) {
+					$result = array();
+										
+					for ($i = 0; $i < count($selection); ++$i) {
+						$selection[$i] = explode('|', $selection[$i]);
+						$ressort = array();
+						for ($j = 0; $j < count($selection[$i]); ++$j) {
+							$ressort[]['uid'] = $selection[$i][$j];
+							if(!isset($result[$j]) || !in_array($ressort, $result[$j])) {
+								$result[$j][] = $ressort;
+							}
+						}
+					}
+					
+					return $result;
+				}
+
+				/// get article and offset lists for a set of sections
+				/**
+				 * 
+				 */
+				function fillPlacementWithData ($tree, $articleId) {
+					for ($i = 0; $i < count($tree); ++$i) {
+						for ($j = 0; $j < count($tree[$i]); ++$j) {
+							for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
+								// get data (for title display) for each section
+								$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
+								// add article list and list type for last element only to tree structure
+								if (($k+1) == count($tree[$i][$j])) {
+									$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
+									$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId ($tree[$i][$j][$k]['uid'], $articleId);
+								}
+							}
+						}
+					}
+					return $tree;
+				}
+	
+	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		
 		$articles = $this->getArticles($this->getAttribute('num_articles'));
