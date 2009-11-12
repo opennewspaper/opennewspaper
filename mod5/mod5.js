@@ -25,6 +25,7 @@
 	/// "processing spinner" in source_browser div
 	function processing() {ldelim}
 		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
+		document.getElementById('article_text').innerHTML = '';
 	{rdelim}
 
 	/// "processing spinner" in article_text div

@@ -411,9 +411,9 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		$article = new tx_newspaper_Article();
-		$source->readFields($article, array('title', 'teaser', 'text'), new tx_newspaper_SourcePath($path));
+		$source->readField($article, 'text', new tx_newspaper_SourcePath($path));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
-		die($article->getAttribute('title') . $article->getAttribute('teaser') . $article->getAttribute('text'));
+		die($article->getAttribute('text'));
 	}
 
 }
