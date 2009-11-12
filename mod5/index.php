@@ -441,6 +441,14 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 		$new_article->setAttribute('articletype_id', $articletype);
 
+		$source->readArticle($new_article, new tx_newspaper_SourcePath($path));
+		
+		t3lib_div::devlog('import_article', 'newspaper', 0, 
+			array(
+				'$new_article' => $new_article,
+			)
+		);
+		
 	}
 	
 }
