@@ -190,14 +190,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	*/
 	function renderPlacement ($input) {
 		$selection = $input['sections_selected'];
-					
+		
+		$tree = array(array(array(array('articlelist'=> $this))));
+		/*
 		// calculate which / how many placers to show
 		$tree = $this->calculatePlacementTreeFromSelection($selection);
 		t3lib_div::devlog('tree 1', 'newspaper', 0, $tree);
 		// grab the data for all the places we need to display
 		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
 		t3lib_div::devlog('tree 2', 'newspaper', 0, $tree);
-					
+		*/		
 		// get ll labels 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 		$localLang = $localLang[$GLOBALS['LANG']->lang];	
