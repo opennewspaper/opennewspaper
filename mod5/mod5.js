@@ -45,7 +45,11 @@
 	function setArticlePreview(response)  {ldelim}
       	document.getElementById('article_text').innerHTML = response.responseText;
 	{rdelim}
-	 
+	
+	function importArticle(source_id, path) {ldelim}
+		alert('importArticle()');
+	{rdelim}
+		
 	function loadArticle(source_id, path) {ldelim}
 
 		var params = 'tx_newspaper_mod5[ajaxcontroller]=load_article&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
