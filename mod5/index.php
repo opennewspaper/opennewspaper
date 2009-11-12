@@ -329,7 +329,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		if ($type == 'newarticle') {
 			$this->createNewArticle($section, $articletype);
 		} else {
-			$this->import_article($section, $articletype, $type);
+			$this->import_article(array());
 		}
 	
 	}
@@ -367,18 +367,6 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 			 	   $new_article->getUid() . ']=edit';
 */
 		header('Location: ' . $url);				
-	}
-	
-	function importArticle($section, $articletype, $source_id) {
-		$source = tx_newspaper::getRegisteredSource($source_id);
-		
-		$this->browse_path = $source->browse(new tx_newspaper_SourcePath(''));
-		t3lib_div::devlog('/', 'newspaper', 0, $this->browse_path);
-		
-		# $this->moduleContent();
-		#$this->renderBackendSmarty();
-		
-		# die('import new article from source '.$source->getTitle());			
 	}
 	
 	function browse_path(array $input) {
@@ -423,25 +411,26 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 
 	function import_article(array $input) {
 
-		$section = intval(t3lib_div::_GP('section'));
-		$articletype = intval(t3lib_div::_GP('articletype'));
+		$section = new tx_newspaper_Section(intval(t3lib_div::_GP('section')));
+		$articletype = new tx_newspaper_ArticleType(intval(t3lib_div::_GP('articletype')));
 
-		$source_id = t3lib_div::_GP('source_id');
-		$path = t3lib_div::_GP('source_path');
+		$source = tx_newspaper::getRegisteredSource(t3lib_div::_GP('source_id'));
+		$path = new tx_newspaper_SourcePath(t3lib_div::_GP('source_path'));
 		
-		$source = tx_newspaper::getRegisteredSource($source_id);
 		t3lib_div::devlog('import_article', 'newspaper', 0, 
 			array(
 				'$section' => $section,
 				'$articletype' => $articletype,
-				'$source_id' => $source_id,
+				'$source_id' => $source,
 				'$path' => $path,
 			)
 		);
-		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
-		$new_article->setAttribute('articletype_id', $articletype);
+		
+		
+		$new_article = $section->copyDefaultArticle($articletype->getTSConfigSettings('musthave'));
+		$new_article->setAttribute('articletype_id', $articletype->getUid());
 
-		$source->readArticle($new_article, new tx_newspaper_SourcePath($path));
+		$source->readArticle($new_article, $path);
 		
 		t3lib_div::devlog('import_article', 'newspaper', 0, 
 			array(
