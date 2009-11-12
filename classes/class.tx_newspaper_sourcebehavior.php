@@ -59,7 +59,7 @@ class tx_newspaper_SourceBehavior {
 		}
 		
 		/// If that didn't work, throw up
-		if (!$articleclass instanceof tx_newspaper_ArticleIface) {
+		if (!$article instanceof tx_newspaper_ArticleIface) {
 			throw new tx_newspaper_WrongClassException($articleclass);
 		}
 		
