@@ -384,17 +384,18 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		
-		$ret = '<select name="source_path" size="10">' . "<br />\n";
+		$ret = '<select name="source_path" size="20">' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= $entry->getTitle() . "<br />\n";
+				$ret .= '<option onclick=import(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
+					$entry->getTitle() . '</option>' . "\n";
 			} else {
 				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
-					$entry->getTitle() . '</option>' . "<br />\n";
+					$entry->getTitle() . '</option>' . "\n";
 			}  
 		}
 		$ret .= '</select>' . "<br />\n";

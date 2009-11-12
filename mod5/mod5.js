@@ -36,6 +36,10 @@
       document.getElementById('source_browser').innerHTML = response.responseText;
 	{rdelim}
 	
+	function import(source_id, path) {ldelim}
+		alert('import('+source_id+', '+path+')');
+	{rdelim}
+	
 	function changeSource(source_id, path) {ldelim}
 		var params = 'tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
 
