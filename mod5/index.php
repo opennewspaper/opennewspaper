@@ -430,9 +430,15 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$new_article = $section->copyDefaultArticle($articletype->getTSConfigSettings('musthave'));
 		$new_article->setAttribute('articletype_id', $articletype->getUid());
 
+		t3lib_div::devlog('after copyDefaultArticle', 'newspaper', 0, 
+			array(
+				'$new_article' => $new_article,
+			)
+		);
+
 		$source->readArticle($new_article, $path);
 		
-		t3lib_div::devlog('import_article', 'newspaper', 0, 
+		t3lib_div::devlog('after readArticle', 'newspaper', 0, 
 			array(
 				'$new_article' => $new_article,
 			)
@@ -442,7 +448,17 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$new_article->setAttribute('crdate', time());
 		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 
+		t3lib_div::devlog('before store', 'newspaper', 0, 
+			array(
+				'$new_article' => $new_article,
+			)
+		);
 		$new_article->store();
+		t3lib_div::devlog('after store', 'newspaper', 0, 
+			array(
+				'$new_article' => $new_article,
+			)
+		);
 
 		$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
