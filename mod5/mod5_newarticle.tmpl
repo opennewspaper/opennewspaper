@@ -18,9 +18,20 @@
 	  {/foreach}
     </div>
 
-	{* here the source browser is inserted via AJAX *}
-	<div id="source_browser">
-	</div>
+	<table>
+	  <tr>
+	    <td>
+		  {* here the source browser is inserted via AJAX *}
+		  <div id="source_browser">
+		  </div>
+		</td>
+		<td>
+		  {* here the text of the selected article is inserted via AJAX *}
+		  <div id="article_text">
+		  </div>
+		</td>
+	  </tr>
+	</table>
 
 	<div><br />
 	  {$LABEL.section}:<br />

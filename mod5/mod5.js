@@ -27,6 +27,11 @@
 		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
 	{rdelim}
 
+	/// "processing spinner" in article_text div
+	function processing() {ldelim}
+		document.getElementById('article_text').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
+	{rdelim}
+
 	/// Error message in source_browser div
 	function failed() {ldelim}
 		document.getElementById('source_browser').innerHTML = '<span color="ff0000">{$LABEL.error_browsing}</span>';
@@ -37,11 +42,12 @@
 	{rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
-		alert('setArticlePreview(' + response.responseText + ')');
+		alert('setArticlePreview(): ' + response.responseText);
+      	document.getElementById('article_text').innerHTML = response.responseText;
 	{rdelim}
 	 
 	function loadArticle(source_id, path) {ldelim}
-		alert('loadArticle('+source_id+', '+path+')');
+
 		var params = 'tx_newspaper_mod5[ajaxcontroller]=load_article&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
 
 	    var request = new top.Ajax.Request(
