@@ -409,6 +409,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 		$smarty->assign('article', $article);
+		$smarty->assign('source_id', $source_id);
+		$smarty->assign('source_path', $path);
  	
 		die($smarty->fetch('mod5_articlepreview.tmpl'));
 	}
@@ -425,8 +427,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 			array(
 				'$section' => $section,
 				'$articletype' => $articletype,
-				'$source_id' => $source,
-				'$path' => $path,
+				'$source_id' => t3lib_div::_GP('source_id'),
+				'$path' => t3lib_div::_GP('source_path'),
 			)
 		);
 		
