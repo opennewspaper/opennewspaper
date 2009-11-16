@@ -400,7 +400,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		$article = new tx_newspaper_Article();
 		$source->readFields($article, 
-							array('header', 'teaser', 'text'), 
+							array('title', 'teaser', 'text'), 
 							new tx_newspaper_SourcePath($path));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 
