@@ -377,7 +377,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		$ret = '<select name="source_path" size="20">' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
-		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $path . '\')' . '>' . 
+		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
@@ -399,14 +399,19 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		$article = new tx_newspaper_Article();
-		$source->readField($article, 'text', new tx_newspaper_SourcePath($path));
+		$source->readFields($article, 
+							array('header', 'teaser', 'text'), 
+							new tx_newspaper_SourcePath($path));
 		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 
-//		$import_button = '<input type="button" value="Import" onclick="importArticle(\'' . $source_id . '\',\'' . $path .'\')" />';
-	
 		$import_info = '<input type="hidden" name="source_id" value="' . $source_id . '" />' .
-					   '<input type="hidden" name="source_path" value="' . $path . '" />';	
-		die('<div>' .$article->getAttribute('text') . '</div>' . '<div>' . $import_info . '</div>' . "\n");
+					   '<input type="hidden" name="source_path" value="' . $path . '" />';
+		
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty->assign('article', $article);
+ 	
+		die($smarty->fetch('mod5_articlepreview.tmpl'));
 	}
 
 	function import_article(array $input) {
