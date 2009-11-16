@@ -402,7 +402,6 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$source->readFields($article, 
 							array('title', 'teaser', 'text'), 
 							new tx_newspaper_SourcePath($path));
-		t3lib_div::devlog('load_article', 'newspaper', 0, $article);
 
 		$import_info = '<input type="hidden" name="source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="source_path" value="' . $path . '" />';
@@ -435,20 +434,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$new_article = $section->copyDefaultArticle($articletype->getTSConfigSettings('musthave'));
 		$new_article->setAttribute('articletype_id', $articletype->getUid());
 
-		t3lib_div::devlog('after copyDefaultArticle', 'newspaper', 0, 
-			array(
-				'$new_article' => $new_article,
-			)
-		);
-
 		$source->readArticle($new_article, $path);
 		
-		t3lib_div::devlog('after readArticle', 'newspaper', 0, 
-			array(
-				'$new_article' => $new_article,
-			)
-		);
-
 		// add creation date and user
 		$new_article->setAttribute('crdate', time());
 		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
