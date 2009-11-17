@@ -253,9 +253,9 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 		echo tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
 		die();
 	}
-	
-	
-	
+
+
+
 
 	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
