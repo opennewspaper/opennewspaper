@@ -1520,7 +1520,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 $TCA["tx_newspaper_extra_textbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_textbox"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "pool,title,text"
+		"showRecordFieldList" => "pool,title,text,image"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_textbox"]["feInterface"],
 	"columns" => array (
@@ -1548,9 +1548,21 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				"rows" => "5",
 			)
 		),
+		"image" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.image",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra_image",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "pool;;;;1-1-1, title;;;;2-2-2, text;;;richtext[*];3-3-3")
+		"0" => array("showitem" => "pool;;;;1-1-1, title;;;;2-2-2, text;;;richtext[*];3-3-3, image")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

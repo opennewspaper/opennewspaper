@@ -474,6 +474,7 @@ CREATE TABLE tx_newspaper_extra_textbox (
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	text text NOT NULL,
+	image blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
