@@ -811,6 +811,21 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 *  	rearrange the articles
 	 */
 	public function includeConcreteList($PA, $fobj) {
+		global $BACK_PATH;
+		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
+		$tce->backPath = $BACK_PATH;
+		$params = array(
+		        'size' => 2,
+		        'dontShowMoveIcons' => 1,
+		        'autoSizeMax' => 0,
+		        'maxitems' => 2,
+		        'style' => " style='width: 150px;'",
+		        'readOnly' => 0);
+		$tce->printNeededJS['dbFileIcons'] = 1;
+		$out .= $tce->printNeededJSFunctions();
+		
+		$out .= $tce->dbFileIcons('pid','db','pages',$loadDB->itemArray,'',$params);
+		return $out;
 		return "hello, i am a user function. it is very nice to meet you!";
 	}
 	
