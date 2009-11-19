@@ -814,9 +814,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		global $BACK_PATH;
 	
 		t3lib_div::devlog('$PA', 'newspaper', 0, $PA);	
-		$article_list = tx_newspaper_Articlelist_Factory::getInstance()->create($PA['row']['uid']);
-		$table = tx_newspaper::getTable($article_list);
-		$uid = $article_list->getUid();
+		$row = tx_newspaper::selectOneRow('list_table, list_uid', 'tx_newspaper_articlelist', 'uid = ' . intval($PA['row']['uid']));
+		$table = $row['list_table'];
+		$uid = $row['list_uid'];
 		
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
 		$tce->backPath = $BACK_PATH;
