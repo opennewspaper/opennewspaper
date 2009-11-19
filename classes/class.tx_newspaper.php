@@ -759,6 +759,61 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return self::$registered_sources[$key];
 	}
 	
+	/** Also, to sort articles on the list up and down.
+	 * 
+	 *  This function is called by TCEForms with a default-constructed article
+	 *  list object. Therefore it must create its own article list, the UID of
+	 *  which it reads from \p $PA.
+	 * 
+	 *  \param $PA Array: \code array(
+	 *    altName => 
+	 * 	  palette =>
+	 * 	  extra => 
+	 * 	  pal => 
+	 * 	  fieldConf => array (
+	 * 		exclude =>
+	 * 		label => LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles
+	 * 		config => array(
+	 * 		  type => user
+	 * 		  internal_type => db
+	 * 		  allowed => tx_newspaper_article
+	 * 		  size => 10
+	 * 		  minitems => 0
+	 * 		  maxitems => 100
+	 * 		  MM => tx_newspaper_articlelist_semiautomatic_articles_mm
+	 * 		  userFunc => tx_newspaper_articlelist_semiautomatic->displayListedArticles
+	 * 		  form_type => user
+	 * 		)
+	 * 	  )
+	 * 	  fieldTSConfig => 
+	 * 	  itemFormElName => 
+	 *    itemFormElName_file => 
+	 *    itemFormElValue => 
+	 * 	  itemFormElID => 
+	 * 	  onFocus => 
+	 * 	  label => 
+	 * 	  fieldChangeFunc => array(
+	 * 		TBE_EDITOR_fieldChanged => 
+	 * 		alert => 
+	 * 	  )
+	 * 	  table => tx_newspaper_articlelist_semiautomatic
+	 * 	  field => articles
+	 * 	  row => array(
+	 * 		uid =>
+	 * 		... (other attributes of tx_newspaper_articlelist_semiautomatic)
+	 * 	  )
+	 * 	  pObj =>
+	 *  )\endcode
+	 * 
+	 *  \param $fobj reference to the parent object (instance of t3lib_TCEforms)
+	 * 
+	 *  \return List of articles currently on the list, with controls to 
+	 *  	rearrange the articles
+	 */
+	public function includeConcreteList($PA, $fobj) {
+		return "hello, i am a user function. it is very nice to meet you!";
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 
