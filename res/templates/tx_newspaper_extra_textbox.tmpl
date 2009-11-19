@@ -13,9 +13,21 @@
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+
 <h4>{$title}</h4>
+
 <p>
-{$text}
+
+    {if $image}
+        {if $image->getAttributes('kicker')}<h5>{$image->getAttributes('kicker')}</h5>{/if}
+        {if $image->getAttributes('title')}<h4>{$image->getAttributes('title')}</h4>{/if}
+        <img src="{$basepath}/{$sizes.textbox}/{$image->getAttributes('image_file')}" 
+             alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
+        {if $image->getAttributes('caption')}<p>{$image->getAttributes('caption')}</p>{/if}
+    {/if}
+    
+    {$text}
+
 </p>
 
 <!--  end  res/templates/tx_newspaper_extra_textbox.tmpl -->
