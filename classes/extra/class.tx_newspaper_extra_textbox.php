@@ -10,6 +10,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  *  - \p pool
  *  - \p title
  *  - \p text
+ *  - \p image
  */
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
@@ -44,6 +45,11 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
 		$this->smarty->assign('title', $this->getAttribute('title'));
 		$this->smarty->assign('text', $this->getAttribute('text'));
+		if ($this->getAttribute('image')) {
+			$image = new tx_newspaper_Image(intval($this->getAttribute('image')));
+			$smarty->assign('image', $image);
+			$smarty->assign('rendered_image', $image->render());
+		}
 		
 		return $this->smarty->fetch($this);
 	}
