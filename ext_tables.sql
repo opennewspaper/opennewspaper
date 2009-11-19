@@ -512,7 +512,6 @@ CREATE TABLE tx_newspaper_externallinks (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	text tinytext NOT NULL,
 	url tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),

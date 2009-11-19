@@ -125,8 +125,7 @@
 			<label index="tx_newspaper_extra_externallinks.links">Links</label>
 			<label index="tx_newspaper_extra_externallinks.template">Design template</label>
 			<label index="tx_newspaper_externallinks">External Links</label>
-			<label index="tx_newspaper_externallinks.text">Link text</label>
-			<label index="tx_newspaper_externallinks.url">Link URL</label>
+			<label index="tx_newspaper_externallinks.url">Link URL and text</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Display articles</label>
 			<label index="tx_newspaper_extra_displayarticles.todo">To do: find a better solution ;-)</label>
 			<label index="tx_newspaper_articlelist_manual">Article List: Manual</label>
@@ -318,8 +317,7 @@
 			<label index="tx_newspaper_extra_externallinks.links">Links</label>
 			<label index="tx_newspaper_extra_externallinks.template">Designvorlage</label>
 			<label index="tx_newspaper_externallinks">Externe Links</label>
-			<label index="tx_newspaper_externallinks.text">Linktext</label>
-			<label index="tx_newspaper_externallinks.url">Link-URL</label>
+			<label index="tx_newspaper_externallinks.url">Link-URL und -text</label>
 			<label index="tx_newspaper_extra_displayarticles">Extra: Artikelanzeige</label>
 			<label index="tx_newspaper_extra_displayarticles.todo">To do: bessere Lösung finden ;-)</label>
 			<label index="tx_newspaper_articlelist_manual">Artikelliste: Manuell</label>
