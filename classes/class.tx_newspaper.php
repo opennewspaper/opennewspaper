@@ -812,7 +812,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 */
 	public function includeConcreteList($PA, $fobj) {
 		global $BACK_PATH;
-		
+	
+		t3lib_div::devlog('$PA', 'newspaper', 0, $PA);	
 		$article_list = tx_newspaper_Articlelist_Factory::getInstance()->create($PA['row']['uid']);
 		$table = tx_newspaper::getTable($article_list);
 		$uid = $article_list->getUid();
