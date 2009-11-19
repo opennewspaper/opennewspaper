@@ -118,10 +118,9 @@ $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["rang
 
 
 // modify some other values
-/*
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]['type'] = 'user';
 $TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]['userFunc'] = 'tx_newspaper_articlelist->includeConcreteList';
-*/
+
 $TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["size"] = "10";
 $TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["maxitems"] = "100";
 
