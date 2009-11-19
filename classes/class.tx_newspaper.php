@@ -812,6 +812,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 */
 	public function includeConcreteList($PA, $fobj) {
 		global $BACK_PATH;
+		
+		$article_list = tx_newspaper_Articlelist_Factory::getInstance()->create($PA['row']['uid']);
+		$table = tx_newspaper::getTable($article_list);
+		$uid = $article_list->getUid();
+		
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
 		$tce->backPath = $BACK_PATH;
 		$params = array(
@@ -824,7 +829,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$tce->printNeededJS['dbFileIcons'] = 1;
 		$out .= $tce->printNeededJSFunctions();
 		
-		$out .= $tce->dbFileIcons('pid','db','pages',$loadDB->itemArray,'',$params);
+//		$out .= $tce->dbFileIcons('pid','db','pages',$loadDB->itemArray,'',$params);
+		$out .= $tce->getMainFields($table, $uid);
 		return $out;
 		return "hello, i am a user function. it is very nice to meet you!";
 	}
