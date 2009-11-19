@@ -700,6 +700,7 @@ CREATE TABLE tx_newspaper_extra_bio (
 	template_set tinytext NOT NULL,
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	author_name tinytext NOT NULL,
+	is_author tinyint(3) DEFAULT '0' NOT NULL,
 	author_id tinytext NOT NULL,
 	image_file blob NOT NULL,
 	photo_source tinytext NOT NULL,

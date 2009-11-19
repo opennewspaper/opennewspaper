@@ -2128,7 +2128,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 $TCA["tx_newspaper_extra_bio"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_bio"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,template_set,pool,author_name,author_id,image_file,photo_source,bio_text"
+		"showRecordFieldList" => "hidden,template_set,pool,author_name,is_author,author_id,image_file,photo_source,bio_text"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
 	"columns" => array (
@@ -2161,6 +2161,13 @@ $TCA["tx_newspaper_extra_bio"] = array (
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
+			)
+		),
+		"is_author" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.is_author",		
+			"config" => Array (
+				"type" => "check",
 			)
 		),
 		"author_id" => Array (		
@@ -2216,7 +2223,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, author_id, image_file, photo_source, bio_text;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts]")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts]")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

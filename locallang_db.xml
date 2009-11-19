@@ -166,6 +166,7 @@
 			<label index="tx_newspaper_extra_bio.template_set">Template set</label>
 			<label index="tx_newspaper_extra_bio.pool">Pool</label>
 			<label index="tx_newspaper_extra_bio.author_name">Author name</label>
+			<label index="tx_newspaper_extra_bio.is_author">Displayed person has written the article</label>
 			<label index="tx_newspaper_extra_bio.author_id">Author ID</label>
 			<label index="tx_newspaper_extra_bio.image_file">Photo file</label>
 			<label index="tx_newspaper_extra_bio.photo_source">Photo source</label>
@@ -358,6 +359,7 @@
 			<label index="tx_newspaper_extra_bio.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_bio.pool">Pool</label>
 			<label index="tx_newspaper_extra_bio.author_name">Autorenname</label>
+			<label index="tx_newspaper_extra_bio.is_author">Dargestellte Person hat den Artikel geschrieben</label>
 			<label index="tx_newspaper_extra_bio.author_id">Autorenkürzel</label>
 			<label index="tx_newspaper_extra_bio.image_file">Fotodatei</label>
 			<label index="tx_newspaper_extra_bio.photo_source">Bildquelle</label>
