@@ -50,7 +50,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>$incomingFieldArray, 'table'=>$table, 'id'=>$id, 'request'=>$_REQUEST));
 
 // \todo: move to writesLog check ???
 		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
