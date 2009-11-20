@@ -817,7 +817,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 		$out = '';
 		
-		$out .= '<table><tr><td>'
+		$out .= '<table><tr><td>';
 		$out .= '$PA = ' . str_replace(' ', '&nbsp;', str_replace("\n", "</td></tr>\n<tr><td>", print_r($PA, 1)));
 		
 		$row = tx_newspaper::selectOneRow('list_table, list_uid', 'tx_newspaper_articlelist', 'uid = ' . intval($PA['row']['uid']));
@@ -825,7 +825,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$uid = $row['list_uid'];
 
 		$out .= '$row = ' . str_replace(' ', '&nbsp;', str_replace("\n", "</td></tr>\n<tr><td>", print_r($row, 1)));
-		$out .= '</td></tr></table>'
+		$out .= '</td></tr></table>';
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
 		$tce->backPath = $BACK_PATH;
 		$out .= $tce->getMainFields($table, $uid);
