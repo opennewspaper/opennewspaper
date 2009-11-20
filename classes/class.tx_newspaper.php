@@ -818,7 +818,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$out = '';
 		
 		$out .= '<table><tr><td>';
-		$out .= '$PA = ' . str_replace(' ', '&nbsp;', str_replace("\n", "</td></tr>\n<tr><td>", print_r($PA, 1)));
+#		$out .= '$PA = ' . str_replace(' ', '&nbsp;', str_replace("\n", "</td></tr>\n<tr><td>", print_r($PA, 1)));
 		
 		$row = tx_newspaper::selectOneRow('list_table, list_uid', 'tx_newspaper_articlelist', 'uid = ' . intval($PA['row']['uid']));
 		$table = $row['list_table'];
