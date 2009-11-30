@@ -480,7 +480,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_mostcommented.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, hours, num_favorites, display_num, display_time",
+		"fe_admin_fieldList" => "hidden, hours, num_favorites, display_num, display_time, template",
 	)
 );
 

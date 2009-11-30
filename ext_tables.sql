@@ -657,6 +657,7 @@ CREATE TABLE tx_newspaper_extra_mostcommented (
 	num_favorites int(11) DEFAULT '0' NOT NULL,
 	display_num tinyint(3) DEFAULT '0' NOT NULL,
 	display_time tinyint(3) DEFAULT '0' NOT NULL,
+	template tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -157,6 +157,7 @@
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Number of displayed articles</label>
 			<label index="tx_newspaper_extra_mostcommented.display_num">Display number of comments</label>
 			<label index="tx_newspaper_extra_mostcommented.display_time">Display time actually used</label>
+			<label index="tx_newspaper_extra_mostcommented.template">Display template</label>
 			<label index="tx_newspaper_comment_cache">Comment cache</label>
 			<label index="tx_newspaper_comment_cache.article">Article</label>
 			<label index="tx_newspaper_comment_cache.kicker">Kicker</label>
@@ -350,6 +351,7 @@
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Anzahl angezeigter Favoriten</label>
 			<label index="tx_newspaper_extra_mostcommented.display_num">Anzahl der Kommentare anzeigen</label>
 			<label index="tx_newspaper_extra_mostcommented.display_time">Tatsaechlich gerechnete Zeit anzeigen</label>
+			<label index="tx_newspaper_extra_mostcommented.template">Darstellungstemplate</label>
 			<label index="tx_newspaper_comment_cache">Kommentar-cache</label>
 			<label index="tx_newspaper_comment_cache.article">Artikel</label>
 			<label index="tx_newspaper_comment_cache.kicker">Dachzeile</label>

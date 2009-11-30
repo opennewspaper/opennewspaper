@@ -1998,7 +1998,7 @@ $TCA["tx_newspaper_tag"] = array (
 $TCA["tx_newspaper_extra_mostcommented"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_mostcommented"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,hours,num_favorites,display_num,display_time"
+		"showRecordFieldList" => "hidden,hours,num_favorites,display_num,display_time,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_mostcommented"]["feInterface"],
 	"columns" => array (
@@ -2056,9 +2056,17 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				"type" => "check",
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, hours, num_favorites, display_num, display_time")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, hours, num_favorites, display_num, display_time, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
