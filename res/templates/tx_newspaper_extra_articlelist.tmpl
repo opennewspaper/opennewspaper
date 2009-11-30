@@ -25,7 +25,7 @@
 	   we must assign the image object to a temporary variable.
 	   The <img> tag is also more readable that way.
 	*}
-	{assign var=image value=$article->getFirstExtraOf('tx_newspaper_Extra_Image')}
+	{assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
     {assign var=sizes value=$image->getSizes()}
 	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttributes('filename')}"
 {*		 width="{$image->getWidths().micro}" 
