@@ -26,7 +26,8 @@
 	   The <img> tag is also more readable that way.
 	*}
 	{assign var=image value=$article->getFirstExtraOf('tx_newspaper_Extra_Image')}
-	<img src="{$image->getBasepath()}/{$image->getSizes().micro}/{$image->getAttributes('filename')}"
+    {assign var=sizes value=$image->getSizes()}
+	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttributes('filename')}"
 {*		 width="{$image->getWidths().micro}" 
 		 height="{$image->getHeights().micro}" 
 *}		 alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
