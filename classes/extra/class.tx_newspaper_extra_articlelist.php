@@ -65,6 +65,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 			$template = $this;
 		}
 		
+		foreach ($articles as $art) $art->getAttribute('uid');
 		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0, 
 			array(
 				'articles' => $articles
