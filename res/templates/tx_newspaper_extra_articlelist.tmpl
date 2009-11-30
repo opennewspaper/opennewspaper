@@ -27,10 +27,10 @@
 	*}
 	{assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
     {assign var=sizes value=$image->getSizes()}
-	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttributes('filename')}"
+	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttribute('filename')}"
 {*		 width="{$image->getWidths().micro}" 
 		 height="{$image->getHeights().micro}" 
-*}		 alt="{if $image->getAttributes('alttext')}{$image->getAttributes('alttext')}{else}{$image->getAttributes('caption')}{/if}" />
+*}		 alt="{if $image->getAttribute('alttext')}{$image->getAttribute('alttext')}{else}{$image->getAttribute('caption')}{/if}" />
 	</a>
 {/section}
 
