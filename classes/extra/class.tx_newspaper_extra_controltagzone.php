@@ -86,7 +86,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			return $this->getTitle() . '(' . $tag_zone['name'] . ')';
 		} catch (tx_newspaper_DBException $e) { 
 			global $LANG;
-			return $this->getTitle() . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:no_controltag_selected', false);
+			return $this->getTitle() . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_no_controltag_selected', false);
 		}
 		
 	}
