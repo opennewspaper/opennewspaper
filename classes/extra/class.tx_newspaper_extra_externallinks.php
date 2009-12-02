@@ -138,11 +138,13 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 	/// Return and (if needed) read the links displayed in this list
 	private function getLinks() {
 		if (!$this->links) {
-			foreach (explode(',', trim($this->getAttribute('links'))) as $link_uid) {
-				if ($link_uid) {
-					$this->links[] = new tx_newspaper_ExternalLink($link_uid);
+			try {
+				foreach (explode(',', trim($this->getAttribute('links'))) as $link_uid) {
+					if ($link_uid) {
+						$this->links[] = new tx_newspaper_ExternalLink($link_uid);
+					}
 				}
-			}
+			} catch (tx_newspaper_DBException $e) { }
 		}
 		
 		return $this->links;
