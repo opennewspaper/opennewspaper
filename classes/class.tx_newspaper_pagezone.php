@@ -842,7 +842,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s): 
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
-				 *  (2.3.1.3 Beispiel - Änderung Ebene 1, aber Referenzelement wird nicht vererbt)
+				 *  (2.3.1.3 Beispiel - ��nderung Ebene 1, aber Referenzelement wird nicht vererbt)
 				 */
 				$parent = $this->getParentForPlacement();
 				if (!$parent instanceof tx_newspaper_PageZone) {
@@ -958,13 +958,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         		try {
 					//  assembling the query manually here cuz we want to ignore enable fields
 					$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-						'deleted, gui_hidden', 
+						'deleted, gui_hidden, show_extra', 
 						tx_newspaper_Extra_Factory::getExtraTable(),
 						'uid = ' . $uid['uid_foreign']);
 					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			
 			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-					if (!$deleted['deleted'] && !$deleted['gui_hidden']) {
+					if (!$deleted['deleted'] && !$deleted['gui_hidden'] && 
+						!(TYPO3_MODE != 'BE' && !$deleted['show_extra'])) {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
