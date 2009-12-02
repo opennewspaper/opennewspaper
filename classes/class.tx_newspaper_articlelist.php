@@ -348,62 +348,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function setAbstractUid($uid) {
 		$this->abstract_uid = $uid;
 	}
-	
-	/** Also, to sort articles on the list up and down.
-	 * 
-	 *  This function is called by TCEForms with a default-constructed article
-	 *  list object. Therefore it must create its own article list, the UID of
-	 *  which it reads from \p $PA.
-	 * 
-	 *  \param $PA Array: \code array(
-	 *    altName => 
-	 * 	  palette =>
-	 * 	  extra => 
-	 * 	  pal => 
-	 * 	  fieldConf => array (
-	 * 		exclude =>
-	 * 		label => LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles
-	 * 		config => array(
-	 * 		  type => user
-	 * 		  internal_type => db
-	 * 		  allowed => tx_newspaper_article
-	 * 		  size => 10
-	 * 		  minitems => 0
-	 * 		  maxitems => 100
-	 * 		  MM => tx_newspaper_articlelist_semiautomatic_articles_mm
-	 * 		  userFunc => tx_newspaper_articlelist_semiautomatic->displayListedArticles
-	 * 		  form_type => user
-	 * 		)
-	 * 	  )
-	 * 	  fieldTSConfig => 
-	 * 	  itemFormElName => 
-	 *    itemFormElName_file => 
-	 *    itemFormElValue => 
-	 * 	  itemFormElID => 
-	 * 	  onFocus => 
-	 * 	  label => 
-	 * 	  fieldChangeFunc => array(
-	 * 		TBE_EDITOR_fieldChanged => 
-	 * 		alert => 
-	 * 	  )
-	 * 	  table => tx_newspaper_articlelist_semiautomatic
-	 * 	  field => articles
-	 * 	  row => array(
-	 * 		uid =>
-	 * 		... (other attributes of tx_newspaper_articlelist_semiautomatic)
-	 * 	  )
-	 * 	  pObj =>
-	 *  )\endcode
-	 * 
-	 *  \param $fobj reference to the parent object (instance of t3lib_TCEforms)
-	 * 
-	 *  \return List of articles currently on the list, with controls to 
-	 *  	rearrange the articles
-	 */
-	public function includeConcreteList($PA, $fobj) {
-		return "hello, i am a user function. it is very nice to meet you!";
-	}
-	
+		
 	/// Register a type of Article List so the system knows about it
 	/** The registered Article Lists are used so a BE user can select the type
 	 *  of Article List they need.
