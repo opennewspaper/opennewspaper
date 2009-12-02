@@ -78,11 +78,17 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 
 	/// Displays the Tag Zone operating on.
 	public function getDescription() {
-		$tag_zone = tx_newspaper::selectOneRow(
-			'name', self::tag_zone_table, 
-			'uid = ' . $this->getAttribute('tag_zone')
-		);
-		return $this->getTitle() . '(' . $tag_zone['name'] . ')';
+		try {
+			$tag_zone = tx_newspaper::selectOneRow(
+				'name', self::tag_zone_table, 
+				'uid = ' . $this->getAttribute('tag_zone')
+			);
+			return $this->getTitle() . '(' . $tag_zone['name'] . ')';
+		} catch (tx_newspaper_DBException $e) { 
+			global $LANG;
+			return $this->getTitle() . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:no_controltag_selected', false);
+		}
+		
 	}
 
 	public static function getModuleName() {
