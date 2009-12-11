@@ -338,7 +338,9 @@ uids_or_where:
 ' . (is_array($uids_or_where)? var_export($uids_or_where, true) : $uids_or_where); 
 		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);
 		
-		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		if (!is_object($GLOBALS['TYPO3_DB'])) {
+			$GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		}
 		if (self::use_datamap && is_array($uids_or_where)) {
 			$cmdmap = array();
 			foreach ($uids_or_where as $uid) {
@@ -356,7 +358,8 @@ uids_or_where:
 			t3lib_div::loadTCA($table);
 
 			if (is_array($uids_or_where)) {
-				$uids_or_where = 'uid IN (' . implode(', ', $uids_or_where) . ')';
+				if (count($uids_or_where) <= 0) return;
+				$uids_or_where = 'uid IN ( 0, ' . implode(', ', $uids_or_where) . ')';
 			} else if (is_int($uids_or_where)) {
 				$uids_or_where = 'uid = ' . $uids_or_where;
 			}
