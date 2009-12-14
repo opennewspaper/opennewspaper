@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Helge Preuss, Oliver Schr��der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,12 +44,13 @@ class fullWidthDoc extends template {
 /**
  * Module 'Article placement' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schr��der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
 class  tx_newspaper_module7 extends t3lib_SCbase {
 				var $pageinfo;
+				var $prefixId = 'tx_newspaper_mod7';
 
 				/**
 				 * Initializes the Module
@@ -81,38 +82,41 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						ini_set('display_errors',  'on');
 						
 						// get "pi"vars
-						$input = t3lib_div::GParrayMerged('tx_newspaper_mod7');
+						$input = t3lib_div::GParrayMerged($this->prefixId);
 						
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsave' :
 								$this->saveSectionsForArticle($input);
-								die($this->renderPlacement($input));
-								break;
+								die($this->renderPlacement($input, false));
+							break;
 							case 'updatearticlelist' :
 								die(json_encode($this->getArticleListBySectionId($input['section'], $input['placearticleuid'])));
-								break;
+							break;
 							case 'checkarticlelistsforupdates' :
 								die(json_encode($this->checkArticleListsForUpdates($input)));
-								break;
+							break;
 							case 'savesection' :
 								die($this->saveSection($input));
-								break;
+							break;
 							case 'placearticle' :
 								die($this->placeArticle($input));
-								break;
+							break;
 							case 'sendarticletocod' :
 								die($this->sendArticleToChiefOfDuty($input));
-								break;
+							break;
 							case 'sendarticletoeditor' :
 								die($this->sendArticleToEditor($input));
-								break;
+							break;
 							case 'putarticleonline' :
 								die($this->putArticleOnline($input));
-								break;
+							break;
 							case 'putarticleoffline' :
 								die($this->putArticleOffline($input));
-								break;
+							break;
+							case 'justsave' :
+								die(true);
+							break;
 						}
 						
 						// draw the header
@@ -123,17 +127,24 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 38;
 						}
-						// @todo: single mode comes later 				
 						
+						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
 								$output = $this->renderPreview($input['articleid']);
-								break;
+							break;
+							case 'placement' :
+								$output = $this->renderPlacement($input, false);
+							break;
+							case 'singleplacement' :
+								$output = $this->renderSinglePlacement($input['articleid'], $input['sectionid']);
+							break;
 							default :
 								$output = $this->renderModule($input);
-								break;
+							break;
 						}
-
+						$output = $this->be_wrapInBaseClass($output);
+	
 						$this->content .= $this->doc->section('', $output, 0, 1);
 						$this->moduleContent();
 						$this->content .= $this->doc->spacer(10);
@@ -149,6 +160,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->content.=$this->doc->spacer(10);
 					}
 				}
+				
+				
+				function be_wrapInBaseClass ($content) {
+					return '<div class="' . $this->prefixId . '">' . $content . '</div>';
+				}
 
 
 				// render a frontend preview of an article
@@ -163,7 +179,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function renderModule ($input) {
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
-					$sections = $this->getSectionsByArticleId($input['articleid']);	
+					$sections = $this->getSectionsByArticleId($input['articleid']);
+					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user')); 	
 					// get ll labels 
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 					$localLang = $localLang[$GLOBALS['LANG']->lang];					
@@ -174,6 +191,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('input', $input);						
 					$smarty->assign('article', $article);
 					$smarty->assign('sections', $sections);
+					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
 					return $smarty->fetch('mod7_module.tpl');
 				}
@@ -294,7 +312,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					switch ($sectionType) {
 						case 'tx_newspaper_ArticleList_Manual' :
 							$result = $section->getArticleList()->assembleFromUIDs($articleIds);
-							break;
+						break;
 						case 'tx_newspaper_ArticleList_Semiautomatic' :
 							$articleIdsAndOffsets = array ();
 							for ($i = 0; $i < count($articleIds); ++$i) {
@@ -303,10 +321,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 									(isset($offsets[$i])) ? $offsets[$i] : '0'
 								);
 							}
-							$result = $section->getArticleList()->assembleFromUIDs(
-								array ($articleIdsAndOffsets)  
-							);
-							break;
+							$result = $section->getArticleList()->assembleFromUIDs($articleIdsAndOffsets);
+						break;
 					}
 
 					return true;
@@ -370,25 +386,39 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return ?
 				 */
-				function renderPlacement ($input) {
+				function renderPlacement ($input, $singleMode = false) {
 					$selection = $input['sections_selected'];
 					
 					// calculate which / how many placers to show
 					$tree = $this->calculatePlacementTreeFromSelection($selection);
-					// grab the data for all the places we need to display
+					// grab the data for all the placers we need to display
 					$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
+					// grab the article
+					$article = $this->getArticleByArticleId($input['placearticleuid']);
 					
-					// get ll labels 
+					// get locallang labels 
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 					$localLang = $localLang[$GLOBALS['LANG']->lang];	
-										
+									
 					// render
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
 					$smarty->assign('tree', $tree);
+					$smarty->assign('article', $article);
+					$smarty->assign('singlemode', $singleMode);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('iscod', $this->userIsChiefOfDuty());
 					return $smarty->fetch('mod7_placement.tpl');
+				}
+				
+				
+				function renderSinglePlacement ($articleId, $sectionId) {
+					$input = array(
+						'sections_selected' => array($sectionId), 
+						'placearticleuid' => $articleId
+					);
+					
+					return $this->renderPlacement($input ,true);
 				}
 				
 				
@@ -458,7 +488,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					
 					$result = array();
 					$sectionId = $this->extractSectionId($sectionId);
-					if (!$sectionId) $sectionId = 1;	// temporary safeguard so i [helge] can work with this
 					$section = new tx_newspaper_section($sectionId);
 					$listType = get_class($section->getArticleList());
 					$articleList = $section->getArticleList()->getArticles(9999);
@@ -481,7 +510,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 						}
 						if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
-							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
+							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offsetList[$article->getAttribute('uid')] . ')';
 						}
 					}
 					return $result;
@@ -539,6 +568,19 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function getArticleByArticleId ($articleId) {
 					return new tx_newspaper_article($articleId);
+				}
+				
+				
+				function getBackendUserById ($userId) {
+					// intentionally done without enableFields check
+					$result = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+						'*',
+						'be_users',
+						'uid = ' . $userId);
+					if (count($result) == 1) {
+						return $result[0];
+					}
+					return array();
 				}
 
 
