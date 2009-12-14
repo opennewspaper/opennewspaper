@@ -44,6 +44,7 @@
 
 	function updateSourceBrowser(response) {ldelim}
       document.getElementById('source_browser').innerHTML = response.responseText;
+      document.getElementById('article_text').innerHTML = '';
 	{rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
