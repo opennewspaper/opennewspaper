@@ -375,7 +375,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		
-		$ret = '<select name="source_path" size="20">' . "<br />\n";
+		$ret = '<select name="source_path" size="20" style="width:400px">' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
