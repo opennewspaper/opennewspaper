@@ -557,23 +557,40 @@ $.fn.moveOptionsUp = function(toTop, increment) {
 	selectId = this.attr("id");
 	var selectList = document.getElementById(selectId);
 	var selectOptions = selectList.getElementsByTagName("option");
-	for (var i = 1; i < selectOptions.length; i++) {
-		var opt = selectOptions[i];
+	for (var i = 0; i < selectOptions.length; i++) {
+		var opt = selectOptions[i];		
 		if (opt.selected) {
-			selectList.removeChild(opt);
-			if (toTop) {
-				selectList.insertBefore(opt, selectOptions[0]);
+			
+			// handle special case: is first element
+			if (i > 0) {
+				selectList.removeChild(opt);
+				index = (toTop) ? 0 : i - 1;
+				add = (toTop) ? i : 1;
+				selectList.insertBefore(opt, selectOptions[index]);
 			} else {
-				selectList.insertBefore(opt, selectOptions[i - 1]);
-				// incrementing - shouldn't be in here, but well... you know....
-				if (increment && (selectOptions[i - 1].value.indexOf("_") > -1)) {
-					optionValue = selectOptions[i - 1].value.split("_");
-					optionValue[0] = parseInt(optionValue[0]) + 1;
-					optionValue = optionValue.join("_")
-					selectOptions[i - 1].value = optionValue;
+				index = 0;
+				add = 1;
+			}
+			
+			if (increment && (selectOptions[index].value.indexOf("_") > -1)) {
+				optionValue = selectOptions[index].value.split("_");
+				optionValue[0] = parseInt(optionValue[0]) + add;
+				optionValue = optionValue.join("_");
+				selectOptions[index].value = optionValue;
+				
+				//we except only one pair of () in the option label
+				optionText = selectOptions[index].text.split("(");
+				optionText[1] = optionText[1].replace(/\)/g, "");
+				optionText[1] = parseInt(optionText[1]) + add;
+				offset = optionText[1];
+				if (offset > 0) {
+					offset = '+' + offset;
 				}
+				optionText = optionText[0] + "(" + offset + ")";
+				selectOptions[index].text = optionText;
 			}
 		}
+		
 	}
 }
 
@@ -589,24 +606,40 @@ $.fn.moveOptionsDown = function(toBottom, decrement) {
 	selectId = this.attr("id");
 	var selectList = document.getElementById(selectId);
 	var selectOptions = selectList.getElementsByTagName("option");
-	for (var i = selectOptions.length - 2; i >= 0; i--) {
+	for (var i = selectOptions.length - 1; i >= 0; i--) {
 		var opt = selectOptions[i];
 		if (opt.selected) {
-			var nextOpt = selectOptions[i + 1];
-			opt = selectList.removeChild(opt);
-			if (toBottom) {
+			
+			// handle special case: is last element
+			if (i < (selectOptions.length - 1)) {
+				index = (toBottom) ? selectOptions.length - 1 : i + 1;
+				subtract = (toBottom) ? selectOptions.length - i - 1 : 1;
+				nextOpt = selectOptions[index];
+				opt = selectList.removeChild(opt);
 				nextOpt = selectList.replaceChild(opt, nextOpt);
 				selectList.insertBefore(nextOpt, opt);
 			} else {
-				nextOpt = selectList.replaceChild(opt, nextOpt);
-				selectList.insertBefore(nextOpt, opt);
-				// decrementing - shouldn't be in here, but well... you know....
-				if (decrement && (selectOptions[i + 1].value.indexOf("_") > -1)) {
-					optionValue = selectOptions[i + 1].value.split("_");
-					optionValue[0] = parseInt(optionValue[0]) - 1;
-					optionValue = optionValue.join("_")
-					selectOptions[i + 1].value = optionValue;
+				index = (selectOptions.length - 1);
+				subtract = 1;
+			}
+			
+			// decrementing - shouldn't be in here, but well... you know....
+			if (decrement && (selectOptions[index].value.indexOf("_") > -1)) {
+				optionValue = selectOptions[index].value.split("_");
+				optionValue[0] = parseInt(optionValue[0]) - subtract;
+				optionValue = optionValue.join("_");
+				selectOptions[index].value = optionValue;
+				
+				//we except only one pair of () in the option label
+				optionText = selectOptions[index].text.split("(");
+				optionText[1] = optionText[1].replace(/\)/g, "");
+				optionText[1] = parseInt(optionText[1]) - subtract;
+				offset = optionText[1];
+				if (offset > 0) {
+					offset = '+' + offset;
 				}
+				optionText = optionText[0] + "(" + offset + ")";
+				selectOptions[index].text = optionText;
 			}
 		}
 	}

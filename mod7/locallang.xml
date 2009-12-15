@@ -31,6 +31,7 @@
 			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
 			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
 			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
+			<label index="saveall">Alle Artikellisten speichern</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -58,6 +59,7 @@
 			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
 			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
 			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
+			<label index="saveall">Alle Artikellisten speichern</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -118,9 +118,9 @@ function checkForRefresh () {
 			function(data) {
 				$.each(data, function(index, item){
 					if (!item) {
-						$("input.refresh[title=" + index + "]").css("color", "red");
+						$("input.refresh[title=" + index + "]").addClass("unsaved");
 					} else {
-						$("input.refresh[title=" + index + "]").css("color", "black");
+						$("input.refresh[title=" + index + "]").removeClass("unsaved");
 					}
 				});
 				hideProgress();
@@ -138,6 +138,7 @@ function executeFinalAction (action) {
 			if (data) {
 				saveAllSections();
 				closePlacement(true);
+				$("input#saveall").removeClass("unsaved");
 			} else {
 				alert (langActiondidnotwork);
 			}
@@ -147,26 +148,56 @@ function executeFinalAction (action) {
 }
 
 
+function everythingSaved () {
+	var result = true;
+	$("input.save").each(function(index, item) {
+		if ($(item).hasClass("unsaved")) {
+			result = false;
+		}
+	});
+	return result;
+}
+
+
 function connectPlacementEvents () {
 	
+	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, table.articles .movetotop, table.articles .movetobottom").click(function() {
+		$("input.save[title=" +  this.rel + "]").addClass("unsaved");
+		$("input#saveall").addClass("unsaved");
+		return false;
+  	});
+	
+	$(".movetotop").click(function() {
+		$("#" + this.rel).moveOptionsUp(true, true);
+		return false;
+  	});
+	
+	$(".movetobottom").click(function() {
+		$("#" + this.rel).moveOptionsDown(true, true);
+		return false;
+  	});
 	
 	$(".moveup").click(function() {
 		$("#" + this.rel).moveOptionsUp(false, true);
+		return false;
   	});
 	
 	
 	$(".movedown").click(function() {
 		$("#" + this.rel).moveOptionsDown(false, true);
+		return false;
   	});
 	
 	
 	$(".delete").click(function() {
 		$("#" + this.rel).removeOption(/./, true);
+		return false;
   	});
 	
 	
 	$(".insertarticle").click(function() {
 		insertArticle(this.rel);
+		return false;
   	});
 	
 	
@@ -181,13 +212,26 @@ function connectPlacementEvents () {
 				false,
 				hideProgress
 			);	
-		}		
+		}
+		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
+		$("input.save[title=" +  this.title + "]").removeClass("unsaved");
+		if (everythingSaved()) {
+			$("input#saveall").removeClass("unsaved");
+		}
+		return false;
   	});
 	
 	
 	$(".save").click(function() {
 		saveSection(this.title);
+		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
+		$("input.save[title=" +  this.title + "]").removeClass("unsaved");
+		if (everythingSaved()) {
+			$("input#saveall").removeClass("unsaved");
+		}
+		return false;
   	});
+	
 	
 }
 
@@ -196,14 +240,13 @@ $(document).ready(function(){
 	
 	connectPlacementEvents();
 	
-	
-	$("#save").click(function() {
+	$("#savesections").click(function() {
 		
 		elementId = this.title;
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
-			"index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsave", 
+			"index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
 			$("#placementform").serialize(), 
 			function (data) {
 				$("#placement").html(data);
@@ -212,7 +255,7 @@ $(document).ready(function(){
 				hideProgress();
 			}
 		);
-		
+		return false;
   	});
 	
 	var refreshCheck = window.setInterval("checkForRefresh()", 15000);
@@ -220,6 +263,7 @@ $(document).ready(function(){
 
 	$("#checkrefresh").click(function() {
 		checkForRefresh();
+		return false;
 	});
 	
 	
@@ -227,46 +271,60 @@ $(document).ready(function(){
 		$("#" + this.id).copyOptions("#" + this.title, "selected");
 		$("#" + this.id).unselectAllOptions();
 		$("#" + this.title).unselectAllOptions();
+		return false;
   	});
 	
 	
 	$(".cancel").click(function() {
 		cancelPlacement();
+		return false;
 	});
 	
 	
 	$(".sendtocod").click(function() {
 		executeFinalAction("sendarticletocod");
+		return false;
 	});
 	
 	
 	$(".sendtoeditor").click(function () {
 		executeFinalAction("sendarticletoeditor");
+		return false;
 	});
 	
 	
 	$(".place").click(function () {
 		executeFinalAction("placearticle");
+		return false;
 	});
 	
 	
 	$(".putonline").click(function () {
 		executeFinalAction("putarticleonline");
+		return false;
 	});
 	
 	
 	$(".putoffline").click(function () {
 		executeFinalAction("putarticleoffline");
+		return false;
 	});	
 	
 	
+	$(".saveall").click(function () {
+		executeFinalAction("justsave");
+		return false;
+	});
+	
 	$("#filter").keyup(function () {
 		filterAvailableSections();
+		return false;
 	});
 	
 	
 	$("#preview").click(function () {
 		showArticlePreview();
+		return false;
 	});
 	
 });

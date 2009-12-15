@@ -44,7 +44,7 @@ class fullWidthDoc extends template {
 /**
  * Module 'Article placement' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schr��der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Matthias Krappitz <matthias@aemka.de>, Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
@@ -86,7 +86,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
-							case 'showplacementandsave' :
+							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
 								die($this->renderPlacement($input, false));
 							break;
@@ -510,7 +510,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 						}
 						if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
-							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offsetList[$article->getAttribute('uid')] . ')';
+							$offset = $offsetList[$article->getAttribute('uid')];
+							if ($offset > 0) {
+								$offset = '+' . $offset;
+							}
+							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 						}
 					}
 					return $result;
