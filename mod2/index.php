@@ -259,8 +259,8 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 
 		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
 
-
-		$smarty->assign('T3PATH', substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+//\todo: remove '/'/ and create a WORKING function (check if available in t3lib_div)
+		$smarty->assign('T3PATH', '/' . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
 		return $smarty->fetch('mod2.tmpl');
 	}
