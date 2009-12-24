@@ -83,7 +83,7 @@ t3lib_div::devlog('2', 'npmod7', 0);
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('input', 'npmod7', 0, $input);
+t3lib_div::devlog('input', 'npmod7', 0, array($input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -118,7 +118,7 @@ t3lib_div::devlog('input', 'npmod7', 0, $input);
 								die(true);
 							break;
 						}
-						
+t3lib_div::devlog('3', 'npmod7', 0);	
 						// draw the header
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 						$this->doc->backPath = $BACK_PATH;
@@ -127,7 +127,7 @@ t3lib_div::devlog('input', 'npmod7', 0, $input);
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 59;
 						}
-						
+t3lib_div::devlog('input 2', 'npmod7', 0, array($input));						
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
@@ -177,6 +177,7 @@ t3lib_div::devlog('input', 'npmod7', 0, $input);
 				
 				// render the main / full module
 				function renderModule ($input) {
+t3lib_div::devlog('renderModule() start', 'npmod7', 0);	
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
 					$sections = $this->getSectionsByArticleId($input['articleid']);
