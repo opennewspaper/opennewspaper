@@ -222,6 +222,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 		$smarty->assign('TIME_HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/history.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('RECORD_LOCKED_ICON', tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false));
+		$smarty->assign('ARTICLE_PLACEMENT_ICON', tx_newspaper_BE::renderIcon('gfx/list.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_placement', false)));
 
 
 		/// build browse sequence
