@@ -198,7 +198,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 		$smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
 		$smarty->assign('RANGE_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.range', false));
 
-		$smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdoen (for page browser)
+		$smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 		$smarty->assign('STEP_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.step_items_per_page', false));
 		$smarty->assign('START_PAGE', t3lib_div::_GP('start_page'));
 
