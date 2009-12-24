@@ -1,3 +1,4 @@
+{debug}
 {if $singlemode}
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
