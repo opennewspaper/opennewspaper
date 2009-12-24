@@ -125,7 +125,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->content .= $this->doc->startPage($LANG->getLL('title'));
 						
 						if (!isset($input['articleid'])) {
-							$input['articleid'] = 38;
+							$input['articleid'] = 59;
 						}
 						
 						$output = '';
