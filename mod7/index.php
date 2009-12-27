@@ -194,7 +194,7 @@ t3lib_div::devlog('renderModule() start', 'npmod7', 0);
 					$smarty->assign('sections', $sections);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
-					$smarty->assign('singlemode', true);
+//					$smarty->assign('singlemode', true);
 					return $smarty->fetch('mod7_module.tpl');
 				}
 				
