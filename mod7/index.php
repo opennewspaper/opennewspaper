@@ -83,7 +83,7 @@ t3lib_div::devlog('2', 'npmod7', 0);
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('input', 'npmod7', 0, array($input));
+t3lib_div::devlog('input', 'npmod7', 0, $input);
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -127,7 +127,7 @@ t3lib_div::devlog('3', 'npmod7', 0);
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 59;
 						}
-t3lib_div::devlog('input 2', 'npmod7', 0, array($input));						
+t3lib_div::devlog('input 2', 'npmod7', 0, $input);						
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
@@ -194,6 +194,7 @@ t3lib_div::devlog('renderModule() start', 'npmod7', 0);
 					$smarty->assign('sections', $sections);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
+					$smarty->assign('singlemode', true);
 					return $smarty->fetch('mod7_module.tpl');
 				}
 				
