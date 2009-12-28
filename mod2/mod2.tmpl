@@ -179,7 +179,7 @@ td {ldelim}
 {/if}
 		</td>
 		<td> 
-<a href="../mod7/index.php?articleid={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> 
+<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> 
 {$ARTICLE_PREVIEW_ICON} 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
 <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
