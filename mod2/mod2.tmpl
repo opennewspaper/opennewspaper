@@ -41,8 +41,8 @@ td {ldelim}
 	function getComment(article_uid, comment_uid) {ldelim}
 //alert(path + "typo3conf/ext/newspaper/mod2/index.php");
 		var request = new Ajax.Request(
-// 			path + "typo3conf/ext/newspaper/mod2/index.php",
- 			"/taz426/typo3conf/ext/newspaper/mod2/index.php",
+ 			path + "typo3conf/ext/newspaper/mod2/index.php",
+// 			"/taz426/typo3conf/ext/newspaper/mod2/index.php",
  			{ldelim}
 				method: 'get',
 				parameters: "ajax=1&param=" + article_uid + "|" + comment_uid + "&no_cache=" + new Date().getTime(),
@@ -179,8 +179,8 @@ td {ldelim}
 {/if}
 		</td>
 		<td> 
-{$ARTICLE_PREVIEW_ICON} 
 <a href="#"> {$ARTICLE_PLACEMENT_ICON} </a> 
+{$ARTICLE_PREVIEW_ICON} 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
 <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
 		</td>
