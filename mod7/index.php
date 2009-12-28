@@ -75,15 +75,12 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					// The page will show only if there is a valid page and if this page may be viewed by the user
 					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
 					$access = is_array($this->pageinfo) ? 1 : 0;
-t3lib_div::devlog('1', 'npmod7', 0);
 					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
-t3lib_div::devlog('2', 'npmod7', 0);												
 						//@todo: comment out later
 						ini_set('display_errors',  'on');
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('input', 'npmod7', 0, $input);
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -118,7 +115,6 @@ t3lib_div::devlog('input', 'npmod7', 0, $input);
 								die(true);
 							break;
 						}
-t3lib_div::devlog('3', 'npmod7', 0);	
 						// draw the header
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 						$this->doc->backPath = $BACK_PATH;
@@ -127,7 +123,6 @@ t3lib_div::devlog('3', 'npmod7', 0);
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 59;
 						}
-t3lib_div::devlog('input 2', 'npmod7', 0, $input);						
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
@@ -177,7 +172,6 @@ t3lib_div::devlog('input 2', 'npmod7', 0, $input);
 				
 				// render the main / full module
 				function renderModule ($input) {
-t3lib_div::devlog('renderModule() start', 'npmod7', 0);	
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
 					$sections = $this->getSectionsByArticleId($input['articleid']);
