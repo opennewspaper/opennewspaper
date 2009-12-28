@@ -1,95 +1,151 @@
 {* debug *}
-{if $singlemode}
-	<script type="text/javascript" language="javascript">
-	var langSavedidnotwork = "{$lang.savedidnotwork}";
-	var langReallycancel = "{$lang.reallycancel}";
-	var langActiondidnotwork = "{$lang.actiondidnotwork}";
-	var langReallyrefresh = "{$lang.reallyrefresh}";
-	</script>
-	<link rel="stylesheet" type="text/css" href="res/mod7.css" />
-	<script src="res/jquery-1.3.2.min.js" type="text/javascript"></script>
-	<script src="res/jquery.selectboxes.js" type="text/javascript"></script>
-	<script src="res/mod7.js" type="text/javascript"></script>
-	<form action="" method="post" id="placementform">
+<script type="text/javascript" language="javascript">
+var langSavedidnotwork = "{$lang.savedidnotwork}";
+var langReallycancel = "{$lang.reallycancel}";
+var langActiondidnotwork = "{$lang.actiondidnotwork}";
+var langReallyrefresh = "{$lang.reallyrefresh}";
+</script>
+<link rel="stylesheet" type="text/css" href="res/mod7.css" />
+<script src="res/jquery-1.3.2.min.js" type="text/javascript"></script>
+<script src="res/jquery.selectboxes.js" type="text/javascript"></script>
+<script src="res/mod7.js" type="text/javascript"></script>
+
+<h2>
+	{$lang.title} 
+	<img src="res/move-spinner.gif" alt="" id="progress" />
+</h2>
+<div style="padding-top: 5px;" />
+<hr style="margin-top: 5px; margin-bottom: 5px;" />
+<div style="padding-top: 5px;" />
+
+<table border="0" cellspacing="0" cellpadding="0" class="sections" id="articleinfo">
+  <tr>
+    <td align="left">
+		<table width="300" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <th scope="row">{$lang.kicker}:</th>
+		    <td>{$article->getAttribute('kicker')}</td>
+		  </tr>
+		  <tr>
+		    <th scope="row">{$lang.headline}:</th>
+		    <td>{$article->getAttribute('title')}</td>
+		  </tr>
+		  <tr>
+		    <th scope="row">{$lang.author}:</th>
+		    <td>{$article->getAttribute('author')}</td>
+		  </tr>
+		</table>
+	</td>
+    <td>
+		<table width="300" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+		    <th scope="row">{$lang.editedby}:</th>
+		    <td>{$backenduser.username}</td>
+		    <td rowspan="3" valign="top">
+		    	<input type="button" id="preview" value="{$lang.preview}" />
+			</td>
+		  </tr>
+		  <tr>
+		    <th scope="row">{$lang.online}:</th>
+		    <td>{if $article->getAttribute('hidden')}{$lang.no}{else}{$lang.yes}{/if}</td>
+	      </tr>
+		  <tr>
+		    <th scope="row">{$lang.placed}:</th>
+		    <td>{* {if $article->getAttribute('is_placed')}{$lang.yes}{else}{$lang.no}{/if} *}</td>
+	      </tr>
+		</table>
+	</td>
+  </tr>
+</table>
+
+<br />
+
+<form action="" method="post" id="placementform">
 	<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
 	<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
-{/if}
 
-	<table width="" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-		{foreach from=$tree item="level" name="levelloop"}
-			<td valign="top" class="level">
-			{foreach from=$level item="sections" name="sectionsloop"}
-				<div class="level level{$smarty.foreach.levelloop.iteration}">
-					<table border="0" cellspacing="0" cellpadding="0" class="articles">
-						<tr>
-					    	<th scope="col" colspan="3">
-								{foreach from=$sections item="section" name="sectionloop"}
-									{$section.section->getAttribute('section_name')} {if $smarty.foreach.sectionloop.iteration < count($sections)}&gt;{/if}
-								{/foreach}
-							</th>
-					  	</tr>
-						{if isset($section.articlelist) && ($iscod || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic")}
-						<tr>
-						    <td>
-								<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
-									{*
-									{foreach from=$section.articlelist item="article" key="articleKey"}
-										<option value="{$articleKey}" title="" class="">{$article}</option> 
-									{/foreach}
-									*}
-									{html_options options=$section.articlelist}			
-								</select>
-							</td>
-							<td valign="top" width="16">
-								<a href="#" class="movetotop" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/group_totop.gif" />
-								</a>
-								<br />	
-								<a href="#" class="moveup" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/up.gif" />
-								</a> 
-								<br />
-								<a href="#" class="movedown" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/down.gif" />
-								</a>
-								<a href="#" class="movetobottom" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/group_tobottom.gif" />
-								</a>
-								<br />
-								{if $section.listtype != "tx_newspaper_ArticleList_Semiautomatic"}
-									<br />
-									<a href="#" class="insertarticle" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-										<img src="/typo3/sysext/t3skin/icons/gfx/button_left.gif" width="14" height="14" />
-									</a>
-									<br />
-									<a href="#" class="delete" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-										<img src="/typo3/sysext/t3skin/icons/gfx/group_clear.gif" />
-									</a>
-								{/if}
-							</td>
-						</tr>
-						{else}
-						<tr>
-							<td>
-								<i class="noaccess">Keine Berechtigung für Sammelresorts.</i>
-							</td>
-						</tr>
-						{/if}
-					</table>
-					{if $iscod || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic"}
-						<div align="right">
-							<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
-							<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
-						</div>
-					{/if}
-				</div>
-			{/foreach}
-			</td> 
-		{/foreach}
-		</tr>
+	<table border="0" cellspacing="0" cellpadding="0" class="sections">
+	  <tr>
+	    <th scope="col" colspan="3">{$lang.section}</th>
+	  </tr>
+	  <tr>
+	    <td>
+			<select name="tx_newspaper_mod7[sections_selected][]" id="sections_selected" multiple="multiple" size="9" class="multiple-select ressort-select">
+			</select>
+		</td>
+		<td valign="top" width="16">
+			<a href="#" class="movetotop" rel="sections_selected">
+				<img src="/typo3/sysext/t3skin/icons/gfx/group_totop.gif" />
+			</a>
+			<br />				
+			<a href="#" class="moveup" rel="sections_selected">
+				<img src="/typo3/sysext/t3skin/icons/gfx/up.gif" />
+			</a> 
+			<br />
+			<a href="#" class="movedown" rel="sections_selected">
+				<img src="/typo3/sysext/t3skin/icons/gfx/down.gif" />
+			</a>
+			<br />
+			<a href="#" class="movetobottom" rel="sections_selected">
+				<img src="/typo3/sysext/t3skin/icons/gfx/group_tobottom.gif" />
+			</a>
+			<br />
+			<a href="#" class="delete" rel="sections_selected">
+				<img src="/typo3/sysext/t3skin/icons/gfx/group_clear.gif" />
+			</a>
+		</td>
+		<td>
+			<label for="filter">{$lang.filtersections}:</label>
+			<input type="text" name="tx_newspaper_mod7[filter]" id="filter" value="" />
+			<br />
+			<select name="tx_newspaper_mod7[sections_available][]" title="sections_selected" id="sections_available" multiple="multiple" size="7" class="multiple-select ressort-select addresort">
+				{html_options options=$sections}
+			</select>
+		</td>
+	  </tr>
 	</table>
+	
+	<div align="right" style="width: 674px;">
+		<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
+		<input type="button" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
+	</div>
 
-{if $singlemode}
-	</form>
+<br />
+
+<div id="buttons">
+	{if $article->getAttribute('workflow_status') == 0}
+		{if $input.showworkflowbuttons}
+			<input type="button" value="{$lang.tocod}" class="sendtocod" />
+		{else}
+			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+		{/if}
+		{if $article->getAttribute('hidden')}
+			<input type="button" value="{$lang.putonline}" class="putonline" />
+		{else}
+			<input type="button" value="{$lang.putoffline}" class="putoffline" />
+		{/if}
+		<input type="button" value="{$lang.cancel}" class="cancel" />
+	{/if}
+	{if $article->getAttribute('workflow_status') == 1}
+		<input type="button" value="{$lang.place}" class="place" />
+		{if $input.showworkflowbuttons}
+			<input type="button" value="{$lang.backtoeditor}" class="sendtoeditor" />
+		{else}
+			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+		{/if}
+		{if $article->getAttribute('hidden')}
+			<input type="button" value="{$lang.putonline}" class="putonline" />
+		{else}
+			<input type="button" value="{$lang.putoffline}" class="putoffline" />
+		{/if}
+		<input type="button" value="{$lang.cancel}" class="cancel" />
+	{/if}
+</div>
+
+<br />
+
+{if $article->getAttribute('workflow_status') == 1}
+	<div id="placement"></div>
 {/if}
+
+</form>
