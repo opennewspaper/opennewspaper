@@ -185,7 +185,7 @@ td {ldelim}
 <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
 		</td>
 		<td align="center">
-{if ($DATA[i].starttime > 0 || $DATA[i].enddtime > 0)}
+{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
 	{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
 		{$TIME_HIDDEN_ICON}
 	{else}
