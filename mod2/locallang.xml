@@ -36,6 +36,7 @@
 			
 			<label index="label.hide">Hide article</label>
 			<label index="label.unhide">Unhide article</label>
+			<label index="label.article_placement">Article placement</label>
 			<label index="label.preview_article">Preview article</label>
 			<label index="label.edit_article">Edit article</label>
 			<label index="label.time">This article uses start time and/ or end time</label>
