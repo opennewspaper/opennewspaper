@@ -120,9 +120,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->doc->backPath = $BACK_PATH;
 						$this->content .= $this->doc->startPage($LANG->getLL('title'));
 						
-						if (!isset($input['articleid'])) {
-							$input['articleid'] = 59;
-						}
+//						if (!isset($input['articleid'])) {
+//							$input['articleid'] = 59;
+//						}
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
