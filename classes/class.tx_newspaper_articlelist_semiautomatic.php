@@ -426,7 +426,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 		the code to subtract another ArticleList too.
 	 *  \todo Figure out how to preview hidden articles
 	 */
-	private function getRawArticleUIDs($number, $start = 0) {
+	public function getRawArticleUIDs($number, $start = 0) {
 
 		$table = $this->getAttribute('filter_sql_table');
 		if (!$table) $table = 'tx_newspaper_article';
