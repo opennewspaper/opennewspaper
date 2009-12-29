@@ -206,7 +206,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				
 				// save all the selected sections for an article
 				function saveSectionsForArticle ($input) {
-t3lib_div::devlog(saveSectionsForArticle(), 'np mod7', 0, array('input' => $input));
+t3lib_div::devlog('saveSectionsForArticle()', 'np mod7', 0, array('input' => $input));
 					$sectionIds = array();
 					// we take all the sections out of the strings like 10|11|12, 10|14|17, ...
 					if (is_array($input['sections_selected'])) {
