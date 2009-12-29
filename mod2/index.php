@@ -188,12 +188,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/'));
 
-t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
+//\todo t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
 //dummy data
 for ($i=0; $i < sizeof($row); $i++) {
 	$row[$i]['comment'] = 'oliver (2008-03-21 17:37): Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars. Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.';
 }
-t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
+//\todo t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 
 
 		$smarty->assign('PAGE_PREV_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_prev', false));
@@ -353,7 +353,7 @@ t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 			default:
 				// nothing to do
 		}
-t3lib_div::devlog('moderation: moderation field still missing', 'newspaper', 0);
+//\todo t3lib_div::devlog('moderation: moderation field still missing', 'newspaper', 0);
 		
 		
 		if (t3lib_div::_GP('author') != '')
