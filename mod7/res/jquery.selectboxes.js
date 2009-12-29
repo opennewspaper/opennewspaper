@@ -572,13 +572,14 @@ $.fn.moveOptionsUp = function(toTop, increment) {
 				add = 1;
 			}
 			
+			// incrementing - shouldn't be in here, but well... you know....
 			if (increment && (selectOptions[index].value.indexOf("_") > -1)) {
 				optionValue = selectOptions[index].value.split("_");
 				optionValue[0] = parseInt(optionValue[0]) + add;
 				optionValue = optionValue.join("_");
 				selectOptions[index].value = optionValue;
 				
-				//we except only one pair of () in the option label
+				// we except only one pair of round brackets in the option label
 				optionText = selectOptions[index].text.split("(");
 				optionText[1] = optionText[1].replace(/\)/g, "");
 				optionText[1] = parseInt(optionText[1]) + add;
@@ -630,7 +631,7 @@ $.fn.moveOptionsDown = function(toBottom, decrement) {
 				optionValue = optionValue.join("_");
 				selectOptions[index].value = optionValue;
 				
-				//we except only one pair of () in the option label
+				// we except only one pair of round brackets in the option label
 				optionText = selectOptions[index].text.split("(");
 				optionText[1] = optionText[1].replace(/\)/g, "");
 				optionText[1] = parseInt(optionText[1]) - subtract;
