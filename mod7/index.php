@@ -212,10 +212,14 @@ t3lib_div::devlog('saveSectionsForArticle()', 'np mod7', 0, array('input' => $in
 					if (is_array($input['sections_selected'])) {
 						foreach ($input['sections_selected'] as $sectionCombination) {
 							$sectionCombination = explode('|', $sectionCombination);
-							foreach ($sectionCombination as $section) {
-								if (!in_array($section, $sectionIds)) {
-									$sectionIds[] = $section;
-								}
+//							foreach ($sectionCombination as $section) {
+//								if (!in_array($section, $sectionIds)) {
+//									$sectionIds[] = $section;
+//								}
+//							}
+							$sectionUid = $sectionCombination[sizeof($sectionCombination)-1];
+							if (!in_array($sectionUid, $sectionIds)) {
+								$sectionIds[] = $sectionUid; // append last section uid, ignore the sectiuon tree above
 							}
 						}
 						$article = new tx_newspaper_article($input['placearticleuid']);
