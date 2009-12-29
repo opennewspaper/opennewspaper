@@ -1,3 +1,6 @@
+var refreshCheck;
+
+
 function showProgress () {
 	$("#progress").css("display", "inline");
 }
@@ -164,6 +167,7 @@ function connectPlacementEvents () {
 	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, table.articles .movetotop, table.articles .movetobottom").click(function() {
 		$("input.save[title=" +  this.rel + "]").addClass("unsaved");
 		$("input#saveall").addClass("unsaved");
+		startCheckCountdown();
 		return false;
   	});
 	
@@ -236,6 +240,12 @@ function connectPlacementEvents () {
 }
 
 
+function startCheckCountdown () {
+	window.clearInterval(refreshCheck);
+	refreshCheck = window.setInterval("checkForRefresh()", 15000);
+}
+
+
 $(document).ready(function(){
 	
 	connectPlacementEvents();
@@ -258,8 +268,7 @@ $(document).ready(function(){
 		return false;
   	});
 	
-	var refreshCheck = window.setInterval("checkForRefresh()", 15000);
-	// window.clearInterval(refreshCheck);
+	startCheckCountdown();
 
 	$("#checkrefresh").click(function() {
 		checkForRefresh();
