@@ -120,9 +120,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->doc->backPath = $BACK_PATH;
 						$this->content .= $this->doc->startPage($LANG->getLL('title'));
 						
-//						if (!isset($input['articleid'])) {
-//							$input['articleid'] = 59;
-//						}
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
@@ -174,7 +171,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function renderModule ($input) {
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
-					$sections = $this->getSectionsByArticleId($input['articleid']);
+					$sections = $this->getSectionsByArticleId($article);
 					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user')); 	
 					// get ll labels 
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
@@ -188,7 +185,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('sections', $sections);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
-//					$smarty->assign('singlemode', true);
 					return $smarty->fetch('mod7_module.tpl');
 				}
 				
@@ -520,17 +516,15 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				/// grab all sections that a article can be placed in
 				/** semiautomatic lists get their article uid prepended with the article offset
 				 * 
-				 * 	\param $articleId UID of the tx_newspaper_Article
+				 * 	\param $article tx_newspaper_Article object
 				 *  \return \code array (
 				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
 				 * 		...,
 				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
 				 *  )
 				 */
-				 function getSectionsByArticleId ($articleId) {
+				 function getSectionsByArticleId(tx_newspaper_Article $article) {
 					$result = array();
-					
-					$article = new tx_newspaper_article($articleId);
 					$sections = tx_newspaper_section::getAllSections();
 					foreach ($sections as $section) {
 						$sectionPathes =  $section->getSectionPath();
