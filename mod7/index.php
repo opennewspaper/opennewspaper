@@ -81,6 +81,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
+t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
