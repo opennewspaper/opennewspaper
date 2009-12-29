@@ -219,7 +219,7 @@ t3lib_div::devlog('saveSectionsForArticle()', 'np mod7', 0, array('input' => $in
 							}
 						}
 						$article = new tx_newspaper_article($input['placearticleuid']);
-t3lib_div::devlog(saveSectionsForArticle(), 'np mod7', 0, array('sectionIds' => $sectionIds));
+t3lib_div::devlog('saveSectionsForArticle()', 'np mod7', 0, array('sectionIds' => $sectionIds));
 						return $article->setSections($sectionIds);
 					}
 				}
