@@ -149,8 +149,8 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 <br />
 
-{* if $article->getAttribute('workflow_status') == 1 *}
+{if $article->getAttribute('workflow_status') == 1}
 	<div id="placement"></div>
-{* /if *}
+{/if}
 
 </form>
