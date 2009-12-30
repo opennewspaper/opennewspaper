@@ -651,7 +651,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 /// \todo: just collect here and store sections later in article::store()
 		
 		// get pos of next element 
-		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getuid()) + 1;
+		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getUid()) + 1;
 		
 		tx_newspaper::insertRows(
 			'tx_newspaper_article_sections_mm',
