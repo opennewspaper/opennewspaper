@@ -75,6 +75,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 	  <tr>
 	    <td>
 			<select name="tx_newspaper_mod7[sections_selected][]" id="sections_selected" multiple="multiple" size="9" class="multiple-select ressort-select">
+				{html_options options=$sections_active}
 			</select>
 		</td>
 		<td valign="top" width="16">

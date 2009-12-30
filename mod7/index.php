@@ -172,7 +172,8 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				function renderModule ($input) {
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
-					$sections = $this->getSectionsByArticleId($article);
+					$sections = $this->renderAllAvailableSections();
+					$sections_active = $this->renderSectionsForArticle($article);
 					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user')); 	
 					// get ll labels 
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
@@ -184,6 +185,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					$smarty->assign('input', $input);						
 					$smarty->assign('article', $article);
 					$smarty->assign('sections', $sections);
+					$smarty->assign('sections_active', $sections_active);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
 					return $smarty->fetch('mod7_module.tpl');
@@ -213,7 +215,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 							$sectionCombination = explode('|', $sectionCombination);
 							$sectionUid = $sectionCombination[sizeof($sectionCombination)-1];
 							if (!in_array($sectionUid, $sectionIds)) {
-								$sectionIds[] = $sectionUid; // append last section uid, ignore the sectiuon tree above
+								$sectionIds[] = $sectionUid; // append last section uid, ignore the section tree above
 							}
 						}
 						$article = new tx_newspaper_article($input['placearticleuid']);
@@ -513,19 +515,42 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				}
 				
 				
-				/// grab all sections that a article can be placed in
-				/** semiautomatic lists get their article uid prepended with the article offset
-				 * 
-				 * 	\param $article tx_newspaper_Article object
+				/// get all available sections 
+				/** Get all sections an article can be assigned to 
 				 *  \return \code array (
 				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
 				 * 		...,
 				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
 				 *  )
 				 */
-				 function getSectionsByArticleId(tx_newspaper_Article $article) {
+				function renderAllAvailableSections() {
+					return $this->prepareSectionOptions(tx_newspaper_section::getAllSections());
+				}
+				
+				/// get all sections assigned to given article 
+				/** Get a list of all sections the article is assigned to
+				 * \param $article object containing an article 
+				 *  \return \code array (
+				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
+				 * 		...,
+				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
+				 *  )
+				 */
+				function renderSectionsForArticle(tx_newspaper_Article $article) {
+				 	return $this->prepareSectionOptions($article->getSections());
+				}
+				 
+				/// render html code to be added to a select box 
+				/** Render HTML code to be added to the select boxed in the Smarty template
+				 * \param $sections array containg section objects 
+				 * \return \code array (
+				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
+				 * 		...,
+				 * 		"root_section_uid_N|...|current_section_uid_N" => "Root Section N > ... > Current Section N"
+				 *  )
+				 */
+				private function prepareSectionOptions(array $sections) {
 					$result = array();
-					$sections = tx_newspaper_section::getAllSections();
 					foreach ($sections as $section) {
 						$sectionPathes =  $section->getSectionPath();
 						$uids = array();
@@ -538,10 +563,10 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						$titles = implode(' > ', array_reverse($titles));
 						$result[$uids] = $titles;
 					}
-					
 					return $result;
-				}
-				
+				 }
+
+
 				
 				/// extract the section uid out of the select elements mames that are
 				/** like "placer_10_11_12" where we need the "12" out of it
