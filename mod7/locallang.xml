@@ -14,6 +14,7 @@
 			<label index="online">Online</label>
 			<label index="placed">Platziert</label>
 			<label index="section">Ressort</label>
+			<label index="article_uid">Artikel-Id</label>
 			<label index="filtersections">Ressorts filtern</label>
 			<label index="save">Speichern</label>
 			<label index="checkforupdates">Aktualisierungen überprüfen</label>

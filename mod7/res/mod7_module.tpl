@@ -39,6 +39,10 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
     <td>
 		<table width="300" border="0" cellspacing="0" cellpadding="0">
 		  <tr>
+		    <th scope="row">{$lang.article_uid}:</th>
+		    <td>{$article->getUid()}</td>
+		  </tr>
+		  <tr>
 		    <th scope="row">{$lang.editedby}:</th>
 		    <td>{$backenduser.username}</td>
 		    <td rowspan="3" valign="top">
