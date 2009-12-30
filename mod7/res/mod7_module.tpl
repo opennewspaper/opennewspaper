@@ -20,7 +20,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 <table border="0" cellspacing="0" cellpadding="0" class="sections" id="articleinfo">
   <tr>
-    <td align="left">
+    <td style="vertical-align:top;">
 		<table width="300" border="0" cellspacing="0" cellpadding="0">
 		  <tr>
 		    <th scope="row">{$lang.kicker}:</th>
@@ -36,7 +36,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 		  </tr>
 		</table>
 	</td>
-    <td>
+    <td style="vertical-align:top;">
 		<table width="300" border="0" cellspacing="0" cellpadding="0">
 		  <tr>
 		    <th scope="row">{$lang.article_uid}:</th>
