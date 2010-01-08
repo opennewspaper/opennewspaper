@@ -46,7 +46,7 @@ function insertArticle (elementId) {
 function saveAllSections () {
 	$("select.placement-select").each(function(index, item) {
 		saveIt = false;
-		$("input[rel='" + item.id + "']").each(function(index, item) {
+		$("input[title='" + item.id + "']").each(function(index, item) {
 			alert ("found: " + item);
 			if ($(item).hasClass("unsaved")) {
 				saveIt = true;		
