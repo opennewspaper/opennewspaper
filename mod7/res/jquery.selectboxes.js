@@ -547,6 +547,11 @@ $.fn.unselectAllOptions = function() {
 }
 
 
+/**
+ * 
+ * @param {Object} toTop		boolean		move selected option to to
+ * @param {Object} increment	boolean		incremend offset as well
+ */
 $.fn.moveOptionsUp = function(toTop, increment) {
 	if (toTop == undefined) {
 		toTop = false;
