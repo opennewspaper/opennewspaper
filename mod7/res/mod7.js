@@ -181,6 +181,7 @@ function connectPlacementEvents () {
 		return false;
   	});
 	
+	$(".moveup").unbind("click");
 	$(".moveup").click(function() {
 		$("#" + this.rel).moveOptionsUp(false, true);
 		return false;
