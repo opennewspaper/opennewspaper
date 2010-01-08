@@ -45,7 +45,9 @@ function insertArticle (elementId) {
 //could be optimised by doing it all in a single request
 function saveAllSections () {
 	$("select.placement-select").each(function(index, item){
-		saveSection (item.id, false);
+		if (("input[rel=\"" + item.id + "\"].save").hasClass("unsaved")) {
+			saveSection(item.id, false);
+		}
 	});
 }
 
