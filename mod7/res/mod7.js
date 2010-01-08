@@ -85,16 +85,9 @@ function cancelPlacement () {
 }
 
 
-// remove article list (@todo: check if depreacted???)
 function closePlacement (noConfirmation) {
-	if (noConfirmation == undefined) {
-		noConfirmation = false;
-	}
-	
-	if (noConfirmation || confirm(langReallycancel)) {	
-		$("#placement").html("");
-		$("#sections_selected, #sections_available").unselectAllOptions(); 
-	}
+	// @todo: check if closePlacement differs from cancelPlacement. if not: re-factor
+	cancelPlacement();
 }
 
 
@@ -145,7 +138,7 @@ function executeFinalAction (action) {
 		function (data) {
 			if (data) {
 				saveAllSections();
-//				closePlacement(true); // this would hide the article lists
+				closePlacement(true); // this would hide the article lists
 				$("input#saveall").removeClass("unsaved");
 			} else {
 				alert (langActiondidnotwork);
