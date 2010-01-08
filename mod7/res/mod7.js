@@ -80,6 +80,12 @@ function collectSections () {
 }
 
 
+function cancelPlacement () {
+	history.back();
+}
+
+
+// remove article list (@todo: check if depreacted???)
 function closePlacement (noConfirmation) {
 	if (noConfirmation == undefined) {
 		noConfirmation = false;
@@ -139,7 +145,7 @@ function executeFinalAction (action) {
 		function (data) {
 			if (data) {
 				saveAllSections();
-				closePlacement(true);
+//				closePlacement(true); // this would hide the article lists
 				$("input#saveall").removeClass("unsaved");
 			} else {
 				alert (langActiondidnotwork);
