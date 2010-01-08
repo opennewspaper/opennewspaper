@@ -273,13 +273,8 @@ function startCheckCountdown () {
 }
 
 
-$(document).ready(function(){
-	
-	connectSectionEvents();
-	
-	$("#savesections").click(function() {
-		
-		elementId = this.title;
+function saveSections() {
+		elementId = $("#savesections").attr("title");
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
@@ -292,8 +287,19 @@ $(document).ready(function(){
 				hideProgress();
 			}
 		);
-		return false;
+		return false;	
+}
+
+
+
+$(document).ready(function(){
+	
+	connectSectionEvents();
+	
+	$("#savesections").click(function() {
+		saveSections();
   	});
+	saveSections();
 	
 	startCheckCountdown();
 
