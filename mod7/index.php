@@ -470,6 +470,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						}
 					}
 					
+					print_r($result);
 					return $result;
 				}
 				
