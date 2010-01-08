@@ -524,6 +524,7 @@ $.fn.selectedOptions = function()
 };
 
 
+// \todo: extend lib to extract changes to lib
 // added by Matthias
 
 
