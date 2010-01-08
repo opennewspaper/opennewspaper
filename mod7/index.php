@@ -458,7 +458,8 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				 */
 				function calculatePlacementTreeFromSelection ($selection) {
 					$result = array();
-										
+					
+					//@todo: re-arrange sorting here to achieve different positioning in frontend					
 					for ($i = 0; $i < count($selection); ++$i) {
 						$selection[$i] = explode('|', $selection[$i]);
 						$ressort = array();
@@ -470,7 +471,6 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						}
 					}
 					
-					print_r($result);
 					return $result;
 				}
 				
