@@ -162,6 +162,35 @@ function everythingSaved () {
 }
 
 
+function connectSectionEvents(){
+
+	$("table.sections .movetotop").click(function() {
+		$("#" + this.rel).moveOptionsUp(true, true);
+		return false;
+  	});
+	
+	$("table.sections .movetobottom").click(function() {
+		$("#" + this.rel).moveOptionsDown(true, true);
+		return false;
+  	});
+	
+	$("table.sections .moveup").click(function() {
+		$("#" + this.rel).moveOptionsUp(false, true);
+		return false;
+  	});
+	
+	$("table.sections .movedown").click(function() {
+		$("#" + this.rel).moveOptionsDown(false, true);
+		return false;
+  	});
+	
+	$("table.sections .delete").click(function() {
+		$("#" + this.rel).removeOption(/./, true);
+		return false;
+  	});
+
+}
+
 function connectPlacementEvents () {
 	
 	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, table.articles .movetotop, table.articles .movetobottom").click(function() {
@@ -171,30 +200,27 @@ function connectPlacementEvents () {
 		return false;
   	});
 	
-	$(".movetotop").click(function() {
+	$("table.articles .movetotop").click(function() {
 		$("#" + this.rel).moveOptionsUp(true, true);
 		return false;
   	});
 	
-	$(".movetobottom").click(function() {
+	$("table.articles .movetobottom").click(function() {
 		$("#" + this.rel).moveOptionsDown(true, true);
 		return false;
   	});
 	
-	$(".moveup").unbind("click");
-	$(".moveup").click(function() {
+	$("table.articles .moveup").click(function() {
 		$("#" + this.rel).moveOptionsUp(false, true);
 		return false;
   	});
 	
-	
-	$(".movedown").click(function() {
+	$("table.articles .movedown").click(function() {
 		$("#" + this.rel).moveOptionsDown(false, true);
 		return false;
   	});
 	
-	
-	$(".delete").click(function() {
+	$("table.articles .delete").click(function() {
 		$("#" + this.rel).removeOption(/./, true);
 		return false;
   	});
@@ -249,7 +275,7 @@ function startCheckCountdown () {
 
 $(document).ready(function(){
 	
-	connectPlacementEvents();
+	connectSectionEvents();
 	
 	$("#savesections").click(function() {
 		
