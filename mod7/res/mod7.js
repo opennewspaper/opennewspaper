@@ -87,8 +87,8 @@ function closePlacement (noConfirmation) {
 	
 	if (noConfirmation || confirm(langReallycancel)) {	
 		$("#placement").html("");
-		$("#sections_selected").removeOption(/./);
-		$("#sections_available").unselectAllOptions();
+//		$("#sections_selected").removeOption(/./);
+//		$("#sections_available").unselectAllOptions();
 	}
 }
 
