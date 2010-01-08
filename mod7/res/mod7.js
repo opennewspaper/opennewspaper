@@ -47,7 +47,6 @@ function saveAllSections () {
 	$("select.placement-select").each(function(index, item) {
 		saveIt = false;
 		$("input[title='" + item.id + "']").each(function(index, item) {
-			alert ("found: " + item);
 			if ($(item).hasClass("unsaved")) {
 				saveIt = true;		
 			}	
@@ -148,6 +147,7 @@ function executeFinalAction (action) {
 			if (data) {
 				saveAllSections();
 				closePlacement(true); // this would hide the article lists
+				$("input.save").removeClass("unsaved");
 				$("input#saveall").removeClass("unsaved");
 			} else {
 				alert (langActiondidnotwork);
