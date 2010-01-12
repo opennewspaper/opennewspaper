@@ -127,8 +127,15 @@ class tx_newspaper_BE {
 	}	
 	
 	
-	
-	
+	/// itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
+	function addTemplateSetDropdownEntries(&$params, &$pObj) {
+		$this->readTemplateSetItems($params);
+	}
+
+	/// get available templates and store in &$param
+	/**
+	 * If template named default is found, it is moved to first position in the dropdown
+	 */
 	private function readTemplateSetItems(&$params) {
 		global $LANG; 
 		
@@ -145,19 +152,12 @@ class tx_newspaper_BE {
 				$default_found = true;
 			}
 		}
-		
+
 		if (!$default_found) {
 			unset($params['items'][1]); // remove entry 'default' (because there's no templateset "default" available)
 		}
 	}
-	
 
-	/// itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
-	function addTemplateSetDropdownEntries(&$params, &$pObj) {
-		$this->readTemplateSetItems($params);
-	}
-	
-	
 	/// create html code for a template set dropdown (including AJAX call in onchange event)
 	/// assumes that js function storeTemplateSet() is available
 	public static function createTemplateSetDropdown($table, $uid, $default_value='') {
@@ -172,6 +172,28 @@ class tx_newspaper_BE {
 		$html .= '</select>';
 		return $html;
 	}
+	
+	
+	/// itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
+	function addInheritancePageDropdownEntries(&$params, &$pObj) {
+		$this->readInheritancePageItems($params);
+	}
+
+	private function readInheritancePageItems(&$params) {
+		global $LANG; 
+		
+		$pages = array('dummy', 'test', 'aha');
+
+		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
+		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
+		for ($i = 0; $i < sizeof($pages); $i++) {
+			$params['items'][] = array($pages[$i], $pages[$i]);				
+		}
+
+	}
+
+
+
 
 
 
