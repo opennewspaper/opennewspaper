@@ -433,6 +433,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		$where = $this->getAttribute('filter_sql_where');
 		if (!$where) $where = '1';
+		if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
 		$where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
 		
 		if ($this->getAttribute('filter_sections')) {
@@ -558,6 +559,21 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 		ksort($new_articles);
 		return $new_articles;
+	}
+	
+	///	Replace a substring denoted as a variable with the corresponding GET parameter
+	/** For example, all occurrences of \c $art are replaced with 
+	 *  \c $)GET['art']. If \c $)GET['art'] is not set, the variable is
+	 *  unchanged.
+	 * 
+	 *  \param $string The string to be expanded.
+	 *  \return The expanded string.
+	 */
+	private static function expandGETParameter($string) {
+		$matches = array();
+		if (!preg_match_all('/$(.*)\w/', $string, $matches)) return $string;
+		t3lib_div::devlog('preg stuff', 'newspaper', 0, array($string, $matches));
+		return $string;
 	}
 	
 	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
