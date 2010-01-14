@@ -193,6 +193,19 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $that;
 	}
 
+	/// Pass variables that are used in rendering from outside the Extra
+	/** The situation can occur that an Extra must render values about which it
+	 *  does not know - e.g. its position in a container. The entity which calls
+	 *  \c render() on \c $this must call \c assignSmartyVar() before calling
+	 *  \c render().
+	 * 
+	 *  \param $variables Array (variable name => value)
+	 */
+	public function assignSmartyVar(array $variables) {
+		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
+		foreach ($variables as $key => $value) $this->smarty->assign($key, $value);
+	}
+	
 	/// Prepare for rendering. Should be called in every reimplementation of render().
 	/** This function initializes the tx_newspaper_Smarty object and sets the
 	 *  correct template search path. It also ensures that all attributes to the
