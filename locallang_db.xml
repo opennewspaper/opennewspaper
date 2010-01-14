@@ -195,6 +195,8 @@
 			<label index="tx_newspaper_extra_searchresults.tags">Preset tags</label>
 			<label index="tx_newspaper_extra_container">Extra: Container for Extras</label>
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
+			<label index="tx_newspaper_tag_type">Tag type</label>
+			<label index="tx_newspaper_tag_type.name">Name</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -389,6 +391,8 @@
 			<label index="tx_newspaper_extra_searchresults.tags">Voreingestellte Tags</label>
 			<label index="tx_newspaper_extra_container">Extra: Extra-Container</label>
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
+			<label index="tx_newspaper_tag_type">Tagtyp</label>
+			<label index="tx_newspaper_tag_type.name">Name</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

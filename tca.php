@@ -1980,8 +1980,12 @@ $TCA["tx_newspaper_tag"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag_type",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 	),
@@ -2625,6 +2629,32 @@ $TCA["tx_newspaper_extra_container"] = array (
 	),
 	"types" => array (
 		"0" => array("showitem" => "hidden;;1;;1-1-1, extras")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
+
+
+
+$TCA["tx_newspaper_tag_type"] = array (
+	"ctrl" => $TCA["tx_newspaper_tag_type"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "name"
+	),
+	"feInterface" => $TCA["tx_newspaper_tag_type"]["feInterface"],
+	"columns" => array (
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.name",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "name;;;;1-1-1")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
