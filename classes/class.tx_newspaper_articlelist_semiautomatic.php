@@ -433,6 +433,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		$where = $this->getAttribute('filter_sql_where');
 		if (!$where) $where = '1';
+		t
 		if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
 		$where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
 		
@@ -571,8 +572,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	private static function expandGETParameter($string) {
 		$matches = array();
-		if (!preg_match_all('/$(.*)\w/', $string, $matches)) return $string;
-		t3lib_div::devlog('preg stuff', 'newspaper', 0, array($string, $matches));
+		t3lib_div::devlog('preg stuff', 'newspaper', 0, $string);
+		if (!preg_match_all('/\$(.*)\w/', $string, $matches)) return $string;
+		t3lib_div::devlog('preg stuff', 'newspaper', 0, $matches);
 		return $string;
 	}
 	
