@@ -454,7 +454,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					  '   ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local';
 
 			$where .= ' AND tx_newspaper_article_sections_mm.uid_foreign IN (' . 
-							implode(', ', $sections) .')';
+							implode(', ', $sections) . ')';
 		}
 		
 		if ($this->getAttribute('filter_tags_include')) {
@@ -463,7 +463,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
 
 			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign IN (' . 
-							$this->getAttribute('filter_tags_include') .')';
+							$this->getAttribute('filter_tags_include') . ')';
 		}
 		
 		if ($this->getAttribute('filter_tags_exclude')) {
@@ -472,7 +472,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
 
 			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign NOT IN (' . 
-							$this->getAttribute('filter_tags_exclude') .')';
+							$this->getAttribute('filter_tags_exclude') . ')';
 		}
 
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
@@ -575,6 +575,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		t3lib_div::devlog('preg stuff', 'newspaper', 0, $string);
 		if (!preg_match_all('/\$(.*)\w/', $string, $matches)) return $string;
 		t3lib_div::devlog('preg stuff', 'newspaper', 0, $matches);
+		foreach ($matches[0] as $match) {
+			$var = substr($match, 1);	//  lose the '$'
+			if ($_GET[$var]) $string = str_replace($match, $_GET[$var], $string); 
+		}
 		return $string;
 	}
 	
