@@ -17,20 +17,22 @@
 
 {section name=i loop=$articles}
 	<a href="{$articles[i]->getLink()}">
-	<h2>{$articles[i]->getAttribute('kicker')}</h2>
-	<h1>{$articles[i]->getAttribute('title')}</h1>
+  	  <h2>{$articles[i]->getAttribute('kicker')}</h2>
+	  <h1>{$articles[i]->getAttribute('title')}</h1>
 
-	{* Because smarty (and PHP) cannot cope with a construct such as 
-		$article->getFirstExtraOf('tx_newspaper_Extra_Image')->getBasepath()
-	   we must assign the image object to a temporary variable.
-	   The <img> tag is also more readable that way.
-	*}
-	{assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
-    {assign var=sizes value=$image->getSizes()}
-	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttribute('image_file')}"
-{*		 width="{$image->getWidths().micro}" 
-		 height="{$image->getHeights().micro}" 
-*}		 alt="{if $image->getAttribute('alttext')}{$image->getAttribute('alttext')}{else}{$image->getAttribute('caption')}{/if}" />
+	  {* Because smarty (and PHP) cannot cope with a construct such as 
+		 $article->getFirstExtraOf('tx_newspaper_Extra_Image')->getBasepath()
+	     we must assign the image object to a temporary variable.
+	     The <img> tag is also more readable that way.
+	  *}
+	  {assign var=image value=$articles[i]->getFirstExtraOf('tx_newspaper_Extra_Image')}
+	  {if $image}
+        {assign var=sizes value=$image->getSizes()}
+    	<img src="{$image->getBasepath()}/{$sizes.micro}/{$image->getAttribute('image_file')}"
+{*		     width="{$image->getWidths().micro}" 
+    		 height="{$image->getHeights().micro}" 
+*}		     alt="{if $image->getAttribute('alttext')}{$image->getAttribute('alttext')}{else}{$image->getAttribute('caption')}{/if}" />
+      {/if}
 	</a>
 {/section}
 
