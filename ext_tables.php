@@ -636,6 +636,9 @@ $TCA["tx_newspaper_extra_container"] = array (
 	)
 );
 
+
+t3lib_extMgm::allowTableOnStandardPages('tx_newspaper_tag_type');
+
 $TCA["tx_newspaper_tag_type"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type',		
