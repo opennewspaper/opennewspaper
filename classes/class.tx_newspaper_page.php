@@ -110,16 +110,20 @@ class tx_newspaper_Page
  	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
  	public function __toString() {
- 		$this->getAttribute('uid');
- 		$ret = $this->getTable() . ':' . " \n" .
- 			   'UID: ' . $this->getUid() . " \n" .
-				($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
- 			   'condition: ' . $this->condition . " \n" .
- 			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
- 			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
- 			   (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
- 			   		('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
-					'');
+ 		try {
+	 		$this->getAttribute('uid');
+	 		$ret = $this->getTable() . ':' . " \n" .
+	 			   'UID: ' . $this->getUid() . " \n" .
+					($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
+	 			   'condition: ' . $this->condition . " \n" .
+	 			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
+	 			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
+	 			   (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
+	 			   		('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
+						'');
+ 		} catch (Exception $e) {
+ 			$ret = 'Page ' . $this->getUid() . ': __toString() threw an exception: ' . $e;
+ 		} 
 		return $ret;
  	}
  	
