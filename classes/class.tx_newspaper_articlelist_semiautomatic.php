@@ -579,6 +579,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$var = substr($match, 1);	//  lose the '$'
 			if ($_GET[$var]) $string = str_replace($match, $_GET[$var], $string); 
 		}
+		t3lib_div::devlog('preg stuff', 'newspaper', 0, $string);
 		return $string;
 	}
 	
