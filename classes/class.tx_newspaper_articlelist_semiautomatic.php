@@ -486,7 +486,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			intval($start) . ', ' . intval($number)
 		);
 
-#t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, tx_newspaper::$query);
+t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array(tx_newspaper::$query, $results));
 
 		$uids = array();
 		foreach ($results as $result) {
@@ -572,14 +572,15 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	private static function expandGETParameter($string) {
 		$matches = array();
-		t3lib_div::devlog('preg stuff', 'newspaper', 0, $string);
+		
 		if (!preg_match_all('/\$(.*)\w/', $string, $matches)) return $string;
-		t3lib_div::devlog('preg stuff', 'newspaper', 0, $matches);
+		
+		//	full matches are in $matches[0], partial ones in $matches[1] and so on
 		foreach ($matches[0] as $match) {
 			$var = substr($match, 1);	//  lose the '$'
 			if ($_GET[$var]) $string = str_replace($match, $_GET[$var], $string); 
 		}
-		t3lib_div::devlog('preg stuff', 'newspaper', 0, $string);
+
 		return $string;
 	}
 	
