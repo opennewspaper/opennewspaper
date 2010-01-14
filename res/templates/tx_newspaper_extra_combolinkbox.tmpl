@@ -1,5 +1,5 @@
 
-<!-- start res/templates/tx_newspaper_extra_bio.tmpl -->
+<!-- start res/templates/tx_newspaper_extra_combolinkbox.tmpl -->
 
 {* Article
    Variables:
@@ -17,7 +17,7 @@
 {if $related_articles}
 	<div id="related_articles">
 		<ul>
-			{foreach from=$related_articles item=$article}
+			{foreach from=$related_articles item=article}
 				<li>
 					<a href="{$article->getLink()}"
 						>{$article->getAttribute('kicker')} {$article->getAttribute('header')}</a>
@@ -30,7 +30,7 @@
 {if $manually_selected_articles}
 	<div id="manually_selected_articles">
 		<ul>
-			{foreach from=$manually_selected_articles item=$article}
+			{foreach from=$manually_selected_articles item=article}
 				<li>
 					<a href="{$article->getLink()}"
 						>{$article->getAttribute('kicker')} {$article->getAttribute('header')}</a>
@@ -43,7 +43,7 @@
 {if $internal_links}
 	<div id="internal_links">
 		<ul>
-			{foreach from=$internal_links item=$link}
+			{foreach from=$internal_links item=link}
 				<li>
 					<a href="{$link->getURL()}" 
 						{if $link->getTarget()}
@@ -59,7 +59,7 @@
 {if $external_links}
 	<div id="external_links">
 		<ul>
-			{foreach from=$external_links item=$link}
+			{foreach from=$external_links item=link}
 				<li>
 					<a href="{$link->getURL()}" 
 						{if $link->getTarget()}
@@ -72,4 +72,4 @@
 	</div>
 {/if}
 
-<!--  end  res/templates/tx_newspaper_extra_bio.tmpl -->
+<!--  end  res/templates/tx_newspaper_extra_combolinkbox.tmpl -->
