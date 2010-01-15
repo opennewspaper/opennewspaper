@@ -477,15 +477,19 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 		
-		$results = tx_newspaper::selectRows(
-			'DISTINCT tx_newspaper_article.uid', 
-			$table,
-			$where,
-			'',
-			$this->getAttribute('filter_sql_order_by'),
-			intval($start) . ', ' . intval($number)
-		);
-
+		try {
+			$results = tx_newspaper::selectRows(
+				'DISTINCT tx_newspaper_article.uid', 
+				$table,
+				$where,
+				'',
+				$this->getAttribute('filter_sql_order_by'),
+				intval($start) . ', ' . intval($number)
+			);
+		} catch (tx_newspaper_DBException $e) {
+			//  This guards agains article lists which use GET varaiables, 
+			//	which are not set in the BE	
+		}
 t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array(tx_newspaper::$query, $results));
 
 		$uids = array();
