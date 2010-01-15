@@ -60,7 +60,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
 		
-		t3lib_div::devlog('tx_newspaper_Extra_ControlTagZone::render()', 'newspaper', 0, array($control_tags, $extras));
 		if (!$extras) return;
 		
 		$rendered_extras = array();
@@ -164,6 +163,13 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $extra;
 	}
 	
+	/// Returns the link to the dossier page for the referenced tag
+	/** \param $tag $uid of the tag for which the dossier is assembled
+	 *  \return Link to the Typo3 page containing the dossier
+	 *  \throw tx_newspaper_IllegalUsageException if no dossier page is defined
+	 *   	in TSConfig
+	 *  \todo make GET parameter 'dossier' configurable
+	 */
 	private function getDossierLink($tag) {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
