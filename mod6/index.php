@@ -105,9 +105,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		global $LANG;
 		$this->MOD_MENU = Array (
 			'function' => Array (
-				'1' => $LANG->getLL('function1'),
-				'2' => $LANG->getLL('function2'),
-				'3' => $LANG->getLL('function3'),
+				'1' => $LANG->getLL('manage_dossiers'),
+				'2' => $LANG->getLL('manage_tag_zones'),
 			)
 		);
 		parent::menuConfig();
