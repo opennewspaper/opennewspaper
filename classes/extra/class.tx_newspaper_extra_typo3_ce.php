@@ -41,7 +41,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 
 		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
-			
+			t3lib_div::devlog('render()', 'newspaper', 0, $ce_uid);
 			$ret .= "\n" . '<!-- ' . 
 				print_r( tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid"), 1) .
 				' -->' . "\n";
