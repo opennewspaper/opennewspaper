@@ -40,3 +40,8 @@ CREATE TABLE `tx_newspaper_extra_textbox` (
 CREATE TABLE `tx_newspaper_extra_bio` (
   FULLTEXT KEY `title` (`author_name`, `bio_text`)
 );
+
+# Index on pagetype.get_var to speed up lookup of page types
+CREATE TABLE `tx_newspaper_pagetype` (
+  INDEX `get_var` ( `get_var` ( 8 ) )
+); 
