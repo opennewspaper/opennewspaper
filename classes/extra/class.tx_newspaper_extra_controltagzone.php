@@ -64,8 +64,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		if (!$extras) return;
 		
 		$rendered_extras = array();
-		foreach ($extras as $extra) {
-			$extra->assignSmartyVar(array('dossier_link' => $this->getDossierLink()));
+		foreach ($extras as $tag => $extra) {
+			$extra->assignSmartyVar(array('dossier_link' => $this->getDossierLink($tag)));
 			$rendered_extras[] = $extra->render();
 		}
 				
@@ -145,7 +145,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 
 			if ($extras_data) {
 				foreach ($extras_data as $extra_data) {
-					$extra[] = new $extra_data['extra_table']($extra_data['extra_uid']);
+					$extra[$control_tag] = new $extra_data['extra_table']($extra_data['extra_uid']);
 				}
 				break;
 			}
@@ -164,7 +164,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $extra;
 	}
 	
-	private function getDossierLink() {
+	private function getDossierLink($tag) {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
 		if (!$dossier_page) {
@@ -173,7 +173,11 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			);
 		}
 		
-		$url = tx_newspaper::typolink_url(array('id' => $dossier_page));
+		$url = tx_newspaper::typolink_url(
+			array(
+				'id' => $dossier_page,
+				'dossier' => $tag
+			));
 		return $url;
 	}
 	
