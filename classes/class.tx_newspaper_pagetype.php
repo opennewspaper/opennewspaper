@@ -57,11 +57,16 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	 *  \note If we need to change the mapping of GET-parameters to page types, 
 	 *  do it here!
 	 *
-	 *	If $_GET['art'] is set, it is the article page
-	 *
-	 *	Else if $_GET['page'] is set, it is the page corresponding to that type
-	 *
-	 *	Else it is the section overview page
+	 *  - If $_GET['pagetype'] is set, it is the page corresponding to that type
+	 *    - The parameter 'pagetype' is in fact configurable via 
+	 *      tx_newspaper::GET_pagetype().
+	 *  - If any other GET variable configured in the table tx_newspaper_pagetype
+	 *    is set, the PageType corresponding to that is instantiated.
+	 *  - If $_GET['art'] is set, it is the article page. $_GET['art'] is 
+	 *    checked last, so it does not override any other page type which might
+	 *    display a specific article.
+	 *  - If no GET variable configured to define a page type is set, it is the
+	 *    section overview page.
 	 */
  	function __construct($get = array()) {
  		if (is_int($get)) {
@@ -81,7 +86,12 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  				'get_var != \'\''
  			);
  			
- 			t3lib_div::devlog('types', 'np', 0, $possible_types);
+ 			foreach ($possible_types as $type) {
+ 				if ($get[$type['get_var']]) {
+ 					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
+ 					return;
+ 				}
+ 			}
  			if ($get[tx_newspaper::GET_article()]) {
  				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
 			} else {
