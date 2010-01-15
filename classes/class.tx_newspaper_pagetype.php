@@ -78,6 +78,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
  		} else {
+			t3lib_div::devlog('GET', 'gna', 0, $get);
  			//  try all page types other than the article page first 
  			$possible_types = tx_newspaper::selectRows(
  				'DISTINCT get_var', tx_newspaper::getTable($this),
@@ -88,13 +89,19 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  			t3lib_div::devlog('gna', 'gna', 0, $possible_types);
  			foreach ($possible_types as $type) {
 	 			t3lib_div::devlog('checking...', 'gna', 0, $type);
- 				
+				$get_var = $type['get_var'];
+
+ 				// transform $get[skpc[sc]] to $get[skpc][sC]
+				if (strpos($get_var, ']') !== false) { 				
+					$parts = explode('[', $get_var);
+		 			t3lib_div::devlog('parts', 'gna', 0, $parts);
+				}
+				
  				if ($get[$type['get_var']]) {
 		 			t3lib_div::devlog('found', 'gna', 0, $type['get_var']);
  					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
  					return;
  				}
- 				t3lib_div::devlog('GET', 'gna', 0, $get);
  			}
  			if ($get[tx_newspaper::GET_article()]) {
  				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
