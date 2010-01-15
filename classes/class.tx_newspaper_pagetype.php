@@ -94,7 +94,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  				// transform $get[skpc[sc]] to $get[skpc][sC]
 				if (strpos($get_var, ']') !== false) { 				
 					$parts = explode('[', $get_var);
-					foreach($parts as $key => $part) rtrim($parts[$key], ']');
+					foreach($parts as $key => $part) $parts[$key] = rtrim($part, ']');
 		 			t3lib_div::devlog('parts', 'gna', 0, $parts);
 				}
 				
