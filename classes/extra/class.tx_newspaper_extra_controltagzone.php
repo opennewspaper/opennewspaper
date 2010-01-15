@@ -165,7 +165,16 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	}
 	
 	private function getDossierLink() {
-		return 'dossierlink';
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
+		if (!$dossier_page) {
+			throw new tx_newspaper_IllegalUsageException(
+				'No dossier page defined. Please set newspaper.dossier_page_id in TSConfig!'
+			);
+		}
+		
+		$url = tx_newspaper::typolink_url(array('id' => $dossier_page));
+		return $url;
 	}
 	
 }
