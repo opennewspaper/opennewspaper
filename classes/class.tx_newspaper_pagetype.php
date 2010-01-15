@@ -87,7 +87,10 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  			);
  			t3lib_div::devlog('gna', 'gna', 0, $possible_types);
  			foreach ($possible_types as $type) {
+	 			t3lib_div::devlog('checking...', 'gna', 0, $type);
+ 				
  				if ($get[$type['get_var']]) {
+		 			t3lib_div::devlog('found', 'gna', 0, $type['get_var']);
  					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
  					return;
  				}
