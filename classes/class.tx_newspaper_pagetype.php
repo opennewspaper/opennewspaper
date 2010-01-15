@@ -97,7 +97,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 					foreach($parts as $key => $part) $parts[$key] = rtrim($part, ']');
 					
 		 			t3lib_div::devlog('parts', 'gna', 0, $parts);
-		 			$get_var = implode('][', $parts);
+		 			$get_var = array($parts[0] => $parts[1]);
 				}
 				
  				if ($get[$get_var]) {
