@@ -33,9 +33,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	const tag_table = 'tx_newspaper_tag';
 	///	SQL table associating tx_newspaper_Tag s with tx_newspaper_Article s 
 	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
-
-	///	\p tag_type field's value for Control Tags
-	const control_tag_type = 'control';
 		
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -119,7 +116,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 					' JOIN ' . self::article_tag_mm_table . 
 					' ON ' . self::tag_table . '.uid = ' . self::article_tag_mm_table . '.uid_foreign',
 				self::article_tag_mm_table . '.uid_local = ' . $article->getUid() .
-				' AND ' . self::tag_table . '.tag_type = \'' . self::control_tag_type .'\''
+				' AND ' . self::tag_table . '.tag_type = \'' . tx_newspaper::getControlTagType .'\''
 			);
 
 			foreach ($tags as $tag) $tag_uids[] = $tag['uid']; 

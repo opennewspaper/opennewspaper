@@ -834,6 +834,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$out .= $tce->getMainFields($table, $row);
 		return $out;
 	}
+
+	/// Value for field \c tag_type of table \c tx_newspaper_tag denoting dossier tags	
+	public function getControlTagType() {
+		return 2;
+	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	

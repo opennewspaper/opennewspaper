@@ -278,7 +278,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	static private function getAvailableTags() {
 		return tx_newspaper::selectRows(
 			'uid, tag', self::tag_table,
-			'tag_type = ' . self::getControlTagType() 
+			'tag_type = ' . tx_newspaper::getControlTagType() 
 		);
 	}
 
@@ -294,10 +294,6 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		return $extra_types;
 	}
 	
-	/// Value for field \c tag_type of table \c tx_newspaper_tag denoting dossier tags
-	static private function getControlTagType() {
-		return 2;
-	}
 }
 
 
