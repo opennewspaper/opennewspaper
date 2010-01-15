@@ -228,12 +228,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 			$this->smarty->assign('data', $data);
 							
-			$this->content .= $this->doc->section(
-				'Message #1:', 
-				$this->smarty->fetch('mod6.tmpl'),
-				0, 1
-			);
 		}
+		$this->content .= $this->doc->section(
+			'Message #1:', 
+			$this->smarty->fetch('mod6.tmpl'),
+			0, 1
+		);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
