@@ -65,6 +65,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		
 		$rendered_extras = array();
 		foreach ($extras as $extra) {
+			$extra->assignSmartyVar(array('dossier_link' => $this->getDossierLink()));
 			$rendered_extras[] = $extra->render();
 		}
 				
@@ -161,6 +162,10 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			}
 		}
 		return $extra;
+	}
+	
+	private function getDossierLink() {
+		return 'dossierlink';
 	}
 	
 }
