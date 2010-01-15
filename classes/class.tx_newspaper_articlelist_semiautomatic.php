@@ -491,7 +491,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			//	which are not set in the BE
 			$results = array();	
 		}
-t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array(tx_newspaper::$query, $results));
+#t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array(tx_newspaper::$query, $results));
 
 		$uids = array();
 		foreach ($results as $result) {
