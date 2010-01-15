@@ -488,7 +488,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			);
 		} catch (tx_newspaper_DBException $e) {
 			//  This guards agains article lists which use GET varaiables, 
-			//	which are not set in the BE	
+			//	which are not set in the BE
+			$results = array();	
 		}
 t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array(tx_newspaper::$query, $results));
 
