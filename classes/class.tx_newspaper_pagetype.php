@@ -95,10 +95,12 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				if (strpos($get_var, ']') !== false) { 				
 					$parts = explode('[', $get_var);
 					foreach($parts as $key => $part) $parts[$key] = rtrim($part, ']');
+					
 		 			t3lib_div::devlog('parts', 'gna', 0, $parts);
+		 			$get_var = implode('][', $parts);
 				}
 				
- 				if ($get[$type['get_var']]) {
+ 				if ($get[$get_var]) {
 		 			t3lib_div::devlog('found', 'gna', 0, $type['get_var']);
  					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
  					return;
