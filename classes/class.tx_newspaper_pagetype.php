@@ -85,7 +85,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  				'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
  				'get_var != \'\''
  			);
- 			
+ 			t3lib_div::devlog('gna', 'gna', 0, $possible_types);
  			foreach ($possible_types as $type) {
  				if ($get[$type['get_var']]) {
  					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
