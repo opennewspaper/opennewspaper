@@ -837,7 +837,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 	/// Value for field \c tag_type of table \c tx_newspaper_tag denoting dossier tags	
 	public function getControlTagType() {
-		return 2;
+		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$ctt = intval($TSConfig['newspaper.']['control_tag_type']);
+		return $ctt? $ctt: 2;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
