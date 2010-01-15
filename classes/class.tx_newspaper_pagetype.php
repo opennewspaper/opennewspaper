@@ -29,8 +29,25 @@
  *  \date Feb 6, 2009
  */
  
-/// brief description
-/** long description
+/// Type of the page that is displayed.
+/** Newspaper allows for (more or less) freely configurable types of pages for
+ *  each tx_newspaper_Section. As always, the concept might best be explained by
+ *  examples.
+ * 
+ *  - The List of articles belonging to a Section is shown on the Section
+ *    Overview Page.
+ *  - Articles belonging to a Section are displayed on the Article Page.
+ *  - An Article may be displayed differently for printing on a Print Page.
+ *  - There may be a RSS Page for RSS feeds.
+ *  - etc. pp.
+ * 
+ *  Each of the Pages can be fully configured with Page Zones and Extras,
+ *  independently from each other.
+ * 
+ *  Which Page Type is currently shown in the Frontend, is decided by the GET
+ *  parameters the current (Typo3) page is called with. 
+ * 
+ *  \see tx_newspaper_Page.
  */
 class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  	
@@ -55,10 +72,21 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  		} else if ($get[tx_newspaper::GET_pagetype()]) { 
 				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
- 		} else if ($get[tx_newspaper::GET_article()]) {
- 			$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
-		} else {
-			$this->condition = 'NOT get_var';
+ 		} else {
+ 			//  try all page types other than the article page first 
+ 			$possible_types = tx_newspaper::selectRows(
+ 				'DISTINCT get_var', tx_newspaper::getTable($this),
+ 				'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
+ 				'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
+ 				'get_var != \'\''
+ 			);
+ 			
+ 			t3lib_div::devlog('types', 'np', 0, $possible_types);
+ 			if ($get[tx_newspaper::GET_article()]) {
+ 				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
+			} else {
+				$this->condition = 'NOT get_var';
+ 			}
  		}
   	}
  	
