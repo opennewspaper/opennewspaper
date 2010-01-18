@@ -202,31 +202,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// Deletes the concrete Extras and all references to it
 	public function deleteIncludingReferences() {
 		throw new tx_newspaper_NotYetImplementedException();
-		/*
-		/// Find abstract records linking to the concrete Extra
-		$uids = tx_newspaper::selectRows(
-			'uid', self::$table, 
-			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
-			' AND extra_uid = ' . $this->getUid());
-
-		foreach ($uids as $uid) {
-			/// Delete entries in association tables linking to abstract record
-			tx_newspaper::deleteRows(
-				tx_newspaper_Article::getExtra2PagezoneTable(), 
-				'uid_foreign = ' . intval($uid['uid'])
-			);
-			tx_newspaper::deleteRows(
-				tx_newspaper_PageZone_Page::getExtra2PagezoneTable(), 
-				'uid_foreign = ' . intval($uid['uid'])
-			);
-			
-			/// Delete the abstract record
-			tx_newspaper::deleteRows(self::$table, 'uid = ' . intval($uid['uid']));
-		}
-		
-		/// delete the concrete record
-		tx_newspaper::deleteRows($this->getTable(), 'uid = ' . $this->getUid());
-		*/
 	}
 	
 	/// Lists Extras which are in the pool of master copies for new Extras
@@ -640,6 +615,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  Extra on the template PageZone.
 	 *  Also, it sets the origin_uid property on the copied Extras to reflect
 	 *  the origin of the Extra.
+	 * 
+	 *  \param $parent_zone Page Zone from which the Extras are copied.
 	 */
 	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
 		foreach ($parent_zone->getExtras() as $extra_to_copy) {
@@ -662,26 +639,37 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 	}
 
-	/** - input: inetger wie inherits_from
-	 *  - parent-seitenbereich aendern
-	 *  - direkt auf diesem seitenbereich platzierte extras verstecken und ans ende schieben
+	/// Change parent Page Zone
+	/** - Hide Extras placed on this Page Zone
+	 *  - Copy Extras from new parent
+	 *  \param $parent_uid UID of parent Page Zone, or if 0, inherit from next
+	 *      page zone above, or if < 0, don't inherit at all
  	 */
-	public function changeParent($parent_zone) {
+	public function changeParent($parent_uid) {
 		foreach ($this->getExtras() as $extra) {
 			if ($extra->isOriginExtra()) {
-				// hide and move to end of page zone
+				/// Hide and move to end of page zone
+				$extra->setAttribute('show_extra', 0);
+				$extra->store();
 			} else {
-				// delete
+				/// Delete Extra, also on sub-PageZones
+				$this->removeExtra($extra, true);
 			}
 		}
 		
-		$parent_zone = intval($parent_zone);
-		if ($parent_zone < 0) return;
-		else if ($parent_zone == 0) {
-			// get parent, copy extras from there
+		$parent_uid = intval($parent_uid);
+				
+		if ($parent_uid < 0) {
+			//  don't do nuthin'
+		} else if ($parent_uid == 0) {
+			$parent_zone = $this->getParentPageZoneOfSameType();
 		} else {
-			$this->copyExtrasFrom(tx_newspaper_PageZone_Factory::getInstance()->create($parent_zone));
+			$parent_zone = tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
 		}
+		if ($parent_zone) $this->copyExtrasFrom($parent_zone);
+
+		$this->setAttribute('inherits_from', $parent_uid);
+		$this->store();
 		
 	}
 	
