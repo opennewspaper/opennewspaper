@@ -162,15 +162,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	public function getUid() { return intval($this->uid); }
 	public function setUid($uid) { $this->uid = $uid; }
 
-/// \todo: still needed? see getAvailablePageTypes()
-/* 	static public function getPageTypeList() {
- 		throw new tx_newspaper_NotYetImplementedException();
- 	}
-*/ 	
+
 	static public function getModuleName() { return 'np_pagetype'; }
  	
-
-
 	/// get all available page types
 	/// \return array all available page types objects
 	public static function getAvailablePageTypes() {
