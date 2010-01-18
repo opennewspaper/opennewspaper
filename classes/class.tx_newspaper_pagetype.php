@@ -78,7 +78,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
  		} else {
-			if (self::find_in_possible_types($get)) return;
+			if ($this->find_in_possible_types($get)) return;
 			
 			if ($get[tx_newspaper::GET_article()]) {
  				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
@@ -88,7 +88,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  		}
   	}
  	
- 	private static function find_in_possible_types(array $get) {
+ 	private function find_in_possible_types(array $get) {
  		//  try all page types other than the article page first 
  		$possible_types = tx_newspaper::selectRows(
  			'DISTINCT get_var', tx_newspaper::getTable($this),
