@@ -709,6 +709,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 	}
 
+	/** - input: inetger wie inherits_from
+	 *  - parent-seitenbereich aendern
+	 *  - direkt auf diesem seitenbereich platzierte extras verstecken und ans ende schieben
+ 	 */
+	public function changeParent($parent_zone) {
+		
+	}
+	
 	public function getExtraOrigin(tx_newspaper_Extra $extra) {
 		if ($extra->isOriginExtra()) return $this;
 		
