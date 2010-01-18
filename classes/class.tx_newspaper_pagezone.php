@@ -394,55 +394,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if ($inherit_mode > 0) 
 				return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
 		}
-		
-		/** Step from parent to parent until a PageZone with matching type is
-		 *  found.
-		 */
-		$current_page = $this->getParentPage();
-		while ($current_page) {
-			/** First get parent section of the current page...	*/
-			$parent_section = $current_page->getParentSection();
-			if ($parent_section instanceof tx_newspaper_Section) {
-				/** ... then get parent section of the current section.	*/
-				$parent_section = $parent_section->getParentSection();
-			} else {
-				//	Root of section tree reached
-				return null;
-			}
-			
-			if (!$parent_section instanceof tx_newspaper_Section) {
-				//	Root of section tree reached
-				return null;
-			}
-			
-			/** Find page of same page type under parent section.	*/
-			$new_page = null;
-			foreach ($parent_section->getSubPages() as $page) {
-				if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
-					$new_page = $page;
-				}
-			}
 
-			$current_page = $new_page;
-			if (!$new_page) {
-				/** If page not active in parent section, look in the section
-				 *  further up.
-				 */
-				continue;
-			}
-		
-			/** Look for PageZone of the same type in the Page of the same page
-			 *  type in the parent section (phew). If no active PageZone is
-			 *  found, continue looking in the parent section.
-			 */	
-			foreach ($new_page->getActivePageZones() as $parent_pagezone) {
-				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
-					return $parent_pagezone;
-			}
-			
-		}
-		
-		return null;
+		return $this->getParentPageZoneOfSameType();
 	}
 	
 	/// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras
@@ -714,6 +667,21 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  - direkt auf diesem seitenbereich platzierte extras verstecken und ans ende schieben
  	 */
 	public function changeParent($parent_zone) {
+		foreach ($this->getExtras() as $extra) {
+			if ($extra->isOriginExtra()) {
+				// hide and move to end of page zone
+			} else {
+				// delete
+			}
+		}
+		
+		$parent_zone = intval($parent_zone);
+		if ($parent_zone < 0) return;
+		else if ($parent_zone == 0) {
+			// get parent, copy extras from there
+		} else {
+			$this->copyExtrasFrom(tx_newspaper_PageZone_Factory::getInstance()->create($parent_zone));
+		}
 		
 	}
 	
@@ -933,6 +901,58 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// \return The position value of the last Extra on the PageZone
 	protected function findLastPosition() {
 		return $this->getExtra(sizeof($this->getExtras())-1)->getAttribute('position');
+	}
+
+	/** Step from parent to parent until a PageZone with matching type is
+	 *  found.
+	 */
+	protected function getParentPageZoneOfSameType() {
+		$current_page = $this->getParentPage();
+		while ($current_page) {
+			/** First get parent section of the current page...	*/
+			$parent_section = $current_page->getParentSection();
+			if ($parent_section instanceof tx_newspaper_Section) {
+				/** ... then get parent section of the current section.	*/
+				$parent_section = $parent_section->getParentSection();
+			} else {
+				//	Root of section tree reached
+				return null;
+			}
+			
+			if (!$parent_section instanceof tx_newspaper_Section) {
+				//	Root of section tree reached
+				return null;
+			}
+			
+			/** Find page of same page type under parent section.	*/
+			$new_page = null;
+			foreach ($parent_section->getSubPages() as $page) {
+				if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
+					$new_page = $page;
+				}
+			}
+
+			$current_page = $new_page;
+			if (!$new_page) {
+				/** If page not active in parent section, look in the section
+				 *  further up.
+				 */
+				continue;
+			}
+		
+			/** Look for PageZone of the same type in the Page of the same page
+			 *  type in the parent section (phew). If no active PageZone is
+			 *  found, continue looking in the parent section.
+			 */	
+			foreach ($new_page->getActivePageZones() as $parent_pagezone) {
+				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
+					return $parent_pagezone;
+			}
+			
+		}
+		
+		return null;
+		
 	}
 	
 	/// Read Extras from DB
