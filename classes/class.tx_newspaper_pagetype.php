@@ -78,47 +78,47 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
  		} else {
-			t3lib_div::devlog('GET', 'gna', 0, $get);
- 			//  try all page types other than the article page first 
- 			$possible_types = tx_newspaper::selectRows(
- 				'DISTINCT get_var', tx_newspaper::getTable($this),
- 				'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
- 				'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
- 				'get_var != \'\''
- 			);
- 			t3lib_div::devlog('gna', 'gna', 0, $possible_types);
- 			foreach ($possible_types as $type) {
-	 			t3lib_div::devlog('checking...', 'gna', 0, $type);
-				$get_var = $type['get_var'];
-
- 				// transform $get[skpc[sc]] to $get[skpc][sC]
-				if (strpos($get_var, ']') !== false) { 				
-					$parts = explode('[', $get_var);
-					foreach($parts as $key => $part) $parts[$key] = rtrim($part, ']');
-					
-		 			t3lib_div::devlog('parts', 'gna', 0, $parts);
-		 			$get_var = array($parts[0], $parts[1]);
-				}
-				
-				$temp_get = $get;
-				while (is_array($get_var) and sizeof($get_var) > 1) {
-					$temp_get = $temp_get[array_shift($get_var)];
-					t3lib_div::devlog('$temp_get', 'gna', 0, array($temp_get, $get_var));
-				} 
-		 		if (is_array($get_var)) $get_var = $get_var[0];
-				if ($temp_get[$get_var]) {
-		 			t3lib_div::devlog('found', 'gna', 0, $type['get_var']);
- 					$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
- 					return;
- 				}
- 			}
- 			if ($get[tx_newspaper::GET_article()]) {
+			if (find_in_possible_types($get)) return;
+			
+			if ($get[tx_newspaper::GET_article()]) {
  				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
 			} else {
 				$this->condition = 'NOT get_var';
  			}
  		}
   	}
+ 	
+ 	private function find_in_possible_types(array $get) {
+ 		//  try all page types other than the article page first 
+ 		$possible_types = tx_newspaper::selectRows(
+ 			'DISTINCT get_var', tx_newspaper::getTable($this),
+ 			'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
+ 			'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
+ 			'get_var != \'\''
+ 		);
+ 		foreach ($possible_types as $type) {
+			$get_var = $type['get_var'];
+
+ 			// transform $get[skpc[sc]] to $get[skpc][sC]
+			if (strpos($get_var, ']') !== false) { 				
+				$parts = explode('[', $get_var);
+				foreach($parts as $key => $part) $parts[$key] = rtrim($part, ']');
+					
+				$get_var = array($parts[0], $parts[1]);
+			}
+				
+			$temp_get = $get;
+			while (is_array($get_var) and sizeof($get_var) > 1) {
+				$temp_get = $temp_get[array_shift($get_var)];
+			} 
+		 	if (is_array($get_var)) $get_var = $get_var[0];
+			if ($temp_get[$get_var]) {
+ 				$this->condition = 'get_var = \'' . $type['get_var'] .'\'';
+ 				return true;
+ 			}
+ 		}
+ 		return false;
+ 	}
  	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
