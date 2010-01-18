@@ -294,6 +294,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
 
 		if (!self::$basepath) {
+			if (!$TSConfig['newspaper.']['image.']['basepath']) {
+				t3lib_div::devlog('basepath not set in TSConfig', 
+								  'newspaper', 1, array('TSConfig' =>$TSConfig));
+			}
 			self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
 		}
 
