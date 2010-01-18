@@ -103,8 +103,8 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				$temp_get = $get;
 				while (is_array($get_var) and sizeof($get_var) > 1) {
 					$temp_get = $temp_get[array_shift($get_var)];
+					t3lib_div::devlog('$temp_get', 'gna', 0, array($temp_get, $get_var));
 				} 
-				t3lib_div::devlog('$temp_get', 'gna', 0, $temp_get);
 		 		
 				if ($temp_get[$get_var]) {
 		 			t3lib_div::devlog('found', 'gna', 0, $type['get_var']);
