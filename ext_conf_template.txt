@@ -5,4 +5,7 @@ logDbInsertUpdateDelete = 0
 logDbSelect = 0
 
 # cat=basic/enable; type=string; label=Log db access: set file for logging data when executing db SQL statements (configured by setting logDbInsertUpdateDelete and logDbSelect) 
-logDbFile = 
+logDbFile =
+
+# cat=basic/enable; type=string; label=Path of Typo3 newspaper installation
+newspaperTypo3Path = 
