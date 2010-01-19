@@ -532,7 +532,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 
 	/// get absolute path to Typo3 installation
-	/// \return absolute path to Typo3 installation
+	/// \return absolute path to Typo3 installation (last / is not part of the return value)
 	public static function getAbsolutePath() {
 		/// \todo replace by a version NOT using EM conf (check t3lib_div)
 		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
