@@ -170,7 +170,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
 
 		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getAttribute('num_articles'));
-		t3lib_div::devlog('articles', 'newspaper', 0, array('articles_sorted' => $articles_sorted));
+//		t3lib_div::devlog('articles', 'newspaper', 0, array('articles_sorted' => $articles_sorted));
 
 		if (true) {
 	 	 	$smarty = new tx_newspaper_Smarty();
