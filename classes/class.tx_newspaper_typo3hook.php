@@ -57,14 +57,21 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 	}
 
 	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
-//t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
+t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
+
+		if (isset($incomingFieldArray['hidden'])) {
+			$incomingFieldArray['hidden_TEST'] = $incomingFieldArray['hidden'];
+		}
+
 		if (isset($request['hidden_status']) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$incomingFieldArray['hidden'] = $request['hidden_status'];
 		}
-		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG']))
+		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG'])) {
 			return; // value not set, so can't decide if the status changed 
-		if ($request['workflow_status'] == $request['workflow_status_ORG'])
+		}
+		if ($request['workflow_status'] == $request['workflow_status_ORG']) {
 			return; // status wasn't changed, so don't store value
+		}
 		$incomingFieldArray['workflow_status'] = $request['workflow_status']; // change workflow status
 	}
 
@@ -74,9 +81,9 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		global $LANG;
-//t3lib_div::devlog('sh post enter', 'newspaper', 0, array($status, $table, $id, $fieldArray));
+t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 
-		/// add modifications user and time if  tx_newspaper_Article is updated
+		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserDataIfArticle($status, $table, $id, $fieldArray);
 
 		/// check if publish_date is to be added
@@ -149,7 +156,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 				}
 				
 				/// check if manual comment should be written (this log record should always be written last)
-				if (isset($_REQUEST['workflow_comment'])) {
+				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
@@ -212,7 +219,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 	}
 
 
-	/// add modification user and modification time when updating tx_newspaper_article
+	/// add modification user when updating tx_newspaper_article
 	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
 			return false;
@@ -222,6 +229,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
 	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 /// \todo: timestart - alle kombinationen abfangen!!!
 		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
 //debug($fieldArray);
