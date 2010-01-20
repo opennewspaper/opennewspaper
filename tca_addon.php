@@ -146,5 +146,5 @@ $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = 4;
 
 /// remove "hidden" checkbox in article backend (interferes with workflow button "hide" and "publish") 
 unset($TCA['tx_newspaper_article']['columns']['hidden']['config']['type']);
-$TCA['tx_newspaper_article']['columns']['hidden']['config']['type'] = 'passthrough';
+$TCA['tx_newspaper_article']['columns']['hidden']['config']['type'] = 'none'; /// \todo: find a better solution, this is rendered as non-editable text field
 ?>
