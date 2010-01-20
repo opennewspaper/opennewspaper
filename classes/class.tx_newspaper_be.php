@@ -305,7 +305,7 @@ function findElementsByName(name, type) {
 
 
 
-/// \todo: move to pagezone?
+/// \todo: move to pagezone
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
@@ -394,8 +394,9 @@ function findElementsByName(name, type) {
 		$data[] = self::extractData($pz); // empty array if concrete article
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
 //t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, $data);
+/// \todo: can't that be checked nicer???
 		if (sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
-			// so it's no concrete article 
+			// so it's no concrete article (= default article or pagezone_page)
 			
 			$s = $pz->getParentPage()->getParentSection();
 			$pages = $s->getSubPages(); // get activate pages for current section
@@ -423,12 +424,16 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
 
 
+		// get a smarty object
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
 
 		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
 		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
 		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
+		$label['pagezone_inheritancesource'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource', false);
+		$label['pagezone_inheritancesource_upper'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_upper', false);
+		$label['pagezone_inheritancesource_none'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_none', false);
 		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
 
 		$smarty->assign('LABEL', $label);
@@ -440,6 +445,18 @@ function findElementsByName(name, type) {
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
+
+		if (!$is_concrete_article) {
+			// add possible inheritance sources fir this page zone
+			$pp = $pz->getPossibleParents();
+			$page_name = array();
+			for ($i = 0; $i < sizeof($pp); $i++) {
+				$page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // can'tbe accessed with smarty
+			}
+//t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
+			$smarty->assign('INHERITANCESOURCE', $pp);
+			$smarty->assign('INHERITANCESOURCENAME', $page_name);
+		}
 
 		/// "new to top" buttons vary for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
 		if ($data[0]['pagezone_type'] instanceof tx_newspaper_article && $data[0]['pagezone_type']->getAttribute('is_article') == 0) {
@@ -509,6 +526,7 @@ function findElementsByName(name, type) {
 				'pagezone_type' => $pz->getPageZoneType(),
 				'pagezone_id' => $pz->getPagezoneUid(),
 				'pagezone_concrete_id' => $pz->getUid(),
+				'inherits_from' => $pz->getAttribute('inherits_from')
 			);
 	}
 
