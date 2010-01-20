@@ -8,4 +8,4 @@ logDbSelect = 0
 logDbFile =
 
 # cat=basic/enable; type=string; label=Path of Typo3 newspaper installation
-newspaperTypo3Path = 
+newspaperTypo3Path = /
