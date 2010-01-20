@@ -265,8 +265,7 @@ for ($i=0; $i < sizeof($row); $i++) {
 
 		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
 
-//\todo: remove '/'/ and create a WORKING function (check if available in t3lib_div)
-		$smarty->assign('T3PATH', '/' . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . '/typo3/');
 		
 		return $smarty->fetch('mod2.tmpl');
 	}
