@@ -8,7 +8,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
 		if (strtolower($table) == 'tx_newspaper_article') {
-			// hide default articles in list module
+			// hide default articles in list module, only concrete article are visible in list module
 			$additionalWhereClause .= ' AND is_template=0';
 		}
 	}
@@ -24,7 +24,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
-	/// the checkbox is_article in pagezonetype can't be unchecked later!
+	/// the checkbox is_article in pagezonetype can't be unchecked once it was set
 	/** \param $table table name in hook
 	 *  \param $field name of single field currently processed in hook 
 	 *  \param $row data to be written
@@ -59,14 +59,10 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
 t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
 
-		if (isset($incomingFieldArray['hidden'])) {
-			$incomingFieldArray['hidden_TEST'] = $incomingFieldArray['hidden'];
-		}
-
-		if (isset($request['hidden_status']) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
+		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$incomingFieldArray['hidden'] = $request['hidden_status'];
 		}
-		if (!isset($request['workflow_status']) || !isset($request['workflow_status_ORG'])) {
+		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
 			return; // value not set, so can't decide if the status changed 
 		}
 		if ($request['workflow_status'] == $request['workflow_status_ORG']) {
@@ -84,7 +80,7 @@ t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, 
 t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 
 		/// add modifications user if tx_newspaper_Article is updated
-		$this->addModificationUserDataIfArticle($status, $table, $id, $fieldArray);
+		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
 
 		/// check if publish_date is to be added
 		$this->addPublishDateIfNotSet($status, $table, $id, &$fieldArray);
@@ -123,7 +119,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 				/// IMPORTANT: checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
 				
 				/// check if auto log entry for hiding/publishing newspaper record should be written
-				if (isset($fieldArray['hidden'])) {
+				if (array_key_exists('hidden', $fieldArray)) {
 					if ($table == 'tx_newspaper_article') {
 						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_published', false);
 					} else {
@@ -142,7 +138,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 				}
 				
 				/// check if auto log entry for change of workflow status should be written (article only)
-				if ($table == 'tx_newspaper_article' & isset($fieldArray['workflow_status']) && isset($_REQUEST['workflow_status_ORG'])) {
+				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
@@ -156,6 +152,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 				}
 				
 				/// check if manual comment should be written (this log record should always be written last)
+				
 				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
@@ -220,7 +217,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 
 
 	/// add modification user when updating tx_newspaper_article
-	private function addModificationUserDataIfArticle($status, $table, $id, &$fieldArray) {
+	private function addModificationUserIfArticle($status, $table, $id, &$fieldArray) {
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
 			return false;
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
