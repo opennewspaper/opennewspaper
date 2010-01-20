@@ -202,6 +202,32 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// Deletes the concrete Extras and all references to it
 	public function deleteIncludingReferences() {
 		throw new tx_newspaper_NotYetImplementedException();
+		/*
+\todo: Oliver: I found this in my code, wrote it in September, so I have to have a deep look into this ...
+		/// Find abstract records linking to the concrete Extra
+		$uids = tx_newspaper::selectRows(
+			'uid', self::$table, 
+			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
+			' AND extra_uid = ' . $this->getUid());
+
+		foreach ($uids as $uid) {
+			/// Delete entries in association tables linking to abstract record
+			tx_newspaper::deleteRows(
+				tx_newspaper_Article::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			tx_newspaper::deleteRows(
+				tx_newspaper_PageZone_Page::getExtra2PagezoneTable(), 
+				'uid_foreign = ' . intval($uid['uid'])
+			);
+			
+			/// Delete the abstract record
+			tx_newspaper::deleteRows(self::$table, 'uid = ' . intval($uid['uid']));
+		}
+		
+		/// delete the concrete record
+		tx_newspaper::deleteRows($this->getTable(), 'uid = ' . $this->getUid());
+		*/
 	}
 	
 	/// Lists Extras which are in the pool of master copies for new Extras
