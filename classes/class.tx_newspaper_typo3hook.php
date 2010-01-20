@@ -59,7 +59,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
 t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
 
-		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
+		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$incomingFieldArray['hidden'] = $request['hidden_status'];
 		}
 		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
