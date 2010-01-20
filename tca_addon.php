@@ -143,8 +143,4 @@ $TCA['tx_newspaper_pagezonetype']['columns']['normalized_name']['config']['eval'
 // \todo: remove after modifying the conf in kickstarter
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = 4;
 
-
-/// remove "hidden" checkbox in article backend (interferes with workflow button "hide" and "publish") 
-unset($TCA['tx_newspaper_article']['columns']['hidden']['config']['type']);
-$TCA['tx_newspaper_article']['columns']['hidden']['config']['type'] = 'none'; /// \todo: find a better solution, this is rendered as non-editable text field
 ?>
