@@ -617,6 +617,9 @@ function findElementsByName(name, type) {
 		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
 		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
 		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
+		
+		// if hidden_status equals -1, the hidden status wasn't changed by hide/publish button
+		// if hidden_status DOES NOT equal -1, the hide/publish button was prressed, so IGNORE the value of the "hidden" field
 		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
 
 		// add javascript \todo: move to external file
@@ -693,14 +696,14 @@ function changeWorkflowStatus(status, hidden_status) {
 		
 		/// check / revise
 		if ($button['check']) {
-			$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), $hidden);
+			$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1);
 			if (!$hidden && $button['hide'])
 				$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden);
 			elseif ($hidden && $button['publish'])
 				$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden);
 			$content .= '<br />';
 		} elseif ($button['revise']) {
-			$content .= $this->renderWorkflowButton(0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), $hidden);
+			$content .= $this->renderWorkflowButton(0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1);
 			if (!$hidden && $button['hide'])
 				$content .= $this->renderWorkflowButton(0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden);
 			elseif ($hidden && $button['publish'])
