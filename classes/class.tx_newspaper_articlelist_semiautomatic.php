@@ -167,6 +167,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function displayListedArticles($PA, $fobj) {
 /// \todo: display message when list is empty
+
+		if (intval($PA['row']['uid'] == 0)) {
+			// probably a new record
+/// \todo: localization ...
+			return 'Save first ...';
+		}
+
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
 
 		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getAttribute('num_articles'));
