@@ -54,6 +54,8 @@ unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
 
+
+
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array (
 	"lower" => "1"
@@ -141,6 +143,8 @@ $TCA['tx_newspaper_pagezonetype']['columns']['normalized_name']['config']['eval'
 // \todo: remove after modifying the conf in kickstarter
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = 4;
 
+/// remove "hide" checkbox in articles because this interferes with the workflow buttons (hide and publish) that are using the "hidden" field
+unset($TCA['tx_newspaper_article']['columns']['hidden']);
 
 
 ?>
