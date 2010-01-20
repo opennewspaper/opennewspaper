@@ -34,6 +34,9 @@
 			<label index="message_delete_confirm">Do you really want to delete this extra?</label>
 			<label index="label_pagetype">Page</label>
 			<label index="label_pagezonetype">Page zone</label>
+			<label index="pagezone_inheritancesource">Inheritance source</label>
+			<label index="pagezone_inheritancesource_none">No Inheritance</label>
+			<label index="pagezone_inheritancesource_upper">Same page type in upper level</label>
 			<label index="label_new_extra_new">New extra</label>
 			<label index="label_new_extra_from_pool">From pool</label>
 			<label index="message_no_extra_selected">Please select an extra to proceed.</label>

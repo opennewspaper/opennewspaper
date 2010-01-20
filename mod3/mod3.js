@@ -145,7 +145,8 @@ alert('test function found');
 	
 	/// AJAX call: move extra on pagezone_page or article
 	function extra_move_after(origin_uid, pz_uid, extra_uid, is_concrete_article) {ldelim}
-		var request = new top.Ajax.Request(
+//alert(top.path + "typo3conf/ext/newspaper/mod3/index.php");
+	var request = new top.Ajax.Request(
 				top.path + "typo3conf/ext/newspaper/mod3/index.php",
 				{ldelim}
 				method: 'get',
@@ -332,8 +333,23 @@ alert('test function found');
 		);
 	{rdelim}
 
+	
+	function inheritancesource_change(pz_uid, value) {ldelim}
+	var request = new top.Ajax.Request(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{ldelim}
+			method: 'get',
+			parameters: "inheritancesource_change=1&pz_uid=" + pz_uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+			onCreate: processing,
+			onSuccess: reload
+		{rdelim}
+	);
+{rdelim}
 
-/// \to do: remove after all call are swicthed to page/article version
+	
+	
+
+/// \to do: remove after all calls are switched to page/article version ????
 	function processing() {ldelim}
 
 		img = document.createElement('img');

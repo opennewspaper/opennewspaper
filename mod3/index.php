@@ -95,6 +95,17 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 
+	/// change inheritance source
+	/** possible values:
+	 *    0: default, get from same pagezone type from upper level
+	 *   -1: none: do not inherit any extra 
+	 *  uid: uid of a concrete pagezone on the same level (pagezone_page); not available for articles (articles are unique to a section)
+	 */
+	private function processInheritanceSourceChange($value) {
+t3lib_div::devlog('processInheritanceSourceChange', 'newspaper', 0, array(value => $value));
+		die();		
+	}
+
 
 	/// called via ajax: render list of extras for concrete article
 	/// \param $article_uid uid of concrete(!) article
@@ -403,6 +414,12 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		if (t3lib_div::_GP('extra_pagezone_type_change') == 1) {
 			$this->processPageZoneTypeChange(t3lib_div::_GP('pzt_uid')); 
 		}
+
+
+		if (t3lib_div::_GP('inheritancesource_change') == 1) {
+			$this->processInheritanceSourceChange(t3lib_div::_GP('value')); 
+		}
+
 		
 		if (t3lib_div::_GP('extra_save_field') == 1) {
 			$this->processSaveExtraField(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('value'), t3lib_div::_GP('type'));

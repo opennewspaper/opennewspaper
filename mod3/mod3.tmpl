@@ -18,14 +18,14 @@
 	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a> 
 {/if}
 
-	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if ($ADMIN)}[{$s->getUid()}]{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	
 	{* Dropdown for page and page zone for last (=selected) section only (and if NOT concrete article) *}
 	{if !$IS_CONCRETE_ARTICLE && $smarty.section.i.last} 
 	 	&nbsp; &nbsp; 
 		{$LABEL.pagetype}: 
 		<select  onchange="page_type_change(this.value)">
-		{section name="j loop=$PAGETYPE}
+		{section name=j loop=$PAGETYPE}
 			{if $PAGETYPE[j]->getUid() == $DATA[i].page_type->getUid()}
 				<option selected="selected" 
 			{else}
@@ -39,7 +39,7 @@
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezonetype}: 
 		<select  onchange="pagezone_type_change(this.value)">
-		{section name="j loop=$PAGEZONETYPE}
+		{section name=j loop=$PAGEZONETYPE}
 			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
 				<option selected="selected" 
 			{else}
@@ -48,8 +48,34 @@
 		{/section}
 		</select>
 		{if ($ADMIN)}
-			[{$DATA[i].pagezone_id}|{$DATA[i].pagezone_concrete_id}]
+			[<span title="abstract">{$DATA[i].pagezone_id}</span>|<span title="concrete">{$DATA[i].pagezone_concrete_id}</span>]
 		{/if}
+
+{*
+todo: store changes
+todo: $pz->getPossibleParents() seems to be buggy; could be an effect of corrupt data too ...
+		 &nbsp; &nbsp; 
+		{$LABEL.pagezone_inheritancesource}: 
+		<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
+{* 0 -> default inheritance mode, read upper level *
+			<option value="0" {if ({$DATA[i].inherits_from == 0)}selected="selected "{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
+			{section name=j loop=$INHERITANCESOURCE}
+
+				{if $INHERITANCESOURCE[j]->getUid() == $DATA[i].inherits_from}
+					<option selected="selected" 
+				{else}
+					<option 
+				{/if} value="{$INHERITANCESOURCE[j]->getUid()}">{$INHERITANCESOURCENAME[j]}</option>
+
+			{/section}
+{* -1 -> no inheritance *
+			<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
+		</select>
+		{if ($ADMIN)}
+			[{$DATA[i].inherits_from}]
+		{/if}
+*}
+
 	{/if}
 {if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
 	{* dummy button for pagezone_page only *}
