@@ -166,7 +166,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  	rearrange the articles
 	 */
 	public function displayListedArticles($PA, $fobj) {
-t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA));		
+//t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA));		
 		global $LANG;
 
 		if (intval($PA['row']['uid'] == 0)) {
@@ -183,7 +183,7 @@ t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA))
 	 	 	$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
 			$smarty->assign('articles', $articles_sorted);
-			$smarty->assign('message_empty', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_unsaved', false));
+			$smarty->assign('message_empty', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_empty', false));
 	
 			return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 		} else {
