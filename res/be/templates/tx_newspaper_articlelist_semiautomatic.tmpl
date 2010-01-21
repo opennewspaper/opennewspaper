@@ -1,4 +1,4 @@
-
+{if $articles}
 <table>
 	{foreach from=$articles item=article}
 		<tr>
@@ -12,3 +12,6 @@
 		</tr>
 	{/foreach}
 </table>
+{else}
+	{$message_empty}
+{/if}
