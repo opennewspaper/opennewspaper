@@ -166,12 +166,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  	rearrange the articles
 	 */
 	public function displayListedArticles($PA, $fobj) {
-/// \todo: display message when list is empty
+		global $LANG;
 
 		if (intval($PA['row']['uid'] == 0)) {
 			// probably a new record
-/// \todo: localization ...
-			return 'Save first ...';
+			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_unsaved', false);
 		}
 
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
@@ -183,6 +182,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 	 	$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
 			$smarty->assign('articles', $articles_sorted);
+			$smarty->assign('message_empty', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_unsaved', false));
 	
 			return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 		} else {
