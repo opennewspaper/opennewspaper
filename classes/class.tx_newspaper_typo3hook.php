@@ -50,14 +50,16 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>$incomingFieldArray, 'table'=>$table, 'id'=>$id, 'request'=>$_REQUEST));
+//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>$incomingFieldArray, 'table'=>$table, 'id'=>$id, 'request'=>$_REQUEST));
 
 // \todo: move to writesLog check ???
-		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id, $_REQUEST);
+		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id);
 	}
 
-	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id, $request) {
-t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
+	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id) {
+//t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
+
+		$request = $_REQUEST; // copy array, because values might be overwritten
 
 		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$incomingFieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite value of field "hidden"
@@ -105,8 +107,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) { 
 /// \todo: move to function
 				/// tx_newspaper_StoredObject is implemented, so record is to be stored in a special sysfolder
-				$sf = tx_newspaper_Sysfolder::getInstance();
-				$pid = $sf->getPid($np_obj);
+				$pid = tx_newspaper_Sysfolder::getInstance()->getPid($np_obj);
 				$fieldArray['pid'] = $pid; // map pid to appropriate sysfolder
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
@@ -117,6 +118,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 /// \todo: move to function - move to log class?
 
 				/// IMPORTANT: checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
+
+//debug($GLOBALS['BE_USER']);				
+				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
 				
 				/// check if auto log entry for hiding/publishing newspaper record should be written
 				if (array_key_exists('hidden', $fieldArray)) {
@@ -128,8 +132,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
-						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
-						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'crdate' => time(), 
+						'cruser_id' => $be_user, 
+						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table, 
 						'table_uid' => $id,
 						'action' => $action,
@@ -142,8 +147,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
-						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
-						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'crdate' => time(), 
+						'cruser_id' => $be_user, 
+						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table, 
 						'table_uid' => $id,
 						'action' => tx_newspaper_BE::getWorkflowStatusActionTitle(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG'])),
@@ -157,8 +163,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
-						'crdate' => time(), /// \todo: remove this field from table - as log entries aren't updated the time equals tstamp
-						'cruser_id' => -1, // \todo: $GLOBALS['BE_USER']->user['uid'] not available, other way to store be_user needed
+						'crdate' => time(), 
+						'cruser_id' => $be_user, 
+						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table, 
 						'table_uid' => $id,
 						'action' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_user_entry', false),
