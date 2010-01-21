@@ -166,6 +166,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  	rearrange the articles
 	 */
 	public function displayListedArticles($PA, $fobj) {
+t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA));		
 		global $LANG;
 
 		if (intval($PA['row']['uid'] == 0)) {
