@@ -458,7 +458,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 		/// if a new extra was placed on a pagezone, write abstract record
 		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 		
-		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that)
+		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that);
 		
 	}
 
