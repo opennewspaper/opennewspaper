@@ -364,11 +364,31 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		self::$registered_articlelists[] = $newList;
 	}
 
-	/// Get the list of registered Article List types
-	/** \return The list of registered Article List types.
+	/// Checks if an object or a table name is a registered article list
+	/** \param $data object or database table to be checked
+	 *  \return true if $data represents a registered article list
 	 */
-	static public function getRegisteredArticleLists() {
-		return self::$registered_articlelists;
+	static public function isRegisteredArticleList($data) {
+		// extract table name from given $data
+		if (is_object($data)) {
+			// $data contains an object
+			if (!is_subclass_of($data, 'tx_newspaper_ArticleList')) {
+				return false; // object does NOT extend tx_newspaper_ArticleList, so no definatley no registered article list
+			}
+			$table = $data->getTable();
+		} else {
+			// $data contains a database table name
+			$table = $data;
+		}
+		$table = strtolower($table);
+		
+		// check if database table is known
+		for ($i = 0; $i < sizeof(self::$registered_articlelists); $i++) {
+			if (strtolower(self::$registered_articlelists[$i]->getTable()) == $table) {
+				return true; // here you go
+			}
+		} 
+		return false;
 	}
 	
 	
@@ -381,21 +401,23 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 * \param $that t3lib_TCEmain object? 
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('datamap afo hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+//t3lib_div::devlog('datamap ado hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		
-		if ($status == 'new') {
-			// new record, so get substituated uid
-			$concrete_al_uid = intval($that->substNEWwithIDs[$id]);
-		} else {
-			// existing record with existing uid, so just use the given $id
-			$concrete_al_uid = intval($id);
-		}
-		
-		$concrete_al = new $table($concrete_al_uid);
-		if ($concrete_al->getAbstractUid() == 0) {
-			/// no abstract record found, so create a new one
-			$concrete_al->createArticleListRecord($concrete_al_uid, $table);
-		}		
+		if (self::isRegisteredArticleList($table)) {
+			if ($status == 'new') {
+				// new record, so get substituated uid
+				$concrete_al_uid = intval($that->substNEWwithIDs[$id]);
+			} else {
+				// existing record with existing uid, so just use the given $id
+				$concrete_al_uid = intval($id);
+			}
+			
+			$concrete_al = new $table($concrete_al_uid);
+			if ($concrete_al->getAbstractUid() == 0) {
+				/// no abstract record found, so create a new one
+				$concrete_al->createArticleListRecord($concrete_al_uid, $table);
+			}	
+		}	
 	}
 	
 	
