@@ -381,7 +381,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 * \param $that t3lib_TCEmain object? 
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-t3lib_div::devlog('datamap afo hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+//t3lib_div::devlog('datamap afo hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		
 		if ($status == 'new') {
 			// new record, so get substituated uid
