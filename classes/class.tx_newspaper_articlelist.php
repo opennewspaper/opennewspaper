@@ -294,14 +294,15 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			'uid = ' . intval($uid)
 		);
 	
-		/// write the uid and table into page zone table, with the values read above
+		/// write the uid and table into articlelist table, with the values read above
 		$row['list_uid'] = $uid;
 		$row['list_table'] = $table;
 		$row['tstamp'] = time();				///< tstamp is set to now
 		
 		// assign article list with section (if any)
-		if ($this->section)
+		if ($this->section) {
 			$row['section_id'] = $this->section->getUid();
+		}
 
 		$al_uid = tx_newspaper::insertRows('tx_newspaper_articlelist', $row);
 		
@@ -369,6 +370,25 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	static public function getRegisteredArticleLists() {
 		return self::$registered_articlelists;
 	}
+	
+	
+	/// Save hook function, called from the global save hook in tx_newspaper_typo3hook
+	/** Writes an abstract record for a concreate3 article list, if no abstract record is available
+	 * \param $status Status of the current operation, 'new' or 'update
+	 * \param $table The table currently processing data for
+	 * \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
+	 * \param $fieldArray The field array of a record
+	 * \param $that t3lib_TCEmain object? 
+	 */
+	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+t3lib_div::devlog('datamap afo hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+		if (self::getAbstractUid() == 0) {
+			
+		}		
+	}
+	
+	
+	
 
 	///	Remove all articles from the list.
 	/** This function should be an abstract function. But it also should be
