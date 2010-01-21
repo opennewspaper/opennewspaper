@@ -60,7 +60,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $request));
 
 		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
-			$incomingFieldArray['hidden'] = $request['hidden_status'];
+			$incomingFieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite value of field "hidden"
 		}
 		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
 			return; // value not set, so can't decide if the status changed 
@@ -457,6 +457,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 		
 		/// if a new extra was placed on a pagezone, write abstract record
 		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
+		
+		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that)
+		
 	}
 
 	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
@@ -480,8 +483,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
 /// \todo: explain in detail what's happening here!
 	private function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
-		if (tx_newspaper::isAbstractClass($table))
+		if (tx_newspaper::isAbstractClass($table)) {
 			return; // abstract class, nothing to do
+		}
 	
 		/// check if a new extra is stored
 		// exclude new articles - articles are extras but shouldn't be treated like extras here!
