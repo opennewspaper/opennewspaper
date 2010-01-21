@@ -50,8 +50,8 @@
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
-			<label index="title_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
-			<label index="title_tx_newspaper_articlelist_empty">No article in this article list</label>
+			<label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
+			<label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
 			<label index="title_tx_newspaper_articletype">Article type</label>
 			<label index="title_tx_newspaper_extra_articlelinks">Links about the article</label>
 			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
