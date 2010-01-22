@@ -79,7 +79,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		global $LANG;
-t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+//t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 
 		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
@@ -104,7 +104,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 			$np_obj = new $table();
 
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
-			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) { 
+			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) {
 /// \todo: move to function
 				/// tx_newspaper_StoredObject is implemented, so record is to be stored in a special sysfolder
 				$pid = tx_newspaper_Sysfolder::getInstance()->getPid($np_obj);
@@ -119,8 +119,20 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 
 				/// IMPORTANT: checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
 
+				$request = $_REQUEST;
+
 //debug($GLOBALS['BE_USER']);				
 				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
+				
+				// check if the placement form should be opened after saving the record
+				// \todo if that's possible ...
+				$redirectToPlacementModule = false;
+				if (isset($request['workflow_status']) && isset($request['workflow_status_ORG']) && $request['workflow_status'] == 2 && $request['workflow_status_ORG'] != 2) {
+					$redirectToPlacementModule = true;
+					$request['workflow_status'] = 1; /// active role is set to duty editor, but placement form is opened immediately. it that form is saved, workflow_status is set to 2
+					$fieldArray['workflow_status'] = 1;						
+				}
+				
 				
 				/// check if auto log entry for hiding/publishing newspaper record should be written
 				if (array_key_exists('hidden', $fieldArray)) {
@@ -143,7 +155,7 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 				}
 				
 				/// check if auto log entry for change of workflow status should be written (article only)
-				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
+				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $request)) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
@@ -152,14 +164,13 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table, 
 						'table_uid' => $id,
-						'action' => tx_newspaper_BE::getWorkflowStatusActionTitle(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG'])),
+						'action' => tx_newspaper_BE::getWorkflowStatusActionTitle(intval($fieldArray['workflow_status']), intval($request['workflow_status_ORG'])),
 						'comment' => ''
 					));
 				}
 				
-				/// check if manual comment should be written (this log record should always be written last)
-				
-				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
+				/// check if manual comment should be written (this log record should always be written LAST)
+				if (isset($request['workflow_comment']) && $request['workflow_comment'] != '') {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => time(),
@@ -169,10 +180,10 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 						'table_name' => $table, 
 						'table_uid' => $id,
 						'action' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_user_entry', false),
-						'comment' => $_REQUEST['workflow_comment']
+						'comment' => $request['workflow_comment']
 					));
 				}
-
+/// \todo: if ($redirectToPlacementModule) { ...}
 			}
 		}
 	}

@@ -28,6 +28,14 @@
 			<label index="label_workflow_revise">Revise</label>
 			<label index="label_workflow_revise_hide">Revise &amp; hide</label>
 			<label index="label_workflow_revise_publish">Revise &amp; publish</label>
+			<label index="label_workflow_place">Place</label>
+			<label index="label_workflow_place_hide">Place &amp; hide</label>
+			<label index="label_workflow_place_publish">Place &amp; publish</label>
+			<label index="label_workflow_status_0">Editorial staff</label>
+			<label index="label_workflow_status_1">Duty editor</label>
+			<label index="label_workflow_status_2">Article online, workflow ended</label>
+			<label index="label_workflow_status_old">Old status</label>
+			<label index="label_workflow_status_new">New status</label>
 			<label index="log_record_hidden">Record hidden</label>
 			<label index="log_record_published">Record published</label>
 			<label index="log_article_hidden">Article hidden</label>
