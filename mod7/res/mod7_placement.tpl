@@ -29,7 +29,7 @@
 								{/foreach}
 							</th>
 					  	</tr>
-						{if isset($section.articlelist) && ($iscod || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic")}
+						{if isset($section.articlelist) && ($isde || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic")}
 						<tr>
 						    <td>
 								<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
@@ -77,7 +77,7 @@
 						</tr>
 						{/if}
 					</table>
-					{if $iscod || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic"}
+					{if $isde || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic"}
 						<div align="right">
 							<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
 							<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />

@@ -753,11 +753,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return true;
 	}
 	
-	///	Is the logged in user an editor in chief (allowed to publish articles)?
+	///	Is the logged in user a duty editor (allowed to publish articles)?
 	/** \todo finish: read group of logged in user and compare it to the
-	 *  	TSConfig-defined user group of chief editors.
+	 *  	TSConfig-defined user group of duty editors.
 	 */
-	public static function isChief() {
+	public static function isDutyEditor() {
 		return true;
 	}
 

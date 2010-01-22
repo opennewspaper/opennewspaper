@@ -100,8 +100,8 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 							case 'placearticle' :
 								die($this->placeArticle($input));
 							break;
-							case 'sendarticletocod' :
-								die($this->sendArticleToChiefOfDuty($input));
+							case 'sendarticletoed' :
+								die($this->sendArticleToDutyEditor($input));
 							break;
 							case 'sendarticletoeditor' :
 								die($this->sendArticleToEditor($input));
@@ -192,9 +192,9 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				}
 				
 				
-				function userIsChiefOfDuty () {
+				function userIsDutyEditor () {
 					// @todo: use later
-					// return tx_newspaper::isChief();
+					// return tx_newspaper::isDutyEditor();
 					return true;
 				}
 
@@ -236,11 +236,11 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				}
 				
 				
-				/// send article further to chief of duty
+				/// send article further to duty editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function sendArticleToChiefOfDuty ($input) {
+				function sendArticleToDutyEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', 1);
 					return true;
@@ -401,7 +401,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					$smarty->assign('article', $article);
 					$smarty->assign('singlemode', $singleMode);
 					$smarty->assign('lang', $localLang);
-					$smarty->assign('iscod', $this->userIsChiefOfDuty());
+					$smarty->assign('isde', $this->userIsDutyEditor());
 					return $smarty->fetch('mod7_placement.tpl');
 				}
 				

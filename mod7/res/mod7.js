@@ -330,8 +330,8 @@ $(document).ready(function(){
 	});
 	
 	
-	$(".sendtocod").click(function() {
-		executeFinalAction("sendarticletocod");
+	$(".sendtoed").click(function() {
+		executeFinalAction("sendarticletoed");
 		return false;
 	});
 	

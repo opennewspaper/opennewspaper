@@ -120,7 +120,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 <div id="buttons">
 	{if $article->getAttribute('workflow_status') == 0}
 		{if $input.showworkflowbuttons}
-			<input type="button" value="{$lang.tocod}" class="sendtocod" />
+			<input type="button" value="{$lang.to_de}" class="sendtode" />
 		{else}
 			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
 		{/if}

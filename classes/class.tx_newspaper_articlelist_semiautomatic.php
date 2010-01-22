@@ -217,7 +217,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
 		$smarty->assign('tree', $tree);
 		$smarty->assign('lang', $localLang);
-		$smarty->assign('iscod', $this->userIsChiefOfDuty());
+		$smarty->assign('isde', $this->userIsDutyEditor());
 		return $smarty->fetch('mod7_placement.tpl');
 	}
 	
@@ -263,9 +263,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					return $tree;
 				}
 	
-				function userIsChiefOfDuty () {
+				function userIsDutyEditor () {
 					// @todo: use later
-					// return tx_newspaper::isChief();
+					// return tx_newspaper::isDutyEditor();
 					return true;
 				}
 	
