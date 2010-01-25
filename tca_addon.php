@@ -139,8 +139,7 @@ $TCA['tx_newspaper_pagetype']['columns']['normalized_name']['config']['eval'] = 
 $TCA['tx_newspaper_pagezonetype']['columns']['normalized_name']['config']['eval'] = 'required,uniqueInPid,alphanum,nospace';
 
 
-// set size of selectbox for sections in articles to 4; ff/mac bug: no proper scrollbars if size<= 3
-// \todo: remove after modifying the conf in kickstarter
-$TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = 4;
+// make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
+$TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
 ?>
