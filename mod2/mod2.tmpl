@@ -55,13 +55,64 @@ td {ldelim}
 
 	{rdelim}
 
+
+
+
+
+
+
+/// extracted from typo3/class.browse_links.php
+
+var BrowseLinks = {ldelim}
+	elements: {ldelim}{rdelim},
+	addElements: function(elements) {ldelim}
+		BrowseLinks.elements = $H(BrowseLinks.elements).merge(elements).toObject();
+	{rdelim},
+	focusOpenerAndClose: function(close) {ldelim}
+		if (close) {ldelim}
+			parent.window.opener.focus();
+			parent.close();
+		{rdelim}
+	{rdelim}
+{rdelim}
+
+
+function $H(object) {ldelim}
+  return new Hash(object);
+{rdelim};
+
+// new params: form_table, form_field, form_uid
+function insertElement(table, uid, type, filename, fp, filetype, imagefile, action, close, form_table, form_field, form_uid) {ldelim}
+  var performAction = true;
+  // Call performing function and finish this action:
+  if (performAction) {ldelim}
+    addElement(filename, table+"_"+uid, fp, close, table, uid, form_table, form_field, form_uid);
+  {rdelim}
+{rdelim}
+
+// new params: table, uid, form_table, form_field, form_uid
+function addElement(elName, elValue, altElValue, close, table, uid, form_table, form_field, form_uid) {ldelim}
+//alert("data[" + table + "][" + uid + "][" + form_field + "]" + ", form_field: " + form_field);
+  if (parent.window.opener && parent.window.opener.setFormValueFromBrowseWin) {ldelim}
+    parent.window.opener.setFormValueFromBrowseWin("data[" + form_table + "][" + form_uid + "][" + form_field + "]", altElValue? altElValue : elValue, elName);
+    focusOpenerAndClose(close);
+  {rdelim} else {ldelim}
+    alert("Error - reference to main window is not set properly!");
+    parent.close();
+  {rdelim}
+{rdelim}
+
+function focusOpenerAndClose(close)	{ldelim}
+  BrowseLinks.focusOpenerAndClose(close);
+{rdelim}
+
 </script>
 
 
-</head></body>
-
-
-
+{* test links
+<a onclick="return insertElement('tx_newspaper_article', '61', 'db', 'TESTARTIKEL', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Add to list..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a><br /><br />
+<a onclick="return insertElement('tx_newspaper_article', '67', 'db', 'dasg21 testclose1', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Choose ..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a><br /><br />
+*}
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
 {$RANGE_LABEL}: <select name="range">
@@ -121,7 +172,9 @@ td {ldelim}
 
 
 {if $URL_PREV != ''}
-<a href="index.php?{$URL_PREV}">{$PAGE_PREV_LABEL}</a>
+<a href="index.php?{$URL_PREV}{if $FORM_TABLE}
+&form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
+{/if}">{$PAGE_PREV_LABEL}</a>
 {else}
 {$PAGE_PREV_LABEL}
 {/if}
@@ -135,7 +188,9 @@ td {ldelim}
 {/if}
  ]
 {if $URL_NEXT != ''}
-<a href="index.php?{$URL_NEXT}">{$PAGE_NEXT_LABEL}</a>
+<a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
+&form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
+{/if}">{$PAGE_NEXT_LABEL}</a>
 {else}
 {$PAGE_NEXT_LABEL}
 {/if}
@@ -146,12 +201,17 @@ td {ldelim}
 <td>No. </td>
 <td>Article</td>
 <td>Author</td>
-<td>BE user</td>
+{if !$IS_ARTICLE_BROWSER}
+  <td>BE user</td>
+{/if}
 <td>Date</td>
 <td align="center">Visible&nbsp;</td>
-<td align="center">Command&nbsp;</td>
+{if !$IS_ARTICLE_BROWSER}
+  <td align="center">Command&nbsp;</td>
+{/if}
 <td align="center">Time controlled</td>
 </tr>
+
 {section name=i loop=$DATA}
 {if ($smarty.section.i.index % 2 == 0)}
 	<tr class="bg1">
@@ -165,25 +225,48 @@ td {ldelim}
 		</td>
 		<td align="right"> {math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step} </td>
 		<td> 
-			<div title="{$DATA[i].teaser}"><span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})</div>
+			<div title="{$DATA[i].teaser}">
+{if $IS_ARTICLE_BROWSER}
+	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Add to list..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a>&nbsp;
+	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+{/if}
+				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
+{if !$IS_ARTICLE_BROWSER}
+    </a>  			
+{/if}
+			</div>
 			<div id="comments{$DATA[i].uid}" class="comment_box">{$DATA[i].comment} <a href="javascript:getComment({$DATA[i].uid}, 1);">ajax</a></div>
 		</td>
 		<td> {$DATA[i].author} </td>
-		<td> <!-- {$DATA[i].be_user} --> test_user </td> 
+{if !$IS_ARTICLE_BROWSER}
+		<td> {$DATA[i].be_user} </td>
+{/if}
 		<td> {$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"} </td>
 		<td align="center">
-{if $DATA[i].hidden == 0}
-<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
+{if !$IS_ARTICLE_BROWSER}
+  {* moderation list, so link visibile icon with hide/unhide functionality *}
+  {if $DATA[i].hidden == 0}
+    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
+  {else}
+    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
+  {/if}
 {else}
-<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
-{/if}
+  {* article browser, just display visiblity status, but do NOT link the icon *}
+  {if $DATA[i].hidden == 0}
+    {$HIDE_ICON}
+  {else}
+    {$UNHIDE_ICON}
+  {/if}
+{/if}  
 		</td>
+{if !$IS_ARTICLE_BROWSER}
 		<td> 
 <a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> 
 {$ARTICLE_PREVIEW_ICON} 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
 <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
 		</td>
+{/if}
 		<td align="center">
 {if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
 	{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}

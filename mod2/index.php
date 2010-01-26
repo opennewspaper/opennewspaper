@@ -229,6 +229,13 @@ for ($i=0; $i < sizeof($row); $i++) {
 		$smarty->assign('RECORD_LOCKED_ICON', tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false));
 		$smarty->assign('ARTICLE_PLACEMENT_ICON', tx_newspaper_BE::renderIcon('gfx/list.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_placement', false)));
 
+		// some values for article browser functionality
+		$smarty->assign('FORM_TABLE', (t3lib_div::_GP('form_table'))? t3lib_div::_GP('form_table') : '');
+		$smarty->assign('FORM_FIELD', (t3lib_div::_GP('form_field'))? t3lib_div::_GP('form_field') : '');
+		$smarty->assign('FORM_UID', intval(t3lib_div::_GP('form_uid'))? intval(t3lib_div::_GP('form_uid')) : 0);
+		
+		$smarty->assign('IS_ARTICLE_BROWSER', t3lib_div::_GP('form_table'))? 1 : 0; // set flag if mod2 should be rednered as moderation list or as article browser 
+
 
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {

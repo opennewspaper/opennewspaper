@@ -1,5 +1,26 @@
 <?php
 
+
+
+/// newspaper configuration; added here because this file is included when accssing hooks even if the newspaper framework is NOT available
+
+// replace element browser (EB) with article browser; array of fields in
+//$GLOBALS['newspaper']['tx_newspaper_article']['replaceEM'][name_of_db_table] = array(field_list) 
+$GLOBALS['newspaper']['replaceEM']['tx_newspaper_article'] = array('related'); // fields in articles
+$GLOBALS['newspaper']['replaceEM']['tx_newspaper_articlelist_manual'] = array('articles');
+$GLOBALS['newspaper']['replaceEM']['tx_newspaper_extra_combolinkbox'] = array('manually_selected_articles'); // \todo: replace with mod7 be (see #609)
+/** \todo
+ * set newspaper configuration using framework?
+ * example: tx_newspaper::setConfReplaceElementBrowserWithArticleBrowser([table], [field]);
+ */
+
+
+
+
+
+
+
+
 require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehook.php');
 
 
@@ -7,10 +28,13 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
+		
+		// \todo: move to tx_np_article
 		if (strtolower($table) == 'tx_newspaper_article') {
 			// hide default articles in list module, only concrete article are visible in list module
 			$additionalWhereClause .= ' AND is_template=0';
 		}
+		
 	}
 
 
@@ -20,7 +44,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// TCEForm hooks
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
-//t3lib_div::devlog('sh pre table', 'newspaper', 0, array($table, $field, $row, $altName, $palette, $extra, $pal, $_REQUEST));
+//t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => '$row, 'altName' => $altName, 'palette' => $palette, 'extra' => $extra, 'pal' => $pal, '_REQUEST' => $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
 	}
 
@@ -40,8 +64,35 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
 
+	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
+if ($field == 'related') t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'out' => $out, 'PA' => $PA));
 
+		// replace element browser (EB) with tx_newspaper article browser
+		if ($this->replaceEmWithArticleBrowser($table, $field)) {
+			// add table and field name to js function name
+			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
+			$js = '<script type="text/javascript">
+function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
+  var url = "' . tx_newspaper::getAbsolutePath() .  '/typo3conf/ext/newspaper/mod2/index.php?mode="+mode+"&bparams="+params+"&form_table="+form_table+"&form_field="+form_field+"&form_uid="+form_uid;
+  browserWin = window.open(url,"Typo3WinBrowser","height=350,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
+  browserWin.focus();
+}
+</script>';
+			// replace em with article browser
+			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $row['uid'] . '); return false;" >';
+			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
+		}
 
+	}
+
+	private function replaceEmWithArticleBrowser($table, $field) {
+//t3lib_div::devlog('replaceEmWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
+		//$GLOBALS['newspaper']['replaceEM']['tx_newspaper_article'] = array(field1, ... fieldn);
+		//$GLOBALS['newspaper']['replaceEM'][another_table] = array(field1, ... fieldn);
+		return 	array_key_exists('replaceEM', $GLOBALS['newspaper']) &&
+				array_key_exists(strtolower($table), $GLOBALS['newspaper']['replaceEM']) && 
+				in_array(strtolower($field), $GLOBALS['newspaper']['replaceEM'][strtolower($table)]);
+	}
 
 
 
