@@ -187,7 +187,7 @@ function focusOpenerAndClose(close)	{ldelim}
 	{math equation="(sp+1)*st" sp=$_POST.start_page st=$_POST.step}
 {/if}
  ]
-{if $URL_NEXT != ''}
+{if $URL_NEXT}
 <a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
 &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
 {/if}">{$PAGE_NEXT_LABEL}</a>
@@ -227,7 +227,7 @@ function focusOpenerAndClose(close)	{ldelim}
 		<td> 
 			<div title="{$DATA[i].teaser}">
 {if $IS_ARTICLE_BROWSER}
-	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Add to list..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a>&nbsp;
+	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
 	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
 {/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
