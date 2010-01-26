@@ -41,6 +41,7 @@
 			<label index="label.edit_article">Edit article</label>
 			<label index="label.time">This article uses start time and/ or end time</label>
 			<label index="label.internal_comments">View all internal comments for this article</label>
+			<label index="label.article_add">Add article to list ...</label>
 			
 			<label index="label.page_prev">&lt;&lt; previous hits</label>
 			<label index="label.page_next">next hits &gt;&gt;</label>
