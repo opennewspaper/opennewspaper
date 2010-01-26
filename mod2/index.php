@@ -228,6 +228,7 @@ for ($i=0; $i < sizeof($row); $i++) {
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('RECORD_LOCKED_ICON', tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false));
 		$smarty->assign('ARTICLE_PLACEMENT_ICON', tx_newspaper_BE::renderIcon('gfx/list.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_placement', false)));
+		$smarty->assign('ARTICLE_ADD_ICON', tx_newspaper_BE::renderIcon('gfx/plusbullet2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_add', false)));
 
 		// some values for article browser functionality
 		$smarty->assign('FORM_TABLE', (t3lib_div::_GP('form_table'))? t3lib_div::_GP('form_table') : '');
@@ -270,6 +271,12 @@ for ($i=0; $i < sizeof($row); $i++) {
 
 		$smarty->assign('DATA', $row);
 
+		if (!isset($_POST['step'])) {
+			$_POST['step'] = 10; // set default
+		}
+		if (!isset($_POST['start_page'])) {
+			$_POST['start_page'] = 0; // set default
+		}
 		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . '/typo3/');
