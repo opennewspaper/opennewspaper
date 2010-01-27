@@ -81,7 +81,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
+//t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -188,7 +188,19 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					$smarty->assign('sections_active', $sections_active);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
+					$smarty->assign('ICON', $this->getIcons());
 					return $smarty->fetch('mod7_module.tpl');
+				}
+				
+				private function getIcons() {
+					return array(
+						'group_totop' => tx_newspaper_BE::renderIcon('gfx/group_totop.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_totop', false, 14, 14)),
+						'up' => tx_newspaper_BE::renderIcon('gfx/up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_up', false, 14, 14)),
+						'down' => tx_newspaper_BE::renderIcon('gfx/down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_down', false, 14, 14)),
+						'group_tobottom' => tx_newspaper_BE::renderIcon('gfx/group_tobottom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_tobottom', false, 14, 14)),
+						'group_clear' => tx_newspaper_BE::renderIcon('gfx/group_clear.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_clear', false, 14, 14)),
+						'button_left' => tx_newspaper_BE::renderIcon('gfx/button_left.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_left', false, 14, 14)),
+					);
 				}
 				
 				
@@ -402,6 +414,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					$smarty->assign('singlemode', $singleMode);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('isde', $this->userIsDutyEditor());
+					$smarty->assign('ICON', $this->getIcons());
 					return $smarty->fetch('mod7_placement.tpl');
 				}
 				

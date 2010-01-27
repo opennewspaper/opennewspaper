@@ -43,28 +43,28 @@
 							</td>
 							<td valign="top" width="16">
 								<a href="#" class="movetotop" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/group_totop.gif" />
+									{$ICON.group_totop}
 								</a>
 								<br />	
 								<a href="#" class="moveup" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/up.gif" />
+									{$ICON.up}
 								</a> 
 								<br />
 								<a href="#" class="movedown" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/down.gif" />
+									{$ICON.down}
 								</a>
 								<a href="#" class="movetobottom" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-									<img src="/typo3/sysext/t3skin/icons/gfx/group_tobottom.gif" />
+									{$ICON.group_tobottom}
 								</a>
 								<br />
 								{if $section.listtype != "tx_newspaper_ArticleList_Semiautomatic"}
 									<br />
 									<a href="#" class="insertarticle" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-										<img src="/typo3/sysext/t3skin/icons/gfx/button_left.gif" width="14" height="14" />
+										{$ICON.button_left}
 									</a>
 									<br />
 									<a href="#" class="delete" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-										<img src="/typo3/sysext/t3skin/icons/gfx/group_clear.gif" />
+										{$ICON.group_clear}
 									</a>
 								{/if}
 							</td>

@@ -80,23 +80,23 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 		</td>
 		<td valign="top" width="16">
 			<a href="#" class="movetotop" rel="sections_selected">
-				<img src="/typo3/sysext/t3skin/icons/gfx/group_totop.gif" />
+				{$ICON.group_totop}
 			</a>
 			<br />				
 			<a href="#" class="moveup" rel="sections_selected">
-				<img src="/typo3/sysext/t3skin/icons/gfx/up.gif" />
+				{$ICON.up}
 			</a> 
 			<br />
 			<a href="#" class="movedown" rel="sections_selected">
-				<img src="/typo3/sysext/t3skin/icons/gfx/down.gif" />
+				{$ICON.down}
 			</a>
 			<br />
 			<a href="#" class="movetobottom" rel="sections_selected">
-				<img src="/typo3/sysext/t3skin/icons/gfx/group_tobottom.gif" />
+				{$ICON.group_tobottom}
 			</a>
 			<br />
 			<a href="#" class="delete" rel="sections_selected">
-				<img src="/typo3/sysext/t3skin/icons/gfx/group_clear.gif" />
+				{$ICON.group_clear}
 			</a>
 		</td>
 		<td>

@@ -33,6 +33,12 @@
 			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
 			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
 			<label index="saveall">Alle Artikellisten speichern</label>
+			<label index="label_group_totop">Move to top</label>
+			<label index="label_group_up">Move up</label>
+			<label index="label_group_down">Move down</label>
+			<label index="label_group_tobottom">Move to bottom</label>
+			<label index="label_group_clear">Remove article</label>
+			<label index="label_button_left">Add article</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
