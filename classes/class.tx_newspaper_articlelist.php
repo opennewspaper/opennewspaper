@@ -364,6 +364,14 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		self::$registered_articlelists[] = $newList;
 	}
 
+
+	/// Get the list of registered Article List types
+	/** \return The list of registered Article List types.
+	 */
+	static public function getRegisteredArticleLists() {
+		return self::$registered_articlelists;
+	}
+
 	/// Checks if an object or a table name is a registered article list
 	/** \param $data object or database table to be checked
 	 *  \return true if $data represents a registered article list
