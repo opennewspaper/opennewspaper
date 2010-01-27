@@ -806,11 +806,10 @@ t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $bu
 	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
 	 *  \return String <img ...> or <a href><img ...></a> (if linked)
 	 */
-	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false) {
+	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false, $width=16, $height=16) {
 
-/// \todo: read width and height from file? or hardcode 16x16px?
-		$width = 16;
-		$height = 16;
+		$width = intval($width)? intval($width) : 16;
+		$height = intval($height)? intval($height) : 16;
 
 		if ($id) {
 			$id = ' id="' . $id . '" '; // if id is set, set build attribute id="..."
