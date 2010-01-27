@@ -279,7 +279,7 @@ for ($i=0; $i < sizeof($row); $i++) {
 		}
 		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
 
-		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . '/typo3/');
+		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		
 		return $smarty->fetch('mod2.tmpl');
 	}

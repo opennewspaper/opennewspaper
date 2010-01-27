@@ -816,7 +816,7 @@ t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $bu
 			$id = ' id="' . $id . '" '; // if id is set, set build attribute id="..."
 		}
 
-		$backPath = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT'])) . 'typo3/'; // build bach path
+		$backPath = tx_newspaper::getAbsolutePath() . 'typo3/'; // build back path
 		if (substr($backPath, 0, 1) != '/') {
 			$backPath = '/' . $backPath;
 		}

@@ -532,18 +532,30 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 
 	/// get absolute path to Typo3 installation
-	/// \return absolute path to Typo3 installation (last / is not part of the return value)
-	public static function getAbsolutePath() {
+	/// \param $endsWithSlash determines if the returned path ends with a slash
+	/// \return absolute path to Typo3 installation 
+	public static function getAbsolutePath($endsWithSlash=true) {
 		/// \todo replace by a version NOT using EM conf (check t3lib_div)
 		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
 		if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
 			throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
 		}
-//t3lib_div::devlog('getAbsolutePath()', 'newspaper', 0, array(PATH_site));
 		$path = trim($em_conf['newspaperTypo3Path']);
-		if (substr($path, strlen($path)-1) == '/') {
-			// cut off last '/'
-			$path = substr($path, 0, strlen($path)-1);
+		
+		if ($endsWithSlash) {
+			// append "/", if missing
+			if ($path == '') {
+				$path = '/';
+			}
+			elseif (substr($path, strlen($path)-1) != '/') {
+				$path .= '/';
+			}
+		} else {
+			// remove last "/", if any
+			if (substr($path, strlen($path)-1) == '/') {
+				// cut off last '/'
+				$path = substr($path, 0, strlen($path)-1);
+			}
 		}
 		return $path;
 	}
