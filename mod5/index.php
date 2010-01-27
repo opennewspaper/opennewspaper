@@ -350,7 +350,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 
 		$new_article->store();
 
-		$url_parts = tx_newspaper::getAbsolutePath();
+		$base_url = tx_newspaper::getAbsolutePath();
 
 		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
 				'typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
