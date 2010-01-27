@@ -557,6 +557,12 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 				$path = substr($path, 0, strlen($path)-1);
 			}
 		}
+		
+		// first character in ABSOLUTE path must be a "/"
+		if (substr($path, 0, 1) != '/') {
+			$path = '/' . $path;
+		}
+		
 		return $path;
 	}
 
