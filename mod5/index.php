@@ -222,9 +222,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 		$smarty_article->assign('ARTICLE', $this->getLatestArticles());
 		$smarty_article->assign('ARTICLE_EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
-/// \todo: write function for path creation!!!!
-		$smarty_article->assign('T3PATH', '/' . substr(PATH_typo3, strlen($_SERVER['DOCUMENT_ROOT']))); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
-		$smarty->assign('ARTICLELIST', $smarty_article->fetch('mod5_latestarticles.tmpl'));
+		$smarty_article->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/'); // path to typo3, needed for edit article		$smarty->assign('ARTICLELIST', $smarty_article->fetch('mod5_latestarticles.tmpl'));
 
 
 		/// sys_be_shortcut
