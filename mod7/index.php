@@ -193,6 +193,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				private function getIcons() {
+					global $LANG;
 					return array(
 						'group_totop' => tx_newspaper_BE::renderIcon('gfx/group_totop.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_totop', false, 14, 14)),
 						'up' => tx_newspaper_BE::renderIcon('gfx/up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_up', false, 14, 14)),
