@@ -340,8 +340,8 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$at = new tx_newspaper_ArticleType($articletype);
 			
 		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
-t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
-t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
+//t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
+//t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
 		$new_article->setAttribute('articletype_id', $articletype);
 
 		// add creation date and user
@@ -350,22 +350,11 @@ t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings(
 
 		$new_article->store();
 
-		$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+		$url_parts = tx_newspaper::getAbsolutePath());
 
-		/*	volle URL muss angegeben werden, weil manche browser sonst 
-		 *  'http://' davorhaengen.
-		 */			
-		$url_parts = explode('/typo3', tx_newspaper::currentURL());
-		$base_url = $url_parts[0];
-
-		$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-				'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
+				'typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
 				$new_article->getUid() . ']=edit';
-/*
-			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' .
-			 	   $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
-			 	   $new_article->getUid() . ']=edit';
-*/
 		header('Location: ' . $url);				
 	}
 	
