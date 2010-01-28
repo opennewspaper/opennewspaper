@@ -65,7 +65,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
-if ($field == 'related') t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'out' => $out, 'PA' => $PA));
+//if ($field == 'related') t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'out' => $out, 'PA' => $PA));
 
 		// replace element browser (EB) with tx_newspaper article browser
 		if ($this->replaceEmWithArticleBrowser($table, $field)) {
@@ -84,16 +84,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		}
 
 	}
-
-	private function replaceEmWithArticleBrowser($table, $field) {
-//t3lib_div::devlog('replaceEmWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
-		//$GLOBALS['newspaper']['replaceEM']['tx_newspaper_article'] = array(field1, ... fieldn);
-		//$GLOBALS['newspaper']['replaceEM'][another_table] = array(field1, ... fieldn);
-		return 	array_key_exists('replaceEM', $GLOBALS['newspaper']) &&
-				array_key_exists(strtolower($table), $GLOBALS['newspaper']['replaceEM']) && 
-				in_array(strtolower($field), $GLOBALS['newspaper']['replaceEM'][strtolower($table)]);
-	}
-
 
 
 

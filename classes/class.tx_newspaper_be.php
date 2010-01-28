@@ -418,7 +418,7 @@ function findElementsByName(name, type) {
 			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage
 			$data[0]['article_id'] = $pz->getUid(); // store article uid for backend buttons usage (edit)
 		}
-//t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array($pz, $data));
+//t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array('pz' => $pz, 'data' => $data));
 
 
 		// if concrete article: add shortcuts for missing should-have and must-have extras
@@ -696,7 +696,7 @@ function changeWorkflowStatus(status, hidden_status) {
 		
 		$content = '';
 
-t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));	
+//t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));	
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
 			$content .= $this->renderWorkflowButton(false, 'hide', $hidden);
@@ -837,7 +837,6 @@ t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $bu
 	/**
 	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
 	 * called by hook $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][]
-	 * \return true, if files were added
 	 */
 	public static function addAdditionalScriptToBackend() {
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/util.js');
