@@ -1,13 +1,56 @@
 <script language="javascript">
 
-// these function assume prototype (ajax) be available
+
+// this script assumes prototype (ajax) to be available
+
+
+
+
+
+
+
+// add javascript and css if not available (backend called in popup WITHOUT typo3 frameset where these scripts are loaded to)
+t3BackendObject = getTypo3BackendObject();
+if (t3BackendObject != top) {ldelim}
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/common.js", "js");
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.js", "js");
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/extra/util.js", "js");
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/util.js", "js");
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.css", "css");
+{rdelim}
+
+//http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
+function loadJsCssFile(filename, filetype) {ldelim}
+	if (filetype == "js") {ldelim} //if filename is a external JavaScript file
+		var fileref = document.createElement('script');
+		fileref.setAttribute("type", "text/javascript");
+		fileref.setAttribute("src", filename);
+	{rdelim} else if (filetype == "css") {ldelim} //if filename is an external CSS file
+		var fileref = document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", filename);
+	{rdelim}
+	if (typeof fileref != "undefined") {ldelim}
+		document.getElementsByTagName("head")[0].appendChild(fileref);
+	{rdelim}
+{rdelim}
+
 
 
 /// utility functions //////////////////////////////////////////////////////////
 
-function test() {ldelim}
-alert('test function found');
-{rdelim}
+	// returns object containing getViewportWidth() etc. functions (or returns false if not available)
+	function getTypo3BackendObject() {ldelim}
+		if (typeof top.getViewportWidth == 'function') {ldelim}
+			return top; // called in "normal" typo3 backend
+		{rdelim}
+		if (typeof opener.top.getViewportWidth == 'function') {ldelim}
+			return opener.top; // called in standalone popup
+		{rdelim}
+		return false; // no reference could be found
+	{rdelim}
+	
 
 	/// returns the reload type for ajax call depending on the flag "is_concrete_article"
 	function get_onSuccess_function(is_concrete_article) {ldelim}
@@ -68,12 +111,17 @@ alert('test function found');
 	
 	/// the list of extras has to be reloaded from the server (needed for modal box or saveField ajax calls)
 	function reload_in_article(pz_uid) {ldelim}
+		if (t3BackendObject == top) {ldelim}
+			ref = top.content.list_frame
+		{rdelim} else {ldelim}
+			ref = top;
+		{rdelim}
 		var request = new top.Ajax.Request(
-				top.path + "typo3conf/ext/newspaper/mod3/index.php",
-				{ldelim}
+			t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{ldelim}
 				method: 'get',
 				parameters: "reload_extra_in_concrete_article=1&pz_uid=" + pz_uid + "&no_cache=" + new Date().getTime(),
-				onCreate: top.content.list_frame.processing_in_article,
+				onCreate: ref.processing_in_article,
 				onSuccess: response_in_article
 			{rdelim}
 		);
@@ -202,9 +250,9 @@ alert('test function found');
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-		var closehtml = (is_concrete_article)? escape(top.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : top.path + "typo3conf/ext/newspaper/mod3/close.html"; 
+		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/close.html"; 
 		top.showPopWin(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&is_concrete_article=" + is_concrete_article + "&returnUrl=" + closehtml,
+			t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&is_concrete_article=" + is_concrete_article + "&returnUrl=" + closehtml,
 			width, 
 			height, 
 			null, 
@@ -215,9 +263,9 @@ alert('test function found');
 	function subModalExtraEdit(table, uid, pz_uid, is_concrete_article) {ldelim}
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-		var closehtml = (is_concrete_article)? escape(top.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : top.path + "typo3conf/ext/newspaper/mod3/close.html";
+		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/close.html";
 		top.showPopWin(
-			top.path + "typo3/alt_doc.php?returnUrl=" + closehtml + "&edit[" + table + "][" + uid + "]=edit",
+			t3BackendObject.path + "typo3/alt_doc.php?returnUrl=" + closehtml + "&edit[" + table + "][" + uid + "]=edit",
 			width, 
 			height, 
 			null, 
@@ -225,15 +273,6 @@ alert('test function found');
 		);
 	{rdelim}
 
-	
-	
-	
-	
-
-	
-	
-	
-	
 	
 	
 	
@@ -455,18 +494,18 @@ alert('test function found');
 	
 	
 /// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
-	
 	function storeTemplateSet(table, uid, value) {ldelim}
 		uid = parseInt(uid);
 		var request = new top.Ajax.Request(
-				top.path + "typo3conf/ext/newspaper/mod3/index.php",
-				{ldelim}
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{ldelim}
 				method: 'get',
-				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime()
 			{rdelim}
 		);
 	{rdelim}				
+
 	
-	
+
 	
 </script>
