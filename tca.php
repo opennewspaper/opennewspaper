@@ -596,8 +596,9 @@ $TCA["tx_newspaper_article"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser_list",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "text",
+				"cols" => "40",	
+				"rows" => "5",
 			)
 		),
 		"text" => Array (		
@@ -1058,7 +1059,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 $TCA["tx_newspaper_articlelist"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,list_table,list_uid,section_id,notes"
+		"showRecordFieldList" => "hidden,starttime,endtime,notes,list_table,list_uid,section_id"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist"]["feInterface"],
 	"columns" => array (
@@ -1098,6 +1099,15 @@ $TCA["tx_newspaper_articlelist"] = array (
 				)
 			)
 		),
+		"notes" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.notes",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required",
+			)
+		),
 		"list_table" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.list_table",		
@@ -1135,17 +1145,9 @@ $TCA["tx_newspaper_articlelist"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"notes" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.notes",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, list_table, list_uid, section_id, notes")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, notes, list_table, list_uid, section_id")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -1176,7 +1178,7 @@ $TCA["tx_newspaper_pagetype"] = array (
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",	
-				"eval" => "alphanum,nospace",
+				"eval" => "required,alphanum,nospace,uniqueInPid",
 			)
 		),
 		"is_article_page" => Array (		
@@ -1235,7 +1237,7 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",	
-				"eval" => "alphanum,nospace",
+				"eval" => "required,alphanum,nospace,uniqueInPid",
 			)
 		),
 		"is_article" => Array (		
@@ -2660,5 +2662,4 @@ $TCA["tx_newspaper_tag_type"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

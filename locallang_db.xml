@@ -83,10 +83,10 @@
 			<label index="tx_newspaper_extra.template_set">Template set</label>
 			<label index="tx_newspaper_extra_sectionlist">Extra: Display the list of articles in a section</label>
 			<label index="tx_newspaper_articlelist">Article list (abstract superclass)</label>
+			<label index="tx_newspaper_articlelist.notes">Name</label>
 			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID of the list</label>
 			<label index="tx_newspaper_articlelist.section_id">ID of associated Section</label>
-			<label index="tx_newspaper_articlelist.notes">Notes</label>
 			<label index="tx_newspaper_pagetype">Page type</label>
 			<label index="tx_newspaper_pagetype.type_name">Type name</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Path name for Smarty templates</label>
@@ -279,10 +279,10 @@
 			<label index="tx_newspaper_extra.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_sectionlist">Extra: Anzeige der Artikel in einem Ressort</label>
 			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>
+			<label index="tx_newspaper_articlelist.notes">Name</label>
 			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>
 			<label index="tx_newspaper_articlelist.list_uid">UID der Liste</label>
 			<label index="tx_newspaper_articlelist.section_id">ID des zugehörigen Ressorts</label>
-			<label index="tx_newspaper_articlelist.notes">Notizen</label>
 			<label index="tx_newspaper_pagetype">Seitentyp</label>
 			<label index="tx_newspaper_pagetype.type_name">Typname</label>
 			<label index="tx_newspaper_pagetype.normalized_name">Pathname für Smarty-Templates</label>
