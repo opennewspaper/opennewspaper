@@ -61,7 +61,9 @@
   *  example.
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
-	
+
+/// \todo: rename field "notes", should be "title" (see #595)
+
 	/// Construct a tx_newspaper_ArticleList
 	/** \param $uid UID of the record in the corresponding SQL table
 	 *  \param $section tx_newspaper_Section to which this ArticleList is
