@@ -133,12 +133,6 @@ $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"][
 $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
 
-// normalized name should be required and uniqueInPid too
-// \todo: remove after adding the conf in kickstarter
-$TCA['tx_newspaper_pagetype']['columns']['normalized_name']['config']['eval'] = 'required,uniqueInPid,alphanum,nospace';
-$TCA['tx_newspaper_pagezonetype']['columns']['normalized_name']['config']['eval'] = 'required,uniqueInPid,alphanum,nospace';
-
-
 // make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
