@@ -566,6 +566,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
+		t3lib_div::devlog('setInherits()', 'newspaper', 0, array('extra' => $extra, 'inherits' => intval($inherits)));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
@@ -573,10 +574,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
-	
+        t3lib_div::devlog('setInherits()', 'newspaper', 0, array('is_inheritable' => $extra->getAttribute('is_inheritable')));
+		
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            t3lib_div::devlog('setInherits()', 'newspaper', 0, array('inheriting_pagezone' => $inheriting_pagezone));
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid());
-
+            t3lib_div::devlog('setInherits()', 'newspaper', 0, array('copied_extra' => $copied_extra));
+			
 			if ($copied_extra) {
 				if ($inherits == false) {	
 					/** Whenever the inheritance hierarchy is invalidated, 
@@ -593,6 +597,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					$copied_extra->setAttribute('gui_hidden', 0);
 				}
 				$copied_extra->store();
+				t3lib_div::devlog('setInherits()', 'newspaper', 0, array('copied_extra after store' => $copied_extra));
+				
+			}
+			else {
+				t3lib_div::devlog('setInherits()', 'newspaper', 0, 'no copied_extra');
 			}
 			 
 		}
@@ -832,7 +841,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s): 
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
-				 *  (2.3.1.3 Beispiel - ��nderung Ebene 1, aber Referenzelement wird nicht vererbt)
+				 *  (2.3.1.3 Beispiel - ������nderung Ebene 1, aber Referenzelement wird nicht vererbt)
 				 */
 				$parent = $this->getParentForPlacement();
 				if (!$parent instanceof tx_newspaper_PageZone) {
