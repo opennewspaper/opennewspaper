@@ -20,12 +20,12 @@ class tx_newspaper_WorkflowLog {
  
 
 	/// \return message: what status change took place
-	public static function getWorkflowStatusChangedComment($new_status, $old_status) {
+	public static function getWorkflowStatusChangedComment($new_role, $old_role) {
 		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_new', false) . ' "' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_' . intval($new_status), false) . '", ' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_old', false) . '"' .
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_' . intval($old_status), false) . '"';
+		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_new', false) . ' "' . 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_old', false) . '"' .
+			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
 	}
 	
 
