@@ -33,14 +33,13 @@
 			<label index="label_workflow_place_publish">Place &amp; publish</label>
 			<label index="label_workflow_status_0">Editorial staff</label>
 			<label index="label_workflow_status_1">Duty editor</label>
-			<label index="label_workflow_status_2">Article online, workflow ended</label>
+			<label index="label_workflow_status_1000">Article online, workflow ended</label>
 			<label index="label_workflow_status_old">Old status</label>
 			<label index="label_workflow_status_new">New status</label>
 			<label index="log_record_hidden">Record hidden</label>
 			<label index="log_record_published">Record published</label>
 			<label index="log_article_hidden">Article hidden</label>
 			<label index="log_article_published">Article published</label>
-			<label index="log_user_entry">User comment</label>
 			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>

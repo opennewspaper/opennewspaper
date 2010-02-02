@@ -16,6 +16,10 @@ define('DEBUG_POSITION', false);
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', true); // if set to true the workflow buttons don't close the form (better for testing)
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
 
+define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
+define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
+define('NP_ACTIVE_ROLE_NONE', 1000);
+
 
 /// function for adding newspaper functionality to the backend
 /** \todo Oliver: document me!
@@ -783,17 +787,6 @@ function changeWorkflowStatus(status, hidden_status) {
 		}
 		return false; // no group found
 	}
-
-
-	/// \return message: what status change took place
-	public static function getWorkflowStatusActionTitle($new_status, $old_status) {
-		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_new', false) . ' "' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_' . intval($new_status), false) . '" ,' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_old', false) . '"' .
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_status_' . intval($old_status), false) . '"';
-	}
-
 
 
 

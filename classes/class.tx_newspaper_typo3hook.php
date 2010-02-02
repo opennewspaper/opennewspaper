@@ -103,28 +103,10 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>$incomingFieldArray, 'table'=>$table, 'id'=>$id, 'request'=>$_REQUEST));
-
-// \todo: move to writesLog check ???
-		$this->checkIfWorkflowStatusChanged($incomingFieldArray, $table, $id);
+		
+		// pass data to newspaper classes
+		tx_newspaper_WorkflowLog::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
-
-	private function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id) {
-//t3lib_div::devlog('wf stat', 'newspaper', 0, array($incomingFieldArray, $table, $id, $_REQUEST));
-
-		$request = $_REQUEST; // copy array, because values might be overwritten
-
-		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
-			$incomingFieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite value of field "hidden"
-		}
-		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
-			return; // value not set, so can't decide if the status changed 
-		}
-		if ($request['workflow_status'] == $request['workflow_status_ORG']) {
-			return; // status wasn't changed, so don't store value
-		}
-		$incomingFieldArray['workflow_status'] = $request['workflow_status']; // change workflow status
-	}
-
 
 
 
@@ -151,93 +133,21 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		/// handle uploads of tx_newspaper_Extra_Image
 		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
 		
-		if (!tx_newspaper::isAbstractClass($table) && class_exists($table)) { ///<newspaper specification: table name = class name
-
+		// send hook to newspaper classes
+		tx_newspaper_WorkflowLog::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+		
+/// \todo move to sysfolder class	
+		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
-
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
 			if (in_array("tx_newspaper_StoredObject", class_implements($np_obj))) {
-/// \todo: move to function
 				/// tx_newspaper_StoredObject is implemented, so record is to be stored in a special sysfolder
 				$pid = tx_newspaper_Sysfolder::getInstance()->getPid($np_obj);
 				$fieldArray['pid'] = $pid; // map pid to appropriate sysfolder
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
-
-			/// check if a newspaper record action should be logged
-			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
-				
-/// \todo: move to function - move to log class?
-
-				/// IMPORTANT: checkIfWorkflowStatusChanged() has run, so $fieldArray has been modified already
-
-				$request = $_REQUEST;
-
-//debug($GLOBALS['BE_USER']);				
-				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
-				
-				// check if the placement form should be opened after saving the record
-				// \todo if that's possible ...
-				$redirectToPlacementModule = false;
-				if (isset($request['workflow_status']) && isset($request['workflow_status_ORG']) && $request['workflow_status'] == 2 && $request['workflow_status_ORG'] != 2) {
-					$redirectToPlacementModule = true;
-					$request['workflow_status'] = 1; /// active role is set to duty editor, but placement form is opened immediately. it that form is saved, workflow_status is set to 2
-					$fieldArray['workflow_status'] = 1;						
-				}
-				
-				
-				/// check if auto log entry for hiding/publishing newspaper record should be written
-				if (array_key_exists('hidden', $fieldArray)) {
-					if ($table == 'tx_newspaper_article') {
-						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_published', false);
-					} else {
-						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_published', false);
-					}
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => time(),
-						'crdate' => time(), 
-						'cruser_id' => $be_user, 
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
-						'table_uid' => $id,
-						'action' => $action,
-						'comment' => ''
-					));
-				}
-				
-				/// check if auto log entry for change of workflow status should be written (article only)
-				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $request)) {
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => time(),
-						'crdate' => time(), 
-						'cruser_id' => $be_user, 
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
-						'table_uid' => $id,
-						'action' => tx_newspaper_BE::getWorkflowStatusActionTitle(intval($fieldArray['workflow_status']), intval($request['workflow_status_ORG'])),
-						'comment' => ''
-					));
-				}
-				
-				/// check if manual comment should be written (this log record should always be written LAST)
-				if (isset($request['workflow_comment']) && $request['workflow_comment'] != '') {
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => time(),
-						'crdate' => time(), 
-						'cruser_id' => $be_user, 
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
-						'table_uid' => $id,
-						'action' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_user_entry', false),
-						'comment' => $request['workflow_comment']
-					));
-				}
-/// \todo: if ($redirectToPlacementModule) { ...}
-			}
 		}
+
 	}
 
 
