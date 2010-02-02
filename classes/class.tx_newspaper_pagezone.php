@@ -643,6 +643,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $hierarchy;
 	}
 
+
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,
 	 *  but not the data from the concrete Extra_* tables. I.e. it creates a
@@ -673,6 +674,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
 		}
 	}
+
 
 	/// Change parent Page Zone
 	/** - Hide Extras placed on this Page Zone
@@ -708,6 +710,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 	}
 	
+
 	public function getExtraOrigin(tx_newspaper_Extra $extra) {
 		if ($extra->isOriginExtra()) return $this;
 		
@@ -719,6 +722,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 		}
 	}
+
 
 	public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
 		$original_pagezone = $this->getExtraOrigin($extra);
@@ -733,15 +737,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $section->getAttribute('section_name');
 	}
 	
+
 	/// returns true if pagezone is an article
 	public function isArticle() {
 		return $this instanceof tx_newspaper_Article;
 	}
 
+
 	/// returns true if pagezone is a pagezone_page
 	public function isPagezonePage() {
 		return $this instanceof tx_newspaper_PageZone_Page;
 	}
+
 
 	/// returns true if pagezone is a default article
 	public function isDefaultArticle() {
@@ -750,6 +757,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		return ($this->getAttribute('is_template') == 1);
 	}
+
 
 	/// returns true if pagezone is a concrete article
 	public function isConcreteArticle() {
@@ -798,14 +806,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return tx_newspaper::insertRows('tx_newspaper_pagezone', $row);		
 	}
 
+
 	public function setPageZoneType(tx_newspaper_PageZoneType $type) {
 		$this->pagezonetype = $type;
 	}
+
 
 	public function setParentPage(tx_newspaper_Page $parent) {
 		$this->parent_page = $parent;
 		$this->parent_page_id = $parent->getUid();
 	}
+
 
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -841,7 +852,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s): 
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
-				 *  (2.3.1.3 Beispiel - ������nderung Ebene 1, aber Referenzelement wird nicht vererbt)
+				 *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
 				 */
 				$parent = $this->getParentForPlacement();
 				if (!$parent instanceof tx_newspaper_PageZone) {
@@ -891,7 +902,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return $position+($position_before_which-$position)/2;
 	}
 
- 	/// Binary search for an Extra, assuming that $this->extras is ordered by position
+
+	/// Binary search for an Extra, assuming that $this->extras is ordered by position
 	/** This method must be overridden in the Article class because in articles
 	 *  Extras are ordered by paragraph first, position second
 	 */
@@ -913,9 +925,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 													  ' not found in array of Extras!');		
 	}
 	
+
 	///	Given a origin_uid, find the Extra which has this value for origin_uid
 	final protected function findExtraByOriginUID($origin_uid) {
-		foreach ($this->getExtras() as $extra) {
+		foreach ($this->getExtras(true) as $extra) {
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
 		return null;
@@ -925,6 +938,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	protected function findLastPosition() {
 		return $this->getExtra(sizeof($this->getExtras())-1)->getAttribute('position');
 	}
+
 
 	/** Step from parent to parent until a PageZone with matching type is
 	 *  found.
@@ -978,6 +992,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 	}
 	
+
 	/// Read Extras from DB
 	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
 	 *  class c'tor instead of every descendant to minimize code duplication.
@@ -998,8 +1013,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo factor out code to read MM table and create Extras
 	 * 
 	 *  \param $uid UID in the table of the abstract PageZone type 
+	 *  \param $hidden_too Also get Extras that are hidden because their
+     *        inheritance mode has been set to false
 	 */
- 	protected function readExtras($uid) {
+ 	protected function readExtras($uid, $hidden_too = false) {
 		$uids = tx_newspaper::selectRows(
 			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
 		);
@@ -1015,8 +1032,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			
 			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-					if (!$deleted['deleted'] && !$deleted['gui_hidden'] && 
-						!(TYPO3_MODE != 'BE' && !$deleted['show_extra'])) {
+					if (!$deleted['deleted'] && 
+					    (!$deleted['gui_hidden'] || $hidden_too) && 
+						!(TYPO3_MODE != 'BE' && 
+						!$deleted['show_extra'])) {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
@@ -1033,6 +1052,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		# else t3lib_div::debug("readExtras($uid): Empty result for " . tx_newspaper::$query);
  	}
  	
+
  	/// Ordering function to keep Extras in the order in which they appear on the PageZone
  	/** Supplied as parameter to usort() in getExtras().
  	 *  \param $extra1 first Extra to compare
@@ -1045,6 +1065,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		return $extra1->getAttribute('position')-$extra2->getAttribute('position');			 	
 	}
 	
+
 	/// Read Attributes from DB
 	/** \see readExtras()
 	 * 
@@ -1057,6 +1078,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		$this->attributes['query'] = tx_newspaper::$query;
  	}
  	
+
  	/// Returns the table which links Extras to this type of page zone
  	/** This function is needed, and non-static, because late static binding
  	 *  does not work too well with PHP (at least prior to 5.3, which introduced
@@ -1067,14 +1089,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	abstract public function getExtra2PagezoneTable();
  	
  	/// Retrieve the array of Extras on the PageZone, sorted by position
-	public function getExtras() {
+ 	/** \param $hidden_too Also get Extras that are hidden because their
+ 	 *        inheritance mode has been set to false
+ 	 */
+	public function getExtras($hidden_too = false) {
 		if (!$this->extras) {
-			$this->readExtras($this->getUid());
+			$this->readExtras($this->getUid(), $hidden_too);
 		}
 
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
 		return $this->extras; 
 	}
+
 
 	///	Retrieve a single Extra, defined by its index in the sequence
 	/** \param $index 
