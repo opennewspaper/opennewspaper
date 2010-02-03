@@ -115,6 +115,8 @@
 			<label index="tx_newspaper_extra_articlelist.first_article">First article to display (number)</label>
 			<label index="tx_newspaper_extra_articlelist.num_articles">Number of articles to display</label>
 			<label index="tx_newspaper_extra_articlelist.template">Display template</label>
+			<label index="tx_newspaper_extra_articlelist.header">Header</label>
+			<label index="tx_newspaper_extra_articlelist.image">Image</label>
 			<label index="tx_newspaper_extra_textbox">Extra: Text box</label>
 			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_textbox.title">Title</label>
@@ -311,6 +313,8 @@
 			<label index="tx_newspaper_extra_articlelist.first_article">Erster anzuzeigender Artikel (Zahl)</label>
 			<label index="tx_newspaper_extra_articlelist.num_articles">Anzahl anzuzeigender Artikel</label>
 			<label index="tx_newspaper_extra_articlelist.template">Designvorlage</label>
+			<label index="tx_newspaper_extra_articlelist.header">Überschrift</label>
+			<label index="tx_newspaper_extra_articlelist.image">Bild</label>
 			<label index="tx_newspaper_extra_textbox">Extra: Textkasten</label>
 			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_textbox.title">Titel</label>

@@ -1444,7 +1444,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 $TCA["tx_newspaper_extra_articlelist"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_articlelist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "description,articlelist,first_article,num_articles,template"
+		"showRecordFieldList" => "description,articlelist,first_article,num_articles,template,header,image"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_articlelist"]["feInterface"],
 	"columns" => array (
@@ -1508,9 +1508,32 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				"size" => "30",
 			)
 		),
+		"header" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.header",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"image" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.image",		
+			"config" => Array (
+				"type" => "group",
+				"internal_type" => "file",
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
+				"uploadfolder" => "uploads/tx_newspaper",
+				"show_thumbs" => 1,	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "description;;;;1-1-1, articlelist, first_article, num_articles, template")
+		"0" => array("showitem" => "description;;;;1-1-1, articlelist, first_article, num_articles, template, header, image")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

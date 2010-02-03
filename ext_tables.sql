@@ -454,6 +454,8 @@ CREATE TABLE tx_newspaper_extra_articlelist (
 	first_article int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	template tinytext NOT NULL,
+	header tinytext NOT NULL,
+	image blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
