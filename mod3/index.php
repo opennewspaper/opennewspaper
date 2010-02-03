@@ -167,13 +167,19 @@ t3lib_div::devlog('processInheritanceSourceChange', 'newspaper', 0, array(value 
 		$pz_uid = intval($pz_uid);
 //		$paragraph = intval($paragraph); // \todo: needed???
 
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create($pz_uid); // create pagezone or article
-		
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create($pz_uid); // create pagezone_page or article
+
 		$abstract_uid = tx_newspaper_Extra::createExtraRecord($pooled_extra_uid, $extra_class, true); // true = force new record to be written
+
 		$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
-		
+//		$e->setAttribute('origin_uid', $origin_uid); // store uid of referenced extra, so this extra can be identified as a referenced extra
+/// \todo: show / passdown: get values from origin extra and use setAttr() or set default values for show and passdown?
+//		$e->store();
+
+/// \todo: check why SECOND extra records gets written 		
 		$pz->insertExtraAfter($e, $origin_uid);		
-//\todo: close.html/close_in_afrticle.html
+
+//\todo: close.html/close_in_article.html
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
 		die();
 	}	
