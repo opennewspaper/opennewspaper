@@ -957,7 +957,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
         t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
-	        'pagezone_uid' => $getUid(),
+	        'pagezone_uid' => $this->getUid(),
 	        '$origin_uid' => $origin_uid, 
 	        '$hidden_too' => intval($hidden_too))
         );
