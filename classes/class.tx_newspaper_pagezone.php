@@ -1031,6 +1031,20 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 
+	/// Retrieve the array of Extras on the PageZone, sorted by position
+    /** \param $hidden_too Also get Extras that are hidden because their
+     *        inheritance mode has been set to false
+     */
+    public function getExtras($hidden_too = false) {
+        if (!$this->extras) {
+            $this->readExtras($this->getUid(), $hidden_too);
+        }
+
+        usort($this->extras, array(get_class($this), 'compareExtras')); 
+        return $this->extras; 
+    }
+
+	
 	/// Read Extras from DB
 	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
 	 *  class c'tor instead of every descendant to minimize code duplication.
@@ -1079,8 +1093,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		        		$this->extras[] = $extra;
 					} else {
 						/// \todo remove association table entry, but only if really deleted
-#						t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': deleted!');
-					}
+				        t3lib_div::devlog('readExtras()', 'newspaper', 0, 
+				            array('extra uid' => $uid['uid_foreign'],
+				                  $deleted)
+				        );
+											}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
 					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
@@ -1126,19 +1143,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
  	abstract public function getExtra2PagezoneTable();
  	
-
- 	/// Retrieve the array of Extras on the PageZone, sorted by position
- 	/** \param $hidden_too Also get Extras that are hidden because their
- 	 *        inheritance mode has been set to false
- 	 */
-	public function getExtras($hidden_too = false) {
-		if (!$this->extras) {
-			$this->readExtras($this->getUid(), $hidden_too);
-		}
-
-		usort($this->extras, array(get_class($this), 'compareExtras')); 
-		return $this->extras; 
-	}
 
 
 	///	Retrieve a single Extra, defined by its index in the sequence
