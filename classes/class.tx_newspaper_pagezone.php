@@ -1089,10 +1089,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
-					} else {
+                        t3lib_div::devlog(
+                            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).') succeeded',
+                            'newspaper', 0, 
+                            array('extra uid' => $uid['uid_foreign'],
+                                  $deleted) 
+						} else {
 						/// \todo remove association table entry, but only if really deleted
 				        t3lib_div::devlog(
-				        'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')',
+				            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')',
 				            'newspaper', 0, 
 				            array('extra uid' => $uid['uid_foreign'],
 				                  $deleted) 
