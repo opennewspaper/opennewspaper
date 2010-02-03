@@ -1035,7 +1035,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      */
     public function getExtras($hidden_too = false) {
         t3lib_div::devlog('getExtras('.intval($hidden_too).')', 'newspaper', 0);
-    	if (!$this->extras) {
+    	if (!$this->extras || $hidden_too) {
             $this->readExtras($this->getUid(), $hidden_too);
         }
 
