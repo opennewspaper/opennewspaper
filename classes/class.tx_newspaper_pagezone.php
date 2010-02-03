@@ -1034,7 +1034,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *        inheritance mode has been set to false
      */
     public function getExtras($hidden_too = false) {
-        if (!$this->extras) {
+        t3lib_div::devlog('getExtras('.intval($hidden_too.')', 'newspaper', 0, array(
+            'pagezone_uid' => $this->getUid(),
+            '$origin_uid' => $origin_uid, 
+            '$hidden_too' => intval($hidden_too),
+            'getExtras()' => $this->getExtras($hidden_too))
+        );
+    	if (!$this->extras) {
             $this->readExtras($this->getUid(), $hidden_too);
         }
 
@@ -1067,7 +1073,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      *        inheritance mode has been set to false
 	 */
  	protected function readExtras($uid, $hidden_too = false) {
-		$uids = tx_newspaper::selectRows(
+        t3lib_div::devlog(
+            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')', 'nespaper', 0);
+ 		$uids = tx_newspaper::selectRows(
 			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
 		);
 
@@ -1089,15 +1097,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
-                        t3lib_div::devlog(
-                            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).') succeeded',
+if(0)                   t3lib_div::devlog(
+                            'readExtras() succeeded',
                             'newspaper', 0, 
                             array('extra uid' => $uid['uid_foreign'],
                                   $deleted));
 						} else {
 						/// \todo remove association table entry, but only if really deleted
-				        t3lib_div::devlog(
-				            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')',
+if(0)			        t3lib_div::devlog(
+				            'readExtras() failed',
 				            'newspaper', 0, 
 				            array('extra uid' => $uid['uid_foreign'],
 				                  $deleted) 
