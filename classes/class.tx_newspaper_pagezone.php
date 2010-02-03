@@ -956,8 +956,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \param $hidden_too Whether to search in GUI-hidden extras as well
 	 */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
-        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array('$origin_uid' => $origin_uid, '$hidden_too' => intval($hidden_too)));
-        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array('getExtras()' => $this->getExtras($hidden_too)));
+        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
+	        'pagezone_uid' => $getUid(),
+	        '$origin_uid' => $origin_uid, 
+	        '$hidden_too' => intval($hidden_too))
+        );
+        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, 
+            array('getExtras()' => $this->getExtras($hidden_too))
+        );
         
 		foreach ($this->getExtras($hidden_too) as $extra) {
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
