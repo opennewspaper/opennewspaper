@@ -153,7 +153,10 @@ t3lib_div::devlog('processInheritanceSourceChange', 'newspaper', 0, array(value 
 
 		$e = new $extra_class($pooled_extra_uid);
 		$copied_extra = $e->duplicate();
-		$copied_extra->setAttribute('pool', false);
+		$copied_extra->setAttribute('pool', false); // otherwise a copied pooled extra would be a pooled extra too
+		// set default value fpr show and pass down
+		$copied_extra->setAttribute('show_extra', true);
+		$copied_extra->setAttribute('is_inheritable', true);
 		$copied_extra->store();	
 
 		$pz->insertExtraAfter($copied_extra, $origin_uid);
