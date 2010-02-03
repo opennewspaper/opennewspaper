@@ -44,6 +44,7 @@
 		<td align="center">pos</td>
 		<td align="center">origin</td>
 		<td align="center">uid</td>
+		<td align="center">concr.</td>
 	{/if}
 </tr>
 	{section name=i loop=$EXTRA_DATA} 
@@ -134,6 +135,7 @@
 				<td>{$EXTRA_DATA[i].position}</td>
 				<td>{$EXTRA_DATA[i].origin_uid}</td>
 				<td>{$EXTRA_DATA[i].uid}</td>
+				<td>{$EXTRA_DATA[i].concrete_uid}</td>
 			{/if}
 			</tr>
 	{/section}
