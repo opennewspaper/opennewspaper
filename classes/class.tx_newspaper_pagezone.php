@@ -590,7 +590,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
-		t3lib_div::devlog('setInherits()', 'newspaper', 0, array('extra' => $extra, 'inherits' => intval($inherits)));
+		t3lib_div::devlog('setInherits() - 0', 'newspaper', 0, array('extra' => $extra, 'inherits' => intval($inherits)));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
@@ -598,12 +598,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
-        t3lib_div::devlog('setInherits()', 'newspaper', 0, array('is_inheritable' => $extra->getAttribute('is_inheritable')));
+        t3lib_div::devlog('setInherits() - 1: after store', 'newspaper', 0, array('is_inheritable' => $extra->getAttribute('is_inheritable')));
 		
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-            t3lib_div::devlog('setInherits()', 'newspaper', 0, array('inheriting_pagezone' => $inheriting_pagezone));
+            t3lib_div::devlog('setInherits() - 2: inheriting pagezone', 'newspaper', 0, array('inheriting_pagezone' => $inheriting_pagezone));
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid(), true);
-            t3lib_div::devlog('setInherits()', 'newspaper', 0, array('copied_extra' => $copied_extra));
+            t3lib_div::devlog('setInherits() - 3: copied extra', 'newspaper', 0, array('copied_extra' => $copied_extra));
 			
 			if ($copied_extra) {
 				if ($inherits == false) {	
@@ -621,11 +621,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					$copied_extra->setAttribute('gui_hidden', 0);
 				}
 				$copied_extra->store();
-				t3lib_div::devlog('setInherits()', 'newspaper', 0, array('copied_extra after store' => $copied_extra));
+				t3lib_div::devlog('setInherits() - 4: copied extra after store', 'newspaper', 0, array('copied_extra after store' => $copied_extra));
 				
 			}
 			else {
-				t3lib_div::devlog('setInherits()', 'newspaper', 0, 'no copied_extra');
+				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'no copied_extra');
 			}
 			 
 		}
@@ -959,10 +959,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 	        'pagezone_uid' => $this->getUid(),
 	        '$origin_uid' => $origin_uid, 
-	        '$hidden_too' => intval($hidden_too))
-        );
-        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, 
-            array('getExtras()' => $this->getExtras($hidden_too))
+	        '$hidden_too' => intval($hidden_too),
+            'getExtras()' => $this->getExtras($hidden_too))
         );
         
 		foreach ($this->getExtras($hidden_too) as $extra) {
@@ -1093,7 +1091,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		        		$this->extras[] = $extra;
 					} else {
 						/// \todo remove association table entry, but only if really deleted
-				        t3lib_div::devlog('readExtras('.$uid.', '.intval($hidden_too).')', 'newspaper', 0, 
+				        t3lib_div::devlog(
+				        'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')',
+				            'newspaper', 0, 
 				            array('extra uid' => $uid['uid_foreign'],
 				                  $deleted) 
 				        );
