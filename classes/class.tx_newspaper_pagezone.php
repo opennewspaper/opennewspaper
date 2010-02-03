@@ -1095,7 +1095,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 						/// \todo remove association table entry, but only if really deleted
 				        t3lib_div::devlog('readExtras()', 'newspaper', 0, 
 				            array('extra uid' => $uid['uid_foreign'],
-				                  $deleted)
+				                  $deleted) 
 				        );
 											}
         		} catch (tx_newspaper_EmptyResultException $e) {
