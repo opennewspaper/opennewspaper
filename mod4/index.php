@@ -787,8 +787,9 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'mm.uid_foreign'
 		);
 		if (sizeof($row) > 0) { 
+t3lib_div::devlog('row', 'newspaper', 0, $row);
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
+				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid_foreign'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}
