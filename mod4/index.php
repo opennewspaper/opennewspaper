@@ -353,7 +353,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                     ' concrete uid: ' .
                         '<strong>' . 
                         '<a href="' .
-                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3D&edit[tx_newspaper_articlelist_manual][' . $concrete_list->getUID() . ']=edit">'
+                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3D&edit[tx_newspaper_articlelist_manual][' . $concrete_list->getUID() . ']=edit">' .
                             $concrete_list->getUID() .
                         '</a>' .
                         '</strong>' .
