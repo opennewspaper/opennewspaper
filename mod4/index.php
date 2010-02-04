@@ -330,11 +330,18 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         return $ret;
     }
     
-    static function getExtraInfo($section_id) {
+    static function getExtraInfo($extra_id) {
         $ret = '';
-        foreach (explode(',', $section_id) as $section) {
-            $ret .= '<p>' . 
-                    'Extra ' . intval(trim($section)) .
+        foreach (explode(',', $extra_id) as $uid) {
+            try {
+                $extra = tx_newspaper_Extra_Factory::getInstance()->create(intval(trim($uid)));
+            } catch (tx_newspaper_DBException $e) {
+                $ret .= '<p><strong>No such extra: ' . $uid . '</strong></p>';
+                continue;
+            }
+        	$ret .= '<p>' . 
+	                    'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getAbstractUid()) . 
+	                    ' (' . $extra->getTable() . ' ' . self::getRecordLink($extra->getTable(), $extra->getUid()) . ')' .
                     '</p>';
         }
         return $ret;
