@@ -85,9 +85,11 @@ class tx_newspaper_ResolveRealURL {
 	    ');
         if (!$res) die('article alias ' . $article_alias . ' not found');
 
-        while ($row = mysql_fetch_array($res, MYSQL_ASSOC)) print_r ($row);
+        $row = mysql_fetch_array($res, MYSQL_ASSOC);
+        if (!$row) die('article alias ' . $article_alias . ' not found');
+        
 		// 
-		die('article alias: ' . $article_alias);
+		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
 	}
 	
 	private $uri;
