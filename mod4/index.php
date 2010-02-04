@@ -512,7 +512,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			),
 			array(
 				'title' => 'Extra on Pagezone Page: mm-linked Extras',
-				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezonePage'),
+				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone('tx_newspaper_pagezone_page_extras_mm')'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Extra on Article: mm-linked Extras',
+				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone('tx_newspaper_article_extras_mm')'),
 				'param' => array()
 			),
 		);
@@ -768,14 +773,15 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		return $msg;
 	}
 	
-	static function checkLinksToDeletedExtrasPagezonePage($mm_table) {
+	/// \param $mm_table typo3 mm table where extras are linked
+	static function checkLinksToDeletedExtrasPagezone($mm_table) {
 		$msg = '';
 		$count = 0;
 			
 		// deleted flag set?
 		$row = tx_newspaper::selectRows(
 			'mm.*',
-			'tx_newspaper_pagezone_page_extras_mm mm INNER JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid', 
+			$mm_table . ' mm INNER JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid', 
 			'e.deleted=1',
 			'',
 			'mm.uid_foreign'
@@ -790,7 +796,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		// abstract extra deleted?
 		$row = tx_newspaper::selectRows(
 			'mm.*',
-			'tx_newspaper_pagezone_page_extras_mm mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid AND e.uid<=0',
+			$mm_table . ' mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid AND e.uid<=0',
 			'1',
 			'',
 			'mm.uid_foreign'
