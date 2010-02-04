@@ -274,14 +274,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		// ... section
     		try {
     		    $section = new tx_newspaper_Section(intval(trim($uid)));
+	            $ret .= '<p>' . 
+	                'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) .
+	                ' (' . $section->getAttribute('section_name') . ')' . 
+	            '</p>';
     		} catch (tx_newspaper_DBException $e) {
     			$ret .= '<p><strong>No such section: ' . $uid . '</strong></p>';
     			continue;
     		}
-            $ret .= '<p>' . 
-                'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) .
-                ' (' . $section->getAttribute('section_name') . ')' . 
-            '</p>';
     		
             // ... article list
     		try {
@@ -338,14 +338,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         foreach (explode(',', $article_id) as $uid) {
             try {
             	$article = new tx_newspaper_Article($uid);
+	            $ret .= '<p>' . 
+	                        'Article: ' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
+	                        ' - ' . $article->getAttribute('title');
+	                    '</p>';
             } catch (tx_newspaper_DBException $e) {
                 $ret .= '<p><strong>No such article: ' . $uid . '</strong></p>';
             	continue;
             }
-            $ret .= '<p>' . 
-	                    'Article: ' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
-	                    ' - ' . $article->getAttribute('title');
-                    '</p>';
             
             foreach ($article->getExtras() as $extra) {
             	$ret .= self::getExtraInfo($extra->getAbstractUid());
@@ -359,14 +359,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         foreach (explode(',', $extra_id) as $uid) {
             try {
                 $extra = tx_newspaper_Extra_Factory::getInstance()->create(intval(trim($uid)));
+	            $ret .= '<p>' . 
+	                        'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getAbstractUid()) . 
+	                        ' (' . $extra->getTable() . ' ' . self::getRecordLink($extra->getTable(), $extra->getUid()) . ')' .
+	                    '</p>';
             } catch (tx_newspaper_DBException $e) {
                 $ret .= '<p><strong>No such extra: ' . $uid . '</strong></p>';
                 continue;
             }
-        	$ret .= '<p>' . 
-	                    'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getAbstractUid()) . 
-	                    ' (' . $extra->getTable() . ' ' . self::getRecordLink($extra->getTable(), $extra->getUid()) . ')' .
-                    '</p>';
         }
         return $ret;
     }
@@ -376,14 +376,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         foreach (explode(',', $articlelist_id) as $uid) {
         	try {
         		$concrete_list = tx_newspaper_ArticleList_Factory::getInstance()->create(intval(trim($uid)));
+	            $ret .= '<p>' . 
+	                        'Article list: ' . self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
+	                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
+	                    '</p>';
         	} catch (tx_newspaper_DBException $e) {
                 $ret .= '<p><strong>No such article list: ' . $uid . '</strong></p>';
         		continue;
         	}
-            $ret .= '<p>' . 
-                        'Article list: ' . self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
-                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
-                    '</p>';
             
             $articles = $concrete_list->getArticles(10);
             if ($articles) {
