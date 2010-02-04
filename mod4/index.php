@@ -368,7 +368,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         return $ret;
     }
     
-    static protected getPageInfo($page_id) {
+    static protected function getPageInfo($page_id) {
     	$ret = '';
     	foreach (explode(',', $page_id) as $uid) {
     		try {
