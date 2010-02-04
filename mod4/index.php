@@ -510,7 +510,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkExtraInArticleIsArticleOrPagezone'),
 				'param' => array()
 			),
-
+			array(
+				'title' => 'Extra on Pagezone Page: mm-linked Extras',
+				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezonePage'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
@@ -764,7 +768,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		return $msg;
 	}
 	
-	static function checkLinksToDeletedExtras() {
+	static function checkLinksToDeletedExtrasPagezonePage() {
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_extra
@@ -777,7 +781,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		$msg = sizeof($row) . ' problems found.<br />';
 		for($i = 0; $i < sizeof($row); $i++) {
-			// ...
+t3lib_div::devlog('checkLinksToDeletedExtrasPagezonePage()', 'newspaper', 0, array('row' => $row));
 		}
 
 		return $msg;
