@@ -276,14 +276,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		} catch (tx_newspaper_DBException $e) {
     			continue;
     		}
-            $ret .= '<p>' . 
-                'Section ' . 
-                '<strong>' .
-                '<a href="/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D11%26table%3D&edit[tx_newspaper_section][' . $section->getUID() . ']=edit">' .
-                     $section->getUID() .
-                '</a>'.
-                '</strong>' .
-            '</p>';
+            $ret .= '<p>' . 'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) . '</p>';
     		
     		try {
     		    $articlelist = $section->getArticleList();
@@ -297,7 +290,6 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		try {
     		    $default_article = $section->getDefaultArticle();
     		    $ret .= self::getArticleInfo($default_article->getUid());
-    		    
     		} catch (tx_newspaper_DBException $e) {
                 $ret .= '<p>' . '<strong>' . 'No default article' . '</strong>' . '</p>';
     		}
@@ -313,12 +305,22 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	return $ret;
     }
 
-    static function getArticleInfo($section_id) {
+    static function getArticleInfo($article_id) {
         $ret = '';
-        foreach (explode(',', $section_id) as $section) {
+        foreach (explode(',', $article_id) as $uid) {
+            try {
+            	$article = new tx_newspaper_Article($uid);
+            } catch (tx_newspaper_DBException $e) {
+                continue;
+            }
             $ret .= '<p>' . 
-                    'Article ' . intval(trim($section)) .
+	                    'Article: ' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
+	                    ' - ' . $article->getAttribute('title');
                     '</p>';
+            
+            foreach ($article->getExtras() as $extra) {
+            	$ret .= self::getExtraInfo($extra->getAbstractUid());
+            }
         }
         return $ret;
     }
@@ -344,21 +346,21 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             $ret .= '<p>' . 
                         'Article list: ' .
                         self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
-/*                        '<strong>' . 
-                        '<a href="' .
-                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3Dtx_newspaper_articlelist&edit[tx_newspaper_articlelist][' . $concrete_list->getAbstractUid() .']=edit">' .
-                            $concrete_list->getAbstractUid() .
-                        '</a>' .
-                        '</strong>' .
-*/                    ' concrete table: ' . $concrete_list->getTable() .
-                    ' concrete uid: ' .
-                        '<strong>' . 
-                        '<a href="' .
-                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3D&edit[tx_newspaper_articlelist_manual][' . $concrete_list->getUID() . ']=edit">' .
-                            $concrete_list->getUID() .
-                        '</a>' .
-                        '</strong>' .
+                        ' concrete table: ' . $concrete_list->getTable() .
+                        ' concrete uid: ' .
+                        self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
                     '</p>';
+            
+            $articles = $concrete_list->getArticles(10);
+            if ($articles) {
+            	foreach ($articles as $article) {
+            		$ret .= '<p>&nbsp;&nbsp;Article' . 
+            		self::getRecordLink('tx_newspaper_article', $article->getUid()) .
+            		' - ' . $article->getAttribute('title') . '</p>';
+            	}
+            } else {
+            	$ret .= '<p>&nbsp;&nbsp;No articles.</p>';
+            }
         }
         return $ret;
     }
