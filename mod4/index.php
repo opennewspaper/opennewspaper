@@ -419,6 +419,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 ' (' .$pagezone_type->getAttribute('type_name') . ')' .
             '</p>';
         }
+        return $ret;
     }
     
     static function getRecordLink($table, $id) {
