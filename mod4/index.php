@@ -512,13 +512,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			),
 			array(
 				'title' => 'Extra on Pagezone Page: mm-linked Extras',
-				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone("tx_newspaper_pagezone_page_extras_mm")'),
-				'param' => array()
+				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone'),
+				'param' => array("tx_newspaper_pagezone_page_extras_mm")
 			),
 			array(
 				'title' => 'Extra on Article: mm-linked Extras',
-				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone("tx_newspaper_article_extras_mm")'),
-				'param' => array()
+				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone'),
+				'param' => array("tx_newspaper_article_extras_mm")
 			),
 		);
 		return $f;
