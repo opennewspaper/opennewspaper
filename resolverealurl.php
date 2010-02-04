@@ -59,14 +59,14 @@ class tx_newspaper_ResolveRealURL {
 		// should never happen if mod_rewrite and resolverealurl.php are configured in sync
 		if (!in_array($first, self::$prefixes)) {
 			// to do: show the original URI
-		    die('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
+		    self::error('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
 		}
 		
 		$post_index = array_search(self::post_key, $segments);
 		if ($post_index === false) {
 			// URL does not lead to an article.
 			// to do: handle this.
-			die(self::post_key . ' not found!');
+			self::error(self::post_key . ' not found!');
 		}
 		
 		$article_alias = $segments[$post_index+1];
@@ -75,21 +75,25 @@ class tx_newspaper_ResolveRealURL {
         require_once(self::base_path . '/typo3conf/localconf.php');
 
         $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
-            or die('Could not connect: ' . mysql_error());
-        mysql_select_db($typo_db) or die('Could not select database');
+            or self::error('Could not connect: ' . mysql_error());
+        mysql_select_db($typo_db) or self::error('Could not select database');
 
         $res = mysql_query('
 	        SELECT field_id, value_id 
 	        FROM ' . self::uniquealias_table .'
 	        WHERE value_alias = \'' . $article_alias .'\'
 	    ');
-        if (!$res) die('article alias ' . $article_alias . ' not found');
+        if (!$res) self::error('article alias ' . $article_alias . ' not found');
 
         $row = mysql_fetch_array($res, MYSQL_ASSOC);
-        if (!$row) die('article alias ' . $article_alias . ' not found');
+        if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
 		// 
 		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
+	}
+	
+	private static error($msg) {
+		die($msg);
 	}
 	
 	private $uri;
