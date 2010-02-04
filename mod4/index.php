@@ -798,13 +798,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		);
 		if (sizeof($row) > 0) { 
 			for($i = 0; $i < sizeof($row); $i++) {
+t3liv_div::devlog('row', 'newspaper', 0, $row);
 				$msg .= 'Extra #' . $row['uid_foreign'] . ' is deleted; assigned to pagezone_page #' . $row['uid_local'] . '<br />';
 				$count++;
 			}
 		}		
 
 		if ($count > 0) {
-			$msg .= '<strong>' . $count . ' problems found</strong></br>' . $msg;
+			$msg = '<strong>' . $count . ' problems found</strong></br>' . $msg;
 		}
 
 		return $msg;
