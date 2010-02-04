@@ -278,7 +278,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	            $ret .= '<p>' . 
 	                'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) .
 	                ' (' . $section->getAttribute('section_name') . ')' . 
-	            '</p>';
+	            '</p>' . '<hr />';
     		} catch (tx_newspaper_DBException $e) {
     			$ret .= '<p><strong>No such section: ' . $uid . '.</strong></p>';
     			continue;
@@ -288,6 +288,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		try {
     		    $articlelist = $section->getArticleList();
                 $ret .= self::getArticleListInfo($articlelist->getAbstractUid());
+                $ret .=  '<hr />';
     		} catch (tx_newspaper_DBException $e) {
     			$ret .= '<p>' . '<strong>' . 'No associated article list.' . '</strong>' . '</p>';
     		}
@@ -296,7 +297,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		try {
     			$default_article_type = new tx_newspaper_ArticleType($section->getAttribute('default_articletype'));
     			$ret .= '<p>Default article type: ' . self::getRecordLink('tx_newspaper_articletype', $default_article_type->getUID()) .
-    			     ' (' . $default_article_type->getAttribute('title') . ')</p>';
+    			     ' (' . $default_article_type->getAttribute('title') . ')</p>' . '<hr />';
     		} catch (tx_newspaper_DBException $e) {
                 $ret .= '<p>' . '<strong>' . 'No default article type.' . '</strong>' . '</p>';
             }
@@ -304,7 +305,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             // ... default article
     		try {
     		    $default_article = $section->getDefaultArticle();
-    		    $ret .= self::getArticleInfo($default_article->getUid());
+    		    $ret .= self::getArticleInfo($default_article->getUid()) . '<hr />';
     		} catch (tx_newspaper_IllegalUsageException $e) {
                 $ret .= '<p>' . '<strong>' . 'No default article.' . '</strong>' . '</p>';
     		}
@@ -315,6 +316,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             	foreach ($pages as $page) {
             	   $ret .= self::getPageInfo($page->getUID());
             	}
+            	$ret .=  '<hr />';
             } else {
             	$ret .= '<p>' . '<strong>' . 'No pages.' . '</strong>' . '</p>';
             }
