@@ -29,7 +29,7 @@
  *  \date Jan 18, 2010
  */
  
-/// \todo brief description
+/// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
 class tx_newspaper_ResolveRealURL {
@@ -88,11 +88,17 @@ class tx_newspaper_ResolveRealURL {
         $row = mysql_fetch_array($res, MYSQL_ASSOC);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
-		// 
 		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
+		
+		// include newspaper extension.
+		// check /index.php and /www/onlinetaz/typo3_src-4.2.6/typo3/sysext/cms/tslib for
+		// files to include.
+		
+		// instantiate article and redirect ot $article->getLink()
 	}
 	
 	private static error($msg) {
+		// todo handle errors.
 		die($msg);
 	}
 	
