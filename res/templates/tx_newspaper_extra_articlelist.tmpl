@@ -14,6 +14,8 @@
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+{if $attributes.header}<h3>{$attributes.header}</h3>{/if}
+{if $attributes.image}<img src="{$attributes.image}" />{/if}
 
 {section name=i loop=$articles}
 	<a href="{$articles[i]->getLink()}">
