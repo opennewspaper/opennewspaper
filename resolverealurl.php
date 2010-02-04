@@ -41,6 +41,8 @@ class tx_newspaper_ResolveRealURL {
 	
 	const post_key = '1';
 
+	const base_path = '/www/onlinetaz/branches/taz 2.0/helge';
+	
 	static $prefixes = array('1', '4');
 	
 	public function __construct() {
@@ -70,7 +72,7 @@ class tx_newspaper_ResolveRealURL {
 		$article_alias = $segments[$post_index+1];
 		
 		// todo: make the path portable
-        require_once('../localconf.php');
+        require_once(self::base_path . '/typo3conf/localconf.php');
 
         $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
             or die('Could not connect: ' . mysql_error());
