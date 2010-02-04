@@ -380,7 +380,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             }
             
             $associated_section = new tx_newspaper_Section($page->getAttribute('section'));
-            $page_type = new tx_newspaper_PageType($page->getAttribute('pagetype_id'));
+            $page_type = new tx_newspaper_PageType(intval($page->getAttribute('pagetype_id')));
             $ret .= '<p>' . 'Page: ' .
                         self::getRecordLink('tx_newspaper_page', $page->getUid()) .
                         ' associated section: ' . $associated_section->getUid() . ' (' . $associated_section->getAttribute('section_name') . ')' .
