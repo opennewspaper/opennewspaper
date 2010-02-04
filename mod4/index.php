@@ -343,13 +343,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         	}
             $ret .= '<p>' . 
                         'Article list: ' .
-                        '<strong>' . 
+                        self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
+/*                        '<strong>' . 
                         '<a href="' .
                             '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3Dtx_newspaper_articlelist&edit[tx_newspaper_articlelist][' . $concrete_list->getAbstractUid() .']=edit">' .
                             $concrete_list->getAbstractUid() .
                         '</a>' .
                         '</strong>' .
-                    ' concrete table: ' . $concrete_list->getTable() .
+*/                    ' concrete table: ' . $concrete_list->getTable() .
                     ' concrete uid: ' .
                         '<strong>' . 
                         '<a href="' .
