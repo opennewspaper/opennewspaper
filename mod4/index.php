@@ -277,7 +277,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     			$ret .= '<p><strong>No such section: ' . $uid . '</strong></p>';
     			continue;
     		}
-            $ret .= '<p>' . 'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) . '</p>';
+            $ret .= '<p>' . 
+                'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) .
+                ' (' . $section->getAttribute('section_name') . ')' . 
+            '</p>';
     		
     		try {
     		    $articlelist = $section->getArticleList();
@@ -371,7 +374,6 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     static protected function getPageInfo($page_id) {
     	$ret = '';
     	foreach (explode(',', $page_id) as $uid) {
-    		echo $uid;
     		try {
     			$page = new tx_newspaper_Page(intval(trim($uid)));
             } catch (tx_newspaper_DBException $e) {
@@ -383,11 +385,40 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             $page_type = new tx_newspaper_PageType(intval($page->getAttribute('pagetype_id')));
             $ret .= '<p>' . 'Page: ' .
                         self::getRecordLink('tx_newspaper_page', $page->getUid()) .
-                        ' associated section: ' . $associated_section->getUid() . ' (' . $associated_section->getAttribute('section_name') . ')' .
-                        ' page type: ' . $page_type->getUid() . ' (' . $page_type->getAttribute('type_name') . ')' .
+                        ' associated section: ' . self::getRecordLink('tx_newspaper_section', $associated_section->getUid()) . 
+                            ' (' . $associated_section->getAttribute('section_name') . ')' .
+                        ' page type: ' . self::getRecordLink('tx_newspaper_pagetype', $page_type->getUid()) . 
+                            ' (' . $page_type->getAttribute('type_name') . ')' .
                     '</p>';
+            
+            $pagezones = $page->getPageZones();
+            if ($pagezones) {
+            	foreach ($pagezones as $pagezone) {
+            		$ret .= self::getPageZoneInfo($pagezone->getAbstractUid());
+            	}
+            } else {
+            	$ret .= '<p>&nbsp;&nbsp;No page zones.</p>';
+            }
     	}
     	return $ret;
+    }
+    
+    static protected function getPageZoneInfo($pagezone_id) {
+        $ret = '';
+        foreach (explode(',', $pagezone_id) as $uid) {
+            try {
+                $pagezone = tx_newspaper_PageZone_Factory::getInstance()->create(intval(trim($uid)));
+            } catch (tx_newspaper_DBException $e) {
+                $ret .= '<p><strong>No such page zone: ' . $uid . '</strong></p>';
+                continue;
+            }
+            $pagezone_type = $pagezone->getPageZoneType();
+            $ret .= '<p>Page Zone: ' . self::getRecordLink('tx_newspaper_pagezone', $pagezone->getAbstractUid()) .
+                ' (' . $pagezone->getTable() . ' ' . self::getRecordLink($pagezone->getTable(), $pagezone->getUid()) . ')' .
+                ' Type: ' . self::getRecordLink('tx_newspaper_pagezonetype', $pagezone_type->getUid()) . 
+                ' (' .$pagezone_type->getAttribute('type_name') . ')' .
+            '</p>';
+        }
     }
     
     static function getRecordLink($table, $id) {
