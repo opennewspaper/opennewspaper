@@ -34,26 +34,36 @@
  */
 class tx_newspaper_ResolveRealURL {
 
+	/// SQL table containing the resolution parameters.
 	const uniquealias_table = 'tx_newspaper_uniqalias';
+	/// Typo3 page used to display resolved articles.
+	const article_typo3_page = 33;
 	
+	const post_key = '1';
+
 	public function __construct() {
-		$this->url = $_SERVER['QUERY_STRING'];
-		echo '<pre>';
-		echo 'QUERY_STRING: ' . $_SERVER['QUERY_STRING'] . "\n";
-		echo 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'];
-        echo '</pre>';
-		
+		$this->uri = $_SERVER['REQUEST_URI'];
 	}
 	
-	public function resolve($url) {
-		die(print_r($url, 1));
+	public function resolve() {
+		$segments = explode('/', $this->uri);
+		$first = array_shift($segments);
+		if (intval($first) != 1 && intval($first) != 4) {
+		    die(print_r(array($first, $segments, 1)));
+		}
+		$post_index = array_search(self::post_key);
+		if ($post_index === false) {
+			die(self::post_key . ' not found!')
+		}
+		$article_alias = $segments[$post_index+1];
+		die('article alias: ' . $article_alias);
 	}
 	
-	private $url;
+	private $uri;
 }
 
 $resolver = new tx_newspaper_ResolveRealURL();
 
-$resolver->resolve($_GET);
+$resolver->resolve();
 
 ?>
