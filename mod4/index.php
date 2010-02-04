@@ -274,7 +274,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     			continue;
     		}
             $ret .= '<p>' . 'Section ' . 
-                '<a href="/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D11%26table%3D&edit[tx_newspaper_section][' . $section->getUID() . ']=edit">'
+                '<a href="/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D11%26table%3D&edit[tx_newspaper_section][' . $section->getUID() . ']=edit">' .
                      $section->getUID() .
                 '</a>'.
             '</p>';
