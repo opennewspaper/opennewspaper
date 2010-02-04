@@ -41,22 +41,29 @@ class tx_newspaper_ResolveRealURL {
 	
 	const post_key = '1';
 
+	static $prefixes = array('1', '4');
+	
 	public function __construct() {
 		$this->uri = $_SERVER['REQUEST_URI'];
 	}
 	
 	public function resolve() {
+		// uri will be of the form /[14]/.*/1/article-alias[...]
 		$segments = explode('/', $this->uri);
-		echo print_r($segments, 1);
-		$first = array_shift($segments);
+		
+        array_shift($segments);             // remove leading null string
+		$first = array_shift($segments);    // get first path segment
 		echo $first . "<br />\n";
-		if (intval($first) != 1 && intval($first) != 4) {
+		
+		if (!in_array($first, self::$prefixes)) {
 		    die(print_r(array($first, $segments, 1)));
 		}
+		
 		$post_index = array_search(self::post_key);
 		if ($post_index === false) {
 			die(self::post_key . ' not found!');
 		}
+		
 		$article_alias = $segments[$post_index+1];
 		die('article alias: ' . $article_alias);
 	}
