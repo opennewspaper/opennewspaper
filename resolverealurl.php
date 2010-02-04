@@ -36,9 +36,20 @@ class tx_newspaper_ResolveRealURL {
 
 	const uniquealias_table = 'tx_newspaper_uniqalias';
 	
+	public function __construct() {
+		$this->url = $_SERVER['QUERY_STRING'];
+		echo '<pre>';
+		echo $_SERVER['QUERY_STRING'];
+		echo $_SERVER['REQUEST_URI'];
+        echo '</pre>';
+		
+	}
+	
 	public function resolve($url) {
 		die(print_r($url, 1));
 	}
+	
+	private $url;
 }
 
 $resolver = new tx_newspaper_ResolveRealURL();
