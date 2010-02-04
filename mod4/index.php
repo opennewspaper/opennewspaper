@@ -247,7 +247,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	  
     	</form>
     	';
-    	return $ret;
+    	return $ret . '<hr />';
     }
     
     /// Return information about the desired records
