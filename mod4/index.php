@@ -274,6 +274,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		try {
     		    $section = new tx_newspaper_Section(intval(trim($uid)));
     		} catch (tx_newspaper_DBException $e) {
+    			$ret .= '<p><strong>No such section: ' . $uid . '</strong></p>';
     			continue;
     		}
             $ret .= '<p>' . 'Section ' . self::getRecordLink('tx_newspaper_section', $section->getUID()) . '</p>';
@@ -296,7 +297,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		
     		$pages = $section->getActivePages();
             foreach ($pages as $page) {
-            	$ret .= '<p>Page ' . $page->getUID() . '</p>';
+            	$ret .= self::getPageInfo($page->getUID());
             }
             
     		// ... articles.
@@ -311,7 +312,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             try {
             	$article = new tx_newspaper_Article($uid);
             } catch (tx_newspaper_DBException $e) {
-                continue;
+                $ret .= '<p><strong>No such article: ' . $uid . '</strong></p>';
+            	continue;
             }
             $ret .= '<p>' . 
 	                    'Article: ' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
@@ -341,6 +343,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         	try {
         		$concrete_list = tx_newspaper_ArticleList_Factory::getInstance()->create(intval(trim($uid)));
         	} catch (tx_newspaper_DBException $e) {
+                $ret .= '<p><strong>No such article list: ' . $uid . '</strong></p>';
         		continue;
         	}
             $ret .= '<p>' . 
@@ -363,6 +366,27 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             }
         }
         return $ret;
+    }
+    
+    static protected getPageInfo($page_id) {
+    	$ret = '';
+    	foreach (explode(',', $page_id) as $uid) {
+    		try {
+    			$page = new tx_newspaper_Page($uid);
+            } catch (tx_newspaper_DBException $e) {
+                $ret .= '<p><strong>No such page: ' . $uid . '</strong></p>';
+                continue;
+            }
+            
+            $associated_section = new tx_newspaper_Section($page->getAttribute('section'));
+            $page_type = new tx_newspaper_PageType($page->getAttribute('pagetype_id'));
+            $ret .= '<p>' . 'Page: ' .
+                        self::getRecordLink('tx_newspaper_page', $page->getUid()) .
+                        ' associated section: ' . $associated_section->getUid() . ' (' . $associated_section->getAttribute('section_name') . ')' .
+                        ' page type: ' . $page_type->getUid() . ' (' . $page_type->getAttribute('type_name') . ')' .
+                    '</p>';
+    	}
+    	return $ret;
     }
     
     static function getRecordLink($table, $id) {
