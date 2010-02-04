@@ -37,6 +37,12 @@
 
 
 
+/// Class to generate a BE module with 100% width
+class fullWidthDoc extends template {
+	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
+}
+
+
 
 $LANG->includeLLFile('EXT:newspaper/mod4/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
@@ -111,7 +117,7 @@ tx_newspaper_Section::getAllSections(); // ???
 		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
 		    // Draw the header.
-			$this->doc = t3lib_div::makeInstance('bigDoc');
+			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
