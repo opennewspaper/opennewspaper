@@ -39,8 +39,8 @@ class tx_newspaper_ResolveRealURL {
 	public function __construct() {
 		$this->url = $_SERVER['QUERY_STRING'];
 		echo '<pre>';
-		echo $_SERVER['QUERY_STRING'];
-		echo $_SERVER['REQUEST_URI'];
+		echo 'QUERY_STRING: ' . $_SERVER['QUERY_STRING'] . "\n";
+		echo 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'];
         echo '</pre>';
 		
 	}
