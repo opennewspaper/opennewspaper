@@ -303,8 +303,20 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             	$ret .= self::getPageInfo($page->getUID());
             }
             
-    		// ... articles.
-    		
+            // ... articles.
+            $uids = tx_newspaper::selectRows(
+                'uid_local', 'tx_newspaper_article_sections_mm', 
+                'uid_foreign = ' . $section->getUid(),
+                '', 'uid_local ASC'
+            );
+            if ($uids) {
+            	$ret .= '<p>Associated articles:</p>';
+	    		foreach ($uids as $uid) {
+	    			$ret .= self::getArticleInfo($uid['uid_local']);
+	    		}
+            } else {
+            	$ret .= '<p><strong>No articles associated with section ' . $section->getUid() . '.</strong></p>';
+            }
     	}
     	return $ret;
     }
