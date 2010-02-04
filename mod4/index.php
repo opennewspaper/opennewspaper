@@ -226,18 +226,21 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	<form>
     	  <table>
     	    <tr>
-    	      <td>Section ID</td><input name="tx_newspaper_mod4[section_id]" /></td>
+    	      <td>Section ID</td><td><input name="tx_newspaper_mod4[section_id]" /></td>
             </tr>
             <tr>
-              <td>Article ID</td><input name="tx_newspaper_mod4[article_id]" /></td>
+              <td>Article ID</td><td><input name="tx_newspaper_mod4[article_id]" /></td>
             </tr>
             <tr>
-              <td>Extra ID</td><input name="tx_newspaper_mod4[extra_id]" /></td>
+              <td>Extra ID</td><<td>input name="tx_newspaper_mod4[extra_id]" /></td>
             </tr>
             <tr>
-              <td>Article list ID</td><input name="tx_newspaper_mod4[articlelist_id]" /></td>
+              <td>Article list ID</td><td><input name="tx_newspaper_mod4[articlelist_id]" /></td>
     	    </tr>
     	  </table>
+    	  
+    	  <input type="submit" value=" Go ">
+    	  
     	</form>
     	';
     	return $ret;
