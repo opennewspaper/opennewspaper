@@ -297,33 +297,20 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	/// save hook: delete
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array('command' => $command, 'table' => $table, 'id' => $id, 'value' => $value));
-//t3lib_div::debug($_SERVER); t3lib_div::debug($that); die();
+//t3lib_div::debug($that); die();
 		if ($command == 'delete') {
 			$this->checkIfArticletypeCanBeDeleted($table, $id);
 			$this->checkIfSectionCanBeDeleted($table, $id);
 			$this->checkIfPageTypeCanBeDeleted($table, $id);
 			$this->checkIfPageZoneTypeCanBeDeleted($table, $id);
-			$this->processIfConcreteExtraIsDeleted($table, $id);
 /// \todo: check if articles are assigned to section
 /// \todo: check if pages are assigned to section
+			
+			// pass hook to newspaper classes			
+			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $that);
 		}
 	}
 
-	/// if a concrete extra is deleted it is checked if 
-	private function processIfConcreteExtraIsDeleted($table, $id) {
-		if ($table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-//t3lib_div::devlog('processIfConcreteExtraIsDeleted()', 'newspaper', 0, array('table' => $table, 'id' => $id));
-			$e = new $table(intval($id));
-//t3lib_div::devlog('processIfConcreteExtraIsDeleted() count ref', 'newspaper', 0, array($e->getReferenceCount()));
-			if ($e->getReferenceCount() <= 1) {
-				// just one (or none?) abstract extra for this concrete extra
-				$e->deleteIncludingReferences(); 
-			} else {
-				// \todo: include list of reference, or even a link to delete all references?
-				die('This extra can\'t be deleted because ' . $e->getReferenceCount() . ' references are existing! Please remove the extras one by one');
-			}
-		}
-	}
 
 
 	private function checkIfSectionCanBeDeleted($table, $id) {

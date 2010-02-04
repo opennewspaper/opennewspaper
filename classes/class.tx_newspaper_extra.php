@@ -630,6 +630,30 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return null;
 	}
 	
+	
+	/// save hook functions
+	
+	/// \todo: documentation
+	public static function processCmdmap_preProcess($command, $table, $id, $value, $that) {
+		
+		// check if a concrete extra can be deleted (and delete all associated records if yes)
+		// tx_newspaper_article implements the extra interface but shouldn't be regarded as an extra when it comes to deleting		
+		if ($table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
+//t3lib_div::devlog('delete extra', 'newspaper', 0, array('table' => $table, 'id' => $id));
+			$e = new $table(intval($id));
+//t3lib_div::devlog('delete extra count ref', 'newspaper', 0, array($e->getReferenceCount()));
+			if ($e->getReferenceCount() <= 1) {
+				// just one (or none?) abstract extra for this concrete extra
+				$e->deleteIncludingReferences(); 
+			} else {
+				// \todo: include list of reference, or even a link to delete all references?
+				die('This extra can\'t be deleted because ' . $e->getReferenceCount() . ' references are existing! Please remove the extras one by one');
+			}
+		}
+	}
+	
+	
+	
 	private $uid = 0;			///< Extra's UID in the concrete Extra table
 	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
 
