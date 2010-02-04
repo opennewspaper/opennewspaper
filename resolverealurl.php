@@ -53,18 +53,38 @@ class tx_newspaper_ResolveRealURL {
 		
         array_shift($segments);             // remove leading null string
 		$first = array_shift($segments);    // get first path segment
-		echo $first . "<br />\n";
 		
+		// should never happen if mod_rewrite and resolverealurl.php are configured in sync
 		if (!in_array($first, self::$prefixes)) {
-		    die(print_r(array($first, $segments, 1)));
+			// to do: show the original URI
+		    die('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
 		}
 		
 		$post_index = array_search(self::post_key, $segments);
 		if ($post_index === false) {
+			// URL does not lead to an article.
+			// to do: handle this.
 			die(self::post_key . ' not found!');
 		}
 		
 		$article_alias = $segments[$post_index+1];
+		
+		// todo: make the path portable
+        require_once('../localconf.php');
+
+        $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
+            or die('Could not connect: ' . mysql_error());
+        mysql_select_db($typo_db) or die('Could not select database');
+
+        $res = mysql_query('
+	        SELECT field_id, value_id 
+	        FROM ' . self::uniquealias_table .'
+	        WHERE value_alias = \'' . $article_alias .'\'
+	    ');
+        if (!$res) die('article alias ' . $article_alias . ' not found');
+
+        while ($row = mysql_fetch_array($res, MYSQL_ASSOC)) print_r ($row);
+		// 
 		die('article alias: ' . $article_alias);
 	}
 	
