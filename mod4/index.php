@@ -364,7 +364,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             try {
                 $extra = tx_newspaper_Extra_Factory::getInstance()->create(intval(trim($uid)));
 	            $ret .= '<p>' . 
-	                        'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getAbstractUid()) . 
+	                        'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getExtraUid()) . 
 	                        ' (' . $extra->getTable() . ' ' . self::getRecordLink($extra->getTable(), $extra->getUid()) . ')' .
 	                        $extra->getDescription() .
 	                    '</p>';
