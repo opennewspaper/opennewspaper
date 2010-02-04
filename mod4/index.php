@@ -279,7 +279,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	                ' (' . $section->getAttribute('section_name') . ')' . 
 	            '</p>';
     		} catch (tx_newspaper_DBException $e) {
-    			$ret .= '<p><strong>No such section: ' . $uid . '</strong></p>';
+    			$ret .= '<p><strong>No such section: ' . $uid . '.</strong></p>';
     			continue;
     		}
     		
@@ -288,7 +288,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		    $articlelist = $section->getArticleList();
                 $ret .= self::getArticleListInfo($articlelist->getAbstractUid());
     		} catch (tx_newspaper_DBException $e) {
-    			$ret .= '<p>' . '<strong>' . 'No associated article list' . '</strong>' . '</p>';
+    			$ret .= '<p>' . '<strong>' . 'No associated article list.' . '</strong>' . '</p>';
     		}
     		
     		// ... default article type
@@ -297,7 +297,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     			$ret .= '<p>Default article type: ' . self::getRecordLink('tx_newspaper_articletype', $default_article_type->getUID()) .
     			     ' (' . $default_article_type->getAttribute('title') . ')</p>';
     		} catch (tx_newspaper_DBException $e) {
-                $ret .= '<p>' . '<strong>' . 'No default article type' . '</strong>' . '</p>';
+                $ret .= '<p>' . '<strong>' . 'No default article type.' . '</strong>' . '</p>';
             }
             
             // ... default article
@@ -305,7 +305,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		    $default_article = $section->getDefaultArticle();
     		    $ret .= self::getArticleInfo($default_article->getUid());
     		} catch (tx_newspaper_IllegalUsageException $e) {
-                $ret .= '<p>' . '<strong>' . 'No default article' . '</strong>' . '</p>';
+                $ret .= '<p>' . '<strong>' . 'No default article.' . '</strong>' . '</p>';
     		}
     		
     		// ... pages
@@ -315,7 +315,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             	   $ret .= self::getPageInfo($page->getUID());
             	}
             } else {
-            	$ret .= '<p>' . '<strong>' . 'No pages' . '</strong>' . '</p>';
+            	$ret .= '<p>' . '<strong>' . 'No pages.' . '</strong>' . '</p>';
             }
             
             // ... articles. usually, lots.
@@ -347,7 +347,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	                        ' - ' . $article->getAttribute('title');
 	                    '</p>';
             } catch (tx_newspaper_DBException $e) {
-                $ret .= '<p><strong>No such article: ' . $uid . '</strong></p>';
+                $ret .= '<p><strong>No such article: ' . $uid . '.</strong></p>';
             	continue;
             }
             
@@ -366,9 +366,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	            $ret .= '<p>' . 
 	                        'Extra: ' . self::getRecordLink('tx_newspaper_extra', $extra->getAbstractUid()) . 
 	                        ' (' . $extra->getTable() . ' ' . self::getRecordLink($extra->getTable(), $extra->getUid()) . ')' .
+	                        $extra->getDescription() .
 	                    '</p>';
             } catch (tx_newspaper_DBException $e) {
-                $ret .= '<p><strong>No such extra: ' . $uid . '</strong></p>';
+                $ret .= '<p><strong>No such extra: ' . $uid . '.</strong></p>';
                 continue;
             }
         }
@@ -385,7 +386,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
 	                    '</p>';
         	} catch (tx_newspaper_DBException $e) {
-                $ret .= '<p><strong>No such article list: ' . $uid . '</strong></p>';
+                $ret .= '<p><strong>No such article list: ' . $uid . '.</strong></p>';
         		continue;
         	}
             
@@ -408,7 +409,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		try {
     			$page = new tx_newspaper_Page(intval(trim($uid)));
             } catch (tx_newspaper_DBException $e) {
-                $ret .= '<p><strong>No such page: ' . $uid . '</strong></p>';
+                $ret .= '<p><strong>No such page: ' . $uid . '.</strong></p>';
                 continue;
             }
             
@@ -440,7 +441,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             try {
                 $pagezone = tx_newspaper_PageZone_Factory::getInstance()->create(intval(trim($uid)));
             } catch (tx_newspaper_DBException $e) {
-                $ret .= '<p><strong>No such page zone: ' . $uid . '</strong></p>';
+                $ret .= '<p><strong>No such page zone: ' . $uid . '.</strong></p>';
                 continue;
             }
             $pagezone_type = $pagezone->getPageZoneType();
