@@ -225,20 +225,21 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	}
 
     static function getInfoForm() {
+    	$mod_post = t3lib_div::_GP('tx_newspaper_mod4');
     	$ret = '
     	<form>
     	  <table>
     	    <tr>
-    	      <td>Section ID</td><td><input name="tx_newspaper_mod4[section_id]" /></td>
+    	      <td>Section ID</td><td><input name="tx_newspaper_mod4[section_id]" value="' . $mod_post['section_id'] .'" /></td>
             </tr>
             <tr>
-              <td>Article ID</td><td><input name="tx_newspaper_mod4[article_id]" /></td>
+              <td>Article ID</td><td><input name="tx_newspaper_mod4[article_id]" value="' . $mod_post['article_id'] .'" /></td>
             </tr>
             <tr>
-              <td>Extra ID</td><td><input name="tx_newspaper_mod4[extra_id]" /></td>
+              <td>Extra ID</td><td><input name="tx_newspaper_mod4[extra_id]" value="' . $mod_post['extra_id'] .'" /></td>
             </tr>
             <tr>
-              <td>Article list ID</td><td><input name="tx_newspaper_mod4[articlelist_id]" /></td>
+              <td>Article list ID</td><td><input name="tx_newspaper_mod4[articlelist_id]" value="' . $mod_post['articlelist_id'] .'" /></td>
     	    </tr>
     	  </table>
     	  
