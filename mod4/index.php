@@ -371,8 +371,9 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     static protected function getPageInfo($page_id) {
     	$ret = '';
     	foreach (explode(',', $page_id) as $uid) {
+    		echo $uid;
     		try {
-    			$page = new tx_newspaper_Page($uid);
+    			$page = new tx_newspaper_Page(intval(trim($uid)));
             } catch (tx_newspaper_DBException $e) {
                 $ret .= '<p><strong>No such page: ' . $uid . '</strong></p>';
                 continue;
