@@ -769,6 +769,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	}
 	
 	static function checkLinksToDeletedExtrasPagezonePage() {
+		$msg = '';
+		$count = 0;
+			
+		// deleted flag set?
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_extra
@@ -777,11 +781,30 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'tx_newspaper_extra.deleted',
 			 '', 'uid'
 		);
-		if (!$row) return true; // no problems found
+		if (sizeof($row) > 0) { 
+			for($i = 0; $i < sizeof($row); $i++) {
+				$msg .= 'Deleted flag set for Extra #' . $row['uid'] . ' = ' . $row['extra_table'] . '#' . $row['extra_uid'] . '<br />';
+				$count++;
+			}
+		}
+		
+		// abstract extra deleted?
+		$row = tx_newspaper::selectRows(
+			'pzp_e_mm.*',
+			'tx_newspaper_pagezone_page_extras_mm pzp_e_mm LEFT JOIN tx_newspaper_extra e ON pzp_e_mm.uid_foreign=e.uid AND e.uid<=0',
+			'1',
+			'',
+			'pzp_e_mm.uid_foreign'
+		);
+		if (sizeof($row) > 0) { 
+			for($i = 0; $i < sizeof($row); $i++) {
+				$msg .= 'Extra #' . $row['uid_foreign'] . ' is deleted; assigned to pagezone_page #' . $row['uid_local'] . '<br />';
+				$count++;
+			}
+		}		
 
-		$msg = sizeof($row) . ' problems found.<br />';
-		for($i = 0; $i < sizeof($row); $i++) {
-t3lib_div::devlog('checkLinksToDeletedExtrasPagezonePage()', 'newspaper', 0, array('row' => $row));
+		if ($count > 0) {
+			$msg .= '<strong>' . $count . ' problems found</strong></br>' . $msg;
 		}
 
 		return $msg;
