@@ -51,114 +51,115 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module4 extends t3lib_SCbase {
-				var $pageinfo;
+	var $pageinfo;
 
-				/**
-				 * Initializes the Module
-				 * @return	void
-				 */
-				function init()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/**
+	 * Initializes the Module
+	 * @return	void
+	 */
+	function init()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					// display db errors
-					$GLOBALS['TYPO3_DB']->debugOutput=true;
+		// display db errors
+		$GLOBALS['TYPO3_DB']->debugOutput=true;
 
-					parent::init();
+		parent::init();
 
-					/*
-					if (t3lib_div::_GP('clear_all_cache'))	{
-						$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-					}
-					*/
-				}
+		/*
+		if (t3lib_div::_GP('clear_all_cache'))	{
+			$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
+		}
+		*/
+	}
 
-				/**
-				 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-				 *
-				 * @return	void
-				 */
-				function menuConfig()	{
-					global $LANG;
-					$this->MOD_MENU = Array (
-						'function' => Array (
-							'1' => $LANG->getLL('function1'),
-//							'2' => $LANG->getLL('function2'),
+	/**
+	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
+	 *
+	 * @return	void
+	 */
+	function menuConfig()	{
+		global $LANG;
+    	$this->MOD_MENU = Array (
+			'function' => Array (
+				'1' => $LANG->getLL('mod4_db_consistency_checks'),
+				'2' => $LANG->getLL('mod4_record_info'),
 //							'3' => $LANG->getLL('function3'),
-						)
-					);
-					parent::menuConfig();
-				}
+			)
+		);
+		parent::menuConfig();
+	}
 
-				/**
-				 * Main function of the module. Write the content to $this->content
-				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
-				 */
-				function main()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+	/**
+	 * Main function of the module. Write the content to $this->content
+	 * If you chose "web" as main module, you will need to consider the 
+	 * \c $this->id parameter which will contain the uid-number of the page
+	 * clicked in the page tree
+	 */
+	function main()	{
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-tx_newspaper_Section::getAllSections();
-					// Access check!
-					// The page will show only if there is a valid page and if this page may be viewed by the user
-					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-					$access = is_array($this->pageinfo) ? 1 : 0;
+tx_newspaper_Section::getAllSections(); // ???
+
+		// Access check. The page will show only if there is a valid page and if
+		// this page may be viewed by the user 
+		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
+		$access = is_array($this->pageinfo) ? 1 : 0;
 				
-					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
+		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
-							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('bigDoc');
-						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+		    // Draw the header.
+			$this->doc = t3lib_div::makeInstance('bigDoc');
+			$this->doc->backPath = $BACK_PATH;
+			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
-							// JavaScript
-						$this->doc->JScode = '
-							<script language="javascript" type="text/javascript">
-								script_ended = 0;
-								function jumpToUrl(URL)	{
-									document.location = URL;
-								}
-							</script>
-						';
-						$this->doc->postCode='
-							<script language="javascript" type="text/javascript">
-								script_ended = 1;
-								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-							</script>
-						';
-
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-						$this->content.=$this->doc->divider(5);
-
-
-						// Render content:
-						$this->moduleContent();
-
-
-						// ShortCut
-						if ($BE_USER->mayMakeShortcut())	{
-							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-						}
-
-						$this->content.=$this->doc->spacer(10);
-					} else {
-							// If no access or if ID == zero
-
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
+			// JavaScript
+			$this->doc->JScode = '
+				<script language="javascript" type="text/javascript">
+					script_ended = 0;
+					function jumpToUrl(URL)	{
+						document.location = URL;
 					}
+				</script>
+			';
+			$this->doc->postCode='
+				<script language="javascript" type="text/javascript">
+					script_ended = 1;
+					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
+				</script>
+			';
+
+			$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
+
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+			$this->content.=$this->doc->spacer(5);
+			$this->content.=$this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+			$this->content.=$this->doc->divider(5);
+
+
+			// Render content:
+			$this->moduleContent();
+
+
+			// ShortCut
+			if ($BE_USER->mayMakeShortcut())	{
+				$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
+			}
+
+			$this->content.=$this->doc->spacer(10);
+		} else {
+			// If no access or if ID == zero
+
+			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc->backPath = $BACK_PATH;
+
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+			$this->content.=$this->doc->spacer(5);
+			$this->content.=$this->doc->spacer(10);
+		}
 				
-				}
+	}
 
 				/**
 				 * Prints out the module HTML
@@ -171,15 +172,14 @@ tx_newspaper_Section::getAllSections();
 					echo $this->content;
 				}
 
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent() {
-					switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1:
-							$content = '
+	/// Generates the module content
+	function moduleContent() {
+		
+		global $LANG;
+		
+		switch((string)$this->MOD_SETTINGS['function'])	{
+			case 1:
+				$content = '
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
   overflow: auto;
@@ -191,33 +191,116 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 //								'POST:'.t3lib_div::view_array($_POST).'<br />'.
 								
 								
-							$f = $this->getListOfDbConsistencyChecks();
-							for ($i = 0; $i < sizeof($f); $i++) {
-								$content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
-								$tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
-								if ($tmp === true) {
-									$content .= 'No problems found<br />';
-								} else {
-									$content .= $tmp;
-								}
-							}
-
-								
-							$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
-						break;
-						case 2:
-							$content='<div align=center><strong>Menu item #2...</strong></div>';
-							$this->content.=$this->doc->section('Message #2:',$content,0,1);
-						break;
-						case 3:
-							$content='<div align=center><strong>Menu item #3...</strong></div>';
-							$this->content.=$this->doc->section('Message #3:',$content,0,1);
-						break;
+				$f = $this->getListOfDbConsistencyChecks();
+				for ($i = 0; $i < sizeof($f); $i++) {
+					$content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
+					$tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
+					if ($tmp === true) {
+						$content .= 'No problems found<br />';
+					} else {
+						$content .= $tmp;
 					}
 				}
+								
+				$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
+				break;
+			case 2:
+				$content = '<div align=center><strong>' . $LANG->getLL('mod4_record_info') . '</strong></div>';
+				
+				$content .= self::getInfoForm();
+				
+				$result = t3lib_div::_GP('t3lib_div::_GP('tx_newspaper_mod4')');
+				if ($result) $content .= self::getInfo($result);
+				
+				$this->content .= $this->doc->section($LANG->getLL('mod4_record_info'), $content, 0, 1);
+			    break;
+			case 3:
+				$content='<div align=center><strong>Menu item #3...</strong></div>';
+				$this->content.=$this->doc->section('Message #3:',$content,0,1);
+				break;
+		}
+	}
 
-
+    static function getInfoForm() {
+    	$ret = '
+    	<form>
+    	  <table>
+    	    <tr>
+    	      <td>Section ID</td><input name="tx_newspaper_mod4[section_id]" /></td>
+            </tr>
+            <tr>
+              <td>Article ID</td><input name="tx_newspaper_mod4[article_id]" /></td>
+            </tr>
+            <tr>
+              <td>Extra ID</td><input name="tx_newspaper_mod4[extra_id]" /></td>
+            </tr>
+            <tr>
+              <td>Article list ID</td><input name="tx_newspaper_mod4[articlelist_id]" /></td>
+    	    </tr>
+    	  </table>
+    	</form>
+    	';
+    	return $ret;
+    }
+    
+    /// Return information about the desired records
+    static function getInfo(array $mod_post) {
+    	$ret = '';
+    	if ($mod_post['section_id']) {
+    		$ret .= self::getSectionInfo($mod_post['section_id']);
+    	}
+        if ($mod_post['article_id']) {
+            $ret .= self::getArticleInfo($mod_post['article_id']);
+        }
+            if ($mod_post['extra_id']) {
+            $ret .= self::getExtraInfo($mod_post['extra_id']);
+        }
+            if ($mod_post['articlelist_id']) {
+            $ret .= self::getArticleListInfo($mod_post['articlelist_id']);
+        }
+        return $ret;
+    }
 	
+    static function getSectionInfo($section_id) {
+    	$ret = '';
+    	foreach (explode(',', $section_id) as $section) {
+    		$ret .= '<p>' . 
+    		        'Section ' . intval(trim($section)) .
+    		        '</p>';
+    	}
+    	return $ret;
+    }
+
+    static function getArticleInfo($section_id) {
+        $ret = '';
+        foreach (explode(',', $section_id) as $section) {
+            $ret .= '<p>' . 
+                    'Article ' . intval(trim($section)) .
+                    '</p>';
+        }
+        return $ret;
+    }
+    
+    static function getExtraInfo($section_id) {
+        $ret = '';
+        foreach (explode(',', $section_id) as $section) {
+            $ret .= '<p>' . 
+                    'Extra ' . intval(trim($section)) .
+                    '</p>';
+        }
+        return $ret;
+    }
+    
+    static function getArticleListInfo($section_id) {
+        $ret = '';
+        foreach (explode(',', $section_id) as $section) {
+            $ret .= '<p>' . 
+                    'Article list ' . intval(trim($section)) .
+                    '</p>';
+        }
+        return $ret;
+    }
+    
 	function getListOfDbConsistencyChecks() {
 		$f = array(
 			array(

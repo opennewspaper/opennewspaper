@@ -7,10 +7,13 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Administration</label>
-			<label index="function1">DB consistency checks</label>
+			<label index="mod4_db_consistency_checks">DB consistency checks</label>
+            <label index="mod4_record_info">Record information</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Administration</label>
+            <label index="mod4_db_consistency_checks">DB Konsistenzchecks</label>
+            <label index="mod4_record_info">Information über Datensätze</label>
 		</languageKey>
 	</data>
 </T3locallang>
