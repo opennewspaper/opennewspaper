@@ -797,9 +797,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'pzp_e_mm.uid_foreign'
 		);
 		if (sizeof($row) > 0) { 
-t3lib_div::devlog('row', 'newspaper', 0, $row);
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Extra #' . $row['uid_foreign'] . ' is deleted; assigned to pagezone_page #' . $row['uid_local'] . '<br />';
+				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to pagezone_page #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}		
