@@ -787,9 +787,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'mm.uid_foreign'
 		);
 		if (sizeof($row) > 0) { 
-//t3lib_div::devlog('row', 'newspaper', 0, $row);
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid_foreign'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
+				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid_foreign'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' uid_local #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}
@@ -804,7 +803,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		);
 		if (sizeof($row) > 0) { 
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
+				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to ' . $mm_table . ' uid_local #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}		
