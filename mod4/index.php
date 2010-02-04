@@ -52,6 +52,9 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  */
 class  tx_newspaper_module4 extends t3lib_SCbase {
 	var $pageinfo;
+	
+	/// Root of the Typo3 installation for links in the BE
+	const INSTALLATION_ROOT = '';
 
 	/**
 	 * Initializes the Module
@@ -273,10 +276,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		} catch (tx_newspaper_DBException $e) {
     			continue;
     		}
-            $ret .= '<p>' . 'Section ' . 
+            $ret .= '<p>' . 
+                'Section ' . 
+                '<strong>' .
                 '<a href="/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D11%26table%3D&edit[tx_newspaper_section][' . $section->getUID() . ']=edit">' .
                      $section->getUID() .
                 '</a>'.
+                '</strong>' .
             '</p>';
     		
     		try {
@@ -336,12 +342,39 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         		continue;
         	}
             $ret .= '<p>' . 
-                    'Article list: ' . $concrete_list->getAbstractUid() .
+                        'Article list: ' .
+                        '<strong>' . 
+                        '<a href="' .
+                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3Dtx_newspaper_articlelist&edit[tx_newspaper_articlelist][' . $concrete_list->getAbstractUid() .']=edit">' .
+                            $concrete_list->getAbstractUid() .
+                        '</a>' .
+                        '</strong>' .
                     ' concrete table: ' . $concrete_list->getTable() .
-                    ' concrete uid: ' . $concrete_list->getUID() .
+                    ' concrete uid: ' .
+                        '<strong>' . 
+                        '<a href="' .
+                            '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3D&edit[tx_newspaper_articlelist_manual][' . $concrete_list->getUID() . ']=edit">'
+                            $concrete_list->getUID() .
+                        '</a>' .
+                        '</strong>' .
                     '</p>';
         }
         return $ret;
+    }
+    
+    static function getRecordLink($table, $id) {
+    	return 
+    	    '<strong>' . 
+	    	    '<a href="' .
+    	    	    self::INSTALLATION_ROOT .
+	           	    '/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D6%26table%3D&edit[' .
+	    	        $table .
+	    	        '][' .
+	    	        $id .
+	    	        ']=edit">' .
+	    	        $id .
+	    	    '</a>' .
+    	    '</strong>' ;
     }
     
 	function getListOfDbConsistencyChecks() {
