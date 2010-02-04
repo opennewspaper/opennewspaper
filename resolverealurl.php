@@ -59,7 +59,7 @@ class tx_newspaper_ResolveRealURL {
 		    die(print_r(array($first, $segments, 1)));
 		}
 		
-		$post_index = array_search(self::post_key);
+		$post_index = array_search(self::post_key, $segments);
 		if ($post_index === false) {
 			die(self::post_key . ' not found!');
 		}
