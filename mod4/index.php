@@ -273,18 +273,31 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		} catch (tx_newspaper_DBException $e) {
     			continue;
     		}
+            $ret .= '<p>' . 'Section ' . $section->getUID() . '</p>';
     		
-    		$articlelist = $section->getArticleList();
+    		try {
+    		    $articlelist = $section->getArticleList();
+                $ret .= self::getArticleListInfo($articlelist->getUid());
+    		} catch (tx_newspaper_DBException $e) {
+    			$ret .= '<p>' . '<strong>' . 'No associated article list' . '</strong>' . '</p>';
+    		}
+    		
     		// ... default article type (how?)
-    		$default_article = $section->getDefaultArticle();
+    		
+    		try {
+    		    $default_article = $section->getDefaultArticle();
+    		    $ret .= self::getArticleInfo($default_article->getUid());
+    		    
+    		} catch (tx_newspaper_DBException $e) {
+                $ret .= '<p>' . '<strong>' . 'No default article' . '</strong>' . '</p>';
+    		}
+    		
     		$pages = $section->getActivePages();
+            foreach ($pages as $page) {
+            	$ret .= '<p>Page ' . $page->getUID() . '</p>';
+            }    		
     		// ... articles.
     		
-    		$ret .= '<div class="sectioninfo">' . 
-    		        'Section ' . intval(trim($section)) .
-    		        self::getArticleListInfo($articlelist->getUid()) .
-    		        self::getArticleInfo($article->getUid()) .
-    		        '</div>';
     	}
     	return $ret;
     }
