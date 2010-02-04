@@ -768,37 +768,36 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		return $msg;
 	}
 	
-	static function checkLinksToDeletedExtrasPagezonePage() {
+	static function checkLinksToDeletedExtrasPagezonePage($mm_table) {
 		$msg = '';
 		$count = 0;
 			
 		// deleted flag set?
 		$row = tx_newspaper::selectRows(
-			'*',
-			'tx_newspaper_extra
-			 INNER JOIN tx_newspaper_pagezone_page_extras_mm 
-			 ON tx_newspaper_extra.uid = tx_newspaper_pagezone_page_extras_mm.uid_foreign',
-			'tx_newspaper_extra.deleted',
-			 '', 'uid'
+			'mm.*',
+			'tx_newspaper_pagezone_page_extras_mm mm INNER JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid', 
+			'e.deleted=1',
+			'',
+			'mm.uid_foreign'
 		);
 		if (sizeof($row) > 0) { 
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Deleted flag set for Extra #' . $row['uid'] . ' = ' . $row['extra_table'] . '#' . $row['extra_uid'] . '<br />';
+				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}
 		
 		// abstract extra deleted?
 		$row = tx_newspaper::selectRows(
-			'pzp_e_mm.*',
-			'tx_newspaper_pagezone_page_extras_mm pzp_e_mm LEFT JOIN tx_newspaper_extra e ON pzp_e_mm.uid_foreign=e.uid AND e.uid<=0',
+			'mm.*',
+			'tx_newspaper_pagezone_page_extras_mm mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid AND e.uid<=0',
 			'1',
 			'',
-			'pzp_e_mm.uid_foreign'
+			'mm.uid_foreign'
 		);
 		if (sizeof($row) > 0) { 
 			for($i = 0; $i < sizeof($row); $i++) {
-				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to pagezone_page #' . $row[$i]['uid_local'] . '<br />';
+				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to ' . $mm_table . ' #' . $row[$i]['uid_local'] . '<br />';
 				$count++;
 			}
 		}		
