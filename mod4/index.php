@@ -273,11 +273,15 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		} catch (tx_newspaper_DBException $e) {
     			continue;
     		}
-            $ret .= '<p>' . 'Section ' . $section->getUID() . '</p>';
+            $ret .= '<p>' . 'Section ' . 
+                '<a href="/typo3/alt_doc.php?returnUrl=db_list.php%3Fid%3D11%26table%3D&edit[tx_newspaper_section][' . $section->getUID() . ']=edit">'
+                     $section->getUID() .
+                '</a>'.
+            '</p>';
     		
     		try {
     		    $articlelist = $section->getArticleList();
-                $ret .= self::getArticleListInfo($articlelist->getUid());
+                $ret .= self::getArticleListInfo($articlelist->getAbstractUid());
     		} catch (tx_newspaper_DBException $e) {
     			$ret .= '<p>' . '<strong>' . 'No associated article list' . '</strong>' . '</p>';
     		}
@@ -295,7 +299,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		$pages = $section->getActivePages();
             foreach ($pages as $page) {
             	$ret .= '<p>Page ' . $page->getUID() . '</p>';
-            }    		
+            }
+            
     		// ... articles.
     		
     	}
@@ -322,11 +327,18 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         return $ret;
     }
     
-    static function getArticleListInfo($section_id) {
+    static function getArticleListInfo($articlelist_id) {
         $ret = '';
-        foreach (explode(',', $section_id) as $section) {
+        foreach (explode(',', $articlelist_id) as $uid) {
+        	try {
+        		$concrete_list = tx_newspaper_ArticleList_Factory::getInstance()->create(intval(trim($uid)));
+        	} catch (tx_newspaper_DBException $e) {
+        		continue;
+        	}
             $ret .= '<p>' . 
-                    'Article list ' . intval(trim($section)) .
+                    'Article list: ' . $concrete_list->getAbstractUid() .
+                    ' concrete table: ' . $concrete_list->getTable() .
+                    ' concrete uid: ' . $concrete_list->getUID() .
                     '</p>';
         }
         return $ret;
