@@ -305,7 +305,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             // ... default article
     		try {
     		    $default_article = $section->getDefaultArticle();
-    		    $ret .= self::getArticleInfo($default_article->getUid()) . '<hr />';
+    		    $ret .= '<p>Default article:</p>' . 
+    		      self::getArticleInfo($default_article->getUid()) . '<hr />';
     		} catch (tx_newspaper_IllegalUsageException $e) {
                 $ret .= '<p>' . '<strong>' . 'No default article.' . '</strong>' . '</p>';
     		}
