@@ -209,7 +209,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				
 				$content .= self::getInfoForm();
 				
-				$result = t3lib_div::_GP('t3lib_div::_GP('tx_newspaper_mod4')');
+				$result = t3lib_div::_GP('tx_newspaper_mod4');
 				if ($result) $content .= self::getInfo($result);
 				
 				$this->content .= $this->doc->section($LANG->getLL('mod4_record_info'), $content, 0, 1);
