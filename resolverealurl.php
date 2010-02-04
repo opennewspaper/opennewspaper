@@ -53,7 +53,7 @@ class tx_newspaper_ResolveRealURL {
 		}
 		$post_index = array_search(self::post_key);
 		if ($post_index === false) {
-			die(self::post_key . ' not found!')
+			die(self::post_key . ' not found!');
 		}
 		$article_alias = $segments[$post_index+1];
 		die('article alias: ' . $article_alias);
