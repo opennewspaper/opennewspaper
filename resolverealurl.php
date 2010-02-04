@@ -47,6 +47,7 @@ class tx_newspaper_ResolveRealURL {
 	
 	public function resolve() {
 		$segments = explode('/', $this->uri);
+		echo print_r($segments, 1);
 		$first = array_shift($segments);
 		echo $first . "<br />\n";
 		if (intval($first) != 1 && intval($first) != 4) {
