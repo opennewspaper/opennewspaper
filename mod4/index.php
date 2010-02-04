@@ -232,7 +232,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
               <td>Article ID</td><td><input name="tx_newspaper_mod4[article_id]" /></td>
             </tr>
             <tr>
-              <td>Extra ID</td><<td>input name="tx_newspaper_mod4[extra_id]" /></td>
+              <td>Extra ID</td><td><input name="tx_newspaper_mod4[extra_id]" /></td>
             </tr>
             <tr>
               <td>Article list ID</td><td><input name="tx_newspaper_mod4[articlelist_id]" /></td>
@@ -266,10 +266,25 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	
     static function getSectionInfo($section_id) {
     	$ret = '';
-    	foreach (explode(',', $section_id) as $section) {
-    		$ret .= '<p>' . 
+    	foreach (explode(',', $section_id) as $uid) {
+    		
+    		try {
+    		    $section = new tx_newspaper_Section(intval(trim($uid)));
+    		} catch (tx_newspaper_DBException $e) {
+    			continue;
+    		}
+    		
+    		$articlelist = $section->getArticleList();
+    		// ... default article type (how?)
+    		$default_article = $section->getDefaultArticle();
+    		$pages = $section->getActivePages();
+    		// ... articles.
+    		
+    		$ret .= '<div class="sectioninfo">' . 
     		        'Section ' . intval(trim($section)) .
-    		        '</p>';
+    		        self::getArticleListInfo($articlelist->getUid()) .
+    		        self::getArticleInfo($article->getUid()) .
+    		        '</div>';
     	}
     	return $ret;
     }
