@@ -310,8 +310,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		
     		// ... pages
     		$pages = $section->getActivePages();
-            foreach ($pages as $page) {
-            	$ret .= self::getPageInfo($page->getUID());
+            if ($pages) {
+            	foreach ($pages as $page) {
+            	   $ret .= self::getPageInfo($page->getUID());
+            	}
+            } else {
+            	$ret .= '<p>' . '<strong>' . 'No pages' . '</strong>' . '</p>';
             }
             
             // ... articles. usually, lots.
