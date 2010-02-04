@@ -352,7 +352,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             }
             
             foreach ($article->getExtras() as $extra) {
-            	$ret .= self::getExtraInfo($extra->getAbstractUid());
+            	$ret .= self::getExtraInfo($extra->getExtraUid());
             }
         }
         return $ret;
