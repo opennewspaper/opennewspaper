@@ -271,6 +271,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	$ret = '';
     	foreach (explode(',', $section_id) as $uid) {
     		
+    		// ... section
     		try {
     		    $section = new tx_newspaper_Section(intval(trim($uid)));
     		} catch (tx_newspaper_DBException $e) {
@@ -282,6 +283,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 ' (' . $section->getAttribute('section_name') . ')' . 
             '</p>';
     		
+            // ... article list
     		try {
     		    $articlelist = $section->getArticleList();
                 $ret .= self::getArticleListInfo($articlelist->getAbstractUid());
@@ -289,8 +291,16 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     			$ret .= '<p>' . '<strong>' . 'No associated article list' . '</strong>' . '</p>';
     		}
     		
-    		// ... default article type (how?)
-    		
+    		// ... default article type
+    		try {
+    			$default_article_type = new tx_newspaper_ArticleType($section->getAttribute('default_articletype'));
+    			$ret .= '<p>Default article type: ' . self::getRecordLink('tx_newspaper_articletype', $default_article_type->getUID()) .
+    			     ' (' . $default_article_type->getAttribute('title') . ')</p>';
+    		} catch (tx_newspaper_DBException $e) {
+                $ret .= '<p>' . '<strong>' . 'No default article type' . '</strong>' . '</p>';
+            }
+            
+            // ... default article
     		try {
     		    $default_article = $section->getDefaultArticle();
     		    $ret .= self::getArticleInfo($default_article->getUid());
@@ -298,12 +308,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 $ret .= '<p>' . '<strong>' . 'No default article' . '</strong>' . '</p>';
     		}
     		
+    		// ... pages
     		$pages = $section->getActivePages();
             foreach ($pages as $page) {
             	$ret .= self::getPageInfo($page->getUID());
             }
             
-            // ... articles.
+            // ... articles. usually, lots.
             $uids = tx_newspaper::selectRows(
                 'uid_local', 'tx_newspaper_article_sections_mm', 
                 'uid_foreign = ' . $section->getUid(),
@@ -317,6 +328,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             } else {
             	$ret .= '<p><strong>No articles associated with section ' . $section->getUid() . '.</strong></p>';
             }
+            
     	}
     	return $ret;
     }
@@ -369,19 +381,15 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         		continue;
         	}
             $ret .= '<p>' . 
-                        'Article list: ' .
-                        self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
-                        ' concrete table: ' . $concrete_list->getTable() .
-                        ' concrete uid: ' .
-                        self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
+                        'Article list: ' . self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
+                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
                     '</p>';
             
             $articles = $concrete_list->getArticles(10);
             if ($articles) {
             	foreach ($articles as $article) {
-            		$ret .= '<p>&nbsp;&nbsp;Article' . 
-            		self::getRecordLink('tx_newspaper_article', $article->getUid()) .
-            		' - ' . $article->getAttribute('title') . '</p>';
+            		$ret .= '<p>&nbsp;&nbsp;Article' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
+            		    ' - ' . $article->getAttribute('title') . '</p>';
             	}
             } else {
             	$ret .= '<p>&nbsp;&nbsp;No articles.</p>';
