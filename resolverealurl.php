@@ -33,6 +33,9 @@
 // the following is copied and adapted from index.php
 //
 
+// stfu
+error_reporting (E_ALL ^ E_NOTICE);
+
 define('PATH_thisScript',
     str_replace('//','/', 
         str_replace('\\','/', 
@@ -102,8 +105,7 @@ echo "PATH_tslib ". PATH_tslib . '<br>' .
     " PATH_typo3 " . PATH_typo3 . '<br>' . 
     " PATH_typo3conf " . PATH_typo3conf . '<br>';
 
-// todo: make the path portable
-require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
+require_once(PATH_typo3conf . 'localconf.php');
 
 require_once(PATH_t3lib.'class.t3lib_timetrack.php');
 $TT = new t3lib_timeTrack;
@@ -164,21 +166,17 @@ class tx_newspaper_ResolveRealURL {
 		}
 		
 		$article_alias = $segments[$post_index+1];
-		
-global $typo_db_host, $typo_db_username, $typo_db_password, $typo_db;
-echo  $typo_db_host . $typo_db_username. $typo_db_password. $typo_db;
-        $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
-            or self::error('Could not connect: ' . mysql_error());
-        mysql_select_db($typo_db) or self::error('Could not select database');
-
-        $res = mysql_query('
-	        SELECT field_id, value_id 
-	        FROM ' . self::uniquealias_table .'
-	        WHERE value_alias = \'' . $article_alias .'\'
-	    ');
+	
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		    'field_id, value_id', self::uniquealias_table,
+		    'WHERE value_alias = \'' . $article_alias .'\''
+		);
+		echo $query . '<br>';
+        $res = $GLOBALS['TYPO3_DB']->sql_query($query);
         if (!$res) self::error('article alias ' . $article_alias . ' not found');
 
-        $row = mysql_fetch_array($res, MYSQL_ASSOC);
+        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
 		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
