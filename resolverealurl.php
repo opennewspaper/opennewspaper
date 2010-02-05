@@ -61,7 +61,7 @@ class tx_newspaper_ResolveRealURL {
 		// should never happen if mod_rewrite and resolverealurl.php are configured in sync
 		if (!in_array($first, self::$prefixes)) {
 			// to do: show the original URI
-		    self::error('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
+		    $this->error('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
 		}
 		
 		$post_index = array_search(self::post_key, $segments);
@@ -85,10 +85,10 @@ class tx_newspaper_ResolveRealURL {
 		    ' WHERE value_alias = \'' . $article_alias .'\'';
 
 		$res = mysql_query($query);
-        if (!$res) self::error('Faulty SQL query: ' . $query);
+        if (!$res) $this->error('Faulty SQL query: ' . $query);
 				
 		$row = mysql_fetch_array($res, MYSQL_ASSOC);
-        if (!$row) self::error('Article alias ' . $article_alias . ' not found');
+        if (!$row) $this->error('Article alias ' . $article_alias . ' not found');
         
         $this->article_id = intval($row['value_id']);
 	}
@@ -110,7 +110,7 @@ class tx_newspaper_ResolveRealURL {
                         '&' . 'art=' . $this->article_id;
 	}
 	
-	private static function error($msg) {
+	private function error($msg) {
         $this->error_log[] = $msg;
 	}
 	    
