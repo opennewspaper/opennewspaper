@@ -95,6 +95,7 @@ if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main fronte
 require_once(PATH_t3lib.'class.t3lib_db.php');
 $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 
+print_r($TYPO3_DB->admin_get_dbs());
 echo PATH_site . '<br>';
 echo PATH_thisScript . '<br>';
 echo "PATH_tslib ". PATH_tslib . '<br>' . 
@@ -145,7 +146,6 @@ class tx_newspaper_ResolveRealURL {
 		
 		$article_alias = $segments[$post_index+1];
 	
-		//if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 		    'field_id, value_id', self::uniquealias_table,
 		    'value_alias = \'' . $article_alias .'\''
@@ -158,11 +158,7 @@ class tx_newspaper_ResolveRealURL {
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
 		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
-		
-		// include newspaper extension.
-		// check /index.php and /www/onlinetaz/typo3_src-4.2.6/typo3/sysext/cms/tslib for
-		// files to include.
-		
+				
 		// instantiate article and redirect ot $article->getLink()
 	}
 	
