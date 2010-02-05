@@ -109,7 +109,7 @@ $TSFE->connectToDB();
 #$TSFE->workspacePreviewInit();
 #        $TSFE->checkAlternativeIdMethods();
     $TSFE->clear_preview();
-    $TSFE->determineId();
+#    $TSFE->determineId();
     $TSFE->makeCacheHash();
     $TSFE->getCompressedTCarray();
     
