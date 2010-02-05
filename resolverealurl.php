@@ -145,6 +145,7 @@ class tx_newspaper_ResolveRealURL {
         // instantiate article and redirect ot $article->getLink()
         $article = new tx_newspaper_Article(intval($row['value_id']));
         
+        print_r($article);
 		die($article->getLink());		
 	}
 	
