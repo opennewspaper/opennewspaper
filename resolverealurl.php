@@ -96,9 +96,9 @@ require_once(PATH_t3lib.'class.t3lib_db.php');
 $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 
 echo " typo_db_username " . $typo_db_username . 
-" typo_db_password ".$typo_db_password 
-" typo_db_host ".$typo_db_host 
-" typo_db ".$typo_db . '<br>';
+    " typo_db_password ".$typo_db_password. 
+    " typo_db_host ".$typo_db_host .  
+    " typo_db ".$typo_db . '<br>';
 echo PATH_site . '<br>';
 echo PATH_thisScript . '<br>';
 echo "PATH_tslib ". PATH_tslib . '<br>' . 
