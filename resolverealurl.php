@@ -100,7 +100,7 @@ class tx_newspaper_ResolveRealURL {
             return self::article_typo3_page_alias . 
                 self::post_key . '/' .
                 $this->article_alias . '/';
-		else if (true) {
+        } else if (true) {
 		    return self::article_typo3_page_alias . 
 		        '?art=' . $this->article_id;
 		} else {
