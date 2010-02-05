@@ -358,9 +358,7 @@ class tx_newspaper_ResolveRealURL {
                                                 if (substr($addQueryParams,0,1)!='&')           {
                                                         $addQueryParams = '';
                                                 } elseif ($conf['useCacheHash']) {      // cache hashing:
-                                                        $pA = t3lib_div::cHashParams($addQueryParams.$GLOBALS['TSFE']->linkVars);       // Added '.$this->linkVars' dec 2003: The need for adding the linkVars is that they will be included in the link,
-but not the cHash. Thus the linkVars will always be the problem that prevents the cHash from working. I cannot see what negative implications in terms of incompatibilities this could bring, but for now I hope there are none. So here we go... (- kaspe
-r)
+                                                        $pA = t3lib_div::cHashParams($addQueryParams.$GLOBALS['TSFE']->linkVars);       // Added '.$this->linkVars' dec 2003: The need for adding the linkVars is that they will be included in the link,but not the cHash. Thus the linkVars will always be the problem that prevents the cHash from working. I cannot see what negative implications in terms of incompatibilities this could bring, but for now I hope there are none. So here we go... (- kasper)
                                                         $addQueryParams.= '&cHash='.t3lib_div::shortMD5(serialize($pA));
                                                 }
 
@@ -512,8 +510,7 @@ r)
                                 }
 
                                 $onClick="vHWin=window.open('".$GLOBALS['TSFE']->baseUrlWrap($finalTagParts['url'])."','FEopenLink','".$JSwindowParams."');vHWin.focus();return false;";
-                                $res = '<a href="'.htmlspecialchars($finalTagParts['url']).'"'. $target .' onclick="'.htmlspecialchars($onClick).'"'.($title?' title="'.$title.'"':'').($linkClass?' class="'.$linkClass.'"':'').$finalTagParts['aTagParam
-s'].'>';
+                                $res = '<a href="'.htmlspecialchars($finalTagParts['url']).'"'. $target .' onclick="'.htmlspecialchars($onClick).'"'.($title?' title="'.$title.'"':'').($linkClass?' class="'.$linkClass.'"':'').$finalTagParts['aTagParams'].'>';
                         } else {
                                 if ($GLOBALS['TSFE']->spamProtectEmailAddresses === 'ascii' && $finalTagParts['TYPE'] === 'mailto') {
                                         $res = '<a href="'.$finalTagParts['url'].'"'.($title?' title="'.$title.'"':'').$finalTagParts['targetParams'].($linkClass?' class="'.$linkClass.'"':'').$finalTagParts['aTagParams'].'>';
