@@ -81,6 +81,10 @@ define('PATH_typo3conf', PATH_site.'typo3conf/');
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
 
 require_once(PATH_typo3conf . 'localconf.php');
+echo " typo_db_username " . $typo_db_username . 
+    " typo_db_password ".$typo_db_password. 
+    " typo_db_host ".$typo_db_host .  
+    " typo_db ".$typo_db . '<br>';
 
 require_once(PATH_t3lib.'class.t3lib_timetrack.php');
 $TT = new t3lib_timeTrack;
@@ -95,10 +99,6 @@ if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main fronte
 require_once(PATH_t3lib.'class.t3lib_db.php');
 $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 
-echo " typo_db_username " . $typo_db_username . 
-    " typo_db_password ".$typo_db_password. 
-    " typo_db_host ".$typo_db_host .  
-    " typo_db ".$typo_db . '<br>';
 echo PATH_site . '<br>';
 echo PATH_thisScript . '<br>';
 echo "PATH_tslib ". PATH_tslib . '<br>' . 
