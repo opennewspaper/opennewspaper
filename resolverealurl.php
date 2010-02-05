@@ -135,7 +135,7 @@ class tx_newspaper_ResolveRealURL {
 		// instantiate article and redirect ot $article->getLink()
 	}
 	
-	private static error($msg) {
+	private static function error($msg) {
 		// todo handle errors.
 		die($msg);
 	}
