@@ -1,0 +1,40 @@
+<div id="comments-{$tableUid}" class="comments">
+    <table>
+        {foreach item=comment from=$comments}
+            <tr>
+                <td>{$comment.username} </td>
+                <td>{$comment.created} </td>
+                <td>{$comment.action}</td>
+                <td>{$comment.comment} </td>
+           </tr>
+        {/foreach}
+    </table>
+{if $showMore}
+    {literal}
+        <a href="#" onclick="getComments();">mehr...</a>        
+    {/literal}
+{/if}
+</div>
+{literal}
+    <script language="javascript">
+        function getComments() {
+            var path = window.location.pathname;
+            path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+            new top.Ajax.Request( path+'/mod1/index.php',
+                    {   method : 'GET',
+                        parameters :{'AJAX_CALL' : true,'show_all_comments' : true, 'tbl' : 'tx_newspaper_article', 'tbl_uid' : 1},
+                        onSuccess : showMessage,
+                        onError : showError
+                    } );
+        }
+
+        function showMessage(data) {
+            document.getElementById('comments-{/literal}{$tableUid}{literal}').innerHTML = data.responseText;
+        }
+
+        function showError(data) {
+            alert(data.responseText);
+        }
+
+    </script>
+{/literal}

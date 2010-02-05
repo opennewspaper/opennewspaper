@@ -14,9 +14,54 @@ define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
  
 class tx_newspaper_WorkflowLog {   
 
-	public static function renderBackend($table, $uid) {
-		return 'Hello newspaper!';
+	 public static function renderBackend($table, $tableUid, $allComments = false) {
+        if($allComments) {
+            $comments = self::getAllComments($table, $tableUid);
+        } else {
+            $comments = self::getLatestComments($table, $tableUid);
+        }
+
+        $comments = self::addUsername($comments);
+        return self::renderTemplate($comments, $tableUid, !$allComments);
+    }
+    
+    private static function getAllComments($table, $uid) {
+		$comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log', 'table_name = \''.$table.'\' and table_uid = '.$uid.' order by crdate desc');
+        return $comments;
 	}
+
+    private static function getLatestComments($table, $table_uid) {
+        $latestComments = "SELECT FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, crdate, be_user, action, comment FROM `tx_newspaper_log` WHERE";
+        $latestComments = $latestComments." table_name = '$table' AND table_uid = $table_uid";
+        $latestComments = $latestComments." AND crdate = (SELECT MAX(crdate) FROM tx_newspaper_log WHERE table_name = '$table' AND table_uid = $table_uid)";
+
+        $res = $GLOBALS['TYPO3_DB']->sql_query($latestComments);
+        $comments = array();
+        while($comment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            $comments[] = $comment;
+        }
+        return $comments;
+    }
+
+    private static function renderTemplate($comments, $tableUid, $showMoreLink = true) {
+       self::addUsername($comments);
+       $smarty = new tx_newspaper_Smarty();
+       $smarty->assign('comments', $comments);
+       $smarty->assign('tableUid', $tableUid);
+       $smarty->assign('showMore', $showMoreLink);
+       return $smarty->fetch(tx_newspaper::getAbsolutePath().'res/be/templates/workflow_comment_output.tmpl');
+    }
+
+    private static function addUsername($comments) {
+        $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
+        foreach($comments as $i => $comment) {
+            $userId = $comment['be_user'];
+            $userdata= $beFunc->getUserNames('username, uid', 'AND uid ='.$userId);            
+            $comments[$i]['username'] = $userdata[$userId]['username'];
+        }
+
+        return $comments;
+    }
  
 
 	/// \return message: what status change took place
