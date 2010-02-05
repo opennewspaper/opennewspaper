@@ -15,6 +15,9 @@ define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 class tx_newspaper_WorkflowLog {   
 
 	 public static function renderBackend($table, $tableUid, $allComments = false) {
+        if(!$table || !$tableUid) {
+            throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
+        }
         if($allComments) {
             $comments = self::getAllComments($table, $tableUid);
         } else {
