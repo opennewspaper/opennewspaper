@@ -163,7 +163,7 @@ class tx_newspaper_ResolveRealURL {
         
         print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
                        
-        $link = self::fake_typolink(
+        $link = $this->fake_typolink(
             array(
                 'id' => self::article_typo3_page,
                 tx_newspaper::article_get_parameter => intval($row['value_id'])
@@ -178,7 +178,7 @@ class tx_newspaper_ResolveRealURL {
 		die($msg);
 	}
 	
-	private static function fake_typolink(array $params = array()) {
+	private function fake_typolink(array $params = array()) {
 
 		// generate tslib_cObj::typolink() parameters from the saner parameters to this function		
         foreach ($params as $key => $param) {
