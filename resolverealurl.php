@@ -105,6 +105,9 @@ echo "PATH_tslib ". PATH_tslib . '<br>' .
 // todo: make the path portable
 require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
 
+require_once(PATH_t3lib.'class.t3lib_timetrack.php');
+$TT = new t3lib_timeTrack;
+
 require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
     
