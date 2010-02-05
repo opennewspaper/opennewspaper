@@ -68,13 +68,10 @@ define('TYPO3_MODE','FE');
 
 if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
 
-#define('TYPO3_mainDir', 'typo3/');      // This is the directory of the backend administration for the sites of this TYPO3 installation.
-#define('PATH_typo3', PATH_site.TYPO3_mainDir);
 define('PATH_typo3conf', PATH_site.'typo3conf/');
-
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
 
-require_once(PATH_t3lib.'class.t3lib_div.php');
+#require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
 
 require_once(PATH_t3lib.'config_default.php');
