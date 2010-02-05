@@ -64,7 +64,7 @@ if (PATH_tslib=='') {
 // the following is copied and adapted from typo3/sysext/cms/tslib/index_ts.php
 //
 
-#define('TYPO3_MODE','FE');
+define('TYPO3_MODE','FE');
 
 if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
 
