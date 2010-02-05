@@ -86,6 +86,19 @@ if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 
 require_once(PATH_tslib.'class.tslib_content.php');
 
+$temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
+$TSFE = new $temp_TSFEclassName(
+        $TYPO3_CONF_VARS,
+        t3lib_div::_GP('id'),
+        t3lib_div::_GP('type'),
+        t3lib_div::_GP('no_cache'),
+        t3lib_div::_GP('cHash'),
+        t3lib_div::_GP('jumpurl'),
+        t3lib_div::_GP('MP'),
+        t3lib_div::_GP('RDCT')
+    );
+    
+$TSFE->connectToDB();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
