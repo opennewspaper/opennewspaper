@@ -37,7 +37,7 @@ define('PATH_thisScript',
               $_SERVER['ORIG_PATH_TRANSLATED']: 
                 $_SERVER['PATH_TRANSLATED'])? 
                 ($_SERVER['ORIG_PATH_TRANSLATED']? $_SERVER['ORIG_PATH_TRANSLATED']: $_SERVER['PATH_TRANSLATED']):
-                  ($_SERVER['ORIG_SCRIPT_FILENAME']?$_SERVER['ORIG_SCRIPT_FILENAME']:$_SERVER['SCRIPT_FILENAME'])
+                  ($_SERVER['SCRIPT_FILENAME'])
         )
     )
 );
