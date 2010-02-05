@@ -30,95 +30,9 @@
  */
 
 
-//
-// the following is copied and adapted from index.php
-//
+#error_reporting (E_ALL ^ E_NOTICE);                                     // stfu
 
-error_reporting (E_ALL ^ E_NOTICE);                                     // stfu
 
-define('PATH_thisScript',
-    str_replace('//','/', 
-        str_replace('\\','/', 
-            (php_sapi_name()=='cgi' || php_sapi_name()=='isapi' || php_sapi_name()=='cgi-fcgi')&&
-             ($_SERVER['ORIG_PATH_TRANSLATED']? 
-              $_SERVER['ORIG_PATH_TRANSLATED']: 
-                $_SERVER['PATH_TRANSLATED'])? 
-                ($_SERVER['ORIG_PATH_TRANSLATED']? $_SERVER['ORIG_PATH_TRANSLATED']: $_SERVER['PATH_TRANSLATED']):
-                  $_SERVER['SCRIPT_FILENAME']
-        )
-    )
-);
-
-define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
-
-if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
-    define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
-} elseif (@is_dir(PATH_site.'tslib/')) {
-    define('PATH_tslib', PATH_site.'tslib/');
-}
-if (PATH_tslib=='') {
-    die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
-}
-
-//
-// the following is copied and adapted from typo3/sysext/cms/tslib/index_ts.php
-//
-
-define('TYPO3_MODE','FE');
-
-if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
-
-define('PATH_typo3conf', PATH_site.'typo3conf/');
-if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
-
-require_once(PATH_t3lib.'class.t3lib_div.php');
-require_once(PATH_t3lib.'class.t3lib_extmgm.php');
-
-require_once(PATH_t3lib.'config_default.php');
-// the name of the TYPO3 database is stored in this constant. Here the inclusion of the config-file is verified by checking if this var is set.
-if (!defined ('TYPO3_db'))  die ('The configuration file was not included.');   
-
-require_once(PATH_t3lib.'class.t3lib_db.php');
-$TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
-$TYPO3_DB->connectDB();
-
-if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
-/*
-// needed for tslib_cObj::typolink()
-require_once(PATH_tslib.'class.tslib_content.php');
-require_once(PATH_tslib.'class.tslib_fe.php');
-
-require_once(PATH_t3lib.'class.t3lib_timetrack.php');
-$TT = new t3lib_timeTrack;  //  $TSFE needs this.
-$TT->start();
-
-$temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
-$TSFE = new $temp_TSFEclassName(
-        $TYPO3_CONF_VARS,
-        tx_newspaper_ResolveRealURL::article_typo3_page,
-        t3lib_div::_GP('type'),
-        t3lib_div::_GP('no_cache'),
-        t3lib_div::_GP('cHash'),
-        t3lib_div::_GP('jumpurl'),
-        t3lib_div::_GP('MP'),
-        t3lib_div::_GP('RDCT')
-    );
-    
-$TSFE->connectToDB();
-#    $TSFE->initFEuser();
-#$TSFE->workspacePreviewInit();
-#        $TSFE->checkAlternativeIdMethods();
-    $TSFE->clear_preview();
-#    $TSFE->determineId();
-    $TSFE->makeCacheHash();
-    $TSFE->getCompressedTCarray();
-    
-$TSFE->initTemplate();
-    $TSFE->getFromCache();
-
-    
-$TSFE->getConfigArray();
-*/
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
@@ -161,15 +75,23 @@ class tx_newspaper_ResolveRealURL {
 		
 		$article_alias = $segments[$post_index+1];
 	
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-		    'field_id, value_id', self::uniquealias_table,
-		    'value_alias = \'' . $article_alias .'\''
-		);
-		echo $query . '<br>';
-        $res = $GLOBALS['TYPO3_DB']->sql_query($query);
-        if (!$res) self::error('article alias ' . $article_alias . ' not found');
 
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
+		global $typo_db_username, $typo_db_password, $typo_db_host, $typo_db;
+		
+		// Connecting, selecting database
+        $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
+            or die('Could not connect: ' . mysql_error());
+        mysql_select_db($typo_db) or die('Could not select database');
+		
+		$query = 'SELECT field_id, value_id FROM ' . self::uniquealias_table .
+		    ' WHERE value_alias = \'' . $article_alias .'\'';
+		echo $query . '<br>';
+
+		$res = mysql_query($query);
+        if (!$res) self::error('article alias ' . $article_alias . ' not found');
+				
+		$row = mysql_fetch_array($res, MYSQL_ASSOC);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
         print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
