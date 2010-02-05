@@ -37,13 +37,24 @@ class tx_newspaper_ResolveRealURL {
 
 	/// SQL table containing the resolution parameters.
 	const uniquealias_table = 'tx_newspaper_uniqalias';
-	/// Typo3 page used to display resolved articles.
-	const article_typo3_page = 33;
-	
+
+	/// Typo3 page id used to display resolved articles.
+	const article_typo3_page_id = 33;
+
+	/// Typo3 page used to display resolved articles as seen by RealURL.
+	const article_typo3_page_alias = 'start/';
+
+	/// Keyword in page path used to mark the article alias.
 	const post_key = '1';
 
+	/// Typo3 installation base.
 	const base_path = '/www/onlinetaz/branches/taz 2.0/helge';
-	
+
+	/// Prefixes which signify that this URI is an old path.
+	/** Paths starting with these prefixes after the first slash are redirected
+	 *  to the article display page in newspaper. The web server must redirect
+	 *  these URIs to this script.
+	 */
 	static $prefixes = array('1', '4');
 	
 	public function __construct() {
@@ -85,15 +96,21 @@ class tx_newspaper_ResolveRealURL {
 	/** Edit this for pretty URLs to redirect to
 	 */
 	private function articleurl() {
-		if (true) {
-		    return '/start/?art=' . $this->article_id;
+        if (true) {
+            return self::article_typo3_page_alias . 
+                self::post_key . '/' .
+                $this->article_alias . '/';
+		else if (true) {
+		    return self::article_typo3_page_alias . 
+		        '?art=' . $this->article_id;
 		} else {
-		  return '/index.php?id=' . self::article_typo3_page . 
-                        '&' . 'art=' . $this->article_id;
+		    return '/index.php?id=' . self::article_typo3_page_id . 
+                '&' . 'art=' . $this->article_id;
 		}
 	}
 	
-    private function getAlias() {
+    
+	private function getAlias() {
         
         // uri will be of the form /[14]/.*/1/article-alias[...]
         $segments = explode('/', $this->uri);
@@ -117,9 +134,11 @@ class tx_newspaper_ResolveRealURL {
         return $segments[$post_index+1];
     }
 	
-	private function error($msg) {
+	
+    private function error($msg) {
         $this->error_log[] = $msg;
 	}
+	
 	
 	private function fail() {
         foreach ($this->error_log as $error) {
@@ -128,8 +147,10 @@ class tx_newspaper_ResolveRealURL {
         exit;
 	}
 	    
+
 	private $uri;
 	private $article_id;
+	private $article_alias;
 	private $error_log = array();
 }
 
