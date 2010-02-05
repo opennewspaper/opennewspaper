@@ -83,7 +83,7 @@ $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 $TYPO3_DB->connectDB();
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
-
+/*
 // needed for tslib_cObj::typolink()
 require_once(PATH_tslib.'class.tslib_content.php');
 require_once(PATH_tslib.'class.tslib_fe.php');
@@ -118,7 +118,7 @@ $TSFE->initTemplate();
 
     
 $TSFE->getConfigArray();
-
+*/
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
@@ -174,121 +174,16 @@ class tx_newspaper_ResolveRealURL {
         
         print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
 
-        /*
-        $link = $this->fake_typolink(
-            array(
-                'id' => self::article_typo3_page,
-                tx_newspaper::article_get_parameter => intval($row['value_id'])
-        ));
-        */
-        $link = tx_newspaper::typolink_url(
-            array(
-                'id' => self::article_typo3_page,
-                tx_newspaper::article_get_parameter => intval($row['value_id'])
-        ));
-        #        print_r($GLOBALS['TSFE']);
-		die($link);		
+		$_GET['id'] = self::article_typo3_page;
+		$_GET['art'] = $row['value_id'];
+		include(PATH_site . 'index.php');	
 	}
 	
 	private static function error($msg) {
 		// todo handle errors.
 		die($msg);
 	}
-	
-    function getConfigArray()       {
-        $setStatPageName = false;
-
-        // If config is not set by the cache (which would be a major mistake somewhere) 
-        // OR if INTincScripts-include-scripts have been registered, then we must parse the template in order to get it
-        if (!is_array($this->config) || is_array($this->config['INTincScript']) || $this->forceTemplateParsing) {       
-            $GLOBALS['TT']->push('Parse template','');
-
-            // Force parsing, if set?:
-            $this->tmpl->forceTemplateParsing = $this->forceTemplateParsing;
-
-            // Start parsing the TS template. Might return cached version.
-            $this->tmpl->start($this->rootLine);
-            $GLOBALS['TT']->pull();
-
-            if ($this->tmpl->loaded)    {
-                $GLOBALS['TT']->push('Setting the config-array','');
-                //      t3lib_div::print_array($this->tmpl->setup);
-                $this->sPre = $this->tmpl->setup['types.'][$this->type];    // toplevel - objArrayName
-                $this->pSetup = $this->tmpl->setup[$this->sPre.'.'];
-
-                if (!is_array($this->pSetup))   {
-                    if ($this->checkPageUnavailableHandler())       {
-                        $this->pageUnavailableAndExit('The page is not configured! [type= '.$this->type.']['.$this->sPre.']');
-                    } else {
-                        $message = 'The page is not configured! [type= '.$this->type.']['.$this->sPre.']';
-                        header('HTTP/1.0 503 Service Temporarily Unavailable');
-                        t3lib_div::sysLog($message, 'cms', t3lib_div::SYSLOG_SEVERITY_ERROR);
-                        $this->printError($message);
-                        exit;
-                    }
-                } else {
-                    $this->config['config'] = array();
-
-                    // Filling the config-array, first with the main "config." part
-                    if (is_array($this->tmpl->setup['config.'])) {
-                        $this->config['config'] = $this->tmpl->setup['config.'];
-                    }
-                    // override it with the page/type-specific "config."
-                    if (is_array($this->pSetup['config.'])) {
-                        $this->config['config'] = t3lib_div::array_merge_recursive_overrule($this->config['config'], $this->pSetup['config.']);
-                    }
-
-                        // if .simulateStaticDocuments was not present, the default value will rule.
-                    if (!isset($this->config['config']['simulateStaticDocuments'])) {
-                        $this->config['config']['simulateStaticDocuments'] = trim($this->TYPO3_CONF_VARS['FE']['simulateStaticDocuments']);
-                    }
-                    if ($this->config['config']['simulateStaticDocuments']) {
-                            // Set replacement char only if it is needed
-                        $this->setSimulReplacementChar();
-                    }
-
-                    if ($this->config['config']['typolinkEnableLinksAcrossDomains']) {
-                        $this->config['config']['typolinkCheckRootline'] = true;
-                    }
-
-                        // Set default values for removeDefaultJS, inlineStyle2TempFile and minifyJS so CSS and JS are externalized/minified if compatversion is higher than 4.0
-                    if (t3lib_div::compat_version('4.0')) {
-                        if (!isset($this->config['config']['removeDefaultJS'])) {
-                            $this->config['config']['removeDefaultJS'] = 'external';
-                        }
-                        if (!isset($this->config['config']['inlineStyle2TempFile'])) {
-                            $this->config['config']['inlineStyle2TempFile'] = 1;
-                        }
-                        if (!isset($this->config['config']['minifyJS'])) {
-                            $this->config['config']['minifyJS'] = 1;
-                        }
-                    }
-
-                            // Processing for the config_array:
-                    $this->config['rootLine'] = $this->tmpl->rootLine;
-                    $this->config['mainScript'] = trim($this->config['config']['mainScript']) ? trim($this->config['config']['mainScript']) : 'index.php';
-
-                        // Initialize statistics handling: Check filename and permissions
-                    $setStatPageName = $this->statistics_init();
-
-                    $this->config['FEData'] = $this->tmpl->setup['FEData'];
-                    $this->config['FEData.'] = $this->tmpl->setup['FEData.'];
-	            }
-                $GLOBALS['TT']->pull();
-            } else {
-                if ($this->checkPageUnavailableHandler())       {
-                    $this->pageUnavailableAndExit('No template found!');
-                } else {
-                    $message = 'No template found!';
-                    header('HTTP/1.0 503 Service Temporarily Unavailable');
-                    t3lib_div::sysLog($message, 'cms', t3lib_div::SYSLOG_SEVERITY_ERROR);
-                    $this->printError($message);
-                    exit;
-                }
-            }
-        }
-    }
-    
+	    
 	private $uri;
 }
 
