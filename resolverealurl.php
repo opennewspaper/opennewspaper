@@ -98,6 +98,8 @@ class tx_newspaper_ResolveRealURL {
 
 		$_GET['id'] = self::article_typo3_page;
 		$_GET['art'] = $row['value_id'];
+
+		header('Location: ' . 'index.php?id=' . self::article_typo3_page . '&' . 'art=' . $row['value_id']);
 		
 	}
 	
@@ -113,7 +115,8 @@ $resolver = new tx_newspaper_ResolveRealURL();
 
 $resolver->resolve();
 
+/*
 chdir(PATH_site);
 include('index.php');   
-
+*/
 ?>
