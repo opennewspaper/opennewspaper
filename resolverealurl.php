@@ -88,6 +88,10 @@ if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 require_once(PATH_tslib.'class.tslib_content.php');
 require_once(PATH_tslib.'class.tslib_fe.php');
 
+require_once(PATH_t3lib.'class.t3lib_timetrack.php');
+$TT = new t3lib_timeTrack;
+$TT->start();
+
 $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
 $TSFE = new $temp_TSFEclassName(
         $TYPO3_CONF_VARS,
