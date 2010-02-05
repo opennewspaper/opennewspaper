@@ -71,7 +71,7 @@ if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
 define('PATH_typo3conf', PATH_site.'typo3conf/');
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
 
-#require_once(PATH_t3lib.'class.t3lib_div.php');
+require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
 
 require_once(PATH_t3lib.'config_default.php');
@@ -83,7 +83,7 @@ $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 $TYPO3_DB->connectDB();
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
-//}
+
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
@@ -138,9 +138,12 @@ class tx_newspaper_ResolveRealURL {
         $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
-		die('article alias: ' . $article_alias . ': ' . print_r($row, 1));
-				
-		// instantiate article and redirect ot $article->getLink()
+        print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
+        
+        // instantiate article and redirect ot $article->getLink()
+        $article = new tx_newspaper_Article(intval($row['value_id']));
+        
+		die($article->getLink());		
 	}
 	
 	private static function error($msg) {
