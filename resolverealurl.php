@@ -102,6 +102,9 @@ echo "PATH_tslib ". PATH_tslib . '<br>' .
     " PATH_typo3 " . PATH_typo3 . '<br>' . 
     " PATH_typo3conf " . PATH_typo3conf . '<br>';
 
+// todo: make the path portable
+require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
+
 require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
     
@@ -159,8 +162,6 @@ class tx_newspaper_ResolveRealURL {
 		
 		$article_alias = $segments[$post_index+1];
 		
-		// todo: make the path portable
-        require_once(self::base_path . '/typo3conf/localconf.php');
 
         $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
             or self::error('Could not connect: ' . mysql_error());
