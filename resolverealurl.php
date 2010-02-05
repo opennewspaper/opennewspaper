@@ -84,6 +84,8 @@ $TYPO3_DB->connectDB();
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 
+require_once(PATH_tslib.'class.tslib_content.php');
+
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
