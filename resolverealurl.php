@@ -77,7 +77,6 @@ class tx_newspaper_ResolveRealURL {
 	
 
 		require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
-		global $typo_db_username, $typo_db_password, $typo_db_host, $typo_db;
 		
 		// Connecting, selecting database
         $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
