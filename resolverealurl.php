@@ -97,7 +97,7 @@ class tx_newspaper_ResolveRealURL {
 	/** Edit this for pretty URLs to redirect to
 	 */
 	private function articleURL() {
-        if (true) {
+        if (false) {
             return self::article_typo3_page_alias . 
                 self::post_key . '/' .
                 $this->article_alias . '/';
