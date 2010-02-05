@@ -31,7 +31,7 @@
 
 
 #error_reporting (E_ALL ^ E_NOTICE);                                     // stfu
-
+define('PATH_site', tx_newspaper_ResolveRealURL::base_path);
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
