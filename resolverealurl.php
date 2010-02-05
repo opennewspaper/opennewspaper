@@ -28,7 +28,45 @@
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Jan 18, 2010
  */
- 
+
+define('PATH_thisScript',
+    str_replace('//','/', 
+        str_replace('\\','/', 
+            (php_sapi_name()=='cgi' || php_sapi_name()=='isapi' || php_sapi_name()=='cgi-fcgi')&&
+             ($_SERVER['ORIG_PATH_TRANSLATED']? 
+              $_SERVER['ORIG_PATH_TRANSLATED']: 
+                $_SERVER['PATH_TRANSLATED'])? 
+                ($_SERVER['ORIG_PATH_TRANSLATED']? $_SERVER['ORIG_PATH_TRANSLATED']: $_SERVER['PATH_TRANSLATED']):
+                  ($_SERVER['ORIG_SCRIPT_FILENAME']?$_SERVER['ORIG_SCRIPT_FILENAME']:$_SERVER['SCRIPT_FILENAME'])
+        )
+    )
+);
+
+if (true) {
+    define('PATH_site', dirname(tx_newspaper_ResolveRealURL::base_path) . '/');
+} else {
+    define('PATH_site', dirname(PATH_thisScript).'/');
+}
+
+if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
+    define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
+} elseif (@is_dir(PATH_site.'tslib/')) {
+    define('PATH_tslib', PATH_site.'tslib/');
+} else {
+
+    // define path to tslib/ here:
+    $configured_tslib_path = '';
+
+    // example:
+    // $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
+
+    define('PATH_tslib', $configured_tslib_path);
+}
+
+if (PATH_tslib=='') {
+    die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
+}
+
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
