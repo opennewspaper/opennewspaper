@@ -29,6 +29,10 @@
  *  \date Jan 18, 2010
  */
 
+//
+// the following is copied and adapted from index.php
+//
+
 define('PATH_thisScript',
     str_replace('//','/', 
         str_replace('\\','/', 
@@ -37,11 +41,10 @@ define('PATH_thisScript',
               $_SERVER['ORIG_PATH_TRANSLATED']: 
                 $_SERVER['PATH_TRANSLATED'])? 
                 ($_SERVER['ORIG_PATH_TRANSLATED']? $_SERVER['ORIG_PATH_TRANSLATED']: $_SERVER['PATH_TRANSLATED']):
-                  ($_SERVER['SCRIPT_FILENAME'])
+                  $_SERVER['SCRIPT_FILENAME']
         )
     )
 );
-echo PATH_thisScript . '<br>';
 
 if (true) {
     define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
@@ -69,6 +72,36 @@ if (PATH_tslib=='') {
     die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
 }
 
+//
+// the following is copied and adapted from typo3/sysext/cms/tslib/index_ts.php
+//
+
+$TYPO3_MISC['microtime_start'] = microtime();
+define('TYPO3_OS', stristr(PHP_OS,'win')&&!stristr(PHP_OS,'darwin')?'WIN':'');
+define('TYPO3_MODE','FE');
+
+if (!defined('PATH_t3lib'))         define('PATH_t3lib', PATH_site.'t3lib/');
+
+define('TYPO3_mainDir', 'typo3/');      // This is the directory of the backend administration for the sites of this TYPO3 installation.
+define('PATH_typo3', PATH_site.TYPO3_mainDir);
+define('PATH_typo3conf', PATH_site.'typo3conf/');
+
+if (!defined('PATH_tslib')) {
+    if (@is_dir(PATH_site.TYPO3_mainDir.'sysext/cms/tslib/')) {
+        define('PATH_tslib', PATH_site.TYPO3_mainDir.'sysext/cms/tslib/');
+    } elseif (@is_dir(PATH_site.'tslib/')) {
+        define('PATH_tslib', PATH_site.'tslib/');
+    }
+}
+
+if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
+
+echo PATH_thisScript . '<br>';
+echo "PATH_tslib ". PATH_tslib . " PATH_t3lib " . PATH_t3lib . " PATH_typo3 " . PATH_typo3 . " PATH_typo3conf " . PATH_typo3conf;
+
+require_once(PATH_t3lib.'class.t3lib_div.php');
+require_once(PATH_t3lib.'class.t3lib_extmgm.php');
+    
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
