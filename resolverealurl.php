@@ -163,7 +163,7 @@ class tx_newspaper_ResolveRealURL {
         
         print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
                        
-        $link = tx_newspaper::typolink_url(
+        $link = self::fake_typolink(
             array(
                 'id' => self::article_typo3_page,
                 tx_newspaper::article_get_parameter => intval($row['value_id'])
@@ -178,7 +178,42 @@ class tx_newspaper_ResolveRealURL {
 		die($msg);
 	}
 	
-	private static function fake_typolink($linktxt, $conf) {
+	private static function fake_typolink(array $params = array()) {
+
+		// generate tslib_cObj::typolink() parameters from the saner parameters to this function		
+        foreach ($params as $key => $param) {
+            if (is_array($param)) {
+                foreach ($param as $subkey => $value) {
+                    $params[$key.'['.$subkey.']'] = $value;
+                }
+                unset($params[$key]);
+            }
+        }
+
+        //  set TypoScript config array
+        $temp_conf = array();
+
+        if ($params['id']) $temp_conf['parameter'] = $params['id'];
+        else $temp_conf['parameter.']['current'] = 1;
+        unset($params['id']);
+		
+        $no_cache = false;
+        $sep = '&';
+        if (sizeof($params) > 0) {
+            foreach ($params as $key => $value) {
+                if ($key == 'no_cache' && $value != 0) $no_cache = true;
+                if ($key != 'cHash') {
+                    $temp_conf['additionalParams'] .= "$sep$key=$value";
+                    $sep = '&';
+                }
+            }
+        }
+        if (!$no_cache) $temp_conf['useCacheHash'] = 1;
+
+        
+        $linktext = "";
+        $conf = $temp_conf;
+		
                 $LD = array();
                 $finalTagParts = array();
                 $finalTagParts['aTagParams'] = $this->getATagParams($conf);
