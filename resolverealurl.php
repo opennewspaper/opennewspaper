@@ -41,12 +41,14 @@ define('PATH_thisScript',
         )
     )
 );
+echo PATH_thisScript . '<br>';
 
 if (true) {
     define('PATH_site', dirname(tx_newspaper_ResolveRealURL::base_path) . '/');
 } else {
     define('PATH_site', dirname(PATH_thisScript).'/');
 }
+echo PATH_site . '<br>';
 
 if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
     define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
