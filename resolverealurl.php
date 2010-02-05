@@ -98,7 +98,9 @@ class tx_newspaper_ResolveRealURL {
 
 		$_GET['id'] = self::article_typo3_page;
 		$_GET['art'] = $row['value_id'];
-		include(PATH_site . 'index.php');	
+		
+		chdir(PATH_site);
+		include('index.php');	
 	}
 	
 	private static function error($msg) {
