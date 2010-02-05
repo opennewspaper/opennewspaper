@@ -49,25 +49,14 @@ define('PATH_thisScript',
     )
 );
 
-if (true) {
-    define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
-} else {
-    define('PATH_site', dirname(PATH_thisScript).'/');
-}
-echo PATH_site . '<br>';
+define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
 
 if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
     define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
 } elseif (@is_dir(PATH_site.'tslib/')) {
     define('PATH_tslib', PATH_site.'tslib/');
 } else {
-
-    // define path to tslib/ here:
     $configured_tslib_path = '';
-
-    // example:
-    // $configured_tslib_path = '/var/www/mysite/typo3/sysext/cms/tslib/';
-
     define('PATH_tslib', $configured_tslib_path);
 }
 
@@ -83,27 +72,13 @@ $TYPO3_MISC['microtime_start'] = microtime();
 define('TYPO3_OS', stristr(PHP_OS,'win')&&!stristr(PHP_OS,'darwin')?'WIN':'');
 define('TYPO3_MODE','FE');
 
-if (!defined('PATH_t3lib'))         define('PATH_t3lib', PATH_site.'t3lib/');
+if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
 
 define('TYPO3_mainDir', 'typo3/');      // This is the directory of the backend administration for the sites of this TYPO3 installation.
 define('PATH_typo3', PATH_site.TYPO3_mainDir);
 define('PATH_typo3conf', PATH_site.'typo3conf/');
 
-if (!defined('PATH_tslib')) {
-    if (@is_dir(PATH_site.TYPO3_mainDir.'sysext/cms/tslib/')) {
-        define('PATH_tslib', PATH_site.TYPO3_mainDir.'sysext/cms/tslib/');
-    } elseif (@is_dir(PATH_site.'tslib/')) {
-        define('PATH_tslib', PATH_site.'tslib/');
-    }
-}
-
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
-
-echo PATH_thisScript . '<br>';
-echo "PATH_tslib ". PATH_tslib . '<br>' . 
-    " PATH_t3lib " . PATH_t3lib . '<br>' . 
-    " PATH_typo3 " . PATH_typo3 . '<br>' . 
-    " PATH_typo3conf " . PATH_typo3conf . '<br>';
 
 require_once(PATH_typo3conf . 'localconf.php');
 
@@ -117,12 +92,15 @@ require(PATH_t3lib.'config_default.php');
 if (!defined ('TYPO3_db'))  die ('The configuration file was not included.');   // the name of the TYPO3 database is stored in this constant. Here the inclusion of the config-file is verified by checking if this var is set.
 if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main frontend extension "cms" was not loaded. Enable it in the extension manager in the backend.');
 
-if (!defined('PATH_tslib')) {
-    define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
-}
-
 require_once(PATH_t3lib.'class.t3lib_db.php');
 $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
+
+echo PATH_site . '<br>';
+echo PATH_thisScript . '<br>';
+echo "PATH_tslib ". PATH_tslib . '<br>' . 
+    " PATH_t3lib " . PATH_t3lib . '<br>' . 
+    " PATH_typo3 " . PATH_typo3 . '<br>' . 
+    " PATH_typo3conf " . PATH_typo3conf . '<br>';
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
@@ -167,7 +145,7 @@ class tx_newspaper_ResolveRealURL {
 		
 		$article_alias = $segments[$post_index+1];
 	
-		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		//if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 		    'field_id, value_id', self::uniquealias_table,
 		    'value_alias = \'' . $article_alias .'\''
