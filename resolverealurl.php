@@ -30,9 +30,6 @@
  */
 
 
-#error_reporting (E_ALL ^ E_NOTICE);                                     // stfu
-define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
-
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
@@ -86,7 +83,6 @@ class tx_newspaper_ResolveRealURL {
 		
 		$query = 'SELECT field_id, value_id FROM ' . self::uniquealias_table .
 		    ' WHERE value_alias = \'' . $article_alias .'\'';
-//		echo $query . '<br>';
 
 		$res = mysql_query($query);
         if (!$res) self::error('article alias ' . $article_alias . ' not found');
@@ -94,12 +90,8 @@ class tx_newspaper_ResolveRealURL {
 		$row = mysql_fetch_array($res, MYSQL_ASSOC);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
-//        print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
-
-		$_GET['id'] = self::article_typo3_page;
-		$_GET['art'] = $row['value_id'];
-
-		header('Location: ' . '/index.php?id=' . self::article_typo3_page . '&' . 'art=' . $row['value_id']);
+		header('Location: ' . '/index.php?id=' . self::article_typo3_page . '&' . 'art=' . $row['value_id'],
+		      true, 301);
 		
 	}
 	
@@ -115,8 +107,4 @@ $resolver = new tx_newspaper_ResolveRealURL();
 
 $resolver->resolve();
 
-/*
-chdir(PATH_site);
-include('index.php');   
-*/
 ?>
