@@ -52,28 +52,8 @@ class tx_newspaper_ResolveRealURL {
 	
 	public function resolve() {
 		
-		// uri will be of the form /[14]/.*/1/article-alias[...]
-		$segments = explode('/', $this->uri);
-		
-        array_shift($segments);             // remove leading null string
-		$first = array_shift($segments);    // get first path segment
-		
-		// should never happen if mod_rewrite and resolverealurl.php are configured in sync
-		if (!in_array($first, self::$prefixes)) {
-			// to do: show the original URI
-		    $this->error('Path ' . $this->uri . ' does not start with ' . implode(' or ', self::$prefixes));
-		}
-		
-		$post_index = array_search(self::post_key, $segments);
-		if ($post_index === false) {
-			// URL does not lead to an article.
-			// to do: handle this.
-			self::error('Path segment \'' . self::post_key . '\' not found!');
-		}
-		
-		$article_alias = $segments[$post_index+1];
-	
-
+	    $article_alias = $this->getAlias();
+	    
 		require_once(tx_newspaper_ResolveRealURL::base_path . '/typo3conf/localconf.php');
 		
 		// Connecting, selecting database
@@ -98,20 +78,54 @@ class tx_newspaper_ResolveRealURL {
             header('Location: ' . $this->articleurl(),
                    true, 301);
 		} else {
-			foreach ($this->error_log as $error) {
-				echo $error . '<br />';
-			}
-			exit;
+			$this->fail();
+		}
+	}
+		
+	/** Edit this for pretty URLs to redirect to
+	 */
+	private function articleurl() {
+		if (true) {
+		    return '/start/?art=' . $this->article_id;
+		} else {
+		  return '/index.php?id=' . self::article_typo3_page . 
+                        '&' . 'art=' . $this->article_id;
 		}
 	}
 	
-	private function articleurl() {
-		return '/index.php?id=' . self::article_typo3_page . 
-                        '&' . 'art=' . $this->article_id;
-	}
+    private function getAlias() {
+        
+        // uri will be of the form /[14]/.*/1/article-alias[...]
+        $segments = explode('/', $this->uri);
+        
+        array_shift($segments);             // remove leading null string
+        $first = array_shift($segments);    // get first path segment
+        
+        // should never happen if mod_rewrite and resolverealurl.php are configured in sync
+        if (!in_array($first, self::$prefixes)) {
+            // to do: show the original URI
+            $this->error('Path \'' . $this->uri . '\' does not start with ' . implode(' or ', self::$prefixes));
+        }
+        
+        $post_index = array_search(self::post_key, $segments);
+        if ($post_index === false) {
+            // URL does not lead to an article.
+            // to do: handle this.
+            self::error('Path segment \'' . self::post_key . '\' not found!');
+        }
+        
+        return $segments[$post_index+1];
+    }
 	
 	private function error($msg) {
         $this->error_log[] = $msg;
+	}
+	
+	private function fail() {
+        foreach ($this->error_log as $error) {
+            echo $error . '<br />';
+        }
+        exit;
 	}
 	    
 	private $uri;
