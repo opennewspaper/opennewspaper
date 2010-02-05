@@ -86,7 +86,7 @@ class tx_newspaper_ResolveRealURL {
 	
 	public function redirect() {
 		if ($this->article_id) {
-			print($this->articleURL());
+#			print($this->articleURL());
             header('Location: ' . $this->articleURL(),
                    true, 301);
 		} else {
