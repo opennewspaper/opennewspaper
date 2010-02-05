@@ -94,6 +94,7 @@ if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main fronte
 
 require_once(PATH_t3lib.'class.t3lib_db.php');
 $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
+$TYPO3_DB->connectDB();
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'field_id, value_id', tx_newspaper_ResolveRealURL::uniquealias_table,
             'value_alias = \'die-schmetterlingsschwestern\''
