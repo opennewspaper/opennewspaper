@@ -86,7 +86,8 @@ class tx_newspaper_ResolveRealURL {
 	
 	public function redirect() {
 		if ($this->article_id) {
-            header('Location: ' . $this->articleurl(),
+			print($this->articleURL());
+            header('Location: ' . $this->articleURL(),
                    true, 301);
 		} else {
 			$this->fail();
@@ -95,7 +96,7 @@ class tx_newspaper_ResolveRealURL {
 		
 	/** Edit this for pretty URLs to redirect to
 	 */
-	private function articleurl() {
+	private function articleURL() {
         if (true) {
             return self::article_typo3_page_alias . 
                 self::post_key . '/' .
