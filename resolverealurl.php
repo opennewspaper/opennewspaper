@@ -166,7 +166,7 @@ class tx_newspaper_ResolveRealURL {
         $link = tx_newspaper::typolink_url(
             array(
                 'id' => self::article_typo3_page,
-                tx_newspaper::article_get_parameter => intval($row['value_id']
+                tx_newspaper::article_get_parameter => intval($row['value_id'])
         ));
         
 #        print_r($GLOBALS['TSFE']);
