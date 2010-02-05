@@ -106,7 +106,7 @@ $TSFE = new $temp_TSFEclassName(
     
 $TSFE->connectToDB();
 $TSFE->initTemplate();
-//$TSFE->getConfigArray();
+$TSFE->getConfigArray();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
