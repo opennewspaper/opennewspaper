@@ -44,7 +44,7 @@ define('PATH_thisScript',
 echo PATH_thisScript . '<br>';
 
 if (true) {
-    define('PATH_site', dirname(tx_newspaper_ResolveRealURL::base_path) . '/');
+    define('PATH_site', tx_newspaper_ResolveRealURL::base_path . '/');
 } else {
     define('PATH_site', dirname(PATH_thisScript).'/');
 }
