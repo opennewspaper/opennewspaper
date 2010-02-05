@@ -106,10 +106,10 @@ $TSFE = new $temp_TSFEclassName(
     
 $TSFE->connectToDB();
 #    $TSFE->initFEuser();
-$TSFE->workspacePreviewInit();
-        $TSFE->checkAlternativeIdMethods();
+#$TSFE->workspacePreviewInit();
+#        $TSFE->checkAlternativeIdMethods();
     $TSFE->clear_preview();
- #   $TSFE->determineId();
+    $TSFE->determineId();
     $TSFE->makeCacheHash();
     $TSFE->getCompressedTCarray();
     
