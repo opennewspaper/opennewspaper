@@ -166,6 +166,7 @@ class tx_newspaper_ResolveRealURL {
 		$article_alias = $segments[$post_index+1];
 		
 global $typo_db_host, $typo_db_username, $typo_db_password, $typo_db;
+echo  $typo_db_host . $typo_db_username. $typo_db_password. $typo_db;
         $link = mysql_connect($typo_db_host, $typo_db_username, $typo_db_password)
             or self::error('Could not connect: ' . mysql_error());
         mysql_select_db($typo_db) or self::error('Could not select database');
