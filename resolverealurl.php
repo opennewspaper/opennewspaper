@@ -280,6 +280,7 @@ class tx_newspaper_ResolveRealURL {
                     exit;
                 }
             }
+        }
     }
     
 	private $uri;
