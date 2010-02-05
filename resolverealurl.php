@@ -170,7 +170,7 @@ class tx_newspaper_ResolveRealURL {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 		    'field_id, value_id', self::uniquealias_table,
-		    'WHERE value_alias = \'' . $article_alias .'\''
+		    'value_alias = \'' . $article_alias .'\''
 		);
 		echo $query . '<br>';
         $res = $GLOBALS['TYPO3_DB']->sql_query($query);
