@@ -64,8 +64,6 @@ if (PATH_tslib=='') {
 // the following is copied and adapted from typo3/sysext/cms/tslib/index_ts.php
 //
 
-#$TYPO3_MISC['microtime_start'] = microtime();
-#define('TYPO3_OS', stristr(PHP_OS,'win')&&!stristr(PHP_OS,'darwin')?'WIN':'');
 define('TYPO3_MODE','FE');
 
 if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
@@ -76,8 +74,8 @@ define('PATH_typo3conf', PATH_site.'typo3conf/');
 
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
 
-require_once(PATH_t3lib.'class.t3lib_timetrack.php');
-$TT = new t3lib_timeTrack;
+#require_once(PATH_t3lib.'class.t3lib_timetrack.php');
+#$TT = new t3lib_timeTrack;
 
 require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
