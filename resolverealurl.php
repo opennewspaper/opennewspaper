@@ -105,7 +105,7 @@ $TSFE = new $temp_TSFEclassName(
     );
     
 $TSFE->connectToDB();
-    $TSFE->initFEuser();
+#    $TSFE->initFEuser();
 $TSFE->workspacePreviewInit();
         $TSFE->checkAlternativeIdMethods();
     $TSFE->clear_preview();
