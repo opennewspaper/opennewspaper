@@ -68,7 +68,7 @@ class tx_newspaper_ResolveRealURL {
 		if ($post_index === false) {
 			// URL does not lead to an article.
 			// to do: handle this.
-			self::error(self::post_key . ' not found!');
+			self::error('Path segment \'' . self::post_key . '\' not found!');
 		}
 		
 		$article_alias = $segments[$post_index+1];
@@ -85,26 +85,43 @@ class tx_newspaper_ResolveRealURL {
 		    ' WHERE value_alias = \'' . $article_alias .'\'';
 
 		$res = mysql_query($query);
-        if (!$res) self::error('article alias ' . $article_alias . ' not found');
+        if (!$res) self::error('Faulty SQL query: ' . $query);
 				
 		$row = mysql_fetch_array($res, MYSQL_ASSOC);
-        if (!$row) self::error('article alias ' . $article_alias . ' not found');
+        if (!$row) self::error('Article alias ' . $article_alias . ' not found');
         
-		header('Location: ' . '/index.php?id=' . self::article_typo3_page . '&' . 'art=' . $row['value_id'],
-		      true, 301);
-		
+        $this->article_id = intval($row['value_id']);
+	}
+	
+	public function redirect() {
+		if ($this->article_id) {
+            header('Location: ' . $this->articleurl(),
+                   true, 301);
+		} else {
+			foreach ($this->error_log as $error) {
+				echo $error . '<br />';
+			}
+			exit;
+		}
+	}
+	
+	private function articleurl() {
+		return '/index.php?id=' . self::article_typo3_page . 
+                        '&' . 'art=' . $this->article_id;
 	}
 	
 	private static function error($msg) {
-		// todo handle errors.
-		die($msg);
+        $this->error_log[] = $msg;
 	}
 	    
 	private $uri;
+	private $article_id;
+	private $error_log = array();
 }
 
 $resolver = new tx_newspaper_ResolveRealURL();
 
 $resolver->resolve();
+$resolver->redirect();
 
 ?>
