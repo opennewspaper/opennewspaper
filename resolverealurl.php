@@ -89,7 +89,7 @@ require_once(PATH_tslib.'class.tslib_content.php');
 require_once(PATH_tslib.'class.tslib_fe.php');
 
 require_once(PATH_t3lib.'class.t3lib_timetrack.php');
-$TT = new t3lib_timeTrack;
+$TT = new t3lib_timeTrack;  //  $TSFE needs this.
 $TT->start();
 
 $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
@@ -105,6 +105,7 @@ $TSFE = new $temp_TSFEclassName(
     );
     
 $TSFE->connectToDB();
+$TSFE->initTemplate();
 $TSFE->getConfigArray();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
