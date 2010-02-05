@@ -132,7 +132,8 @@ class tx_newspaper_ResolveRealURL {
             self::error('Path segment \'' . self::post_key . '\' not found!');
         }
         
-        return $segments[$post_index+1];
+        $this->article_alias = $segments[$post_index+1];
+        return $this->article_alias; 
     }
 	
 	
