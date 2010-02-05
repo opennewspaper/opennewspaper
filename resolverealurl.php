@@ -88,14 +88,13 @@ $TT = new t3lib_timeTrack;
 require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
 
+require_once(PATH_t3lib.'config_default.php');
+// the name of the TYPO3 database is stored in this constant. Here the inclusion of the config-file is verified by checking if this var is set.
+if (!defined ('TYPO3_db'))  die ('The configuration file was not included.');   
 echo " typo_db_username " . $typo_db_username . 
     " typo_db_password ".$typo_db_password. 
     " typo_db_host ".$typo_db_host .  
     " typo_db ".$typo_db . '<br>';
-
-require_once(PATH_t3lib.'config_default.php');
-// the name of the TYPO3 database is stored in this constant. Here the inclusion of the config-file is verified by checking if this var is set.
-if (!defined ('TYPO3_db'))  die ('The configuration file was not included.');   
 if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main frontend extension "cms" was not loaded. Enable it in the extension manager in the backend.');
 
 require_once(PATH_t3lib.'class.t3lib_db.php');
