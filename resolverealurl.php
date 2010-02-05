@@ -42,7 +42,7 @@ class tx_newspaper_ResolveRealURL {
 	const article_typo3_page_id = 33;
 
 	/// Typo3 page used to display resolved articles as seen by RealURL.
-	const article_typo3_page_alias = 'start/';
+	const article_typo3_page_alias = '/start/';
 
 	/// Keyword in page path used to mark the article alias.
 	const post_key = '1';
