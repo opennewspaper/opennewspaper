@@ -106,7 +106,8 @@ $TSFE = new $temp_TSFEclassName(
     
 $TSFE->connectToDB();
 $TSFE->initTemplate();
-$TSFE->forceTemplateParsing = true;
+#$TSFE->forceTemplateParsing = true;
+$TSFE->getPageAndRootline();
 $TSFE->getConfigArray();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
@@ -185,10 +186,6 @@ class tx_newspaper_ResolveRealURL {
 		die($msg);
 	}
 	
-	private function fake_typolink(array $params = array()) {
-
-	}
-	
     function getConfigArray()       {
         $setStatPageName = false;
 
@@ -197,16 +194,16 @@ class tx_newspaper_ResolveRealURL {
         if (!is_array($this->config) || is_array($this->config['INTincScript']) || $this->forceTemplateParsing) {       
             $GLOBALS['TT']->push('Parse template','');
 
-                // Force parsing, if set?:
+            // Force parsing, if set?:
             $this->tmpl->forceTemplateParsing = $this->forceTemplateParsing;
 
-                // Start parsing the TS template. Might return cached version.
+            // Start parsing the TS template. Might return cached version.
             $this->tmpl->start($this->rootLine);
-                $GLOBALS['TT']->pull();
+            $GLOBALS['TT']->pull();
 
             if ($this->tmpl->loaded)    {
                 $GLOBALS['TT']->push('Setting the config-array','');
-            //      t3lib_div::print_array($this->tmpl->setup);
+                //      t3lib_div::print_array($this->tmpl->setup);
                 $this->sPre = $this->tmpl->setup['types.'][$this->type];    // toplevel - objArrayName
                 $this->pSetup = $this->tmpl->setup[$this->sPre.'.'];
 
@@ -267,7 +264,7 @@ class tx_newspaper_ResolveRealURL {
 
                     $this->config['FEData'] = $this->tmpl->setup['FEData'];
                     $this->config['FEData.'] = $this->tmpl->setup['FEData.'];
-	                   }
+	            }
                 $GLOBALS['TT']->pull();
             } else {
                 if ($this->checkPageUnavailableHandler())       {
