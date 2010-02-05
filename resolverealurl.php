@@ -54,6 +54,7 @@ class tx_newspaper_ResolveRealURL {
 	}
 	
 	public function resolve() {
+		
 		// uri will be of the form /[14]/.*/1/article-alias[...]
 		$segments = explode('/', $this->uri);
 		
@@ -85,7 +86,7 @@ class tx_newspaper_ResolveRealURL {
 		
 		$query = 'SELECT field_id, value_id FROM ' . self::uniquealias_table .
 		    ' WHERE value_alias = \'' . $article_alias .'\'';
-		echo $query . '<br>';
+//		echo $query . '<br>';
 
 		$res = mysql_query($query);
         if (!$res) self::error('article alias ' . $article_alias . ' not found');
@@ -93,7 +94,7 @@ class tx_newspaper_ResolveRealURL {
 		$row = mysql_fetch_array($res, MYSQL_ASSOC);
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
-        print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
+//        print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
 
 		$_GET['id'] = self::article_typo3_page;
 		$_GET['art'] = $row['value_id'];
