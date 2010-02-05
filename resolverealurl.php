@@ -105,9 +105,18 @@ $TSFE = new $temp_TSFEclassName(
     );
     
 $TSFE->connectToDB();
+    $TSFE->initFEuser();
+$TSFE->workspacePreviewInit();
+        $TSFE->checkAlternativeIdMethods();
+    $TSFE->clear_preview();
+    $TSFE->determineId();
+    $TSFE->makeCacheHash();
+    $TSFE->getCompressedTCarray();
+    
 $TSFE->initTemplate();
-#$TSFE->forceTemplateParsing = true;
-$TSFE->getPageAndRootline();
+    $TSFE->getFromCache();
+
+    
 $TSFE->getConfigArray();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
