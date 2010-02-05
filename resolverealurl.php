@@ -105,8 +105,8 @@ $TSFE = new $temp_TSFEclassName(
     );
     
 $TSFE->connectToDB();
-$TSFE->initTemplate();
-$TSFE->getConfigArray();
+//$TSFE->initTemplate();
+//$TSFE->getConfigArray();
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
@@ -162,17 +162,24 @@ class tx_newspaper_ResolveRealURL {
         if (!$row) self::error('article alias ' . $article_alias . ' not found');
         
         print('article alias: ' . $article_alias . ': ' . print_r($row, 1));
+                       
+        $link = tx_newspaper::typolink_url(
+            array(
+                'id' => self::article_typo3_page,
+                tx_newspaper::article_get_parameter => intval($row['value_id']
+        ));
         
-        // instantiate article and redirect ot $article->getLink()
-        $article = new tx_newspaper_Article(intval($row['value_id']));
-        
-        print_r($GLOBALS['TSFE']);
-		die($article->getLink());		
+#        print_r($GLOBALS['TSFE']);
+		die($link);		
 	}
 	
 	private static function error($msg) {
 		// todo handle errors.
 		die($msg);
+	}
+	
+	private static function fake_typolink() {
+		
 	}
 	
 	private $uri;
