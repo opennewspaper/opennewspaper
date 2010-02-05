@@ -182,7 +182,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 
-	public public function getTable() {
+	public function getTable() {
 		return 'tx_newspaper_article';
 	}
 
