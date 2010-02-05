@@ -29,7 +29,7 @@
  *  \date Jan 18, 2010
  */
 
-function startup() {
+//function startup() {
 	
 	global $TYPO3_MISC, $TT, $TYPO3_DB;
 //
@@ -98,7 +98,7 @@ $TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
 $TYPO3_DB->connectDB();
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
-}
+//}
 
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
@@ -166,7 +166,7 @@ class tx_newspaper_ResolveRealURL {
 	private $uri;
 }
 
-startup();
+//startup();
 $resolver = new tx_newspaper_ResolveRealURL();
 
 $resolver->resolve();
