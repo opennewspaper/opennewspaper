@@ -97,11 +97,26 @@ if (!defined('PATH_tslib')) {
 if (!@is_dir(PATH_typo3conf))   die('Cannot find configuration. This file is probably executed from the wrong location.');
 
 echo PATH_thisScript . '<br>';
-echo "PATH_tslib ". PATH_tslib . " PATH_t3lib " . PATH_t3lib . " PATH_typo3 " . PATH_typo3 . " PATH_typo3conf " . PATH_typo3conf;
+echo "PATH_tslib ". PATH_tslib . '<br>' . 
+    " PATH_t3lib " . PATH_t3lib . '<br>' . 
+    " PATH_typo3 " . PATH_typo3 . '<br>' . 
+    " PATH_typo3conf " . PATH_typo3conf . '<br>';
 
 require_once(PATH_t3lib.'class.t3lib_div.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
     
+require(PATH_t3lib.'config_default.php');
+if (!defined ('TYPO3_db'))  die ('The configuration file was not included.');   // the name of the TYPO3 database is stored in this constant. Here the inclusion of the config-file is verified by checking if this var is set.
+if (!t3lib_extMgm::isLoaded('cms')) die('<strong>Error:</strong> The main frontend extension "cms" was not loaded. Enable it in the extension manager in the backend.');
+
+if (!defined('PATH_tslib')) {
+    define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
+}
+
+require_once(PATH_t3lib.'class.t3lib_db.php');
+$TYPO3_DB = t3lib_div::makeInstance('t3lib_DB');
+
+if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 /// Resolves a link to an old taz article and loads the article in the newspaper extension.
 /** \todo long description
  */
