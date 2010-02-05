@@ -84,7 +84,9 @@ $TYPO3_DB->connectDB();
 
 if (!t3lib_extMgm::isLoaded('newspaper')) die('newspaper not loaded.');
 
+// needed for tslib_cObj::typolink()
 require_once(PATH_tslib.'class.tslib_content.php');
+require_once(PATH_tslib.'class.tslib_fe.php');
 
 $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
 $TSFE = new $temp_TSFEclassName(
