@@ -29,15 +29,12 @@
  *  \date Jan 18, 2010
  */
 
-//function startup() {
-	
-	global $TYPO3_MISC, $TT, $TYPO3_DB;
+
 //
 // the following is copied and adapted from index.php
 //
 
-// stfu
-error_reporting (E_ALL ^ E_NOTICE);
+error_reporting (E_ALL ^ E_NOTICE);                                     // stfu
 
 define('PATH_thisScript',
     str_replace('//','/', 
@@ -58,11 +55,7 @@ if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
     define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');
 } elseif (@is_dir(PATH_site.'tslib/')) {
     define('PATH_tslib', PATH_site.'tslib/');
-} else {
-    $configured_tslib_path = '';
-    define('PATH_tslib', $configured_tslib_path);
 }
-
 if (PATH_tslib=='') {
     die('Cannot find tslib/. Please set path by defining $configured_tslib_path in '.basename(PATH_thisScript).'.');
 }
@@ -71,8 +64,8 @@ if (PATH_tslib=='') {
 // the following is copied and adapted from typo3/sysext/cms/tslib/index_ts.php
 //
 
-$TYPO3_MISC['microtime_start'] = microtime();
-define('TYPO3_OS', stristr(PHP_OS,'win')&&!stristr(PHP_OS,'darwin')?'WIN':'');
+#$TYPO3_MISC['microtime_start'] = microtime();
+#define('TYPO3_OS', stristr(PHP_OS,'win')&&!stristr(PHP_OS,'darwin')?'WIN':'');
 define('TYPO3_MODE','FE');
 
 if (!defined('PATH_t3lib')) define('PATH_t3lib', PATH_site.'t3lib/');
@@ -166,7 +159,6 @@ class tx_newspaper_ResolveRealURL {
 	private $uri;
 }
 
-//startup();
 $resolver = new tx_newspaper_ResolveRealURL();
 
 $resolver->resolve();
