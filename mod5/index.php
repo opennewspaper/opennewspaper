@@ -241,7 +241,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
 		}
 
-		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
 		return $smarty->fetch('mod5.tmpl');
 	}		
@@ -310,7 +310,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
 		}
 
-		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
 		die($smarty->fetch('mod5_newarticle.tmpl'));
 	}
