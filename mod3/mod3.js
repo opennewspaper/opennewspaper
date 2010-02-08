@@ -1,7 +1,6 @@
 {literal}
 <script language="javascript">
 
-
 // this script assumes prototype (ajax) to be available
 
 
@@ -221,6 +220,14 @@ function loadJsCssFile(filename, filetype) {
 	
 	/// store data in field (if field is changed a undo/store option is added to field; one field editable at a time)
 	function extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article) {
+		switch(type) {
+			case 'para':
+				document.enter_para_uid = null;
+			break;
+			case 'notes':
+				document.enter_notes_uid = null;
+			break;
+		}
 		var request = new top.Ajax.Request(
 				top.path + "typo3conf/ext/newspaper/mod3/index.php",
 				{
@@ -428,16 +435,18 @@ function loadJsCssFile(filename, filetype) {
 	
 /// handling paragraphs and notes in pagezone_page and article	
 	
-	document.change_para = false; // if set to false, a paragraph might be changed
+	document.enter_para_uid = null; // if set to false, a paragraph might be changed
 	document.def_para = new Array(); // stores the current value for all paragraphs being displayed
-	document.change_notes = false; // if set to false, a note might be changed
+	document.enter_notes_uid = null; // if set to false, a note might be changed
 	document.def_notes = new Array(); // stores the current value for all notes being displayed
 	
-	function changeField(extra_uid, type) {
-		if (eval("document.change_" + type)) {
-			alert('todo: message ... erst speichern ... ' + extra_uid + ',' + eval("document.def_" + type + "[extra_uid]"));
-			document.getElementById(type + '_' + extra_uid).value = eval("document.def_" + type + "[extra_uid]"); // undo
-			return false;
+	// note: if paragraph AND notes are filed in the same form, data is lost if both types contains unsaved data
+	function enterField(extra_uid, type) {
+		old_type_uid = eval("document.enter_" + type + '_uid');
+//top.console.log('enterField     e uid' + extra_uid + ', type: ' + type + ', old: ' + old_type_uid);
+		if (old_type_uid != null) {
+			// undo unsaved change
+			undoField(old_type_uid, type);
 		}
 
 		// \todo: type check ...
@@ -447,16 +456,20 @@ function loadJsCssFile(filename, filetype) {
 		
 		switch(type) {
 			case 'para':
-				document.change_para = true;
+				document.enter_para_uid = extra_uid;
 			break;
 			case 'notes':
-				document.change_notes = true;
+				document.enter_notes_uid = extra_uid;
 			break;
 		}
 		
 	}
 
 	function undoField(extra_uid, type) {
+		
+		if (type == null) return false;
+		
+//top.console.log('undo   type: ' + type + 'e uid: ' + extra_uid);
 		document.getElementById(type + '_td_' + extra_uid).style.backgroundColor = '';
 		document.getElementById('save_' + type + '_' + extra_uid).style.display = 'none';
 
@@ -464,10 +477,10 @@ function loadJsCssFile(filename, filetype) {
 
 		switch(type) {
 			case 'para':
-				document.change_para = false;
+				document.enter_para_uid = null;
 			break;
 			case 'notes':
-				document.change_notes = false;
+				document.enter_notes_uid = null;
 			break;
 		}
 		
@@ -475,9 +488,11 @@ function loadJsCssFile(filename, filetype) {
 
 	function saveField(pz_uid, extra_uid, type, is_concrete_article) {
 		value = document.getElementById(type + '_' + extra_uid).value;
+//top.console.log("save " + value + ', e uid: ' + extra_uid);
 		extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article);
 		
 		// store this value as new default (not needed if page is reloaded ...)
+/*
 		switch(type) {
 			case 'para':
 				document.def_para[extra_uid] = value;
@@ -486,7 +501,7 @@ function loadJsCssFile(filename, filetype) {
 				document.def_notes[extra_uid] = value;
 			break;
 		}
-		
+*/		
 	}
 	
 	
