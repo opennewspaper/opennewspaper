@@ -247,23 +247,27 @@ function findElementsByName(name, type) {
 		
 		
 		global $LANG;
-//t3lib_div::devlog('ral pa', 'newspaper', 0, $PA);		
+t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));		
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
 		}
 		$section_uid = intval($PA['row']['uid']);
 
-		// set configuration
-		$config['type'] = 'select';
-		$config['size'] = 1;
-		$config['maxitems'] = 1;
-		$config['form_type'] = 'select';
-
 		// add article lists to dropdown
 		$al_available = tx_newspaper_ArticleList::getRegisteredArticleLists();
 		$s = new tx_newspaper_Section($section_uid);
-		$s_al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($PA['row']['articlelist']), $s);
+		try {
+			$s_al = $s->getArticleList(); // tx_newspaper_ArticleList_Factory::getInstance()->create(intval($PA['row']['articlelist']), $s);
+		} catch (tx_newspaper_EmptyResultException $e) {
+			// article list couldn't be fetched, so create a new default article list
+			$s->assignDefaultArticleList();
+			$s_al = $s->getArticleList();
+			
+			// overwrite article list uids in $PA with new article list uids
+			$PA['row']['articlelist'] = $s_al->getAbstractUid();
+			$PA['itemFormElValue'] = $s_al->getAbstractUid();
+		}
 		$selItems = array();
 		for ($i = 0; $i < sizeof($al_available); $i++) {
 			if ($al_available[$i]->getTable() == $s_al->getTable()) {
@@ -280,6 +284,12 @@ function findElementsByName(name, type) {
 	
 		// add javascript to onchange field
 		$PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] = 'processArticlelist(); ' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'];
+	
+		// set configuration
+		$config['type'] = 'select';
+		$config['size'] = 1;
+		$config['maxitems'] = 1;
+		$config['form_type'] = 'select';
 	
 		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
 
