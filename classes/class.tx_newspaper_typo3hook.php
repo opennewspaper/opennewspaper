@@ -121,9 +121,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		/// check if publish_date is to be added
 		$this->addPublishDateIfNotSet($status, $table, $id, &$fieldArray);
 
-		/// check if an article list was changed for a section
-		$this->checkArticleListChangedInSection($fieldArray, $table, $id);
-
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
 		
@@ -134,6 +131,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
 		
 		// send hook to newspaper classes
+		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_WorkflowLog::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		
 /// \todo move to sysfolder class	
@@ -216,50 +214,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		return false; // publish_date remained unchanged
 	}
 
-	private function checkArticleListChangedInSection(array &$fieldArray, $table, $id) {
-		if ($table != 'tx_newspaper_section') return; // no section processed, nothing to do
-		if (!isset($fieldArray['articlelist'])) return; // articlelist wasn't changed, nothing to do
-//t3lib_div::devlog('al1 fiealdArray[al]', 'np', 0, array($fieldArray, $table, $id));
-		if (!tx_newspaper::isAbstractClass($fieldArray['articlelist']) && class_exists($fieldArray['articlelist'])) {
-			$al = new $fieldArray['articlelist'](); // create new article list, the value in the backend dropdown is the name of the article list class
-			if ($al instanceof tx_newspaper_articlelist) {
-
-				// "delete" (= set deleted flag) previous concrete article list before writing the new one
-				// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
-				$s = new tx_newspaper_Section(intval($id));
-				$current_al = $s->getArticleList();
-				tx_newspaper::updateRows(
-					$current_al->getTable(),
-					'uid=' . $current_al->getUid(),
-					array('deleted' => 1)
-				);
-
-				// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
-				// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
-				tx_newspaper::updateRows(
-					'tx_newspaper_articlelist',
-					'section_id=' . $id,
-					array('deleted' => 1)
-				);
-				
-				// store new article list
-				$new_al = new $fieldArray['articlelist'](0, $s);
-				$new_al->setAttribute('crdate', time());
-				$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-				
-				// check if current section is to be assigned to newly created semi automatic article list (default behavior)
-/// \todo: move to class tx_newspaper_articlelist_semiautomatic?
-				/// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
-				if (strtolower($fieldArray['articlelist']) == 'tx_newspaper_articlelist_semiautomatic') {
-					$new_al->setAttribute('filter_sections', $s->getUid());
-				}
-				
-				$new_al->store();
- 				$fieldArray['articlelist'] = $new_al->getAbstractUid(); // store uid of abstract article list; will be stored in section
-//t3lib_div::devlog('al 2 instanceof al: s, new_al, fieldArray', 'np', 0, array($s, $new_al, $fieldArray));
-			}
-		}
-	}
 
 	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
 		$pzt = new tx_newspaper_PageZoneType(); 
@@ -418,34 +372,14 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 //t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray)); // , $_REQUEST
 //t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
 				
-		/// If a new section has been created ...
-		$this->addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that);
-		$this->copyPlacementIfNewSection($status, $table, $id, $fieldArray, $that);
-		
 		/// if a new extra was placed on a pagezone, write abstract record
 		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 		
-		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that);
-		
+		// pass hook to newspaper classes
+		tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
+		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
 	}
 
-	private function addDefaultArticleListIfNewSection($status, $table, $id, $fieldArray, $that) {
-		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
-			$s = new tx_newspaper_Section($section_uid);
-			$al = new tx_newspaper_ArticleList_Semiautomatic(0, $s);
-			$al->setAttribute('crdate', time());
-			$al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-			$al->setAttribute('filter_sections', $s->getUid()); // current section is default filter
-			$al->store();
-		} 
-	}
-	private function copyPlacementIfNewSection($status, $table, $id, $fieldArray, $that) {
-		if ($status == 'new' && $table == 'tx_newspaper_section') {
-			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
-/// \todo: $this->newSection($id, $fieldArray); /// copy placement ...
-		} 
-	}
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
 /// \todo: explain in detail what's happening here!

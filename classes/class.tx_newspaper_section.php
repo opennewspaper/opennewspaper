@@ -105,6 +105,70 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
 	}
 
+
+	/// assigns a default article list to this section
+	public function assignDefaultArticleList() {
+// \todo make configurable which article list type is default
+// \todo: how to add a default note like "Article list for section 'dummy'"?
+		$al = new tx_newspaper_ArticleList_Semiautomatic(0, $this);
+		$this->replaceArticleList($al); // assign new article list to this section
+	}
+
+
+	/// replaces the current (if any) article list with ths given new article list
+	/** the method first removes the old article list (if any) and then assign the new article list.
+	 *  As some attribute are changed (crdate f.ex) the new article gets stored in this method.
+	 * \param $new_al article list object of the new article list
+	 * \return uid of abstract article list
+	 */ 
+	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
+		
+		try {
+
+			$current_al = $this->getArticleList(); // get current article list
+			
+			// "delete" (= set deleted flag) previous concrete article list before writing the new one
+			// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
+			tx_newspaper::updateRows(
+				$current_al->getTable(),
+				'uid=' . $current_al->getUid(),
+				array('deleted' => 1)
+			);
+			
+			// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
+			// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
+			tx_newspaper::updateRows(
+				'tx_newspaper_articlelist',
+				'section_id=' . $this->getUid(),
+				array('deleted' => 1)
+			);
+
+		} catch (tx_newspaper_EmptyResultException $e) {
+			// no article list assigned so far, either new section or the article list was deleted for some reason
+		}
+
+		
+		// set some values
+		// \todo move to al constructor
+		$new_al->setAttribute('crdate', time());
+		$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		
+		// check if current section is to be assigned to newly created semi automatic article list (default behavior)
+		/// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
+/// \todo move to al_semi constructor
+		if (strtolower($new_al->getTable()) == 'tx_newspaper_articlelist_semiautomatic') {
+			$new_al->setAttribute('filter_sections', $this->getUid());
+		}
+		
+		$new_al->store(); // store new article list
+//t3lib_div::devlog('al 2 instanceof al: s, new_al, fieldArray', 'np', 0, array($s, $new_al, $fieldArray));
+		
+		return $new_al->getAbstractUid();
+
+	}
+
+
+
 	public function getArticleList() {
 		if (!$this->articlelist) { 
 			$list = tx_newspaper::selectOneRow(
@@ -409,7 +473,51 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	static public function getModuleName() { return 'np_section'; }
 	
 	
+	/// Typo3  hooks
 	
+	/// \todo: documentation
+	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+		if ($status == 'new' && $table == 'tx_newspaper_section') {
+			// a new section is stored, so assign a default article list
+			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
+			$s = new tx_newspaper_Section($section_uid);
+			$s->assignDefaultArticleList();
+		}
+	}
+
+	/// \todo: documentation	
+	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+		if ($table != 'tx_newspaper_section') {
+			return; // no section processed, nothing to do
+		}
+		
+		// check if the article list was changed
+		if (!isset($fieldArray['articlelist'])) {
+			return; // article list wasn't changed, nothing to do
+		}	
+		
+//t3lib_div::devlog('al1 fiealdArray[al]', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
+		if (tx_newspaper::isAbstractClass($fieldArray['articlelist']) || !class_exists($fieldArray['articlelist'])) {
+			return; // well, ... can't create an object for an abstract or non-existing class 
+		}
+		
+		// note: the value in the backend dropdown is the name of the article list class ($fieldArray['articlelist'])
+		
+		if (new $fieldArray['articlelist']() instanceof tx_newspaper_articlelist) {
+			// new article list class is a valid article list class, so change article list for this section now				
+			$s = new tx_newspaper_Section(intval($id)); // create section object
+			$new_al = new $fieldArray['articlelist'](0, $s);
+			if ($abstract_uid = $s->replaceArticleList($new_al)) {
+				$fieldArray['articlelist'] = $abstract_uid; // store uid of abtracte article list in section, if replacing was successful
+			} 
+		}
+	}
+	
+
+
+
+
+
  	private $attributes = array();					///< The member variables
 	private $subPages = array();
 	private $articlelist = null;
