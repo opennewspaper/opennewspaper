@@ -124,7 +124,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
 		
 		try {
-
 			$current_al = $this->getArticleList(); // get current article list
 			
 			// "delete" (= set deleted flag) previous concrete article list before writing the new one
@@ -134,18 +133,17 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				'uid=' . $current_al->getUid(),
 				array('deleted' => 1)
 			);
-			
-			// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
-			// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
-			tx_newspaper::updateRows(
-				'tx_newspaper_articlelist',
-				'section_id=' . $this->getUid(),
-				array('deleted' => 1)
-			);
-
 		} catch (tx_newspaper_EmptyResultException $e) {
 			// no article list assigned so far, either new section or the article list was deleted for some reason
 		}
+
+		// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
+		// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
+		tx_newspaper::updateRows(
+			'tx_newspaper_articlelist',
+			'section_id=' . $this->getUid(),
+			array('deleted' => 1)
+		);
 
 		
 		// set some values
