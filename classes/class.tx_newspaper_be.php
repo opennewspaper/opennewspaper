@@ -247,7 +247,7 @@ function findElementsByName(name, type) {
 		
 		
 		global $LANG;
-t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));		
+//t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));		
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
