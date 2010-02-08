@@ -480,9 +480,7 @@ function findElementsByName(name, type) {
 		}
 
 		
-		$smarty->assign('MODULE_PATH', TYPO3_MOD_PATH); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
-
-		
+	
 		// pagezones are rendered by a separate smarty template - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = self::getPagezoneSmartyObject();
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
