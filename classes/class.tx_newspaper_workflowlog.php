@@ -52,7 +52,8 @@ class tx_newspaper_WorkflowLog {
        $smarty->assign('comments', $comments);
        $smarty->assign('tableUid', $tableUid);
        $smarty->assign('showMore', $showMoreLink);
-       return $smarty->fetch(tx_newspaper::getAbsolutePath().'res/be/templates/workflow_comment_output.tmpl');
+       $smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
+       return $smarty->fetch('workflow_comment_output.tmpl');
     }
 
     private static function addUsername($comments) {
