@@ -243,6 +243,23 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 
 
+	/// workflow log display and browser
+	private function processWorkflowLog() {
+		$table = isset($_REQUEST['tbl']) ? $_REQUEST['tbl'] : null;
+		$tableUid = isset($_REQUEST['tbl_uid']) ? $_REQUEST['tbl_uid'] : null ;
+		$showAllComments = isset($_REQUEST['show_all_comments']) ? $_REQUEST['show_all_comments'] : false ;
+		$ajaxCall = isset($_REQUEST['AJAX_CALL'])? true : false;
+		$content = tx_newspaper_WorkflowLog::renderBackend($table, $tableUid, $showAllComments);
+		if($ajaxCall) {
+		    echo $content;
+		    die();
+		} else {
+			/// \todo @Ramon: still needed?
+		    $this->content = $this->doc->section('',$content.'<div id="test2"></div>', 0, 1);
+	    }
+	}
+
+
 
 
 				/**
@@ -267,17 +284,6 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 				 * @return	void
 				 */
 				function menuConfig()	{
-/*
-					global $LANG;
-					$this->MOD_MENU = Array (
-						'function' => Array (
-							'1' => $LANG->getLL('function1'),
-							'2' => $LANG->getLL('function2'),
-							'3' => $LANG->getLL('function3'),
-						)
-					);
-					parent::menuConfig();
-*/
 				}
 
 
@@ -296,6 +302,12 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (!isset($_REQUEST['param']))
 						return false; // no valid call without params possible
 					
+
+					// workflow log display
+					if ($_REQUEST['param'] == 'workflowlog') {
+						$this->processWorkflowLog();
+					}
+
 					
 					if (isset($_REQUEST['extra_modalbox']) || isset($_REQUEST['extra_iframe']))
 						$this->processExtraForm(); // AJAX call for Extra form (modalbox or iframe)
@@ -327,111 +339,12 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 //<a onclick="return jumpTo('2',this,'pages2',0);" href="#">np_section</a>
 //top.goToModule('web_list');this.blur();return false;
 					
-					return false; // if processing was successful, the script died after the AJAX request was answered; if param weren't valid return false anyway
+					return false; // if processing was successful, the script died after the AJAX request was answered; if params weren't valid return false anyway
 
-/*
-					// Access check!
-					// The page will show only if there is a valid page and if this page may be viewed by the user
-					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-					$access = is_array($this->pageinfo) ? 1 : 0;
-
-					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
-
-							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="POST">';
-
-							// JavaScript
-						$this->doc->JScode = '
-							<script language="javascript" type="text/javascript">
-								script_ended = 0;
-								function jumpToUrl(URL)	{
-									document.location = URL;
-								}
-							</script>
-						';
-						$this->doc->postCode='
-							<script language="javascript" type="text/javascript">
-								script_ended = 1;
-								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-							</script>
-						';
-
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-						$this->content.=$this->doc->divider(5);
-
-
-						// Render content:
-						$this->moduleContent();
-
-
-						// ShortCut
-						if ($BE_USER->mayMakeShortcut())	{
-							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-						}
-
-						$this->content.=$this->doc->spacer(10);
-					} else {
-							// If no access or if ID == zero
-
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
-					}
-*/
 				}
 
-				/**
-				 * Prints out the module HTML
-				 *
-				 * @return	void
-				 */
-				function printContent()	{
-/*
-					$this->content.=$this->doc->endPage();
-					echo $this->content;
-*/
-								}
 
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent()	{
-/*
-					switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1:
-							$content='<div align="center"><strong>Hello World!</strong></div><br />
-								The "Kickstarter" has made this module automatically, it contains a default framework for a backend module but apart from that it does nothing useful until you open the script '.substr(t3lib_extMgm::extPath('newspaper'),strlen(PATH_site)).$pathSuffix.'index.php and edit it!
-								<hr />
-								<br />This is the GET/POST vars sent to the script:<br />'.
-								'GET:'.t3lib_div::view_array($_GET).'<br />'.
-								'POST:'.t3lib_div::view_array($_POST).'<br />'.
-								'';
-							$this->content.=$this->doc->section('Message #1:',$content,0,1);
-						break;
-						case 2:
-							$content='<div align=center><strong>Menu item #2...</strong></div>';
-							$this->content.=$this->doc->section('Message #2:',$content,0,1);
-						break;
-						case 3:
-							$content='<div align=center><strong>Menu item #3...</strong></div>';
-							$this->content.=$this->doc->section('Message #3:',$content,0,1);
-						break;
-					}
-*/
-				}
+
 
 
 }
@@ -453,6 +366,5 @@ $SOBE->init();
 foreach($SOBE->include_once as $INC_FILE)	include_once($INC_FILE);
 
 $SOBE->main();
-$SOBE->printContent();
 
 ?>

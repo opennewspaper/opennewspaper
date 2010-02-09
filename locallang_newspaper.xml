@@ -40,6 +40,7 @@
 			<label index="log_record_published">Record published</label>
 			<label index="log_article_hidden">Article hidden</label>
 			<label index="log_article_published">Article published</label>
+			<label index="log_more_link">More ...</label>
 			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>

@@ -18,6 +18,7 @@ class tx_newspaper_WorkflowLog {
         if(!$table || !$tableUid) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
+        $tableUid = intval($tableUid);
         if($allComments) {
             $comments = self::getAllComments($table, $tableUid);
         } else {
@@ -28,15 +29,59 @@ class tx_newspaper_WorkflowLog {
         return self::renderTemplate($comments, $tableUid, !$allComments);
     }
     
+    /// return javascript for ajax calls
+    /** This method is needed because the moderation list (mod3) shows multiple workflow log comment on one page
+     *  On that page the JS should only be added once ...
+     */
+    public static function getJavascript() {
+    	return '
+		<script language="javascript">
+        var tableUid = null;
+        function getComments(uid) {
+            var path = window.location.pathname;
+            document.tableUid = uid; // store for access in showMessage()
+
+            test = path.substring(path.lastIndexOf("/") - 5);
+            if (test.substring(0, 6) == "typo3/") {
+            	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3" 
+            } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
+            	path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
+            }
+            new top.Ajax.Request(path + "typo3conf/ext/newspaper/mod1/index.php",
+                    {   method : "GET",
+                        parameters :{
+                        	"param" : "workflowlog",
+                        	"AJAX_CALL" : true,
+                        	"show_all_comments" : true, 
+                        	"tbl" : "tx_newspaper_article", 
+                        	"tbl_uid" : uid
+                        },
+                        onSuccess : showMessage,
+                        onError : showError
+                    } );
+        }
+
+        function showMessage(data) {
+            document.getElementById("comments-" + document.tableUid).innerHTML = data.responseText;
+        }
+
+        function showError(data) {
+            alert(data.responseText);
+        }
+
+    	</script>
+    	';
+    }
+    
     private static function getAllComments($table, $uid) {
-		$comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log', 'table_name = \''.$table.'\' and table_uid = '.$uid.' order by crdate desc');
+		$comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log', 'table_name = \''.$table.'\' AND table_uid = '.$uid.' ORDER BY uid DESC');
         return $comments;
 	}
 
     private static function getLatestComments($table, $table_uid) {
         $latestComments = "SELECT FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, crdate, be_user, action, comment FROM `tx_newspaper_log` WHERE";
         $latestComments = $latestComments." table_name = '$table' AND table_uid = $table_uid";
-        $latestComments = $latestComments." AND crdate = (SELECT MAX(crdate) FROM tx_newspaper_log WHERE table_name = '$table' AND table_uid = $table_uid)";
+        $latestComments = $latestComments." AND crdate = (SELECT MAX(crdate) FROM tx_newspaper_log WHERE table_name = '$table' AND table_uid = $table_uid) ORDER BY uid DESC";
 
         $res = $GLOBALS['TYPO3_DB']->sql_query($latestComments);
         $comments = array();
@@ -47,13 +92,17 @@ class tx_newspaper_WorkflowLog {
     }
 
     private static function renderTemplate($comments, $tableUid, $showMoreLink = true) {
-       self::addUsername($comments);
-       $smarty = new tx_newspaper_Smarty();
-       $smarty->assign('comments', $comments);
-       $smarty->assign('tableUid', $tableUid);
-       $smarty->assign('showMore', $showMoreLink);
-       $smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
-       return $smarty->fetch('workflow_comment_output.tmpl');
+		global $LANG;
+		self::addUsername($comments);
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->assign('comments', $comments);
+		$smarty->assign('tableUid', $tableUid);
+		$smarty->assign('showMore', $showMoreLink);
+		$smarty->assign('LABEL', array(
+			'more' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_more_link', false)
+		));
+		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
+		return $smarty->fetch('workflow_comment_output.tmpl');
     }
 
     private static function addUsername($comments) {

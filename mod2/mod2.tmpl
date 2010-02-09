@@ -31,34 +31,6 @@ td {ldelim}
 	var path = window.location.pathname;
 	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
-	function toggleComment(comment_id) {ldelim}
-		if (document.getElementById(comment_id).style.display != "none")
-			document.getElementById(comment_id).style.display = "none";
-		else
-			document.getElementById(comment_id).style.display = "block";
-	{rdelim}
-
-	function getComment(article_uid, comment_uid) {ldelim}
-//alert(path + "typo3conf/ext/newspaper/mod2/index.php");
-		var request = new Ajax.Request(
- 			path + "typo3conf/ext/newspaper/mod2/index.php",
-// 			"/taz426/typo3conf/ext/newspaper/mod2/index.php",
- 			{ldelim}
-				method: 'get',
-				parameters: "ajax=1&param=" + article_uid + "|" + comment_uid + "&no_cache=" + new Date().getTime(),
-				onSuccess: updateComment
-			{rdelim}
-		);
-	{rdelim}
-
-	function updateComment(request) {ldelim}
-
-	{rdelim}
-
-
-
-
-
 
 
 /// extracted from typo3/class.browse_links.php
@@ -109,6 +81,7 @@ function focusOpenerAndClose(close)	{ldelim}
 
 </script>
 
+{$workflowlog_javascript} {* add once only for all comments *}
 
 
 
@@ -233,7 +206,10 @@ function focusOpenerAndClose(close)	{ldelim}
     </a>  			
 {/if}
 			</div>
+{*
+show last comment as title flag for (i) button; not needed as the latest comment is displayed anyway
 			<div id="comments{$DATA[i].uid}" class="comment_box">{$DATA[i].comment} <a href="javascript:getComment({$DATA[i].uid}, 1);">ajax</a></div>
+*}
 		</td>
 		<td> {$DATA[i].author} </td>
 {if !$IS_ARTICLE_BROWSER}
@@ -262,7 +238,7 @@ function focusOpenerAndClose(close)	{ldelim}
 <a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> 
 {$ARTICLE_PREVIEW_ICON} 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
-<a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> 
+{* left here, because (i) button might be needed later, though probably with js call <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> *} 
 		</td>
 {/if}
 		<td align="center">
@@ -274,6 +250,15 @@ function focusOpenerAndClose(close)	{ldelim}
 	{/if}
 {/if}
 		</td>	
+	</tr>
+
+{if ($smarty.section.i.index % 2 == 0)}
+	<tr class="bg1">
+{else}
+	<tr class="bg2">
+{/if}
+		<td colspan="2"></td>
+		<td colspan="7">{$DATA[i].workflowlog}</td>
 	</tr>
 {/section}
 </table>

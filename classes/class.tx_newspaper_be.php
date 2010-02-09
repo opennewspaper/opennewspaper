@@ -694,6 +694,9 @@ function changeWorkflowStatus(status, hidden_status) {
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 
 		$html .= $smarty->fetch('workflow_comment.tmpl');
+		
+		$html .= tx_newspaper_workflowlog::getJavascript();
+		$html .= tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $PA['row']['uid']);
 
 		return $html;
 	}

@@ -188,11 +188,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/'));
 
-//\todo t3lib_div::devlog('moderation: comment still missing', 'newspaper', 0);
-//dummy data
-for ($i=0; $i < sizeof($row); $i++) {
-	$row[$i]['comment'] = 'oliver (2008-03-21 17:37): Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars. Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.Dies ist ein Beispiel f�r die Anzeige des letzten Kommentars.';
-}
 //\todo t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
 
 
@@ -237,7 +232,6 @@ for ($i=0; $i < sizeof($row); $i++) {
 		
 		$smarty->assign('IS_ARTICLE_BROWSER', t3lib_div::_GP('form_table'))? 1 : 0; // set flag if mod2 should be rednered as moderation list or as article browser 
 
-
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {
 			$smarty->assign('URL_PREV', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) - 1)));
@@ -259,6 +253,7 @@ for ($i=0; $i < sizeof($row); $i++) {
 		
 		$locked_article = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
+			// check if article is locked
 			$t = t3lib_BEfunc::isRecordLocked('tx_newspaper_article', $row[$i]['uid']);
 			if (isset($t['record_uid'])) {
 				$locked_article[$i] = array(
@@ -266,8 +261,11 @@ for ($i=0; $i < sizeof($row); $i++) {
 					'msg' => $t['msg']
 				);
 			}
+			// add workflowlog data to $row
+			$row[$i]['workflowlog'] = tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $row[$i]['uid']);
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
+		$smarty->assign('workflowlog_javascript', tx_newspaper_workflowlog::getJavascript()); // add js once only
 
 		$smarty->assign('DATA', $row);
 

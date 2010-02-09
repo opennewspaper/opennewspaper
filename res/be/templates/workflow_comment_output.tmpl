@@ -1,40 +1,23 @@
+{* debug *}
 <div id="comments-{$tableUid}" class="comments">
-    <table>
+    <table style="width:550px">
         {foreach item=comment from=$comments}
             <tr>
                 <td>{$comment.username} </td>
-                <td>{$comment.created} </td>
-                <td>{$comment.action}</td>
-                <td>{$comment.comment} </td>
+                <td style="width:110px;">{$comment.created} </td>
+                {* <td>{$comment.action}</td> *}
+                {if $comment.action == 4}
+                <td style="width:350px;"><strong>{$comment.comment}</strong> </td> {* manual comment *}
+                {else}
+                <td style="width:350px;">{$comment.comment} </td> {* newspaper system comment *}
+                {/if}
            </tr>
         {/foreach}
     </table>
 {if $showMore}
-    {literal}
-        <a href="#" onclick="getComments();">mehr...</a>        
-    {/literal}
+	<a href="#" onclick="getComments({$tableUid}); return false;">{$LABEL.more}</a>        
 {/if}
 </div>
 {literal}
-    <script language="javascript">
-        function getComments() {
-            var path = window.location.pathname;
-            path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-            new top.Ajax.Request( path+'/mod1/index.php',
-                    {   method : 'GET',
-                        parameters :{'AJAX_CALL' : true,'show_all_comments' : true, 'tbl' : 'tx_newspaper_article', 'tbl_uid' : 1},
-                        onSuccess : showMessage,
-                        onError : showError
-                    } );
-        }
 
-        function showMessage(data) {
-            document.getElementById('comments-{/literal}{$tableUid}{literal}').innerHTML = data.responseText;
-        }
-
-        function showError(data) {
-            alert(data.responseText);
-        }
-
-    </script>
 {/literal}

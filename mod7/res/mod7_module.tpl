@@ -61,6 +61,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 	</td>
   </tr>
 </table>
+{$workflowlog}
 
 <br />
 
