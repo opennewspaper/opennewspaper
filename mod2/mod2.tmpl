@@ -108,9 +108,9 @@ function focusOpenerAndClose(close)	{ldelim}
 </select>
 
 
-{$MODERATION_LABEL}: <select name="moderation">
-{foreach from=$MODERATION key=key item=value}
-{if $key == $_POST.moderation}
+{$ROLE_LABEL}: <select name="role">
+{foreach from=$ROLE key=key item=value}
+{if $key == $_POST.role}
 	<option selected="selected" value="{$key}">{$value}</option>
 {else}
 	<option value="{$key}">{$value}</option>
@@ -122,7 +122,9 @@ function focusOpenerAndClose(close)	{ldelim}
 <br />
 
 {$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author}" /> 
-{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" /> 
+{* \todo: add section filter
+{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" />
+*}
 {$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 
 {$STEP_LABEL}: <select name="step">

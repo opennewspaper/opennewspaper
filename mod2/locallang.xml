@@ -14,12 +14,10 @@
 			<label index="label.status_hidden">Show articles</label>
 			<label index="option.status_hidden_all">all</label>
 			<label index="option.status_hidden_on">hidden only</label>
-			<label index="option.status_hidden_off">visible only</label>
+			<label index="option.status_hidden_off">published only</label>
 
-			<label index="label.status_moderation">Moderation status</label>
-			<label index="option.status_moderation_all">all</label>
-			<label index="option.status_moderation_on">to be moderated only</label>
-			<label index="option.status_moderation_off">not to be moderated only</label>
+			<label index="label_status_role">Active role</label>
+			<label index="label_status_role_all">All roles</label>
 			
 			<label index="label.range">Time range</label>			
 			<label index="option.range_today">today</label>

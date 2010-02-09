@@ -161,15 +161,13 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$this->processGP();
 		$this->processGPVisibility(); // check if an article is hidden/unhidden
 		
-		/// build where part for filter
-		$where = $this->createWherePart(); // get conditions for sql statement
 #t3lib_div::devlog('where', 'newspaper', 0, $where);
 
 		/// get records (get one more than needed to find out if there's an next page)
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_article',
-			$where,
+			$this->createWherePart(), // get conditions for sql statement
 			'',
 			'tstamp DESC',
 			intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
@@ -205,8 +203,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
 		$smarty->assign('HIDDEN_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.status_hidden', false));
 
-		$smarty->assign('MODERATION', $this->getModerationArray()); // add data for moderation dropdown
-		$smarty->assign('MODERATION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.status_moderation', false));
+		$smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
+		$smarty->assign('ROLE_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role', false));
 
 		$smarty->assign('AUTHOR_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.author', false));
 		$smarty->assign('SECTION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.section', false));
@@ -230,7 +228,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('FORM_FIELD', (t3lib_div::_GP('form_field'))? t3lib_div::_GP('form_field') : '');
 		$smarty->assign('FORM_UID', intval(t3lib_div::_GP('form_uid'))? intval(t3lib_div::_GP('form_uid')) : 0);
 		
-		$smarty->assign('IS_ARTICLE_BROWSER', t3lib_div::_GP('form_table'))? 1 : 0; // set flag if mod2 should be rednered as moderation list or as article browser 
+		$smarty->assign('IS_ARTICLE_BROWSER', t3lib_div::_GP('form_table'))? 1 : 0; // set flag if mod2 should be rendered as moderation list or as article browser 
 
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {
@@ -296,7 +294,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			/// set default values for initial call of form
 			$_POST['range'] = 'today';
 			$_POST['hidden'] = 'all';
-			$_POST['moderation'] = 'all';
+			$_POST['role'] = 'all';
 			$_POST['author'] = '';
 			$_POST['section'] = '';
 			$_POST['text'] = '';
@@ -308,7 +306,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 /// \todo: check: $_get[]=... - warum nicht $_post[]=... ???
 			if (!t3lib_div::_POST('range')) $_GET['range'] = 'today';
 			if (!t3lib_div::_POST('hidden')) $_GET['hidden'] = 'all';
-			if (!t3lib_div::_POST('moderation')) $_GET['moderation'] = 'all';
+			if (!t3lib_div::_POST('role')) $_GET['role'] = 'all';
 			if (!t3lib_div::_POST('step')) $_GET['step'] = 10;
 			if (!t3lib_div::_POST('start_page')) $_GET['start_page'] = 0;
 		}
@@ -347,7 +345,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	/// create where part of sql statement for filter
 	/// return string 'WHERE' is NOT added to the string
-	function createWherePart() {
+	private function createWherePart() {
 		$where = array();
 		
 		$where[] = 'deleted=0';
@@ -364,11 +362,21 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			default:
 				// nothing to do
 		}
-//\todo t3lib_div::devlog('moderation: moderation field still missing', 'newspaper', 0);
+		switch(strtolower(t3lib_div::_GP('role'))) {
+			case '0':
+			case '1':
+			case '1000':
+				$where[] = 'workflow_status=' . t3lib_div::_GP('role');
+			break;
+			case 'all':
+			default:
+				// nothing to do
+		}
 		
 		
-		if (t3lib_div::_GP('author') != '')
+		if (t3lib_div::_GP('author') != '') {
 			$where[] = 'author LIKE "%' . t3lib_div::_GP('author') . '%"';
+		}
 		if (t3lib_div::_GP('section')) {
 t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 		}
@@ -389,7 +397,7 @@ t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 
 // function to fill filter dropdowns with data
 
-	function getHiddenArray() {
+	private function getHiddenArray() {
 		global $LANG;
 		$hidden = array();
 		$hidden['all'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_hidden_all', false);
@@ -397,16 +405,16 @@ t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 		$hidden['off'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_hidden_off', false);
 		return $hidden;		
 	}
-/// \todo: new statusses need to be added - this field is not just a flag anymore!
-	function getModerationArray() {
+	private function getRoleArray() {
 		global $LANG;
-		$moderation = array();
-		$moderation['all'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_moderation_all', false);
-		$moderation['on'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_moderation_on', false);
-		$moderation['off'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_moderation_off', false);
-		return $moderation;		
+		$role = array();
+		$role['all'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
+		$role['0'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_0', false);
+		$role['1'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1', false);
+		$role['1000'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1000', false);
+		return $role;		
 	}
-	function getRangeArray() {
+	private function getRangeArray() {
 		global $LANG;
 		$range = array();
 		$range['today'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.range_today', false);
