@@ -62,6 +62,7 @@ td {ldelim}
 
 
 /// extracted from typo3/class.browse_links.php
+/// in order to get the article and articlelist browser working like the typo3 EB
 
 var BrowseLinks = {ldelim}
 	elements: {ldelim}{rdelim},
@@ -109,10 +110,7 @@ function focusOpenerAndClose(close)	{ldelim}
 </script>
 
 
-{* test links
-<a onclick="return insertElement('tx_newspaper_article', '61', 'db', 'TESTARTIKEL', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Add to list..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a><br /><br />
-<a onclick="return insertElement('tx_newspaper_article', '67', 'db', 'dasg21 testclose1', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#"><img width="18" height="16" alt="" title="Choose ..." src="/taz426/typo3/sysext/t3skin/icons/gfx/plusbullet2.gif"/></a><br /><br />
-*}
+
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
 {$RANGE_LABEL}: <select name="range">
