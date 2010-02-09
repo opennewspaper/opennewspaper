@@ -350,7 +350,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp(t3lib_div::_GP('range'));
 		
 		// get article fromcorrect sysfolder only
-		$where[] = $sysfolder = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
+		$where[] = 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
 		
 		switch(strtolower(t3lib_div::_GP('hidden'))) {
 			case 'on':
