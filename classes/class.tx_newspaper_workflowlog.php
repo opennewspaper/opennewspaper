@@ -84,7 +84,7 @@ class tx_newspaper_WorkflowLog {
  	}
 
  	
- 	/// modify $incominigFieldArray if the workflow status for an article changed
+ 	/// modify $incominigFieldArray if the workflow status for an article changed; called in save hook
  	private static function checkIfWorkflowStatusChanged(&$incomingFieldArray, $table, $id) {
 //t3lib_div::devlog('checkIfWorkflowStatusChanged()', 'newspaper', 0, array('incomingFieldArray' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_REQUEST' => $_REQUEST));
 
