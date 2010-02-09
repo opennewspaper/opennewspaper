@@ -292,7 +292,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			/// set default values for initial call of form
 			$_POST['range'] = 'today';
 			$_POST['hidden'] = 'all';
-			$_POST['role'] = 'all';
+			$_POST['role'] = '-1';
 			$_POST['author'] = '';
 			$_POST['section'] = '';
 			$_POST['text'] = '';
@@ -304,7 +304,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 /// \todo: check: $_get[]=... - warum nicht $_post[]=... ???
 			if (!t3lib_div::_POST('range')) $_GET['range'] = 'today';
 			if (!t3lib_div::_POST('hidden')) $_GET['hidden'] = 'all';
-			if (!t3lib_div::_POST('role')) $_GET['role'] = 'all';
+			if (!t3lib_div::_POST('role')) $_GET['role'] = '-1';
 			if (!t3lib_div::_POST('step')) $_GET['step'] = 10;
 			if (!t3lib_div::_POST('start_page')) $_GET['start_page'] = 0;
 		}
@@ -369,7 +369,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			case '1000':
 				$where[] = 'workflow_status=' . t3lib_div::_GP('role');
 			break;
-			case 'all':
+			case '-1': // all
 			default:
 				// nothing to do
 		}
@@ -409,7 +409,7 @@ t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 	private function getRoleArray() {
 		global $LANG;
 		$role = array();
-		$role['all'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
+		$role['-1'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
 		$role['0'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_0', false);
 		$role['1'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1', false);
 		$role['1000'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1000', false);
