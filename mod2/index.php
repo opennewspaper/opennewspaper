@@ -386,7 +386,7 @@ t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 				addslashes(t3lib_div::_GP('text')) . '%" OR teaser LIKE "%' . 
 				addslashes(t3lib_div::_GP('text')) . '%" OR text LIKE "%' . 
 				addslashes(t3lib_div::_GP('text')) . '%")';
-			
+t3lib_div::devlog('where', 'newspaper', 0, array('where' => $where));
 		return implode(' AND ', $where);				
 	}
 
