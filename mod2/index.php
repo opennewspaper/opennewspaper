@@ -320,7 +320,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'section' => $_POST['section'],
 			'text' => $_POST['text'],
 			'step' => $_POST['step'],
-			'start_page' => 0 // always start on furst result page
+			'start_page' => 0 // always start on first result page
 		)));
 		
 	}
