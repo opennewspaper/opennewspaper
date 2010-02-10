@@ -136,4 +136,14 @@ $TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"][
 // make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
+
+
+// hide field "tag type" in form "extra: control tag zone" and store value for type control tag
+$TCA['tx_newspaper_extra_controltagzone']['columns']['tag_type']['config'] = array(
+	'type' => 'user',
+	'userFunc' => 'tx_newspaper_Extra_ControlTagZone->renderBackendFieldTagType',
+	'noTableWrapping' => 1
+);
+
+
 ?>

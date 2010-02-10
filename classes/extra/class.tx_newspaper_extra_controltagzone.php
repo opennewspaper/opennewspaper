@@ -187,6 +187,15 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		return $url;
 	}
 	
+	
+	
+	/// backend functions
+	
+	/// hides field tag zone type in extra tag control tag zone and set the value for "control tag" in a hidden field 
+	public static function renderBackendFieldTagType($PA, $fObj=null) {
+		return '<input type="hidden" value="' . tx_newspaper::getControlTagType() . '" name="' . $PA['itemFormElName'] . '">';
+	}
+	
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_ControlTagZone());
