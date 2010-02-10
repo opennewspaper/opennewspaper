@@ -164,7 +164,7 @@ class tx_newspaper_WorkflowLog {
 
 	
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
-	private static function logWorkflow($status, $table, $id, &$fieldArray) {
+	public static function logWorkflow($status, $table, $id, &$fieldArray) {
 		global $LANG;
 		
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
