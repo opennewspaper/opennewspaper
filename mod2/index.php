@@ -291,7 +291,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			/// module is called from menu
 			
 			$storedFilter = unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter'));
-t3lib_div::devlog('getModulteData', 'np', 0, array('storedFilter' => $storedFilter, 'is_array' => is_array($storedFilter)));
 			if (is_array($storedFilter)) {
 				// use stored filter
 				$storedFilter = $this->addDefaultFilterValues($storedFilter); // in case something went wrong when storing the filter settings
