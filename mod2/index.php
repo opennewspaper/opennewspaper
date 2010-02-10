@@ -285,28 +285,25 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	/// set default values
 	function processGP() {
-#t3lib_div::devlog('$_request', 'np', 0, $_REQUEST);
-#t3lib_div::devlog('_post', 'np', 0, t3lib_div::_POST());
-#t3lib_div::devlog('_get', 'np', 0, t3lib_div::_GET());
+//t3lib_div::devlog('processGP()', 'np', 0, array('_request' => $_REQUEST, '_post' => $_POST, '_get' => $_GET));
+
 		if ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) == 0)) {
-			/// set default values for initial call of form
-			$_POST['range'] = 'today';
-			$_POST['hidden'] = 'all';
-			$_POST['role'] = '-1';
-			$_POST['author'] = '';
-			$_POST['section'] = '';
-			$_POST['text'] = '';
-			$_POST['step'] = 10;
-			$_POST['start_page'] = 0;
+			/// module is called from menu
+			
+			$storedFilter = unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter'));
+t3lib_div::devlog('getModulteData', 'np', 0, array('storedFilter' => $storedFilter, 'is_array' => is_array($storedFilter)));
+			if (is_array($storedFilter)) {
+				// use stored filter
+				$storedFilter = $this->addDefaultFilterValues($storedFilter); // in case something went wrong when storing the filter settings
+				$_POST = $storedFilter; 
+			} else {
+				// set default filter setting
+				$_POST = $this->addDefaultFilterValues($_POST);
+			}
 		} elseif ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) > 0)) {
 			/// set some defaults for pages being called by url
 			$_POST = t3lib_div::_GET(); // copy to $_post -> ring is created based on $_post
-/// \todo: check: $_get[]=... - warum nicht $_post[]=... ???
-			if (!t3lib_div::_POST('range')) $_GET['range'] = 'today';
-			if (!t3lib_div::_POST('hidden')) $_GET['hidden'] = 'all';
-			if (!t3lib_div::_POST('role')) $_GET['role'] = '-1';
-			if (!t3lib_div::_POST('step')) $_GET['step'] = 10;
-			if (!t3lib_div::_POST('start_page')) $_GET['start_page'] = 0;
+			$_POST = $this->addDefaultFilterValues($_POST);
 		}
 
 		/// if "go" button was pressed, reset page browsing
@@ -314,7 +311,36 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$_POST['start_page'] = 0;
 			unset($_POST['go']); // if querystring contains this marker it indecates that the form was submitted, so it's unset to remove it from the browse urls
 		}
+		
+		// store filter settings
+		$GLOBALS['BE_USER']->pushModuleData("tx_newspaper/mod2/index.php/filter", serialize(array(
+			'range' => $_POST['range'],
+			'hidden' => $_POST['hidden'],
+			'role' => $_POST['role'],
+			'author' => $_POST['author'],
+			'section' => $_POST['section'],
+			'text' => $_POST['text'],
+			'step' => $_POST['step'],
+			'start_page' => 0 // always start on furst result page
+		)));
+		
 	}
+
+	/// adds default filter settings if filter type is missing in given array
+	/// \param $settings filter settings
+	/// \return array with filter settings where missing filter type were added with default values
+	private function addDefaultFilterValues(array $settings) {
+		if (!array_key_exists('range', $settings)) $settings['range'] = 'today';
+		if (!array_key_exists('hidden', $settings)) $settings['hidden'] = 'all';
+		if (!array_key_exists('role', $settings)) $settings['role'] = '-1';
+		if (!array_key_exists('author', $settings)) $settings['author'] = '';
+		if (!array_key_exists('section', $settings)) $settings['section'] = '';
+		if (!array_key_exists('text', $settings)) $settings['text'] = '';
+		if (!array_key_exists('step', $settings)) $settings['step'] = 10;
+		if (!array_key_exists('start_page', $settings)) $settings['start_page'] = 0;
+		return $settings;
+	}
+
 
 	/// check if an article is to be hidden/unhidden; write to database if yes
 	function processGPVisibility() {
