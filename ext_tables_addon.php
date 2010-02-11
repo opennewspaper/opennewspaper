@@ -83,6 +83,16 @@ if (TYPO3_MODE == 'BE') {
 	/// add icon for newspaper sysfolders
 	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
 
+
+
+// set range for role in be_users
+$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
+	"lower" => "0",
+	"upper" => "1000"
+);
+
+
+
 }
 
 ?>
