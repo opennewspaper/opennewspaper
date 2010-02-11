@@ -117,6 +117,10 @@ $TCA["tx_newspaper_extra_mostcommented"]["columns"]["num_favorites"]["config"]["
 $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
+$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
+	"lower" => "0",
+	"upper" => "1000"
+);
 
 
 // modify some other values
