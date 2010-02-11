@@ -135,7 +135,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 	{if $article->getAttribute('workflow_status') == 1}
 		<input type="button" value="{$lang.place}" class="place" />
 		{if $input.showworkflowbuttons}
-			<input type="button" value="{$lang.backtoeditor}" class="sendtoeditor" />
+			<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
 		{else}
 			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
 		{/if}

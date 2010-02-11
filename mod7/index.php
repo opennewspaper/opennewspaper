@@ -100,7 +100,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							case 'placearticle' :
 								die($this->placeArticle($input));
 							break;
-							case 'sendarticletoed' :
+							case 'sendarticletodutyeditor' :
 								die($this->sendArticleToDutyEditor($input));
 							break;
 							case 'sendarticletoeditor' :
