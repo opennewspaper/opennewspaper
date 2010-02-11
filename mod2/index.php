@@ -184,9 +184,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/'));
 
-//\todo t3lib_div::devlog('moderation: be user still missing', 'newspaper', 0);
-
-
 		$smarty->assign('PAGE_PREV_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_prev', false));
 		$smarty->assign('PAGE_NEXT_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_next', false));
 		$smarty->assign('PAGE_HITS_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_hits', false));
@@ -246,10 +243,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		/// build url for switch visibility button
 		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
 
-		
+		// check if article is locked, add be_user to array and add workflow log
 		$locked_article = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			// check if article is locked
+			// is article locked?
 			$t = t3lib_BEfunc::isRecordLocked('tx_newspaper_article', $row[$i]['uid']);
 			if (isset($t['record_uid'])) {
 				$locked_article[$i] = array(
@@ -257,6 +254,13 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 					'msg' => $t['msg']
 				);
 			}
+			// add be_user
+			$be_user = tx_newspaper::selectOneRow(
+				'username',
+				'be_users',
+				'uid=' . ($row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'])
+			);
+			$row[$i]['be_user'] = $be_user['username'];  
 			// add workflowlog data to $row
 			$row[$i]['workflowlog'] = tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $row[$i]['uid']);
 		}
