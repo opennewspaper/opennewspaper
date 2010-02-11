@@ -71,6 +71,9 @@ todo: $pz->getPossibleParents() seems to be buggy; could be an effect of corrupt
 			{/section}
 {* -1 -> no inheritance *}
 			<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
+{* future feature;
+<option value="-2" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo: use TSConfig setting</option>
+*}
 		</select>
 		{if ($ADMIN)}
 			[{$DATA[i].inherits_from}]
