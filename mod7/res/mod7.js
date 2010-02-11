@@ -276,7 +276,7 @@ function connectPlacementEvents () {
 
 function startCheckCountdown () {
 	window.clearInterval(refreshCheck);
-	refreshCheck = window.setInterval("checkForRefresh()", 15000);
+	refreshCheck = window.setInterval("checkForRefresh()", 60000);
 }
 
 
