@@ -54,10 +54,11 @@
 {*
 todo: store changes
 todo: $pz->getPossibleParents() seems to be buggy; could be an effect of corrupt data too ...
+*}
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezone_inheritancesource}: 
 		<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
-{* 0 -> default inheritance mode, read upper level *
+{* 0 -> default inheritance mode, read upper level *}
 			<option value="0" {if ({$DATA[i].inherits_from == 0)}selected="selected "{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
 			{section name=j loop=$INHERITANCESOURCE}
 
@@ -68,13 +69,13 @@ todo: $pz->getPossibleParents() seems to be buggy; could be an effect of corrupt
 				{/if} value="{$INHERITANCESOURCE[j]->getUid()}">{$INHERITANCESOURCENAME[j]}</option>
 
 			{/section}
-{* -1 -> no inheritance *
+{* -1 -> no inheritance *}
 			<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
 		</select>
 		{if ($ADMIN)}
 			[{$DATA[i].inherits_from}]
 		{/if}
-*}
+
 
 	{/if}
 {if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
