@@ -12,7 +12,7 @@ define('NP_WORKLFOW_LOG_CHANGE_ROLE', 3);
 define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 
  
-class tx_newspaper_WorkflowLog {   
+class tx_newspaper_Workflow {   
 
 	 public static function renderBackend($table, $tableUid, $allComments = false) {
         if(!$table || !$tableUid) {
@@ -222,7 +222,7 @@ class tx_newspaper_WorkflowLog {
 						'table_name' => $table, 
 						'table_uid' => $id,
 						'action' => NP_WORKLFOW_LOG_CHANGE_ROLE,
-						'comment' => tx_newspaper_WorkflowLog::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($request['workflow_status_ORG']))
+						'comment' => self::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($request['workflow_status_ORG']))
 					));
 				}
 				

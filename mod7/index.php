@@ -190,8 +190,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('ICON', $this->getIcons());
 					$smarty->assign('workflowlog', 
-						tx_newspaper_workflowlog::getJavascript() .
-						tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $input['articleid'])
+						tx_newspaper_workflow::getJavascript() .
+						tx_newspaper_workflow::renderBackend('tx_newspaper_article', $input['articleid'])
 					);
 					return $smarty->fetch('mod7_module.tpl');
 				}

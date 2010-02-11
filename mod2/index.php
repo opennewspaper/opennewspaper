@@ -262,10 +262,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			);
 			$row[$i]['be_user'] = $be_user['username'];  
 			// add workflowlog data to $row
-			$row[$i]['workflowlog'] = tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $row[$i]['uid']);
+			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid']);
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
-		$smarty->assign('workflowlog_javascript', tx_newspaper_workflowlog::getJavascript()); // add js once only
+		$smarty->assign('workflowlog_javascript', tx_newspaper_workflow::getJavascript()); // add js once only
 
 		$smarty->assign('DATA', $row);
 
@@ -355,12 +355,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				case 'hidden':
 					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 1, 'tstamp' => time()));
 					$fA = array('hidden' => 1);
-					tx_newspaper_WorkflowLog::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
 				break;
 				case 'visible':
 					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 0, 'tstamp' => time()));
 					$fA = array('hidden' => 0);
-					tx_newspaper_WorkflowLog::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
 				default:
 /// \todo: throw exception
 			}

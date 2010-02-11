@@ -695,8 +695,8 @@ function changeWorkflowStatus(status, hidden_status) {
 
 		$html .= $smarty->fetch('workflow_comment.tmpl');
 		
-		$html .= tx_newspaper_workflowlog::getJavascript();
-		$html .= tx_newspaper_workflowlog::renderBackend('tx_newspaper_article', $PA['row']['uid']);
+		$html .= tx_newspaper_workflow::getJavascript();
+		$html .= tx_newspaper_workflow::renderBackend('tx_newspaper_article', $PA['row']['uid']);
 
 		return $html;
 	}
