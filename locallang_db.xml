@@ -202,6 +202,7 @@
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
+			<label index="be_users.tx_newspaper_role">Role</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.list_type_pi1">Ressorts/Artikel anzeigen</label>
@@ -400,6 +401,7 @@
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
+			<label index="be_users.tx_newspaper_role">Rolle</label>
 		</languageKey>
 	</data>
 </T3locallang>

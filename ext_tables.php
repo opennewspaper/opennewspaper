@@ -16,36 +16,43 @@ if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM1','',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM2','',t3lib_extMgm::extPath($_EXTKEY).'mod2/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM3','',t3lib_extMgm::extPath($_EXTKEY).'mod3/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM4','',t3lib_extMgm::extPath($_EXTKEY).'mod4/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM5','',t3lib_extMgm::extPath($_EXTKEY).'mod5/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('txnewspaperM6','','',t3lib_extMgm::extPath($_EXTKEY).'mod6/');
 }
 
 
 if (TYPO3_MODE == 'BE')	{
 		
+	t3lib_extMgm::addModule('web','txnewspaperM7','',t3lib_extMgm::extPath($_EXTKEY).'mod7/');
 }
 
 
@@ -698,5 +705,28 @@ $tempColumns = Array (
 t3lib_div::loadTCA("pages");
 t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
 t3lib_extMgm::addToAllTCAtypes("pages","tx_newspaper_associated_section;;;;1-1-1, tx_newspaper_module");
-require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
+
+$tempColumns = Array (
+	"tx_newspaper_role" => Array (		
+		"exclude" => 1,		
+		"label" => "LLL:EXT:newspaper/locallang_db.xml:be_users.tx_newspaper_role",		
+		"config" => Array (
+			"type"     => "input",
+			"size"     => "4",
+			"max"      => "4",
+			"eval"     => "int",
+			"checkbox" => "0",
+			"range"    => Array (
+				"upper" => "1000",
+				"lower" => "10"
+			),
+			"default" => 0
+		)
+	),
+);
+
+
+t3lib_div::loadTCA("be_users");
+t3lib_extMgm::addTCAcolumns("be_users",$tempColumns,1);
+t3lib_extMgm::addToAllTCAtypes("be_users","tx_newspaper_role;;;;1-1-1");
 ?>
