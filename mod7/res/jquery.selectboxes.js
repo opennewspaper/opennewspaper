@@ -525,7 +525,7 @@ $.fn.selectedOptions = function()
 
 
 // \todo: extend lib to extract changes to lib
-// added by Matthias
+// added by Matthias (MK)
 
 
 $.fn.selectAllOptions = function() {
