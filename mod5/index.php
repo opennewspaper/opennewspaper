@@ -346,6 +346,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		// add creation date and user
 		$new_article->setAttribute('crdate', time());
 		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		$new_article->setAttribute('hidden', 1); // hide new article
 
 		$new_article->store();
 
