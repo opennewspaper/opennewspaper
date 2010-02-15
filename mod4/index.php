@@ -834,9 +834,9 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		$role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_NONE;
 			
 		$row = tx_newspaper::selectRows(
-			'uid',
+			'uid,workflow_status',
 			'tx_newspaper_article',
-			'deleted=1 AND workflow_status NOT IN (' . $role_ids . ')',
+			'deleted=0 AND workflow_status NOT IN (' . $role_ids . ')',
 			'',
 			'uid'
 		);
