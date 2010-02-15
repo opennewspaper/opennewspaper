@@ -1,11 +1,17 @@
+// get absolute path
+var path = window.location.pathname;
+path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+
+
 var refreshCheck;
 
-
+// show spinner
 function showProgress () {
 	$("#progress").css("display", "inline");
 }
 
 
+// hide spinner
 function hideProgress () {
 	$("#progress").css("display", "none");
 }
@@ -13,7 +19,7 @@ function hideProgress () {
 
 function showArticlePreview () {
 	window.open(
-		"/typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
+		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
 		"preview", 
 		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
 	);
@@ -42,7 +48,7 @@ function insertArticle (elementId) {
 }
 
 
-//could be optimised by doing it all in a single request
+// \todo: can be optimized by saving all in a single request
 function saveAllSections () {
 	$("select.placement-select").each(function(index, item) {
 		saveIt = false;
