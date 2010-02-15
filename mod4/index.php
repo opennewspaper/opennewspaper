@@ -781,7 +781,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 						' is not connected to either an article or a page zone:<br /> ' . 
 						t3lib_div::view_array ($concrete) . '<br />';
 			} catch(tx_newspaper_EmptyResultException $e) {
-				$msg .= 'Extra #' . $row[$i]['extra_uid'] . ' in table ' . $row[$i]['extra_table'] . ' dies not exist<br />';
+				$msg .= 'Extra #' . $row[$i]['extra_uid'] . ' in table ' . $row[$i]['extra_table'] . ' does not exist<br />';
 			} 
 		}
 		
