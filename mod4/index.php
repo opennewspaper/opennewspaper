@@ -771,14 +771,18 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		
 		$msg = sizeof($row) . ' problems found.<br />';
 		for($i = 0; $i < sizeof($row); $i++) {
-			$concrete = tx_newspaper::selectOneRow(
-				'*', $row[$i]['extra_table'],
-				'uid = ' . $row[$i]['extra_uid']
-			);
-			$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
-					' #' . $row[$i]['extra_uid'] . ')'. 
-					' is not connected to either an article or a page zone:<br /> ' . 
-					t3lib_div::view_array ($concrete) . '<br />';
+			try {
+				$concrete = tx_newspaper::selectOneRow(
+					'*', $row[$i]['extra_table'],
+					'uid = ' . $row[$i]['extra_uid']
+				);
+				$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] . 
+						' #' . $row[$i]['extra_uid'] . ')'. 
+						' is not connected to either an article or a page zone:<br /> ' . 
+						t3lib_div::view_array ($concrete) . '<br />';
+			} catch(tx_newspaper_EmptyResultException $e) {
+				$msg .= 'Extra #' . $row[$i]['extra_uid'] . ' in table ' . $row[$i]['extra_table'] . ' dies not exist<br />';
+			} 
 		}
 		
 		return $msg;
