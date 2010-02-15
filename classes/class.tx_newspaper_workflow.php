@@ -5,6 +5,11 @@
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
+
+define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
+define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
+define('NP_ACTIVE_ROLE_NONE', 1000);
+
  
 define('NP_WORKLFOW_LOG_HIDE', 1);
 define('NP_WORKLFOW_LOG_PUBLISH', 2);
@@ -117,13 +122,46 @@ class tx_newspaper_Workflow {
     }
  
 
+	/// \return role set in be_users (or false if not available)
+	public static function getRole() {
+		// check global object BE_USER first
+		if (isset($GLOBALS['BE_USER']->user['uid'])) {
+			return $GLOBALS['BE_USER']->user['uid'];
+		}
+		// check session then
+		if ($_COOKIE['be_typo_user']) {	
+			$row = tx_newspaper::selectOneRow(
+				'ses_userid',
+				'be_sessions',
+				'ses_id="' . $_COOKIE['be_typo_user'] . '"'  
+			);
+			return intval($row['ses_userid']);
+		}
+		return false; 
+	}
+
+
 	/// \return message: what status change took place
 	public static function getWorkflowStatusChangedComment($new_role, $old_role) {
 		global $LANG;
 		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_new', false) . ' "' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
+			self::getRoleTitle($new_role) . '", ' . //$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
 			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_old', false) . '"' .
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
+			self::getRoleTitle($old_role) . '"'; // $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
+	}
+
+	private static function getRoleTitle($role) {
+		global $LANG;
+		switch($role) {
+			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
+				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
+			case NP_ACTIVE_ROLE_DUTY_EDITOR:
+				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
+			case NP_ACTIVE_ROLE_NONE:
+				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
+		}
+		t3lib_div::devlog('getRoleTitle() - unknown role', 'newspaper', 3, array('role' => $role));
+		return '[' . $role . ']'; // no role title available
 	}
 	
 
@@ -181,13 +219,14 @@ class tx_newspaper_Workflow {
 				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
 				
 				// check if the placement form should be opened after saving the record
-				// \todo if that's possible ...
-				$redirectToPlacementModule = false;
-				if (isset($request['workflow_status']) && isset($request['workflow_status_ORG']) && $request['workflow_status'] == 2 && $request['workflow_status_ORG'] != 2) {
-					$redirectToPlacementModule = true;
-					$request['workflow_status'] = 1; /// active role is set to duty editor, but placement form is opened immediately. it that form is saved, workflow_status is set to 2
-					$fieldArray['workflow_status'] = 1;						
-				}
+// \todo if that's possible ...
+// deprecated: just a sketch ...
+//				$redirectToPlacementModule = false;
+//				if (isset($request['workflow_status']) && isset($request['workflow_status_ORG']) && $request['workflow_status'] == 2 && $request['workflow_status_ORG'] != 2) {
+//					$redirectToPlacementModule = true;
+//					$request['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; /// active role is set to duty editor, but placement form is opened immediately. it that form is saved, workflow_status is set to 2
+//					$fieldArray['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR;						
+//				}
 				
 				
 				/// check if auto log entry for hiding/publishing newspaper record should be written

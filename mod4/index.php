@@ -526,6 +526,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkLinksToDeletedExtrasPagezone'),
 				'param' => array("tx_newspaper_article_extras_mm")
 			),
+			array(
+				'title' => 'Unknow workflow_status / role',
+				'class_function' => array('tx_newspaper_module4', 'checkUnknownWorkflowStatus'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
@@ -820,6 +825,37 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		return $msg;
 	}
+
+
+	static function checkUnknownWorkflowStatus() {
+		$msg = '';
+		$count = 0;
+			
+		$role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_NONE;
+			
+		$row = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_article',
+			'deleted=1 AND workflow_status NOT IN (' . $role_ids . ')',
+			'',
+			'uid'
+		);
+		if (sizeof($row) > 0) { 
+			for($i = 0; $i < sizeof($row); $i++) {
+				$msg .= 'Article #' . $row[$i]['uid'] . ': unknown workflow_status ' . $row[$i]['workflow_status'] . '<br />';
+				$count++;
+			}
+		} else {
+			return true;
+		}
+
+		if ($count > 0) {
+			$msg = $count . ' problems found</br>' . $msg;
+		}
+
+		return $msg;
+	}
+
 
 }
 

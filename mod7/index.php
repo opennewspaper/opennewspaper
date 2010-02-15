@@ -247,7 +247,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function placeArticle ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
-					$article->setAttribute('workflow_status', 2);
+					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 					$article->setAttribute('is_placed', 1);
 					return true;
 				}
@@ -259,7 +259,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function sendArticleToDutyEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
-					$article->setAttribute('workflow_status', 1);
+					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
 					return true;
 				}
 				
@@ -270,7 +270,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function sendArticleToEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
-					$article->setAttribute('workflow_status', 0);
+					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
 					return true;
 				}
 				

@@ -73,7 +73,7 @@ $TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = ar
 	"lower" => "1"
 );
 $TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = array (
-	"lower" => "1"
+	"lower" => "0"
 );
 $TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array (
 	"lower" => "1"

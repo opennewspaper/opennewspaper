@@ -118,6 +118,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 <br />
 
+{* \todo: use consts: NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE *}
 <div id="buttons">
 	{if $article->getAttribute('workflow_status') == 0}
 		{if $input.showworkflowbuttons}

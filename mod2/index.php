@@ -397,9 +397,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				// nothing to do
 		}
 		switch(strtolower(t3lib_div::_GP('role'))) {
-			case '0':
-			case '1':
-			case '1000':
+			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
+			case NP_ACTIVE_ROLE_DUTY_EDITOR:
+			case NP_ACTIVE_ROLE_NONE:
 				$where[] = 'workflow_status=' . t3lib_div::_GP('role');
 			break;
 			case '-1': // all
@@ -443,9 +443,9 @@ t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
 		global $LANG;
 		$role = array();
 		$role['-1'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
-		$role['0'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_0', false);
-		$role['1'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1', false);
-		$role['1000'] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_1000', false);
+		$role[NP_ACTIVE_ROLE_EDITORIAL_STAFF] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
+		$role[NP_ACTIVE_ROLE_DUTY_EDITOR] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
+		$role[NP_ACTIVE_ROLE_NONE] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
 		return $role;		
 	}
 	private function getRangeArray() {

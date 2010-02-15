@@ -88,7 +88,7 @@ if (TYPO3_MODE == 'BE') {
 // set range for role in be_users
 	$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
 		"lower" => "0",
-		"upper" => "1000"
+		"upper" => "1000" // NP_ACTIVE_ROLE_NONE
 	);
 
 }

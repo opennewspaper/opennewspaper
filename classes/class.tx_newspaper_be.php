@@ -11,12 +11,8 @@ define('BE_DISPLAY_MODE_SUBMODAL', 2);
 
 define('BE_ICON_CLOSE', '1');
 
-define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
+define('NP_ARTICLE_WORKFLOW_NOCLOSE', true); // if set to true the workflow buttons don't close the form (better for testing)
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
-
-define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
-define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
-define('NP_ACTIVE_ROLE_NONE', 1000);
 
 
 /// function for adding newspaper functionality to the backend
@@ -624,9 +620,9 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('button tsc', 'newspaper', 0, array('PA[fieldTSConfig]' => $PA['fieldTSConfig']));		
 //t3lib_div::devlog('button tsc', 'newspaper', 0, array('PA[row]' => $PA['row']));
 		
-		/// $PA['fieldTSConfig'] contains TSConfig set as TCEFORM.tx_newspaper_article.workflow_status.[...]
-		/// workflow_status = name of the field
-		
+		// get role set in be_users
+		$role = tx_newspaper_workflow::getRole();
+				
 		$hidden = $PA['row']['hidden'];
 		$workflow = intval($PA['row']['workflow_status']);
 
@@ -640,11 +636,11 @@ function findElementsByName(name, type) {
 
 		// add javascript \todo: move to external file
 		$html .= '<script language="javascript" type="text/javascript">
-function changeWorkflowStatus(status, hidden_status) {
-	status = parseInt(status);
+function changeWorkflowStatus(role, hidden_status) {
+	role = parseInt(role);
 	hidden_status = parseInt(hidden_status);
-	if (status == 0 || status == 1 || status == 2) {
-		document.getElementById("workflow_status").value = status; // valid status found
+	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
+		document.getElementById("workflow_status").value = role; // valid role found
 	}
 	document.getElementById("hidden_status").value = hidden_status;
 //alert(document.getElementById("hidden_status").value);
@@ -662,26 +658,28 @@ function changeWorkflowStatus(status, hidden_status) {
 		$button['place'] = false;
 		// hide or publish button is available for every workflow status
 		if (!$hidden) {
-			$button['hide'] = $this->isButtonVisible('hide', $PA['fieldTSConfig']['hide']);
+			$button['hide'] = $this->isButtonVisible('hide', $role);
 		} else {
-			$button['publish'] = $this->isButtonVisible('publish', $PA['fieldTSConfig']['publish']);
+			$button['publish'] = $this->isButtonVisible('publish', $role);
 		}
 		switch($workflow) {
-			case 0: 
+			case NP_ACTIVE_ROLE_EDITORIAL_STAFF: 
 				// active role: editor (Redakteur)
-				$button['check'] = $this->isButtonVisible('check', $PA['fieldTSConfig']['check']);
-				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
+				$button['check'] = $this->isButtonVisible('check', $role);
+				$button['place'] = $this->isButtonVisible('place', $role);
 			break;
-			case 1:
+			case NP_ACTIVE_ROLE_DUTY_EDITOR:
 				// active role: duty editor (CvD)
-				$button['revise'] = $this->isButtonVisible('revise', $PA['fieldTSConfig']['revise']);
-				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
+				$button['revise'] = $this->isButtonVisible('revise', $role);
+				$button['place'] = $this->isButtonVisible('place', $role);
+
 			break;
-			case 2:
-				// active role: no one (the article has left the workflow)
-				$button['check'] = $this->isButtonVisible('check', $PA['fieldTSConfig']['check']);
-				$button['revise'] = $this->isButtonVisible('revise', $PA['fieldTSConfig']['revise']);
-				$button['place'] = $this->isButtonVisible('place', $PA['fieldTSConfig']['place']);
+//	deprecated		case 2: // \todo: how to call placement form???
+//				// active role: no one (the article has left the workflow)
+//				$button['check'] = $this->isButtonVisible('check', $role);
+//				$button['revise'] = $this->isButtonVisible('revise', $role);
+//				$button['place'] = $this->isButtonVisible('place', $role);
+
 			default:
 				t3lib_div::devlog('getWorkflowButtons() - unknown workflow status', 'newspaper', 3, array('PA' => $PA, 'workflow_status' => $workflow));
 		}
@@ -710,60 +708,66 @@ function changeWorkflowStatus(status, hidden_status) {
 		$content = '';
 
 //t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));	
+		
+		/// just save (and don't close the form)
+		$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_save', false), -1, true);
+		
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
-			$content .= $this->renderWorkflowButton(false, 'hide', $hidden);
+			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_hide', false), $hidden);
 		} elseif ($hidden && $button['publish']) {
-			$content .= $this->renderWorkflowButton(false, 'publish', $hidden);
+			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_publish', false), $hidden);
 		}
 		$content .= '<br />';
 		
 		/// check / revise / place
 		if ($button['check']) {
-			$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1);
+			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1);
 			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden);
 			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(1, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden);
 			$content .= '<br />';
 		} elseif ($button['revise']) {
-			$content .= $this->renderWorkflowButton(0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1);
+			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1);
 			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden);
 			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden);
 			$content .= '<br />';
 		}
-		if (NP_SHOW_PLACE_BUTTONS) {
-			// hide place buttons until opening placement form feature is implemented
-			if ($button['place']) {
-				$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place', false), -1);
-				if (!$hidden && $button['hide'])
-					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_hide', false), $hidden);
-				elseif ($hidden && $button['publish'])
-					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_publish', false), $hidden);
-				$content .= '<br />';
-			}
-		}
+// deprecated, \todo: how to call placement form???
+//		if (NP_SHOW_PLACE_BUTTONS) {
+//			// hide place buttons until opening placement form feature is implemented
+//			if ($button['place']) {
+//				$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place', false), -1);
+//				if (!$hidden && $button['hide'])
+//					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_hide', false), $hidden);
+//				elseif ($hidden && $button['publish'])
+//					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_publish', false), $hidden);
+//				$content .= '<br />';
+//			}
+//		}
 
 		return $content;
 	}
 	
-	/** \param $new_status true indicates a workflow status change
-	 *  \param $title Title displayed on the button
-	 *  \param $hidden ?
+	/** \param $new_role if false, the role hasn't changes, else new role 
+	 *  \param $title Title for the button
+	 *  \param $hidden Specifies the hidden sdtatus of the current article
+	 *  \param $overWriteNoCloseConstValue: overwrited the const setting (NP_ARTICLE_WORKFLOW_NOCLOSE), if set to true, a save (plus whatever) button (without closing the form) is rendered
 	 */
-	private function renderWorkflowButton($new_status, $title, $hidden) {
+	private function renderWorkflowButton($new_role, $title, $hidden, $overWriteNoCloseConstValue=null) {
 		$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
-		if ($new_status !== false) {
-			$js = 'changeWorkflowStatus(' . intval($new_status) . ', ' . $hidden . ')';
+		if ($new_role !== false) {
+			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . ')';
 		} else {
 			$js = 'changeWorkflowStatus(-1, ' . $hidden . ')'; 
 		}
 		
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '" onclick="' . $js . '" ';
-		if (NP_ARTICLE_WORKFLOW_NOCLOSE) {
-			// test version, don't close after saving
+		if (NP_ARTICLE_WORKFLOW_NOCLOSE || $overWriteNoCloseConstValue == true) {
+			// don't close after saving (for "just save" button or for test purposes)
 			$html .= 'name="_savedok" src="sysext/t3skin/icons/gfx/savedok.gif" ';
 		} else {
 			// live version, save and close
@@ -777,26 +781,39 @@ function changeWorkflowStatus(status, hidden_status) {
 
 	/**
 	 *  \param $button (internal) name of button
-	 *  \param $be_config uids of allowed be_groups (comma separated)
+	 *  \param $role value for role
 	 *  \return boolean is be_user member of one of given be_groups
 	 */
-	private function isButtonVisible($button, $be_config) {
+	private function isButtonVisible($button, $role) {
 //t3lib_div::devlog('button', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'button' => $button, 'be_config' => $be_config));
-
 		if ($GLOBALS['BE_USER']->isAdmin()) {
 			return true; // admins can see all buttons
 		}
 
-		$be_group = explode(',', $be_config);
-		// check all groups
-		for ($i = 0; $i < sizeof($be_group); $i++) {
-			if ($GLOBALS['BE_USER']->isMemberOfGroup($be_group[$i])) {
-				return true; // group found
-			}
+		switch(strtolower($button)) {
+			case 'hide':
+				return true;
+			break;
+			case 'publish':
+				return true;
+			break;
+			case 'check':
+				return true;
+			break;
+			case 'revise':
+				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
+					return true;
+				}
+			break;
+			case 'place':
+				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
+					return true;
+				}
+			break;
 		}
-		return false; // no group found
+		
+		return false;
 	}
-
 
 
 
