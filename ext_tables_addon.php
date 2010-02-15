@@ -62,8 +62,8 @@ $TCA['tx_newspaper_tag']['ctrl']['iconfile'] =
 if (TYPO3_MODE == 'BE') {
 /// \todo: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 	
-	$tempColumns["tx_newspaper_associated_section"]["config"]["range"] = array();
-	t3lib_extMgm::addTCAcolumns("pages",$tempColumns,1);
+	// remove range check for set range for role in be_users in table pages
+	unset($TCA['pages']['columns']['set range for role in be_users']['config']['range']);
 
 	// add main module 'newspaper', add sub modules
 	t3lib_extMgm::addModule('txnewspaperMmain','','',t3lib_extMgm::extPath($_EXTKEY).'mod_main/'); // main
@@ -86,12 +86,10 @@ if (TYPO3_MODE == 'BE') {
 
 
 // set range for role in be_users
-$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
-	"lower" => "0",
-	"upper" => "1000"
-);
-
-
+	$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
+		"lower" => "0",
+		"upper" => "1000"
+	);
 
 }
 
