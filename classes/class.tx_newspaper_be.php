@@ -674,6 +674,12 @@ function changeWorkflowStatus(role, hidden_status) {
 				$button['place'] = $this->isButtonVisible('place', $role);
 
 			break;
+			case NP_ACTIVE_ROLE_NONE:
+				// active role: none
+				$button['check'] = $this->isButtonVisible('check', $role);
+				$button['revise'] = $this->isButtonVisible('revise', $role);
+				$button['place'] = $this->isButtonVisible('place', $role);
+			break;
 //	deprecated		case 2: // \todo: how to call placement form???
 //				// active role: no one (the article has left the workflow)
 //				$button['check'] = $this->isButtonVisible('check', $role);
@@ -728,7 +734,8 @@ function changeWorkflowStatus(role, hidden_status) {
 			elseif ($hidden && $button['publish'])
 				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden);
 			$content .= '<br />';
-		} elseif ($button['revise']) {
+		}
+		if ($button['revise']) {
 			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1);
 			if (!$hidden && $button['hide'])
 				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden);
