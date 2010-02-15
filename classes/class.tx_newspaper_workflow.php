@@ -125,17 +125,17 @@ class tx_newspaper_Workflow {
 	/// \return role set in be_users (or false if not available)
 	public static function getRole() {
 		// check global object BE_USER first
-		if (isset($GLOBALS['BE_USER']->user['uid'])) {
-			return $GLOBALS['BE_USER']->user['uid'];
+		if (isset($GLOBALS['BE_USER']->user['tx_newspaper_role'])) {
+			return $GLOBALS['BE_USER']->user['tx_newspaper_role'];
 		}
 		// check session then
 		if ($_COOKIE['be_typo_user']) {	
 			$row = tx_newspaper::selectOneRow(
-				'ses_userid',
-				'be_sessions',
-				'ses_id="' . $_COOKIE['be_typo_user'] . '"'  
+				'tx_newspaper_role',
+				'be_users',
+				'uid=' . $_COOKIE['be_typo_user'] . ' AND deleted=0'
 			);
-			return intval($row['ses_userid']);
+			return $row['tx_newspaper_role'];
 		}
 		return false; 
 	}
