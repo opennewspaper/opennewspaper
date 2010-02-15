@@ -617,14 +617,14 @@ function findElementsByName(name, type) {
 
 	function getWorkflowButtons($PA, $fobj) {
 		global $LANG;
-//t3lib_div::devlog('button tsc', 'newspaper', 0, array('PA[fieldTSConfig]' => $PA['fieldTSConfig']));		
-//t3lib_div::devlog('button tsc', 'newspaper', 0, array('PA[row]' => $PA['row']));
+//t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 		
 		// get role set in be_users
 		$role = tx_newspaper_workflow::getRole();
 				
 		$hidden = $PA['row']['hidden'];
 		$workflow = intval($PA['row']['workflow_status']);
+//t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('workflow' => $workflow, 'hidden' => $hidden));
 
 		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
 		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
@@ -785,7 +785,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \return boolean is be_user member of one of given be_groups
 	 */
 	private function isButtonVisible($button, $role) {
-//t3lib_div::devlog('button', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'button' => $button, 'be_config' => $be_config));
+//t3lib_div::devlog('button', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'button' => $button, 'role' => $role));
 		if ($GLOBALS['BE_USER']->isAdmin()) {
 			return true; // admins can see all buttons
 		}
