@@ -72,11 +72,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
 					// Access check!
-					// The page will show only if there is a valid page and if this page may be viewed by the user
-					$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-					$access = is_array($this->pageinfo) ? 1 : 0;
-					if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
-						//@todo: comment out later
+// \todo: better check: currently access to all be_users is granted
+					if (isset($GLOBALS['BE_USER']->user['uid']) && $GLOBALS['BE_USER']->user['uid'])	{
+						// \todo: comment out later
 						ini_set('display_errors',  'on');
 						
 						// get "pi"vars
