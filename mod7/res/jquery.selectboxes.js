@@ -549,7 +549,7 @@ $.fn.unselectAllOptions = function() {
 
 /**
  * 
- * @param {Object} toTop		boolean		move selected option to to
+ * @param {Object} toTop		boolean		move selected option to top
  * @param {Object} increment	boolean		incremend offset as well
  */
 $.fn.moveOptionsUp = function(toTop, increment) {
@@ -585,7 +585,7 @@ $.fn.moveOptionsUp = function(toTop, increment) {
 				optionValue = optionValue.join("_");
 				selectOptions[index].value = optionValue;
 				
-				// @todo: check for last bracket and get its position to make sure we don't hit the wrong one 
+				// \todo: check for last bracket and get its position to make sure we don't hit the wrong one 
 				optionText = selectOptions[index].text.split("(");
 				optionText[1] = optionText[1].replace(/\)/g, "");
 				optionText[1] = parseInt(optionText[1]) + add;

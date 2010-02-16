@@ -6,18 +6,18 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 var refreshCheck;
 
 // show spinner
-function showProgress () {
+function showProgress() {
 	$("#progress").css("display", "inline");
 }
 
 
 // hide spinner
-function hideProgress () {
+function hideProgress() {
 	$("#progress").css("display", "none");
 }
 
-
-function showArticlePreview () {
+// open preview window
+function showArticlePreview() {
 	window.open(
 		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
 		"preview", 
@@ -38,6 +38,7 @@ function filterAvailableSections () {
 }
 
 
+// insert article in manual article list
 function insertArticle (elementId) {
 	$("#" + elementId).addOption(
 		$("#placearticleuid").val(), 
