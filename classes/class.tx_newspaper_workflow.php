@@ -158,6 +158,47 @@ class tx_newspaper_Workflow {
 	}
 
 
+	/// checks if a workflow feature is available for the current backend user and article workflow status
+	/** \param $feature (internal) name of feature (currently: hide, publish, check, revise, place)
+	 *  \return boolean is be_user member of one of given be_groups
+	 */
+	public static function isFunctionalityAvailable($feature) {
+		$role = self::getRole();
+//t3lib_div::devlog('isFunctionalityAvailable()', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'feature' => $feature, 'role' => $role));
+		if ($GLOBALS['BE_USER']->isAdmin()) {
+			return true; // admins can see all buttons
+		}
+
+		if ($role === false) {
+			return false;
+		}
+
+		switch(strtolower($feature)) {
+			case 'hide':
+				return true;
+			break;
+			case 'publish':
+				return true;
+			break;
+			case 'check':
+				return true;
+			break;
+			case 'revise':
+				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
+					return true;
+				}
+			break;
+			case 'place':
+				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
+					return true;
+				}
+			break;
+		}
+		
+		return false;
+	}
+
+
 	/// \return message: what status change took place
 	public static function getWorkflowStatusChangedComment($new_role, $old_role) {
 		global $LANG;

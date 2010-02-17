@@ -619,9 +619,6 @@ function findElementsByName(name, type) {
 		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 		
-		// get role set in be_users
-		$role = tx_newspaper_workflow::getRole();
-				
 		$hidden = $PA['row']['hidden'];
 		$workflow = intval($PA['row']['workflow_status']);
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('workflow' => $workflow, 'hidden' => $hidden));
@@ -658,33 +655,33 @@ function changeWorkflowStatus(role, hidden_status) {
 		$button['place'] = false;
 		// hide or publish button is available for every workflow status
 		if (!$hidden) {
-			$button['hide'] = $this->isButtonVisible('hide', $role);
+			$button['hide'] = tx_newspaper_workflow::isFunctionalityAvailable('hide');
 		} else {
-			$button['publish'] = $this->isButtonVisible('publish', $role);
+			$button['publish'] = tx_newspaper_workflow::isFunctionalityAvailable('publish');
 		}
 		switch($workflow) {
 			case NP_ACTIVE_ROLE_EDITORIAL_STAFF: 
 				// active role: editor (Redakteur)
-				$button['check'] = $this->isButtonVisible('check', $role);
-				$button['place'] = $this->isButtonVisible('place', $role);
+				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
+				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
 			break;
 			case NP_ACTIVE_ROLE_DUTY_EDITOR:
 				// active role: duty editor (CvD)
-				$button['revise'] = $this->isButtonVisible('revise', $role);
-				$button['place'] = $this->isButtonVisible('place', $role);
+				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
+				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
 
 			break;
 			case NP_ACTIVE_ROLE_NONE:
 				// active role: none
-				$button['check'] = $this->isButtonVisible('check', $role);
-				$button['revise'] = $this->isButtonVisible('revise', $role);
-				$button['place'] = $this->isButtonVisible('place', $role);
+				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
+				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
+				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
 			break;
 //	deprecated		case 2: // \todo: how to call placement form???
 //				// active role: no one (the article has left the workflow)
-//				$button['check'] = $this->isButtonVisible('check', $role);
-//				$button['revise'] = $this->isButtonVisible('revise', $role);
-//				$button['place'] = $this->isButtonVisible('place', $role);
+//				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
+//				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
+//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
 
 			default:
 				t3lib_div::devlog('getWorkflowButtons() - unknown workflow status', 'newspaper', 3, array('PA' => $PA, 'workflow_status' => $workflow));
@@ -786,41 +783,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	}
 
 
-	/**
-	 *  \param $button (internal) name of button
-	 *  \param $role value for role
-	 *  \return boolean is be_user member of one of given be_groups
-	 */
-	private function isButtonVisible($button, $role) {
-//t3lib_div::devlog('button', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'button' => $button, 'role' => $role));
-		if ($GLOBALS['BE_USER']->isAdmin()) {
-			return true; // admins can see all buttons
-		}
 
-		switch(strtolower($button)) {
-			case 'hide':
-				return true;
-			break;
-			case 'publish':
-				return true;
-			break;
-			case 'check':
-				return true;
-			break;
-			case 'revise':
-				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
-					return true;
-				}
-			break;
-			case 'place':
-				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
-					return true;
-				}
-			break;
-		}
-		
-		return false;
-	}
 
 
 
