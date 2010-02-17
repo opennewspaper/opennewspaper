@@ -40,7 +40,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	
 	function getDescription() {
 		return 'Display a list of articles: ' . 
-			$this->articlelist->__toString();
+			$this->articlelist->getDescription();
 	}
 	
 	/** Assign the list of articles to a Smarty template. The template must 
