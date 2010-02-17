@@ -1172,7 +1172,7 @@ if(0)			        t3lib_div::devlog(
 	/// Add an Extra to the PageZone, both in RAM and persistently
 	public function addExtra(tx_newspaper_Extra $extra) {
 		$this->extras[] = $extra;
-
+/*
 		try {
 			tx_newspaper::selectOneRow(
 				'uid_local',
@@ -1182,14 +1182,14 @@ if(0)			        t3lib_div::devlog(
 			);
 
 		} catch (tx_newspaper_EmptyResultException $e) {
-			tx_newspaper::insertRows(
+*/			tx_newspaper::insertRows(
 				$this->getExtra2PagezoneTable(),
 				array(
 					'uid_local' => $this->getUid(),
 					'uid_foreign' => $extra->getExtraUid()
 				)
 			);
-		}
+//		}
 	}
 	
 	
