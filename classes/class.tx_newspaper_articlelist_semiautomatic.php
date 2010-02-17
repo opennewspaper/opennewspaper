@@ -217,7 +217,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
 		$smarty->assign('tree', $tree);
 		$smarty->assign('lang', $localLang);
-		$smarty->assign('isde', $this->userIsDutyEditor());
+		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 		return $smarty->fetch('mod7_placement.tpl');
 	}
 	
@@ -262,13 +262,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					}
 					return $tree;
 				}
-	
-				function userIsDutyEditor () {
-					// @todo: use later
-					// return tx_newspaper::isDutyEditor();
-					return true;
-				}
-	
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		

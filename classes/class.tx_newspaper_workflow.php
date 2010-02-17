@@ -133,11 +133,28 @@ class tx_newspaper_Workflow {
 			$row = tx_newspaper::selectOneRow(
 				'tx_newspaper_role',
 				'be_users',
-				'uid=' . $_COOKIE['be_typo_user'] . ' AND deleted=0'
+				'uid=' . intval($_COOKIE['be_typo_user']) . ' AND deleted=0'
 			);
 			return $row['tx_newspaper_role'];
 		}
 		return false; 
+	}
+	
+	/// \return true if be_user has newspaper role "duty editor"
+	public static function isDutyEditor() {
+		$role = self::getRole();
+		if ($role === false) {
+			return false;
+		}
+		return ($role == 1);
+	}
+	/// \return true if be_user has newspaper role "editorial staff"
+	public static function isEditor() {
+		$role = self::getRole();
+		if ($role === false) {
+			return false;
+		}
+		return ($role == 0);
 	}
 
 

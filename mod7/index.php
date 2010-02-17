@@ -209,20 +209,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				function userIsDutyEditor () {
-					// @todo: use later
-					// return tx_newspaper::isDutyEditor();
-					return true;
-				}
-
-
-				function userIsEditor () {
-					// @todo: use later
-					// return tx_newspaper::isEditor();
-					return false;
-				}
-				
-				
 				// save all the selected sections for an article
 				function saveSectionsForArticle ($input) {
 					$sectionIds = array();
@@ -420,7 +406,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('article', $article);
 					$smarty->assign('singlemode', $singleMode);
 					$smarty->assign('lang', $localLang);
-					$smarty->assign('isde', $this->userIsDutyEditor());
+					$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 					$smarty->assign('ICON', $this->getIcons());
 					return $smarty->fetch('mod7_placement.tpl');
 				}

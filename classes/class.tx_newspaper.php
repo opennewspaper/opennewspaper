@@ -763,22 +763,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $is_article_page;
 	}
 	
-	///	Is the logged in user an editor (allowed to edit articles)?
-	/** \todo finish: read group of logged in user and compare it to the
-	 *  	TSConfig-defined user group of editors.
-	 */
-	public static function isEditor() {
-		return true;
-	}
-	
-	///	Is the logged in user a duty editor (allowed to publish articles)?
-	/** \todo finish: read group of logged in user and compare it to the
-	 *  	TSConfig-defined user group of duty editors.
-	 */
-	public static function isDutyEditor() {
-		return true;
-	}
-
 	public static function currentURL() {
 		$hostname = $_SERVER['SERVER_NAME'];
 		$baseURI = explode($hostname, t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
