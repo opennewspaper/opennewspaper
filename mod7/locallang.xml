@@ -39,6 +39,7 @@
 			<label index="label_group_tobottom">Move to bottom</label>
 			<label index="label_group_clear">Remove article</label>
 			<label index="label_button_left">Add article</label>
+			<label index="label_button_right">Remove article TO BE PLACED</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>

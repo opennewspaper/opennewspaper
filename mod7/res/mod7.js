@@ -37,16 +37,49 @@ function filterAvailableSections () {
 	});
 }
 
+// return uid of article to be placed
+function getArticleToBePlacedUid() {
+	return $("#placearticleuid")[0].defaultValue;
+}
 
 // insert article in manual article list
-function insertArticle (elementId) {
+function insertArticle(elementId) {
 	$("#" + elementId).addOption(
 		$("#placearticleuid").val(), 
 		$("#placearticletitle").val()
 	);
-	$("#" + elementId).moveOptionsUp(true);
-	$("#" + elementId).unselectAllOptions();
+	$("#" + elementId).moveOptionsUp(true); // move article to top
+	$("#" + elementId).selectOptions($("#placearticleuid").val(), true); // select added article
 }
+
+// remove article to be placed from list (no matter what articles are selected)
+function removeArticleToBePlaced(elementId) {
+	if ($("#" + elementId).containsOption(getArticleToBePlacedUid())) {
+		selection = $(elementId.selector).selectedValues; // store old selection
+		$(elementId.selector); // remove article to be placed
+		$("#" + elementId).removeOption(getArticleToBePlacedUid());
+		$("#" + elementId).selectedOptions = selection; // restore old selection
+	}
+}
+
+function displayInsertOrDelButton(elementId){
+	if (typeof elementId == "string") {
+		buttonListId = elementId.substring(8);
+	} else {
+		buttonListId = elementId.selector.substring(8);
+	} 
+	if ($(elementId.selector).containsOption(getArticleToBePlacedUid())) {
+		// article to be placed is PLACED in list
+		$("#addbutton_" + buttonListId).hide();
+		$("#delbutton_" + buttonListId).show();
+	} else {
+		// article to be placed is MISSING in list
+		$("#addbutton_" + buttonListId).show();
+		$("#delbutton_" + buttonListId).hide();
+	}
+	hideProgress(); // displayInsertOrDelButton() might be called when refrshinh a list with AJAX
+}
+
 
 
 // \todo: can be optimized by saving all in a single request
@@ -89,7 +122,7 @@ function saveSection (elementId, async) {
 function collectSections () {
 	sections = new Array ();
 	$(".refresh").each(function(index, item) {
-		sections.push(item.title);	
+		sections.push(item.title);
   	});
 	return sections;
 }
@@ -140,7 +173,8 @@ function checkForRefresh () {
 					}
 				});
 				hideProgress();
-			});
+			}
+		);
 	}
 }
 
@@ -207,7 +241,7 @@ function connectSectionEvents(){
 
 function connectPlacementEvents () {
 	
-	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, table.articles .movetotop, table.articles .movetobottom").click(function() {
+	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, .removearticletobeplaced, table.articles .movetotop, table.articles .movetobottom").click(function() {
 		$("input.save[title=" +  this.rel + "]").addClass("unsaved");
 		$("input#saveall").addClass("unsaved");
 		startCheckCountdown();
@@ -236,15 +270,24 @@ function connectPlacementEvents () {
 	
 	$("table.articles .delete").click(function() {
 		$("#" + this.rel).removeOption(/./, true);
+		displayInsertOrDelButton($("#" + this.rel));
 		return false;
   	});
 	
 	
 	$(".insertarticle").click(function() {
 		insertArticle(this.rel);
+		displayInsertOrDelButton($("#" + this.rel));
 		return false;
   	});
-	
+
+
+	$(".removearticletobeplaced").click(function() {
+		removeArticleToBePlaced(this.rel);
+		displayInsertOrDelButton($("#" + this.rel));
+		return false;
+  	});
+
 	
 	$(".refresh").click(function() {
 		if (confirm(langReallyrefresh)) {
@@ -255,7 +298,7 @@ function connectPlacementEvents () {
 				"index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist",
 				{"tx_newspaper_mod7[section]" : this.title, "tx_newspaper_mod7[placearticleuid]" : $("#placearticleuid").val()}, 
 				false,
-				hideProgress
+				displayInsertOrDelButton, ["#" + this.title] //displayInsertOrDelButton, [{"elementId": "#" + this.title}]
 			);	
 		}
 		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");

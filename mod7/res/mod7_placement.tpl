@@ -29,15 +29,10 @@
 								{/foreach}
 							</th>
 					  	</tr>
-						{if isset($section.articlelist) && ($isde || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic")}
+						{if isset($section.articlelist) && ($isde || $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic")}
 						<tr>
 						    <td>
 								<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
-									{*
-									{foreach from=$section.articlelist item="article" key="articleKey"}
-										<option value="{$articleKey}" title="" class="">{$article}</option> 
-									{/foreach}
-									*}
 									{html_options options=$section.articlelist}			
 								</select>
 							</td>
@@ -57,10 +52,14 @@
 									{$ICON.group_tobottom}
 								</a>
 								<br />
-								{if $section.listtype != "tx_newspaper_ArticleList_Semiautomatic"}
+								{if $section.listtype|lower == "tx_newspaper_articlelist_manual"}
+									{* add insert/remove button for article to be placed, remove button for selected article *}
 									<br />
-									<a href="#" class="insertarticle" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
-										{$ICON.button_left}
+									<a {if ($section.article_placed_already)}style="display:none;" {/if}id="addbutton_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" href="#" class="insertarticle" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+										{$ICON.button_left}{* add button *}
+									</a>
+									<a {if (!$section.article_placed_already)}style="display:none;" {/if}id="delbutton_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" href="#" class="removearticletobeplaced" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+										{$ICON.button_right}{* delete article to be placed button *}
 									</a>
 									<br />
 									<a href="#" class="delete" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
@@ -77,7 +76,7 @@
 						</tr>
 						{/if}
 					</table>
-					{if $isde || $section.listtype == "tx_newspaper_ArticleList_Semiautomatic"}
+					{if $isde || $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic"}
 						<div align="right">
 							<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
 							<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />

@@ -196,14 +196,16 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				
 				private function getIcons() {
 					global $LANG;
-					return array(
+					$icon = array(
 						'group_totop' => tx_newspaper_BE::renderIcon('gfx/group_totop.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_totop', false, 14, 14)),
 						'up' => tx_newspaper_BE::renderIcon('gfx/up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_up', false, 14, 14)),
 						'down' => tx_newspaper_BE::renderIcon('gfx/down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_down', false, 14, 14)),
 						'group_tobottom' => tx_newspaper_BE::renderIcon('gfx/group_tobottom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_tobottom', false, 14, 14)),
 						'group_clear' => tx_newspaper_BE::renderIcon('gfx/group_clear.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_clear', false, 14, 14)),
 						'button_left' => tx_newspaper_BE::renderIcon('gfx/button_left.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_left', false, 14, 14)),
+						'button_right' => tx_newspaper_BE::renderIcon('gfx/button_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_right', false, 14, 14)),
 					);
+					return $icon;
 				}
 				
 				
@@ -400,8 +402,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					
 					// calculate which / how many placers to show
 					$tree = $this->calculatePlacementTreeFromSelection($selection);
+
 					// grab the data for all the placers we need to display
 					$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
+//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
 					// grab the article
 					$article = $this->getArticleByArticleId($input['placearticleuid']);
 					
@@ -446,6 +450,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 								if (($k+1) == count($tree[$i][$j])) {
 									$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
 									$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId ($tree[$i][$j][$k]['uid'], $articleId);
+									$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
 								}
 							}
 						}
@@ -486,7 +491,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							}
 						}
 					}
-					
+
 					return $result;
 				}
 				
