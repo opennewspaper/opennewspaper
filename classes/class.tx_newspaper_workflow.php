@@ -208,7 +208,7 @@ class tx_newspaper_Workflow {
 			self::getRoleTitle($old_role) . '"'; // $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
 	}
 
-	private static function getRoleTitle($role) {
+	public static function getRoleTitle($role) {
 		global $LANG;
 		switch($role) {
 			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
