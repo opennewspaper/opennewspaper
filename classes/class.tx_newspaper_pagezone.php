@@ -480,7 +480,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$copied_extra = clone $insert_extra;
 				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
 				
-				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
+				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, $recursive);
 			}
 		}
 		return $insert_extra;
