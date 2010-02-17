@@ -444,19 +444,21 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
+		t3lib_div::devlog(
+			'insertExtraAfter()', 'newspaper', 0, 
+			array(
+				'page zone' => $this->__toString(),
+				'$insert_extra' => $insert_extra,
+				'$origin_uid' => $origin_uid,
+				'$recursive' => intval($recursive)) 
+			);
+		
 		/** \todo: it should be possible to set the paragraph BEFORE calling
 		 *   	this function. otherwise a workaround is needed: insert extra to
 		 * 		article and call changeExtraArticle() on the article afterwards
 		 */
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		$insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
-		
-		t3lib_div::devlog(
-			'insertExtraAfter()', 'newspaper', 0, 
-			array('$insert_extra' => $insert_extra,
-				'$origin_uid' => $origin_uid,
-				'$recursive' => intval($recursive)) 
-			);
 		
 		/** Write Extra to DB	*/
 		$insert_extra->store();
@@ -590,7 +592,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function setInherits(tx_newspaper_Extra $extra, $inherits = true) {
 
-if(0)		t3lib_div::devlog('setInherits() - 0', 'newspaper', 0, array('extra' => $extra, 'inherits' => intval($inherits)));
 		//	Check if the Extra is really present. An exception is thrown if not.
 		$this->indexOfExtra($extra);
 
@@ -598,12 +599,9 @@ if(0)		t3lib_div::devlog('setInherits() - 0', 'newspaper', 0, array('extra' => $
 
 		$extra->setAttribute('is_inheritable', $inherits);
 		$extra->store();
-if(0)        t3lib_div::devlog('setInherits() - 1: after store', 'newspaper', 0, array('is_inheritable' => $extra->getAttribute('is_inheritable')));
 		
 		foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-if(0)            t3lib_div::devlog('setInherits() - 2: inheriting pagezone', 'newspaper', 0, array('inheriting_pagezone' => $inheriting_pagezone));
 			$copied_extra = $inheriting_pagezone->findExtraByOriginUID($extra->getOriginUid(), true);
-if(0)            t3lib_div::devlog('setInherits() - 3: copied extra', 'newspaper', 0, array('copied_extra' => $copied_extra));
 			
 			if ($copied_extra) {
 				if ($inherits == false) {	
@@ -621,7 +619,6 @@ if(0)            t3lib_div::devlog('setInherits() - 3: copied extra', 'newspaper
 					$copied_extra->setAttribute('gui_hidden', 0);
 				}
 				$copied_extra->store();
-if(0)				t3lib_div::devlog('setInherits() - 4: copied extra after store', 'newspaper', 0, array('copied_extra after store' => $copied_extra));
 				
 			}
 			else {
