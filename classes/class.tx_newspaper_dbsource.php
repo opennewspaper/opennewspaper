@@ -134,7 +134,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
-    public function getPathSegments() {
+    public function getPathSegments(tx_newspaper_SourcePath $path) {
     	throw new tx_newspaper_NotYetImplementedException();
     }
 
