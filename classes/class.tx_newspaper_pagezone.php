@@ -865,7 +865,7 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 	 * 			next Extra
 	 */
 	protected function getInsertPosition($origin_uid) {
-		t3lib_div::devlog('getInsertPosition()', 'newspaper', 0, array(
+if(0)		t3lib_div::devlog('getInsertPosition()', 'newspaper', 0, array(
 			'origin_uid' => $origin_uid
 		));
 		
