@@ -64,14 +64,23 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		try {
-		return get_class($this) . ' ' . $this->getUid() . ' (' . "\n" .
-				($this->getParentPage() instanceof tx_newspaper_Page? 
-					$this->getParentPage()->getPageType()->getAttribute('type_name'). '/': 
-					'') .
-				$this->getPageZoneType()->getAttribute('type_name') .
+			$ret = get_class($this) . ' ' . $this->getUid() . ' (' . "\n";
+			
+			$page = $this->getParentPage();
+			if ($page instanceof tx_newspaper_Page) {
+				$section = $page->getParentSection();
+				if ($section instanceof tx_newspaper_Section) {
+					$ret .= $section->getAttribute('section_name') . '/';
+				}
+				$ret .= $page->getPageType()->getAttribute('type_name'). '/';
+			}
+			$ret .= $this->getPageZoneType()->getAttribute('type_name') .
 				') ';
-		} catch (tx_newspaper_Exception $e) { return 'Duh, exception thrown: ' . $e; } 
-			   										 
+			
+			return $ret;
+		} catch (tx_newspaper_Exception $e) { 
+			return $ret . '... oops, exception thrown: ' . $e; 
+		}
 			   
 	}
 	
