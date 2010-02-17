@@ -1074,12 +1074,12 @@ if(0)        t3lib_div::devlog('getExtras('.intval($hidden_too).')', 'newspaper'
      *        inheritance mode has been set to false
 	 */
  	protected function readExtras($uid, $hidden_too = false) {
-if(0)        t3lib_div::devlog(
-            'readExtras('.(is_array($uid)? implode(', ', $uid): $uid ).', '.intval($hidden_too).')', 'nespaper', 0);
+ 	
  		$uids = tx_newspaper::selectRows(
-			'uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
+			'DISTINCT uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
 		);
 
+		t3lib_div::devlog('readExtras()', 'newspaper', 0, $uids);
 		if ($uids) {
         	foreach ($uids as $uid) {
         		try {
@@ -1171,15 +1171,7 @@ if(0)			        t3lib_div::devlog(
 
 	/// Add an Extra to the PageZone, both in RAM and persistently
 	public function addExtra(tx_newspaper_Extra $extra) {
-/*		$found = false;
-		foreach ($this->getExtras() as $present_extra) {
-			if ($extra->getExtraUid() == $present_extra->getExtraUid()) {
-				$found = true;
-				break;
-			}
-		}
-		if (!$found) 
-*/		$this->extras[] = $extra;
+		$this->extras[] = $extra;
 
 		try {
 			tx_newspaper::selectOneRow(
@@ -1188,7 +1180,6 @@ if(0)			        t3lib_div::devlog(
 				'uid_local = ' . $this->getUid() . 
 				' AND uid_foreign = ' . $extra->getExtraUid()
 			);
-//t3lib_div::devlog('addExtra query 1', 'newspaper', 0, array(tx_newspaper::$query));
 
 		} catch (tx_newspaper_EmptyResultException $e) {
 			tx_newspaper::insertRows(
@@ -1198,7 +1189,6 @@ if(0)			        t3lib_div::devlog(
 					'uid_foreign' => $extra->getExtraUid()
 				)
 			);
-//t3lib_div::devlog('addExtra query 2', 'newspaper', 0, array(tx_newspaper::$query));		
 		}
 	}
 	
