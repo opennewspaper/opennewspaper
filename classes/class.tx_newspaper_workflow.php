@@ -160,7 +160,7 @@ class tx_newspaper_Workflow {
 
 	/// checks if a workflow feature is available for the current backend user and article workflow status
 	/** \param $feature (internal) name of feature (currently: hide, publish, check, revise, place)
-	 *  \return boolean is be_user member of one of given be_groups
+	 *  \return true, if feature is availa for be_user and workflow_status of article
 	 */
 	public static function isFunctionalityAvailable($feature) {
 		$role = self::getRole();
