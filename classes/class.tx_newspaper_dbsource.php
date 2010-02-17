@@ -134,6 +134,13 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
     	throw new tx_newspaper_NotYetImplementedException();
     }
     
+    public function getPathSegments() {
+    	throw new tx_newspaper_NotYetImplementedException();
+    }
+
+	public function getTitle () {
+    	throw new tx_newspaper_NotYetImplementedException();
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	//		end of public interface											  //
