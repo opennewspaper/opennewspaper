@@ -54,8 +54,8 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 		    <td>{if $article->getAttribute('hidden')}{$lang.no}{else}{$lang.yes}{/if}</td>
 	      </tr>
 		  <tr>
-		    <th scope="row">{$lang.placed}:</th>
-		    <td>{* {if $article->getAttribute('is_placed')}{$lang.yes}{else}{$lang.no}{/if} *}</td>
+		    <th scope="row">{$lang.activerole}:</th>
+		    <td>{$article_workflow_status_title}</td>
 	      </tr>
 		</table>
 	</td>

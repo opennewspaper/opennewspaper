@@ -12,7 +12,7 @@
 			<label index="author">Autor</label>
 			<label index="editedby">Bearbeitet von</label>
 			<label index="online">Online</label>
-			<label index="placed">Platziert</label>
+			<label index="activerole">Aktiver Rolle</label>
 			<label index="section">Ressort</label>
 			<label index="article_uid">Artikel-Id</label>
 			<label index="filtersections">Ressorts filtern</label>
@@ -48,7 +48,7 @@
 			<label index="author">Autor</label>
 			<label index="editedby">Bearbeitet von</label>
 			<label index="online">Online</label>
-			<label index="placed">Platziert</label>
+			<label index="activerole">Aktive Rolle</label>
 			<label index="section">Ressort</label>
 			<label index="filtersections">Ressorts filtern</label>
 			<label index="save">Speichern</label>

@@ -180,7 +180,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					// instanciate smarty
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-					$smarty->assign('input', $input);						
+					$smarty->assign('input', $input);
+					$smarty->assign('article_workflow_status_title', tx_newspaper_workflow::getRoleTitle($article->getAttribute('workflow_status')));						
+t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 					$smarty->assign('article', $article);
 					$smarty->assign('sections', $sections);
 					$smarty->assign('sections_active', $sections_active);
@@ -234,7 +236,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function placeArticle ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
-					$article->setAttribute('is_placed', 1);
 					return true;
 				}
 				
