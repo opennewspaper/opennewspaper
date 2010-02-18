@@ -487,6 +487,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
 				
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $insert_extra->getOriginUid(), false);
+				t3lib_div::devlog('copied extra', 'newspaper', 0, $copied_extra->__toString());
+		
 			}
 		}
 		return $insert_extra;
