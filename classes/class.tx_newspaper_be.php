@@ -398,7 +398,7 @@ function findElementsByName(name, type) {
 				$extra_data[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
 			}
 		}
-
+		t3lib_div::devlog('renderBackendPageZone()', 'newspaper', 0, array('extra_data' => $extra_data));
 		$is_concrete_article = 0; // init
 		/// add current page zone and extras
 		$data[] = self::extractData($pz); // empty array if concrete article
