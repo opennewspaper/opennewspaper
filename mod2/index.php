@@ -255,11 +255,16 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				);
 			}
 			// add be_user
-			$be_user = tx_newspaper::selectOneRow(
-				'username',
-				'be_users',
-				'uid=' . ($row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'])
-			);
+			$be_user_uid = $row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'];
+			if ($be_user_uid) {
+				$be_user = tx_newspaper::selectOneRow(
+					'username',
+					'be_users',
+					'uid=' . $be_user_uid
+				);
+			} else {
+				$be_user['username'] = '---'; // no be_user stord in article
+			}
 			$row[$i]['be_user'] = $be_user['username'];  
 			// add workflowlog data to $row
 			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid']);
