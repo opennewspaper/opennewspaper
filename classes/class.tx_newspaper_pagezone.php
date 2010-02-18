@@ -372,22 +372,28 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *    parent of the current Section (this is the default)
 	 *  - Any PageZone of the same tx_newspaper_PageZoneType as \c $this which
 	 *    lies under a tx_newspaper_Page in the same tx_newspaper_Section as
-	 *    \c $this.
-	 * 
+	 *    \c $this. (Expect for page zone $this)
+	 *
+	 * 	\param $sistersOnly Return sister pagezones only, ignore parent page zone
+	 * 	  
 	 *  \return List of Page Zones to which the inheritance of \p $this can
 	 *  	change.
 	 */
-	public function getPossibleParents() {
+	public function getPossibleParents($sistersOnly=false) {
 
 		$zones = array();
 
-		$parent_zone = $this->getParentForPlacement(true);
-		if ($parent_zone) $zones[] = $parent_zone;
+		if (!$sistersOnly) {
+			$parent_zone = $this->getParentForPlacement(true);
+			if ($parent_zone) $zones[] = $parent_zone;
+		}
 		
 		$sister_pages = $this->getParentPage()->getParentSection()->getActivePages();
 		foreach ($sister_pages as $page) {
 			if ($sister_zone = $page->getPageZone($this->getPageZoneType())) {
-				$zones[] = $sister_zone;
+				if ($sister_zone->getParentPage()->getPageType() != $this->getParentPage()->getPageType()) {
+					$zones[] = $sister_zone;
+				}
 			}
 		}
 		

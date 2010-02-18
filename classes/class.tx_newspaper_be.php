@@ -457,11 +457,17 @@ function findElementsByName(name, type) {
 		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
 
 		if (!$is_concrete_article) {
-			// add possible inheritance sources fir this page zone
-			$pp = $pz->getPossibleParents();
+			// add possible inheritance sources for this page zone
+			$pp = $pz->getPossibleParents(true);
 			$page_name = array();
 			for ($i = 0; $i < sizeof($pp); $i++) {
-				$page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // can'tbe accessed with smarty
+				if (false) {
+					// this is the current page,, so remove from array
+					unset($pp[$i]);
+				} else {
+					// get name of page
+					$page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // can't be accessed with smarty
+				}
 			}
 //t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
 			$smarty->assign('INHERITANCESOURCE', $pp);
