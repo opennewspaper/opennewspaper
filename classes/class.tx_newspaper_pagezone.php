@@ -1081,8 +1081,8 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 			'DISTINCT uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
 		);
 
-		t3lib_div::devlog('readExtras()', 'newspaper', 0, $uids);
 		if ($uids) {
+			t3lib_div::devlog('readExtras()', 'newspaper', 0, $uids);
         	foreach ($uids as $uid) {
         		try {
 					//  assembling the query manually here cuz we want to ignore enable fields
