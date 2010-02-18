@@ -871,9 +871,6 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 	 * 			next Extra
 	 */
 	protected function getInsertPosition($origin_uid) {
-if(0)		t3lib_div::devlog('getInsertPosition()', 'newspaper', 0, array(
-			'origin_uid' => $origin_uid
-		));
 		
 		if ($origin_uid) {
 			/** Find the Extra to insert after. If it is not deleted on this page,
@@ -1046,7 +1043,6 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
      *        inheritance mode has been set to false
      */
     public function getExtras($hidden_too = false) {
-if(0)        t3lib_div::devlog('getExtras('.intval($hidden_too).')', 'newspaper', 0);
     	if (!$this->extras || $hidden_too) {
             $this->readExtras($this->getUid(), $hidden_too);
         }
@@ -1104,27 +1100,15 @@ if(0)        t3lib_div::devlog('getExtras('.intval($hidden_too).')', 'newspaper'
 	
 	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 		        		$this->extras[] = $extra;
-if(0)                   t3lib_div::devlog(
-                            'readExtras() succeeded',
-                            'newspaper', 0, 
-                            array('extra uid' => $uid['uid_foreign'],
-                                  $deleted));
-						} else {
+					} else {
 						/// \todo remove association table entry, but only if really deleted
-if(0)			        t3lib_div::devlog(
-				            'readExtras() failed',
-				            'newspaper', 0, 
-				            array('extra uid' => $uid['uid_foreign'],
-				                  $deleted) 
-				        );
-											}
+					}
         		} catch (tx_newspaper_EmptyResultException $e) {
         			/// \todo remove association table entry
 					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
         		}
         	}
 		} 
-		# else t3lib_div::debug("readExtras($uid): Empty result for " . tx_newspaper::$query);
  	}
  	
 
@@ -1178,24 +1162,14 @@ if(0)			        t3lib_div::devlog(
 	/// Add an Extra to the PageZone, both in RAM and persistently
 	public function addExtra(tx_newspaper_Extra $extra) {
 		$this->extras[] = $extra;
-/*
-		try {
-			tx_newspaper::selectOneRow(
-				'uid_local',
-				$this->getExtra2PagezoneTable(),
-				'uid_local = ' . $this->getUid() . 
-				' AND uid_foreign = ' . $extra->getExtraUid()
-			);
-
-		} catch (tx_newspaper_EmptyResultException $e) {
-*/			tx_newspaper::insertRows(
-				$this->getExtra2PagezoneTable(),
-				array(
-					'uid_local' => $this->getUid(),
-					'uid_foreign' => $extra->getExtraUid()
-				)
-			);
-//		}
+		
+		tx_newspaper::insertRows(
+			$this->getExtra2PagezoneTable(),
+			array(
+				'uid_local' => $this->getUid(),
+				'uid_foreign' => $extra->getExtraUid()
+			)
+		);
 	}
 	
 	
