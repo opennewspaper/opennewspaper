@@ -735,7 +735,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 		// get must-have/should-have configuration 
 		$at = $this->getArticleType();
-t3lib_div::devlog('getMissingDefaultExtras()', 'newspaper', 0, array('at' => $at));
+		
+		if ($at == null) {
+			t3lib_div::devlog('getMissingDefaultExtras(): no article ytpe set for article #' . $this->getUid(), 'newspaper', 3);
+			return array(); // no article type, no shortcuts ...
+		}
+		
 		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
 //t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras));
 
