@@ -129,7 +129,8 @@ function collectSections () {
 
 
 function closePlacement() {
-	history.back();
+	top.goToModule('txnewspaperMmain_txnewspaperM2'); 
+	return false;
 }
 
 
