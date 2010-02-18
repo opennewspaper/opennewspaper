@@ -101,8 +101,9 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	 *   -1: none: do not inherit any extra 
 	 *  uid: uid of a concrete pagezone on the same level (pagezone_page); not available for articles (articles are unique to a section)
 	 */
-	private function processInheritanceSourceChange($value) {
-t3lib_div::devlog('processInheritanceSourceChange', 'newspaper', 0, array(value => $value));
+	private function processInheritanceSourceChange($pz_uid, $new_parent_pagezone_value) {
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // create pagezone or article
+		$pz->changeParent(intval($new_parent_pagezone_value));
 		die();		
 	}
 
@@ -426,7 +427,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 
 
 		if (t3lib_div::_GP('inheritancesource_change') == 1) {
-			$this->processInheritanceSourceChange(t3lib_div::_GP('value')); 
+			$this->processInheritanceSourceChange(t3lib_div::_GP('pz_uid'), t3lib_div::_GP('value')); 
 		}
 
 		

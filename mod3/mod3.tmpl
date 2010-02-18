@@ -51,23 +51,18 @@
 			[<span title="abstract">{$DATA[i].pagezone_id}</span>|<span title="concrete">{$DATA[i].pagezone_concrete_id}</span>]
 		{/if}
 
-{*
-todo: store changes
-todo: $pz->getPossibleParents() seems to be buggy; could be an effect of corrupt data too ...
-*}
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezone_inheritancesource}: 
 		<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
 			<option value="0" {if ({$DATA[i].inherits_from == 0)}selected="selected "{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
+{* page zone being activaed for other page on nthe same level *}
 			{section name=j loop=$INHERITANCESOURCE}
-
 				{if $INHERITANCESOURCE[j]->getUid() == $DATA[i].inherits_from}
 					<option selected="selected" 
 				{else}
 					<option 
 				{/if} value="{$INHERITANCESOURCE[j]->getUid()}">{$INHERITANCESOURCENAME[j]}</option>
-
 			{/section}
 {* -1 -> no inheritance *}
 			<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
