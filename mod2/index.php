@@ -385,6 +385,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$where = array();
 		
 		$where[] = 'deleted=0';
+		$where[] = 'is_template=0';
 		$where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp(t3lib_div::_GP('range'));
 		
 		// get article fromcorrect sysfolder only
