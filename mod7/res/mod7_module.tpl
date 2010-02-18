@@ -120,33 +120,22 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 {* \todo: use consts: NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE *}
 <div id="buttons">
-	{if $article->getAttribute('workflow_status') == 0}
-		{if $input.showworkflowbuttons}
-			<input type="button" value="{$lang.tode}" class="sendtode" />
-		{else}
-			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
-		{/if}
-		{if $article->getAttribute('hidden')}
-			<input type="button" value="{$lang.putonline}" class="putonline" />
-		{else}
-			<input type="button" value="{$lang.putoffline}" class="putoffline" />
-		{/if}
-		<input type="button" value="{$lang.cancel}" class="cancel" />
-	{/if}
-	{if $article->getAttribute('workflow_status') == 1}
+	{if $workflow_permissions.place}
 		<input type="button" value="{$lang.place}" class="place" />
-		{if $input.showworkflowbuttons}
-			<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
-		{else}
-			<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
-		{/if}
-		{if $article->getAttribute('hidden')}
-			<input type="button" value="{$lang.putonline}" class="putonline" />
-		{else}
-			<input type="button" value="{$lang.putoffline}" class="putoffline" />
-		{/if}
-		<input type="button" value="{$lang.cancel}" class="cancel" />
 	{/if}
+	{if $workflow_permissions.revise}
+		<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
+	{elseif $workflow_permissions.check}
+		<input type="button" value="{$lang.todutyeditor}" class="sendtodutyeditor" />
+	{/if}
+	{if $workflow_permissions.hide}
+		<input type="button" value="{$lang.putoffline}" class="putoffline" />
+	{elseif $workflow_permissions.publish}
+		<input type="button" value="{$lang.putonline}" class="putonline" />
+	{/if}
+	<input type="button" value="{$lang.cancel}" class="cancel" />
+
+	---- <input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
 </div>
 
 <br />

@@ -182,13 +182,20 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 					$smarty->assign('input', $input);
 					$smarty->assign('article_workflow_status_title', tx_newspaper_workflow::getRoleTitle($article->getAttribute('workflow_status')));						
-t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
+//t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 					$smarty->assign('article', $article);
 					$smarty->assign('sections', $sections);
 					$smarty->assign('sections_active', $sections_active);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('ICON', $this->getIcons());
+					$smarty->assign('workflow_permissions', array(
+						'hide' => ($article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('hide'),
+						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('publish'),
+						'check' => ($article->getAttribute('workflow_status') == 1)? false : tx_newspaper_workflow::isFunctionalityAvailable('check'),
+						'revise' => ($article->getAttribute('workflow_status') == 0)? false : tx_newspaper_workflow::isFunctionalityAvailable('revise'),
+						'place' => tx_newspaper_workflow::isFunctionalityAvailable('place'),
+					));
 					$smarty->assign('workflowlog', 
 						tx_newspaper_workflow::getJavascript() .
 						tx_newspaper_workflow::renderBackend('tx_newspaper_article', $input['articleid'])
@@ -236,6 +243,7 @@ t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 				function placeArticle ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
+					$article->store();
 					return true;
 				}
 				
@@ -247,6 +255,7 @@ t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 				function sendArticleToDutyEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
+					$article->store();
 					return true;
 				}
 				
@@ -258,6 +267,7 @@ t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 				function sendArticleToEditor ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
+					$article->store();
 					return true;
 				}
 				
@@ -269,6 +279,7 @@ t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 				function putArticleOnline ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 0);
+					$article->store();
 					return true;
 				}
 				
@@ -280,6 +291,7 @@ t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 				function putArticleOffline ($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 1);
+					$article->store();
 					return true;	
 				}
 				

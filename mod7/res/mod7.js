@@ -128,14 +128,8 @@ function collectSections () {
 }
 
 
-function cancelPlacement () {
+function closePlacement() {
 	history.back();
-}
-
-
-function closePlacement (noConfirmation) {
-	// @todo: check if closePlacement differs from cancelPlacement. if not: re-factor
-	cancelPlacement();
 }
 
 
@@ -179,7 +173,10 @@ function checkForRefresh () {
 }
 
 
-function executeFinalAction (action) {
+function executeAJAX (action, close) {
+	if (close == undefined) {
+		close = true;
+	}
 	showProgress();
 	$.get(
 		"index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
@@ -187,7 +184,7 @@ function executeFinalAction (action) {
 		function (data) {
 			if (data) {
 				saveAllSections();
-				closePlacement(true); // this would hide the article lists
+				close? closePlacement() : '';
 				$("input.save").removeClass("unsaved");
 				$("input#saveall").removeClass("unsaved");
 			} else {
@@ -375,43 +372,43 @@ $(document).ready(function(){
 	
 	
 	$(".cancel").click(function() {
-		cancelPlacement();
+		closePlacement();
 		return false;
 	});
 	
 	
 	$(".sendtodutyeditor").click(function() {
-		executeFinalAction("sendarticletodutyeditor");
+		executeAJAX("sendarticletodutyeditor");
 		return false;
 	});
 	
 	
 	$(".sendtoeditor").click(function () {
-		executeFinalAction("sendarticletoeditor");
+		executeAJAX("sendarticletoeditor");
 		return false;
 	});
 	
 	
 	$(".place").click(function () {
-		executeFinalAction("placearticle");
+		executeAJAX("placearticle");
 		return false;
 	});
 	
 	
 	$(".putonline").click(function () {
-		executeFinalAction("putarticleonline");
+		executeAJAX("putarticleonline");
 		return false;
 	});
 	
 	
 	$(".putoffline").click(function () {
-		executeFinalAction("putarticleoffline");
+		executeAJAX("putarticleoffline");
 		return false;
 	});	
 	
 	
 	$(".saveall").click(function () {
-		executeFinalAction("justsave");
+		executeAJAX("justsave", false);
 		return false;
 	});
 	
