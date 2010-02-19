@@ -1,28 +1,30 @@
 {* debug *}
+{literal}
 <script language="javascript">
 
-	function getChosenExtra() {ldelim}
-		if (document.getElementById('extra_list_pooled').selectedIndex < 0) {ldelim}
+	function getChosenExtra() {
+		if (document.getElementById('extra_list_pooled').selectedIndex < 0) {
 			alert('{$MESSAGE.no_extra_selected}');
 			return false;
-		{rdelim}
+		}
  		return document.getElementById('extra_list_pooled').value;
-	{rdelim}
+	}
 
-	function extra_insert_after_POOL_copy(origin_uid, extra_class, pz_uid, paragraph, path) {ldelim}
+	function extra_insert_after_POOL_copy(origin_uid, extra_class, pz_uid, paragraph, path) {
 		extra_uid = getChosenExtra();
-		if (extra_uid != false) {ldelim}
+		if (extra_uid != false) {
 			self.location.href = "index.php?extra_insert_after_from_pool_copy=1&pooled_extra_uid=" + extra_uid + "&origin_uid=" + origin_uid + "&extra_class=" + extra_class + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&path=" + path;
-		{rdelim}
-	{rdelim}
-	function extra_insert_after_POOL_ref(origin_uid, extra_class, pz_uid, paragraph, path) {ldelim}
+		}
+	}
+	function extra_insert_after_POOL_ref(origin_uid, extra_class, pz_uid, paragraph, path) {
 		extra_uid = getChosenExtra();
-		if (extra_uid != false) {ldelim}
+		if (extra_uid != false) {
 			self.location.href = "index.php?extra_insert_after_from_pool_ref=1&pooled_extra_uid=" + extra_uid + "&origin_uid=" + origin_uid + "&extra_class=" + extra_class + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&path=" + path;
-		{rdelim}
-	{rdelim}
+		}
+	}
 
 </script>
+{/literal}
 
 
 {* render list with pooled extras *}
