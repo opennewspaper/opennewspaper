@@ -1,46 +1,47 @@
 {* debug *}
+{literal}
 <style type="text/css">
-body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {ldelim}
+body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
   overflow: auto;
-{rdelim}
-table {ldelim}
+}
+table {
   table-layout: auto; 
   border: 1px solid gray; 
   padding: 0; 
   margin: 0; 
   border-collapse: collapse; 
-{rdelim}
-td {ldelim}
+}
+td {
   vertical-align: top;
    border: 1px solid #e8e8e8;
-{rdelim}
-.bg1 {ldelim}
+}
+.bg1 {
   background-color: #f0f0f0;"
-{rdelim}
-.bg2 {ldelim}
+}
+.bg2 {
   background-color: #d0d0d0;
-{rdelim}
-.kicker {ldelim}
+}
+.kicker {
   color: #c61940;
-{rdelim}
-.comment_box {ldelim}
+}
+.comment_box {
   display: none;
   background-color: white;
-{rdelim} 
-.gray {ldelim}
+} 
+.gray {
   color: #909090;
-{rdelim}
+}
 
 
-.box {ldelim}
+.box {
   width: 300px;
   background-color: white;
   margin: 5px;
   padding: 5px;
   margin-top: 0px;
   padding-top: 0px;
-{rdelim}
-.box_hl {ldelim}
+}
+.box_hl {
   color: black;
   font-weigth: bold;
   width: 300px;
@@ -49,13 +50,12 @@ td {ldelim}
   padding: 5px;
   margin-bottom: 0px;
   padding-bottom: 0px;
-{rdelim}
-
-
-</style> 
+}
+</style>
+{/literal}
+ 
 
 <script language="javascript">
-	
 	
 	/// when section is changed the assigned default article type gets selected
 	function setDefaultArticletype(section_id) {ldelim}
@@ -102,13 +102,31 @@ td {ldelim}
 		layer.appendChild(img);
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	{rdelim}
+	
+	function processing() {ldelim}
+		img = document.createElement('img');
+		img_src = document.createAttribute('src');
+		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
+		img.setAttributeNode(img_src);
+
+		layer_style = document.createAttribute('style');
+		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
+
+		layer = document.createElement('div');
+		layer.setAttributeNode(layer_style);
+
+		layer.appendChild(img);
+		self.document.getElementsByTagName('body')[0].appendChild(layer);
+	{rdelim}
+	
+	
 
 </script>
 
 <div id="dashboard" style="display: block">
 
 
-<div class="box_hl">Wizards </div>
+<div class="box_hl">{$LABEL.wizards}</div>
 <div class="box">	
 	<a href="{$MODULE_PATH}index.php?new_article=1">{$WIZARD_ICON} New article</a><br />
 	{$WIZARD_ICON} Create image gallery (DEMO LINK)<br />
@@ -120,7 +138,7 @@ td {ldelim}
 	
 	
 	
-<div class="box_hl">Latest articles </div>
+<div class="box_hl">{$LABEL.latest_articles}</div>
 <div class="box">	
 	{$ARTICLELIST}
 </div>
@@ -128,7 +146,7 @@ td {ldelim}
 
 
 	
-<div class="box_hl">Shortcuts </div>	
+<div class="box_hl">{$LABEL.shortcuts}</div>	
 <div class="box">	
 	{section name=i loop=$SHORTCUT}
 	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT_BE_ICON} {$SHORTCUT[i].description}</a><br />
@@ -137,7 +155,7 @@ td {ldelim}
 <br />
 
 
-<div class="box_hl">Manage user comments (DEMO ONLY)</div>	
+<div class="box_hl">{$LABEL.manage_usercomments}</div>	
 <div class="box">		
 	{$MANAGE_USERCOMMENTS_ICON} US-Klimapolitik (Hans, 12.06.2009, 12:45:23)</a><br />
 	{$MANAGE_USERCOMMENTS_ICON} Kitas (Petra, 12.06.2009, 12:43:23)</a><br />
@@ -147,13 +165,15 @@ td {ldelim}
 <br />
 	
 	
-<div class="box_hl">Newspaper functions </div>	
+<div class="box_hl">{$LABEL.newspaper_functions}</div>	
 <div class="box">		
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Publishing workflow</a><br />
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
+	<a href="index.php?tx_newspaper_mod5%5Bajaxcontroller%5D=change_role&tx_newspaper_mod5%5Bnew_role%5D={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: {$ROLE.current})<br />
 </div>
 <br />
 
+{*
 <div class="box_hl">Logged in users (DEMO ONLY)</div>	
 <div class="box">		
 	meier (CvD)<br />
@@ -162,6 +182,7 @@ td {ldelim}
 	fischer (Praktikant)<br />
 </div>
 <br />
+*}
 
 </div>
 

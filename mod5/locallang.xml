@@ -14,6 +14,16 @@
 			<label index="label_articletype">Article type</label>
 			<label index="label_back_to_dashboard">Back to Dashboard</label>
 			<label index="label_error_browsing">Error browsing source</label>
+			<label index="label_role">Role</label>
+			<label index="label_start_wizard">Wizard</label>
+			<label index="label_usercomments">User comments</label>
+			<label index="label_shortcut_typo3">Shortcut</label>
+			<label index="label_shortcut_newspaper">Go to ...</label>
+			<label index="label_wizards">Wizards</label>
+			<label index="label_latest_articles">Latzest articles</label>
+			<label index="label_shortcuts">Shortcuts</label>
+			<label index="label_manage_usercomments">Manage user comments (DEMO ONLY)</label>
+			<label index="label_newspaper_functions">Newspaper functions</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Start</label>
