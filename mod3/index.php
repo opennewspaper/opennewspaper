@@ -767,7 +767,15 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		} 
 		if ($this->section_id) {
 			$s = new tx_newspaper_Section(intval($this->section_id));
-			if (!$s->isValid()) {
+			
+			try {	
+				$isValidSection = $s->isValid();
+			} catch ( tx_newspaper_EmptyResultException $e) {
+				t3lib_div::devlog('readUidList() - invalid section', 'newspaper', 3, array('section uid' => $this->section_id));
+				$isValidSection = false; // for some reason the section stored in the be_user isn't valid
+			} 
+			
+			if (!$isValidSection) {
 				// no valid section, nothing to show ...
 				$this->section_id = 0; 
 			}
@@ -782,7 +790,16 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 				// check if page with stored page type is available for given section
 				$this->page_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"); // read from be user
 				$pt = new tx_newspaper_PageType(intval($this->page_type_id));
-				if ($pt->isValid()) {
+				
+				try {	
+					$isValidPageType = $pt->isValid();
+				} catch ( tx_newspaper_EmptyResultException $e) {
+					t3lib_div::devlog('readUidList() - invalid pagetype', 'newspaper', 3, array('pagetype uid' => $this->page_type_id));
+					$isValidPageType = false; // for some reason the page type stored in the be_user isn't valid
+				} 
+				
+				
+				if ($isValidPageType) {
 					/// get page with given page type
 					for ($i = 0; $i < sizeof($active_pages); $i++) {
 						if ($active_pages[$i]->getPageType()->getUid() == $this->page_type_id) {
@@ -809,7 +826,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 //debug(t3lib_div::view_array($p));
 
 
-		/// processpage zone type id 
+		/// process pagezone type id 
 		if ($this->page_id) {
 			$active_pagezones = $p->getPageZones(); /// get list of available page zones for given page
 //debug(t3lib_div::view_array($active_pagezones[0]));
@@ -817,7 +834,15 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 				// check if page zone with stored pagezone type is available for given page
 				$this->pagezone_type_id = $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id"); // read from be user
 				$pzt = new tx_newspaper_PageZoneType(intval($this->pagezone_type_id));
-				if (is_array($active_pagezones) && $pzt->isValid()) { ///  if no active pagezone is available, true is returned!
+				
+				try {	
+					$isValidPageZoneType = $pzt->isValid();
+				} catch ( tx_newspaper_EmptyResultException $e) {
+					t3lib_div::devlog('readUidList() - invalid pagezonetype', 'newspaper', 3, array('pagezonetype uid' => $this->pagezone_type_id));
+					$isValidPageZoneType = false; // for some reason the pagezonetype stored in the be_user isn't valid
+				} 
+				
+				if (is_array($active_pagezones) && $isValidPageZoneType) { ///  if no active pagezone is available, true is returned!
 					/// get pagezone with given pagezone type
 					for ($i = 0; $i < sizeof($active_pagezones); $i++) {
 						if ($active_pagezones[$i]->getPageZoneType()->getUid() == $this->pagezone_type_id) {
