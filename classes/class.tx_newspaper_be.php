@@ -366,7 +366,7 @@ function findElementsByName(name, type) {
 			
 			$data[] = $extra_data;
 
-			t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra data' => $extra_data));
+			t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra' => $extra, 'extra data' => $extra_data));
 		}
 		return $data;
 	} 
