@@ -26,7 +26,6 @@
 			<label index="toeditor">Zurück zum Redakteur</label>
 			<label index="yes">ja</label>
 			<label index="no">nein</label>
-			<label index="preview">Vorschau</label>
 			<label index="refresh">Aktualisieren</label>
 			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
 			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
@@ -61,7 +60,6 @@
 			<label index="toeditor">Zurück zum Redakteur</label>
 			<label index="yes">ja</label>
 			<label index="no">nein</label>
-			<label index="preview">Vorschau</label>
 			<label index="refresh">Aktualisieren</label>
 			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
 			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>

@@ -40,14 +40,11 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 		<table width="300" border="0" cellspacing="0" cellpadding="0">
 		  <tr>
 		    <th scope="row">{$lang.article_uid}:</th>
-		    <td>{$article->getUid()}</td>
+		    <td>{$article->getUid()} <a href="#" onclick="return false;" id="preview">{$ICON.preview}</a> </td>
 		  </tr>
 		  <tr>
 		    <th scope="row">{$lang.editedby}:</th>
 		    <td>{$backenduser.username}</td>
-		    <td rowspan="3" valign="top">
-		    	<input type="button" id="preview" value="{$lang.preview}" />
-			</td>
 		  </tr>
 		  <tr>
 		    <th scope="row">{$lang.online}:</th>
