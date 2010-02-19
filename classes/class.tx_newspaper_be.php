@@ -319,7 +319,7 @@ function findElementsByName(name, type) {
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
-		t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra' => $extra);
+		t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra' => $extra));
 		
 		$data = array();
 		
