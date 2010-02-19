@@ -15,7 +15,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
-		parent::setUp();
+        parent::setUp();        
 	}
 
 	function tearDown() {
@@ -36,14 +36,12 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_createExtra() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
+        $temp = array();
+        foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class();
 			$this->assertTrue(is_object($temp));
 			$this->assertTrue($temp instanceof tx_newspaper_Extra);
 			$this->assertTrue($temp instanceof $extra_class);
-			if ($this->attributes_to_test['title'][$extra_class])
-				$this->assertEquals($temp->getTitle(),
-								    $this->attributes_to_test['title'][$extra_class]);
 			if ($this->attributes_to_test['modulename'][$extra_class])
 				$this->assertEquals($temp->getModuleName(),
 									$this->attributes_to_test['modulename'][$extra_class]);
@@ -51,47 +49,48 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	public function test_getAttributeUid() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$this->assertEquals(1, $temp->getAttribute('uid'), 'uid passed in on object creation does not match with the attribute uid.');
+		foreach($this->fixture->getExtraUids() as $uid) {
+			$temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+			$this->assertEquals($uid, $temp->getAttribute('uid'), 'uid passed in on object creation does not match with the attribute uid.');
 		}
 	}
 	
 	public function test_getAttribute() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);			
-			if($this->attributes_to_test['title'][$extra_class]) {
-				$this->assertEquals($this->attributes_to_test['title'][$extra_class], $temp->getAttribute('title'));
-			}
-		}
+        $temp = array();
+        foreach($this->fixture->getExtraUids() as $uid) {
+            $temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+        }
 
+        foreach($this->fixture->extra_data as $i => $value) {
+            $this->assertEquals($this->fixture->extra_data[$i]['caption'], $temp[$i]->getAttribute('caption'));
+        }
+		
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
-		$temp->getAttribute('es gibt mich nicht, schmeiss ne exception!');
+		$temp[0]->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
 
 	public function test_setAttribute() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$time = time();
-			$temp->setAttribute('crdate', $time);
-			$this->assertEquals($temp->getAttribute('crdate'), $time);
-		}
+		$temp = array();
+        foreach($this->fixture->getExtraUids() as $uid) {
+            $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+            $time = time();
+			$extra->setAttribute('crdate', $time);
+			$this->assertEquals($extra->getAttribute('crdate'), $time);
+        }
 	}
 
 	public function test_isRegisteredExtra() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($temp));
-		}
-	}	
+        $uid = $this->fixture->getExtraUid();		
+        $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+        $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
+	}
 
 	public function test_registerExtra() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			tx_newspaper_Extra::registerExtra($temp);
-			$this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($temp));
-		}
-	}	
+		$uid = $this->fixture->getExtraUid();
+        $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+        tx_newspaper_Extra::registerExtra($extra);
+        $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
+	}
 
 	public function test_render() {
 		
@@ -108,17 +107,17 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}	
 
 	public function test_store() {
-		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
+		foreach($this->fixture->getExtraUids() as $uid) {
+			$temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 			$uid = $temp->store();
 			t3lib_div::debug('store() ok');
-			$this->assertEquals($uid, $temp->getUid());
+			$this->assertEquals($uid, $temp->getUid(), "id is wrong");
 
 			/// check that record in DB equals data in memory
 			$data = tx_newspaper::selectOneRow(
 				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
 			foreach ($data as $key => $value) {
-				$this->assertEquals($temp->getAttribute($key), $value);
+				$this->assertEquals($temp->getAttribute($key), $value, $key." has wrong value");
 			}
 		
 			/// change an attribute, store and check
@@ -199,7 +198,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_getTable() {
 		foreach(array_merge($this->extras_to_test, 
 							$this->extras_to_test_additionally) as $extra_class) {
-			$temp = new $extra_class(1);
+			$temp = new $extra_class(1);            
 			$this->assertEquals(strtolower($extra_class), $temp->getTable());
 		}
 	}

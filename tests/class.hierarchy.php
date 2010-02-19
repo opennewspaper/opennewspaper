@@ -110,6 +110,11 @@ class tx_newspaper_hierarchy {
 	public function getExtraUid() {
 		return $this->extra_uids[0];
 	}
+
+    public function getExtraUids() {
+        return $this->extra_uids;
+    }
+
 	
 	public function getPageUid() {
 		return $this->page_uids[0];
@@ -204,16 +209,14 @@ class tx_newspaper_hierarchy {
 			$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($pagezone_uid);
 
 			foreach($this->extra_data as $i => $extra) {
-				$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
-				$this->extra_uids[] = $extra_uid;
-
+				$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);                
 				$extra_object = new $this->concrete_extra_table($extra_uid);
 				tx_newspaper::updateRows(
 					$this->extra_table, 
 					'uid = ' . $extra_object->getExtraUid(), 
 					array(
 						'position' => $this->extra_pos[$i],
-						'origin_uid' => $extra_object->getExtraUid(),
+						'origin_uid' => $extra_object->getExtraUid(),                        
 					)
 				);
 			
@@ -223,6 +226,7 @@ class tx_newspaper_hierarchy {
 						'uid_local' => $pagezone->getUid(),
 						'uid_foreign' => $extra_object->getExtraUid()
 					));
+                $this->extra_uids[] = $extra_object->getExtraUid();
 			}
 		}
 	}
@@ -337,7 +341,7 @@ class tx_newspaper_hierarchy {
 	private $articlelist_table = 'tx_newspaper_articlelist';
 	private $articlelist_id = null;
 	private $abstract_articlelist_id = null;
-	private $articlelistauto_table = 'tx_newspaper_articlelist_auto';
+	private $articlelistauto_table = ' 	tx_newspaper_articlelist_semiautomatic';
 	private $articlelist_data = array(
 		'pid' => '2827',
 		'tstamp' => '1234567890',
@@ -355,11 +359,6 @@ class tx_newspaper_hierarchy {
 		'tstamp' => '1234567890',
 		'crdate' => '1234567890',
 		'cruser_id' => '1',
-		'sorting' => '1024',
-		'deleted' => '0',
-		'hidden' => '0',
-		'starttime' => '0',
-		'endtime' => '0',
 		);
 	
 	private $pagetype_table = 'tx_newspaper_pagetype';
@@ -469,10 +468,11 @@ class tx_newspaper_hierarchy {
 	/// The Page Zones in the hierarchy as a flat array of objects
 	private $pagezones = array();
 	
-	private $extra_table = 'tx_newspaper_extra';
+	private $extra_uids = array();
+    private $extra_table = 'tx_newspaper_extra';
 	private $concrete_extra_table = 'tx_newspaper_extra_image';
 	private $extra2pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';	
-	private $extra_data = array(
+	public $extra_data = array(
 		array(
 			'pid' => 2573,
 			'tstamp' => 1234567890,

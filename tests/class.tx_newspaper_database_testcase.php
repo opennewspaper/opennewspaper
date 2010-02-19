@@ -13,10 +13,10 @@
  		function setUp() {
  			$this->createDatabase();
  			$this->cleanDatabase();
-			$this->useTestDatabase();
- 			$this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.basetables.sql');
+			$this->useTestDatabase();             
+ 			$this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
  			$this->importExtensions(array('newspaper'));
- 			$this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
+// 			$this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
 			$this->fixture = new tx_newspaper_hierarchy();
  		}
  		
@@ -56,6 +56,26 @@
 			$content = implode($statements);
 			return $content;
 		}
+
+     /**
+	 * Drops tables in test database
+	 *
+	 * @return void
+	 */
+	protected function clearDatabase() {
+		$db = $GLOBALS['TYPO3_DB'];
+		$databaseNames = $db->admin_get_dbs();
+
+		if (in_array($this->testDatabase, $databaseNames)) {
+			$db->sql_select_db($this->testDatabase);
+
+			// drop all tables
+			$tables = $this->getDatabaseTables();
+			foreach ($tables as $tableName) {
+				$db->admin_query('TRUNCATE TABLE '. $tableName);
+			}
+		}
+	}
 		
 		/**
 		 * Because this class lives inside the folder Tests it is listed as a tests by tx_phpunit.
@@ -66,7 +86,7 @@
 		}
 		
  		
- 		protected $fixture = null ;		//< Testdata
+ 		protected  $fixture = null ;		//< Testdata
  		
  }
 ?>
