@@ -110,6 +110,9 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 					die($this->load_article($input));
 				case 'import_article' :
 					die($this->import_article($input));
+				case 'change_role': 
+					$this->changeRole($input); // no die() needed, just change to tole and re-render the module
+				break;
 			}				
 
 			$this->checkIfNewArticle();
@@ -203,19 +206,33 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$label['new_article_typo3'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false);
 		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
 		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
+		$label['wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_wizards', false);
+		$label['latest_articles'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_latest_articles', false);
+		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcuts', false);
+		$label['manage_usercomments'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_manage_usercomments', false);
+		$label['newspaper_functions'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_newspaper_functions', false);
 	
-	
-/// \todo: title flags ...	
-		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
-		$smarty->assign('MANAGE_USERCOMMENTS_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
-		$smarty->assign('SHORTCUT_BE_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
-		$smarty->assign('SHORTCUT_NEWSPAPER_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
+		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
+		$smarty->assign('MANAGE_USERCOMMENTS_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_usercomments', false)));
+		$smarty->assign('SHORTCUT_BE_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_typo3', false)));
+		$smarty->assign('SHORTCUT_NEWSPAPER_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_newspaper', false)));
+		$smarty->assign('ROLE_ICON', tx_newspaper_BE::renderIcon('gfx/i/be_users.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_role', false)));
 	
 	
 		$message['demo'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_demo', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
+
+		/// newspaper roles
+		$role = tx_newspaper_workflow::getRole();
+		$changeto_value = ($role == NP_ACTIVE_ROLE_DUTY_EDITOR)? NP_ACTIVE_ROLE_EDITORIAL_STAFF : NP_ACTIVE_ROLE_DUTY_EDITOR; // 
+		$smarty->assign('ROLE', array(
+			'current' => tx_newspaper_workflow::getRoleTitle($role),
+			'changeto' => tx_newspaper_workflow::getRoleTitle($changeto_value),
+			'changeto_value' => $changeto_value 
+		));
+
 
 		/// latest articles		
  		$smarty_article = new tx_newspaper_Smarty();
@@ -462,6 +479,13 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		header('Location: ' . $url);				
 		
 	}
+	
+	
+	private function changeRole(array $input) {
+t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
+		tx_newspaper_workflow::changeRole(intval($input['new_role']));
+	}
+	
 	
 }
 

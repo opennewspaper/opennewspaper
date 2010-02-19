@@ -156,6 +156,31 @@ class tx_newspaper_Workflow {
 		}
 		return ($role == 0);
 	}
+	
+	
+	/// Changes the newspaper role of the be_user
+	/** 
+	 * The role of the be_user will be set to the given new role in $new_role.
+	 * The filter for the moderation list is modified to filter the list according to the new role.
+	 * \param $new_role value for the new role to change to
+	 * \return true if chnage was successful, else false
+	 */
+	public static function changeRole($new_role) {
+		if (!isset($GLOBALS['BE_USER']->user)) {
+			return false;
+		}
+		// store new role in be_user
+		tx_newspaper::updateRows(
+			'be_users',
+			'uid=' . $GLOBALS['BE_USER']->user['uid'],
+			 array('tx_newspaper_role' => intval($new_role))
+		);
+		$GLOBALS['BE_USER']->user['tx_newspaper_role'] = intval($new_role); // kind of a hack, but this way the new value is ready to use at once
+		$storedFilter = unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter'));
+		$storedFilter['role'] = intval($new_role);
+		$GLOBALS['BE_USER']->pushModuleData("tx_newspaper/mod2/index.php/filter", serialize($storedFilter));
+		return true;  
+	}
 
 
 	/// checks if a workflow feature is available for the current backend user and article workflow status
