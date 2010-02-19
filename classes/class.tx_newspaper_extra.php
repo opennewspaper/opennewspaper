@@ -567,7 +567,10 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *  \return int the origin uid of an extra (if 0 return abstract extra uid)
 	 */ 
 	public function getOriginUid() {
-		t3lib_div::devlog('getOriginUid()', 'newspaper', 0, array('uid' => $this->getExtraUid(), 'origin uid' => $this->getAttribute('origin_uid')));
+		t3lib_div::devlog(
+			'getOriginUid()', 'newspaper', 0, 
+			array('uid' => $this->getExtraUid(), 'origin uid' => $this->getAttribute('origin_uid'),
+				'attributes' => $this->attributes, 'extra attributes' => $this->extra_attributes));
 		if ($this->getAttribute('origin_uid'))
 			return intval($this->getAttribute('origin_uid'));
 		else
