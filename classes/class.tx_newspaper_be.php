@@ -320,11 +320,16 @@ function findElementsByName(name, type) {
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
 		$data = array();
+		
 		for ($i = 0; $i < sizeof($extra); $i++) {
+			
+			//	don't display extras for which attribute gui_hidden is set
+			if ($extra[$i]->getAttribute('gui_hidden')) continue;
+			
 			$extra_data = array(
 				'extra_type' => $extra[$i]->getTitle(),
 				'uid' => $extra[$i]->getExtraUid(),
-				'title' => $extra[$i]->getDescription(), //$extra[$i]->getAttribute('title'),
+				'title' => $extra[$i]->getDescription(), 
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
 				'concrete_table' => $extra[$i]->getTable(),
@@ -359,12 +364,10 @@ function findElementsByName(name, type) {
 			// render html dropdown and add to array
 			$extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);
 			
-			//	don't display extras for which attribute gui_hidden is set
-			if (!$extra[$i]->getAttribute('gui_hidden')) {
-				$data[] = $extra_data;
-			}
+			$data[] = $extra_data;
+
+			t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra data' => $extra_data));
 		}
-		t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'data' => $data));
 		return $data;
 	} 
 	
