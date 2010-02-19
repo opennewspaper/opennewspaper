@@ -873,8 +873,8 @@ t3lib_div::devlog('readUidList()', 'newspaper', 0, array('pagetype uid' => $this
 		/// store ids for be user for later use
 t3lib_div::devlog('readUidList() data stored in be_users', 'newspaper', 0, array('section uid' => $this->section_id, 'pagetype uid' => $this->page_type_id, 'pagezonetype uid' => $this->pagezone_type_id));
 		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/section_id", $this->section_id);
-		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_id", $this->page_type_id);
-		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_id", $this->pagezone_type_id);		
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/page_type_id", $this->page_type_id);
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/pagezone_type_id", $this->pagezone_type_id);		
 		
 	}
 	
