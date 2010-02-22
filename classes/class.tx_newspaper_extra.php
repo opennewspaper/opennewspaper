@@ -269,12 +269,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			$this->extra_attributes = $this->getExtraUid()? 
 				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
 				array();
-			t3lib_div::devlog('getAttribute(): read extra attributes ('.$this->getExtraUid().')', 
-				'newspaper', 0,
-				array(
-					'extra_attributes' => $this->extra_attributes,
-					'stack backtrace'  => debug_backtrace()
-				));
 		}
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
@@ -574,10 +568,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *  \return int the origin uid of an extra (if 0 return abstract extra uid)
 	 */ 
 	public function getOriginUid() {
-		t3lib_div::devlog(
-			'getOriginUid(' . $this->getExtraUid() . ')', 'newspaper', 0, 
-			array('uid' => $this->getExtraUid(), 'origin uid' => $this->getAttribute('origin_uid'),
-				'attributes' => $this->attributes, 'extra attributes' => $this->extra_attributes));
 		if ($this->getAttribute('origin_uid'))
 			return intval($this->getAttribute('origin_uid'));
 		else
