@@ -994,9 +994,10 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 	protected function getParentPageZoneOfSameType() {
 		$current_page = $this->getParentPage();
 		while ($current_page) {
-			t3lib_div::devlog('getParentPageZoneOfSameType()', 'np', 0, array('page' => $current_page));
+			t3lib_div::devlog('gPPZOST: page', 'np', 0, $current_page);
 			/** First get parent section of the current page...	*/
 			$parent_section = $current_page->getParentSection();
+			t3lib_div::devlog('gPPZOST: section', 'np', 0, $parent_section);
 			if ($parent_section instanceof tx_newspaper_Section) {
 				/** ... then get parent section of the current section.	*/
 				$parent_section = $parent_section->getParentSection();
@@ -1004,6 +1005,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 				//	Root of section tree reached
 				return null;
 			}
+			t3lib_div::devlog('gPPZOST: parent section', 'np', 0, $parent_section);
 			
 			if (!$parent_section instanceof tx_newspaper_Section) {
 				//	Root of section tree reached
