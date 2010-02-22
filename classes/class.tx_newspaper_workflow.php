@@ -297,13 +297,13 @@ class tx_newspaper_Workflow {
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function logWorkflow($status, $table, $id, &$fieldArray) {
 		global $LANG;
-t3lib_div::devlog('logWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
+//t3lib_div::devlog('logWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
-t3lib_div::devlog('1', 'np', 0);
+
 			/// check if a newspaper record action should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
-t3lib_div::devlog('2', 'np', 0);
+
 				self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
 
 //debug($GLOBALS['BE_USER']);				
@@ -312,7 +312,6 @@ t3lib_div::devlog('2', 'np', 0);
 				/// check if auto log entry for hiding/publishing newspaper record should be written
 				$current_time = time(); // make sure all log entries written in this run have the same time
 				if (array_key_exists('hidden', $fieldArray)) {
-t3lib_div::devlog('3', 'np', 0);
 					if ($table == 'tx_newspaper_article') {
 						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_published', false);
 					} else {
@@ -333,7 +332,6 @@ t3lib_div::devlog('3', 'np', 0);
 				
 				/// check if auto log entry for change of workflow status should be written (article only)
 				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
-t3lib_div::devlog('4', 'np', 0);
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
@@ -349,7 +347,6 @@ t3lib_div::devlog('4', 'np', 0);
 				
 				/// check if manual comment should be written (this log record should always be written LAST)
 				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
-t3lib_div::devlog('5', 'np', 0);
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
@@ -362,7 +359,6 @@ t3lib_div::devlog('5', 'np', 0);
 						'comment' => $_REQUEST['workflow_comment']
 					));
 				}
-t3lib_div::devlog('6', 'np', 0);
 /// \todo: if ($redirectToPlacementModule) { ...}
 			}
 		}
