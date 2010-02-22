@@ -382,16 +382,40 @@ $(document).ready(function(){
 		executeAJAX("sendarticletodutyeditor");
 		return false;
 	});
+	$(".sendtodutyeditorhide").click(function() {
+		executeAJAX("sendarticletodutyeditorhide");
+		return false;
+	});
+	$(".sendtodutyeditorpublish").click(function() {
+		executeAJAX("sendarticletodutyeditorpublish");
+		return false;
+	});
 	
 	
 	$(".sendtoeditor").click(function () {
 		executeAJAX("sendarticletoeditor");
 		return false;
 	});
+	$(".sendtoeditorhide").click(function () {
+		executeAJAX("sendarticletoeditorhide");
+		return false;
+	});
+	$(".sendtoeditorpublish").click(function () {
+		executeAJAX("sendarticletoeditorpublish");
+		return false;
+	});
 	
 	
 	$(".place").click(function () {
 		executeAJAX("placearticle");
+		return false;
+	});
+	$(".placehide").click(function () {
+		executeAJAX("placearticlehide");
+		return false;
+	});
+	$(".placepublish").click(function () {
+		executeAJAX("placearticlepublish");
 		return false;
 	});
 	

@@ -121,23 +121,64 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 {* \todo: use consts: NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE *}
 <div id="buttons">
-	<input type="hidden" name="tx_newspaper_mod7[workflow_status_ORG]" value="{$article->getAttribute('workflow_status')}" />
+<input type="hidden" name="tx_newspaper_mod7[workflow_status_ORG]" value="{$article->getAttribute('workflow_status')}" />
+<table>
+<tr>
+<td>
 	{if $workflow_permissions.place}
 		<input type="button" value="{$lang.place}" class="place" />
 	{/if}
+</td>
+<td>
 	{if $workflow_permissions.revise}
 		<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
 	{elseif $workflow_permissions.check}
 		<input type="button" value="{$lang.todutyeditor}" class="sendtodutyeditor" />
 	{/if}
+</td>
+<td></td>
+<td>
+	<input type="button" value="{$lang.cancel}" class="cancel" />
+
+	---- <input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+
+</td>
+</tr>
+<tr>
+<td>
+	{if $workflow_permissions.place}
+		{if $workflow_permissions.hide}
+			<input type="button" value="{$lang.placehide}" class="placehide" />
+		{elseif $workflow_permissions.publish}
+			<input type="button" value="{$lang.placepublish}" class="placepublish" />
+		{/if}
+	{/if}
+</td>
+<td>
+	{if $workflow_permissions.revise}
+		{if $workflow_permissions.hide}
+			<input type="button" value="{$lang.toeditorhide}" class="sendtoeditorhide" />
+		{elseif $workflow_permissions.publish}
+			<input type="button" value="{$lang.toeditorpublish}" class="sendtoeditorpublish" />
+		{/if}
+	{elseif $workflow_permissions.check}
+		{if $workflow_permissions.hide}
+			<input type="button" value="{$lang.todutyeditorhide}" class="sendtodutyeditorhide" />
+		{elseif $workflow_permissions.publish}
+			<input type="button" value="{$lang.todutyeditorpublish}" class="sendtodutyeditorpublish" />
+		{/if}
+	{/if}
+</td>
+<td>
 	{if $workflow_permissions.hide}
 		<input type="button" value="{$lang.putoffline}" class="putoffline" />
 	{elseif $workflow_permissions.publish}
 		<input type="button" value="{$lang.putonline}" class="putonline" />
 	{/if}
-	<input type="button" value="{$lang.cancel}" class="cancel" />
-
-	---- <input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+</td>
+<td></td>
+</tr>
+</table>	
 </div>
 
 <br />

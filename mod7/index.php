@@ -98,11 +98,29 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							case 'placearticle':
 								die($this->placeArticle($input));
 							break;
+							case 'placearticlehide':
+								die($this->placeArticle($input, array('hide' => true)));
+							break;
+							case 'placearticlepublish':
+								die($this->placeArticle($input, array('publish' => true)));
+							break;
 							case 'sendarticletodutyeditor':
 								die($this->sendArticleToDutyEditor($input));
 							break;
+							case 'sendarticletodutyeditorhide':
+								die($this->sendArticleToDutyEditor($input, array('hide' => true)));
+							break;
+							case 'sendarticletodutyeditorpublish':
+								die($this->sendArticleToDutyEditor($input, array('publish' => true)));
+							break;
 							case 'sendarticletoeditor':
 								die($this->sendArticleToEditor($input));
+							break;
+							case 'sendarticletoeditorhide':
+								die($this->sendArticleToEditor($input, array('hide' => true)));
+							break;
+							case 'sendarticletoeditorpublish':
+								die($this->sendArticleToEditor($input, array('publish' => true)));
 							break;
 							case 'putarticleonline':
 								die($this->putArticleOnline($input));
@@ -245,14 +263,22 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function placeArticle($input) {
+				function placeArticle($input, array $statusHidePublish=array()) {
+t3lib_div::devlog('hp' ,'np', 0, $statusHidePublish);
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
-					$article->store();
+					
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_NONE; // \todo: well, this is a hack (simulating a submit)
-					$this->writeLog($input, array(
-						'place' => true 
-					));
+					$log['place'] = true;
+					if (isset($statusHidePublish['hide'])) {
+						$log['hidden'] = true;
+						$article->setAttribute('hidden', true);
+					} elseif (isset($statusHidePublish['publish'])) {
+						$log['hidden'] = false;
+						$article->setAttribute('hidden', false);
+					}
+					$article->store();
+					$this->writeLog($input, $log);
 					return true;
 				}
 				
@@ -260,15 +286,23 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function sendArticleToDutyEditor($input) {
+				function sendArticleToDutyEditor($input, array $statusHidePublish=array()) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
-					$article->store();
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; // \todo: well, this is a hack ...
-					$this->writeLog($input, array(
+					$log = array(
 						'workflow_status' => NP_ACTIVE_ROLE_DUTY_EDITOR,
 						'workflow_status_ORG' => $input['workflow_status_ORG'] 
-					));
+					);
+					if (isset($statusHidePublish['hide'])) {
+						$log['hidden'] = true;
+						$article->setAttribute('hidden', true);
+					} elseif (isset($statusHidePublish['publish'])) {
+						$log['hidden'] = false;
+						$article->setAttribute('hidden', false);
+					}
+					$article->store();					
+					$this->writeLog($input, $log);
 					return true;
 				}
 				
@@ -276,15 +310,23 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function sendArticleToEditor($input) {
+				function sendArticleToEditor($input, array $statusHidePublish=array()) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
-					$article->store();
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_EDITORIAL_STAFF; // \todo: well, this is a hack ...
-					$this->writeLog($input, array(
+					$log = array(
 						'workflow_status' => NP_ACTIVE_ROLE_EDITORIAL_STAFF,
 						'workflow_status_ORG' => $input['workflow_status_ORG']
-					));
+					);
+					if (isset($statusHidePublish['hide'])) {
+						$log['hidden'] = true;
+						$article->setAttribute('hidden', true);
+					} elseif (isset($statusHidePublish['publish'])) {
+						$log['hidden'] = false;
+						$article->setAttribute('hidden', false);
+					}
+					$article->store();
+					$this->writeLog($input, $log);
 					return true;
 				}
 				
