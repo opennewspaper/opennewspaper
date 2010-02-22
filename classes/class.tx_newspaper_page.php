@@ -475,6 +475,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		 	}
 		 	
 		 	foreach ($parent_section->getSubPages() as $page) {
+			 	t3lib_div::devlog('gPPOST: parent->subPage', 'np', 0, $page);
+			 	if (!$page instanceof tx_newspaper_Page) {
+				 	t3lib_div::devlog('gPPOST: not a page!', 'np', 1);
+			 		continue;
+			 	}
 			 	if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
 				 	return $page;
 			 	}
