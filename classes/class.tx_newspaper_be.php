@@ -25,9 +25,6 @@ class tx_newspaper_BE {
 	private static $backend_files_added = false; // are js/css files added for backend
 
 
-
-
-
 	/// backend: render list of pages and pagezones for section
 	/// either called by userfunc in be or ajax
 	public static function renderPagePageZoneList($PA, $fObj=null) {
@@ -172,8 +169,7 @@ class tx_newspaper_BE {
 		$html .= '</select>';
 		return $html;
 	}
-	
-	
+		
 	/// itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
 	function addInheritancePageDropdownEntries(&$params, &$pObj) {
 		$this->readInheritancePageItems($params);
@@ -191,11 +187,6 @@ class tx_newspaper_BE {
 		}
 
 	}
-
-
-
-
-
 
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
@@ -306,15 +297,6 @@ function findElementsByName(name, type) {
 		return $html;
 	}
 
-
-
-
-
-
-
-
-
-
 /// \todo: move to pagezone
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
@@ -372,23 +354,15 @@ function findElementsByName(name, type) {
 		}
 		return $data;
 	} 
-	
-
-
-
-
 
 /// function to render extras (article or pagezone_page)
 /// \todo: move locallang and smarty templates from mod3 to res/be/...
-
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
 //t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
 		return self::renderBackendPageZone($article, false);
 	}
-
-
 
 	public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
 		global $LANG;

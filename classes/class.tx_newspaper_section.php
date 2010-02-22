@@ -172,7 +172,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$list = tx_newspaper::selectOneRow(
 				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
 			);
-			$this->articlelist = tx_newspaper_ArticleList_Factory::create($list['uid'], $this);
+			$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create($list['uid'], $this);
 		}
 
 		return $this->articlelist; 

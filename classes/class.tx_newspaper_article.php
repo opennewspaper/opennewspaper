@@ -379,7 +379,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 												   'uid = ' . $extra['uid_foreign']);
 					if (TYPO3_MODE != 'BE' && !$show['show_extra']) continue; 
 
-					$new_extra = tx_newspaper_Extra_Factory::create($extra['uid_foreign']);
+					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($extra['uid_foreign']);
 					$this->extras[] = $new_extra;
 				} catch(tx_newspaper_EmptyResultException $e) {
 					/// Remove mm-table entry if the extra pointed to doesn't exist

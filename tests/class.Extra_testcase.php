@@ -164,7 +164,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
 			$extra_supertable_uid = $data['uid'];
-			$extra_reborn = tx_newspaper_Extra_Factory::create($extra_supertable_uid);
+			$extra_reborn = tx_newspaper_Extra_Factory::getInstance()->create($extra_supertable_uid);
 			$this->assertTrue(is_a($extra_reborn, $extra_class));
 			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
 			
