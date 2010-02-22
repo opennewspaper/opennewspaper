@@ -665,7 +665,7 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 		);
 		foreach ($heirs as $heir) {
 			$inheriting_pagezone = new $table($heir['uid']);
-			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+			$hierarchy[] = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
 
 		if (!$this->getParentPage()) return $hierarchy;
