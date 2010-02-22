@@ -95,19 +95,19 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							case 'savesection' :
 								die($this->saveSection($input));
 							break;
-							case 'placearticle' :
+							case 'placearticle':
 								die($this->placeArticle($input));
 							break;
-							case 'sendarticletodutyeditor' :
+							case 'sendarticletodutyeditor':
 								die($this->sendArticleToDutyEditor($input));
 							break;
-							case 'sendarticletoeditor' :
+							case 'sendarticletoeditor':
 								die($this->sendArticleToEditor($input));
 							break;
-							case 'putarticleonline' :
+							case 'putarticleonline':
 								die($this->putArticleOnline($input));
 							break;
-							case 'putarticleoffline' :
+							case 'putarticleoffline':
 								die($this->putArticleOffline($input));
 							break;
 							case 'justsave' :
@@ -236,66 +236,122 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					}
 				}
 				
+				
+
+
+/// modifying the workflow status of an article
 
 				/// place an article
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function placeArticle ($input) {
+				function placeArticle($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 					$article->store();
+					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_NONE; // \todo: well, this is a hack (simulating a submit)
+					$this->writeLog($input, array(
+						'place' => true 
+					));
 					return true;
 				}
-				
 				
 				/// send article further to duty editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function sendArticleToDutyEditor ($input) {
+				function sendArticleToDutyEditor($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
 					$article->store();
+					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; // \todo: well, this is a hack ...
+					$this->writeLog($input, array(
+						'workflow_status' => NP_ACTIVE_ROLE_DUTY_EDITOR,
+						'workflow_status_ORG' => $input['workflow_status_ORG'] 
+					));
 					return true;
 				}
-				
 				
 				/// send article back to editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function sendArticleToEditor ($input) {
+				function sendArticleToEditor($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
 					$article->store();
+					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_EDITORIAL_STAFF; // \todo: well, this is a hack ...
+					$this->writeLog($input, array(
+						'workflow_status' => NP_ACTIVE_ROLE_EDITORIAL_STAFF,
+						'workflow_status_ORG' => $input['workflow_status_ORG']
+					));
 					return true;
 				}
-				
 				
 				/// set article status to online
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function putArticleOnline ($input) {
+				function putArticleOnline($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 0);
 					$article->store();
+					$this->writeLog($input, array(
+						'hidden' => false
+					));
 					return true;
 				}
-				
 				
 				/// set article status to offline
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
-				function putArticleOffline ($input) {
+				function putArticleOffline($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 1);
 					$article->store();
+					$this->writeLog($input, array(
+						'hidden' => true
+					));
 					return true;	
 				}
 				
+				/// write workflow log entry for manual comment (if a manuel comment was entered)
+				/**
+				 *  \param $input data submitted in form
+				 *  \return true if a workflow comment was written, else false
+				 */
+				private function writeLog(array $input, array $type) {
+//t3lib_div::devlog('writeLog()','newspaper', 0, array('input' => $input, 'type' => $type));
+					if (!isset($input['placearticleuid']) || !intval($input['placearticleuid'])) {
+						return false; // no article uid, no log entry ...
+					}
+					
+					// create a "fake" fieldArray
+					$fieldArray = array();
+					if (isset($type['hidden'])) {
+						$fieldArray['hidden'] = $type['hidden']; 
+					}
+					if (isset($type['workflow_status'])) {
+						$fieldArray['workflow_status'] = $type['workflow_status'];
+					} elseif (isset($type['place']) && $type['place'] == 1) {
+						$fieldArray['workflow_status'] = NP_ACTIVE_ROLE_NONE;
+					}
+					if (isset($type['workflow_status_ORG'])) {
+						$fieldArray['workflow_status_ORG'] = $type['workflow_status_ORG'];
+					}
+					if (isset($input['workflow_comment'])) {
+						$fieldArray['workflow_comment'] = $input['workflow_comment'];
+						$_REQUEST['workflow_comment'] = $input['workflow_comment']; // \todo: hack, logWorkflow can work
+					}
+//t3lib_div::devlog('writeLog()','newspaper', 0, array('fake fieldArray' => $fieldArray));					
+					tx_newspaper_workflow::logWorkflow('update', 'tx_newspaper_article', intval($input['placearticleuid']), $fieldArray);
+					return true;
+				}
+
+
+
+
 				
 				/// save all the articles of a single section
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')

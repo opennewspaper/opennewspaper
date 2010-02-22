@@ -18,6 +18,8 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 <hr style="margin-top: 5px; margin-bottom: 5px;" />
 <div style="padding-top: 5px;" />
 
+<form action="" method="post" id="placementform">
+
 <table border="0" cellspacing="0" cellpadding="0" class="sections" id="articleinfo">
   <tr>
     <td style="vertical-align:top;">
@@ -56,13 +58,15 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 	      </tr>
 		</table>
 	</td>
+	<td>
+		<textarea style="width: 400px; height: 70px;" name="tx_newspaper_mod7[workflow_comment]" id="workflow_comment"></textarea>
+	</td>
   </tr>
 </table>
 {$workflowlog}
 
 <br />
 
-<form action="" method="post" id="placementform">
 	<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
 	<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
 
@@ -117,6 +121,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 {* \todo: use consts: NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE *}
 <div id="buttons">
+	<input type="hidden" name="tx_newspaper_mod7[workflow_status_ORG]" value="{$article->getAttribute('workflow_status')}" />
 	{if $workflow_permissions.place}
 		<input type="button" value="{$lang.place}" class="place" />
 	{/if}
