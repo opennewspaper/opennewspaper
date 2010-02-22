@@ -480,7 +480,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 				 	t3lib_div::devlog('gPPOST: not a page!', 'np', 1);
 			 		continue;
 			 	}
-			 	if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
+			 	if ($page->getPageType()->getUid() == $this->getPageType()->getUid()) {
 				 	return $page;
 			 	}
 		 	}
