@@ -371,7 +371,7 @@ function findElementsByName(name, type) {
 		/// add upper level page zones and extras, if any
 		if ($show_levels_above) {
 			$parent_pagezones = $pz->getInheritanceHierarchyUp(false);
-			t3lib_div::devlog('parent zones', 'np', $parent_pagezones);
+			t3lib_div::devlog('parent zones', 'np', 0, $parent_pagezones);
 			$pz_up = array_reverse($parent_pagezones);
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
 				$data[] = self::extractData($pz_up[$i]);
