@@ -421,7 +421,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo A recursive version of this function would be more elegant, I reckon.
 	 */
 	public function getParentForPlacement($structure_only = false) {
-		t3lib_div::devlog('getParentForPlacement()', 'np', 0, $this);
 
 		if (!$structure_only) { 
 			$inherit_mode = intval($this->getAttribute('inherits_from'));
@@ -567,10 +566,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 
-		t3lib_div::devlog('moveExtraAfter()', 'newspaper', 0, array(
-			'move_extra' => $move_extra,
-			'origin_uid' => $origin_uid
-		));
 		///	Check that $move_extra is really on $this
 		$this->indexOfExtra($move_extra);
 		
@@ -626,8 +621,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 					/** Whenever the inheritance hierarchy is invalidated, 
 					 *  inherited Extras are hidden and moved to the end. 
 					 */
-#					$copied_extra->setAttribute('position', 
-#						$inheriting_pagezone->findLastPosition()+self::EXTRA_SPACING);
 					$copied_extra->setAttribute('gui_hidden', 1);
 				} else {
 					/** Whenever the inheritance hierarchy is restored, 
@@ -640,7 +633,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				
 			}
 			else {
-if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'no copied_extra');
+				///	\todo What's going on here?
 			}
 			 
 		}
@@ -658,15 +651,7 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 
 		if ($including_myself) $hierarchy[] = $this;
 		
-		///  look for inheriting page zones only of the same type as $this
-		$table = tx_newspaper::getTable($this);
-		$heirs = tx_newspaper::selectRows(
-			'uid', $table, 'inherits_from = ' . $this->getUid()
-		);
-		foreach ($heirs as $heir) {
-			$inheriting_pagezone = new $table($heir['uid']);
-			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
-		}
+		$hierarchy = $this->getExplicitlyInheritingPagezoneHierarchy();
 
 		if (!$this->getParentPage()) return $hierarchy;
 
@@ -678,11 +663,29 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 				if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
 					$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 				}
+			} else {
+				// find page further down the section hierarchy
 			}
 		}
 		return $hierarchy;
 	}
 
+	/// Reads page zones which have been explicitly set to inherit from \c $this.
+	private function getExplicitlyInheritingPagezoneHierarchy() {
+		
+		$hierarchy = array();
+		
+		$table = tx_newspaper::getTable($this);
+		$heirs = tx_newspaper::selectRows(
+			'uid', $table, 'inherits_from = ' . $this->getUid()
+		);
+		
+		foreach ($heirs as $heir) {
+			$inheriting_pagezone = new $table($heir['uid']);
+			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+		}
+		
+	}
 
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,
@@ -763,7 +766,10 @@ if(0)				t3lib_div::devlog('setInherits() - no copied extra', 'newspaper', 0, 'n
 		}
 	}
 
-
+	/// Return the section \p $extra was inserted in string format
+	/** \todo Make the '---' and '< error >' messages class constants instead of
+	 *  	hardcoding them. 
+	 */
 	public function getExtraOriginAsString(tx_newspaper_Extra $extra) {
 		$original_pagezone = $this->getExtraOrigin($extra);
 		if (!$original_pagezone) return '---';
@@ -995,8 +1001,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 		$current_page = $this->getParentPage();
 		while ($current_page) {
 			
-			$current_page = $current_page->getParentPageOfSameType();
-		
+			$current_page = $current_page->getParentPageOfSameType();		
 			if (!$current_page instanceof tx_newspaper_Page) continue;
 			
 			/** Look for PageZone of the same type. If no active PageZone is
