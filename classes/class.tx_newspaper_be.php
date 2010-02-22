@@ -381,7 +381,7 @@ function findElementsByName(name, type) {
 		/// add current page zone and extras
 		$data[] = self::extractData($pz); // empty array if concrete article
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
-		t3lib_div::devlog('renderBackendPageZone()', 'newspaper', 0, array('extra_data' => $extra_data));
+
 //t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, $data);
 /// \todo: can't that be checked nicer???
 		if (sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
