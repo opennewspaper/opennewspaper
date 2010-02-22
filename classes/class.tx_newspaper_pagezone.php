@@ -685,6 +685,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
 		
+		return $hierarchy;
 	}
 
 	/// As the name says, copies Extras from another PageZone
