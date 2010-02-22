@@ -421,6 +421,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo A recursive version of this function would be more elegant, I reckon.
 	 */
 	public function getParentForPlacement($structure_only = false) {
+		t3lib_div::devlog('getParentForPlacement()', 'np', 0, $this);
 
 		if (!$structure_only) { 
 			$inherit_mode = intval($this->getAttribute('inherits_from'));
@@ -993,6 +994,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 	protected function getParentPageZoneOfSameType() {
 		$current_page = $this->getParentPage();
 		while ($current_page) {
+			t3lib_div::devlog('getParentPageZoneOfSameType()', 'np', 0, array('page' => $current_page));
 			/** First get parent section of the current page...	*/
 			$parent_section = $current_page->getParentSection();
 			if ($parent_section instanceof tx_newspaper_Section) {
