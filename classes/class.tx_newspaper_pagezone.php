@@ -994,14 +994,12 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 	protected function getParentPageZoneOfSameType() {
 		$current_page = $this->getParentPage();
 		while ($current_page) {
-			t3lib_div::devlog('gPPZOST: page', 'np', 0, $current_page);
 			
 			$current_page = $current_page->getParentPageOfSameType();
 		
 			if (!$current_page instanceof tx_newspaper_Page) continue;
 			
-			/** Look for PageZone of the same type in the Page of the same page
-			 *  type in the parent section (phew). If no active PageZone is
+			/** Look for PageZone of the same type. If no active PageZone is
 			 *  found, continue looking in the parent section.
 			 */	
 			foreach ($current_page->getActivePageZones() as $parent_pagezone) {

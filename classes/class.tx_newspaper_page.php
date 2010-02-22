@@ -468,18 +468,12 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	 	while ($parent_section) {
 		 	/** ... then get parent section of the current section.	*/
 		 	$parent_section = $parent_section->getParentSection();
-		 	t3lib_div::devlog('gPPOST: section', 'np', 0, $parent_section);
 		 	if (!$parent_section instanceof tx_newspaper_Section) {
 			 	//	Root of section tree reached
 			 	return null;
 		 	}
 		 	
 		 	foreach ($parent_section->getSubPages() as $page) {
-			 	t3lib_div::devlog('gPPOST: parent->subPage', 'np', 0, $page);
-			 	if (!$page instanceof tx_newspaper_Page) {
-				 	t3lib_div::devlog('gPPOST: not a page!', 'np', 1);
-			 		continue;
-			 	}
 			 	if ($page->getPageType()->getUid() == $this->getPageType()->getUid()) {
 				 	return $page;
 			 	}
