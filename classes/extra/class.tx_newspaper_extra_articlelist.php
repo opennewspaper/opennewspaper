@@ -25,20 +25,13 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	public function __construct($uid = 0) { 
 		if (intval($uid)) {
 			parent::__construct($uid); 
-			$this->attributes = $this->readExtraItem($uid, $this->getTable());
-			$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
-				$this->getAttribute('articlelist')
-			);
-			if (!$this->articlelist instanceof tx_newspaper_ArticleList) {
-				throw new tx_newspaper_InconsistencyException(
-					'Extra ArticleList has associated article list set to UID ' . $this->getUid() .
-					', which does not resolve to a valid article list.'
-				);
-			}
 		}
 	}
 	
 	function getDescription() {
+		
+		$this->readArticleList();
+		
 		return 'Display a list of articles: ' . 
 			$this->articlelist->getDescription();
 	}
@@ -61,6 +54,8 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
 		$this->prepare_render($template_set);
 		
+		$this->readArticleList();
+
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article'));
 		$template = $this->getAttribute('template');
@@ -86,6 +81,21 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	}
 	
 	public static function dependsOnArticle() { return false; }
+	
+	private function readArticlelist() {
+		
+		if ($this->articlelist instanceof tx_newspaper_ArticleList) return;
+		
+		$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
+			$this->getAttribute('articlelist')
+		);
+		if (!$this->articlelist instanceof tx_newspaper_ArticleList) {
+			throw new tx_newspaper_InconsistencyException(
+				'Extra ArticleList has associated article list set to UID ' . $this->getUid() .
+				', which does not resolve to a valid article list.'
+			);
+		}		
+	}
 		
 	private $articlelist;
 }
