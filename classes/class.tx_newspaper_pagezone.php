@@ -995,45 +995,14 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 		$current_page = $this->getParentPage();
 		while ($current_page) {
 			t3lib_div::devlog('gPPZOST: page', 'np', 0, $current_page);
-			/** First get parent section of the current page...	*/
-			$parent_section = $current_page->getParentSection();
-			t3lib_div::devlog('gPPZOST: section', 'np', 0, $parent_section);
-			if ($parent_section instanceof tx_newspaper_Section) {
-				/** ... then get parent section of the current section.	*/
-				$parent_section = $parent_section->getParentSection();
-			} else {
-				//	Root of section tree reached
-				return null;
-			}
 			
-			if (!$parent_section instanceof tx_newspaper_Section) {
-				//	Root of section tree reached
-				return null;
-			}
-			t3lib_div::devlog('gPPZOST: parent section', 'np', 0, $parent_section);
-			
-			/** Find page of same page type under parent section.	*/
-			$new_page = null;
-			foreach ($parent_section->getSubPages() as $page) {
-				if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
-					$new_page = $page;
-				}
-			}
-			t3lib_div::devlog('gPPZOST: new page', 'np', 0, $new_page);
-
-			$current_page = $new_page;
-			if (!$new_page) {
-				/** If page not active in parent section, look in the section
-				 *  further up.
-				 */
-				continue;
-			}
+			$current_page = $current_page->getParentPageOfSameType();
 		
 			/** Look for PageZone of the same type in the Page of the same page
 			 *  type in the parent section (phew). If no active PageZone is
 			 *  found, continue looking in the parent section.
 			 */	
-			foreach ($new_page->getActivePageZones() as $parent_pagezone) {
+			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType())
 					return $parent_pagezone;
 			}

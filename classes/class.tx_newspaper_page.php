@@ -454,6 +454,35 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  		return $this->parentSection; 
  	}
  	
+ 	/// Find page of same page type under parent section.	*/
+ 	public function getParentPageOfSameType() {
+	 	
+	 	/** First get parent section of the current page...	*/
+	 	$parent_section = $this->getParentSection();
+	 	if (!$parent_section instanceof tx_newspaper_Section) {
+	 		throw new tx_newspaper_InconsistencyException(
+	 			'Oops, found a Page without a parent Section: Page ID = ' . $this->getUid()
+	 		);
+	 	} 
+	 	
+	 	while ($parent_section) {
+		 	/** ... then get parent section of the current section.	*/
+		 	$parent_section = $parent_section->getParentSection();
+		 	t3lib_div::devlog('gPPOST: section', 'np', 0, $parent_section);
+		 	if (!$parent_section instanceof tx_newspaper_Section) {
+			 	//	Root of section tree reached
+			 	return null;
+		 	}
+		 	
+		 	foreach ($parent_section->getSubPages() as $page) {
+			 	if ($page->getPageType()->getUid() == $current_page->getPageType()->getUid()) {
+				 	return $page;
+			 	}
+		 	}
+	 	}
+	 	
+ 	}
+ 	
  	/// tx_newspaper_PageType of the current tx_newspaper_Page
  	/** \return tx_newspaper_PageType of the current tx_newspaper_Page
  	 */
