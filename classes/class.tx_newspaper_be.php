@@ -301,7 +301,9 @@ function findElementsByName(name, type) {
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
-		t3lib_div::devlog('collectExtras()', 'np', 0, array('pagezone' => $pz, 'extra' => $extra));
+		foreach($extra as $e) $extra_uids_string .= $e->getExtraUid()." ";
+		t3lib_div::devlog('collectExtras(' . $pz->getPagezoneUid() . '; ' . $extra_uids_string . ')', 
+						   'np', 0, array('pagezone' => $pz, 'extra' => $extra));
 		
 		$data = array();
 		
@@ -350,7 +352,9 @@ function findElementsByName(name, type) {
 			
 			$data[] = $extra_data;
 
-			t3lib_div::devlog('...added extra', 'np', 0, array('pagezone' => $pz, 'extra' => $extra[$i], 'extra data' => $extra_data));
+			t3lib_div::devlog(
+				'...added extra: ' . $extra[$i]->getExtraUid(), 
+				'np', 0, array('pagezone' => $pz, 'extra' => $extra[$i], 'extra data' => $extra_data));
 		}
 		return $data;
 	} 
