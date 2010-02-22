@@ -998,6 +998,8 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 			
 			$current_page = $current_page->getParentPageOfSameType();
 		
+			if (!$current_page instanceof tx_newspaper_Page) continue;
+			
 			/** Look for PageZone of the same type in the Page of the same page
 			 *  type in the parent section (phew). If no active PageZone is
 			 *  found, continue looking in the parent section.
