@@ -1005,12 +1005,12 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 				//	Root of section tree reached
 				return null;
 			}
-			t3lib_div::devlog('gPPZOST: parent section', 'np', 0, $parent_section);
 			
 			if (!$parent_section instanceof tx_newspaper_Section) {
 				//	Root of section tree reached
 				return null;
 			}
+			t3lib_div::devlog('gPPZOST: parent section', 'np', 0, $parent_section);
 			
 			/** Find page of same page type under parent section.	*/
 			$new_page = null;
@@ -1019,6 +1019,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 					$new_page = $page;
 				}
 			}
+			t3lib_div::devlog('gPPZOST: new page', 'np', 0, $new_page);
 
 			$current_page = $new_page;
 			if (!$new_page) {
