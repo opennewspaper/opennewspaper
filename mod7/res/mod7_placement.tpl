@@ -29,7 +29,8 @@
 								{/foreach}
 							</th>
 					  	</tr>
-						{if isset($section.articlelist) && ($isde || $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic")}
+						{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
+						{* duty editor, article list availaable, class for article list is known *}
 						<tr>
 						    <td>
 								<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
@@ -71,12 +72,12 @@
 						{else}
 						<tr>
 							<td>
-								<i class="noaccess">Keine Berechtigung für Sammelresorts.</i>
+								<i class="noaccess">Kein CvD oder keine Artikelliste im Ressort.</i>
 							</td>
 						</tr>
 						{/if}
 					</table>
-					{if $isde || $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic"}
+					{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
 						<div align="right">
 							<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
 							<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
