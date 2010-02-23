@@ -6,6 +6,47 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="title">Article placement</label>
+			<label index="kicker">Kicker</label>
+			<label index="headline">Headline</label>
+			<label index="author">Author</label>
+			<label index="editedby">Edited by</label>
+			<label index="online">Online</label>
+			<label index="activerole">Active role</label>
+			<label index="section">Section</label>
+			<label index="article_uid">Article id</label>
+			<label index="filtersections">Section filter</label>
+			<label index="save">Save</label>
+			<label index="checkforupdates">Check for updates</label>
+			<label index="todutyeditor">To duty editor</label>
+			<label index="todutyeditorhide">To duty editor &amp; Hide</label>
+			<label index="todutyeditorpublish">To duty editor &amp; Publish</label>
+			<label index="putonline">Publish</label>
+			<label index="putoffline">Hide</label>
+			<label index="cancel">Cancel</label>
+			<label index="place">Place</label>
+			<label index="placehide">Place &amp; Hide</label>
+			<label index="placepublish">Place &amp; Publish</label>
+			<label index="toeditor">Back to editorial staff</label>
+			<label index="toeditorhide">Back to editorial staff &amp; Hide</label>
+			<label index="toeditorpublish">Back to editorial staff &amp; Publish</label>
+			<label index="yes">yes</label>
+			<label index="no">no</label>
+			<label index="refresh">Update</label>
+			<label index="savedidnotwork">Saving failed.</label>
+			<label index="reallycancel">Do you really want to cancel and discard all changes?</label>
+			<label index="actiondidnotwork">Action failed.</label>
+			<label index="reallyrefresh">Do you really want to update this list?\nUnsaved changes will be discarded.</label>
+			<label index="saveall">Save all article lists</label>
+			<label index="label_group_totop">Move to top</label>
+			<label index="label_group_up">Move up</label>
+			<label index="label_group_down">Move down</label>
+			<label index="label_group_tobottom">Move to bottom</label>
+			<label index="label_group_clear">Remove article</label>
+			<label index="label_button_left">Add article</label>
+			<label index="label_button_right">Remove article TO BE PLACED</label>
+		</languageKey>
+		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
 			<label index="kicker">Dachzeile</label>
 			<label index="headline">Überschrift</label>
@@ -36,42 +77,15 @@
 			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
 			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
 			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
-			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
+			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\nUngespeicherte Aenderungen gehen verloren.</label>
 			<label index="saveall">Alle Artikellisten speichern</label>
-			<label index="label_group_totop">Move to top</label>
-			<label index="label_group_up">Move up</label>
-			<label index="label_group_down">Move down</label>
-			<label index="label_group_tobottom">Move to bottom</label>
-			<label index="label_group_clear">Remove article</label>
-			<label index="label_button_left">Add article</label>
-			<label index="label_button_right">Remove article TO BE PLACED</label>
-		</languageKey>
-		<languageKey index="de" type="array">
-			<label index="title">Artikel-Platzierung</label>
-			<label index="kicker">Dachzeile</label>
-			<label index="headline">Überschrift</label>
-			<label index="author">Autor</label>
-			<label index="editedby">Bearbeitet von</label>
-			<label index="online">Online</label>
-			<label index="activerole">Aktive Rolle</label>
-			<label index="section">Ressort</label>
-			<label index="filtersections">Ressorts filtern</label>
-			<label index="save">Speichern</label>
-			<label index="checkforupdates">Aktualisierungen überprüfen</label>
-			<label index="todutyeditor">Zum CvD</label>
-			<label index="putonline">Publizieren</label>
-			<label index="putoffline">Verstecken</label>
-			<label index="cancel">Abbrechen</label>
-			<label index="place">Platzieren</label>
-			<label index="toeditor">Zurück zum Redakteur</label>
-			<label index="yes">ja</label>
-			<label index="no">nein</label>
-			<label index="refresh">Aktualisieren</label>
-			<label index="savedidnotwork">Das Speichern hat nicht funktoniert.</label>
-			<label index="reallycancel">Wirklich abbrechen und alle Änderungen verwerfen?</label>
-			<label index="actiondidnotwork">Diese Aktion hat leider nicht funktioniert.</label>
-			<label index="reallyrefresh">Wollen Sie wirklich diese Liste aktualisieren?\n Ungespeicherte Aenderungen gehen verloren.</label>
-			<label index="saveall">Alle Artikellisten speichern</label>
+			<label index="label_group_totop">Ganz nach oben</label>
+			<label index="label_group_up">Eine Position nach oben</label>
+			<label index="label_group_down">Eine Position nach unten</label>
+			<label index="label_group_tobottom">Ganz nach unten</label>
+			<label index="label_group_clear">Artikel entfernen</label>
+			<label index="label_button_left">Artikel hinzufügen</label>
+			<label index="label_button_right">ZU PLATZIERENDEN Artikel entfernen</label>
 		</languageKey>
 	</data>
 </T3locallang>
