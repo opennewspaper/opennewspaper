@@ -72,7 +72,15 @@
 						{else}
 						<tr>
 							<td>
-								<i class="noaccess">Kein CvD oder keine Artikelliste im Ressort.</i>
+								{if !$isde}
+									<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />
+								{/if}
+								{if !isset($section.articlelist)}
+									<i class="noaccess">{$lang.message_no_articlelist}</i><br />
+								{/if}
+								{if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
+									<i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
+								{/if}
 							</td>
 						</tr>
 						{/if}

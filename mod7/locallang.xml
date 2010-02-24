@@ -45,6 +45,9 @@
 			<label index="label_group_clear">Remove article</label>
 			<label index="label_button_left">Add article</label>
 			<label index="label_button_right">Remove article TO BE PLACED</label>
+			<label index="message_no_dutyeditor">Access for duty editors only.</label>
+			<label index="message_no_articlelist">No article list found in section</label>
+			<label index="message_unknown_articlelisttype">Unknown article list type</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -86,6 +89,9 @@
 			<label index="label_group_clear">Artikel entfernen</label>
 			<label index="label_button_left">Artikel hinzufügen</label>
 			<label index="label_button_right">ZU PLATZIERENDEN Artikel entfernen</label>
+			<label index="message_no_dutyeditor">Keine CvD-Rechte.</label>
+			<label index="message_no_articlelist">Keine Artikelliste im Ressort.</label>
+			<label index="message_unknown_articlelisttype">Unbekannter Artikellistentyp.</label>
 		</languageKey>
 	</data>
 </T3locallang>
