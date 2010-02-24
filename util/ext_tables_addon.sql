@@ -16,10 +16,18 @@ CREATE TABLE tx_newspaper_pagezone_page (
 
 # Modifications for table 'tx_newspaper_article'
 CREATE TABLE tx_newspaper_article (
-    text LONGTEXT NOT NULL,
-	template_set tinytext NOT NULL,
-	kram TEXT,
-	FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`),
+    text LONGTEXT NOT NULL
+);
+CREATE TABLE tx_newspaper_article (
+	template_set tinytext NOT NULL
+);
+CREATE TABLE tx_newspaper_article (
+	kram TEXT
+);
+CREATE TABLE tx_newspaper_article (
+	FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`)
+);
+CREATE TABLE tx_newspaper_article (
 	FULLTEXT KEY `text` (`teaser`, `teaser_list`, `text`, `author`)
 );
 
