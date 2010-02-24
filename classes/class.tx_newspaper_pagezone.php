@@ -656,6 +656,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if (!$this->getParentPage()) return $hierarchy;
 
 		/// look for page zones on pages in section down the section hierarchy
+		$sub_pages = $this->getParentPage()->getSubPagesOfSameType();
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
 			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
 			if ($page instanceof tx_newspaper_Page) {
@@ -687,6 +688,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		
 		return $hierarchy;
 	}
+
 
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,

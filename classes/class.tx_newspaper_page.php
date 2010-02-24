@@ -481,6 +481,24 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	 	}
 	 	
  	}
+
+	public function getSubPagesOfSameType() {
+		
+		$sub_pages = array();
+		$page_type = $this->getParentPage()->getPageType();
+		
+		foreach ($this->getParentSection()->getChildSections() as $sub_section) {
+			$page = $sub_section->getSubPage($page_type);
+			if ($page instanceof tx_newspaper_Page) {
+				$sub_pages[] = $page;
+			} else {
+				// find page further down the section hierarchy
+				$sub_pages = array_merge($sub_pages, $sub_section->getSubPagesRecursively($page_type));
+			}
+		}			
+		
+		return $sub_pages;
+	}
  	
  	/// tx_newspaper_PageType of the current tx_newspaper_Page
  	/** \return tx_newspaper_PageType of the current tx_newspaper_Page

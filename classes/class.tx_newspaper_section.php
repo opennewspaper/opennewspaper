@@ -215,6 +215,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $this->getAttribute('articlelist');
 	}
 	
+	/// Returns all pages attached to the current section 
 	public function getSubPages() {
         if (!$this->subPages) {
             $row = tx_newspaper::selectRows(
@@ -228,6 +229,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		return $this->subPages;
  	}
  	
+ 	/// Finds the page under the current section that has the required page type.
  	public function getSubPage(tx_newspaper_PageType $type) {
  		foreach ($this->getSubPages() as $page) {
  			if ($page->getPageType()->getUid() == $type->getUid())
@@ -235,6 +237,22 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		}
  		///	\todo or throw?
  		return null;
+ 	}
+ 	
+ 	/// Finds a pages of specified page type under the current section or its children.
+ 	/** If this section has the specified page type activated, that page is returned.
+ 	 *  Else all activated pages in the child sections are returned. Each section
+ 	 *  is followed down the section tree until a desired page is found.
+ 	 */
+ 	public function getSubPagesRecursively(tx_newspaper_PageType $type) {
+ 		$sub_page = $this->getSubPage($type);
+ 		if ($sub_page instanceof tx_newspaper_Page) return array($sub_page);
+ 		
+ 		$sub_pages = array();
+ 		foreach ($this->getChildSections() as $sub_section) {
+ 			$sub_pages = array_merge($sub_pages, $sub_section->getSubPagesRecursively($type));
+ 		}
+ 		return $sub_pages;
  	}
  	
  	/// gets an array of sections up the rootline
