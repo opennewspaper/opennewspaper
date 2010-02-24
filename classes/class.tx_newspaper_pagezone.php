@@ -459,14 +459,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */ 
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
-		t3lib_div::devlog(
-			'insertExtraAfter()', 'newspaper', 0, 
-			array(
-				'page zone' => $this->__toString(),
-				'$insert_extra' => $insert_extra,
-				'$origin_uid' => $origin_uid,
-				'$recursive' => intval($recursive)) 
-			);
 		
 		/** \todo: it should be possible to set the paragraph BEFORE calling
 		 *   	this function. otherwise a workaround is needed: insert extra to
@@ -486,9 +478,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$copied_extra = clone $insert_extra;
 				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
 				
-				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid /* $insert_extra->getOriginUid() */, false);
-				t3lib_div::devlog('copied extra', 'newspaper', 0, $copied_extra->__toString());
-		
+				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid /* $insert_extra->getOriginUid() */, false);		
 			}
 		}
 		return $insert_extra;

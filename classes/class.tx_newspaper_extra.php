@@ -290,7 +290,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	public function setAttribute($attribute, $value) {
-		t3lib_div::devlog('setAttribute()', 'newspaper', 0, array('extra' => $this, 'attribute' => $attribute, 'value' => $value));
+
 		if (!$this->extra_attributes) {
 			$this->extra_attributes = $this->getExtraUid()? 
 				tx_newspaper::selectOneRow(
