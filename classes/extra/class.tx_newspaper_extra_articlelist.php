@@ -37,7 +37,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		} catch (tx_newspaper_DBException $e) {
 			global $LANG;
 			return 
-				'<table><tr><td valign="center">' .
+				'<table><tr><td valign="middle">' .
 					tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '') .
 				'<td><td>' . 
 					$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_articlelist_missing_deleted', false) . '<br />' .
