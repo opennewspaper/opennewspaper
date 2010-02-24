@@ -657,6 +657,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// look for page zones on pages in section down the section hierarchy
 		$sub_pages = $this->getParentPage()->getSubPagesOfSameType();
+		t3lib_div::devlog('subpages', 'np', 0, $sub_pages);
 		foreach ($this->getParentPage()->getParentSection()->getChildSections() as $sub_section) {
 			$page = $sub_section->getSubPage($this->getParentPage()->getPageType());
 			if ($page instanceof tx_newspaper_Page) {
