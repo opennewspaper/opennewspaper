@@ -12,8 +12,7 @@
 // add javascript and css if not available (backend called in popup WITHOUT typo3 frameset where these scripts are loaded to)
 var t3BackendObject = getTypo3BackendObject();
 if (t3BackendObject != top) {
-	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/common.js", "js");
-	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.js", "js");
+	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/newspaper_subModal.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/extra/util.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/util.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.css", "css");
