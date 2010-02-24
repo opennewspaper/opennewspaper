@@ -60,7 +60,7 @@
             <label index="message_no_controltag_selected">No control tag selected</label>
             <label index="message_articlelist_missing_deleted">
                 The article list this Extra displays is missing or deleted.
-            </label 
+            </label>
             <label index="message_select_another_articlelist">
                 Please select another article list.
             </label>
