@@ -54,13 +54,15 @@
 			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
 			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
 			<label index="message_title_sectiontree">Section tree</label>
+            <label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
+            <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
+            <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
             <label index="message_no_controltag_selected">No control tag selected</label>
+            <label index="message_articlelist_missing_deleted">The article list this Extra displays is missing or deleted.<br />Please select another article list.</label>
 			<label index="title_tx_newspaper_article">Article</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
 			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
-			<label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
-			<label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
 			<label index="title_tx_newspaper_articletype">Article type</label>
 			<label index="title_tx_newspaper_extra_articlelinks">Links about the article</label>
 			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
@@ -85,6 +87,7 @@
 			<label index="label_articlelist_included_tags">Tag(s)</label>
 			<label index="label_articlelist_excluded_tags">Ausgeschlossene Tag(s)</label>
             <label index="message_no_controltag_selected">Kein Steuertag ausgewählt</label>
+            <label index="message_articlelist_missing_deleted">Dieses Extra bezieht sich auf eine fehlende oder gelöschte Artikelliste.<br />Bitte wählen Sie eine andere Artikelliste.</label>
 			<label index="title_tx_newspaper_article">Artikel</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
