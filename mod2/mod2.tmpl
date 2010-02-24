@@ -239,8 +239,9 @@ show last comment as title flag for (i) button; not needed as the latest comment
 {/if}  
 		</td>
 {if !$IS_ARTICLE_BROWSER}
-		<td> 
-<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> 
+		<td>
+{if $IS_DUTY_EDITOR}<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> {/if}
+ 
 {$ARTICLE_PREVIEW_ICON} 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
 {* left here, because (i) button might be needed later, though probably with js call <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> *} 
