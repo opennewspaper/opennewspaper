@@ -485,7 +485,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	public function getSubPagesOfSameType() {
 		
 		$sub_pages = array();
-		$page_type = $this->getParentPage()->getPageType();
+		$page_type = $this->getPageType();
 		
 		foreach ($this->getParentSection()->getChildSections() as $sub_section) {
 			$page = $sub_section->getSubPage($page_type);
