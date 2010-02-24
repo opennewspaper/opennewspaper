@@ -36,8 +36,9 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 			$this->articlelist->getDescription();
 		} catch (tx_newspaper_DBException $e) {
 			global $LANG;
-			t3lib_div::devlog('fehlermeldung', 'np', 0, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_articlelist_missing_deleted', false));
-			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_articlelist_missing_deleted', false);
+			return tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '') . 
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_articlelist_missing_deleted', false) . '<br />' .
+				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_select_another_articlelist', false);
 		}
 		
 	}
