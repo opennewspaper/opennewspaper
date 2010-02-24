@@ -450,7 +450,7 @@ CREATE TABLE tx_newspaper_extra_articlelist (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	description tinytext NOT NULL,
-	articlelist blob NOT NULL,
+	articlelist int(11) DEFAULT '0' NOT NULL,
 	first_article int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	template tinytext NOT NULL,
