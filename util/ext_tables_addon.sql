@@ -18,6 +18,7 @@ CREATE TABLE tx_newspaper_pagezone_page (
 CREATE TABLE tx_newspaper_article (
     text LONGTEXT NOT NULL,
 	template_set tinytext NOT NULL,
+	kram TEXT,
 	FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`),
 	FULLTEXT KEY `text` (`teaser`, `teaser_list`, `text`, `author`)
 );
