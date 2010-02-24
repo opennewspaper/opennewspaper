@@ -270,6 +270,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	/** \return true, if \p $this is associated with a valid Section
 	 */
 	public function isSectionList() {
+		if (!intval($this->getAttribute('section_id'))) return false;
 		try {
 			$section = new tx_newspaper_Section($this->getAttribute('section_id'));
 			return ($section->getAttribute('uid') == $this->getAttribute('section_id'));
