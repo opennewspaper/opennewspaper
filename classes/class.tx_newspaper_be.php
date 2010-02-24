@@ -774,7 +774,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// get html for this icon (may include an anchor) 
 	/** \param $image path to icon
-	 *  \param $id 
+	 *  \param $id if set, $id will be inserted as an html id
 	 *  \param $title title for title flag of img
 	 *  \param $ahref 
 	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
