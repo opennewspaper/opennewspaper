@@ -135,7 +135,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		} else {
 			$extra_table = 'tx_newspaper_extra_image';
 		}
-		if (!($table instanceof $extra_table)) return;
+		if ($table != $extra_table) return;
 
 		self::getTSConfig(); // called after class check, otherwise TSConfig for images is read for every record stored in typo3 
 		
