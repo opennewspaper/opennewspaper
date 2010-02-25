@@ -127,8 +127,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$status, $table, $id, &$fieldArray, $that
 	) {
 		
-		self::getTSConfig();
-		
 		/*  in a static function, there is no object to call. prior to PHP 5.3,
 		 *  there is no way to find out which class we are in.
 		 */
@@ -137,7 +135,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		} else {
 			$extra_table = 'tx_newspaper_extra_image';
 		}
-		if ($table instanceof $extra_table) return;
+		if (!($table instanceof $extra_table)) return;
+
+		self::getTSConfig(); // called after class check, otherwise TSConfig for images is read for every record stored in typo3 
 		
 //		t3lib_div::devlog('image save hook', 'newspaper', 0, 
 //			array('status' => $status, 'table' => $table, 'id' => $id, 
