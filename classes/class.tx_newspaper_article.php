@@ -810,6 +810,90 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
+
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	//
+	//	Typo3 hooks
+	//
+	////////////////////////////////////////////////////////////////////////////
+	
+	/** \todo some documentation would be nice ;-) */
+	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+		self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
+	}
+	
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too)
+	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+		if (strtolower($table) == 'tx_newspaper_article' && isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
+			
+			// hidden is 0, so article was just made visible
+			
+			$article = null; // might be needed later
+
+			// if the values for starttime or publish_date are set in $fieldArray, these values MUST be used 
+			// (because these new values aren't stored in the database)
+
+			if (isset($fieldArray['publish_date'])) {
+				// publish_date is available in $fieldArray, no need to read from database
+				$publish_date = $fieldArray['publish_date'];
+			} else {
+				// publish_date has to be retrieved
+				if (intval($id)) {
+					// article was stored before ...
+					$article = new tx_newspaper_article(intval($id)); // get article
+					$publish_date = $article->getAttribute('publish_date');
+				} else {
+					// new article
+					$publish_date = 0; 
+				}
+			}
+			
+			if ($publish_date > 0) {
+				return; // publish date has been set already 
+			}
+
+			if (isset($fieldArray['starttime'])) {
+				// starttime is available in $fieldArray
+				$starttime = $fieldArray['starttime'];
+			} else {
+				// starttime has to be retrieved
+				if (intval($id)) {
+					// article was stored before ...
+					if (!($article instanceof tx_newspaper_article)) {
+						$article = new tx_newspaper_article(intval($id)); // get article
+					}
+					$starttime = $article->getAttribute('starttime');
+				} else {
+					// new article, $id equal NEW_something
+					$starttime = 0; // if timestart would have been set, it would be part of $fieldArray
+				}
+			}
+
+			$fieldArray['publish_date'] = max(time(), $starttime); // change publish_date
+		}
+			
+	}
+	
+	/// sets the publish date if needed
+	/** The publish date needs to be set if the atrribute hidden changes to 0 and
+	 *  no publish_date is stored so far.
+	 *  This method just SETS the publish_date attribute, but DOES NOT store the article
+	 */
+	public function setPublishDateIfNeeded() {
+		$fakeFieldArray = array(
+			'hidden' => $this->getAttribute('hidden')
+		);
+		self::addPublishDateIfNotSet('', $this->getTable(), $this->getUid(), $fakeFieldArray);
+		if (isset($fakeFieldArray['publish_date'])) { 
+			// addPublishDateIfNotSet() added a new publish_date in $fakeFieldArray, so set that date as publish_date
+			$this->setAttribute('publish_date', $fakeFieldArray['publish_date']);
+		}
+	}
+
+
 	
 	////////////////////////////////////////////////////////////////////////////
 	//

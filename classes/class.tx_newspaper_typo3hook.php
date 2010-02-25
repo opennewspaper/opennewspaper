@@ -115,11 +115,14 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		global $LANG;
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 
+		// call save hook in newspaper calsses
+		tx_newspaper_article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+		
+
+
 		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
 
-		/// check if publish_date is to be added
-		$this->addPublishDateIfNotSet($status, $table, $id, &$fieldArray);
 
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
@@ -200,18 +203,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			return false;
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
 		return true; 
-	}
-
-	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
-	private function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
-/// \todo: timestart - alle kombinationen abfangen!!!
-		if (strtolower($table) == 'tx_newspaper_article' && $fieldArray['hidden'] == 0 && !$fieldArray['publish_date']) {
-//debug($fieldArray);
-			$fieldArray['publish_date'] = time(); // change publish_date
-			return true;
-		}
-		return false; // publish_date remained unchanged
 	}
 
 

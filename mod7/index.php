@@ -275,6 +275,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
 						$article->setAttribute('hidden', false);
+						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					}
 					$article->store();
 					$this->writeLog($input, $log);
@@ -299,6 +300,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
 						$article->setAttribute('hidden', false);
+						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					}
 					$article->store();					
 					$this->writeLog($input, $log);
@@ -323,6 +325,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
 						$article->setAttribute('hidden', false);
+						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					}
 					$article->store();
 					$this->writeLog($input, $log);
@@ -336,6 +339,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function putArticleOnline($input) {
 					$article = $this->getArticleByArticleId ($input['placearticleuid']);
 					$article->setAttribute('hidden', 0);
+					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					$article->store();
 					$this->writeLog($input, array(
 						'hidden' => false

@@ -353,23 +353,28 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 
 	/// check if an article is to be hidden/unhidden; write to database if yes
+	/**
+	 * this way to change visibility makes sure, that the current page browser selection lasts
+	 */
 	function processGPVisibility() {
-#t3lib_div::devlog('article_visibility', 'np', 0, t3lib_div::_GP('article_visibility'));
+//t3lib_div::devlog('article_visibility', 'np', 0, t3lib_div::_GP('article_visibility'));
 		if (t3lib_div::_GP('article_visibility') != '') {
 /// \todo: permission check
 			switch(strtolower(t3lib_div::_GP('article_visibility'))) {
-/// \todo: use t3 api
 				case 'hidden':
+					// direct access to database ...
 					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 1, 'tstamp' => time()));
 					$fA = array('hidden' => 1);
 					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
 				break;
 				case 'visible':
-					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 0, 'tstamp' => time()));
+					// use newspaper claases becuase the publish_date might be updated
+					$article = new tx_newspaper_article(intval(t3lib_div::_GP('article_uid')));
+					$article->setAttribute('hidden', 0);
+					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+					$article->store();
 					$fA = array('hidden' => 0);
 					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
-				default:
-/// \todo: throw exception
 			}
 			// unset parameters (so they are not added to querystring later)
 			unset($_POST['article_visibility']);
@@ -420,7 +425,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$where[] = 'author LIKE "%' . t3lib_div::_GP('author') . '%"';
 		}
 		if (t3lib_div::_GP('section')) {
-t3lib_div::devlog('moderation: section missing', 'newspaper', 0);
+t3lib_div::devlog('moderation: section missing', 'newspaper', 3);
 		}
 		if (t3lib_div::_GP('text'))
 			$where[] = '(title LIKE "%' . addslashes(t3lib_div::_GP('text')) . '%" OR kicker LIKE "%' . 
