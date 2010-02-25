@@ -33,7 +33,7 @@
 			<label index="label.step_items_per_page">Items per page</label>
 			
 			<label index="label.hide">Hide article</label>
-			<label index="label.unhide">Unhide article</label>
+			<label index="label.unhide">Publish article</label>
 			<label index="label.article_placement">Article placement</label>
 			<label index="label.preview_article">Preview article</label>
 			<label index="label.edit_article">Edit article</label>
