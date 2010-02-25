@@ -6,13 +6,13 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Dashboard</label>
+			<label index="title">Wizards</label>
 			<label index="label_new_article">New article</label>
 			<label index="label_new_article_button">Go</label>
 			<label index="label_new_article_typo3">Create new</label>
 			<label index="label_section">Section</label>
 			<label index="label_articletype">Article type</label>
-			<label index="label_back_to_dashboard">Back to Dashboard</label>
+			<label index="label_back_to_wizards">Back to Wizards main page</label>
 			<label index="label_error_browsing">Error browsing source</label>
 			<label index="label_role">Role</label>
 			<label index="label_start_wizard">Wizard</label>
@@ -28,7 +28,7 @@
 		<languageKey index="de" type="array">
 			<label index="title">Start</label>
 			<label index="label_new_article">Neuer Artikel</label>
-			<label index="label_back_to_dashboard">Zurück zum Dashboard</label>
+			<label index="label_back_to_wizards">Zurück zur Wizard-Startseite</label>
 			<label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
 		</languageKey>
 	</data>

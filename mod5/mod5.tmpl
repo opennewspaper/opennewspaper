@@ -34,7 +34,7 @@ td {
 
 
 .box {
-  width: 300px;
+  width: 400px;
   background-color: white;
   margin: 5px;
   padding: 5px;
@@ -44,7 +44,7 @@ td {
 .box_hl {
   color: black;
   font-weigth: bold;
-  width: 300px;
+  width: 400px;
   background-color: #d0d0d0;
   margin: 5px;
   padding: 5px;
@@ -77,10 +77,10 @@ td {
 
 	function switch_new_article(show_article) {ldelim}
 		if (show_article) {ldelim}
-			document.getElementById('dashboard').style.display = 'none';
+			document.getElementById('wizards').style.display = 'none';
 			document.getElementById('div_new_article').style.display = 'block';
 		{rdelim} else {ldelim}
-			document.getElementById('dashboard').style.display = 'block';
+			document.getElementById('wizards').style.display = 'block';
 			document.getElementById('div_new_article').style.display = 'none';
 		{rdelim}
 	{rdelim}
@@ -123,7 +123,7 @@ td {
 
 </script>
 
-<div id="dashboard" style="display: block">
+<div id="wizards" style="display: block">
 
 
 <div class="box_hl">{$LABEL.wizards}</div>
@@ -169,7 +169,7 @@ td {
 <div class="box">		
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Moderation list</a><br />
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
-	<a href="index.php?tx_newspaper_mod5%5Bajaxcontroller%5D=change_role&tx_newspaper_mod5%5Bnew_role%5D={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: {$ROLE.current})<br />
+	<a href="index.php?tx_newspaper_mod5%5Bajaxcontroller%5D=change_role&tx_newspaper_mod5%5Bnew_role%5D={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: <strong>{$ROLE.current}</strong>)<br />
 </div>
 <br />
 
@@ -187,7 +187,7 @@ td {
 </div>
 
 <div id="div_new_article" style="display: none">
-  <a href="#" onclick="switch_new_article(false); return false;">BACK TO DASHBOARD</a><br />
+  <a href="#" onclick="switch_new_article(false); return false;">{$LABEL.back_to_wizards}</a><br />
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>

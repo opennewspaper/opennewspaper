@@ -37,9 +37,14 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 
 
+/// Class to generate a BE module with 100% width
+class fullWidthDoc extends template {
+	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
+}
+
 
 /**
- * Module 'Dashboard' for the 'newspaper' extension.
+ * Module 'Wizards' for the 'newspaper' extension.
  *
  * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
@@ -118,7 +123,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$this->checkIfNewArticle();
 
 			// Draw the header.
-			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
@@ -312,7 +317,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		$label['new_article_typo3'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false);
 		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
 		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
-		$label['back_to_dashboard'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_dashboard', false);
+		$label['back_to_wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false);
 		$label['error_browsing'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false);
 		$smarty->assign('LABEL', $label);
 
