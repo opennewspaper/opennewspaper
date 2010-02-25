@@ -78,7 +78,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
   browserWin.focus();
 }
 </script>';
-			// replace em with article browser
+			// replace eb with article browser
 			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $row['uid'] . '); return false;" >';
 			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
 		}
