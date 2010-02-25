@@ -12,7 +12,7 @@
 			<label index="author">Author</label>
 			<label index="editedby">Edited by</label>
 			<label index="online">Online</label>
-			<label index="activerole">Active role</label>
+			<label index="article_activerole">Current article workflow role</label>
 			<label index="section">Section</label>
 			<label index="article_uid">Article id</label>
 			<label index="filtersections">Section filter</label>
@@ -56,7 +56,7 @@
 			<label index="author">Autor</label>
 			<label index="editedby">Bearbeitet von</label>
 			<label index="online">Online</label>
-			<label index="activerole">Aktive Rolle</label>
+			<label index="article_activerole">Aktuelle Artikel-Workflow-Rolle</label>
 			<label index="section">Ressort</label>
 			<label index="article_uid">Artikel-Id</label>
 			<label index="filtersections">Ressorts filtern</label>
