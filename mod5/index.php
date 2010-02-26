@@ -309,6 +309,17 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		
 		t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);
 		
+		$sections = tx_newspaper_Section::getAllSections();
+//t3lib_div::devlog('new_article()', 'np', 0, array('sections' => $sections));
+		$sections_available = array(); // true = default article available, else false
+		foreach($sections as $section) {
+			if ($section != null && $section->getDefaultArticle()) {
+				$sections_available[] = true;
+			} else {
+				$sections_available[] = false;
+			}
+		}		
+		
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
@@ -326,7 +337,9 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 		
-		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
+		$smarty->assign('SECTION', $sections);
+		$smarty->assign('SECTION_AVAILABLE', $sections_available);
+		
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);

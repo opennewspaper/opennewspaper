@@ -37,7 +37,11 @@
 	  {$LABEL.section}:<br />
       <select name="section" size="1" onchange="setDefaultArticletype(this.value)">
 		{section name=i loop=$SECTION}
-    	  <option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option> 
+		  {if $SECTION_AVAILABLE[i]}
+    	  	<option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
+    	  {else}
+    	    <option disabled="disabled" value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
+    	  {/if}
 		{/section}
       </select>
     </div>
