@@ -450,12 +450,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// Get article type of article
-	/** \return tx_newspaper_ArticleType assigned to this Article, or \c null.
+	/** \return tx_newspaper_ArticleType assigned to this Article
 	 */
 	public function getArticleType() {
-		if (!$this->getAttribute('articletype_id')) {
-			return null;
-		}
 		return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
 	}
 
@@ -715,10 +712,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 	/// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
 	/** \return The tx_newspaper_Section in which \p $this is displayed by
-	 *  	default, if no Section context is given. 
+	 *  	default, if no Section context is given, or \c null.
 	 */		
 	public function getPrimarySection() {
 		$sections = $this->getSections(1);
+		if (sizeof($sections) == 0) {
+			return null; // no section found
+		}
 		return $sections[0];
 	}
 
@@ -734,18 +734,30 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$shortcuts = array();
 
 		// get must-have/should-have configuration 
-		$at = $this->getArticleType();
-		
-		if ($at == null) {
-			t3lib_div::devlog('getMissingDefaultExtras(): no article ytpe set for article #' . $this->getUid(), 'newspaper', 3);
+		try {
+			$at = $this->getArticleType();
+			$at->getAttribute('uid'); // access article type to force database access
+		} catch (tx_newspaper_EmptyResultException $e) {
+			// article type could not be found - either article type is 0 or article type is deleted for some reason
+			t3lib_div::devlog('getMissingDefaultExtras(): no article type set for article #' . $this->getUid(), 'newspaper', 3);
 			return array(); // no article type, no shortcuts ...
 		}
-		
+
 		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
 //t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras));
 
 		// get extras on default article for the primary section of this article
-		$defaultExtras = $this->getPrimarySection()->getDefaultArticle()->getExtras();
+		if (!$primarySection = $this->getPrimarySection()) {
+			// no primary section found, so no section assigned, so no extra missing ...
+			return array();
+		}
+		if (!$defaultArticle = $primarySection->getDefaultArticle()) {
+			// no default article found, so no extras missing ...
+			return array();	
+		}
+		$defaultExtras = $defaultArticle->getExtras();
+		
+		
 //t3lib_div::devlog('getMissingDefaultExtras() defafult extras', 'newspaper', 0, array('de' => $defaultExtras));
 		if (is_array($defaultExtras)) {
 			// get extras assigned to this article

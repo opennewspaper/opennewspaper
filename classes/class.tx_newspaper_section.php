@@ -282,7 +282,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	/** \return the Article PageZone (PageZoneType has is_article set) on the 
-	 * 		Page marked as the Article Page
+	 * 		Page marked as the Article Page, or \c null.
 	 */ 
 	public function getDefaultArticle() {
 		foreach ($this->getSubPages() as $sub_page) {
@@ -292,13 +292,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				}
 			}
 		}
-
-		/// \todo Print the names of the article page type and page zone type
-		throw new tx_newspaper_IllegalUsageException('There must be one page under section "' .
-			$this->getAttribute('section_name') . '" that has the page type which is marked ' .
-			'as Article Page. Additionally, this page must have a page zone which is marked' .
-			' as the Article Page Zone.'
-		);
+		return null; // no default article found
 	}
  	
  	/** Create a new article from the article with the default placement as 
@@ -316,7 +310,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	 */
  	public function copyDefaultArticle(array $must_have_extras) {
 
- 		$new_article = $this->getDefaultArticle();
+ 		if (!$new_article = $this->getDefaultArticle()) {
+			// no default article found, so no article to copy, just return a new empty article
+			return new tx_newspaper_article(); 			
+ 		}
  		if (!$new_article instanceof tx_newspaper_Article) {
  			throw new tx_newspaper_InconsistencyException('getDefaultArticle() did not return an Article!');
  		}

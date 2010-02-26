@@ -309,14 +309,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             }
             
             // ... default article
-    		try {
-    		    $default_article = $section->getDefaultArticle();
+            if ($default_article = $section->getDefaultArticle()) {
     		    $ret .= '<p>Default article:</p>' . 
     		      self::getArticleInfo($default_article->getUid()) . '<hr />';
-    		} catch (tx_newspaper_IllegalUsageException $e) {
+            } else {
                 $ret .= '<p>' . '<strong>' . 'No default article.' . '</strong>' . '</p>';
-    		}
-    		
+            }
+            
     		// ... pages
     		$pages = $section->getActivePages();
             if ($pages) {
