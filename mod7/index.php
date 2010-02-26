@@ -73,9 +73,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 					// Access check!
 // \todo: better check: currently access to all be_users is granted
-					if (isset($GLOBALS['BE_USER']->user['uid']) && $GLOBALS['BE_USER']->user['uid'])	{
-						// \todo: comment out later
-						ini_set('display_errors',  'on');
+					if (isset($GLOBALS['BE_USER']->user['uid']) && $GLOBALS['BE_USER']->user['uid']) {
+//						ini_set('display_errors',  'on');
 						
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
@@ -186,6 +185,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				
 				// render the main / full module
 				function renderModule ($input) {
+					
+					if (!isset($input['articleid']) || !$input['articleid']) {
+						die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
+					}
+					
 					// get data
 					$article = $this->getArticleByArticleId($input['articleid']);
 					$sections = $this->renderAllAvailableSections();
