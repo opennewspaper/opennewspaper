@@ -323,23 +323,31 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
-		$label['new_article'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false);
-		$label['new_article_button'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false);
-		$label['new_article_typo3'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false);
-		$label['section'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false);
-		$label['articletype'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false);
-		$label['back_to_wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false);
-		$label['error_browsing'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false);
-		$smarty->assign('LABEL', $label);
+		$smarty->assign('LABEL', array(
+			'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
+			'new_article_button' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false),
+			'new_article_typo3' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false),
+			'section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false),
+			'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
+			'back_to_wizards' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false),
+			'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
+			'no_sect' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
+		));
+
+		$smarty->assign('MESSAGE', array(
+			'no_section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section', false),
+			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
+		));		
+
 
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
-		
+
 		$smarty->assign('SECTION', $sections);
 		$smarty->assign('SECTION_AVAILABLE', $sections_available);
-		
+
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
