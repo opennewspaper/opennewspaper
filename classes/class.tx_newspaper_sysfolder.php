@@ -184,6 +184,14 @@ class tx_newspaper_Sysfolder {
 		return self::$rootfolder_modulename;
 	}
  	
+ 	/// create all sysfolder newspaper might need
+ 	public static function createAll() {
+		foreach(get_declared_classes() as $class) {
+			if (!tx_newspaper::isAbstractClass($class) && tx_newspaper::classImplementsInterface($class, 'tx_newspaper_StoredObject')) {
+				$dummy = self::getInstance()->getPid(new $class); // this creates the sysfolder if it does not exist
+			}
+		}	 		
+ 	}
 }
 
 ?>
