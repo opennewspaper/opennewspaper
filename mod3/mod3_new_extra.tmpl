@@ -57,7 +57,7 @@ if (in_article) alert("pool: in article not yet implemented");
 
 
 {* render list with registered extras *}
-<select id="extra_list" size="{$LIST_SIZE}">';
+<select id="extra_list" size="{$LIST_SIZE}" ondblclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID}, {$ARTICLE_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})">';
 {section name=i loop=$EXTRA}
 	<option value="{$EXTRA[i]->getTable()}|{$EXTRA[i]->getSysfolderPid()}">{$EXTRA[i]->getTitle()}</option>
 {/section}

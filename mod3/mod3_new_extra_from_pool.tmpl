@@ -29,7 +29,7 @@
 
 {* render list with pooled extras *}
 {if sizeof($EXTRA_POOLED) > 0 && $EXTRA_POOLED != false	}
-	<select id="extra_list_pooled" size="{$LIST_SIZE}">';
+	<select id="extra_list_pooled" size="{$LIST_SIZE}" ondblclick="extra_insert_after_POOL_copy({$ORIGIN_UID}, '{$EXTRA_CLASS}', {$PZ_UID}, {$PARAGRAPH}, top.path)">';
 	{section name=i loop=$EXTRA_POOLED}
 		<option value="{$EXTRA_POOLED[i]->getUid()}">{$EXTRA_POOLED[i]->getDescription()}</option>
 	{/section}
