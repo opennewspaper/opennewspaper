@@ -89,7 +89,7 @@ function focusOpenerAndClose(close)	{
 
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
-{$RANGE_LABEL}: <select name="range">
+{$RANGE_LABEL}: <select name="range" onchange="this.form.submit()">
 {foreach from=$RANGE key=key item=value}
 {if $key == $_POST.range}
 	<option selected="selected" value="{$key}">{$value}</option>
@@ -100,7 +100,7 @@ function focusOpenerAndClose(close)	{
 </select>
 
 
-{$HIDDEN_LABEL}: <select name="hidden">
+{$HIDDEN_LABEL}: <select name="hidden" onchange="this.form.submit()">
 {foreach from=$HIDDEN key=key item=value}
 {if $key == $_POST.hidden}
 	<option selected="selected" value="{$key}">{$value}</option>
@@ -111,7 +111,7 @@ function focusOpenerAndClose(close)	{
 </select>
 
 
-{$ROLE_LABEL}: <select name="role">
+{$ROLE_LABEL}: <select name="role" onchange="this.form.submit()">
 {foreach from=$ROLE key=key item=value}
 {if $key == $_POST.role}
 	<option selected="selected" value="{$key}">{$value}</option>
@@ -130,7 +130,7 @@ function focusOpenerAndClose(close)	{
 *}
 {$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 
-{$STEP_LABEL}: <select name="step">
+{$STEP_LABEL}: <select name="step" onchange="this.form.submit()">
 {foreach from=$STEP item=value}
 {if $value == $_POST.step}
 	<option selected="selected" value="{$value}">{$value}</option>
