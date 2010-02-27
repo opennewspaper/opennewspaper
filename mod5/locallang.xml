@@ -20,7 +20,7 @@
 			<label index="label_shortcut_typo3">Shortcut</label>
 			<label index="label_shortcut_newspaper">Go to ...</label>
 			<label index="label_wizards">Wizards</label>
-			<label index="label_latest_articles">Latzest articles</label>
+			<label index="label_latest_articles">Latest articles</label>
 			<label index="label_shortcuts">Shortcuts</label>
 			<label index="label_manage_usercomments">Manage user comments (DEMO ONLY)</label>
 			<label index="label_newspaper_functions">Newspaper functions</label>
