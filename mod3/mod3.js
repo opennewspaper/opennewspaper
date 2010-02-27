@@ -1,6 +1,6 @@
-{literal}
-<script language="javascript">
 
+<script language="javascript">
+//{literal}
 // this script assumes prototype (ajax) to be available
 
 
@@ -41,6 +41,9 @@ function loadJsCssFile(filename, filetype) {
 
 	// returns object containing getViewportWidth() etc. functions (or returns false if not available)
 	function getTypo3BackendObject() {
+//top.console.log('getTypo3BackendObject()');
+//top.console.log(typeof top.getViewportWidth);
+//alert('+++');
 		if (typeof top.getViewportWidth == 'function') {
 			return top; // called in "normal" typo3 backend
 		}
@@ -522,6 +525,5 @@ function loadJsCssFile(filename, filetype) {
 
 	
 
-	
+//{/literal}	
 </script>
-{/literal}
