@@ -117,12 +117,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			// Render content:
 			$this->moduleContent();
 
-
-			// ShortCut
-			if ($BE_USER->mayMakeShortcut())	{
-				$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-			}
-
 			$this->content.=$this->doc->spacer(10);
 		} else {
 				// If no access or if ID == zero
