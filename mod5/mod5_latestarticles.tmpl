@@ -4,9 +4,8 @@
    {$ARTICLE_EDIT_ICON} 
   </a>
   {if $ARTICLE[i]->getAttribute('title') != ''}
-    {$ARTICLE[i]->getAttribute('title')}
-  {else}
-    (#{$ARTICLE[i]->getUid()})
-  {/if}  
+    {$ARTICLE[i]->getAttribute('title')} 
+  {/if}
+  (#{$ARTICLE[i]->getUid()})
   <br />
 {/section}
