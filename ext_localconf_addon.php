@@ -24,4 +24,20 @@
 	// register extension manager hook
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/mod/tools/em/index.php']['tsStyleConfigForm'][] = 'EXT:newspaper/classes/class.tx_newspaper_typo3hook.php:tx_newspaper_Typo3Hook->tsStyleConfigForm';
 	
+	
+	
+	// hide some fields
+	// hide some tables
+	t3lib_extMgm::addPageTSConfig('
+#		TCEFORM.tx_newspaper_article.hidden.disabled = 1 // this would hide starttime/endtime too, because these fields are on a secondary palette
+		TCEFORM.tx_newspaper_article.source_id.disabled = 1
+		TCEFORM.tx_newspaper_article.source_object.disabled = 1
+		TCEFORM.tx_newspaper_article.is_template.disabled = 1
+		TCEFORM.tx_newspaper_article.pagezonetype_id.disabled = 1
+		TCEFORM.tx_newspaper_article.name.disabled = 1
+		TCEFORM.tx_newspaper_article.inherits_from.disabled = 1
+
+		mod.web_list.hideTables = tx_newspaper_pagezone,tx_newspaper_extra
+	');
+	
 ?>
