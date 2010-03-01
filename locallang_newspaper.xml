@@ -88,6 +88,8 @@
 			<label index="title_tx_newspaper_tag">Tag</label>
 			<label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
+			<label index="label_tab_article_article">Article</label>
+			<label index="label_tab_article_additional">Additional data</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="label_articlelist_included_sections">Ressort(s)</label>

@@ -29,7 +29,7 @@
 	// hide some fields
 	// hide some tables
 	t3lib_extMgm::addPageTSConfig('
-#		TCEFORM.tx_newspaper_article.hidden.disabled = 1 // this would hide starttime/endtime too, because these fields are on a secondary palette
+		TCEFORM.tx_newspaper_article.hidden.disabled = 1 
 		TCEFORM.tx_newspaper_article.source_id.disabled = 1
 		TCEFORM.tx_newspaper_article.source_object.disabled = 1
 		TCEFORM.tx_newspaper_article.is_template.disabled = 1

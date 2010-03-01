@@ -46,6 +46,7 @@ $TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['type'
 
 
 // /switch Extra field 'extras' in article (created by kickstarter) to a userFunc field (displaying a list of associated Extras)
+unset($TCA['tx_newspaper_article']['extras']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
 
@@ -145,5 +146,20 @@ $TCA['tx_newspaper_extra_controltagzone']['columns']['tag_type']['config'] = arr
 	'noTableWrapping' => 1
 );
 
+
+
+// article backend modifications
+t3lib_div::devlog('TCA', 'np', 0, $GLOBALS['TCA']['tx_newspaper_article']['types'][0]);
+	// detach starttime and endtime from hidden field palette
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden;;1;;1-1-1, ', 'hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
+	
+	// attach starttime and endtime from field publish_date
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', publish_date, ', ', publish_date;;1;;1-1-1, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
+
+	// add tabs
+	$GLOBALS['TCA']['tx_newspaper_article']['ctrl']['dividers2tabs'] = 1; ;// yes, do use tabs
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden, ', '--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_article, hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', template_set,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_additional, template_set,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
+t3lib_div::devlog('TCA', 'np', 0, $GLOBALS['TCA']['tx_newspaper_article']['types'][0]);
 
 ?>
