@@ -438,11 +438,13 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 	
 	///	Get all tx_newspaper_Section records in the DB.
-	/** \param $sort_by Field of the \c tx_newspaper_section SQL table to sort 
+	/** \param $articlesAllowedOnly if set to true only section with the
+	 *       articles_allowed flag set are returned
+	 *  \param $sort_by Field of the \c tx_newspaper_section SQL table to sort 
 	 * 		results by.
 	 *  \return tx_newspaper_Section objects in the DB.
 	 */
-	public static function getAllSections($sort_by = 'sorting') {
+	public static function getAllSections($articlesAllowedOnly=true, $sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
 		$excluded = $TSConfig['newspaper.']['excluded_sections'];
 		
@@ -465,6 +467,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				}
 				$additional_where .= ')';
 			}
+		}
+		
+		if ($articlesAllowedOnly) {
+			$additional_where .= ' AND articles_allowed=1';
 		}
 		
 		$row = tx_newspaper::selectRows(

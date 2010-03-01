@@ -24,7 +24,7 @@
 			<label index="label_shortcuts">Shortcuts</label>
 			<label index="label_manage_usercomments">Manage user comments (DEMO ONLY)</label>
 			<label index="label_newspaper_functions">Newspaper functions</label>
-			<label index="message_no_section">No section available, so no article can be added. Please create sections in order to create articles.</label>
+			<label index="message_no_section">No section available, so no article can be added. Please create sections (and allow the addition of articles) in order to create articles.</label>
 			<label index="message_no_articletype">No article type available, so no article can be added. Please create article types in order to create articles.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
