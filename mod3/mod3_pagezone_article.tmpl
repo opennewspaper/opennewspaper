@@ -32,19 +32,19 @@
 {if $EXTRA_DATA}
 <table class="mod3_table">
 <tr>
-	<td>{$LABEL.extra}</td>
-	{if (!$IS_CONCRETE_ARTICLE)}<td>{$LABEL.notes}</td> {/if}
-	<td>{$LABEL.templateset}</td>
-	<td align="center">{$LABEL.show}</td>
-	{if (!$IS_CONCRETE_ARTICLE)}<td align="center">{$LABEL.pass_down}</td> {/if}
-	{if (!$IS_CONCRETE_ARTICLE)}<td align="center">{$LABEL.inherits_from}</td> {/if}
-	<td align="center">{$LABEL.paragraph}</td>
-	<td>{$LABEL.commands}</td>
+	<td class="mod3_td">{$LABEL.extra}</td>
+	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td">{$LABEL.notes}</td> {/if}
+	<td class="mod3_td">{$LABEL.templateset}</td>
+	<td  class="mod3_td" align="center">{$LABEL.show}</td>
+	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td" align="center">{$LABEL.pass_down}</td> {/if}
+	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td" align="center">{$LABEL.inherits_from}</td> {/if}
+	<td class="mod3_td" align="center">{$LABEL.paragraph}</td>
+	<td class="mod3_td">{$LABEL.commands}</td>
 	{if ($DEBUG_OUTPUT && $ADMIN)}
-		<td align="center">pos</td>
-		<td align="center">origin</td>
-		<td align="center">uid</td>
-		<td align="center">concr.</td>
+		<td class="mod3_td" align="center">pos</td>
+		<td class="mod3_td" align="center">origin</td>
+		<td class="mod3_td" align="center">uid</td>
+		<td class="mod3_td" align="center">concr.</td>
 	{/if}
 </tr>
 	{section name=i loop=$EXTRA_DATA} 
@@ -54,17 +54,17 @@
 			<tr class="bg2">
 		{/if}
 {* note *}
-				<td> {$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span> </td>
+				<td class="mod3_td"> {$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span> </td>
 				{if (!$IS_CONCRETE_ARTICLE)}
-					<td id="notes_td_{$EXTRA_DATA[i].uid}">
+					<td class="mod3_td" id="notes_td_{$EXTRA_DATA[i].uid}">
 						<input id="notes_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
 						<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes', 0); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
 					</td>
 				{/if}
 {* template set *}				
-				<td>{$EXTRA_DATA[i].template_set_HTML}</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
 {* show *}
-				<td align="center">
+				<td class="mod3_td" align="center">
 					{if $EXTRA_DATA[i].show == 0}
 					<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 1);" /> 
 					{else}
@@ -73,7 +73,7 @@
 				</td>
 				{if (!$IS_CONCRETE_ARTICLE)}
 {* pass down *}
-					<td align="center">
+					<td class="mod3_td" align="center">
 						{if $EXTRA_DATA[i].pass_down == 0}
 						<input type="checkbox" onchange="extra_set_pass_down({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 1);" />
 						{else}
@@ -81,14 +81,14 @@
 						{/if}
 					</td>
 				{/if}
-				{if (!$IS_CONCRETE_ARTICLE)}<td> {$EXTRA_DATA[i].inherits_from} </td> {/if}
+				{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td"> {$EXTRA_DATA[i].inherits_from} </td> {/if}
 {* paragraph *}		
-				<td id="para_td_{$EXTRA_DATA[i].uid}" align="center">
+				<td class="mod3_td" id="para_td_{$EXTRA_DATA[i].uid}" align="center">
 					<input id="para_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'para');" style="width: 30px" type="text" value="{$EXTRA_DATA[i].paragraph}" />
 					<span style="display: none" id="save_para_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'para', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if}); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'para'); return false;">{$UNDO_ICON}</a></span> 
 				</td>
 
-				<td>
+				<td class="mod3_td">
 {* edit *}
 					{if $EXTRA_DATA[i].origin_placement == true || $IS_CONCRETE_ARTICLE} 
 					  <a href="javascript:extra_edit('{$EXTRA_DATA[i].concrete_table}', {$EXTRA_DATA[i].concrete_uid}, {$DATA.article_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$EDIT_ICON}</a>
@@ -132,10 +132,10 @@
 		
 			{if ($DEBUG_OUTPUT && $ADMIN)}
 				{* if td's are added here, do add them to the table header too *}
-				<td>{$EXTRA_DATA[i].position}</td>
-				<td>{$EXTRA_DATA[i].origin_uid}</td>
-				<td>{$EXTRA_DATA[i].uid}</td>
-				<td>{$EXTRA_DATA[i].concrete_uid}</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].position}</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].origin_uid}</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].uid}</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].concrete_uid}</td>
 			{/if}
 			</tr>
 	{/section}
