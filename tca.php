@@ -164,7 +164,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 $TCA["tx_newspaper_section"] = array (
 	"ctrl" => $TCA["tx_newspaper_section"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "section_name,parent_section,default_articletype,articlelist,template_set,pagetype_pagezone"
+		"showRecordFieldList" => "section_name,articles_allowed,parent_section,default_articletype,pagetype_pagezone,articlelist,template_set"
 	),
 	"feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
 	"columns" => array (
@@ -176,6 +176,14 @@ $TCA["tx_newspaper_section"] = array (
 				"size" => "40",	
 				"max" => "40",	
 				"eval" => "required",
+			)
+		),
+		"articles_allowed" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.articles_allowed",		
+			"config" => Array (
+				"type" => "check",
+				"default" => 1,
 			)
 		),
 		"parent_section" => Array (		
@@ -203,6 +211,13 @@ $TCA["tx_newspaper_section"] = array (
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
+			)
+		),
+		"pagetype_pagezone" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone",		
+			"config" => Array (
+				"type" => "none",
 			)
 		),
 		"articlelist" => Array (		
@@ -233,16 +248,9 @@ $TCA["tx_newspaper_section"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"pagetype_pagezone" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone",		
-			"config" => Array (
-				"type" => "none",
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "section_name;;;;1-1-1, parent_section, default_articletype, articlelist, template_set, pagetype_pagezone")
+		"0" => array("showitem" => "section_name;;;;1-1-1, articles_allowed, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2718,5 +2726,4 @@ $TCA["tx_newspaper_tag_type"] = array (
 		"1" => array("showitem" => "")
 	)
 );
-require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
