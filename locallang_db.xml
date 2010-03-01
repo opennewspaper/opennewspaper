@@ -48,6 +48,7 @@
 			<label index="tx_newspaper_pagezone_page.inherits_from">Page zone the placement is inherited from</label>
 			<label index="tx_newspaper_article">Article</label>
 			<label index="tx_newspaper_article.articletype_id">Article type</label>
+			<label index="tx_newspaper_article.publish_date">Publish date</label>
 			<label index="tx_newspaper_article.title">Title</label>
 			<label index="tx_newspaper_article.title_list">Title for list view, if different</label>
 			<label index="tx_newspaper_article.kicker">Kicker</label>
@@ -65,7 +66,6 @@
 			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Page Zone Type</label>
 			<label index="tx_newspaper_article.inherits_from">Page zone the placement is inherited from</label>
-			<label index="tx_newspaper_article.publish_date">Publish date</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.tags">Tags</label>
@@ -247,6 +247,7 @@
 			<label index="tx_newspaper_pagezone_page.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.articletype_id">Artikeltyp</label>
+			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
 			<label index="tx_newspaper_article.title">Titel</label>
 			<label index="tx_newspaper_article.title_list">Titel für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.kicker">Dachzeile</label>
@@ -264,7 +265,6 @@
 			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Seitenbereichstyp</label>
 			<label index="tx_newspaper_article.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
-			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.tags">Schlagworte</label>
