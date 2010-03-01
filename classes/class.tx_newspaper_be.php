@@ -352,6 +352,18 @@ function findElementsByName(name, type) {
 		}
 		return $data;
 	} 
+	
+	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)	
+	function renderArticleKickerTtitleTeaser($PA, $fobj) {
+//t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
+		return '';	
+	}
+	/// render dummy field for kicker, title and teaser in list views in order to place these 3 field in 1 row (in a palette)	
+	function renderArticleKickerTtitleTeaserForListviews($PA, $fobj) {
+//t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
+		return '';	
+	}
+	
 
 /// function to render extras (article or pagezone_page)
 /// \todo: move locallang and smarty templates from mod3 to res/be/...
@@ -418,6 +430,7 @@ function findElementsByName(name, type) {
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
 
 		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
+		$label['show_visible_only'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_visible_only', false);
 		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
 		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
 		$label['pagezone_inheritancesource'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource', false);
