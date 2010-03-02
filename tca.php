@@ -2726,4 +2726,5 @@ $TCA["tx_newspaper_tag_type"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
