@@ -26,6 +26,8 @@
 	
 	
 	
+	
+	
 	// hide some fields
 	// hide some tables
 	t3lib_extMgm::addPageTSConfig('
@@ -38,6 +40,14 @@
 		TCEFORM.tx_newspaper_article.inherits_from.disabled = 1
 
 		mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
+				
+		user.options.hideRecords.pages = ' . $sysfolder . '
+	');
+	
+	// set start module
+	t3lib_extMgm::addUserTSConfig('
+		setup.default.startModule = txnewspaperMmain_txnewspaperM5
+		setup.override.startModule = txnewspaperMmain_txnewspaperM5
 	');
 	
 ?>
