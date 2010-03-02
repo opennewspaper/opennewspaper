@@ -57,6 +57,18 @@ $TCA['tx_newspaper_extra_typo3_ce']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_typo3_ce.gif';
 $TCA['tx_newspaper_tag']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_tag.gif';
+$TCA['tx_newspaper_controltag_to_extra']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_controltag_to_extra.gif';
+$TCA['tx_newspaper_extra_combolinkbox']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_combolinkbox.gif';
+$TCA['tx_newspaper_extra_container']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_container.gif';
+$TCA['tx_newspaper_extra_controltagzone']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_controltagzone.gif';
+$TCA['tx_newspaper_extra_searchresults']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_searchresults.gif';
+$TCA['tx_newspaper_tag_zone']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_zone.gif';
 
 
 if (TYPO3_MODE == 'BE') {
@@ -81,7 +93,7 @@ if (TYPO3_MODE == 'BE') {
 	$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
 	
 	/// add icon for newspaper sysfolders
-	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_newspaper_sysf.gif');
+	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/icons/icon_tx_newspaper_sysf.gif');
 
 
 
