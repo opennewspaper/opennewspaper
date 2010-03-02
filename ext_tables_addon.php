@@ -38,25 +38,25 @@ $TCA['tx_newspaper_articlelist_manual']['ctrl']['iconfile'] =
 $TCA['tx_newspaper_articlelist_semiautomatic']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_articlelist_semiautomatic.gif';
 $TCA['tx_newspaper_comment_cache']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_comment_cache.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_comment_cache.gif';
 $TCA['tx_newspaper_externallinks']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_externallinks.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_externallinks.gif';
 $TCA['tx_newspaper_extra_articlelist']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_articlelist.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_articlelist.gif';
 $TCA['tx_newspaper_extra_bio']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_bio.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_bio.gif';
 $TCA['tx_newspaper_extra_displayarticles']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_displayarticles.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_displayarticles.gif';
 $TCA['tx_newspaper_extra_externallinks']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_externallinks.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_externallinks.gif';
 $TCA['tx_newspaper_extra_mostcommented']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_mostcommented.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_mostcommented.gif';
 $TCA['tx_newspaper_extra_textbox']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_textbox.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_textbox.gif';
 $TCA['tx_newspaper_extra_typo3_ce']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_extra_typo3_ce.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_typo3_ce.gif';
 $TCA['tx_newspaper_tag']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/tx_newspaper_tag.gif';
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag.gif';
 $TCA['tx_newspaper_controltag_to_extra']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_controltag_to_extra.gif';
 $TCA['tx_newspaper_extra_combolinkbox']['ctrl']['iconfile'] =
@@ -69,10 +69,10 @@ $TCA['tx_newspaper_extra_searchresults']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_searchresults.gif';
 $TCA['tx_newspaper_tag_zone']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_zone.gif';
-
+$TCA['tx_newspaper_tag_type']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_type.gif';
 
 if (TYPO3_MODE == 'BE') {
-/// \todo: hide sysfolder (with user tsconfig): options.hideRecords.pages	
 	
 	// remove range check for set range for role in be_users in table pages
 	unset($TCA['pages']['columns']['set range for role in be_users']['config']['range']);
