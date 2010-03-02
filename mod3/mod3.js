@@ -114,7 +114,7 @@ function loadJsCssFile(filename, filetype) {
 	/// the list of extras has to be reloaded from the server (needed for modal box or saveField ajax calls)
 	function reload_in_article(pz_uid) {
 		if (t3BackendObject == top) {
-			ref = top.content.list_frame
+			ref = top.content;
 		} else {
 			ref = top;
 		}
@@ -148,7 +148,18 @@ function loadJsCssFile(filename, filetype) {
 		);
 	}	
 	
-	
+	/// toggle checkbox "Show visible extras only"
+	function toggle_show_visible_only(checked) {
+		var request = new top.Ajax.Request(
+				top.path + "typo3conf/ext/newspaper/mod3/index.php",
+				{
+				method: 'get',
+				parameters: "toggle_show_visible_only=1&checked=" + checked + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			}
+		);
+	}		
 
 	
 	
