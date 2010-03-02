@@ -123,7 +123,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$this->checkIfNewArticle();
 
 			// Draw the header.
-			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
+			$this->doc = t3lib_div::makeInstance('bigDoc'); //fullWidthDoc');
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
