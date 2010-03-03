@@ -16,7 +16,7 @@ td {
    border: 1px solid #e8e8e8;
 }
 .bg1 {
-  background-color: #f0f0f0;"
+  background-color: #f0f0f0;
 }
 .bg2 {
   background-color: #d0d0d0;
@@ -43,7 +43,7 @@ td {
 }
 .box_hl {
   color: black;
-  font-weigth: bold;
+  font-weight: bold;
   width: 400px;
   background-color: #d0d0d0;
   margin: 5px;
@@ -54,74 +54,6 @@ td {
 </style>
 {/literal}
  
-
-<script language="javascript">
-	
-	/// when section is changed the assigned default article type gets selected
-	function setDefaultArticletype(section_id) {ldelim}
-		switch(parseInt(section_id)) {ldelim}
-{section name=i loop=$SECTION}
-{if $SECTION[i]->getAttribute('default_articletype') > 0}
-			case {$SECTION[i]->getUid()}:
-				d_at = {$SECTION[i]->getAttribute('default_articletype')};
-			break;
-{/if}
-{/section}
-			default:
-				d_at = 0;
-		{rdelim}
-		if (d_at > 0) {ldelim}
-			document.getElementById('articletype').value = d_at;
-		{rdelim}
-	{rdelim}
-
-	function switch_new_article(show_article) {ldelim}
-		if (show_article) {ldelim}
-			document.getElementById('wizards').style.display = 'none';
-			document.getElementById('div_new_article').style.display = 'block';
-		{rdelim} else {ldelim}
-			document.getElementById('wizards').style.display = 'block';
-			document.getElementById('div_new_article').style.display = 'none';
-		{rdelim}
-	{rdelim}
-
-
-
-	function processing() {ldelim}
-		img = document.createElement('img');
-		img_src = document.createAttribute('src');
-		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
-		img.setAttributeNode(img_src);
-
-		layer_style = document.createAttribute('style');
-		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
-
-		layer = document.createElement('div');
-		layer.setAttributeNode(layer_style);
-
-		layer.appendChild(img);
-		self.document.getElementsByTagName('body')[0].appendChild(layer);
-	{rdelim}
-	
-	function processing() {ldelim}
-		img = document.createElement('img');
-		img_src = document.createAttribute('src');
-		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
-		img.setAttributeNode(img_src);
-
-		layer_style = document.createAttribute('style');
-		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
-
-		layer = document.createElement('div');
-		layer.setAttributeNode(layer_style);
-
-		layer.appendChild(img);
-		self.document.getElementsByTagName('body')[0].appendChild(layer);
-	{rdelim}
-	
-	
-
-</script>
 
 <div id="wizards" style="display: block">
 
@@ -183,54 +115,5 @@ td {
 </div>
 <br />
 *}
-
-</div>
-
-<div id="div_new_article" style="display: none">
-  <a href="#" onclick="switch_new_article(false); return false;">{$LABEL.back_to_wizards}</a><br />
-  <form action="index.php">
-    <div>{$LABEL.new_article}</div>
-    <div>
-      <input checked="checked" type="radio" name="type" value="newarticle"> {$LABEL.new_article_typo3}<br />
-      
-      {* read registered sources *}
-	  {foreach from=$IMPORT_SOURCE item=source key=key}
-      	<input type="radio" name="type" value="{$key}"> {$source->getTitle()}<br /> 
-	  {/foreach}
-    </div>
-
-	{if $BROWSE_PATH}
-	   {foreach from=$BROWSE_PATH item=path}
-	     <p>{$path}</p>
-	   {/foreach}
-	{/if}
-
-	<div><br />
-	  {$LABEL.section}:<br />
-      <select name="section" size="1" onchange="setDefaultArticletype(this.value)">
-{section name=i loop=$SECTION}
-    	  <option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option> 
-{/section}
-      </select>
-    </div>
-
-	<div><br />
-	  {$LABEL.articletype}:<br /> 
-      <select id="articletype" name="articletype" size="1">
-{section name=i loop=$ARTICLETYPE}
-{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
-          <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
-{else}
-    	  <option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
-{/if}
-{/section}
-      </select>
-    </div>
-	<input type="submit" value="{$LABEL.new_article_button}" />
-
-	</form>
-
-
-
 
 </div>
