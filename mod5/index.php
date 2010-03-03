@@ -116,11 +116,12 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 				case 'import_article' :
 					die($this->import_article($input));
 				case 'change_role': 
-					$this->changeRole($input); // no die() needed, just change to tole and re-render the module
+					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
 			}				
 
-			$this->checkIfNewArticle();
+			// check if new article is to be created, if yes, then do so and redirect to that newly created article
+			$this->checkIfNewArticle(); // \todo: add to controller
 
 			// Draw the header.
 			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
@@ -151,11 +152,12 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 			$this->content.=$this->doc->divider(5);
 
-			if (isset($_REQUEST['new_article']))
+			if (isset($_REQUEST['new_article'])) {
 				$this->new_article();
-
-			// Render content:
-			$this->moduleContent();
+			} else {
+				// Render start wizard page:
+				$this->moduleContent();
+			}
 
 
 //						// ShortCut
@@ -304,10 +306,8 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 	}
 		
 	private function new_article() {
-		
+//t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);		
 		global $LANG;
-		
-		t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);
 		
 		$sections = tx_newspaper_Section::getAllSections();
 //t3lib_div::devlog('new_article()', 'np', 0, array('sections' => $sections));
@@ -355,7 +355,9 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
-		die($smarty->fetch('mod5_newarticle.tmpl'));
+		$this->content .= $this->doc->section('', $smarty->fetch('mod5_newarticle.tmpl'), 0, 1);
+		$this->content.=$this->doc->spacer(10);
+		
 	}
 	
 	private function checkIfNewArticle() {
