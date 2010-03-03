@@ -71,6 +71,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private $pagezone_type_id;
 	
 	private $show_levels_above;
+	private $show_visible_only;
 	
 	
 	/// functions call by ajax calls //////////////////////////////////////////
@@ -85,6 +86,18 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/show_levels_above", $checked); // store status of checkbox for be_user
 		die();
 	}
+
+	private function processToggleShowVisibleOnly($checked) {
+		global $BE_USER;
+		if (strtolower($checked) == 'true') {
+			$checked = true;
+		} else {
+			$checked = false;
+		}
+		$BE_USER->pushModuleData("tx_newspaper/mod3/index.php/show_visible_only", $checked); // store status of checkbox for be_user
+		die();
+	}
+
 
 	private function processPageTypeChange($pt_uid) {
 		global $BE_USER;
@@ -401,6 +414,10 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 
 		if (t3lib_div::_GP('toggle_show_levels_above') == 1) {
 			$this->processToggleShowLevelsAbove(t3lib_div::_GP('checked')); 
+		}
+
+		if (t3lib_div::_GP('toggle_show_visible_only') == 1) {
+			$this->processToggleShowVisibleOnly(t3lib_div::_GP('checked')); 
 		}
 
 		if (t3lib_div::_GP('extra_insert_after_dummy') == 1) {
@@ -753,6 +770,10 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 				
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
 		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
+
+		$this->show_visible_only = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_visible_only'); // read from be user
+		if ($this->show_visible_only !== true) $this->show_visible_only = false; // make sure it's boolean
+
 		
 		// init
 		$this->section_id = 0;

@@ -6,7 +6,16 @@
 {if (!$IS_CONCRETE_ARTICLE)}
 	<br />
 	{* checkbox: show levels above for pagezone_page and default article *}
-	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above}<br /><br />
+	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above} 
+
+{* \todo, see #653 *}
+ 	{*cehckbox: deactivate moving and adding extras *}
+	{* checkbox: show visible extras only *}	
+{*	<input type="checkbox" {if $SHOW_VISIBLE_ONLY}checked="checked" {/if} onchange="javascript:toggle_show_visible_only(this.checked);" /> {$LABEL.show_visible_only} *}
+	
+	{* dropdown: tagzone extra visibility (yes, no, only) *}
+	
+	<br /><br />
 {/if}
 
 {section name=i loop=$DATA}

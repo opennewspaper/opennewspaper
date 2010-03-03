@@ -31,6 +31,7 @@
 			<label index="title_new_extra">New extra</label>
 			<label index="label_close">Close without saving</label>
 			<label index="label_show_levels_above">Show levels above</label>
+			<label index="label_show_visible_only">Show visible extras only</label>
 			<label index="message_delete_confirm">Do you really want to delete this extra?</label>
 			<label index="label_pagetype">Page</label>
 			<label index="label_pagezonetype">Page zone</label>
