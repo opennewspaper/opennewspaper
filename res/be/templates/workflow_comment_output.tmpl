@@ -3,13 +3,13 @@
     <table style="width:550px">
         {foreach item=comment from=$comments}
             <tr>
-                <td>{$comment.username} </td>
-                <td style="width:110px;">{$comment.created} </td>
-                {* <td>{$comment.action}</td> *}
+                <td valign="top">{$comment.username} </td>
+                <td valign="top" style="width:110px;">{$comment.created} </td>
+                {* <td valign="top">{$comment.action}</td> *}
                 {if $comment.action == 4}
-                <td style="width:350px;"><strong>{$comment.comment|nl2br}</strong> </td> {* manual comment *}
+                <td  valign="top"style="width:350px;"><strong>{$comment.comment|nl2br}</strong> </td> {* manual comment *}
                 {else}
-                <td style="width:350px;">{$comment.comment} </td> {* newspaper system comment *}
+                <td  valign="top"style="width:350px;">{$comment.comment} </td> {* newspaper system comment *}
                 {/if}
            </tr>
         {/foreach}
