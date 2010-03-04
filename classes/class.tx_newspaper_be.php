@@ -49,6 +49,7 @@ class tx_newspaper_BE {
 					// active page type found
 					$data[$i]['ACTIVE'] = true;
 					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
+					$data[$i]['DEFAULT_ARTICLE_PAGE'] = $active_page->getPageType()->getAttribute('is_article_page');
 					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
 					$data[$i]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_page', $active_page->getUid(), $active_page->getAttribute('template_set'));
 					break;
@@ -59,6 +60,7 @@ class tx_newspaper_BE {
 		// add delete ajax call to each activated page, add activate ajax call to each non-activated page
 		// add delete ajax call to each activated pagezone, add activate ajax call to each non-activated pagezone 
 		// and add page type name
+		// and add pagezone type name
 		for ($i = 0; $i < sizeof($page_types); $i++) {
 			$data[$i]['type_name'] = $page_types[$i]->getAttribute('type_name');
 			if (isset($data[$i]['ACTIVE']) && $data[$i]['ACTIVE'] == true) {
@@ -68,28 +70,41 @@ class tx_newspaper_BE {
 					/// get ACTIVE page zone type id for ACTIVE page in loop
 					for ($j = 0; $j < sizeof($pagezone_types); $j++) {
 						if ($pagezone_types[$j]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
-							// active pagezone type found
+							// active pagezone type found 	
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
 							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
 							$data[$i]['pagezones'][$j]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown($active_pagezone->getTable(), $active_pagezone->getUid(), $active_pagezone->getAttribute('template_set'));
 							break;
-						}
+						} 
 					}
 				}
 				// add ajax call to each non-activated pagezone type (and add pagezone type name)
+				// or remove pagezone type if not applicable
 				for ($j = 0; $j < sizeof($pagezone_types); $j++) {
 					$data[$i]['pagezones'][$j]['type_name'] = $pagezone_types[$j]->getAttribute('type_name');
 					if (!isset($data[$i]['pagezones'][$j]['ACTIVE'])) {
-						$data[$i]['pagezones'][$j]['ACTIVE'] = false;
-						$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_pagezone_in_page', false)) . '\');';
+						// so this pagezone type hasn't been activated
+						if ($pagezone_types[$j]->getAttribute('is_article') && !$data[$i]['DEFAULT_ARTICLE_PAGE']) {
+							// default article pagezone for non-default article page, this combinations is not allowed (and nonsense)
+							unset($data[$i]['pagezones'][$j]); // so remove data collected so far for this combination
+						} else {
+							// active pagezone type found ['ACTIVE'] = false;
+							$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_pagezone_in_page', false)) . '\');';
+						}
 					}
 				}
 			} else {
-				// not active, so no pagezones
+				// page type not active, so no pagezones to display
 				$data[$i]['ACTIVE'] = false;
 				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_types[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_page_in_section', false)) . '\');';
 			}
+			if (is_array($data[$i]['pagezones'])) {
+				ksort($data[$i]['pagezones'], SORT_NUMERIC); // sort array, so order of pagezone is fixed
+				// renumber indeces (in case an entry was unset; so {section} can still be used in smarty)
+				$data[$i]['pagezones'] = array_values($data[$i]['pagezones']); 
+			}
+			
 		}
 //t3lib_div::devlog('data apz', 'np', 0, $data);
 		/// generate be html code using smarty 
