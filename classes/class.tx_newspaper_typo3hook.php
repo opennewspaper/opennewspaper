@@ -425,7 +425,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	function tsStyleConfigForm($_funcRef, $_params, $that=null) {
 //t3lib_div::devlog('tsStyleConfigForm()', 'newspaper', 0, array('dummy' => $_params->CMD, '_funcRef' => $_funcRef, 'print_r _params' => print_r($_params, true)));
 		if (isset($_params->CMD['showExt']) && strtolower($_params->CMD['showExt']) == 'newspaper') {
-			// update button in extension amanger was pressed AND current extions is newspaper, so create all non-existing newspaper sysfolders
+			// update button in extension manager was pressed AND current extions is newspaper, so create all non-existing newspaper sysfolders
 			tx_newspaper_sysfolder::createAll();
 		}
 	}
