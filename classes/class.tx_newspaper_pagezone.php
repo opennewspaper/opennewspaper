@@ -803,6 +803,19 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return ($this->getAttribute('is_template') == 0);
 	}
 		
+	/// delete this concrete and the parent abstract pagezone
+	public function delete() {
+		// delete concrete pagezone delete abstract record first
+		$this->setAttribute('deleted', 1); 
+		$this->store();
+		// delete abstract record then
+		tx_newspaper::updateRows(
+			'tx_newspaper_pagezone',
+			'uid=' . $this->getAbstractUid(),
+			array('deleted' => 1)
+		);
+	}
+	
 	
 	////////////////////////////////////////////////////////////////////////////
 	//

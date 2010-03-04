@@ -187,11 +187,14 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		exit();
 	}
 	function processDeletePage() {
-/// \todo: delete subsequent page zones too!
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
 //t3lib_div::devlog('papt param', 'newspaper', 0, $param);
-		tx_newspaper::deleteRows('tx_newspaper_page', array(intval($param['page'])));
+
+		// delete page and subsequent abstract and concrete pagezones
+		$p = new tx_newspaper_page(intval($param['page']));
+		$p->delete();
+		
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true; 
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
@@ -203,6 +206,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
 //t3lib_div::devlog('papzt param', 'newspaper', 0, $param);
+		
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
 			new tx_newspaper_Page(intval($param['page'])), 
 			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
@@ -221,8 +225,11 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	function processDeletePageZone() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
 		$param = $this->splitParams();
-#t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
-		tx_newspaper::deleteRows('tx_newspaper_pagezone', array(intval($param['pagezone'])));
+//t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
+
+		// delete abstract and concrete pagezone		
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($param['pagezone']));
+		$pz->delete();
 		
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;

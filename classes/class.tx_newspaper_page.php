@@ -416,6 +416,22 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 #t3lib_div::devlog('get pz row', 'newspaper', 0, $row);
 		return new tx_newspaper_Page(intval($row['page_id']));		
 	}
+	
+	/// Delete a newspaper page and all subsequent abstract and concrete pagezones
+	public function delete() {
+		$this->deletePagezones();
+		$this->setAttribute('deleted', 1); // delete page then
+		$this->store();
+	}
+	
+	/// Delete all subsequent abstract and concrete pagezones
+	public function deletePagezones() {
+		foreach ($this->getActivePagezones() as $pz) {
+			$pz->delete(); // delete all activated pagezones
+		}
+	}
+	
+	
 
 	/// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
 	/** \return array of active tx_newspaper_PageZone objects for given
