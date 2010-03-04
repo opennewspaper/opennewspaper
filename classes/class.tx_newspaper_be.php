@@ -782,12 +782,13 @@ function changeWorkflowStatus(role, hidden_status) {
 			$js = 'changeWorkflowStatus(-1, ' . $hidden . ')'; 
 		}
 		
-		$html = $title . '<input style="margin-right:20px;" title="' . $title . '" onclick="' . $js . '" ';
+		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"'; 
 		if (NP_ARTICLE_WORKFLOW_NOCLOSE || $overWriteNoCloseConstValue == true) {
 			// don't close after saving (for "just save" button or for test purposes)
 			$html .= 'name="_savedok" src="sysext/t3skin/icons/gfx/savedok.gif" ';
 		} else {
-			// live version, save and close
+			// live version, save and close (and add onclick js)
+			$html .= ' onclick="' . $js . '" ';
 			$html .= 'name="_saveandclosedok" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" ';			
 		}
 		$html .= 'width="16" type="image" height="16" class="c-inputButton"/>';
