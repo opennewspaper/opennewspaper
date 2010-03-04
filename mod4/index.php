@@ -477,6 +477,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     }
     
 	function getListOfDbConsistencyChecks() {
+/**
+ * \todo
+ * concrete undelete pagezone without a matching undeleted abstract pagezone
+ */
 		$f = array(
 			array(
 				'title' => 'Abstract extra: concrete extra missing',
