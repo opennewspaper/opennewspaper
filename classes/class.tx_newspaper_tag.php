@@ -122,7 +122,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 										  $strong = false) {
 		$results = tx_newspaper::selectRows(
 			'tag', 'tx_newspaper_tag',
-			'tag LIKE ' . ($start_only? '': '%') . $fragment . '%',
+			'tag LIKE \'' . ($start_only? '': '%') . $fragment . '%\'',
 			'', '', ($max? ('0, ' . $max): '')
 		);
 

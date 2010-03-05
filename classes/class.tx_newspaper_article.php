@@ -865,7 +865,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
             t3lib_div::devLog('modifyTagSelection', 'modify', 0, array() );            
             global $TCA;
             $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'user';
-            $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagsInArticle';
+            $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
         }
 
     }

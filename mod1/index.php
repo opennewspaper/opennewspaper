@@ -280,10 +280,15 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 	}
 
 
-    private function getTag() {
-        t3lib_div::devLog('getTag', 'mod1' , 0, false);
-        if(isset($_REQUEST['tag']))
-        echo tx_newspaper_Tag::getCompletions($_REQUEST['tag'], 10);
+    private function processTagSuggest() {
+        if(isset($_REQUEST['search'])) {
+            $suggestion = tx_newspaper_Tag::getCompletions($_REQUEST['search'], 10);
+//            t3lib_div::devLog('getProcessTag', 'mod1' , 0, $suggestion);
+            foreach($suggestion as $i => $suggest) {
+                $html = $html.'<li id="suggest-'.$i.'">'.$suggest.'</li>'; 
+            }
+            exit('<ul id="suggestions">'.$html.'</ul>');
+        }
     }
 
 
@@ -346,8 +351,7 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 						$this->processExtraDelete(); // AJAX call
 
                     if (isset($_REQUEST['tag'])) {
-                            t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
-                        $this->processGetTag();
+                        $this->processTagSuggest();
                     }
 
 

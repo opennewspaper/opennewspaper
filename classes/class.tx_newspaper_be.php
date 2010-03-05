@@ -529,27 +529,46 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 		return $smarty->fetch('mod3.tmpl');
 	}
 
-    public function renderTagsInArticle($PA, $fobj) {
+    public function renderTagControlsInArticle($PA, $fobj) {
+        $articleId = $PA['row']['uid'];
         $obj = new t3lib_TCEforms();
-        //        unset($PA['fieldConf']['config']['internal_type']);
         $PA['fieldConf']['config']['size'] = 4;
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
-        //        $PA['fieldConf']['config']['renderMode'] = 'singlebox';
-        //        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
-        $s=str_replace("\r\n","\n",$fld);
-        $s=str_replace("\n","\r",$s);
-        // Don't allow out-of-control blank lines
-        $fld=preg_replace("/\n{2,}/","\r\r",$s);
-        $toReplace = '|(<select name="data\[tx_newspaper_article\]\[24\]\[tags\]_sel.*</select>)|m';
-        preg_match($toReplace, $fld, $matches);
-        if(count($matches) > 0) {
-            $fld = preg_replace($toReplace, '<input id="tag_input" type="text"/><div id="response"/>'.$matches[0], $fld);
+
+        //inset input field
+        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
+        $with = '<input type="text" id="tag_input" autocomplete="off" style="width:250px; margin-right:50px;"/><img id="spinner" src="/typo3_base/typo3/gfx/spinner.gif"/><div id="tag-suggestions"></div>';
+        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+        return $this->getFindTagsJs($articleId).$fld;
+    }
+
+    /**
+     * @access private
+     * @param  $what string that will be searched
+     * @param  $with string  that will be inserted
+     * @param  string $pattern Regexp
+     * @param bool $reinsertMatch if true (default) $with will be inserteted before the match which will be inserted as well. 
+     * @return replaced text or complete text if no match was found
+     */
+    private function replaceIncludingEndOfLine($what, $with, $pattern, $reinsertMatch = true) {
+        $newText = str_replace("\r\n","\n",$what);
+        $newText = str_replace("\n","\r",$newText);
+        // convert blank lines too
+        $newText= preg_replace("/\n{2,}/","\r\r",$newText);
+        $toReplace = '|('.$pattern.')|m'; // with 'm' option . matches EOL  
+        preg_match($toReplace, $newText, $matches);
+        $hasMatches = (count($matches) > 0);
+        if($hasMatches) {
+            if($reinsertMatch) {
+                $fld = preg_replace($toReplace, $with.$matches[0], $newText);
+            } else {
+                $fld = preg_replace($toReplace, $with, $newText);
+            }
         }
-//        $toReplace = '|<td valign="top" class="thumbnails">.*<\/select><\/td>|m';
-//        $fld = preg_replace($toReplace, '<td valign="top"><input id="tag_input" type="text"/></td>', $fld);
-        return $this->getFindTagsJs().$fld;
+
+        return $hasMatches ? $fld : $what;
     }
 
     public function getArticleTags(&$params, &$pObj) {
@@ -570,35 +589,37 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 
 
 
-    private function getFindTagsJs() {
+    private function getFindTagsJs($articleId) {
         return <<<JSCODE
     <script language="JavaScript">
     document.observe("dom:loaded", function() {
-        Element.observe('tag_input', 'keypress', findTags);
-        $$('[name="data[tx_newspaper_article][24][tags]_sel"]')[0].hide();
+        $('tag_input').observe('keyup', findTags);
+        $('spinner').hide();
+        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         });
-    function <findTags(event></findTags(event>) {
+    function findTags(event) {
         if(event.keyCode == Event.KEY_RETURN) {
             Event.stop(event);
-            var selectList = $$('[name="data[tx_newspaper_article][24][tags]_list"]')[0];
+            var selectList = $$('[name="data[tx_newspaper_article][$articleId][tags]_list"]')[0];
             var opt = document.createElement('option');
             opt.value = selectList.options != undefined ? selectList.options.length + 1 : 1;
             opt.text = this.value;
-            setFormValueFromBrowseWin('data[tx_newspaper_article][24][tags]',opt.value,opt.text); TBE_EDITOR.fieldChanged('tx_newspaper_article','24','tags','data[tx_newspaper_article][24][tags]');
-//            try {
-//                selectList.add(opt, null);
-//            } catch(exception) {
-//                //IE handling
-//                selectList.add(opt);
-//            }
-
+            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',opt.value,opt.text); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
         }
-        var request = new top.Ajax.Request(
-        top.path + 'typo3conf/ext/newspaper/mod1/index.php',
+        var path = window.location.pathname;
+        var test = path.substring(path.lastIndexOf("/") - 5);
+        if (test.substring(0, 6) == "typo3/") {
+            path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+        } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
+            path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
+        }
+        var request = new top.Ajax.Request (
+        path + 'typo3conf/ext/newspaper/mod1/index.php',
         {
             method: 'get',
-            parameters: {tag : this.value, tag: 'true'},
-            onSuccess: function(e) { $(response) = e.responseText  }
+            parameters: {search : this.value, tag: 'true', param : 'ajax'},
+            onCreate: function() { $('spinner').show();} ,
+            onSuccess: function(data) { $('tag-suggestions').innerHTML = data.responseText; $('spinner').hide(); }
         }
         );
        }
