@@ -60,8 +60,7 @@ $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc']
 
 // /switch field tag in article to a userfunc field (allowing auto completion)
 //unset($TCA['tx_newspaper_article']['columns']['tags']['config']);
-//$TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'user';
-//$TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagsInArticle';
+$TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
 
 // fix ranges artificially imposed by kickstarter
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array (
