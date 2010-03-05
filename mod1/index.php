@@ -285,9 +285,21 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
             $suggestion = tx_newspaper_Tag::getCompletions($_REQUEST['search'], 10);
 //            t3lib_div::devLog('getProcessTag', 'mod1' , 0, $suggestion);
             foreach($suggestion as $i => $suggest) {
-                $html = $html.'<li id="suggest-'.$i.'">'.$suggest.'</li>'; 
+                $html = $html.'<li id="'.$i.'">'.$suggest.'</li>';
             }
-            exit('<ul id="suggestions">'.$html.'</ul>');
+            exit('<ul>'.$html.'</ul>');
+        }
+    }
+
+    private function processTagInsert() {
+        if(isset($_REQUEST['tag'])) {
+            try {
+                $result = tx_newspaper::selectOneRow('uid, tag', 'tx_newspaper_tag', 'tag = \'' .$_REQUEST['tag']. '\'');
+                $uid = $result['uid'];
+            } catch(tx_newspaper_EmptyResultException $e) {
+                $uid = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $_REQUEST['tag'] ));
+            }
+            exit($uid);
         }
     }
 
@@ -350,9 +362,12 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (isset($_REQUEST['extra_delete']))
 						$this->processExtraDelete(); // AJAX call
 
-                    if (isset($_REQUEST['tag'])) {
-                        $this->processTagSuggest();
-                    }
+                    //Tag handling
+                    if ($_REQUEST['param'] == 'tag-suggest')
+                        $this->processTagSuggest(); //AJAX call
+
+                    if ($_REQUEST['param'] == 'tag-insert')
+                        $this->processTagInsert(); //AJAX call
 
 
 

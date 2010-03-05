@@ -539,7 +539,7 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 
         //inset input field
         $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
-        $with = '<input type="text" id="tag_input" autocomplete="off" style="width:250px; margin-right:50px;"/><img id="spinner" src="/typo3_base/typo3/gfx/spinner.gif"/><div id="tag-suggestions"></div>';
+        $with='<input type="text" id="autocomplete" name="autocomplete_parameter" /><span id="indicator1" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices" class="autocomplete"></div>';
         $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
         return $this->getFindTagsJs($articleId).$fld;
     }
@@ -592,20 +592,17 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
     private function getFindTagsJs($articleId) {
         return <<<JSCODE
     <script language="JavaScript">
-    document.observe("dom:loaded", function() {
-        $('tag_input').observe('keyup', findTags);
-        $('spinner').hide();
-        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
+        var MyCompleter = Class.create(Ajax.Autocompleter, {
+
+              onComplete: function(\$super, request) {
+                var serverChoices = request.responseText;
+                var currentChoice = "<ul><li>" + this.getToken() + "<" + "/li>";
+                var allChoices = serverChoices.replace(/<ul>/, currentChoice);
+                request.responseText = allChoices;
+
         });
-    function findTags(event) {
-        if(event.keyCode == Event.KEY_RETURN) {
-            Event.stop(event);
-            var selectList = $$('[name="data[tx_newspaper_article][$articleId][tags]_list"]')[0];
-            var opt = document.createElement('option');
-            opt.value = selectList.options != undefined ? selectList.options.length + 1 : 1;
-            opt.text = this.value;
-            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',opt.value,opt.text); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
-        }
+    document.observe("dom:loaded", function() {
+        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         var path = window.location.pathname;
         var test = path.substring(path.lastIndexOf("/") - 5);
         if (test.substring(0, 6) == "typo3/") {
@@ -613,16 +610,29 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
         } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
             path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
         }
-        var request = new top.Ajax.Request (
-        path + 'typo3conf/ext/newspaper/mod1/index.php',
-        {
+        new MyCompleter("autocomplete", "autocomplete_choices", path + 'typo3conf/ext/newspaper/mod1/index.php', {
+            paramName: 'search',
             method: 'get',
-            parameters: {search : this.value, tag: 'true', param : 'ajax'},
-            onCreate: function() { $('spinner').show();} ,
-            onSuccess: function(data) { $('tag-suggestions').innerHTML = data.responseText; $('spinner').hide(); }
+            parameters: 'param=tag-suggest',
+            indicator: 'indicator1',
+            frequency: 0.1,
+            afterUpdateElement : insertTag
+        });
+     });
+
+     function insertTag(currInput, selectedElement) {
+        if(!selectedElement.id) {
+            //neuen tag einfügen
+            new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {
+                    method: 'get',
+                    parameters: {param : 'tag-insert', tag : selectedElement.innerHTML},
+                    onSuccess: function(data) { selectedElement.id = data.responseText; insertTag(null, selectedElement); }
+                });
+        } else {
+            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',selectedElement.id, selectedElement.innerHTML); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
         }
-        );
-       }
+        return false;
+     }
        </script>
 JSCODE;
 

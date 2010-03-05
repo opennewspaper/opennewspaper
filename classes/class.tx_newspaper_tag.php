@@ -114,14 +114,14 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 *  	\p $fragment
 	 *  \param $strong If \c true, fatten the requested portion of the tag that
 	 * 		has been searched for.
-	 *  \return Array of tags (as strings, not UIDs) that match \p $fragment
+	 *  \return Array of tags (UIDs as key and tagname as value) that match \p $fragment
 	 */
 	static public function getCompletions($fragment, 
 										  $max = 0, 
 										  $start_only = false, 
 										  $strong = false) {
 		$results = tx_newspaper::selectRows(
-			'tag', 'tx_newspaper_tag',
+			'uid, tag', 'tx_newspaper_tag',
 			'tag LIKE \'' . ($start_only? '': '%') . $fragment . '%\'',
 			'', '', ($max? ('0, ' . $max): '')
 		);
@@ -130,7 +130,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
 		if ($results) {
 			foreach ($results as $row) {
-				$return[] = str_replace($fragment, 
+				$return[$row['uid']] = str_replace($fragment, 
 										($strong? '<strong>': '') . $fragment . ($strong? '</strong>': ''), 
 										$row['tag']);
 			}
