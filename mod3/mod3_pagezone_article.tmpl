@@ -34,12 +34,12 @@
 <tr>
 	<td class="mod3_td">{$LABEL.extra}</td>
 	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td">{$LABEL.notes}</td> {/if}
-	<td class="mod3_td">{$LABEL.templateset}</td>
 	<td  class="mod3_td" align="center">{$LABEL.show}</td>
 	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td" align="center">{$LABEL.pass_down}</td> {/if}
 	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td" align="center">{$LABEL.inherits_from}</td> {/if}
 	<td class="mod3_td" align="center">{$LABEL.paragraph}</td>
 	<td class="mod3_td">{$LABEL.commands}</td>
+	<td class="mod3_td">{$LABEL.templateset}</td>
 	{if ($DEBUG_OUTPUT && $ADMIN)}
 		<td class="mod3_td" align="center">pos</td>
 		<td class="mod3_td" align="center">origin</td>
@@ -61,8 +61,6 @@
 						<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes', 0); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
 					</td>
 				{/if}
-{* template set *}				
-				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
 {* show *}
 				<td class="mod3_td" align="center">
 					{if $EXTRA_DATA[i].show == 0}
@@ -129,6 +127,8 @@
 					{/if}
 
 				</td>
+{* template set *}				
+				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
 		
 			{if ($DEBUG_OUTPUT && $ADMIN)}
 				{* if td's are added here, do add them to the table header too *}

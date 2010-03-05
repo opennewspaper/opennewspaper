@@ -10,11 +10,11 @@
 <tr>
 	<td class="mod3_td">{$LABEL.extra}</td>
 	<td class="mod3_td">{$LABEL.notes}</td>
-	<td class="mod3_td">{$LABEL.templateset}</td>
 	<td class="mod3_td" align="center">{$LABEL.show}</td>
 	<td class="mod3_td" align="center">{$LABEL.pass_down}</td>
 	<td class="mod3_td" align="center">{$LABEL.inherits_from}</td>
 	<td class="mod3_td">{$LABEL.commands}</td>
+	<td class="mod3_td">{$LABEL.templateset}</td>
 	{if ($DEBUG_OUTPUT && $ADMIN)}
 		<td class="mod3_td" align="center">pos</td>
 		<td class="mod3_td" align="center">origin</td>
@@ -33,7 +33,6 @@
 					<input id="notes_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
 					<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes', 0); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span> 
 				</td>
-				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
 				<td class="mod3_td" align="center">
 		{if $EXTRA_DATA[i].show == 0}
 		<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 1);" /> 
@@ -87,6 +86,7 @@
 		  {$EMPTY_ICON}
 		{/if} 
 				</td>
+				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
 		
 		{if ($DEBUG_OUTPUT && $ADMIN)}
 			{* if td's are added here, add them to in the table header *}
