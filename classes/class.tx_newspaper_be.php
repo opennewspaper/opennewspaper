@@ -385,7 +385,7 @@ function findElementsByName(name, type) {
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
-//t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
+t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
 		return self::renderBackendPageZone($article, false);
 	}
 
@@ -528,6 +528,21 @@ function findElementsByName(name, type) {
 		
 		return $smarty->fetch('mod3.tmpl');
 	}
+
+    public function renderTagsInArticle($PA, $fobj) {
+        $obj = new t3lib_TCEforms();
+//        unset($PA['fieldConf']['config']['internal_type']);
+        $PA['fieldConf']['config']['size'] = 4;
+        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
+        $PA['fieldConf']['config']['foreign_table_where'] = 'order by tx_newspaper_tag.tag';
+        $PA['fieldConf']['config']['form_type'] = 'select';
+        $PA['fieldConf']['config']['type'] = 'select';
+//        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
+        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
+        global $TCA;
+        $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'select';
+        return $fld;
+    }
 
 	/// read data for non concrete article pagezones
 	private static function extractData(tx_newspaper_PageZone $pz) {
