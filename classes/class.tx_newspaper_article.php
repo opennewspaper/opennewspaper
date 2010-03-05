@@ -12,6 +12,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_w
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlebehavior.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_tag.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 /// An article for the online newspaper
@@ -822,6 +823,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
+
+    /// Get the tags for an article
+    // \return array of tags linked with this article or empty array
+    public function getTags() {
+        $tag_ids = tx_newspaper::selectRows(
+			'uid_foreign',
+			'tx_newspaper_article_tags_mm',
+			'uid_local = '.$this->getUid(),
+			'',
+			'',
+			''
+		);
+
+		$tags = array();
+		foreach ($tag_ids as $id) {
+			$tags[] = new tx_newspaper_Tag($id['uid_foreign']);
+		}
+		return $tags;
+    }
 
 	
 	

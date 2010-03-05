@@ -236,6 +236,30 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
 		$this->assertTrue(sizeof($articles) == 0);
 	}
+
+    public function test_getTags() {
+        $tagnames = array('test-tag-1', 'test-tag-2', 'test-tag-3');
+        $tags = $this->article->getTags();
+        $this->assertEquals(0, count($tags), "No tags expected");
+        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[0], 'tag_type' => 1));
+        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
+
+        $tags = $this->article->getTags();
+        $this->assertEquals(1, count($tags), "One tag expected");
+
+        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[1], 'tag_type' => 1));
+        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
+
+        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[2], 'tag_type' => 1));
+        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
+
+        $tags = $this->article->getTags();
+        $this->assertEquals(3, count($tags), "Three tags expected");
+
+        foreach($tags as $i => $tag) {
+            $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
+        }
+    }
 	
 	////////////////////////////////////////////////////////////////////////////
 

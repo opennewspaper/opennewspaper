@@ -284,6 +284,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 
     private function getTag() {
+        t3lib_div::devLog('getTag', 'mod1' , 0, false);
         if(isset($_REQUEST['tag']))
         echo tx_newspaper_Tag::getCompletions($_REQUEST['tag'], 10);
     }
@@ -347,6 +348,11 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (isset($_REQUEST['extra_delete']))
 						$this->processExtraDelete(); // AJAX call
 
+                    if (isset($_REQUEST['tag'])) {
+                            t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
+                        $this->processGetTag();
+                    }
+
 
 
 // new stuff for section
@@ -358,8 +364,6 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 						$this->processDeletePage(); // AJAX call
 					if (isset($_REQUEST['delete_pagezone']))
 						$this->processDeletePageZone(); // AJAX call
-                    if (isset($_REQUEST['get_tag']))
-                        $this->processGetTag();
 
 
 					/// as the module is used for ajax only so far, why not use it as the shortcut for the section list module?
