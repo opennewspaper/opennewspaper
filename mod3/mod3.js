@@ -16,14 +16,18 @@ if (t3BackendObject != top) {
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/extra/util.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/util.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.css", "css");
+    loadJsCssFile(t3BackendObject.path + "typo3/contrib/scriptaculous/scriptaculous.js", "js", "load=builder,effects,controls,dragdrop");
 }
 
 //http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
-function loadJsCssFile(filename, filetype) {
+function loadJsCssFile(filename, filetype, param) {
 	if (filetype == "js") { //if filename is a external JavaScript file
 		var fileref = document.createElement('script');
 		fileref.setAttribute("type", "text/javascript");
-		fileref.setAttribute("src", filename);
+        if(param) {
+            filename = filename + '?' + param; 
+        }
+        fileref.setAttribute("src", filename );
 	} else if (filetype == "css") { //if filename is an external CSS file
 		var fileref = document.createElement("link");
 		fileref.setAttribute("rel", "stylesheet");
