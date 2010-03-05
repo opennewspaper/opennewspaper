@@ -232,6 +232,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->moveExtraAfter($e, $origin_uid);
 				
 		if ($pz->isConcreteArticle()) {
+			// \todo: Helge, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
+			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // re-reading the pagezone ...
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
 		}
 		
