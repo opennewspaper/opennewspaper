@@ -17,6 +17,7 @@ if (t3BackendObject != top) {
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/util.js", "js");
 	loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/contrib/subModal/subModal.css", "css");
     loadJsCssFile(t3BackendObject.path + "typo3/contrib/scriptaculous/scriptaculous.js", "js", "load=builder,effects,controls,dragdrop");
+        loadJsCssFile(t3BackendObject.path + "typo3conf/ext/newspaper/res/be/autocomplete.css", "css");
 }
 
 //http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
