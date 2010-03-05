@@ -406,7 +406,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		
-		$ret = '<select name="source_path" size="20" style="width:320px">' . "<br />\n";
+		$ret = '<select name="' . $this->prefixId . 'source_path" size="20" style="width:320px">' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
@@ -434,8 +434,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 							array('title', 'teaser', 'text'), 
 							new tx_newspaper_SourcePath($path));
 
-		$import_info = '<input type="hidden" name="source_id" value="' . $source_id . '" />' .
-					   '<input type="hidden" name="source_path" value="' . $path . '" />';
+		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
+					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
 		
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
