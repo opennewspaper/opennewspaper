@@ -46,6 +46,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
 //t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => '$row, 'altName' => $altName, 'palette' => $palette, 'extra' => $extra, 'pal' => $pal, '_REQUEST' => $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
+        tx_newspaper_Article::getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that);
 	}
 
 	/// the checkbox is_article in pagezonetype can't be unchecked once it was set
