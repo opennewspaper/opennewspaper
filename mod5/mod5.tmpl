@@ -60,7 +60,7 @@ td {
 
 <div class="box_hl">{$LABEL.wizards}</div>
 <div class="box">	
-	<a href="{$MODULE_PATH}index.php?new_article=1">{$WIZARD_ICON} New article</a><br />
+	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=new_article_wizard">{$WIZARD_ICON} New article</a><br />
 	{$WIZARD_ICON} Create image gallery (DEMO LINK)<br />
 </div>
 <br />	
@@ -101,7 +101,7 @@ td {
 <div class="box">		
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Moderation list</a><br />
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
-	<a href="index.php?tx_newspaper_mod5%5Bajaxcontroller%5D=change_role&tx_newspaper_mod5%5Bnew_role%5D={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: <strong>{$ROLE.current}</strong>)<br />
+	<a href="index.php?tx_newspaper_mod5[ajaxcontroller]=change_role&amp;tx_newspaper_mod5[new_role]={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: <strong>{$ROLE.current}</strong>)<br />
 </div>
 <br />
 

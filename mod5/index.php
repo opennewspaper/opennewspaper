@@ -50,6 +50,8 @@ class fullWidthDoc extends template {
  */
 class  tx_newspaper_module5 extends t3lib_SCbase {
 	
+	const prefixId = 'tx_newspaper_mod5';
+	
 	const number_of_latest_articles = 10;
 	const shortcut_group = 5;
 	
@@ -100,14 +102,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 				
 		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
-//debug(t3lib_div::_GP('type4newarticle'));
-//debug(t3lib_div::_GP('section'));
-//debug(t3lib_div::_GP('articletype'));
-//debug($_REQUEST);
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
-t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST));
+//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
@@ -118,11 +116,8 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 				case 'change_role': 
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
-			}				
-
-			// check if new article is to be created, if yes, then do so and redirect to that newly created article
-			$this->checkIfNewArticle(); // \todo: add to controller
-
+			}
+			
 			// Draw the header.
 			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
 			$this->doc->backPath = $BACK_PATH;
@@ -152,20 +147,30 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 			$this->content.=$this->doc->divider(5);
 
-			if (isset($_REQUEST['new_article'])) {
-				$this->new_article();
-			} else {
-				// Render start wizard page:
-				$this->moduleContent();
-			}
 
-
-//						// ShortCut
-//						if ($BE_USER->mayMakeShortcut())	{
-//							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-//						}
+			switch ($input['controller']) {
+				case 'new_article_wizard': 
+					$this->new_article_backend(); // fills $this->doc with the new article wizard backend
+				break;
+				case 'new_article_create':
+				case 'new_article_create_dummy':
+					// create/import new article and redirect to article backend
+					switch($input['type']) {
+						case 'newarticle':
+							// "normal" new article
+							$this->createNewArticle($input);
+						break;
+						default:
+							// "imported" article
+							$this->import_article(array());
+					}
+				break;
+				default: 
+					$this->moduleContent(); // Render start wizard page
+			}		
 
 			$this->content.=$this->doc->spacer(10);
+			
 		} else {
 			// If no access or if ID == zero
 
@@ -304,13 +309,13 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		return $article;
 		
 	}
-		
-	private function new_article() {
+	
+	/// render new article wizard backend
+	private function new_article_backend() {
 //t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);		
 		global $LANG;
 		
 		$sections = tx_newspaper_Section::getAllSections();
-//t3lib_div::devlog('new_article()', 'np', 0, array('sections' => $sections));
 		$sections_available = array(); // true = default article available, else false
 		foreach($sections as $section) {
 			if ($section != null && $section->getDefaultArticle()) {
@@ -339,6 +344,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
 		));		
 
+		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
@@ -360,38 +366,28 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('$_request' => $_REQUEST)
 		
 	}
 	
-	private function checkIfNewArticle() {
-		$type = t3lib_div::_GP('type');
-		$section = intval(t3lib_div::_GP('section'));
-		$articletype = intval(t3lib_div::_GP('articletype'));
-//debug(array($type4newarticle, $section, $articletype));	
-		if ((strlen($type) == 0) || $section <= 0 || $articletype <= 0)
-			return false;
-	  
-		/// so a new article should be created
-		
-		if ($type == 'newarticle') {
-			$this->createNewArticle($section, $articletype);
-		} else {
-			$this->import_article(array());
-		}
-	
-	}
-	
-	private function createNewArticle($section, $articletype) {
+	private function createNewArticle($input) { // }$section, $articletype) {
 		/// just a plain typo3 article, no import ('newarticle' is set as a convention for this case)
-		$s = new tx_newspaper_Section($section);
-		$at = new tx_newspaper_ArticleType($articletype);
+		$s = new tx_newspaper_Section($input['section']);
+		$at = new tx_newspaper_ArticleType($input['articletype']);
 			
 		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
 //t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
 //t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
-		$new_article->setAttribute('articletype_id', $articletype);
+		$new_article->setAttribute('articletype_id', $input['articletype']);
 
 		// add creation date and user
 		$new_article->setAttribute('crdate', time());
 		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 		$new_article->setAttribute('hidden', 1); // hide new article
+
+		if ($input['controller'] == 'new_article_create_dummy') {
+			// add some dummy content
+			$new_article->setAttribute('kicker', 'Kicker ' . uniqid());
+			$new_article->setAttribute('title', 'Title ' . uniqid());
+			$new_article->setAttribute('teaser', tx_newspaper_be::getLoremIpsum());
+			$new_article->setAttribute('text', tx_newspaper_be::getLoremIpsum(rand(1, 3), true, false));
+		}
 
 		$new_article->store();
 
@@ -451,11 +447,11 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 
 	function import_article(array $input) {
 
-		$section = new tx_newspaper_Section(intval(t3lib_div::_GP('section')));
-		$articletype = new tx_newspaper_ArticleType(intval(t3lib_div::_GP('articletype')));
+		$section = new tx_newspaper_Section(intval($input['section']));
+		$articletype = new tx_newspaper_ArticleType(intval($input['articletype']));
 
-		$source = tx_newspaper::getRegisteredSource(t3lib_div::_GP('source_id'));
-		$path = new tx_newspaper_SourcePath(t3lib_div::_GP('source_path'));
+		$source = tx_newspaper::getRegisteredSource($input['source_id']);
+		$path = new tx_newspaper_SourcePath($input['source_path']);
 		
 		t3lib_div::devlog('import_article', 'newspaper', 0, 
 			array(

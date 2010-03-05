@@ -18,15 +18,15 @@
 
   </div>
 {else}
-  {* at least one ssection and one article type available, so wizrad be can used *}
+  {* at least one section and one article type available, so wizard be can used *}
   <form action="index.php">
     <div>{$LABEL.new_article}</div>
     <div>
-      <input checked="checked" type="radio" name="type" onclick="clearSourceBrowser()" value="newarticle"> {$LABEL.new_article_typo3}<br />
+      <input checked="checked" type="radio" name="tx_newspaper_mod5[type]" onclick="clearSourceBrowser()" value="newarticle"> {$LABEL.new_article_typo3}<br />
       
       {* read registered sources *}
 	  {foreach from=$IMPORT_SOURCE item=source key=key}
-      	<input type="radio" name="type" value="{$key}" onclick="changeSource('{$key}', '')"> {$source->getTitle()}<br /> 
+      	<input type="radio" name="tx_newspaper_mod5[type]" value="{$key}" onclick="changeSource('{$key}', '')"> {$source->getTitle()}<br /> 
 	  {/foreach}
     </div>
 
@@ -47,7 +47,7 @@
 
 	<div><br />
 	  {$LABEL.section}:<br />
-      <select name="section" size="1" onchange="setDefaultArticletype(this.value)">
+      <select name="tx_newspaper_mod5[section]" size="1" onchange="setDefaultArticletype(this.value)">
 		{section name=i loop=$SECTION}
 		  {if $SECTION_AVAILABLE[i]}
     	  	<option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
@@ -60,7 +60,7 @@
 
 	<div><br />
 	  {$LABEL.articletype}:<br /> 
-      <select id="articletype" name="articletype" size="1">
+      <select id="articletype" name="tx_newspaper_mod5[articletype]" size="1">
 		{section name=i loop=$ARTICLETYPE}
 		  {if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
             <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
@@ -70,7 +70,20 @@
 		{/section}
       </select>
     </div>
-	<input type="submit" value="{$LABEL.new_article_button}" />
+    <script type="text/javascript">
+//{literal}
+    	function executeSubmit(type) {
+    		document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
+			document.forms[0].submit();
+    	}
+//{/literal}
+    </script>
+    <input type="hidden" name="tx_newspaper_mod5[controller]" id="tx_newspaper_mod5[controller]" value="" />
+	<input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" />
+	{if $IS_ADMIN}
+		<input type="button" onclick="executeSubmit('new_article_create_dummy'); return false;" name="tx_newspaper_mod5[new_article_create_dummy]" value="Lorem ipsum dummy article" id="tx_newspaper_mod5[new_article_create_dummy]" />
+	{/if}
+		
 
 	</form>
 {/if}
