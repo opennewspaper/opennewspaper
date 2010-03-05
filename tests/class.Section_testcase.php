@@ -63,7 +63,7 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($list, 
 							tx_newspaper_ArticleList_Factory::getInstance()->create($this->fixture->getAbstractArticlelistUid(), $this->section));
 		
-		$this->assertEquals($list->getTitle(), 'Automatic article list');
+		$this->assertEquals($list->getTitle(), 'Semiautomatic article list');
 		$this->assertEquals($list->getAbstractUid(), $this->fixture->getAbstractArticlelistUid());
 		
 		// section 1 has currently 1 article associated with it.
@@ -84,12 +84,12 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
 	
 	public function test_ArticleList() {
 		$registered = tx_newspaper_ArticleList::getRegisteredArticleLists();
-		$this->assertTrue($registered[0] instanceof tx_newspaper_ArticleList_Auto);
+		$this->assertTrue($registered[0] instanceof tx_newspaper_ArticleList_Manual);
 		
 		$list = $this->section->getArticleList();
 		$list->setAttribute('new attribute', 1);
 		$this->assertEquals(1, $list->getAttribute('new attribute'), '\'new attribute\' not set');
-		$this->assertEquals($this->fixture->getAbstractArticlelistUid(),  $list->getAttribute('uid'));
+		$this->assertEquals($this->fixture->getAbstractArticlelistUid(),  $list->getAttribute('uid'), "uids do not match");
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$list->getAttribute('wrong attribute');
 	}
