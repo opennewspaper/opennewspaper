@@ -367,8 +367,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 	}
 	
-	private function createNewArticle($input) { // }$section, $articletype) {
-		/// just a plain typo3 article, no import ('newarticle' is set as a convention for this case)
+	/// creates a new article
+	private function createNewArticle($input) { 
+		/// just a plain typo3 article
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
 			
