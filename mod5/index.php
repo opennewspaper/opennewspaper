@@ -111,8 +111,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					die($this->browse_path($input));
 				case 'load_article' :
 					die($this->load_article($input));
-				case 'import_article' :
-					die($this->import_article($input));
+// \todo: Helge, still needed?
+//				case 'import_article' :
+//					die($this->import_article($input));
 				case 'change_role': 
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
@@ -162,7 +163,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						break;
 						default:
 							// "imported" article
-							$this->import_article(array());
+							$this->import_article($input);
 					}
 				break;
 				default: 
