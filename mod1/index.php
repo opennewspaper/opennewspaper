@@ -276,10 +276,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		if($ajaxCall) {
 		    echo $content;
 		    die();
-		} else {
-			/// \todo @Ramon: still needed?
-		    $this->content = $this->doc->section('',$content.'<div id="test2"></div>', 0, 1);
-	    }
+		}
 	}
 
 
