@@ -39,7 +39,9 @@
 	{if (!$IS_CONCRETE_ARTICLE)}<td class="mod3_td" align="center">{$LABEL.inherits_from}</td> {/if}
 	<td class="mod3_td" align="center">{$LABEL.paragraph}</td>
 	<td class="mod3_td">{$LABEL.commands}</td>
-	<td class="mod3_td">{$LABEL.templateset}</td>
+	{if $USE_TEMPLATE_SETS}
+		<td class="mod3_td">{$LABEL.templateset}</td>
+	{/if}
 	{if ($DEBUG_OUTPUT && $ADMIN)}
 		<td class="mod3_td" align="center">pos</td>
 		<td class="mod3_td" align="center">origin</td>
@@ -127,9 +129,10 @@
 					{/if}
 
 				</td>
-{* template set *}				
-				<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
-		
+{* template set *}
+				{if $USE_TEMPLATE_SETS}				
+					<td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
+				{/if}
 			{if ($DEBUG_OUTPUT && $ADMIN)}
 				{* if td's are added here, do add them to the table header too *}
 				<td class="mod3_td">{$EXTRA_DATA[i].position}</td>

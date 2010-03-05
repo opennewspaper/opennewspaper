@@ -498,6 +498,7 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
+			$smarty_pz->assign('USE_TEMPLATE_SETS', tx_newspaper::USE_TEMPLATE_SETS); // are template set dropdowns visible or not
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available 

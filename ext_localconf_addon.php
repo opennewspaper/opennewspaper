@@ -45,6 +45,16 @@
 		user.options.hideRecords.pages = ' . $sysfolder . '
 	');
 	
+	// hide template sets, if they shouldn't be used
+	if (!tx_newspaper::USE_TEMPLATE_SETS) {
+		t3lib_extMgm::addPageTSConfig('
+			TCEFORM.tx_newspaper_section.template_set.disabled = 1 
+			TCEFORM.tx_newspaper_page.template_set.disabled = 1 
+			TCEFORM.tx_newspaper_pagezone_page.template_set.disabled = 1 
+			TCEFORM.tx_newspaper_article.template_set.disabled = 1 
+		');
+	}
+	
 	// set start module
 	t3lib_extMgm::addUserTSConfig('
 		setup.default.startModule = txnewspaperMmain_txnewspaperM5
