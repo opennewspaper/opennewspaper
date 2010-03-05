@@ -459,8 +459,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 				'$input' => $input,
 				'$section' => $section,
 				'$articletype' => $articletype,
-				'$source_id' => t3lib_div::_GP('source_id'),
-				'$path' => t3lib_div::_GP('source_path'),
+				'$source_id' => $input['source_id'],
+				'$path' => $input['source_path'],
 			)
 		);
 		
