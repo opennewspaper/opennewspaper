@@ -600,6 +600,8 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
                 var currentChoice = "<ul><li>" + this.getToken() + "<" + "/li>";
                 var allChoices = serverChoices.replace(/<ul>/, currentChoice);
                 request.responseText = allChoices;
+                \$super(request);
+             }
 
         });
     document.observe("dom:loaded", function() {
