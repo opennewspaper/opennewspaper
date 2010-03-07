@@ -380,6 +380,8 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 						$this->processDeletePage(); // AJAX call
 					if (isset($_REQUEST['delete_pagezone']))
 						$this->processDeletePageZone(); // AJAX call
+                    if (isset($_REQUEST['get_tag']))
+                        $this->processGetTag();
 
 
 					/// as the module is used for ajax only so far, why not use it as the shortcut for the section list module?

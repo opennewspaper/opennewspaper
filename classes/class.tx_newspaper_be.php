@@ -643,16 +643,38 @@ JSCODE;
         $obj = new t3lib_TCEforms();
 //        unset($PA['fieldConf']['config']['internal_type']);
         $PA['fieldConf']['config']['size'] = 4;
-        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
-        $PA['fieldConf']['config']['foreign_table_where'] = 'order by tx_newspaper_tag.tag';
+        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';        
         $PA['fieldConf']['config']['form_type'] = 'select';
-        $PA['fieldConf']['config']['type'] = 'select';
+//        $PA['fieldConf']['config']['renderMode'] = 'singlebox';
 //        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
-        global $TCA;
-        $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'select';
-        return $fld;
+        $s=str_replace("\r\n","\n",$fld);
+        $s=str_replace("\n","\r",$s);
+        // Don't allow out-of-control blank lines
+        $fld=preg_replace("/\n{2,}/","\r\r",$s);
+        $toReplace = '|<td valign="top" class="thumbnails">.*<\/select><\/td>|m';
+        $fld = preg_replace($toReplace, '<td valign="top"><input id="tag_input" type="text" onkeyup="findTags(\'tag_input\')"/></td>', $fld);
+        return $this->getFindTagsJs().$fld;
     }
+
+
+    private function getFindTagsJs() {
+        return <<<JSCODE
+    <script language="JavaScript">
+    function findTags(inputId) {
+        var request = new top.Ajax.Request(
+        top.path + 'typo3conf/ext/newspaper/mod1/index.php',
+        {
+            method: 'get',
+            parameters: {tag : $(inputId).value, getTag: 'true'},            
+            onSuccess: function(e) { $(inputId) = e.responseText  }
+        }
+        );
+       }
+       </script>
+JSCODE;
+
+}
 
 	/// read data for non concrete article pagezones
 	private static function extractData(tx_newspaper_PageZone $pz) {
