@@ -639,6 +639,21 @@ JSCODE;
 
 }
 
+    public function renderTagsInArticle($PA, $fobj) {
+        $obj = new t3lib_TCEforms();
+//        unset($PA['fieldConf']['config']['internal_type']);
+        $PA['fieldConf']['config']['size'] = 4;
+        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
+        $PA['fieldConf']['config']['foreign_table_where'] = 'order by tx_newspaper_tag.tag';
+        $PA['fieldConf']['config']['form_type'] = 'select';
+        $PA['fieldConf']['config']['type'] = 'select';
+//        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
+        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
+        global $TCA;
+        $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'select';
+        return $fld;
+    }
+
 	/// read data for non concrete article pagezones
 	private static function extractData(tx_newspaper_PageZone $pz) {
 		if (!$pz || !($pz->getUid())) {
