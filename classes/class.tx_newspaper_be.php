@@ -597,10 +597,19 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 
               onComplete: function(\$super, request) {
                 var serverChoices = request.responseText;
-                var currentChoice = "<ul><li>" + this.getToken() + "<" + "/li>";
+                var currentChoice = this._getCurrentInputAsPartialList();
                 var allChoices = serverChoices.replace(/<ul>/, currentChoice);
                 request.responseText = allChoices;
                 \$super(request);
+             },
+
+             getUpdatedChoices: function(\$super) {
+                this.updateChoices(this._getCurrentInputAsPartialList() + '</ul>');
+                \$super();
+             },
+
+             _getCurrentInputAsPartialList: function() {
+                return "<ul><li>" + this.getToken() + "<" + "/li>";
              }
 
         });
@@ -626,15 +635,17 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
      function insertTag(currInput, selectedElement) {
         if(!selectedElement.id) {
             //neuen tag einfügen
-            new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {
+            new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {                    
                     method: 'get',
                     parameters: {param : 'tag-insert', tag : selectedElement.innerHTML},
-                    onSuccess: function(data) { selectedElement.id = data.responseText; insertTag(null, selectedElement); }
+                    onSuccess: function(request) {
+                                    var newElem = request.responseText.evalJSON(true);
+                                    setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',newElem.uid, newElem.tag); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
+                               }
                 });
         } else {
             setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',selectedElement.id, selectedElement.innerHTML); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
         }
-        return false;
      }
        </script>
 JSCODE;

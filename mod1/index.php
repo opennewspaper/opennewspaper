@@ -291,15 +291,18 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
         }
     }
 
+    /**
+     * @return uid of inserted tag
+     */
     private function processTagInsert() {
         if(isset($_REQUEST['tag'])) {
-            try {
-                $result = tx_newspaper::selectOneRow('uid, tag', 'tx_newspaper_tag', 'tag = \'' .$_REQUEST['tag']. '\'');
-                $uid = $result['uid'];
-            } catch(tx_newspaper_EmptyResultException $e) {
-                $uid = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $_REQUEST['tag'] ));
-            }
-            exit($uid);
+            $tagValue = $_REQUEST['tag'];
+            $tag = new tx_newspaper_Tag();
+            $tag->setAttribute('tag', $tagValue);            
+            $uid = $tag->store();
+            $result = array('uid' => $uid, 'tag' => $tagValue);
+//            t3lib_div::devLog('processTagInsert', 'mod1' , 0, $result);
+            exit(json_encode($result));
         }
     }
 
