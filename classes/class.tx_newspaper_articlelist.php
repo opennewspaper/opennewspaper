@@ -88,6 +88,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 /// \todo: remove if not needed: t3lib_div::devlog('wrong attribute exception', 'newspaper', 1, $e);
 			}
 		}
+		$this->setAttribute('crdate', time());
+		$this->setAttribute('tstamp', time());
+		$this->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		
 	}
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
