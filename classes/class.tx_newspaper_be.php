@@ -651,6 +651,7 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 JSCODE;
 
 }
+
 	/// read data for non concrete article pagezones
 	private static function extractData(tx_newspaper_PageZone $pz) {
 		if (!$pz || !($pz->getUid())) {
