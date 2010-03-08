@@ -860,6 +860,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
         self::modifyTagSelection($table, $field);
     }
 
+	public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
+		if (strtolower($table) == 'tx_newspaper_article') {
+			// hide default articles in list module, only concrete article are visible in list module
+			$additionalWhereClause .= ' AND is_template=0';
+		}
+	}
+
+
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
             t3lib_div::devLog('modifyTagSelection', 'modify', 0, array() );            

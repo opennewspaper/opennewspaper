@@ -29,11 +29,8 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
 		
-		// \todo: move to tx_np_article
-		if (strtolower($table) == 'tx_newspaper_article') {
-			// hide default articles in list module, only concrete article are visible in list module
-			$additionalWhereClause .= ' AND is_template=0';
-		}
+		// pass down to newspaper hooks
+		tx_newspaper_article::getDBlistQuery($table, $pageId, $additionalWhereClause, $selectedFieldsList, $parentObject);
 		
 	}
 
