@@ -913,6 +913,12 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$ctt = intval($TSConfig['newspaper.']['control_tag_type']);
 		return $ctt? $ctt: 2;
 	}
+
+    public static function getContentTagType() {
+        $TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+		$ctt = intval($TSConfig['newspaper.']['content_tag_type']);
+		return $ctt? $ctt: 1;
+    }
 	
 	////////////////////////////////////////////////////////////////////////////
 	

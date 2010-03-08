@@ -297,8 +297,8 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
     private function processTagInsert() {
         if(isset($_REQUEST['tag'])) {
             $tagValue = $_REQUEST['tag'];
-            $tag = new tx_newspaper_Tag();
-            $tag->setAttribute('tag', $tagValue);            
+            $tag = tx_newspaper_Tag::createContentTag($tagValue);
+		    $tag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
             $uid = $tag->store();
             $result = array('uid' => $uid, 'tag' => $tagValue);
 //            t3lib_div::devLog('processTagInsert', 'mod1' , 0, $result);

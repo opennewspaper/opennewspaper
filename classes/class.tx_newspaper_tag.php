@@ -40,6 +40,34 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 			$this->setUid($uid);
 		}
 	}
+
+    /**
+     * Creates a new Controltag
+     * @static
+     * @return void
+     */
+    public static function createControlTag($value = null) {
+        return self::createTag(tx_newspaper::getControlTagType(), $value);
+    }
+
+    /**
+     * Creates a new Contenttag
+     * @static
+     * @return void
+     */
+    public static function createContentTag($value = null) {
+        return self::createTag(tx_newspaper::getContentTagType(), $value);
+    }
+
+    private static function createTag($tagType, $value) {
+        $tag = new tx_newspaper_Tag();
+        $tag->setAttribute('tag_type', $tagType);
+        if($value) {
+            $tag->setAttribute('tag', $value);
+        }
+
+        return $tag;
+    }
 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
@@ -87,7 +115,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      * @throws tx_newspaper_IllegalUsageException
      */
 	public function store() {
-        if(!$this->getAttribute('tag') || trim($this->getAttribute('tag')) === '') {
+        if(!$this->getAttribute('tag') || trim($this->getAttribute('tag')) === '' || !$this->getAttribute('tag_type') ) {
             $message = '[tag: \''.$this->getAttribute('tag') .'\', type: \'' . !$this->getAttribute('tag_type') .'\]';
             $message = 'Can not store tag, it has no content or type. '.$message;
             throw new tx_newspaper_IllegalUsageException($message);
@@ -99,6 +127,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         if(count($result) > 0) {
             $this->uid = $result[0]['uid'];
         } else {
+            $createTime = time();
+            $this->setAttribute('crdate', $createTime);
+		    $this->setAttribute('tstamp', $createTime);
             $this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
             $this->uid = tx_newspaper::insertRows($this->getTable(), $this->attributes);
         }
