@@ -82,6 +82,7 @@ class tx_newspaper_Sysfolder {
 		$module_name = strtolower($module_name);
 		
 		$fields = array(); // data for sysfolder creation
+
 		if ($module_name == self::getRootSysfolderModuleName()) {
 			/// newspaper root sysfolder for module is created on root level in Typo3
 			$fields['pid'] = 0;
@@ -89,6 +90,7 @@ class tx_newspaper_Sysfolder {
 		} else {
 			/// all other sysfolders are created within the newspaper root sysfolder
 			$fields['pid'] = self::getPidRootfolder(); 
+			$fields['sorting'] = self::getNewSysfolderSorting($module_name);
 		}
 		$fields['module'] = 'newspaper'; // for plugin-list in pages
 		$fields['tx_newspaper_module'] = $module_name;
@@ -100,9 +102,42 @@ class tx_newspaper_Sysfolder {
 		$fields['crdate'] = time();
 		$fields['tstamp'] = time();
 		$fields['hidden'] = 0;
-		
 		$uid = tx_newspaper::insertRows('pages', $fields); // insert sysfolder and get uid of that sysfolder
 		$this->sysfolder[$module_name] = $uid; // append this sysfolder in local storage array
+	}
+	
+	/// returns a sorting weight fopr Typo3 page creation in order to get a resonable sorting for newspaper sysfolders
+	private function getNewSysfolderSorting($module_name) {
+		switch(strtolower($module_name)) {
+			case 'np_article':
+				return 1;
+			break;
+			case 'np_section':
+				return 2;
+			break;
+			case 'np_al_manual':
+				return 11;
+			break;
+			case 'np_al_semiauto':
+				return 12;
+			break;
+			case 'np_articletype':
+				return 21;
+			break;
+			case 'np_pagetype':
+				return 22;
+			break;
+			case 'np_pagezonetype':
+				return 22;
+			break;
+			case 'np_page':
+				return 29001;
+			break;
+			case 'np_pagezone_page':
+				return 29002;
+			break;
+		}
+		return 20000; // default: lower bottom of sysfolder, but not the very bottom; basically to sort extras above the bottom sysfolders
 	}
 
 
