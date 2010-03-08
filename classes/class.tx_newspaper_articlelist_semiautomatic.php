@@ -71,6 +71,23 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// SQL table storing the relations between list and articles
 	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
 	
+	/// Construct a tx_newspaper_ArticleList_Semiautomatic
+	/** This constructor is used to set the default section filter
+	 *  \param $uid UID of the record in the corresponding SQL table
+	 *  \param $section tx_newspaper_Section to which this ArticleList is
+	 * 		bound.
+	 */
+	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
+		tx_newspaper_ArticleList::__construct($uid, $section);
+		if ($uid == 0 && $section) {
+			// set default filter
+			// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
+			$this->setAttribute('filter_sections', $section->getUid());
+		}
+	}
+	
+	
+	
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
