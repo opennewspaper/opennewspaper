@@ -133,33 +133,57 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				'uid=' . $current_al->getUid(),
 				array('deleted' => 1)
 			);
+			$this->articlelist = null; // well, this list has just been deleted on the database
 		} catch (tx_newspaper_EmptyResultException $e) {
 			// no article list assigned so far, either new section or the article list was deleted for some reason
 		}
 
 		// "delete" (= set deleted flag) all abstract article lists assigned to this section, before writing the new one
-		// just deleting the current article list would do too, but this is easier (and deletes potential orphan article list for this section too)
+		// just deleting the current article list would do, but this deletes potential orphan article lists for this section too
 		tx_newspaper::updateRows(
 			'tx_newspaper_articlelist',
 			'section_id=' . $this->getUid(),
 			array('deleted' => 1)
 		);
 
-		
-		// set some values
-		// \todo move to al constructor
-		$new_al->setAttribute('crdate', time());
-		$new_al->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		
-		// check if current section is to be assigned to newly created semi automatic article list (default behavior)
-		/// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
-/// \todo move to al_semi constructor
-		if (strtolower($new_al->getTable()) == 'tx_newspaper_articlelist_semiautomatic') {
-			$new_al->setAttribute('filter_sections', $this->getUid());
-		}
-		
+
+		/// try to re-activate an old deleted article list for the new article list type
+
+		// read newest abstract article list of new article list's type (record is deleted; was before or was set deleted by the updareRows() abobe)		
+		$al_abstract = tx_newspaper::selectRowsDirect(
+			'*',
+			'tx_newspaper_articlelist',
+			'list_table="' .  $new_al->getTable() . '" AND section_id=' . $this->getUid(),
+			'',
+			'crdate DESC, tstamp DESC',
+			'1'
+		);
+		if (sizeof($al_abstract) > 0) {
+			// try to re-activate deleted article list
+			// check if concrete article list is still available
+			$al_concrete = tx_newspaper::selectRowsDirect(
+				'*',
+				$new_al->getTable(),
+				'uid=' . $al_abstract[0]['list_uid']
+			);
+			if (sizeof($al_concrete) > 0) {
+				tx_newspaper::updateRows( // undelete concrete article list
+					$new_al->getTable(),
+					'uid=' . $al_abstract[0]['list_uid'],
+					array('deleted' => 0)
+				);
+				tx_newspaper::updateRows( // undelete abstract article list
+					'tx_newspaper_articlelist',
+					'uid=' . $al_abstract[0]['uid'],
+					array('deleted' => 0)
+				);
+				return $al_abstract[0]['uid']; // uid of abstract article list
+			}
+		} 
+
+		// no article list found to re-activate, so create a new one
+
 		$new_al->store(); // store new article list
-//t3lib_div::devlog('al 2 instanceof al: s, new_al, fieldArray', 'np', 0, array($s, $new_al, $fieldArray));
 		
 		return $new_al->getAbstractUid();
 
@@ -523,6 +547,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		// note: the value in the backend dropdown is the name of the article list class ($fieldArray['articlelist'])
 		
 		if (new $fieldArray['articlelist']() instanceof tx_newspaper_articlelist) {
+t3lib_div::devlog('sh post in section', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
 			// new article list class is a valid article list class, so change article list for this section now				
 			$s = new tx_newspaper_Section(intval($id)); // create section object
 			$new_al = new $fieldArray['articlelist'](0, $s);
