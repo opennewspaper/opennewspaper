@@ -341,11 +341,15 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_articlelist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "description, articlelist, first_article, num_articles, template, header, image",
+		"fe_admin_fieldList" => "starttime, endtime, description, articlelist, first_article, num_articles, template, header, image",
 	)
 );
 
@@ -358,11 +362,15 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_textbox.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "pool, title, text, image",
+		"fe_admin_fieldList" => "starttime, endtime, pool, title, text, image",
 	)
 );
 
@@ -375,11 +383,15 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_externallinks.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "pool, title, links, template",
+		"fe_admin_fieldList" => "starttime, endtime, pool, title, links, template",
 	)
 );
 
@@ -392,11 +404,15 @@ $TCA["tx_newspaper_externallinks"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_externallinks.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "url",
+		"fe_admin_fieldList" => "starttime, endtime, url",
 	)
 );
 
@@ -409,11 +425,15 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_displayarticles.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "todo",
+		"fe_admin_fieldList" => "starttime, endtime, todo",
 	)
 );
 
@@ -479,13 +499,15 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
-			'disabled' => 'hidden',
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_mostcommented.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, hours, num_favorites, display_num, display_time, template",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, hours, num_favorites, display_num, display_time, template",
 	)
 );
 
@@ -519,13 +541,15 @@ $TCA["tx_newspaper_extra_bio"] = array (
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
-			'disabled' => 'hidden',
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_bio.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text",
 	)
 );
 
@@ -559,13 +583,15 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
-			'disabled' => 'hidden',
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_controltagzone.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, tag_zone, tag_type, default_extra",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, tag_zone, tag_type, default_extra",
 	)
 );
 
@@ -595,13 +621,15 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
-			'disabled' => 'hidden',
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_combolinkbox.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, show_related_articles, manually_selected_articles, internal_links, external_links",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, show_related_articles, manually_selected_articles, internal_links, external_links",
 	)
 );
 
@@ -613,11 +641,16 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
+		'delete' => 'deleted',	
+		'enablecolumns' => array (		
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
+		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_searchresults.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "sections, search_term, tags",
+		"fe_admin_fieldList" => "starttime, endtime, sections, search_term, tags",
 	)
 );
 
@@ -631,13 +664,15 @@ $TCA["tx_newspaper_extra_container"] = array (
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'enablecolumns' => array (		
-			'disabled' => 'hidden',
+			'disabled' => 'hidden',	
+			'starttime' => 'starttime',	
+			'endtime' => 'endtime',
 		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_container.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, extras",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, extras",
 	)
 );
 
