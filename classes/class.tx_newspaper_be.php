@@ -654,33 +654,74 @@ JSCODE;
 
     public function renderTagsInArticle($PA, $fobj) {
         $obj = new t3lib_TCEforms();
-//        unset($PA['fieldConf']['config']['internal_type']);
+        //        unset($PA['fieldConf']['config']['internal_type']);
         $PA['fieldConf']['config']['size'] = 4;
-        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';        
+        $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
-//        $PA['fieldConf']['config']['renderMode'] = 'singlebox';
-//        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
+        //        $PA['fieldConf']['config']['renderMode'] = 'singlebox';
+        //        $PA['fieldConf']['config']['items'] = array( array('name', 'value') );
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
         $s=str_replace("\r\n","\n",$fld);
         $s=str_replace("\n","\r",$s);
         // Don't allow out-of-control blank lines
         $fld=preg_replace("/\n{2,}/","\r\r",$s);
-        $toReplace = '|<td valign="top" class="thumbnails">.*<\/select><\/td>|m';
-        $fld = preg_replace($toReplace, '<td valign="top"><input id="tag_input" type="text" onkeyup="findTags(\'tag_input\')"/></td>', $fld);
+        $toReplace = '|(<select name="data\[tx_newspaper_article\]\[24\]\[tags\]_sel.*</select>)|m';
+        preg_match($toReplace, $fld, $matches);
+        if(count($matches) > 0) {
+            $fld = preg_replace($toReplace, '<input id="tag_input" type="text"/><div id="response"/>'.$matches[0], $fld);
+        }
+//        $toReplace = '|<td valign="top" class="thumbnails">.*<\/select><\/td>|m';
+//        $fld = preg_replace($toReplace, '<td valign="top"><input id="tag_input" type="text"/></td>', $fld);
         return $this->getFindTagsJs().$fld;
     }
+
+    public function getArticleTags(&$params, &$pObj) {
+//        t3lib_div::devLog('getArticleTags', 'be', 0, array('params' => $params, 'pObj' => $piObj) );
+        if(!$params['row']['uid']) {
+            throw new tx_newspaper_Exception('Article Uid not passed in');
+        }
+        $articleID = $params['row']['uid'];
+        $article = new tx_newspaper_Article($articleID);
+        $tags = $article->getTags();
+        $items = array();
+        foreach($tags as $tag) {
+            $items[] = array($tag->getAttribute('tag'), $tag->getUid(), '');
+        }
+//        t3lib_div::devLog('getArticleTags--items', 'be', 0, array('tags' => $items));
+        $params['items'] = $items;
+    }
+
 
 
     private function getFindTagsJs() {
         return <<<JSCODE
     <script language="JavaScript">
-    function findTags(inputId) {
+    document.observe("dom:loaded", function() {
+        Element.observe('tag_input', 'keypress', findTags);
+        $$('[name="data[tx_newspaper_article][24][tags]_sel"]')[0].hide();
+        });
+    function <findTags(event></findTags(event>) {
+        if(event.keyCode == Event.KEY_RETURN) {
+            Event.stop(event);
+            var selectList = $$('[name="data[tx_newspaper_article][24][tags]_list"]')[0];
+            var opt = document.createElement('option');
+            opt.value = selectList.options != undefined ? selectList.options.length + 1 : 1;
+            opt.text = this.value;
+            setFormValueFromBrowseWin('data[tx_newspaper_article][24][tags]',opt.value,opt.text); TBE_EDITOR.fieldChanged('tx_newspaper_article','24','tags','data[tx_newspaper_article][24][tags]');
+//            try {
+//                selectList.add(opt, null);
+//            } catch(exception) {
+//                //IE handling
+//                selectList.add(opt);
+//            }
+
+        }
         var request = new top.Ajax.Request(
         top.path + 'typo3conf/ext/newspaper/mod1/index.php',
         {
             method: 'get',
-            parameters: {tag : $(inputId).value, getTag: 'true'},            
-            onSuccess: function(e) { $(inputId) = e.responseText  }
+            parameters: {tag : this.value, tag: 'true'},
+            onSuccess: function(e) { $(response) = e.responseText  }
         }
         );
        }
