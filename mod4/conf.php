@@ -4,6 +4,8 @@
 $MCONF['name'] = 'txnewspaperMmain_txnewspaperM4';
 $MCONF['script'] = '_DISPATCH';
 	
+define('TYPO3_MOD_PATH', '../typo3conf/ext/newspaper/mod4/');
+	
 $MCONF['access'] = 'admin';
 
 $MLANG['default']['tabs_images']['tab'] = 'moduleicon.gif';
