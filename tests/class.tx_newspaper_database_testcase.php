@@ -15,7 +15,7 @@
  			$this->cleanDatabase();
 			$this->useTestDatabase();             
  			$this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
- 			$this->importExtensions(array('newspaper'));
+ 			$this->importExtensions(array('newspaper', 'devlog'));             
 // 			$this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
 			$this->fixture = new tx_newspaper_hierarchy();
  		}
