@@ -166,6 +166,57 @@ limit: ' . $limit . '
 			return $rows;
 		} else throw new tx_newspaper_NoResException(self::$query);
 	}
+
+	/// Execute a \c SELECT query, check the result, return all records
+	/** enableFields() are NOT taken into account, that's why this method is called selectRowsDIRECT
+	 * 
+	 *  \param $fields Fields to \c SELECT
+	 *  \param $table Table to \c SELECT \c FROM
+	 *  \param $where \c WHERE - clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to \c GROUP \c BY
+	 *  \param $orderBy Fields to \c ORDER \c BY
+	 *  \param $limit Maximum number of records to \c SELECT
+	 *  \return The result of the query as 2-dimensional associative array
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
+	 */
+	public static function selectRowsDirect($fields, $table, $where = '1',
+									  $groupBy = '', $orderBy = '', $limit = '') {
+		$message = 'selectRowsDirect
+fields: ' . $fields . '
+table: ' . $table . '
+where: ' . $where . '
+groupBy: ' . $groupBy . '
+orderBy: ' . $orderBy . '
+limit: ' . $limit . '
+'; 
+		self::writeNewspaperLogEntry('logDbSelect', $message);
+		
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$fields, $table, 
+			$where, 
+			$groupBy, 
+			$orderBy, 
+			$limit
+		);
+
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+		if ($res) {
+	        $rows = array();
+	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	$rows[] = $row;
+	        }
+	        
+	        self::writeNewspaperLogEntry('logDbSelect', 'selectRowsDirect, #results: ' . sizeof($rows));
+	        
+			return $rows;
+		} else {
+			throw new tx_newspaper_NoResException(self::$query);
+		}
+	}
+
 	
 	/// Execute a \c SELECT query on M-M related tables
 	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the 
@@ -413,7 +464,7 @@ uids_or_where:
 			return $p->enableFields($table, $show_hidden);
 		}
 
-		/// show everything but deleted records in backend, if deleted falg existing for given table
+		/// show everything but deleted records in backend, if deleted flag is existing for given table
 		if (isset($GLOBALS['TCA'][$table]['ctrl']['delete']))
 			return ' AND ' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
 	
