@@ -593,26 +593,57 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
     private function getFindTagsJs($articleId) {
         return <<<JSCODE
     <script language="JavaScript">
-        var MyCompleter = Class.create(Ajax.Autocompleter, {
+        var mapSelector = function(instance) {
+                var ret = []; // Beginning matches
+                var partial = []; // Inside matches
+                var entry = instance.getToken();
+                var count = 0;
 
-              onComplete: function(\$super, request) {
-                var serverChoices = request.responseText;
-                var currentChoice = this._getCurrentInputAsPartialList();
-                var allChoices = serverChoices.replace(/<ul>/, currentChoice);
-                request.responseText = allChoices;
-                \$super(request);
-             },
+                instance.options.array.each(
+                    function(pair) {
+                        var elem = pair.value;
+                        var foundPos = instance.options.ignoreCase ?
+                            elem.toLowerCase().indexOf(entry.toLowerCase()) :
+                            elem.indexOf(entry);
 
-             getUpdatedChoices: function(\$super) {
-                this.updateChoices(this._getCurrentInputAsPartialList() + '</ul>');
-                \$super();
-             },
+                        while (foundPos != -1) {
+                            if (foundPos == 0 && elem.length != entry.length) {
+                              ret.push('<li id="'+pair.key+'">' + elem.substr(0, entry.length) +
+                                elem.substr(entry.length) + "</li>");
+                              break;
+                            } else if (entry.length >= instance.options.partialChars &&
+                              instance.options.partialSearch && foundPos != -1) {
+                              if (instance.options.fullSearch || /\s/.test(elem.substr(foundPos-1,1))) {
+                                partial.push('<li id="'+pair.key+'">' + elem.substr(0, foundPos) + "<strong>" +
+                                  elem.substr(foundPos, entry.length) + "</strong>" + elem.substr(
+                                  foundPos + entry.length) + "</li>");
+                                break;
+                              }
+                            }
 
-             _getCurrentInputAsPartialList: function() {
-                return "<ul><li>" + this.getToken() + "<" + "/li>";
-             }
+                            foundPos = instance.options.ignoreCase ?
+                              elem.toLowerCase().indexOf(entry.toLowerCase(), foundPos + 1) :
+                              elem.indexOf(entry, foundPos + 1);
+                        }
+                    }
+                  );
+                if (partial.length)
+                  ret = ret.concat(partial.slice(0, instance.options.choices - ret.length));
+                return "<ul>" + ret.join('') + "</ul>";
+            }
+      var MyCompleter = Class.create(Autocompleter.Local, {
 
-        });
+                     getUpdatedChoices: function() {
+                        var serverChoices = this.options.selector(this);
+                        var currentChoice = this._getCurrentInputAsPartialList();
+                        var allChoices = serverChoices.replace(/<ul>/, currentChoice);
+                        this.updateChoices(allChoices);
+                     },
+
+                     _getCurrentInputAsPartialList: function() {
+                        return "<ul><li>" + this.getToken() + "<" + "/li>";
+                     },
+            });   
     document.observe("dom:loaded", function() {
         $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         var path = window.location.pathname;
@@ -622,14 +653,20 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
         } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
             path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
         }
-        new MyCompleter("autocomplete", "autocomplete_choices", path + 'typo3conf/ext/newspaper/mod1/index.php', {
-            paramName: 'search',
-            method: 'get',
-            parameters: 'param=tag-suggest',
-            indicator: 'indicator1',
-            frequency: 0.1,
-            afterUpdateElement : insertTag
-        });
+
+        //get all tags so they are cached
+        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
+                                method: 'get',
+                                parameters: 'param=tag-getall',
+                                onSuccess: function(request) {
+                                                var choices = new Hash(request.responseText.evalJSON());
+                                                new MyCompleter('autocomplete', 'autocomplete_choices', choices, {
+                                                    selector : mapSelector,
+                                                    afterUpdateElement : insertTag
+                                                });
+                                           }
+                            });
+
      });
 
      function insertTag(currInput, selectedElement) {

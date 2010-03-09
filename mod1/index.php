@@ -306,6 +306,15 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
         }
     }
 
+    private function processTagGetAll() {
+        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'tag_type = '.tx_newspaper::getContentTagType());
+        $tags = array();
+        foreach($results as $result) {
+            $tags[$result['uid']] = $result['tag'];
+        }
+        exit(json_encode($tags));
+    }
+
 
 
 
@@ -371,6 +380,9 @@ t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 
                     if ($_REQUEST['param'] == 'tag-insert')
                         $this->processTagInsert(); //AJAX call
+
+                    if ($_REQUEST['param'] == 'tag-getall')
+                        $this->processTagGetAll(); //AJAX call
 
 
 
