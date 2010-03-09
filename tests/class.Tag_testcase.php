@@ -37,6 +37,11 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
      */
     public function test_storeEmptyTag() {
 
+        // NOTE:
+        // I tried using setException('expected_Exception') but it did not work.
+        // When one check passed no other failed, therfore the more noisy try/catch.
+
+
         //stored with no attributes set
         try {
             $aTag = new tx_newspaper_Tag();
@@ -140,6 +145,19 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper::getControlTagType(), $tag->getAttribute('tag_type'));
+    }
+
+    public function test_storeSameValueDifferentType() {
+        $controlTag = tx_newspaper_Tag::createControlTag('test');
+        $contentTag = tx_newspaper_Tag::createContentTag('test');
+
+        $contentTag->store();
+        $controlTag->store();
+
+        $this->assertNotEquals(0, $contentTag->getUid(), 'content tag was not stored');
+        $this->assertNotEquals(0, $controlTag->getUid(), 'control tag was not stored');
+
+        $this->assertNotEquals($controlTag->getUid(), $contentTag->getUid(), 'Tags of different type and same content should be allowed');
     }
 
 

@@ -108,9 +108,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	}
 
 	/**
-     *
-     * 
-     * If a tag of same type and content is found its uid is returned
+     * Stores a tag and prevents duplicate tags by checking content and type.
      * @return uid
      * @throws tx_newspaper_IllegalUsageException
      */
@@ -120,10 +118,12 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             $message = 'Can not store tag, it has no content or type. '.$message;
             throw new tx_newspaper_IllegalUsageException($message);
         }
+
         if (!$this->attributes) $this->readAttributesFromDB();
-        $where = 'tag = \'' . $this->getAttribute('tag') . '\''; // AND tag_type = ' . $this->getAttribute('tag_type');
+
+        $where = 'tag = \'' . $this->getAttribute('tag') . '\' AND tag_type = ' . $this->getAttribute('tag_type');
 		$result = tx_newspaper::selectRows('uid, tag_type, pid', $this->getTable(), $where);
-        t3lib_div::devLog('store', 'tag', 0, $result);
+
         if(count($result) > 0) {
             $this->uid = $result[0]['uid'];
         } else {
