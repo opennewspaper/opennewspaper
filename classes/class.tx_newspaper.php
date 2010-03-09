@@ -30,7 +30,20 @@ class tx_newspaper  {
 	///	The \c GET parameter which determines which page type is displayed
 	const pagetype_get_parameter = 'pagetype';
 	
+	/// Returns whether a specified record is available in the DB
+	public static function isPresent($table, $where, $use_enable_fields = true) {
+		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
+		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'uid', $table, 
+			$where . ($use_enable_fields? self::enableFields($table): ''));
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		if (!$res) return false;
+        
+        return true;
+		
+	}
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 * 
