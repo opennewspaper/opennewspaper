@@ -10,6 +10,8 @@
  *     operation.
  *   - Caching the content managed by newspaper to speed up delivery on uncached
  * 	   Typo3 pages. 
+ *  \todo Preview uncached
+ *  \todo Saving any newspaper-related item must invalidate typo3 page cache
  */
 class tx_newspaper_Cache {
 	
