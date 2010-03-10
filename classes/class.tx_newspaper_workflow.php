@@ -114,8 +114,8 @@ class tx_newspaper_Workflow {
         $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
         foreach($comments as $i => $comment) {
             $userId = $comment['be_user'];
-            $userdata= $beFunc->getUserNames('username, uid', 'AND uid ='.$userId);            
-            $comments[$i]['username'] = $userdata[$userId]['username'];
+            $userdata= $beFunc->getUserNames('username, uid, realName', 'AND uid ='.$userId);            
+            $comments[$i]['username'] = $userdata[$userId]['realName']? $userdata[$userId]['realName'] : $userdata[$userId]['username'];
         }
 
         return $comments;
