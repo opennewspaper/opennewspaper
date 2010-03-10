@@ -86,12 +86,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$this->section = $section;
 		} elseif ($this->getUid()) {
 			try {
-			if ($this->getAttribute('section_id')) {
-				$this->section = new tx_newspaper_Section($this->getAttribute('section_id'));
-			}
-			} catch (tx_newspaper_WrongAttributeException $e) {
-/// \todo: remove if not needed: t3lib_div::devlog('wrong attribute exception', 'newspaper', 1, $e);
-			}
+				if ($this->getAttribute('section_id')) {
+					$this->section = new tx_newspaper_Section($this->getAttribute('section_id'));
+				}
+			} catch (tx_newspaper_WrongAttributeException $e) { }
 		}
 	}
 

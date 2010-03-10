@@ -47,16 +47,28 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 
 	/// SQL table storing the relations between list and articles
 	const mm_table = 'tx_newspaper_articlelist_manual_articles_mm';
+	const article_table = 'tx_newspaper_article';
 
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
 	 *  \return The \p $number Articles starting with \p $start
 	 */
-	public function getArticles($number, $start = 0) {		
+	public function getArticles($number, $start = 0) {
+/*
+SELECT tx_newspaper_articlelist_manual_articles_mm.uid_foreign
+FROM tx_newspaper_articlelist_manual_articles_mm
+JOIN tx_newspaper_article ON tx_newspaper_articlelist_manual_articles_mm.uid_foreign = tx_newspaper_article.uid
+WHERE
+uid_local = 5 AND hidden = 0
+ORDER BY sorting ASC
+LIMIT 0, 10
+ */				
 		$results = tx_newspaper::selectRows(
-				'uid_foreign',
-				self::mm_table,
+				self::mm_table . '.uid_foreign',
+				self::mm_table . 
+					' JOIN ' . self::article_table . 
+					' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
 				'uid_local = ' . intval($this->getUid()),
 				'',
 				'sorting ASC',
