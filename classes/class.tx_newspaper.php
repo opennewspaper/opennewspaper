@@ -40,7 +40,8 @@ class tx_newspaper  {
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		
 		if (!$res) return false;
-        
+        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if (!$row['uid']) return false; 
         return true;
 		
 	}
