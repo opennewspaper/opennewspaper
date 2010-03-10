@@ -100,8 +100,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>$incomingFieldArray, 'table'=>$table, 'id'=>$id, 'request'=>$_REQUEST));
-		
+t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
 		tx_newspaper_Workflow::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
@@ -110,17 +109,14 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-		global $LANG;
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 
-		// call save hook in newspaper calsses
+		// call save hook in newspaper classes
 		tx_newspaper_article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		
 
-
 		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
-
 
 		/// check if a page zone type with is_article flag set is allowed
 		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
@@ -358,62 +354,11 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 
 
 	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array($status, $table, $id, $fieldArray)); // , $_REQUEST
-//t3lib_div::devlog('adbo after new ids', 'newspaper', 0, $that->substNEWwithIDs);		
-				
-		/// if a new extra was placed on a pagezone, write abstract record
-		$this->writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
-		
+//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, 'subst id' => $that->substNEWwithIDs)); // , $_REQUEST
 		// pass hook to newspaper classes
 		tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
-	}
-
-
-	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records
-/// \todo: explain in detail what's happening here!
-	private function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
-		if (tx_newspaper::isAbstractClass($table)) {
-			return; // abstract class, nothing to do
-		}
-	
-		/// check if a new extra is stored
-		// exclude new articles - articles are extras but shouldn't be treated like extras here!
-		if ($status == 'new' && $table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-//t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone()', 'newspaper', 0, array($table, $id, $_REQUEST));		
-			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
-			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
-			if (!$pz_uid) {
-				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): Illegal value for pagezone uid: #', 'newspaper', 3, array($table, $id, $pz_uid));
-				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
-			}
-
-			// get uid of new concrete extra (that was just stored)
-			$concrete_extra_uid = intval($that->substNEWwithIDs[$id]);
-			
-			// create abstract record for this concrete extra
-			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table, true); // $force=true, there's no abstract record for this extra existing (for this is a totally new extra)
-
-			// get pagezone (pagezone_page or article)
-			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-
-			// get extra ...
-			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
-			// .... add set some default values
-			$e->setAttribute('show_extra', 1);
-			$e->setAttribute('is_inheritable', 1);
-
-			// insert extra on pagezone
-			$pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
-
-			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
-				// set paragraph
-				$pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
-			} else {
-				$e->store(); // call store() only if changeExtraParagraph() wasn't called (see above)
-			}
-
-		}
+		tx_newspaper_extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
 	}
 
 	
@@ -427,30 +372,6 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array'=>
 			tx_newspaper_sysfolder::createAll();
 		}
 	}
-	
-	
-	
-	
-	/// check if a UNIQUE normlized_name was already entered - if yes, display value as non-editable field
-	/** \param string $table table name in hook
-	 *  \param string $field name of single field currently processed in hook 
-	 *  \param array $row data to be written
-	 *  \param tx_newspaper_StoredObject object type to check
-	 *  \return void 
-	 */
-/*
-\todo: still needed?
-	private function checkNormalizedNameUniqueField($table, $field, $row, tx_newspaper_StoredObject $obj) {
-		if ($table == $obj->getTable() && $field == 'normalized_name' && $row['normalized_name'] != '') {
-			t3lib_div::loadTCA($table); // Make sure to load full $TCA array for the table
-			/// if field 'normalized_name' is filled, just display the value, but the value can't be edited
-			unset($GLOBALS['TCA'][$table]['columns']['normalized_name']['config']['type']);
-			$GLOBALS['TCA'][$table]['columns']['normalized_name']['config']['type'] = 'none';
-		}
-	}
-*/
-	
-	
 	
 }	
 
