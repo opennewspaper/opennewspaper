@@ -270,6 +270,7 @@ class tx_newspaper_Page
 	 *  \return tx_newspaper_PageZone of type \p $type, or \c null.
 	 */
 	function getPageZone(tx_newspaper_PageZoneType $type) {
+		if (!is_array($this->getPageZones())) return null;
  		foreach ($this->getPageZones() as $pagezone) {
  			if ($pagezone->getPageZoneType()->getUid() == $type->getUid())
  				return $pagezone;
