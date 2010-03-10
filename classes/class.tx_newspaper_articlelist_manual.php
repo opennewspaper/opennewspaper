@@ -70,7 +70,7 @@ LIMIT 0, 10
 					' JOIN ' . self::article_table . 
 					' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
 				'uid_local = ' . intval($this->getUid()) . 
-					' AND ' . tx_newspaper::enableFields(self::article_table),
+					tx_newspaper::enableFields(self::article_table),
 				'',
 				'sorting ASC',
 				"$start, $number"
