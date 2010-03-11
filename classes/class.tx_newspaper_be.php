@@ -659,8 +659,8 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
                                 method: 'get',
                                 parameters: 'param=tag-getall',
                                 onSuccess: function(request) {
-                                                var tags = request.responseText.evalJSON();
-                                                var choices = tags.length > 0 ? new Hash(tags) : new Hash({});
+                                                var serverTags = request.responseText.evalJSON();
+                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
                                                 new MyCompleter('autocomplete', 'autocomplete_choices', choices, {
                                                     selector : mapSelector,
                                                     afterUpdateElement : insertTag
