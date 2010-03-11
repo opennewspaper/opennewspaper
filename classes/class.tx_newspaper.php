@@ -839,6 +839,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$baseURI = explode($hostname, t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
 		$https = $_SERVER['HTTPS'];
 		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
+		return $url;
 	}
 	
 	public static function registerSource($key, tx_newspaper_Source $new_source) {
