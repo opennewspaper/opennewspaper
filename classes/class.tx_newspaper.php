@@ -842,6 +842,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $url;
 	}
 	
+	/// \return current protocol and host
+	public static function currentProtocolHost() {
+		return 'http' . ($_SERVER['HTTPS']? 's': '') . '://' . $_SERVER['SERVER_NAME'];
+	}
+	
 	public static function registerSource($key, tx_newspaper_Source $new_source) {
 		self::$registered_sources[$key] = $new_source;
 	}
