@@ -395,7 +395,7 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 		$data = array();
 		$extra_data = array();
 
-		/// add upper level page zones and extras, if any
+		/// add UPPER level page zones and extras, if any
 		if ($show_levels_above) {
 			$pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
 			for ($i = 0; $i < sizeof($pz_up); $i++) {
@@ -404,14 +404,19 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 			}
 		}
 
-		$is_concrete_article = 0; // init
-		/// add current page zone and extras
+		// check if $pz is a concrete article
+		if ($pz instanceof tx_newspaper_article) {
+			$is_concrete_article = !$pz->isDefaultArticle();
+		} else {
+			$is_concrete_article = 0;
+		}
+
+		/// add CURRENT page zone and extras
 		$data[] = self::extractData($pz); // empty array if concrete article
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
 
 //t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, $data);
-/// \todo: can't that be checked nicer???
-		if (sizeof($data[0]) > 0) { // if concrete article: $data[0] = emtpy; 
+		if (!$is_concrete_article) {
 			// so it's no concrete article (= default article or pagezone_page)
 			
 			$s = $pz->getParentPage()->getParentSection();
@@ -428,7 +433,6 @@ t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAb
 			}
 			$data[0]['article_id'] = -1; // only needed for concrete article
 		} else {
-			$is_concrete_article = 1; // render list of extras for a concrete article
 			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage
 			$data[0]['article_id'] = $pz->getUid(); // store article uid for backend buttons usage (edit)
 		}
