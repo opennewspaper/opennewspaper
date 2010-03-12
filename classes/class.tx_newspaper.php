@@ -917,6 +917,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
 		$tce->backPath = $BACK_PATH;
+		$out .= $tce->getSoloField($table, $row, 'articles');
 		$out .= $tce->getMainFields($table, $row);
 		return $out;
 	}
