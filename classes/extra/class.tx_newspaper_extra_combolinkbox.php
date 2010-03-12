@@ -48,12 +48,16 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 			$current_article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
 
 			$rows = tx_newspaper::selectRows(
-				'uid_local, uid_foreign',
+				tx_newspaper_Article::article_related_table . '.uid_local, ' . tx_newspaper_Article::article_related_table .'.uid_foreign',
 				tx_newspaper_Article::article_related_table,
 				'uid_local = ' . $current_article->getUid() .
 				' OR uid_foreign = ' . $current_article->getUid()
 			);
-			
+/*			' JOIN ' . self::article_table . 
+				' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
+			'uid_local = ' . intval($this->getUid()) . 
+				tx_newspaper::enableFields(self::article_table),
+*/			
 			$articles = array();
 			
 			foreach ($rows as $row) {
