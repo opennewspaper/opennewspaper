@@ -912,12 +912,10 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$table = $row['list_table'];
 		$uid = $row['list_uid'];
 
-		$out .= "<div>$table: $uid</div>";
 		$row = tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
 		
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
 		$tce->backPath = $BACK_PATH;
-		$out .= $tce->getSoloField($table, $row, 'articles');
 		$out .= $tce->getMainFields($table, $row);
 		return $out;
 	}
