@@ -273,7 +273,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             $ret .= self::getArticleListInfo($mod_post['articlelist_id']);
         }
         if ($mod_post['pagezone_id']) {
-            $ret .= self::getPageZoneInfo($mod_post['pagezone_id']);
+            $ret .= self::getPageZoneInfo($mod_post['pagezone_id'], true);
         }
         return $ret;
     }
@@ -448,7 +448,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	return $ret;
     }
     
-    static protected function getPageZoneInfo($pagezone_id) {
+    static protected function getPageZoneInfo($pagezone_id, $with_page_info = false) {
         $ret = '';
         foreach (explode(',', $pagezone_id) as $uid) {
             try {
@@ -462,7 +462,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 ' (' . $pagezone->getTable() . ' ' . self::getRecordLink($pagezone->getTable(), $pagezone->getUid()) . ')' .
                 ' Type: ' . self::getRecordLink('tx_newspaper_pagezonetype', $pagezone_type->getUid()) . 
                 ' (' .$pagezone_type->getAttribute('type_name') . ')' .
-            '</p>';
+                '</p>';
+            if ($with_page_info) {
+            	$ret .= self::getPageInfo($pagezone->getParentPage()->getUid());
+            }
         }
         return $ret;
     }
