@@ -55,6 +55,10 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_articlelist.tmpl
 	 */
 	public function render($template_set = '') {
+
+		$this->prepare_render($template_set);
+		
+		$this->readArticleList();
 		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0, 
 			array(
 				'uid' => $this->getUid(), 
@@ -62,10 +66,6 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 				'article list' => $this->articlelist
 			)
 		);
-
-		$this->prepare_render($template_set);
-		
-		$this->readArticleList();
 
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article'));
