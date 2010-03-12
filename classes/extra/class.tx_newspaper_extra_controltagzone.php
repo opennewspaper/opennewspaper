@@ -33,6 +33,8 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	const tag_table = 'tx_newspaper_tag';
 	///	SQL table associating tx_newspaper_Tag s with tx_newspaper_Article s 
 	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
+	/// GET-parameter describing the wanted control tag for a dossier
+	const default_dossier_get_parameter = 'dossier';
 		
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -179,10 +181,13 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			);
 		}
 		
+		$dossier_get_parameter = $TSConfig['newspaper.']['dossier_get_parameter'];
+		if (!$dossier_get_parameter) $dossier_get_parameter = self::default_dossier_get_parameter;
+		
 		$url = tx_newspaper::typolink_url(
 			array(
 				'id' => $dossier_page,
-				'dossier' => $tag
+				$dossier_get_parameter => $tag
 			));
 		return $url;
 	}
