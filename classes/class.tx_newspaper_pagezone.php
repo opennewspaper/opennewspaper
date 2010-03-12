@@ -716,7 +716,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *      page zone above, or if < 0, don't inherit at all
  	 */
 	public function changeParent($new_parent_uid) {
-		t3lib_div::devlog('changeParent()', 'newspaper', 0, $new_parent_uid);
+
 		foreach ($this->getExtras() as $extra) {
 			if ($extra->isOriginExtra()) {
 				/// Hide and move to end of page zone
@@ -737,7 +737,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		} else {
 			$parent_zone = tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
 		}
-		t3lib_div::devlog('changeParent()', 'newspaper', 0, $parent_zone);
+
 		if ($parent_zone) $this->copyExtrasFrom($parent_zone);
 
 		$this->setAttribute('inherits_from', $parent_uid);
