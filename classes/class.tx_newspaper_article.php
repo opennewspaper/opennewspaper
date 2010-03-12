@@ -458,7 +458,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 	/// checks if article is a default article or a concrete article
-	/// \return \c true if article is a default article (else \c false).
+	/** \return \c true if article is a default article (else \c false).
+	 */
 	public function isDefaultArticle() {
 		return $this->getAttribute('is_template');
 	}
@@ -727,9 +728,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/// Gets a list of (configured but) missing extras in the article
 	/** It is checked if extras placed on the default article are missing in
 	 *  the concrete article and if extras configured as must-have or should-
-	 *  have are missing in the article
-	 */  
-	/// \return array of Extra objects (either existing extras or newly created empty extras) 
+	 *  have are missing in the article.
+	 *  \return array of Extra objects (either existing extras or newly created empty extras)
+	 */   
 	public function getMissingDefaultExtras() {
 
 		$shortcuts = array();
@@ -867,7 +868,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 	}
 
-
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
             t3lib_div::devLog('modifyTagSelection', 'modify', 0, array() );            
@@ -880,7 +880,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too)
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		if (strtolower($table) == 'tx_newspaper_article' && isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
 			
 			// hidden is 0, so article was just made visible
@@ -964,7 +963,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \todo make static, move to tx_newspaper
 	 */
 	protected function getCurrentPage() {
-		$section = tx_newspaper::getSection();
+		if (TYPO3_MODE == 'BE') {
+			$section = $this->getPrimarySection();
+		} else { 
+			$section = tx_newspaper::getSection();
+		}
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
 	
