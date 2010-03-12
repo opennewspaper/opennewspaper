@@ -586,8 +586,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 	}
 
-
-
 	/// Check if given class name is an abstract class
 	/** \param $class class name
 	 *  \return \c true if abstract class, \c false else (or if no class at all)
@@ -601,10 +599,10 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $abstract;
 	}
 
-
 	/// get absolute path to Typo3 installation
-	/// \param $endsWithSlash determines if the returned path ends with a slash
-	/// \return absolute path to Typo3 installation 
+	/** \param $endsWithSlash determines if the returned path ends with a slash
+	 *  \return absolute path to Typo3 installation
+	 */ 
 	public static function getAbsolutePath($endsWithSlash=true) {
 		/// \todo replace by a version NOT using EM conf (check t3lib_div)
 		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
@@ -636,7 +634,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 		return $path;
 	}
-
 
 	/// prepends the given absolute path part if path to check is no absolute path
 	/** \param $path2check path to check if it's an absolute path
@@ -674,7 +671,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
 	}
 	
-
 	/// Get the tx_newspaper_Section object of the page currently displayed
 	/** Currently, that means it returns the tx_newspaper_Section record which
 	 *  lies on the current Typo3 page. This implementation may change, but this
@@ -693,7 +689,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 		return new tx_newspaper_Section($section_uid);
 	}
-	
 	
 	/// Return the name of the SQL table \p $class is persistently stored in
 	/** \param $class either object or a class name to find the SQL table for
@@ -723,7 +718,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $child_list;	
 	}
 
-
 	/// Check if a given class implements a given interface
 	/** \param $class PHP class to check if it implements \p $interface
 	 *  \param $interface PHP interface to check if it is implemented by \p $class
@@ -738,7 +732,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		}
 		return false;
 	}
-
 
 	/// Get a list of all the attributes/DB fields an object (or class) has
 	/** \param $object An object of the desired class, or the class name as string
@@ -919,6 +912,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$table = $row['list_table'];
 		$uid = $row['list_uid'];
 
+		$out .= "<div>$table: $uid</div>";
 		$row = tx_newspaper::selectOneRow('*', $table, 'uid = ' . intval($uid));
 		
 		$tce = t3lib_div::makeInstance('t3lib_TCEforms');
