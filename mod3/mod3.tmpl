@@ -9,8 +9,8 @@
 	<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" /> {$LABEL.show_levels_above} 
 
 {* \todo, see #653 *}
- 	{*cehckbox: deactivate moving and adding extras *}
-	{* checkbox: show visible extras only *}	
+ 	{* checkbox: deactivate moving and adding extras *}
+	{* checkbox: show visible extras only *}
 {*	<input type="checkbox" {if $SHOW_VISIBLE_ONLY}checked="checked" {/if} onchange="javascript:toggle_show_visible_only(this.checked);" /> {$LABEL.show_visible_only} *}
 	
 	{* dropdown: tagzone extra visibility (yes, no, only) *}
@@ -27,7 +27,7 @@
 	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a> 
 {/if}
 
-	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if ($ADMIN)}[{$s->getUid()}]{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{if ($ADMIN)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	
 	{* Dropdown for page and page zone for last (=selected) section only (and if NOT concrete article) *}
 	{if !$IS_CONCRETE_ARTICLE && $smarty.section.i.last} 
@@ -43,7 +43,7 @@
 		{/section}
 		</select>
 		{if ($ADMIN)}
-			[{$DATA[i].page_id}]
+			<span title="Page id">[{$DATA[i].page_id}]</span>
 		{/if}
 		 &nbsp; &nbsp; 
 		{$LABEL.pagezonetype}: 
@@ -57,7 +57,7 @@
 		{/section}
 		</select>
 		{if ($ADMIN)}
-			[<span title="abstract">{$DATA[i].pagezone_id}</span>|<span title="concrete">{$DATA[i].pagezone_concrete_id}</span>]
+			[<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>]
 		{/if}
 
 		 &nbsp; &nbsp; 
@@ -80,7 +80,7 @@
 *}
 		</select>
 		{if ($ADMIN)}
-			[{$DATA[i].inherits_from}]
+			<span title="0: default, -1: none; else: Concrete Pagezone id">[{$DATA[i].inherits_from}]</span>
 		{/if}
 
 
