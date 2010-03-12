@@ -245,6 +245,9 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             <tr>
               <td>Article list ID</td><td><input name="tx_newspaper_mod4[articlelist_id]" value="' . $mod_post['articlelist_id'] .'" /></td>
     	    </tr>
+            <tr>
+              <td>Page zone ID</td><td><input name="tx_newspaper_mod4[pagezone_id]" value="' . $mod_post['pagezone_id'] .'" /></td>
+    	    </tr>
     	  </table>
     	  
     	  <input type="submit" value=" Go ">
@@ -263,11 +266,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         if ($mod_post['article_id']) {
             $ret .= self::getArticleInfo($mod_post['article_id']);
         }
-            if ($mod_post['extra_id']) {
+        if ($mod_post['extra_id']) {
             $ret .= self::getExtraInfo($mod_post['extra_id']);
         }
-            if ($mod_post['articlelist_id']) {
+        if ($mod_post['articlelist_id']) {
             $ret .= self::getArticleListInfo($mod_post['articlelist_id']);
+        }
+        if ($mod_post['pagezone_id']) {
+            $ret .= self::getPageZoneInfo($mod_post['pagezone_id']);
         }
         return $ret;
     }
