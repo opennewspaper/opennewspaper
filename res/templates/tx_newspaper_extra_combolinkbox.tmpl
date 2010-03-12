@@ -20,7 +20,7 @@
 			{foreach from=$related_articles item=article}
 				<li>
 					<a href="{$article->getLink()}"
-						>{$article->getAttribute('kicker')} {$article->getAttribute('header')}</a>
+						>{$article->getAttribute('kicker')} {$article->getAttribute('title')}</a>
 				</li>
 			{/foreach}
 		</ul>
@@ -33,7 +33,7 @@
 			{foreach from=$manually_selected_articles item=article}
 				<li>
 					<a href="{$article->getLink()}"
-						>{$article->getAttribute('kicker')} {$article->getAttribute('header')}</a>
+						>{$article->getAttribute('kicker')} {$article->getAttribute('title')}</a>
 				</li>
 			{/foreach}
 		</ul>
