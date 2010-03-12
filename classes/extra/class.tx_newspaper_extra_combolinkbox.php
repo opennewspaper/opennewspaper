@@ -21,6 +21,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
  */
 class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 		
+	const article_table = 'tx_newspaper_article';
+	
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid); 
@@ -49,15 +51,17 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 
 			$rows = tx_newspaper::selectRows(
 				tx_newspaper_Article::article_related_table . '.uid_local, ' . tx_newspaper_Article::article_related_table .'.uid_foreign',
-				tx_newspaper_Article::article_related_table,
-				'uid_local = ' . $current_article->getUid() .
-				' OR uid_foreign = ' . $current_article->getUid()
+				tx_newspaper_Article::article_related_table .
+					'JOIN tx_newspaper_article AS a_local
+ON tx_newspaper_article_related_mm.uid_local = a_local.uid
+JOIN tx_newspaper_article AS a_foreign
+ON tx_newspaper_article_related_mm.uid_foreign= a_foreign.uid',
+
+				'(uid_local = ' . $current_article->getUid() .
+				' OR uid_foreign = ' . $current_article->getUid() . ')' .
+				' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
 			);
-/*			' JOIN ' . self::article_table . 
-				' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
-			'uid_local = ' . intval($this->getUid()) . 
-				tx_newspaper::enableFields(self::article_table),
-*/			
+
 			$articles = array();
 			
 			foreach ($rows as $row) {
