@@ -186,7 +186,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 //t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA));		
 		global $LANG;
 
-		if (intval($PA['row']['uid'] == 0)) {
+		if (intval($PA['row']['uid']) == 0) {
 			// probably a new record
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_unsaved', false);
 		}
@@ -194,7 +194,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
 
 		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getAttribute('num_articles'));
-//		t3lib_div::devlog('articles', 'newspaper', 0, array('articles_sorted' => $articles_sorted));
+//t3lib_div::devlog('articles', 'newspaper', 0, array('articles_sorted' => $articles_sorted));
 
 		if (true) {
 	 	 	$smarty = new tx_newspaper_Smarty();
