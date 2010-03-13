@@ -56,7 +56,6 @@
 			<label index="message_title_sectiontree">Section tree</label>
             <label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
             <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
-            <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
             <label index="message_no_controltag_selected">No control tag selected</label>
             <label index="message_articlelist_missing_deleted">
                 The article list this Extra displays is missing or deleted.
