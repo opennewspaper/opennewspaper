@@ -385,7 +385,7 @@ function findElementsByName(name, type) {
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
-t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
+//t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
 		return self::renderBackendPageZone($article, false);
 	}
 
