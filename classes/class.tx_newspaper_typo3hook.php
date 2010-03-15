@@ -109,7 +109,7 @@ t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' =
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
+t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 
 		// call save hook in newspaper classes
 		tx_newspaper_article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
