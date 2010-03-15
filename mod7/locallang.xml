@@ -45,6 +45,7 @@
 			<label index="label_group_clear">Remove article</label>
 			<label index="label_button_left">Add article</label>
 			<label index="label_button_right">Remove article TO BE PLACED</label>
+			<label index="label_button_articlebrowser">Add an article</label>
 			<label index="message_no_dutyeditor">Access for duty editors only.</label>
 			<label index="message_no_articlelist">No article list found in section</label>
 			<label index="message_unknown_articlelisttype">Unknown article list type</label>

@@ -1,7 +1,9 @@
 // get absolute path
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-
+if (path.indexOf('typo3conf/ext/newspaper') == -1) {
+	path += 'typo3conf/ext/newspaper/'; // modify path if called from within a module
+}
 
 var refreshCheck;
 
@@ -19,7 +21,7 @@ function hideProgress() {
 // open preview window
 function showArticlePreview() {
 	window.open(
-		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
+		path + "mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
 		"preview", 
 		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
 	);
@@ -39,7 +41,7 @@ function filterAvailableSections () {
 
 // return uid of article to be placed
 function getArticleToBePlacedUid() {
-	return $("#placearticleuid")[0].defaultValue;
+	return ($("#placearticleuid").length? $("#placearticleuid")[0].defaultValue : 0);
 }
 
 // insert article in manual article list
@@ -102,11 +104,10 @@ function saveSection (elementId, async) {
 	if (async == undefined) {
 		async = true;
 	}
-	
 	$("#" + elementId).selectAllOptions();
 	showProgress();
 	jQuery.ajax({
-		url: "index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
+		url: path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
 		success: function (data) {
 			if (!data) {
 				alert(langSavedidnotwork);
@@ -157,7 +158,7 @@ function checkForRefresh () {
 		
 		showProgress();
 		$.getJSON(
-			"index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
+			path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
 			$("#placementform").serialize(), 
 			function(data) {
 				$.each(data, function(index, item){
@@ -180,7 +181,7 @@ function executeAJAX (action, close) {
 	}
 	showProgress();
 	$.get(
-		"index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
+		path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
 		$("#placementform").serialize(), 
 		function (data) {
 			if (data) {
@@ -209,92 +210,76 @@ function everythingSaved () {
 
 
 function connectSectionEvents(){
-
 	$("table.sections .movetotop").click(function() {
 		$("#" + this.rel).moveOptionsUp(true, true);
 		return false;
   	});
-	
 	$("table.sections .movetobottom").click(function() {
 		$("#" + this.rel).moveOptionsDown(true, true);
 		return false;
   	});
-	
 	$("table.sections .moveup").click(function() {
 		$("#" + this.rel).moveOptionsUp(false, true);
 		return false;
   	});
-	
 	$("table.sections .movedown").click(function() {
 		$("#" + this.rel).moveOptionsDown(false, true);
 		return false;
   	});
-	
 	$("table.sections .delete").click(function() {
 		$("#" + this.rel).removeOption(/./, true);
 		return false;
   	});
-
 }
 
-function connectPlacementEvents () {
-	
+function connectPlacementEvents() {
 	$("table.articles .moveup, table.articles .movedown, table.articles .delete, table.articles .insertarticle, .removearticletobeplaced, table.articles .movetotop, table.articles .movetobottom").click(function() {
 		$("input.save[title=" +  this.rel + "]").addClass("unsaved");
 		$("input#saveall").addClass("unsaved");
 		startCheckCountdown();
 		return false;
   	});
-	
 	$("table.articles .movetotop").click(function() {
 		$("#" + this.rel).moveOptionsUp(true, true);
 		return false;
   	});
-	
 	$("table.articles .movetobottom").click(function() {
 		$("#" + this.rel).moveOptionsDown(true, true);
 		return false;
   	});
-	
 	$("table.articles .moveup").click(function() {
 		$("#" + this.rel).moveOptionsUp(false, true);
 		return false;
   	});
-	
 	$("table.articles .movedown").click(function() {
 		$("#" + this.rel).moveOptionsDown(false, true);
 		return false;
   	});
-	
 	$("table.articles .delete").click(function() {
 		$("#" + this.rel).removeOption(/./, true);
 		displayInsertOrDelButton($("#" + this.rel));
 		return false;
   	});
-	
-	
 	$(".insertarticle").click(function() {
 		insertArticle(this.rel);
 		displayInsertOrDelButton($("#" + this.rel));
 		return false;
   	});
-
-
 	$(".removearticletobeplaced").click(function() {
 		removeArticleToBePlaced(this.rel);
 		displayInsertOrDelButton($("#" + this.rel));
 		return false;
   	});
-
-	
 	$(".refresh").click(function() {
 		if (confirm(langReallyrefresh)) {
 			$("#" + this.title).selectAllOptions();
 			$("#" + this.title).removeOption(/./, true);
 			showProgress();
 			$("#" + this.title).ajaxAddOption(
-				"index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist",
-				{"tx_newspaper_mod7[section]" : this.title, "tx_newspaper_mod7[placearticleuid]" : $("#placearticleuid").val()}, 
+				path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
+					"tx_newspaper_mod7[section]" : this.title, 
+					"tx_newspaper_mod7[placearticleuid]" : ($("#placearticleuid").length? $("#placearticleuid").val() : 0)
+				}, 
 				false,
 				displayInsertOrDelButton, ["#" + this.title] //displayInsertOrDelButton, [{"elementId": "#" + this.title}]
 			);	
@@ -306,8 +291,6 @@ function connectPlacementEvents () {
 		}
 		return false;
   	});
-	
-	
 	$(".save").click(function() {
 		saveSection(this.title);
 		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
@@ -317,8 +300,6 @@ function connectPlacementEvents () {
 		}
 		return false;
   	});
-	
-	
 }
 
 
@@ -333,7 +314,7 @@ function saveSections() {
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
-			"index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
+			path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
 			$("#placementform").serialize(), 
 			function (data) {
 				$("#placement").html(data);
@@ -349,12 +330,17 @@ function saveSections() {
 
 $(document).ready(function(){
 	
-	connectSectionEvents();
-	
-	$("#savesections").click(function() {
+	if ($("#savesections").length) {
+		// execute only if full articlelist placement module (don't include if articlelist placement is standalone version)
+		connectSectionEvents();
+ 		$("#savesections").click(function(){
+			saveSections();
+		});
 		saveSections();
-  	});
-	saveSections();
+	} else {
+		// add listener to articlelist selectbox
+		connectPlacementEvents();
+	}
 	
 	startCheckCountdown();
 
@@ -364,88 +350,140 @@ $(document).ready(function(){
 	});
 	
 	
-	$(".addresort").click(function() {
-		$("#" + this.id).copyOptions("#" + this.title, "selected");
-		$("#" + this.id).unselectAllOptions();
-		$("#" + this.title).unselectAllOptions();
-		return false;
-  	});
+	if ($(".addresort").length) {
+		$(".addresort").click(function() {
+			$("#" + this.id).copyOptions("#" + this.title, "selected");
+			$("#" + this.id).unselectAllOptions();
+			$("#" + this.title).unselectAllOptions();
+			return false;
+	  	});
+	}
 	
+	if ($(".cancel").length) {
+		$(".cancel").click(function() {
+			closePlacement();
+			return false;
+		});
+	}
 	
-	$(".cancel").click(function() {
-		closePlacement();
-		return false;
-	});
+	if ($(".sendtodutyeditor").length) {
+		$(".sendtodutyeditor").click(function() {
+			executeAJAX("sendarticletodutyeditor");
+			return false;
+		});
+	}
+		
+	if ($(".sendtodutyeditorhide").length) {
+		$(".sendtodutyeditorhide").click(function() {
+			executeAJAX("sendarticletodutyeditorhide");
+			return false;
+		});
+	}
 	
+	if ($(".sendtodutyeditorpublish").length) {
+		$(".sendtodutyeditorpublish").click(function(){
+			executeAJAX("sendarticletodutyeditorpublish");
+			return false;
+		});
+	}
 	
-	$(".sendtodutyeditor").click(function() {
-		executeAJAX("sendarticletodutyeditor");
-		return false;
-	});
-	$(".sendtodutyeditorhide").click(function() {
-		executeAJAX("sendarticletodutyeditorhide");
-		return false;
-	});
-	$(".sendtodutyeditorpublish").click(function() {
-		executeAJAX("sendarticletodutyeditorpublish");
-		return false;
-	});
+	if ($(".sendtoeditor").length) {
+		$(".sendtoeditor").click(function () {
+			executeAJAX("sendarticletoeditor");
+			return false;
+		});
+	}
 	
+	if ($(".sendtoeditorhide").length) {
+		$(".sendtoeditorhide").click(function () {
+			executeAJAX("sendarticletoeditorhide");
+			return false;
+		});
+	}
 	
-	$(".sendtoeditor").click(function () {
-		executeAJAX("sendarticletoeditor");
-		return false;
-	});
-	$(".sendtoeditorhide").click(function () {
-		executeAJAX("sendarticletoeditorhide");
-		return false;
-	});
-	$(".sendtoeditorpublish").click(function () {
-		executeAJAX("sendarticletoeditorpublish");
-		return false;
-	});
+	if ($(".sendtoeditorpublish").length) {
+		$(".sendtoeditorpublish").click(function () {
+			executeAJAX("sendarticletoeditorpublish");
+			return false;
+		});
+	}
 	
+	if ($(".place").length) {
+		$(".place").click(function () {
+			executeAJAX("placearticle");
+			return false;
+		});
+	}
 	
-	$(".place").click(function () {
-		executeAJAX("placearticle");
-		return false;
-	});
-	$(".placehide").click(function () {
-		executeAJAX("placearticlehide");
-		return false;
-	});
-	$(".placepublish").click(function () {
-		executeAJAX("placearticlepublish");
-		return false;
-	});
+	if ($(".placehide").length) {
+		$(".placehide").click(function () {
+			executeAJAX("placearticlehide");
+			return false;
+		});
+	}
 	
+	if ($(".placepublish").length) {
+		$(".placepublish").click(function(){
+			executeAJAX("placearticlepublish");
+			return false;
+		});
+	}
 	
-	$(".putonline").click(function () {
-		executeAJAX("putarticleonline");
-		return false;
-	});
+	if ($(".putonline").length) {
+		$(".putonline").click(function(){
+			executeAJAX("putarticleonline");
+			return false;
+		});
+	}
 	
+	if ($(".putoffline").length) {
+		$(".putoffline").click(function(){
+			executeAJAX("putarticleoffline");
+			return false;
+		});
+	}
 	
-	$(".putoffline").click(function () {
-		executeAJAX("putarticleoffline");
-		return false;
-	});	
+	if ($(".saveall").length) {
+		$(".saveall").click(function () {
+			executeAJAX("justsave", false);
+			return false;
+		});
+	}
+		
+	if ($("#filter").length) {
+		$("#filter").keyup(function () {
+			filterAvailableSections();
+			return false;
+		});
+	}
 	
-	
-	$(".saveall").click(function () {
-		executeAJAX("justsave", false);
-		return false;
-	});
-	
-	$("#filter").keyup(function () {
-		filterAvailableSections();
-		return false;
-	});
-	
-	
-	$("#preview").click(function () {
-		showArticlePreview();
-		return false;
-	});
+	if ($("#preview").length) {	
+		$("#preview").click(function () {
+			showArticlePreview();
+			return false;
+		});
+	}
 	
 });
+
+
+
+
+// http://www.gettingclever.com/2008/06/javascript-stacktrace.html
+function stacktrace() {
+ re = /function\W+([\w-]+)/i;
+ var f = arguments.callee;
+ var s = "";
+ while (f) {
+  s += (re.exec(f))[1] + '('; 
+  for (i = 0; i < f.arguments.length - 1; i++) {
+   s += "'" + f.arguments[i] + "', ";
+  }
+  if (f.arguments.length > 0) {
+   s += "'" + f.arguments[i] + "'";
+  }
+  s += ")\n\n";
+  f = f.arguments.callee.caller;
+ }
+ return s;
+}

@@ -34,8 +34,9 @@ require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);
 
 
+
 /// Class to generate a BE module with 100% width
-class fullWidthDoc extends template {
+class fullWidthDoc_mod7 extends template {
 	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
@@ -51,6 +52,8 @@ class fullWidthDoc extends template {
 class  tx_newspaper_module7 extends t3lib_SCbase {
 				var $pageinfo;
 				var $prefixId = 'tx_newspaper_mod7';
+				
+				private $al_be = null; // backend object providing the methods for generating the backend for article list placement
 
 				/**
 				 * Initializes the Module
@@ -58,7 +61,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-
+	
 					parent::init();
 				}
 
@@ -70,23 +73,28 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-
 					// Access check!
+
 // \todo: better check: currently access to all be_users is granted
 					if (isset($GLOBALS['BE_USER']->user['uid']) && $GLOBALS['BE_USER']->user['uid']) {
 //						ini_set('display_errors',  'on');
-						
+
+						$this->al_be = new tx_newspaper_BE();
+
 						// get "pi"vars
 						$input = t3lib_div::GParrayMerged($this->prefixId);
-//t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
+						if (!isset($input['articleid'])) {
+							$input['articleid'] = 0; //isset($input['placearticleuid'])? $input['placearticleuid'] : 0; // needed for standalone form (singleplacement)
+						}
+t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
-								die($this->renderPlacement($input, false));
+								die($this->al_be->renderPlacement($input, false));
 							break;
 							case 'updatearticlelist' :
-								die(json_encode($this->getArticleListBySectionId($input['section'], $input['placearticleuid'])));
+								die(json_encode($this->al_be->getArticleListBySectionId($input['section'], $input['placearticleuid'])));
 							break;
 							case 'checkarticlelistsforupdates' :
 								die(json_encode($this->checkArticleListsForUpdates($input)));
@@ -132,7 +140,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							break;
 						}
 						// draw the header
-						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
+						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod7');
 						$this->doc->backPath = $BACK_PATH;
 						$this->content .= $this->doc->startPage($LANG->getLL('title'));
 						
@@ -142,10 +150,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 								$output = $this->renderPreview($input['articleid']);
 							break;
 							case 'placement' :
-								$output = $this->renderPlacement($input, false);
+								$output = $this->al_be->renderPlacement($input, false);
 							break;
 							case 'singleplacement' :
-								$output = $this->renderSinglePlacement($input['articleid'], $input['sectionid']);
+								$output = $this->al_be->renderSinglePlacement($input['articleid'], $input['sectionid']);
 							break;
 							default :
 								$output = $this->renderModule($input);
@@ -178,7 +186,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				// render a frontend preview of an article
 				function renderPreview ($articleId) {
 					$article = new tx_newspaper_article($articleId);
-					// @todo: does not work:
 					return $article->render();
 				}
 				
@@ -191,7 +198,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					}
 					
 					// get data
-					$article = $this->getArticleByArticleId($input['articleid']);
+					$article = $this->al_be->getArticleByArticleId($input['articleid']);
 					$sections = $this->renderAllAvailableSections();
 					$sections_active = $this->renderSectionsForArticle($article);
 					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user')); 	
@@ -210,7 +217,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('sections_active', $sections_active);
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
-					$smarty->assign('ICON', $this->getIcons());
+					$smarty->assign('ICON', $this->al_be->getArticlelistIcons());
 					$smarty->assign('workflow_permissions', array(
 						'hide' => ($article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('hide'),
 						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('publish'),
@@ -225,22 +232,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					return $smarty->fetch('mod7_module.tpl');
 				}
 				
-				private function getIcons() {
-					global $LANG;
-					$icon = array(
-						'group_totop' => tx_newspaper_BE::renderIcon('gfx/group_totop.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_totop', false, 14, 14)),
-						'up' => tx_newspaper_BE::renderIcon('gfx/up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_up', false, 14, 14)),
-						'down' => tx_newspaper_BE::renderIcon('gfx/down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_down', false, 14, 14)),
-						'group_tobottom' => tx_newspaper_BE::renderIcon('gfx/group_tobottom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_tobottom', false, 14, 14)),
-						'group_clear' => tx_newspaper_BE::renderIcon('gfx/group_clear.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_group_clear', false, 14, 14)),
-						'button_left' => tx_newspaper_BE::renderIcon('gfx/button_left.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_left', false, 14, 14)),
-						'button_right' => tx_newspaper_BE::renderIcon('gfx/button_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_right', false, 14, 14)),
-						'preview' => tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)),
-					);
-					return $icon;
-				}
-				
-				
+
 				// save all the selected sections for an article
 				function saveSectionsForArticle ($input) {
 					$sectionIds = array();
@@ -268,7 +260,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function placeArticle($input, array $statusHidePublish=array()) {
-					$article = $this->getArticleByArticleId ($input['placearticleuid']);
+					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 					
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_NONE; // \todo: well, this is a hack (simulating a submit)
@@ -291,7 +283,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToDutyEditor($input, array $statusHidePublish=array()) {
-					$article = $this->getArticleByArticleId ($input['placearticleuid']);
+					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; // \todo: well, this is a hack ...
 					$log = array(
@@ -316,7 +308,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToEditor($input, array $statusHidePublish=array()) {
-					$article = $this->getArticleByArticleId ($input['placearticleuid']);
+					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_EDITORIAL_STAFF; // \todo: well, this is a hack ...
 					$log = array(
@@ -341,7 +333,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOnline($input) {
-					$article = $this->getArticleByArticleId ($input['placearticleuid']);
+					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('hidden', 0);
 					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					$article->store();
@@ -356,7 +348,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOffline($input) {
-					$article = $this->getArticleByArticleId ($input['placearticleuid']);
+					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('hidden', 1);
 					$article->store();
 					$this->writeLog($input, array(
@@ -420,7 +412,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					}
 					
 					$result = false;
-					$sectionId = $this->extractSectionId($input['section']);
+					$sectionId = $this->al_be->extractSectionId($input['section']);
 					$section = new tx_newspaper_section ($sectionId);
 					$sectionType = get_class($section->getArticleList());
 					
@@ -457,7 +449,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					
 					// get data for all sections
 					foreach ($input['sections'] as $section) {
-						$articleLists[$section] = $this->getArticleListBySectionId($section, $input['placearticleuid']);
+						$articleLists[$section] = $this->al_be->getArticleListBySectionId($section, $input['placearticleuid']);
 					}
 					
 					// explode selected values ourselves as we must not use pivars any more
@@ -497,149 +489,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 				
 				
-				/// render the placement editors according to sections selected for article
-				/** in comparison the the displayed ones in the form
-				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
-				 *  \return ?
-				 */
-				function renderPlacement ($input, $singleMode = false) {
-					$selection = $input['sections_selected'];
-					
-					// calculate which / how many placers to show
-					$tree = $this->calculatePlacementTreeFromSelection($selection);
-
-					// grab the data for all the placers we need to display
-					$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
-//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
-					// grab the article
-					$article = $this->getArticleByArticleId($input['placearticleuid']);
-					
-					// get locallang labels 
-					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-					$localLang = $localLang[$GLOBALS['LANG']->lang];	
-									
-					// render
-					$smarty = new tx_newspaper_Smarty();
-					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
-					$smarty->assign('tree', $tree);
-					$smarty->assign('article', $article);
-					$smarty->assign('singlemode', $singleMode);
-					$smarty->assign('lang', $localLang);
-					$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-					$smarty->assign('ICON', $this->getIcons());
-					return $smarty->fetch('mod7_placement.tpl');
-				}
-				
-				
-				function renderSinglePlacement ($articleId, $sectionId) {
-					$input = array(
-						'sections_selected' => array($sectionId), 
-						'placearticleuid' => $articleId
-					);
-					
-					return $this->renderPlacement($input ,true);
-				}
-				
-				
-				/// get article and offset lists for a set of sections
-				/**
-				 * 
-				 */
-				function fillPlacementWithData ($tree, $articleId) {
-					for ($i = 0; $i < count($tree); ++$i) {
-						for ($j = 0; $j < count($tree[$i]); ++$j) {
-							for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
-								// get data (for title display) for each section
-								$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
-								// add article list and list type for last element only to tree structure
-								if (($k+1) == count($tree[$i][$j])) {
-									$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
-									$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId ($tree[$i][$j][$k]['uid'], $articleId);
-									$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
-								}
-							}
-						}
-					}
-					return $tree;
-				}
-				
-				
-				/// extract just the article-uids from an article list
-				/**
-				 * 
-				 */
-				function getArticleIdsFromArticleList ($articleList) {
-					// collect all article uids
-					$articleUids = array();
-					foreach ($articleList as $article) {
-						$articleUids[] = $article->getAttribute('uid');
-					}
-					return $articleUids;
-				}
-				
-				
-				/// calculate a "minimal" (tree-)list of sections
-				/**
-				 * 
-				 */
-				function calculatePlacementTreeFromSelection ($selection) {
-					$result = array();
-					
-					//@todo: re-arrange sorting here to achieve different positioning in frontend					
-					for ($i = 0; $i < count($selection); ++$i) {
-						$selection[$i] = explode('|', $selection[$i]);
-						$ressort = array();
-						for ($j = 0; $j < count($selection[$i]); ++$j) {
-							$ressort[]['uid'] = $selection[$i][$j];
-							if(!isset($result[$j]) || !in_array($ressort, $result[$j])) {
-								$result[$j][] = $ressort;
-							}
-						}
-					}
-
-					return $result;
-				}
-				
-				
-				/// get a list of articles by a section id
-				/**
-				 * 
-				 */
-				function getArticleListBySectionId ($sectionId, $articleId = false) {
-					
-					$result = array();
-					$sectionId = $this->extractSectionId($sectionId);
-					$section = new tx_newspaper_section($sectionId);
-					$listType = get_class($section->getArticleList());
-					$articleList = $section->getArticleList()->getArticles(9999);
-					
-					// get offsets
-					if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
-						$articleUids = $this->getArticleIdsFromArticleList($articleList);
-						$offsetList = $section->getArticleList()->getOffsets($articleUids);	
-					}
-					
-					// prepend the article we are working on to list for semiautomatic lists
-					if ($listType == 'tx_newspaper_ArticleList_Semiautomatic' && $articleId) {
-						$article = $this->getArticleByArticleId($articleId);
-						$result['0_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
-					}
-					
-					// fill the section placers from their articlelists
-					foreach ($articleList as $article) {
-						if ($listType == 'tx_newspaper_ArticleList_Manual') {
-							$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
-						}
-						if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
-							$offset = $offsetList[$article->getAttribute('uid')];
-							if ($offset > 0) {
-								$offset = '+' . $offset;
-							}
-							$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
-						}
-					}
-					return $result;
-				}
 				
 				
 				/// get all available sections 
@@ -694,28 +543,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 }
 
 
-				
-				/// extract the section uid out of the select elements mames that are
-				/** like "placer_10_11_12" where we need the "12" out of it
-				 * 
-				 */
-				function extractSectionId ($sectionId) {
-					if (strstr($sectionId, '_')) {
-						$sectionId = explode('_', $sectionId);
-						$sectionId = $sectionId[count($sectionId)-1];
-					}
-					return $sectionId;
-				}
-				
-				
-				/// grab a single article by its id
-				/** \param $articleId UID of the tx_newspaper_Article
-				 *  \return the instantiated tx_newspaper_Article object
-				 */
-				function getArticleByArticleId ($articleId) {
-					return new tx_newspaper_article($articleId);
-				}
-				
 				
 				function getBackendUserById ($userId) {
 					// intentionally done without enableFields check
