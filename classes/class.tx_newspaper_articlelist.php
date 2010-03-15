@@ -435,6 +435,17 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	}
 	
 	
+	/// TCEforms hook
+	public static function getMainFields_preProcess($table, $row, $that) {
+		if (strtolower($table) != self::$table) {
+			return; // nothing to do
+		}
+		if (!intval($row['uid'])) {
+			// no integer uid, so a NEW123something uid,, so a new records
+			die('You can\'t create a new abstract articlelist.');
+		}		
+	}
+	
 	
 
 	///	Remove all articles from the list.
