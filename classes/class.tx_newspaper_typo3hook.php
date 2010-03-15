@@ -103,6 +103,9 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
 		tx_newspaper_Workflow::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
+
+        $incomingFieldArray['tags'] = '1,2';
+//        $_REQUEST['data'][$table][$id]['tags'] = '7,8';
 	}
 
 
@@ -130,6 +133,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 		// send hook to newspaper classes
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+
+//        $fieldArray['tags'] = 2;
+//        $_REQUEST['data'][$table][$id]['tags'] = '7,8';
 		
 /// \todo move to sysfolder class	
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
