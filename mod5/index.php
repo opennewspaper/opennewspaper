@@ -38,7 +38,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 
 
 /// Class to generate a BE module with 100% width
-class fullWidthDoc extends template {
+class fullWidthDoc_mod5 extends template {
 	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
@@ -120,7 +120,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			}
 			
 			// Draw the header.
-			$this->doc = t3lib_div::makeInstance('fullWidthDoc');
+			$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod5');
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 

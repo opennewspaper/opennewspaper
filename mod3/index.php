@@ -38,7 +38,7 @@ require_once($BACK_PATH . 'template.php');
 
 
 /// Class to generate a BE module with 100% width
-class fullWidthDoc extends template {
+class fullWidthDoc_mod3 extends template {
 	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
@@ -642,7 +642,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 					if ($access)	{
 
 							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
+						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod3');
 						$this->doc->backPath = $BACK_PATH;
 						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
