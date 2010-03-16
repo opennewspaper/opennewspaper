@@ -541,12 +541,26 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
+        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+        $ctrlTags = $this->replaceIncludingEndOfLine($fld, 'tags_ctrl', 'tags', false);
+        $ctrlTags = $this->addTagInputField($ctrlTags, $articleId, 'tags_ctrl');
+//        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags_ctrl\]_sel.*</select>';
+//        $with='<input type="text" id="autocomplete_tags_ctrl" name="autocomplete_parameter_tags_ctrl" /><span id="indicator1_tags_ctrl" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_tags_ctrl" class="autocomplete"></div>';
+//        $ctrlTags = $this->replaceIncludingEndOfLine($ctrlTags, $with, $pattern, false);
 
         //inset input field
-        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
-        $with='<input type="text" id="autocomplete" name="autocomplete_parameter" /><span id="indicator1" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices" class="autocomplete"></div>';
-        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
-        return $this->getFindTagsJs($articleId).$fld;
+        $fld = $this->addTagInputField($fld, $articleId, 'tags');
+//        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
+//        $with='<input type="text" id="autocomplete" name="autocomplete_parameter" /><span id="indicator1" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices" class="autocomplete"></div>';
+//        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+        return $this->getFindTagsJs($articleId).$fld.$ctrlTags;
+    }
+
+
+    private function addTagInputField($selectBox, $articleId, $fieldname) {
+        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\['.$fieldname.'\]_sel.*</select>';
+        $with='<input type="text" id="autocomplete_'.$fieldname.'" name="autocomplete_parameter" /><span id="indicator1_'.$fieldname.'" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$fieldname.'" class="autocomplete"></div>';
+        return $this->replaceIncludingEndOfLine($selectBox, $with, $pattern);
     }
 
     /**
@@ -558,10 +572,7 @@ function findElementsByName(name, type) {
      * @return replaced text or complete text if no match was found
      */
     private function replaceIncludingEndOfLine($what, $with, $pattern, $reinsertMatch = true) {
-        $newText = str_replace("\r\n","\n",$what);
-        $newText = str_replace("\n","\r",$newText);
-        // convert blank lines too
-        $newText= preg_replace("/\n{2,}/","\r\r",$newText);
+        $newText = $this->replaceEol($what);
         $toReplace = '|('.$pattern.')|m'; // with 'm' option . matches EOL  
         preg_match($toReplace, $newText, $matches);
         $hasMatches = (count($matches) > 0);
@@ -574,6 +585,13 @@ function findElementsByName(name, type) {
         }
 
         return $hasMatches ? $fld : $what;
+    }
+
+    private function replaceEol($text) {
+        $text = str_replace("\r\n","\n",$text);
+        $text = str_replace("\n","\r",$text);
+        // convert blank lines too
+        return preg_replace("/\n{2,}/","\r\r",$text);
     }
 
     public function getArticleTags(&$params, &$pObj) {
@@ -658,23 +676,58 @@ function findElementsByName(name, type) {
             path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
         }
 
+        //get all content tags so they are cached
+        createTagCache('tags');
+//        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
+//                                method: 'get',
+//                                parameters: 'param=tag-getall',
+//                                onSuccess: function(request) {
+//                                                var serverTags = request.responseText.evalJSON();
+//                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
+//                                                new MyCompleter('autocomplete_tags', 'autocomplete_choices_tags', choices, {
+//                                                    selector : mapSelector,
+//                                                    afterUpdateElement : insertTag
+//                                                });
+//                                           }
+//                            });
+//        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
+//                                method: 'get',
+//                                parameters: 'param=tag-getall',
+//                                onSuccess: function(request) {
+//                                                var serverTags = request.responseText.evalJSON();
+//                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
+//                                                new MyCompleter('autocomplete_tags_ctrl', 'autocomplete_choices_tags_ctrl', choices, {
+//                                                    selector : mapSelector,
+//                                                    afterUpdateElement : insertTag
+//                                                });
+//                                           }
+//                            });
+        //get all controltags so they are cached
+
+
+     });
+
+     function createTagCache(tagType) {
         //get all tags so they are cached
-        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
+        return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
                                 parameters: 'param=tag-getall',
                                 onSuccess: function(request) {
                                                 var serverTags = request.responseText.evalJSON();
                                                 var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
-                                                new MyCompleter('autocomplete', 'autocomplete_choices', choices, {
+                                                new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_tag_'+tagType, choices, {
                                                     selector : mapSelector,
-                                                    afterUpdateElement : insertTag
+                                                    afterUpdateElement : insertTag+tagType
                                                 });
                                            }
                             });
-
-     });
+     }
 
      function insertTag(currInput, selectedElement) {
+        alert("Called");
+     }
+
+     function insertTag(currInput, selectedElement, tagType) {
         if(!selectedElement.id) {
             //neuen tag einfügen
             new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {                    
