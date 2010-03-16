@@ -2,7 +2,7 @@
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 if (path.indexOf('typo3conf/ext/newspaper') == -1) {
-	path += 'typo3conf/ext/newspaper/'; // modify path if called from within a module
+	path += 'typo3conf/ext/newspaper'; // modify path if called from within a module
 }
 
 var refreshCheck;
@@ -21,7 +21,7 @@ function hideProgress() {
 // open preview window
 function showArticlePreview() {
 	window.open(
-		path + "mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
+		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
 		"preview", 
 		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
 	);
@@ -107,7 +107,7 @@ function saveSection (elementId, async) {
 	$("#" + elementId).selectAllOptions();
 	showProgress();
 	jQuery.ajax({
-		url: path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
+		url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
 		success: function (data) {
 			if (!data) {
 				alert(langSavedidnotwork);
@@ -158,7 +158,7 @@ function checkForRefresh () {
 		
 		showProgress();
 		$.getJSON(
-			path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
+			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
 			$("#placementform").serialize(), 
 			function(data) {
 				$.each(data, function(index, item){
@@ -181,7 +181,7 @@ function executeAJAX (action, close) {
 	}
 	showProgress();
 	$.get(
-		path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
+		path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
 		$("#placementform").serialize(), 
 		function (data) {
 			if (data) {
@@ -276,7 +276,7 @@ function connectPlacementEvents() {
 			$("#" + this.title).removeOption(/./, true);
 			showProgress();
 			$("#" + this.title).ajaxAddOption(
-				path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
+				path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
 					"tx_newspaper_mod7[section]" : this.title, 
 					"tx_newspaper_mod7[placearticleuid]" : ($("#placearticleuid").length? $("#placearticleuid").val() : 0)
 				}, 
@@ -314,7 +314,7 @@ function saveSections() {
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
-			path + "mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
+			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
 			$("#placementform").serialize(), 
 			function (data) {
 				$("#placement").html(data);
