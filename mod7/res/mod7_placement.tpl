@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 {if $singlemode}
 	<!-- <script type="text/javascript" src="contrib/prototype/prototype.js"></script> -->
 	<script type="text/javascript" language="javascript">
