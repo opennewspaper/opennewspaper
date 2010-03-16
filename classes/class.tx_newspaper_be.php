@@ -687,8 +687,8 @@ t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'ta
                      },
             });   
     document.observe("dom:loaded", function() {
-//        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
-//        $$('[name="data[tx_newspaper_article][$articleId][tags_ctrl]_sel"]')[0].hide();
+        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
+        $$('[name="data[tx_newspaper_article][$articleId][tags_ctrl]_sel"]')[0].hide();
         var path = window.location.pathname;
         var test = path.substring(path.lastIndexOf("/") - 5);
         if (test.substring(0, 6) == "typo3/") {
@@ -698,11 +698,11 @@ t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'ta
         }
 
         //create completer and tag caches for content- and control-tags
-//        createTagCompletion('tags', mapSelector);
-        createTagCompletion('tags_ctrl', mapSelector);
+        createTagCompletion('tags', mapSelector, false);
+        window.setTimeout(function() {createTagCompletion('tags_ctrl', mapSelector)}, 1000);
      });
 
-     function createTagCompletion(tagType, mySelector) {
+     function createTagCompletion(tagType, mySelector, stop) {
         //get all tags so they are cached
         return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
@@ -713,10 +713,10 @@ t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'ta
                                                 new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_'+tagType, choices, {
                                                     selector : mySelector,                                                    
                                                     afterUpdateElement : function(currInput, selectedElement) {
-                                                                        insertTag(currInput, selectedElement, tagType);
-                                                                    }
-                                                });
-                                           }
+                                                                            insertTag(currInput, selectedElement, tagType);
+                                                                         }
+                                                });                                                
+                                           },                                
                             });
      }
 
