@@ -416,21 +416,30 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('datamap ado hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
-		
 		if (self::isRegisteredArticleList($table)) {
-			if ($status == 'new') {
-				// new record, so get substituated uid
-				$concrete_al_uid = intval($that->substNEWwithIDs[$id]);
-			} else {
-				// existing record with existing uid, so just use the given $id
-				$concrete_al_uid = intval($id);
-			}
-			
-			$concrete_al = new $table($concrete_al_uid);
-			if ($concrete_al->getAbstractUid() == 0) {
-				/// no abstract record found, so create a new one
-				$concrete_al->createArticleListRecord($concrete_al_uid, $table);
-			}	
+			self::writeAbstractRecordIfNeeded($status, $table, $id);
+		}
+
+	}
+	
+	/// checks if an abstract record needs to be written after creating a concrete article list in the list module
+	/** \param $status Status of the current operation, 'new' or 'update
+	 *  \param $table The table currently processing data for
+	 *  \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
+	 */	 
+	private static function writeAbstractRecordIfNeeded($status, $table, $id) {
+		if ($status == 'new') {
+			// new record, so get substituated uid
+			$concrete_al_uid = intval($that->substNEWwithIDs[$id]);
+		} else {
+			// existing record with existing uid, so just use the given $id
+			$concrete_al_uid = intval($id);
+		}
+		
+		$concrete_al = new $table($concrete_al_uid);
+		if ($concrete_al->getAbstractUid() == 0) {
+			/// no abstract record found, so create a new one
+			$concrete_al->createArticleListRecord($concrete_al_uid, $table);
 		}	
 	}
 	
