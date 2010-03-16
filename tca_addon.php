@@ -281,6 +281,9 @@ $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config'][
 $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config']['size'] = '12';  
 
-
+// abstract article list modifications
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1'; // just display concrete article list and assiciated section
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_uid']['config']['readOnly'] = '1';
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['section_id']['config']['readOnly'] = '1';
 
 ?>
