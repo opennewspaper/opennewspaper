@@ -192,11 +192,17 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				
 				// render the main / full module
 				function renderModule ($input) {
-					
-					if (!isset($input['articleid']) || !$input['articleid']) {
-						die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
+					// check if article placement for article was called
+					if (isset($input['articleid']) && $input['articleid']) {
+						return $this->renderPlacementModule($input);
 					}
 					
+					// render article list backend module
+					die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
+				}
+				
+				
+				function renderPlacementModule($input) {
 					// get data
 					$article = $this->al_be->getArticleByArticleId($input['articleid']);
 					$sections = $this->renderAllAvailableSections();
@@ -231,6 +237,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					);
 					return $smarty->fetch('mod7_module.tpl');
 				}
+				
 				
 
 				// save all the selected sections for an article
