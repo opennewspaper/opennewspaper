@@ -534,21 +534,27 @@ function findElementsByName(name, type) {
 		return $smarty->fetch('mod3.tmpl');
 	}
 
-    public function renderTagControlsInArticle($PA, $fobj) {
+    public function renderTagControlsInArticle(&$PA, $fobj) {
+        t3lib_div::devLog('renderTagControlsInArticle', 'be', 0, array('params' => $PA, 'fObj' => $fObj) );
         $articleId = $PA['row']['uid'];
         $obj = new t3lib_TCEforms();
         $PA['fieldConf']['config']['size'] = 4;
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
+        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags]';
+        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags';
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
-        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
-        $ctrlTags = $this->replaceIncludingEndOfLine($fld, 'tags_ctrl', 'tags', false);
+//        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags_ctrl]';
+        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags_ctrl';
+        $ctrlTags = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags_ctrl' ,$PA['row'], $PA);
+//        $ctrlTags = $this->replaceIncludingEndOfLine($fld, 'tags_ctrl', 'tags', false);
         $ctrlTags = $this->addTagInputField($ctrlTags, $articleId, 'tags_ctrl');
 //        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags_ctrl\]_sel.*</select>';
 //        $with='<input type="text" id="autocomplete_tags_ctrl" name="autocomplete_parameter_tags_ctrl" /><span id="indicator1_tags_ctrl" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_tags_ctrl" class="autocomplete"></div>';
 //        $ctrlTags = $this->replaceIncludingEndOfLine($ctrlTags, $with, $pattern, false);
 
-        //inset input field
+        //insert input field
         $fld = $this->addTagInputField($fld, $articleId, 'tags');
 //        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
 //        $with='<input type="text" id="autocomplete" name="autocomplete_parameter" /><span id="indicator1" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices" class="autocomplete"></div>';
@@ -595,13 +601,19 @@ function findElementsByName(name, type) {
     }
 
     public function getArticleTags(&$params, &$pObj) {
-//        t3lib_div::devLog('getArticleTags', 'be', 0, array('params' => $params, 'pObj' => $piObj) );
+        t3lib_div::devLog('getArticleTags', 'be', 0, array('params' => $params, 'pObj' => $piObj) );
         if(!$params['row']['uid']) {
             throw new tx_newspaper_Exception('Article Uid not passed in');
         }
         $articleID = $params['row']['uid'];
         $article = new tx_newspaper_Article($articleID);
-        $tags = $article->getTags();
+        if($params['field'] == 'tags') {
+            $tags = $article->getTags(tx_newspaper::getContentTagType());
+        } else if($params['field'] == 'tags_ctrl') {
+            $tags = $article->getTags(tx_newspaper::getControlTagType());
+        } else {
+            throw new tx_newspaper_Exception('field \''.$params['field'].'\' unkown');
+        }
         $items = array();
         foreach($tags as $tag) {
             $items[] = array($tag->getAttribute('tag'), $tag->getUid(), '');
@@ -667,7 +679,7 @@ function findElementsByName(name, type) {
                      },
             });   
     document.observe("dom:loaded", function() {
-        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
+//        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         var path = window.location.pathname;
         var test = path.substring(path.lastIndexOf("/") - 5);
         if (test.substring(0, 6) == "typo3/") {
@@ -677,7 +689,7 @@ function findElementsByName(name, type) {
         }
 
         //get all content tags so they are cached
-        createTagCache('tags');
+        createTagCache('tags', mapSelector);
 //        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
 //                                method: 'get',
 //                                parameters: 'param=tag-getall',
@@ -707,7 +719,7 @@ function findElementsByName(name, type) {
 
      });
 
-     function createTagCache(tagType) {
+     function createTagCache(tagType, mySelector) {
         //get all tags so they are cached
         return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
@@ -716,16 +728,18 @@ function findElementsByName(name, type) {
                                                 var serverTags = request.responseText.evalJSON();
                                                 var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
                                                 new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_tag_'+tagType, choices, {
-                                                    selector : mapSelector,
-                                                    afterUpdateElement : insertTag+tagType
+                                                    selector : mySelector,
+//                                                    afterUpdateElement : function(currInput, selectedElement) {
+//                                                                        insertTag(currInput, selectedElement, tagType);
+//                                                                    }
                                                 });
                                            }
                             });
      }
 
-     function insertTag(currInput, selectedElement) {
-        alert("Called");
-     }
+//     function insertTag(currInput, selectedElement) {
+//        alert("Called");
+//     }
 
      function insertTag(currInput, selectedElement, tagType) {
         if(!selectedElement.id) {

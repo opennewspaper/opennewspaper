@@ -825,17 +825,18 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return self::$extra_2_pagezone_table;
 	}
 
-    /// Get the tags for an article
-    // \return array of tags linked with this article or empty array
-    public function getTags() {
-        $tag_ids = tx_newspaper::selectRows(
-			'uid_foreign',
-			'tx_newspaper_article_tags_mm',
-			'uid_local = '.$this->getUid(),
-			'',
-			'',
-			''
-		);
+    /**
+     * @param  $tagtype int defaults to contentTagType
+     * @return array
+     */
+    public function getTags($tagtype = null) {
+        if(!$tagtype) {
+            $tagtype = tx_newspaper::getContentTagType();
+        }
+        $where .= " AND tag_type = ".$tagtype;
+        $where .= " AND uid_local = ".$this->getUid();
+        $tag_ids = tx_newspaper::selectMMQuery('uid_foreign', $this->getTable(),
+            'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
 
 		$tags = array();
 		foreach ($tag_ids as $id) {

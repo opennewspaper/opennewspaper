@@ -239,29 +239,42 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_getTags() {
         $tagnames = array('test-tag-1', 'test-tag-2', 'test-tag-3');
+        $tagType = tx_newspaper::getContentTagType();
+        $articleId = $this->article->getUid();
+
         $tags = $this->article->getTags();
         $this->assertEquals(0, count($tags), "No tags expected");
-        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[0], 'tag_type' => 1));
-        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
 
+        $this->insertTag($articleId, $tagnames[0], $tagType);
         $tags = $this->article->getTags();
         $this->assertEquals(1, count($tags), "One tag expected");
 
-        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[1], 'tag_type' => 1));
-        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
+        $this->insertTag($articleId, $tagnames[1], $tagType);
+        $tags = $this->article->getTags();
+        $this->assertEquals(2, count($tags), "Two tags expected");
 
-        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tagnames[2], 'tag_type' => 1));
-        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $this->article->getUid(), 'uid_foreign' => $tagId));
-
+        $this->insertTag($articleId, $tagnames[2], $tagType);
         $tags = $this->article->getTags();
         $this->assertEquals(3, count($tags), "Three tags expected");
 
         foreach($tags as $i => $tag) {
             $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
         }
+
+        $tags = $this->article->getTags(tx_newspaper::getControlTagType());
+        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet');
+
+        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper::getControlTagType());
+        $tags = $this->article->getTags(tx_newspaper::getControlTagType());
+        $this->assertEquals(1, count($tags), 'One Controltags expected.');
     }
 	
 	////////////////////////////////////////////////////////////////////////////
+
+    private function insertTag($articleId, $tag, $tagType) {
+        $tagId = tx_newspaper::insertRows('tx_newspaper_tag', array('tag' => $tag, 'tag_type' => $tagType));
+        tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array('uid_local' => $articleId, 'uid_foreign' => $tagId));
+    }
 
 	private function createExtras() {
 		foreach ($this->extra_data as $index => $extra) {
