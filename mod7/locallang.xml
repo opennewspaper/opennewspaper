@@ -49,6 +49,8 @@
 			<label index="message_no_dutyeditor">Access for duty editors only.</label>
 			<label index="message_no_articlelist">No article list found in section</label>
 			<label index="message_unknown_articlelisttype">Unknown article list type</label>
+			<label index="title_articlelist_list">Article lists</label>
+			<label index="title_articlelist_list_empty">No article lists available</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>

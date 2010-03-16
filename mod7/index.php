@@ -198,10 +198,50 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					}
 					
 					// render article list backend module
-					die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
+//die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
+					return $this->renderArticlelistList($input);
+				}
+				
+				/// render list of all (non-section) article lists
+				function renderArticlelistList($input) {
+					$al = $this->getAllNonSectionArticleLists();
+t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' => $al));
+
+					// get ll labels 
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
+					$localLang = $localLang[$GLOBALS['LANG']->lang];					
+
+					// instanciate smarty
+					$smarty = new tx_newspaper_Smarty();
+					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
+					$smarty->assign('input', $input);
+					$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
+					$smarty->assign('lang', $localLang);
+					$smarty->assign('AL', $al);
+					$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
+					return $smarty->fetch('mod7_articlelist_list.tmpl');
+				}
+				
+				/// \return array with concrete article lists
+				// \todo: move to articlelist class?
+				private function getAllNonSectionArticleLists() {
+					$row = tx_newspaper::selectRows(
+						'uid',
+						'tx_newspaper_articlelist',
+						'section_id IS NULL', // non-section articlelists only
+						'',
+						'notes, crdate DESC'
+					);
+					$articlelist = array();
+					foreach($row as $current_al) {
+						$articlelist[] = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($current_al['uid']));
+					}
+					return $articlelist;
 				}
 				
 				
+				
+				/// render backend for pplacing an article into all article lsits (depending on the chosen setions)
 				function renderPlacementModule($input) {
 					// get data
 					$article = $this->al_be->getArticleByArticleId($input['articleid']);

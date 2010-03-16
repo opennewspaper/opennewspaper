@@ -1,0 +1,33 @@
+{debug}
+
+<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.css" />
+
+<div class="tx_newspaper_mod7">
+
+<h2>{$lang.title_articlelist_list}</h2>
+<hr />
+
+{if !$AL}
+<br /><strong>{$lang.title_articlelist_list_empty}</strong>
+{else}
+	<table class="al_list">
+		<tr>		
+			<td><strong>Title</strong></td>
+			<td><strong>Type</strong></td>
+{if $IS_ADMIN}
+			<td><strong>uids</strong></td>
+{/if}			
+		</tr>
+	{foreach from=$AL item="current_al" name="loop"}
+		<tr>		
+			<td> {$current_al->getAttribute('uid')} </td>
+			<td> {$current_al->getTitle()} </td>
+{if $IS_ADMIN}
+			<td> <span title="Abstract uid"> [{$current_al->getAbstractUid()}</span>|<span title="Concrete uid">{$current_al->getUid()}] </span></td>
+{/if}			
+		</tr>
+	{/foreach}
+	</table>
+{/if}
+
+</div>
