@@ -1247,7 +1247,7 @@ t3lib_div::devlog('mod7 - renderPlacement()', 'newspaper', 0, array('input' => $
 		$smarty->assign('lang', $localLang);
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 		$smarty->assign('ICON', $this->getArticlelistIcons());
-		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(false));
+		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
 		return $smarty->fetch('mod7_placement.tpl');
 	}
 	
