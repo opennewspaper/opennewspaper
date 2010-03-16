@@ -39,7 +39,9 @@
 		TCEFORM.tx_newspaper_article.pagezonetype_id.disabled = 1
 		TCEFORM.tx_newspaper_article.name.disabled = 1
 		TCEFORM.tx_newspaper_article.inherits_from.disabled = 1
+		TCEFORM.tx_newspaper_articlelist.section_id.disabled = 1
 		TCEFORM.pages.tx_newspaper_module.disabled = 1
+		
 
 		mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
 				
