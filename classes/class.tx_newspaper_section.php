@@ -559,7 +559,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		// note: the value in the backend dropdown is the name of the article list class ($fieldArray['articlelist'])
 		
 		if (new $fieldArray['articlelist']() instanceof tx_newspaper_articlelist) {
-t3lib_div::devlog('sh post in section', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
+//t3lib_div::devlog('sh post in section', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
 			// new article list class is a valid article list class, so change article list for this section now				
 			$s = new tx_newspaper_Section(intval($id)); // create section object
 			$new_al = new $fieldArray['articlelist'](0, $s);
