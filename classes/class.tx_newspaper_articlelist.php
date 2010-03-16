@@ -417,7 +417,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('datamap ado hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		if (self::isRegisteredArticleList($table)) {
-			self::writeAbstractRecordIfNeeded($status, $table, $id);
+			self::writeAbstractRecordIfNeeded($status, $table, $id, $that);
 		}
 
 	}
@@ -427,7 +427,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \param $table The table currently processing data for
 	 *  \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
 	 */	 
-	private static function writeAbstractRecordIfNeeded($status, $table, $id) {
+	private static function writeAbstractRecordIfNeeded($status, $table, $id, $that) {
 		if ($status == 'new') {
 			// new record, so get substituated uid
 			$concrete_al_uid = intval($that->substNEWwithIDs[$id]);
@@ -435,7 +435,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			// existing record with existing uid, so just use the given $id
 			$concrete_al_uid = intval($id);
 		}
-		
+	
 		$concrete_al = new $table($concrete_al_uid);
 		if ($concrete_al->getAbstractUid() == 0) {
 			/// no abstract record found, so create a new one
@@ -446,13 +446,53 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
 	/// TCEforms hook
 	public static function getMainFields_preProcess($table, $row, $that) {
-		if (strtolower($table) != self::$table) {
-			return; // nothing to do
+		// check concrete article lists first ...
+		if (self::isRegisteredArticleList($table)) {
+			self::blockAccessIfSectionArticleList($table, $row);
 		}
+
+		// ... abstract article lists then
+		if (strtolower($table) == self::$table) {
+			if (!intval($row['uid'])) {
+				// no integer uid for abstract article list, so a NEW123something uid,, so a new records
+				die('You can\'t create a new abstract articlelist.');
+			}
+			if ($row['section_id']) {
+				$section_uid = 0;
+				if (intval($row['section_id'])) {
+					$section_uid = intval($row['section_id']);
+				} else {
+					// so value is formed like: tx_newspager_section_[uid]|[section_name]
+					// \todo: is there a typo3 api method to extract the uid?
+					if (substr(strtolower($row['section_id']), 0, 21) == 'tx_newspaper_section_') {
+						$part = explode('|', substr($row['section_id'], 21));
+						if (isset($part[0]) && intval($part[0])) {
+							$section_uid = intval($part[0]);
+						}
+					}
+				}
+				if ($section_uid) {
+					die(self::blockAccessIfSectionArticleListMessage(new tx_newspaper_section($section_uid)));
+				}
+			}
+		}
+	}
+
+	/// blocks access (in the list module) to article list associated with a section; must be edited in the section articl list module
+	private static function blockAccessIfSectionArticleList($table, $row) {
 		if (!intval($row['uid'])) {
-			// no integer uid, so a NEW123something uid,, so a new records
-			die('You can\'t create a new abstract articlelist.');
-		}		
+			return; // new record, can' be associated to a section
+		}
+		$concrete_al = new $table($row['uid']);
+		if ($concrete_al->getAttribute('section_id')) {
+			// a section is associated with this article list ...
+			die(self::blockAccessIfSectionArticleListMessage(new tx_newspaper_section($concrete_al->getAttribute('section_id'))));
+		}
+	} 
+	
+	/// \return Error message (Section article lists can only be edited in article list module)
+	private static function blockAccessIfSectionArticleListMessage(tx_newspaper_section $s) {
+		return 'This article list is associated to section "' . htmlspecialchars($s->getAttribute('section_name')) . '". This article list can only be edited in the section article list module.';
 	}
 	
 	
