@@ -542,19 +542,18 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
 
-        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags]';
-        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags';
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, tx_newspaper::getContentTagType());
-        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
-        $fld = $this->addTagInputField($fld, $articleId, 'tags');
-
-        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags_ctrl]';
-        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags_ctrl';
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, tx_newspaper::getControlTagType());
-        $ctrlTags = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags_ctrl' ,$PA['row'], $PA);
-        $ctrlTags = $this->addTagInputField($ctrlTags, $articleId, 'tags_ctrl');
+        $fld = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper::getContentTagType());
+        $ctrlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper::getControlTagType());
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         return $this->getFindTagsJs($articleId).$fld.$ctrlTags;
+    }
+
+    private function createTagSelectElement(&$PA, $obj, $articleId, $name, $tagType) {
+        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$name.']';
+        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$name;
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagType);
+        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $name ,$PA['row'], $PA);
+        return $this->addTagInputField($fld, $articleId, $name);
     }
 
     private function fillItemValues($articleId, $tagType) {
