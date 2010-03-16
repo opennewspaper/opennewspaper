@@ -28,9 +28,6 @@
  */
 
 
-/// \todo: @oliver: major clean up needed!
-
-
 //unset($MCONF);
 require_once('conf.php');
 require_once($BACK_PATH . 'init.php');
@@ -38,7 +35,7 @@ require_once($BACK_PATH . 'template.php');
 
 
 /// Class to generate a BE module with 100% width
-class fullWidthDoc extends template {
+class fullWidthDoc_mod9 extends template {
 	var $divClass = 'typo3-fullWidthDoc';	///< Sets width to 100%
 }
 
@@ -57,6 +54,9 @@ define('DEBUG_OUTPUT', true); // show position etc.
  */
 class  tx_newspaper_module9 extends t3lib_SCbase {
 	var $pageinfo;
+	private $be_conf = array();
+	private $ll = array();
+	private $prefixId = 'tx_newspaper_mod9';
 
 				/**
 				 * Main function of the module. Write the content to $this->content
@@ -67,12 +67,26 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 				function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 					
-					$access = $GLOBALS['BE_USER']->user['uid']? true : false; // \todo: better check needed
+					$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 
 					if ($access)	{
 
+						// read be conf and merge with $this->id
+						$this->be_conf = unserialize($BE_USER->getModuleData('tx_newspaper/mod9'));
+//t3lib_div::devlog('mod9', 'newspaper', 0, array('be_conf' => $this->be_conf, 'this->id' => $this->id));
+						if (!$this->id && isset($this->be_conf['id'])) {
+							$this->id = $this->be_conf['id'];
+						} else {
+							$this->be_conf['id'] = $this->id;
+						}
+
+						// get ll labels 
+						$this->ll = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod9/locallang.xml', $GLOBALS['LANG']->lang);
+						$this->ll = $this->ll[$GLOBALS['LANG']->lang];	
+//t3lib_div::devlog('mod9', 'newspaper', 0, array('this->ll' => $this->ll));
+
 							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
+						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod9');
 						$this->doc->backPath = $BACK_PATH;
 						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
@@ -92,25 +106,23 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 							</script>
 						';
 
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />' . $LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
-
 						$this->content.=$this->doc->startPage($LANG->getLL('title'));
 						$this->content.=$this->doc->header($LANG->getLL('title'));
-//						$this->content.=$this->doc->spacer(5);
-//						$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-//						$this->content.=$this->doc->divider(5);
-
 
 						// Render content:
-						$this->moduleContent();
-
-
-						// ShortCut
-//						if ($BE_USER->mayMakeShortcut())	{
-//							$this->content.=$this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-//						}
+						if (!$this->id) {
+							// no section chosen
+							$this->content .= $this->doc->section('', '<br /> ' . $this->ll['message_no_section_chosen'], 0, 1);
+						} else {
+							// render chosen section's article list
+							$this->moduleContent();
+						}
 
 						$this->content.=$this->doc->spacer(10);
+						
+						// store conf
+						$BE_USER->pushModuleData('tx_newspaper/mod9', serialize($this->be_conf));
+						
 					} else {
 							// If no access or if ID == zero
 
@@ -143,19 +155,12 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 				 */
 				function moduleContent() {
 					global $LANG;
-
-					$content = 'dummy';
+		
+					$al_be = new tx_newspaper_BE();
+					$content = $al_be->renderSinglePlacement(0, $this->id);
 
 					$this->content .= $this->doc->section('', $content, 0, 1);
-				
 				}
-
-
-	
-	
-	
-	
-	
 	
 	
 	/**

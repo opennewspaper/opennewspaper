@@ -7,9 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Article lists</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="message_no_section_chosen">Please select (or even create) a section.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikellisten</label>
