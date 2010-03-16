@@ -122,6 +122,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 * \return uid of abstract article list
 	 */ 
 	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
+		global $LANG; 
 		
 		try {
 			$current_al = $this->getArticleList(); // get current article list
@@ -182,8 +183,19 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		} 
 
 		// no article list found to re-activate, so create a new one
-
 		$new_al->store(); // store new article list
+
+		// set title for this articlelist
+		$title = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_section_articlelist', false);
+		$title = str_replace('###SECTION###', $this->getAttribute('section_name'), $title);
+		$title = str_replace('###ARTICLELIST_TYPE###', $new_al->getTitle(), $title);
+		tx_newspaper::updateRows( 
+			'tx_newspaper_articlelist',
+			'uid=' . $new_al->getAbstractUid(),
+			array(
+				'notes' => $title
+			)
+		);
 		
 		return $new_al->getAbstractUid();
 
