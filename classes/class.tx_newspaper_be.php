@@ -542,18 +542,18 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
 
-        $fld = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper::getContentTagType());
-        $ctrlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper::getControlTagType());
+        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper::getContentTagType());
+        $controlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper::getControlTagType());
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
-        return $this->getFindTagsJs($articleId).$fld.$ctrlTags;
+        return $this->getFindTagsJs($articleId).$contentTags.$controlTags;
     }
 
-    private function createTagSelectElement(&$PA, $obj, $articleId, $name, $tagType) {
-        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$name.']';
-        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$name;
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagType);
-        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $name ,$PA['row'], $PA);
-        return $this->addTagInputField($fld, $articleId, $name);
+    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId) {
+        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$tagType.']';
+        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$tagType;
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId);
+        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
+        return $this->addTagInputField($fld, $articleId, $tagType);
     }
 
     private function fillItemValues($articleId, $tagType) {
@@ -565,15 +565,15 @@ function findElementsByName(name, type) {
         foreach($tags as $i => $tag) {
             $items[] = $tags[$i]['uid_foreign'].'|'.$tags[$i]['tag'];
         }
-//t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
+t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
         return implode(',', $items);
         
     }
 
 
-    private function addTagInputField($selectBox, $articleId, $fieldname) {
-        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\['.$fieldname.'\]_sel.*</select>';
-        $with='<input type="text" id="autocomplete_'.$fieldname.'" name="autocomplete_parameter" /><span id="indicator1_'.$fieldname.'" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$fieldname.'" class="autocomplete"></div>';
+    private function addTagInputField($selectBox, $articleId, $tagType) {
+        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\['.$tagType.'\]_sel.*</select>';
+        $with='<input type="text" id="autocomplete_'.$tagType.'" /><span id="indicator_'.$tagType.'" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$tagType.'" class="autocomplete"></div>';
         return $this->replaceIncludingEndOfLine($selectBox, $with, $pattern);
     }
 
@@ -609,7 +609,7 @@ function findElementsByName(name, type) {
     }
 
     public function getArticleTags(&$params, &$pObj) {
-t3lib_div::devLog('getArticleTags', 'newspaperr', 0, array('params' => $params, 'pObj' => $piObj) );
+// t3lib_div::devLog('getArticleTags', 'newspaper', 0, array('params' => $params) );
         if(!$params['row']['uid']) {
             throw new tx_newspaper_Exception('Article Uid not passed in');
         }
@@ -688,6 +688,7 @@ t3lib_div::devLog('getArticleTags', 'newspaperr', 0, array('params' => $params, 
             });   
     document.observe("dom:loaded", function() {
 //        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
+//        $$('[name="data[tx_newspaper_article][$articleId][tags_ctrl]_sel"]')[0].hide();
         var path = window.location.pathname;
         var test = path.substring(path.lastIndexOf("/") - 5);
         if (test.substring(0, 6) == "typo3/") {
@@ -696,72 +697,43 @@ t3lib_div::devLog('getArticleTags', 'newspaperr', 0, array('params' => $params, 
             path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
         }
 
-        //get all content tags so they are cached
-        createTagCache('tags', mapSelector);
-//        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
-//                                method: 'get',
-//                                parameters: 'param=tag-getall',
-//                                onSuccess: function(request) {
-//                                                var serverTags = request.responseText.evalJSON();
-//                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
-//                                                new MyCompleter('autocomplete_tags', 'autocomplete_choices_tags', choices, {
-//                                                    selector : mapSelector,
-//                                                    afterUpdateElement : insertTag
-//                                                });
-//                                           }
-//                            });
-//        new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
-//                                method: 'get',
-//                                parameters: 'param=tag-getall',
-//                                onSuccess: function(request) {
-//                                                var serverTags = request.responseText.evalJSON();
-//                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
-//                                                new MyCompleter('autocomplete_tags_ctrl', 'autocomplete_choices_tags_ctrl', choices, {
-//                                                    selector : mapSelector,
-//                                                    afterUpdateElement : insertTag
-//                                                });
-//                                           }
-//                            });
-        //get all controltags so they are cached
-
-
+        //create completer and tag caches for content- and control-tags
+//        createTagCompletion('tags', mapSelector);
+        createTagCompletion('tags_ctrl', mapSelector);
      });
 
-     function createTagCache(tagType, mySelector) {
+     function createTagCompletion(tagType, mySelector) {
         //get all tags so they are cached
         return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
-                                parameters: 'param=tag-getall',
+                                parameters: {param: 'tag-getall', type: tagType},
                                 onSuccess: function(request) {
                                                 var serverTags = request.responseText.evalJSON();
-                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
-                                                new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_tag_'+tagType, choices, {
-                                                    selector : mySelector,
-//                                                    afterUpdateElement : function(currInput, selectedElement) {
-//                                                                        insertTag(currInput, selectedElement, tagType);
-//                                                                    }
+                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);                                                
+                                                new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_'+tagType, choices, {
+                                                    selector : mySelector,                                                    
+                                                    afterUpdateElement : function(currInput, selectedElement) {
+                                                                        insertTag(currInput, selectedElement, tagType);
+                                                                    }
                                                 });
                                            }
                             });
      }
 
-//     function insertTag(currInput, selectedElement) {
-//        alert("Called");
-//     }
 
      function insertTag(currInput, selectedElement, tagType) {
         if(!selectedElement.id) {
             //neuen tag einfügen
             new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {                    
                     method: 'get',
-                    parameters: {param : 'tag-insert', tag : selectedElement.innerHTML},
+                    parameters: {param : 'tag-insert', type : tagType, tag : selectedElement.innerHTML},
                     onSuccess: function(request) {
                                     var newElem = request.responseText.evalJSON(true);
-                                    setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',newElem.uid, newElem.tag); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
+                                    setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId]['+tagType+']',newElem.uid, newElem.tag); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId]['+tagType+']');
                                }
                 });
         } else {
-            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId][tags]',selectedElement.id, selectedElement.innerHTML); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
+            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId]['+tagType+']',selectedElement.id, selectedElement.innerHTML); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
         }
      }
        </script>

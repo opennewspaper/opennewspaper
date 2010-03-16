@@ -862,12 +862,40 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
         self::modifyTagSelection($table, $field);
     }
 
+    public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
+        self::joinTags($incomingFieldArray, $table, $id, $that);
+    }
+
 	public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
 		if (strtolower($table) == 'tx_newspaper_article') {
 			// hide default articles in list module, only concrete article are visible in list module
 			$additionalWhereClause .= ' AND is_template=0';
 		}
 	}
+
+    /**
+     * Joins tags from control- and content-selectboxes so both are stored in a single table. 
+     * @static
+     * @param  $incomingFieldArray
+     * @param  $table
+     * @param  $id
+     * @param  $that
+     * @return void
+     */
+    private static function joinTags(&$incomingFieldArray, $table, $id, $that) {
+        t3lib_div::devlog('joinTags', 'newspaper', 0, array('incommingFields' => $incomingFieldArray));
+        if($table == 'tx_newspaper_article' && isset($incomingFieldArray['tags']) && isset($incomingFieldArray['tags_ctrl'])) {
+          $tags = $incomingFieldArray['tags'];
+          $ctrlTags = $incomingFieldArray['tags_ctrl'];
+          if($ctrlTags) {
+              $tags = explode(",",$tags);
+              $ctrlTags = explode(",",$ctrlTags);
+              $allTags = implode(",", array_merge($tags, $ctrlTags));
+              $incomingFieldArray['tags'] = $allTags;
+              $_REQUEST['data'][$table][$id]['tags'] = $allTags;
+          }
+        }
+    }
 
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {

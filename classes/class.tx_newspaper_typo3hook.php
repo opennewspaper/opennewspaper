@@ -109,9 +109,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
 		tx_newspaper_Workflow::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
-
-        $incomingFieldArray['tags'] = '7,8';
-        $_REQUEST['data'][$table][$id]['tags'] = '7,8';
+        tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 
 
