@@ -4,6 +4,7 @@
 // require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
 
+
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
 // base class for extras
 require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php');
@@ -285,5 +286,11 @@ $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config'][
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1'; // just display concrete article list and assiciated section
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_uid']['config']['readOnly'] = '1';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['section_id']['config']['readOnly'] = '1';
+
+
+/// Extras
+
+/// Extra: image
+$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = 10240; // 10 mb \todo: make configurable
 
 ?>
