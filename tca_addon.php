@@ -59,8 +59,9 @@ unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
 
-// /switch field tag in article to a userfunc field (allowing auto completion)
-//$TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
+// initially load no tags and let custom code handle it
+$TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
+// switch field tag in article to a userfunc field (allowing auto completion)
 $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx_newspaper_be->getArticleTags';
 
 // fix ranges artificially imposed by kickstarter

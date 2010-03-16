@@ -535,31 +535,40 @@ function findElementsByName(name, type) {
 	}
 
     public function renderTagControlsInArticle(&$PA, $fobj) {
-        t3lib_div::devLog('renderTagControlsInArticle', 'be', 0, array('params' => $PA, 'fObj' => $fObj) );
+//t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         $articleId = $PA['row']['uid'];
         $obj = new t3lib_TCEforms();
         $PA['fieldConf']['config']['size'] = 4;
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
+
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags]';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags';
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, tx_newspaper::getContentTagType());
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags' ,$PA['row'], $PA);
-//        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+        $fld = $this->addTagInputField($fld, $articleId, 'tags');
+
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][tags_ctrl]';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_tags_ctrl';
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, tx_newspaper::getControlTagType());
         $ctrlTags = $obj->getSingleField_typeSelect('tx_newspaper_article', 'tags_ctrl' ,$PA['row'], $PA);
-//        $ctrlTags = $this->replaceIncludingEndOfLine($fld, 'tags_ctrl', 'tags', false);
         $ctrlTags = $this->addTagInputField($ctrlTags, $articleId, 'tags_ctrl');
-//        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags_ctrl\]_sel.*</select>';
-//        $with='<input type="text" id="autocomplete_tags_ctrl" name="autocomplete_parameter_tags_ctrl" /><span id="indicator1_tags_ctrl" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_tags_ctrl" class="autocomplete"></div>';
-//        $ctrlTags = $this->replaceIncludingEndOfLine($ctrlTags, $with, $pattern, false);
-
-        //insert input field
-        $fld = $this->addTagInputField($fld, $articleId, 'tags');
-//        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\[tags\]_sel.*</select>';
-//        $with='<input type="text" id="autocomplete" name="autocomplete_parameter" /><span id="indicator1" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices" class="autocomplete"></div>';
-//        $fld = $this->replaceIncludingEndOfLine($fld, $with, $pattern);
+//t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         return $this->getFindTagsJs($articleId).$fld.$ctrlTags;
+    }
+
+    private function fillItemValues($articleId, $tagType) {
+        $where .= " AND tag_type = ".$tagType;
+        $where .= " AND uid_local = ".$articleId;
+        $tags = tx_newspaper::selectMMQuery('uid_foreign, tag', 'tx_newspaper_article',
+            'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
+        $items = array();
+        foreach($tags as $i => $tag) {
+            $items[] = $tags[$i]['uid_foreign'].'|'.$tags[$i]['tag'];
+        }
+//t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
+        return implode(',', $items);
+        
     }
 
 
@@ -601,7 +610,7 @@ function findElementsByName(name, type) {
     }
 
     public function getArticleTags(&$params, &$pObj) {
-        t3lib_div::devLog('getArticleTags', 'be', 0, array('params' => $params, 'pObj' => $piObj) );
+t3lib_div::devLog('getArticleTags', 'newspaperr', 0, array('params' => $params, 'pObj' => $piObj) );
         if(!$params['row']['uid']) {
             throw new tx_newspaper_Exception('Article Uid not passed in');
         }
@@ -618,7 +627,7 @@ function findElementsByName(name, type) {
         foreach($tags as $tag) {
             $items[] = array($tag->getAttribute('tag'), $tag->getUid(), '');
         }
-//        t3lib_div::devLog('getArticleTags--items', 'be', 0, array('tags' => $items));
+// t3lib_div::devLog('getArticleTags--items', 'newspaper', 0, array('tags' => $items));
         $params['items'] = $items;
     }
 
