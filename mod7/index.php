@@ -198,7 +198,6 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					}
 					
 					// render article list backend module
-//die('<div style="margin-left:10px;"><br /><strong>Newspaper message:</strong><br />The article placement module cannot be called directly.</div>');
 					return $this->renderArticlelistList($input);
 				}
 				
@@ -228,7 +227,7 @@ t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' =
 					$row = tx_newspaper::selectRows(
 						'uid',
 						'tx_newspaper_articlelist',
-						'section_id IS NULL', // non-section articlelists only
+						'(section_id IS NULL OR section_id="")', // non-section articlelists only
 						'',
 						'notes, crdate DESC'
 					);
