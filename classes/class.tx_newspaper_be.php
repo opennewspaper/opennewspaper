@@ -611,7 +611,7 @@ t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'ta
     public function getArticleTags(&$params, &$pObj) {
 // t3lib_div::devLog('getArticleTags', 'newspaper', 0, array('params' => $params) );
         if(!$params['row']['uid']) {
-            throw new tx_newspaper_Exception('Article Uid not passed in');
+            return; // new articles can't have tags ...
         }
         $articleID = $params['row']['uid'];
         $article = new tx_newspaper_Article($articleID);
