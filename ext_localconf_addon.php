@@ -64,4 +64,12 @@
 		setup.override.startModule = txnewspaperMmain_txnewspaperM5
 	');
 	
+	
+	// remove some save&new buttons
+	t3lib_extMgm::addUserTSConfig('
+		options.saveDocNew.tx_newspaper_article=0
+	');
+	
+	
+	
 ?>
