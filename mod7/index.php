@@ -153,7 +153,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 								$output = $this->al_be->renderPlacement($input, false);
 							break;
 							case 'singleplacement' :
-								$output = $this->al_be->renderSinglePlacement($input['articleid'], $input['sectionid']);
+								$output = $this->al_be->renderSinglePlacement($input);
 							break;
 							default :
 								$output = $this->renderModule($input);
@@ -204,12 +204,15 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				/// render list of all (non-section) article lists
 				function renderArticlelistList($input) {
 					$al = $this->getAllNonSectionArticleLists();
-t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' => $al));
+//t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' => $al));
 
 					// get ll labels 
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 					$localLang = $localLang[$GLOBALS['LANG']->lang];					
-
+					
+					// prepare: icons ...
+					$al_be = new tx_newspaper_BE();
+					
 					// instanciate smarty
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
@@ -217,6 +220,7 @@ t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' =
 					$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('AL', $al);
+					$smarty->assign('ICON', $al_be->getArticleListIcons());
 					$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
 					return $smarty->fetch('mod7_articlelist_list.tmpl');
 				}

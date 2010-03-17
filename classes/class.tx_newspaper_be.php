@@ -1180,55 +1180,100 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	// article list functions (for mod7)
 	
-	public function renderSinglePlacement($articleId, $sectionId) {
-		$input = array(
-			'sections_selected' => array($sectionId), 
-			'placearticleuid' => $articleId
-		);
-		return $this->renderPlacement($input, true);
+	public function renderSinglePlacement($input) {
+//t3lib_div::devlog('be::renderSinglePlacement()', 'newspaper', 0, array('input' => $input));
+		if (isset($input['sectionid'])) {
+			// render section article list
+			$input = array(
+				'sections_selected' => array($input['sectionid']), 
+				'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0
+			);
+			return $this->renderPlacement($input, true);
+		}
+		if (isset($input['articlelistid'])) {
+			// render NON-section article list
+			return $this->renderPlacement($input, true);
+		}	
 	}
 	
 	/// render the placement editors according to sections selected for article
 	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered, 
 	 *  if not, a button to call the article browser is displayed.
-	 * 
+	 * \todo: docuemnt $input array types ...
 	 */
 	/** in comparison the the displayed ones in the form
 	 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 	 *  \return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
-		$selection = $input['sections_selected'];
-t3lib_div::devlog('mod7 - renderPlacement()', 'newspaper', 0, array('input' => $input));					
-		// calculate which / how many placers to show
-		$tree = $this->calculatePlacementTreeFromSelection($selection);
+t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
+		if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
+			// section article list
+			$selection = $input['sections_selected'];
+			// calculate which / how many placers to show
+			$tree = $this->calculatePlacementTreeFromSelection($selection);
+			$smarty_template = 'mod7_placement_section.tpl';
+		} elseif (isset($input['articlelistid']) && $input['articlelistid']) {
+			// read article list
+			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
+			
+			// fill the articlelist with articles
+			$article_list = $al->getArticles(9999);
+			$articles = array();
+			foreach ($article_list as $article) {
+				if ($al->getTable() == 'tx_newspaper_articlelist_manual') {
+					$articles[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
+				}
+				if ($al->getTable() == 'tx_newspaper_articlelist_semiautomatic') {
+					$articleUids = $this->getArticleIdsFromArticleList($al);
+					$offsetList = $al->getOffsets($articleUids);	
 
-		if ($input['placearticleuid']) {
+					$offset = $offsetList[$article->getAttribute('uid')];
+					if ($offset > 0) {
+						$offset = '+' . $offset;
+					}
+					$articles[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
+				}
+			}
+			
+			$smarty_template = 'mod7_placement_non_section.tpl';
+		} else {
+			$al = null; // no article list
+		}
+
+		if (isset($input['placearticleuid']) && $input['placearticleuid']) {
 			// grab the article, if an article id was given
 			$article = $this->getArticleByArticleId($input['placearticleuid']); // render add/remove article button (for given article id)
+			// grab the data for all the placers needed to be displayed
+//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
 		} else {
 			$article = null; // no article id given; so an icon for the article browser is rendered
 		}
+		
+		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not 
 
-		// grab the data for all the placers we need to display
-		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
-//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
 
 		// get locallang labels 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 		$localLang = $localLang[$GLOBALS['LANG']->lang];	
-						
+				
 		// render
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
 		$smarty->assign('tree', $tree);
 		$smarty->assign('article', $article);
+		$smarty->assign('articlelist', $al);
+		if ($al) {
+			$smarty->assign('articlelist_type', strtolower($al->getTable()));
+			$smarty->assign('articles', $articles);
+		}
 		$smarty->assign('singlemode', $singleMode);
 		$smarty->assign('lang', $localLang);
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 		$smarty->assign('ICON', $this->getArticlelistIcons());
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-		return $smarty->fetch('mod7_placement.tpl');
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smart_template' => $smarty_template, 'smarty' => $smarty));		
+		return $smarty->fetch($smarty_template);
 	}
 	
 
@@ -1351,6 +1396,7 @@ t3lib_div::devlog('mod7 - renderPlacement()', 'newspaper', 0, array('input' => $
 			'button_right' => tx_newspaper_BE::renderIcon('gfx/button_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_right', false, 14, 14)),
 			'preview' => tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)),
 			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_articlebrowser', false, 14, 14)),
+			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_edit_articlelist', false)),
 		);
 		return $icon;
 	}

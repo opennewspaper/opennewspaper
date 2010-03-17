@@ -157,8 +157,7 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 					global $LANG;
 		
 					$al_be = new tx_newspaper_BE();
-					$content = $al_be->renderSinglePlacement(0, $this->id);
-
+					$content = $al_be->renderSinglePlacement(array('sectionid' => $this->id));
 					$this->content .= $this->doc->section('', $content, 0, 1);
 				}
 	

@@ -1,4 +1,4 @@
-{debug}
+{* debug *}
 
 <link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.css" />
 
@@ -12,9 +12,9 @@
 {else}
 	<table class="al_list">
 		<tr>		
-			<td><strong>Title</strong></td>
-			<td><strong>Type</strong></td>
-			<td><strong>Commands</strong></td>
+			<td><strong>{$lang.label_articlelist_list_title}</strong></td>
+			<td><strong>{$lang.label_articlelist_list_type}</strong></td>
+			<td><strong>{$lang.label_articlelist_list_commands}</strong></td>
 {if $IS_ADMIN}
 			<td><strong>uids</strong></td>
 {/if}			
@@ -23,7 +23,7 @@
 		<tr>		
 			<td> {$current_al->getAttribute('notes')} </td>
 			<td> {$current_al->getTitle()} </td>
-			<td></td>
+			<td style="text-align:center;"> <a href="index.php?tx_newspaper_mod7[controller]=singleplacement&tx_newspaper_mod7[articlelistid]={$current_al->getAbstractUid()}">{$ICON.edit}</a> </td>
 {if $IS_ADMIN}
 			<td> <span title="Abstract uid"> [{$current_al->getAbstractUid()}</span>|<span title="Concrete uid">{$current_al->getUid()}] </span></td>
 {/if}			

@@ -235,7 +235,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$smarty->assign('tree', $tree);
 		$smarty->assign('lang', $localLang);
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-		return $smarty->fetch('mod7_placement.tpl');
+		return $smarty->fetch('mod7_placement_section.tpl');
 	}
 	
 	/// calculate a "minimal" (tree-)list of sections

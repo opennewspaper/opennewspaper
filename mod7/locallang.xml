@@ -46,11 +46,15 @@
 			<label index="label_button_left">Add article</label>
 			<label index="label_button_right">Remove article TO BE PLACED</label>
 			<label index="label_button_articlebrowser">Add an article</label>
+			<label index="label_edit_articlelist">Edit article list</label>
 			<label index="message_no_dutyeditor">Access for duty editors only.</label>
 			<label index="message_no_articlelist">No article list found in section</label>
 			<label index="message_unknown_articlelisttype">Unknown article list type</label>
 			<label index="title_articlelist_list">Article lists</label>
 			<label index="title_articlelist_list_empty">No article lists available</label>
+			<label index="label_articlelist_list_title">Title</label>			
+			<label index="label_articlelist_list_type">Type</label>
+			<label index="label_articlelist_list_commands">Commands</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -92,9 +96,16 @@
 			<label index="label_group_clear">Artikel entfernen</label>
 			<label index="label_button_left">Artikel hinzufügen</label>
 			<label index="label_button_right">ZU PLATZIERENDEN Artikel entfernen</label>
+			<label index="label_edit_articlelist">Artikelliste bearbeiten</label>
 			<label index="message_no_dutyeditor">Keine CvD-Rechte.</label>
 			<label index="message_no_articlelist">Keine Artikelliste im Ressort.</label>
 			<label index="message_unknown_articlelisttype">Unbekannter Artikellistentyp.</label>
+			<label index="title_articlelist_list">Artikellisten</label>
+			<label index="title_articlelist_list_empty">Keine Artikellisten verfügbar</label>
+			<label index="label_articlelist_list_title">Titel</label>			
+			<label index="label_articlelist_list_type">Typ</label>
+			<label index="label_articlelist_list_commands">Befehle</label>
+
 		</languageKey>
 	</data>
 </T3locallang>
