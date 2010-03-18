@@ -171,8 +171,8 @@ class tx_newspaper_Smarty extends Smarty {
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
 		$page_type->getAttribute('uid');
-		$pagetype_uid = $page->getAttribute('pagetype_id');
-		$page_type2 = new tx_newspaper_PageType(intval($pagetype_uid));
+		$pagetype_uid = intval($page->getAttribute('pagetype_id'));
+		$page_type2 = new tx_newspaper_PageType($pagetype_uid);
 		$page_type2->getAttribute('uid');
 		t3lib_div::devlog('setPageType', 'np', 0, 
 			array('pt uid' => $pagetype_uid, 'pt 1'=>$page_type, 'pt2'=>$page_type2, 'bt'=>array_slice(debug_backtrace(), 0, 2)));
@@ -181,7 +181,6 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
-		t3lib_div::devlog('setPageZoneType', 'np', 0, $pagezone->getPageZoneType()->getAttribute('type_name'));
 		$this->pagezonetype = $pagezone->getPageZoneType();
 	}
 		
@@ -241,7 +240,7 @@ class tx_newspaper_Smarty extends Smarty {
 	private function assembleSearchPath() {
 		global $TYPO3_CONF_VARS;
 		$temporary_searchpath = array();
-		t3lib_div::devlog('assembleSearchPath()', 'np', 0, array('this->basepath' => $this->basepath));
+
 		if ($this->templateset &&
 			file_exists($this->basepath . '/template_sets/' . $this->templateset) &&
 			is_dir($this->basepath . '/template_sets/' . $this->templateset)
