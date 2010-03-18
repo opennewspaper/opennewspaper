@@ -63,7 +63,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		/// Call the render() method for that page, which renders all page areas
 		$content .= $page->render();
 	
-		return $this->pi_wrapInBaseClass($content);
+		return $content;
 	}
 	
 	/// Get the tx_newspaper_Section object the plugin currently works on
