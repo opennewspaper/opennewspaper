@@ -194,11 +194,11 @@ class tx_newspaper_Smarty extends Smarty {
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
-				t3lib_div::devlog('yes', 'np', 0, $dir);
+				if (TYPO3_MODE == 'FE') t3lib_div::devlog('yes', 'np', 0, $dir);
 				$this->template_dir = $dir;	
 				break;
 			}
-			t3lib_div::devlog('no', 'np', 0, $dir);
+			if (TYPO3_MODE == 'FE') t3lib_div::devlog('no', 'np', 0, $dir);
 		}
 		
 		if (TYPO3_MODE == 'FE') {
@@ -298,7 +298,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
 		
-		t3lib_div::devlog('$this->templateSearchPath', 'np', 0, $this->templateSearchPath);
+		if (TYPO3_MODE == 'FE') t3lib_div::devlog('$this->templateSearchPath', 'np', 0, $this->templateSearchPath);
 	}
 
 	private $templateset = '';
