@@ -237,15 +237,15 @@ class tx_newspaper_Smarty extends Smarty {
 		$temporary_searchpath = array();
 		t3lib_div::devlog('basepath','np',0,$this->basepath);
 		if ($this->templateset &&
-			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
-			is_dir($this->basepath . 'template_sets/' . $this->templateset)
+			file_exists($this->basepath . '/template_sets/' . $this->templateset) &&
+			is_dir($this->basepath . '/template_sets/' . $this->templateset)
 		   ) {
 		   	t3lib_div::devlog('template set', 'np', 0, $this->templateset);
 			if ($this->pagetype) {
 				$page_name = $this->pagetype->getAttribute('normalized_name')?
 					$this->pagetype->getAttribute('normalized_name'):
 					strtolower($this->pagetype->getAttribute('type_name'));
-				$page_template_dir = $this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name;
+				$page_template_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. $page_name;
 			   	t3lib_div::devlog('page name', 'np', 0, array($page_name, $page_template_dir));
 				if ($this->pagezonetype) {
 					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
@@ -275,7 +275,7 @@ class tx_newspaper_Smarty extends Smarty {
 		} else {
 			$page_name = self::pagename_for_all_pagezones;
 		}
-		$page_template_dir = $this->basepath . 'template_sets/' . self::default_template_set . '/'. $page_name;
+		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
 		t3lib_div::devlog('page name', 'np', 0, array($page_name, $page_template_dir));
 		
 		//	first look for the page zone specific templates
@@ -283,7 +283,7 @@ class tx_newspaper_Smarty extends Smarty {
 			$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 				$this->pagezonetype->getAttribute('normalized_name'):
 				strtolower($this->pagezonetype->getAttribute('type_name'));
-			$pagezone_template_dir = 'template_sets/' . self::default_template_set . '/'. $page_name . '/'. $pagezone_name;
+			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
 		   	t3lib_div::devlog('page zone', 'np', 0, array($pagezone_name, $pagezone_template_dir));
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
