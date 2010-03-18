@@ -71,9 +71,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  	function __construct($get = array()) {
  		if (is_int($get)) {
 			$this->setUid($get); // just read the record (probably for backend)
-			if (TYPO3_MODE == 'BE') {
+//			if (TYPO3_MODE == 'BE') {
 				$this->condition = 'uid=' . $this->getUid();
-			}
+//			}
  		} else if ($get[tx_newspaper::GET_pagetype()]) { 
 				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
