@@ -169,9 +169,10 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
+		$page_type = $page->getPageType();
 		t3lib_div::devlog('setPageType', 'np', 0, 
-			array($page->getPageType()->getAttribute('type_name'), debug_backtrace()));
-		$this->pagetype = $page->getPageType();
+			array($page_type, debug_backtrace()));
+		$this->pagetype = $page_type;
 	}
 	
 	/// Sets the page zone type we're working on
