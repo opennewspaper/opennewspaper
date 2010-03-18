@@ -86,6 +86,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 				$this->condition = 'NOT get_var';
  			}
  		}
+ 		t3lib_div::devlog('pt ctor','np', 0, array('cond'=>$this->condition));
   	}
  	 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
@@ -106,6 +107,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  	public function getID() { return $this->getAttribute('uid'); }
  	
  	public function getAttribute($attribute) {
+ 		
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
@@ -113,6 +115,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 			);
 			$this->setUid($this->attributes['uid']);
 		}
+ 		t3lib_div::devlog('pt attributes','np', 0, array('cond'=>$this->attributes));
 
  		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);

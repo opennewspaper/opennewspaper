@@ -175,7 +175,7 @@ class tx_newspaper_Smarty extends Smarty {
 		$page_type2 = new tx_newspaper_PageType(intval($pagetype_uid));
 		$page_type2->getAttribute('uid');
 		t3lib_div::devlog('setPageType', 'np', 0, 
-			array($pagetype_uid, $page_type, $page_type2, array_slice(debug_backtrace(), 0, 2)));
+			array('pt uid' => $pagetype_uid, 'pt 1'=>$page_type, 'pt2'=>$page_type2, 'bt'=>array_slice(debug_backtrace(), 0, 2)));
 		$this->pagetype = $page_type2;
 	}
 	
