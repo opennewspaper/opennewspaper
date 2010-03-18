@@ -235,7 +235,7 @@ class tx_newspaper_Smarty extends Smarty {
 	private function assembleSearchPath() {
 		global $TYPO3_CONF_VARS;
 		$temporary_searchpath = array();
-		t3lib_div::debug('basepath','np',0,$this->basepath);
+		t3lib_div::devlog('basepath','np',0,$this->basepath);
 		if ($this->templateset &&
 			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
 			is_dir($this->basepath . 'template_sets/' . $this->templateset)
