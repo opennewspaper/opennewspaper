@@ -1366,6 +1366,47 @@ t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $inp
 		return $result;
 	}
 	
+	
+		/// get a list of articles by a section id
+	function getArticleListByArticlelistId($articlelistId, $articleId = false) {
+		
+		$result = array();
+		
+		$al_uid = intval($this->extractElementId($articlelistId));
+		
+		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+		$articleList = $al->getArticles(9999);
+		$listType = $al->getTable();
+
+		// get offsets
+		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
+			$articleUids = $this->getArticleIdsFromArticleList($articleList);
+			$offsetList = $al->getOffsets($articleUids);	
+		}
+
+		// prepend the article we are working on to list for semiautomatic lists
+		if ($listType == 'tx_newspaper_articlelist_semiautomatic' && $articleId) {
+			$article = $this->getArticleByArticleId($articleId);
+			$result['0_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
+		}
+
+		// fill the articlelist
+		foreach ($articleList as $article) {
+			if ($listType == 'tx_newspaper_articlelist_manual') {
+				$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
+			}
+			if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
+				$offset = $offsetList[$article->getAttribute('uid')];
+				if ($offset > 0) {
+					$offset = '+' . $offset;
+				}
+				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
+			}
+		}
+t3lib_div::devlog('getArticleListByArticlelistId()', 'newspaper', 0, array('result' => $result));
+		return $result;
+	}
+	
 	/// extract the section uid out of the select elements mames that are
 	/// like "placer_10_11_12" where we need the "12" out of it
 	function extractElementId($sectionId) {

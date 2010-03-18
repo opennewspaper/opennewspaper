@@ -93,8 +93,8 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 								$this->saveSectionsForArticle($input);
 								die($this->al_be->renderPlacement($input, false));
 							break;
-							case 'updatearticlelist' :
-								die(json_encode($this->al_be->getArticleListBySectionId($input['section'], $input['placearticleuid'])));
+							case 'updatearticlelist':
+								die($this->updateArticlelist($input));
 							break;
 							case 'checkarticlelistsforupdates' :
 								die(json_encode($this->checkArticleListsForUpdates($input)));
@@ -644,6 +644,21 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						return $result[0];
 					}
 					return array();
+				}
+				
+				
+				function updateArticlelist($input) {
+t3lib_div::devlog('updateArticlelist()', 'newspaper', 0, array('input' => $input));
+					if (substr($input['element'], 0, 7) == 'placer_') {
+						// section article list
+						$input['section'] = $input['element']; // section al type
+						return json_encode($this->al_be->getArticleListBySectionId($input['section'], $input['placearticleuid'])); 
+					} elseif (substr($input['element'], 0, 3) == 'al_') {
+						// non-section article list
+						$input['al'] = $input['element']; // non-section al type
+t3lib_div::devlog('updateArticlelist()', 'newspaper', 0, array('input' => $input));
+						return json_encode($this->al_be->getArticleListByArticlelistId($input['al'], $input['placearticleuid']));
+					}
 				}
 
 

@@ -278,7 +278,7 @@ function connectPlacementEvents() {
 			showProgress();
 			$("#" + this.title).ajaxAddOption(
 				path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
-					"tx_newspaper_mod7[section]" : this.title, 
+					"tx_newspaper_mod7[element]" : this.title, 
 					"tx_newspaper_mod7[placearticleuid]" : ($("#placearticleuid").length? $("#placearticleuid").val() : 0)
 				}, 
 				false,
