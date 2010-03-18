@@ -169,7 +169,8 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
-		t3lib_div::devlog('setPageType', 'np', 0, $page->getPageType()->getAttribute('type_name'));
+		t3lib_div::devlog('setPageType', 'np', 0, 
+			array($page->getPageType()->getAttribute('type_name'), debug_backtrace()));
 		$this->pagetype = $page->getPageType();
 	}
 	
