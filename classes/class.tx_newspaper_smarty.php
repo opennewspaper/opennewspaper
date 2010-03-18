@@ -234,27 +234,33 @@ class tx_newspaper_Smarty extends Smarty {
 			file_exists($this->basepath . 'template_sets/' . $this->templateset) &&
 			is_dir($this->basepath . 'template_sets/' . $this->templateset)
 		   ) {
+		   	t3lib_div::devlog('template set', 'np', 0, $this->templateset);
 			if ($this->pagetype) {
 				$page_name = $this->pagetype->getAttribute('normalized_name')?
 					$this->pagetype->getAttribute('normalized_name'):
 					strtolower($this->pagetype->getAttribute('type_name'));
+			   	t3lib_div::devlog('page name', 'np', 0, $page_name);
 				if ($this->pagezonetype) {
 					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 						$this->pagezonetype->getAttribute('normalized_name'):
 						strtolower($this->pagezonetype->getAttribute('type_name'));
+				   	t3lib_div::devlog('page zone name', 'np', 0, $pagezone_name);
 					if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 						is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 					   ) {
 						$temporary_searchpath[] = 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name;
+					   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 					}
 				}
 				if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name) &&
 					is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
 				   ) {
 					$temporary_searchpath[] = 'template_sets/' . $this->templateset . '/'. $page_name;
+				   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 				}
 			}
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
+		   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 		}
 		
 		//	default template set
@@ -265,16 +271,19 @@ class tx_newspaper_Smarty extends Smarty {
 		} else {
 			$page_name = self::pagename_for_all_pagezones;
 		}
+		t3lib_div::devlog('page name', 'np', 0, $page_name);
 		
 		//	first look for the page zone specific templates
 		if ($this->pagezonetype) {
 			$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 				$this->pagezonetype->getAttribute('normalized_name'):
 				strtolower($this->pagezonetype->getAttribute('type_name'));
+		   	t3lib_div::devlog('page zone name', 'np', 0, $pagezone_name);
 			if (file_exists($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name) &&
 				is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name . '/'. $pagezone_name)
 			   ) {
 				$temporary_searchpath[] = 'template_sets/default/'. $page_name . '/'. $pagezone_name;
+			   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 			}
 		}
 
@@ -283,6 +292,7 @@ class tx_newspaper_Smarty extends Smarty {
 			is_dir($this->basepath . 'template_sets/' . $this->templateset . '/'. $page_name)
 		   ) {
 			$temporary_searchpath[] = 'template_sets/default/'. $page_name;
+		   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 		}
 
 		//	finally those common for all pages and page zones
