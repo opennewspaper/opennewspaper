@@ -72,7 +72,7 @@ LIMIT 0, 10
 				'uid_local = ' . intval($this->getUid()) . 
 					tx_newspaper::enableFields(self::article_table),
 				'',
-				'sorting ASC',
+				self::mm_table . '.sorting ASC',
 				"$start, $number"
 		);
 		
