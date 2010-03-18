@@ -1333,7 +1333,7 @@ t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $inp
 	function getArticleListBySectionId($sectionId, $articleId = false) {
 		
 		$result = array();
-		$sectionId = $this->extractSectionId($sectionId);
+		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
 		$listType = get_class($section->getArticleList());
 		$articleList = $section->getArticleList()->getArticles(9999);
@@ -1368,7 +1368,7 @@ t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $inp
 	
 	/// extract the section uid out of the select elements mames that are
 	/// like "placer_10_11_12" where we need the "12" out of it
-	function extractSectionId($sectionId) {
+	function extractElementId($sectionId) {
 		if (strstr($sectionId, '_')) {
 			$sectionId = explode('_', $sectionId);
 			$sectionId = $sectionId[count($sectionId)-1];

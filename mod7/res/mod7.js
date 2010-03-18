@@ -94,20 +94,21 @@ function saveAllSections () {
 			}	
   		});
 		if (saveIt) {
-			saveSection(item.id, false);
+			saveArticleList(item.id, false);
 		}
 	});
 }
 
 
-function saveSection (elementId, async) {
+function saveArticleList(elementId, async) {
+//console.log(stacktrace());
 	if (async == undefined) {
 		async = true;
 	}
 	$("#" + elementId).selectAllOptions();
 	showProgress();
 	jQuery.ajax({
-		url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savesection&tx_newspaper_mod7[section]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
+		url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savearticlelist&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
 		success: function (data) {
 			if (!data) {
 				alert(langSavedidnotwork);
@@ -292,7 +293,7 @@ function connectPlacementEvents() {
 		return false;
   	});
 	$(".save").click(function() {
-		saveSection(this.title);
+		saveArticleList(this.title);
 		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
 		$("input.save[title=" +  this.title + "]").removeClass("unsaved");
 		if (everythingSaved()) {
