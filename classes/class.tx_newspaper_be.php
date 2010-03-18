@@ -1403,7 +1403,7 @@ t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $inp
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
-t3lib_div::devlog('getArticleListByArticlelistId()', 'newspaper', 0, array('result' => $result));
+//t3lib_div::devlog('getArticleListByArticlelistId()', 'newspaper', 0, array('result' => $result));
 		return $result;
 	}
 	
