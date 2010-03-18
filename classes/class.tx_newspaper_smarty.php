@@ -194,7 +194,7 @@ class tx_newspaper_Smarty extends Smarty {
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
-				if (TYPO3_MODE == 'FE') t3lib_div::devlog('yes', 'np', 0, $dir);
+				if (TYPO3_MODE == 'FE') t3lib_div::devlog('yes', 'np', 0, $dir . '/' . $template);
 				$this->template_dir = $dir;	
 				break;
 			}
