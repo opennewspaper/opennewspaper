@@ -295,12 +295,13 @@ function findElementsByName(name, type) {
 	
 		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
 
-		$out .= ' ' . self::renderEditIcon4ArticleList($s->getArticleList());
+		// $out .= ' ' . self::renderEditIcon4ArticleList($s->getArticleList()); // might be needed later, see renderEditIcon4ArticleList()
 
 		return $out;
 
 	}
 
+/** deactivated, see #806; might be needed later to link to section article list module
 	function renderEditIcon4ArticleList(tx_newspaper_Articlelist $al) {
 		global $LANG;
 		$html .= '<span id="edit_articlelist">';
@@ -311,6 +312,7 @@ function findElementsByName(name, type) {
 		$html .= '<span style="display:none;" id="NO_edit_articlelist">' .  $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_edit_articlelist_in_section_save_first', false) . '</span>';
 		return $html;
 	}
+*/
 
 /// \todo: move to pagezone
 /// \todo: correct sorting: negative paragraph at the bottom
