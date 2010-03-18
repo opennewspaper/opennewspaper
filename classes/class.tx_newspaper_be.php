@@ -368,6 +368,8 @@ function findElementsByName(name, type) {
 		return $data;
 	} 
 	
+	
+/// \todo: is this really needed 
 	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)	
 	function renderArticleKickerTtitleTeaser($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
