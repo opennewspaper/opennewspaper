@@ -171,12 +171,8 @@ class tx_newspaper_Smarty extends Smarty {
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
 		$page_type->getAttribute('uid');
-		$pagetype_uid = intval($page->getAttribute('pagetype_id'));
-		$page_type2 = new tx_newspaper_PageType($pagetype_uid);
-		$page_type2->getAttribute('uid');
-		t3lib_div::devlog('setPageType', 'np', 0, 
-			array('pt uid' => $pagetype_uid, 'pt 1'=>$page_type, 'pt2'=>$page_type2, 'bt'=>array_slice(debug_backtrace(), 0, 2)));
-		$this->pagetype = $page_type2;
+		t3lib_div::devlog('setPageType', 'np', 0, array('pt'=>$page_type));
+		$this->pagetype = $page_type;
 	}
 	
 	/// Sets the page zone type we're working on
@@ -204,11 +200,9 @@ class tx_newspaper_Smarty extends Smarty {
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
-				if (TYPO3_MODE == 'FE') t3lib_div::devlog('yes', 'np', 0, $dir . '/' . $template);
 				$this->template_dir = $dir;	
 				break;
 			}
-			if (TYPO3_MODE == 'FE') t3lib_div::devlog('no', 'np', 0, $dir);
 		}
 		
 		if (TYPO3_MODE == 'FE') {
@@ -245,31 +239,25 @@ class tx_newspaper_Smarty extends Smarty {
 			file_exists($this->basepath . '/template_sets/' . $this->templateset) &&
 			is_dir($this->basepath . '/template_sets/' . $this->templateset)
 		   ) {
-		   	t3lib_div::devlog('template set', 'np', 0, $this->templateset);
 			if ($this->pagetype) {
 				$page_name = $this->pagetype->getAttribute('normalized_name')?
 					$this->pagetype->getAttribute('normalized_name'):
 					strtolower($this->pagetype->getAttribute('type_name'));
 				$page_template_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. $page_name;
-			   	t3lib_div::devlog('page name', 'np', 0, array($page_name, $page_template_dir));
 				if ($this->pagezonetype) {
 					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 						$this->pagezonetype->getAttribute('normalized_name'):
 						strtolower($this->pagezonetype->getAttribute('type_name'));
 					$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
-				   	t3lib_div::devlog('page zone', 'np', 0, array($pagezone_name, $pagezone_template_dir));
 					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 						$temporary_searchpath[] = $pagezone_template_dir;
-					   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 					}
 				}
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 					$temporary_searchpath[] = $page_template_dir;
-				   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 				}
 			}
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
-		   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 		}
 		
 		//	default template set
@@ -281,7 +269,6 @@ class tx_newspaper_Smarty extends Smarty {
 			$page_name = self::pagename_for_all_pagezones;
 		}
 		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
-		t3lib_div::devlog('page name', 'np', 0, array($page_name, $page_template_dir));
 		
 		//	first look for the page zone specific templates
 		if ($this->pagezonetype) {
@@ -289,17 +276,14 @@ class tx_newspaper_Smarty extends Smarty {
 				$this->pagezonetype->getAttribute('normalized_name'):
 				strtolower($this->pagezonetype->getAttribute('type_name'));
 			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
-		   	t3lib_div::devlog('page zone', 'np', 0, array($pagezone_name, $pagezone_template_dir));
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
-			   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 			}
 		}
 
 		//	then for the page specific ones
 		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
-		   	t3lib_div::devlog('path', 'np', 0, $temporary_searchpath);
 		}
 
 		//	finally those common for all pages and page zones
@@ -314,8 +298,6 @@ class tx_newspaper_Smarty extends Smarty {
 			}
 		}
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
-		
-		if (TYPO3_MODE == 'FE') t3lib_div::devlog('templateSearchPath', 'np', 0, $this->templateSearchPath);
 	}
 
 	private $templateset = '';
