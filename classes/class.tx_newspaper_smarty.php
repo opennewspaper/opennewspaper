@@ -160,17 +160,21 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = 'default') {
+		t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
+		
 		$this->templateset = $template_set;
 		$this->assign('template_set', $template_set);
 	}
 	
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
+		t3lib_div::devlog('setPageType', 'np', 0, $page->getPageType()->getAttribute('type_name'));
 		$this->pagetype = $page->getPageType();
 	}
 	
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
+		t3lib_div::devlog('setPageZoneType', 'np', 0, $pagezone->getPageZoneType()->getAttribute('type_name'));
 		$this->pagezonetype = $pagezone->getPageZoneType();
 	}
 		
@@ -308,7 +312,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
 		
-		if (TYPO3_MODE == 'FE') t3lib_div::devlog('$this->templateSearchPath', 'np', 0, $this->templateSearchPath);
+		if (TYPO3_MODE == 'FE') t3lib_div::devlog('templateSearchPath', 'np', 0, $this->templateSearchPath);
 	}
 
 	private $templateset = '';
