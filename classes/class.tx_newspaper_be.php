@@ -1210,8 +1210,11 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
-t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
-		if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
+		if (
+			(isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) || // section article list
+			(isset($input['ajaxcontroller']) && $input['ajaxcontroller'] == 'showplacementandsavesections') // placing ONE article
+		) {
 			// section article list
 			$selection = $input['sections_selected'];
 			// calculate which / how many placers to show
