@@ -648,7 +648,6 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				
 				
 				function updateArticlelist($input) {
-t3lib_div::devlog('updateArticlelist()', 'newspaper', 0, array('input' => $input));
 					if (substr($input['element'], 0, 7) == 'placer_') {
 						// section article list
 						$input['section'] = $input['element']; // section al type
@@ -656,7 +655,6 @@ t3lib_div::devlog('updateArticlelist()', 'newspaper', 0, array('input' => $input
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
 						// non-section article list
 						$input['al'] = $input['element']; // non-section al type
-t3lib_div::devlog('updateArticlelist()', 'newspaper', 0, array('input' => $input));
 						return json_encode($this->al_be->getArticleListByArticlelistId($input['al'], $input['placearticleuid']));
 					}
 				}
