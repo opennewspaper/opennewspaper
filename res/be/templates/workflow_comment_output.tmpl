@@ -14,8 +14,10 @@
            </tr>
         {/foreach}
     </table>
-{if $showMore}
-	<a href="#" onclick="getComments({$tableUid}); return false;">{$LABEL.more}</a>        
+{if !$allComments}
+	<a href="#" onclick="getComments({$tableUid}, 1); return false;">{$LABEL.more}</a>
+{else}
+	<a href="#" onclick="getComments({$tableUid}, 0); return false;">{$LABEL.less}</a>
 {/if}
 </div>
 {literal}

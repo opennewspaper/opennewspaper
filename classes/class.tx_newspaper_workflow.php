@@ -19,7 +19,7 @@ define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
  
 class tx_newspaper_Workflow {   
 
-	 public static function renderBackend($table, $tableUid, $allComments = false) {
+	 public static function renderBackend($table, $tableUid, $allComments=false) {
         if(!$table || !$tableUid) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
@@ -31,7 +31,7 @@ class tx_newspaper_Workflow {
         }
 
         $comments = self::addUsername($comments);
-        return self::renderTemplate($comments, $tableUid, !$allComments);
+        return self::renderTemplate($comments, $tableUid, $allComments);
     }
     
     /// return javascript for ajax calls
@@ -42,7 +42,12 @@ class tx_newspaper_Workflow {
     	return '
 		<script language="javascript">
         var tableUid = null;
-        function getComments(uid) {
+        function getComments(uid, all_comments) {
+        	if (all_comments == undefined || all_comments != true) {
+				all_comments = 0;
+			} else {
+				all_comments = 1;
+			}
             var path = window.location.pathname;
             document.tableUid = uid; // store for access in showMessage()
 
@@ -57,7 +62,7 @@ class tx_newspaper_Workflow {
                         parameters :{
                         	"param" : "workflowlog",
                         	"AJAX_CALL" : true,
-                        	"show_all_comments" : true, 
+                        	"show_all_comments" : all_comments, 
                         	"tbl" : "tx_newspaper_article", 
                         	"tbl_uid" : uid
                         },
@@ -96,15 +101,16 @@ class tx_newspaper_Workflow {
         return $comments;
     }
 
-    private static function renderTemplate($comments, $tableUid, $showMoreLink = true) {
+    private static function renderTemplate($comments, $tableUid, $allComments=false) {
 		global $LANG;
 		self::addUsername($comments);
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
 		$smarty->assign('tableUid', $tableUid);
-		$smarty->assign('showMore', $showMoreLink);
+		$smarty->assign('allComments', $allComments);
 		$smarty->assign('LABEL', array(
-			'more' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_more_link', false)
+			'more' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_more_link', false),
+			'less' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_less_link', false)
 		));
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');

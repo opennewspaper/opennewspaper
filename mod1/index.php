@@ -268,9 +268,10 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 	/// workflow log display and browser
 	private function processWorkflowLog() {
+//t3lib_div::devLog('processWorkflowLog()', 'newspaper' , 0, array('_request' => $_REQUEST));
 		$table = isset($_REQUEST['tbl']) ? $_REQUEST['tbl'] : null;
 		$tableUid = isset($_REQUEST['tbl_uid']) ? $_REQUEST['tbl_uid'] : null ;
-		$showAllComments = isset($_REQUEST['show_all_comments']) ? $_REQUEST['show_all_comments'] : false ;
+		$showAllComments = isset($_REQUEST['show_all_comments'])? $_REQUEST['show_all_comments'] : false ; // show_all_comment = true meas render LINK "show all comments"
 		$ajaxCall = isset($_REQUEST['AJAX_CALL'])? true : false;
 		$content = tx_newspaper_Workflow::renderBackend($table, $tableUid, $showAllComments);
 		if($ajaxCall) {

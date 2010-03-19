@@ -263,7 +263,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			}
 			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
 			// add workflowlog data to $row
-			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid']);
+			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 		$smarty->assign('workflowlog_javascript', tx_newspaper_workflow::getJavascript()); // add js once only
