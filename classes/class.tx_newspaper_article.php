@@ -899,7 +899,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
-            t3lib_div::devLog('modifyTagSelection', 'modify', 0, array() );            
+//t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));            
             global $TCA;
             $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'user';
             $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
