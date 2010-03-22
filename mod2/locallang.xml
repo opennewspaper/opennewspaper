@@ -52,6 +52,48 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Produktionsliste</label>
+			
+			<label index="label.status_hidden">Artikel anzeigen</label>
+			<label index="option.status_hidden_all">Alle</label>
+			<label index="option.status_hidden_on">Nur versteckte</label>
+			<label index="option.status_hidden_off">Nut publizierte</label>
+
+			<label index="label_status_role">Rolle</label>
+			<label index="label_status_role_all">Alle Rollen</label>
+			
+			<label index="label.range">Zeitfenster</label>			
+			<label index="option.range_today">Heute</label>
+			<label index="option.range_day">Tag</label>
+			<label index="option.range_days">Tage</label>
+			<label index="option.range_no_limit">Alle</label>
+
+			<label index="label_title_number">Nr.</label>
+			<label index="label_title_article">Artikel</label>
+			<label index="label_title_author">Autor</label>
+			<label index="label_title_be_user">Online Redakteur</label>
+			<label index="label_title_modification_date">Datum</label>
+			<label index="label_title_visibility">Online</label>
+			<label index="label_title_time_controlled">Zeitgezündet</label>
+			<label index="label_title_commands">Funktion</label>
+
+			<label index="label.author">Autor</label>
+			<label index="label.section">Ressort</label>
+			<label index="label.textsearch">Text</label>
+			<label index="label.go">Zeigen</label>
+			<label index="label.step_items_per_page">Artikel pro Seite</label>
+			<label index="label.hide">Artikel verstecken</label>
+			<label index="label.unhide">Artikel publizieren</label>
+			<label index="label.article_placement">Artikel platzieren</label>
+			<label index="label.preview_article">Vorschau</label>
+			<label index="label.edit_article">Artikel bearbeiten</label>
+			<label index="label.time">Zeitgezündete Artikel</label>
+			<label index="label.internal_comments">Alle Kommentare anzeigen</label>
+			<label index="label.article_add">Zu Liste hinzufügen</label>
+			
+			<label index="label.page_prev">Vorige</label>
+			<label index="label.page_next">Nächste</label>
+			<label index="label.page_hits">Treffer</label>
+
 		</languageKey>
 	</data>
 </T3locallang>
