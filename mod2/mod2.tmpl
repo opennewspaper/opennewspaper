@@ -80,6 +80,15 @@ function focusOpenerAndClose(close)	{
   BrowseLinks.focusOpenerAndClose(close);
 }
 
+/// \todo: based from mod7, how to merge into 1 js file?
+function showArticlePreview(article_uid) {
+	window.open(
+		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid, 
+		"preview", 
+		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
+	);
+}
+
 </script>
 {/literal}
 
@@ -238,7 +247,7 @@ function focusOpenerAndClose(close)	{
 		<td>
 {if $IS_DUTY_EDITOR}<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> {/if}
  
-{$ARTICLE_PREVIEW_ICON} 
+<a href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;">{$ARTICLE_PREVIEW_ICON}</a> 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
 {* left here, because (i) button might be needed later, though probably with js call <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> *} 
 		</td>
