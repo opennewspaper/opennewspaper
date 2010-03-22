@@ -432,7 +432,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		for($i = 0; $i < strlen($text); $i++) $ascii[$text[$i]] = ord($text[$i]); 
 		t3lib_div::devlog('cU', 'np', 0, array('text' =>$text, 'ascii' => $ascii));
 		
-		$text = str_replace('ü', '&uuml;', $text);
+		$text = str_replace(chr(252), '&uuml;', $text);
 		return $text;
 	}
 		
