@@ -382,7 +382,7 @@ function showArticlePreview(article_uid) {
 		<td>{$LABEL_TITLE.be_user}</td>
 		<td>{$LABEL_TITLE.modification_date}</td>
 		<td width="30">{$LABEL_TITLE.visibility}</td>
-		<td>{$LABEL_TITLE.time_controlled}</td>
+			{$LABEL_TITLE.time_controlled}
 	</tr>
 
 {section name=i loop=$DATA}
@@ -402,8 +402,10 @@ function showArticlePreview(article_uid) {
   {else}
     <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
   {/if}
+<!--
 			</td>	
-			<td> 
+			<td>
+--> 
 {* <strong>{$DATA[i].???|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].???|date_format:"%H:%I:%S"} *}
 				{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
 					{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
@@ -425,9 +427,9 @@ function showArticlePreview(article_uid) {
 			<td></td>
 			<td colspan="8" class="comments">
 			<p>
-			Samuel Talleux 	19.03.2010 12:16 <strong>hello!</strong> <br />
-			Samuel Talleux 	19.03.2010 12:16 <strong>New role "Duty editor", Old role"Editorial staff"</strong><br />
-			Samuel Talleux 	19.03.2010 12:16 <strong>Article published</strong><br />
+			Samuel Talleux 	19.03.2010 12:16 Artikel publiziert <br />
+			Samuel Talleux 	19.03.2010 12:12 <strong>Fehler korrigiert</strong><br />
+			Helge Preuss 	19.03.2010 12:10 Artikel <br />
 			</p>
 		<div id="comments-45" class="comments">
 			<a href="#" onclick="getComments(45); return false;" class="more">More</a>
