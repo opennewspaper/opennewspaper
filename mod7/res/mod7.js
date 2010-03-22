@@ -23,7 +23,7 @@ function showArticlePreview() {
 	window.open(
 		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
 		"preview", 
-		"width=600,height=400,left=100,top=200,resizable=yes,toolbar=no,location=no"
+		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
 	);
 }
 
