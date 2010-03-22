@@ -148,12 +148,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function moduleContent()	{
+//t3lib_div::devlog('where', 'newspaper', 0, array('where' => $this->createWherePart()));
+
 		global $LANG;
 		
 		$this->processGP();
 		$this->processGPVisibility(); // check if an article is hidden/unhidden
-		
-#t3lib_div::devlog('where', 'newspaper', 0, $where);
 
 		/// get records (get one more than needed to find out if there's an next page)
 		$row = tx_newspaper::selectRows(
@@ -164,7 +164,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'tstamp DESC',
 			intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
 		);
-#t3lib_div::devlog('row', 'newspaper', 0, $row);
+//t3lib_div::devlog('row', 'newspaper', 0, array('row' => $row));
 
 		$content= $this->renderBackendSmarty($row);
 
@@ -176,7 +176,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		global $LANG;
 		
  		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
 		$smarty->assign('IS_DUTY_EDITOR', tx_newspaper_workflow::isDutyEditor());
 
@@ -200,6 +200,17 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('AUTHOR_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.author', false));
 		$smarty->assign('SECTION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.section', false));
 		$smarty->assign('TEXTSEARCH_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.textsearch', false));
+
+		$smarty->assign('LABEL_TITLE', array(
+			'number' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_number', false),
+			'article' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_article', false),
+			'author' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_author', false),
+			'be_user' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_be_user', false),
+			'modification_date' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_modification_date', false),
+			'visibility' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_visibility', false),
+			'time_controlled' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_time_controlled', false),
+			'commands' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_commands', false),
+		));
 
 		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
 
@@ -280,7 +291,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		
-		return $smarty->fetch('mod2.tmpl');
+		if (t3lib_div::_GP('form_table')) {
+			return $smarty->fetch('mod2_old.tmpl'); // article browser 
+		}
+		return $smarty->fetch('mod2_main.tmpl'); // moderation list
 	}
 
 
@@ -383,6 +397,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	/// create where part of sql statement for filter
 	/// return string 'WHERE' is NOT added to the string
 	private function createWherePart() {
+//t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('_request' => $_REQUEST));
 		$where = array();
 		
 		$where[] = 'deleted=0';
@@ -415,18 +430,19 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 		
 		
-		if (t3lib_div::_GP('author') != '') {
-			$where[] = 'author LIKE "%' . t3lib_div::_GP('author') . '%"';
+		if (trim(t3lib_div::_GP('author'))) {
+			$where[] = 'author LIKE "%' . trim(t3lib_div::_GP('author')) . '%"';
 		}
 		if (t3lib_div::_GP('section')) {
 t3lib_div::devlog('moderation: section missing', 'newspaper', 3);
 		}
-		if (t3lib_div::_GP('text'))
-			$where[] = '(title LIKE "%' . addslashes(t3lib_div::_GP('text')) . '%" OR kicker LIKE "%' . 
-				addslashes(t3lib_div::_GP('text')) . '%" OR teaser LIKE "%' . 
-				addslashes(t3lib_div::_GP('text')) . '%" OR text LIKE "%' . 
-				addslashes(t3lib_div::_GP('text')) . '%")';
-
+		if (trim(t3lib_div::_GP('text'))) {
+			$where[] = '(title LIKE "%' . addslashes(trim(t3lib_div::_GP('text'))) . '%" OR kicker LIKE "%' . 
+				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR teaser LIKE "%' . 
+				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR text LIKE "%' . 
+				addslashes(trim(t3lib_div::_GP('text'))) . '%")';
+		}
+//t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('where' => $where));
 		return implode(' AND ', $where);				
 	}
 

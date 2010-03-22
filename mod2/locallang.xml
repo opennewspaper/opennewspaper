@@ -7,9 +7,6 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Moderation list</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
 			
 			<label index="label.status_hidden">Show articles</label>
 			<label index="option.status_hidden_all">all</label>
@@ -24,14 +21,21 @@
 			<label index="option.range_day">day</label>
 			<label index="option.range_days">days</label>
 			<label index="option.range_no_limit">no limit</label>
-			
+
+			<label index="label_title_number">No.</label>
+			<label index="label_title_article">Article</label>
+			<label index="label_title_author">Author</label>
+			<label index="label_title_be_user">BE user</label>
+			<label index="label_title_modification_date">Date</label>
+			<label index="label_title_visibility">Visible</label>
+			<label index="label_title_time_controlled">Time controlled</label>
+			<label index="label_title_commands">Commands</label>
+
 			<label index="label.author">Author</label>
 			<label index="label.section">Section</label>
 			<label index="label.textsearch">Text</label>
 			<label index="label.go">Go</label>
-			
 			<label index="label.step_items_per_page">Items per page</label>
-			
 			<label index="label.hide">Hide article</label>
 			<label index="label.unhide">Publish article</label>
 			<label index="label.article_placement">Article placement</label>
@@ -41,9 +45,9 @@
 			<label index="label.internal_comments">View all internal comments for this article</label>
 			<label index="label.article_add">Add article to list ...</label>
 			
-			<label index="label.page_prev">&lt;&lt; previous hits</label>
-			<label index="label.page_next">next hits &gt;&gt;</label>
-			<label index="label.page_hits">hit(s)</label>
+			<label index="label.page_prev">Previous hits</label>
+			<label index="label.page_next">Next hits</label>
+			<label index="label.page_hits">Hit(s)</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">

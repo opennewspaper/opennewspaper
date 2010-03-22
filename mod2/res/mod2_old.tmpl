@@ -181,20 +181,21 @@ function showArticlePreview(article_uid) {
 {/if}
 
 <table>
+
 <tr>
 <td></td>
-<td>No. </td>
-<td>Article</td>
-<td>Author</td>
+<td>{$LABEL_TITLE.number} </td>
+<td>{$LABEL_TITLE.article}</td>
+<td>{$LABEL_TITLE.author}</td>
 {if !$IS_ARTICLE_BROWSER}
-  <td>BE user</td>
+  <td>{$LABEL_TITLE.be_user}</td>
 {/if}
-<td>Date</td>
+<td>{$LABEL_TITLE.modification_date}</td>
 <td align="center">Visible&nbsp;</td>
 {if !$IS_ARTICLE_BROWSER}
-  <td align="center">Command&nbsp;</td>
+  <td align="center">{$LABEL_TITLE.commands}&nbsp;</td>
 {/if}
-<td align="center">Time controlled</td>
+<td align="center">{$LABEL_TITLE.time_controlled}</td>
 </tr>
 
 {section name=i loop=$DATA}
