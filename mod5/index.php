@@ -414,11 +414,11 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= '<option onclick=loadArticle(\'' . $source_id . '\',\'' . self::cleanUmlauts($entry->getID()) .'\')' . '>' .
-					$entry->getTitle() . '</option>' . "\n";
+				$ret .= '<option onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
+					self::cleanUmlauts($entry->getTitle()) . '</option>' . "\n";
 			} else {
-				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . self::cleanUmlauts($entry->getID()) .'\')' . '>' . 
-					$entry->getTitle() . '</option>' . "\n";
+				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+					self::cleanUmlauts($entry->getTitle()) . '</option>' . "\n";
 			}  
 		}
 		$ret .= '</select>' . "<br />\n";
