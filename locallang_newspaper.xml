@@ -127,6 +127,24 @@
 			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 			<label index="title_tx_newspaper_tag">Tag</label>
+			<label index="label_workflow_hide">Verstecken</label>
+			<label index="label_workflow_publish">Publizieren</label>
+			<label index="label_workflow_check">Zum CvD</label>
+			<label index="label_workflow_check_hide">Zum Redakteur &amp; verstekcen</label>
+			<label index="label_workflow_check_publish">Zum CvD &amp; publizieren</label>
+			<label index="label_workflow_revise">Zum Redakteur</label>
+			<label index="label_workflow_revise_hide">Zum Redakteur &amp; verstekcen</label>
+			<label index="label_workflow_revise_publish">Zum Redakteur &amp; publizieren</label>
+			<label index="label_workflow_place">Plazieren</label>
+			<label index="label_workflow_place_hide">Plazieren &amp; verstekcen</label>
+			<label index="label_workflow_place_publish">Plazieren &amp; publizieren</label>
+			<label index="label_workflow_save">Speichern</label>
+			<label index="label_workflow_role_editorialstaff">Redaktion</label>
+			<label index="label_workflow_role_dutyeditor">CvD</label>
+			<label index="label_workflow_role_none">Artikel plaziert</label>
+			<label index="label_workflow_role_old">Alte Rolle</label>
+			<label index="label_workflow_role_new">Neue Rolle</label>
+			
 		</languageKey>
 	</data>
 </T3locallang>
