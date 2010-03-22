@@ -6,12 +6,12 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Wizards</label>
+			<label index="mlang_tabs_tab">Dashboard</label>
 			<label index="mlang_labels_tabdescr">Wizards for many newspaper functions</label>
 			<label index="mlang_labels_tablabel">Newspaper wizards</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Wizards</label>
+			<label index="mlang_tabs_tab">Dashboard</label>
 			<label index="mlang_labels_tabdescr">Wizards für viele Newspaper-Funktionen</label>
 			<label index="mlang_labels_tablabel">Newspaper-Wizards</label>
 		</languageKey>
