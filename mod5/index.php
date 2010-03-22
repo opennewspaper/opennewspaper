@@ -206,7 +206,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
 	}
 				
-		
 	private function renderBackendSmarty() {
 		global $LANG;
 
@@ -275,7 +274,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		return $smarty->fetch('mod5.tmpl');
 	}		
-		
 	
 	private function getShortcuts() {
 		return tx_newspaper::selectRows(
@@ -286,8 +284,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'sorting'
 		);
 	}	
-		
-		
+				
 	/// \return array of latest tx_newspaper_article's
 	private function getLatestArticles() {
 /// \todo: set limit per tsconfig or for each user individually
@@ -427,7 +424,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	}
 	
 	private static function cleanUmlauts($text) {
-		
+		return utf8_encode($text);
 		$ascii = array();
 		for($i = 0; $i < strlen($text); $i++) $ascii[$text[$i]] = ord($text[$i]); 
 		t3lib_div::devlog('cU', 'np', 0, array('text' =>$text, 'ascii' => $ascii));
