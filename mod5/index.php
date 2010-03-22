@@ -412,10 +412,10 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
 				$ret .= '<option onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
-					self::cleanUmlauts($entry->getTitle()) . '</option>' . "\n";
+					utf8_encode($entry->getTitle()) . '</option>' . "\n";
 			} else {
 				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
-					self::cleanUmlauts($entry->getTitle()) . '</option>' . "\n";
+					utf8_encode($entry->getTitle()) . '</option>' . "\n";
 			}  
 		}
 		$ret .= '</select>' . "<br />\n";
@@ -423,16 +423,6 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		die($ret);
 	}
 	
-	private static function cleanUmlauts($text) {
-		return utf8_encode($text);
-		$ascii = array();
-		for($i = 0; $i < strlen($text); $i++) $ascii[$text[$i]] = ord($text[$i]); 
-		t3lib_div::devlog('cU', 'np', 0, array('text' =>$text, 'ascii' => $ascii));
-		
-		$text = str_replace(array(chr(252), chr(228)), array('&uuml;', '&auml;'), $text);
-		return $text;
-	}
-		
 	function load_article(array $input) {
 		$source_id = $input['source_id'];
 		$path = $input['path'];
