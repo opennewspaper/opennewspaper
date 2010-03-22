@@ -12,7 +12,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Produktionslisten</label>
-			<label index="mlang_labels_tabdescr">Artikel Produktion</label>
+			<label index="mlang_labels_tabdescr">Artikelproduktion</label>
 			<label index="mlang_labels_tablabel">Artikel produzieren</label>
 		</languageKey>
 	</data>
