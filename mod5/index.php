@@ -427,7 +427,11 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	}
 	
 	private static function cleanUmlauts($text) {
-		t3lib_div::devlog('cU', 'np', 0, array('text' =>$text));
+		
+		$ascii = array();
+		for($i = 0; $i < strlen($text); $i++) $ascii[$text[$i]] = ord($text[$i]); 
+		t3lib_div::devlog('cU', 'np', 0, array('text' =>$text, 'ascii' => $ascii));
+		
 		$text = str_replace('ü', '&uuml;', $text);
 		return $text;
 	}
