@@ -165,7 +165,8 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	static public function getModuleName() { return 'np_pagetype'; }
  	
 	/// get all available page types
-	/// \return array all available page types objects
+	/** \return array of all available page types objects
+	 */
 	public static function getAvailablePageTypes() {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pt = new tx_newspaper_PageType();
@@ -174,7 +175,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 			$pt->getTable(),
 			'deleted = 0 AND pid = ' . $sf->getPid($pt)
 		);
-#t3lib_div::devlog('gapt row', 'newspaper', 0, $row);
+
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new tx_newspaper_PageType(intval($row[$i]['uid']));
