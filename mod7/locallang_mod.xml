@@ -11,9 +11,9 @@
 			<label index="mlang_labels_tablabel">Article placement</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Artikel-Platzierung</label>
-			<label index="mlang_labels_tabdescr">Artikel in Artikellisten platzieren</label>
-			<label index="mlang_labels_tablabel">Artikel-Platzierung</label>
+			<label index="mlang_tabs_tab">Artikellisten</label>
+			<label index="mlang_labels_tabdescr">Verwaltung von Artikellisten: Artikel in Artikellisten platzieren</label>
+			<label index="mlang_labels_tablabel">Verwaltung von Artikellisten: Artikel in Artikellisten platzieren</label>
 		</languageKey>
 	</data>
 </T3locallang>
