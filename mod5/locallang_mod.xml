@@ -12,8 +12,8 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Dashboard</label>
-			<label index="mlang_labels_tabdescr">Wizards für viele Newspaper-Funktionen</label>
-			<label index="mlang_labels_tablabel">Newspaper-Wizards</label>
+			<label index="mlang_labels_tabdescr">Anlaufstelle für viele Newspaper-Funktionen</label>
+			<label index="mlang_labels_tablabel">Newspaper-Zentrale</label>
 		</languageKey>
 	</data>
 </T3locallang>

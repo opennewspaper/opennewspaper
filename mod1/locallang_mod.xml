@@ -6,11 +6,11 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Extra</label>
+			<label index="mlang_tabs_tab">Web-Elements</label>
 			<label index="mlang_labels_tabdescr">For AJAX requests</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Extra</label>
+			<label index="mlang_tabs_tab">Web-Elemente</label>
 			<label index="mlang_labels_tabdescr">Für AJAX-Aufrufe</label>
 		</languageKey>
 	</data>

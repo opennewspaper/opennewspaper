@@ -6,14 +6,14 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Moderation list</label>
-			<label index="mlang_labels_tabdescr">Description ...</label>
-			<label index="mlang_labels_tablabel">Moderating articles</label>
+			<label index="mlang_tabs_tab">Production lists</label>
+			<label index="mlang_labels_tabdescr">Producing articles</label>
+			<label index="mlang_labels_tablabel">Producing articles</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Moderationsliste</label>
-			<label index="mlang_labels_tabdescr">Beschreibung ...</label>
-			<label index="mlang_labels_tablabel">Artikel moderieren</label>
+			<label index="mlang_tabs_tab">Produktionslisten</label>
+			<label index="mlang_labels_tabdescr">Artikel Produktion</label>
+			<label index="mlang_labels_tablabel">Artikel produzieren</label>
 		</languageKey>
 	</data>
 </T3locallang>

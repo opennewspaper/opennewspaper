@@ -6,14 +6,14 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Placement</label>
-			<label index="mlang_labels_tabdescr">Add extras to page zones</label>
-			<label index="mlang_labels_tablabel">Extra to page zone</label>
+			<label index="mlang_tabs_tab">Content placement</label>
+			<label index="mlang_labels_tabdescr">Add content to page areas</label>
+			<label index="mlang_labels_tablabel">Add content to page areas</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Bestückung</label>
-			<label index="mlang_labels_tabdescr">Seitenbereichen Extras hinzufügen</label>
-			<label index="mlang_labels_tablabel">Extra für Seitenbereiche</label>
+			<label index="mlang_tabs_tab">Seitengestaltung</label>
+			<label index="mlang_labels_tabdescr">Seitenelemente platzieren</label>
+			<label index="mlang_labels_tablabel">Seitenelemente platzieren</label>
 		</languageKey>
 	</data>
 </T3locallang>
