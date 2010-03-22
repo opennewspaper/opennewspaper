@@ -11,9 +11,9 @@
 			<label index="mlang_labels_tablabel">Modules for newspaper ext</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Zeitung</label>
-			<label index="mlang_labels_tabdescr">Hier fehlt noch Text ...</label>
-			<label index="mlang_labels_tablabel">Module für die Zeitung-Erweiterung</label>
+			<label index="mlang_tabs_tab">Newspaper</label>
+			<label index="mlang_labels_tabdescr">Online-Publishing Extension</label>
+			<label index="mlang_labels_tablabel">Online-Publishing Newspaper</label>
 		</languageKey>
 	</data>
 </T3locallang>
