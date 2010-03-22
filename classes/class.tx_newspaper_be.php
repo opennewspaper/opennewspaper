@@ -569,7 +569,7 @@ function findElementsByName(name, type) {
         foreach($tags as $i => $tag) {
             $items[] = $tags[$i]['uid_foreign'].'|'.$tags[$i]['tag'];
         }
-t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
+//t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
         return implode(',', $items);
         
     }
@@ -934,38 +934,37 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $button array stating (boolean) if the button for the various states should be displayed
 	 */
 	private function renderWorkflowButtons($hidden, $button) {
+//t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));
 		global $LANG;
 		
 		$content = '';
-
-//t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));	
 		
 		/// just save (and don't close the form)
-		$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_save', false), -1, true);
+		$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_save', false), -1, true, false);
 		
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
-			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_hide', false), $hidden);
+			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_hide', false), $hidden, true);
 		} elseif ($hidden && $button['publish']) {
-			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_publish', false), $hidden);
+			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_publish', false), $hidden, true);
 		}
 		$content .= '<br />';
 		
 		/// check / revise / place
 		if ($button['check']) {
-			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1);
+			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1, false);
 			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden, true);
 			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden, true);
 			$content .= '<br />';
 		}
 		if ($button['revise']) {
-			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1);
+			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1, false);
 			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden, true);
 			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden);
+				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden, true);
 			$content .= '<br />';
 		}
 // deprecated, \todo: how to call placement form???
@@ -987,10 +986,18 @@ function changeWorkflowStatus(role, hidden_status) {
 	/** \param $new_role if false, the role hasn't changes, else new role 
 	 *  \param $title Title for the button
 	 *  \param $hidden Specifies the hidden sdtatus of the current article
+	 *  \param $changeHiddenStatus if true the hidden status changes when the button is pressed
 	 *  \param $overWriteNoCloseConstValue: overwrited the const setting (NP_ARTICLE_WORKFLOW_NOCLOSE), if set to true, a save (plus whatever) button (without closing the form) is rendered
 	 */
-	private function renderWorkflowButton($new_role, $title, $hidden, $overWriteNoCloseConstValue=null) {
-		$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
+	private function renderWorkflowButton($new_role, $title, $hidden, $changeHiddenStatus=false, $overWriteNoCloseConstValue=null) {
+//t3lib_div::devlog('renderWorkflowButton()', 'newspaper', 0, array('new_role' => $new_role, 'title' => $title, 'hidden' => $hidden, 'overWriteNoCloseConstValue' => $overWriteNoCloseConstValue));
+		
+		if (!$changeHiddenStatus) {
+			$hideen= -1;
+		} else {
+			$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
+		}
+		
 		if ($new_role !== false) {
 			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . ')';
 		} else {
@@ -1007,7 +1014,6 @@ function changeWorkflowStatus(role, hidden_status) {
 			$html .= 'name="_saveandclosedok" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" ';			
 		}
 		$html .= 'width="16" type="image" height="16" class="c-inputButton"/>';
-
 		return $html;
 	}
 
