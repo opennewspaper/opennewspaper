@@ -193,7 +193,9 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		t3lib_div::devlog("template search path", "np", 0, $this->templateSearchPath);
+		t3lib_div::devlog("template search path", "np", 0, array (
+		$template,
+		$this->templateSearchPath));
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
@@ -201,6 +203,7 @@ class tx_newspaper_Smarty extends Smarty {
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
+				t3lib_div::devlog("found", "np", 0, array ($dir . '/' . $template));
 				$this->template_dir = $dir;	
 				break;
 			}
