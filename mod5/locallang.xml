@@ -32,6 +32,8 @@
 			<label index="label_new_article">Neuer Artikel</label>
 			<label index="label_back_to_wizards">Zurück zur Wizard-Startseite</label>
 			<label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
+			<label index="label_latest_articles">Letzte Artikel</label>
+			<label index="label_newspaper_functions">Newspaper Funktionen</label>
 		</languageKey>
 	</data>
 </T3locallang>
