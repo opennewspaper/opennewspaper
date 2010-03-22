@@ -193,6 +193,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
+		t3lib_div::devlog("template search path", "np", 0, $this->templateSearchPath);
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
