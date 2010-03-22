@@ -56,7 +56,7 @@
 			<label index="label.status_hidden">Artikel anzeigen</label>
 			<label index="option.status_hidden_all">Alle</label>
 			<label index="option.status_hidden_on">Nur versteckte</label>
-			<label index="option.status_hidden_off">Nut publizierte</label>
+			<label index="option.status_hidden_off">Nur publizierte</label>
 
 			<label index="label_status_role">Rolle</label>
 			<label index="label_status_role_all">Alle Rollen</label>
