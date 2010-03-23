@@ -6,9 +6,9 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Control Tag Control</label>
+			<label index="mlang_tabs_tab">Control tags</label>
 			<label index="mlang_labels_tabdescr">Associate Extras with control tags and control tag zones</label>
-			<label index="mlang_labels_tablabel">Control tags</label>
+			<label index="mlang_labels_tablabel">Control tag control</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Dossiers</label>

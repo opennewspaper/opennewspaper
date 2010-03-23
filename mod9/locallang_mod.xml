@@ -8,7 +8,7 @@
 		<languageKey index="default" type="array">
 			<label index="mlang_tabs_tab">Article lists</label>
 			<label index="mlang_labels_tabdescr">List, create, edit and delete article lists (expect article lor assigned to sections)</label>
-			<label index="mlang_labels_tablabel">Administer article lists</label>
+			<label index="mlang_labels_tablabel">Administer article lists for sections</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Sammelressorts</label>
