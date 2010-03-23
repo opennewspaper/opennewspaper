@@ -255,7 +255,7 @@ body {
 {/if}
 	
 {section name=i loop=$DATA}	
-	{if $smarty.section.i.last} {* redner filter once only, align to current pagezone, so use last iteration *}
+	{if $smarty.section.i.last && !$IS_CONCRETE_ARTICLE} {* render filter once only, align to current pagezone, so use last iteration *}
 		<form>
 		<div id="filter">
 			{if (!$IS_CONCRETE_ARTICLE)}
