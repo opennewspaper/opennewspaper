@@ -55,7 +55,7 @@
 			<label index="label_shortcuts">Shortcuts</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="title">Inhalte einpflegen</label>
+			<label index="title">Seitengestaltung</label>
 			<label index="label_extra">Web-Element</label>
 			<label index="label_show">Anzeigen</label>
 			<label index="label_pass_down">Vererben</label>
