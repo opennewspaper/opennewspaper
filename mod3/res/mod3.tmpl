@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 {include file="mod3.css"} {* css for processin extras *}
 {include file="mod3.js"}  {* js for extra processing extras *}
@@ -288,11 +288,11 @@ body {
 				{/section}
 				</select>
 				<label>{$LABEL.pagezonetype}</label>
-
+|{$DATA[i].inherits_from}|
 				<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
-					<option value="0" {if ({$DATA[i].inherits_from == 0)}selected="selected "{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
-{* page zone being activaed for other page on nthe same level *}
+					<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
+{* page zone being activated for other page on the same level *}
 					{section name=j loop=$INHERITANCESOURCE}
 						{if $INHERITANCESOURCE[j]->getAbstractUid() == $DATA[i].inherits_from}
 							<option selected="selected" 
@@ -301,8 +301,8 @@ body {
 						{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $ADMIN && $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
 					{/section}
 {* -1 -> no inheritance *}
-					<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
-{* future feature; <option value="-2" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo: use TSConfig setting</option> *}
+					<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
+{* future feature; <option value="-2" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo: use TSConfig setting</option> *}
 				</select>
 				<label>{$LABEL.pagezone_inheritancesource}</label>
 
