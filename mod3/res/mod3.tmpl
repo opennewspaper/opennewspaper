@@ -288,7 +288,7 @@ body {
 				{/section}
 				</select>
 				<label>{$LABEL.pagezonetype}</label>
-|{$DATA[i].inherits_from}|
+
 				<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
 					<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
