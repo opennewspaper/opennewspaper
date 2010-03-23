@@ -14,6 +14,7 @@ define('BE_ICON_CLOSE', '1');
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
 
+define('DEBUG_OUTPUT', false); // show position etc.
 
 /// function for adding newspaper functionality to the backend
 /** \todo Oliver: document me!
