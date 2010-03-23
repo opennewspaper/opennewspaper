@@ -331,7 +331,7 @@ body {
 {/if}
 			
 			</strong></p>
-			<a href="#">{$NEW_TOP_ICON}</a>
+			<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a>
 		</div>  <!--  close browsePages -->
 
 
