@@ -396,8 +396,8 @@ function showArticlePreview(article_uid) {
 		</td>
 		<td>{$DATA[i].author}</td>
 		<td>{$DATA[i].be_user}</td>
-		<td> <strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%I:%S"} </td>
-		<td>{if $DATA[i].publish_date} <strong>{$DATA[i].publish_date|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].publish_date|date_format:"%H:%I:%S"} {/if}</td>
+		<td> <strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%M:%S"} </td>
+		<td>{if $DATA[i].publish_date} <strong>{$DATA[i].publish_date|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].publish_date|date_format:"%H:%M:%S"} {/if}</td>
 		<td align="center">
   {if $DATA[i].hidden == 0}
     <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
