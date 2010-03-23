@@ -376,6 +376,7 @@ function showArticlePreview(article_uid) {
 
 <table>
 	<tr class="bg2">
+		<td></td> {* locked articles *}
 		<td>{$LABEL_TITLE.number}</td>
 		<td>{$LABEL_TITLE.article}</td>
 		<td>{$LABEL_TITLE.author}</td>
@@ -389,8 +390,8 @@ function showArticlePreview(article_uid) {
 
 {section name=i loop=$DATA}
 	<tr class="bg1 noborder">
+		<td>{if $LOCKED_ARTICLE[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg|escape:"htlmall"}{/if}</td>
 		<td class="number">{math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step}</td> 	
-		
 		<td> 	
 			<h2 class="kicker">{$DATA[i].kicker}</h2>
 			<h1>{$DATA[i].title}</h1>      			
@@ -427,6 +428,7 @@ function showArticlePreview(article_uid) {
 	</tr>
 	<tr class="bg1">
 			<td></td>
+			<td></td>			
 			<td colspan="8" class="comments">
 			<p>
 			Samuel Talleux 	19.03.2010 12:16 Artikel publiziert <br />
