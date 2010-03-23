@@ -203,6 +203,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'be_user' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_be_user', false),
 			'modification_date' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_modification_date', false),
 			'visibility' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_visibility', false),
+			'publish_date' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_publish_date', false),
 			'time_controlled' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_time_controlled', false),
 			'commands' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_commands', false),
 		));

@@ -27,7 +27,8 @@
 			<label index="label_title_author">Author</label>
 			<label index="label_title_be_user">BE user</label>
 			<label index="label_title_modification_date">Stored</label>
-			<label index="label_title_visibility">Visible</label>
+			<label index="label_title_visibility">Online</label>
+			<label index="label_title_publish_date">Publish date</label>
 			<label index="label_title_time_controlled">Time controlled</label>
 			<label index="label_title_commands">Commands</label>
 
@@ -73,6 +74,7 @@
 			<label index="label_title_be_user">Online Redakteur</label>
 			<label index="label_title_modification_date">Gespeichert</label>
 			<label index="label_title_visibility">Online</label>
+			<label index="label_title_publish_date">Publikationsdatum</label>
 			<label index="label_title_time_controlled">Zeitgezündet</label>
 			<label index="label_title_commands">Funktion</label>
 

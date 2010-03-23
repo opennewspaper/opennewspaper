@@ -382,10 +382,8 @@ function showArticlePreview(article_uid) {
 		<td>{$LABEL_TITLE.author}</td>
 		<td>{$LABEL_TITLE.be_user}</td>
 		<td>{$LABEL_TITLE.modification_date}</td>
+		<td>{$LABEL_TITLE.publish_date}</td>
 		<td width="30">{$LABEL_TITLE.visibility}</td>
-			<!--
-			{$LABEL_TITLE.time_controlled}
-			-->
 	</tr>
 
 {section name=i loop=$DATA}
@@ -399,16 +397,13 @@ function showArticlePreview(article_uid) {
 		<td>{$DATA[i].author}</td>
 		<td>{$DATA[i].be_user}</td>
 		<td> <strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%I:%S"} </td>
+		<td>{if $DATA[i].publish_date} <strong>{$DATA[i].publish_date|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].publish_date|date_format:"%H:%I:%S"} {/if}</td>
 		<td align="center">
   {if $DATA[i].hidden == 0}
     <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
   {else}
     <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
-  {/if}<br><br>
-<!--
-			</td>	
-			<td>
---> 
+  {/if}<br /><br />
 {* <strong>{$DATA[i].???|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].???|date_format:"%H:%I:%S"} *}
 				{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
 					{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
