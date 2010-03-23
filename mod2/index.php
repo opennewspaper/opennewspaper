@@ -107,6 +107,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				</script>
 			';
 
+			$this->content .= $this->doc->startPage('');
+
 			// Render content:
 			$this->moduleContent();
 
