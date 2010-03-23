@@ -741,6 +741,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($parent_zone) $this->copyExtrasFrom($parent_zone);
 
 		$this->setAttribute('inherits_from', $parent_uid);
+		$this->setAttribute('tstamp', time());
 		$this->store();
 		
 	}
