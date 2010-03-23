@@ -450,7 +450,7 @@ function findElementsByName(name, type) {
 
 		// get a smarty object
  		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 
 		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
 		$label['show_visible_only'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_visible_only', false);
@@ -782,7 +782,7 @@ JSCODE;
 		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_shortcuts', false);
 	
 		$smarty_pz = new tx_newspaper_Smarty();
-		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 	
 		$smarty_pz->assign('LABEL', $label);
 	

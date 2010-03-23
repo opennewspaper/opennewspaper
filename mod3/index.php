@@ -179,7 +179,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 		$pz->insertExtraAfter($copied_extra, $origin_uid);
 
-		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
+		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
 		die();
 	}
 	private function processExtraInsertAfterFromPoolReference($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
@@ -201,7 +201,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$pz->insertExtraAfter($e, $origin_uid);		
 
 //\todo: close.html/close_in_article.html
-		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/close.html');
+		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
 		die();
 	}	
 	
@@ -509,7 +509,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra', false));
 
  	 	$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 
 		$label['new_extra_new'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_new', false);
 		$label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
@@ -579,7 +579,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra_from_pool', false) . ': ' . $e->getTitle());
 		
 		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 		
 		$label['extra_copy_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra_copy_from_pool', false);
 		$label['extra_reference_from_pool'] =  $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra_reference_from_pool', false);
