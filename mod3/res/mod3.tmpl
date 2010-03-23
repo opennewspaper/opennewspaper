@@ -289,7 +289,6 @@ body {
 				</select>
 				<label>{$LABEL.pagezonetype}</label>
 
-{if $DEBUG_OUTPUT} {* hide inheritance source (temporarily) for demo presentation *}		
 				<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
 					<option value="0" {if ({$DATA[i].inherits_from == 0)}selected="selected "{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
@@ -306,7 +305,7 @@ body {
 {* future feature; <option value="-2" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo: use TSConfig setting</option> *}
 				</select>
 				<label>{$LABEL.pagezone_inheritancesource}</label>
-{/if}		
+
 			{/if}
 			{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
 				{* dummy button for pagezone_page only *}
