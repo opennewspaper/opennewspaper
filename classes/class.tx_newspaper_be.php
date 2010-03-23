@@ -506,6 +506,9 @@ function findElementsByName(name, type) {
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
+			
+			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currentlx edited page zone?
+			
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 			$smarty_pz->assign('USE_TEMPLATE_SETS', tx_newspaper::USE_TEMPLATE_SETS); // are template set dropdowns visible or not

@@ -8,7 +8,11 @@
 
 
 <table style="margin-bottom:30px;">
-	<tr class="bg2">
+{if $IS_CURRENT}
+	<tr class="bg2"> {* currently edited page zone *} 
+{else}
+	<tr class="bg1"> {* page zone from levels above the currently edited pagezone *}
+{/if}
 		<td>{$LABEL.extra}</td>
 		<td>{$LABEL.notes}</td>
 		<td>{$LABEL.show}</td>
@@ -25,8 +29,12 @@
 			<td class="mod3_td" align="center">concr.</td>
 		{/if}	
 	</tr>
-{section name=i loop=$EXTRA_DATA} 
-	<tr class="bg1 noborder">
+{section name=i loop=$EXTRA_DATA}
+{if $EXTRA_DATA[i].origin_placement == true} 
+	<tr class="bg1 noborder"> {* placed extra, so it can be edited *}
+{else}
+	<tr class="bg1 noborder"> {* inherited extra, so it CAN'T be edited *}	
+{/if}
 		<td>{$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span></td>
 		<td class="mod3_td" id="notes_td_{$EXTRA_DATA[i].uid}">
 			<input id="notes_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
