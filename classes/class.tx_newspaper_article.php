@@ -883,7 +883,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
      * @return void
      */
     private static function joinTags(&$incomingFieldArray, $table, $id, $that) {
-        t3lib_div::devlog('joinTags', 'newspaper', 0, array('incommingFields' => $incomingFieldArray));
+//t3lib_div::devlog('joinTags()', 'newspaper', 0, array('incommingFields' => $incomingFieldArray));
         if($table == 'tx_newspaper_article' && isset($incomingFieldArray['tags']) && isset($incomingFieldArray['tags_ctrl'])) {
           $tags = $incomingFieldArray['tags'];
           $ctrlTags = $incomingFieldArray['tags_ctrl'];
@@ -907,10 +907,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
     }
 	
-	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too)
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
-		if (strtolower($table) == 'tx_newspaper_article' && isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
+//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
+		if (strtolower($table) == 'tx_newspaper_article' && 
+			(
+				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
+				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) // called by self::setPublishDateIfNeeded() or hidden field is configured to be visible in backend
+			)
+		) {
 			
 			// hidden is 0, so article was just made visible
 			
@@ -973,6 +978,7 @@ t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => 
 		if (isset($fakeFieldArray['publish_date'])) { 
 			// addPublishDateIfNotSet() added a new publish_date in $fakeFieldArray, so set that date as publish_date
 			$this->setAttribute('publish_date', $fakeFieldArray['publish_date']);
+			$this->setAttribute('tstamp', time());
 		}
 	}
 
