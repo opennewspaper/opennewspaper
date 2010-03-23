@@ -854,16 +854,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** \todo some documentation would be nice ;-) */
+    public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
+        self::joinTags($incomingFieldArray, $table, $id, $that);
+    }
+
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
 	}
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
         self::modifyTagSelection($table, $field);
-    }
-
-    public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-        self::joinTags($incomingFieldArray, $table, $id, $that);
     }
 
 	public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
@@ -909,6 +909,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too)
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
+t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		if (strtolower($table) == 'tx_newspaper_article' && isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) {
 			
 			// hidden is 0, so article was just made visible
