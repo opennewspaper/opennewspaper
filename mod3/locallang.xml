@@ -83,9 +83,9 @@
 			<label index="message_delete_confirm">Wollen Sie dieses Web-Element wirklich löschen?</label>
 			<label index="label_pagetype">Seite</label>
 			<label index="label_pagezonetype">Seitenbereich</label>
-			<label index="pagezone_inheritancesource">Vererbungsquelle</label>
+			<label index="pagezone_inheritancesource">Erben von</label>
 			<label index="pagezone_inheritancesource_none">Keine Vererbung</label>
-			<label index="pagezone_inheritancesource_upper">Gleicher Seitentyp aus der übergeordneten Ebene</label>
+			<label index="pagezone_inheritancesource_upper">Gleicher Seitentyp/höhere Ebene</label>
 			<label index="label_new_extra_new">Neues Web-Element</label>
 			<label index="label_new_extra_from_pool">Aus dem Pool</label>
 			<label index="message_no_extra_selected">Bitte wählen Sie ein Web-Element aus.</label>

@@ -470,6 +470,7 @@ function findElementsByName(name, type) {
 		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
 		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
+		$smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 
 		if (!$is_concrete_article) {
 			// add possible inheritance sources for this page zone

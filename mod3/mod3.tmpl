@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 {include file="mod3.css"} {* css for processin extras *}
 {include file="mod3.js"}  {* js for extra processing extras *}
@@ -27,9 +27,9 @@
 	<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a> 
 
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{* split here to avoid whitespace in html code *}{if 
-		($ADMIN)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+		($ADMIN && $DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
  : {$DATA[i].page_type->getAttribute('type_name')} 
-{if ($ADMIN)}
+{if ($ADMIN && $DEBUG_OUTPUT)}
  	[<span title="Page id">{$DATA[i].page_id}</span>|<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>|<span title="0: default, -1: none; else: Abstract Pagezone id">{$DATA[i].inherits_from}</span>]
 {/if}
 {/if}
@@ -47,7 +47,7 @@
 			{/if} value="{$PAGETYPE[j]->getUid()}">{$PAGETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
 		</select>
-		{* if ($ADMIN)} displayed after page in inheritance rootline
+		{* if ($ADMIN && $DEBUG_OUTPUT)} displayed after page in inheritance rootline
 			<span title="Page id">[{$DATA[i].page_id}]</span>
 		{/if *}
 		 &nbsp; &nbsp; 
@@ -61,7 +61,7 @@
 			{/if} value="{$PAGEZONETYPE[j]->getUid()}">{$PAGEZONETYPE[j]->getAttribute('type_name')}</option> 
 		{/section}
 		</select>
-		{* if ($ADMIN)}  displayed after page in inheritance rootline
+		{* if ($ADMIN && $DEBUG_OUTPUT)}  displayed after page in inheritance rootline
 			[<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>]
 		{/if *}
 
@@ -76,7 +76,7 @@
 					<option selected="selected" 
 				{else}
 					<option 
-				{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $ADMIN} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
+				{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $ADMIN && $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
 			{/section}
 {* -1 -> no inheritance *}
 			<option value="-1" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
@@ -84,7 +84,7 @@
 <option value="-2" {if ({$DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo: use TSConfig setting</option>
 *}
 		</select>
-		{* if ($ADMIN)} displayed after page in inheritance rootline
+		{* if ($ADMIN && $DEBUG_OUTPUT)} displayed after page in inheritance rootline
 			<span title="0: default, -1: none; else: Abstract Pagezone id">[{$DATA[i].inherits_from}]</span>
 		{/if *}
 
