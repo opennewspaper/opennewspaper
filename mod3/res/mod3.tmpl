@@ -322,16 +322,17 @@ body {
 
 		<div id="browsePages">
 			<p class="left"> <strong>
-			
-{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{* split here to avoid whitespace in html code *}{if 
-		($ADMIN && $DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
- : {$DATA[i].page_type->getAttribute('type_name')} 
-{if ($ADMIN && $DEBUG_OUTPUT)}
- 	[<span title="Page id">{$DATA[i].page_id}</span>|<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>|<span title="Inheritance source. 0: default, -1: none; else: Abstract Pagezone id">{$DATA[i].inherits_from}</span>]
-{/if}
-			
+
+{if !$IS_CONCRETE_ARTICLE}
+	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{* split here to avoid whitespace in html code *}{if 
+			($ADMIN && $DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+	 : {$DATA[i].page_type->getAttribute('type_name')}
+	{if ($ADMIN && $DEBUG_OUTPUT)}
+	 	[<span title="Page id">{$DATA[i].page_id}</span>|<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>|<span title="Inheritance source. 0: default, -1: none; else: Abstract Pagezone id">{$DATA[i].inherits_from}</span>]
+	{/if}
 			</strong></p>
 			<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a>
+{/if}
 		</div>  <!--  close browsePages -->
 
 
