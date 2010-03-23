@@ -276,10 +276,6 @@ body {
 				</select>
 				<label>{$LABEL.pagetype}</label>
 				
-				{* if ($ADMIN && $DEBUG_OUTPUT)} displayed after page in inheritance rootline
-					<span title="Page id">[{$DATA[i].page_id}]</span>
-				{/if *}
-				
 				<select  onchange="pagezone_type_change(this.value)">
 				{section name=j loop=$PAGEZONETYPE}
 					{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
@@ -322,12 +318,21 @@ body {
 			{* dropdown: tagzone extra visibility (yes, no, only) *}
 		</div>  <!-- filter close-->
 		</form>
-	
+	{/if}
+
 		<div id="browsePages">
-			<p class="left"> <strong>Start: Ressortseite</strong></p>
+			<p class="left"> <strong>
+			
+{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{* split here to avoid whitespace in html code *}{if 
+		($ADMIN && $DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+ : {$DATA[i].page_type->getAttribute('type_name')} 
+{if ($ADMIN && $DEBUG_OUTPUT)}
+ 	[<span title="Page id">{$DATA[i].page_id}</span>|<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>|<span title="Inheritance source. 0: default, -1: none; else: Abstract Pagezone id">{$DATA[i].inherits_from}</span>]
+{/if}
+			
+			</strong></p>
 			<a href="#">{$NEW_TOP_ICON}</a>
 		</div>  <!--  close browsePages -->
-	{/if}
 
 
 	{if $PAGEZONE[i] != false || $IS_CONCRETE_ARTICLE}
