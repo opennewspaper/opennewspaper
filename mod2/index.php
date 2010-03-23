@@ -253,7 +253,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			if (isset($t['record_uid'])) {
 				$locked_article[$i] = array(
 					'username' => $t['username'],
-					'msg' => $t['msg']
+					'msg' => htmlentities($t['msg'])
 				);
 			}
 			// add be_user
