@@ -385,7 +385,6 @@ function findElementsByName(name, type) {
 	
 
 /// function to render extras (article or pagezone_page)
-/// \todo: move locallang and smarty templates from mod3 to res/be/...
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
