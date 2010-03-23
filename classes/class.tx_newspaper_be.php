@@ -458,6 +458,7 @@ function findElementsByName(name, type) {
 		$label['pagezone_inheritancesource'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource', false);
 		$label['pagezone_inheritancesource_upper'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_upper', false);
 		$label['pagezone_inheritancesource_none'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_none', false);
+		$label['title'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title', false);
 		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
 
 		$smarty->assign('LABEL', $label);
