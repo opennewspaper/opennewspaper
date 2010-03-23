@@ -88,7 +88,7 @@ if (TYPO3_MODE == 'BE') {
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM6', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod6/'); // control tags
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM8', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod8/'); // tag admin
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM4', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod4/'); // admin tools
-	t3lib_extMgm::addModule('tools', 'txnewspaperM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/'); // AJAX stuff ("hidden" in Admin tools main menu) \todo: readl "hide" or move ajax functionality to another module
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/'); // AJAX stuff
 
 	/// add newspaper to Plugin-in list
 	/// records are stored in sysfolders with module set to 'newspaper'
