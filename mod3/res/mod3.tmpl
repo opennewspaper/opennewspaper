@@ -250,7 +250,9 @@ body {
 	<!-- Section content -->
 
 <div id="tx_newspaper_mod3">
+{if (!$IS_CONCRETE_ARTICLE)}
 	<h1 class="headline">{$LABEL.title}</h1>
+{/if}
 	
 {section name=i loop=$DATA}	
 	{if $smarty.section.i.last} {* redner filter once only, align to current pagezone, so use last iteration *}
