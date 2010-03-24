@@ -203,6 +203,8 @@ class tx_newspaper_Smarty extends Smarty {
 			if (file_exists($dir . '/' . $template)) {
 				$compile_dir = str_replace($this->basepath, '', $dir);
 				$this->compile_dir .= $compile_dir;
+				file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
+				
 				t3lib_div::devlog("found", "np", 0, array (
 					'basepath' => $this->basepath, 
 					'template' => $dir . '/' . $template,
