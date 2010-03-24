@@ -27,7 +27,7 @@
 	
 	
 	
-	
+	$sysfolder = ''; // \todo, see #603
 	
 	// hide some fields
 	// hide some tables
