@@ -117,6 +117,7 @@ class tx_newspaper_Smarty extends Smarty {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$this->basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
+		$this->basepath = str_replace('//', '/', $this->basepath);
 	}
 
 	public function __toString() {
