@@ -30,10 +30,24 @@
 		<languageKey index="de" type="array">
 			<label index="title">Start</label>
 			<label index="label_new_article">Neuer Artikel</label>
+			<label index="label_new_article_button">Start</label>
+			<label index="label_new_article_typo3">Neu anlegen</label>
+			<label index="label_section">Ressort</label>
+			<label index="label_articletype">Artikeltyp</label>
 			<label index="label_back_to_wizards">Zurück zur Wizard-Startseite</label>
 			<label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
+			<label index="label_role">Rolle</label>
+			<label index="label_start_wizard">Wizard</label>
+			<label index="label_usercomments">Userkommentare</label>
+			<label index="label_shortcut_typo3">Shortcut</label>
+			<label index="label_shortcut_newspaper">Springen nach ...</label>
+			<label index="label_wizards">Wizards</label>
 			<label index="label_latest_articles">Letzte Artikel</label>
-			<label index="label_newspaper_functions">Newspaper Funktionen</label>
+			<label index="label_shortcuts">Shortcuts</label>
+			<label index="label_manage_usercomments">Userkommentare verwalten (DEMO)</label>
+			<label index="label_newspaper_functions">Newspaper-Funktionen</label>
+			<label index="message_no_section">Es kann kein Artikel angelegt werden, da kein Ressort exisiert. Bitte legen Sie ein Ressort an (und geben es für die Aufnahmen von Artikeln frei).</label>
+			<label index="message_no_articletype">Es kann kein Artikel angelegt werden, da kein Artikeltyp existiert. Bitte legen Sie Artikeltypen an, um Artikel anlegen zu können.</label>
 		</languageKey>
 	</data>
 </T3locallang>
