@@ -112,8 +112,6 @@ class tx_newspaper_Smarty extends Smarty {
 		file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
 		$this->config_dir   = $tmp . 'smarty_config';
 
-#		$this->templateSearchPath = array(PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY); 
-
 		$this->caching = false;
 
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
@@ -193,9 +191,8 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		t3lib_div::devlog("template search path", "np", 0, array (
-		$template,
-		$this->templateSearchPath));
+		t3lib_div::devlog("template search path", "np", 0, 
+						  array ($template, $this->templateSearchPath));
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
@@ -203,8 +200,9 @@ class tx_newspaper_Smarty extends Smarty {
 			
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
-				t3lib_div::devlog("found", "np", 0, array ($dir . '/' . $template));
+				t3lib_div::devlog("found", "np", 0, array ($this->basepath, $dir . '/' . $template));
 				$this->template_dir = $dir;	
+				
 				break;
 			}
 		}
