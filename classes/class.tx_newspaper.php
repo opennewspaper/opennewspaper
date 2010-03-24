@@ -865,6 +865,14 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $ctt? $ctt: 1;
     }
 	
+	public static function registerSaveHook($class) {
+		self::$registered_savehooks[] = $class;
+	}
+	
+	public static function getRegisteredSaveHooks() {
+		return self::$registered_savehooks;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	/** SQL queries are stored as a static member variable, so they can be 
@@ -877,6 +885,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	private static $local_cObj = null;
 	
 	private static $registered_sources = array();
+	
+	private static $registered_savehooks = array();
 	
 }
 

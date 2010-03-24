@@ -137,6 +137,9 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		// send hook to newspaper classes
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+		
+		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray', 
+										 $status, $table, $id, $fieldArray, $that);
 
 //        $fieldArray['tags'] = 2;
 //        $_REQUEST['data'][$table][$id]['tags'] = '7,8';
@@ -240,7 +243,13 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 	}
 
-
+	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, $fieldArray, $that) {
+		foreach (tx_newspaper::getRegisteredSaveHooks as $savehook_object) {
+			if (function_exists($savehook_object, $savehook_name)) {
+				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
+			}
+		}
+	}
 
 
 	/// save hook: delete
