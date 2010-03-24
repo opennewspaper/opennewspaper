@@ -82,6 +82,11 @@
 			<label index="label_title_publish_date">Publikationsdatum</label>
 			<label index="label_title_time_controlled">Zeitgezündet</label>
 			<label index="label_title_commands">Funktion</label>
+			
+			<label index="label_time_controlled_not_yet">Startdatum/-uhrzeit wird sein: ###STARTTIME###</label>
+			<label index="label_time_controlled_not_anymore">Enddatum/-uhrzeit: ###ENDTIME###</label>
+			<label index="label_time_controlled_now_and_future">Startdatum/-uhrzeit war: ###STARTTIME###</label>
+			<label index="label_time_controlled_now_but_will_end">Startdatum/-uhrzeit war: ###STARTTIME###, Enddatum/-uhrzeit: ###ENDTIME###</label>
 
 			<label index="label.author">Autor</label>
 			<label index="label.section">Ressort</label>
