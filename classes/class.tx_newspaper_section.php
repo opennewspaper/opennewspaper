@@ -509,6 +509,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$additional_where .= ' AND articles_allowed=1';
 		}
 		
+		// add sysfolder id
+		$additional_where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()); 
+		
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
