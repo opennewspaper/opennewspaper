@@ -246,7 +246,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, $fieldArray, $that) {
 t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('hook' => $savehook_name, 'hooks' => tx_newspaper::getRegisteredSaveHooks(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
+			t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('checking class' => get_class($savehook_object))); 
 			if (function_exists($savehook_object, $savehook_name)) {
+				t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('found hook' => get_class($savehook_object))); 
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
 			}
 		}
