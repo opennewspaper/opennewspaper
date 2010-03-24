@@ -202,10 +202,11 @@ class tx_newspaper_Smarty extends Smarty {
 			//	if required template exists in current dir, use this dir
 			if (file_exists($dir . '/' . $template)) {
 				$compile_dir = str_replace($this->basepath, '', $dir);
+				$this->compile_dir .= $compile_dir;
 				t3lib_div::devlog("found", "np", 0, array (
 					'basepath' => $this->basepath, 
 					'template' => $dir . '/' . $template,
-					'compile dir' => $compile_dir
+					'compile dir' => $this->compile_dir
 				));
 				$this->template_dir = $dir;	
 				
