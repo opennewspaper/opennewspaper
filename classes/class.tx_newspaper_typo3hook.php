@@ -244,7 +244,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 
 	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, $fieldArray, $that) {
-		foreach (tx_newspaper::getRegisteredSaveHooks as $savehook_object) {
+		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
 			if (function_exists($savehook_object, $savehook_name)) {
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
 			}
