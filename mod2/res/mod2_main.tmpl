@@ -405,12 +405,29 @@ function showArticlePreview(article_uid) {
     <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
   {/if}<br /><br />
 {* <strong>{$DATA[i].???|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].???|date_format:"%H:%I:%S"} *}
-				{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
+				{if $DATA[i].starttime > 0 || $DATA[i].endtime > 0}
+				{* so this is a time controlled article ... *}
+{* $DATA[i].starttime}<br />{$DATA[i].endtime}<br />{$smarty.now}<br /> *}
+					{if $DATA[i].starttime != 0 && $DATA[i].starttime > $smarty.now}
+						{* not yet published *}
+						<span title="{$DATA[i].time_controlled_not_yet}">{$TIME_YELLOW}</span>
+					{elseif $DATA[i].endtime != 0 && $DATA[i].endtime < $smarty.now}
+						{* publish time exceeded - will never be visible again *}
+						<span title="{$DATA[i].time_controlled_not_anymore}">{$TIME_RED}</span>
+					{elseif $DATA[i].endtime != 0 && $DATA[i].endtime >= $smarty.now}
+						{* article is online, but will be offline in future; endtime is set *}
+						<span title="{$DATA[i].time_controlled_now_but_will_end}">{$TIME_GREEN}</span>
+					{elseif $DATA[i].starttime != 0 && $DATA[i].starttime <= $smarty.now && $DATA[i].endtime == 0}
+						{* article is online, and will remain online; endtime is NOT set *}
+						<span title="{$DATA[i].time_controlled_now_and_future}">{$TIME_VERY_GREEN}</span>
+					{/if}
+{* old version:			
 					{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
 						{$TIME_HIDDEN_ICON}
 					{else}
 						{$TIME_VISIBLE_ICON}
 					{/if}
+*}
 				{else}
 					<strong> </strong><br />
 				{/if}

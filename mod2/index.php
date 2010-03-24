@@ -207,6 +207,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'time_controlled' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_time_controlled', false),
 			'commands' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_commands', false),
 		));
+		$smarty->assign('LABEL', array(
+			'time_controlled_not_yet' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_yet', false),
+			'time_controlled_not_anymore' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_anymore', false),
+			'time_controlled_now_and_future' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_and_future', false),
+			'time_controlled_now_but_will_end' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_but_will_end', false),
+		));
 
 		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
 
@@ -217,6 +223,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('COMMENT_ICON', tx_newspaper_BE::renderIcon('gfx/zoom2.gif', '', '###COMMENT###'));
 		$smarty->assign('TIME_HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/history.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
+
+		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
+		$smarty->assign('TIME_GREEN', tx_newspaper_BE::renderIcon($image_path . 'history_green.gif', '', ''));
+		$smarty->assign('TIME_YELLOW', tx_newspaper_BE::renderIcon($image_path . 'history_yellow.gif', '', ''));
+		$smarty->assign('TIME_RED', tx_newspaper_BE::renderIcon($image_path . 'history_red.gif', '', ''));
+		$smarty->assign('TIME_VERY_GREEN', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', ''));
+
+
 		$smarty->assign('RECORD_LOCKED_ICON', tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false));
 		$smarty->assign('ARTICLE_PLACEMENT_ICON', tx_newspaper_BE::renderIcon('gfx/list.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_placement', false)));
 		$smarty->assign('ARTICLE_ADD_ICON', tx_newspaper_BE::renderIcon('gfx/plusbullet2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_add', false)));
@@ -275,6 +289,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 		$smarty->assign('workflowlog_javascript', tx_newspaper_workflow::getJavascript()); // add js once only
 
+		// add information for time controlled articles
+		for ($i = 0; $i < sizeof($row); $i++) {
+			$row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_yet', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
+			$row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_anymore', false), $row[$i]['starttime'] ,$row[$i]['endtime']); 
+			$row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_and_future', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
+			$row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_but_will_end', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
+		}
+
 		$smarty->assign('DATA', $row);
 
 		if (!isset($_POST['step'])) {
@@ -293,7 +315,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $smarty->fetch('mod2_main.tmpl'); // moderation list
 	}
 
-
+	private function insertStartEndtime($string, $starttime, $endtime) {
+// \todo: time format string should be configurable
+		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
+		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
+		return $string;
+	}
 
 
 

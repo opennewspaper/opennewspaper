@@ -1028,7 +1028,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 
 	/// get html for this icon (may include an anchor) 
-	/** \param $image path to icon
+	/** \param $image path to icon in typo3 skin; if path start with a "/" t3 skinning is bypassed and the file is referenced directly
 	 *  \param $id if set, $id will be inserted as an html id
 	 *  \param $title title for title flag of img
 	 *  \param $ahref 
@@ -1053,7 +1053,13 @@ function changeWorkflowStatus(role, hidden_status) {
 			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
 		} else {
 			// show icon
-			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
+			if (substr($image, 0, 1) != '/') {
+				// typo3 skinning
+				$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
+			} else {
+				// absolute path, use given file withiout using typo3 skinning
+				$html = '<img' . $id . ' src="' . $image . '" title="' . $title . '" alt="" />';
+			}
 		}
 		if ($ahref)
 			return $ahref . $html . '</a>'; // if linked wrap in link
