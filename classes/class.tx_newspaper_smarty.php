@@ -192,8 +192,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		t3lib_div::devlog("template search path", "np", 0, 
-						  array ($template, $this->templateSearchPath));
+		false && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
@@ -205,11 +204,7 @@ class tx_newspaper_Smarty extends Smarty {
 				$this->compile_dir .= $compile_dir;
 				file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
 				
-				t3lib_div::devlog("found", "np", 0, array (
-					'basepath' => $this->basepath, 
-					'template' => $dir . '/' . $template,
-					'compile dir' => $this->compile_dir
-				));
+				false && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
 				$this->template_dir = $dir;	
 				
 				break;
