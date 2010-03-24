@@ -118,7 +118,8 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 
 		// call save hook in newspaper classes
-		tx_newspaper_article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
+//		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		
 
 		/// add modifications user if tx_newspaper_Article is updated
@@ -131,12 +132,9 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
 		/// handle uploads of tx_newspaper_Extra_Image
-		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
-		
-		// send hook to newspaper classes
-		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
-		tx_newspaper_Workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
-		
+		/// \todo do it in handleRegisteredSaveHooks()
+//		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
+				
 		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray', 
 										 $status, $table, $id, $fieldArray, $that);
 

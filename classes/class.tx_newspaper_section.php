@@ -587,4 +587,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	static private $list_table = 'tx_newspaper_articlelist';
  }
  
+tx_newspaper::registerSaveHook(new tx_newspaper_taz_Section());
+
 ?>

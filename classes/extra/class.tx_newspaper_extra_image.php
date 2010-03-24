@@ -346,6 +346,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image());
 
+tx_newspaper::registerSaveHook(new tx_newspaper_extra_Image());
+
 //  Popups displaying enlarged images are handled here
 if ($_GET['bild_fuer_artikel']) { 
 	//...

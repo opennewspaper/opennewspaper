@@ -369,8 +369,8 @@ class tx_newspaper_Workflow {
 			}
 		}
 	}
-
-
 }
+
+tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
  
 ?>

@@ -1162,4 +1162,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	
 }
 
+tx_newspaper::registerSaveHook(new tx_newspaper_Article());
+
 ?>
