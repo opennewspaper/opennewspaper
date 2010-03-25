@@ -41,7 +41,15 @@
 		TCEFORM.tx_newspaper_article.inherits_from.disabled = 1
 		TCEFORM.tx_newspaper_articlelist.section_id.disabled = 1
 		TCEFORM.pages.tx_newspaper_module.disabled = 1
-		
+
+		// hide filter fields for manuel articlelist (activate when article browser can use filters)
+		TCEFORM.tx_newspaper_articlelist_manual.filter_sections.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_tags_include.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_tags_exclude.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_articlelist_exclude.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_table.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_where.disabled = 1
+		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_order_by.disabled = 1
 
 		mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
 				
