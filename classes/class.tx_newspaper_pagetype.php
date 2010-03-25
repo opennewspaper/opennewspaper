@@ -69,21 +69,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	 *    section overview page.
 	 */
  	function __construct($get = array()) {
- 		if (is_int($get)) {
-			$this->setUid($get); // just read the record (probably for backend)
-			$this->condition = 'uid = ' . $this->getUid();
- 		} else if ($get[tx_newspaper::GET_pagetype()]) { 
-				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
-					'\' AND get_value = '.intval($get[tx_newspaper::GET_pagetype()]);
- 		} else {
-			if ($this->find_in_possible_types($get)) return;
-			
-			if ($get[tx_newspaper::GET_article()]) {
- 				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
-			} else {
-				$this->condition = 'NOT get_var';
- 			}
- 		}
+		$this->setSQLCondition($get);
   	}
  	 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
@@ -184,6 +170,42 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	}
 
 	////////////////////////////////////////////////////////////////////////////
+	
+	private function setSQLcondition($input) {
+		if (is_int($input)) {
+			$this->setIntCondition($input);
+			return;
+ 		} else if (!is_array($input)) {
+ 			throw new tx_newspaper_IllegalUsageException(
+				'Argument to generate a page type must be either an integer UID or the _GET array.
+				 In fact it is:
+				' . print_r($input, 1)
+			);
+ 		}
+ 		
+		$this->setConditionFromGET($input);
+	}
+	
+	private function setIntCondition($uid) {
+		$this->setUid($uid); // just read the record (probably for backend)
+		$this->condition = 'uid = ' . $this->getUid();
+	}
+	
+	private function setConditionFromGET(array $input) {
+ 		if ($input[tx_newspaper::GET_pagetype()]) { 
+				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
+					'\' AND get_value = '.intval($input[tx_newspaper::GET_pagetype()]);
+ 		} else {
+			if ($this->find_in_possible_types($input)) return;
+			
+			if ($input[tx_newspaper::GET_article()]) {
+ 				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
+			} else {
+				$this->condition = 'NOT get_var';
+ 			}
+ 		}
+		
+	}
 	
 	/// Create the Page Type from all possible, non-special registered types
 	/** The \em special Types are: article page, section overview page, and all
