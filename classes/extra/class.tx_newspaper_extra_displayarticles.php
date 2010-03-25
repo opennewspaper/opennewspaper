@@ -35,6 +35,12 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 	 * 		\p $template_set.
 	 */
 	public function render($template_set = '') {
+		
+		if (!intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
+			$this->smarty->assign('GET', $_GET);
+			return $this->smarty->fetch('error_article_on_section_page.tmpl');
+		}
+		
 		/// find current section's default article and read its template set
 		$default_article = $this->getPageZone()->getParentPage()->getParentSection()->getDefaultArticle();
 		if ($default_article instanceof tx_newspaper_article && 
