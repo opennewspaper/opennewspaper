@@ -83,6 +83,8 @@
 			<label index="tx_newspaper_extra.notes">Notes</label>
 			<label index="tx_newspaper_extra.template_set">Template set</label>
 			<label index="tx_newspaper_extra_sectionlist">Extra: Display the list of articles in a section</label>
+			<label index="tx_newspaper_extra_sectionlist.first_article">First article</label>
+			<label index="tx_newspaper_extra_sectionlist.num_articles">Number of articles</label>
 			<label index="tx_newspaper_articlelist">Article list (abstract superclass)</label>
 			<label index="tx_newspaper_articlelist.notes">Name</label>
 			<label index="tx_newspaper_articlelist.list_table">Type (class) of the list</label>
@@ -283,6 +285,8 @@
 			<label index="tx_newspaper_extra.notes">Notizen</label>
 			<label index="tx_newspaper_extra.template_set">Satz an Designvorlagen</label>
 			<label index="tx_newspaper_extra_sectionlist">Extra: Anzeige der Artikel in einem Ressort</label>
+			<label index="tx_newspaper_extra_sectionlist.first_article">Erster Artikel</label>
+			<label index="tx_newspaper_extra_sectionlist.num_articles">Anzahl der Artikel</label>
 			<label index="tx_newspaper_articlelist">Artikelliste (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_articlelist.notes">Name</label>
 			<label index="tx_newspaper_articlelist.list_table">Typ (Klasse) der Liste</label>

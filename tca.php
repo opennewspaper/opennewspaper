@@ -1013,7 +1013,7 @@ $TCA["tx_newspaper_extra"] = array (
 $TCA["tx_newspaper_extra_sectionlist"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_sectionlist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime"
+		"showRecordFieldList" => "hidden,starttime,endtime,first_article,num_articles"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionlist"]["feInterface"],
 	"columns" => array (
@@ -1053,9 +1053,41 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				)
 			)
 		),
+		"first_article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.first_article",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.num_articles",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, first_article, num_articles")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")

@@ -216,7 +216,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_sectionlist.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, first_article, num_articles",
 	)
 );
 

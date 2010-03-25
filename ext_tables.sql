@@ -301,6 +301,8 @@ CREATE TABLE tx_newspaper_extra_sectionlist (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
+	first_article int(11) DEFAULT '0' NOT NULL,
+	num_articles int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
