@@ -102,10 +102,10 @@ $TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["range"] = array (
 	"lower" => "1"
 );
 $TCA["tx_newspaper_extra_articlelist"]["columns"]["first_article"]["config"]["range"] = array (
-	"lower" => "0"
+	"lower" => "1"
 );
 $TCA["tx_newspaper_extra_articlelist"]["columns"]["num_articles"]["config"]["range"] = array (
-	"lower" => "0"
+	"lower" => "1"
 );
 $TCA["tx_newspaper_page"]["columns"]["get_value"]["config"]["range"] = array (
 	"lower" => "1"
