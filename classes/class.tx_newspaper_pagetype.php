@@ -171,6 +171,10 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
 	////////////////////////////////////////////////////////////////////////////
 	
+	/// Derive the SQL condition used to instantiate the type from the parameters the constructor was called with.
+	/** \param $input Either a UID for a concrete PageType record or the array
+	 *     of $_GET parameters.
+	 */ 
 	private function setSQLcondition($input) {
 		if (is_int($input)) {
 			$this->setIntCondition($input);
@@ -186,21 +190,30 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 		$this->setConditionFromGET($input);
 	}
 	
+	/// Set SQL condition for reading a page type with a specified UID.
 	private function setIntCondition($uid) {
 		$this->setUid($uid); // just read the record (probably for backend)
 		$this->condition = 'uid = ' . $this->getUid();
 	}
 	
+	/// Determine the SQL condition from the GET parameters the FE page was called with.
 	private function setConditionFromGET(array $input) {
+		
+		// First check if a page type was explicitly requested.
  		if ($input[tx_newspaper::GET_pagetype()]) { 
-				$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
-					'\' AND get_value = '.intval($input[tx_newspaper::GET_pagetype()]);
+			$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
+				'\' AND get_value = \'' . $input[tx_newspaper::GET_pagetype()] . '\'';
  		} else {
+ 			
+ 			// Try to deduce the page type from other GET parameters.
 			if ($this->find_in_possible_types($input)) return;
 			
+			// If none is set, check if an article is requested.
 			if ($input[tx_newspaper::GET_article()]) {
  				$this->condition = 'get_var = \'' . tx_newspaper::GET_article() .'\'';
 			} else {
+				
+				// Only of no other page type could be determined, show the section page.
 				$this->condition = 'NOT get_var';
  			}
  		}
@@ -219,14 +232,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	 *  \return \c true if a page type could be initialized, \c false otherwise.
 	 */
  	private function find_in_possible_types(array $get) {
+ 		
  		//  try all page types other than the article page first 
- 		$possible_types = tx_newspaper::selectRows(
- 			'DISTINCT get_var', tx_newspaper::getTable($this),
- 			'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
- 			'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
- 			'get_var != \'\''
- 		);
- 		foreach ($possible_types as $type) {
+ 		foreach (self::getNonSpecialPageTypes() as $type) {
 			$get_var = $type['get_var'];
 
  			// transform $get[skpc[sc]] to $get[skpc][sC]
@@ -247,9 +255,21 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  				return true;
  			}
  		}
+ 		
  		return false;
  	}
 
+	/// Non-special meaning, types that don't have a special meaning in the system
+	private static function getNonSpecialPageTypes() {
+ 		return tx_newspaper::selectRows(
+ 			'DISTINCT get_var', tx_newspaper::getTable($this),
+ 			'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
+ 			'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
+ 			'get_var != \'\''
+ 		);
+		
+	} 
+	
  	private $uid = 0;
  	private $condition = '1';
  	private $attributes = array();
