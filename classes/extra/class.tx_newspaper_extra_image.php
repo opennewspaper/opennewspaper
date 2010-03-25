@@ -86,9 +86,18 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 */
 	public function getDescription() {
 		self::getTSConfig();
-		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
-			'<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
+		if ($this->getAttribute(self::image_file_field)) {
+			$thumbnail_file = self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
+			 		  '/' . $this->getAttribute(self::image_file_field); 
+			if (file_exists($thumbnail_file)) {
+				$image_tag = '<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
 			 		  '/' . $this->getAttribute(self::image_file_field) . '" />';
+			}
+		} else {
+			$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '');
+		}
+		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
+			$image_tag;
 	}
 
 // title for module
