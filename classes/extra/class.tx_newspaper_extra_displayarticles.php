@@ -37,6 +37,7 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 	public function render($template_set = '') {
 		
 		if (!intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
+			$this->prepare_render();
 			$this->smarty->assign('GET', $_GET);
 			return $this->smarty->fetch('error_article_on_section_page.tmpl');
 		}
