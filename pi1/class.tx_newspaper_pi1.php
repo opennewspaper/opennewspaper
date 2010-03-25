@@ -32,6 +32,9 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  *  \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
+	
+	const db_exception_template = 'error_db_exception.tmpl';
+	
 	var $prefixId      = 'tx_newspaper_pi1';		// Same as class name
 	var $scriptRelPath = 'pi1/class.tx_newspaper_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'newspaper';	// The extension key.
@@ -43,27 +46,42 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return	The content that is displayed on the website
 	 */
 	function main($content,$conf)	{
+
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$page = new tx_newspaper_PageType($_GET);
-		$page->getAttribute('uid');
-		t3lib_div::devlog('page type', 'np', 0, $page);
-		/// Get the tx_newspaper_Section object associated with the current Typo3 page
-		$section = $this->getSection();
-		if (!($section instanceof tx_newspaper_Section))
-			throw new tx_newspaper_WrongClassException();
-		
-		/// Get the page displayed on that section	
-		$page = $this->getPage($section);
-	
-		if (!($page instanceof tx_newspaper_Page))
-			throw new tx_newspaper_WrongClassException();
 
-		/// Call the render() method for that page, which renders all page areas
-		$content .= $page->render();
-	
+		try {
+
+			$page = new tx_newspaper_PageType($_GET);
+			$page->getAttribute('uid');
+			t3lib_div::devlog('page type', 'np', 0, $page);
+			/// Get the tx_newspaper_Section object associated with the current Typo3 page
+			$section = $this->getSection();
+			if (!($section instanceof tx_newspaper_Section))
+				throw new tx_newspaper_WrongClassException();
+			
+			/// Get the page displayed on that section	
+			$page = $this->getPage($section);
+		
+			if (!($page instanceof tx_newspaper_Page))
+				throw new tx_newspaper_WrongClassException();
+
+			/// Call the render() method for that page, which renders all page areas
+			$content .= $page->render();
+
+		} catch (tx_newspaper_DBException $e) {
+
+			$smarty = new tx_newspaper_Smarty();
+			$smarty->assign('_GET', $_GET);
+			$smarty->assign('exception', $e);
+			
+			$content .= $smarty->fetch(self::db_exception_template); 
+
+		}
+
 		return $content;
+
 	}
 	
 	/// Get the tx_newspaper_Section object the plugin currently works on
