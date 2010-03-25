@@ -43,7 +43,7 @@
 		TCEFORM.pages.tx_newspaper_module.disabled = 1
 
 		// hide filter fields for manuel articlelist (activate when article browser can use filters)
-		TCEFORM.tx_newspaper_articlelist_manual.filter_sections.disabled = 1
+//		TCEFORM.tx_newspaper_articlelist_manual.filter_sections.disabled = 1
 		TCEFORM.tx_newspaper_articlelist_manual.filter_tags_include.disabled = 1
 		TCEFORM.tx_newspaper_articlelist_manual.filter_tags_exclude.disabled = 1
 		TCEFORM.tx_newspaper_articlelist_manual.filter_articlelist_exclude.disabled = 1
