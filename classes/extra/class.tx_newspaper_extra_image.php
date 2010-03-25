@@ -87,11 +87,13 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public function getDescription() {
 		self::getTSConfig();
 		if ($this->getAttribute(self::image_file_field)) {
-			$thumbnail_file = self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
-			 		  '/' . $this->getAttribute(self::image_file_field); 
+			$thumbnail_file = PATH_site . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
+			 		  '/' . $this->getAttribute(self::image_file_field);
 			if (file_exists($thumbnail_file)) {
 				$image_tag = '<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
 			 		  '/' . $this->getAttribute(self::image_file_field) . '" />';
+			} else {
+				$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '');
 			}
 		} else {
 			$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '');
