@@ -94,7 +94,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 	
 	function getMainFields_preProcess($table, $row, $that) {
-//t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
+ t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
 		// pass down hook to newspaper classes
 		tx_newspaper_articlelist::getMainFields_preProcess($table, $row, $that);
 	}
