@@ -12,10 +12,10 @@
 <p>
   These are the parameters we could deduce from your request:
   <ul>
-    {section name=i loop=$_GET}
-      <li>{$i}: {$_GET[i]}< /li>
-    {/section}
+    {foreach from=$_GET key=key item=value}
+      <li>{$key}: {$value}</li>
+    {/foreach}
   </ul>
   And this is the message that came with the exception that was thrown:
-  {$exception->getMessage()}
+  <pre>{$exception->getMessage()}</pre>
 </p>
