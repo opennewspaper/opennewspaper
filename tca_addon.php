@@ -111,23 +111,22 @@ unset($TCA['tx_newspaper_pagezone_page']['columns']['template_set']['config']['i
 $TCA['tx_newspaper_pagezone_page']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 
 
-$TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["range"] = array ("lower" => "1");
-$TCA["tx_newspaper_articlelist_manual"]["columns"]["num_articles"]["config"]["range"] = array ("lower" => "1");
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["num_articles"]["config"]["range"] = array ("lower" => "1");
-$TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["size"] = "10";
-$TCA["tx_newspaper_articlelist_manual"]["columns"]["articles"]["config"]["maxitems"] = "100";
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["size"] = "10";
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]["maxitems"] = "100";
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['type'] = 'user';
-$TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["articles"]["config"]['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
+$TCA['tx_newspaper_articlelist']['columns']['list_uid']['config']['range'] = array ('lower' => '1');
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['endtime']['config']['size'] = '12';  
-// abstract article list modifications
-$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1'; // just display concrete article list and assiciated section
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1'; 
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_uid']['config']['readOnly'] = '1';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['section_id']['config']['readOnly'] = '1';
+$TCA['tx_newspaper_articlelist_manual']['columns']['num_articles']['config']['range'] = array ('lower' => '1');
+$TCA['tx_newspaper_articlelist_semiautomatic']['columns']['num_articles']['config']['range'] = array ('lower' => '1');
+$TCA['tx_newspaper_articlelist_manual']['columns']['articles']['config']['size'] = '10';
+$TCA['tx_newspaper_articlelist_manual']['columns']['articles']['config']['maxitems'] = '100';
+$TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['size'] = '10';
+$TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['maxitems'] = '100';
+$TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['type'] = 'user';
+$TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
 
 $TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array ("lower" => "1");

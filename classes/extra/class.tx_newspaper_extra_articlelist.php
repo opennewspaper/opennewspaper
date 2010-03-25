@@ -60,6 +60,11 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		
 		$this->readArticleList();
 		
+		if (!$this->articlelist instanceof tx_newspaper_ArticleList) {
+			return $this->smarty->fetch('');
+		}		
+		
+		
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article')-1);
 		$template = $this->getAttribute('template');
@@ -98,12 +103,6 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
 			$this->getAttribute('articlelist')
 		);
-		if (!$this->articlelist instanceof tx_newspaper_ArticleList) {
-			throw new tx_newspaper_InconsistencyException(
-				'Extra ArticleList has associated article list set to UID ' . $this->getUid() .
-				', which does not resolve to a valid article list.'
-			);
-		}		
 	}
 		
 	private $articlelist;
