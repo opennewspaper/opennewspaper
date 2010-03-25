@@ -15,6 +15,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
+	const DEFAULT_NUM_ARTICLES = 10;
+	
 	public function __construct($uid = 0) { 
 		if ($uid) {
 			parent::__construct($uid); 
@@ -35,7 +37,9 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		
 		$list = tx_newspaper::getSection()->getArticleList();
 
-		$articles = $list->getArticles(10, 0);
+		$first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
+		$num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): self::DEFAULT_NUM_ARTICLES;
+		$articles = $list->getArticles($num, $first);
 		
 		$this->smarty->assign('articles', $articles);
 		
