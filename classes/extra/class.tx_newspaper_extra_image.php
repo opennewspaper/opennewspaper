@@ -93,10 +93,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 				$image_tag = '<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
 			 		  '/' . $this->getAttribute(self::image_file_field) . '" />';
 			} else {
-				$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '');
+				$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '', 'Image is set, but missing');
 			}
 		} else {
-			$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '');
+			$image_tag = tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '', 'Image is not yet set');
 		}
 		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
 			$image_tag;
