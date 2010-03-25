@@ -58,12 +58,11 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
 		$this->prepare_render($template_set);
 		
-		$this->readArticleList();
-		
-		if (!$this->articlelist instanceof tx_newspaper_ArticleList) {
-			return $this->smarty->fetch('');
-		}		
-		
+		try {
+			$this->readArticleList();
+		} catch (tx_newspaper_EmptyResultException $e) {
+			return $this->smarty->fetch('error_articlelist_missing.tmpl');
+		}
 		
 		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
 													$this->getAttribute('first_article')-1);
