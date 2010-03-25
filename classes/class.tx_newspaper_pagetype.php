@@ -262,7 +262,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	/// Non-special meaning, types that don't have a special meaning in the system
 	private static function getNonSpecialPageTypes() {
  		return tx_newspaper::selectRows(
- 			'DISTINCT get_var', tx_newspaper::getTable($this),
+ 			'DISTINCT get_var', tx_newspaper::getTable('tx_newspaper_PageType'),
  			'get_var != \'' . tx_newspaper::GET_pagetype() .'\' AND ' .
  			'get_var != \'' . tx_newspaper::GET_article() .'\' AND ' .
  			'get_var != \'\''
