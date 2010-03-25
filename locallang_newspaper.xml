@@ -54,6 +54,8 @@
 			<label index="message_close_pagezone_in_section">Return to list of page types</label>
 			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
 			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
+			<label index="message_image_missing">The image file you chose is no longer present on the file system!</label>
+            <label index="message_image_unset">You have not chosen an image yet.</label>
 			<label index="message_title_sectiontree">Section tree</label>
             <label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
             <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
@@ -144,6 +146,8 @@
 			<label index="label_workflow_role_none">Artikel plaziert</label>
 			<label index="label_workflow_role_old">Alte Rolle</label>
 			<label index="label_workflow_role_new">Neue Rolle</label>
+            <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
+            <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
 			
 		</languageKey>
 	</data>
