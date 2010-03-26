@@ -45,6 +45,15 @@ class tx_newspaper  {
         return true;
 		
 	}
+	
+	private static function writeFunctionAndArgumentsToLog($type) {
+		$backtrace = debug_backtrace();
+		$previous_function = $backtrace[1];
+		$function_name = $previous_function['function'];
+		$args = join("\n", $previous_function['args']);
+		self::writeNewspaperLogEntry($type, "$function_name\n$args");
+	}
+	
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 * 
@@ -60,15 +69,8 @@ class tx_newspaper  {
 	 */
 	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
 											   $groupBy = '', $orderBy = '', $limit = '') {
-		$message = 'selectZeroOrOneRows
-fields: ' . $fields . '
-table: ' . $table . '
-where: ' . $where . '
-groupBy: ' . $groupBy . '
-orderBy: ' . $orderBy . '
-limit: ' . $limit . '
-'; 
-		self::writeNewspaperLogEntry('logDbSelect', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
 
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
@@ -103,15 +105,8 @@ limit: ' . $limit . '
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
-		$message = 'selectOneRow
-fields: ' . $fields . '
-table: ' . $table . '
-where: ' . $where . '
-groupBy: ' . $groupBy . '
-orderBy: ' . $orderBy . '
-limit: ' . $limit . '
-'; 
-		self::writeNewspaperLogEntry('logDbSelect', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
 		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
@@ -150,15 +145,8 @@ limit: ' . $limit . '
 	 */
 	public static function selectRows($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
-		$message = 'selectRows
-fields: ' . $fields . '
-table: ' . $table . '
-where: ' . $where . '
-groupBy: ' . $groupBy . '
-orderBy: ' . $orderBy . '
-limit: ' . $limit . '
-'; 
-		self::writeNewspaperLogEntry('logDbSelect', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
 		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
@@ -196,15 +184,8 @@ limit: ' . $limit . '
 	 */
 	public static function selectRowsDirect($fields, $table, $where = '1',
 									  $groupBy = '', $orderBy = '', $limit = '') {
-		$message = 'selectRowsDirect
-fields: ' . $fields . '
-table: ' . $table . '
-where: ' . $where . '
-groupBy: ' . $groupBy . '
-orderBy: ' . $orderBy . '
-limit: ' . $limit . '
-'; 
-		self::writeNewspaperLogEntry('logDbSelect', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
 		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
@@ -254,17 +235,8 @@ limit: ' . $limit . '
 	 */
 	public static function selectMMQuery($select, $local_table, $mm_table, $foreign_table,
 										 $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
-		$message = 'selectMMQuery
-select: ' . $select . '
-local_table: ' . $local_table . '
-local_table: ' . $local_table . '
-mm_table: ' . $mm_table . '
-whereClause: ' . $whereClause . '
-groupBy: ' . $groupBy . '
-orderBy: ' . $orderBy . '
-limit: ' . $limit . '
-'; 
-		self::writeNewspaperLogEntry('logDbSelect', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
 		
 		if($foreign_table == $local_table) {
 			$foreign_table_as = $foreign_table . uniqid('_join');
@@ -304,11 +276,8 @@ limit: ' . $limit . '
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function insertRows($table, array $row) {
-		$message = 'insertRows
-table: ' . $table . '
-row: 
-' . var_export($row, true); 
-		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);
+
+		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
 		global $TCA;
 		t3lib_div::loadTCA($table);
@@ -363,13 +332,9 @@ row:
 	 * 		to a SQL syntax error
 	 */
 	public static function updateRows($table, $where, array $row) {
-		$message = 'updateRows
-table: ' . $table . '
-where: ' . $where . '
-row: 
-' . var_export($row, true); 
-		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);		
-		
+
+		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
+
 		unset ($row['uid']);
 		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
@@ -403,12 +368,9 @@ row:
 		
 		if (!$uids_or_where) return;
 		
-		$message = 'deleteRows
-table: ' . $table . '
-uids_or_where: 
-' . (is_array($uids_or_where)? var_export($uids_or_where, true) : $uids_or_where); 
-		self::writeNewspaperLogEntry('logDbInsertUpdateDelete', $message);
-		
+
+		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) {
 			$GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		}
