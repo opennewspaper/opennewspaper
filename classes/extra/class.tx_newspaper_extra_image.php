@@ -121,7 +121,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/// Get the array of possible image sizes registered in TSConfig
 	public function getSizes() {
 		self::getTSConfig();
-		t3lib_div::devlog('getSizes()', 'newspaper', 0, self::$sizes);
 		return self::$sizes;
 	}
 
