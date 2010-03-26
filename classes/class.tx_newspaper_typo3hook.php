@@ -41,7 +41,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// TCEForm hooks
 	function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
-t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'altName' => $altName, 'palette' => $palette, 'extra' => $extra, 'pal' => $pal, '_REQUEST' => $_REQUEST));
+//t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'altName' => $altName, 'palette' => $palette, 'extra' => $extra, 'pal' => $pal, '_REQUEST' => $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
         tx_newspaper_Article::getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that);
 	}
@@ -63,7 +63,7 @@ t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('tab
 
 
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
-t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
+//t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
 
 		// replace element browser (EB) with tx_newspaper article browser
 		if ($this->replaceEbWithArticleBrowser($table, $field)) {
@@ -94,7 +94,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 	
 	function getMainFields_preProcess($table, $row, $that) {
- t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
+//t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
 		// pass down hook to newspaper classes
 		tx_newspaper_articlelist::getMainFields_preProcess($table, $row, $that);
 	}
