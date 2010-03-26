@@ -367,6 +367,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/// Get the list of tx_newspaper_Extra associated with this Article in sorted order
 	/** The Extras are sorted by attribute \c paragraph first and
 	 *  \c position second.
+	 * 
+	 * \param $extra_class The desired type of tx_newspaper_Extra, either as
+	 *  	object or as class name
 	 */
 	public function getExtras() { 
 		if (!$this->extras) {
@@ -393,7 +396,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		
 		usort($this->extras, array(get_class($this), 'compareExtras')); 
 		
-		return $this->extras; 
+		return $this->extras;
+
 	}
 
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
@@ -429,6 +433,23 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
 	
+	public function getExtrasOf($extra_class) {
+
+		if ($extra_class instanceof tx_newspaper_Extra) {
+			$extra_class = tx_newspaper::getTable($extra_class);
+		}
+
+		$extras = array();
+				
+		foreach ($this->getExtras() as $extra) {
+			if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
+				$extras[] = $extra;
+			}
+		}
+		
+		return $extras;
+	}
+	
 	/// Find the first tx_newspaper_Extra of a given type
 	/** \param $extra_class The desired type of tx_newspaper_Extra, either as
 	 *  	object or as class name
@@ -436,17 +457,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 * 		in article), or \c null.
 	 */
 	public function getFirstExtraOf($extra_class) {
-
-		if ($extra_class instanceof tx_newspaper_Extra) {
-			$extra_class = tx_newspaper::getTable($extra_class);
-		}
-		
-		foreach ($this->getExtras() as $extra) {
-			if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
-				return $extra;
-			}
-		}
-		
+		$extras = $this->getExtrasOf($extra_class);
+		if (sizeof($extras) > 0) return $extras[0];		
 		return null;
 	}
 
