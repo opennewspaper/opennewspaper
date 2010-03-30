@@ -511,7 +511,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
 	
 	
-	
+	/// \return $TCA for this article list (abstract and concrete)
 	public function getTcaFields() {
 		t3lib_div::loadTCA(tx_newspaper_articlelist::$table); // load tca for abstract articlelist
 		t3lib_div::loadTCA($this->getTable()); // load tca for current concrete articlelist
@@ -523,33 +523,33 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			'abstract' => $GLOBALS['TCA']['tx_newspaper_articlelist']['columns'],
 			'concrete' => tx_newspaper_UtilMod::disableTsconfigFieldsInTca($GLOBALS['TCA'][$this->getTable()]['columns'], $tsc['TCEFORM.'][$this->getTable() . '.'])
 		);
-//t3lib_div::devlog('al-mod', 'newspaper', 0, array('TCA' => $tca, $this->getTable() => $tsc['TCEFORM.'][$this->getTable() . '.']));
 		return $tca;
 	}
 	
+	/// \return HTML code containing the form for (abstract and concrete) article list editing
 	public function getAndProcessTceformBasedBackend() {
 		$fields = $this->getTcaFields();
-//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
+t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST)); //, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
 		
 //t3lib_div::devlog('t3 consts', 'newspaper', 0, array('PATH_typo3_mod' => PATH_typo3_mod, 'TYPO3_MOD_PATH' => TYPO3_MOD_PATH, 'TBE_MODULES' => $GLOBALS['TBE_MODULES'], 'TBE_STYLES' => $GLOBALS['TBE_STYLES'], 'T3_VAR' => $GLOBALS['T3_VAR']));		
 		$content = '';
 		$form = t3lib_div::makeInstance('t3lib_TCEforms');
 		$form->initDefaultBEmode();
-//		$form->backPath = $GLOBALS['BACK_PATH'];
-//		$form->backPath = tx_newspaper::getAbsolutePath() . 'typo3/';
 		$form->backPath = '';
-//		$content .= $form->printNeededJSFunctions_top();
-
 		$form->formName = 'editform';
 		$form->doSaveFieldName = "doSave";
-		
-			//http://lists.typo3.org/pipermail/typo3-german/2009-December/064304.html
-			//thanks to dimitry dupelov
-			// \todo: Che3ck T3 4.2.x only? Does this work in T3 4.3.x?
-			$content .= '
-<link rel="stylesheet" type="text/css" href="stylesheet.css" /></link>
+
+//		$content .= $form->printNeededJSFunctions_top(); // \todo: check if this method can replace the manual addition of css and js below
+		//http://lists.typo3.org/pipermail/typo3-german/2009-December/064304.html
+		//thanks to dimitry dupelov
+		// \todo: Check T3 4.2.x only? Does this work in T3 4.3.x?
+		$content .= '
+<!-- <link rel="stylesheet" type="text/css" href="stylesheet.css" /></link> -->
 <link rel="stylesheet" type="text/css" href="' . $GLOBALS['TBE_STYLES']['styleSheetFile_post'] . '" /></link>
 <style>
+body {
+	overflow: auto !important;
+}
 .class-main4 {
 	/* display: block; */
 	margin: 0 0 0 10px;
@@ -571,72 +571,63 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$this->R_URL_getvars = t3lib_div::_GET();
 		$this->R_URI = $this->R_URL_parts['path'] . '?' . t3lib_div::implodeArrayForUrl('', $this->R_URL_getvars);
 		$content .= '<form action="' . htmlspecialchars($this->R_URI) . '" method="post" enctype="' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['form_enctype'] . '" name="editform" onsubmit="document.editform._scrollPosition.value=(document.documentElement.scrollTop || document.body.scrollTop); return TBE_EDITOR.checkSubmit(1);">';
+
+
+		// idea for tceforms rendering, see: http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
 		
-		// render abstract article list backend first
-		$dataArr = tx_newspaper_UtilMod::getTCEFormArray('tx_newspaper_articlelist', $this->getAbstractUid());
+		// render abstract article list backend first ...
 		$row = tx_newspaper::selectOneRow(
 			'*',
 			'tx_newspaper_articlelist',
 			'uid=' . $this->getAbstractUid()
 		);
-//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('dataArr' => $dataArr, 'this->getAbstractUid()' => $this->getAbstractUid()));
 		foreach($fields['abstract'] as $tcaField => $tcaFieldConfig) {
-//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('tcaField' => $tcaField, 'tcaFieldConfig' => $tcaFieldConfig));
 			if ($tcaField != 'list_table' && $tcaField != 'list_uid') {
-				//http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
-//				$content .= $form->getSoloField('tx_newspaper_articlelist', $dataArr['tx_newspaper_articlelist_' . $this->getAbstractUid()], $tcaField) . '<br /><br />';
 				$content .= $form->getSingleField('tx_newspaper_articlelist', $tcaField, $row);
-//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('content acc' => $content));
 			} 
 		}
-//		$content .= $form->getListedFields('tx_newspaper_articlelist', $row, 'hidden,starttime,endtime');
+		
+		// ... render concrete article list backend then
+		$row = tx_newspaper::selectOneRow(
+			'*',
+			$this->getAttribute('list_table'),
+			'uid=' . $this->getUid()
+		);
+		foreach($fields['concrete'] as $tcaField => $tcaFieldConfig) {
+			if ($tcaField != 'articles') { // \todo: add field articles too to allow complete form editiing (but will this work with the mod7 standalone article list backend??)
+				//http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
+				$content .= $form->getSingleField($this->getAttribute('list_table'), $tcaField, $row);
+			} 
+		}
 		
 		
-
-		
+		// add store buttons
 		// copied from /typo3/alt_doc.php
 		$buttons['save'] = '<input type="image" class="c-inputButton" name="_savedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/savedok.gif','') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc', 1) . '" />';
 		$buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/saveandclosedok.gif', '').' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc', 1) . '" />';
 		$buttons['close'] = '<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">' . '<img' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/closedok.gif', 'width="21" height="16"').' class="c-inputButton" title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc', 1) . '" alt="" /></a>';
 		//?delete?
-		
-//		$content .= $form->printNeededJSFunctions();
-//		$content .= '<script type="text/javascript">
-//' . $form->JSbottom('editform') . '
-//'; 
-//		$content .= $form->JSbottom('editform', true);
-		$content .= $form->printNeededJSFunctions();
-
+		// \todo: move to top (in non-scrolling div)
 		$content .= '<br /><br ><br />';
 		foreach($buttons as $button) {
 			$content .= $button;
 		}
 
+		// add typo3 js files		
+		$content .= $form->printNeededJSFunctions();
 
-		$content = $this->compileForm($content);
+
+		// add some hidden fields (needed for typo3 js backend handling) 
+		$content = tx_newspaper_UtilMod::compileForm($content);
 		
-		$content .= '</form>';
-//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('content' => $content, 'button' => $buttons));
+		$content .= '</form>'; // close form
 
+//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('content' => $content, 'button' => $buttons));
 		return $content;
 	}
 	
 	
-	// based on typo3/alt_doc.php; \TODO. MOVE TO MOD_UTIL CLASS
-	/**
-	 * Put together the various elements (buttons, selectors, form) into a table
-	 * \param $editForm HTML form
-	 * \return Composite HTML
-	 */
-	function compileForm($editForm)	{
-		return '
-			<!-- EDITING FORM -->
-			' . $editForm . '
-			<input type="hidden" name="closeDoc" value="0" />
-			<input type="hidden" name="doSave" value="0" />
-			<input type="hidden" name="_scrollPosition" value="" />
-			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />';
-	}
+
 	
 	
 	

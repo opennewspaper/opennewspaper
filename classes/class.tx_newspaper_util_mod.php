@@ -90,6 +90,23 @@ class tx_newspaper_UtilMod {
 	}
 	
 	
+		// based on typo3/alt_doc.php;
+	/**
+	 * Put together the various elements (buttons, selectors, form) into a table
+	 * \param $editForm HTML form
+	 * \return Composite HTML
+	 */
+	public static function compileForm($editForm)	{
+		return '
+			<!-- EDITING FORM -->
+			' . $editForm . '
+			<input type="hidden" name="closeDoc" value="0" />
+			<input type="hidden" name="doSave" value="0" />
+			<input type="hidden" name="_scrollPosition" value="" />
+			<input type="hidden" name="_serialNumber" value="' . md5(microtime()) . '" />';
+	}
+	
+	
 }
 
 ?>
