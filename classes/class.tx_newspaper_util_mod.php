@@ -48,7 +48,46 @@ class tx_newspaper_UtilMod {
 		return $last_midnight; // default: today only
 	}
 	
+	/// removes fields from given $tca if a field is disabled in TSConfig: TCEFORM.[table].[field].disabled = 1
+	/** \param $tca TCA for a table
+	 *  \param $tableTCEFORM TCEFORM part from TSConfig for table that provided $tca fields
+	 *  \return TCA fields but fields that where disabled in TSConfig 
+	 */ 
+	static public function disableTsconfigFieldsInTca(array $tca, $tableTCEFORM) {
+		if (!is_array($tableTCEFORM)) {
+			return $tca; // no TSConfig found, so just return $tca
+		}
+
+		// check TCEFORM configuraion
+		/** Example for $tableTCEFORM:
+		 *  [field1.][disabled]=1
+		 *  [field2.][disabled]=1 ...
+		 */
+		foreach($tableTCEFORM as $field => $config) {
+			if (substr($field, -1) == '.') {
+				$field = substr($field, 0, strlen($field)-1); // remove last char, if that char is '.' (TSConfig array is stored as "[table].")
+			}
+			foreach($config as $configParam => $configValue) {
+				if (strtolower($configParam) == 'disabled' && $configValue == 1) {
+					// a disabled field is found, so try to remove it from $tca array
+					if (array_key_exists($field, $tca)) {
+						unset($tca[$field]);
+					}
+				}
+			}	
+		}
+		return $tca;
+	}
 	
+	
+	// http://www.typo3.net/index.php?id=13&action=list_post&code_numbering=0&tid=85598
+	public static function getTCEFormArray($table, $uid, $isNew=false) {
+		$trData = t3lib_div::makeInstance('t3lib_transferData');
+		$trData->addRawData = true;
+		$trData->fetchRecord($table, $uid, $isNew? 'new' : ''); // 'new'
+		reset($trData->regTableItems_data);
+		return $trData->regTableItems_data;
+	}
 	
 	
 }

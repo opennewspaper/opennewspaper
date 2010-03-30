@@ -11,14 +11,17 @@
 	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery-1.3.2.min.js" type="text/javascript"></script>
 	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery.selectboxes.js" type="text/javascript"></script>
 	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.js" type="text/javascript"></script>
-	<form action="" method="post" id="placementform">
-	{if $article}
-		<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
-		<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
+	{if !$FULLRECORD}
+		<form action="" method="post" id="placementform">
+		{if $article}
+			<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
+			<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
+		{/if}
 	{/if}
 	<div class="tx_newspaper_mod7">
 {/if}
 
+{if !$FULLRECORD}
 	<table width="" border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			{foreach from=$tree item="level" name="levelloop"}
@@ -104,8 +107,14 @@
 			{/foreach}
 		</tr>
 	</table>
+{/if}
 
 {if $singlemode}
-        </form>
+	{if !$FULLRECORD}
+		</form>        
+        <a href="{$smarty.server.PHP_SELF}?{$smarty.server.QUERY_STRING}&tx_newspaper_mod7[fullrecord]=1&tx_newspaper_mod9[fullrecord]=1">{$lang.label_articlelist_fullrecord}</a>
+	{else}
+		{$AL_BACKEND}
+	{/if}
         </div>
 {/if}                                                    

@@ -1207,8 +1207,10 @@ function changeWorkflowStatus(role, hidden_status) {
 			// render section article list
 			$input = array(
 				'sections_selected' => array($input['sectionid']), 
-				'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0
+				'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0,
+				'fullrecord' => (isset($input['fullrecord']))? $input['fullrecord'] : 0
 			);
+			
 			return $this->renderPlacement($input, true);
 		}
 		if (isset($input['articlelistid'])) {
@@ -1276,10 +1278,30 @@ function changeWorkflowStatus(role, hidden_status) {
 		
 		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not 
 
+		// render full record backend if paramter fullrecord is set to 1
+		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
+			if ($al == null) {
+				// article list hasn't been read
+				if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
+					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // cget article list for first (and only) section
+					$al = $s->getArticleList();
+				}
+			}
+			if ($al != null) {
+				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // render backend, store if saved, close if closed
+		} else {
+				$articlelistFullrecordBackend = 'Error'; // \todo: localization
+			}
+				
+		} else {
+			$articlelistFullrecordBackend = '';
+		}
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend));
+
 
 		// get locallang labels 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-		$localLang = $localLang[$GLOBALS['LANG']->lang];	
+		$localLang = $localLang[$GLOBALS['LANG']->lang];
 				
 		// render
 		$smarty = new tx_newspaper_Smarty();
@@ -1296,7 +1318,11 @@ function changeWorkflowStatus(role, hidden_status) {
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 		$smarty->assign('ICON', $this->getArticlelistIcons());
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smart_template' => $smarty_template, 'smarty' => $smarty));		
+		
+		$smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
+		$smarty->assign('AL_BACKEND', $articlelistFullrecordBackend);
+		
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));		
 		return $smarty->fetch($smarty_template);
 	}
 	

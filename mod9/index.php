@@ -88,7 +88,7 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 							// Draw the header.
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod9');
 						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+//						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
 							// JavaScript
 						$this->doc->JScode = '
@@ -115,7 +115,8 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 							$this->content .= $this->doc->section('', '<br /> ' . $this->ll['message_no_section_chosen'], 0, 1);
 						} else {
 							// render chosen section's article list
-							$this->moduleContent();
+							$input = t3lib_div::GParrayMerged($this->prefixId);
+							$this->moduleContent($input);
 						}
 
 						$this->content.=$this->doc->spacer(10);
@@ -143,8 +144,8 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 				 * @return	void
 				 */
 				function printContent()	{
-
-					$this->content.=$this->doc->endPage();
+					$this->form = false; // do not add </form>
+					$this->content .= $this->doc->endPage();
 					echo $this->content;
 				}
 
@@ -153,14 +154,15 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 				 *
 				 * @return	void
 				 */
-				function moduleContent() {
+				function moduleContent(array $input) {
 					global $LANG;
 		
 					$al_be = new tx_newspaper_BE();
-					$content = $al_be->renderSinglePlacement(array('sectionid' => $this->id));
+					$input['sectionid'] = $this->id;
+					$content = $al_be->renderSinglePlacement($input); // $this->id = section uid clicked oon in section tree (in navigation frame)
+					
 					$this->content .= $this->doc->section('', $content, 0, 1);
-				}
-	
+				}	
 	
 	/**
 	 * Initializes the Module

@@ -55,6 +55,7 @@
 			<label index="label_articlelist_list_title">Title</label>			
 			<label index="label_articlelist_list_type">Type</label>
 			<label index="label_articlelist_list_commands">Commands</label>
+			<label index="label_articlelist_fullrecord">Configure article list</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -105,7 +106,7 @@
 			<label index="label_articlelist_list_title">Titel</label>			
 			<label index="label_articlelist_list_type">Typ</label>
 			<label index="label_articlelist_list_commands">Befehle</label>
-
+			<label index="label_articlelist_fullrecord">Artikelliste konfigurieren</label>
 		</languageKey>
 	</data>
 </T3locallang>
