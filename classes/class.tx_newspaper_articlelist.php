@@ -343,7 +343,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function getAbstractUid() {
 		if ($this->abstract_uid)
 			return $this->abstract_uid;
-			
+
+		if (!is_object($GLOBALS['TYPO3_DB'])) return false;
+					
 		// add section to query if this article list is assigned to a section
 		$where = '';
 		if ($this->section instanceof tx_newspaper_Section) 
