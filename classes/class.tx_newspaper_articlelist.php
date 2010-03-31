@@ -148,14 +148,19 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 					'*', $this->getTable(), 'uid = ' . $this->getUid()):
 				array();
 		}
-		
+
 		if (!$this->attributes && $this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
 		}
-		
-		$this->attributes[$attribute] = $value;
+
+		if (array_key_exists($attribute, $this->abstract_attributes)) {
+			$this->abstract_attributes[$attribute] = $value;
+		} else {
+			$this->attributes[$attribute] = $value;
+		}
+
 	}
 
 	/// \see tx_newspaper_StoredObject
@@ -167,7 +172,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			if (!$this->attributes) {
 				$this->readAttributes($this->getTable(), $this->getUid());
 			}			
-				
+			
+			tx_newspaper::updateRows(
+				'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid(), $this->abstract_attributes
+			);
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
@@ -384,7 +392,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		self::$registered_articlelists[] = $newList;
 	}
 
-
 	/// Get the list of registered Article List types
 	/** \return The list of registered Article List types.
 	 */
@@ -418,7 +425,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		} 
 		return false;
 	}
-	
 	
 	/// Save hook function, called from the global save hook in tx_newspaper_typo3hook
 	/** Writes an abstract record for a concreate3 article list, if no abstract record is available
@@ -456,7 +462,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$concrete_al->createArticleListRecord($concrete_al_uid, $table);
 		}	
 	}
-	
 	
 	/// TCEforms hook
 	public static function getMainFields_preProcess($table, $row, $that) {
@@ -509,8 +514,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return 'This article list is associated to section "' . htmlspecialchars($s->getAttribute('section_name')) . '". This article list can only be edited in the section article list module.';
 	}
 	
-	
-
 	///	Remove all articles from the list.
 	/** This function should be an abstract function. But it also should be
 	 *  protected or private, and PHP doesn't allow abstract functions to be
@@ -522,8 +525,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			'clearList() should never be called. Override it in the child classes!'
 		);
 	}
-	
-	
 	
 	/// \return $TCA for this article list (abstract and concrete)
 	public function getTcaFields() {
@@ -640,12 +641,6 @@ body {
 		return $content;
 	}
 	
-	
-
-	
-	
-	
-
 
 	private $uid = 0;				///< UID of concrete record
 	protected $abstract_uid = 0;	///< UID of abstract record
