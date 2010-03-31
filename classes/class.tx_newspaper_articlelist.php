@@ -548,7 +548,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	/// \return HTML code containing the form for (abstract and concrete) article list editing
 	public function getAndProcessTceformBasedBackend() {
 		$fields = $this->getTcaFields();
-t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST)); //, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
+//t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST)); //, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
 		
 		// check if data needs to be stored in article list configuration
 		$this->processDataStorage(); 
@@ -663,7 +663,6 @@ body {
 			isset($_REQUEST['_savedok_y'])) &&
 			isset($_REQUEST['abstr_al_uid']) && intval($_REQUEST['abstr_al_uid'])
 		) {
-//t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array('do store data!'));	
 			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($_REQUEST['abstr_al_uid']));
 
 			// prepare abstract attributes ...
@@ -674,7 +673,6 @@ body {
 			foreach($_REQUEST['data'][$al->getTable()][$al->getUid()] as $field => $value) {
 				$al->setAttribute($field, $value);
 			}			
-//debug($al->__toString());
 			$al->store();
 		}
 	}
