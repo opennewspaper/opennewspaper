@@ -71,8 +71,6 @@ class tx_newspaper_Sysfolder {
  		
  	}
  	
- 	
- 
   	/// creates a sysfolder (in Typo3 table pages)
  	/** \param $module_name name of module
  	/** \param $sysfolder_name Title of sys folder
@@ -140,7 +138,6 @@ class tx_newspaper_Sysfolder {
 		return 20000; // default: lower bottom of sysfolder, but not the very bottom; basically to sort extras above the bottom sysfolders
 	}
 
-
  	/// gets pids of classes extending the given class
  	/** \param $class_name class name to get pid (if available) of child classes
  	 *  \return array list of pids (for storing records in Typo3 database)
@@ -159,7 +156,6 @@ class tx_newspaper_Sysfolder {
 		}
 		return $pid_list;
  	}
-
 
  	/// gets the uid of the sysfolder to store data in
  	/** \param $obj object implemeting the tx_newspaper_StoredObject interface
@@ -193,7 +189,6 @@ class tx_newspaper_Sysfolder {
  		
  		return $this->sysfolder[$module_name];
 	}
-
 
 	/// checks if module name matches the specification
 	/** Specification for module name:

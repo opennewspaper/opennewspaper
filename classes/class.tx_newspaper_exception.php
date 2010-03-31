@@ -110,8 +110,9 @@ class tx_newspaper_WrongAttributeException
 	/** \param $attribute Which attribute was wrongly accessed
 	 *  \param $uid UID of the object which was misused
 	 */ 
-	public function __construct($attribute, $uid = '') {
+	public function __construct($attribute, array $attributes = array(), $uid = '') {
         parent::__construct("Attribute '$attribute' does not exist" .
+        					($attributes? " in attribute list: " . print_r($attributes, 1): '') . 
         					($uid === ''? '': " - UID $uid"));
         $this->attributeName = $attribute;
     }

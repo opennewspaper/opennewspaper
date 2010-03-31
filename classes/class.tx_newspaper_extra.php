@@ -289,9 +289,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
  		}
 
         throw new tx_newspaper_WrongAttributeException(
-        	$attribute . 
-        	'\' [ attributes: ' . print_r($this->attributes, 1) . ', extra_attributes: ' .
-        	print_r($this->extra_attributes, 1) . ' ]\'');
+        	$attribute, array('attributes' => $this->attributes, 'extra_attributes' => $this->extra_attributes));
 	}
 
 	public function setAttribute($attribute, $value) {

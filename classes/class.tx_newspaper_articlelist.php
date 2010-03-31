@@ -130,13 +130,25 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
  		}
 
         throw new tx_newspaper_WrongAttributeException(
-        	$attribute . 
-        	' [ ' . print_r($this->attributes, 1) . ',' .
-        	print_r($this->abstract_attributes, 1) . ' ]');
+        	$attribute, array('attributes' => $this->attributes, 'abstract_attributes' => $this->abstract_attributes));
 	}
 
 	/// \see tx_newspaper_StoredObject
 	public function setAttribute($attribute, $value) {
+		
+		if (!$this->abstract_attributes) {
+			$this->abstract_attributes = $this->getAbstractUid()? 
+				tx_newspaper::selectOneRow(
+					'*', 'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid()): 
+				array();
+		}
+		if (!$this->attributes) {
+			$this->attributes = $this->getUid()?
+				tx_newspaper::selectOneRow(
+					'*', $this->getTable(), 'uid = ' . $this->getUid()):
+				array();
+		}
+		
 		if (!$this->attributes && $this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
