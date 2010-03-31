@@ -168,10 +168,23 @@
     background-position: -2px 3px;
     padding: 2px 8px  8px 13px;
 }
-
 #modlist a.more:hover {
 	background-image: url(../res/be/img/arrow_down_over.gif);
 }
+
+#modlist a.less {
+	text-decoration: none;
+	font-size: 10px;
+	text-transform: uppercase;	
+    background-image: url(../res/be/img/arrow_up.gif);
+    background-repeat: no-repeat;
+    background-position: -2px 3px;
+    padding: 2px 8px  8px 13px;
+}
+#modlist a.less:hover {
+	background-image: url(../res/be/img/arrow_up_over.gif);
+}
+
 	
 #tx_newspaper_mod3 .comments p {
 	color:grey;
@@ -449,7 +462,8 @@ function showArticlePreview(article_uid) {
 			</p>
 		<div id="comments-45" class="comments">
 			<a href="#" onclick="getComments(45); return false;" class="more">More</a>
-		</div> -->
+		</div> 
+-->
 		</td>
 	</tr> 
 {/section}
