@@ -1,3 +1,34 @@
+{* \todo: css copied from mod2_main.tmpl *}
+{literal} 
+<style type="text/css">
+.np_wf_link a.more {
+	text-decoration: none;
+	font-size: 10px;
+	text-transform: uppercase;	
+    background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_down.gif);
+    background-repeat: no-repeat;
+    background-position: -2px 3px;
+    padding: 2px 8px  8px 13px;
+}
+.np_wf_link a.more:hover {
+	background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_down_over.gif);
+}
+
+.np_wf_link a.less {
+	text-decoration: none;
+	font-size: 10px;
+	text-transform: uppercase;	
+    background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_up.gif);
+    background-repeat: no-repeat;
+    background-position: -2px 3px;
+    padding: 2px 8px  8px 13px;
+}
+.np_wf_link a.less:hover {
+	background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_up_over.gif);
+}
+</style>
+{/literal}
+
 <div id="workflow_comment_input"> {* 34px height: so ff can render vertical scrollbars, see #753 *}
 	<textarea id="workflow_comment" name="workflow_comment" style="width:400px; height:34px;"></textarea>
 </div>
