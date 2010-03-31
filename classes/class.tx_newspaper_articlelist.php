@@ -361,7 +361,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', 'tx_newspaper_articlelist', 
-			'list_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) . 
+			'list_table = \'' . $this->getTable() . '\'' . 
 			' AND list_uid=' . $this->getUid() . $where .
 			tx_newspaper::enableFields('tx_newspaper_articlelist')
 		);
