@@ -176,9 +176,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			tx_newspaper::updateRows(
 				'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid(), $this->abstract_attributes
 			);
+			t3lib_div::devlog('store() update', 'newspaper', 0, array(tx_newspaper::$query));
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
+			t3lib_div::devlog('store() update', 'newspaper', 0, array(tx_newspaper::$query));
 		} else {
 			///	Store a newly created article list
 			/// \todo If the PID is not set manually, $tce->process_datamap() fails silently. 
@@ -189,10 +191,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 					$this->getTable(), $this->attributes
 				)
 			);
+			t3lib_div::devlog('store() insert', 'newspaper', 0, array(tx_newspaper::$query));
 		}
 
 		/// Ensure the article list has an entry in the abstract super table...
 		$articlelist_uid = $this->createArticleListRecord($this->getUid(), $this->getTable());
+		t3lib_div::devlog('store() createArticleListRecord', 'newspaper', 0, array(tx_newspaper::$query));
 		return $this->getUid();
 	}
 
