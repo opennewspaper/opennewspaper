@@ -550,13 +550,22 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$fields = $this->getTcaFields();
 t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST)); //, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
 		
+		// check if data needs to be stored in article list configuration
+		$this->processDataStorage(); 
+		
+		// check if configuration form was closed and redirect to article list form
+		// make sure that processDataStorage() has run (otherwise save&close can't save the data) 
+		$this->checkIfFormWasClosed(); 
+		
 //t3lib_div::devlog('t3 consts', 'newspaper', 0, array('PATH_typo3_mod' => PATH_typo3_mod, 'TYPO3_MOD_PATH' => TYPO3_MOD_PATH, 'TBE_MODULES' => $GLOBALS['TBE_MODULES'], 'TBE_STYLES' => $GLOBALS['TBE_STYLES'], 'T3_VAR' => $GLOBALS['T3_VAR']));		
 		$content = '';
+		
+		// tceforms configuration
 		$form = t3lib_div::makeInstance('t3lib_TCEforms');
 		$form->initDefaultBEmode();
 		$form->backPath = '';
 		$form->formName = 'editform';
-		$form->doSaveFieldName = "doSave";
+		$form->doSaveFieldName = 'doSave';
 
 //		$content .= $form->printNeededJSFunctions_top(); // \todo: check if this method can replace the manual addition of css and js below
 		//http://lists.typo3.org/pipermail/typo3-german/2009-December/064304.html
@@ -570,7 +579,6 @@ body {
 	overflow: auto !important;
 }
 .class-main4 {
-	/* display: block; */
 	margin: 0 0 0 10px;
 }
 .nbsp {
@@ -586,11 +594,15 @@ body {
 ';
 
 		// next 4 lines copied from typo3/alt_doc.php
+		// open form
 		$this->R_URL_parts = parse_url(t3lib_div::getIndpEnv('REQUEST_URI'));
 		$this->R_URL_getvars = t3lib_div::_GET();
 		$this->R_URI = $this->R_URL_parts['path'] . '?' . t3lib_div::implodeArrayForUrl('', $this->R_URL_getvars);
 		$content .= '<form action="' . htmlspecialchars($this->R_URI) . '" method="post" enctype="' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['form_enctype'] . '" name="editform" onsubmit="document.editform._scrollPosition.value=(document.documentElement.scrollTop || document.body.scrollTop); return TBE_EDITOR.checkSubmit(1);">';
 
+		// add abtract article list uid
+		$content .= '<input type="hidden" name="abstr_al_uid" value="' . $this->getAbstractUid() . '" />';
+		
 
 		// idea for tceforms rendering, see: http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
 		
@@ -605,7 +617,6 @@ body {
 				$content .= $form->getSingleField('tx_newspaper_articlelist', $tcaField, $row);
 			} 
 		}
-		
 		// ... render concrete article list backend then
 		$row = tx_newspaper::selectOneRow(
 			'*',
@@ -614,16 +625,14 @@ body {
 		);
 		foreach($fields['concrete'] as $tcaField => $tcaFieldConfig) {
 			if ($tcaField != 'articles') { // \todo: add field articles too to allow complete form editiing (but will this work with the mod7 standalone article list backend??)
-				//http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
 				$content .= $form->getSingleField($this->getAttribute('list_table'), $tcaField, $row);
 			} 
 		}
 		
 		
-		// add store buttons
-		// copied from /typo3/alt_doc.php
+		// add store buttons (based on /typo3/alt_doc.php)
 		$buttons['save'] = '<input type="image" class="c-inputButton" name="_savedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/savedok.gif','') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc', 1) . '" />';
-		$buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/saveandclosedok.gif', '').' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc', 1) . '" />';
+		$buttons['save_close'] = '<input onclick="document.editform.closeDoc.value=1;" type="image" class="c-inputButton" name="_saveandclosedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/saveandclosedok.gif', '').' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc', 1) . '" />';
 		$buttons['close'] = '<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">' . '<img' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/closedok.gif', 'width="21" height="16"').' class="c-inputButton" title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc', 1) . '" alt="" /></a>';
 		//?delete?
 		// \todo: move to top (in non-scrolling div)
@@ -635,7 +644,6 @@ body {
 		// add typo3 js files		
 		$content .= $form->printNeededJSFunctions();
 
-
 		// add some hidden fields (needed for typo3 js backend handling) 
 		$content = tx_newspaper_UtilMod::compileForm($content);
 		
@@ -644,6 +652,41 @@ body {
 //t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('content' => $content, 'button' => $buttons));
 		return $content;
 	}
+
+	/// check if article list configuration needs to be stored and stores the data if yes
+	private function processDataStorage() {
+//t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array());
+		if (
+			(isset($_REQUEST['_saveandclosedok_x']) ||
+			isset($_REQUEST['_saveandclosedok_y']) ||
+			isset($_REQUEST['_savedok_x']) ||
+			isset($_REQUEST['_savedok_y'])) &&
+			isset($_REQUEST['abstr_al_uid']) && intval($_REQUEST['abstr_al_uid'])
+		) {
+//t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array('do store data!'));	
+			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($_REQUEST['abstr_al_uid']));
+
+			// prepare abstract attributes ...
+			foreach($_REQUEST['data']['tx_newspaper_articlelist'][$al->getAbstractUid()] as $field => $value) {
+				$al->setAttribute($field, $value);
+			}
+			// ... and prepare concrete attributes
+			foreach($_REQUEST['data'][$al->getTable()][$al->getUid()] as $field => $value) {
+				$al->setAttribute($field, $value);
+			}			
+//debug($al->__toString());
+			$al->store();
+		}
+	}
+	
+	// checks if an article list configuration form was closed and redirect to article list form if yes
+	private function checkIfFormWasClosed() {
+		if (isset($_REQUEST['closeDoc']) && $_REQUEST['closeDoc'] == 1) {
+			header('Location: ' . $_SERVER['PHP_SELF'] . '?fullrecord=0&M=' . htmlspecialchars($_REQUEST['M']) .'&id=' . intval($_REQUEST['id']));
+		}
+	}
+	
+	
 	
 
 	private $uid = 0;				///< UID of concrete record
