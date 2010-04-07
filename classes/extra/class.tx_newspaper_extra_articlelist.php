@@ -64,8 +64,10 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 			return $this->smarty->fetch('error_articlelist_missing.tmpl');
 		}
 		
-		$articles = $this->articlelist->getArticles($this->getAttribute('num_articles'), 
-													$this->getAttribute('first_article')-1);
+		$num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): 1;
+		$first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
+		$articles = $this->articlelist->getArticles($num, $first);
+		
 		$template = $this->getAttribute('template');
 		if ($template) {
 			if (strpos($template, '.tmpl') === false) $template .= '.tmpl';
