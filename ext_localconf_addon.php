@@ -44,6 +44,7 @@
 		TCEFORM.tx_newspaper_article.pagezonetype_id.disabled = 1
 		TCEFORM.tx_newspaper_article.name.disabled = 1
 		TCEFORM.tx_newspaper_article.inherits_from.disabled = 1
+		TCEFORM.tx_newspaper_article.modification_user.disabled = 1
 		TCEFORM.tx_newspaper_articlelist.section_id.disabled = 1
 		TCEFORM.pages.tx_newspaper_module.disabled = 1
 
