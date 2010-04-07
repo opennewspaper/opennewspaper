@@ -676,7 +676,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		if (tx_newspaper::isAbstractClass($table)) {
 			return; // abstract class, nothing to do
 		}
-	
+	die('duh.');
 		/// check if a new extra is stored
 		// exclude new articles - articles are extras too but shouldn't be treated like extras here!
 		if ($status == 'new' && $table != 'tx_newspaper_article' && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
