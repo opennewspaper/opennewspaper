@@ -396,7 +396,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 					// direct access to database ...
 					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 1, 'tstamp' => time()));
 					$fA = array('hidden' => 1);
-					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
 				break;
 				case 'visible':
 					// use newspaper claases becuase the publish_date might be updated
@@ -405,7 +405,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
 					$article->store();
 					$fA = array('hidden' => 0);
-					tx_newspaper_Workflow::logWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
 			}
 			// unset parameters (so they are not added to querystring later)
 			unset($_POST['article_visibility']);

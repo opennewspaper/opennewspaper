@@ -11,9 +11,6 @@ define('BE_DISPLAY_MODE_SUBMODAL', 2);
 
 define('BE_ICON_CLOSE', '1');
 
-define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
-define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
-
 define('DEBUG_OUTPUT', false); // show position etc.
 
 /// function for adding newspaper functionality to the backend
@@ -847,7 +844,7 @@ JSCODE;
 
 
 /// workflow logging functions
-
+// \todo: BUTTONS: rewrite for alt_doc xlass in workflow class
 	function getWorkflowButtons($PA, $fobj) {
 		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
@@ -857,27 +854,27 @@ JSCODE;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('workflow' => $workflow, 'hidden' => $hidden));
 
 		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
-		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
-		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
+//		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
+//		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
 		
 		// if hidden_status equals -1, the hidden status wasn't changed by hide/publish button
 		// if hidden_status DOES NOT equal -1, the hide/publish button was pressed, so IGNORE the value of the "hidden" field
-		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
+//		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
 
 		// add javascript \todo: move to external file
-		$html .= '<script language="javascript" type="text/javascript">
-function changeWorkflowStatus(role, hidden_status) {
-	role = parseInt(role);
-	hidden_status = parseInt(hidden_status);
-	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
-		document.getElementById("workflow_status").value = role; // valid role found
-	}
-	document.getElementById("hidden_status").value = hidden_status;
-//alert(document.getElementById("hidden_status").value);
-	return false;
-}
-</script>
-';
+//		$html .= '<script language="javascript" type="text/javascript">
+//function changeWorkflowStatus(role, hidden_status) {
+//	role = parseInt(role);
+//	hidden_status = parseInt(hidden_status);
+//	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
+//		document.getElementById("workflow_status").value = role; // valid role found
+//	}
+//	document.getElementById("hidden_status").value = hidden_status;
+////alert(document.getElementById("hidden_status").value);
+//	return false;
+//}
+//</script>
+//';
 
 		// buttons to be displayed in article backend
 		$button = array(); // init with false ...
@@ -921,7 +918,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 //t3lib_div::devlog('button', 'newspaper', 0, array('hidden' => $hidden, 'workflow' => $workflow, 'button' => $button));
 
-		$html .= $this->renderWorkflowButtons($hidden, $button);
+//		$html .= $this->renderWorkflowButtons($hidden, $button);
 		
 		/// add workflow comment field (using smarty)
  		$smarty = new tx_newspaper_Smarty();
@@ -934,7 +931,6 @@ function changeWorkflowStatus(role, hidden_status) {
 
 		return $html;
 	}
-
 	/** \param $hidden
 	 *  \param $button array stating (boolean) if the button for the various states should be displayed
 	 */
@@ -988,6 +984,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		return $content;
 	}
 	
+	/// render a workflow button for an article
 	/** \param $new_role if false, the role hasn't changes, else new role 
 	 *  \param $title Title for the button
 	 *  \param $hidden Specifies the hidden sdtatus of the current article

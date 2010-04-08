@@ -108,7 +108,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
-		tx_newspaper_Workflow::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
+//		tx_newspaper_Workflow::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 
@@ -116,10 +116,11 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-
+t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		
 
 		/// add modifications user if tx_newspaper_Article is updated

@@ -410,7 +410,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					return true;	
 				}
 				
-				/// write workflow log entry for manual comment (if a manuel comment was entered)
+				/// write workflow log entry for manual comment (if a manual comment was entered)
 				/**
 				 *  \param $input data submitted in form
 				 *  \return true if a workflow comment was written, else false
@@ -436,10 +436,10 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					}
 					if (isset($input['workflow_comment'])) {
 						$fieldArray['workflow_comment'] = $input['workflow_comment'];
-						$_REQUEST['workflow_comment'] = $input['workflow_comment']; // \todo: hack, logWorkflow can work
+						$_REQUEST['workflow_comment'] = $input['workflow_comment']; // \todo: remove hack, so tx_newspaper_workflow::processAndLogWorkflow() can work
 					}
 //t3lib_div::devlog('writeLog()','newspaper', 0, array('fake fieldArray' => $fieldArray));					
-					tx_newspaper_workflow::logWorkflow('update', 'tx_newspaper_article', intval($input['placearticleuid']), $fieldArray);
+					tx_newspaper_workflow::processAndLogWorkflow('update', 'tx_newspaper_article', intval($input['placearticleuid']), $fieldArray);
 					return true;
 				}
 
