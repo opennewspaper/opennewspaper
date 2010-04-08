@@ -23,7 +23,9 @@ class tx_newspaper_BE {
 	private static $backend_files_added = false; // are js/css files added for backend
 
 
-	/// backend: render list of pages and pagezones for section
+
+/// backend: render list of pages and pagezones for section
+
 	/// either called by userfunc in be or ajax
 	public static function renderPagePageZoneList($PA, $fObj=null) {
 		global $LANG;
@@ -137,6 +139,8 @@ class tx_newspaper_BE {
 	}	
 	
 	
+/// template set functions
+	
 	/// itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
 	function addTemplateSetDropdownEntries(&$params, &$pObj) {
 		$this->readTemplateSetItems($params);
@@ -183,6 +187,10 @@ class tx_newspaper_BE {
 		return $html;
 	}
 		
+		
+		
+/// pagezone inheritance source functions
+		
 	/// itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
 	function addInheritancePageDropdownEntries(&$params, &$pObj) {
 		$this->readInheritancePageItems($params);
@@ -200,6 +208,10 @@ class tx_newspaper_BE {
 		}
 
 	}
+
+
+
+/// article list functions
 
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
@@ -228,8 +240,6 @@ echo "
 		document.getElementById('edit_articlelist').style.display = 'inline';
 		document.getElementById('NO_edit_articlelist').style.display = 'none';		
 	}
- 	
- 		
  		
  }
 
@@ -369,7 +379,7 @@ function findElementsByName(name, type) {
 	} 
 	
 	
-/// \todo: is this really needed 
+/// \todo: is this really needed?
 	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)	
 	function renderArticleKickerTtitleTeaser($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
@@ -845,80 +855,9 @@ JSCODE;
 
 /// workflow logging functions
 // \todo: BUTTONS: rewrite for alt_doc xlass in workflow class
-	function getWorkflowButtons($PA, $fobj) {
+	function getWorkflowCommentBackend($PA, $fobj) {
 		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
-		
-		$hidden = $PA['row']['hidden'];
-		$workflow = intval($PA['row']['workflow_status']);
-//t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('workflow' => $workflow, 'hidden' => $hidden));
-
-		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
-//		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
-//		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
-		
-		// if hidden_status equals -1, the hidden status wasn't changed by hide/publish button
-		// if hidden_status DOES NOT equal -1, the hide/publish button was pressed, so IGNORE the value of the "hidden" field
-//		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
-
-		// add javascript \todo: move to external file
-//		$html .= '<script language="javascript" type="text/javascript">
-//function changeWorkflowStatus(role, hidden_status) {
-//	role = parseInt(role);
-//	hidden_status = parseInt(hidden_status);
-//	if (role == ' . NP_ACTIVE_ROLE_EDITORIAL_STAFF . ' || role == ' . NP_ACTIVE_ROLE_DUTY_EDITOR . ' || role == ' . NP_ACTIVE_ROLE_NONE . ') {
-//		document.getElementById("workflow_status").value = role; // valid role found
-//	}
-//	document.getElementById("hidden_status").value = hidden_status;
-////alert(document.getElementById("hidden_status").value);
-//	return false;
-//}
-//</script>
-//';
-
-		// buttons to be displayed in article backend
-		$button = array(); // init with false ...
-		$button['hide'] = false;
-		$button['publish'] = false; // show
-		$button['check'] = false;
-		$button['revise'] = false;
-		$button['place'] = false;
-		// hide or publish button is available for every workflow status
-		if (!$hidden) {
-			$button['hide'] = tx_newspaper_workflow::isFunctionalityAvailable('hide');
-		} else {
-			$button['publish'] = tx_newspaper_workflow::isFunctionalityAvailable('publish');
-		}
-		switch($workflow) {
-			case NP_ACTIVE_ROLE_EDITORIAL_STAFF: 
-				// active role: editor (Redakteur)
-				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
-				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
-			break;
-			case NP_ACTIVE_ROLE_DUTY_EDITOR:
-				// active role: duty editor (CvD)
-				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
-				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
-
-			break;
-			case NP_ACTIVE_ROLE_NONE:
-				// active role: none
-				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
-				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
-				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
-			break;
-//	deprecated		case 2: // \todo: how to call placement form???
-//				// active role: no one (the article has left the workflow)
-//				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
-//				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
-//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
-
-			default:
-				t3lib_div::devlog('getWorkflowButtons() - unknown workflow status', 'newspaper', 3, array('PA' => $PA, 'workflow_status' => $workflow));
-		}
-//t3lib_div::devlog('button', 'newspaper', 0, array('hidden' => $hidden, 'workflow' => $workflow, 'button' => $button));
-
-//		$html .= $this->renderWorkflowButtons($hidden, $button);
 		
 		/// add workflow comment field (using smarty)
  		$smarty = new tx_newspaper_Smarty();
@@ -931,97 +870,6 @@ JSCODE;
 
 		return $html;
 	}
-	/** \param $hidden
-	 *  \param $button array stating (boolean) if the button for the various states should be displayed
-	 */
-	private function renderWorkflowButtons($hidden, $button) {
-//t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));
-		global $LANG;
-		
-		$content = '';
-		
-		/// just save (and don't close the form)
-		$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_save', false), -1, true, false);
-		
-		/// hide / publish
-		if (!$hidden && $button['hide']) {
-			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_hide', false), $hidden, true);
-		} elseif ($hidden && $button['publish']) {
-			$content .= $this->renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_publish', false), $hidden, true);
-		}
-		$content .= '<br />';
-		
-		/// check / revise / place
-		if ($button['check']) {
-			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1, false);
-			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden, true);
-			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden, true);
-			$content .= '<br />';
-		}
-		if ($button['revise']) {
-			$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1, false);
-			if (!$hidden && $button['hide'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden, true);
-			elseif ($hidden && $button['publish'])
-				$content .= $this->renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden, true);
-			$content .= '<br />';
-		}
-// deprecated, \todo: how to call placement form???
-//		if (NP_SHOW_PLACE_BUTTONS) {
-//			// hide place buttons until opening placement form feature is implemented
-//			if ($button['place']) {
-//				$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place', false), -1);
-//				if (!$hidden && $button['hide'])
-//					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_hide', false), $hidden);
-//				elseif ($hidden && $button['publish'])
-//					$content .= $this->renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_publish', false), $hidden);
-//				$content .= '<br />';
-//			}
-//		}
-
-		return $content;
-	}
-	
-	/// render a workflow button for an article
-	/** \param $new_role if false, the role hasn't changes, else new role 
-	 *  \param $title Title for the button
-	 *  \param $hidden Specifies the hidden sdtatus of the current article
-	 *  \param $changeHiddenStatus if true the hidden status changes when the button is pressed
-	 *  \param $overWriteNoCloseConstValue: overwrited the const setting (NP_ARTICLE_WORKFLOW_NOCLOSE), if set to true, a save (plus whatever) button (without closing the form) is rendered
-	 */
-	private function renderWorkflowButton($new_role, $title, $hidden, $changeHiddenStatus=false, $overWriteNoCloseConstValue=null) {
-//t3lib_div::devlog('renderWorkflowButton()', 'newspaper', 0, array('new_role' => $new_role, 'title' => $title, 'hidden' => $hidden, 'overWriteNoCloseConstValue' => $overWriteNoCloseConstValue));
-		
-		if (!$changeHiddenStatus) {
-			$hideen= -1;
-		} else {
-			$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
-		}
-		
-		if ($new_role !== false) {
-			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . ')';
-		} else {
-			$js = 'changeWorkflowStatus(-1, ' . $hidden . ')'; 
-		}
-		
-		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"'; 
-		if (NP_ARTICLE_WORKFLOW_NOCLOSE || $overWriteNoCloseConstValue == true) {
-			// don't close after saving (for "just save" button or for test purposes)
-			$html .= 'name="_savedok" src="sysext/t3skin/icons/gfx/savedok.gif" ';
-		} else {
-			// live version, save and close (and add onclick js)
-			$html .= ' onclick="' . $js . '" ';
-			$html .= 'name="_saveandclosedok" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" ';			
-		}
-		$html .= 'width="16" type="image" height="16" class="c-inputButton"/>';
-		return $html;
-	}
-
-
-
-
 
 
 	/// get html for this icon (may include an anchor) 

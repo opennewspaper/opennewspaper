@@ -22,7 +22,7 @@ $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_ne
 // /switch Extra field 'extras' in article (created by kickstarter)) to a userFunc field (displaying buttons according to workflow_status and be_users.tx_np_role)
 unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
-$TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowButtons';
+$TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowCommentBackend';
 // initially load no tags and let custom code handle it
 $TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
 // switch field tag in article to a userfunc field (allowing auto completion)
