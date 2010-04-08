@@ -476,6 +476,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
 		global $LANG;
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
+//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
 
@@ -543,6 +544,6 @@ function changeWorkflowStatus(role, hidden_status) {
 	}
 }
 
-tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
+//tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
  
 ?>
