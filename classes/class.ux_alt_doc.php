@@ -46,8 +46,8 @@ class ux_SC_alt_doc extends SC_alt_doc {
 //				$buttons['save_new'] = '<input type="image" class="c-inputButton" name="_savedoknew"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedoknew.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveNewDoc',1).'" />';
 //			}
 
-				// SAVE / CLOSE
-//			$buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
+			// SAVE / CLOSE
+			$buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
 
 			// FINISH TRANSLATION / SAVE / CLOSE
 			if ($GLOBALS['TYPO3_CONF_VARS']['BE']['explicitConfirmationOfTranslation'])	{
@@ -107,7 +107,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 //t3lib_div::devlog('XCLASS', 'newspaper', 0, array('row' => $row));
 
 		// render all workflow buttons as 'save_close' buttons
-		$buttons['save_close'] = tx_newspaper_workflow::getWorkflowButtons($row);
+		$buttons['save_close'] .= tx_newspaper_workflow::getWorkflowButtons($row);
 	
 		
 		return $buttons;
