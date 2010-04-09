@@ -152,10 +152,10 @@ CREATE TABLE tx_newspaper_pagezone_page (
 
 
 #
-# Table structure for table 'tx_newspaper_article_extras_mm'
+# Table structure for table 'tx_newspaper_article_sections_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_extras_mm (
+CREATE TABLE tx_newspaper_article_sections_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -168,10 +168,10 @@ CREATE TABLE tx_newspaper_article_extras_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_sections_mm'
+# Table structure for table 'tx_newspaper_article_extras_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_sections_mm (
+CREATE TABLE tx_newspaper_article_extras_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -239,8 +239,8 @@ CREATE TABLE tx_newspaper_article (
 	author tinytext NOT NULL,
 	source_id tinytext NOT NULL,
 	source_object tinytext NOT NULL,
-	extras int(11) DEFAULT '0' NOT NULL,
 	sections int(11) DEFAULT '0' NOT NULL,
+	extras int(11) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
 	is_template tinyint(3) DEFAULT '0' NOT NULL,
 	template_set int(11) DEFAULT '0' NOT NULL,

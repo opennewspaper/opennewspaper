@@ -60,8 +60,8 @@
 			<label index="tx_newspaper_article.author">Author</label>
 			<label index="tx_newspaper_article.source_id">Unique ID in newspaper editing system</label>
 			<label index="tx_newspaper_article.source_object">Source the article was imported from (serialized object)</label>
-			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.sections">Sections this article appears in</label>
+			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.name">Name of page zone</label>
 			<label index="tx_newspaper_article.is_template">This article is inserted on a page to serve as template for all actual articles</label>
 			<label index="tx_newspaper_article.template_set">Template set</label>
@@ -262,8 +262,8 @@
 			<label index="tx_newspaper_article.author">Autor</label>
 			<label index="tx_newspaper_article.source_id">Unique ID im Redaktionssystem der Zeitung</label>
 			<label index="tx_newspaper_article.source_object">Quelle aus der der Artikel importiert wurde (serialisiertes Objekt)</label>
-			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.sections">Ressorts in denen dieser Artikel erscheint</label>
+			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.name">Name des Seitenbereichs</label>
 			<label index="tx_newspaper_article.is_template">Dieser Artikel wird auf einer Seite eingesetzt, um als Vorlage für alle tatsächlichen Artikel zu dienen</label>
 			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
