@@ -47,6 +47,7 @@ class fullWidthDoc_mod2 extends template {
  */
 class  tx_newspaper_module2 extends t3lib_SCbase {
 	var $pageinfo;
+	private $prefixId = 'tx_newspaper_mod2';
 
 	/**
 	 * Initializes the Module
@@ -148,7 +149,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		global $LANG;
 		
 		$this->processGP();
-		$this->processGPVisibility(); // check if an article is hidden/unhidden
+		$this->processGPController(); // check if a controller was used (hide/unhide/delete article)
 
 		/// get records (get one more than needed to find out if there's an next page)
 		$row = tx_newspaper::selectRows(
@@ -223,6 +224,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('COMMENT_ICON', tx_newspaper_BE::renderIcon('gfx/zoom2.gif', '', '###COMMENT###'));
 		$smarty->assign('TIME_HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/history.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
+		$smarty->assign('ARTICLE_DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.delete_article', false)));
+		$smarty->assign('ARTICLE_DELETE_MESSAGE', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:message_delete_article', false));
 
 		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
 		$smarty->assign('TIME_GREEN', tx_newspaper_BE::renderIcon($image_path . 'history_green.gif', '', ''));
@@ -383,11 +386,11 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	}
 
 
-	/// check if an article is to be hidden/unhidden; write to database if yes
+	/// check if an article is to be hidden/unhidden/deleted
 	/**
 	 * this way to change visibility makes sure, that the current page browser selection lasts
 	 */
-	function processGPVisibility() {
+	function processGPController() {
 //t3lib_div::devlog('article_visibility', 'np', 0, t3lib_div::_GP('article_visibility'));
 		if (t3lib_div::_GP('article_visibility') != '') {
 /// \todo: permission check

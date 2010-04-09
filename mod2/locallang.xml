@@ -50,6 +50,8 @@
 			<label index="label.time">This article uses start time and/ or end time</label>
 			<label index="label.internal_comments">View all internal comments for this article</label>
 			<label index="label.article_add">Add article to list ...</label>
+			<label index="label.delete_article">Delete article</label>
+			<label index="message_delete_article">Do you really want to delete this article?</label>
 			
 			<label index="label.page_prev">Previous hits</label>
 			<label index="label.page_next">Next hits</label>
@@ -101,6 +103,8 @@
 			<label index="label.time">Zeitgezündete Artikel</label>
 			<label index="label.internal_comments">Alle Kommentare anzeigen</label>
 			<label index="label.article_add">Zu Liste hinzufügen</label>
+			<label index="label.delete_article">Artikel löschen</label>
+			<label index="message_delete_article">Möchten Sie diesen Artikel wirklich löschen?</label>
 			
 			<label index="label.page_prev">Vorige</label>
 			<label index="label.page_next">Nächste</label>

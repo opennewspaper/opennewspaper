@@ -246,7 +246,7 @@
 	position: absolute;
 	display: none;
 	z-index: 50;
-	width: 70px;	
+	width: 90px;	
 	border: 1px solid grey;
 	padding: 5px;
 	background-color: white;
@@ -274,6 +274,13 @@ function showArticlePreview(article_uid) {
 		"preview", 
 		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
 	);
+}
+
+function deleteArticle(article_uid) {
+alert('to come ...');
+//  if (confirm("{/literal}{$ARTICLE_DELETE_MESSAGE}{literal}")) {
+//  	self.location.href = 'index.php?tx_newspaper_mod2[controller]=delete&uid=' + article_uid;
+//  }
 }
 
 </script>
@@ -449,9 +456,10 @@ function showArticlePreview(article_uid) {
 					<strong> </strong><br />
 				{/if}
 			<div class="hide">
-{if $IS_DUTY_EDITOR}<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> {/if}&nbsp; 
-<a href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;">{$ARTICLE_PREVIEW_ICON}</a>&nbsp;
+{if $IS_DUTY_EDITOR}<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> {/if} 
+<a href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"> {$ARTICLE_PREVIEW_ICON}</a> 
 <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a> 
+<a href="#" onclick="deleteArticle({$DATA[i].uid}); return false;"> {$ARTICLE_DELETE_ICON} </a> 
 			</div>
 			</td>
 	</tr>
