@@ -75,6 +75,7 @@ $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(',
 $GLOBALS['TCA']['tx_newspaper_article']['ctrl']['dividers2tabs'] = 1; ;// yes, do use tabs
 $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden, ', '--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_article, hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', template_set,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_additional, template_set,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
+$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', extras,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_web_elements, extras,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 //t3lib_div::devlog('TCA', 'np', 0, $GLOBALS['TCA']['tx_newspaper_article']['types'][0]);
 // add time to starttime and endtime for newspaper records
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['starttime']['config']['eval'] = 'datetime';
