@@ -471,6 +471,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		// add creation date and user
 		$new_article->setAttribute('crdate', time());
 		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		$new_article->setAttribute('hidden', 1); // hide imported article
 
 		t3lib_div::devlog('before store', 'newspaper', 0, 
 			array(
