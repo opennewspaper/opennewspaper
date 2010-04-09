@@ -655,7 +655,10 @@ body {
 
 	/// check if article list configuration needs to be stored and stores the data if yes
 	private function processDataStorage() {
-//t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array());
+//t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array('_request' => $_REQUEST));
+		
+		/// loadTCA for abstract und concrete table has run already, so TCA is accessible
+		
 		if (
 			(isset($_REQUEST['_saveandclosedok_x']) ||
 			isset($_REQUEST['_saveandclosedok_y']) ||
@@ -671,6 +674,16 @@ body {
 			}
 			// ... and prepare concrete attributes
 			foreach($_REQUEST['data'][$al->getTable()][$al->getUid()] as $field => $value) {
+				if ($GLOBALS['TCA'][$this->getTable()]['columns'][$field]['config']['type'] == 'group' &&
+					$GLOBALS['TCA'][$this->getTable()]['columns'][$field]['config']['internal_type'] == 'db'
+				) {
+					// check if type group/db is processed and remove table name so only th uid remains
+					// THIS DOES ONLY WORK IF ONLY ONE TABLE IS ALLOWED FOR THIS FIELD!!!
+					$val = strrev($value);
+					$parts = explode('_',$val,2);
+					$value = strrev($parts[0]); // overwrite $value
+				}
+				
 				$al->setAttribute($field, $value);
 			}			
 			$al->store();
