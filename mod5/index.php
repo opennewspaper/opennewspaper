@@ -506,7 +506,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	
 	
 	private function changeRole(array $input) {
-t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
 		tx_newspaper_workflow::changeRole(intval($input['new_role']));
 	}
 	
