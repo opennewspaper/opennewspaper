@@ -44,9 +44,9 @@
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
-      document.getElementById('source_browser').innerHTML = response.responseText;
+      document.getElementById('lorem').style.display = 'none';
+	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
-	  document.getElementById('lorem').style.display = 'none';
 	{rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
