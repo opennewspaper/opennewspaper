@@ -343,6 +343,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		));		
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
+		$smarty->assign('SHOW_LOREM', ($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.use_lorem') != 0));
 
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
