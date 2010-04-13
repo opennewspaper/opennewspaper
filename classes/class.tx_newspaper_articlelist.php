@@ -679,6 +679,7 @@ body {
 				) {
 					// check if type group/db is processed and remove table name so only th uid remains
 					// THIS DOES ONLY WORK IF ONLY ONE TABLE IS ALLOWED FOR THIS FIELD!!!
+					// based on t3lib_loaddbgroup::readList()
 					$val = strrev($value);
 					$parts = explode('_',$val,2);
 					$value = strrev($parts[0]); // overwrite $value
