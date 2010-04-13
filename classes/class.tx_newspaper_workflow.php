@@ -15,6 +15,7 @@ define('NP_WORKLFOW_LOG_HIDE', 1);
 define('NP_WORKLFOW_LOG_PUBLISH', 2);
 define('NP_WORKLFOW_LOG_CHANGE_ROLE', 3);
 define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
+define('NP_WORKLFOW_LOG_IMPORT', 5);
 
 
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
@@ -471,11 +472,30 @@ function changeWorkflowStatus(role, hidden_status) {
 //t3lib_div::devlog('checkIfWorkflowStatusChanged() - leave', 'newspaper', 0, array('fieldArray' => $fieldArray));
 	}
 
+	/// write to log directly
+	/** \param $table name of table the log entry is associated with
+	 *  \param $id id of record in $table  
+	 *  \param $comment comment to log
+	 */
+	public static function directLog($table, $id, $comment) {
+		$current_time = time();
+		tx_newspaper::insertRows('tx_newspaper_log', array(
+			'pid' => 0,
+			'tstamp' => $current_time,
+			'crdate' => $current_time, 
+			'cruser_id' => $GLOBALS['BE_USER']->user['uid'], 
+			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
+			'table_name' => $table, 
+			'table_uid' => $id,
+			'action' => NP_WORKLFOW_LOG_IMPORT,
+			'comment' => $comment
+		));
+	} 
 	
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
 		global $LANG;
-//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
+t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();

@@ -43,6 +43,9 @@
 			<label index="log_article_published">Article published</label>
 			<label index="log_more_link">More ...</label>
 			<label index="log_less_link">Less ...</label>
+			<label index="log_import">Article imported</label>
+			<label index="log_import_source_id">Source</label>
+			<label index="log_import_source_path">Path</label>
 			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
@@ -147,6 +150,12 @@
 			<label index="label_workflow_role_none">Artikel plaziert</label>
 			<label index="label_workflow_role_old">Alte Rolle</label>
 			<label index="label_workflow_role_new">Neue Rolle</label>
+			<label index="log_more_link">Mehr ...</label>
+			<label index="log_less_link">Weniger ...</label>
+			<label index="log_import">Artikel importiert</label>
+			<label index="log_import_source_id">Quelle</label>
+			<label index="log_import_source_path">Pfad</label>
+
             <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
             <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
 			<label index="label_tab_web_elements">Web-Elemente</label>
