@@ -45,8 +45,8 @@
 	</table>
 
 	<div><br />
-	  {$LABEL.section}:<br />
-      <select name="tx_newspaper_mod5[section]" size="1" onchange="setDefaultArticletype(this.value)">
+	  {$LABEL.section}: 
+      <select name="tx_newspaper_mod5[section]" size="1" onchange="setDefaultArticletype(this.value)" style="margin-right:30px;">
 		{section name=i loop=$SECTION}
 		  {if $SECTION_AVAILABLE[i]}
     	  	<option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
@@ -55,11 +55,9 @@
     	  {/if}
 		{/section}
       </select>
-    </div>
 
-	<div><br />
-	  {$LABEL.articletype}:<br /> 
-      <select id="articletype" name="tx_newspaper_mod5[articletype]" size="1">
+	  {$LABEL.articletype}:  
+      <select id="articletype" name="tx_newspaper_mod5[articletype]" size="1" style="margin-right:30px;">
 		{section name=i loop=$ARTICLETYPE}
 		  {if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
             <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
@@ -68,21 +66,19 @@
 		  {/if}
 		{/section}
       </select>
-    </div>
-    <script type="text/javascript">
-//{literal}
+
+    <script type="text/javascript">{literal}
     	function executeSubmit(type) {
     		document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
 			document.forms[0].submit();
-    	}
-//{/literal}
-    </script><br />
+    	}{/literal}
+    </script>
     <input type="hidden" name="tx_newspaper_mod5[controller]" id="tx_newspaper_mod5[controller]" value="" />
-	<input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" />
+	<input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" style="margin-right:30px;" />
 	{if $SHOW_LOREM}
 		<input id="lorem" type="button" onclick="executeSubmit('new_article_create_dummy'); return false;" name="tx_newspaper_mod5[new_article_create_dummy]" value="Lorem ipsum dummy article" id="tx_newspaper_mod5[new_article_create_dummy]" />
 	{/if}
-		
+	</div>
 
 	</form>
 {/if}
