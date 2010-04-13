@@ -506,7 +506,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 */
 
 		// log import
-		$comment = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
+		$comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
 		if ($input['source_id']) {
 			$comment = ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . $input['source_id'];
 		}
