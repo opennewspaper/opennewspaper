@@ -508,10 +508,10 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		// log import
 		$comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
 		if ($input['source_id']) {
-			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . $input['source_id'];
+			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . ': ' . $input['source_id'];
 		}
 		if ($input['source_path']) {
-			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . $input['source_path'];
+			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . ': ' . $input['source_path'];
 		}
 		tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment);
 
