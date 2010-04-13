@@ -405,15 +405,17 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		
-		$ret = '<select name="' . $this->prefixId . 'source_path" size="20" style="width:320px">' . "<br />\n";
+		$width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.articlesource.browser_width')) : 320; // 320px is default
+		
+		$ret = '<select name="' . $this->prefixId . 'source_path" size="20" style="width:' . $width . 'px">' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= '<option onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' .
-					utf8_encode($entry->getTitle()) . '</option>' . "\n";
+				$ret .= '<option title="' . utf8_encode($entry->getTitle()) . '" onclick=loadArticle(\'' . $source_id . 
+					'\',\'' . $entry->getID() .'\')' . '>' . utf8_encode($entry->getTitle()) . '</option>' . "\n";
 			} else {
 				$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
 					utf8_encode($entry->getTitle()) . '</option>' . "\n";
