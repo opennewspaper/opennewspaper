@@ -443,7 +443,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		$smarty->assign('article', $article);
 		$smarty->assign('source_id', $source_id);
 		$smarty->assign('source_path', $path);
- 	
+		
 		die($smarty->fetch('mod5_articlepreview.tmpl'));
 	}
 
@@ -504,8 +504,18 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 			 	   $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
 			 	   $new_article->getUid() . ']=edit';
 */
-		header('Location: ' . $url);				
-		
+
+		// log import
+		$comment = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
+		if ($input['source_id']) {
+			$comment = ', ' . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . $input['source_id'];
+		}
+		if ($input['source_path']) {
+			$comment = ', ' . $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . $input['source_path'];
+		}
+		tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment);
+
+		header('Location: ' . $url); // redirect to article backend	
 	}
 	
 	
