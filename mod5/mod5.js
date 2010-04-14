@@ -45,7 +45,7 @@
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
-      changeLoremButton('none);
+      changeLoremButton('none');
 //        document.getElementById('lorem').style.display = 'none';
 	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
