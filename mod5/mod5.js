@@ -40,14 +40,22 @@
 	function clearSourceBrowser() {ldelim}
       document.getElementById('source_browser').innerHTML = '';
 	  document.getElementById('article_text').innerHTML = '';
-	  document.getElementById('lorem').style.display = 'inline';
+//	  document.getElementById('lorem').style.display = 'inline';
+      changeLoremButton('inline');
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
-      document.getElementById('lorem').style.display = 'none';
+      changeLoremButton('none);
+//        document.getElementById('lorem').style.display = 'none';
 	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
 	{rdelim}
+
+    function changeLoremButton(displayOption) {ldelim}
+        if(document.getElementById('lorem')) {ldelim}
+           document.getElementById('lorem').style.display = displayOption
+        {rdelim}
+    {rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
       	document.getElementById('article_text').innerHTML = response.responseText;
