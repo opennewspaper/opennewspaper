@@ -40,18 +40,16 @@
 	function clearSourceBrowser() {ldelim}
       document.getElementById('source_browser').innerHTML = '';
 	  document.getElementById('article_text').innerHTML = '';
-//	  document.getElementById('lorem').style.display = 'inline';
-      changeLoremButton('inline');
+      changeLoremButtonDisplayOption('inline');
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
-      changeLoremButton('none');
-//        document.getElementById('lorem').style.display = 'none';
+      changeLoremButtonDisplayOption('none');
 	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
 	{rdelim}
 
-    function changeLoremButton(displayOption) {ldelim}
+    function changeLoremButtonDisplayOption(displayOption) {ldelim}
         if(document.getElementById('lorem')) {ldelim}
            document.getElementById('lorem').style.display = displayOption
         {rdelim}
