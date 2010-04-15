@@ -26,6 +26,9 @@
 			<label index="label_newspaper_functions">Newspaper functions</label>
 			<label index="message_no_section">No section available, so no article can be added. Please create sections (and allow the addition of articles) in order to create articles.</label>
 			<label index="message_no_articletype">No article type available, so no article can be added. Please create article types in order to create articles.</label>
+			<label index="label_section_base">Base section</label>
+			<label index="label_section_select">Please select target section</label>
+			<label index="message_no_section_chosen">Please select a target section first</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Start</label>
@@ -48,6 +51,9 @@
 			<label index="label_newspaper_functions">Newspaper-Funktionen</label>
 			<label index="message_no_section">Es kann kein Artikel angelegt werden, da kein Ressort exisiert. Bitte legen Sie ein Ressort an (und geben es für die Aufnahmen von Artikeln frei).</label>
 			<label index="message_no_articletype">Es kann kein Artikel angelegt werden, da kein Artikeltyp existiert. Bitte legen Sie Artikeltypen an, um Artikel anlegen zu können.</label>
+			<label index="label_section_base">Start-Ressorts</label>
+			<label index="label_section_select">Bitte wählen Sie das Ziel-Ressort</label>
+			<label index="message_no_section_chosen">Bitte wählen Sie ein Ziel-Ressort aus, um einen Artikel anzulegen.</label>
 		</languageKey>
 	</data>
 </T3locallang>

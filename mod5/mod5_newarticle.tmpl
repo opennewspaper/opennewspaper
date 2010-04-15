@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 {include file="mod5.js"}  {* js for importing articles *}
 
@@ -19,7 +19,18 @@
   </div>
 {else}
   {* at least one section and one article type available, so wizard be can used *}
-  <form action="index.php">
+  <form action="index.php" name="newarticlewizard">
+	  <script type="text/javascript">{literal}
+		function executeSubmit(type) {
+			selIdx = document.getElementsByName('tx_newspaper_mod5[section]')[0].selectedIndex;
+			if (selIdx == -1) {
+				alert("{/literal}{$MESSAGE.no_section_chosen}{literal}");
+				return false;
+			}
+			document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
+			document.forms[0].submit();
+		}{/literal}
+	  </script>
     <div>{$LABEL.new_article}</div>
     <div>
       <input checked="checked" type="radio" name="tx_newspaper_mod5[type]" onclick="clearSourceBrowser()" value="newarticle"> {$LABEL.new_article_typo3}<br />
@@ -29,6 +40,8 @@
 	  {/foreach}
     </div>
 
+{* old version *}
+<!--
 	<div><br />
 	  {$LABEL.section}: 
       <select name="tx_newspaper_mod5[section]" size="1" onchange="setDefaultArticletype(this.value)" style="margin-right:30px;">
@@ -42,7 +55,7 @@
       </select>
 
 	  {$LABEL.articletype}:  
-      <select id="articletype" name="tx_newspaper_mod5[articletype]" size="1" style="margin-right:30px;">
+      <select id="articletype_OLD" name="tx_newspaper_mod5[articletype]" size="1" style="margin-right:30px;">
 		{section name=i loop=$ARTICLETYPE}
 		  {if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
             <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
@@ -51,20 +64,65 @@
 		  {/if}
 		{/section}
       </select>
-
-    <script type="text/javascript">{literal}
-    	function executeSubmit(type) {
-    		document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
-			document.forms[0].submit();
-    	}{/literal}
-      </script>
-      <input type="hidden" name="tx_newspaper_mod5[controller]" id="tx_newspaper_mod5[controller]" value="" />
+      <input type="hidden" name="tx_newspaper_mod5[controller]_OLD" id="tx_newspaper_mod5[controller]_OLD" value="" />
 	  <input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" style="margin-right:30px;" />
       {if $SHOW_LOREM}
         <input id="lorem" type="button" onclick="executeSubmit('new_article_create_dummy'); return false;" name="tx_newspaper_mod5[new_article_create_dummy]" value="Lorem ipsum dummy article" id="tx_newspaper_mod5[new_article_create_dummy]" />
-      {/if}
+      {/if} 
       <br /><br />
     </div>
+-->
+
+
+
+{* new version *}
+	<div>
+		<br />
+		<table>
+			<tr>
+				<td> {$LABEL.section_base} </td>
+				<td> {$LABEL.section_select} </td>
+				<td> {$LABEL.articletype} </td>
+			</tr><tr>
+				<td>
+					<select id="section1" onchange="changeSectionBox2(this.value)" style="width:320px;" size="10">
+						{section name=i loop=$SECTION1}
+				    	  	<option value="{$SECTION1[i]->getUid()}"> {$SECTION1[i]->getAttribute('section_name')}</option>
+						{/section}
+					</select>
+				</td>
+				<td>
+					<select name="tx_newspaper_mod5[section]" id="section2" style="display:inline; width:320px;" size="10"></select> {* empty selectbox, is displayed when opening the form *}
+					{foreach key=main_section_id item=main_section from=$SECTION2}
+							<select id="section2_{$main_section_id}" style="display:none; width:320px;" size="10">
+								{foreach key=sub_section_id item=sub_section from=$main_section}
+									<option value="{$sub_section->getUid()}"> {$sub_section->getAttribute('section_name')}</option>
+								{/foreach}
+							</select>
+					{/foreach}
+				</td>
+				<td>
+					<select id="articletype" name="tx_newspaper_mod5[articletype]" size="10" style="width:320px; margin-right:30px;">
+						{section name=i loop=$ARTICLETYPE}
+							{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
+								<option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
+							{else}
+								<option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
+							{/if}
+						{/section}
+			      	</select>
+			     </td>
+			</tr><tr>
+				<td></td>
+				<td colspan="2">
+			      <input type="hidden" name="tx_newspaper_mod5[controller]" id="tx_newspaper_mod5[controller]" value="" />
+				  <input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" style="margin-right:30px;" />
+			      {if $SHOW_LOREM}
+			        <input id="lorem" type="button" onclick="executeSubmit('new_article_create_dummy'); return false;" name="tx_newspaper_mod5[new_article_create_dummy]" value="Lorem ipsum dummy article" id="tx_newspaper_mod5[new_article_create_dummy]" />
+			      {/if}
+				</td>
+		</table>
+	</div>
 
 	<table>
 	  <tr>
@@ -83,5 +141,5 @@
   </form>
 {/if}
 
-
+{if $IS_ADMIN}<br /><br /><a href="#" onclick="location.reload(); return false;">Reload</a>{/if}
 </div>

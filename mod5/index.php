@@ -264,7 +264,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 		
-		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
+//		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
@@ -331,6 +331,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'new_article_button' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false),
 			'new_article_typo3' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false),
 			'section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false),
+			'section_base' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_base', false),
+			'section_select' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_select', false),
 			'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
 			'back_to_wizards' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false),
 			'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
@@ -340,6 +342,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('MESSAGE', array(
 			'no_section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section', false),
 			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
+			'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
 		));		
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
@@ -352,7 +355,33 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('SECTION', $sections);
 		$smarty->assign('SECTION_AVAILABLE', $sections_available);
-
+		
+		// \todo: TSConfig + more than 1 start section
+		$start_section = new tx_newspaper_section(1); // ATTENTION: 1 is hard coded section "Start" !!!
+		$start_sections = $start_section->getChildSections(false);
+		
+		$sub_sections = array();
+		foreach($start_sections as $key => $current_sub_section) {
+			// check if main section on level 1 can take articles. add to selectbox2 if yes (only selectbox2 sections can be chosen)
+			if ($current_sub_section->getAttribute('articles_allowed')) {
+				$sub_sections[$current_sub_section->getUid()][$start_section->getUid()] = $current_sub_section;
+			}
+			// add all sub section that can take articles
+			$tmp_sections = $current_sub_section->getChildSections(true);
+			foreach($tmp_sections as $tmp_section) {
+				if ($tmp_section->getAttribute('articles_allowed')) {
+					$sub_sections[$current_sub_section->getUid()][$tmp_section->getUid()] = $tmp_section;
+				}
+			}
+			// if no sub section could be found for a start section, remove start section 
+			if (sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
+				unset($start_sections[$key]); // no s
+			}
+		}
+		
+		$smarty->assign('SECTION1', $start_sections);
+		$smarty->assign('SECTION2', $sub_sections);
+//t3lib_div::devlog('new article wizard', 'newspaper', 0, array('start_sections' => $start_sections, 'sub_sections' => $sub_sections));
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);

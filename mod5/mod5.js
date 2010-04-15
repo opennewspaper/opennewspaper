@@ -104,4 +104,27 @@
 		  {rdelim}
 	    );
 	  {rdelim}
+	  
+	  
+{literal}
+	var section2_uid_old = null;
+	// show section selectbox associated with chosen section in selectbox 1 (hide previously displayed sub section selectbox, if any)
+	function changeSectionBox2(section_uid) {
+		if (section2_uid_old != null) {
+			// hide previously chosen section selectbox
+			document.getElementById('section2_' + parseInt(section2_uid_old)).style.display = 'none';
+			document.getElementById('section2_' + parseInt(section2_uid_old)).name = '';
+		} else {
+			// hide empty selectbox
+			document.getElementById('section2').style.display = 'none';
+			document.getElementById('section2').name = '';
+		}
+		section2_uid_old = section_uid;
+		// display chosen section selectbox
+		document.getElementById('section2_' + parseInt(section_uid)).style.display = 'inline';
+		document.getElementById('section2_' + parseInt(section_uid)).name = 'tx_newspaper_mod5[section]'; // currently active section list gets this name in order to show the article wizard where to check ...
+	}
+
+{/literal}
+	  
 </script>
