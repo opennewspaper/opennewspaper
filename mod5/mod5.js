@@ -7,13 +7,15 @@
 	/// when section is changed the assigned default article type gets selected
 	function setDefaultArticletype(section_id) {ldelim}
 		switch(parseInt(section_id)) {ldelim}
-			{section name=i loop=$SECTION}
-				{if $SECTION[i]->getAttribute('default_articletype') > 0}
-					case {$SECTION[i]->getUid()}:
-						d_at = {$SECTION[i]->getAttribute('default_articletype')};
-					break;
-				{/if}
-			{/section}
+			{foreach item=sub_section from=$SECTION2}
+				{foreach item=section from=$sub_section}
+					{if $section->getAttribute('default_articletype') > 0}
+						case {$section->getUid()}:
+							d_at = {$section->getAttribute('default_articletype')};
+						break;
+					{/if}
+				{/foreach}
+			{/foreach}
 			default:
 				d_at = 0;
 		{rdelim}
