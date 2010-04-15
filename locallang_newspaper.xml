@@ -155,7 +155,6 @@
 			<label index="log_import">Artikel importiert</label>
 			<label index="log_import_source_id">Quelle</label>
 			<label index="log_import_source_path">Pfad</label>
-
             <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
             <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
 			<label index="label_tab_web_elements">Web-Elemente</label>
