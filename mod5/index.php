@@ -313,22 +313,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 //t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);		
 		global $LANG;
 		
-		
-// \todo: remove old stuff when new stuff is approved
-		$sections = tx_newspaper_Section::getAllSections();
-		$sections_available = array(); // true = default article available, else false
-		foreach($sections as $section) {
-			if ($section != null && $section->getDefaultArticle()) {
-				$sections_available[] = true;
-			} else {
-				$sections_available[] = false;
-			}
-		}
-
-
-
-
-
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
@@ -359,9 +343,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 
-		$smarty->assign('SECTION', $sections);
-		$smarty->assign('SECTION_AVAILABLE', $sections_available);
-		
 		// \todo: TSConfig + more than 1 start section
 		$start_section = new tx_newspaper_section(1); // ATTENTION: 1 is hard coded section "Start" !!!
 		$start_sections = $start_section->getChildSections(false);

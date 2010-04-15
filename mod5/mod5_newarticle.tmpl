@@ -1,4 +1,4 @@
-{debug}
+{* debug *}
 
 {include file="mod5.js"}  {* js for importing articles *}
 
@@ -6,16 +6,15 @@
 
   <strong><a href="index.php">{$LABEL.back_to_wizards}</a></strong><br /><br />
 
-{if !$SECTION || !$ARTICLETYPE}
-  {* no section available *}
+{if !$SECTION2 || !$ARTICLETYPE}
+  {* no section or article type available *}
   <div> <br />
-	{if !$SECTION}  
+	{if !$SECTION2}  
       {$MESSAGE.no_section}<br />
     {/if} 
 	{if !$ARTICLETYPE}  
       {$MESSAGE.no_articletype}
     {/if} 
-
   </div>
 {else}
   {* at least one section and one article type available, so wizard be can used *}
@@ -41,38 +40,7 @@
     </div>
 
 {* old version *}
-<!--
-	<div><br />
-	  {$LABEL.section}: 
-      <select name="tx_newspaper_mod5[section]" size="1" onchange="setDefaultArticletype(this.value)" style="margin-right:30px;">
-		{section name=i loop=$SECTION}
-		  {if $SECTION_AVAILABLE[i]}
-    	  	<option value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
-    	  {else}
-    	    <option disabled="disabled" value="{$SECTION[i]->getUid()}"> {$SECTION[i]->getAttribute('section_name')}</option>
-    	  {/if}
-		{/section}
-      </select>
-
-	  {$LABEL.articletype}:  
-      <select id="articletype_OLD" name="tx_newspaper_mod5[articletype]" size="1" style="margin-right:30px;">
-		{section name=i loop=$ARTICLETYPE}
-		  {if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
-            <option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
-		  {else}
-    	    <option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
-		  {/if}
-		{/section}
-      </select>
-      <input type="hidden" name="tx_newspaper_mod5[controller]_OLD" id="tx_newspaper_mod5[controller]_OLD" value="" />
-	  <input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" style="margin-right:30px;" />
-      {if $SHOW_LOREM}
-        <input id="lorem" type="button" onclick="executeSubmit('new_article_create_dummy'); return false;" name="tx_newspaper_mod5[new_article_create_dummy]" value="Lorem ipsum dummy article" id="tx_newspaper_mod5[new_article_create_dummy]" />
-      {/if} 
-      <br /><br />
-    </div>
--->
-
+<!-- onchange="setDefaultArticletype(this.value)" -->
 
 
 {* new version *}
@@ -104,11 +72,11 @@
 				<td>
 					<select id="articletype" name="tx_newspaper_mod5[articletype]" size="10" style="width:320px; margin-right:30px;">
 						{section name=i loop=$ARTICLETYPE}
-							{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')}
+{*							{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')} 
 								<option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
-							{else}
+							{else} *}
 								<option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
-							{/if}
+{* 							{/if} *}
 						{/section}
 			      	</select>
 			     </td>
