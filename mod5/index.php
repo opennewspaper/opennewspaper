@@ -368,13 +368,14 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		
 		$sub_sections = array();
 		foreach($start_sections as $key => $current_sub_section) {
-			// check if main section on level 1 can take articles. add to selectbox2 if yes (only selectbox2 sections can be chosen)
+			// check if main section on level 1 can take articles and a default article is available. add to section2 if yes (only selectbox2 sections can be chosen)
 			if ($current_sub_section->getAttribute('articles_allowed') && $current_sub_section->getDefaultArticle()) {
 				$sub_sections[$current_sub_section->getUid()][$start_section->getUid()] = $current_sub_section;
 			}
 			// add all sub section that can take articles
 			$tmp_sections = $current_sub_section->getChildSections(true);
 			foreach($tmp_sections as $tmp_section) {
+				// check if section can take articles and a default article is available. add to section2 if yes (only selectbox2 sections can be chosen)
 				if ($tmp_section->getAttribute('articles_allowed') && $tmp_section->getDefaultArticle()) {
 					$sub_sections[$current_sub_section->getUid()][$tmp_section->getUid()] = $tmp_section;
 				}
