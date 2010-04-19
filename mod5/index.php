@@ -363,7 +363,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			}
 			// if no sub section could be found for a start section, remove start section 
 			if (sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
-				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
+#				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
 			}
 		}
 		
