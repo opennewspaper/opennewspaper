@@ -40,6 +40,21 @@
     </div>
 
 {* select section and article type *}
+	<table>
+	  <tr>
+	    <td valign="top">
+		  {* here the source browser is inserted via AJAX *}
+		  <div id="source_browser">
+		  </div>
+		</td>
+		<td>
+		  {* here the text of the selected article is inserted via AJAX *}
+		  <div id="article_text">
+		  </div>
+		</td>
+	  </tr>
+	</table>
+
 	<div>
 		<br />
 		<table>
@@ -88,20 +103,6 @@
 		</table>
 	</div>
 
-	<table>
-	  <tr>
-	    <td valign="top">
-		  {* here the source browser is inserted via AJAX *}
-		  <div id="source_browser">
-		  </div>
-		</td>
-		<td>
-		  {* here the text of the selected article is inserted via AJAX *}
-		  <div id="article_text">
-		  </div>
-		</td>
-	  </tr>
-	</table>
   </form>
 {/if}
 
