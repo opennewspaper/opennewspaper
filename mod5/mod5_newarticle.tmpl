@@ -83,11 +83,7 @@
 				<td>
 					<select id="articletype" name="tx_newspaper_mod5[articletype]" size="10" style="width:320px; margin-right:30px;">
 						{section name=i loop=$ARTICLETYPE}
-{*							{if $ARTICLETYPE[i]->getUid() == $SECTION[0]->getAttribute('default_articletype')} 
-								<option selected="selected" value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
-							{else} *}
-								<option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
-{* 							{/if} *}
+							<option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option> 
 						{/section}
 			      	</select>
 			     </td>
