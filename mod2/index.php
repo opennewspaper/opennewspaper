@@ -82,8 +82,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		// Access check!
 		// The page will show only if there is a valid page and if this page may be viewed by the user
-		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-		$access = is_array($this->pageinfo) ? 1 : 0;
+//		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
+//		$access = is_array($this->pageinfo) ? 1 : 0;
+		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 
 		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
 
