@@ -574,7 +574,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$content .= '
 <!-- <link rel="stylesheet" type="text/css" href="stylesheet.css" /></link> -->
 <link rel="stylesheet" type="text/css" href="' . $GLOBALS['TBE_STYLES']['styleSheetFile_post'] . '" /></link>
-<style>
+<style type="text/css">
 body {
 	overflow: auto !important;
 }
