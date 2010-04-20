@@ -91,17 +91,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	function main()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-
-		// a valid page for permissions check is needed - use newspaper root folder
-		$this->id = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder(); 
-
 		// Access check!
-		// The page will show only if there is a valid page and if this page may be viewed by the user
-		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-		$access = is_array($this->pageinfo) ? 1 : 0;
+		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 
-				
-		if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id))	{
+		if ($access) {
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
