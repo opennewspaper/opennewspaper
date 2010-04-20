@@ -125,6 +125,12 @@
 		// display chosen section selectbox
 		document.getElementById('section2_' + parseInt(section_uid)).style.display = 'inline';
 		document.getElementById('section2_' + parseInt(section_uid)).name = 'tx_newspaper_mod5[section]'; // currently active section list gets this name in order to show the article wizard where to check ...
+		
+//console.log(document.getElementById('section2_' + parseInt(section_uid)).value);
+		if (document.getElementById('section2_' + parseInt(section_uid)).value != -1) {
+			setDefaultArticletype(document.getElementById('section2_' + parseInt(section_uid)).value);
+		}
+		
 	}
 
 {/literal}
