@@ -419,7 +419,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		$width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 320; // 320px is default
 		
-		$ret = '<select name="' . $this->prefixId . 'source_path" size="20" style="width:' . $width . 'px">' . "<br />\n";
+		$ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
  		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
 				$path . '</option>' . "<br />\n";
