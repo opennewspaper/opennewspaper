@@ -361,9 +361,11 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					$sub_sections[$current_sub_section->getUid()][$tmp_section->getUid()] = $tmp_section;
 				}
 			}
-			// if no sub section could be found for a start section, remove start section 
-			if (sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
-#				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
+			// if no sub section could be found for a start section, remove start section
+			//  Rev. 7617 that line caused a "tried to call function getUid() on a non-object"
+			// is_object() chekc added, but i don't know why ...
+			if (is_object($current_sub_section ) && sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
+				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
 			}
 		}
 		
