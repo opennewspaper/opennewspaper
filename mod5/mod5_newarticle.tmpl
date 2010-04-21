@@ -448,6 +448,7 @@ body {
 	width: 430px; /* \todo: use tsconfig value here */
 	height: 400px;
 	margin-right: 16px;
+	display: none;
 }
 </style>
 {/literal}
@@ -500,6 +501,26 @@ body {
 			</tr>
 		<table>
 		
+{* source browser and article preview *}
+		
+		{* breadcrumb *}
+<!-- \todo
+    	<div id="breadcrumbs">
+			<a href="#">Top</a><p>&nbsp;>&nbsp;</p>
+			<a href="#" class="current">Datum</a><p>&nbsp;>&nbsp;</p>
+			<a href="#">Ressort</a><p>&nbsp;>&nbsp;</p>
+			<a href="#">Artikel</a>
+		</div>		
+-->
+		<br /><br />
+		
+		{* here the source browser is inserted via AJAX *}
+		<div id="source_browser"></div>	
+		
+		{* here the text of the selected article is inserted via AJAX *}
+		<div id="article_text"></div>
+
+
 {* select section and article type *}
 		<div id="artikelimport">
 			<div>
@@ -539,25 +560,8 @@ body {
 			{/if}
 			<input style="display: none; " type="hidden" name="tx_newspaper_mod5[controller]" id="tx_newspaper_mod5[controller]" value="" />
 		</div>	
-	
-{* source browser and article preview *}
-		
-		{* breadcrumb *}
-<!-- \todo
-    	<div id="breadcrumbs">
-			<a href="#">Top</a><p>&nbsp;>&nbsp;</p>
-			<a href="#" class="current">Datum</a><p>&nbsp;>&nbsp;</p>
-			<a href="#">Ressort</a><p>&nbsp;>&nbsp;</p>
-			<a href="#">Artikel</a>
-		</div>		
--->
-		<br /><br />
-		
-		{* here the source browser is inserted via AJAX *}
-		<div id="source_browser"></div>	
-		
-		{* here the text of the selected article is inserted via AJAX *}
-		<div id="article_text"></div>
+
+
 </form>		
 		
 	{/if}
