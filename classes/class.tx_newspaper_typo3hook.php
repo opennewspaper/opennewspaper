@@ -269,7 +269,11 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 	}
 
 	function processDatamap_afterAllOperations($that) {
-//debug($that);
+		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
+			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
+				$savehook_object->processDatamap_afterAllOperations($that);
+			}
+		}
 	}
 
 
