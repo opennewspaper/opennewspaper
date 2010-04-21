@@ -554,7 +554,6 @@ function findElementsByName(name, type) {
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         $articleId = $PA['row']['uid'];
         $obj = new t3lib_TCEforms();
-        $PA['fieldConf']['config']['size'] = 4;
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
 
@@ -715,6 +714,7 @@ function findElementsByName(name, type) {
 
         //create completer and tag caches for content- and control-tags
         createTagCompletion('tags', mapSelector, false);
+        //without timeout the second autosuggest is not created properly, maybe because of ajax.
         window.setTimeout(function() {createTagCompletion('tags_ctrl', mapSelector)}, 1000);
      });
 
