@@ -250,7 +250,8 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 	}
 
 
-	/// save hook: delete
+	/// command map hooks 
+	
 	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array('command' => $command, 'table' => $table, 'id' => $id, 'value' => $value));
 //t3lib_div::debug($that); die();
@@ -267,6 +268,9 @@ t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 't
 		}
 	}
 
+	function processDatamap_afterAllOperations($that) {
+//debug($that);
+	}
 
 
 	private function checkIfSectionCanBeDeleted($table, $id) {
