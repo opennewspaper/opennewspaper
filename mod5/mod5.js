@@ -40,13 +40,17 @@
 	{rdelim}
 
 	function clearSourceBrowser() {ldelim}
-      document.getElementById('source_browser').innerHTML = '';
+      document.getElementById('source_browser').style.display = 'none';
+	  document.getElementById('article_text').style.display = 'none';
+	  document.getElementById('source_browser').innerHTML = '';
 	  document.getElementById('article_text').innerHTML = '';
       changeLoremButtonDisplayOption('inline');
 	{rdelim}
 
 	function updateSourceBrowser(response) {ldelim}
       changeLoremButtonDisplayOption('none');
+      document.getElementById('source_browser').style.display = 'online';
+	  document.getElementById('article_text').style.display = 'inline';
 	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
 	{rdelim}
