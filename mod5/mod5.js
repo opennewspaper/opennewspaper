@@ -49,7 +49,7 @@
 
 	function updateSourceBrowser(response) {ldelim}
       changeLoremButtonDisplayOption('none');
-      document.getElementById('source_browser').style.display = 'online';
+      document.getElementById('source_browser').style.display = 'inline';
 	  document.getElementById('article_text').style.display = 'inline';
 	  document.getElementById('source_browser').innerHTML = response.responseText;
       document.getElementById('article_text').innerHTML = '';
