@@ -44,7 +44,7 @@
 	position: absolute;
 	padding: 10px;
 	margin: 30px 0 0 650px;
-	width: 250px;	
+	width: 260px;	
 	background-color: #EFEDE4;
 	border: 1px solid #AAA;
 }
@@ -72,7 +72,7 @@
 }
 
 #filter label {
-	width: 100px; 
+	width: 110px; 
 }
 
 #filter .submit {
@@ -309,9 +309,6 @@ alert('to come ...');
 			{/if}
 			{/foreach}
 		</select>
-	
-		
-		
 	<br />
 	
 	<label>{$HIDDEN_LABEL}</label>
@@ -340,6 +337,10 @@ alert('to come ...');
 	
 	<label>{$AUTHOR_LABEL}</label> 
 	<input type="text" name="author" value="{$_POST.author}" />  
+	<br />
+
+	<label>{$BE_USER_LABEL}</label> 
+	<input type="text" name="be_user" value="{$_POST.be_user}" />  
 	<br />
 
 {* \todo: add section filter

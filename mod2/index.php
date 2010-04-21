@@ -155,7 +155,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'tstamp DESC',
 			intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
 		);
-//t3lib_div::devlog('row', 'newspaper', 0, array('row' => $row));
+//t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 
 		$content= $this->renderBackendSmarty($row);
 
@@ -191,6 +191,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('AUTHOR_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.author', false));
 		$smarty->assign('SECTION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.section', false));
 		$smarty->assign('TEXTSEARCH_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.textsearch', false));
+		$smarty->assign('BE_USER_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_be_user', false));
 
 		$smarty->assign('LABEL_TITLE', array(
 			'number' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_number', false),
@@ -357,6 +358,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'hidden' => $_POST['hidden'],
 			'role' => $_POST['role'],
 			'author' => $_POST['author'],
+			'be_user' => $_POST['be_user'],
 			'section' => $_POST['section'],
 			'text' => $_POST['text'],
 			'step' => $_POST['step'],
@@ -373,6 +375,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if (!array_key_exists('hidden', $settings)) $settings['hidden'] = 'all';
 		if (!array_key_exists('role', $settings)) $settings['role'] = '-1';
 		if (!array_key_exists('author', $settings)) $settings['author'] = '';
+		if (!array_key_exists('be_user', $settings)) $settings['be_user'] = '';
 		if (!array_key_exists('section', $settings)) $settings['section'] = '';
 		if (!array_key_exists('text', $settings)) $settings['text'] = '';
 		if (!array_key_exists('step', $settings)) $settings['step'] = 10;
@@ -416,7 +419,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 
 	/// create where part of sql statement for filter
-	/// return string 'WHERE' is NOT added to the string
+	/// return array with condition to be combined with "AND"
 	private function createWherePart() {
 //t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('_request' => $_REQUEST));
 		$where = array();
@@ -452,8 +455,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		
 		
 		if (trim(t3lib_div::_GP('author'))) {
-			$where[] = 'author LIKE "%' . trim(t3lib_div::_GP('author')) . '%"';
+			$where[] = 'author LIKE "%' . addslashes(trim(t3lib_div::_GP('author'))) . '%"';
 		}
+
+		if (trim(t3lib_div::_GP('be_user'))) {
+			$where[] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim(t3lib_div::_GP('be_user'))) . '%")';
+		}
+
+
 		if (t3lib_div::_GP('section')) {
 t3lib_div::devlog('moderation: section missing', 'newspaper', 3);
 		}
