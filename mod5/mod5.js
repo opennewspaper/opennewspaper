@@ -58,7 +58,8 @@
     {rdelim}
 	
 	function setArticlePreview(response)  {ldelim}
-      	document.getElementById('article_text').innerHTML = response.responseText;
+      	document.getElementById('article_text').style.display = 'inline';
+		document.getElementById('article_text').innerHTML = response.responseText;
 	{rdelim}
 	
 	function importArticle(source_id, path) {ldelim}
