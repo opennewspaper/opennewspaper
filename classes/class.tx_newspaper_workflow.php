@@ -495,7 +495,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
 		global $LANG;
-t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
+//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
