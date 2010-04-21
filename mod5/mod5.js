@@ -100,6 +100,9 @@
 	function changeSource(source_id, path) {ldelim}
 		var params = 'tx_newspaper_mod5[ajaxcontroller]=browse_path&tx_newspaper_mod5[source_id]='+source_id+'&tx_newspaper_mod5[path]='+path;
 
+	    document.getElementById('source_browser').style.display = 'inline';
+	    document.getElementById('article_text').style.display = 'inline';
+
 	    var request = new top.Ajax.Request(
 	      top.path + "typo3conf/ext/newspaper/mod5/index.php",
 		  {ldelim}
