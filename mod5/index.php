@@ -346,7 +346,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			if ($current_sub_section->getAttribute('articles_allowed') && $current_sub_section->getDefaultArticle()) {
 				$sub_sections[$current_sub_section->getUid()][$start_section->getUid()] = $current_sub_section;
 			}
-			// add all sub section that can take articles
+			// add all sub sections that can take articles
 			$tmp_sections = $current_sub_section->getChildSections(true);
 			foreach($tmp_sections as $tmp_section) {
 				// check if section can take articles and a default article is available. add to section2 if yes (only selectbox2 sections can be chosen)
@@ -354,10 +354,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					$sub_sections[$current_sub_section->getUid()][$tmp_section->getUid()] = $tmp_section;
 				}
 			}
-			// if no sub section could be found for a start section, remove start section
-			//  Rev. 7617 that line caused a "tried to call function getUid() on a non-object"
-			// is_object() chekc added, but i don't know why ...
-			if (is_object($current_sub_section ) && sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
+			// if no sub section could be found for a start section, remove start section (if main section is allowed to take articles, the sub section IS NOT empty)
+			if (sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
 				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
 			}
 		}

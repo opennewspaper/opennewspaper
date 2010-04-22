@@ -526,9 +526,9 @@ body {
 			<div>
 				<label>{$LABEL.section_base}</label> <br />
 				<select id="section1" onchange="changeSectionBox2(this.value)" size="9">
-				{section name=i loop=$SECTION1}
-		    	  	<option value="{$SECTION1[i]->getUid()}"> {$SECTION1[i]->getAttribute('section_name')}</option>
-				{/section}
+				{foreach key=section_id item=section from=$SECTION1}
+		    	  	<option value="{$section->getUid()}"> {$section->getAttribute('section_name')}</option>
+				{/foreach}
 				</select>
 			</div>
 			
