@@ -700,6 +700,11 @@ function findElementsByName(name, type) {
                      _getCurrentInputAsPartialList: function() {
                         return "<ul><li>" + this.getToken() + "<" + "/li>";
                      },
+
+                     selectEntry : function(\$super) {
+                        \$super();
+                        this.element.value = '';
+                     }
             });   
     document.observe("dom:loaded", function() {
         $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
