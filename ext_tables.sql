@@ -29,7 +29,7 @@ CREATE TABLE tx_newspaper_extra_image (
 	pool tinyint(3) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	image_file blob NOT NULL,
-	caption tinytext NOT NULL,
+	caption text NOT NULL,
 	normalized_filename tinytext NOT NULL,
 	kicker tinytext NOT NULL,
 	credit tinytext NOT NULL,
@@ -648,6 +648,7 @@ CREATE TABLE tx_newspaper_tag (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	title tinytext NOT NULL,
 	tag tinytext NOT NULL,
 	tag_type blob NOT NULL,
 	

@@ -51,11 +51,11 @@
 			<label index="tx_newspaper_article.articletype_id">Article type</label>
 			<label index="tx_newspaper_article.publish_date">Publish date</label>
 			<label index="tx_newspaper_article.title">Title</label>
-			<label index="tx_newspaper_article.title_list">Title for list view, if different</label>
+			<label index="tx_newspaper_article.title_list">Title for regional edition</label>
 			<label index="tx_newspaper_article.kicker">Kicker</label>
-			<label index="tx_newspaper_article.kicker_list">Kicker for list view, if different</label>
+			<label index="tx_newspaper_article.kicker_list">Kicker for regional edition</label>
 			<label index="tx_newspaper_article.teaser">Teaser</label>
-			<label index="tx_newspaper_article.teaser_list">Teaser for list view, if different</label>
+			<label index="tx_newspaper_article.teaser_list">Teaser for regional edition</label>
 			<label index="tx_newspaper_article.text">Article text</label>
 			<label index="tx_newspaper_article.author">Author</label>
 			<label index="tx_newspaper_article.source_id">Unique ID in newspaper editing system</label>
@@ -155,6 +155,7 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_where">SQL Condition for listed Articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_order_by">SQL expression to sort listed articles</label>
 			<label index="tx_newspaper_tag">Tag</label>
+			<label index="tx_newspaper_tag.title">Title</label>
 			<label index="tx_newspaper_tag.tag">Tag</label>
 			<label index="tx_newspaper_tag.tag_type">Tag type</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Most commented articles</label>
@@ -253,11 +254,11 @@
 			<label index="tx_newspaper_article.articletype_id">Artikeltyp</label>
 			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
 			<label index="tx_newspaper_article.title">Titel</label>
-			<label index="tx_newspaper_article.title_list">Titel für Listenansicht, wenn anders</label>
+			<label index="tx_newspaper_article.title_list">Titel für Regionalausgabe</label>
 			<label index="tx_newspaper_article.kicker">Dachzeile</label>
-			<label index="tx_newspaper_article.kicker_list">Dachzeile für Listenansicht, wenn anders</label>
+			<label index="tx_newspaper_article.kicker_list">Dachzeile für Regionalausgabe</label>
 			<label index="tx_newspaper_article.teaser">Teaser</label>
-			<label index="tx_newspaper_article.teaser_list">Teaser für Listenansicht, wenn anders</label>
+			<label index="tx_newspaper_article.teaser_list">Teaser für Regionalausgabe</label>
 			<label index="tx_newspaper_article.text">Artikeltext</label>
 			<label index="tx_newspaper_article.author">Autor</label>
 			<label index="tx_newspaper_article.source_id">Unique ID im Redaktionssystem der Zeitung</label>
@@ -357,6 +358,7 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_where">SQL-Bedingung für aufgelistete Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_order_by">SQL-Ausdruck zum Sortieren aufgelisteter Artikel</label>
 			<label index="tx_newspaper_tag">Schlagworte</label>
+			<label index="tx_newspaper_tag.title">Titel</label>
 			<label index="tx_newspaper_tag.tag">Schlagwort</label>
 			<label index="tx_newspaper_tag.tag_type">Tagart</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Meistkommentierte Artikel</label>

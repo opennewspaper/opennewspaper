@@ -78,8 +78,9 @@ $TCA["tx_newspaper_extra_image"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.caption",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
+				"type" => "text",
+				"cols" => "40",	
+				"rows" => "3",
 			)
 		),
 		"normalized_filename" => Array (		
@@ -2169,10 +2170,18 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 $TCA["tx_newspaper_tag"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "tag,tag_type"
+		"showRecordFieldList" => "title,tag,tag_type"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"tag" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag",		
@@ -2195,7 +2204,7 @@ $TCA["tx_newspaper_tag"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "tag;;;;1-1-1, tag_type")
+		"0" => array("showitem" => "title;;;;2-2-2, tag;;;;3-3-3, tag_type")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
