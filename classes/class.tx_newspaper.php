@@ -12,7 +12,7 @@ class tx_newspaper  {
 	// basic newspaper configuration
 	
 	// \todo: set to true if template set are fully functional
-	const USE_TEMPLATE_SETS = false; // if set to false, no template set form fields aren't visible in the backend
+	const USE_TEMPLATE_SETS = false; // if set to false, no template set form fields are visible in the backend
 
 
 	///	Whether to use Typo3's command- and datamap functions for DB operations
