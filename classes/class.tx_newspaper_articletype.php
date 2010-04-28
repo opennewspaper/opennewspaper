@@ -112,7 +112,6 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	}
 
 
-/// \todo: move tsconfig access to tx_newspaper class	
 	/// Get TSConfig setting for this article type
 	/** \param $type article type configured in TSConfig, currently
 	 *      available: musthave, shouldhave
