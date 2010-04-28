@@ -10,14 +10,17 @@
  
  class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
  	
- 		function setUp() {
+ 		function setUp($createFixture = true) {
  			$this->createDatabase();
  			$this->cleanDatabase();
 			$this->useTestDatabase();             
  			$this->importTables(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.sql');
  			$this->importExtensions(array('newspaper', 'devlog'));             
 // 			$this->importData(PATH_typo3conf . 'ext/newspaper/tests/typo3.newspaper.basis1.inserts.sql');
-			$this->fixture = new tx_newspaper_hierarchy();
+
+             if($createFixture) {
+                $this->fixture = new tx_newspaper_hierarchy();
+             }
  		}
  		
  		function tearDown() {
