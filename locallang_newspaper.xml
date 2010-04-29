@@ -37,6 +37,7 @@
 			<label index="label_workflow_role_none">Article online, workflow ended</label>
 			<label index="label_workflow_role_old">Old role</label>
 			<label index="label_workflow_role_new">New role</label>
+			<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
 			<label index="log_record_hidden">Record hidden</label>
 			<label index="log_record_published">Record published</label>
 			<label index="log_article_hidden">Article hidden</label>
@@ -150,6 +151,10 @@
 			<label index="label_workflow_role_none">Artikel plaziert</label>
 			<label index="label_workflow_role_old">Alte Rolle</label>
 			<label index="label_workflow_role_new">Neue Rolle</label>
+			<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
+			<label index="log_record_published">Publiziert</label>
+			<label index="log_article_hidden">Artikel versteckt</label>
+			<label index="log_article_published">Artikel publiziert</label>
 			<label index="log_more_link">Mehr ...</label>
 			<label index="log_less_link">Weniger ...</label>
 			<label index="log_import">Artikel importiert</label>

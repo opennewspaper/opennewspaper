@@ -411,10 +411,15 @@ function changeWorkflowStatus(role, hidden_status) {
 	/// \return message: what status change took place
 	public static function getWorkflowStatusChangedComment($new_role, $old_role) {
 		global $LANG;
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_new', false) . ' "' . 
-			self::getRoleTitle($new_role) . '", ' . //$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
-			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_old', false) . '"' .
-			self::getRoleTitle($old_role) . '"'; // $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
+		$log = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_change', false);
+		$log = str_replace('###OLD_ROLE###', self::getRoleTitle($old_role), $log);
+		$log = str_replace('###NEW_ROLE###', self::getRoleTitle($new_role), $log);
+		return $log;
+//		return  . ' --> ' . self::getRoleTitle($new_role);
+//		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_new', false) . ' "' . 
+//			self::getRoleTitle($new_role) . '", ' . //$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
+//			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_old', false) . '"' .
+//			self::getRoleTitle($old_role) . '"'; // $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
 	}
 
 	public static function getRoleTitle($role) {
