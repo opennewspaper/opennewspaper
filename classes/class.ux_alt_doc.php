@@ -56,7 +56,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		}
 
 		// CLOSE button:
-		$buttons['close'] = '<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.
+		$buttons['close'] = '
+<!-- dummy button for iframe testing -->				
+<a href="#" onclick="console.dirxml(window); alert(\'test\');">IFrame</a> &nbsp; &nbsp; 
+				
+				
+				<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.
 				'<img'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/closedok.gif','width="21" height="16"').' class="c-inputButton" title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc',1).'" alt="" />'.
 				'</a>';
 
