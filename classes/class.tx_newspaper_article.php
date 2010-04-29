@@ -114,7 +114,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		
  		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
-        	throw new tx_newspaper_WrongAttributeException($attribute, $this->getUid());
+        	throw new tx_newspaper_WrongAttributeException($attribute, $this->attributes, $this->getUid());
  		}
 
  		return $this->attributes[$attribute];
