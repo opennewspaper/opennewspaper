@@ -57,8 +57,24 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 		// CLOSE button:
 		$buttons['close'] = '
-<!-- dummy button for iframe testing -->				
-<a href="#" onclick="console.dirxml(window); alert(\'test\');">IFrame</a> &nbsp; &nbsp; 
+<!-- dummy button for iframe testing -->
+        <script type="text/javascript">
+            function frameTest() {
+                var iframeDok = top.window.frames[\'popupFrame\'].document;
+
+                var saveDokInput = iframeDok.createElement("input");
+                saveDokInput.setAttribute("name", "_savedok.x");
+                iframeDok.forms[0].appendChild(saveDokInput);
+
+                var saveDokInput2 = iframeDok.createElement("input");
+                saveDokInput2.setAttribute("name", "_savedok.y");
+                iframeDok.forms[0].appendChild(saveDokInput2);
+
+                iframeDok.forms[0].submit();
+                return false;
+            }
+        </script>
+<a href="#" onclick="frameTest();">IFrame</a> &nbsp; &nbsp;
 				
 				
 				<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.
