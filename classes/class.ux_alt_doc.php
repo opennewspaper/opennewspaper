@@ -64,10 +64,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
                 var saveDokInput = iframeDok.createElement("input");
                 saveDokInput.setAttribute("name", "_savedok.x");
+                saveDokInput.setAttribute("type", "hidden");
                 iframeDok.forms[0].appendChild(saveDokInput);
 
                 var saveDokInput2 = iframeDok.createElement("input");
                 saveDokInput2.setAttribute("name", "_savedok.y");
+                saveDokInput2.setAttribute("type", "hidden");
                 iframeDok.forms[0].appendChild(saveDokInput2);
 
                 iframeDok.forms[0].submit();
