@@ -452,7 +452,7 @@ function findElementsByName(name, type) {
 
 		// if concrete article: add shortcuts for missing should-have and must-have extras
 		$shortcuts = $is_concrete_article? $pz->getMissingDefaultExtras() : array();
-//t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
+if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
 
 
 		// get a smarty object
@@ -924,7 +924,7 @@ JSCODE;
 	 * called by hook $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][]
 	 */
 	public static function addAdditionalScriptToBackend() {
-		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/util.js');
+		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/newspaper.js');
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_DISPLAY_MODE_IFRAME:
 				self::$backend_files_added = true; // nothing to add for iframe mode
@@ -932,7 +932,6 @@ JSCODE;
 			case BE_DISPLAY_MODE_SUBMODAL:
 				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
-				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/extra/util.js');
 				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
 				self::$backend_files_added = true;
 			break;
