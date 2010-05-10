@@ -519,7 +519,7 @@ function loadJsCssFile(filename, filetype, param) {
 */		
 	}
 	
-    var tTabManagement = {
+    var TabManagement = {
         initialize: function() {
             this.tabs = {};
         },
@@ -531,7 +531,10 @@ function loadJsCssFile(filename, filetype, param) {
     }
 
         function showExtra(table, id) {
-            $('extra_' + id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+table+']['+id+']=edit""></iframe>';
+            $$('.extra').each(function(div){ div.hide(); }  );
+            var extra_div_id = table + '_' + id;
+            $(extra_div_id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+table+']['+id+']=edit""></iframe>';
+            $(extra_div_id).show();
         }
 	
 	

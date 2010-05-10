@@ -1,0 +1,23 @@
+{debug}
+{literal}
+    <style type="text/css">
+        #extra_tabs ul li { display: inline; padding: 0; margin: 0; }
+    </style>
+    <script language="text/JavaScript">
+
+    </script>
+{/literal}
+
+<div id="extra_tabs">
+    <ul>
+        {foreach from=$EXTRA_DATA item=extra}
+        <li>
+            <a href="#" onclick="showExtra('{$extra.concrete_table}', {$extra.concrete_uid}); return false;"><strong>{$extra.extra_type}</strong></a>
+        </li>
+        {/foreach}
+    </ul>
+    {foreach from=$EXTRA_DATA item=extra}
+        <div id="{$extra.concrete_table}_{$extra.concrete_uid}" class="extra"></div>
+    {/foreach}
+    </div>
+</div>
