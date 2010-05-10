@@ -1,5 +1,3 @@
-
-<script language="javascript">
 //{literal}
 // this script assumes prototype (ajax) to be available
 
@@ -555,4 +553,3 @@ function loadJsCssFile(filename, filetype, param) {
 	
 
 //{/literal}	
-</script>
