@@ -1,7 +1,56 @@
 {debug}
 {literal}
     <style type="text/css">
-        #extra_tabs ul li { display: inline; padding: 0; margin: 0; }
+        #extra_tabs, #extra_tabs  ul  {margin: 0; padding: 0 3px 0 0; float: left; width: 100%}
+        #extra_tabs ul li {
+            display: inline;
+            padding: 5px;
+            margin: 0 0 0 0;
+            border: solid 1px;
+            border-bottom: none;
+            -moz-border-radius-topleft: 3px;
+            -moz-border-radius-topright: 3px;
+             float: left;
+        }
+        #extra_tabs ul li a { display: inline; padding: 5px 10px; color: #666666; }
+        #extra_tabs ul li a.extra_tab_act { display: inline; padding: 5px 10px; color: #000000; }
+        
+
+        /*#extra_tabs ul li,*/
+         /*#extra_tabs ul li a {*/
+            /*color: #666;*/
+            /*border: solid solid none;*/
+            /*border-width: 1px 1px 0;*/
+            /*border-color: #A2AAB8 #A2AAB8;*/
+            /*background: #c4d4cd;*/
+            /*padding: 0;*/
+            /*-moz-border-radius-topleft: 3px;*/
+            /*-moz-border-radius-topright: 3px;*/
+        /*}*/
+
+        /*#extra_tabs ul li,*/
+        /*#extra_tabs li.extra_tabact {*/
+            /*border-bottom: 0px;*/
+            /*border-radius: 3px;*/
+            /*-webkit-border-radius: 3px;*/
+            /*-moz-border-radius: 3px;*/
+        /*}*/
+        /*#extra_tabs ul li a {*/
+            /*color: #666;*/
+            /*text-decoration: none;*/
+            /*display: block;*/
+            /*width: 100%;*/
+            /*padding: 2px 5px 3px 2px;*/
+        /*}*/
+
+        /*#extra_tabs ul li.tabact a {*/
+            /*color: black;*/
+            /*padding-left: 10px;*/
+            /*padding-right: 10px;*/
+        /*}*/
+
+
+
     </style>
     <script language="text/JavaScript">
 
@@ -12,7 +61,7 @@
     <ul>
         {foreach from=$EXTRA_DATA item=extra}
         <li>
-            <a href="#" onclick="tabManagement.show('{$extra.concrete_table}', {$extra.concrete_uid}); return false;"><strong>{$extra.extra_type}</strong></a>
+            <a href="#" onclick="tabManagement.show('{$extra.concrete_table}', {$extra.concrete_uid}); this.blur(); return false;">{$extra.extra_type}</a>
         </li>
         {/foreach}
     </ul>

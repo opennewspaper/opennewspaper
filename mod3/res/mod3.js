@@ -522,9 +522,9 @@ function loadJsCssFile(filename, filetype, param) {
     var TabManagement =  Class.create({
 
         initialize: function() {
-            this.tabs = [];
+            this.tabIds = [];
             //Javascript has no contains method so add one.
-            this.tabs.contains = function(elem) {
+            this.tabIds.contains = function(elem) {
                 var contained = false;
                 for(var i = 0 ; i < this.length; i++) {
                     if(this[i] == elem) {
@@ -534,26 +534,39 @@ function loadJsCssFile(filename, filetype, param) {
                 }
                 return contained;
             }
+            // add
+            $('extra_tabs').observe('click', this._markActiveTab);
         },
 
         show: function(tab, id) {
             var tab_id = tab +'_'+id;
 
             //hide all tabs, they must have a css-class called .extra_tab 
-            $$('.extra_tab').each(function(div){ div.hide(); });
+            $$('.extra_tab').each(function(div){ div.hide();});
 
             //load iframe only once
-            if(!this.tabs.contains(tab_id)) {
-                $(tab_id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
-                this.tabs.push(tab_id);
+            if(!this.tabIds.contains(tab_id)) {
+                $(tab_id).innerHTML='<iframe height="840px" width="100%" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
+                this.tabIds.push(tab_id);
             }
 
             $(tab_id).show();
-        }
+        },
 
+        _markActiveTab: function(event) {
+            $('extra_tabs').select('a').each(function(anchor) { anchor.removeClassName('extra_tab_act'); })
+            var elem = event.findElement('a');
+            if(elem) {
+                elem.addClassName('extra_tab_act');
+            }
+        }
     });
 
-    var tabManagement = new TabManagement();
+    var tabManagement = null;
+    document.observe('dom:loaded', function() {
+      tabManagement = new TabManagement();
+      
+    });
 
 
 	
