@@ -12,12 +12,12 @@
     <ul>
         {foreach from=$EXTRA_DATA item=extra}
         <li>
-            <a href="#" onclick="showExtra('{$extra.concrete_table}', {$extra.concrete_uid}); return false;"><strong>{$extra.extra_type}</strong></a>
+            <a href="#" onclick="tabManagement.show('{$extra.concrete_table}', {$extra.concrete_uid}); return false;"><strong>{$extra.extra_type}</strong></a>
         </li>
         {/foreach}
     </ul>
     {foreach from=$EXTRA_DATA item=extra}
-        <div id="{$extra.concrete_table}_{$extra.concrete_uid}" class="extra"></div>
+        <div id="{$extra.concrete_table}_{$extra.concrete_uid}" class="extra_tab"></div>
     {/foreach}
     </div>
 </div>

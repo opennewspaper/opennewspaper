@@ -518,25 +518,44 @@ function loadJsCssFile(filename, filetype, param) {
 		}
 */		
 	}
-	
-    var TabManagement = {
+
+    var TabManagement =  Class.create({
+
         initialize: function() {
-            this.tabs = {};
+            this.tabs = [];
+            //Javascript has no contains method so add one.
+            this.tabs.contains = function(elem) {
+                var contained = false;
+                for(var i = 0 ; i < this.length; i++) {
+                    if(this[i] == elem) {
+                        contained = true;
+                        break;
+                    }
+                }
+                return contained;
+            }
         },
 
-        showExtra: function(table, id) {
-          this.tabs[id]
-        },
+        show: function(tab, id) {
+            var tab_id = tab +'_'+id;
 
-    }
+            //hide all tabs, they must have a css-class called .extra_tab 
+            $$('.extra_tab').each(function(div){ div.hide(); });
 
-        function showExtra(table, id) {
-            $$('.extra').each(function(div){ div.hide(); }  );
-            var extra_div_id = table + '_' + id;
-            $(extra_div_id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+table+']['+id+']=edit""></iframe>';
-            $(extra_div_id).show();
+            //load iframe only once
+            if(!this.tabs.contains(tab_id)) {
+                $(tab_id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
+                this.tabs.push(tab_id);
+            }
+
+            $(tab_id).show();
         }
-	
+
+    });
+
+    var tabManagement = new TabManagement();
+
+
 	
 	
 /// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
