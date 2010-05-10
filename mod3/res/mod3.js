@@ -534,18 +534,20 @@ function loadJsCssFile(filename, filetype, param) {
                 }
                 return contained;
             }
-            // add
-            $('extra_tabs').observe('click', this._markActiveTab);
+            this._hideAllTabs();
         },
 
         show: function(tab, id) {
-            var tab_id = tab +'_'+id;
+            var tab_id = tab;
+            if(id) {
+                tab_id = tab  +'_'+id;
+            }
 
             //hide all tabs, they must have a css-class called .extra_tab 
-            $$('.extra_tab').each(function(div){ div.hide();});
+            this._hideAllTabs();
 
-            //load iframe only once
-            if(!this.tabIds.contains(tab_id)) {
+            //check for id is a hack so overview-tab is not processed here
+            if(!this.tabIds.contains(tab_id) && id) {
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
             }
@@ -553,18 +555,23 @@ function loadJsCssFile(filename, filetype, param) {
             $(tab_id).show();
         },
 
-        _markActiveTab: function(event) {
-            $('extra_tabs').select('a').each(function(anchor) { anchor.removeClassName('extra_tab_act'); })
+        markActiveTab: function(event) {
+            $('extras').select('a').each(function(anchor) { anchor.removeClassName('extra_tab_act'); })
             var elem = event.findElement('a');
             if(elem) {
                 elem.addClassName('extra_tab_act');
             }
+        },
+
+        _hideAllTabs: function() {
+            $$('.extra_tab').each(function(div){ div.hide();});
         }
     });
 
     var tabManagement = null;
     document.observe('dom:loaded', function() {
-      tabManagement = new TabManagement();
+        tabManagement = new TabManagement();
+        $('extras').observe('click', tabManagement.markActiveTab);
       
     });
 

@@ -802,7 +802,8 @@ JSCODE;
 		$label['notes'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_notes', false);
 		$label['templateset'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_templateset', false);
 		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_shortcuts', false);
-	
+	    $label['overview'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:overview', false);
+
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 	
