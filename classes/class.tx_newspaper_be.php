@@ -540,7 +540,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 				$smarty_pz->assign('MESSAGE', $message);
                 if (true) {
                  // tabbed backend
-                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
+                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                 } else {
                  // just a list of extras
                  $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone

@@ -521,8 +521,20 @@ function loadJsCssFile(filename, filetype, param) {
 */		
 	}
 	
-	
-	
+    var tTabManagement = {
+        initialize: function() {
+            this.tabs = {};
+        },
+
+        showExtra: function(table, id) {
+          this.tabs[id]
+        },
+
+    }
+
+        function showExtra(table, id) {
+            $('extra_' + id).innerHTML='<iframe height="840px" width="510px" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+table+']['+id+']=edit""></iframe>';
+        }
 	
 	
 	
@@ -536,7 +548,9 @@ function loadJsCssFile(filename, filetype, param) {
 				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime()
 			}
 		);
-	}				
+	}
+        
+
 
 	
 
