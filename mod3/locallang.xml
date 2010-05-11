@@ -54,6 +54,7 @@
 			<label index="label_new_extra_in_article">Create new extra configured for this article type and section</label>
 			<label index="label_shortcuts">Shortcuts</label>
             <label index="overview">Overview</label>
+            <label index="message_unsaved_data">Unsaved data will be lost. Continue?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Seitengestaltung</label>
@@ -104,6 +105,7 @@
 			<label index="label_new_extra_in_article">Ein neues Web-Element anlegen (laut Konfiguration für diesen Artikeltyp und dieses Ressort)</label>
 			<label index="label_shortcuts">Shortcuts</label>
             <label index="overview">Überblick</label>
+            <label index="message_unsaved_data">Nicht gespeicherte Änderungen gehen verloren. Fortfahren?</label>
 		</languageKey>
 	</data>
 </T3locallang>

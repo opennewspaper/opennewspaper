@@ -468,7 +468,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 		$label['pagezone_inheritancesource_none'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_none', false);
 		$label['title'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title', false);
 		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
-        $message['confirmation'] = "Nicht gespeicherte Änderungen gehen verloren. \n Fortfahren?";
+        $message['confirmation'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_unsaved_data', false);
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);

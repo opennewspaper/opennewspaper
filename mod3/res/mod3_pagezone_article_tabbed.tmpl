@@ -18,13 +18,8 @@
         #tx_newspaper_mod3 table {float: left; padding: 0; margin: 0;}
 
     </style>
-    <script language="text/JavaScript">
-        document.observe('dom:loaded', function() {
-            tabManagement.setConfirmationMessage({/literal} '{$message.confirmation}' {literal} );
-        });
-    </script>
 {/literal}
-
+<span id="confirmationMessage" style="display: none;">{$MESSAGE.confirmation}</span>
 <div id="extras">
     <ul>
         <li><a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true, 1); return false;">{$NEW_TOP_ICON}</a><br /></li>

@@ -523,7 +523,7 @@ function loadJsCssFile(filename, filetype, param) {
 
         initialize: function() {
             this.tabIds = [];
-            this.confirmMessage = "Really loose data?";
+            this.confirmMessage = $('confirmationMessage').innerHTML;
             //Javascript has no contains method so add one.
             this.tabIds.contains = function(elem) {
                 var contained = false;
@@ -547,7 +547,7 @@ function loadJsCssFile(filename, filetype, param) {
             }
             this._hideAllTabs();
 
-            //hack for overview-tab so is not processed here because it has no id
+            //hack for overview-tab so is not processed here because it has no iframe
             if(!this.tabIds.contains(tab_id) && id) {
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
@@ -599,12 +599,7 @@ function loadJsCssFile(filename, filetype, param) {
                 allowSubmit = confirm(this.confirmMessage);                
             }
             return allowSubmit;
-        },
-
-        setConfirmationMessage: function(message) {
-            this.confirmMessage = message;
         }
-
     });
 
     var tabManagement = null;
