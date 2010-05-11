@@ -574,11 +574,10 @@ function loadJsCssFile(filename, filetype, param) {
                     var frame = $(this.tabIds[i]);
                     var iframeDok = top.window.frames[frame.id].document;
 
-                    var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod + ".x"});
-                    iframeDok.forms[0].appendChild(saveDokInput);
-
-                    var saveDokInput2 = new Element('input', {type: 'hidden', name: saveMethod + ".y"});
-                    iframeDok.forms[0].appendChild(saveDokInput2);
+                    ['.x', '.y'].each(function(suffix) {
+                        var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod + suffix});
+                        iframeDok.forms[0].appendChild(saveDokInput);
+                    });
 
                     iframeDok.forms[0].submit();
                 }
