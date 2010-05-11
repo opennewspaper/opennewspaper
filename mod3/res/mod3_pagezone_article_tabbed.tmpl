@@ -19,7 +19,9 @@
 
     </style>
     <script language="text/JavaScript">
-
+        document.observe('dom:loaded', function() {
+            tabManagement.setConfirmationMessage({/literal} '{$message.confirmation}' {literal} );
+        });
     </script>
 {/literal}
 

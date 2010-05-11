@@ -523,6 +523,7 @@ function loadJsCssFile(filename, filetype, param) {
 
         initialize: function() {
             this.tabIds = [];
+            this.confirmMessage = "Really loose data?";
             //Javascript has no contains method so add one.
             this.tabIds.contains = function(elem) {
                 var contained = false;
@@ -539,19 +540,18 @@ function loadJsCssFile(filename, filetype, param) {
 
         show: function(tab, id) {
             var tab_id = tab;
+
+            //hack for overview tab, caus it has no id
             if(id) {
                 tab_id = tab  +'_'+id;
             }
-
-            //hide all tabs, they must have a css-class called .extra_tab 
             this._hideAllTabs();
 
-            //check for id is a hack so overview-tab is not processed here
+            //hack for overview-tab so is not processed here because it has no id
             if(!this.tabIds.contains(tab_id) && id) {
-                $(tab_id).innerHTML='<iframe height="840px" width="100%" id="extra_dialog" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
+                $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
             }
-
             $(tab_id).show();
         },
 
@@ -563,16 +563,54 @@ function loadJsCssFile(filename, filetype, param) {
             }
         },
 
+        /**
+         *
+         * @param saveMethod savedok or saveandclosedok
+         */
+        submitTabs: function(saveMethod) {
+            var allowSubmit = this.isDirty();
+            if(allowSubmit) {
+                for(var i = 0; i < this.tabIds.length; i++) {
+                    var frame = $(this.tabIds[i]);
+                    var iframeDok = top.window.frames[frame.id].document;
+
+                    var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod + ".x"});
+                    iframeDok.forms[0].appendChild(saveDokInput);
+
+                    var saveDokInput2 = new Element('input', {type: 'hidden', name: saveMethod + ".y"});
+                    iframeDok.forms[0].appendChild(saveDokInput2);
+
+                    iframeDok.forms[0].submit();
+                }
+            }
+            return allowSubmit;
+        },
+
+        /**
+         * hide all tabs, they must have a css-class called .extra_tab 
+         */
         _hideAllTabs: function() {
             $$('.extra_tab').each(function(div){ div.hide();});
+        },
+
+        isDirty: function() {
+            var allowSubmit = true;
+            if(this.tabIds.size() > 0) {
+                allowSubmit = confirm(this.confirmMessage);                
+            }
+            return allowSubmit;
+        },
+
+        setConfirmationMessage: function(message) {
+            this.confirmMessage = message;
         }
+
     });
 
     var tabManagement = null;
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
         $('extras').observe('click', tabManagement.markActiveTab);
-      
     });
 
 
