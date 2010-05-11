@@ -22,7 +22,7 @@
 <span id="confirmationMessage" style="display: none;">{$MESSAGE.confirmation}</span>
 <div id="extras">
     <ul>
-        <li><a href="#" onclick="extra_insert_after(0, {$DATA.pagezone_id}, 0, true, 1); return false;">{$NEW_TOP_ICON}</a><br /></li>
+        <li><a href="#" onclick="tabManagement.show('add_extra', [0, {$DATA.pagezone_id}, 0, true, 1]); this.blur(); return false;">{$NEW_TOP_ICON}</a></li>
         <li><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
         {if $EXTRA_DATA}
             {foreach from=$EXTRA_DATA item=extra}
@@ -32,6 +32,7 @@
             {/foreach}
         {/if}
     </ul>
+    <div id="add_extra" class="extra_tab"></div>
     <div id="overview" class="extra_tab">
         {if $SHORTCUT}
 		    <div style="margin-bottom: 7px;">

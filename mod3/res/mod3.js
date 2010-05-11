@@ -542,13 +542,17 @@ function loadJsCssFile(filename, filetype, param) {
             var tab_id = tab;
 
             //hack for overview tab, caus it has no id
-            if(id) {
+            if(typeof id  == 'number') {
                 tab_id = tab  +'_'+id;
             }
             this._hideAllTabs();
 
-            //hack for overview-tab so is not processed here because it has no iframe
-            if(!this.tabIds.contains(tab_id) && id) {
+            if(tab_id == 'add_extra') {
+                var closehtml = (id[4])? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + id[1]) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
+                var url = t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + id[0] + "&pz_uid=" + id[1] + "&paragraph=" + id[2] + "&new_at_top=" + id[3] + "&is_concrete_article=" + id[4] + "&returnUrl=" + id[0];
+                $(tab_id).innerHTML = '<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="'+url+'"></iframe>';
+
+            } else if(!this.tabIds.contains(tab_id) && id) { //hack for overview-tab so is not processed here because it has no iframe
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
             }
