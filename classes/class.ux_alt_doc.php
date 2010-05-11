@@ -34,7 +34,9 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		if (!$this->errorC && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'])	{
 
 			// SAVE button:
+//			$buttons['save'] = '<input onclick="newspaperArticleStore(this);" type="image" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
 			$buttons['save'] = '<input type="image" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
+
 
 //			// SAVE / VIEW button:
 //			if ($this->viewId && !$this->noView && t3lib_extMgm::isLoaded('cms')) {
@@ -47,7 +49,9 @@ class ux_SC_alt_doc extends SC_alt_doc {
 //			}
 
 			// SAVE / CLOSE
+//			$buttons['save_close'] = '<input onclick="newspaperArticleStore(this);" type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
 			$buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
+
 
 			// FINISH TRANSLATION / SAVE / CLOSE
 			if ($GLOBALS['TYPO3_CONF_VARS']['BE']['explicitConfirmationOfTranslation'])	{
@@ -58,25 +62,30 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		// CLOSE button:
 		$buttons['close'] = '
 <!-- dummy button for iframe testing -->
-        <script type="text/javascript">
-            function frameTest() {
-                var iframeDok = top.window.frames[\'popupFrame\'].document;
+<script type="text/javascript">
+	function frameTest(buttonName) {
 
-                var saveDokInput = iframeDok.createElement("input");
-                saveDokInput.setAttribute("name", "_savedok.x");
-                saveDokInput.setAttribute("type", "hidden");
-                iframeDok.forms[0].appendChild(saveDokInput);
+		var iframeDok = top.window.frames[\'popupFrame\'].document;
 
-                var saveDokInput2 = iframeDok.createElement("input");
-                saveDokInput2.setAttribute("name", "_savedok.y");
-                saveDokInput2.setAttribute("type", "hidden");
-                iframeDok.forms[0].appendChild(saveDokInput2);
+		var saveDokInputX = iframeDok.createElement("input");
+		saveDokInputX.setAttribute("name", buttonName + ".x");
+		saveDokInputX.setAttribute("type", "hidden");
 
-                iframeDok.forms[0].submit();
-                return false;
-            }
-        </script>
-<a href="#" onclick="frameTest();">IFrame</a> &nbsp; &nbsp;
+		var saveDokInputY = iframeDok.createElement("input");
+		saveDokInputY.setAttribute("name", buttonName + ".y");
+		saveDokInputY.setAttribute("type", "hidden");
+
+		iframeDok.forms[0].appendChild(saveDokInputX);
+		iframeDok.forms[0].appendChild(saveDokInputY);
+
+		iframeDok.forms[0].submit();
+		return false;
+	}
+	function newspaperArticleStore(that) {
+		frameTest(that.name);
+	}
+</script>
+
 				
 				
 				<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.

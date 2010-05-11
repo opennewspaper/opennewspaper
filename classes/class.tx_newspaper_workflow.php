@@ -173,10 +173,15 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 		
 		if ($new_role !== false) {
-			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . ')';
+			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . '); ';
 		} else {
-			$js = 'changeWorkflowStatus(-1, ' . $hidden . ')'; 
+			$js = 'changeWorkflowStatus(-1, ' . $hidden . '); '; 
 		}
+		
+// \todo: add only if needed
+		// add js call for saving potentially open iframe form for extras
+		$js .= 'newspaperArticleStore(this); ';
+		
 		
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"';
 		$html .= ' onclick="' . $js . '" '; // add js call 
