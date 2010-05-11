@@ -4,9 +4,8 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 	protected function getButtons()	{
-		
+//debug($this->elementsData[0]['table']);		
 		if ($this->elementsData[0]['table'] != 'tx_newspaper_article') {
-//debug($this->elementsData[0]['table']);
 			return parent::getButtons();
 		}
 		
@@ -57,6 +56,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 		// CLOSE button:
 		$buttons['close'] = '
+<!-- hide docheader2 (csh and path info) --> 
+<style>
+#typo3-docheader-row2 { display:none; }
+div#typo3-docbody { top:20px; }
+</style>
+
 <!-- dummy button for iframe testing -->
 <script type="text/javascript">
 	function frameTest(buttonName) {
