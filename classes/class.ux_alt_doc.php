@@ -34,7 +34,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		if (!$this->errorC && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'])	{
 
 			// SAVE button:
-			$buttons['save'] = '<input type="image" onclick="return tabManagement.submitTabs(\'_savedok\');" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
+			$buttons['save'] = '<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
 
 //			// SAVE / VIEW button:
 //			if ($this->viewId && !$this->noView && t3lib_extMgm::isLoaded('cms')) {
@@ -47,7 +47,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 //			}
 
 			// SAVE / CLOSE
-			$buttons['save_close'] = '<input type="image" onclick="return tabManagement.submitTabs(\'_saveandclosedok\');" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
+			$buttons['save_close'] = '<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
 
 			// FINISH TRANSLATION / SAVE / CLOSE
 			if ($GLOBALS['TYPO3_CONF_VARS']['BE']['explicitConfirmationOfTranslation'])	{

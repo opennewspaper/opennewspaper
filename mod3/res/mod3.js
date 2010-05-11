@@ -574,8 +574,9 @@ function loadJsCssFile(filename, filetype, param) {
                     var frame = $(this.tabIds[i]);
                     var iframeDok = top.window.frames[frame.id].document;
 
+                    //typo3 needs these coordinates somehow to properly save the article.
                     ['.x', '.y'].each(function(suffix) {
-                        var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod + suffix});
+                        var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod.name + suffix});
                         iframeDok.forms[0].appendChild(saveDokInput);
                     });
 
