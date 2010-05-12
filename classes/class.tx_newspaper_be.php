@@ -2,12 +2,14 @@
 /**
  *  \file class.tx_newspaper_be.php
  *
- *  \author Oliver Schrï¿½der <newspaper@schroederbros.de>
+ *  \author Oliver Schröder <newspaper@schroederbros.de>
  *  \date Feb 27, 2009
  */
 
-define('BE_DISPLAY_MODE_IFRAME', 1);
-define('BE_DISPLAY_MODE_SUBMODAL', 2);
+define('BE_EXTRA_DISPLAY_MODE_SUBMODAL', 1); // extras are edited in a subModal popup
+define('BE_EXTRA_DISPLAY_MODE_TABBED', 2);   // extras are edited in tabs
+
+
 
 define('BE_ICON_CLOSE', '1');
 
@@ -539,13 +541,17 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 				$smarty_pz->assign('EXTRA_DATA', $tmp);
 				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
 				$smarty_pz->assign('MESSAGE', $message);
-                if (true) {
-                 // tabbed backend
-                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
-                } else {
-                 // just a list of extras
-                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
-                }
+                
+               	switch(self::getExtraBeDisplayMode()) {
+               		case BE_EXTRA_DISPLAY_MODE_TABBED:
+		                 // tabbed backend
+		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
+               		break;
+               		case BE_EXTRA_DISPLAY_MODE_SUBMODAL: 
+               		default:
+		                 // just a list of extras
+		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
+               	} 
 			}
 		}
 
@@ -556,6 +562,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 
 		return $smarty->fetch('mod3.tmpl');
 	}
+	
 
     public function renderTagControlsInArticle(&$PA, $fobj) {
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
@@ -933,29 +940,46 @@ JSCODE;
 	public static function addAdditionalScriptToBackend() {
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/newspaper.js');
 		switch(self::getExtraBeDisplayMode()) {
-			case BE_DISPLAY_MODE_IFRAME:
-				self::$backend_files_added = true; // nothing to add for iframe mode
-			break;
-			case BE_DISPLAY_MODE_SUBMODAL:
+			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
 				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
 				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
 				self::$backend_files_added = true;
 			break;
+			case BE_EXTRA_DISPLAY_MODE_TABBED:
+			default:
+				self::$backend_files_added = true; // nothing to add 
+			break;
 		}
 	}
 
-/// \todo: read from tsconfig
+	
+	// read tsconfig to render configured backend (default: subModal)
 	public static function getExtraBeDisplayMode() {
-		return BE_DISPLAY_MODE_SUBMODAL;
+		// read tsconfig from root newspaper sysfolder
+		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPidRootfolder());
+		
+		if (isset($tsc['newspaper.']['be.']['extra_in_article_mode'])) {
+			switch (strtolower($tsc['newspaper.']['be.']['extra_in_article_mode'])) {
+				case 'tabbed':
+					return BE_EXTRA_DISPLAY_MODE_TABBED;
+				break;
+				case 'submodal':
+					return BE_EXTRA_DISPLAY_MODE_SUBMODAL;
+				break;
+			}
+		}
+
+		return BE_EXTRA_DISPLAY_MODE_SUBMODAL; // default
 	}
 
 	
+	// todo: documentation - and check if this function is really needed
 	public static function wrapInAhref($html, $type) {
 		switch ($type) {
 			case BE_ICON_CLOSE:
 				switch (self::getExtraBeDisplayMode()) {
-					case BE_DISPLAY_MODE_SUBMODAL:
+					case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
 						$html = '<a href="#" onclick="top.hidePopWin(false);">' . $html . '</a>';
 					break;
 				}

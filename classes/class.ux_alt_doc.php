@@ -5,6 +5,18 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 	protected function getButtons()	{
 		global $TCA,$LANG;
+
+
+//debug($this->elementsData);
+//debug($this->editconf);
+//debug($this->elementsData[0]['table']);
+		
+		if (!tx_newspaper::startsWith($this->elementsData[0]['table'], 'tx_newspaper')) {
+			// no newspaper stuff found, so let typo3 handle this on its own ;-)
+			return parent::getButtons();
+		}
+
+
 		
 		// add workflow buttons to newspaper articles (and remove docheader2)
 		if ($this->elementsData[0]['table'] == 'tx_newspaper_article') {
@@ -21,22 +33,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 				'csh' => '',
 			);
 	
-				// Render SAVE type buttons:
-				// The action of each button is decided by its name attribute. (See doProcessData())
+			// Render SAVE type buttons and add newspaper workflow buttons
+			// The action of each button is decided by its name attribute. (See doProcessData())
 			if (!$this->errorC && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'])	{
 	
 				// SAVE button:
 				$buttons['save'] = '<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
-	
-	//			// SAVE / VIEW button:
-	//			if ($this->viewId && !$this->noView && t3lib_extMgm::isLoaded('cms')) {
-	//				$buttons['save_view'] = '<input type="image" class="c-inputButton" name="_savedokview"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedokshow.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDocShow',1).'" />';
-	//			}
-	
-	//			// SAVE / NEW button:
-	//			if (count($this->elementsData)==1 && $this->getNewIconMode($this->firstEl['table'])) {
-	//				$buttons['save_new'] = '<input type="image" class="c-inputButton" name="_savedoknew"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedoknew.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveNewDoc',1).'" />';
-	//			}
 	
 				// SAVE / CLOSE
 				$buttons['save_close'] = '<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
@@ -128,7 +130,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 	//t3lib_div::devlog('XCLASS', 'newspaper', 0, array('row' => $row));
 	
 			// render all workflow buttons as 'save_close' buttons
-			$buttons['save_close'] .= tx_newspaper_workflow::getWorkflowButtons($row);
+			$buttons['save_close'] .= self::getJsForArticlePreview() . tx_newspaper_workflow::getWorkflowButtons($row);
 		
 			return $buttons;
 		}
@@ -136,29 +138,48 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 		
-//debug($this->elementsData);
-//debug($this->editconf);
-//debug($this->elementsData[0]['table']);
-
 		// hide delete, save&new and save&preview buttons (and docheader2) for extras
 		if (!tx_newspaper::isAbstractClass($this->elementsData[0]['table'])) {
 			$check = new $this->elementsData[0]['table']();
 			if (tx_newspaper::classImplementsInterface($this->elementsData[0]['table'], 'tx_newspaper_ExtraIface')) {
-				// newspaper extra is being edited, don't show show delete button
+				// newspaper extra is being edited, don't show show delete, view, new and close buttons
 				$buttons = parent::getButtons();
 				$buttons['save_view'] = '';
 				$buttons['save_new'] = '';
-				$buttons['delete'] = self::getStyleToHideDocheader2(); // mis-use delete button to add css code to hide docheader2+
+				if (tx_newspaper_be::getExtraBeDisplayMode() == BE_EXTRA_DISPLAY_MODE_TABBED) {
+					// no close buttons, if tabbed backend
+					$buttons['save_close'] = '';
+					$buttons['close'] = '';
+				}
+				// mis-use delete button to add css code and hide docheader2 
+				$buttons['delete'] = self::getStyleToHideDocheader2(); 
 				return $buttons;
 			}
 		}
 
 
-		// no newspaper stuff found, so let typo3 handle this on its own ;-)
+		// no need to modify the button array for this newspaper recird, so let Typo3 handle this call ...
 		return parent::getButtons();
 		
 	}
 	
+	
+	
+	private function getJsForArticlePreview() {
+		return '<script language="javascript">
+	var path = window.location.pathname;
+	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+/// \todo: based on mod7, how to merge into 1 js file?
+function showArticlePreview(article_uid) {
+	window.open(
+		path + "typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid, 
+		"preview", 
+		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
+	);
+}
+</script>
+<a href="#" onclick="showArticlePreview('. $this->elementsData[0]['uid'] . '); return false;">' . tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)) . '</a>';
+	}
 	
 	
 	private static function getStyleToHideDocheader2() {
