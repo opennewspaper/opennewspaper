@@ -694,6 +694,19 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		}
 		return false;
 	}
+	
+	/// checks if a string starts with a specific text
+	/** \param $haystack string to searched
+	 *  \param $needle string to search for
+	 *  \param $caseSensitive specifies if the search is case-sensitive (default=false)
+	 */
+	public static function startsWith($haystack, $needle, $caseSensitive=false) {
+		if ($caseSensitive) {
+    		return (strpos($haystack, $needle) === 0);
+		}
+		return (stripos($haystack, $needle) === 0);
+	}
+	
 
 	/// Get a list of all the attributes/DB fields an object (or class) has
 	/** \param $object An object of the desired class, or the class name as string
