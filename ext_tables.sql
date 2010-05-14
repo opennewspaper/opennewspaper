@@ -184,10 +184,10 @@ CREATE TABLE tx_newspaper_article_extras_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_tags_mm'
+# Table structure for table 'tx_newspaper_article_related_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_tags_mm (
+CREATE TABLE tx_newspaper_article_related_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -200,10 +200,10 @@ CREATE TABLE tx_newspaper_article_tags_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_related_mm'
+# Table structure for table 'tx_newspaper_article_tags_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_related_mm (
+CREATE TABLE tx_newspaper_article_tags_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -236,7 +236,9 @@ CREATE TABLE tx_newspaper_article (
 	teaser text NOT NULL,
 	teaser_list text NOT NULL,
 	text text NOT NULL,
+	no_rte tinyint(3) DEFAULT '0' NOT NULL,
 	author tinytext NOT NULL,
+	modification_user blob NOT NULL,
 	source_id tinytext NOT NULL,
 	source_object tinytext NOT NULL,
 	sections int(11) DEFAULT '0' NOT NULL,
@@ -246,10 +248,9 @@ CREATE TABLE tx_newspaper_article (
 	template_set int(11) DEFAULT '0' NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
-	workflow_status int(11) DEFAULT '0' NOT NULL,
-	modification_user blob NOT NULL,
-	tags int(11) DEFAULT '0' NOT NULL,
 	related int(11) DEFAULT '0' NOT NULL,
+	tags int(11) DEFAULT '0' NOT NULL,
+	workflow_status int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

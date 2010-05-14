@@ -57,7 +57,9 @@
 			<label index="tx_newspaper_article.teaser">Teaser</label>
 			<label index="tx_newspaper_article.teaser_list">Teaser for list view, if different</label>
 			<label index="tx_newspaper_article.text">Article text</label>
+			<label index="tx_newspaper_article.no_rte">Do not use the RTE</label>
 			<label index="tx_newspaper_article.author">Author</label>
+			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.source_id">Unique ID in newspaper editing system</label>
 			<label index="tx_newspaper_article.source_object">Source the article was imported from (serialized object)</label>
 			<label index="tx_newspaper_article.sections">Sections this article appears in</label>
@@ -67,10 +69,9 @@
 			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Page Zone Type</label>
 			<label index="tx_newspaper_article.inherits_from">Page zone the placement is inherited from</label>
-			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
-			<label index="tx_newspaper_article.modification_user">Modification user</label>
-			<label index="tx_newspaper_article.tags">Tags</label>
 			<label index="tx_newspaper_article.related">Related articles on the topic</label>
+			<label index="tx_newspaper_article.tags">Tags</label>
+			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
 			<label index="tx_newspaper_extra">Extra (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
 			<label index="tx_newspaper_extra.extra_uid">UID of Extra</label>
@@ -260,7 +261,9 @@
 			<label index="tx_newspaper_article.teaser">Teaser</label>
 			<label index="tx_newspaper_article.teaser_list">Teaser für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.text">Artikeltext</label>
+			<label index="tx_newspaper_article.no_rte">RTE nicht verwenden</label>
 			<label index="tx_newspaper_article.author">Autor</label>
+			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.source_id">Unique ID im Redaktionssystem der Zeitung</label>
 			<label index="tx_newspaper_article.source_object">Quelle aus der der Artikel importiert wurde (serialisiertes Objekt)</label>
 			<label index="tx_newspaper_article.sections">Ressorts in denen dieser Artikel erscheint</label>
@@ -270,10 +273,9 @@
 			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Seitenbereichstyp</label>
 			<label index="tx_newspaper_article.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
-			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
-			<label index="tx_newspaper_article.modification_user">Modification user</label>
-			<label index="tx_newspaper_article.tags">Schlagworte</label>
 			<label index="tx_newspaper_article.related">Weitere Artikel zum Thema</label>
+			<label index="tx_newspaper_article.tags">Schlagworte</label>
+			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
 			<label index="tx_newspaper_extra">Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
 			<label index="tx_newspaper_extra.extra_uid">UID des Extras</label>
