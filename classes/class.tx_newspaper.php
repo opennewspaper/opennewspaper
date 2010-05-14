@@ -4,7 +4,12 @@
 
 
 /// Utility class which provides static functions. A namespace, so to speak.
-/** \todo Reorder according to functionality (e.g. DB operations, class logic 
+/** Because PHP has introduced namespaces only with PHP 5.3, and we started
+ *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
+ *  used, all utility functions for \c newspaper are moved into class tx_newspaper,
+ *  which simulates a namespace.
+ * 
+ *  \todo Reorder according to functionality (e.g. DB operations, class logic 
  * 		etc.)
  */
 class tx_newspaper  {
@@ -212,7 +217,6 @@ class tx_newspaper  {
 		}
 	}
 
-	
 	/// Execute a \c SELECT query on M-M related tables
 	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the 
 	 *	SQL query is retained for debugging as \c tx_newspaper::$query.
