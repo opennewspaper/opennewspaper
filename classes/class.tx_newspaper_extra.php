@@ -403,7 +403,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *  	successfully or \c false if the class was registered already.
 	 */
 	public static function registerExtra(tx_newspaper_Extra $extra) {
-// if this devlog call is used, the Typo3 backend crashed t3lib_div::devlog('registerExtra', 'newspaper', 0, tx_newspaper_Extra::getRegisteredExtras());
 		if (!self::isRegisteredExtra($extra)) {
 			self::$registeredExtra[] = $extra; // add this Extra to list
 			return true;
