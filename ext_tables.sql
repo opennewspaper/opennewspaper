@@ -184,10 +184,10 @@ CREATE TABLE tx_newspaper_article_extras_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_related_mm'
+# Table structure for table 'tx_newspaper_article_tags_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_related_mm (
+CREATE TABLE tx_newspaper_article_tags_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -200,10 +200,10 @@ CREATE TABLE tx_newspaper_article_related_mm (
 
 
 #
-# Table structure for table 'tx_newspaper_article_tags_mm'
+# Table structure for table 'tx_newspaper_article_related_mm'
 # 
 #
-CREATE TABLE tx_newspaper_article_tags_mm (
+CREATE TABLE tx_newspaper_article_related_mm (
   uid_local int(11) DEFAULT '0' NOT NULL,
   uid_foreign int(11) DEFAULT '0' NOT NULL,
   tablenames varchar(30) DEFAULT '' NOT NULL,
@@ -245,11 +245,11 @@ CREATE TABLE tx_newspaper_article (
 	extras int(11) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
 	is_template tinyint(3) DEFAULT '0' NOT NULL,
-	template_set int(11) DEFAULT '0' NOT NULL,
 	pagezonetype_id int(11) DEFAULT '0' NOT NULL,
+	template_set int(11) DEFAULT '0' NOT NULL,
 	inherits_from int(11) DEFAULT '0' NOT NULL,
-	related int(11) DEFAULT '0' NOT NULL,
 	tags int(11) DEFAULT '0' NOT NULL,
+	related int(11) DEFAULT '0' NOT NULL,
 	workflow_status int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),

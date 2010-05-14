@@ -66,11 +66,11 @@
 			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.name">Name of page zone</label>
 			<label index="tx_newspaper_article.is_template">This article is inserted on a page to serve as template for all actual articles</label>
-			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Page Zone Type</label>
+			<label index="tx_newspaper_article.template_set">Template set</label>
 			<label index="tx_newspaper_article.inherits_from">Page zone the placement is inherited from</label>
-			<label index="tx_newspaper_article.related">Related articles on the topic</label>
 			<label index="tx_newspaper_article.tags">Tags</label>
+			<label index="tx_newspaper_article.related">Related articles on the topic</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow status</label>
 			<label index="tx_newspaper_extra">Extra (abstract superclass)</label>
 			<label index="tx_newspaper_extra.extra_table">Type (class) of Extra</label>
@@ -270,11 +270,11 @@
 			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.name">Name des Seitenbereichs</label>
 			<label index="tx_newspaper_article.is_template">Dieser Artikel wird auf einer Seite eingesetzt, um als Vorlage für alle tatsächlichen Artikel zu dienen</label>
-			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.pagezonetype_id">Seitenbereichstyp</label>
+			<label index="tx_newspaper_article.template_set">Satz an Vorlagen</label>
 			<label index="tx_newspaper_article.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
-			<label index="tx_newspaper_article.related">Weitere Artikel zum Thema</label>
 			<label index="tx_newspaper_article.tags">Schlagworte</label>
+			<label index="tx_newspaper_article.related">Weitere Artikel zum Thema</label>
 			<label index="tx_newspaper_article.workflow_status">Workflow-Status</label>
 			<label index="tx_newspaper_extra">Extras (abstrakte Oberklasse)</label>
 			<label index="tx_newspaper_extra.extra_table">Typ (Klasse) des Extras</label>
