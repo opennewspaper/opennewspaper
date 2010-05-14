@@ -286,15 +286,12 @@ class tx_newspaper  {
 		global $TCA;
 		t3lib_div::loadTCA($table);
 
+		self::setTimestampIfPresent($table, $row);
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		if (isset($TCA[$table]) && self::use_datamap) {
-			/// process_datamap() dies if PID is not set
-/*			if (!isset($row['pid']) || !$row['pid']) {
-				throw new tx_newspaper_IllegalUsageException('PID must be set, else process_datamap() will die! ' .
-															 print_r($row, 1));
-			}
-*/		
+		
 			///	Assemble a datamap with a new UID
 			$new_id = 'NEW'.uniqid('');
 			$datamap = array(
@@ -340,6 +337,8 @@ class tx_newspaper  {
 		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
 		unset ($row['uid']);
+		
+		self::setTimestampIfPresent($table, $row);
 		
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
@@ -417,6 +416,25 @@ class tx_newspaper  {
         return $GLOBALS['TYPO3_DB']->sql_affected_rows();        
 	}
 
+	/// If \p $table has a \c tstamp field, set it to current time in \p $row
+	public static function setTimestampIfPresent($table, array &$row) {
+		if (!isset($row['tstamp']) && self::fieldExists($table, 'tstamp')) {
+			$row['tstamp'] = time();
+		}
+	}
+	
+	/// Returns true if SQL table \p $table has a field called \p $field
+	public static function fieldExists($table, $field) {
+		
+		self::$query = "SHOW COLUMNS FROM $table";
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		if (!$res) throw new tx_newspaper_NoResException(self::$query);
+	
+	    $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+
+	    return in_array($field, $row);
+	}
 
 	/// \c WHERE clause to filter out unwanted records 
 	/** Returns a part of a \c WHERE clause which will filter out records with
