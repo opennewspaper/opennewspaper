@@ -146,13 +146,13 @@
 			<label index="label_workflow_revise">Zum Redakteur</label>
 			<label index="label_workflow_revise_hide">Zum Redakteur &amp; verstecken</label>
 			<label index="label_workflow_revise_publish">Zum Redakteur &amp; publizieren</label>
-			<label index="label_workflow_place">Plazieren</label>
-			<label index="label_workflow_place_hide">Plazieren &amp; verstecken</label>
-			<label index="label_workflow_place_publish">Plazieren &amp; publizieren</label>
+			<label index="label_workflow_place">Platzieren</label>
+			<label index="label_workflow_place_hide">Platzieren &amp; verstecken</label>
+			<label index="label_workflow_place_publish">Platzieren &amp; publizieren</label>
 			<label index="label_workflow_save">Speichern</label>
 			<label index="label_workflow_role_editorialstaff">Redaktion</label>
 			<label index="label_workflow_role_dutyeditor">CvD</label>
-			<label index="label_workflow_role_none">Artikel plaziert</label>
+			<label index="label_workflow_role_none">Artikel platziert</label>
 			<label index="label_workflow_role_old">Alte Rolle</label>
 			<label index="label_workflow_role_new">Neue Rolle</label>
 			<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
