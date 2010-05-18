@@ -46,7 +46,7 @@ $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $
 
 //	// remove kickstarter generated palette configuration
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title;;;;2-2-2, ', ', title, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title_list;;;;3-3-3, ', ', title_list, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);	
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser;;;;3-3-3, ', ', teaser, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);	
 
 	// detach starttime and endtime from hidden field palette
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden;;1;;1-1-1, ', 'hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
@@ -59,13 +59,13 @@ $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $
 	// add list view fields to palette 3
 	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][3]['showitem'] = 'kicker_list, title_list, teaser_list';
 	// create virtual field "kicker_title_teaser", use to attach palette 2 (kicker, title and teaser in 1 row) ... 
-	$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser'] = array(
-		'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser',
-		'config' => array(
-			'type' => 'user',
-			'userFunc' => 'tx_newspaper_be->renderArticleKickerTtitleTeaser',
-		)
-	);
+//	$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser'] = array(
+//		'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser',
+//		'config' => array(
+//			'type' => 'user',
+//			'userFunc' => 'tx_newspaper_be->renderArticleKickerTtitleTeaser',
+//		)
+//	);
 //	// ... and replace field kicker with virtual field kicker_title_teaser (and remove fields kicker, title and teaser from main form)
 //	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', kicker, ', ', kicker_title_teaser;;2, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 //	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
