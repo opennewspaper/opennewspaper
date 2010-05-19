@@ -321,7 +321,10 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 			default:
 				die('Unknown type when saving field: ' + $type);
 		}
-
+		
+		// re-read pagezone, changeExtraParagraph() does NOT modify the extra paragraph in the pagezone_article object; see correspoding todo
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+		
 		if ($pz->isConcreteArticle()) {
 			echo tx_newspaper_be::renderBackendPageZone($pz, false);
 		}
