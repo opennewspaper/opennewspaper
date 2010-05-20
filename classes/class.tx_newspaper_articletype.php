@@ -115,7 +115,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	/// Get TSConfig setting for this article type
 	/** \param $type article type configured in TSConfig, currently
 	 *      available: musthave, shouldhave
-	 *  \return array containing extra class names
+	 *  \return array containing configuration: [class name][:paragraph][,[classname][:paragraph]][...,[classname][:paragraph]]
 	 */
 	public function getTSConfigSettings($type) {
 		/// check tsconfig in article sysfolder
