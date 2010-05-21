@@ -1,8 +1,6 @@
 {* debug *}
 <script type="text/javascript">
-    var lastTab = '{$LATEST_TAB}';
-    var lastUid = {$LATEST_UID};
-    var confirmationMessage = '{$MESSAGE.confirmation}'
+    var confirmationMessage = '{$MESSAGE.confirmation}';
 </script>
 {literal}
     <style type="text/css">
@@ -26,13 +24,14 @@
 
     </style>
 {/literal}
+<input type="hidden" id="lastTab" name="mod3[lastTab]" value="{$lastTab}" /> 
 <div id="extras">
     <ul>
-        <li><a href="#" onclick="tabManagement.show('add_extra', [0, {$DATA.pagezone_id}, 0, true, 1]); this.blur(); return false;">{$NEW_TOP_ICON}</a></li>
-        <li><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
+        <li id="tab_add_extra"><a href="#" onclick="tabManagement.show('add_extra', [0, {$DATA.pagezone_id}, 0, true, 1]); this.blur(); return false;">{$NEW_TOP_ICON}</a></li>
+        <li id="tab_overview"><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
         {if $EXTRA_DATA}
             {foreach from=$EXTRA_DATA item=extra}
-            <li>
+            <li id="tab_{$extra.concrete_table}_{$extra.concrete_uid}">
                 <a href="#" onclick="tabManagement.show('{$extra.concrete_table}', {$extra.concrete_uid}); this.blur(); return false;">{$extra.extra_type}</a>
             </li>
             {/foreach}

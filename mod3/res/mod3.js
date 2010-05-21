@@ -542,7 +542,7 @@ function loadJsCssFile(filename, filetype, param) {
         show: function(tab, id) {
             var tab_id = tab;
 
-            //hack for overview tab, caus it has no id
+            //hack for overview tab, cause it has no id
             if(typeof id  == 'number') {
                 tab_id = tab  +'_'+id;
             }
@@ -557,15 +557,16 @@ function loadJsCssFile(filename, filetype, param) {
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tab+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
             }
+
+            this.markActiveTab(tab_id);
             $(tab_id).show();
         },
 
-        markActiveTab: function(event) {
-            $('extras').select('ul li a').each(function(anchor) { anchor.removeClassName(this.activeTabClass); }, this)
-            var elem = event.findElement('a');
-            if(elem) {
-                elem.addClassName(this.activeTabClass);
-            }
+        markActiveTab: function(tab_id) {
+            $('extras').select('.' + this.activeTabClass).each(function(anchor) {
+                anchor.removeClassName(this.activeTabClass);
+            }, this);
+            $('tab_'+ tab_id).select('a').each(function(a) {a.addClassName(this.activeTabClass)}, this);
         },
 
         /**
@@ -623,15 +624,19 @@ function loadJsCssFile(filename, filetype, param) {
                 });
     }
 
+    
     var tabManagement = null;
+    /**
+     * Stuff that should be executed after the dom is loaded
+     */
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
-        $('extras').observe('click', tabManagement.markActiveTab.bind(tabManagement));
-        if(lastTab && lastUid) {
-            tabManagement.show(lastTab, lastUid);
-        } else {
-            tabManagement.show('overview');
-        }
+        tabManagement.show($('lastTab').value);
+
+        $('extras').observe('click', function(event) {
+           var tabClicked = event.select('li');
+           alert(tabClicked.id);
+        });
 
         //handling this inside a loop did not work
         extra_edit = addAskUserIfDirty(extra_edit);

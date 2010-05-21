@@ -348,6 +348,7 @@ function findElementsByName(name, type) {
 				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
 				'notes' => $extra[$i]->getAttribute('notes'),
 				'template_set' => $extra[$i]->getAttribute('template_set'),
+                'tstamp' => $extra[$i]->getAttribute('tstamp'),
 			);
 			// the following attributes aren't always available 
 			try {
@@ -398,7 +399,7 @@ function findElementsByName(name, type) {
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
-//t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid()));
+//t3lib_div::devlog('e in a', 'np', 0, array($PA, $fobj, $article, $article->getAbstractUid(), $_REQUEST));
 		return self::renderBackendPageZone($article, false);
 	}
 
@@ -514,7 +515,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 		$smarty_pz = self::getPagezoneSmartyObject();
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
-		$pagezone = array();
+		$pagezone = array();         
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			
 			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currentlx edited page zone?
@@ -537,14 +538,17 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_defaultextra_in_article', false)));
 				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_in_article', false)));
 	
-				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
-				$smarty_pz->assign('EXTRA_DATA', $tmp);
+				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);                
+				$smarty_pz->assign('EXTRA_DATA', $tmp['extras']);
+                $smarty_pz->assign('LATEST_TAB', key($tmp['latestTab']));
+                $smarty_pz->assign('LATEST_UID', $tmp['latestTab'][key($tmp['latestTab'])]);
 				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
 				$smarty_pz->assign('MESSAGE', $message);
                 
                	switch(self::getExtraBeDisplayMode()) {
                		case BE_EXTRA_DISPLAY_MODE_TABBED:
 		                 // tabbed backend
+                         $smarty_pz->assign('lastTab', isset($_REQUEST['mod3[lastTab]']) ? $_REQUEST['mod3[lastTab]'] : 'overview' );
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;
                		case BE_EXTRA_DISPLAY_MODE_SUBMODAL: 
@@ -833,23 +837,31 @@ JSCODE;
 	}
 
 	private static function processExtraDataForExtraInArticle($extra_data) {
-	
+
 		if (sizeof($extra_data) == 0) {
 			// message "no extra so far" shound be rendered in smarty template
 			return false;
 		}
-			
+
 		// prepare bg color
 		$para = false; // init with false, so first paragraph can be identified
 		$bg = 1;
+        $latest = 0;
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			if (intval($extra_data[$i]['paragraph']) !== $para) {
 				$para = intval($extra_data[$i]['paragraph']); // store new paragraph
 				$bg = ($bg == 1)? 0 : 1; // switch bg type
 			}
 			$extra_data[$i]['bg_color_type'] = $bg;
+            if($extra_data[$latest]['tstamp'] < $extra_data[$i]['tstamp']) {                
+                $latest = $i;
+            }
+
 		}
-		return $extra_data;
+        $data = array();
+        $data['extras'] = $extra_data;
+        $data['latestTab'] = array($extra_data[$latest]['concrete_table'] => $extra_data[$latest]['concrete_uid']);
+		return $data;
 	
 	}
 
