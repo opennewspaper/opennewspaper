@@ -222,7 +222,7 @@ function loadJsCssFile(filename, filetype, param) {
 	
 	/// prepare AJAX call in modal box: edit extra on pagezone_page or article
 	function extra_edit(table, uid, pz_uid, is_concrete_article) {
-/// \todo: add be_mode
+/// \todo: add be_mode            
 			subModalExtraEdit(table, uid, pz_uid, is_concrete_article);
 	}
 
@@ -572,22 +572,19 @@ function loadJsCssFile(filename, filetype, param) {
          * @param saveMethod savedok or saveandclosedok
          */
         submitTabs: function(saveMethod) {
-            var allowSubmit = this.isDirty();
-            if(allowSubmit) {
-                for(var i = 0; i < this.tabIds.length; i++) {
-                    var frame = $(this.tabIds[i]);
-                    var iframeDok = top.window.frames[frame.id].document;
+            for(var i = 0; i < this.tabIds.length; i++) {
+                var frame = $(this.tabIds[i]);
+                var iframeDok = top.window.frames[frame.id].document;
 
-                    //typo3 needs these coordinates somehow to properly save the article.
-                    ['.x', '.y'].each(function(suffix) {
-                        var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod.name + suffix});
-                        iframeDok.forms[0].appendChild(saveDokInput);
-                    });
+                //typo3 needs these coordinates somehow to properly save the article.
+                ['.x', '.y'].each(function(suffix) {
+                    var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod.name + suffix});
+                    iframeDok.forms[0].appendChild(saveDokInput);
+                });
 
-                    iframeDok.forms[0].submit();
-                }
+                iframeDok.forms[0].submit();
             }
-            return allowSubmit;
+            return true;
         },
 
         /**
@@ -597,24 +594,69 @@ function loadJsCssFile(filename, filetype, param) {
             $$('.extra_tab').each(function(div){ div.hide();});
         },
 
-        isDirty: function() {
+        askUserContinueIfDirty: function() {
             var allowSubmit = true;
             if(this.tabIds.size() > 0) {
-                allowSubmit = confirm(this.confirmMessage);                
+                allowSubmit = confirm(this.confirmMessage);
             }
             return allowSubmit;
         }
+
     });
+
+    var doWrap = function(f) {
+        return f.wrap(function() {
+//                    if(tabManagement.askUserContinueIfDirty()) {
+//                        var args = Array.prototype.slice.call(arguments, 1);
+//                        return orginalFunc.apply(this, args);
+//                    }
+
+                alert('buh');
+                });
+    }
 
     var tabManagement = null;
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
         $('extras').observe('click', tabManagement.markActiveTab);
+
+//        extra_edit = doWrap(extra_edit);
+
+//        [extra_edit, extra_insert_after, extra_move_after, extra_delete].each(function(extraFunc) {
+//            return extraFunc.wrap(
+//                function(orginalFunc) {
+////                    if(tabManagement.askUserContinueIfDirty()) {
+////                        var args = Array.prototype.slice.call(arguments, 1);
+////                        return orginalFunc.apply(this, args);
+////                    }
+//                    alert('buh');
+//                });
+//        });
+        var editFunctions = [extra_edit, extra_insert_after, extra_move_after, extra_delete];
+        for(var i = 0 ; i < editFunctions.length; i++) {
+            editFunctions[i] = doWrap(editFunctions[i]);
+        }
+//    [extra_edit].each(function(f) {
+//                f = f.wrap(function(orginalFunc) {
+//                    if(tabManagement.askUserContinueIfDirty()) {
+//                        var args = Array.prototype.slice.call(arguments, 1);
+//                        return orginalFunc.apply(this, args);
+//                    }
+//                });
+////                alert(func);
+//            });
+
+
+//        extra_edit = extra_edit.wrap(function(orginalFunc) {
+//            if(tabManagement.askUserContinueIfDirty()) {
+//                var args = Array.prototype.slice.call(arguments, 1);
+//                return orginalFunc.apply(this, args);
+//            }
+//        });
     });
 
 
-	
-	
+
 /// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
 	function storeTemplateSet(table, uid, value) {
 		uid = parseInt(uid);
