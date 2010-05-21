@@ -1,4 +1,9 @@
 {* debug *}
+<script type="text/javascript">
+    var lastTab = '{$LATEST_TAB}';
+    var lastUid = {$LATEST_UID};
+    var confirmationMessage = '{$MESSAGE.confirmation}'
+</script>
 {literal}
     <style type="text/css">
         #extras, #extras  ul  {margin: 0; padding: 0 3px 0 0; float: left; width: 100%}
@@ -21,7 +26,6 @@
 
     </style>
 {/literal}
-<span id="confirmationMessage" style="display: none;">{$MESSAGE.confirmation}</span>
 <div id="extras">
     <ul>
         <li><a href="#" onclick="tabManagement.show('add_extra', [0, {$DATA.pagezone_id}, 0, true, 1]); this.blur(); return false;">{$NEW_TOP_ICON}</a></li>

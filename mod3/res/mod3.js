@@ -523,7 +523,8 @@ function loadJsCssFile(filename, filetype, param) {
 
         initialize: function() {
             this.tabIds = [];
-            this.confirmMessage = $('confirmationMessage').innerHTML;
+            this.activeTabClass = 'extra_tab_act';
+            this.confirmMessage = confirmationMessage;
             //Javascript has no contains method so add one.
             this.tabIds.contains = function(elem) {
                 var contained = false;
@@ -560,25 +561,29 @@ function loadJsCssFile(filename, filetype, param) {
         },
 
         markActiveTab: function(event) {
-            $('extras').select('a').each(function(anchor) { anchor.removeClassName('extra_tab_act'); })
+            $('extras').select('ul li a').each(function(anchor) { anchor.removeClassName(this.activeTabClass); }, this)
             var elem = event.findElement('a');
             if(elem) {
-                elem.addClassName('extra_tab_act');
+                elem.addClassName(this.activeTabClass);
             }
         },
 
         /**
          *
-         * @param saveMethod savedok or saveandclosedok
+         * @param saveInput savedok or saveandclosedok
          */
-        submitTabs: function(saveMethod) {
+        submitTabs: function(saveInput) {
             for(var i = 0; i < this.tabIds.length; i++) {
                 var frame = $(this.tabIds[i]);
+                if(!frame.id) {
+                    alert("missing " + this.tabIds[i]);
+                    return false;
+                }
                 var iframeDok = top.window.frames[frame.id].document;
 
                 //typo3 needs these coordinates somehow to properly save the article.
                 ['.x', '.y'].each(function(suffix) {
-                    var saveDokInput = new Element('input', {type: 'hidden', name: saveMethod.name + suffix});
+                    var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix});
                     iframeDok.forms[0].appendChild(saveDokInput);
                 });
 
@@ -604,55 +609,35 @@ function loadJsCssFile(filename, filetype, param) {
 
     });
 
-    var doWrap = function(f) {
-        return f.wrap(function() {
-//                    if(tabManagement.askUserContinueIfDirty()) {
-//                        var args = Array.prototype.slice.call(arguments, 1);
-//                        return orginalFunc.apply(this, args);
-//                    }
-
-                alert('buh');
+    /**
+     * Intercepts original function if there are unsaved iframes and warns user
+     * @param func
+     */
+    var addAskUserIfDirty = function(func) {
+        //parameter orginalFunc is passed from wrap function itself
+        return func.wrap(function(orginalFunc) {
+                    if(tabManagement.askUserContinueIfDirty()) {
+                        var args = Array.prototype.slice.call(arguments, 1);
+                        return orginalFunc.apply(this, args);
+                    }
                 });
     }
 
     var tabManagement = null;
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
-        $('extras').observe('click', tabManagement.markActiveTab);
-
-//        extra_edit = doWrap(extra_edit);
-
-//        [extra_edit, extra_insert_after, extra_move_after, extra_delete].each(function(extraFunc) {
-//            return extraFunc.wrap(
-//                function(orginalFunc) {
-////                    if(tabManagement.askUserContinueIfDirty()) {
-////                        var args = Array.prototype.slice.call(arguments, 1);
-////                        return orginalFunc.apply(this, args);
-////                    }
-//                    alert('buh');
-//                });
-//        });
-        var editFunctions = [extra_edit, extra_insert_after, extra_move_after, extra_delete];
-        for(var i = 0 ; i < editFunctions.length; i++) {
-            editFunctions[i] = doWrap(editFunctions[i]);
+        $('extras').observe('click', tabManagement.markActiveTab.bind(tabManagement));
+        if(lastTab && lastUid) {
+            tabManagement.show(lastTab, lastUid);
+        } else {
+            tabManagement.show('overview');
         }
-//    [extra_edit].each(function(f) {
-//                f = f.wrap(function(orginalFunc) {
-//                    if(tabManagement.askUserContinueIfDirty()) {
-//                        var args = Array.prototype.slice.call(arguments, 1);
-//                        return orginalFunc.apply(this, args);
-//                    }
-//                });
-////                alert(func);
-//            });
 
-
-//        extra_edit = extra_edit.wrap(function(orginalFunc) {
-//            if(tabManagement.askUserContinueIfDirty()) {
-//                var args = Array.prototype.slice.call(arguments, 1);
-//                return orginalFunc.apply(this, args);
-//            }
-//        });
+        //handling this inside a loop did not work
+        extra_edit = addAskUserIfDirty(extra_edit);
+        extra_insert_after = addAskUserIfDirty(extra_insert_after);
+        extra_move_after = addAskUserIfDirty(extra_move_after);
+        extra_delete = addAskUserIfDirty(extra_delete);        
     });
 
 
