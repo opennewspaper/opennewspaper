@@ -540,15 +540,13 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 	
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);                
 				$smarty_pz->assign('EXTRA_DATA', $tmp['extras']);
-                $smarty_pz->assign('LATEST_TAB', key($tmp['latestTab']));
-                $smarty_pz->assign('LATEST_UID', $tmp['latestTab'][key($tmp['latestTab'])]);
 				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
 				$smarty_pz->assign('MESSAGE', $message);
                 
                	switch(self::getExtraBeDisplayMode()) {
                		case BE_EXTRA_DISPLAY_MODE_TABBED:
 		                 // tabbed backend
-                         $smarty_pz->assign('lastTab', isset($_REQUEST['mod3[lastTab]']) ? $_REQUEST['mod3[lastTab]'] : 'overview' );
+                         $smarty_pz->assign('lastTab', isset($_REQUEST['lastTab']) ? $_REQUEST['lastTab'] : 'overview' );
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;
                		case BE_EXTRA_DISPLAY_MODE_SUBMODAL: 
@@ -853,14 +851,10 @@ JSCODE;
 				$bg = ($bg == 1)? 0 : 1; // switch bg type
 			}
 			$extra_data[$i]['bg_color_type'] = $bg;
-            if($extra_data[$latest]['tstamp'] < $extra_data[$i]['tstamp']) {                
-                $latest = $i;
-            }
 
 		}
         $data = array();
         $data['extras'] = $extra_data;
-        $data['latestTab'] = array($extra_data[$latest]['concrete_table'] => $extra_data[$latest]['concrete_uid']);
 		return $data;
 	
 	}
