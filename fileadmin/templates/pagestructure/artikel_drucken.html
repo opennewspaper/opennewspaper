@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<meta name="language" content="de" />
+<meta name="author" content="taz, die tageszeitung" />
+<meta name="publisher" content="taz, die tageszeitung" />
+<meta name="copyright" content="Contrapress Media GmbH" />
+<meta name="description" content="taz, die tageszeitung " />
+<meta name="keywords"  content="taz,tageszeitung,Politik,Umwelt,Gesellschaft,Kultur,Hintergrund,Magazin,gruene Politik,linke Politik,Zeitgeschehen,Berlin,Lokalteile,Nord,Bremen,Hamburg,Nachrichten,Kommentare,Debatte,Schlagzeilen,TOM Comic,Tom,Cartoons,Karikaturen,politische Karikatur" />
+<meta name="page-type" content="Bericht Reportage" />
+<meta name="audience" content="Alle" />
+<meta name="robots" content="index,follow" />
+
+<meta name="robots" content="noarchive" />
+<meta name="revisit-after" content="1 day" />
+<title>taz, die tageszeitung</title>
+
+
+<link href="css/taz.css" rel="stylesheet" type="text/css" media="all" />
+<!--[if lte IE 6]>
+<link href="css/ie6hacks.css" rel="stylesheet" type="text/css" />
+<link href="css/taz_ems.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<!--[if IE 7]>
+<link href="css/ie7hacks.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<link href="css/taz_print.css" rel="stylesheet" type="text/css" media="all" />
+<script language="JavaScript" src="js/jsfunktionen.js" type="text/javascript"></script>
+</head>
+
+<body>
+<a name="top"></a>
+<div id="counter">&nbsp;</div>
+<!-- Beginn Werbung aussen (statisch) -->
+<div id="werbung_oben" class="werbung_oben">
+	<img src="images/werbung_oben.jpg" alt="werbung oben" />
+</div>
+<div id="werbung_rechts" class="werbung_rechts">
+	<img src="images/werbung_rechts.jpg" alt="werbung rechts" />
+</div>
+<!-- Ende Werbung aussen (statisch) -->
+<div class="schwarzer_rahmen_oben">
+	<div id="mini_navi_rahmen">
+		<ul>
+			<li><a href="#">Abo</a></li>
+			<li><a href="#">Anzeigen</a></li>
+			<li><a href="#">tazshop</a></li>
+			<li><a href="#">Genossenschaft</a></li>
+			<li><a href="#">&Uuml;ber uns</a></li>
+		</ul>
+	</div>
+	<img id="taz_logo_klein" src="images/logo_klein.gif" alt="taz logo klein" />
+</div>
+<div id="hauptbereich">
+	<div class="schwarzer_rahmen_links">
+		<a href="http://www.taz.de"><img border="0" id="taz_logo" src="images/logo_print.gif" alt="taz logo" /></a>
+	</div>
+	
+		<div id="content_gesamt">
+		
+			<div id="main_navi_div">
+			<ul>
+				<li><a class="main_navi_element_erstes" href="#">Start</a></li>
+				<li><a class="main_navi_element_aktiv" href="#">Politik</a></li>
+				<li><a href="#">Zukunft</a></li>
+				<li><a href="#">Debatte</a></li>
+				<li><a href="#">Leben</a></li>
+				<li><a href="#">Sport</a></li>
+				<li><a href="#">Wahrheit</a></li>
+			</ul>
+			<div id="suche_top" class="main_navi_suchfeld">
+				<form name="suche">
+					<div id="searchform1" class="main_navi_element suchfeld_element"><a onmouseover ="javascript:hilitesearch_on();" onmouseout ="javascript:hilitesearch_off();" href="#">Suche</a></div>
+				<div id="searchform2" class="suchfeld_element"><input type="text" name="suchwort" />&nbsp;</div>
+				<div id="searchform3" class="suchfeld_element"><a onmouseover ="javascript:hilitesearch_on();" onmouseout ="javascript:hilitesearch_off();" href="javascript:document.forms.suche.submit();"><img border="0" class="pfeil_mehr" src="images/absenden.gif"  alt="Suche starten"/></a>&nbsp;
+				</div>					
+				</form>
+				</div>
+		</div>
+		<div id="main_navi_sub_div">
+			<ul>
+				<li><a class="erstes_element main_navi_sub_element_aktiv" href="#">Deutschland</a></li>
+				<li><a href="#">Europa</a></li>
+				<li><a href="#">Nahost</a></li>
+				<li><a href="#">Amerika</a></li>
+				<li><a href="#">Asien</a></li>
+				<li><a href="#">Afrika</a></li>
+			</ul>
+		</div>
+		
+		<!-- Beginn linke Spalte -->
+			<div id="linke_spalte">
+			<!-- Beginn Artikel -->
+				<div id="artikel" class="artikel">		
+					<div class="artikel_main">
+						<div class="artikelheader">
+						<div class="artikeldatum">7. M&auml;rz 2007, 16:35 Uhr</div>
+						<div class="toolleiste"><p class="smallblackfont">Schrift</p><a onfocus="blur()" href="javascript:increaseFontSize();"><img id="schrift_groesser"class="topiconnavi_links" border="0" src="images/plus.gif" alt="Schrift vergr&ouml;&szlig;ern"/></a><a onfocus="blur()" href="javascript:decreaseFontSize();"><img id="schrift_kleiner" class="topiconnavi_links" border="0" src="images/minus_grau.gif" alt="Schrift verkleinern"/></a><a onfocus="blur()" href="#"><img class="topiconnavi_mitte" border="0" src="images/kommentar_icon.gif" alt="Artikel kommentieren"/></a><a onfocus="blur()" href="#"><img class="topiconnavi_rechts" border="0" src="images/drucken_icon.gif" alt="Artikel drucken"/></a><a onfocus="blur()" href="#"><img class="topiconnavi_rechts" border="0" src="images/email_icon.gif" alt="Artikel versenden"/></a>
+							</div>
+					</div>
+					
+						<h2>Frauentag</h2>
+						<h1>Angela Merkel fordert Frauenb&uuml;ndnisse</h1>
+						<p class="artikelintro">Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.</p>
+						<a href="#"><img border="0" src="images/ministerinnen.jpg" alt="Artikelbild"/></a>	
+						<p class="bildunterschrift">20 Jahre Bundesfrauentag</p><p class="bildunterschrift_rechts">Foto: ddp</p>
+						<div class="clear_columns"></div>
+						<p class="artikeltext">	Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.
+						</p>
+						<div class="shortybox">
+									<!-- Beginn Shorty: Mehr zum Thema -->
+						<div class="shorty_mehr">
+							<div class="shorty_header_links">
+								<h6>Mehr zum Thema</h6>			
+						</div>
+							<div class="shorty_mehr_links_text">
+								<ul>
+									<li><a class="ressortlink_title" href="#">Ausland:</a><a class="ressortlink_text" href="#">Leben unter dem Kriegsrecht in Guinea</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr"/></a></li>
+									<li><a class="ressortlink_title" href="#">Umwelt:</a><a class="ressortlink_text" href="#">Hitzestress in Mitteleuropa</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr"/></a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- Ende Shorty: Mehr zum Thema -->
+						<!-- Beginn Shorty: Infobox1 -->
+						<div class="shorty_info_typ1">
+							<div class="shorty_info_typ1_header_links">
+								<h4>Mehr zum Thema</h4>					
+							</div>
+							<div class="shorty_info_typ1_links_text">
+								<p class="smallblackfont"><a href="#">Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen.</a></p>
+							</div>
+						</div>
+						<!-- Ende Shorty: Infobox1 -->
+						<!-- Beginn Shorty: Infobox2 -->
+						<div class="shorty_info_typ2">
+							<div class="shorty_info_typ2_pic">
+								<img border="0" src="images/kommentar_dummy.jpg" alt="Matthias Urbach" />						
+							</div>
+							<div class="shorty_info_typ2_text">
+								<p class="smallblackfont"><strong>Matthias Urbach,</strong> 39, analysiert f&uuml;r die taz seit 10 Jahren die Energiepolitik</p>
+							</div>
+							<div class="clear_columns"></div>
+						</div>
+						<!-- Ende Shorty: Infobox2 -->
+						</div>
+						<!-- Ende Shortybox -->
+						<p class="artikeltext">Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.Lieber Kunde und Leser, falls Sie keine Probleme haben, diesen Blindtext schnell und z&uuml;gig zu lesen, k&ouml;nnen Sie sich gl&uuml;cklich sch&auml;tzen. Der verantwortliche Art Director, der Ihnen h&ouml;chstwahrscheinlich gerade diesen Entwurf pr&auml;sentiert, versteht sein typografisches Handwerk par excellence.</p>		
+					</div>
+				
+				
+			  </div>
+					<!-- Ende Artikel -->
+					
+					<!-- Beginn Weitere-Interne-Links-Plugin -->
+					<div class="plugin_links">
+						<div class="toolleiste_unten_trenner"></div>
+						<div class="toolleiste_unten"><a onfocus="blur()" href="#"><img class="topiconnavi_mitte" border="0" src="images/kommentar_icon.gif" alt="Artikel kommentieren"/></a><a onfocus="blur()" href="#"><img class="topiconnavi_rechts" border="0" src="images/drucken_icon.gif" alt="Artikel drucken"/></a><a onfocus="blur()" href="#"><img class="topiconnavi_rechts" border="0" src="images/email_icon.gif" alt="Artikel versenden"/></a>
+							</div>
+					
+						<div class="weitere_interne_links">
+							<p class="smallblackfont"><a href="#">weiter mit Deutschland-Themen<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a><br /><a href="#">weiter mit Politik-Themen<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a><br /><a href="#">zur Startseite<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></p>
+						</div>
+					</div>
+					<!-- Ende Weitere-Interne-Links-Plugin -->
+					
+					<!-- Beginn Kommentare-zum-Artikel-Plugin -->
+				<div class="plugin_links">
+				<div class="header_mit_icon_links">
+						<div class="header_icon_float"><img src="images/umfrage.gif" alt="Symbol Leserkommentare"/></div>
+							<h6>Leserkommentare (3)</h6>						
+						</div> 				
+					<div class="leserkommentare_box_links">
+						<p class="smallblackfont">Letzter Eintrag vom 24.03.2007, 16:35 Uhr:</p>
+						<a class="ressortlink_title" href="#">Von ProErwin:</a><a class="ressortlink_text" href="#">&quot;Frauen mit bunten Kopft&uuml;chern&quot; h&ouml;rt sich gleich besser an als &quot;Frauen mit Kopft&uuml;chern&quot; ...</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a>
+						<div class="alle_leserkommentare">
+							Alle Leserkommentare<a href="#"><img border="0" class="pfeil_mehr" src="images/absenden.gif"  alt="Leserkommentare anzeigen"/></a>	
+						</div>
+						<div class="clear_columns"></div>	
+					</div>
+				</div>
+				<!-- Ende Kommentare-zum-Artikel-Plugin -->
+					
+					<!-- Beginn Bilder-des-Tages-Plugin -->
+					<div class="plugin_links">
+						<div id="bilder_des_tages_header" class="header_links_alternativ">
+							<h4>Bilder des Tages</h4>
+						</div>
+							<div id="bilder_des_tages_header_links" class="bildstrecke_preview">
+								<a href="#"><span class="smallblackfont_bildstrecke">Hochwasser</span><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a>
+								<a href="#"><img border="0" src="images/bilderdestages_dummybild.jpg" alt="Bilder des Tages"/></a>
+							</div>
+							<div id="bilder_des_tages_header_mitte" class="bildstrecke_preview">
+								<a href="#"><span class="smallblackfont_bildstrecke">Skandal</span><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a>
+								<a href="#"><img border="0" src="images/bilderdestages_dummybild.jpg"  alt="Bilder des Tages"/></a>
+							</div>
+							<div id="bilder_des_tages_header_rechts" class="bildstrecke_preview">
+								<a href="#"><span class="smallblackfont_bildstrecke">Handball</span><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a>
+								<a href="#"><img border="0" src="images/bilderdestages_dummybild.jpg"  alt="Bilder des Tages"/></a>
+							</div>
+							<div class="clear_columns"></div>
+						</div>						
+						<div class="abstand_vertikal_7px"></div>	
+					<!-- Ende Bilder-des-Tages-Plugin -->
+					
+			</div>
+			<!-- Ende linke Spalte -->
+			<!-- Beginn rechte Spalte -->
+			<div id="rechte_spalte">
+				<div id="mini_navi_rechts"  class="plugin_rechts">
+					<ul>
+						<li><a href="#">Blogs</a></li>
+						<li><a href="#">Regional</a></li>
+						<li><a href="#">Specials</a></li>
+						<li><a href="#">Reise</a></li>
+					</ul>
+				</div>
+				<!-- Beginn Datum-Plugin -->
+				<div id="datum_plugin_rechts" class="plugin_rechts">
+					29|03|07				
+				</div>
+				<!-- Ende Datum-Plugin -->
+				<!-- Beginn Dynamischer Content-Bereich in der rechten Spalte -->
+				<div id="content_rechts">
+					<!-- Beginn Tabbox-Plugin -->
+					<div id="tabbox" class="plugin_rechts">
+						<div id="tabbox_left_header" class="tabbox_left_header">
+								<h6><a href="javascript:tabbox_wechseln('tabbox_right');" onfocus="blur();">Schlagzeilen</a></h6>						</div>
+						<!-- Beginn: Header Alternativ-Anzeige Non-JS -->
+						<div id="nonjs_tabbox_left_header" class="nonjs_tabbox_left_header">
+								<h6>Schlagzeilen</h6>						</div>
+						<!-- Ende: Header Alternativ-Anzeige Non-JS -->
+						<div id="tabbox_right_header" class="tabbox_right_header">
+								<h6><a href="javascript:tabbox_wechseln('tabbox_left');" onfocus="blur();">Am meisten gelesen</a></h6>					</div>
+						<div id="tabbox_left" class="tabbox_left">
+							<ul>
+								<li><a class="ressortlink_title" href="#">Ausland:</a><a class="ressortlink_text" href="#">Leben unter dem Kriegsrecht in Guinea</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+								<li><a class="ressortlink_title" href="#">Umwelt:</a><a class="ressortlink_text" href="#">Hitzestress in Mitteleuropa</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+								<li><a class="ressortlink_title" href="#">RAF:</a><a class="ressortlink_text" href="#">der Opfer des &quot;Deutschen Herbstes&quot; mit Staatsakt gedenken</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+							</ul>
+						</div>
+						<!-- Beginn: Header Alternativ-Anzeige Non-JS -->
+						<div id="nonjs_tabbox_right_header" class="nonjs_tabbox_right_header"><h6>Am meisten gelesen</h6></div>
+						<!-- Ende: Header Alternativ-Anzeige Non-JS -->
+						<div id="tabbox_right" class="tabbox_right">
+							<ul>
+							<li><a class="ressortlink_title" href="#">1. Ausland:</a><a class="ressortlink_text" href="#">Leben unter dem Kriegsrecht in Guinea</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										<li><a class="ressortlink_title" href="#">2. Umwelt:</a><a class="ressortlink_text" href="#">Hitzestress in Mitteleuropa</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										<li><a class="ressortlink_title" href="#">3. RAF:</a><a class="ressortlink_text" href="#">der Opfer des &quot;Deutschen Herbstes&quot; mit Staatsakt gedenken</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+							</ul>
+						</div>
+						<script language="javascript" type="text/javascript">
+							document.getElementById('tabbox_right').style.display = 'none';
+							document.getElementById('nonjs_tabbox_left_header').style.display = 'none';
+							document.getElementById('nonjs_tabbox_right_header').style.display = 'none';
+							document.getElementById('tabbox_right_header').style.display = 'block';
+							document.getElementById('tabbox_left_header').style.display = 'block';
+						</script>
+					</div>
+					<!-- Ende Tabbox-Plugin -->
+					<!-- Beginn Frühere-Artikel-Plugin -->
+					<div class="plugin_rechts">																	
+									<div class="fruehere_artikel_block">		
+										<h4>Fr&uuml;here Artikel zum Thema</h4>
+										<ul>
+											<li><a class="ressortlink_title" href="#">Ausland:</a><a class="ressortlink_text" href="#">Leben unter dem Kriegsrecht in Guinea</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+											<li><a class="ressortlink_title" href="#">Umwelt:</a><a class="ressortlink_text" href="#">Hitzestress in Mitteleuropa</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+											<li><a class="ressortlink_title" href="#">RAF:</a><a class="ressortlink_text" href="#">der Opfer des &quot;Deutschen Herbstes&quot; mit Staatsakt gedenken</a><a href="#"><img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										</ul>
+									</div>
+				  </div>
+					<!-- Ende Frühere-Artikel-Plugin -->
+					<!-- Beginn Inline-Werbe-Plugin -->
+					<div class="werbeblock_inline">
+						<div class="header_rechts_alternativ">
+							<h6>Anzeige</h6>					</div>
+						<a href="#"><img border="0" src="images/werbung_artikelseite_inline.jpg" alt="klick f&uuml;r mehr" /></a>				</div>
+					<!-- Ende Inline-Werbe-Plugin -->
+					
+					<!-- Beginn 5-Fragen-Plugin -->
+					<div class="plugin_rechts">
+						<div class="header_rechts">
+							<h6><a href="#">F&uuml;nf Fragen</a></h6>					</div>
+						<div class="fuenf_fragen_rechts_text">
+							<h6><a href="#"><b>zum Thema Kurnaz</b></a></h6><p class="smallblackfont"><a href="#">an den Leiter des Hauptstadtb&uuml;ros der taz<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></p>
+						</div>
+					</div>
+					<!-- Ende 5-Fragen-Plugin -->
+					<!-- Beginn Externe-Links-Plugin -->
+					<div class="plugin_rechts">
+						<div class="externe_links_block">		
+										<h4>Externe Links zum Thema</h4>
+										<ul>
+										<li><a href="#">www.kurnaz.de<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										<li><a href="#">Pressemitteilung Ausw&auml;rtiges Amt<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										<li><a href="#">BND-Untersuchungsausschuss<img border="0" class="pfeil_mehr" src="images/pfeil_rechts_11.gif" alt="klick f&uuml;r mehr" /></a></li>
+										</ul>
+									</div>
+					</div>
+					<!-- Ende Externe-Links-Plugin -->
+					<!-- Beginn Mehr-taz-Plugin (Variante mit einer Bildspalte) -->
+					<div class="plugin_rechts">
+						<div class="header_rechts">
+							<h6><a href="#">Mehr taz</a></h6>					
+						</div>
+						<div class="mehr_taz_icon_rechts_einspaltig">
+								<a href="#"><img border="0" src="images/tazcafe.jpg" alt="klick f&uuml;r mehr" /></a>
+						</div>
+					</div>
+					<!-- Ende Mehr-taz-Plugin (Variante mit einer Bildspalte) -->				
+				</div>
+				<!-- Ende Dynamischer Content-Bereich in der rechten Spalte -->
+
+				
+			</div>
+			<!-- Ende rechte Spalte -->
+	</div>
+	
+	<div class="pre_footer">
+	</div>
+	<!-- Beginn Footer -->
+	<div id="footer">
+		<div class="trennlinie_footer"><div id="mini_navi_kontakt_impressum" class="sitemap_footer_trennlinie">
+			<div class="zum_seitenanfang"><span class="mini_navi_element"><a onfocus="blur()" class="smallblackfont" href="#top">Seitenanfang</a></span><a href="#top"><img border="0" src="images/pfeil_oben.gif" alt="klick f&uuml;r mehr" /></a></div>
+		
+		
+			<ul>
+				<li><a href="#">Impressum</a></li>
+				<li>|</li>
+				<li><a href="#">Kontakt</a></li>
+			</ul>
+		</div>
+		</div>
+				
+		<div id="sitemap_footer_1" class="sitemap_footer">
+			<ul>
+				<li><a href="#">Start</a></li>
+				<li>|</li>
+				<li><a href="#">Politik</a></li>
+				<li>|</li>
+				<li><a href="#">Zukunft</a></li>
+				<li>|</li>
+				<li><a href="#">Debatte</a></li>
+				<li>|</li>
+				<li><a href="#">Leben</a></li>
+				<li>|</li>
+				<li><a href="#">Sport</a></li>
+				<li>|</li>
+				<li><a href="#">Wahrheit</a></li>
+				<li>|</li>
+				<li><a href="#">Suche</a></li>
+			</ul>
+		</div>
+		<div id="sitemap_footer_3" class="sitemap_footer">
+			<ul>
+				<li><a href="#">Abo</a></li>
+				<li>|</li>
+				<li><a href="#">Anzeigen</a></li>
+				<li>|</li>
+				<li><a href="#">taz-shop</a></li>
+				<li>|</li>
+				<li><a href="#">Genossenschaft</a></li>
+				<li>|</li>
+				<li><a href="#">&Uuml;ber uns</a></li>
+			</ul>
+		
+			<ul>
+				<li><a href="#">Blog</a></li>
+				<li>|</li>
+				<li><a href="#">Regional</a></li>
+				<li>|</li>
+				<li><a href="#">Specials</a></li>
+				<li>|</li>
+				<li><a href="#">Reise</a></li>
+			</ul>
+		</div>
+		<div class="copyright_notice">
+			&copy; taz Entwicklungs GmbH &amp; Co. Medien KG, Vervielf&auml;ltigung nur mit Genehmigung des taz Verlags
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

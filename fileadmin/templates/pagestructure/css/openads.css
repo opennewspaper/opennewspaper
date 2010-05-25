@@ -1,0 +1,143 @@
+
+/* styles for ads */
+/* fil 2008-05 /06 openads zones */
+/* oa_jstag, oa_markedzone, oa_zoneid61 */
+
+
+/* werbung außen */
+.oa_topspace {
+	position:absolute;
+	top:0px; left:0px;
+	width:828px; height:90px;
+	margin-bottom:8px;
+/*	background:red; */
+}
+.oa_verlag .oa_topspace { width:805px; }
+.oa_topspace .oa_superbanner {
+	position:absolute;
+	top:0px; right:0px;
+}
+#adl_sb_table,
+.oa_topspace .oa_wallpaper {
+	position:absolute !important;
+	top:0px !important; right:-8px !important;
+	}
+.oa_topspace .oa_wallpaper object,
+.oa_topspace .oa_wallpaper embed,
+.oa_topspace .oa_wallpaper img {
+	position:absolute !important;
+	top:0px !important; right:0px !important;
+	}
+#adl_sb_table{ width:836px !important; }
+.oa_rightspace {
+	position:absolute;
+	top:0px; left:836px;
+	right:0px; bottom:0px;
+/*	background:red; */
+}
+.oa_verlag .oa_rightspace { left:813px; }
+.oa_rightspace .oa_skyscraper {
+	position:absolute;
+	top:98px; left:0px;
+}
+.oa_rightspace .oa_wallpaper {
+	position:absolute;
+	top:0px; left:0px;
+	}
+
+.artikelwerbung a, .artikelwerbung div, .artikelwerbung object,
+.oa_badgedzone a, .oa_badgedzone div, .oa_badgedzone object {
+    display:block !important;
+	margin-top:16px;
+}
+.artikelwerbung .oa_badge,
+.oa_badgedzone .oa_badge { 
+	margin-top:0px;
+	border-top: 1px solid black;
+	height:16px;
+	position:relative;
+	font-size:11px;
+}
+.artikelwerbung .oa_badge { border-top:none; }
+.oa_zoneid4 a, .oa_zoneid4 div, .oa_zoneid4 object,
+.oa_zoneid5 a, .oa_zoneid5 div, .oa_zoneid5 object,
+.oa_zoneid6 a, .oa_zoneid6 div, .oa_zoneid6 object,
+.oa_zoneid20 a, .oa_zoneid20 div, .oa_zoneid20 object,
+.oa_zoneid41 a, .oa_zoneid41 div, .oa_zoneid41 object,
+.oa_zoneid49 a, .oa_zoneid49 div, .oa_zoneid49 object,
+.oa_zoneid50 a, .oa_zoneid50 div, .oa_zoneid50 object,
+.oa_zoneid57 a, .oa_zoneid57 div, .oa_zoneid57 object,
+.oa_zoneid61 a, .oa_zoneid61 div, .oa_zoneid61 object
+  {	height:80px; }
+.oa_zoneid4  .oa_badge,
+.oa_zoneid5  .oa_badge,
+.oa_zoneid6  .oa_badge,
+.oa_zoneid20 .oa_badge,
+.oa_zoneid41 .oa_badge,
+.oa_zoneid49 .oa_badge,
+.oa_zoneid50 .oa_badge,
+.oa_zoneid56 .oa_badge,
+.oa_zoneid57 .oa_badge,
+.oa_zoneid61 .oa_badge
+  {	top:-96px; }
+.oa_zoneid42 a, .oa_zoneid42 div, .oa_zoneid42 object
+  {	height:120px; }
+.oa_zoneid42 .oa_badge
+  {	top:-136px; }
+
+.artikelwerbung a, .artikelwerbung div, .artikelwerbung object, .artikelwerbung embed,
+.oa_zoneid51 a, .oa_zoneid51 div, .oa_zoneid51 object, .oa_zoneid51 embed,
+.oa_zoneid52 a, .oa_zoneid52 div, .oa_zoneid52 object, .oa_zoneid52 embed
+  {	height:250px; overflow:hidden; }
+.artikelwerbung div div,
+.oa_zoneid51 div div,
+.oa_zoneid52 div div {
+	height:auto;
+}
+.artikelwerbung .oa_badge,
+.oa_zoneid51 .oa_badge,
+.oa_zoneid52 .oa_badge
+  {	top:-266px; }
+
+
+/* haengendes Element "taz-Abonnement" aka "mehr taz" */
+.oa_zoneid3 a, .oa_zoneid3 div, .oa_zoneid3 object {
+        width:108px; height:110px;      /* effective 118x120 */
+        margin-left:122px;
+        margin-top:3px; /* override badgedzone default 16px */
+        border:1px solid black;
+        background-color:white; padding:4px;
+        position:relative; z-index:1;
+}
+.oa_zoneid3 div.oa_badge {
+        width:240px; height:18px; /* override oa_badge default height:16px */
+        background-color:#DCD8C4;
+        line-height:18px;
+        top:-123px; left:0px;
+        z-index:0;
+        /* override inherited */
+        border:none;
+        padding:0px 0px 0px 8px;
+        margin:0px;
+}
+
+/* fil@taz.de 2008-06-03 */
+.artikelwerbung { 
+	clear:both; 
+	padding-top:1px;
+}
+
+
+/* fil 2008-06-19 mittal wallpaper*/
+/* .oa_homepage { background-color: white; }
+.oa_topspace .oa_wallpaper {
+	right:-9px !important;
+	}
+.oa_rightspace .oa_wallpaper {
+	top:89px;
+}
+*/
+
+/* fil 2008-12-12 html banner */
+.oa_htmlbanner { }
+.oa_htmlbanner a { display:inline !important; }

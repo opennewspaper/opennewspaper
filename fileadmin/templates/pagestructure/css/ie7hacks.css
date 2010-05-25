@@ -1,0 +1,184 @@
+/* Hacks fuer den IE7 oder hoeher, getestet nur mit IE 7.0/XP */
+
+.bildspalte_rechts img{
+	margin-bottom: 1px;
+}
+
+#thirdlevel_teaser{
+	padding-bottom:4px;
+}
+
+.main_navi_suchfeld input{
+	margin-top:0;
+	/*margin-bottom:-1px;*/ /*Habe ich gemacht, damit die menu spalte im ie genau so schlank ist wie im ff;-). olga */
+}
+
+.main_navi_suchfeld img{
+	margin-top:2px;
+}
+
+.main_navi_suchfeld_aktiv img{
+	margin-top:2px;
+}
+
+
+.toolleiste_unten{
+	margin-top:-10px;
+}
+
+.weitere_interne_links{
+	margin-top:-14px;
+}
+
+.zum_seitenanfang{
+	margin-top:2px;
+}
+
+.antwort_absenden{
+	padding-top:13px;
+}
+
+.tabbox_left{
+	padding-top:4px;
+	}
+	
+.tabbox_right{
+	padding-top:4px;
+	}
+	
+.teaserpic_blog{
+	padding-bottom:0px;
+}
+
+.toolleiste{
+	margin-top:-4px;
+}
+
+.dossiers_schmuckbild{
+	padding-bottom:0;
+}
+
+.header_schmuckbild{
+	padding-top:57px;
+}
+
+.weitere_interne_links{
+	margin-top:-12px;
+}
+
+.toolleiste_unten{
+	margin-top:-13px;
+}
+
+.leserkommentare_box_links{
+	padding-top:10px;
+	padding-bottom:4px;
+}
+
+.clear_columns_charts{
+	padding-top:2px;
+	clear:both;
+}
+
+.send_to_a_friend_form{
+	padding-top:29px;
+}
+
+.footer_zeile_links{
+	margin-top:-37px;
+}
+
+.detail_search_form{
+	padding-top:28px;
+}
+
+.tabbox_left{
+	padding-top:4px;
+}
+
+.tabbox_right{
+	padding-top:4px;
+}
+
+.bildunterschrift{
+	padding-top:2px;
+	padding-bottom:12px;
+}
+
+.bildunterschrift_rechts{
+	padding-top:2px;
+	padding-bottom:12px;
+}
+
+.galerie_content{
+/*	margin-top:-12px;*/
+}
+
+.voting_content{
+	margin-top:-24px;
+}
+
+.tom_content{
+	margin-top:-24px;
+}
+
+
+
+/* von Olga f�r Leseforen   */
+.kommentar_abstand {
+height: 3px;
+margin-bottom: -5px;
+margin-top: 0px;
+}
+
+
+
+/* von Olga f�r den unteren Abstand von Bildern       6.02.08 */
+div.csc-textpic div.csc-textpic-imagewrap .csc-textpic-image img{
+margin-bottom:16px;
+margin-top: 0px;
+}
+
+/* Schwarze Schrift statt blaue im Kontaktformular von Olga    6.02.08  */
+div.tx-lumophpinclude-pi1 form fieldset legend {
+color: #000000;
+margin-left: -8px;
+}
+
+/* Stopper Abstand unten Olga 08.02.08 */
+.thirdlevel_teaser {
+padding-bottom:0px;
+margin-bottom: -4px;
+}
+
+
+/* Form Inputfelder Hintergrund Olga 25.02.08 */
+#formchr input.right {
+background-color: #EFEDE4;
+}
+
+/* 2008-06-15 rebrush */
+.shuffledarticle {
+	margin-top:-2px;
+	}
+.shuffledarticle .modulkopf {
+	padding-bottom:4px;
+	}
+
+.adr_2 .indented {
+ 	margin-top:-1em;
+}
+
+.shit_happens .navilist { 
+	position:absolute; top:488px; bottom:none; left:0px; right:0px;
+}
+
+
+/* fil 2009-04: neues Layout 
+   work around missing support for :before in IE
+*/
+#mini_navi_rahmen li+li{
+	border-left:1px solid white;
+	padding-left:6px;
+}
+

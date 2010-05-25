@@ -1,0 +1,58 @@
+/* general styles */
+
+.ad_zone {}
+.ad_zone_contentad {
+  margin-bottom:16px;
+  display:none;
+  }
+.ad_badge {
+  border-top: 1px solid black;
+  padding-top:1px;
+  height:14px;
+  font-size:11px;
+  }
+.ad_core {
+  overflow:hidden;
+  }
+
+
+/* zone individual styles */
+
+#adition_zone_banner {
+  position:absolute;
+  top:0px;
+  left:0px;
+  width:829px;
+  height:90px;
+  overflow:hidden;
+  text-align:right;
+  }
+
+#adition_zone_sky {
+  position:absolute;
+  top:98px;
+  left:836px;
+  overflow:hidden;
+  }
+
+#adition_zone_artikel_co { width:404px; margin-bottom:20px; }
+#adition_zone_artikel_co .ad_core { width:300; height:250px; }
+
+#adition_zone_rechts_co1,
+#adition_zone_rechts_co2,
+#adition_zone_rechts_co3,
+#adition_zone_rechts_co4,
+#adition_zone_rechts_co5,
+#adition_zone_rechts_co6,
+#adition_zone_rechts_co7,
+#adition_zone_rechts_co8 { width:248px; } 
+#adition_zone_rechts_co1 .ad_core,
+#adition_zone_rechts_co2 .ad_core,
+#adition_zone_rechts_co3 .ad_core,
+#adition_zone_rechts_co4 .ad_core,
+#adition_zone_rechts_co5 .ad_core,
+#adition_zone_rechts_co6 .ad_core,
+#adition_zone_rechts_co7 .ad_core,
+#adition_zone_rechts_co8 .ad_core { height:80px; } 
+
+

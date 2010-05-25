@@ -1,0 +1,10 @@
+form.tazbuch img {
+	margin-right: 20px;
+margin-bottom: 10px;
+	float: left;
+}
+
+form.tazbuch table tr:first-child td {
+	width: 0px!important;
+	vertical-align: top;
+}

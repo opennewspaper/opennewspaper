@@ -1,0 +1,16 @@
+.dossier_header{
+
+	padding-top:2px;
+}
+.header_zeile_links{
+	padding-top:12px;
+}
+
+.main_navi_suchfeld input{
+	margin-top:1px;
+	/*margin-bottom:-1px;*/ /*Habe ich gemacht, damit die menu spalte im ie genau so schlank ist wie im ff;-). olga */
+}
+
+.main_navi_suchfeld_aktiv input{
+	margin-top:1px;
+}
