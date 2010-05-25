@@ -257,6 +257,24 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
+    private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph) {
+        $extra = new $extra_class;
+        $extra->setAttribute('crdate', time());
+        $extra->setAttribute('tstamp', time());
+        $extraUid = $extra->store();
+
+        $article = new tx_newspaper_Article($article_uid);
+        $article->addExtra($extra);
+
+        $pz_uid = $article->getPageZoneUid();
+        $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+        $pz->moveExtraAfter($extra, $origin_uid);
+        $data = array('extra_uid' => $extraUid, 'content' => tx_newspaper_be::renderBackendPageZone($pz, false, true));
+        header('Content-type: application/json');
+        echo json_encode($data);
+        die();
+    }
+
 	/// called via ajax: toggle show checkbox for extra on pagezone
 	/// \param $extra_uid uid of extra
 	/// \param $show boolean value wheater to show or not this extra
@@ -374,6 +392,7 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 
 
 
+
 	private function check4Ajax() {
 		/// \todo: check permissions
 t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_name]' => $_SERVER['SCRIPT_NAME']));
@@ -475,6 +494,10 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		if (t3lib_div::_GP('extra_insert_after_from_pool_ref') == 1) {
 			die($this->processExtraInsertAfterFromPoolReference(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('pooled_extra_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('path')));	
 		}
+
+        if (t3lib_div::_GP('extra_create') == 1) {
+            die($this->processExtraCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));
+        }
 
 
 		

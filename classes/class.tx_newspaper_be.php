@@ -547,6 +547,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
                		case BE_EXTRA_DISPLAY_MODE_TABBED:
 		                 // tabbed backend
                          $smarty_pz->assign('lastTab', isset($_REQUEST['lastTab']) ? $_REQUEST['lastTab'] : 'overview' );
+                         tx_newspaper_BE::addNewExtraData($smarty_pz);
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;
                		case BE_EXTRA_DISPLAY_MODE_SUBMODAL: 
@@ -564,6 +565,55 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 
 		return $smarty->fetch('mod3.tmpl');
 	}
+
+    private static function addNewExtraData(&$smarty) {
+        global $LANG;
+//debug(array($origin_uid, $pz_uid, $paragraph));
+
+        // convert params, sent by js, so false is given as string, not a boolean
+/// \todo: switch to 0/1 instead of false/true
+        if ($new_at_top == 'false') {
+            $new_at_top = false;
+        } else {
+            $new_at_top = true;
+        }
+        if ($paragraph == 'false') {
+            $paragraph = false;
+        } else {
+            $paragraph = intval($paragraph);
+        }
+
+
+        $label = $smarty->get_template_vars('LABEL');
+        $label['new_extra_new'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_new', false);
+        $label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
+
+        $message = $smarty->get_template_vars('MESSAGE');
+        $message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
+
+        /// list of registered extras
+        $extra = tx_newspaper_Extra::getRegisteredExtras();
+//debug($extra, 'e');
+        $smarty->assign('LABEL', $label);
+        $smarty->assign('MESSAGE', $message);
+        $smarty->assign('EXTRA', $extra); // list of extras
+        $smarty->assign('LIST_SIZE', max(2, min(12, sizeof($extra)))); /// size at least 2, otherwise list would be rendered as dropdown
+
+        if ($paragraph === false) {
+            // the param is received as string, not boolean ... sent with js
+            $smarty->assign('PARAGRAPH_USED', false);
+        } else {
+            $smarty->assign('PARAGRAPH_USED', true);
+            $smarty->assign('PARAGRAPH', intval($paragraph));
+        }
+
+        if ($new_at_top === false) {
+            // the param is received as string, not boolean ... sent with js
+            $smarty->assign('NEW_AT_TOP', false);
+        } else {
+            $smarty->assign('NEW_AT_TOP', true);
+        }
+    }
 	
 
     public function renderTagControlsInArticle(&$PA, $fobj) {

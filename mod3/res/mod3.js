@@ -296,45 +296,6 @@ function loadJsCssFile(filename, filetype, param) {
 		);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-
-
-
 	function extra_insert_after_dummy(origin_uid, pagezone_uid) {
 /// \todo: remove after testing
 		var request = new top.Ajax.Request(
@@ -549,18 +510,13 @@ function loadJsCssFile(filename, filetype, param) {
 
             this._hideAllTabs();
 
-
-            if(tab_id == 'add_extra') {
-                var closehtml = (params[4])? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + params[1]) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
-                var url = t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + params[0] + "&pz_uid=" + params[1] + "&paragraph=" + params[2] + "&new_at_top=" + params[3] + "&is_concrete_article=" + params[4] + "&returnUrl=" + params[0];
-                $(tab_id).innerHTML = '<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="'+url+'"></iframe>';
-
-            } else if(!this.tabIds.contains(tab_id) && isExtraTab) { //hack for overview-tab so is not processed here because it has no iframe
+            if(!this.tabIds.contains(tab_id) && isExtraTab) { //hack for overview-tab so is not processed here because it has no iframe
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tableName+']['+id+']=edit""></iframe>';
                 this.tabIds.push(tab_id);
             }
 
             this.markActiveTab(tab_id);
+            $('lastTab').value = tab_id;
             $(tab_id).show();
         },
 
@@ -608,14 +564,6 @@ function loadJsCssFile(filename, filetype, param) {
                 allowSubmit = confirm(this.confirmMessage);
             }
             return allowSubmit;
-        },
-
-        saveLastTab: function(event) {
-           var tabClicked = event.findElement('li');
-           if(tabClicked && tabClicked.id) {
-               //instead of li#id the div#id is needed, so replace the tab
-               $('lastTab').value = tabClicked.id.replace(/tab_/,'');
-           }
         }
 
     });
@@ -643,8 +591,6 @@ function loadJsCssFile(filename, filetype, param) {
         tabManagement = new TabManagement();
         tabManagement.show($('lastTab').value);
 
-        $('extras').observe('click', tabManagement.saveLastTab);
-
         //handling this inside a loop did not work
         extra_edit = addAskUserIfDirty(extra_edit);
         extra_insert_after = addAskUserIfDirty(extra_insert_after);
@@ -665,9 +611,68 @@ function loadJsCssFile(filename, filetype, param) {
 			}
 		);
 	}
-        
 
+	function getChosenExtra() {
+		if (document.getElementById('extra_list').selectedIndex < 0) {
+			alert(msgNoExtraSelected);
+			return false;
+		}
+		return document.getElementById('extra_list').value;
+	}
 
+	function getParagraph() {
+		return parseInt(document.getElementById('paragraph').value);
+	}
+
+	function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, paragraphUsed) {
+		var target_uid = article_uid > 0? article_uid : pz_uid;
+		var closehtml = (in_article)? escape("close_reload_in_concrete_article.html?pz_uid=" + target_uid) : "close.html";
+//		var new_extra_paragraph_position_data = '';
+//		 if(paragraphUsed) {
+//		    new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
+//		 }
+		var extra_class_sysfolder = getChosenExtra();
+		var extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+		var extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
+		if (!extra_class || !extra_sysfolder) {
+			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
+			return false;
+		}
+		extra_sysfolder = parseInt(extra_sysfolder);
+		if (extra_class != false) { //extra is related to pagezone in save hook!
+            var loc = top.path + "typo3conf/ext/newspaper/mod3/index.php";
+            new Ajax.Request(loc, {
+                parameters: {'extra_create' : 1, 'article_uid' : article_uid, 'extra_class' : extra_class, 'origin_uid' : origin_uid, 'pz_uid' : pz_uid, 'paragraph' : getParagraph()},
+                onCreate: processing_in_article,
+                onSuccess: function(transport) {
+                    if(transport) {
+                        var  data = transport.responseJSON;
+                        $('extras').innerHTML = data.content;
+                        tabManagement.show(extra_class+'_'+data.extra_uid);
+                    }
+                }
+            });
+        }
+        return false;
+	}
+
+	function extra_insert_after_POOL(origin_uid, pz_uid, in_article, paragraphUsed) {
+        if (in_article) alert("pool: in article not yet implemented");
+		    new_extra_paragraph_position_data = '';
+		if(paragraphUsed) {
+		    new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
+        }
+		extra_class_sysfolder = getChosenExtra();
+		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+		if (extra_class == false) {
+			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
+			return false;
+		}
+		if (extra_class != false) {
+//self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pool_extra_pz_uid=" + pz_uid + "&pool_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
+			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data;
+		}
+	}
 	
 
 //{/literal}	
