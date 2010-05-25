@@ -562,8 +562,6 @@ function loadJsCssFile(filename, filetype, param) {
 
             this.markActiveTab(tab_id);
             $(tab_id).show();
-
-
         },
 
         markActiveTab: function(tab_id) {
@@ -610,6 +608,14 @@ function loadJsCssFile(filename, filetype, param) {
                 allowSubmit = confirm(this.confirmMessage);
             }
             return allowSubmit;
+        },
+
+        saveLastTab: function(event) {
+           var tabClicked = event.findElement('li');
+           if(tabClicked && tabClicked.id) {
+               //instead of li#id the div#id is needed, so replace the tab
+               $('lastTab').value = tabClicked.id.replace(/tab_/,'');
+           }
         }
 
     });
@@ -637,14 +643,7 @@ function loadJsCssFile(filename, filetype, param) {
         tabManagement = new TabManagement();
         tabManagement.show($('lastTab').value);
 
-        $('extras').observe('click', function(event) {
-           var tabClicked = event.findElement('li');
-           if(tabClicked && tabClicked.id) {
-               //instead of li#id the div#id is needed, so replace the tab
-               var divId = tabClicked.id.replace(/tab_/,'');
-               $('lastTab').value = divId;
-           }
-        });
+        $('extras').observe('click', tabManagement.saveLastTab);
 
         //handling this inside a loop did not work
         extra_edit = addAskUserIfDirty(extra_edit);
