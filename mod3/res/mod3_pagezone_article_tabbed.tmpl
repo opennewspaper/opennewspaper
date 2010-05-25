@@ -64,7 +64,7 @@
 
          {*add input field for paragraph (if article)*}
         {if ($PARAGRAPH_USED == true)}
-        Paragraph:
+        {$LABEL.paragraph}:
             {if ($NEW_AT_TOP == true)}
         <input id="paragraph" name="paragraph" value="{$PARAGRAPH}" type="text" />
             {else}

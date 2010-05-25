@@ -181,7 +181,12 @@ function loadJsCssFile(filename, filetype, param) {
 				method: 'get',
 				parameters: "extra_shortcut_create=1&article_uid=" + article_uid + "&extra_class=" + extra_class + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
 				onCreate: eval(get_onCreate_function(1)),
-				onSuccess: eval(get_onSuccess_function(1))
+				onSuccess: function(transport) {
+                    var data = transport.responseText.evalJSON();
+                    $('extras').innerHTML = data.htmlContent;
+                    tabManagement.show(extra_class + '_' + data.extra_uid);
+
+                }
 			}
 		);
 	}
@@ -595,7 +600,7 @@ function loadJsCssFile(filename, filetype, param) {
         extra_edit = addAskUserIfDirty(extra_edit);
         extra_insert_after = addAskUserIfDirty(extra_insert_after);
         extra_move_after = addAskUserIfDirty(extra_move_after);
-        extra_delete = addAskUserIfDirty(extra_delete);        
+        extra_delete = addAskUserIfDirty(extra_delete);
     });
 
 

@@ -262,7 +262,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
         $extra->setAttribute('crdate', time());
         $extra->setAttribute('tstamp', time());
         $extraUid = $extra->store();
-
+        
         $article = new tx_newspaper_Article($article_uid);
         $article->addExtra($extra);
 
@@ -302,13 +302,16 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 				$e = new $extra_class();
 				$e->setAttribute('crdate', time());
 	 			$e->setAttribute('tstamp', time());
-				$e->store();
+				$extra_uid = $e->store();
 				$article->addExtra($e);
 			} else {
 				throw new tx_newspaper_WrongClassException('Unknown Extra class: ' . $extra_class);
 			}
 		}
-		echo tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
+        $htmlContent = tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
+        $data = array('extra_uid' => $extra_uid, 'htmlContent' => $htmlContent);
+        header('Content-type: application/json');
+        echo json_encode($data);
 		die();
 	}
 
