@@ -16,10 +16,11 @@ define('NP_WORKLFOW_LOG_PUBLISH', 2);
 define('NP_WORKLFOW_LOG_CHANGE_ROLE', 3);
 define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 define('NP_WORKLFOW_LOG_IMPORT', 5);
-
+define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
 
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
+
 
  
 class tx_newspaper_Workflow {   
@@ -208,9 +209,9 @@ function changeWorkflowStatus(role, hidden_status) {
         }
         $tableUid = intval($tableUid);
         if($allComments) {
-            $comments = self::getAllComments($table, $tableUid);
+            $comments = self::getComments($table, $tableUid);
         } else {
-            $comments = self::getLatestComments($table, $tableUid);
+            $comments = self::getComments($table, $tableUid, NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT);
         }
 
         $comments = self::addUsername($comments);
@@ -234,7 +235,7 @@ function changeWorkflowStatus(role, hidden_status) {
             var path = window.location.pathname;
             document.tableUid = uid; // store for access in showMessage()
 
-            test = path.substring(path.lastIndexOf("/") - 5);
+            var test = path.substring(path.lastIndexOf("/") - 5);
             if (test.substring(0, 6) == "typo3/") {
             	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3" 
             } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
@@ -266,21 +267,10 @@ function changeWorkflowStatus(role, hidden_status) {
     	';
     }
     
-    private static function getAllComments($table, $uid) {
-		$comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log', 'table_name = \''.$table.'\' AND table_uid = '.$uid.' ORDER BY uid DESC');
-        return $comments;
-	}
-
-    private static function getLatestComments($table, $table_uid) {
-        $latestComments = "SELECT FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, crdate, be_user, action, comment FROM `tx_newspaper_log` WHERE";
-        $latestComments = $latestComments." table_name = '$table' AND table_uid = $table_uid";
-        $latestComments = $latestComments." AND crdate = (SELECT MAX(crdate) FROM tx_newspaper_log WHERE table_name = '$table' AND table_uid = $table_uid) ORDER BY uid DESC";
-
-        $res = $GLOBALS['TYPO3_DB']->sql_query($latestComments);
-        $comments = array();
-        while($comment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $comments[] = $comment;
-        }
+    private static function getComments($table, $table_uid, $limit = 0) {
+        $comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log',
+                    'table_name = \''.$table.'\' AND table_uid = '.$table_uid, '','crdate desc', ($limit > 0) ? $limit : '') ;
+        
         return $comments;
     }
 
