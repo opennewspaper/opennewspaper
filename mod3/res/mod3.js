@@ -320,7 +320,7 @@ function loadJsCssFile(filename, filetype, param) {
  			top.path + "typo3conf/ext/newspaper/mod3/index.php",
  			{
 				method: 'get',
-				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime(),
+				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime()
 			}
 		);
 	}
@@ -491,17 +491,6 @@ function loadJsCssFile(filename, filetype, param) {
             this.tabIds = [];
             this.activeTabClass = 'extra_tab_act';
             this.confirmMessage = confirmationMessage;
-            //Javascript has no contains method so add one.
-            this.tabIds.contains = function(elem) {
-                var contained = false;
-                for(var i = 0 ; i < this.length; i++) {
-                    if(this[i] == elem) {
-                        contained = true;
-                        break;
-                    }
-                }
-                return contained;
-            }
             this._hideAllTabs();
         },
 
@@ -515,9 +504,16 @@ function loadJsCssFile(filename, filetype, param) {
 
             this._hideAllTabs();
 
-            if(!this.tabIds.contains(tab_id) && isExtraTab) { //hack for overview-tab so is not processed here because it has no iframe
+            //after an ajax reload the iframe must be loaded again but tabIds already contains the current tab_id
+            //therefore check for empty div.
+            // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
+            if( (!this.tabIds.include(tab_id) || $(tab_id).innerHTML == "") && isExtraTab) {
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tableName+']['+id+']=edit""></iframe>';
-                this.tabIds.push(tab_id);
+
+                //after an ajax reload the tab_id is already inside the list
+                if(!this.tabIds.include(tab_id)) {
+                    this.tabIds.push(tab_id);
+                }
             }
 
             this.markActiveTab(tab_id);
