@@ -198,7 +198,7 @@ function loadJsCssFile(filename, filetype, param) {
 /// functions for placement article AND concrete article ///////////////////////
 	
 	/// AJAX call: delete extra on pagezone_page or article
-	function extra_delete(pz_uid, extra_uid, message, is_concrete_article) {
+	function extra_delete(pz_uid, extra_uid, message, is_concrete_article, extra_class) {
 		if (!confirm(message)) return; // user must confirm that he knows what he's doing
 		var request = new top.Ajax.Request(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
@@ -206,7 +206,11 @@ function loadJsCssFile(filename, filetype, param) {
 				method: 'get',
 				parameters: "extra_delete=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
 				onCreate: eval(get_onCreate_function(is_concrete_article)),
-				onSuccess: eval(get_onSuccess_function(is_concrete_article))
+				onSuccess: function(transport) {
+                    var successFunc = eval(get_onSuccess_function(is_concrete_article));
+                    successFunc(transport);
+                    tabManagement.removeTab(extra_class, extra_uid);
+                }
 			}
 		);
 	}
@@ -485,6 +489,7 @@ function loadJsCssFile(filename, filetype, param) {
 */		
 	}
 
+//////////////////// Functions for tabs
     var TabManagement =  Class.create({
 
         initialize: function() {
@@ -565,6 +570,14 @@ function loadJsCssFile(filename, filetype, param) {
                 allowSubmit = confirm(this.confirmMessage);
             }
             return allowSubmit;
+        },
+
+        removeTab: function(extra_class, extra_uid) {
+            this.tabIds = this.tabIds.without(extra_class + '_' + extra_uid);
+        },
+
+        clearTabCache: function() {
+            this.tabIds = [];
         }
 
     });
@@ -573,10 +586,11 @@ function loadJsCssFile(filename, filetype, param) {
      * Intercepts original function if there are unsaved iframes and warns user
      * @param func
      */
-    var addAskUserIfDirty = function(func) {
+    var interceptIfDirty = function(func) {
         //parameter orginalFunc is passed from wrap function itself
         return func.wrap(function(orginalFunc) {
                     if(tabManagement.askUserContinueIfDirty()) {
+                        tabManagement.clearTabCache(); // invalidate list of tabs after he agreed to lose changes
                         var args = Array.prototype.slice.call(arguments, 1);
                         return orginalFunc.apply(this, args);
                     }
@@ -593,26 +607,13 @@ function loadJsCssFile(filename, filetype, param) {
         tabManagement.show($('lastTab').value);
 
         //handling this inside a loop did not work
-        extra_edit = addAskUserIfDirty(extra_edit);
-        extra_insert_after = addAskUserIfDirty(extra_insert_after);
-        extra_move_after = addAskUserIfDirty(extra_move_after);
-        extra_delete = addAskUserIfDirty(extra_delete);
+        extra_insert_after = interceptIfDirty(extra_insert_after);
+        extra_move_after = interceptIfDirty(extra_move_after);
+        extra_delete = interceptIfDirty(extra_delete);
+        extra_shortcut_create = interceptIfDirty(extra_shortcut_create);
     });
 
-
-
-/// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
-	function storeTemplateSet(table, uid, value) {
-		uid = parseInt(uid);
-		var request = new top.Ajax.Request(
-			top.path + "typo3conf/ext/newspaper/mod3/index.php",
-			{
-				method: 'get',
-				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime()
-			}
-		);
-	}
-
+//////////// copied from mod3_new_extra some slightly modified for usage with tabs others just because of scope
 	function getChosenExtra() {
 		if (document.getElementById('extra_list').selectedIndex < 0) {
 			alert(msgNoExtraSelected);
@@ -674,6 +675,21 @@ function loadJsCssFile(filename, filetype, param) {
 			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data;
 		}
 	}
+
+
+
+/// template set dropdown handling: ATTENTION: copy of this function in res/be/pagetype_pagezonetype_4section.js
+	function storeTemplateSet(table, uid, value) {
+		uid = parseInt(uid);
+		var request = new top.Ajax.Request(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{
+				method: 'get',
+				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime()
+			}
+		);
+	}
+
 	
 
 //{/literal}	

@@ -1,4 +1,4 @@
-{*{debug}*}
+{debug}
 <script type="text/javascript">
     var confirmationMessage = '{$MESSAGE.confirmation}';
     var msgNoExtraSelected = '{$MESSAGE.no_extra_selected}';
@@ -178,7 +178,7 @@
 
             {* delete *}
                                 {if $EXTRA_DATA[i].origin_placement == true || $IS_CONCRETE_ARTICLE}
-                                  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if});">{$DELETE_ICON}</a>
+                                  <a href="javascript:extra_delete({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, '{$LABEL.extra_delete_confirm}', {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if}, '{$EXTRA_DATA[i].concrete_table}');">{$DELETE_ICON}</a>
                                 {else}
                                   {$EMPTY_ICON}
                                 {/if}
