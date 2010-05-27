@@ -512,7 +512,7 @@ function loadJsCssFile(filename, filetype, param) {
             //after an ajax reload the iframe must be loaded again but tabIds already contains the current tab_id
             //therefore check for empty div.
             // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
-            if( (!this.tabIds.include(tab_id) || $(tab_id).innerHTML == "") && isExtraTab) {
+            if( ($(tab_id).innerHTML == "") && isExtraTab) {
                 $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tableName+']['+id+']=edit""></iframe>';
 
                 //after an ajax reload the tab_id is already inside the list

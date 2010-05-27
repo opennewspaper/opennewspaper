@@ -29,6 +29,13 @@
     <ul>
         <li id="tab_add_extra"><a href="#" onclick="tabManagement.show('add_extra', [0, {$DATA.pagezone_id}, 0, true, 1]); this.blur(); return false;">{$NEW_TOP_ICON}</a></li>
         <li id="tab_overview"><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
+        {if $EXTRA_DATA}
+            {foreach from=$EXTRA_DATA item=extra}
+            <li id="tab_{$extra.concrete_table}_{$extra.concrete_uid}">
+                <a href="#" onclick="tabManagement.show('{$extra.concrete_table}_{$extra.concrete_uid}'); this.blur(); return false;">{$extra.extra_type}</a>
+            </li>
+            {/foreach}
+        {/if}
         {if $SHORTCUT}
             {section name=i loop=$SHORTCUT}
                 {if ($SHORTCUT[i]->getUid() > 0)}
@@ -44,13 +51,6 @@
                 {/if}
             {/section}
 	    {/if}
-        {if $EXTRA_DATA}
-            {foreach from=$EXTRA_DATA item=extra}
-            <li id="tab_{$extra.concrete_table}_{$extra.concrete_uid}">
-                <a href="#" onclick="tabManagement.show('{$extra.concrete_table}_{$extra.concrete_uid}'); this.blur(); return false;">{$extra.extra_type}</a>
-            </li>
-            {/foreach}
-        {/if}
     </ul>
     <div id="add_extra" class="extra_tab" style="display: none;">
          {*render list with registered extras *}
