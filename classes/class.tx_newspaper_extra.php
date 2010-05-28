@@ -295,16 +295,20 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	public function setAttribute($attribute, $value) {
 
 		if (!$this->extra_attributes) {
-			$this->extra_attributes = $this->getExtraUid()? 
-				tx_newspaper::selectOneRow(
-					'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()): 
-				array();
+			if ($this->getExtraUid()) {
+				$this->extra_attributes = tx_newspaper::selectOneRow(
+					'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid());
+			} else { 
+				$this->extra_attributes = tx_newspaper::makeArrayFromFields('tx_newspaper_extra');
+			}
 		}
 		if (!$this->attributes) {
-			$this->attributes = $this->getUid()?
-				tx_newspaper::selectOneRow(
-					'*', $this->getTable(), 'uid = ' . $this->getUid()):
-				array();
+			if ($this->getUid()) {
+				$this->attributes =	tx_newspaper::selectOneRow(
+					'*', $this->getTable(), 'uid = ' . $this->getUid()); 
+			} else {
+				$this->attributes =	tx_newspaper::makeArrayFromFields($this->getTable());
+			}
 		}
 
 		/** Because we separated the attributes for the concrete Extra and the
