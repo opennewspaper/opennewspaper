@@ -36,21 +36,13 @@
             </li>
             {/foreach}
         {/if}
-        {if $SHORTCUT}
-            {section name=i loop=$SHORTCUT}
-                {if ($SHORTCUT[i]->getUid() > 0)}
-                     {*duplicate extra placed on default article *}
-                     <li id="tab_{$SHORTCUT[i]->getTable()}_{$SHORTCUT[i]->getOriginUid()}">
-                        <a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', {$SHORTCUT[i]->getOriginUid()});">{$SHORTCUT_DEFAULTEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
-                    </li>
-                {else}
-                     {*create new empty extra configured in tsconfig *}
-                     <li id="tab_{$SHORTCUT[i]->getTable()}">
-                        <a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', 0);">{$SHORTCUT_NEWEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
-                    </li>
-                {/if}
-            {/section}
-	    {/if}
+		{if $SHORTCUT}
+			{foreach from=$SHORTCUT item=extra}
+				{* create new empty extra configured in tsconfig *}
+				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph});">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
+				<br />
+		 	{/foreach}
+		 {/if}
     </ul>
     <div id="add_extra" class="extra_tab" style="display: none;">
          {*render list with registered extras *}
