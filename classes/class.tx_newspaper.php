@@ -425,17 +425,19 @@ class tx_newspaper  {
 	
 	/// Returns true if SQL table \p $table has a field called \p $field
 	public static function fieldExists($table, $field) {
-		
+	    return in_array($field, self::getFields($table));
+	}
+
+	/// Returns the fields that are present in SQL table \p $table
+	public static function getFields($table) {
 		self::$query = "SHOW COLUMNS FROM $table";
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) throw new tx_newspaper_NoResException(self::$query);
 	
-	    $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-
-	    return in_array($field, $row);
+	    return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
-
+	
 	/// \c WHERE clause to filter out unwanted records 
 	/** Returns a part of a \c WHERE clause which will filter out records with
 	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
