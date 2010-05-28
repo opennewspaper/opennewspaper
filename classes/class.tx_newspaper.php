@@ -435,13 +435,14 @@ class tx_newspaper  {
 
 		if (!$res) throw new tx_newspaper_NoResException(self::$query);
 	
-	    return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+	    return $row;
 	}
 	
 	/// Returns an array which has the fields of SQL table \p $table as keys
 	public static function makeArrayFromFields($table) {
 		$fields = self::getFields($table);
-		t3lib_div::devlog('makeArrayFromFields', 'newspaper', 0, $fields);
+		t3lib_div::devlog("makeArrayFromFields($table)", 'newspaper', 0, $fields);
 		$array = array();
 		
 		foreach ($fields as $field) $array[$field] = null;
