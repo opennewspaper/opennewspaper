@@ -438,6 +438,16 @@ class tx_newspaper  {
 	    return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
 	
+	/// Returns an array which has the fields of SQL table \p $table as keys
+	public static function makeArrayFromFields($table) {
+		$fields = self::getFields($table);
+		$array = array();
+		
+		foreach ($fields as $field) $array[$field] = null;
+		
+		return $array;
+	}
+	
 	/// \c WHERE clause to filter out unwanted records 
 	/** Returns a part of a \c WHERE clause which will filter out records with
 	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
