@@ -381,7 +381,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
 			
-		$new_article = $s->copyDefaultArticle($at->getTSConfigSettings('musthave'));
+		$new_article = $s->createNewArticle($at);
 //t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
 //t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
 		$new_article->setAttribute('articletype_id', $input['articletype']);
@@ -476,7 +476,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		);
 		
 		
-		$new_article = $section->copyDefaultArticle($articletype->getTSConfigSettings('musthave'));
+		$new_article = $section->createNewArticle($articletype);
 		$new_article->setAttribute('articletype_id', $articletype->getUid());
 
 		$source->readArticle($new_article, $path);

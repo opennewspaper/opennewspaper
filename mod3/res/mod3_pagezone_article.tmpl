@@ -6,16 +6,11 @@
 	{if $SHORTCUT}
 		<div style="margin-bottom: 7px;">
 		{$LABEL.shortcuts}<br />
-		{section name=i loop=$SHORTCUT}
-			{if ($SHORTCUT[i]->getUid() > 0)}
-				{* duplicate extra placed on default article *}
-				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', {$SHORTCUT[i]->getOriginUid()});">{$SHORTCUT_DEFAULTEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
-			{else}
-				{* create new empty extra configured in tsconfig *}
-				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$SHORTCUT[i]->getTable()}', 0);">{$SHORTCUT_NEWEXTRA_ICON} {$SHORTCUT[i]->getTitle()}</a>
-			{/if}
+		{foreach from=$SHORTCUT item=extra}
+			{* create new empty extra configured in tsconfig *}
+			<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph});">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
 			<br />
-	 	{/section}
+	 	{/foreach}
 	 	</div>
 	 {/if}
 

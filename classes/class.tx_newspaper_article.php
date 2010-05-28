@@ -549,6 +549,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \param $new_paragraph The paragraph to which \p $extra is moved.
 	 */
 	public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
+// \todo: the changed paragraph is STORED in the extra but NOT MODIFIED in this pagezone's extras attribute 		
+		
 		$paragraph = intval($extra->getAttribute('paragraph'));
 		if ($paragraph != intval($new_paragraph)) {
 			$extra->setAttribute('paragraph', intval($new_paragraph));
@@ -756,80 +758,134 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			t3lib_div::devlog('getMissingDefaultExtras(): no article type set for article #' . $this->getUid(), 'newspaper', 3);
 			return array(); // no article type, no shortcuts ...
 		}
-
-		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras));
-
-		// get extras on default article for the primary section of this article
-		if (!$primarySection = $this->getPrimarySection()) {
-			// no primary section found, so no section assigned, so no extra missing ...
-			return array();
-		}
-		if (!$defaultArticle = $primarySection->getDefaultArticle()) {
-			// no default article found, so no extras missing ...
-			return array();	
-		}
-		$defaultExtras = $defaultArticle->getExtras();
 		
+		$must_should_have_extras = array();
 		
-//t3lib_div::devlog('getMissingDefaultExtras() defafult extras', 'newspaper', 0, array('de' => $defaultExtras));
-		if (is_array($defaultExtras)) {
-			// get extras assigned to this article
-			$concreteExtras = $this->getExtras();
-			/// check which default extras are already assigned to this article
-			foreach($defaultExtras as $keyDefault => $defaultExtra) {
-				foreach($concreteExtras as $keyConcrete => $concreteExtra) {
-					if ($defaultExtra->getOriginUid() == $concreteExtra->getOriginUid()) {
-						/// default extra found in concrete article, so no shortcut needed
-						unset($defaultExtras[$keyDefault]);
+		$tsc_extras = array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave'));
+		foreach($tsc_extras as $tsc_extra) {
+//t3lib_div::devlog('getMissingDefaultExtras()', 'newspaper', 0, array('e' => $tsc_extra));
+			list($extra_class, $paragraph) = explode(':', $tsc_extra);
+			$paragraph = intval($paragraph);
 
-						// check if this extra type is a must or should have extra 
-						$key = array_search($defaultExtra->getTable(), $must_should_have_extras);
-						if ($key !== false) {
-							// an extra of this type was found, so no shortcut needed for this extra type
-							unset($must_should_have_extras[$key]);
-						}
-					}
+			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
+				if (!$this->checkExtra($extra_class)) {
+					$e = new $extra_class();
+					$shortcuts[] = array(
+						'extra_class' => $extra_class,
+						'paragraph' => $paragraph,
+						'title' => $e->getTitle(),
+					);
+				}
+			} // \todo: log errors?
+		}	
+
+//		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
+//		$must_should_have_extras_simple = array();
+//		foreach($must_should_have_extras as $extra) {
+//			$tsc = explode(':', $extra);
+//			$must_should_have_extras_simple[] = $tsc[0]; // cut off value for position, if set 
+//		}
+//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras, 'mse_simple' => $must_should_have_extras_simple));
+//
+//		// get extras on default article for the primary section of this article
+//		if (!$primarySection = $this->getPrimarySection()) {
+//			// no primary section found, so no section assigned, so no extra missing ...
+//			return array();
+//		}
+//		if (!$defaultArticle = $primarySection->getDefaultArticle()) {
+//			// no default article found, so no extras missing ...
+//			return array();	
+//		}
+//		$defaultExtras = $defaultArticle->getExtras();
+//		
+//		
+////t3lib_div::devlog('getMissingDefaultExtras() default extras', 'newspaper', 0, array('de' => $defaultExtras));
+//		if (is_array($defaultExtras)) {
+//			// get extras assigned to this article
+//			$concreteExtras = $this->getExtras();
+//			/// check which default extras are already assigned to this article
+//			foreach($defaultExtras as $keyDefault => $defaultExtra) {
+//				foreach($concreteExtras as $keyConcrete => $concreteExtra) {
+//					if ($defaultExtra->getOriginUid() == $concreteExtra->getOriginUid()) {
+//						/// default extra found in concrete article, so no shortcut needed
+//						unset($defaultExtras[$keyDefault]);
+//
+//						// check if this extra type is a must or should have extra 
+//						$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
+//						if ($key !== false) {
+//							// an extra of this type was found, so no shortcut needed for this extra type
+//							unset($must_should_have_extras[$key]);
+//							unset($must_should_have_extras_simple[$key]);
+//						}
+//					}
+//				}
+//			}
+//		}
+////t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 2', 'newspaper', 0, array('mse' => $must_should_have_extras));
+//		
+//		/// search for extras that are already assigned to the article (and are configured as must-have or should-have extra but are NOT placed in the default article)
+//		foreach($concreteExtras as $keyConcrete => $concreteExtra) {
+//			$key = array_search($concreteExtra->getTable(), $must_should_have_extras_simple);
+//			if ($key !== false) {
+//				// an extra of this type was found, so no shortcut needed for this extra type
+//				unset($must_should_have_extras[$key]);
+//				unset($must_should_have_extras_simple[$key]);
+//			}
+//		}
+//		
+//
+//		/// create shortcuts for missing "default" extras in the concrete article
+//		foreach($defaultExtras as $defaultExtra) {
+//			$shortcuts[] = $defaultExtra;
+//			// check if this extra type is a must or should have extra 
+//			$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
+//			if ($key !== false) {
+//				// an extra of this type was found, so no shortcut needed
+//				unset($must_should_have_extras[$key]);
+//				unset($must_should_have_extras_simple[$key]);
+//			}
+//		}
+////t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 3', 'newspaper', 0, array('mse' => $must_should_have_extras, 's' => $shortcuts));
+//
+//		/// create shortcuts for remaining must-have / should-have extras
+//		// the array holds extra class names, not objects!
+//		foreach($must_should_have_extras_simple as $key => $extra_class) {
+//			if (class_exists($extra_class)) {
+//				$tsc = explode(':', $extra_class);
+//				$e = new $extra_class($tsc[0]);
+//				if (sizeof($tsc) > 1) {
+//					$e->setAttribute('paragraph', intval($tsc[1])); // add paragraph for extra
+//				}
+//				$shortcuts[] = $e;
+//			} else {
+//				t3lib_div::devlog('tx_newspaper_Article::getMissingDefaultExtras()', 'newspaper', 2, array('Class ' . $extra_class . ' unknown. Was set as must-have or should-have extra for article type ' . $at->getAttribute('title') . ' in section ' . $this->getPrimarySection()->getAttribute('section_name')));
+//			}
+//		}
+t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));		
+		return $shortcuts;
+	}
+	
+	/// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.
+	/** \param $class name of extra class
+	 *  \param $paragraph paragraph or false, if paragraph shouldn't be checked
+	 *  \return true if the extra was found, else false
+	 */
+	private function checkExtra($class, $paragraph=false) {
+		$class = strtolower($class);
+		if ($paragraph !== false) {
+			$paragraph = intval($paragraph);
+		}
+		foreach($this->getExtras() as $extra) {
+			if ($class == strtolower($extra->getTable())) {
+				if ($paragraph !== false) {
+					return ($extra->getAttribute('paragraph') == $paragraph);
+				} else {
+					return true;
 				}
 			}
 		}
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 2', 'newspaper', 0, array('mse' => $must_should_have_extras));
-		
-		/// search for extras that are already assigned to the article (and are configured as must-have or should-have extra but are NOT placed in the default article)
-		foreach($concreteExtras as $keyConcrete => $concreteExtra) {
-			$key = array_search($concreteExtra->getTable(), $must_should_have_extras);
-			if ($key !== false) {
-				// an extra of this type was found, so no shortcut needed for this extra type
-				unset($must_should_have_extras[$key]);
-			}
-		}
-		
-
-		/// create shortcuts for missing "default" extras in the concrete article
-		foreach($defaultExtras as $defaultExtra) {
-			$shortcuts[] = $defaultExtra;
-			// check if this extra type is a must or should have extra 
-			$key = array_search($defaultExtra->getTable(), $must_should_have_extras);
-			if ($key !== false) {
-				// an extra of this type was found, so no shortcut needed
-				unset($must_should_have_extras[$key]);
-			}
-		}
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 3', 'newspaper', 0, array('mse' => $must_should_have_extras, 's' => $shortcuts));
-
-		/// create shortcuts for remaining must-have / should-have extras
-		// the array holds extra class names, not objects!
-		foreach($must_should_have_extras as $extra_class) {
-			if (class_exists($extra_class)) {
-				$shortcuts[] = new $extra_class();
-			} else {
-				t3lib_div::devlog('tx_newspaper_Article::getMissingDefaultExtras()', 'newspaper', 2, array('Class ' . $extra_class . ' unknown. Was set as must-have or should-have extra for article type ' . $at->getAttribute('title') . ' in section ' . $this->getPrimarySection()->getAttribute('section_name')));
-			}
-		}
-//t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));		
-		return $shortcuts;
-
-	}
+		return false;
+	}	
 
 	
 	/// Get the SQL table which associates tx_newspaper_Extra with tx_newspaper_PageZone.

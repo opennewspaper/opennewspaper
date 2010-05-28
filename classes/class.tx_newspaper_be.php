@@ -429,7 +429,7 @@ function findElementsByName(name, type) {
 		$data[] = self::extractData($pz); // empty array if concrete article
 		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
 
-//t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, $data);
+//t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, array('data' => $data, 'extra_data' => $extra_data));
 		if (!$is_concrete_article) {
 			// so it's no concrete article (= default article or pagezone_page)
 			
@@ -443,7 +443,11 @@ function findElementsByName(name, type) {
 			$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
 			$pagezonetype = array();
 			for ($i = 0; $i < sizeof($pagezones); $i++) {
-				$pagezonetype[] = $pagezones[$i]->getPageZoneType(); 
+				// add all pagezone type except for articles
+				// \todo: make article exception ts-configurable if default articles are to be used (note: default article features have not implmented yet)
+				if (!$pagezones[$i]->getPageZoneType()->getAttribute('is_article')) {
+					$pagezonetype[] = $pagezones[$i]->getPageZoneType();
+				}
 			}
 			$data[0]['article_id'] = -1; // only needed for concrete article
 		} else {
@@ -455,7 +459,7 @@ function findElementsByName(name, type) {
 
 		// if concrete article: add shortcuts for missing should-have and must-have extras
 		$shortcuts = $is_concrete_article? $pz->getMissingDefaultExtras() : array();
-if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
+//if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
 
 
 		// get a smarty object
@@ -490,7 +494,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 			$page_name = array();
 			for ($i = 0; $i < sizeof($pp); $i++) {
 				if (false) {
-					// this is the current page,, so remove from array
+					// this is the current page, so remove from array
 					unset($pp[$i]);
 				} else {
 					// get name of page
@@ -518,7 +522,7 @@ if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0
 		$pagezone = array();         
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
 			
-			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currentlx edited page zone?
+			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currently edited page zone?
 			
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
@@ -995,11 +999,14 @@ JSCODE;
 	 */
 	public static function addAdditionalScriptToBackend() {
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/newspaper.js');
+
+		// add modalbox - is used for placing extra on pagezones
+		// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
+		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
+		$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
+
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
-				// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
-				$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
-				$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
 				self::$backend_files_added = true;
 			break;
 			case BE_EXTRA_DISPLAY_MODE_TABBED:

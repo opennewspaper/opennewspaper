@@ -285,13 +285,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 	
-	/// called via ajax: create an extra (using a shortcut link in "extra in article")
+	/// called via ajax: create an extra (using a shortcut link in "extra in article"); is used in concrete articles only
 	/// \param $article_uid article uid
 	/// \param $extra_class name of extra class (needed if $extra_uid is 0)
-	/// \param $extra_uid if not 0 the uid of the abstract extra to be duplicated	
-	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid) {
-t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid));
+	/// \param $extra_uid if not 0 the uid of the abstract extra to be duplicated
+	/// \param $paragraph paragraph for (non-duplicated) extras
+	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph) {
+//t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid, 'paragraph' => $paragraph));
 		$extra_uid = intval($extra_uid);
+		$paragraph = intval($paragraph);
 		$article = new tx_newspaper_Article(intval($article_uid));
 		if ($extra_uid) {
 			// extra uid is set, so duplicate this extra
@@ -302,6 +304,8 @@ t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('articl
 				$e = new $extra_class();
 				$e->setAttribute('crdate', time());
 	 			$e->setAttribute('tstamp', time());
+// \todo: nächste Zeile ent-auskommentieren, wenn Bug #975 gefixt ist 
+//				$e->setAttribute('paragraph', $paragraph);
 				$extra_uid = $e->store();
 				$article->addExtra($e);
 			} else {
@@ -417,7 +421,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 
 		// create extra using a shortcut link in extra in article
 		if (t3lib_div::_GP('extra_shortcut_create') == 1) {
-			$this->processExtraShortcutCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('extra_uid')); 
+			$this->processExtraShortcutCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('paragraph')); 
 		}
 		
 
