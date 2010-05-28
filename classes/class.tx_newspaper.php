@@ -435,8 +435,12 @@ class tx_newspaper  {
 
 		if (!$res) throw new tx_newspaper_NoResException(self::$query);
 	
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-	    return $row;
+		$fields = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$fields[] = $row['Field'];
+		}
+		
+	    return $fields;
 	}
 	
 	/// Returns an array which has the fields of SQL table \p $table as keys
