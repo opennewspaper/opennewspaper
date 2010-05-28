@@ -16,11 +16,6 @@ $GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_extra_comboli
 
 
 
-
-
-
-
-
 require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehook.php');
 
 
@@ -33,10 +28,6 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		tx_newspaper_article::getDBlistQuery($table, $pageId, $additionalWhereClause, $selectedFieldsList, $parentObject);
 		
 	}
-
-
-
-
 
 
 	/// TCEForm hooks
@@ -100,18 +91,12 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 
 
-
-
-
-
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
-
-
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
@@ -155,7 +140,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		}
 
 	}
-
 
 	/// checks if the combination of get_var and get_value is unique for every page type
 	private function checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id) {
@@ -201,7 +185,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		}
 	}
 
-
 	/// add modification user when updating tx_newspaper_article
 	private function addModificationUserIfArticle($status, $table, $id, &$fieldArray) {
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
@@ -209,7 +192,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
 		return true; 
 	}
-
 
 	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
 		$pzt = new tx_newspaper_PageZoneType(); 
@@ -248,7 +230,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			}
 		}
 	}
-
 
 	/// command map hooks 
 	

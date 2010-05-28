@@ -447,11 +447,11 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 
 
 				
-				/// save all the articles of a single section
-				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
-				 *  \return \c true
-				 */
-				function saveSection($input) {
+	/// save all the articles of a single section
+	/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+	 *  \return \c true
+	 */
+	function saveSection($input) {
 //t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
 					$articleIds = explode('|', $input['articleids']);
 					$offsets = array();
@@ -524,7 +524,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					}
 					t3lib_div::devlog('saveSection() - unknown type [element]', 'newspaper', 3, array('input' => $input));					
 
-				}
+	}
 				
 				
 				/// check several article lists if they have been modified in database 

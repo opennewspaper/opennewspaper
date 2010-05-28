@@ -305,6 +305,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				$e = new $extra_class();
 				$e->setAttribute('crdate', time());
 	 			$e->setAttribute('tstamp', time());
+				$extra_uid = $e->store();
 				$e->setAttribute('paragraph', $paragraph);
 				$extra_uid = $e->store();
 

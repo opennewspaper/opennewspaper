@@ -299,7 +299,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				$this->extra_attributes = tx_newspaper::selectOneRow(
 					'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid());
 			} else { 
-				$this->extra_attributes = tx_newspaper::makeArrayFromFields('tx_newspaper_extra');
+#				$this->extra_attributes = tx_newspaper::makeArrayFromFields('tx_newspaper_extra');
 				$this->extra_attributes = array();
 			}
 		}
@@ -308,7 +308,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				$this->attributes =	tx_newspaper::selectOneRow(
 					'*', $this->getTable(), 'uid = ' . $this->getUid()); 
 			} else {
-				$this->attributes =	tx_newspaper::makeArrayFromFields($this->getTable());
+#				$this->attributes =	tx_newspaper::makeArrayFromFields($this->getTable());
 				$this->attributes =	array();
 			}
 		}
