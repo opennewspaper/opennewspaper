@@ -36,14 +36,12 @@
             </li>
             {/foreach}
         {/if}
-		{if $SHORTCUT}
-			{foreach from=$SHORTCUT item=extra}
-				{* create new empty extra configured in tsconfig *}
-                <li id="tab_{$extra.extra_class}">
-                    <a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph});">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
-                </li>				
-		 	{/foreach}
-		 {/if}
+		{foreach from=$SHORTCUT item=extra}
+			{* create new empty extra configured in tsconfig *}
+			<li id="tab_{$extra.extra_class}">
+				<a href="javascript:extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph});">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
+			</li>				
+		{/foreach}
     </ul>
     <div id="add_extra" class="extra_tab" style="display: none;">
          {*render list with registered extras *}
@@ -199,6 +197,7 @@
         <div id="{$extra.concrete_table}_{$extra.concrete_uid}" class="extra_tab"></div>
     {/foreach}
 	{foreach from=$SHORTCUT item=extra}
+		{* render tab for missing extras = shortcut for extra creation as configured in TSConfig *}
 		<div id="{$extra.title}"></div>
 	{/foreach}
     </div>    
