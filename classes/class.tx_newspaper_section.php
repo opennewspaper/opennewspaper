@@ -340,10 +340,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		
  		$new_article->setAttribute('crdate', time());
  		$new_article->setAttribute('tstamp', time());
+ 		 		
+ 		$new_article->store();
  		
  		$new_article->addSection($this);
- 		
- 		$new_article->store();
  		
  		// \todo: check if extra is placed on $this->getDefaultArticle(), if default article are to be used at all
  		// if yes: copy matching extras from default article if any, else create empty extra (as implemented below) 
