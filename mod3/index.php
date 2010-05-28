@@ -295,6 +295,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$extra_uid = intval($extra_uid);
 		$paragraph = intval($paragraph);
 		$article = new tx_newspaper_Article(intval($article_uid));
+		
 		if ($extra_uid) {
 			// extra uid is set, so duplicate this extra
 			$article->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid)->duplicate());
@@ -304,14 +305,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				$e = new $extra_class();
 				$e->setAttribute('crdate', time());
 	 			$e->setAttribute('tstamp', time());
-// \todo: nächste Zeile ent-auskommentieren, wenn Bug #975 gefixt ist 
-//				$e->setAttribute('paragraph', $paragraph);
+				$e->setAttribute('paragraph', $paragraph);
 				$extra_uid = $e->store();
+
 				$article->addExtra($e);
 			} else {
 				throw new tx_newspaper_WrongClassException('Unknown Extra class: ' . $extra_class);
 			}
 		}
+		
         $htmlContent = tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
         $data = array('extra_uid' => $extra_uid, 'htmlContent' => $htmlContent);
         header('Content-type: application/json');
