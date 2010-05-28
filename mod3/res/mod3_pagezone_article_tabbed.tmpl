@@ -197,14 +197,8 @@
     {foreach from=$EXTRA_DATA item=extra}
         <div id="{$extra.concrete_table}_{$extra.concrete_uid}" class="extra_tab"></div>
     {/foreach}
-    {section name=i loop=$SHORTCUT}
-                {if ($SHORTCUT[i]->getUid() > 0)}
-                     {*duplicate extra placed on default article *}
-                     <div id="{$SHORTCUT[i]->getTable()}_{$SHORTCUT[i]->getOriginUid()}"></div>
-                {else}
-                     {*create new empty extra configured in tsconfig *}
-                     <div id="{$SHORTCUT[i]->getTable()}"></div>
-                {/if}
-            {/section}
+	{foreach from=$SHORTCUT item=extra}
+		<div id="{extra.title}"></div>
+	{/foreach}
     </div>    
 </div>
