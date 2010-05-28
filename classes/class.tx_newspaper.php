@@ -441,6 +441,7 @@ class tx_newspaper  {
 	/// Returns an array which has the fields of SQL table \p $table as keys
 	public static function makeArrayFromFields($table) {
 		$fields = self::getFields($table);
+		t3lib_div::devlog('makeArrayFromFields', 'newspaper', 0, $fields);
 		$array = array();
 		
 		foreach ($fields as $field) $array[$field] = null;
