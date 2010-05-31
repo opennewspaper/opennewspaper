@@ -137,8 +137,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 
-		
-		// hide delete, save&new and save&preview buttons (and docheader2) for extras
+		// hide, delete, save&new and save&preview buttons (and docheader2) for extras
 		if (!tx_newspaper::isAbstractClass($this->elementsData[0]['table'])) {
 			$check = new $this->elementsData[0]['table']();
 			if (tx_newspaper::classImplementsInterface($this->elementsData[0]['table'], 'tx_newspaper_ExtraIface')) {
@@ -146,11 +145,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 				$buttons = parent::getButtons();
 				$buttons['save_view'] = '';
 				$buttons['save_new'] = '';
-				if (tx_newspaper_be::getExtraBeDisplayMode() == BE_EXTRA_DISPLAY_MODE_TABBED) {
-					// no close buttons, if tabbed backend
+				
+				if (!$this->isInPlacementModule() && (tx_newspaper_be::getExtraBeDisplayMode() == BE_EXTRA_DISPLAY_MODE_TABBED)) {
+					// no close buttons, if tabbed backend for extras in CONCRETE articles
 					$buttons['save_close'] = '';
 					$buttons['close'] = '';
-				}
+				} // but do show close buttons in placement module, because in that module 
 				// mis-use delete button to add css code and hide docheader2 
 				$buttons['delete'] = self::getStyleToHideDocheader2(); 
 				return $buttons;
@@ -158,12 +158,15 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		}
 
 
-		// no need to modify the button array for this newspaper recird, so let Typo3 handle this call ...
+		// no need to modify the button array for this newspaper record, so let Typo3 handle this call ...
 		return parent::getButtons();
 		
 	}
 	
-	
+	/// very simple check if the users is editing in the placement module (mod3)
+	private function isInPlacementModule() {
+		return (strpos($this->returnUrl, 'newspaper/mod3/res/close.html') !== false);
+	}
 	
 	private function getJsForArticlePreview() {
 		return '<script language="javascript">
