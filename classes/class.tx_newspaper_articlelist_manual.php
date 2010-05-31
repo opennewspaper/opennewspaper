@@ -96,6 +96,9 @@ LIMIT 0, 10
 			}
 			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i); 
 		}
+	
+		$this->callSaveHooks();
+		
 	}
 		
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {

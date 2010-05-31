@@ -430,6 +430,14 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return false;
 	}
 	
+	static public function registerSaveHook($class) {
+		self::$registered_savehooks[] = $class;
+	}
+	
+	static public function getRegisteredSaveHooks() {
+		return self::$registered_savehooks;
+	}
+	
 	/// Save hook function, called from the global save hook in tx_newspaper_typo3hook
 	/** Writes an abstract record for a concreate3 article list, if no abstract record is available
 	 * \param $status Status of the current operation, 'new' or 'update
@@ -528,6 +536,15 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		throw new tx_newspaper_InconsistencyException(
 			'clearList() should never be called. Override it in the child classes!'
 		);
+	}
+	
+	/// Call all registered save hooks
+	protected function callSaveHooks() {
+		
+		foreach (self::$registered_savehooks as $hook_class) {
+			if (!is_object($hook_class)) $hook_class = new $hook_class();
+			if (method_exists($hook_class, 'articleListSaveHook')) $hook_class->articleListSaveHook($this);
+		}		
 	}
 	
 	/// \return $TCA for this article list (abstract and concrete)
@@ -717,6 +734,9 @@ body {
 	static protected $section_table = 'tx_newspaper_section';
 	/// Array for registered article lists (subclasses of tx_newspaper_ArticleList)
 	static protected $registered_articlelists = array();
+	
+	/// Array for registered save hooks (called after assembleFromUIDs())
+	private static $registered_savehooks = array();
 	
 	///	Fields which should be copied from the concrete to the abstract record
 	private static $fields_to_copy_into_articlelist_table = array(

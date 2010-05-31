@@ -109,6 +109,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	function assembleFromUIDs(array $uids) {
 		$this->clearList();
 		for($i = 0; $i < sizeof($uids); $i++) {
+			
 			if (!is_array($uids[$i]) || sizeof($uids[$i]) < 2) {
 				throw new tx_newspaper_InconsistencyException(
 					'Semiautomatic article list needs UID array to have members
@@ -116,6 +117,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					 print_r($uids[$i])
 				);
 			}
+			
 			$article = new tx_newspaper_Article($uids[$i][0]);
 			$this->insertArticleAtPosition($article, $i);
 			if ($this->getOffset($article) != $uids[$i][1]) {
@@ -128,6 +130,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				);
 			}
 		}
+
+		$this->callSaveHooks();
+		
 	}
 	
 	/// User function called from the BE to display the articles on the list
