@@ -76,7 +76,6 @@ LIMIT 0, 10
 				"$start, $number"
 		);
 		
-		t3lib_div::devlog('query:', 'np', 0, array('query' => tx_newspaper::$query));
 		$articles = array();
 		foreach ($results as $row) {
 			$articles[] = new tx_newspaper_Article($row['uid_foreign']);
