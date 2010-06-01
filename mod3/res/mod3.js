@@ -111,6 +111,7 @@ function loadJsCssFile(filename, filetype, param) {
 	/// just display the ajax response as extra list in concrete article
 	function response_in_article(data) {
 		document.getElementById('extras').innerHTML = data.responseText;
+        tabManagement.clearTabCache();
 	}
 	
 	/// the list of extras has to be reloaded from the server (needed for modal box or saveField ajax calls)
@@ -206,11 +207,7 @@ function loadJsCssFile(filename, filetype, param) {
 				method: 'get',
 				parameters: "extra_delete=1&pz_uid=" + pz_uid + "&extra_uid=" + extra_uid + "&no_cache=" + new Date().getTime(),
 				onCreate: eval(get_onCreate_function(is_concrete_article)),
-				onSuccess: function(transport) {
-                    var successFunc = eval(get_onSuccess_function(is_concrete_article));
-                    successFunc(transport);
-                    tabManagement.removeTab(extra_class, extra_uid);
-                }
+				onSuccess: eval(get_onSuccess_function(is_concrete_article))
 			}
 		);
 	}
@@ -538,23 +535,27 @@ function loadJsCssFile(filename, filetype, param) {
          * @param saveInput savedok or saveandclosedok
          */
         submitTabs: function(saveInput) {
+//            alert('submiting: ' + this.tabIds.join(','));
             for(var i = 0; i < this.tabIds.length; i++) {
                 var frame = $(this.tabIds[i]);
-                if(!frame.id) {
+                if(!frame || !frame.id) {
                     alert("missing " + this.tabIds[i]);
                     return false;
                 }
                 var iframeDok = top.window.frames[frame.id].document;
-
+                
                 //typo3 needs these coordinates somehow to properly save the article.
                 ['.x', '.y'].each(function(suffix) {
                     var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix});
                     iframeDok.forms[0].appendChild(saveDokInput);
                 });
+                iframeDok.
 
-                iframeDok.forms[0].submit();
+
+
+//                alert('submitted');
             }
-            return true;
+            return false;
         },
 
         /**
@@ -568,9 +569,6 @@ function loadJsCssFile(filename, filetype, param) {
             var allowSubmit = true;
             if(this.tabIds.size() > 0) {
                 allowSubmit = confirm(this.confirmMessage);
-                if(allowSubmit) {
-                    this.clearTabCache(); // invalidate list of tabs after user agreed to lose changes
-                }
             }
             return allowSubmit;
         },
@@ -606,7 +604,8 @@ function loadJsCssFile(filename, filetype, param) {
      */
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
-        tabManagement.show($('lastTab').value);
+        tabManagement.show('overview');
+//        tabManagement.show($('lastTab').value);
 
         //handling this inside a loop did not work
         extra_insert_after = interceptIfDirty(extra_insert_after);
