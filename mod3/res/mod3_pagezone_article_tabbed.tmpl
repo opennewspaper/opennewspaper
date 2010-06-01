@@ -31,7 +31,7 @@
         {if $EXTRA_DATA}
             {foreach from=$EXTRA_DATA item=extra}
             <li id="tab_{$extra.concrete_table}_{$extra.concrete_uid}">
-                <a href="#" onclick="tabManagement.show('{$extra.concrete_table}_{$extra.concrete_uid}'); this.blur(); return false;">{$extra.extra_type}</a>
+                <a href="#" onclick="tabManagement.show('{$extra.concrete_table}_{$extra.concrete_uid}'); this.blur(); return false;">{$extra.extra_type} [{$extra.paragraph}]</a>
             </li>
             {/foreach}
         {/if}
