@@ -568,6 +568,9 @@ function loadJsCssFile(filename, filetype, param) {
             var allowSubmit = true;
             if(this.tabIds.size() > 0) {
                 allowSubmit = confirm(this.confirmMessage);
+                if(allowSubmit) {
+                    this.clearTabCache(); // invalidate list of tabs after user agreed to lose changes
+                }
             }
             return allowSubmit;
         },
@@ -590,7 +593,6 @@ function loadJsCssFile(filename, filetype, param) {
         //parameter orginalFunc is passed from wrap function itself
         return func.wrap(function(orginalFunc) {
                     if(tabManagement.askUserContinueIfDirty()) {
-                        tabManagement.clearTabCache(); // invalidate list of tabs after he agreed to lose changes
                         var args = Array.prototype.slice.call(arguments, 1);
                         return orginalFunc.apply(this, args);
                     }
