@@ -68,6 +68,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	///	Offset behind top position with which an article counts as deleted.
 	const offset_deleted = 1000;
 	
+	/// default number for articles (if not set (properly) in article list record)
+	const default_num_articles = 20;
+	
 	/// SQL table storing the relations between list and articles
 	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
 	
@@ -287,7 +290,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		
-		$articles = $this->getArticles($this->getAttribute('num_articles'));
+		$num_articles = intval($this->getAttribute('num_articles'));
+		if ($num_articles <= 0) {
+			// use default value if not set properly in article list record
+			$num_articles = default_num_articles;
+		}  
+		
+		$articles = $this->getArticles($num_articles);
 		
 		//  If article already in list, move it to position $pos
 		foreach ($articles as $i => $present_article) {
