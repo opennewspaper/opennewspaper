@@ -549,8 +549,14 @@ function findElementsByName(name, type) {
                 
                	switch(self::getExtraBeDisplayMode()) {
                		case BE_EXTRA_DISPLAY_MODE_TABBED:
-		                 // tabbed backend
-                         $smarty_pz->assign('lastTab', isset($_REQUEST['lastTab']) ? $_REQUEST['lastTab'] : 'overview' );
+		                 // tabbed backend, set which tab to show after loading
+                          $lastTab = 'overview';                          
+                          if(isset($_REQUEST['lastTab'])) { //is set after reload
+                            $lastTab = $_REQUEST['lastTab'];
+                          } else if(isset($extra_data[0][0])) { //when opened first time
+                              $lastTab = $extra_data[0][0]['concrete_table'].'_'.$extra_data[0][0]['concrete_uid'];
+                          }
+                         $smarty_pz->assign('lastTab', $lastTab);
                          tx_newspaper_BE::addNewExtraData($smarty_pz);
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;

@@ -549,7 +549,7 @@ function loadJsCssFile(filename, filetype, param) {
                     var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix});
                     iframeDok.forms[0].appendChild(saveDokInput);
                 });
-                iframeDok.
+                iframeDok.forms[0].submit();
 
 
 
@@ -604,8 +604,7 @@ function loadJsCssFile(filename, filetype, param) {
      */
     document.observe('dom:loaded', function() {
         tabManagement = new TabManagement();
-        tabManagement.show('overview');
-//        tabManagement.show($('lastTab').value);
+        tabManagement.show($('lastTab').value);
 
         //handling this inside a loop did not work
         extra_insert_after = interceptIfDirty(extra_insert_after);
