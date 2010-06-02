@@ -86,7 +86,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 0; //isset($input['placearticleuid'])? $input['placearticleuid'] : 0; // needed for standalone form (singleplacement)
 						}
-t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
+//t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -476,11 +476,11 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						$sectionType = get_class($section->getArticleList());
 						
 						// save differently depending on list type
-						switch ($sectionType) {
-							case 'tx_newspaper_ArticleList_Manual' :
+						switch(strtolower($sectionType)) {
+							case 'tx_newspaper_articlelist_manual' :
 								$result = $section->getArticleList()->assembleFromUIDs($articleIds);
 							break;
-							case 'tx_newspaper_ArticleList_Semiautomatic' :
+							case 'tx_newspaper_articlelist_semiautomatic' :
 								$articleIdsAndOffsets = array ();
 								for ($i = 0; $i < count($articleIds); ++$i) {
 									$articleIdsAndOffsets[] = array(
@@ -490,6 +490,8 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 								}
 								$result = $section->getArticleList()->assembleFromUIDs($articleIdsAndOffsets);
 							break;
+							default:
+								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
 						}
 	
 						return true;
