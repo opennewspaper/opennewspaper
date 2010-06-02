@@ -273,4 +273,6 @@ $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["rang
 	"lower" => "1"
 );
 
+// todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
+
 ?>
