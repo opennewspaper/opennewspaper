@@ -113,9 +113,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$this->clearList();
 
 		foreach ($uids as $uid) {
-			
-			t3lib_div::devlog('assembleFromUIDs(): $uid', 'newspaper', 0, $uid);	
-			
+						
 			if (!is_array($uid) || sizeof($uid) < 2) {
 				throw new tx_newspaper_InconsistencyException(
 					'Semiautomatic article list needs UID array to have members
@@ -125,9 +123,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			}
 
 			$offset = intval($uid[1]);
-			t3lib_div::devlog('assembleFromUIDs(): $offset', 'newspaper', 0, $offset);
 			if ($offset == 0) continue;
-			t3lib_div::devlog('assembleFromUIDs(): input ok', 'newspaper', 0);	
 			
 			tx_newspaper::insertRows(
 				self::mm_table,
@@ -135,7 +131,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					'uid_foreign' =>  $uid[0],
 					'offset' => $offset)
 			);
-			t3lib_div::devlog('assembleFromUIDs(): insert', 'np', 0, tx_newspaper::$query);
 
 		}
 
@@ -143,7 +138,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 	}
 	
-	/// \todo: commenting ... update or insert a record 
+	/// update or insert a record 
 	private function updateOffset($uid_local, $uid_foreign, $offset) {
 		if (tx_newspaper::updateRows(
 			self::mm_table,
@@ -151,10 +146,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				' AND uid_foreign = ' . $uid_foreign,
 			array('offset' => $offset)
 		)) {
-//t3lib_div::devlog('update tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'backtrace()' => debug_backtrace()));
 			return; // record was successfully updated
 		}
-//t3lib_div::devlog('update tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query));
 
 		// no record was updated, so write a new one
 		tx_newspaper::insertRows(
@@ -165,7 +158,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				'offset' => $offset
 			)
 		);	
-//t3lib_div::devlog('insert tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results, 'backtrace()' => debug_backtrace()));
 
 	}
 	
@@ -278,9 +270,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	/// calculate a "minimal" (tree-)list of sections
-	/**
-	 * 
-	 */
 	function calculatePlacementTreeFromSelection ($selection) {
 		$result = array();
 		
@@ -299,9 +288,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	/// get article and offset lists for a set of sections
-	/**
-	 * 
-	 */
 	function fillPlacementWithData ($tree, $articleId) {
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
@@ -322,23 +308,17 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		
 		$articles = $this->getArticles($this->getNumArticles());
-//t3lib_div::devlog('insertArticleAtPosition()', 'newspaper', 0, array('articles' => $articles, 'num_articles' => $this->getNumArticles()));		
+
 		//  If article already in list, move it to position $pos
 		foreach ($articles as $i => $present_article) {
 			if ($article->getUid() == $present_article->getUid()) {
+				$old_offset = $this->getOffset($present_article);
+				$new_offset = $old_offset+($i-$pos); 
 				$this->updateOffset(
 					$this->getUid(), 
 					$present_article->getUid(), 
-					$pos // 'offset' . ($pos < $i? (' + ' . $i-$pos): (' - ' . $pos - $i))
+					$new_offset
 				);
-//				tx_newspaper::updateRows(
-//					self::mm_table,
-//					'uid_local = ' . intval($this->getUid()) .
-//						' AND uid_foreign = ' . $present_article->getUid(),
-//					array (
-//						'offset' => 'offset' . ($pos < $i? (' + ' . $i-$pos): (' - ' . $pos - $i))
-//					)
-//				);
 				return;
 			}
 		}
@@ -351,21 +331,18 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 
 	public function moveArticle(tx_newspaper_ArticleIface $article, $offset) {
+
 		$this->insertArticle(max(0, $this->getArticlePosition($article)+$offset));
+
 		if ($this->getArticlePosition($article)+$offset < 0) {
+
+			$old_offset = $this->getOffset($article);
+			$new_offset = $old_offset-abs($this->getArticlePosition($article)+$offset);
 			$this->updateOffset(
 				$this->getUid(), 
-				$present_article->getUid(), 
-				$offset //'offset - ' . abs($this->getArticlePosition($article)+$offset)
+				$article->getUid(), 
+				$new_offset
 			);
-//			tx_newspaper::updateRows(
-//				self::mm_table,
-//				'uid_local = ' . intval($this->getUid()) .
-//					' AND uid_foreign = ' . $present_article->getUid(),
-//				array (
-//					'offset' => 'offset - ' . abs($this->getArticlePosition($article)+$offset)
-//				)
-//			);
 		}
 	}
 	
@@ -451,7 +428,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	/// Get number of articles set in this articles list
-	// \return number of articles as stored in the article list record (or a default number, if number isn't properly stored in the data base)
+	/** \return number of articles as stored in the article list record (or a
+	 *  	default number, if number isn't properly stored in the data base)
+	 */
 	private function getNumArticles() {
 		$num_articles = intval($this->getAttribute('num_articles'));
 		if ($num_articles <= 0) {
