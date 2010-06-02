@@ -109,10 +109,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 
 	function assembleFromUIDs(array $uids) {
-t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));	
+
 		$this->clearList();
 
 		foreach ($uids as $uid) {
+			
+			t3lib_div::devlog('assembleFromUIDs(): $uid', 'newspaper', 0, $uid);	
 			
 			if (!is_array($uid) || sizeof($uid) < 2) {
 				throw new tx_newspaper_InconsistencyException(
