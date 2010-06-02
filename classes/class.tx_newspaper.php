@@ -362,12 +362,13 @@ class tx_newspaper  {
 	 *  \param $table SQL table to delete a record from
 	 *  \param $uids_or_where Array of UIDs to delete, a single UID to delete
 	 *  	(must be an integer), or a \c WHERE condition as string
+	 *  \param $key Name of key to be used for the query (default: 'uid')
 	 *  \return number of affected rows
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
-	public static function deleteRows($table, $uids_or_where) {
+	public static function deleteRows($table, $uids_or_where, $key='uid') {
 		
 		if (!$uids_or_where) return;
 		
@@ -395,9 +396,9 @@ class tx_newspaper  {
 
 			if (is_array($uids_or_where)) {
 				if (count($uids_or_where) <= 0) return;
-				$uids_or_where = 'uid IN ( 0, ' . implode(', ', $uids_or_where) . ')';
+				$uids_or_where = $key . ' IN ( 0, ' . implode(', ', $uids_or_where) . ')';
 			} else if (is_int($uids_or_where)) {
-				$uids_or_where = 'uid = ' . $uids_or_where;
+				$uids_or_where = $key . '=' . $uids_or_where;
 			}
 			
 			if (isset($TCA[$table])) {
