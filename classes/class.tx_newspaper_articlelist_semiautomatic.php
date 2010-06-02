@@ -123,8 +123,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					 print_r($uid)
 				);
 			}
+			t3lib_div::devlog('assembleFromUIDs(): input ok', 'newspaper', 0);	
 
-			if (!intval($uid[1])) continue;
+			$offset = intval($uid[1]);
+			t3lib_div::devlog('assembleFromUIDs(): $offset', 'newspaper', 0, array($offset));	
+			if (!$offset) continue;
 			
 			tx_newspaper::insertRows(
 				self::mm_table,
@@ -132,7 +135,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 					' AND uid_foreign = ' . $uid[1],
 				array('offset' => $uid[1])
 			);
-			t3lib_div::devlog('insert:', 'np', 0, array(tx_newspaper::$query));
+			t3lib_div::devlog('assembleFromUIDs(): insert', 'np', 0, array(tx_newspaper::$query));
 
 		}
 
