@@ -125,11 +125,12 @@ t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));
 			if (!intval($uid[1])) continue;
 			
 			tx_newspaper::insertRows(
-					self::mm_table,
-					'uid_local = ' . intval($this->getUid()) . 
-						' AND uid_foreign = ' . $uid[1],
-					array('offset' => $uid[1])
-				);			
+				self::mm_table,
+				'uid_local = ' . intval($this->getUid()) . 
+					' AND uid_foreign = ' . $uid[1],
+				array('offset' => $uid[1])
+			);
+			t3lib_div::devlog('insert:', 'np', 0, array(tx_newspaper::$query));
 
 		}
 
