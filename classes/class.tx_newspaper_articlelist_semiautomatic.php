@@ -131,11 +131,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			
 			tx_newspaper::insertRows(
 				self::mm_table,
-				'uid_local = ' . intval($this->getUid()) . 
-					' AND uid_foreign = ' . $uid[0],
-				array('offset' => $offset)
+				array('uid_local' => intval($this->getUid()), 
+					'uid_foreign' =>  $uid[0],
+					'offset' => $offset)
 			);
-			t3lib_div::devlog('assembleFromUIDs(): insert', 'np', 0, array(tx_newspaper::$query));
+			t3lib_div::devlog('assembleFromUIDs(): insert', 'np', 0, tx_newspaper::$query);
 
 		}
 
