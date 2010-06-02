@@ -112,34 +112,25 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));	
 		$this->clearList();
 
-		for($i = 0; $i < sizeof($uids); $i++) {
+		foreach ($uids as $uid) {
 			
-			if (!is_array($uids[$i]) || sizeof($uids[$i]) < 2) {
+			if (!is_array($uid) || sizeof($uid) < 2) {
 				throw new tx_newspaper_InconsistencyException(
 					'Semiautomatic article list needs UID array to have members
 					 of the form: array(uid, offset), but no array was given: ' .
-					 print_r($uids[$i])
+					 print_r($uid)
 				);
 			}
 
-			$article = new tx_newspaper_Article(intval($uids[$i][0]));
+			if (!intval($uid[1])) continue;
+			
+			tx_newspaper::insertRows(
+					self::mm_table,
+					'uid_local = ' . intval($this->getUid()) . 
+						' AND uid_foreign = ' . $uid[1],
+					array('offset' => $uid[1])
+				);			
 
-//			$this->insertArticleAtPosition($article, $i);
-			if ($this->getOffset($article) != $uids[$i][1]) {
-				// store modified/new offset
-				$this->updateOffset(
-					$this->getUid(),
-					$article->getUid(), 
-					$uids[$i][1]
-				);
-//				tx_newspaper::updateRows(
-//					self::mm_table,
-//					'uid_local = ' . intval($this->getUid()) . 
-//						' AND uid_foreign = ' . $article->getUid(),
-//					array('offset' => $uids[$i][1])
-//				);
-			}
-//t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'backtrace()' => debug_backtrace()));
 		}
 
 		$this->callSaveHooks();
