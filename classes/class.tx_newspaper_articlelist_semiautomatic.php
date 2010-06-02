@@ -126,8 +126,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			t3lib_div::devlog('assembleFromUIDs(): input ok', 'newspaper', 0);	
 
 			$offset = intval($uid[1]);
-			t3lib_div::devlog('assembleFromUIDs(): $offset', 'newspaper', 0, array($offset));	
-			if (!$offset) continue;
+			t3lib_div::devlog('assembleFromUIDs(): $offset', 'newspaper', 0, $offset);
+			if ($offset == 0) continue;
 			
 			tx_newspaper::insertRows(
 				self::mm_table,
