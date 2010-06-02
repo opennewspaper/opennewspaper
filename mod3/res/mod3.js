@@ -510,7 +510,7 @@ function loadJsCssFile(filename, filetype, param) {
             //therefore check for empty div.
             // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
             if( ($(tab_id).innerHTML == "") && isExtraTab) {
-                $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl=close.html&edit['+tableName+']['+id+']=edit""></iframe>';
+                $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
 
                 //after an ajax reload the tab_id is already inside the list
                 if(!this.tabIds.include(tab_id)) {
@@ -535,7 +535,6 @@ function loadJsCssFile(filename, filetype, param) {
          * @param saveInput savedok or saveandclosedok
          */
         submitTabs: function(saveInput) {
-//            alert('submiting: ' + this.tabIds.join(','));
             for(var i = 0; i < this.tabIds.length; i++) {
                 var frame = $(this.tabIds[i]);
                 if(!frame || !frame.id) {
@@ -550,12 +549,8 @@ function loadJsCssFile(filename, filetype, param) {
                     iframeDok.forms[0].appendChild(saveDokInput);
                 });
                 iframeDok.forms[0].submit();
-
-
-
-//                alert('submitted');
             }
-            return false;
+            return true;
         },
 
         /**
