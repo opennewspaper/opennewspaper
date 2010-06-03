@@ -343,7 +343,6 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		switch(strtolower($type)) {
 			case 'para':
-// \todo: why is the param called position, shouldn't it be paragraph?
 				$e->setAttribute('position', 0); // move as first element to new paragraph
 				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
 			break;
