@@ -295,7 +295,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph) {
 //t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid, 'paragraph' => $paragraph));
 		$extra_uid = intval($extra_uid);
-		$paragraph = intval($paragraph);
+        $extra->setAttribute('paragraph', $paragraph);
+        $extra->store();
 		$article = new tx_newspaper_Article(intval($article_uid));
 		
 		if ($extra_uid) {
@@ -343,7 +344,6 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		switch(strtolower($type)) {
 			case 'para':
-// \todo: why is the param called position, shouldn't it be paragraph?
 				$e->setAttribute('position', 0); // move as first element to new paragraph
 				$pz->changeExtraParagraph($e, intval($value)); // change paragraph (and inherit the change); this function stores the extra (so the position change is stored there)
 			break;
