@@ -550,7 +550,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 */
 	public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
 // \todo: the changed paragraph is STORED in the extra but NOT MODIFIED in this pagezone's extras attribute 		
-		
 		$paragraph = intval($extra->getAttribute('paragraph'));
 		if ($paragraph != intval($new_paragraph)) {
 			$extra->setAttribute('paragraph', intval($new_paragraph));
