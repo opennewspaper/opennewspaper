@@ -785,7 +785,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$tsc = explode(':', $extra);
 			$must_should_have_extras_simple[] = $tsc[0]; // cut off value for position, if set 
 		}
-t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras, 'mse_simple' => $must_should_have_extras_simple));
+//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras, 'mse_simple' => $must_should_have_extras_simple));
 
 		// get extras on default article for the primary section of this article
 		if (!$primarySection = $this->getPrimarySection()) {
