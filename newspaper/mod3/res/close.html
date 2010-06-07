@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml-stylesheet href="#internalStyle" type="text/css"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Close</title>
+<script type="text/javascript">
+/*<![CDATA[*/
+	href_reload = parent.window.frames[0].frames['list_frame'].location.href;
+	if (href_reload.charAt(href_reload.length - 1) == '#') {
+		href_reload = href_reload.substr(0, href_reload.length - 1); // cut off last '#', so T3 can reload correctly
+	}
+	parent.window.frames[0].frames['list_frame'].location.href = href_reload;
+	top.hidePopWin(false); /// \todo: this is working for subModal only !!!
+// 	top.goToModule('txnewspaperMmain_txnewspaperM3');
+/*]]>*/
+</script>
+</head>
+<body>
+</body>
+</html>

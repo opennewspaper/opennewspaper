@@ -1,0 +1,21 @@
+{* a div that shows the article text for a selected article so the user knows 
+   what is imported.
+   newspaper also expects the source ID and the path to the article in the 
+   source as POST parameters.
+   
+   variables:
+   $article tx_newspaper_Article object that is displayed
+   $source_id ID of the tx_newspaper_Source to import the article from
+   $source_path Path in the source to the article 
+*}
+
+<div id="article_preview">
+
+  <h1>{$article->getAttribute('title')}</h1>
+  <h5>{$article->getAttribute('teaser')}</h5>
+  <p class="articletext">{$article->getAttribute('text')}</p>
+  
+  <input type="hidden" name="tx_newspaper_mod5[source_id]" value="{$source_id}" />
+  <input type="hidden" name="tx_newspaper_mod5[source_path]" value="{$source_path}" />
+
+</div>

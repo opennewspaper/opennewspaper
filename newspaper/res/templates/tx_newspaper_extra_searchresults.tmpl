@@ -1,0 +1,28 @@
+
+<!-- start res/templates/tx_newspaper_extra_searchresults.tmpl -->
+
+{* Article
+   Variables:
+   $articles	array(
+   					0 => tx_newspaper_Article object,
+   					1 => tx_newspaper_Article object,
+   					...
+   				)
+   $template_set	template set used, if any
+   $attributes	attributes as stored in DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+
+{section name=i loop=$articles}
+	<a href="{$articles[i]->getLink()}">
+		<h2>{$articles[i]->getAttribute('kicker')}</h2>
+		<h1>{$articles[i]->getAttribute('title')}</h1>
+
+		{$articles[i]->getAttribute('teaser')}
+
+	</a>
+{/section}
+
+<!--  end  res/templates/tx_newspaper_extra_searchresults.tmpl -->

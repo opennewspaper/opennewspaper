@@ -1,0 +1,70 @@
+
+<!-- start res/templates/tx_newspaper_article.tmpl -->
+
+{* Article
+   Variables:
+   $paragraphs	array(
+				  	$paragraph_number => array(
+		 				"text" => $text_of_paragraph,
+		    			"spacing" => $number_of_empty_paragraphs_before_this,
+		          		"extras" => array(
+							$position => array(
+        						"extra_name" => $class_of_extra,
+	         					"content" => $rendered_extra
+    	   					),
+			 		 		...
+		 				)
+		 			),
+			 		...
+		  		)
+   $template_set	template set used, if any
+   $attributes	attributes as stored in DB. for example:
+   		kicker
+   		title
+   		teaser
+   		kicker_list	kicker displayed in list view of article, if different
+   		title_list	title displayed in list view of article, if different
+   		teaser_list	teaser displayed in list view of article, if different
+   		author
+   		text		the raw text as stored in the DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+<h2>{$attributes.kicker}</h2>
+<h1>{$attributes.title}</h1>
+<h3>{$attributes.teaser} {if $attributes.author}VON {$attributes.author}{/if}</h3>
+
+<p> 
+	{if $paragraphs}
+		{section name=i loop=$paragraphs}
+			{if $paragraphs[i].spacing}
+				{*  You might want this information to display a slightly larger
+				   	spacing below the previous paragraph... writing a HTML
+				   	comment instead is a bogus example. *}
+				<!-- {$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if} -->
+			{/if}
+
+{*			{if $paragraphs[i].text}
+				<p>{$paragraphs[i].text}</p>
+			{/if}
+*}
+			{if $paragraphs[i].extras}
+				{foreach from=$paragraphs[i].extras item=extra}
+					<div class="{$extra.extra_name}">
+						{$extra.content}
+					</div>
+				{/foreach}					
+			{/if}				
+
+            {if $paragraphs[i].text}
+                <p>{$paragraphs[i].text}</p>
+            {/if}
+
+		{/section}
+	{else}
+		{$attributes.text}
+	{/if}		
+</p>
+
+<!--  end  res/templates/tx_newspaper_article.tmpl -->

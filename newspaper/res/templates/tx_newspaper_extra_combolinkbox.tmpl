@@ -1,0 +1,75 @@
+
+<!-- start res/templates/tx_newspaper_extra_combolinkbox.tmpl -->
+
+{* Article
+   Variables:
+   $related_articles	articles related to the current one
+   $manually_selected_articles	articles manually selected to be displayed as link
+   $internal_links		other links inside the current site
+   $external_links		links outside the current site
+   $template_set		template set used, if any
+   $attributes			attributes as stored in DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
+
+{if $related_articles}
+	<div id="related_articles">
+		<ul>
+			{foreach from=$related_articles item=article}
+				<li>
+					<a href="{$article->getLink()}"
+						>{$article->getAttribute('kicker')} {$article->getAttribute('title')}</a>
+				</li>
+			{/foreach}
+		</ul>
+	</div>
+{/if}
+
+{if $manually_selected_articles}
+	<div id="manually_selected_articles">
+		<ul>
+			{foreach from=$manually_selected_articles item=article}
+				<li>
+					<a href="{$article->getLink()}"
+						>{$article->getAttribute('kicker')} {$article->getAttribute('title')}</a>
+				</li>
+			{/foreach}
+		</ul>
+	</div>
+{/if}
+
+{if $internal_links}
+	<div id="internal_links">
+		<ul>
+			{foreach from=$internal_links item=link}
+				<li>
+					<a href="{$link->getURL()}" 
+						{if $link->getTarget()}
+					   		target="{$link->getTarget()}"
+					   	{/if}
+					   	>{$link->getText()}</a>
+				</li>
+			{/foreach}
+		</ul>
+	</div>
+{/if}
+
+{if $external_links}
+	<div id="external_links">
+		<ul>
+			{foreach from=$external_links item=link}
+				<li>
+					<a href="{$link->getURL()}" 
+						{if $link->getTarget()}
+					   		target="{$link->getTarget()}"
+					   	{/if}
+					   	>{$link->getText()}</a>
+				</li>
+			{/foreach}
+		</ul>
+	</div>
+{/if}
+
+<!--  end  res/templates/tx_newspaper_extra_combolinkbox.tmpl -->
