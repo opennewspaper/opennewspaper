@@ -18,7 +18,7 @@ define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 define('NP_WORKLFOW_LOG_IMPORT', 5);
 define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
 
-define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
+define('NP_ARTICLE_WORKFLOW_NOCLOSE', true); // if set to true the workflow buttons don't close the form (better for testing)
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
 
 
