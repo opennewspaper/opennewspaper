@@ -1010,6 +1010,7 @@ JSCODE;
 		// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
 		$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
+        //$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/tabmanagement.js');
 
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
