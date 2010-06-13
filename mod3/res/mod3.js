@@ -524,7 +524,7 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?returnUrl='+t3BackendObject.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html&edit['+tableName+']['+id+']=edit""></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
@@ -555,14 +555,14 @@ var tabManagement =  {
                 alert("missing " + tabManagement.tabIds[i]);
                 return false;
             }
-            var iframeDok = top.window.frames[frame.id].document;
+            var iframeDok = window.frames[frame.id].document;
 
             //typo3 needs these coordinates somehow to properly save the article.
 //                saveInput.name = '_saveandclosedok';
-            ['.x', '.y'].each(function(suffix) {
-                var saveDokInput = new Element('input', {type: 'hidden', name: '_saveandclosedok' + suffix, value: 1});
-                iframeDok.forms[0].appendChild(saveDokInput);
-            });
+//            ['.x', '.y'].each(function(suffix) {
+//                var saveDokInput = new Element('input', {type: 'hidden', name: '_saveandclosedok' + suffix, value: 1});
+//                iframeDok.forms[0].appendChild(saveDokInput);
+//            });
             $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 })
             iframeDok.forms[0].submit();
             //                var frameForm = iframeDok.forms[0];
