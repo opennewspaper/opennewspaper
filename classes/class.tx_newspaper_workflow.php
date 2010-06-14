@@ -180,10 +180,6 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 		
 // \todo: add only if needed
-		// add js call for saving potentially open iframe form for extras
-		$js .= 'return tabManagement.submitTabs(this);';
-		
-		
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"';
 		$html .= ' onclick="' . $js . '" '; // add js call 
 		if (NP_ARTICLE_WORKFLOW_NOCLOSE) {
