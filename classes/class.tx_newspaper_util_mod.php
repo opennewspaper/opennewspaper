@@ -84,7 +84,7 @@ class tx_newspaper_UtilMod {
 	/** \param $table name of table to check
 	 *  \param $ fields check if these fields are disabled using TCConfig (string or array)
 	 */
-	static public function isAvailableInTceform(array $table, $fields) {
+	static public function isAvailableInTceform($table, $fields) {
 		if (!$table || !$fields) {
 			return false;
 		}
