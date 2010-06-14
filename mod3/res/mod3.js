@@ -525,7 +525,7 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
@@ -552,7 +552,10 @@ var tabManagement =  {
     submitTabs: function(saveInput) {
         for(var i = 0; i < tabManagement.tabIds.length; i++) {
             var frameName = tabManagement.tabIds[i];
-            var iframeDok = window.frames[frameName].document;
+            var iframeDok = $(frameName).contentDocument;
+            if(iframeDok == null) {
+                alert("No dok for " + frameName + " found");
+            }
 
             //typo3 needs these coordinates somehow to properly save the article.
 //                saveInput.name = '_saveandclosedok';
