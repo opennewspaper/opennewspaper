@@ -80,6 +80,38 @@ class tx_newspaper_UtilMod {
 	}
 	
 	
+	/// checks if at least one field in $fields for a given $table are disabled in TCA using TSConfig
+	/** \param $table name of table to check
+	 *  \param $ fields check if these fields are disabled using TCConfig (string or array)
+	 */
+	static public function isAvailableInTceform(array $table, $fields) {
+		if (!$table || !$fields) {
+			return false;
+		}
+		if (!is_array($fields)) {
+			$fields[] = $fields;
+		}
+		$table = strtolower($table);
+
+
+		// read tsconfig
+		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPidRootfolder()); 
+		if (!isset($tsc['TCEFORM.'][$table . '.'])) {
+			return false; // no entries found for table
+		}
+		$tsc = $tsc['TCEFORM.'][$table . '.']; // extract config for given table
+//t3lib_div::devlog('util_mod::tca ...', 'newspaper', 0, array('tsc' => $tsc, 'table' => $table, 'fields' => $fields));		
+		
+		foreach($fields as $field) {
+			if (!isset($tsc[$field . '.']['disabled']) || $tsc[$field . '.']['disabled'] = 0) {
+				return true; // field not listed in tsconfig or NOT disabled, so return true
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	// http://www.typo3.net/index.php?id=13&action=list_post&code_numbering=0&tid=85598
 	public static function getTCEFormArray($table, $uid, $isNew=false) {
 		$trData = t3lib_div::makeInstance('t3lib_transferData');
