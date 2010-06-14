@@ -525,10 +525,10 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
-            if(!tabManagement.tabIds.include(tab_id)) {
+            if(!tabManagement.tabIds.include(tab_id)) {                
                 tabManagement.tabIds.push(tab_id);
             }
         }
@@ -551,10 +551,11 @@ var tabManagement =  {
      */
     submitTabs: function(saveInput) {
         for(var i = 0; i < tabManagement.tabIds.length; i++) {
-            var frameName = tabManagement.tabIds[i];
+            var iframeId = tabManagement.tabIds[i].split('_').pop();
+            var frameName = 'iframe_'+ iframeId ;
             var iframeDok = $(frameName).contentDocument;
             if(iframeDok == null) {
-                alert("No dok for " + frameName + " found");
+                alert("No document for " + frameName + " found");
             }
 
             //typo3 needs these coordinates somehow to properly save the article.
@@ -609,9 +610,13 @@ var tabManagement =  {
         $$('.extra_tab').each(function(div){ div.hide();});
     },
 
+    isDirty: function() {
+        return tabManagement.tabIds.size() > 0;
+    },
+
     askUserContinueIfDirty: function() {
         var allowSubmit = true;
-        if(tabManagement.tabIds.size() > 0) {
+        if(tabManagement.isDirty()) {
             allowSubmit = confirm(tabManagement.confirmMessage);
         }
         return allowSubmit;
@@ -699,7 +704,8 @@ function extra_insert_after_POOL(origin_uid, pz_uid, in_article, paragraphUsed) 
 var interceptIfDirty = function(func) {
     //parameter orginalFunc is passed from wrap function itself
     return func.wrap(function(orginalFunc) {
-                if(tabManagement.askUserContinueIfDirty()) {
+                if(tabManagement.isDirty()) {
+                    tabManagement.submitTabs();
                     var args = Array.prototype.slice.call(arguments, 1);
                     return orginalFunc.apply(this, args);
                 }
@@ -716,9 +722,12 @@ document.observe('dom:loaded', function() {
 
     //handling this inside a loop did not work
     extra_insert_after = interceptIfDirty(extra_insert_after);
+    extra_insert_after_NEW = interceptIfDirty(extra_insert_after_NEW);
+    extra_insert_after_POOL = interceptIfDirty(extra_insert_after_POOL);
     extra_move_after = interceptIfDirty(extra_move_after);
     extra_delete = interceptIfDirty(extra_delete);
     extra_shortcut_create = interceptIfDirty(extra_shortcut_create);
+
 
 });
 
