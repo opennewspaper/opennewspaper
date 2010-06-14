@@ -184,6 +184,7 @@ function loadJsCssFile(filename, filetype, param) {
 				onSuccess: function(transport) {
                     var data = transport.responseText.evalJSON();
                     $('extras').innerHTML = data.htmlContent;
+                    tabManagement.clearTabCache();
                     tabManagement.show(extra_class + '_' + data.extra_uid);
 
                 }
@@ -507,7 +508,7 @@ var tabManagement =  {
 
     initialize: function() {        
         tabManagement.confirmMessage = confirmationMessage;
-        tabManagement._hideAllTabs();
+        tabManagement._hideAllTabs();        
     },
 
     show: function(tabId, params) {
@@ -524,7 +525,7 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" id="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" name="'+tab_id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
@@ -550,19 +551,15 @@ var tabManagement =  {
      */
     submitTabs: function(saveInput) {
         for(var i = 0; i < tabManagement.tabIds.length; i++) {
-            var frame = $(tabManagement.tabIds[i]);
-            if(!frame || !frame.id) {
-                alert("missing " + tabManagement.tabIds[i]);
-                return false;
-            }
-            var iframeDok = window.frames[frame.id].document;
+            var frameName = tabManagement.tabIds[i];
+            var iframeDok = window.frames[frameName].document;
 
             //typo3 needs these coordinates somehow to properly save the article.
 //                saveInput.name = '_saveandclosedok';
-//            ['.x', '.y'].each(function(suffix) {
-//                var saveDokInput = new Element('input', {type: 'hidden', name: '_saveandclosedok' + suffix, value: 1});
-//                iframeDok.forms[0].appendChild(saveDokInput);
-//            });
+            ['.x', '.y'].each(function(suffix) {
+                var saveDokInput = new Element('input', {type: 'hidden', name: '_savedok' + suffix, value: 1});
+                iframeDok.forms[0].appendChild(saveDokInput);
+            });
             $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 })
             iframeDok.forms[0].submit();
             //                var frameForm = iframeDok.forms[0];
@@ -665,6 +662,7 @@ function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, par
                 if(transport) {
                     var  data = transport.responseJSON;
                     $('extras').innerHTML = data.content;
+                    tabManagement.clearTabCache();
                     tabManagement.show(extra_class+'_'+data.extra_uid);
                 }
             }
