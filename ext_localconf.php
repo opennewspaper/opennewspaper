@@ -43,6 +43,22 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_extra_textbox=1
 ');
+t3lib_extMgm::addPageTSConfig('
+
+	# ***************************************************************************************
+	# CONFIGURATION of RTE in table "tx_newspaper_extra_textbox", field "text"
+	# ***************************************************************************************
+RTE.config.tx_newspaper_extra_textbox.text {
+  hidePStyleItems = H1, H4, H5, H6
+  proc.exitHTMLparser_db=1
+  proc.exitHTMLparser_db {
+    keepNonMatchedTags=1
+    tags.font.allowedAttribs= color
+    tags.font.rmTagIfNoAttrib = 1
+    tags.font.nesting = global
+  }
+}
+');
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_externallinks=1
 ');

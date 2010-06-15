@@ -1691,7 +1691,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, pool, title;;;;2-2-2, text;;;richtext[*];3-3-3, image")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, pool, title;;;;2-2-2, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/];3-3-3, image")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
