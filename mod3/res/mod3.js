@@ -706,9 +706,9 @@ var interceptIfDirty = function(func) {
     return func.wrap(function(orginalFunc) {
                 if(tabManagement.isDirty()) {
                     tabManagement.submitTabs();
-                    var args = Array.prototype.slice.call(arguments, 1);
-                    return orginalFunc.apply(this, args);
                 }
+                var args = Array.prototype.slice.call(arguments, 1);
+                return orginalFunc.apply(this, args);
             });
 }
 
