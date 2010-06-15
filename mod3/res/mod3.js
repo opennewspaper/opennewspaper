@@ -550,8 +550,8 @@ var tabManagement =  {
      * @param saveInput savedok or saveandclosedok
      */
     submitTabs: function(saveInput) {
-        for(var i = 0; i < tabManagement.tabIds.length; i++) {
-            var iframeId = tabManagement.tabIds[i].split('_').pop();
+        tabManagement.tabIds.each(function(tabId) {
+            var iframeId = tabId.split('_').pop();
             var frameName = 'iframe_'+ iframeId ;
             var iframeDok = $(frameName).contentDocument;
             if(iframeDok == null) {
@@ -572,7 +572,8 @@ var tabManagement =  {
 //                new Ajax.Request(frameForm.action, {
 //                    parameters: Form.serialize(frameForm)
 //                });
-        }
+        });
+        
         var tabsAreSaving = true;
         var count = 0;
         var keepAsking = false;
@@ -706,11 +707,22 @@ var interceptIfDirty = function(func) {
     return func.wrap(function(orginalFunc) {
                 if(tabManagement.isDirty()) {
                     tabManagement.submitTabs();
+                    sleep(500); //todo: hack to prevent race condition
                 }
                 var args = Array.prototype.slice.call(arguments, 1);
                 return orginalFunc.apply(this, args);
             });
 }
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 
 /**
  * Stuff that should be executed after the dom is loaded
