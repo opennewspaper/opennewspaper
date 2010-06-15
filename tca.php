@@ -2527,7 +2527,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts]")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/]")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
