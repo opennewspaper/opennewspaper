@@ -1,5 +1,4 @@
 <?php
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
 class ux_SC_alt_doc extends SC_alt_doc {
 
 
