@@ -1,4 +1,5 @@
 <?php
+
 class ux_SC_alt_doc extends SC_alt_doc {
 
 
@@ -142,9 +143,8 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 		// hide, delete, save&new and save&preview buttons (and docheader2) for extras
-        $extra = $this->elementsData[0]['table'];
-        if (!tx_newspaper::isAbstractClass($extra)) {
-			if (tx_newspaper::classImplementsInterface($extra, 'tx_newspaper_ExtraIface') || $this->isClasslessExtra($extra)) {
+		if (!tx_newspaper::isAbstractClass($this->elementsData[0]['table'])) {			
+			if (tx_newspaper::classImplementsInterface($this->elementsData[0]['table'], 'tx_newspaper_ExtraIface')) {
 				// newspaper extra is being edited, don't show show delete, view, new and close buttons
 				$buttons = parent::getButtons();
 				$buttons['save_view'] = '';
@@ -166,19 +166,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		return parent::getButtons();
 		
 	}
-
-    /**
-     * Checks agains a list if table is displayed like an extra but has no class
-     * @param  $table
-     * @return bool
-     */
-    private function isClasslessExtra($table) {
-        //todo change to array or something like this if more cases occur
-        return $table === 'tx_newspaper_externallinks';
-    }
-
-
-
+	
 	/// very simple check if the users is editing in the placement module (mod3)
 	private function isInPlacementModule() {
 		return (strpos($this->returnUrl, 'newspaper/mod3/res/close.html') !== false);
