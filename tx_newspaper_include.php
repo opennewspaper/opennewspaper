@@ -190,10 +190,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlel
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articletype.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php');
 
 if (TYPO3_MODE == 'BE')	{
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');	
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_workflow.php');
 }
 
