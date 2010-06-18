@@ -16,9 +16,14 @@
                 <td style="padding:2px;vertical-align:top;">{$comment.username} </td>
                 <td style="padding:2px;vertical-align:top;width:110px;">{$comment.created} </td>
                 {* <td style="padding:2px;vertical-align:top;">{$comment.action}</td> *}
-                {if $comment.action == 4}
+                {if $comment.action == 4} 
+                	{* user comment *}
                 	<td class="style="padding:2px;vertical-align:top;width:350px;"><strong>{$comment.comment|nl2br}</strong> </td> {* manual comment *}
+                {elseif $comment.action == 6}
+                	{* error msg *}
+                	<td class="style="padding:2px;vertical-align:top;width:350px;"><span style="color:red;">{$comment.comment|nl2br}</span> </td> {* manual comment *}
                 {else}
+                	{* no special formatting *}
                 	<td style="padding:2px;vertical-align:top;width:350px;">{$comment.comment} </td> {* newspaper system comment *}
                 {/if}
            </tr>

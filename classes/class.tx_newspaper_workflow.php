@@ -16,6 +16,9 @@ define('NP_WORKLFOW_LOG_PUBLISH', 2);
 define('NP_WORKLFOW_LOG_CHANGE_ROLE', 3);
 define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 define('NP_WORKLFOW_LOG_IMPORT', 5);
+define('NP_WORKLFOW_LOG_ERRROR', 6);
+define('NP_WORKLFOW_LOG_WARNING', 7);
+
 define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
 
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
@@ -472,8 +475,9 @@ function changeWorkflowStatus(role, hidden_status) {
 	/** \param $table name of table the log entry is associated with
 	 *  \param $id id of record in $table  
 	 *  \param $comment comment to log
+	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
-	public static function directLog($table, $id, $comment) {
+	public static function directLog($table, $id, $comment, $type) {
 		$current_time = time();
 		tx_newspaper::insertRows('tx_newspaper_log', array(
 			'pid' => 0,
@@ -483,7 +487,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
 			'table_name' => $table, 
 			'table_uid' => $id,
-			'action' => NP_WORKLFOW_LOG_IMPORT,
+			'action' => $type,
 			'comment' => $comment
 		));
 	} 
