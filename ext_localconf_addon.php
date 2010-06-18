@@ -56,6 +56,10 @@
 		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_table.disabled = 1
 		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_where.disabled = 1
 		TCEFORM.tx_newspaper_articlelist_manual.filter_sql_order_by.disabled = 1
+		
+		// hide starttime and endtime for abstract articlelist (\todo: remove in kickstarter; what could be a useful usage?)
+		TCEFORM.tx_newspaper_articlelist.starttime.disabled = 1
+		TCEFORM.tx_newspaper_articlelist.endtime.disabled = 1
 
 		mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
 				
