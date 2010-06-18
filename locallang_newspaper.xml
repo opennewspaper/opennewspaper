@@ -96,7 +96,7 @@
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
 			<label index="label_tab_article_article">Article</label>
 			<label index="label_tab_article_extra">Web elements</label>
-			<label index="label_tab_article_workflow">Workflow</label>
+			<label index="label_tab_article_workflow">Messages</label>
 			<label index="label_tab_article_tags">Tags</label>
 			<label index="label_tab_article_related">Related articles</label>
 			<label index="label_tab_article_timecontrol">Zeitsteuerung</label>
@@ -168,7 +168,7 @@
             <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
 			<label index="label_tab_article_article">Artikel</label>
 			<label index="label_tab_article_extra">Web-Elemente</label>
-			<label index="label_tab_article_workflow">Workflow</label>
+			<label index="label_tab_article_workflow">Nachrichten</label>
 			<label index="label_tab_article_tags">Tags</label>
 			<label index="label_tab_article_related">Verknüpfte Artikel</label>
 			<label index="label_tab_article_timecontrol">Zeitsteuerung</label>
