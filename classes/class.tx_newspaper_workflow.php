@@ -478,6 +478,8 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
 	public static function directLog($table, $id, $comment, $type) {
+t3liv_div::devlog('directLog()', 'newspaper' , 0, array('type' => $type));
+		$type = intval($type);
 		$current_time = time();
 		tx_newspaper::insertRows('tx_newspaper_log', array(
 			'pid' => 0,
