@@ -523,7 +523,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		if ($input['source_path']) {
 			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . ': ' . $input['source_path'];
 		}
-		tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment);
+		tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment, NP_WORKLFOW_LOG_IMPORT);
 
 		header('Location: ' . $url); // redirect to article backend	
 	}
