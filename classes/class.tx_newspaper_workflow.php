@@ -477,8 +477,22 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $comment comment to log
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
-	public static function directLog($table, $id, $comment, $type) {
-		$type = intval($type);
+//	public static function directLog($table, $id, $comment, $type) {
+//		$type = intval($type);
+//		$current_time = time();
+//		tx_newspaper::insertRows('tx_newspaper_log', array(
+//			'pid' => 0,
+//			'tstamp' => $current_time,
+//			'crdate' => $current_time, 
+//			'cruser_id' => $GLOBALS['BE_USER']->user['uid'], 
+//			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
+//			'table_name' => $table, 
+//			'table_uid' => $id,
+//			'action' => $type,
+//			'comment' => $comment
+//		));
+//	} 
+	public static function directLog($table, $id, $comment) {
 		$current_time = time();
 		tx_newspaper::insertRows('tx_newspaper_log', array(
 			'pid' => 0,
@@ -488,7 +502,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
 			'table_name' => $table, 
 			'table_uid' => $id,
-			'action' => $type,
+			'action' => NP_WORKLFOW_LOG_IMPORT, //$type,
 			'comment' => $comment
 		));
 	} 
