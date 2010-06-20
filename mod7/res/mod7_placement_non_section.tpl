@@ -22,12 +22,14 @@
 			<div class="level level{$smarty.foreach.levelloop.iteration}">
 				<table border="0" cellspacing="0" cellpadding="0" class="articles">
 					{if $articlelist && ($articlelist_type == "tx_newspaper_articlelist_semiautomatic" || $articlelist_type == "tx_newspaper_articlelist_manual")}
-					{* article list availaable, class for article list is known *}
+					{* article list available, class for article list is known *}
 					<tr><th scope="col" colspan="3">{$articlelist->getAttribute('notes')}</th></tr>
 					<tr>
 					    <td>
 							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
-								{html_options options=$articles}			
+								{foreach from=$articles item="list" name="al_loop" key="key"}
+									<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
+								{/foreach}
 							</select>
 						</td>
 						<td valign="top" width="16">

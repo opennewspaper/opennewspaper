@@ -1247,7 +1247,7 @@ JSCODE;
 		} else {
 			$articlelistFullrecordBackend = '';
 		}
-//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend));
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend, 'al' => $al));
 
 
 		// get locallang labels 
@@ -1313,11 +1313,17 @@ JSCODE;
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
 					// get data (for title display) for each section
 					$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
-					// add article list and list type for last element only to tree structure
+					// add article list and list type to tree structure for last element only 
 					if (($k+1) == count($tree[$i][$j])) {
 						$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
-						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId ($tree[$i][$j][$k]['uid'], $articleId);
-						$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
+						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId($tree[$i][$j][$k]['uid'], $articleId);
+						if (strtolower($tree[$i][$j][$k]['listtype']) == 'tx_newspaper_articlelist_manual') {
+							$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
+						} else {
+							// semi-auto list: key -> [offset]_[key], so array_key_exists check like for manual list won't work
+							// but an article is ALWAYS placed in a semi-auto list ...
+							$tree[$i][$j][$k]['article_placed_already'] = true;
+						}
 					}
 				}
 			}
@@ -1332,27 +1338,21 @@ JSCODE;
 		$result = array();
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
-		$listType = get_class($section->getArticleList());
+		$listType = strtolower(get_class($section->getArticleList()));
 		$articleList = $section->getArticleList()->getArticles(9999);
 		
-		// get offsets
-		if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
+		// get offsets for semiautomtic list
+		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
 			$articleUids = $this->getArticleIdsFromArticleList($articleList);
 			$offsetList = $section->getArticleList()->getOffsets($articleUids);	
 		}
 		
-		// prepend the article we are working on to list for semiautomatic lists
-		if ($listType == 'tx_newspaper_ArticleList_Semiautomatic' && $articleId) {
-			$article = $this->getArticleByArticleId($articleId);
-			$result['0_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
-		}
-		
 		// fill the section placers from their articlelists
 		foreach ($articleList as $article) {
-			if ($listType == 'tx_newspaper_ArticleList_Manual') {
+			if ($listType == 'tx_newspaper_articlelist_manual') {
 				$result[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
 			}
-			if ($listType == 'tx_newspaper_ArticleList_Semiautomatic') {
+			if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
 				$offset = $offsetList[$article->getAttribute('uid')];
 				if ($offset > 0) {
 					$offset = '+' . $offset;

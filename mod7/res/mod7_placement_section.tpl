@@ -37,11 +37,13 @@
 						</th>
 						</tr>
 						{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
-							{* duty editor, article list availaable, class for article list is known *}
+							{* duty editor, article list available, class for article list is known *}
 							<tr>
 								<td>
 									<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
-										{html_options options=$section.articlelist}
+										{foreach from=$section.articlelist item="list" name="al_loop" key="key"}
+											<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
+										{/foreach}
 									</select>
 								</td>
 								<td valign="top" width="16">
