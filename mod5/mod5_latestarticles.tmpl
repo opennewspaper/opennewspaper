@@ -1,11 +1,16 @@
+{* debug *}
 {* \todo: message "no article available" *}
 {section name=i loop=$ARTICLE} 
   <a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$ARTICLE[i]->getUid()}]=edit" target="_blank">
    {$ARTICLE_EDIT_ICON} 
   </a>
+{* \todo: crop for kicker and title *}
+  {if $ARTICLE[i]->getAttribute('kicker') != ''}
+    {$ARTICLE[i]->getAttribute('kicker')}:  
+  {/if}
   {if $ARTICLE[i]->getAttribute('title') != ''}
     {$ARTICLE[i]->getAttribute('title')} 
   {/if}
-  (#{$ARTICLE[i]->getUid()})
+  (#{$ARTICLE[i]->getUid()}, {if $ARTICLE[i]->getAttribute('hidden')}<i>offline</i>{else}<b>online</b>{/if}) {* \todo: localization *}
   <br />
 {/section}
