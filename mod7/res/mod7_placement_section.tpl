@@ -42,7 +42,7 @@
 								<td>
 									<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
 										{foreach from=$section.articlelist item="list" name="al_loop" key="key"}
-											<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
+											<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>										
 										{/foreach}
 									</select>
 								</td>
