@@ -370,7 +370,7 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 
 // TODO check permissions
-t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
+//t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (!isset($_REQUEST['param']))
 						return false; // no valid call without params possible
 					
