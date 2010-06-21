@@ -768,21 +768,103 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	public static function GET_pagetype() {
 		return self::pagetype_get_parameter;
 	}
-
+	
 	/// Create a HTML link with text and URL using the \c typolink() API function 
 	/** \param  $text the text to be displayed
 	 *  \param  $params target and optional \c GET parameters as parameter => value
 	 *  \param  $conf optional TypoScript configuration array
-	 *  \return array ['text'], ['href']		
+	 *  \return array ['text'], ['href']
+	 * 
+	 *  \todo I don't think typolink() is called even once in \c tx_newspaper. Scrap
+	 *  	this function and put all functionality into typolink_url().
 	 */
     public static function typolink($text, array $params = array(), array $conf = array()) {
-		//  a tslib_cObj object is needed to call the typolink_URL() function
+		
+		if (TYPO3_MODE == 'BE') {
+			self::buildTSFE();
+			if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
+				throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
+			}
+		}
+		
+		self::makeLocalCObj();
+
+		self::flattenParamsArray($params);
+
+		$temp_conf = self::makeTSConfForTypolink($params, $conf);
+		
+    	//	call typolink_URL() and return data
+    	$data = array(
+			'text' => $text,
+    		'href' => self::$local_cObj->typolink_URL($temp_conf)
+    	);
+
+		return $data;
+	}
+
+	/// populate \c $GLOBALS['TSFE'] even if we're in the BE
+	/** Thanks to typo3.net user semidark. Function lifted from
+	 *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544 
+	 */
+	private static function buildTSFE() {
+		
+		$page_id = 1;	/// \todo Ensure that this is a valid page ID
+		
+		/* Declare */
+		$temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
+	 
+			/* Begin */
+		if (!is_object($GLOBALS['TT'])) {
+			$GLOBALS['TT'] = new t3lib_timeTrack;
+			$GLOBALS['TT']->start();
+		}
+	 
+		if (!is_object($GLOBALS['TSFE'])) {
+			//*** Builds TSFE object
+			$GLOBALS['TSFE'] = new $temp_TSFEclassName($GLOBALS['TYPO3_CONF_VARS'],$page_id,0,0,0,0,0,0);
+	 
+			//*** Builds sub objects
+			$GLOBALS['TSFE']->tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
+			$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
+	 
+			//*** init template
+			$GLOBALS['TSFE']->tmpl->tt_track = 0;// Do not log time-performance information
+			$GLOBALS['TSFE']->tmpl->init();
+	 
+			$rootLine = $GLOBALS['TSFE']->sys_page->getRootLine($page_id);
+	 
+			//*** This generates the constants/config + hierarchy info for the template.
+	 
+			$GLOBALS['TSFE']->tmpl->runThroughTemplates($rootLine,$template_uid);
+			$GLOBALS['TSFE']->tmpl->generateConfig();
+			$GLOBALS['TSFE']->tmpl->loaded=1;
+	 
+			//*** Get config array and other init from pagegen
+			$GLOBALS['TSFE']->getConfigArray();
+			$GLOBALS['TSFE']->linkVars = ''.$GLOBALS['TSFE']->config['config']['linkVars'];
+	 
+			if ($GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'])
+			{
+				foreach (t3lib_div::trimExplode(',',$GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'],1) as $temp_p)
+				{
+					$GLOBALS['TSFE']->pEncAllowedParamNames[$temp_p]=1;
+				}
+			}
+			//*** Builds a cObj
+			$GLOBALS['TSFE']->newCObj();
+		}
+	}
+
+	///  A tslib_cObj object is needed to call the typolink_URL() function
+	private static function makeLocalCObj() {
 		if (!self::$local_cObj) {
 	        self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
     	    self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
-		}
+		}		
+	}
 
-		//  make sure $params is a one-dimensional array
+	/// Make sure \p $params is a one-dimensional array
+	private static function flattenParamsArray(array &$params) {
 		foreach ($params as $key => $param) {
 			if (is_array($param)) {
 				foreach ($param as $subkey => $value) {
@@ -791,8 +873,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 				unset($params[$key]);
 			}
 		}
-
-		//	set TypoScript config array
+	}
+	
+	///	set TypoScript config array - yeah I know, it's not TSConfig!
+	private static function makeTSConfForTypolink(array $params, array $conf) {
+		
 		if ($conf) $temp_conf = $conf;
 		else $temp_conf = array();
 
@@ -812,13 +897,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         	}
 	    }
         if (!$no_cache) $temp_conf['useCacheHash'] = 1;
-
-    	//	call typolink_URL() and return data
-    	$data = array();
-    	$data['text'] = $text;
-    	$data['href'] = self::$local_cObj->typolink_URL($temp_conf);
-
-		return $data;
+		
+		return $temp_conf;
 	}
 
 	/// Get a typolink-compatible URL
