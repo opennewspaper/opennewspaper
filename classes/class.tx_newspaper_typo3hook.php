@@ -226,6 +226,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, $fieldArray, $that) {
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
 			if (method_exists($savehook_object, $savehook_name)) {
+//t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
 			}
 		}
