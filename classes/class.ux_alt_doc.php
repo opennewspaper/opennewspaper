@@ -35,6 +35,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
             //SAVE EXTRAS button
             $save_extra_title = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_extra', false);
             $save_extras = $save_extra_title.'<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$save_extra_title.'" />';
+            $save_extras .= '</div><div class="buttongroup">'; // wrap extra save button in single div, so it gets a seperator
 
             // Render SAVE type buttons and add newspaper workflow buttons
             // The action of each button is decided by its name attribute. (See doProcessData())
