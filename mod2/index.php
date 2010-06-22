@@ -157,9 +157,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		);
 //t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 
-		$content= $this->renderBackendSmarty($row);
+		$content = $this->renderBackendSmarty($row);
 
 		$this->content .= $this->doc->section('', $content, 0, 1);
+//t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));
 	}
 
 	
@@ -384,34 +385,66 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	}
 
 
-	/// check if an article is to be hidden/unhidden/deleted
-	/**
-	 * this way to change visibility makes sure, that the current page browser selection lasts
-	 */
+	/// Stores hidden/unhidden article status in ajax calls
+	// this way to change visibility makes sure, that the current page browser selection lasts
 	function processGPController() {
-//t3lib_div::devlog('article_visibility', 'np', 0, t3lib_div::_GP('article_visibility'));
+//t3lib_div::devlog('article_visibility', 'np', 0, array('_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
 		if (t3lib_div::_GP('article_visibility') != '') {
 /// \todo: permission check
+			$article_uid = intval(t3lib_div::_GP('article_uid'));
+			
+			// prepare array with data to be stored
 			switch(strtolower(t3lib_div::_GP('article_visibility'))) {
 				case 'hidden':
-					// direct access to database ...
-					tx_newspaper::updateRows('tx_newspaper_article', 'uid=' . intval(t3lib_div::_GP('article_uid')), array('hidden' => 1, 'tstamp' => time()));
-					$fA = array('hidden' => 1);
-					tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					$fA = array(
+						'hidden' => 1,
+						'modification_user' => intval($BE_USER->user['uid'])
+					);
 				break;
 				case 'visible':
-					// use newspaper claases becuase the publish_date might be updated
-					$article = new tx_newspaper_article(intval(t3lib_div::_GP('article_uid')));
-					$article->setAttribute('hidden', 0);
-					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
-					$article->store();
-					$fA = array('hidden' => 0);
-					tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', intval(t3lib_div::_GP('article_uid')), $fA);
+					$fA = array(
+						'hidden' => 0,
+						'modification_user' => intval($BE_USER->user['uid']),
+					);
+					// read article from db because the publish_date might be updated (article is about being published)
+					$article = new tx_newspaper_article($article_uid);
+					if (!$article->getAttribute('publish_date')) {
+						$article->setPublishDateIfNeeded(); // set publish_date
+						// add publish date
+						$fA['publish_date'] = $article->getAttribute('publish_date'); // read from unstored(!) article object
+					}
 			}
+
+			// store data and call article save hooks then
+			$this->storeHiddenStausWithHooks($article_uid, $fA);
+
+			// write workflow log entry
+			tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', $article_uid, $fA);
+			
 			// unset parameters (so they are not added to querystring later)
 			unset($_POST['article_visibility']);
 			unset($_POST['article_uid']);
 		}
+	}
+	
+	// \todo: replace with newspaper hook handling, see #1055
+	/// This function assures that Typo3 save hooks are called, so registered Hooks in newspaper are called too
+	/** \param $uid article uid
+	 *  \param $fieldArray data for tce datamap
+	 */
+	private function storeHiddenStausWithHooks($uid, array $fieldArray) {
+//t3lib_div::devlog('storeHiddenStausWithHooks()', 'newspaper', 0, array('uid' => $uid, 'fieldArray' => $fieldArray));
+			if (!intval($uid)) {
+				return false;
+			}
+			
+			// prepare datamap array data
+			$datamap['tx_newspaper_article'][intval($uid)] = $fieldArray;
+			
+			// use datamap, so all save hooks get called
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, array());
+			$tce->process_datamap();
 	}
 
 
