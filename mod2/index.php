@@ -392,43 +392,32 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if (t3lib_div::_GP('article_visibility') != '') {
 /// \todo: permission check
 			$article_uid = intval(t3lib_div::_GP('article_uid'));
-			
+			$hidden_status = strtolower(t3lib_div::_GP('article_visibility')); 
+
+			// unset parameters (so they are not added to querystring later)
+			unset($_POST['article_visibility']);
+			unset($_POST['article_uid']);
+
 			// prepare array with data to be stored
-			switch(strtolower(t3lib_div::_GP('article_visibility'))) {
+			switch($hidden_status) {
 				case 'hidden':
-					$fA = array(
-						'hidden' => 1,
-						'modification_user' => intval($BE_USER->user['uid'])
-					);
+					$fA = array('hidden' => 1);
 				break;
 				case 'visible':
-					$fA = array(
-						'hidden' => 0,
-						'modification_user' => intval($BE_USER->user['uid']),
-					);
-					// read article from db because the publish_date might be updated (article is about being published)
-					$article = new tx_newspaper_article($article_uid);
-					if (!$article->getAttribute('publish_date')) {
-						$article->setPublishDateIfNeeded(); // set publish_date
-						// add publish date
-						$fA['publish_date'] = $article->getAttribute('publish_date'); // read from unstored(!) article object
-					}
+					$fA = array('hidden' => 0);
+				break;
+				default:
+					return;
 			}
 
 			// store data and call article save hooks then
 			$this->storeHiddenStausWithHooks($article_uid, $fA);
 
-			// write workflow log entry
-			tx_newspaper_Workflow::processAndLogWorkflow('', 'tx_newspaper_article', $article_uid, $fA);
-			
-			// unset parameters (so they are not added to querystring later)
-			unset($_POST['article_visibility']);
-			unset($_POST['article_uid']);
 		}
 	}
 	
 	// \todo: replace with newspaper hook handling, see #1055
-	/// This function assures that Typo3 save hooks are called, so registered Hooks in newspaper are called too
+	/// This function use Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
 	/** \param $uid article uid
 	 *  \param $fieldArray data for tce datamap
 	 */
@@ -446,7 +435,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$tce->start($datamap, array());
 			$tce->process_datamap();
 	}
-
 
 
 
