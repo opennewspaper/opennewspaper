@@ -102,6 +102,7 @@ class tx_newspaper_Sysfolder {
 		$fields['hidden'] = 0;
 		$uid = tx_newspaper::insertRows('pages', $fields); // insert sysfolder and get uid of that sysfolder
 		$this->sysfolder[$module_name] = $uid; // append this sysfolder in local storage array
+		// \todo: check: t3lib_BEfunc::getSetUpdateSignal('updatePageTree');
 	}
 	
 	/// returns a sorting weight fopr Typo3 page creation in order to get a resonable sorting for newspaper sysfolders
