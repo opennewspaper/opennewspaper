@@ -1,4 +1,4 @@
-{* debug *}
+{* debug *} 
 <script type="text/javascript" language="javascript">
 var langSavedidnotwork = "{$lang.savedidnotwork}";
 var langReallycancel = "{$lang.reallycancel}";
