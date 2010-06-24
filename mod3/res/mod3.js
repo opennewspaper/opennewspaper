@@ -647,7 +647,7 @@ function getParagraph() {
     return parseInt(document.getElementById('paragraph').value);
 }
 
-function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, paragraphUsed) {
+function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, paragraphUsed, show) {
     var target_uid = article_uid > 0? article_uid : pz_uid;
     var closehtml = (in_article)? escape("close_reload_in_concrete_article.html?pz_uid=" + target_uid) : "close.html";
 //		var new_extra_paragraph_position_data = '';
@@ -665,7 +665,7 @@ function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, par
     if (extra_class != false) { //extra is related to pagezone in save hook!
         var loc = top.path + "typo3conf/ext/newspaper/mod3/index.php";
         new Ajax.Request(loc, {
-            parameters: {'extra_create' : 1, 'article_uid' : article_uid, 'extra_class' : extra_class, 'origin_uid' : origin_uid, 'pz_uid' : pz_uid, 'paragraph' : getParagraph()},
+            parameters: {'extra_create' : 1, 'article_uid' : article_uid, 'extra_class' : extra_class, 'origin_uid' : origin_uid, 'pz_uid' : pz_uid, 'paragraph' : getParagraph(), 'doShow' : show},
             onCreate: processing_in_article,
             onSuccess: function(transport) {
                 if(transport) {

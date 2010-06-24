@@ -257,12 +257,13 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
-    private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph) {
+    private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph, $show) {
         $extra = new $extra_class;
         $extra->setAttribute('crdate', time());
         $extra->setAttribute('tstamp', time());
         $extraUid = $extra->store();
         $extra->setAttribute('paragraph', $paragraph);
+        $extra->setAttribute('show_extra', $show);
         $extra->store();
         
         $article = new tx_newspaper_Article($article_uid);
@@ -510,7 +511,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		}
 
         if (t3lib_div::_GP('extra_create') == 1) {
-            die($this->processExtraCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph')));
+            die($this->processExtraCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('doShow')));
         }
 
 
