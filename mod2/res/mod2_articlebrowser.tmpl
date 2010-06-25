@@ -177,7 +177,7 @@ function insertElement(uid, kicker, title, element, doClose) {
 {if !$IS_ARTICLE_BROWSER}
 		<td> {$DATA[i].be_user} </td>
 {/if}
-		<td> {$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"} </td>
+		<td> {if $DATA[i].tstamp}{$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"}{/if} </td>
 		<td align="center">
 {if !$IS_ARTICLE_BROWSER}
   {* moderation list, so link visibile icon with hide/unhide functionality *}

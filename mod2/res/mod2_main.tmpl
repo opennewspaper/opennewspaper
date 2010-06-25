@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 {literal}
 <style type="text/css">
@@ -421,7 +421,11 @@ alert('to come ...');
 		</td>
 		<td>{$DATA[i].author}</td>
 		<td>{$DATA[i].be_user}</td>
-		<td> <strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%M:%S"} </td>
+		<td>
+			{if $DATA[i].tstamp} {* tstamp 0 renders current time *}
+				<strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%M:%S"}
+			 {/if}
+		</td>
 		<td>{if $DATA[i].publish_date} <strong>{$DATA[i].publish_date|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].publish_date|date_format:"%H:%M:%S"} {/if}</td>
 		<td align="center">
   {if $DATA[i].hidden == 0}
