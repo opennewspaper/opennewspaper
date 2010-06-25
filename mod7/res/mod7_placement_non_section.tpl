@@ -1,4 +1,4 @@
-{* debug *} 
+{* debug *}
 {if $singlemode}
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
@@ -28,7 +28,7 @@
 					    <td>
 							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select">
 								{foreach from=$articles item="list" name="al_loop" key="key"}
-									<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>										
+									<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
 								{/foreach}
 							</select>
 						</td>
@@ -48,11 +48,9 @@
 								{$ICON.group_tobottom}
 							</a>
 							<br />
-							{if $section.listtype|lower == "tx_newspaper_articlelist_manual"}
+							{if $articlelist_type|lower == "tx_newspaper_articlelist_manual"}
 								<br />
-								<a onclick="alert('Article browser still missing ...'); return false;" href="#">
-									{$ICON.articlebrowser}{* add article using the article browser *}
-								</a>
+                                <a href="#" onclick="setFormValueOpenBrowser_AL('al_{$articlelist->getAbstractUid()}'); return false;" >{$ICON.articlebrowser}</a>
 								<br />
 								<a href="#" class="delete" rel="al_{$articlelist->getAbstractUid()}">
 									{$ICON.group_clear}

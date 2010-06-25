@@ -240,7 +240,11 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('FORM_FIELD', (t3lib_div::_GP('form_field'))? t3lib_div::_GP('form_field') : '');
 		$smarty->assign('FORM_UID', intval(t3lib_div::_GP('form_uid'))? intval(t3lib_div::_GP('form_uid')) : 0);
 		
-		$smarty->assign('IS_ARTICLE_BROWSER', t3lib_div::_GP('form_table'))? 1 : 0; // set flag if mod2 should be rendered as moderation list or as article browser 
+		$smarty->assign('AB4AL', (t3lib_div::_GP('ab4al'))? t3lib_div::_GP('ab4al') : ''); // article browser for article lists
+        $smarty->assign('select_box_id', (t3lib_div::_GP('select_box_id'))? t3lib_div::_GP('select_box_id') : ''); // selectbox id for article browser        
+		
+		
+		$smarty->assign('IS_ARTICLE_BROWSER', (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al'))? 1 : 0); // set flag if mod2 should be rendered as moderation list or as article browser 
 
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {
@@ -309,8 +313,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		
-		if (t3lib_div::_GP('form_table')) {
-			return $smarty->fetch('mod2_old.tmpl'); // article browser 
+		if (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al')) {
+			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser 
 		}
 		return $smarty->fetch('mod2_main.tmpl'); // moderation list
 	}

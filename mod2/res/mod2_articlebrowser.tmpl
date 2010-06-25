@@ -29,72 +29,20 @@ td {
 
 <script language="javascript">
 
-	var path = window.location.pathname;
-	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-
-
-
-/// extracted from typo3/class.browse_links.php
-/// in order to get the article and articlelist browser working like the typo3 EB
-
-var BrowseLinks = {
-	elements: {},
-	addElements: function(elements) {
-		BrowseLinks.elements = $H(BrowseLinks.elements).merge(elements).toObject();
-	},
-	focusOpenerAndClose: function(close) {
-		if (close) {
-			parent.window.opener.focus();
-			parent.close();
-		}
-	}
+function insertElement(uid, kicker, title, element, doClose) {    
+    var selectBox = parent.window.opener.$('#' + element);
+    selectBox.addOptionAboveSelected(uid, kicker, title);
+    if(doClose) parent.close();
 }
 
-
-function $H(object) {
-  return new Hash(object);
-};
-
-// new params: form_table, form_field, form_uid
-function insertElement(table, uid, type, filename, fp, filetype, imagefile, action, close, form_table, form_field, form_uid) {
-  var performAction = true;
-  // Call performing function and finish this action:
-  if (performAction) {
-    addElement(filename, table+"_"+uid, fp, close, table, uid, form_table, form_field, form_uid);
-  }
-}
-
-// new params: table, uid, form_table, form_field, form_uid
-function addElement(elName, elValue, altElValue, close, table, uid, form_table, form_field, form_uid) {
-//alert("data[" + table + "][" + uid + "][" + form_field + "]" + ", form_field: " + form_field);
-  if (parent.window.opener && parent.window.opener.setFormValueFromBrowseWin) {
-    parent.window.opener.setFormValueFromBrowseWin("data[" + form_table + "][" + form_uid + "][" + form_field + "]", altElValue? altElValue : elValue, elName);
-    focusOpenerAndClose(close);
-  } else {
-    alert("Error - reference to main window is not set properly!");
-    parent.close();
-  }
-}
-
-function focusOpenerAndClose(close)	{
-  BrowseLinks.focusOpenerAndClose(close);
-}
-
-/// \todo: based from mod7, how to merge into 1 js file?
-function showArticlePreview(article_uid) {
-	window.open(
-		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid, 
-		"preview", 
-		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
-	);
-}
 
 </script>
 {/literal}
 
-
-{$workflowlog_javascript} {* add once only for all comments *}
-
+{* add once only for all comments *}
+{* \todo: fix js, so workflow log is working 
+{$workflowlog_javascript}  
+*}
 
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
@@ -155,11 +103,13 @@ function showArticlePreview(article_uid) {
 
 <br /><br />
 
+{* add ab4al, if set: article browser for article lists *}
+{* add form_tanle etc. for article browser in list module type backend *}
 
 {if $URL_PREV != ''}
 <a href="index.php?{$URL_PREV}{if $FORM_TABLE}
 &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
-{/if}">{$PAGE_PREV_LABEL}</a>
+{/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_PREV_LABEL}</a>
 {else}
 {$PAGE_PREV_LABEL}
 {/if}
@@ -175,7 +125,7 @@ function showArticlePreview(article_uid) {
 {if $URL_NEXT}
 <a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
 &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
-{/if}">{$PAGE_NEXT_LABEL}</a>
+{/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_NEXT_LABEL}</a>
 {else}
 {$PAGE_NEXT_LABEL}
 {/if}
@@ -213,8 +163,9 @@ function showArticlePreview(article_uid) {
 		<td> 
 			<div title="{$DATA[i].teaser}">
 {if $IS_ARTICLE_BROWSER}
-	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
-	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+	<a onclick="return insertElement('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', false);" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
+	<a onclick="return insertElement('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', true);" href="#">
+
 {/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
 {if !$IS_ARTICLE_BROWSER}
@@ -270,7 +221,11 @@ function showArticlePreview(article_uid) {
 	<tr class="bg2">
 {/if}
 		<td colspan="2"></td>
-		<td colspan="7">{$DATA[i].workflowlog}</td>
+		<td colspan="7">
+{* \todo: fix js, so workflow log is working		
+{$DATA[i].workflowlog}
+*}
+		</td>
 	</tr>
 {/section}
 </table>

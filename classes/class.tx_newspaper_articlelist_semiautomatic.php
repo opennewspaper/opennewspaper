@@ -240,7 +240,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	/// render the placement editors according to sections selected for article
-	/** in comparison the the displayed ones in the form
+	/** in comparison to the displayed ones in the form
 		\param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 		\return ?
 	*/
@@ -266,6 +266,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$smarty->assign('tree', $tree);
 		$smarty->assign('lang', $localLang);
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
+		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath());
 		return $smarty->fetch('mod7_placement_section.tpl');
 	}
 	

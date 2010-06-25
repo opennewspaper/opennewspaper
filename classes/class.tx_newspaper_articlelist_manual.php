@@ -87,13 +87,14 @@ LIMIT 0, 10
 	function assembleFromUIDs(array $uids) {
 		$this->clearList();
 		for($i = 0; $i < sizeof($uids); $i++) {
-			if (!intval($uids[$i])) {
+//			t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));
+            if (!intval($uids[$i])) {
 				throw new tx_newspaper_InconsistencyException(
 					'Manual article list needs UID array to consist of integers,
 					 but no int was given: ' . $uids[$i]
 				);				
 			}
-			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i); 
+			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i);
 		}
 
 		$this->callSaveHooks();

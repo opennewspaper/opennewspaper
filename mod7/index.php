@@ -453,7 +453,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function saveSection($input) {
 //t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
-					$articleIds = explode('|', $input['articleids']);
+                    $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
 					
 					//split offsets from article ids

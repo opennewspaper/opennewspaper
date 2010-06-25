@@ -560,9 +560,12 @@ $.fn.moveOptionsUp = function(toTop, increment) {
 		increment = false;
 	}
 	
-	selectId = this.attr("id");
+	var selectId = this.attr("id");
 	var selectList = document.getElementById(selectId);
 	var selectOptions = selectList.getElementsByTagName("option");
+    var index = null;
+    var add = null;
+
 	for (var i = 0; i < selectOptions.length; i++) {
 		var opt = selectOptions[i];		
 		if (opt.selected) {
@@ -580,21 +583,19 @@ $.fn.moveOptionsUp = function(toTop, increment) {
 			
 			// incrementing - shouldn't be in here, but well... you know....
 			if (increment && (selectOptions[index].value.indexOf("_") > -1)) {
-				optionValue = selectOptions[index].value.split("_");
+				var optionValue = selectOptions[index].value.split("_");
 				optionValue[0] = parseInt(optionValue[0]) + add;
-				optionValue = optionValue.join("_");
-				selectOptions[index].value = optionValue;
+				selectOptions[index].value = optionValue.join("_");;
 				
-				// \todo: check for last bracket and get its position to make sure we don't hit the wrong one 
-				optionText = selectOptions[index].text.split("(");
-				optionText[1] = optionText[1].replace(/\)/g, "");
-				optionText[1] = parseInt(optionText[1]) + add;
-				offset = optionText[1];
+				// should work with any number of round brackets in the option label
+				var optionText = selectOptions[index].text.split("(");
+                var offset = optionText.pop();
+                offset = offset.replace(/\)/g, "");
+                offset = parseInt(offset) + add;
 				if (offset > 0) {
 					offset = '+' + offset;
 				}
-				optionText = optionText[0] + "(" + offset + ")";
-				selectOptions[index].text = optionText;
+				selectOptions[index].text = optionText.join('(') + "(" + offset + ")";
 			}
 		}
 		
@@ -619,9 +620,9 @@ $.fn.moveOptionsDown = function(toBottom, decrement) {
 			
 			// handle special case: is last element
 			if (i < (selectOptions.length - 1)) {
-				index = (toBottom) ? selectOptions.length - 1 : i + 1;
-				subtract = (toBottom) ? selectOptions.length - i - 1 : 1;
-				nextOpt = selectOptions[index];
+				var index = (toBottom) ? selectOptions.length - 1 : i + 1;
+				var subtract = (toBottom) ? selectOptions.length - i - 1 : 1;
+				var nextOpt = selectOptions[index];
 				opt = selectList.removeChild(opt);
 				nextOpt = selectList.replaceChild(opt, nextOpt);
 				selectList.insertBefore(nextOpt, opt);
@@ -632,24 +633,53 @@ $.fn.moveOptionsDown = function(toBottom, decrement) {
 			
 			// decrementing - shouldn't be in here, but well... you know....
 			if (decrement && (selectOptions[index].value.indexOf("_") > -1)) {
-				optionValue = selectOptions[index].value.split("_");
+				var optionValue = selectOptions[index].value.split("_");
 				optionValue[0] = parseInt(optionValue[0]) - subtract;
-				optionValue = optionValue.join("_");
-				selectOptions[index].value = optionValue;
+				selectOptions[index].value = optionValue.join("_");
 				
-				// we except only one pair of round brackets in the option label
-				optionText = selectOptions[index].text.split("(");
-				optionText[1] = optionText[1].replace(/\)/g, "");
-				optionText[1] = parseInt(optionText[1]) - subtract;
-				offset = optionText[1];
+				// should work with any number of round brackets in the option label
+				var optionText = selectOptions[index].text.split("(");
+                var offset = optionText.pop();
+                offset = offset.replace(/\)/g, "");
+                offset = parseInt(offset) - subtract
 				if (offset > 0) {
 					offset = '+' + offset;
 				}
-				optionText = optionText[0] + "(" + offset + ")";
-				selectOptions[index].text = optionText;
+				selectOptions[index].text = optionText.join('(') + "(" + offset + ")";				 
 			}
 		}
 	}
+}
+
+// added by ramon
+$.fn.addOptionAboveSelected = function() {
+
+    if(arguments.length < 3) return this;
+
+    var  value = arguments[0];
+    var  kicker = arguments[1];
+    var  title  = arguments[2];
+    var text = kicker + ': ' + title;
+    
+    var newOpt = document.createElement('option');
+    newOpt.setAttribute('title', text);
+    newOpt.setAttribute('label', text);
+    newOpt.value = value;
+    newOpt.text = text;
+    newOpt.selected = true;
+
+    var selectId = this.attr("id");
+    var selectList = document.getElementById(selectId);
+
+    if(this.selectedOptions().size() == 0) {
+       selectList.add(newOpt, selectList.options[0]);
+    } else {
+        if(!this.containsOption(value)) {
+            var selectedOpt = selectList.options[selectList.selectedIndex];
+            this.unselectAllOptions();
+            selectList.add(newOpt, selectedOpt);
+        }
+    }
 }
 
 
