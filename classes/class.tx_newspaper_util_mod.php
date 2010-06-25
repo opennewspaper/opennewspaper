@@ -39,12 +39,15 @@ class tx_newspaper_UtilMod {
 		$tmp = getdate();
 		$last_midnight = mktime(0, 0, 0, $tmp['mon'], $tmp['mday'], $tmp['year']);
 		
-		if ($type == 'today')
+		if ($type == 'today') {
 			return $last_midnight;
-		if ($type == 'no_limit')
+		}
+		if ($type == 'no_limit') {
 			return 0;
-		if (substr($type, 0, 4) == 'day_')
-			return $last_midnight - intval(substr($type, 4)) * 86400; // 86400 = 1 day in seconds			
+		}
+		if (substr($type, 0, 4) == 'day_') {
+			return $last_midnight - intval(substr($type, 4)) * 86400; // 86400 = 1 day in seconds
+		}			
 		return $last_midnight; // default: today only
 	}
 	
