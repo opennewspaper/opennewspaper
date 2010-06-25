@@ -213,6 +213,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		));
 
 		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
+		$smarty->assign('RESET_FILTER_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.reset_filter', false));
 
 		$smarty->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.hide', false)));
 		$smarty->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.unhide', false)));
@@ -351,10 +352,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$_POST = $this->addDefaultFilterValues($_POST);
 		}
 
-		/// if "go" button was pressed, reset page browsing
 		if (t3lib_div::_GP('go') != '') {
+			// if "go" button was pressed, reset page browsing
 			$_POST['start_page'] = 0;
 			unset($_POST['go']); // if querystring contains this marker it indecates that the form was submitted, so it's unset to remove it from the browse urls
+		} elseif (t3lib_div::_GP('reset_filter') != '') {
+			// if "reset" button was pressed, read filter default settings
+			$_POST = $this->addDefaultFilterValues(array());
+			unset($_POST['reset_filter']); 			
 		}
 		
 		// store filter settings
@@ -373,6 +378,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	}
 
 	/// adds default filter settings if filter type is missing in given array
+	/// if array if empty, all filter default values are returned
 	/// \param $settings filter settings
 	/// \return array with filter settings where missing filter type were added with default values
 	private function addDefaultFilterValues(array $settings) {
