@@ -441,18 +441,18 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			}
 
 			// store data and call article save hooks then
-			$this->storeHiddenStausWithHooks($article_uid, $fA);
+			$this->storeHiddenStatusWithHooks($article_uid, $fA);
 
 		}
 	}
 	
 	// \todo: replace with newspaper hook handling, see #1055
-	/// This function use Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
+	/// This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
 	/** \param $uid article uid
 	 *  \param $fieldArray data for tce datamap
 	 */
-	private function storeHiddenStausWithHooks($uid, array $fieldArray) {
-//t3lib_div::devlog('storeHiddenStausWithHooks()', 'newspaper', 0, array('uid' => $uid, 'fieldArray' => $fieldArray));
+	private function storeHiddenStatusWithHooks($uid, array $fieldArray) {
+//t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('uid' => $uid, 'fieldArray' => $fieldArray));
 			if (!intval($uid)) {
 				return false;
 			}
