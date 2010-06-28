@@ -82,12 +82,22 @@ function displayInsertOrDelButton(elementId){
 	hideProgress(); // displayInsertOrDelButton() might be called when refrshinh a list with AJAX
 }
 
-
+function isDirty() {
+    var saveIt = false;
+    $("select.placement-select").each(function(index, item) {
+        $("input[title='" + item.id + "']").each(function(index, item) {            
+            if ($(item).hasClass("unsaved")) {				
+                saveIt = true;
+			}
+  		});
+	});    
+    return saveIt;
+}
 
 // \todo: can be optimized by saving all in a single request
 function saveAllSections () {
 	$("select.placement-select").each(function(index, item) {
-		saveIt = false;
+		var saveIt = false;
 		$("input[title='" + item.id + "']").each(function(index, item) {
 			if ($(item).hasClass("unsaved")) {
 				saveIt = true;		
@@ -137,7 +147,7 @@ function closePlacement() {
 
 
 function checkForRefresh () {
-	allSections = collectSections();
+	var allSections = collectSections();
 	if (allSections.length > 0) {
 		
 		//we collect the values of the selects manually so that we do not have
@@ -147,8 +157,8 @@ function checkForRefresh () {
 		//and unpack all this in php - there seems no better way to achieve this
 		//without real associative arrays in javascript that are serialisable
 		var allSelectValues = new Array();
-		for (i = 0; i < allSections.length; ++i) {
-			selectValues = new Array();
+		for (var i = 0; i < allSections.length; ++i) {
+			var selectValues = new Array();
 			$("select#" + allSections[i] + " option").each(function(index, item) {
 				selectValues.push($(item).val());
 			});		
@@ -272,7 +282,7 @@ function connectPlacementEvents() {
 		return false;
   	});
 	$(".refresh").click(function() {
-		if (confirm(langReallyrefresh)) {
+		if (isDirty() && confirm(langReallyrefresh)) {
 			$("#" + this.title).selectAllOptions();
 			$("#" + this.title).removeOption(/./, true);
 			showProgress();
