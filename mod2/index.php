@@ -403,11 +403,25 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	/// Stores hidden/unhidden article status in ajax calls
 	// this way to change visibility makes sure, that the current page browser selection lasts
+// \todo: article_visibility: use controller too
 	function processGPController() {
-//t3lib_div::devlog('article_visibility', 'np', 0, array('_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
+		/// \todo: permission check
+		$article_uid = intval(t3lib_div::_GP('article_uid'));
+
+		$input = t3lib_div::GParrayMerged($this->prefixId);
+//t3lib_div::devlog('processGPController()', 'np', 0, array('input' => $input, '_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
+		
+		if (isset($input['controller'])) {
+			switch($input['controller']) {
+				case 'delete':
+					tx_newspaper::deleteUsingCmdMap('tx_newspaper_article', array(intval($article_uid)));
+				break;
+			}
+			unset($_POST[$this->prefixId]); // remove controller from query string
+			return; // don't check visibility if controller was set
+		}
+		
 		if (t3lib_div::_GP('article_visibility') != '') {
-/// \todo: permission check
-			$article_uid = intval(t3lib_div::_GP('article_uid'));
 			$hidden_status = strtolower(t3lib_div::_GP('article_visibility')); 
 
 			// unset parameters (so they are not added to querystring later)
