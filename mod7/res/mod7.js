@@ -79,7 +79,7 @@ function displayInsertOrDelButton(elementId){
 		$("#addbutton_" + buttonListId).show();
 		$("#delbutton_" + buttonListId).hide();
 	}
-	hideProgress(); // displayInsertOrDelButton() might be called when refrshinh a list with AJAX
+	hideProgress(); // displayInsertOrDelButton() might be called when refreshing a list with AJAX
 }
 
 function isDirty() {
