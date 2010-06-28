@@ -299,6 +299,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							}
 						}
 						$article = new tx_newspaper_article($input['placearticleuid']);
+// \todo: why is setSection() called when the form is built (setSection deleted and re-stored section ...)
 						return $article->setSections($sectionIds);
 					}
 				}
