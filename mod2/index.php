@@ -146,16 +146,22 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$this->processGP();
 		$this->processGPController(); // check if a controller was used (hide/unhide/delete article)
 
+		$where = $this->createWherePart(); // get conditions for sql statement
+
 		/// get records (get one more than needed to find out if there's an next page)
-		$row = tx_newspaper::selectRows(
-			'*',
-			'tx_newspaper_article',
-			$this->createWherePart(), // get conditions for sql statement
-			'',
-			'tstamp DESC',
-			intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
-		);
+		if ($where !== false) {
+			$row = tx_newspaper::selectRows(
+				'*',
+				$where['table'],
+				$where['where'], 
+				'',
+				'tstamp DESC',
+				intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
+			);
 //t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
+		} else {
+			$row = array(); // empty result
+		}
 
 		$content = $this->renderBackendSmarty($row);
 
@@ -449,25 +455,36 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 
 
-	/// create where part of sql statement for filter
-	/// return array with condition to be combined with "AND"
+	/// create where part of sql statement for current filter setting
+	/// \return array key 'table' table(s) to be used, key 'where': condition combined with "AND"; or false if query will return an empty result set
 	private function createWherePart() {
 //t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('_request' => $_REQUEST));
 		$where = array();
 		
-		$where[] = 'deleted=0';
-		$where[] = 'is_template=0';
-		$where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp(t3lib_div::_GP('range'));
+		if (trim(t3lib_div::_GP('section'))) {
+			$where_section = $this->getWhereForSection(t3lib_div::_GP('section')); 
+			if ($where_section === false) {
+				return false; // no matching section found, so not article in search result
+			}
+			$table = 'tx_newspaper_article a, tx_newspaper_article_sections_mm mm';
+			$where['section'] = 'a.uid=mm.uid_local AND mm.uid_foreign IN (' . $where_section . ')'; //  
+		} else {
+			$table = 'tx_newspaper_article';	
+		}
+		
+		$where['deleted'] = 'deleted=0';
+		$where['is_template'] = 'is_template=0';
+		$where['tstamp'] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp(t3lib_div::_GP('range'));
 		
 		// get articles from correct sysfolder only
-		$where[] = 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
+		$where['pid'] = 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
 		
 		switch(strtolower(t3lib_div::_GP('hidden'))) {
 			case 'on':
-				$where[] = 'hidden=1';
+				$where['hidden'] = 'hidden=1';
 			break;
 			case 'off':
-				$where[] = 'hidden=0';
+				$where['hidden'] = 'hidden=0';
 			break;
 			case 'all':
 			default:
@@ -477,7 +494,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
 			case NP_ACTIVE_ROLE_DUTY_EDITOR:
 			case NP_ACTIVE_ROLE_NONE:
-				$where[] = 'workflow_status=' . t3lib_div::_GP('role');
+				$where['workflow_status'] = 'workflow_status=' . t3lib_div::_GP('role');
 			break;
 			case '-1': // all
 			default:
@@ -486,29 +503,51 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		
 		
 		if (trim(t3lib_div::_GP('author'))) {
-			$where[] = 'author LIKE "%' . addslashes(trim(t3lib_div::_GP('author'))) . '%"';
+			$where['author'] = 'author LIKE "%' . addslashes(trim(t3lib_div::_GP('author'))) . '%"';
 		}
 
 		if (trim(t3lib_div::_GP('be_user'))) {
-			$where[] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim(t3lib_div::_GP('be_user'))) . '%")';
+			$where['be_user'] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim(t3lib_div::_GP('be_user'))) . '%")';
 		}
 
-
-		if (t3lib_div::_GP('section')) {
-t3lib_div::devlog('moderation: section missing', 'newspaper', 3);
-		}
 		if (trim(t3lib_div::_GP('text'))) {
-			$where[] = '(title LIKE "%' . addslashes(trim(t3lib_div::_GP('text'))) . '%" OR kicker LIKE "%' . 
+			$where['text'] = '(title LIKE "%' . addslashes(trim(t3lib_div::_GP('text'))) . '%" OR kicker LIKE "%' . 
 				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR teaser LIKE "%' . 
 				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR text LIKE "%' . 
 				addslashes(trim(t3lib_div::_GP('text'))) . '%")';
 		}
-//t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('where' => $where));
-		return implode(' AND ', $where);				
+//t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('where' => $where, 'table' => $table));
+		return array(
+			'table' => $table,
+			'where' => implode(' AND ', $where)
+		);				
 	}
 
 
 
+	/// get section uids for given search term $section
+	/// \param $section search term for sections (is NOT trimmed)
+	/// \return comma separated list of section uids or false if no section could be found
+	private function getWhereForSection($section) {
+		$sectionUids = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_section',
+			'section_name LIKE "%' . addslashes($section) . '%"' . // search for sections contains the section search string
+				' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()) // check current section sysfolder only
+		);
+		$uids = array();
+		foreach($sectionUids as $sectionUid) {
+			$uids[] = $sectionUid['uid'];
+		}
+		$sectionUidList = implode(',', $uids);
+		
+		if (!$sectionUidList) {
+			// no matching section found, so no article in result set
+			return false;
+		}
+//t3lib_div::devlog('getWhereForSection()', 'newspaper', 0, array('$sectionUids' => $sectionUids, 'sectionUidList' => $sectionUidList, 'query' => tx_newspaper::$query));
+		return $sectionUidList;
+	}
 
 
 

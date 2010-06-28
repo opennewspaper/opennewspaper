@@ -343,10 +343,10 @@ alert('to come ...');
 	<input type="text" name="be_user" value="{$_POST.be_user}" />  
 	<br />
 
-{* \todo: add section filter
-{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" />
-*}
-		
+	<label>{$SECTION_LABEL}</label> 
+	<input type="text" name="section" value="{$_POST.section}" />  
+	<br />
+
 	<label>{$TEXTSEARCH_LABEL}</label> 
 	<input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 	<br />
