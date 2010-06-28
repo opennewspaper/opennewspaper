@@ -1035,7 +1035,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 	
 	/// sets the publish date if needed
-	/** The publish date needs to be set if the atrribute hidden changes to 0 and
+	/** The publish date needs to be set if the attribute hidden changes to 0 and
 	 *  no publish_date is stored so far.
 	 *  This method just SETS the publish_date attribute, but DOES NOT store the article
 	 */
