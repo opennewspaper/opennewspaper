@@ -379,17 +379,7 @@ class tx_newspaper  {
 			$GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		}
 		if (self::use_datamap && is_array($uids_or_where)) {
-			$cmdmap = array();
-			foreach ($uids_or_where as $uid) {
-				$cmdmap[$table][$uid] = array('delete' => '');
-			}
-	
-			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-			$tce->start(null, $cmdmap);
-			$tce->process_cmdmap();
-			if (count($tce->errorLog)){
-				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
-			}
+			self::deleteUsingCmdMap($table, $uids_or_where);
 		} else {
 			global $TCA;
 			t3lib_div::loadTCA($table);
@@ -415,6 +405,30 @@ class tx_newspaper  {
 		}
 		
         return $GLOBALS['TYPO3_DB']->sql_affected_rows();        
+	}
+	
+	/// Deletes a record from a DB table using a Typo3 command map
+	/**
+	 *  \param $table SQL table to delete a record from
+	 *  \param $uids Array of UIDs to delete
+	 *  \return number of affected rows
+	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
+	 */
+
+	public static function deleteUsingCmdMap($table, array $uids) {
+		$cmdmap = array();
+		foreach ($uids as $uid) {
+			$cmdmap[$table][$uid] = array('delete' => 1);
+		}
+
+		$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+		$tce->start(null, $cmdmap);
+		$tce->process_cmdmap();
+		if (count($tce->errorLog)){
+			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+		}
+t3lib_div::devlog('deleteUsingCmdMap()', 'newsapper', 0, array('no rows' => $GLOBALS['TYPO3_DB']->sql_affected_rows()));
+		return $GLOBALS['TYPO3_DB']->sql_affected_rows(); 
 	}
 
 	/// If \p $table has a \c tstamp field, set it to current time in \p $row
