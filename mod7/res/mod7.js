@@ -282,33 +282,39 @@ function connectPlacementEvents() {
 		return false;
   	});
 	$(".refresh").click(function() {
-		if (isDirty() && confirm(langReallyrefresh)) {
-			$("#" + this.title).selectAllOptions();
-			$("#" + this.title).removeOption(/./, true);
-			showProgress();
-			$("#" + this.title).ajaxAddOption(
-				path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
-					"tx_newspaper_mod7[element]" : this.title, 
-					"tx_newspaper_mod7[placearticleuid]" : ($("#placearticleuid").length? $("#placearticleuid").val() : 0)
-				}, 
-				false,
-				displayInsertOrDelButton, ["#" + this.title] //displayInsertOrDelButton, [{"elementId": "#" + this.title}]
-			);	
-		}
-		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
-		$("input.save[title=" +  this.title + "]").removeClass("unsaved");
+		var doRefresh = true;
+        if (isDirty()) {
+            doRefresh = confirm(langReallyrefresh)
+        }
+        if(doRefresh) {
+            $("#" + this.title).selectAllOptions();
+            $("#" + this.title).removeOption(/./, true);
+            showProgress();
+            $("#" + this.title).ajaxAddOption(
+                path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
+                    "tx_newspaper_mod7[element]" : this.title,
+                    "tx_newspaper_mod7[placearticleuid]" : ($("#placearticleuid").length? $("#placearticleuid").val() : 0)
+                },
+                false,
+                displayInsertOrDelButton, ["#" + this.title] //displayInsertOrDelButton, [{"elementId": "#" + this.title}]
+            );        
+    		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
+	    	$("input.save[title=" +  this.title + "]").removeClass("unsaved");
+        }
 		if (everythingSaved()) {
 			$("input#saveall").removeClass("unsaved");
 		}
 		return false;
   	});
 	$(".save").click(function() {
-		saveArticleList(this.title);
-		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
-		$("input.save[title=" +  this.title + "]").removeClass("unsaved");
-		if (everythingSaved()) {
-			$("input#saveall").removeClass("unsaved");
-		}
+		if(isDirty()) {
+            saveArticleList(this.title);
+            $("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
+            $("input.save[title=" +  this.title + "]").removeClass("unsaved");
+            if (everythingSaved()) {
+                $("input#saveall").removeClass("unsaved");
+            }
+        }            
 		return false;
   	});
 }
