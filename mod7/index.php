@@ -247,7 +247,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				
 				
 				
-				/// render backend for pplacing an article into all article lsits (depending on the chosen setions)
+				/// render backend for pplacing an article into all article lists (depending on the chosen setions)
 				function renderPlacementModule($input) {
 					// get data
 					$article = $this->al_be->getArticleByArticleId($input['articleid']);
