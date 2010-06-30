@@ -173,7 +173,7 @@
 			<label index="label_tab_article_related">Verknüpfte Artikel</label>
 			<label index="label_tab_article_timecontrol">Zeitsteuerung</label>
 			<label index="label_tab_article_additional">Erweitere Daten</label>
-			<label index="title_section_articlelist">Artikellsite für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
+			<label index="title_section_articlelist">Artikelliste für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
 			<label index="label_kicker_title_teaser">Artikel-Kopfdaten</label>
 			<label index="label_kicker_title_teaser_for_list_views">Artikel-Kopfdaten für Listenansicht</label>
 		</languageKey>
