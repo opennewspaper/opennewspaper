@@ -776,10 +776,16 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available_for_page', false);
 					} else {
 						/// render form for pagezone
-						$content = tx_newspaper_BE::renderBackendPageZone(
-							tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id)), 
-							$this->show_levels_above
-						);
+						try {
+							$content = tx_newspaper_BE::renderBackendPageZone(
+								tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id)), 
+								$this->show_levels_above
+							);
+						} catch(tx_newspaper_PathNotFoundException $e) {
+							// \todo localization
+							die('Templates could\'t be found. Is TSConfig newspaper.defaultTemplate set to the correct path?');
+						}
+						
 					}
 					
 					$this->content .= $this->doc->section('', $content, 0, 1);
