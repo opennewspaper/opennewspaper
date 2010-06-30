@@ -620,12 +620,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 *  \return absolute path to Typo3 installation
 	 */ 
 	public static function getAbsolutePath($endsWithSlash=true) {
-		/// \todo replace by a version NOT using EM conf (check t3lib_div)
-		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
-		if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
-			throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
-		}
-		$path = trim($em_conf['newspaperTypo3Path']);
+		
+		$path = self::getBasePath();
 		
 		if ($endsWithSlash) {
 			// append "/", if missing
@@ -637,10 +633,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 			}
 		} else {
 			// remove last "/", if any
-			if (substr($path, strlen($path)-1) == '/') {
-				// cut off last '/'
-				$path = substr($path, 0, strlen($path)-1);
-			}
+			$path = rtrim($path, '/');
 		}
 		
 		// first character in ABSOLUTE path must be a "/"
@@ -651,6 +644,28 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $path;
 	}
 
+	private static function getBasePath() {
+		
+		if (self::isTazSpambusterHackNeeded()) return self::tazSpambusterHack();
+		
+		/// \todo replace by a version NOT using EM conf (check t3lib_div)
+		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
+		
+		if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
+			throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
+		}
+		
+		return trim($em_conf['newspaperTypo3Path']);
+	}
+
+	private static function isTazSpambusterHackNeeded() {
+		return (stripos($_SERVER['HTTP_HOST'], 'spambuster.taz.de') !== false);	
+	}
+	
+	private static function tazSpambusterHack() {
+		return '/onlinetaz/red';
+	}
+	
 	/// prepends the given absolute path part if path to check is no absolute path
 	/** \param $path2check path to check if it's an absolute path
 	 *  \param $absolutePath this path is prepended to $path2check; no
