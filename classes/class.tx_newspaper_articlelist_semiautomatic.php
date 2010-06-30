@@ -499,7 +499,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		if ($this->getAttribute('filter_sql_order_by')) {
 			$order_by = $this->getAttribute('filter_sql_order_by');
 		} else {
-			$order_by = 'publish_date DESC, crdate DESC';
+//			$order_by = 'publish_date DESC, crdate DESC';
+			$order_by = 'CASE
+  WHEN publish_date = \'0\'
+  THEN tstamp
+  ELSE publish_date
+END';
 		}
 		
 		if ($this->getAttribute('filter_sections')) {
