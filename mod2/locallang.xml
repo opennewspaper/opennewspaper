@@ -31,6 +31,7 @@
 			<label index="label_title_publish_date">Publish date</label>
 			<label index="label_title_time_controlled">Time controlled</label>
 			<label index="label_title_commands">Commands</label>
+			<label index="label_title_role">Role</label>
 			
 			<label index="label_time_controlled_not_yet">Will be activated at ###STARTTIME###</label>
 			<label index="label_time_controlled_not_anymore">Ended on ###ENDTIME###</label>
@@ -85,6 +86,7 @@
 			<label index="label_title_publish_date">Publikationsdatum</label>
 			<label index="label_title_time_controlled">Zeitgezündet</label>
 			<label index="label_title_commands">Funktion</label>
+			<label index="label_title_role">Rolle</label>
 			
 			<label index="label_time_controlled_not_yet">Startdatum/-uhrzeit wird sein: ###STARTTIME###</label>
 			<label index="label_time_controlled_not_anymore">Enddatum/-uhrzeit: ###ENDTIME###</label>

@@ -404,10 +404,11 @@ function deleteArticle(article_uid) {
 <table>
 	<tr class="bg2">
 		<td></td> {* locked articles *}
-		<td>{$LABEL_TITLE.number}</td>
+{*		<td>{$LABEL_TITLE.number}</td> see: #1001 *}
 		<td>{$LABEL_TITLE.article}</td>
 		<td>{$LABEL_TITLE.author}</td>
 		<td>{$LABEL_TITLE.be_user}</td>
+		<td>{$LABEL_TITLE.role}</td>
 		<td>{$LABEL_TITLE.modification_date}</td>
 		<td>{$LABEL_TITLE.publish_date}</td>
 		<td width="30">{$LABEL_TITLE.visibility}</td>
@@ -416,13 +417,14 @@ function deleteArticle(article_uid) {
 {section name=i loop=$DATA}
 	<tr class="bg1 noborder">
 		<td>{if $LOCKED_ARTICLE[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg|escape:"htlmall"}{/if}</td>
-		<td class="number" title="#{$DATA[i].uid}">{math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step}</td> 	
+{*		<td class="number" title="#{$DATA[i].uid}">{math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step}</td> *} 	
 		<td> 	
 			<h2 class="kicker">{$DATA[i].kicker}</h2>
 			<h1>{$DATA[i].title}</h1>      			
 		</td>
 		<td>{$DATA[i].author}</td>
 		<td>{$DATA[i].be_user}</td>
+		<td>{$DATA[i].workflow_status_TITLE}</td>
 		<td>
 			{if $DATA[i].tstamp} {* tstamp 0 renders current time *}
 				<strong>{$DATA[i].tstamp|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].tstamp|date_format:"%H:%M:%S"}

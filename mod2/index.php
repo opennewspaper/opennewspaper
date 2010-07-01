@@ -210,6 +210,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'publish_date' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_publish_date', false),
 			'time_controlled' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_time_controlled', false),
 			'commands' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_commands', false),
+			'role' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_title_role', false),
 		));
 		$smarty->assign('LABEL', array(
 			'time_controlled_not_yet' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_yet', false),
@@ -294,6 +295,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				$be_user['username'] = '---'; // no be_user stored in article
 			}
 			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
+			// add role title
+			$row[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($row[$i]['workflow_status']);
 			// add workflowlog data to $row
 			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
 		}
