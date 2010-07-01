@@ -504,7 +504,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
   WHEN publish_date = \'0\'
   THEN tstamp
   ELSE publish_date
-END';
+END 
+DESC';
 		}
 		
 		if ($this->getAttribute('filter_sections')) {
