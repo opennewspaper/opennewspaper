@@ -418,7 +418,7 @@ function deleteArticle(article_uid) {
 	<tr class="bg1 noborder">
 		<td>{if $LOCKED_ARTICLE[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg|escape:"htlmall"}{/if}</td>
 {*		<td class="number" title="#{$DATA[i].uid}">{math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step}</td> *} 	
-		<td> 	
+		<td title="#{$DATA[i].uid}"> 	
 			<h2 class="kicker">{$DATA[i].kicker}</h2>
 			<h1>{$DATA[i].title}</h1>      			
 		</td>
