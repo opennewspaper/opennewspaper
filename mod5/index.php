@@ -424,23 +424,29 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= 
-				    '<option title="' . utf8_encode($entry->getTitle()) . 
-				          '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
-				        utf8_encode($entry->getTitle()) .
-				        '     <strong>[' . $source->getProductionStatus($entry) . ']</strong>' . 
-				    '</option>' . "\n";
+				$ret .= $this->makeArticleMenuEntry($source_id, $entry);
 			} else {
-				$ret .= 
-				    '<option title="' . utf8_encode($entry->getTitle()) . 
-				          '" onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
-				        utf8_encode($entry->getTitle()) . 
-				    '</option>' . "\n";
+				$ret .= $this->makeFolderMenuEntry($source_id, $entry);
 			}  
 		}
 		$ret .= '</select>' . "<br />\n";
 		
 		die($ret);
+	}
+	
+	private function makeArticleMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
+        return '<option title="' . utf8_encode($entry->getTitle()) . 
+                     '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+                    utf8_encode($entry->getTitle()) .
+                    '     <strong>[' . $source->getProductionStatus($entry) . ']</strong>' . 
+                '</option>' . "\n";
+	}
+	
+	private function makeFolderMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
+		return '<option title="' . utf8_encode($entry->getTitle()) . 
+                     '" onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+                   utf8_encode($entry->getTitle()) . 
+               '</option>' . "\n";
 	}
 	
 	function load_article(array $input) {
