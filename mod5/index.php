@@ -424,7 +424,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= $this->makeArticleMenuEntry($source_id, $entry);
+				$ret .= $this->makeArticleMenuEntry($source_id, $source, $entry);
 			} else {
 				$ret .= $this->makeFolderMenuEntry($source_id, $entry);
 			}  
@@ -434,7 +434,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		die($ret);
 	}
 	
-	private function makeArticleMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
+	private function makeArticleMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
         return '<option title="' . utf8_encode($entry->getTitle()) . 
                      '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
                     utf8_encode($entry->getTitle()) .
