@@ -973,6 +973,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 
 	public static function getRegisteredSource($key) {
+		if (!isset(self::$registered_sources[$key])) {
+			throw new tx_newspaper_InconsistencyException(
+			    "Requested source '$key' not present in registered sources: " . print_r(self::$registered_sources, 1)
+			);
+		}
 		return self::$registered_sources[$key];
 	}
 	
