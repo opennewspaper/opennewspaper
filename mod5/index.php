@@ -475,59 +475,70 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 			)
 		);
 		
+		$new_article = $this->createAndImportArticle($articletype, $section, $source, $path);
+
+		$this->logImport($new_article, $input);
 		
-		$new_article = $section->createNewArticle($articletype);
-		$new_article->setAttribute('articletype_id', $articletype->getUid());
+		$this->redirectToArticleMask($new_article);
+	}
 
-		$source->readArticle($new_article, $path);
+	/// Create an article of requested type, perform the import, set necessary attributes and store the article
+	/** Put this way, this function violates the "do one thing" rule so clearly... anyway, still
+	 *  better than leaving it in import_article(). 
+	 * 
+	 * @param $type    the selected article type.
+	 * @param $section section the article belogs to - needed for the default extras.
+	 * @param $source  source the article is imported from.
+	 */
+	private function createAndImportArticle(tx_newspaper_ArticleType $type, 
+	                                        tx_newspaper_Section $section, 
+	                                        tx_newspaper_Source $source, 
+	                                        tx_newspaper_SourcePath $path) {
+	                                   
+        $new_article = $section->createNewArticle($articletype);
+        $new_article->setAttribute('articletype_id', $articletype->getUid());
+
+        $source->readArticle($new_article, $path);
+        
+        // add creation date and user
+        $new_article->setAttribute('crdate', time());
+        $new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+        $new_article->setAttribute('hidden', 1); // hide imported article
+
+        $new_article->store();
 		
-		// add creation date and user
-		$new_article->setAttribute('crdate', time());
-		$new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$new_article->setAttribute('hidden', 1); // hide imported article
-
-		t3lib_div::devlog('before store', 'newspaper', 0, 
-			array(
-				'$new_article' => $new_article,
-			)
-		);
-		$new_article->store();
-		t3lib_div::devlog('after store', 'newspaper', 0, 
-			array(
-				'$new_article' => $new_article,
-			)
-		);
-
-		$path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
-
-		/*	volle URL muss angegeben werden, weil manche browser sonst 
-		 *  'http://' davorhaengen.
-		 */			
-		$url_parts = explode('/typo3', tx_newspaper::currentURL());
-		$base_url = $url_parts[0];
-
-		$url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-				'/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
-				$new_article->getUid() . ']=edit';
-/*
-			$url = $path2installation . '/typo3/alt_doc.php?returnUrl=' .
-			 	   $path2installation . '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
-			 	   $new_article->getUid() . ']=edit';
-*/
-
-		// log import
-		$comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
-		if ($input['source_id']) {
-			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . ': ' . $input['source_id'];
-		}
-		if ($input['source_path']) {
-			$comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . ': ' . $input['source_path'];
-		}
-		tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment, NP_WORKLFOW_LOG_IMPORT);
-
-		header('Location: ' . $url); // redirect to article backend	
+        return $new_article;
 	}
 	
+	/// Note import parameters in workflow log for \p $new_article.
+	private function logImport(tx_newspaper_Article $new_article, $input) {
+        $comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
+        if ($input['source_id']) {
+            $comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . ': ' . $input['source_id'];
+        }
+        if ($input['source_path']) {
+            $comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . ': ' . $input['source_path'];
+        }
+        tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment, NP_WORKLFOW_LOG_IMPORT);
+		
+	}
+	
+	/// Redirect the browser to the article mask for further editing after the import.
+	private function redirectToArticleMask(tx_newspaper_Article $new_article) {
+        $path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+
+        /*  volle URL muss angegeben werden, weil manche browser sonst 
+         *  'http://' davorhaengen.
+         */         
+        $url_parts = explode('/typo3', tx_newspaper::currentURL());
+        $base_url = $url_parts[0];
+
+        $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
+                '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+                $new_article->getUid() . ']=edit';
+                
+        header('Location: ' . $url); // redirect to article backend 
+	} 
 	
 	private function changeRole(array $input) {
 //t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
