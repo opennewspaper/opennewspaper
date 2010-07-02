@@ -428,7 +428,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 				    '<option title="' . utf8_encode($entry->getTitle()) . 
 				          '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
 				        utf8_encode($entry->getTitle()) .
-				        ' ' . $source->getProductionStatus($path) . 
+				        ' ' . $source->getProductionStatus($entry) . 
 				    '</option>' . "\n";
 			} else {
 				$ret .= 
