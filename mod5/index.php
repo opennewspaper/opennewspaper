@@ -424,11 +424,18 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 		
 		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
 			if ($entry->isText()) {
-				$ret .= '<option title="' . utf8_encode($entry->getTitle()) . '" onclick=loadArticle(\'' . $source_id . 
-					'\',\'' . $entry->getID() .'\')' . '>' . utf8_encode($entry->getTitle()) . '</option>' . "\n";
+				$ret .= 
+				    '<option title="' . utf8_encode($entry->getTitle()) . 
+				          '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+				        utf8_encode($entry->getTitle()) .
+				        ' ' . $source->getProductionStatus($path) . 
+				    '</option>' . "\n";
 			} else {
-				$ret .= '<option title="' . utf8_encode($entry->getTitle()) . '" onclick=changeSource(\'' . $source_id . 
-					'\',\'' . $entry->getID() .'\')' . '>' . utf8_encode($entry->getTitle()) . '</option>' . "\n";
+				$ret .= 
+				    '<option title="' . utf8_encode($entry->getTitle()) . 
+				          '" onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+				        utf8_encode($entry->getTitle()) . 
+				    '</option>' . "\n";
 			}  
 		}
 		$ret .= '</select>' . "<br />\n";
