@@ -511,7 +511,7 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	}
 	
 	/// Note import parameters in workflow log for \p $new_article.
-	private function logImport(tx_newspaper_Article $new_article, $input) {
+	private function logImport(tx_newspaper_Article $new_article, array $input) {
         $comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
         if ($input['source_id']) {
             $comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_id', false) . ': ' . $input['source_id'];
