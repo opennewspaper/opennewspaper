@@ -25,6 +25,22 @@ class tx_newspaper_SourcePath {
 	private $is_text = false;
 }
 
+/// A class representing the production status of an article in a source
+/** Stati might be, for example, "Empty", "In Progress", "In Correction" and "Finished".
+ *  Because these stati and their representation may change considerably between different
+ *  editing systems, we supply only the most basic class representation here. Override this class
+ *  for your specific needs.
+ */
+class tx_newspaper_ProductionStatus {
+    public function __construct($status) { 
+        $this->status = $status; 
+    }
+    
+    public function __toString() { return strval($this->status); }
+	
+    private $status = null;
+}
+
  /// A source, from which articles are read
  /** This interface supplies functions which read an Article, or parts of it,
   *  or [parts of] many Articles, or one Extra, or many Extras.
@@ -146,8 +162,26 @@ interface tx_newspaper_Source {
     
     public function getTitle();
     
+    /// Returns the paths below the specified path.
+    /** Assuming the source is organized in a tree structure, returns the nodes
+     *  that lie below \p $path. These nodes may refer to a directory or to an
+     *  article.
+     *   
+     *  \param $path Path whose subnodes are requested.
+     *  \return Array of nodes which lie directly below \p $path.
+     */
     public function browse(tx_newspaper_SourcePath $path);
     
+    /// Returns the production status of the article referenced by \p $path.
+    /** Refer to \c tx_newspaper_ProductionStatus for a brief explanation of 
+     *  production stati.
+     * 
+     *  \param $path The path to the article in question.
+     *  \return The production status of the article referred to by \p $path.
+     *  \throw tx_newspaper_InconsistencyException if \p $path does not refer
+     *      to an article. 
+     */
+    public function getProductionStatus(tx_newspaper_SourcePath $path);
 }
 
 ?>
