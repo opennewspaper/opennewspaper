@@ -427,7 +427,7 @@ class tx_newspaper  {
 		if (count($tce->errorLog)){
 			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
 		}
-t3lib_div::devlog('deleteUsingCmdMap()', 'newsapper', 0, array('no rows' => $GLOBALS['TYPO3_DB']->sql_affected_rows()));
+//t3lib_div::devlog('deleteUsingCmdMap()', 'newspaper', 0, array('number rows' => $GLOBALS['TYPO3_DB']->sql_affected_rows()));
 		return $GLOBALS['TYPO3_DB']->sql_affected_rows(); 
 	}
 

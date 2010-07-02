@@ -138,7 +138,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 *
 	 * @return	void
 	 */
-	function moduleContent()	{
+	function moduleContent() {
 //t3lib_div::devlog('where', 'newspaper', 0, array('where' => $this->createWherePart()));
 
 		global $LANG;
@@ -270,7 +270,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		
 		
 		/// build url for switch visibility button
+		// \todo: check what's that '###ARTILCE_UID###' needed for?
 		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
+		
+		$smarty->assign('URL_PLAIN', tx_newspaper_UtilMod::convertPost2Querystring());
 
 		// check if article is locked, add be_user to array and add workflow log
 		$locked_article = array();
@@ -421,6 +424,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				break;
 			}
 			unset($_POST[$this->prefixId]); // remove controller from query string
+			unset($_POST['article_uid']);
 			return; // don't check visibility if controller was set
 		}
 		

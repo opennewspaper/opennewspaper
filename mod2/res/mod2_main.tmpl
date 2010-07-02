@@ -278,7 +278,7 @@ function showArticlePreview(article_uid) {
 
 function deleteArticle(article_uid) {
   if (confirm("{/literal}{$ARTICLE_DELETE_MESSAGE}{literal}")) {
-  	self.location.href = 'index.php?tx_newspaper_mod2[controller]=delete&article_uid=' + article_uid;
+  	self.location.href = 'index.php?{/literal}{$URL_PLAIN}{literal}&tx_newspaper_mod2[controller]=delete&article_uid=' + article_uid;
   }
 }
 
