@@ -483,8 +483,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	}
 
 	/// Create an article of requested type, perform the import, set necessary attributes and store the article
-	/** Put this way, this function violates the "do one thing" rule so clearly... anyway, still
-	 *  better than leaving it in import_article(). 
+	/** This function violates the "do one thing" rule clearly... anyway, still
+	 *  better than leaving everything in import_article(). 
 	 * 
 	 * @param $type    the selected article type.
 	 * @param $section section the article belogs to - needed for the default extras.
@@ -495,8 +495,8 @@ t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
 	                                        tx_newspaper_Source $source, 
 	                                        tx_newspaper_SourcePath $path) {
 	                                   
-        $new_article = $section->createNewArticle($articletype);
-        $new_article->setAttribute('articletype_id', $articletype->getUid());
+        $new_article = $section->createNewArticle($type);
+        $new_article->setAttribute('articletype_id', $type->getUid());
 
         $source->readArticle($new_article, $path);
         
