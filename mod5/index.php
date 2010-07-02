@@ -410,28 +410,38 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	function browse_path(array $input) {
-t3lib_div::devlog('browse_path', 'newspaper', 0, array('input' => $input));
+
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
 		
-		$width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 430; // 430px is default
+		$menu = $this->makeBrowseMenu($source_id, $path, $source);
 		
-		$ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
- 		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
-		$ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
-				$path . '</option>' . "<br />\n";
-		
-		foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
-			if ($entry->isText()) {
-				$ret .= $this->makeArticleMenuEntry($source_id, $source, $entry);
-			} else {
-				$ret .= $this->makeFolderMenuEntry($source_id, $entry);
-			}  
-		}
-		$ret .= '</select>' . "<br />\n";
-		
-		die($ret);
+		die($menu);
+	}
+	
+	private function makeBrowseMenu($source_id, $path, tx_newspaper_Source $source) {
+        $width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 430; // 430px is default
+        
+        $ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
+        $ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
+        $ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
+                $path . '</option>' . "<br />\n";
+        
+        foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
+            $ret .= $this->makeMenuEntry($source_id, $source, $entry);
+        }
+        $ret .= '</select>' . "<br />\n";
+        
+        return $ret;
+	}
+	
+	private function makeMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
+        if ($entry->isText()) {
+            return $this->makeArticleMenuEntry($source_id, $source, $entry);
+        } else {
+            return $this->makeFolderMenuEntry($source_id, $entry);
+        }  
 	}
 	
 	private function makeArticleMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
