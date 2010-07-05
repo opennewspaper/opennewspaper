@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_util_mod.php
  *
- *  \author Oliver Schr�der <newspaper@schroederbros.de>
+ *  \author Oliver Schröder <newspaper@schroederbros.de>
  *  \date Mar 21, 2009
  */
 
