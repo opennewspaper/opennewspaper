@@ -33,6 +33,7 @@ function insertElement(uid, kicker, title, element, doClose) {
     var selectBox = parent.window.opener.$('#' + element);
     selectBox.addOptionAboveSelected(uid, kicker, title);
     if(doClose) parent.close();
+    return false;
 }
 
 
