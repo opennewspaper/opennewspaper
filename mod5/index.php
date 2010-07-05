@@ -421,15 +421,12 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	private function makeBrowseMenu($source_id, $path, tx_newspaper_Source $source) {
-        
-		global $LANG;
-		
+        		
 		$width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 430; // 430px is default
         
         $ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
-        $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'\')"' . '>Top</option>' . "<br />\n";
-        $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'' . $path . '\')"' . '>' . 
-                $LANG->getLL('label_reload') . ' ' . $path . '</option>' . "<br />\n";
+        
+        $ret .= $this->makeMenuHeader($source_id, $path);
         
         foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
             $ret .= $this->makeMenuEntry($source_id, $source, $entry);
@@ -438,6 +435,18 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         
         return $ret;
 	}
+	
+	private function makeMenuHeader($source_id, $path) {
+        
+		global $LANG;
+		
+        $ret = '<option onclick="changeSource(\'' . $source_id . '\',\'\')"' . '>Top</option>' . "<br />\n";
+        $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'' . $path . '\')"' . '>' .
+                ($path? $LANG->getLL('label_reload'): '') . ' ' . 
+                $path . '</option>' . "<br />\n";
+                
+        return $ret;
+	} 
 	
 	private function makeMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
         if ($entry->isText()) {
