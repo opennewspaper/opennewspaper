@@ -424,8 +424,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         $width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 430; // 430px is default
         
         $ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
-        $ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'\')' . '>Top</option>' . "<br />\n";
-        $ret .= '<option onclick=changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')' . '>' . 
+        $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'\')"' . '>Top</option>' . "<br />\n";
+        $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'' . 'Reload ' . $path . '\')"' . '>' . 
                 $path . '</option>' . "<br />\n";
         
         foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
