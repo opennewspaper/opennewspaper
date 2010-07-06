@@ -170,15 +170,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $this->getUid();		
 	}
 	
-	/// Delete article
-	/// Set deleted flag, all references to the article remain untouched
-	public function delete() {
-		if (!$this->getUid()) {
-			return; // no uid, so no article to be deleted ...
-		}
-		tx_newspaper::deleteUsingCmdMap($this->getTable(), array($this->getUid()));
-	}
-	
 
 	public function getUid() { 
 		if (!intval($this->uid)) $this->uid = $this->attributes['uid'];
