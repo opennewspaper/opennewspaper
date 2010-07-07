@@ -149,6 +149,7 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.articles">Articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.num_articles">Maximum number of articles to manage</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sections">Sections From which articles are included</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.subsequent_sections">Include subsequent section</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_tags_include">Tags to include</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_tags_exclude">Tags to exclude</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_articlelist_exclude">Article list whose articles are excluded</label>
@@ -204,6 +205,8 @@
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tx_newspaper_tag_type">Tag type</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
+			<label index="tx_newspaper_extra_ad">Extra: Ad</label>
+			<label index="tx_newspaper_extra_ad.todo">To do: find abetter solution ;-)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -353,6 +356,7 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.articles">Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.num_articles">Maximale Anzahl verwalteter Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sections">Ressorts, deren Artikel enthalten sind</label>
+			<label index="tx_newspaper_articlelist_semiautomatic.subsequent_sections">Unterressorts einbinden</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_tags_include">Eingeschlossene Tags</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_tags_exclude">Ausgeschlossene Tags</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_articlelist_exclude">Artikelliste, deren Artikel ausgeschlossen sind</label>
@@ -408,6 +412,8 @@
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tx_newspaper_tag_type">Tagtyp</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
+			<label index="tx_newspaper_extra_ad">Extra: Werbung</label>
+			<label index="tx_newspaper_extra_ad.todo">To do: bessere Lösung finden ;-)</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

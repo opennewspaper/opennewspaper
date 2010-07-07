@@ -2067,7 +2067,7 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 	"ctrl" => $TCA["tx_newspaper_articlelist_semiautomatic"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "articles,num_articles,filter_sections,filter_tags_include,filter_tags_exclude,filter_articlelist_exclude,filter_sql_table,filter_sql_where,filter_sql_order_by"
+		"showRecordFieldList" => "articles,num_articles,filter_sections,subsequent_sections,filter_tags_include,filter_tags_exclude,filter_articlelist_exclude,filter_sql_table,filter_sql_where,filter_sql_order_by"
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_semiautomatic"]["feInterface"],
 	"columns" => array (
@@ -2110,6 +2110,13 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
+			)
+		),
+		"subsequent_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.subsequent_sections",		
+			"config" => Array (
+				"type" => "check",
 			)
 		),
 		"filter_tags_include" => Array (		
@@ -2176,7 +2183,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "articles;;;;1-1-1, num_articles, filter_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by")
+		"0" => array("showitem" => "articles;;;;1-1-1, num_articles, filter_sections, subsequent_sections, filter_tags_include, filter_tags_exclude, filter_articlelist_exclude, filter_sql_table, filter_sql_where, filter_sql_order_by")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3058,6 +3065,67 @@ $TCA["tx_newspaper_tag_type"] = array (
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
+	)
+);
+
+
+
+$TCA["tx_newspaper_extra_ad"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_ad"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,starttime,endtime,todo"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_ad"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'starttime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'default'  => '0',
+				'checkbox' => '0'
+			)
+		),
+		'endtime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0',
+				'range'    => array (
+					'upper' => mktime(0, 0, 0, 12, 31, 2020),
+					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
+				)
+			)
+		),
+		"todo" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.todo",		
+			"config" => Array (
+				"type" => "check",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, todo")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "starttime, endtime")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');

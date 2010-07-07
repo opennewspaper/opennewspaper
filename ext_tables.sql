@@ -626,6 +626,7 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic (
 	articles int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	filter_sections blob NOT NULL,
+	subsequent_sections tinyint(3) DEFAULT '0' NOT NULL,
 	filter_tags_include blob NOT NULL,
 	filter_tags_exclude blob NOT NULL,
 	filter_articlelist_exclude blob NOT NULL,
@@ -875,6 +876,27 @@ CREATE TABLE tx_newspaper_tag_type (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_extra_ad'
+#
+CREATE TABLE tx_newspaper_extra_ad (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	starttime int(11) DEFAULT '0' NOT NULL,
+	endtime int(11) DEFAULT '0' NOT NULL,
+	todo tinyint(3) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
