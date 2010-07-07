@@ -1,4 +1,4 @@
-{* debug *} 
+{* debug *}
 {literal}
 <style type="text/css">
 table {
@@ -29,21 +29,72 @@ td {
 
 <script language="javascript">
 
-function insertElement(uid, kicker, title, element, doClose) {    
-    var selectBox = parent.window.opener.$('#' + element);
-    selectBox.addOptionAboveSelected(uid, kicker, title);
-    if(doClose) parent.close();
-    return false;
+	var path = window.location.pathname;
+	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+
+
+
+/// extracted from typo3/class.browse_links.php
+/// in order to get the article and articlelist browser working like the typo3 EB
+
+var BrowseLinks = {
+	elements: {},
+	addElements: function(elements) {
+		BrowseLinks.elements = $H(BrowseLinks.elements).merge(elements).toObject();
+	},
+	focusOpenerAndClose: function(close) {
+		if (close) {
+			parent.window.opener.focus();
+			parent.close();
+		}
+	}
 }
 
+
+function $H(object) {
+  return new Hash(object);
+};
+
+// new params: form_table, form_field, form_uid
+function insertElement(table, uid, type, filename, fp, filetype, imagefile, action, close, form_table, form_field, form_uid) {
+  var performAction = true;
+  // Call performing function and finish this action:
+  if (performAction) {
+    addElement(filename, table+"_"+uid, fp, close, table, uid, form_table, form_field, form_uid);
+  }
+}
+
+// new params: table, uid, form_table, form_field, form_uid
+function addElement(elName, elValue, altElValue, close, table, uid, form_table, form_field, form_uid) {
+//alert("data[" + table + "][" + uid + "][" + form_field + "]" + ", form_field: " + form_field);
+  if (parent.window.opener && parent.window.opener.setFormValueFromBrowseWin) {
+    parent.window.opener.setFormValueFromBrowseWin("data[" + form_table + "][" + form_uid + "][" + form_field + "]", altElValue? altElValue : elValue, elName);
+    focusOpenerAndClose(close);
+  } else {
+    alert("Error - reference to main window is not set properly!");
+    parent.close();
+  }
+}
+
+function focusOpenerAndClose(close)	{
+  BrowseLinks.focusOpenerAndClose(close);
+}
+
+/// \todo: based from mod7, how to merge into 1 js file?
+function showArticlePreview(article_uid) {
+	window.open(
+		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid, 
+		"preview", 
+		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
+	);
+}
 
 </script>
 {/literal}
 
-{* add once only for all comments *}
-{* \todo: fix js, so workflow log is working 
-{$workflowlog_javascript}  
-*}
+
+{$workflowlog_javascript} {* add once only for all comments *}
+
 
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
@@ -83,9 +134,9 @@ function insertElement(uid, kicker, title, element, doClose) {
 <br />
 
 {$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author}" /> 
-
+{* \todo: add section filter
 {$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" />
-
+*}
 {$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 
 {$STEP_LABEL}: <select name="step" onchange="this.form.submit()">
@@ -164,9 +215,8 @@ function insertElement(uid, kicker, title, element, doClose) {
 		<td> 
 			<div title="{$DATA[i].teaser}">
 {if $IS_ARTICLE_BROWSER}
-	<a onclick="return insertElement('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', false);" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
-	<a onclick="return insertElement('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', true);" href="#">
-
+	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
+	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
 {/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
 {if !$IS_ARTICLE_BROWSER}
@@ -178,7 +228,7 @@ function insertElement(uid, kicker, title, element, doClose) {
 {if !$IS_ARTICLE_BROWSER}
 		<td> {$DATA[i].be_user} </td>
 {/if}
-		<td> {if $DATA[i].tstamp}{$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"}{/if} </td>
+		<td> {$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"} </td>
 		<td align="center">
 {if !$IS_ARTICLE_BROWSER}
   {* moderation list, so link visibile icon with hide/unhide functionality *}
@@ -222,11 +272,7 @@ function insertElement(uid, kicker, title, element, doClose) {
 	<tr class="bg2">
 {/if}
 		<td colspan="2"></td>
-		<td colspan="7">
-{* \todo: fix js, so workflow log is working		
-{$DATA[i].workflowlog}
-*}
-		</td>
+		<td colspan="7">{$DATA[i].workflowlog}</td>
 	</tr>
 {/section}
 </table>
