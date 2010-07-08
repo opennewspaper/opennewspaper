@@ -70,13 +70,13 @@ replace "tca.php" \
 
 svn ci -m "auto-fixed changes from kickstarter"
 
-for addon in ../newspaper_?*; do 
-	if [ -x ${addon}/util/replace.sh ]; then
-		cd ${addon}
-		./util/replace.sh
-		cd ../newspaper
-	fi
-done
+#for addon in ../newspaper_?*; do 
+#	if [ -x ${addon}/util/replace.sh ]; then
+#		cd ${addon}
+#		./util/replace.sh
+#		cd ../newspaper
+#	fi
+#done
 
 echo "###"
 echo "###"
