@@ -98,8 +98,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
-			t3lib_div::devlog('main', 'mod5', 0, $input);
-//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
+
+			//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
@@ -477,23 +477,11 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
-        t3lib_div::devlog('load_article', 'newspaper', 0, 
-            array(
-                '$input' => $input,
-                '$source_id' => $source_id,
-                '$path' => $path,
-                '$source' => $source                
-            )
-        );
+
 		$article = new tx_newspaper_Article();
 		$source->readFields($article, 
 							array('title', 'teaser', 'text'), 
 							new tx_newspaper_SourcePath($path));
-        t3lib_div::devlog('load_article 2', 'newspaper', 0, 
-            array(
-                '$article' => $article,
-            )
-        );
 							
 		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
@@ -511,16 +499,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$section = new tx_newspaper_Section(intval($input['section']));
 		$articletype = new tx_newspaper_ArticleType(intval($input['articletype']));
-
-        t3lib_div::devlog('import_article', 'newspaper', 0, 
-            array(
-                '$input' => $input,
-                '$section' => $section,
-                '$articletype' => $articletype,
-                '$source_id' => $input['source_id'],
-                '$path' => $input['source_path'],
-            )
-        );
 		
         $source = tx_newspaper::getRegisteredSource($input['source_id']);
 		$path = new tx_newspaper_SourcePath($input['source_path']);
