@@ -98,6 +98,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
+			t3lib_div::devlog('main', 'mod5', 0, $input);
 //t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
@@ -411,6 +412,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	
 	function browse_path(array $input) {
 
+            t3lib_div::devlog('browse_path', 'mod5', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
@@ -466,12 +468,13 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	
 	private function makeFolderMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
 		return '<option title="' . utf8_encode($entry->getTitle()) . 
-                     '" onclick=changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+                     '" onclick="changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' . 
                    utf8_encode($entry->getTitle()) . 
                '</option>' . "\n";
 	}
 	
 	function load_article(array $input) {
+            t3lib_div::devlog('load_article', 'mod5', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
