@@ -458,9 +458,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	
 	private function makeArticleMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
         return '<option title="' . utf8_encode($entry->getTitle()) . 
-                     '" onclick=loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')' . '>' . 
+                     '" onclick="loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' . 
                     utf8_encode($entry->getTitle()) .
-                    '     <strong>[' . $source->getProductionStatus($entry) . ']</strong>' . 
+                    ' [' . $source->getProductionStatus($entry) . ']' . 
                 '</option>' . "\n";
 	}
 	
