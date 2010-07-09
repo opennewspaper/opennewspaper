@@ -507,18 +507,19 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$section = new tx_newspaper_Section(intval($input['section']));
 		$articletype = new tx_newspaper_ArticleType(intval($input['articletype']));
 
-		$source = tx_newspaper::getRegisteredSource($input['source_id']);
+        t3lib_div::devlog('import_article', 'newspaper', 0, 
+            array(
+                '$input' => $input,
+                '$section' => $section,
+                '$articletype' => $articletype,
+                '$source_id' => $input['source_id'],
+                '$path' => $input['source_path'],
+            )
+        );
+		
+        $source = tx_newspaper::getRegisteredSource($input['source_id']);
 		$path = new tx_newspaper_SourcePath($input['source_path']);
 		
-		t3lib_div::devlog('import_article', 'newspaper', 0, 
-			array(
-				'$input' => $input,
-				'$section' => $section,
-				'$articletype' => $articletype,
-				'$source_id' => $input['source_id'],
-				'$path' => $input['source_path'],
-			)
-		);
 		
 		$new_article = $this->createAndImportArticle($articletype, $section, $source, $path);
 
