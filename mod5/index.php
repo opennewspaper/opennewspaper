@@ -492,6 +492,11 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
+        t3lib_div::devlog('load_article', 'newspaper', 0, 
+            array(
+                '$$article' => $article,
+            )
+        );
 		
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
