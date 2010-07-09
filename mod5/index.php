@@ -474,10 +474,18 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	function load_article(array $input) {
-            t3lib_div::devlog('load_article', 'mod5', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
+        t3lib_div::devlog('load_article', 'newspaper', 0, 
+            array(
+                '$input' => $input,
+                '$section' => $section,
+                '$articletype' => $articletype,
+                '$source_id' => $input['source_id'],
+                '$path' => $input['source_path'],
+            )
+        );
 		$article = new tx_newspaper_Article();
 		$source->readFields($article, 
 							array('title', 'teaser', 'text'), 
