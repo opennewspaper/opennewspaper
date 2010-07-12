@@ -956,7 +956,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	    	$row = tx_newspaper::selectZeroOrOneRows(
 	    	    'uid_local', self::article_related_table, 
 	    	    'uid_foreign = ' . $this->getUid() . ' AND uid_local = ' . $related_article->getUid());
-            t3lib_div::devlog('ensureRelatedArticlesAreBidirectional', 'newspaer', 0, tx_newspaper::$query);
+            t3lib_div::devlog('ensureRelatedArticlesAreBidirectional', 'newspaer', 0, array(tx_newspaper::$query, $row));
 	    	if ($row) continue;
 	    	
 	    	$relation_to_write = array(
