@@ -935,12 +935,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         $related_articles = array();
             
         foreach ($rows as $row) {
-            if (intval($row['uid_local']) == $current_article->getUid()) {
-                if (intval($row['uid_foreign']) != $current_article->getUid()) {
+            if (intval($row['uid_local']) == $this->getUid()) {
+                if (intval($row['uid_foreign']) != $this->getUid()) {
                     $related_articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
                 }
-            } else if ($row['uid_foreign'] == $current_article->getUid()) {
-                if (intval($row['uid_local']) != $current_article->getUid()) {
+            } else if ($row['uid_foreign'] == $this->getUid()) {
+                if (intval($row['uid_local']) != $this->getUid()) {
                     $related_articles[] = new tx_newspaper_Article(intval($row['uid_local']));
                 }
             }
