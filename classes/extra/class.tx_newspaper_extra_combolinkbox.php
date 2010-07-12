@@ -47,59 +47,20 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 
 		if ($this->getAttribute('show_related_articles') &&
 			intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
-			$current_article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
-
-			$rows = tx_newspaper::selectRows(
-				tx_newspaper_Article::article_related_table . '.uid_local, ' . tx_newspaper_Article::article_related_table .'.uid_foreign',
-				tx_newspaper_Article::article_related_table .
-					' JOIN ' . self::article_table . ' AS a_local' .
-					' ON ' . tx_newspaper_Article::article_related_table . '.uid_local = a_local.uid' .
-					' JOIN ' . self::article_table . ' AS a_foreign' .
-					' ON ' . tx_newspaper_Article::article_related_table . '.uid_foreign= a_foreign.uid',
-				'(uid_local = ' . $current_article->getUid() .
-					' OR uid_foreign = ' . $current_article->getUid() . ')' .
-					' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
-			);
-
-			$articles = array();
 			
-			foreach ($rows as $row) {
-				if (intval($row['uid_local']) == $current_article->getUid()) {
-					if (intval($row['uid_foreign']) != $current_article->getUid()) {
-						$articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
-					}
-				} else if ($row['uid_foreign'] == $current_article->getUid()) {
-					if (intval($row['uid_local']) != $current_article->getUid()) {
-						$articles[] = new tx_newspaper_Article(intval($row['uid_local']));
-					}
-				}
-			}
-			
-			$this->smarty->assign('related_articles', $articles);
+			$this->smarty->assign('related_articles', $this->getRelatedArticles());
 		}
 	
 		if ($this->getAttribute('manually_selected_articles')) {
-			$articles = array();
-			foreach (explode(',', $this->getAttribute('manually_selected_articles')) as $article_uid) {
-				$articles[] = new tx_newspaper_Article(intval(trim($article_uid)));
-			}
-			$this->smarty->assign('manually_selected_articles', $articles);
+			$this->smarty->assign('manually_selected_articles', $this->getManuallySelectedArticles());
 		}
 		
 		if ($this->getAttribute('internal_links')) {
-			$links = array();
-			foreach (explode(',', trim($this->getAttribute('internal_links'))) as $link_uid) {
-				$links[] = new tx_newspaper_ExternalLink(intval(trim($link_uid)));
-			}
-			$this->smarty->assign('internal_links', $links);
+			$this->smarty->assign('internal_links', $this->getInternalLinks());
 		}
 
 		if ($this->getAttribute('external_links')) {
-			$links = array();
-			foreach (explode(',', trim($this->getAttribute('external_links'))) as $link_uid) {
-				$links[] = new tx_newspaper_ExternalLink(intval(trim($link_uid)));
-			}
-			$this->smarty->assign('external_links', $links);
+			$this->smarty->assign('external_links', $this->getExternalLinks());
 		}
 
 		return $this->smarty->fetch($this);
@@ -117,7 +78,63 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return true; }
 	
 	////////////////////////////////////////////////////////////////////////////
-		
+	
+	private function getRelatedArticles() {
+        $current_article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
+
+        $rows = tx_newspaper::selectRows(
+            tx_newspaper_Article::article_related_table . '.uid_local, ' . tx_newspaper_Article::article_related_table .'.uid_foreign',
+            tx_newspaper_Article::article_related_table .
+                ' JOIN ' . self::article_table . ' AS a_local' .
+                ' ON ' . tx_newspaper_Article::article_related_table . '.uid_local = a_local.uid' .
+                ' JOIN ' . self::article_table . ' AS a_foreign' .
+                ' ON ' . tx_newspaper_Article::article_related_table . '.uid_foreign= a_foreign.uid',
+            '(uid_local = ' . $current_article->getUid() .
+                ' OR uid_foreign = ' . $current_article->getUid() . ')' .
+                ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
+        );
+
+        $articles = array();
+            
+        foreach ($rows as $row) {
+            if (intval($row['uid_local']) == $current_article->getUid()) {
+                if (intval($row['uid_foreign']) != $current_article->getUid()) {
+                    $articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
+                }
+            } else if ($row['uid_foreign'] == $current_article->getUid()) {
+                if (intval($row['uid_local']) != $current_article->getUid()) {
+                    $articles[] = new tx_newspaper_Article(intval($row['uid_local']));
+                }
+            }
+        }
+        
+        return array_unique($articles);
+	}
+	
+	private function getManuallySelectedArticles() {
+        $articles = array();
+        foreach (explode(',', $this->getAttribute('manually_selected_articles')) as $article_uid) {
+            $articles[] = new tx_newspaper_Article(intval(trim($article_uid)));
+        }
+        return $articles;
+	}
+
+    private function getInternalLinks() {
+        return self::getLinks($this->getAttribute('internal_links'));
+    }
+
+    private function getExternalLinks() {
+    	return self::getLinks($this->getAttribute('external_links'));
+    }
+    
+    private static function getLinks($links_csv) {
+        $links = array();
+        foreach (explode(',', trim($links_csv)) as $link_uid) {
+            $links[] = new tx_newspaper_ExternalLink(intval(trim($link_uid)));
+        }
+        return $links;
+    }
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_ComboLinkBox());
