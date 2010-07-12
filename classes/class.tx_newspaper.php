@@ -281,6 +281,8 @@ class tx_newspaper  {
 	 */
 	public static function insertRows($table, array $row) {
 
+		if (!$row) return;
+		
 		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
 		global $TCA;
