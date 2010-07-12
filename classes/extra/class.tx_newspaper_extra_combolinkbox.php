@@ -80,35 +80,9 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	////////////////////////////////////////////////////////////////////////////
 	
 	private function getRelatedArticles() {
-        $current_article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
+        $current_article = new tx_newspaper_Article(t3lib_div::_GP(tx_newspaper::GET_article()));
 
-        $rows = tx_newspaper::selectRows(
-            tx_newspaper_Article::article_related_table . '.uid_local, ' . tx_newspaper_Article::article_related_table .'.uid_foreign',
-            tx_newspaper_Article::article_related_table .
-                ' JOIN ' . self::article_table . ' AS a_local' .
-                ' ON ' . tx_newspaper_Article::article_related_table . '.uid_local = a_local.uid' .
-                ' JOIN ' . self::article_table . ' AS a_foreign' .
-                ' ON ' . tx_newspaper_Article::article_related_table . '.uid_foreign= a_foreign.uid',
-            '(uid_local = ' . $current_article->getUid() .
-                ' OR uid_foreign = ' . $current_article->getUid() . ')' .
-                ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
-        );
-
-        $articles = array();
-            
-        foreach ($rows as $row) {
-            if (intval($row['uid_local']) == $current_article->getUid()) {
-                if (intval($row['uid_foreign']) != $current_article->getUid()) {
-                    $articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
-                }
-            } else if ($row['uid_foreign'] == $current_article->getUid()) {
-                if (intval($row['uid_local']) != $current_article->getUid()) {
-                    $articles[] = new tx_newspaper_Article(intval($row['uid_local']));
-                }
-            }
-        }
-        
-        return array_unique($articles);
+        return $current_article->getRelatedArticles();
 	}
 	
 	private function getManuallySelectedArticles() {

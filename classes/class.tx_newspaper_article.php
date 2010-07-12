@@ -916,7 +916,56 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		return $tags;
     }
 
-	
+    public function getRelatedArticles() {
+
+        $rows = tx_newspaper::selectRows(
+            self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
+            self::article_related_table .
+                ' JOIN ' . $this->getTable() . ' AS a_local' .
+                ' ON ' . self::article_related_table . '.uid_local = a_local.uid' .
+                ' JOIN ' . $this->getTable() . ' AS a_foreign' .
+                ' ON ' . self::article_related_table . '.uid_foreign= a_foreign.uid',
+            '(uid_local = ' . $this->getUid() .
+                ' OR uid_foreign = ' . $this->getUid() . ')' .
+                ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
+        );
+
+        $related_articles = array();
+            
+        foreach ($rows as $row) {
+            if (intval($row['uid_local']) == $current_article->getUid()) {
+                if (intval($row['uid_foreign']) != $current_article->getUid()) {
+                    $related_articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
+                }
+            } else if ($row['uid_foreign'] == $current_article->getUid()) {
+                if (intval($row['uid_local']) != $current_article->getUid()) {
+                    $related_articles[] = new tx_newspaper_Article(intval($row['uid_local']));
+                }
+            }
+        }
+        
+        return array_unique($articles);
+    }
+
+    /// Make sure that an article related to \c $this has also \c $this as relation. 
+    private function ensureRelatedArticlesAreBidirectional() {
+    	
+    	$relations_to_write = array();
+    	
+    	foreach ($this->getRelatedArticles() as $related_article) {
+	    	$row = tx_newspaper::selectZeroOrOneRows(
+	    	    'uid_local', self::article_related_table, 
+	    	    'uid_foreign = ' . $this->getUid() . ' AND uid_local = ' . $related_article->getUid());
+	    	if ($row) continue;
+	    	
+	    	$relations_to_write[] = array(
+	    	    'uid_local' => $related_article->getUid(),
+	    	    'uid_foreign' => $this->getUid()
+	    	);
+    	}
+    	
+    	tx_newspaper::insertRows(self::article_related_table, $relations_to_write);
+    }
 	
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -931,6 +980,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
+		self::makeRelatedArticlesBidirectional($id);
 	}
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
@@ -968,6 +1018,21 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         }
     }
 
+    /// Make sure that an article related to \c $article_uid has also \c $article_uid as relation. 
+    private static function makeRelatedArticlesBidirectional($article_uid) {
+    	if (!intval($article_uid)) return;
+        $article = new tx_newspaper_Article(intval($article_uid));
+
+        try {
+        	$article->getAttribute('uid');
+        } catch (tx_newspaper_Exception $e) {
+        	return;
+        }
+        
+        $article->ensureRelatedArticlesAreBidirectional();
+        
+    }
+    
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
 //t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));            
