@@ -203,6 +203,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
         $this->cleanupOffsets($old_order);
         
+        return $old_order;
 	}
 	
 	private static function checkArticleOffsetValidity($article_offset) {
@@ -253,7 +254,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         unset($old_order[$index]);
     }
     
-	private function cleanupOffsets(array $old_order) {
+	private function cleanupOffsets(array &$old_order) {
 		
 	}
 	
