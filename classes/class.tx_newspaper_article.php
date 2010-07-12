@@ -963,8 +963,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	    	    'uid_foreign' => $this->getUid()
 	    	);
     	}
-    	
-    	tx_newspaper::insertRows(self::article_related_table, $relations_to_write);
+    	t3lib_div:devlog('ensureRelatedArticlesAreBidirectional', 'newspaer', 0, $relations_to_write);
+   	    tx_newspaper::insertRows(self::article_related_table, $relations_to_write);
     }
 	
 	////////////////////////////////////////////////////////////////////////////
