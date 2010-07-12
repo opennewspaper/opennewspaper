@@ -188,7 +188,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	
 	public function resort(array $old_order, tx_newspaper_Articlelist_Operation $operation) {
 		try {
-			$index = self::indexOfArticle($operation->getUid(), array $old_order);
+			$index = self::indexOfArticle($operation->getUid(), $old_order);
 		} catch (tx_newspaper_Exception $e) {
 			return;
 		}
