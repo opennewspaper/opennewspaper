@@ -917,7 +917,6 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
 
     public function getRelatedArticles() {
-        t3lib_div::devlog('RelatedArticles()', 'newspaer', 0);
     	
         $rows = tx_newspaper::selectRows(
             self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
@@ -945,6 +944,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 }
             }
         }
+
+        t3lib_div::devlog('RelatedArticles()', 'newspaer', 0, $related_articles);
         
         return array_unique($related_articles);
     }
