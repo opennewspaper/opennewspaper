@@ -100,7 +100,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		if ($this->extras) {
             $string .= 'extras: ' . print_r($this->extras, 1) . "\n";
-			
 		}
 		return $string;
 	}
@@ -958,7 +957,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
     /// Make sure that an article related to \c $this has also \c $this as relation. 
     private function ensureRelatedArticlesAreBidirectional() {
-    	        
+        t3lib_div::devlog('ensureRelatedArticlesAreBidirectional: related articles ', 'newspaer', 0, $this->getRelatedArticles());
+    	  
     	foreach ($this->getRelatedArticles() as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
 	    	    'uid_local', self::article_related_table, 
