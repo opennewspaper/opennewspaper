@@ -31,6 +31,60 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist.php');
 
+/// Operation which changes an article's place in a list
+class tx_newspaper_Articlelist_Operation {
+    
+	/** \param $uid The article's UID.
+	 *  \param $operation This can either be an integer, describing how much the
+	 *         article should be sorted up or down, or the keywords 'top' or
+	 *         'bottom', to sort the article to the top or bottom of the list. 
+	 */
+	public function __construct($uid, $operation) {
+		self::checkUIDValid($uid);
+    	$this->article_uid = $uid;
+    	
+    	self::checkOperationValid($operation);
+    	$this->operation = $operation;
+    }
+    
+    public function getUid() { return $this->uid; }
+    
+    public function isToTop() { return self::isTopString($this->operation); }
+    public function isToBottom() { return self::isBottomString($this->operation); }
+    public function shuffleValue() { return intval($this->operation); }
+    
+    private static function checkUIDValid($uid) {
+        if (!intval($uid)) {
+            throw new tx_newspaper_IllegalUsageException('UID must be an integer value');
+        }
+    }
+    
+    private static function checkOperationValid($operation) {
+        if (intval($operation)) return;
+        if (self::isTopString($operation)) return;
+        if (self::isBottomString($operation)) return;
+                
+        throw new tx_newspaper_IllegalUsageException(
+            'Operation must be either an integer value or one of the strings "' .
+            self::TOP_STRING . '" or "' . self::BOTTOM_STRING .'"'
+        );
+    }
+    
+    private static function isTopString($operation) {
+    	return (stripos($operation, self::TOP_STRING) === 0);
+    }
+    
+    private static function isBottomString($operation) {
+    	return (stripos($operation, self::BOTTOM_STRING) === 0);
+    }
+    
+    private $article_uid;
+    private $operation;
+    
+    const TOP_STRING = 'top';
+    const BOTTOM_STRING = 'bottom';
+}
+
 /// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
 /** The Articles contained in the list are automatically determined by the
  *  filter attributes. If the user doesn't interact, these Articles are
@@ -108,19 +162,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 
-	function assembleFromUIDs(array $uids) {
+	public function assembleFromUIDs(array $uids) {
 
 		$this->clearList();
 
 		foreach ($uids as $uid) {
 						
-			if (!is_array($uid) || sizeof($uid) < 2) {
-				throw new tx_newspaper_InconsistencyException(
-					'Semiautomatic article list needs UID array to have members
-					 of the form: array(uid, offset), but no array was given: ' .
-					 print_r($uid)
-				);
-			}
+            self::checkArticleOffsetValidity($uid);
 
 			$offset = intval($uid[1]);
 			if ($offset == 0) continue;
@@ -135,6 +183,77 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 
 		$this->callSaveHooks();
+		
+	}
+	
+	public function resort(array $old_order, tx_newspaper_Articlelist_Operation $operation) {
+		try {
+			$index = self::indexOfArticle($operation->getUid(), array $old_order);
+		} catch (tx_newspaper_Exception $e) {
+			return;
+		}
+
+		if ($operation->shuffleValue()) {
+           	self::resortArticle($index, $operation->shuffleValue(), $old_order);
+        } else if ($operation->isToTop()) {
+           	self::sortArticleToTop($index, $old_order);
+        } else if ($operation->isToBottom()) {
+           	self::dropArticle($index, $old_order);
+        }
+
+        $this->cleanupOffsets($old_order);
+        
+	}
+	
+	private static function checkArticleOffsetValidity($article_offset) {
+        if (!is_array($article_offset) || sizeof($article_offset) < 2) {
+            throw new tx_newspaper_InconsistencyException(
+                'Semiautomatic article list needs UID array to have members
+                 of the form: array(uid, offset), but no array was given: ' .
+                 print_r($uid)
+            );
+        }
+	}
+	
+	private static function indexOfArticle($uid, array $old_order) {
+	    for ($i = 0; $i < sizeof($old_order); $i++) {
+            self::checkArticleOffsetValidity($old_order[$i]);
+
+            $current_uid = $old_order[$i][0];
+	    	if ($current_uid == $uid) return $i;
+	    }
+	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found');
+	}
+	
+	private static function resortArticle($index, $shuffle_value, array &$old_order) {
+		$entry = $old_order[$index];
+		if ($shuffle_value > 0) {
+			// sorting up
+		    for ($i = $index-$shuffle_value; $i < $index; $i++) { 
+		    	$old_order[$i+1] = $old_order[$i];
+		    }
+		    $old_order[$index-$shuffle_value] = $entry;
+		} else {
+			// sorting down
+            for ($i = $index; $i < $index-$shuffle_value; $i++) { 
+                $old_order[$i] = $old_order[$i+1];
+            }
+            $old_order[$index-$shuffle_value] = $entry;
+		}
+	}
+
+    private static function sortArticleToTop($index, array &$old_order) {
+        $entry = $old_order[$index];
+        $entry[1] += $index;
+        unset($old_order[$index]);
+        array_unshift($old_order, $entry);
+    }
+    
+    private static function dropArticle($index, array &$old_order) {
+        unset($old_order[$index]);
+    }
+    
+	private function cleanupOffsets(array $old_order) {
 		
 	}
 	
