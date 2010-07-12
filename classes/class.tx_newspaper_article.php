@@ -917,7 +917,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
 
     public function getRelatedArticles() {
-
+        t3lib_div::devlog('RelatedArticles()', 'newspaer', 0);
+    	
         $rows = tx_newspaper::selectRows(
             self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
             self::article_related_table .
@@ -929,7 +930,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
                 ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
         );
-
+        t3lib_div::devlog('RelatedArticles', 'newspaer', 0, array(tx_newspaper::$query, $rows));
+        
         $related_articles = array();
             
         foreach ($rows as $row) {
@@ -952,7 +954,6 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     	
     	$relations_to_write = array();
     	
-        t3lib_div::devlog('RelatedArticles', 'newspaer', 0, $this->getRelatedArticles());
         
     	foreach ($this->getRelatedArticles() as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
