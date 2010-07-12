@@ -934,7 +934,6 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
                 ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
         );
-        t3lib_div::devlog('RelatedArticles', 'newspaer', 0, array(tx_newspaper::$query, $rows));
         
         $related_articles = array();
             
@@ -949,21 +948,17 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 }
             }
         }
-
-        t3lib_div::devlog('RelatedArticles()', 'newspaer', 0, $related_articles);
         
         return array_unique($related_articles);
     }
 
     /// Make sure that an article related to \c $this has also \c $this as relation. 
     private function ensureRelatedArticlesAreBidirectional() {
-        t3lib_div::devlog('ensureRelatedArticlesAreBidirectional: related articles ', 'newspaer', 0, $this->getRelatedArticles());
     	  
     	foreach ($this->getRelatedArticles() as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
 	    	    'uid_local', self::article_related_table, 
 	    	    'uid_foreign = ' . $this->getUid() . ' AND uid_local = ' . $related_article->getUid());
-            t3lib_div::devlog('ensureRelatedArticlesAreBidirectional', 'newspaer', 0, array(tx_newspaper::$query, $row));
 	    	if ($row) continue;
 	    	
 	    	$relation_to_write = array(
