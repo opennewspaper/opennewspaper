@@ -944,7 +944,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
             }
         }
         
-        return array_unique($articles);
+        return array_unique($related_articles);
     }
 
     /// Make sure that an article related to \c $this has also \c $this as relation. 
