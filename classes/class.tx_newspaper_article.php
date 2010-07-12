@@ -952,6 +952,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     	
     	$relations_to_write = array();
     	
+        t3lib_div::devlog('RelatedArticles', 'newspaer', 0, $this->getRelatedArticles());
+        
     	foreach ($this->getRelatedArticles() as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
 	    	    'uid_local', self::article_related_table, 
