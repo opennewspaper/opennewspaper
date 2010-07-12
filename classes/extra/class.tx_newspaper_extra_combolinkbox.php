@@ -43,7 +43,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 		$this->getAttribute('uid');
-		t3lib_div::devlog('tx_newspaper_Extra_ComboLinkBox','newspaper',0, $this->attributes);
+		t3lib_div::devlog('tx_newspaper_Extra_ComboLinkBox','newspaper',0, $this);
 		$this->prepare_render($template_set);
 
 		if ($this->getAttribute('show_related_articles') &&
