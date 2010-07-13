@@ -939,7 +939,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' ON ' . self::article_related_table . '.uid_foreign= a_foreign.uid',
             '(uid_local = ' . $this->getUid() .
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
-                ' AND (a_foreign.hidden = 0 AND a_local.hidden = 0)'
+                ' AND (a_foreign.hidden = 0)'
         );
         
         $related_articles = array();
