@@ -122,13 +122,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	///	Offset behind top position with which an article counts as deleted.
 	const offset_deleted = 1000;
 	
-	/// default number for articles (if not set (properly) in article list record)
+	/// default number for articles (if not set (properly) in article list record).
 	const default_num_articles = 20;
 	
-	/// SQL table storing the relations between list and articles
+	/// SQL table storing the relations between list and articles.
 	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
 	
-	/// Construct a tx_newspaper_ArticleList_Semiautomatic
+	/// Whether articles from subsections should be recursively included in the list.
+	const include_articles_from_subsections = false;
+	
+	/// Construct a tx_newspaper_ArticleList_Semiautomatic.
 	/** This constructor is used to set the default section filter
 	 *  \param $uid UID of the record in the corresponding SQL table
 	 *  \param $section tx_newspaper_Section to which this ArticleList is
@@ -632,12 +635,14 @@ DESC';
 			$sections = array();
 			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
 				$sections[] = $section_uid;
-				//	add subsections to search clause
-				$section = new tx_newspaper_Section($section_uid);
-				$child_sections = $section->getChildSections(true);
-				if ($child_sections) {
-					foreach ($child_sections as $child_section) {
-						$sections[] = $child_section->getUid();
+				if (self::include_articles_from_subsections) {
+					//	add subsections to search clause
+					$section = new tx_newspaper_Section($section_uid);
+					$child_sections = $section->getChildSections(true);
+					if ($child_sections) {
+						foreach ($child_sections as $child_section) {
+							$sections[] = $child_section->getUid();
+						}
 					}
 				}
 			}
