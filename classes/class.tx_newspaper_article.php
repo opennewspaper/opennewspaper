@@ -334,6 +334,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 																   self::$mapFieldsToSourceFields);
 	}
 	
+	static public function addField($fieldname, $source_fieldname, tx_newspaper_Source $source) {
+        if (!in_array($fieldname, self::$attribute_list)) {
+			self::$attribute_list[] = $fieldname;
+			self::$mapFieldsToSourceFields[get_class($source)][$fieldname] = $source_fieldname;
+        }		
+	}
+	
 	static public function sourceTable(tx_newspaper_Source $source) {
 		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
