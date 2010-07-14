@@ -682,5 +682,29 @@ $.fn.addOptionAboveSelected = function() {
     }
 }
 
+$.fn.getSelectedOption = function() {
+    var selectId = this.attr("id");
+    var list = document.getElementById(selectId);
+    if(list.selectedIndex >= 0) {
+        return list.options[list.selectedIndex];
+    }
+
+    return false;
+}
+
+$.fn.getOptionValues = function() {
+    var values = [];
+
+    var selectId = this.attr("id");
+    var list = document.getElementById(selectId);
+
+    for(var i = 0 ; i < list.options.length; i++) {
+        values.push(list.options[i].value);
+    }
+
+    return values;
+
+}
+
 
 })(jQuery);

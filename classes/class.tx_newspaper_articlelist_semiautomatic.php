@@ -47,7 +47,22 @@ class tx_newspaper_Articlelist_Operation {
     	$this->operation = $operation;
     }
     
-    public function getUid() { return $this->uid; }
+    public function __toString() {
+    	$ret = 'Sort article ' . $this->getUid() . ' ';
+    	if ($this->shuffleValue()) {
+    		$ret .= abs($this->shuffleValue());
+    		if ($this->shuffleValue() > 0) {
+    			$ret .= ' up';
+    		} else {
+    			$ret .= ' down';
+    		}
+    	} else {
+    		$ret .= 'to ' . $this->operation;
+    	}
+    	return $ret;
+    }
+    
+    public function getUid() { return $this->article_uid; }
     
     public function isToTop() { return self::isTopString($this->operation); }
     public function isToBottom() { return self::isBottomString($this->operation); }
@@ -60,7 +75,12 @@ class tx_newspaper_Articlelist_Operation {
     }
     
     private static function checkOperationValid($operation) {
-        if (intval($operation)) return;
+        if (intval($operation)) {
+            if (abs($operation) != 1) {
+                throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
+            }
+            return;
+        }
         if (self::isTopString($operation)) return;
         if (self::isBottomString($operation)) return;
                 
@@ -118,7 +138,7 @@ class tx_newspaper_Articlelist_Operation {
  * 		function in the save hook (tx_newspaper_Typo3Hook), or both.
  */
 class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
-
+	
 	///	Offset behind top position with which an article counts as deleted.
 	const offset_deleted = 1000;
 	
@@ -147,7 +167,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	
-	
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
@@ -165,6 +184,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 
+	/// Makes a persistant article list from an array of UIDs with their respective offsets.
+	/** \param $uids \code array (
+	 *     array($article_uid, $article_offset),
+	 *     ...
+	 * ) \endcode
+	 */
 	public function assembleFromUIDs(array $uids) {
 
 		$this->clearList();
@@ -189,36 +214,51 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 	}
 	
+	/// Given a list of articles and an operation on one of those, returns a new ordered list.
+	/** This function, in contrast to \c assembleFromUIDs(), does not store the 
+	 *  article list. It is used from an AJAX conroller to resort the articles in
+	 *  the list in correct order.
+	 * 
+	 * \param $old_order Previous article list.
+	 * \param $operation Sorts an article up, down, to top or bottom.
+	 * \return The sorted article list after \p $operation has been applied.
+	 */
 	public function resort(array $old_order, tx_newspaper_Articlelist_Operation $operation) {
+		
 		try {
 			$index = self::indexOfArticle($operation->getUid(), $old_order);
 		} catch (tx_newspaper_Exception $e) {
+			// article not in list; do nothing.
 			return;
 		}
 
 		if ($operation->shuffleValue()) {
-           	self::resortArticle($index, $operation->shuffleValue(), $old_order);
+           	$this->resortArticle($index, $operation->shuffleValue(), $old_order);
         } else if ($operation->isToTop()) {
-           	self::sortArticleToTop($index, $old_order);
+           	$this->sortArticleToTop($index, $old_order);
         } else if ($operation->isToBottom()) {
-           	self::dropArticle($index, $old_order);
+           	$this->dropArticle($index, $old_order);
+        } else {
+        	throw new tx_newspaper_IllegalUsageException('WTF is that: ' . $operation);
         }
 
         $this->cleanupOffsets($old_order);
-        
+                
         return $old_order;
 	}
 	
+	/// Checks whether an array is a valid pair of article UID and offset.
 	private static function checkArticleOffsetValidity($article_offset) {
         if (!is_array($article_offset) || sizeof($article_offset) < 2) {
             throw new tx_newspaper_InconsistencyException(
                 'Semiautomatic article list needs UID array to have members
-                 of the form: array(uid, offset), but no array was given: ' .
-                 print_r($uid)
+                  of the form: array(uid, offset), but no array was given: ' .
+                 print_r($article_offset)
             );
         }
 	}
 	
+	/// Finds the position of article with UID \p $uid in the array \p $old_order.
 	private static function indexOfArticle($uid, array $old_order) {
 	    for ($i = 0; $i < sizeof($old_order); $i++) {
             self::checkArticleOffsetValidity($old_order[$i]);
@@ -229,39 +269,126 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found');
 	}
 	
-	private static function resortArticle($index, $shuffle_value, array &$old_order) {
-		$entry = $old_order[$index];
-		if ($shuffle_value > 0) {
-			// sorting up
-		    for ($i = $index-$shuffle_value; $i < $index; $i++) { 
-		    	$old_order[$i+1] = $old_order[$i];
-		    }
-		    $old_order[$index-$shuffle_value] = $entry;
-		} else {
-			// sorting down
-            for ($i = $index; $i < $index-$shuffle_value; $i++) { 
-                $old_order[$i] = $old_order[$i+1];
-            }
-            $old_order[$index-$shuffle_value] = $entry;
+	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
+	private function resortArticle($index, $shuffle_value, array &$old_order) {
+				
+        if (abs($shuffle_value) != 1) {
+			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
-	}
 
-    private static function sortArticleToTop($index, array &$old_order) {
+        $new_index = self::generateValidIndex($index-$shuffle_value);
+		$distance = $this->distance($old_order[$index], $old_order[$new_index]);
+		
+		// the offset is updated in any case
+        $old_order[$index][1] += $shuffle_value;
+
+        if ($new_index == $index) return;
+        
+        // only swap articles if they were really next to each other
+        if (abs($distance) <= 1) {
+            $temp = $old_order[$index];
+        	$old_order[$index] = $old_order[$new_index];	        
+	        $old_order[$new_index] = $temp;
+        }
+	}
+	
+	/// Makes sure an index does not point outside the array. 
+	private static function generateValidIndex($prospective_index) {
+		if ($prospective_index >= 0) return $prospective_index;
+		return 0;
+	}
+	
+	/// How far are article/offset combinations \p $entry1 and \p $entry2 really apart?
+	private function distance(array $entry1, array $entry2) {
+        
+		$this->getRawUids();
+		
+		$uid1 = $entry1[0]; $uid2 = $entry2[0];
+		$offset1 = $entry1[1]; $offset2 = $entry2[1];
+		
+        $raw_index1 = array_search($uid1, $this->raw_uids);
+        $raw_index2 = array_search($uid2, $this->raw_uids);
+        
+        $actual_index1 = $raw_index1-$offset1;
+        $actual_index2 = $raw_index2-$offset2;
+        
+        return $actual_index2 - $actual_index1;
+	}
+    
+	/// Ensures that the list's raw UIDs are stored in \c $this->raw_uids.
+    private function getRawUids() {
+        if (!$this->raw_uids) {
+          $this->raw_uids = $this->getRawArticleUIDs(100, 0);
+        }
+    }
+	
+	/// Moves article at position \p $index in array \p $old_order to the first position.
+	/** \todo Consider sticky articles at the (former) top of the list. */
+    private function sortArticleToTop($index, array &$old_order) {
+    	$distance = $this->distance($old_order[0], $old_order[$index]);
+        self::moveArticleTemporarily($index, $old_order, $distance);
+    }
+    
+    /// Removes article at position \p $index in array \p $old_order from the list.
+    private function dropArticle($index, array &$old_order) {
+    	self::moveArticleTemporarily($index, $old_order, -self::offset_deleted);
+        //moveArticleTemporarily adds article on top but should be at the bottom
+        $entry = array_shift($old_order);
+        $old_order[] = $entry;
+    }
+    
+    /// Moves an article \p $offset positions away from its current position in \p $old_order.
+    private static function moveArticleTemporarily($index, array &$old_order, $offset) {
         $entry = $old_order[$index];
-        $entry[1] += $index;
+        $entry[1] += $offset;
         unset($old_order[$index]);
         array_unshift($old_order, $entry);
     }
-    
-    private static function dropArticle($index, array &$old_order) {
-        unset($old_order[$index]);
-    }
-    
+        
+    /// If the offsets in \p $old_order are confused, return them to a valid state.
+    /** The position of each article in \p $old_order is compared to the position it
+     *  has in the unchanged list of articles, sorted by SQL. If the offset differs
+     *  from the difference in array index, it is calculated correctly.
+     *  
+     *  Articles which are at the top of the list and have too big an offset are not
+     *  corrected, because they are marked as "sticky". 
+     *
+     *  \param $old_order List of article/offset pairs to be checked and corrected.
+     */
 	private function cleanupOffsets(array &$old_order) {
-		
+        
+		$this->getRawUids();
+
+        $is_at_top_of_list = true;                    
+                    
+		for ($index = 0; $index < sizeof($old_order); $index++) {
+		    $entry = $old_order[$index];
+			$uid = $entry[0];
+			$offset = $entry[1];
+			
+			if ($offset == 0) {
+				$is_at_top_of_list = false;
+				continue;
+			}
+			
+			$raw_index = array_search($uid, $this->raw_uids);
+			if ($raw_index-$offset != $index) {
+				
+				$required_offset = $raw_index-$index;
+				
+				if ($required_offset < $offset && $is_at_top_of_list) {
+					continue;
+				}
+								
+				$old_order[$index][1] = $required_offset;
+				
+			}
+			
+			$is_at_top_of_list = false;
+		}
 	}
-	
-	/// update or insert a record 
+		
+	/// Updates or insert a record with the corresponding offset. 
 	private function updateOffset($uid_local, $uid_foreign, $offset) {
 		if (tx_newspaper::updateRows(
 			self::mm_table,
@@ -284,7 +411,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	}
 	
-	/// User function called from the BE to display the articles on the list
+	/// User function called from the BE to display the articles on the list.
 	/** Also, to sort articles on the list up and down.
 	 * 
 	 *  This function is called by TCEForms with a default-constructed article
@@ -362,8 +489,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 	}
 	
-	/// render the placement editors according to sections selected for article
-	/** in comparison to the displayed ones in the form
+	/// Renders the placement editors according to sections selected for article.
+	/** In comparison to the displayed ones in the form
 		\param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 		\return ?
 	*/
@@ -393,7 +520,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $smarty->fetch('mod7_placement_section.tpl');
 	}
 	
-	/// calculate a "minimal" (tree-)list of sections
+	/// Calculates a "minimal" (tree-)list of sections.
 	function calculatePlacementTreeFromSelection ($selection) {
 		$result = array();
 		
@@ -411,7 +538,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $result;
 	}
 	
-	/// get article and offset lists for a set of sections
+	/// Get article and offset lists for a set of sections.
 	function fillPlacementWithData ($tree, $articleId) {
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
@@ -470,7 +597,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 	}
 	
-	/// Tells how much an Article is moved from its chronological list position
+	/// Tells how much an Article is moved from its chronological list position.
 	/** \param $article Article whose offset is required
 	 *  \return The offset of \p $article relative to its original position in
 	 *  	the list. If \p $article is not in the list, returns zero.
@@ -481,7 +608,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return intval($offset[$article->getUid()]);
 	}
 
-	/// A short description that makes an Article List identifiable in the BE
+	/// A short description that makes an Article List identifiable in the BE.
 	public function getDescription() {
 		
 		global $LANG;
@@ -787,6 +914,9 @@ DESC';
 	}
 	
 	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
+	
+	/// The UIDs of articles in the list in the order in which they are originally stored.
+	private $raw_uids = array();
 	
 }
 

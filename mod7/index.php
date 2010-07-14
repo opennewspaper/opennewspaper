@@ -86,7 +86,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 0; //isset($input['placearticleuid'])? $input['placearticleuid'] : 0; // needed for standalone form (singleplacement)
 						}
-//t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
+t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -141,6 +141,12 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							case 'justsave' :
 								die(true);
 							break;
+                            case 'top':
+                            case 'bottom':
+                            case 'moveup':
+                            case 'movedown':
+                                die($this->resortArticlelist($input, $input['ajaxcontroller']));
+                            break;
 						}
 						// draw the header
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod7');
@@ -661,6 +667,48 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						return json_encode($this->al_be->getArticleListByArticlelistId($input['al'], $input['placearticleuid']));
 					}
 				}
+
+                function resortArticleList($input, $action) {
+                    $sectionId = $this->al_be->extractElementId($input['element']);
+                    $section = new tx_newspaper_section ($sectionId);
+                    $articleList = $section->getArticleList();
+                    
+                    if($articleList instanceof tx_newspaper_ArticleList_Semiautomatic) {
+                        $selectedArticleId = array_pop(explode('_', $input['sel_article_id']));
+                        $oldOrder = array();
+                        $articleIds = explode('|', $input['articleids']);
+                        foreach($articleIds as $articleAndOffset) {
+                            //string is offset_articleId, but array should be articleId offset
+                            $tmp = explode('_', $articleAndOffset);
+                            $oldOrder[] = array($tmp[1], $tmp[0]);
+                        }
+
+                        //map action to operation
+                        if($action == 'moveup') {
+                                $action = 1;
+                        } else if($action == 'movedown') {
+                            $action = -1;
+                        } else if($action == 'top') {
+                            $action = tx_newspaper_Articlelist_Operation::TOP_STRING;
+                        } else if($action == 'bottom') {
+                            $action = tx_newspaper_Articlelist_Operation::BOTTOM_STRING;
+                        }
+
+//        t3lib_div::devlog('mod7 resort', 'np', 0, array('selectedArticleId' => $selectedArticleId, 'old order' => $oldOrder));
+
+                        $alOperation = new tx_newspaper_Articlelist_Operation($selectedArticleId, $action);
+                        $reorderList = $articleList->resort($oldOrder, $alOperation);
+                        
+//        t3lib_div::devlog('mod7 resort', 'np', 0, array('selectedArticleId' => $selectedArticleId, 'new order' => $reorderList));
+
+                        //order must be [0] = offset, [1] = articleId
+                        for($i = 0; $i < sizeof($reorderList) ; $i++) {
+                            $reorderList[$i] = array($reorderList[$i][1],$reorderList[$i][0]);
+                        }
+
+                    }
+                    return json_encode($reorderList);
+                }
 
 
 				/**

@@ -130,9 +130,61 @@ function saveArticleList(elementId, async) {
 	});
 }
 
+function resortArticleList(elementId, action, async) {
+//console.log(stacktrace());
+	if (async == undefined) {
+		async = true;
+	}
+    var selectedOption = $("#" + elementId).getSelectedOption();
+    if(selectedOption) {
+        var articleids = $("#" + elementId).getOptionValues().join('|');
+        showProgress();
+        jQuery.ajax({
+            url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]="+action+"&tx_newspaper_mod7[sel_article_id]="+selectedOption.value+"&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + articleids,
+            dataType: 'json',            
+            success: function (data) {
+                if (data) {
+                    updateArticleList(elementId, data, selectedOption.value);
+                } else {
+                    alert(langSavedidnotwork);
+                }
+                hideProgress();
+            },
+            async: async
+        });
+    }
+}
+
+function updateArticleList(listId, offsetAndId, lastSelectedOption) {
+    var newOptions = {};
+    $.each(offsetAndId, function(index, item){
+        $('#' +  listId + ' > option ').each(function() {
+            var artId = item[1] ;
+            //search all option values and compare by article id because offset has changed
+            if($(this).val().lastIndexOf(artId) > -1 ) {
+                var newText = $(this).text().split('(');
+                if(item[0] > 0) {
+                    newOptions[item.join('_')] = newText[0] + '(+' + item[0] + ')';
+                } else {
+                    newOptions[item.join('_')] = newText[0] + '(' + item[0] + ')';
+                }
+                return;
+            }
+        });
+    });
+
+    $('#' + listId).removeOption(/./); //removes all
+    $('#' + listId).addOption(newOptions, false); //add but don't select
+
+    //re-select last selected option
+    var artId = lastSelectedOption.split('_').pop();
+    var regExp = new RegExp('_'+ artId + '$');
+    $('#' + listId).selectOptions(regExp);
+}
+
 
 function collectSections () {
-	sections = new Array ();
+	var sections = new Array ();
 	$(".refresh").each(function(index, item) {
 		sections.push(item.title);
   	});
@@ -251,19 +303,19 @@ function connectPlacementEvents() {
 		return false;
   	});
 	$("table.articles .movetotop").click(function() {
-		$("#" + this.rel).moveOptionsUp(true, true);
+        resortArticleList(this.rel, 'top', true);        
 		return false;
   	});
 	$("table.articles .movetobottom").click(function() {
-		$("#" + this.rel).moveOptionsDown(true, true);
+        resortArticleList(this.rel, 'bottom', true);
 		return false;
   	});
 	$("table.articles .moveup").click(function() {
-		$("#" + this.rel).moveOptionsUp(false, true);
+        resortArticleList(this.rel, 'moveup', true);
 		return false;
   	});
 	$("table.articles .movedown").click(function() {
-		$("#" + this.rel).moveOptionsDown(false, true);
+        resortArticleList(this.rel, 'movedown', true);
 		return false;
   	});
 	$("table.articles .delete").click(function() {
