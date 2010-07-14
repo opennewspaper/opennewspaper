@@ -988,8 +988,10 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
 
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-		self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
-		self::makeRelatedArticlesBidirectional($id);
+		if (strtolower($table) == 'tx_newspaper_article') {
+			self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
+			self::makeRelatedArticlesBidirectional($id);
+		}
 	}
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
