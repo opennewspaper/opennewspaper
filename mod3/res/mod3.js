@@ -525,7 +525,8 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
+            var returnurl =  t3BackendObject.path + 'typo3conf/ext/newspaper/mod3/res/closeTab.html';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?returnUrl='+returnurl+'edit['+tableName+']['+id+']=edit""></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {                
