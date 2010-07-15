@@ -89,7 +89,7 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit""></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html"></iframe>';
 
             //after an ajax reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
@@ -120,7 +120,7 @@ var tabManagement =  {
 
         while(tabs.size() > 0) {
             if(tabManagement.next) {
-                console.log(tabs + " " + tabs.size());
+//                console.log(tabs + " " + tabs.size());
                 tabManagement.next = false;
                 var tableAndId = tabManagement._getTablenameAndId(tabs.pop());                
                 var frameName = 'iframe_'+ tableAndId.id;
@@ -128,34 +128,34 @@ var tabManagement =  {
                 if(iframeDok == null) {
                     alert("No document for " + frameName + " found");
                 }
-                console.log(tabs + " " + tabs.size());
+//                console.log(tabs + " " + tabs.size());
 
                 //typo3 needs these coordinates somehow to properly save the article.
-                    saveInput.name = '_savedok';
+                saveInput.name = '_savedok';
                 ['.x', '.y'].each(function(suffix) {
                     var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix, value: 1});
                     iframeDok.forms[0].appendChild(saveDokInput);
                 });
                 $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });
-                //iframeDok.forms[0].submit();
-                    var frameForm = iframeDok.forms[0];
-                    new Ajax.Request('alt_doc.php?edit['+tableAndId.table+']['+tableAndId.id+']&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html', {
-                        method: 'post',
-                        parameters: Form.serialize(frameForm),
-                        onError: function() {
-                          //next = true;
-                          alert("Extra " + tableAndId.join('_') + " konnte nicht gespeichert werden.");
-                        },
-                        onSuccess: function(transportData) {
-                            alert('test');
-                            console.log("saved " + tableAndId.join('_'));
-                            //next = true;
-                        }
-                    });
+                iframeDok.forms[0].submit();
+                //var frameForm = iframeDok.forms[0];
+//                    new Ajax.Request('alt_doc.php?edit['+tableAndId.table+']['+tableAndId.id+']&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html', {
+//                        method: 'post',
+//                        parameters: Form.serialize(frameForm),
+//                        onError: function() {
+//                          //next = true;
+//                          alert("Extra " + tableAndId.join('_') + " konnte nicht gespeichert werden.");
+//                        },
+//                        onSuccess: function(transportData) {
+//                            alert('test');
+//                            console.log("saved " + tableAndId.join('_'));
+//                            //next = true;
+//                        }
+//                    });
             }
             
-            if(new Date().getTime() - watchdog > 5000) {
-                console.log("exit through watchdog");
+            if(new Date().getTime() - watchdog > 10000) {
+//                console.log("exit through watchdog");
                 break;
             }
         }
