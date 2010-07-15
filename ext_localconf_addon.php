@@ -82,8 +82,8 @@
 	
 	// set start module
 	t3lib_extMgm::addUserTSConfig('
-		setup.default.startModule = txnewspaperMmain_txnewspaperM5
-		setup.override.startModule = txnewspaperMmain_txnewspaperM5
+		setup.default.startModule = txnewspaperMmain_txnewspaperM2
+		setup.override.startModule = txnewspaperMmain_txnewspaperM2
 	');
 	
 	
