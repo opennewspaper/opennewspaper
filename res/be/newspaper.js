@@ -59,9 +59,8 @@ function extract_querystring(querystring, param) {
 }
 
 var tabManagement =  {
-    tabIds: [],
-    activeTabClass: 'extra_tab_act',
-    next : true,
+    tabIds: [],    
+    activeTabClass: 'extra_tab_act',    
 
     initialize: function() {
 //        tabManagement.confirmMessage = confirmationMessage;
@@ -89,9 +88,9 @@ var tabManagement =  {
         //therefore check for empty div.
         // isExtraTab is true when the current tab is an extra and therefore the iframe must be loaded.
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html"></iframe>';
+            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl=typo3conf/ext/newspaper/mod3/res/closeTab.html"></iframe>';
 
-            //after an ajax reload the tab_id is already inside the list
+            //after reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
                 tabManagement.tabIds.push(tab_id);
             }
@@ -115,83 +114,31 @@ var tabManagement =  {
      */
     submitTabs: function(saveInput) {
         var tabs = tabManagement.tabIds.clone();
-        var watchdog = new Date().getTime();
-        //var next = true;
 
-        while(tabs.size() > 0) {
-            if(tabManagement.next) {
-//                console.log(tabs + " " + tabs.size());
-                tabManagement.next = false;
-                var tableAndId = tabManagement._getTablenameAndId(tabs.pop());                
-                var frameName = 'iframe_'+ tableAndId.id;
-                var iframeDok = $(frameName).contentDocument;
-                if(iframeDok == null) {
-                    alert("No document for " + frameName + " found");
-                }
-//                console.log(tabs + " " + tabs.size());
+        tabManagement.submitNext = function() {
+            var tableAndId = tabManagement._getTablenameAndId(tabs.pop());
+            var frameName = 'iframe_'+ tableAndId.id;
+            var iframeDok = $(frameName).contentDocument;
+            if(iframeDok == null) {
+                alert("No document for " + frameName + " found");
+            }
 
-                //typo3 needs these coordinates somehow to properly save the article.
-                saveInput.name = '_savedok';
-                ['.x', '.y'].each(function(suffix) {
-                    var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix, value: 1});
-                    iframeDok.forms[0].appendChild(saveDokInput);
-                });
-                $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });
-                iframeDok.forms[0].submit();
-                //var frameForm = iframeDok.forms[0];
-//                    new Ajax.Request('alt_doc.php?edit['+tableAndId.table+']['+tableAndId.id+']&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html', {
-//                        method: 'post',
-//                        parameters: Form.serialize(frameForm),
-//                        onError: function() {
-//                          //next = true;
-//                          alert("Extra " + tableAndId.join('_') + " konnte nicht gespeichert werden.");
-//                        },
-//                        onSuccess: function(transportData) {
-//                            alert('test');
-//                            console.log("saved " + tableAndId.join('_'));
-//                            //next = true;
-//                        }
-//                    });
-            }
-            
-            if(new Date().getTime() - watchdog > 10000) {
-//                console.log("exit through watchdog");
-                break;
-            }
+            console.log(tabs + " " + tabs.size());
+
+            //typo3 needs these coordinates somehow to properly save the article.
+            saveInput.name = '_savedok';
+            ['.x', '.y'].each(function(suffix) {
+                var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix, value: 1});
+                iframeDok.forms[0].appendChild(saveDokInput);
+            });
+            $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });            
+            iframeDok.forms[0].submit();
         }
 
+        tabManagement.submitNext();
         return false;
-
-//        var tabsAreSaving = true;
-//        var count = 0;
-//        var keepAsking = false;
-////            while(tabsAreSaving) {
-////                //var openTabs = tabManagement.tabIds.findAll(function(it) { return top.window.frames[$(it).id].document.forms.length > 0}).size();
-////                var openTabs = true;
-////                for(var j = 0; j < tabManagement.tabIds.size(); j++) {
-////                    try {
-////                        if(keepAsking)
-////                            alert(top.window.frames[tabManagement.tabIds[j]].document.body.id);
-////                        tabsAreSaving &= top.window.frames[tabManagement.tabIds[j]].document.body.id == "";
-////                    } catch(e) {
-////                        openTabs = false;
-////                        if(keepAsking)
-////                            alert(tabManagement.tabIds[j] + " " + e);
-////                    }
-////                }
-////                if(keepAsking)
-////                    keepAsking = confirm("open tabs " + openTabs + " still saving..." + tabsAreSaving);
-//////                tabsAreSaving = !openTabs;
-////                if(count > 10000) {
-////                    alert('breaking out');
-////                    break;
-////                }
-////                count++;
-////            }
-//        //alert("open tabs " + openTabs);
-//        return false;
     },
-
+   
     /**
      * hide all tabs, they must have a css-class called .extra_tab
      */
