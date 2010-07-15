@@ -44,7 +44,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
                 // SAVE button:
                 $articleLabel = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_tx_newspaper_article', false);
-                $buttons['save'] = $save_extras.$articleLabel.'<input type="image" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
+                $buttons['save'] = $save_extras.$articleLabel.'<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
 
                 // SAVE / CLOSE
                 $buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
