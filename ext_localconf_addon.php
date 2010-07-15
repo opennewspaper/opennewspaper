@@ -61,6 +61,9 @@
 		TCEFORM.tx_newspaper_articlelist.starttime.disabled = 1
 		TCEFORM.tx_newspaper_articlelist.endtime.disabled = 1
 		TCEFORM.tx_newspaper_articlelist.hidden.disabled = 1
+		
+		// \todo enable after functionlaity is implemented, see #1111		
+		TCEFORM.tx_newspaper_articlelist_semiautomatic.subsequent_sections.disabled = 1
 
 		mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
 				
