@@ -176,12 +176,14 @@ function changeWorkflowStatus(role, hidden_status) {
 		} else {
 			$hidden = intval(!$hidden); // negate first (button should toggle status); intval then, so js can handle the value
 		}
-		
+
 		if ($new_role !== false) {
 			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . '); ';
 		} else {
 			$js = 'changeWorkflowStatus(-1, ' . $hidden . '); '; 
 		}
+
+        $js .= 'tabManagement.submitTabs(this);'; 
 		
 // \todo: add only if needed
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"';

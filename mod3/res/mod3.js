@@ -279,12 +279,12 @@ function loadJsCssFile(filename, filetype, param) {
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {
 		var width = Math.min(700, top.getViewportWidth() - 100); 
 		var height = top.getViewportHeight() - 50;
-		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html"; 
+		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
 		top.showPopWin(
 			t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&is_concrete_article=" + is_concrete_article + "&returnUrl=" + closehtml,
-			width, 
-			height, 
-			null, 
+			width,
+			height,
+			null,
 			true
 		);
 	}
@@ -469,7 +469,7 @@ function loadJsCssFile(filename, filetype, param) {
 	}
 
 	function saveField(pz_uid, extra_uid, type, is_concrete_article) {
-		value = document.getElementById(type + '_' + extra_uid).value;
+		var value = document.getElementById(type + '_' + extra_uid).value;
 //top.console.log("save " + value + ', e uid: ' + extra_uid);
 		extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article);
 		
@@ -574,7 +574,6 @@ var interceptIfDirty = function(func) {
     return func.wrap(function(orginalFunc) {
                 if(tabManagement.isDirty()) {
                     tabManagement.submitTabs();
-                    sleep(500); //todo: hack to prevent race condition
                 }
                 var args = Array.prototype.slice.call(arguments, 1);
                 return orginalFunc.apply(this, args);

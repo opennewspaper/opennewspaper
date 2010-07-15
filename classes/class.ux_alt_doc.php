@@ -32,10 +32,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
                 'columns_only' => '',
                 'csh' => '',
             );
-            //SAVE EXTRAS button
-            $save_extra_title = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_extra', false);
-            $save_extras = $save_extra_title.'<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$save_extra_title.'" />';
-            $save_extras .= '</div><div class="buttongroup">'; // wrap extra save button in single div, so it gets a seperator
+
 
             // Render SAVE type buttons and add newspaper workflow buttons
             // The action of each button is decided by its name attribute. (See doProcessData())
@@ -44,10 +41,10 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
                 // SAVE button:
                 $articleLabel = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_tx_newspaper_article', false);
-                $buttons['save'] = $save_extras.$articleLabel.'<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
+                $buttons['save'] = $articleLabel.'<input type="image" onclick="return tabManagement.submitTabs(this);" class="c-inputButton" name="_savedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/savedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc',1).'" />';
 
                 // SAVE / CLOSE
-                $buttons['save_close'] = '<input type="image" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
+                $buttons['save_close'] = '<input type="image" onclick="tabManagement.submitTabs(this)" class="c-inputButton" name="_saveandclosedok"'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/saveandclosedok.gif','').' title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc',1).'" />';
 
                 // FINISH TRANSLATION / SAVE / CLOSE
                 if ($GLOBALS['TYPO3_CONF_VARS']['BE']['explicitConfirmationOfTranslation'])	{
