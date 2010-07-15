@@ -118,20 +118,25 @@ var tabManagement =  {
 
         tabManagement.submitNext = function() {
 
+            //while there are tabs submit them
             if(tabManagement.tabIds.size() > 0) {
                 var tableAndId = tabManagement._getTablenameAndId(tabManagement.tabIds.pop());
                 var frameName = 'iframe_'+ tableAndId.id;
                 var iframeDok = $(frameName).contentDocument;
                 if(iframeDok == null) {
                     alert("No document for " + frameName + " found");
+                    return false;
                 }
 
                 tabManagement.addSaveInput(iframeDok, '_saveandclosedok');
                 iframeDok.forms[0].submit();
 
+            //no tabs anymore, save article
             } else {
-                tabManagement.addSaveInput(document, saveInput.name);
-                document.forms[0].submit();
+                if(saveInput) { //saveInput is set when one of the article savebuttons is pressed.
+                    tabManagement.addSaveInput(document, saveInput.name);
+                    document.forms[0].submit();
+                }
             }
         }
 

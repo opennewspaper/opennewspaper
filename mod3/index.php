@@ -257,7 +257,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		die();
 	}
 
-    private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph, $show) {
+    private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph, $show = 1) {
         $extra = new $extra_class;
         $extra->setAttribute('crdate', time());
         $extra->setAttribute('tstamp', time());
@@ -293,7 +293,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	/// \param $extra_class name of extra class (needed if $extra_uid is 0)
 	/// \param $extra_uid if not 0 the uid of the abstract extra to be duplicated
 	/// \param $paragraph paragraph for (non-duplicated) extras
-	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph) {
+	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph, $show = 1) {
 //t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid, 'paragraph' => $paragraph));
 		$extra_uid = intval($extra_uid);
 		$paragraph = intval($paragraph);
@@ -312,6 +312,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				// attribute 'paragraph' belongs to extra_attributes
 				$extra_uid = $e->store();
 				$e->setAttribute('paragraph', $paragraph);
+                $e->setAttribute('show_extra', $show);
 				$extra_uid = $e->store();
 
 				$article->addExtra($e);
@@ -429,7 +430,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 
 		// create extra using a shortcut link in extra in article
 		if (t3lib_div::_GP('extra_shortcut_create') == 1) {
-			$this->processExtraShortcutCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('paragraph')); 
+			$this->processExtraShortcutCreate(t3lib_div::_GP('article_uid'), t3lib_div::_GP('extra_class'), t3lib_div::_GP('extra_uid'), t3lib_div::_GP('paragraph'), t3lib_div::_GP('doShow')); 
 		}
 		
 

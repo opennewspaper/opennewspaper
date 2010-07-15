@@ -174,12 +174,12 @@ function loadJsCssFile(filename, filetype, param) {
 /// functions for placement (default) article //////////////////////////////////	
 		
 	/// AJAX call: create extra on article, started by shortcut link
-	function extra_shortcut_create(article_uid, extra_class, extra_uid, paragraph) {
+	function extra_shortcut_create(article_uid, extra_class, extra_uid, paragraph, show) {
 		var request = new top.Ajax.Request(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
 			{
 				method: 'get',
-				parameters: "extra_shortcut_create=1&article_uid=" + article_uid + "&extra_class=" + extra_class + "&extra_uid=" + extra_uid + "&paragraph=" + paragraph + "&no_cache=" + new Date().getTime(),
+				parameters: "extra_shortcut_create=1&article_uid=" + article_uid + "&extra_class=" + extra_class + "&extra_uid=" + extra_uid + "&paragraph=" + paragraph + "&doShow=" + show +"&no_cache=" + new Date().getTime(),
 				onCreate: eval(get_onCreate_function(1)),
 				onSuccess: function(transport) {
                     var data = transport.responseText.evalJSON();

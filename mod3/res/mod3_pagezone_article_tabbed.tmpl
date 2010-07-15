@@ -38,7 +38,7 @@
 		{foreach from=$SHORTCUT item=extra}
 			{* create new empty extra configured in tsconfig *}
 			<li id="tab_{$extra.extra_class}">
-				<a href="#" onclick="extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph});">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
+				<a href="#" onclick="extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph}, 1);">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
 			</li>				
 		{/foreach}
 		<li id="tab_overview"><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
