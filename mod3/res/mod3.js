@@ -604,7 +604,8 @@ document.observe('dom:loaded', function() {
     extra_insert_after_POOL = interceptIfDirty(extra_insert_after_POOL);
     extra_move_after = interceptIfDirty(extra_move_after);
     extra_delete = interceptIfDirty(extra_delete);
-    extra_shortcut_create = interceptIfDirty(extra_shortcut_create);    
+    extra_shortcut_create = interceptIfDirty(extra_shortcut_create);
+    saveField = interceptIfDirty(saveField);
 
 
 });
