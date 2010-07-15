@@ -3073,7 +3073,7 @@ $TCA["tx_newspaper_tag_type"] = array (
 $TCA["tx_newspaper_extra_ad"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_ad"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,todo"
+		"showRecordFieldList" => "hidden,starttime,endtime,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_ad"]["feInterface"],
 	"columns" => array (
@@ -3113,16 +3113,79 @@ $TCA["tx_newspaper_extra_ad"] = array (
 				)
 			)
 		),
-		"todo" => Array (		
+		"template" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.todo",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.template",		
 			"config" => Array (
-				"type" => "check",
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, todo")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "starttime, endtime")
+	)
+);
+
+
+
+$TCA["tx_newspaper_extra_generic"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_generic"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,starttime,endtime,template"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_generic"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		'starttime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'default'  => '0',
+				'checkbox' => '0'
+			)
+		),
+		'endtime' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+			'config'  => array (
+				'type'     => 'input',
+				'size'     => '8',
+				'max'      => '20',
+				'eval'     => 'date',
+				'checkbox' => '0',
+				'default'  => '0',
+				'range'    => array (
+					'upper' => mktime(0, 0, 0, 12, 31, 2020),
+					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
+				)
+			)
+		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_generic.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
