@@ -61,18 +61,26 @@ function extract_querystring(querystring, param) {
 var tabManagement =  {
     tabIds: [],
     activeTabClass: 'extra_tab_act',
+    next : true,
 
     initialize: function() {
 //        tabManagement.confirmMessage = confirmationMessage;
         tabManagement._hideAllTabs();
     },
 
-    show: function(tabId, params) {
-        var tableName = tabId.split('_');
-        var id = tableName.pop();
-        var isExtraTab = !isNaN(id); //last part of string is concrete id when its an extra tab
+    _getTablenameAndId: function(tabId) {
+        var tmp = tabId.split('_');
+        var tableId = tmp.pop();
+        var tableName = tmp.join('_');
+        return {'table': tableName, 'id' : tableId};
+    },
 
-        tableName = tableName.join('_');
+    show: function(tabId, params) {
+        var tableAndId = tabManagement._getTablenameAndId(tabId);
+        var tableName = tableAndId.table;
+        var id = tableAndId.id;
+
+        var isExtraTab = !isNaN(id); //last part of string is concrete id when its an extra tab        
         var tab_id = isExtraTab ? tableName + '_' + id : tabId; //if it's no extra the passed in tabid was a real div#id
 
         tabManagement._hideAllTabs();
@@ -106,58 +114,82 @@ var tabManagement =  {
      * @param saveInput savedok or saveandclosedok
      */
     submitTabs: function(saveInput) {
-        tabManagement.tabIds.each(function(tabId) {
-            var iframeId = tabId.split('_').pop();
-            var frameName = 'iframe_'+ iframeId ;
-            var iframeDok = $(frameName).contentDocument;
-            if(iframeDok == null) {
-                alert("No document for " + frameName + " found");
+        var tabs = tabManagement.tabIds.clone();
+        var watchdog = new Date().getTime();
+        //var next = true;
+
+        while(tabs.size() > 0) {
+            if(tabManagement.next) {
+                console.log(tabs + " " + tabs.size());
+                tabManagement.next = false;
+                var tableAndId = tabManagement._getTablenameAndId(tabs.pop());                
+                var frameName = 'iframe_'+ tableAndId.id;
+                var iframeDok = $(frameName).contentDocument;
+                if(iframeDok == null) {
+                    alert("No document for " + frameName + " found");
+                }
+                console.log(tabs + " " + tabs.size());
+
+                //typo3 needs these coordinates somehow to properly save the article.
+                    saveInput.name = '_savedok';
+                ['.x', '.y'].each(function(suffix) {
+                    var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix, value: 1});
+                    iframeDok.forms[0].appendChild(saveDokInput);
+                });
+                $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });
+                //iframeDok.forms[0].submit();
+                    var frameForm = iframeDok.forms[0];
+                    new Ajax.Request('alt_doc.php?edit['+tableAndId.table+']['+tableAndId.id+']&returnUrl='+top.path+'typo3conf/ext/newspaper/mod3/res/closeTab.html', {
+                        method: 'post',
+                        parameters: Form.serialize(frameForm),
+                        onError: function() {
+                          //next = true;
+                          alert("Extra " + tableAndId.join('_') + " konnte nicht gespeichert werden.");
+                        },
+                        onSuccess: function(transportData) {
+                            alert('test');
+                            console.log("saved " + tableAndId.join('_'));
+                            //next = true;
+                        }
+                    });
             }
+            
+            if(new Date().getTime() - watchdog > 5000) {
+                console.log("exit through watchdog");
+                break;
+            }
+        }
 
-            //typo3 needs these coordinates somehow to properly save the article.
-//                saveInput.name = '_saveandclosedok';
-            ['.x', '.y'].each(function(suffix) {
-                var saveDokInput = new Element('input', {type: 'hidden', name: saveInput.name + suffix, value: 1});
-                iframeDok.forms[0].appendChild(saveDokInput);
-            });
-            $A(iframeDok.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });
-            iframeDok.forms[0].submit();
-            //                var frameForm = iframeDok.forms[0];
-////                alert(frameForm.action);
-////                alert(Form.serialize(frameForm));
-//                new Ajax.Request(frameForm.action, {
-//                    parameters: Form.serialize(frameForm)
-//                });
-        });
+        return false;
 
-        var tabsAreSaving = true;
-        var count = 0;
-        var keepAsking = false;
-//            while(tabsAreSaving) {
-//                //var openTabs = tabManagement.tabIds.findAll(function(it) { return top.window.frames[$(it).id].document.forms.length > 0}).size();
-//                var openTabs = true;
-//                for(var j = 0; j < tabManagement.tabIds.size(); j++) {
-//                    try {
-//                        if(keepAsking)
-//                            alert(top.window.frames[tabManagement.tabIds[j]].document.body.id);
-//                        tabsAreSaving &= top.window.frames[tabManagement.tabIds[j]].document.body.id == "";
-//                    } catch(e) {
-//                        openTabs = false;
-//                        if(keepAsking)
-//                            alert(tabManagement.tabIds[j] + " " + e);
-//                    }
-//                }
-//                if(keepAsking)
-//                    keepAsking = confirm("open tabs " + openTabs + " still saving..." + tabsAreSaving);
-////                tabsAreSaving = !openTabs;
-//                if(count > 10000) {
-//                    alert('breaking out');
-//                    break;
-//                }
-//                count++;
-//            }
-        //alert("open tabs " + openTabs);
-        return true;
+//        var tabsAreSaving = true;
+//        var count = 0;
+//        var keepAsking = false;
+////            while(tabsAreSaving) {
+////                //var openTabs = tabManagement.tabIds.findAll(function(it) { return top.window.frames[$(it).id].document.forms.length > 0}).size();
+////                var openTabs = true;
+////                for(var j = 0; j < tabManagement.tabIds.size(); j++) {
+////                    try {
+////                        if(keepAsking)
+////                            alert(top.window.frames[tabManagement.tabIds[j]].document.body.id);
+////                        tabsAreSaving &= top.window.frames[tabManagement.tabIds[j]].document.body.id == "";
+////                    } catch(e) {
+////                        openTabs = false;
+////                        if(keepAsking)
+////                            alert(tabManagement.tabIds[j] + " " + e);
+////                    }
+////                }
+////                if(keepAsking)
+////                    keepAsking = confirm("open tabs " + openTabs + " still saving..." + tabsAreSaving);
+//////                tabsAreSaving = !openTabs;
+////                if(count > 10000) {
+////                    alert('breaking out');
+////                    break;
+////                }
+////                count++;
+////            }
+//        //alert("open tabs " + openTabs);
+//        return false;
     },
 
     /**
