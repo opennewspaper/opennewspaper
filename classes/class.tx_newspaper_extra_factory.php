@@ -30,6 +30,7 @@
  */
 
 /// \todo All extra definitions must be known to this class, even those which are not part of tx_newspaper 
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_ad.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_articlelist.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_bio.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_controltagzone.php');
@@ -37,6 +38,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_displayarticles.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_generic.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_mostcommented.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_searchresults.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_sectionlist.php');

@@ -72,7 +72,11 @@ $TCA['tx_newspaper_tag_zone']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_zone.gif';
 $TCA['tx_newspaper_tag_type']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_type.gif';
-
+$TCA['tx_newspaper_extra_ad']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_ad.gif';	
+$TCA['tx_newspaper_extra_generic']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_generic.gif';
+		
 if (TYPO3_MODE == 'BE') {
 	
 	// remove range check for set range for role in be_users in table pages
