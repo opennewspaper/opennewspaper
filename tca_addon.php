@@ -36,9 +36,16 @@ $TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = 
 // make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
-
-
-
+// newspaper textarea field for teaser
+unset($TCA['tx_newspaper_article']['columns']['teaser']['config']);
+$TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
+	'type' => 'user',
+	'userFunc' => 'tx_newspaper_be->renderTextarea',
+	'width' => '460',
+	'height' => '40',
+	'maxLen' => '10',
+	'useCouter' => '1',
+);
 
 
 // article backend modifications

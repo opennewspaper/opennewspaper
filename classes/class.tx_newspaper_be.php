@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_be.php
  *
- *  \author Oliver Schröder <newspaper@schroederbros.de>
+ *  \author Oliver SchrÃ¶der <newspaper@schroederbros.de>
  *  \date Feb 27, 2009
  */
 
@@ -394,6 +394,45 @@ function findElementsByName(name, type) {
 		return '';	
 	}
 	
+
+/// Userfunc for a texarea field in the backend with newspaper conf
+/** Configuration array
+ *  'type' => 'user'
+ *  'userFunc' => 'tx_newspaper_be->renderTextarea'
+ *  'width' => '[int+]' (default: 530)
+ *  'height' => '[int+]' (default: 80)
+ *  'maxlen' => '[int+]' (default: 1000)
+ *  not yet implemented: 'useCouter' => '1' (default: 0; if set, a counter shows how many character are still avialbalbe in the textarea field)
+ * 
+ *  \param $PA
+ *  \param $fobj
+ *  \return HTML code
+ */
+ 	// js: http://www.rgagnon.com/jsdetails/js-0091.html
+	function renderTextarea($PA, $fobj) {
+//t3lib_div::debug($PA); die();
+
+		$width = (intval($PA['fieldConf']['config']['width']) > 0)? intval($PA['fieldConf']['config']['width']) : 530;
+		$height = (intval($PA['fieldConf']['config']['height']) > 0)? intval($PA['fieldConf']['config']['height']) : 80;
+		$maxLen = (intval($PA['fieldConf']['config']['maxLen']) > 0)? intval($PA['fieldConf']['config']['maxLen']) : 1000;
+// \todo: implent useCounter functionaliyt
+		$useCounter = (intval($PA['fieldConf']['config']['useCounter']))? true : false;
+
+// \todo: move as one function to an external js file
+		$jsFuncName = 'checkMaxLen_' . $PA['field'] . $PA['row']['uid']; // unique js function name
+
+		// add js function (name extended with field name and uid, so js func name is unique)
+		// add typo3 like html code with additional newspaper textarea conf 
+		return '<script>
+function ' . $jsFuncName . '(field, maxLen) {
+    if (field.value.length > maxLen) {
+        field.value = field.value.substring(0, maxLen);
+    } 
+}
+</script>
+<textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea>';	
+	}
+
 
 /// function to render extras (article or pagezone_page)
 	function renderExtraInArticle($PA, $fobj) {
