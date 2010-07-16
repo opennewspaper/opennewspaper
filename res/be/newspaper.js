@@ -1,4 +1,3 @@
-
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
