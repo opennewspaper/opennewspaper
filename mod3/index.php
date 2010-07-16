@@ -546,7 +546,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		
 		$this->content .= $this->doc->startPage('');
 
-		$this->content .= $this->getIconHeader();
+		$this->content .= $this->getSubModalIconHeader();
 				
 		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra', false));
 
@@ -616,7 +616,7 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 		
 		$this->content .= $this->doc->startPage('');
 
-		$this->content .= $this->getIconHeader();
+		$this->content .= $this->getSubModalIconHeader();
 		
 		$this->content .= $this->doc->header($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title_new_extra_from_pool', false) . ': ' . $e->getTitle());
 		
@@ -649,16 +649,13 @@ t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQ
 	}
 
 
-/// \todo: auslagern? 
-	function getIconHeader() {
-		global $LANG;
-
+	/// Renders icons (currently close icon only) for forms in a submodal box
+	function getSubModalIconHeader() {
 		$html = '<div id="typo3-docheader-row1"><div class="buttonsleft"><div class="buttongroup">';
 
-		$html .= tx_newspaper_BE::wrapInAhref(
-			tx_newspaper_BE::renderIcon('gfx/close.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_close', false)),
-			BE_ICON_CLOSE
-		);
+		$html .= '<a href="#" onclick="top.hidePopWin(false);">' . 
+			tx_newspaper_BE::renderIcon('gfx/close.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_close', false)) . 
+			'</a>';
 		
 		$html .= '</div></div></div>';	
 		

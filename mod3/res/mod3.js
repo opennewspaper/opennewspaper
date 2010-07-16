@@ -285,7 +285,7 @@ function loadJsCssFile(filename, filetype, param) {
 			width,
 			height,
 			null,
-			true
+			false // no submodal close button
 		);
 	}
 	
@@ -298,7 +298,7 @@ function loadJsCssFile(filename, filetype, param) {
 			width, 
 			height, 
 			null, 
-			true
+			false // no submodal close button
 		);
 	}
 

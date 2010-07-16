@@ -1084,23 +1084,6 @@ JSCODE;
 	}
 
 	
-	// todo: documentation - and check if this function is really needed
-	public static function wrapInAhref($html, $type) {
-		switch ($type) {
-			case BE_ICON_CLOSE:
-				switch (self::getExtraBeDisplayMode()) {
-					case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
-						$html = '<a href="#" onclick="top.hidePopWin(false);">' . $html . '</a>';
-					break;
-				}
-			break;
-		}
-		return $html;
-	}
-
-
-
-
 	/// Generates some dummy content based on "Lorem ipsum"
 	/** \param $numberOfParagrahs Number of Paragraphs to render
 	 *  \param $wrapInP If set to true the paragraphs are wrapped in <p>...</p>

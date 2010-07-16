@@ -79,7 +79,7 @@
 			<label index="message_section_placement_no_page_available_for_section">Bitte aktivieren Sie einen Seitentyp für dieses Ressort.</label>
 			<label index="message_section_placement_no_pagetype_available_for_page">Bitte aktivieren Sie einen Seitenbereicgstyp für dieses Ressort.</label>
 			<label index="title_new_extra">Neues Web-Element</label>
-			<label index="label_close">Speichern OHNE speichern</label>
+			<label index="label_close">Schließen OHNE speichern</label>
 			<label index="label_show_levels_above">Zeige alle übergeordneten Ebenen</label>
 			<label index="label_show_visible_only">Nur sichtbare Web-Elemente anzeigen</label>
 			<label index="message_delete_confirm">Wollen Sie dieses Web-Element wirklich löschen?</label>
