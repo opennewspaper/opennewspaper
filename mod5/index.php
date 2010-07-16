@@ -99,7 +99,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 
-			//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
+//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
@@ -145,7 +145,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 			switch ($input['controller']) {
 				case 'new_article_wizard': 
-					$this->new_article_backend(); // fills $this->doc with the new article wizard backend
+					$this->new_article_backend($input); // fills $this->doc with the new article wizard backend
 				break;
 				case 'new_article_create':
 				case 'new_article_create_dummy':
@@ -303,8 +303,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	/// render new article wizard backend
-	private function new_article_backend() {
-//t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0);		
+	/// \param $input paramter extracted from url
+	private function new_article_backend(array $input) {
+//t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0, array('input' => $input));		
 		global $LANG;
 		
  		$smarty = new tx_newspaper_Smarty();
@@ -404,8 +405,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$base_url = tx_newspaper::getAbsolutePath();
 
+		// add calling module to url in order to return to the correct calling module ...
 		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
-				'typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+				'typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
 				$new_article->getUid() . ']=edit';
 		header('Location: ' . $url);				
 	}
@@ -508,7 +510,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$this->logImport($new_article, $input);
 		
-		$this->redirectToArticleMask($new_article);
+		$this->redirectToArticleMask($new_article, $input);
 	}
 
 	/// Create an article of requested type, perform the import, set necessary attributes and store the article
@@ -553,7 +555,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	/// Redirect the browser to the article mask for further editing after the import.
-	private function redirectToArticleMask(tx_newspaper_Article $new_article) {
+	private function redirectToArticleMask(tx_newspaper_Article $new_article, array $input=array()) {
         $path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
         /*  volle URL muss angegeben werden, weil manche browser sonst 
@@ -562,8 +564,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         $url_parts = explode('/typo3', tx_newspaper::currentURL());
         $base_url = $url_parts[0];
 
+		// add calling module to url in order to return to the correct calling module ...
         $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-                '/typo3conf/ext/newspaper/mod5/returnUrl.php&edit[tx_newspaper_article][' .
+                '/typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
                 $new_article->getUid() . ']=edit';
                 
         header('Location: ' . $url); // redirect to article backend 
@@ -572,6 +575,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	private function changeRole(array $input) {
 //t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
 		tx_newspaper_workflow::changeRole(intval($input['new_role']));
+	}
+	
+	private function extractCallingModule(array $input=array()) {
+		return (intval($input['calling_module']))? intval($input['calling_module']) : 5; // 5 (= this module) is default
 	}
 	
 	

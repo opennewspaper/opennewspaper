@@ -37,6 +37,18 @@
 	color: #777;
 	background: none;
 }
+
+
+/* wizards */
+#wizards {
+	position: absolute;
+	padding: 10px;
+	margin: -8px 0 0 650px;
+	width: 260px;	
+	xxxbackground-color: #EFEDE4;
+	xxxborder: 1px solid #AAA;
+}
+
 	
 /* filterbox */ 
 	
@@ -295,6 +307,8 @@ function deleteArticle(article_uid) {
 <h1 class="headline">Produktionsliste</h1>
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
+
+<div id="wizards"><a href="{$MODULE5_PATH}index.php?tx_newspaper_mod5[controller]=new_article_wizard&tx_newspaper_mod5[calling_module]=2">{$WIZARD_ICON} {$LABEL.new_article}</a><br /></div>
 
 <div id="filter">
 	

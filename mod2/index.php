@@ -217,6 +217,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'time_controlled_not_anymore' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_anymore', false),
 			'time_controlled_now_and_future' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_and_future', false),
 			'time_controlled_now_but_will_end' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_but_will_end', false),
+			'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
 		));
 
 		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
@@ -267,6 +268,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		} else {
 			$smarty->assign('URL_NEXT', '');
 		}
+		
+		$smarty->assign('MODULE5_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
+		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
 		
 		
 		/// build url for switch visibility button
