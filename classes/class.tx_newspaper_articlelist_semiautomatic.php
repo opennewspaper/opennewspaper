@@ -674,7 +674,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$article_uids[] = $article->getUid();
 		}
 		if ($article_uids) {
-			tx_newspaper::deleteRows(self::mm_table, $article_uids, 'uid_foreign');
+			tx_newspaper::deleteRows(
+				self::mm_table, 
+				$article_uids, 
+				'uid_foreign', // check uid_foreign = article uid
+				'uid_local=' . $this->getUid() // process current article list only
+			);
 		}
 	}
 	

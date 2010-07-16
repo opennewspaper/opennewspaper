@@ -365,12 +365,13 @@ class tx_newspaper  {
 	 *  \param $uids_or_where Array of UIDs to delete, a single UID to delete
 	 *  	(must be an integer), or a \c WHERE condition as string
 	 *  \param $key Name of key to be used for the query (default: 'uid')
+	 *  \param $additional_where be added to the generated where part (AND is added too)
 	 *  \return number of affected rows
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
-	public static function deleteRows($table, $uids_or_where, $key='uid') {
+	public static function deleteRows($table, $uids_or_where, $key='uid', $additional_where='') {
 		
 		if (!$uids_or_where) return;
 		
@@ -393,12 +394,19 @@ class tx_newspaper  {
 				$uids_or_where = $key . '=' . $uids_or_where;
 			}
 			
-			if (isset($TCA[$table])) {
-				self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $uids_or_where, array('deleted' => 1));
-			} else {		
-				self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $uids_or_where);
+			$where_parts[] = $uids_or_where;
+			if ($additional_where) {
+				$where_parts[] = $additional_where;
 			}
-			
+			$where = implode(' AND ', $where_parts);
+
+			if (isset($TCA[$table])) {
+				self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, array('deleted' => 1));
+			} else {		
+				self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
+			}
+//t3lib_div::devlog('deleteRows()', 'newspaper', 0, array('query' => self::$query));			
+
 			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 			if (!$res) {
