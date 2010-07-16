@@ -574,6 +574,7 @@ var interceptIfDirty = function(func) {
     return func.wrap(function(orginalFunc) {
                 if(tabManagement.isDirty()) {
                     tabManagement.submitTabs();
+                    sleep(500); //todo: hack to prevent race condition
                 }
                 var args = Array.prototype.slice.call(arguments, 1);
                 return orginalFunc.apply(this, args);
