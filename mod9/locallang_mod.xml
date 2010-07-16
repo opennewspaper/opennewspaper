@@ -6,12 +6,12 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Article lists</label>
+			<label index="mlang_tabs_tab">Section lists</label>
 			<label index="mlang_labels_tabdescr">List, create, edit and delete article lists (expect article lor assigned to sections)</label>
 			<label index="mlang_labels_tablabel">Administer article lists for sections</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="mlang_tabs_tab">Sammelressorts</label>
+			<label index="mlang_tabs_tab">Ressort-Listen</label>
 			<label index="mlang_labels_tabdescr">Anzeigen, Anlegen, Bearbeiten und Löschen von Artikellisten (außer Ressort-Artikellisten)</label>
 			<label index="mlang_labels_tablabel">Artikellisten Sammelressorts verwalten</label>
 		</languageKey>
