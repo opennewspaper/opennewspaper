@@ -278,4 +278,6 @@ $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["rang
 
 // todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
 
+// for testing image upload sizes (in extra image)
+//$TCA['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = 1000;
 ?>
