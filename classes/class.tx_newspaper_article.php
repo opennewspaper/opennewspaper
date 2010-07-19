@@ -977,13 +977,13 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
 
     private function removeDanglingRelations() {
-    	
         $rows = tx_newspaper::selectRows(
             self::article_related_table .'.uid_foreign',
             self::article_related_table,
             'uid_local = ' . $this->getUid()
         );
-    	
+        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, $rows);
+        
     	$uids = array();
     	foreach ($rows as $article) {
     		$uids[] = $article['uid_foreign'];
@@ -996,8 +996,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
             $where
         );
     	
-    	t3lib_div::devlog($rows);
-    	
+        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, array('sql'=>tx_newspaper::$query, 'rows'=>$rows));
+            	
     	
     } 
     
@@ -1071,6 +1071,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
     
     private static function cleanRelatedArticles($article_uid) {
+    	t3lib_div::devlog('cleanRelatedArticles', 'newspaper', 0, array('article_uid' => $article_uid));
         if (!intval($article_uid)) return;
         $article = new tx_newspaper_Article(intval($article_uid));
 
