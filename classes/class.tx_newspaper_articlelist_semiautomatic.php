@@ -148,7 +148,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	const default_num_articles = 20;
 	
 	/// how many articles are loaded for comparison of offsets
-	const num_raw_uids =10;
+	const num_raw_uids =100;
 	
 	/// SQL table storing the relations between list and articles.
 	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
