@@ -391,7 +391,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			if ($raw_index-$offset != $index) {
 				
 				$required_offset = $raw_index-$index;
-				t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array('required offset'=>$required_offset));
+				t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array(
+					'index'=>$index,
+					'raw index'=>$raw_index,
+					'offset'=>$offset,
+					'required offset'=>$required_offset)
+				);
 				
 				
 				if ($required_offset < $offset && $is_at_top_of_list) {
