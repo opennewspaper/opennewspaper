@@ -147,6 +147,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// default number for articles (if not set (properly) in article list record).
 	const default_num_articles = 20;
 	
+	/// how many articles are loaded for comparison of offsets
+	const num_raw_uids =10;
+	
 	/// SQL table storing the relations between list and articles.
 	const mm_table = 'tx_newspaper_articlelist_semiautomatic_articles_mm';
 	
@@ -331,7 +334,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Ensures that the list's raw UIDs are stored in \c $this->raw_uids.
     private function getRawUids() {
         if (!$this->raw_uids) {
-          $this->raw_uids = $this->getRawArticleUIDs(self::NUM_RAW_UIDS, 0);
+          $this->raw_uids = $this->getRawArticleUIDs(self::num_raw_uids, 0);
         }
     }
 	
