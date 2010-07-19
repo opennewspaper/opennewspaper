@@ -103,6 +103,8 @@ class tx_newspaper_Articlelist_Operation {
     
     const TOP_STRING = 'top';
     const BOTTOM_STRING = 'bottom';
+    
+    const NUM_RAW_UIDS = 10;
 }
 
 /// A list of tx_newspaper_Article s dynamically filled and optionally reordered by the user.
@@ -329,7 +331,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Ensures that the list's raw UIDs are stored in \c $this->raw_uids.
     private function getRawUids() {
         if (!$this->raw_uids) {
-          $this->raw_uids = $this->getRawArticleUIDs(100, 0);
+          $this->raw_uids = $this->getRawArticleUIDs(self::NUM_RAW_UIDS, 0);
         }
     }
 	
@@ -371,7 +373,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$this->getRawUids();
 
         $is_at_top_of_list = true;                    
-        t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, $old_order);
+        t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
         for ($index = 0; $index < sizeof($old_order); $index++) {
 		    $entry = $old_order[$index];
 			$uid = $entry[0];
@@ -386,6 +388,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			if ($raw_index-$offset != $index) {
 				
 				$required_offset = $raw_index-$index;
+				t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array('required offset'=>$required_offset));
+				
 				
 				if ($required_offset < $offset && $is_at_top_of_list) {
 					continue;
@@ -397,7 +401,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			
 			$is_at_top_of_list = false;
 		}
-		t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, $old_order);
+		t3lib_div::devlog('cleanupOffsets() output', 'newspaper', 0, $old_order);
 	}
 		
 	/// Updates or insert a record with the corresponding offset. 
