@@ -984,12 +984,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         );
         t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, $rows);
         
-    	$uids = array();
+    	$uids = array(0);
     	foreach ($rows as $article) {
     		$uids[] = $article['uid_foreign'];
     	}
     	
-    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (0, ' . implode(', ', $uids) . ')';
+    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
     	$rows = tx_newspaper::deleteRows(
             self::article_related_table,
             $where
