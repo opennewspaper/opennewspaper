@@ -705,9 +705,9 @@ t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input
                         for($i = 0; $i < sizeof($reorderList) ; $i++) {
                             $reorderList[$i] = array($reorderList[$i][1],$reorderList[$i][0]);
                         }
-
-                    }
                     return json_encode($reorderList);
+                        
+                    }
                 }
 
 
