@@ -778,8 +778,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		if ($this->getAttribute('filter_sql_order_by')) {
 			$order_by = $this->getAttribute('filter_sql_order_by');
 		} else {
-//			$order_by = 'publish_date DESC, crdate DESC';
-			$order_by = 'CASE
+			$order_by = '
+CASE
   WHEN publish_date = \'0\'
   THEN tstamp
   ELSE publish_date
@@ -843,7 +843,7 @@ DESC';
 			//	which are not set in the BE
 			$results = array();	
 		}
-t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
+#t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
 
 		$uids = array();
 		foreach ($results as $result) {

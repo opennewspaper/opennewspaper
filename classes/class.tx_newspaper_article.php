@@ -975,7 +975,32 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	    	tx_newspaper::insertRows(self::article_related_table, $relation_to_write);
     	}   	    
     }
-	
+
+    private function removeDanglingRelations() {
+    	
+        $rows = tx_newspaper::selectRows(
+            self::article_related_table .'.uid_foreign',
+            self::article_related_table,
+            'uid_local = ' . $this->getUid()
+        );
+    	
+    	$uids = array();
+    	foreach ($rows as $article) {
+    		$uids[] = $article['uid_foreign'];
+    	}
+    	
+    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
+    	$rows = tx_newspaper::selectRows(
+            self::article_related_table .'.*',
+            self::article_related_table,
+            $where
+        );
+    	
+    	t3lib_div::devlog($rows);
+    	
+    	
+    } 
+    
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	Typo3 hooks
@@ -991,6 +1016,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		if (strtolower($table) == 'tx_newspaper_article') {
 			self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
 			self::makeRelatedArticlesBidirectional($id);
+			self::cleanDeletedRelatedArticls($id);
 		}
 	}
 
@@ -1042,6 +1068,19 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         
         $article->ensureRelatedArticlesAreBidirectional();
         
+    }
+    
+    private static function cleanRelatedArticles($article_uid) {
+        if (!intval($article_uid)) return;
+        $article = new tx_newspaper_Article(intval($article_uid));
+
+        try {
+            $article->getAttribute('uid');
+        } catch (tx_newspaper_Exception $e) {
+            return;
+        }
+        
+        $article->removeDanglingRelations();
     }
     
     private static function modifyTagSelection($table, $field) {
