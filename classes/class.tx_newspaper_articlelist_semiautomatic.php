@@ -371,8 +371,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$this->getRawUids();
 
         $is_at_top_of_list = true;                    
-                    
-		for ($index = 0; $index < sizeof($old_order); $index++) {
+        t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, $old_order);
+        for ($index = 0; $index < sizeof($old_order); $index++) {
 		    $entry = $old_order[$index];
 			$uid = $entry[0];
 			$offset = $entry[1];
@@ -397,6 +397,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			
 			$is_at_top_of_list = false;
 		}
+		t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, $old_order);
 	}
 		
 	/// Updates or insert a record with the corresponding offset. 
