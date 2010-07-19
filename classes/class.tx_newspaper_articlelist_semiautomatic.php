@@ -372,7 +372,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         
 		$this->getRawUids();
 
-        $is_at_top_of_list = true;                    
+        $is_at_top_of_list = true;
         t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
         for ($index = 0; $index < sizeof($old_order); $index++) {
 		    $entry = $old_order[$index];
