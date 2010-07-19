@@ -280,16 +280,17 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$distance = $this->distance($old_order[$index], $old_order[$new_index]);
 		
 		// the offset is updated in any case
-        $old_order[$index][1] += $shuffle_value;
+        $old_order[$index][1] += $distance;
 
         if ($new_index == $index) return;
         
-        // only swap articles if they were really next to each other
-        if (abs($distance) <= 1) {
-            $temp = $old_order[$index];
-        	$old_order[$index] = $old_order[$new_index];	        
-	        $old_order[$new_index] = $temp;
-        }
+        self::swap($old_order, $index, $new_index);
+	}
+	
+	private static function swap(array &$old_order, $index, $new_index) {
+        $temp = $old_order[$index];
+        $old_order[$index] = $old_order[$new_index];            
+        $old_order[$new_index] = $temp;
 	}
 	
 	/// Makes sure an index does not point outside the array. 
