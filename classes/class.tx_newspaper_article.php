@@ -1016,7 +1016,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		if (strtolower($table) == 'tx_newspaper_article') {
 			self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
 			self::makeRelatedArticlesBidirectional($id);
-			self::cleanDeletedRelatedArticles($id);
+			self::cleanRelatedArticles($id);
 		}
 	}
 
