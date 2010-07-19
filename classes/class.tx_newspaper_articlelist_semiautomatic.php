@@ -843,8 +843,7 @@ DESC';
 			//	which are not set in the BE
 			$results = array();	
 		}
-//t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
-//t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results, 'backtrace()' => debug_backtrace()));
+t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
 
 		$uids = array();
 		foreach ($results as $result) {
