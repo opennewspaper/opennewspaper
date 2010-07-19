@@ -196,7 +196,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * ) \endcode
 	 */
 	public function assembleFromUIDs(array $uids) {
-
+        t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, $uids);
+		
 		$this->clearList();
 
 		foreach ($uids as $uid) {
