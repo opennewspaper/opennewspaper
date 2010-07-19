@@ -989,7 +989,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     		$uids[] = $article['uid_foreign'];
     	}
     	
-    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
+    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (0, ' . implode(', ', $uids) . ')';
     	$rows = tx_newspaper::deleteRows(
             self::article_related_table,
             $where
