@@ -456,6 +456,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 			// store data and call article save hooks then
 			$this->storeHiddenStatusWithHooks($article_uid, $fA);
+			
+			// redirect to module (in order to remove article_visibility and article_uid from url)
+			header('Location: index.php');
 
 		}
 	}
