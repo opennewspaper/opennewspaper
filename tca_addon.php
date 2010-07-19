@@ -43,7 +43,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	'userFunc' => 'tx_newspaper_be->renderTextarea',
 	'width' => '460',
 	'height' => '40',
-	'maxLen' => '10',
+	'maxLen' => '500',
 	'useCouter' => '1',
 );
 
