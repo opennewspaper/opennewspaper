@@ -419,7 +419,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$article_uid = intval(t3lib_div::_GP('article_uid'));
 
 		$input = t3lib_div::GParrayMerged($this->prefixId);
-//t3lib_div::devlog('processGPController()', 'np', 0, array('input' => $input, '_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
+//t3lib_div::devlog('processGPController()', 'np', 0, array('input' => $input, 'article_uid' => $article_uid, '_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
 		
 		if (isset($input['controller'])) {
 			switch($input['controller']) {
@@ -433,6 +433,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 		
 		if (t3lib_div::_GP('article_visibility') != '') {
+			
+			// publish/hide icon used in production list
+			
 			$hidden_status = strtolower(t3lib_div::_GP('article_visibility')); 
 
 			// unset parameters (so they are not added to querystring later)
