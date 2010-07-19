@@ -990,13 +990,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     	}
     	
     	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
-    	$rows = tx_newspaper::selectRows(
-            self::article_related_table .'.*',
+    	$rows = tx_newspaper::deleteRows(
             self::article_related_table,
             $where
         );
     	
-        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, array('sql'=>tx_newspaper::$query, 'rows'=>$rows));
+        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, array('sql'=>tx_newspaper::$query));
             	
     	
     } 
