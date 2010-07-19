@@ -285,6 +285,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		// the offset is updated in any case
         $old_order[$index][1] += $distance;
 
+        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array(
+            'index'=>$index,
+            'shuffle_value' => shuffle_value,
+            'new index' => $new_index,
+            'distance' => $distance,
+            'new offset' => $old_order[$index][1]
+        ));
         if ($new_index == $index) return;
         
         self::swap($old_order, $index, $new_index);
