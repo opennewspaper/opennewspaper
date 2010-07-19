@@ -459,7 +459,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				 *  \return \c true
 				 */
 				function saveSection($input) {
-//t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
+t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
 					
