@@ -286,7 +286,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$distance = $this->distance($old_order[$index], $old_order[$new_index]);
 		
 		/// it must still be possible to sort articles up if they're on top
-		if (!$distance) $distance = 1;
+		if (!$distance) $distance = -1;
 		
 		// the offset is updated in any case
         $old_order[$index][1] -= $distance;
