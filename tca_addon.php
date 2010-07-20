@@ -44,7 +44,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	'width' => '333',
 	'height' => '41',
 	'maxLen' => '500',
-	'useCounter' => '1',
+	'useCounter' => '0',
 );
 
 
