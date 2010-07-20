@@ -46,6 +46,8 @@
 			<label index="label.step_items_per_page">Items per page</label>
 			<label index="label.hide">Hide article</label>
 			<label index="label.unhide">Publish article</label>
+			<label index="label.hidden">Hidden</label>
+			<label index="label.published">Published</label>
 			<label index="label.article_placement">Article placement</label>
 			<label index="label.preview_article">Preview article</label>
 			<label index="label.edit_article">Edit article</label>
@@ -101,6 +103,8 @@
 			<label index="label.step_items_per_page">Artikel pro Seite</label>
 			<label index="label.hide">Artikel verstecken</label>
 			<label index="label.unhide">Artikel publizieren</label>
+			<label index="label.hidden">versteckt</label>
+			<label index="label.published">publiziert</label>
 			<label index="label.article_placement">Artikel platzieren</label>
 			<label index="label.preview_article">Vorschau</label>
 			<label index="label.edit_article">Artikel bearbeiten</label>

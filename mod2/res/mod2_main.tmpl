@@ -447,9 +447,17 @@ function deleteArticle(article_uid) {
 		<td>{if $DATA[i].publish_date} <strong>{$DATA[i].publish_date|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].publish_date|date_format:"%H:%M:%S"} {/if}</td>
 		<td align="center">
   {if $DATA[i].hidden == 0}
-    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
+  	{if $IS_DUTY_EDITOR || $IS_ADMIN}
+    	<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
+    {else}
+    	{$PUBLISHED_ICON}
+    {/if}
   {else}
-    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
+  	{if $IS_DUTY_EDITOR || $IS_ADMIN}
+	    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
+	{else}
+		{$HIDDEN_ICON}
+	{/if}
   {/if}<br /><br />
 {* <strong>{$DATA[i].???|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].???|date_format:"%H:%I:%S"} *}
 				{if $DATA[i].starttime > 0 || $DATA[i].endtime > 0}

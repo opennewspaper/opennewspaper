@@ -384,7 +384,9 @@ function changeWorkflowStatus(role, hidden_status) {
 				return true;
 			break;
 			case 'publish':
-				return true;
+				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
+					return true; // only duty editors are allowed to publish
+				}
 			break;
 			case 'check':
 				return true;
