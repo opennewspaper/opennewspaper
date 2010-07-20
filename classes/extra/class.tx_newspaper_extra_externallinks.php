@@ -23,6 +23,10 @@ class tx_newspaper_ExternalLink {
 		$this->url = $row['url'];
 	}
 	
+	public function __toString() {
+		return $this->url . ' ' . $this->text;
+	}
+	
 	/// \return The text displayed under the link
 	public function getText() { 
 		return $this->text? $this->text: $this->url; 
