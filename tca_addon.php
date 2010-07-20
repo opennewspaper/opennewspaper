@@ -41,10 +41,10 @@ unset($TCA['tx_newspaper_article']['columns']['teaser']['config']);
 $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	'type' => 'user',
 	'userFunc' => 'tx_newspaper_be->renderTextarea',
-	'width' => '460',
-	'height' => '40',
+	'width' => '333',
+	'height' => '41',
 	'maxLen' => '500',
-	'useCouter' => '1',
+	'useCounter' => '1',
 );
 
 

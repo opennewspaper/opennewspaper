@@ -415,22 +415,44 @@ function findElementsByName(name, type) {
 		$width = (intval($PA['fieldConf']['config']['width']) > 0)? intval($PA['fieldConf']['config']['width']) : 530;
 		$height = (intval($PA['fieldConf']['config']['height']) > 0)? intval($PA['fieldConf']['config']['height']) : 80;
 		$maxLen = (intval($PA['fieldConf']['config']['maxLen']) > 0)? intval($PA['fieldConf']['config']['maxLen']) : 1000;
-// \todo: implent useCounter functionaliyt
 		$useCounter = (intval($PA['fieldConf']['config']['useCounter']))? true : false;
+		
+		$uniq = $PA['field'] . $PA['row']['uid']; // unique string based on field name and record uid
 
 // \todo: move as one function to an external js file
-		$jsFuncName = 'checkMaxLen_' . $PA['field'] . $PA['row']['uid']; // unique js function name
+		$jsFuncName = 'checkMaxLen_' . $uniq; // unique js function name
 
 		// add js function (name extended with field name and uid, so js func name is unique)
-		// add typo3 like html code with additional newspaper textarea conf 
-		return '<script>
-function ' . $jsFuncName . '(field, maxLen) {
-    if (field.value.length > maxLen) {
-        field.value = field.value.substring(0, maxLen);
-    } 
+		// add typo3 like html code with additional newspaper textarea according to given configuration
+		$html = '<style type="text/css">
+#counter_' . $uniq . ' {
+  float:left;
+  margin-left:10px; 
+  margin-top:2px;
+}
+</style>
+<script type="text/javascript">
+  function ' . $jsFuncName . '(field, maxLen, counterField) {
+      if (field.value.length > maxLen) {
+          field.value = field.value.substring(0, maxLen);
+      } 
+      if (counterField) { 
+          document.getElementById(counterField).innerHTML = parseInt(maxLen - field.value.length); 
+      }
 }
 </script>
-<textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea>';	
+';
+		if ($useCounter) {
+			// add textarea AND a counter
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'counter_' . $uniq . '\');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
+<div id="counter_' . $uniq . '">' . intval($maxLen - strlen(utf8_decode($PA['row'][$PA['field']]))) . '</div>';
+		} else {
+			// add textarea only
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
+			
+		}
+
+		return $html;	
 	}
 
 
