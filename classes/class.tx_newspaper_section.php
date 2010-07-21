@@ -365,8 +365,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				
 		 		$new_extra->setAttribute('crdate', time());
 		 		$new_extra->setAttribute('tstamp', time());
-				
-				$new_extra->setAttribute('show_extra', 0);
+
+                //todo: switch via tsconfig
+				$new_extra->setAttribute('show_extra', 1);
 				$new_extra->setAttribute('paragraph', $paragraph);
 				$new_extra->setAttribute('position', 0);
 				
