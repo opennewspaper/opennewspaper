@@ -183,7 +183,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			$js = 'changeWorkflowStatus(-1, ' . $hidden . '); '; 
 		}
 
-        $js .= 'tabManagement.submitTabs(this);'; 
+        $js .= 'return tabManagement.submitTabs(this);'; 
 		
 // \todo: add only if needed
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"';

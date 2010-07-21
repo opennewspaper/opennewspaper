@@ -117,13 +117,13 @@ var tabManagement =  {
     submitTabs: function(saveInput, orginalFunction) {
 
         tabManagement.submitNext = function() {
-
             //while there are tabs submit them
             if(tabManagement.tabIds.size() > 0) {
                 var tableAndId = tabManagement._getTablenameAndId(tabManagement.tabIds.pop());
                 var frameName = 'iframe_'+ tableAndId.id;
                 if(!$(frameName)) {
                     alert('Extra konnte nicht gespeichert werden: ' + frameName);
+                    return false;
                 }
                 var iframeDok = $(frameName).contentDocument;
                 if(iframeDok == null) {
@@ -148,12 +148,16 @@ var tabManagement =  {
         }
 
         tabManagement.submitNext();
-        return false;
+        return false; //it is very important to don't submit
     },
 
     addSaveInput : function(documentObject, savetype) {
         ['.x', '.y'].each(function(suffix) {
             var saveDokInput = new Element('input', {type: 'hidden', name: savetype + suffix, value: 1});
+            if(!documentObject.forms[0]) {
+                alert('fehler beim Speicher der Webelemente.');
+                return false;
+            }
             documentObject.forms[0].appendChild(saveDokInput);
         });
         $A(documentObject.getElementsByName('doSave')).each(function(elem) { elem.value = 1 });
