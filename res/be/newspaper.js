@@ -110,10 +110,11 @@ var tabManagement =  {
     },
 
     /**
-     *
+     * The originalFunction is an array consisting of the function itself, its arguments and context
      * @param saveInput savedok or saveandclosedok
+     * @param orginalFunction function that should be executed after all tabs have been saved
      */
-    submitTabs: function(saveInput) {
+    submitTabs: function(saveInput, orginalFunction) {
 
         tabManagement.submitNext = function() {
 
@@ -121,6 +122,9 @@ var tabManagement =  {
             if(tabManagement.tabIds.size() > 0) {
                 var tableAndId = tabManagement._getTablenameAndId(tabManagement.tabIds.pop());
                 var frameName = 'iframe_'+ tableAndId.id;
+                if(!$(frameName)) {
+                    alert('Extra konnte nicht gespeichert werden: ' + frameName);
+                }
                 var iframeDok = $(frameName).contentDocument;
                 if(iframeDok == null) {
                     alert("No document for " + frameName + " found");
@@ -135,6 +139,10 @@ var tabManagement =  {
                 if(saveInput) { //saveInput is set when one of the article savebuttons is pressed.
                     tabManagement.addSaveInput(document, saveInput.name);
                     document.forms[0].submit();
+                } else {
+                    //submit tabs was not called via standard save button, but function on overview tab.
+                    //in that case the called function (like change paragraph) is executed here, after all tabs have been saved
+                    return orginalFunction[0].apply(orginalFunction[2], orginalFunction[1]);
                 }
             }
         }
