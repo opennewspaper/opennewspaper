@@ -19,19 +19,19 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
 /** The article is the central entity in a newspaper. All other functionalities
  *  deal with displaying articles, lists of articles or additional information
  *  linked to articles.
- * 
+ *
  *  Data-wise, an article consists of the minimum set of fields that every
  *  article must have. All additional data connected to an article (e.g. images,
  *  links, tags, media, ...) are called "Extra" and linked to an article. The
  *  class representing Extras is tx_newspaper_Extra and its descendants.
- * 
- *  The Extras must be placed in an Article or in a PageZone. 
+ *
+ *  The Extras must be placed in an Article or in a PageZone.
  */
-class tx_newspaper_Article extends tx_newspaper_PageZone 
+class tx_newspaper_Article extends tx_newspaper_PageZone
 	implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
 
 	const article_related_table = 'tx_newspaper_article_related_mm';
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	magic methods ( http://php.net/manual/language.oop5.magic.php )
@@ -41,49 +41,49 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/// Create a tx_newspaper_Article
 	/** Initializes the tx_newspaper_ArticleBehavior and tx_newspaper_Smarty
 	 *  used as auxiliaries.
-	 * 
-	 *  Ensures that the current object has a record identifying it in the 
+	 *
+	 *  Ensures that the current object has a record identifying it in the
 	 *  persistent storage as tx_newspaper_Extra and tx_newspaper_PageZone.
 	 */
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 		$this->smarty = new tx_newspaper_Smarty();
-		
+
 		if ($uid) {
 			$this->setUid($uid);
-			
-			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());	
+
+			$this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
 			$this->pagezone_uid = $this->createPageZoneRecord();
 		}
-		
+
 	}
 
 	///	Things to do after an article is cloned
 	/** This magic function is called after all attributes of a
-	 *  tx_newspaper_Article have been copied, when the PHP operation \p clone 
-	 *  is executed on a tx_newspaper_Article. 
-	 * 
+	 *  tx_newspaper_Article have been copied, when the PHP operation \p clone
+	 *  is executed on a tx_newspaper_Article.
+	 *
 	 * 	It ensures that all attributes are read from DB, \c crdate and \c tstamp
-	 *  are updated, and the new tx_newspaper_Article is written to DB. Also, 
+	 *  are updated, and the new tx_newspaper_Article is written to DB. Also,
 	 *  the tx_newspaper_Extra objects associated with the tx_newspaper_Article
-	 *  are \p clone d. 
+	 *  are \p clone d.
 	 */
 	public function __clone() {
- 		/*  ensure attributes are loaded from DB. readExtraItem() isn't  
+ 		/*  ensure attributes are loaded from DB. readExtraItem() isn't
  		 *  called here because maybe the content is already there and it would
  		 *  cause the DB operation to be done twice.
  		 */
 		$this->getAttribute('uid');
-		
+
 		//  unset the UID so the object can be written to a new DB record.
  		$this->attributes['uid'] = 0;
  		$this->setUid(0);
 
  		$this->setAttribute('crdate', time());
  		$this->setAttribute('tstamp', time());
- 		
+
  		$this->store();
- 		
+
  		/// clone extras, creating new abstract references to the concrete records
  		$old_extras = $this->getExtras();
  		$this->extras = array();
@@ -91,7 +91,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
  			$this->extras[] = clone $old_extra;
  		}
  	}
-	
+
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		$string = get_class($this) . ' ' . $this->getUid() . ' ' . "\n";
@@ -103,7 +103,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		return $string;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	interface tx_newspaper_StoredObject
@@ -111,13 +111,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	////////////////////////////////////////////////////////////////////////////
 
 	public function getAttribute($attribute) {
-				
+
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
 		}
-		
+
  		if (!array_key_exists($attribute, $this->attributes) && $this->getUid()) {
         	throw new tx_newspaper_WrongAttributeException($attribute, $this->attributes, $this->getUid());
  		}
@@ -129,19 +129,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if (!$this->attributes) {
 			$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 		}
-		
+
 		$this->attributes[$attribute] = $value;
 	}
 
 	public function store() {
-		
+
 		/// insert article data (if uid == 0) or update if uid > 0
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
-			if (!$this->attributes) { 
+			if (!$this->attributes) {
 				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 			}
-			
+
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
@@ -159,29 +159,29 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// ... and is attached to the correct page
 		if ($this->getParentPage() && $this->getParentPage()->getUid()) {
 			tx_newspaper::updateRows(
-				'tx_newspaper_pagezone', 
-				'uid = ' . $pagezone_uid, 
+				'tx_newspaper_pagezone',
+				'uid = ' . $pagezone_uid,
 				array('page_id' => $this->getParentPage()->getUid())
 			);
 		}
-		
+
 		/// store all extras and make sure they are in the MM relation table
 		if ($this->extras) foreach ($this->extras as $extra) {
 			$extra_uid = $extra->store();
 			$extra_table = $extra->getTable();
 			$this->relateExtra2Article($extra);
 		}
-		
-		return $this->getUid();		
-	}
-	
 
-	public function getUid() { 
+		return $this->getUid();
+	}
+
+
+	public function getUid() {
 		if (!intval($this->uid)) $this->uid = $this->attributes['uid'];
 		return intval($this->uid);
 	}
 
-	public function setUid($uid) { 
+	public function setUid($uid) {
 		$this->uid = $uid;
 		if ($this->attributes) {
 			$this->attributes['source_id'] = $uid;
@@ -196,13 +196,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	static public function getModuleName() {
 		return 'np_article';
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	interface tx_newspaper_ExtraIface
 	//
 	////////////////////////////////////////////////////////////////////////////
-		
+
 	/// Renders an article with all of its Extras
 	/** \param $template_set Template set to use
 	 */
@@ -210,7 +210,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 		/// Default articles should never contain text that is displayed.
 		if ($this->getAttribute('is_template')) return;
-		
+
 		/** Check whether to use a specific template set.
 		 *	This must be done regardless if this is a template used to define
 		 *	default placements for articles, or an actual article.
@@ -218,7 +218,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
 		}
-		
+
 		/// Configure Smarty rendering engine.
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
@@ -278,11 +278,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				$spacing++;
 			}
 		}
-			
+
 		/** Make sure all extras are rendered, even those whose \c paragraph
 		 *  attribute is greater than the number of text paragraphs or less
 		 *  than its negative.
-		 */ 		
+		 */
 		foreach ($this->getExtras() as $extra) {
 			if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
 				$paragraphs[0]['extras'][] = $extra->render($template_set);
@@ -304,7 +304,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \param $table SQL table to read record from
 	 *  \return The data contained in the requested record
 	 *  \todo remove.
-	 */ 
+	 */
 	static public function readExtraItem($uid, $table) {
 		if (!$uid) return array();
 		return tx_newspaper::selectOneRow('*', $table, 'uid=' . $uid);
@@ -322,25 +322,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		$this->source = $source;
 		foreach ($source as $part) {
 			if ($part instanceof tx_newspaper_Source) {
-				$this->setAttribute('source_object', serialize($part)); 
+				$this->setAttribute('source_object', serialize($part));
 			} else if ($part instanceof tx_newspaper_SourcePath) {
 				$this->setAttribute('source_id', serialize($part));
 			}
-		} 
+		}
 	}
 
 	static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
 		return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
 																   self::$mapFieldsToSourceFields);
 	}
-	
+
 	static public function addField($fieldname, $source_fieldname, tx_newspaper_Source $source) {
         if (!in_array($fieldname, self::$attribute_list)) {
 			self::$attribute_list[] = $fieldname;
 			self::$mapFieldsToSourceFields[get_class($source)][$fieldname] = $source_fieldname;
-        }		
+        }
 	}
-	
+
 	static public function sourceTable(tx_newspaper_Source $source) {
 		return tx_newspaper_ArticleBehavior::sourceTable($source, self::$table);
 	}
@@ -350,7 +350,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	interface tx_newspaper_ArticleIface
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	public function importieren(tx_newspaper_Source $quelle) {
 		$this->articleBehavior->importieren($quelle);
 	}
@@ -376,25 +376,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	//	class tx_newspaper_PageZone
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	/// Get the list of tx_newspaper_Extra associated with this Article in sorted order
 	/** The Extras are sorted by attribute \c paragraph first and
 	 *  \c position second.
-	 * 
+	 *
 	 * \param $extra_class The desired type of tx_newspaper_Extra, either as
 	 *  	object or as class name
 	 */
-	public function getExtras() { 
+	public function getExtras() {
 		if (!$this->extras) {
 			$extras = tx_newspaper::selectRows(
-				'uid_foreign', 'tx_newspaper_article_extras_mm', 
+				'uid_foreign', 'tx_newspaper_article_extras_mm',
 				'uid_local = ' . $this->getUid());
 			if ($extras) foreach ($extras as $extra) {
 				try {
-					$show = tx_newspaper::selectOneRow('show_extra', 
-												   'tx_newspaper_extra', 
+					$show = tx_newspaper::selectOneRow('show_extra',
+												   'tx_newspaper_extra',
 												   'uid = ' . $extra['uid_foreign']);
-					if (TYPO3_MODE != 'BE' && !$show['show_extra']) continue; 
+					if (TYPO3_MODE != 'BE' && !$show['show_extra']) continue;
 
 					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($extra['uid_foreign']);
 					$this->extras[] = $new_extra;
@@ -406,17 +406,17 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				}
 			}
 		}
-		
-		usort($this->extras, array(get_class($this), 'compareExtras')); 
-		
+
+		usort($this->extras, array(get_class($this), 'compareExtras'));
+
 		return $this->extras;
 
 	}
 
 	/// Add an extra after the Extra which is on the original page zone as $origin_uid
-	/** Reimplemented from tx_newspaper_PageZone because concrete Articles don't 
-	 *  have PageZones which inherit from them; default article are to be 
-	 *  treated like PageZones. Setting \p $recursive on an concrete Article 
+	/** Reimplemented from tx_newspaper_PageZone because concrete Articles don't
+	 *  have PageZones which inherit from them; default article are to be
+	 *  treated like PageZones. Setting \p $recursive on an concrete Article
 	 *  would result in an error.
 	 */
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
@@ -436,16 +436,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$pagezonetype_id = $pzt['uid'];
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
 		}
-		return $this->pagezonetype; 
+		return $this->pagezonetype;
 	}
 
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	class tx_newspaper_Article
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	public function getExtrasOf($extra_class) {
 
 		if ($extra_class instanceof tx_newspaper_Extra) {
@@ -453,16 +453,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 
 		$extras = array();
-				
+
 		foreach ($this->getExtras() as $extra) {
 			if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
 				$extras[] = $extra;
 			}
 		}
-		
+
 		return $extras;
 	}
-	
+
 	/// Find the first tx_newspaper_Extra of a given type
 	/** \param $extra_class The desired type of tx_newspaper_Extra, either as
 	 *  	object or as class name
@@ -471,7 +471,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 */
 	public function getFirstExtraOf($extra_class) {
 		$extras = $this->getExtrasOf($extra_class);
-		if (sizeof($extras) > 0) return $extras[0];		
+		if (sizeof($extras) > 0) return $extras[0];
 		return null;
 	}
 
@@ -488,44 +488,44 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	public function isDefaultArticle() {
 		return $this->getAttribute('is_template');
 	}
-	
+
 	/// Delete all Extras
 	public function clearExtras() {
-		$this->extras = array();	
+		$this->extras = array();
 	}
 
 	/// Write record in MM table relating an Extra to this article
 	/** The MM table record is only written if it did not exist beforehand.
-	 * 
+	 *
 	 *  If \p $extra did not have a record in the abstract Extra table
 	 *  (\c tx_newspaper_extra ), the record is created.
-	 * 
+	 *
 	 *  The MM-table \c tx_newspaper_article_extra_mm will contain an
 	 *  association between the Article's UID and the UID in the abstract Extra
 	 *  table.
-	 * 
+	 *
 	 *  \param $extra The tx_newspaper_Extra to add to \c $this.
-	 * 
+	 *
 	 *  \return The UID of \p $extra in the abstract Extra table.
-	 */	
+	 */
 	public function relateExtra2Article(tx_newspaper_ExtraIface $extra) {
-		
+
 		$extra_table = tx_newspaper::getTable($extra);
 		$extra_uid = $extra->getUid();
 		$article_uid = $this->getUid();
 
 		$abstract_uid = $extra->getExtraUid();
-		if (!$abstract_uid)	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table); 
-		
+		if (!$abstract_uid)	$abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table);
+
 		/// Write entry in MM table (if not exists)
 		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid_local, uid_foreign', 
+			'uid_local, uid_foreign',
 			tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 			'uid_local = ' . intval($article_uid) .
-			' AND uid_foreign = ' . intval($abstract_uid)	
+			' AND uid_foreign = ' . intval($abstract_uid)
 		);
 
-		if ($row['uid_local'] != $article_uid || 
+		if ($row['uid_local'] != $article_uid ||
 			$row['uid_foreign'] != $abstract_uid) {
 			if (!tx_newspaper::insertRows(
 					tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
@@ -534,49 +534,49 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 						'uid_foreign' => $abstract_uid)
 					)
 				) {
-				return false;					
+				return false;
 			}
-		} 
-		
+		}
+
 		return $abstract_uid;
-		
+
 	}
-	
+
 	/// Change the paragraph of an Extra recursively on inheriting Articles
 	/** This function is used to change the paragraph of an Extra on Articles
 	 *  that serve as templates for the placement of Articles in Sections
 	 *  ("Default Articles"). Because the \c paragraph attribute must be
-	 *  changed in the default articles of Sections that inherit from the 
+	 *  changed in the default articles of Sections that inherit from the
 	 *  current Section, this operation is non-trivial and cannot be performed
 	 *  by a simple setAttribute().
-	 * 
+	 *
 	 *  \p $extra is moved to the first position in the new paragraph, because
 	 * 	otherwise the operation would result in a random position. Extras
 	 *  already present in the target paragraph might have to be moved. That
 	 *  adds further complications to this function.
-	 * 
+	 *
 	 *  \todo Replace with a generic function to set attributes recursively.
-	 * 
+	 *
 	 *  \param $extra tx_newspaper_Extra which should be moved to another
 	 * 		paragraph.
 	 *  \param $new_paragraph The paragraph to which \p $extra is moved.
 	 */
 	public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
-// \todo: the changed paragraph is STORED in the extra but NOT MODIFIED in this pagezone's extras attribute 		
+// \todo: the changed paragraph is STORED in the extra but NOT MODIFIED in this pagezone's extras attribute
 		$paragraph = intval($extra->getAttribute('paragraph'));
 		if ($paragraph != intval($new_paragraph)) {
 			$extra->setAttribute('paragraph', intval($new_paragraph));
 			$extra->setAttribute('position', $this->getInsertPosition(0));
 			$extra->store();
-			
+
 			/** Change the paragraph in inheriting page zones too.
 			 *  \todo Optional: only overwrite paragraph in inheriting pagezones
 			 *  if it has not been changed manually there.
 			 */
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				if (!($inheriting_pagezone instanceof tx_newspaper_Article)) {
-					/* Probably no harm can come if the page zone is not an 
-					 * Article. So we just write a message to the devlog and 
+					/* Probably no harm can come if the page zone is not an
+					 * Article. So we just write a message to the devlog and
 					 * skip it.
 					 */
 					t3lib_div::devlog(
@@ -594,7 +594,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			}
 		}
 	}
-	
+
 	/// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
 	/** \param $section Section from which the link is generated. Defaults to
 	 * 		using the article's primary section.
@@ -602,14 +602,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  \todo Handle links to articles in sections other than their primary section.
 	 *  \todo Handle PageType other than article page.
 	 *  \todo Check if target page has an Article display Extra,
-	 * 		tx_newspaper_Extra_DisplayArticles. 
+	 * 		tx_newspaper_Extra_DisplayArticles.
 	 */
-	public function getLink(tx_newspaper_Section $section = null, 
+	public function getLink(tx_newspaper_Section $section = null,
 							tx_newspaper_PageType $pagetype = null) {
 		if (!$section) {
 			$section = $this->getPrimarySection();
 		}
-		
+
 		if (!$section instanceof tx_newspaper_Section) {
 			//	find section at the root of the section tree
 			//	uses the first section without a parent section
@@ -620,35 +620,35 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$section = new tx_newspaper_Section($section_data['uid']);
 		}
 		else {
-			$typo3page = $section->getTypo3PageID();	
+			$typo3page = $section->getTypo3PageID();
 		}
-		
+
 		return tx_newspaper::typolink_url(
 			array(
 				'id' => $typo3page,
 				tx_newspaper::article_get_parameter => $this->getUid()
 		));
 	}
-	
+
 	/// Get a list of all attributes in the tx_newspaper_Article table.
 	/** \return All attributes in the tx_newspaper_Article table.
 	 *  \todo A static attribute list sucks. Determine it dynamically.
 	 */
 	static public function getAttributeList() { return self::$attribute_list; }
-	
-	
+
+
 	/// Gets a list of tx_newspaper_Article objects assigned to given article type
 	/** \param $at tx_newspaper_ArticleType object
 	 *  \param $limit max number of records to read (default: 10), if negative no limit is used
-	 *  \return array with tx_newspaper_Article objects 
+	 *  \return array with tx_newspaper_Article objects
 	 */
 	static public function listArticlesWithArticletype(
 		tx_newspaper_ArticleType $at, $limit = 10
 	) {
 
 		$limit = intval($limit);
-		$limit_part = ($limit > 0)? '0,' . $limit : ''; 
-		
+		$limit_part = ($limit > 0)? '0,' . $limit : '';
+
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_article',
@@ -668,16 +668,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	/// Adds a tx_newspaper_Section to the tx_newspaper_Article.
 	/** The new tx_newspaper_Section will be inserted after existing sections.
 	 *  The Article is listed in tx_newspaper_Section \p $s afterwards.
-	 * 
+	 *
 	 *  \param $s New Section
 	 */
 	public function addSection(tx_newspaper_Section $s) {
-/// \todo: if ($this->getuid() == 0) throw e OR 		
+/// \todo: if ($this->getuid() == 0) throw e OR
 /// \todo: just collect here and store sections later in article::store()
-		
-		// get pos of next element 
+
+		// get pos of next element
 		$p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getUid()) + 1;
-		
+
 		tx_newspaper::insertRows(
 			'tx_newspaper_article_sections_mm',
 			array(
@@ -686,9 +686,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				'sorting' => $p
 			)
 		);
-		
+
 	}
-	
+
 	///	Sets the sections of an article to exactly the input sections
 	/** \param $uids UIDs of the tx_newspaper_Section s which \c $this will
 	 *  	belong to.
@@ -703,12 +703,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 				}
 			}
 		}
-		
+
 		tx_newspaper::deleteRows(
 			'tx_newspaper_article_sections_mm',
 			'uid_local = ' . $this->getUid()
 		);
-		
+
 		foreach ($uids as $uid) {
 			if (!$uid instanceof tx_newspaper_Section) {
 				$uid = new tx_newspaper_Section($uid);
@@ -731,7 +731,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			'',
 			$limit? "0, $limit": ''
 		);
-		
+
 		$sections = array();
 		foreach ($section_ids as $id) {
 			$sections[] = new tx_newspaper_Section($id['uid_foreign']);
@@ -742,7 +742,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	/// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
 	/** \return The tx_newspaper_Section in which \p $this is displayed by
 	 *  	default, if no Section context is given, or \c null.
-	 */		
+	 */
 	public function getPrimarySection() {
 		$sections = $this->getSections(1);
 		if (sizeof($sections) == 0) {
@@ -757,12 +757,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	 *  the concrete article and if extras configured as must-have or should-
 	 *  have are missing in the article.
 	 *  \return array of Extra objects (either existing extras or newly created empty extras)
-	 */   
+	 */
 	public function getMissingDefaultExtras() {
 
 		$shortcuts = array();
 
-		// get must-have/should-have configuration 
+		// get must-have/should-have configuration
 		try {
 			$at = $this->getArticleType();
 			$at->getAttribute('uid'); // access article type to force database access
@@ -771,9 +771,9 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			t3lib_div::devlog('getMissingDefaultExtras(): no article type set for article #' . $this->getUid(), 'newspaper', 3);
 			return array(); // no article type, no shortcuts ...
 		}
-		
+
 		$must_should_have_extras = array();
-		
+
 		$tsc_extras = array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave'));
 		foreach($tsc_extras as $tsc_extra) {
 //t3lib_div::devlog('getMissingDefaultExtras()', 'newspaper', 0, array('e' => $tsc_extra));
@@ -790,14 +790,14 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 					);
 				}
 			} // \todo: log errors?
-		}	
+		}
 
 /*
 		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
 		$must_should_have_extras_simple = array();
 		foreach($must_should_have_extras as $extra) {
 			$tsc = explode(':', $extra);
-			$must_should_have_extras_simple[] = $tsc[0]; // cut off value for position, if set 
+			$must_should_have_extras_simple[] = $tsc[0]; // cut off value for position, if set
 		}
 //t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras, 'mse_simple' => $must_should_have_extras_simple));
 
@@ -808,11 +808,11 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		}
 		if (!$defaultArticle = $primarySection->getDefaultArticle()) {
 			// no default article found, so no extras missing ...
-			return array();	
+			return array();
 		}
 		$defaultExtras = $defaultArticle->getExtras();
-		
-		
+
+
 //t3lib_div::devlog('getMissingDefaultExtras() default extras', 'newspaper', 0, array('de' => $defaultExtras));
 		if (is_array($defaultExtras)) {
 			// get extras assigned to this article
@@ -824,7 +824,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 						/// default extra found in concrete article, so no shortcut needed
 						unset($defaultExtras[$keyDefault]);
 
-						// check if this extra type is a must or should have extra 
+						// check if this extra type is a must or should have extra
 						$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
 						if ($key !== false) {
 							// an extra of this type was found, so no shortcut needed for this extra type
@@ -836,7 +836,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			}
 		}
 //t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 2', 'newspaper', 0, array('mse' => $must_should_have_extras));
-		
+
 		/// search for extras that are already assigned to the article (and are configured as must-have or should-have extra but are NOT placed in the default article)
 		foreach($concreteExtras as $keyConcrete => $concreteExtra) {
 			$key = array_search($concreteExtra->getTable(), $must_should_have_extras_simple);
@@ -846,12 +846,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 				unset($must_should_have_extras_simple[$key]);
 			}
 		}
-		
+
 
 		/// create shortcuts for missing "default" extras in the concrete article
 		foreach($defaultExtras as $defaultExtra) {
 			$shortcuts[] = $defaultExtra;
-			// check if this extra type is a must or should have extra 
+			// check if this extra type is a must or should have extra
 			$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
 			if ($key !== false) {
 				// an extra of this type was found, so no shortcut needed
@@ -876,10 +876,10 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			}
 		}
 */
-//t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));		
+//t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));
 		return $shortcuts;
 	}
-	
+
 	/// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.
 	/** \param $class name of extra class
 	 *  \param $paragraph paragraph or false, if paragraph shouldn't be checked
@@ -900,9 +900,9 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			}
 		}
 		return false;
-	}	
+	}
 
-	
+
 	/// Get the SQL table which associates tx_newspaper_Extra with tx_newspaper_PageZone.
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
@@ -929,7 +929,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     }
 
     public function getRelatedArticles() {
-    	
+
         $rows = tx_newspaper::selectRows(
             self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
             self::article_related_table .
@@ -941,9 +941,9 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
                 ' AND (a_foreign.hidden = 0)'
         );
-        
+
         $related_articles = array();
-            
+
         foreach ($rows as $row) {
             if (intval($row['uid_local']) == $this->getUid()) {
                 if (intval($row['uid_foreign']) != $this->getUid()) {
@@ -955,25 +955,25 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 }
             }
         }
-        
+
         return array_unique($related_articles);
     }
 
-    /// Make sure that an article related to \c $this has also \c $this as relation. 
+    /// Make sure that an article related to \c $this has also \c $this as relation.
     private function ensureRelatedArticlesAreBidirectional() {
-    	  
+
     	foreach ($this->getRelatedArticles() as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
-	    	    'uid_local', self::article_related_table, 
+	    	    'uid_local', self::article_related_table,
 	    	    'uid_foreign = ' . $this->getUid() . ' AND uid_local = ' . $related_article->getUid());
 	    	if ($row) continue;
-	    	
+
 	    	$relation_to_write = array(
 	    	    'uid_local' => $related_article->getUid(),
 	    	    'uid_foreign' => $this->getUid()
 	    	);
 	    	tx_newspaper::insertRows(self::article_related_table, $relation_to_write);
-    	}   	    
+    	}
     }
 
     private function removeDanglingRelations() {
@@ -982,30 +982,26 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
             self::article_related_table,
             'uid_local = ' . $this->getUid()
         );
-        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, $rows);
-        
+
     	$uids = array(0);
     	foreach ($rows as $article) {
     		$uids[] = $article['uid_foreign'];
     	}
-    	
+
     	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
     	$rows = tx_newspaper::deleteRows(
             self::article_related_table,
             $where
         );
-    	
-        t3lib_div::devlog('removeDanglingRelations', 'newspaper', 0, array('sql'=>tx_newspaper::$query));
-            	
-    	
-    } 
-    
+
+    }
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	Typo3 hooks
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	/** \todo some documentation would be nice ;-) */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
         self::joinTags($incomingFieldArray, $table, $id, $that);
@@ -1031,7 +1027,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	}
 
     /**
-     * Joins tags from control- and content-selectboxes so both are stored in a single table. 
+     * Joins tags from control- and content-selectboxes so both are stored in a single table.
      * @static
      * @param  $incomingFieldArray
      * @param  $table
@@ -1054,7 +1050,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         }
     }
 
-    /// Make sure that an article related to \c $article_uid has also \c $article_uid as relation. 
+    /// Make sure that an article related to \c $article_uid has also \c $article_uid as relation.
     private static function makeRelatedArticlesBidirectional($article_uid) {
     	if (!intval($article_uid)) return;
         $article = new tx_newspaper_Article(intval($article_uid));
@@ -1064,13 +1060,13 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         } catch (tx_newspaper_Exception $e) {
         	return;
         }
-        
+
         $article->ensureRelatedArticlesAreBidirectional();
-        
+
     }
-    
+
     private static function cleanRelatedArticles($article_uid) {
-    	t3lib_div::devlog('cleanRelatedArticles', 'newspaper', 0, array('article_uid' => $article_uid));
+
         if (!intval($article_uid)) return;
         $article = new tx_newspaper_Article(intval($article_uid));
 
@@ -1079,35 +1075,35 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         } catch (tx_newspaper_Exception $e) {
             return;
         }
-        
+
         $article->removeDanglingRelations();
     }
-    
+
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
-//t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));            
+//t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));
             global $TCA;
             $TCA['tx_newspaper_article']['columns']['tags']['config']['type'] = 'user';
             $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
         }
 
     }
-	
+
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
 //t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
-		if (strtolower($table) == 'tx_newspaper_article' && 
+		if (strtolower($table) == 'tx_newspaper_article' &&
 			(
 				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
 				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) // called by self::setPublishDateIfNeeded() or hidden field is configured to be visible in backend
 			)
 		) {
-			
+
 			// hidden is 0, so article was just made visible
-			
+
 			$article = null; // might be needed later
 
-			// if the values for starttime or publish_date are set in $fieldArray, these values MUST be used 
+			// if the values for starttime or publish_date are set in $fieldArray, these values MUST be used
 			// (because these new values aren't stored in the database)
 
 			if (isset($fieldArray['publish_date'])) {
@@ -1121,12 +1117,12 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 					$publish_date = $article->getAttribute('publish_date');
 				} else {
 					// new article
-					$publish_date = 0; 
+					$publish_date = 0;
 				}
 			}
-			
+
 			if ($publish_date > 0) {
-				return; // publish date has been set already 
+				return; // publish date has been set already
 			}
 
 			if (isset($fieldArray['starttime'])) {
@@ -1148,9 +1144,9 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
 			$fieldArray['publish_date'] = max(time(), $starttime); // change publish_date
 		}
-			
+
 	}
-	
+
 	/// sets the publish date if needed
 	/** The publish date needs to be set if the attribute hidden changes to 0 and
 	 *  no publish_date is stored so far.
@@ -1161,7 +1157,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			'hidden' => $this->getAttribute('hidden')
 		);
 		self::addPublishDateIfNotSet('', $this->getTable(), $this->getUid(), $fakeFieldArray);
-		if (isset($fakeFieldArray['publish_date'])) { 
+		if (isset($fakeFieldArray['publish_date'])) {
 			// addPublishDateIfNotSet() added a new publish_date in $fakeFieldArray, so set that date as publish_date
 			$this->setAttribute('publish_date', $fakeFieldArray['publish_date']);
 			$this->setAttribute('tstamp', time());
@@ -1169,39 +1165,39 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	}
 
 
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	protected functions
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	/// Find out which tx_newspaper_Page is currently displayed
 	/** Uses \c $_GET to find out which tx_newspaper_PageType is requested on
 	 *  the current tx_newspaper_Section.
-	 * 
+	 *
 	 *  \return The currently displayed tx_newspaper_Page.
-	 * 
+	 *
 	 *  \todo make static, move to tx_newspaper
 	 */
 	protected function getCurrentPage() {
 		if (TYPO3_MODE == 'BE') {
 			$section = $this->getPrimarySection();
-		} else { 
+		} else {
 			$section = tx_newspaper::getSection();
 		}
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
-	
+
 	/// Split the article's text into an array, one entry for each paragraph
 	/** tx_newspaper_Extra are inserted before or after paragraphs. This
 	 *  function splits the article text so the position of a tx_newspaper_Extra
 	 *  can be found.
-	 *   
+	 *
 	 *  The functionality of this function depends on the way the RTE stores
-	 *  line breaks. Currently it breaks the text at \c "<p>/</p>" -pairs and 
+	 *  line breaks. Currently it breaks the text at \c "<p>/</p>" -pairs and
 	 *  also at line breaks \c ("\n").
-	 * 
+	 *
 	 *  \attention If the format of line breaks changes, this function must be
 	 * 	altered.
 	 */
@@ -1211,8 +1207,8 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		 *  paragraph is meaningful and must be kept.
 		 */
 		$temp_paragraphs = explode('<p', $this->getAttribute('text'));
-		$paragraphs = array();		
-		
+		$paragraphs = array();
+
 		foreach ($temp_paragraphs as $paragraph) {
 			/// Remove the test of the \c "<p>" - tag from every line.
 			$paragraph = trim(substr($paragraph, strpos($paragraph, '>')+1));
@@ -1220,30 +1216,30 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			 *  text is not well-formed. In any case, we must remove the \c "</p>".
 			 */
 			$paragraph = str_replace('</p>', '', $paragraph);
-			
+
 			/// Now we split the paragraph at line breaks.
 			$sub_paragraphs = explode("\n", $paragraph);
-			
+
 			/// Store the pieces in one flat array.
 			foreach($sub_paragraphs as $sub_paragraph) $paragraphs[] = $sub_paragraph;
 		}
 
-		return $paragraphs;	
+		return $paragraphs;
 	}
-		
+
 	/// Get the index of the provided tx_newspaper_Extra in the Extra array
 	/** Binary search for an Extra, assuming that \c $this->extras is ordered by
 	 *  paragraph first and position second.
-	 * 
+	 *
 	 *  \param $extra tx_newspaper_Extra to find
 	 *  \return Index of \p $extra in \c $this->extras
 	 *  \throw tx_newspaper_InconsistencyException if \p $extra is not present
 	 * 		in \c $this->extras
-	 */ 
+	 */
 	protected function indexOfExtra(tx_newspaper_Extra $extra) {
         $high = sizeof($this->getExtras())-1;
         $low = 0;
-       
+
         while ($high >= $low) {
             $index_to_check = floor(($high+$low)/2);
             $comparison = $this->getExtra($index_to_check)->getAttribute('paragraph') -
@@ -1258,69 +1254,69 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	            else return $index_to_check;
             }
         }
-		
+
 		// Loop ended without a match
 		throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
-													  ' not found in array of Extras!');		
+													  ' not found in array of Extras!');
 	}
-	
+
 
  	/// Ordering function to keep Extras in the same order as they appear on the PageZone
  	/** Supplied as parameter to \c usort() in getExtras().
  	 *  \param $extra1 first tx_newspaper_Extra to compare
  	 *  \param $extra2 second tx_newspaper_Extra to compare
- 	 *  \return < 0 if \p $extra1 comes before \p $extra2, > 0 if it comes after, 
- 	 * 			== 0 if their position is the same 
+ 	 *  \return < 0 if \p $extra1 comes before \p $extra2, > 0 if it comes after,
+ 	 * 			== 0 if their position is the same
  	 */
- 	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
+ 	static protected function compareExtras(tx_newspaper_ExtraIface $extra1,
  									 		tx_newspaper_ExtraIface $extra2) {
  		$paragraph1 = $extra1->getAttribute('paragraph');
  		$paragraph2 = $extra2->getAttribute('paragraph');
- 		
+
  		if ($paragraph1 == $paragraph2) {
  			return $extra1->getAttribute('position')-$extra2->getAttribute('position');
  		}
- 		
+
  		/**	Negative paragraphs are sorted at the end, in reverse order.
  		 *  So, a negative paragraph comes AFTER a positive paragraph. If both
  		 *  are negative though, it's the usual order: The smaller value (higher
  		 *  negative value) comes first.
- 		 */ 
+ 		 */
  		if ($paragraph1*$paragraph2 < 0) return $paragraph2-$paragraph1;
  		else return $paragraph1-$paragraph2;
- 			
+
 	}
 
 	/// SQL table which associates tx_newspaper_Extra s with tx_newspaper_PageZone s
 	static protected $extra_2_pagezone_table = 'tx_newspaper_article_extras_mm';
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	//	private data members
 	//
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	///< tx_newspaper_Source the tx_newspaper_Article is read from
 	private $source = null;
 	/// Object to delegate operations to
-	private $articleBehavior = null;	
-	
+	private $articleBehavior = null;
+
 	///	List of attributes that together constitute an Article
 	/** \todo update */
 	private static $attribute_list = array(
 		'title', 'teaser', 'text', 'author'
 	);
-	
+
 	/// Mapping of the attributes to the names they have in the tx_newspaper_Source for each supported tx_newspaper_Source type
 	/** Form of the array:
 	 *  \code
 	 *  source_class_name => array (
 	 * 		attribute_name => name_of_that_attribute_in_source
-	 * 		...		
+	 * 		...
 	 *  )
-	 * \endcode 
+	 * \endcode
 	 * the attributes from \p $attribute_list must be the same as here.
-	 * 
+	 *
 	 * \todo update
 	 */
 	private static $mapFieldsToSourceFields = array(
@@ -1335,17 +1331,17 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 	    	'title' => 'article_manualtitle',
 	    	'teaser' => 'article_title2',
 	    	'text' => 'article_manualtext',
-	    	'ressort' => 'ressort', 
+	    	'ressort' => 'ressort',
 	    	'author' => 'author'
 		)
 	);
-	
+
 	///	Additional info needed to instantiate an article for each supported Source type
 	private static $table = array(
 		'tx_newspaper_taz_RedsysSource' => '',
 		'tx_newspaper_DBSource' => 'tx_hptazarticle_list'
 	);
-	
+
 }
 
 //tx_newspaper::registerSaveHook(new tx_newspaper_Article());
