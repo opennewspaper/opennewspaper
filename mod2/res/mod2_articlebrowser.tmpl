@@ -1,4 +1,4 @@
-{* debug *}
+{* debug *} 
 {literal}
 <style type="text/css">
 table {
@@ -28,6 +28,20 @@ td {
 </style> 
 
 <script language="javascript">
+
+	// for article list module (select box is rendered with newspaper ext
+	
+	function insertElementNpStyle(uid, kicker, title, element, doClose) {    
+	    var selectBox = parent.window.opener.$('#' + element);
+	    selectBox.addOptionAboveSelected(uid, kicker, title);
+	    if(doClose) parent.close();
+	    return false;
+	}
+
+
+
+
+	// for article select boxes rendered by typo3
 
 	var path = window.location.pathname;
 	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
@@ -92,9 +106,10 @@ function showArticlePreview(article_uid) {
 </script>
 {/literal}
 
-
-{$workflowlog_javascript} {* add once only for all comments *}
-
+{* add once only for all comments *}
+{* \todo: fix js, so workflow log is working 
+{$workflowlog_javascript}  
+*}
 
 
 <form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
@@ -134,9 +149,9 @@ function showArticlePreview(article_uid) {
 <br />
 
 {$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author}" /> 
-{* \todo: add section filter
+
 {$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" />
-*}
+
 {$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 
 {$STEP_LABEL}: <select name="step" onchange="this.form.submit()">
@@ -215,8 +230,15 @@ function showArticlePreview(article_uid) {
 		<td> 
 			<div title="{$DATA[i].teaser}">
 {if $IS_ARTICLE_BROWSER}
-	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:"html"}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
-	<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:"html"}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+	{if $AB4AL}
+		{* manual article list module *}
+		<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', false);" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
+		<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'html'}', '{$DATA[i].title|escape:'html'}', '{$select_box_id}', true);" href="#">
+	{else}
+		{* article select box rendered by Typo3 *}
+		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:"html"}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
+		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:"html"}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+	{/if}
 {/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
 {if !$IS_ARTICLE_BROWSER}
@@ -228,7 +250,7 @@ function showArticlePreview(article_uid) {
 {if !$IS_ARTICLE_BROWSER}
 		<td> {$DATA[i].be_user} </td>
 {/if}
-		<td> {$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"} </td>
+		<td> {if $DATA[i].tstamp}{$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"}{/if} </td>
 		<td align="center">
 {if !$IS_ARTICLE_BROWSER}
   {* moderation list, so link visibile icon with hide/unhide functionality *}
@@ -272,7 +294,11 @@ function showArticlePreview(article_uid) {
 	<tr class="bg2">
 {/if}
 		<td colspan="2"></td>
-		<td colspan="7">{$DATA[i].workflowlog}</td>
+		<td colspan="7">
+{* \todo: fix js, so workflow log is working		
+{$DATA[i].workflowlog}
+*}
+		</td>
 	</tr>
 {/section}
 </table>
