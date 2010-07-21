@@ -444,11 +444,11 @@ function findElementsByName(name, type) {
 ';
 		if ($useCounter) {
 			// add textarea AND a counter
-			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'counter_' . $uniq . '\');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'counter_' . $uniq . '\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
 <div id="counter_' . $uniq . '">' . intval($maxLen - strlen(utf8_decode($PA['row'][$PA['field']]))) . '</div>';
 		} else {
 			// add textarea only
-			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" rows="5" class="formField" cols="48" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
 			
 		}
 
