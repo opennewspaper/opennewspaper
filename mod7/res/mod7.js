@@ -361,6 +361,7 @@ function connectPlacementEvents() {
             doRefresh = confirm(langReallyrefresh)
         }
         if(doRefresh) {
+            $('#' + this.title).attr('multiple', 'multiple');
             $("#" + this.title).selectAllOptions();
             $("#" + this.title).removeOption(/./, true);
             showProgress();
@@ -374,6 +375,7 @@ function connectPlacementEvents() {
             );        
     		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
 	    	$("input.save[title=" +  this.title + "]").removeClass("unsaved");
+            $('#' + this.title).removeAttr('multiple');
         }
 		if (everythingSaved()) {
 			$("input#saveall").removeClass("unsaved");
