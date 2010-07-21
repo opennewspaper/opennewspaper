@@ -115,6 +115,7 @@ function saveArticleList(elementId, async) {
 	if (async == undefined) {
 		async = true;
 	}
+    $('#' + elementId).attr('multiple', 'multiple');
 	$("#" + elementId).selectAllOptions();
 	showProgress();
 	jQuery.ajax({
@@ -124,6 +125,7 @@ function saveArticleList(elementId, async) {
 				alert(langSavedidnotwork);
 			}
 			$("#" + elementId).unselectAllOptions();
+            $("#" + elementId).removeAttr('multiple');
 			hideProgress();
 		},
 		async: async
