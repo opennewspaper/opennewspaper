@@ -34,6 +34,7 @@ td {
 	function insertElementNpStyle(uid, kicker, title, element, doClose) {    
 	    var selectBox = parent.window.opener.$('#' + element);
 	    selectBox.addOptionAboveSelected(uid, kicker, title);
+		parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
 	    if(doClose) parent.close();
 	    return false;
 	}
