@@ -189,7 +189,7 @@ function showArticlePreview(article_uid) {
 {else}
 	{math equation="(sp+1)*st" sp=$_POST.start_page st=$_POST.step}
 {/if}
- ]
+ / {$RESULT_COUNT} ]
 {if $URL_NEXT}
 <a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
 &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}

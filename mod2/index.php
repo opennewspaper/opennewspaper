@@ -148,29 +148,31 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$where = $this->createWherePart(); // get conditions for sql statement
 
-		/// get records (get one more than needed to find out if there's an next page)
 		if ($where !== false) {
+			
+			$count = tx_newspaper::countRows($where['table'], $where['where']);
+			
 			$row = tx_newspaper::selectRows(
 				'*',
 				$where['table'],
 				$where['where'], 
 				'',
 				'tstamp DESC',
-				intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')) + 1)
+				intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')))
 			);
 //t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 		} else {
 			$row = array(); // empty result
 		}
 
-		$content = $this->renderBackendSmarty($row);
+		$content = $this->renderBackendSmarty($row, $count);
 
 		$this->content .= $this->doc->section('', $content, 0, 1);
 //t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));
 	}
 
 	
-	function renderBackendSmarty($row) {
+	function renderBackendSmarty($row, $count) {
 		global $LANG;
 		
  		$smarty = new tx_newspaper_Smarty();
@@ -181,6 +183,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('PAGE_PREV_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_prev', false));
 		$smarty->assign('PAGE_NEXT_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_next', false));
 		$smarty->assign('PAGE_HITS_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.page_hits', false));
+		$smarty->assign('RESULT_COUNT', intval($count));
 
 		$smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
 		$smarty->assign('RANGE_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.range', false));
@@ -265,10 +268,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		} else {
 			$smarty->assign('URL_PREV', '');
 		}
-		if (sizeof($row) > intval(t3lib_div::_GP('step'))) {
+		if ($count > intval((t3lib_div::_GP('start_page')+1) * t3lib_div::_GP('step'))) {
 			// so there's at least one next record
 			$smarty->assign('URL_NEXT', tx_newspaper_UtilMod::convertPost2Querystring(array('start_page' => intval(t3lib_div::_GP('start_page')) + 1)));
-			$row = array_slice($row, 0, intval(t3lib_div::_GP('step'))); // cut off entry from next page
 		} else {
 			$smarty->assign('URL_NEXT', '');
 		}
