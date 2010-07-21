@@ -63,35 +63,48 @@
 		TCEFORM.tx_newspaper_articlelist.hidden.disabled = 1
 
 		// hide starttime and endtime for extras
-		TCEFORM.tx_newspaper_extra_image.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_image.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_sectionlist.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_sectionlist.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_typo3_ce.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_typo3_ce.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_articlelist.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_articlelist.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_textbox.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_textbox.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_externallinks.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_externallinks.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_displayarticles.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_displayarticles.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_bio.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_bio.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_controltagzone.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_controltagzone.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_combolinkbox.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_combolinkbox.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_searchresults.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_searchresults.endtime.disabled = 1
-		TCEFORM.tx_newspaper_extra_container.starttime.disabled = 1
-		TCEFORM.tx_newspaper_extra_container.endtime.disabled = 1
 		TCEFORM.tx_newspaper_extra_ad.starttime.disabled = 1
 		TCEFORM.tx_newspaper_extra_ad.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_ad.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_articlelinks.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_articlelist.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_articlelist.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_bio.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_bio.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_bio.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_combolinkbox.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_combolinkbox.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_combolinkbox.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_container.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_container.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_container.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_controltagzone.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_controltagzone.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_controltagzone.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_displayarticles.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_displayarticles.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_externallinks.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_externallinks.endtime.disabled = 1
 		TCEFORM.tx_newspaper_extra_generic.starttime.disabled = 1
 		TCEFORM.tx_newspaper_extra_generic.endtime.disabled = 1
-	
+		TCEFORM.tx_newspaper_extra_generic.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_image.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_image.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_image.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_mostcommented.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_mostcommented.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_mostcommented.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_searchresults.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_searchresults.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_sectionlist.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_sectionlist.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_sectionlist.hidden.disabled = 1
+		TCEFORM.tx_newspaper_extra_textbox.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_textbox.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_typo3_ce.starttime.disabled = 1
+		TCEFORM.tx_newspaper_extra_typo3_ce.endtime.disabled = 1
+		TCEFORM.tx_newspaper_extra_typo3_ce.hidden.disabled = 1
+
 		// \todo enable after functionlaity is implemented, see #1111		
 		TCEFORM.tx_newspaper_articlelist_semiautomatic.subsequent_sections.disabled = 1
 
