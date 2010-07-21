@@ -58,7 +58,47 @@ class tx_newspaper  {
 		$args = join("\n", $previous_function['args']);
 		self::writeNewspaperLogEntry($type, "$function_name\n$args");
 	}
-	
+
+
+	/// Execute a \c SELECT query and return the amount of records in the result set
+	/** enableFields() are taken into account.
+	 *  \param $table Table to \c SELECT \c FROM
+	 *  \param $where \c WHERE - clause (defaults to selecting all records)
+	 *  \param $groupBy Fields to \c GROUP \c BY
+	 *  \return number of records found
+	 *  \throw tx_newspaper_NoResException if no result is found, probably due
+	 * 		to a SQL syntax error
+	 */
+	public static function countRows($table, $where='1', $groupBy='') {
+
+		self::writeFunctionAndArgumentsToLog('logDbSelect');
+		
+		if (!is_object($GLOBALS['TYPO3_DB'])) {
+			$GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
+		}
+
+		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			'COUNT(*) AS c', 
+			$table, 
+			$where . self::enableFields($table), 
+			$groupBy
+		);
+		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+
+		$count = 0;
+		if ($res) {
+	        if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	        	$count = $row['c'];
+	        }
+	        
+	        self::writeNewspaperLogEntry('logDbSelect', 'selectRows, #results: ' . $count);
+	        
+			return $count;
+		} else {
+			throw new tx_newspaper_NoResException(self::$query);
+		}
+	}
+
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 * 
