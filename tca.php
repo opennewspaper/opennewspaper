@@ -174,8 +174,8 @@ $TCA["tx_newspaper_section"] = array (
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.section_name",		
 			"config" => Array (
 				"type" => "input",	
-				"size" => "40",	
-				"max" => "40",	
+				"size" => "48",	
+				"max" => "80",	
 				"eval" => "required",
 			)
 		),
