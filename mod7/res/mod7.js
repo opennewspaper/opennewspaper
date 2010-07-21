@@ -132,26 +132,46 @@ function saveArticleList(elementId, async) {
 
 function resortArticleList(elementId, action, async) {
 //console.log(stacktrace());
-	if (async == undefined) {
-		async = true;
-	}
-    var selectedOption = $("#" + elementId).getSelectedOption();
-    if(selectedOption) {
-        var articleids = $("#" + elementId).getOptionValues().join('|');
-        showProgress();
-        jQuery.ajax({
-            url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]="+action+"&tx_newspaper_mod7[sel_article_id]="+selectedOption.value+"&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + articleids,
-            dataType: 'json',            
-            success: function (data) {
-                if (data) {
-                    updateArticleList(elementId, data, selectedOption.value);
-                } else {
-                    alert(langSavedidnotwork);
-                }
-                hideProgress();
-            },
-            async: async
-        });
+    if($('#' + elementId).hasClass('manual-list')) {
+        switch(action) {
+        case  'top' :
+            $('#' + elementId).moveOptionsUp(true, true);
+            break;
+        case 'bottom' :
+            $('#' + elementId).moveOptionsDown(true, true);
+            break;
+        case 'moveup' :
+            $('#' + elementId).moveOptionsUp(false, true);
+            break;
+        case 'movedown' :
+            $('#' + elementId).moveOptionsDown(false, true);
+            break;
+        default:
+            console.log('action "' + action +"' not found");
+            break;
+        }
+    } else {
+        if (async == undefined) {
+            async = true;
+        }
+        var selectedOption = $("#" + elementId).getSelectedOption();
+        if(selectedOption) {
+            var articleids = $("#" + elementId).getOptionValues().join('|');
+            showProgress();
+            jQuery.ajax({
+                url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]="+action+"&tx_newspaper_mod7[sel_article_id]="+selectedOption.value+"&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + articleids,
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        updateArticleList(elementId, data, selectedOption.value);
+                    } else {
+                        alert(langSavedidnotwork);
+                    }
+                    hideProgress();
+                },
+                async: async
+            });
+        }
     }
 }
 
@@ -184,7 +204,7 @@ function updateArticleList(listId, offsetAndId, lastSelectedOption) {
 
 
 function collectSections () {
-	var sections = new Array ();
+	sections = new Array ();
 	$(".refresh").each(function(index, item) {
 		sections.push(item.title);
   	});
