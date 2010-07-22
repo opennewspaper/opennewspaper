@@ -451,13 +451,13 @@ function deleteArticle(article_uid) {
   	{if $IS_DUTY_EDITOR || $IS_ADMIN}
     	<a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
     {else}
-		{$HIDDEN_ICON}
+		{$PUBLISHED_ICON}
     {/if}
   {else}
   	{if $IS_DUTY_EDITOR || $IS_ADMIN}
 	    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
 	{else}
-    	{$PUBLISHED_ICON}
+    	{$HIDDEN_ICON}
 	{/if}
   {/if}<br /><br />
 {* <strong>{$DATA[i].???|date_format:"%d.%m.%Y"}</strong><br /> {$DATA[i].???|date_format:"%H:%I:%S"} *}
