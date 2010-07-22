@@ -235,8 +235,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('TIME_VISIBLE_ICON', tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.time', false)));
 		$smarty->assign('ARTICLE_DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.delete_article', false)));
 		$smarty->assign('ARTICLE_DELETE_MESSAGE', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:message_delete_article', false));
-		$smarty->assign('PUBLISHED_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.hidden', false)));
-		$smarty->assign('HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.published', false)));
+		$smarty->assign('PUBLISHED_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.published', false)));
+		$smarty->assign('HIDDEN_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.hidden', false)));
 
 
 		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
