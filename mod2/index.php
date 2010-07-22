@@ -22,6 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+define('FILTERTYPE_PRODUCTIONLIST', 1);
+define('FILTERTYPE_ARTICLEBROWSER', 2);
+
+
 
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
@@ -399,14 +403,27 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		
 	}
 
+
 	/// adds default filter settings if filter type is missing in given array
 	/// if array if empty, all filter default values are returned
 	/// \param $settings filter settings
+	/// \param $type either FILTERTYPE_PRODUCTIONLIST or FILTERTYPE_ARTICLEBROWSER
+	/// \param $forceRole if set to true the role is overridden with the default value no matter if a filter value has been already set
 	/// \return array with filter settings where missing filter type were added with default values
-	private function addDefaultFilterValues(array $settings) {
+	private function addDefaultFilterValues(array $settings, $type=FILTERTYPE_PRODUCTIONLIST, $forceRole=false) {
+//t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array($settings, $type));
 		if (!array_key_exists('range', $settings)) $settings['range'] = 'today';
 		if (!array_key_exists('hidden', $settings)) $settings['hidden'] = 'all';
-		if (!array_key_exists('role', $settings)) $settings['role'] = '-1';
+		if (!array_key_exists('role', $settings) || $forceRole) {
+			// add if missing or overwrite if $forceRole is set
+			if ($type == FILTERTYPE_ARTICLEBROWSER) {
+				$settings['role'] = '-1'; // all role if article browser
+			} elseif ($type == FILTERTYPE_PRODUCTIONLIST) {
+				$settings['role'] = tx_newspaper_workflow::getRole(); // current tole of be_user
+			} else {
+				t3lib_div::devlog('addDefaultFilterValues(): unknown type', 'newspaper', 3, array('settings' => $settings, 'type' => $type));
+			}
+		}
 		if (!array_key_exists('author', $settings)) $settings['author'] = '';
 		if (!array_key_exists('be_user', $settings)) $settings['be_user'] = '';
 		if (!array_key_exists('section', $settings)) $settings['section'] = '';
