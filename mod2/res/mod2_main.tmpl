@@ -92,6 +92,11 @@
 	margin:15px 0 0 100px;
 	width:150px;
 }
+
+.red_frame {
+  border-color:red;
+}
+
 	
 /*  hits */ 
 	
@@ -337,7 +342,7 @@ function deleteArticle(article_uid) {
 	<br />
 	
 	<label>{$ROLE_LABEL}</label> 
-		<select name="role" onchange="this.form.submit()">
+		<select name="role" {if !$ROLE_FILTER_EQUALS_USER_ROLE}class="red_frame" {/if}onchange="this.form.submit()">
 			{foreach from=$ROLE key=key item=value}
 			{if $key == $_POST.role}
 				<option selected="selected" value="{$key}">{$value}</option>
@@ -349,15 +354,15 @@ function deleteArticle(article_uid) {
 	<br />
 	
 	<label>{$AUTHOR_LABEL}</label> 
-	<input type="text" name="author" value="{$_POST.author}" />  
+	<input type="text" name="author" value="{$_POST.author|escape:html}" />  
 	<br />
 
 	<label>{$BE_USER_LABEL}</label> 
-	<input type="text" name="be_user" value="{$_POST.be_user}" />  
+	<input type="text" name="be_user" value="{$_POST.be_user|escape:html}" />  
 	<br />
 
 	<label>{$SECTION_LABEL}</label> 
-	<input type="text" name="section" value="{$_POST.section}" />  
+	<input type="text" name="section" value="{$_POST.section|escape:html}" />  
 	<br />
 
 	<label>{$TEXTSEARCH_LABEL}</label> 

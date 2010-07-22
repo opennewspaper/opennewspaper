@@ -22,11 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-define('FILTERTYPE_PRODUCTIONLIST', 1);
-define('FILTERTYPE_ARTICLEBROWSER', 2);
-
-
-
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
 require_once('conf.php');
@@ -201,6 +196,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
 		$smarty->assign('ROLE_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role', false));
+		$smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
 
 		$smarty->assign('AUTHOR_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.author', false));
 		$smarty->assign('SECTION_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.section', false));
@@ -340,10 +336,24 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		
-		if (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al')) {
+		if ($this->isArticleBrowser()) {
 			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser 
 		}
-		return $smarty->fetch('mod2_main.tmpl'); // moderation list
+		return $smarty->fetch('mod2_main.tmpl'); // production list
+	}
+
+	/// \return true if an article browser is rendered, false if production list is rendered
+	private function isArticleBrowser() {
+		return t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al');	
+	}
+	/// \return true if production list is rendered, false if an article browser is rendered 
+	private function isProductionList() {
+		return !$this->isArticleBrowser();	
+	}
+
+	/// \return true if role filter equals the current role of the be_user, else false
+	private function isRoleFilterEqualToUserRole() {
+		return ($_POST['role'] ==  tx_newspaper_workflow::getRole());
 	}
 
 	private function insertStartEndtime($string, $starttime, $endtime) {
@@ -363,14 +373,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) == 0)) {
 			/// module is called from menu
 			
-			$storedFilter = unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter'));
+			$storedFilter = $this->getFilter(); 
 			if (is_array($storedFilter)) {
 				// use stored filter
-				$storedFilter = $this->addDefaultFilterValues($storedFilter); // in case something went wrong when storing the filter settings
+				$storedFilter = $this->addDefaultFilterValues($storedFilter, true); 
 				$_POST = $storedFilter; 
 			} else {
 				// set default filter setting
-				$_POST = $this->addDefaultFilterValues($_POST);
+				$_POST = $this->addDefaultFilterValues($_POST, true);
 			}
 		} elseif ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) > 0)) {
 			/// set some defaults for pages being called by url
@@ -387,49 +397,86 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$_POST = $this->addDefaultFilterValues(array());
 			unset($_POST['reset_filter']); 			
 		}
-		
+
+		$this->storeFilter();
+
+	}
+
+	/// \return filter settings (checks if settings for production list or article browser are requested)
+	private function getFilter() {
+		if ($this->isProductionList()) {
+			return unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter_prodlist'));
+		} else {
+			return array(); // no filter is stored for the article browser
+		}
+	}
+
+	/// Stores the filter setting (check whether to store production list or article browser settings)
+	private function storeFilter() {
 		// store filter settings
-		$GLOBALS['BE_USER']->pushModuleData("tx_newspaper/mod2/index.php/filter", serialize(array(
-			'range' => $_POST['range'],
-			'hidden' => $_POST['hidden'],
-			'role' => $_POST['role'],
-			'author' => $_POST['author'],
-			'be_user' => $_POST['be_user'],
-			'section' => $_POST['section'],
-			'text' => $_POST['text'],
-			'step' => $_POST['step'],
-			'start_page' => 0 // always start on first result page
-		)));
-		
+		if ($this->isProductionList()) {
+			$GLOBALS['BE_USER']->pushModuleData("tx_newspaper/mod2/index.php/filter_prodlist", serialize(array(
+				'range' => $_POST['range'],
+				'hidden' => $_POST['hidden'],
+				'role' => $_POST['role'],
+				'author' => $_POST['author'],
+				'be_user' => $_POST['be_user'],
+				'section' => $_POST['section'],
+				'text' => $_POST['text'],
+				'step' => $_POST['step'],
+				'start_page' => 0 // always start on first result page
+			)));
+		} // no need to store article browser filtrer settings. filter are reset each time an article browser is called
 	}
 
 
 	/// adds default filter settings if filter type is missing in given array
-	/// if array if empty, all filter default values are returned
-	/// \param $settings filter settings
-	/// \param $type either FILTERTYPE_PRODUCTIONLIST or FILTERTYPE_ARTICLEBROWSER
-	/// \param $forceRole if set to true the role is overridden with the default value no matter if a filter value has been already set
-	/// \return array with filter settings where missing filter type were added with default values
-	private function addDefaultFilterValues(array $settings, $type=FILTERTYPE_PRODUCTIONLIST, $forceRole=false) {
+	/** if array $settings is empty or filled partly only, all missing filter values are filled with default values
+     * \param $settings filter settings
+	 * \param $forceReset if set to true some fields are forced to be filled with default values
+	 * \return array with filter settings where missing filters were added (using default values)
+	 */
+	private function addDefaultFilterValues(array $settings, $forceReset=false) {
 //t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array($settings, $type));
-		if (!array_key_exists('range', $settings)) $settings['range'] = 'today';
-		if (!array_key_exists('hidden', $settings)) $settings['hidden'] = 'all';
-		if (!array_key_exists('role', $settings) || $forceRole) {
+		if (!array_key_exists('range', $settings)) {
+			$settings['range'] = 'today';
+		}
+		if (!array_key_exists('hidden', $settings)) {
+			$settings['hidden'] = 'all';
+		}
+		if (!array_key_exists('role', $settings) || $forceReset) {
 			// add if missing or overwrite if $forceRole is set
-			if ($type == FILTERTYPE_ARTICLEBROWSER) {
+			if ($this->isArticleBrowser()) {
 				$settings['role'] = '-1'; // all role if article browser
-			} elseif ($type == FILTERTYPE_PRODUCTIONLIST) {
-				$settings['role'] = tx_newspaper_workflow::getRole(); // current tole of be_user
+			} elseif ($this->isProductionList()) {
+				$settings['role'] = tx_newspaper_workflow::getRole(); // current role of be_user
 			} else {
 				t3lib_div::devlog('addDefaultFilterValues(): unknown type', 'newspaper', 3, array('settings' => $settings, 'type' => $type));
 			}
 		}
-		if (!array_key_exists('author', $settings)) $settings['author'] = '';
-		if (!array_key_exists('be_user', $settings)) $settings['be_user'] = '';
-		if (!array_key_exists('section', $settings)) $settings['section'] = '';
-		if (!array_key_exists('text', $settings)) $settings['text'] = '';
-		if (!array_key_exists('step', $settings)) $settings['step'] = 10;
-		if (!array_key_exists('start_page', $settings)) $settings['start_page'] = 0;
+		if (!array_key_exists('author', $settings) || $forceReset) {
+			$settings['author'] = '';
+		}
+		if (!array_key_exists('be_user', $settings) || $forceReset) {
+			$settings['be_user'] = '';
+		}
+		if ($this->isProductionList()) {
+			if (!array_key_exists('section', $settings) || $forceReset) {
+				$settings['section'] = '';
+			} 
+		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
+			$settings['section'] = $_REQUEST['s'];
+		}
+		if (!array_key_exists('text', $settings) || $forceReset) {
+			$settings['text'] = '';
+		}
+		if (!array_key_exists('step', $settings)) {
+			$settings['step'] = 10;
+		}
+		if (!array_key_exists('start_page', $settings) || $forceReset) {
+			$settings['start_page'] = 0;
+		}
+		
 		return $settings;
 	}
 

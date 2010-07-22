@@ -149,9 +149,9 @@ function showArticlePreview(article_uid) {
 
 <br />
 
-{$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author}" /> 
+{$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author|escape:html}" /> 
 
-{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section}" />
+{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section|escape:html}" />
 
 {$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" /> 
 

@@ -1,6 +1,5 @@
 {* debug *}
 {if $singlemode}
-	<!-- <script type="text/javascript" src="contrib/prototype/prototype.js"></script> -->
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
 	var langReallycancel = "{$lang.reallycancel}";
@@ -75,7 +74,7 @@
 										{else}
 											<br />
 											{* add article browser *}											
-											<a href="#" onclick="setFormValueOpenBrowser_AL('placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}'); return false;" >{$ICON.articlebrowser}</a>
+											<a href="#" onclick="setFormValueOpenBrowser_AL('placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}', '{$section.section->getAttribute('section_name')|escape:html}'); return false;" >{$ICON.articlebrowser}</a>
 										{/if}
 										<br />
 										<a href="#" class="delete" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
