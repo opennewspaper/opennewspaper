@@ -465,7 +465,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				$settings['section'] = '';
 			} 
 		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
-			$settings['section'] = $_REQUEST['s'];
+//	reactivate after #1041 is fixed (recursive section search)		$settings['section'] = $_REQUEST['s']; 
 		}
 		if (!array_key_exists('text', $settings) || $forceReset) {
 			$settings['text'] = '';
@@ -628,8 +628,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	/// get section uids for given search term $section
 	/// \param $section search term for sections (is NOT trimmed)
+	/// \param $recursive wheater or not sub section are searched too
 	/// \return comma separated list of section uids or false if no section could be found
-	private function getWhereForSection($section) {
+	private function getWhereForSection($section, $recursive=true) {
 		$sectionUids = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
