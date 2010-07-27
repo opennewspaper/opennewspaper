@@ -115,6 +115,7 @@ function saveArticleList(elementId, async) {
 	if (async == undefined) {
 		async = true;
 	}
+    var selectedOption = $("#" + elementId).getSelectedOption();
     $('#' + elementId).attr('multiple', 'multiple');
 	$("#" + elementId).selectAllOptions();
 	showProgress();
@@ -126,6 +127,7 @@ function saveArticleList(elementId, async) {
 			}
 			$("#" + elementId).unselectAllOptions();
             $("#" + elementId).removeAttr('multiple');
+            reselectLastOption(elementId, selectedOption.value);
 			hideProgress();
 		},
 		async: async
@@ -199,8 +201,15 @@ function updateArticleList(listId, offsetAndId, lastSelectedOption) {
     $('#' + listId).addOption(newOptions, false); //add but don't select
 
     //re-select last selected option
-    var artId = lastSelectedOption.split('_').pop();
-    var regExp = new RegExp('_'+ artId + '$');
+    reselectLastOption(listId, lastSelectedOption);
+}
+
+function reselectLastOption(listId, lastSelectedOption) {
+    var regExp = lastSelectedOption;
+    if(lastSelectedOption.indexOf('_') > -1) {
+        var artId = lastSelectedOption.split('_').pop();
+        regExp = new RegExp('_'+ artId + '$');
+    }
     $('#' + listId).selectOptions(regExp);
 }
 
