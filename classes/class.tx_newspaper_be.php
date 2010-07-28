@@ -1026,9 +1026,12 @@ JSCODE;
 	 *  \param $title title for title flag of img
 	 *  \param $ahref 
 	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
+	 *  \param $width width in px
+	 *  \param $height height in px
+	 *  \$srcOnly if set to true, only the path to the image is returned otherwise a complete html img tag is returned
 	 *  \return String <img ...> or <a href><img ...></a> (if linked)
 	 */
-	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false, $width=16, $height=16) {
+	public static function renderIcon($image, $id, $title='', $ahref='', $replaceWithCleargifIfEmpty=false, $width=16, $height=16, $srcOnly=false) {
 
 		$width = intval($width)? intval($width) : 16;
 		$height = intval($height)? intval($height) : 16;
@@ -1042,16 +1045,28 @@ JSCODE;
 			$backPath = '/' . $backPath;
 		}
 		if ($ahref == '' && $replaceWithCleargifIfEmpty) {
-			// hide icon (= replace with clear.gif)
-			$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
+			 if (!$srcOnly) {
+				// hide icon (= replace with clear.gif)
+				$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, 'clear.gif', 'width="' . $width . '" height="' . $height . '"') . ' title="' . $title . '" alt="" />';
+			} else {
+				return 'clear.gif';
+			}
 		} else {
 			// show icon
 			if (substr($image, 0, 1) != '/') {
-				// typo3 skinning
-				$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
+				if (!$srcOnly) {
+					// typo3 skinning
+					$html = '<img' . $id . t3lib_iconWorks::skinImg($backPath, $image) . ' title="' . $title . '" alt="" />';
+				} else {
+					return t3lib_iconWorks::skinImg($backPath, $image, '', 1); // just return the src
+				}
 			} else {
-				// absolute path, use given file withiout using typo3 skinning
-				$html = '<img' . $id . ' src="' . $image . '" title="' . $title . '" alt="" />';
+				if (!$srcOnly) {
+					// absolute path, use given file withiout using typo3 skinning
+					$html = '<img' . $id . ' src="' . $image . '" title="' . $title . '" alt="" />';
+				} else {
+					return $image;
+				}
 			}
 		}
 		if ($ahref)
@@ -1483,6 +1498,7 @@ JSCODE;
 			'preview' => tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)),
 			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_articlebrowser', false, 14, 14)),
 			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_edit_articlelist', false)),
+			'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '', '', '', false, 0, 0, true),
 		);
 		return $icon;
 	}

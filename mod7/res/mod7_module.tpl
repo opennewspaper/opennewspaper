@@ -20,61 +20,70 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 <form action="" method="post" id="placementform">
 
-<table border="0" cellspacing="0" cellpadding="0" class="sections" id="articleinfo">
-  <tr>
-    <td style="vertical-align:top;">
-		<table width="300" border="0" cellspacing="0" cellpadding="0">
-		  <tr>
-		    <th scope="row">{$lang.kicker}:</th>
-		    <td>{$article->getAttribute('kicker')}</td>
-		  </tr>
-		  <tr>
-		    <th scope="row">{$lang.headline}:</th>
-		    <td>{$article->getAttribute('title')}</td>
-		  </tr>
-		  <tr>
-		    <th scope="row">{$lang.author}:</th>
-		    <td>{$article->getAttribute('author')}</td>
-		  </tr>
-		</table>
-	</td>
-    <td style="vertical-align:top;">
-		<table width="300" border="0" cellspacing="0" cellpadding="0">
-		  <tr>
-		    <th scope="row">{$lang.article_uid}:</th>
-		    <td>{$article->getUid()} <a href="#" onclick="return false;" id="preview">{$ICON.preview}</a> </td>
-		  </tr>
-		  <tr>
-		    <th scope="row">{$lang.editedby}:</th>
-		    <td>{$backenduser.username}</td>
-		  </tr>
-		  <tr>
-		    <th scope="row">{$lang.online}:</th>
-		    <td>{if $article->getAttribute('hidden')}{$lang.no}{else}{$lang.yes}{/if}</td>
-	      </tr>
-		  <tr>
-		    <th scope="row">{$lang.article_activerole}:</th>
-		    <td>{$article_workflow_status_title}</td>
-	      </tr>
-		</table>
-	</td>
-	<td>
-		<textarea style="width: 400px; height: 70px;" name="tx_newspaper_mod7[workflow_comment]" id="workflow_comment"></textarea>
-	</td>
-  </tr>
-</table>
-{$workflowlog}
 
-<br />
+
+{* article info *}
+
+	<table class="sections" id="articleinfo">
+	  <tr>
+	    <td style="vertical-align:top;">
+			<table width="300" border="0" cellspacing="0" cellpadding="0">
+			  <tr>
+			    <th scope="row">{$lang.kicker}:</th>
+			    <td>{$article->getAttribute('kicker')}</td>
+			  </tr>
+			  <tr>
+			    <th scope="row">{$lang.headline}:</th>
+			    <td>{$article->getAttribute('title')}</td>
+			  </tr>
+			  <tr>
+			    <th scope="row">{$lang.author}:</th>
+			    <td>{$article->getAttribute('author')}</td>
+			  </tr>
+			</table>
+		</td>
+	    <td style="vertical-align:top;">
+			<table width="300" border="0" cellspacing="0" cellpadding="0">
+			  <tr>
+			    <th scope="row">{$lang.article_uid}:</th>
+			    <td>{$article->getUid()} <a href="#" onclick="return false;" id="preview">{$ICON.preview}</a> </td>
+			  </tr>
+			  <tr>
+			    <th scope="row">{$lang.editedby}:</th>
+			    <td>{$backenduser.username}</td>
+			  </tr>
+			  <tr>
+			    <th scope="row">{$lang.online}:</th>
+			    <td>{if $article->getAttribute('hidden')}{$lang.no}{else}{$lang.yes}{/if}</td>
+		      </tr>
+			  <tr>
+			    <th scope="row">{$lang.article_activerole}:</th>
+			    <td>{$article_workflow_status_title}</td>
+		      </tr>
+			</table>
+		</td>
+	  </tr>
+	</table>
+
+
+
+{* sections *}
 
 	<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
 	<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
-
-	<table border="0" cellspacing="0" cellpadding="0" class="sections">
+	<table id="section_selects" class="sections">
 	  <tr>
 	    <th scope="col" colspan="3">{$lang.section}</th>
 	  </tr>
 	  <tr>
+		<td>
+			<label for="filter">{$lang.filtersections}:</label>
+			<input type="text" name="tx_newspaper_mod7[filter]" id="filter" value="" />
+			<br />
+			<select name="tx_newspaper_mod7[sections_available][]" title="sections_selected" id="sections_available" multiple="multiple" size="7" class="multiple-select ressort-select addresort">
+				{html_options options=$sections}
+			</select>
+		</td>
 	    <td>
 			<select name="tx_newspaper_mod7[sections_selected][]" id="sections_selected" multiple="multiple" size="9" class="multiple-select ressort-select">
 				{html_options options=$sections_active}
@@ -101,90 +110,101 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 				{$ICON.group_clear}
 			</a>
 		</td>
-		<td>
-			<label for="filter">{$lang.filtersections}:</label>
-			<input type="text" name="tx_newspaper_mod7[filter]" id="filter" value="" />
-			<br />
-			<select name="tx_newspaper_mod7[sections_available][]" title="sections_selected" id="sections_available" multiple="multiple" size="7" class="multiple-select ressort-select addresort">
-				{html_options options=$sections}
-			</select>
-		</td>
+	  </tr>
+	  <tr>
+	  	<td></td>
+	  	<td colspan="2">
+{* \todo: what is updated here???	  	
+			<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
+*}
+			<input class="input_image" type="image" src="{$ICON.save}" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
+	  	</td>
 	  </tr>
 	</table>
-	
-	<div align="right" style="width: 674px;">
-		<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
-		<input type="button" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
-	</div>
 
-<br />
+
+
+{* placement *}
+<div id="placement"></div>
+
+
+
+{* article list save all/cancel buttons *}
+
+<div id="bottons_al">
+	<input type="button" value="{$lang.cancel}" class="cancel" />
+	<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+</div>
+
+
+
+{* workflow comments *}
+<div id="wf">
+<textarea name="tx_newspaper_mod7[workflow_comment]" id="workflow_comment"></textarea>
+{$workflowlog}
+</div>
+
+
+{* workflow buttons *}
 
 {* \todo: use consts: NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE *}
 <div id="buttons">
 <input type="hidden" name="tx_newspaper_mod7[workflow_status_ORG]" value="{$article->getAttribute('workflow_status')}" />
 <table>
-<tr>
-<td>
-	{if $workflow_permissions.place}
-		<input type="button" value="{$lang.place}" class="place" />
-	{/if}
-</td>
-<td>
-	{if $workflow_permissions.revise}
-		<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
-	{elseif $workflow_permissions.check}
-		<input type="button" value="{$lang.todutyeditor}" class="sendtodutyeditor" />
-	{/if}
-</td>
-<td></td>
-<td>
-	<input type="button" value="{$lang.cancel}" class="cancel" />
 
-	---- <input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
+	<tr>
+		<td>
+			{if $workflow_permissions.place}
+				<input type="button" value="{$lang.place}" class="place" />
+			{/if}
+		</td>
+		<td>	
+			{if $workflow_permissions.place}
+				{if $workflow_permissions.hide}
+					<input type="button" value="{$lang.placehide}" class="placehide" />
+				{elseif $workflow_permissions.publish}
+					<input type="button" value="{$lang.placepublish}" class="placepublish" />
+				{/if}
+			{/if}
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			{if $workflow_permissions.revise}
+				<input type="button" value="{$lang.toeditor}" class="sendtoeditor" />
+			{elseif $workflow_permissions.check}
+				<input type="button" value="{$lang.todutyeditor}" class="sendtodutyeditor" />
+			{/if}
+		</td>
+		<td>
+			{if $workflow_permissions.revise}
+				{if $workflow_permissions.hide}
+					<input type="button" value="{$lang.toeditorhide}" class="sendtoeditorhide" />
+				{elseif $workflow_permissions.publish}
+					<input type="button" value="{$lang.toeditorpublish}" class="sendtoeditorpublish" />
+				{/if}
+			{elseif $workflow_permissions.check}
+				{if $workflow_permissions.hide}
+					<input type="button" value="{$lang.todutyeditorhide}" class="sendtodutyeditorhide" />
+				{elseif $workflow_permissions.publish}
+					<input type="button" value="{$lang.todutyeditorpublish}" class="sendtodutyeditorpublish" />
+				{/if}
+			{/if}
+		</td>
+	</tr>
 
-</td>
-</tr>
-<tr>
-<td>
-	{if $workflow_permissions.place}
-		{if $workflow_permissions.hide}
-			<input type="button" value="{$lang.placehide}" class="placehide" />
-		{elseif $workflow_permissions.publish}
-			<input type="button" value="{$lang.placepublish}" class="placepublish" />
-		{/if}
-	{/if}
-</td>
-<td>
-	{if $workflow_permissions.revise}
-		{if $workflow_permissions.hide}
-			<input type="button" value="{$lang.toeditorhide}" class="sendtoeditorhide" />
-		{elseif $workflow_permissions.publish}
-			<input type="button" value="{$lang.toeditorpublish}" class="sendtoeditorpublish" />
-		{/if}
-	{elseif $workflow_permissions.check}
-		{if $workflow_permissions.hide}
-			<input type="button" value="{$lang.todutyeditorhide}" class="sendtodutyeditorhide" />
-		{elseif $workflow_permissions.publish}
-			<input type="button" value="{$lang.todutyeditorpublish}" class="sendtodutyeditorpublish" />
-		{/if}
-	{/if}
-</td>
-<td>
-	{if $workflow_permissions.hide}
-		<input type="button" value="{$lang.putoffline}" class="putoffline" />
-	{elseif $workflow_permissions.publish}
-		<input type="button" value="{$lang.putonline}" class="putonline" />
-	{/if}
-</td>
-<td></td>
-</tr>
-</table>	
-</div>
+	<tr>
+		<td></td>
+		<td>
+			{if $workflow_permissions.hide}
+				<input type="button" value="{$lang.putoffline}" class="putoffline" /></td>
+			{elseif $workflow_permissions.publish}
+				<input type="button" value="{$lang.putonline}" class="putonline" /></td>
+			{/if}
+	</tr>
 
-<br />
+</table>
 
-{* if $article->getAttribute('workflow_status') == 1 *}
-	<div id="placement"></div>
-{* /if *}
 
 </form>

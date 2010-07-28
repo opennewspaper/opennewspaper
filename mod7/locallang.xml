@@ -47,6 +47,7 @@
 			<label index="label_button_right">Remove article TO BE PLACED</label>
 			<label index="label_button_articlebrowser">Add an article</label>
 			<label index="label_edit_articlelist">Edit article list</label>
+			<label index="label_save">Save</label>
 			<label index="message_no_dutyeditor">Access for duty editors only.</label>
 			<label index="message_no_articlelist">No article list found in section</label>
 			<label index="message_unknown_articlelisttype">Unknown article list type</label>
@@ -98,6 +99,7 @@
 			<label index="label_button_left">Artikel hinzufügen</label>
 			<label index="label_button_right">ZU PLATZIERENDEN Artikel entfernen</label>
 			<label index="label_edit_articlelist">Artikelliste bearbeiten</label>
+			<label index="label_save">Speichern</label>
 			<label index="message_no_dutyeditor">Keine CvD-Rechte.</label>
 			<label index="message_no_articlelist">Keine Artikelliste im Ressort.</label>
 			<label index="message_unknown_articlelisttype">Unbekannter Artikellistentyp.</label>
