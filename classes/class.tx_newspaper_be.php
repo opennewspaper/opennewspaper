@@ -1332,6 +1332,8 @@ JSCODE;
 		$smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
 		$smarty->assign('AL_BACKEND', $articlelistFullrecordBackend);
 		
+		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
+		
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));		
 		return $smarty->fetch($smarty_template);
 	}

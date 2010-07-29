@@ -1,4 +1,6 @@
 {* debug *} 
+{* main template for placement mask *}
+
 <script type="text/javascript" language="javascript">
 var langSavedidnotwork = "{$lang.savedidnotwork}";
 var langReallycancel = "{$lang.reallycancel}";
@@ -117,7 +119,10 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 {* \todo: what is updated here???	  	
 			<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
 *}
-			<input class="input_image" type="image" src="{$ICON.save}" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
+{* (see #1141) not working: looses some sections, switches first and last section (sometimes) 
+<input class="input_image" type="image" src="{$ICON.save}" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
+*}
+			<input type="button" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
 	  	</td>
 	  </tr>
 	</table>

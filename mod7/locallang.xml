@@ -57,6 +57,8 @@
 			<label index="label_articlelist_list_type">Type</label>
 			<label index="label_articlelist_list_commands">Commands</label>
 			<label index="label_articlelist_fullrecord">Configure article list</label>
+			<label index="semiauto_list_is_folded">Article list: see above</label>
+			<label index="toggle_semiauto_al_folded">Toggle view for automatic article lists</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -109,6 +111,8 @@
 			<label index="label_articlelist_list_type">Typ</label>
 			<label index="label_articlelist_list_commands">Befehle</label>
 			<label index="label_articlelist_fullrecord">Artikelliste konfigurieren</label>
+			<label index="semiauto_list_is_folded">Artikelliste: siehe oben bei den eingeklappen Listen</label>
+			<label index="toggle_semiauto_al_folded">Automatische Artikellisten ein-/ausklappen</label>
 		</languageKey>
 	</data>
 </T3locallang>

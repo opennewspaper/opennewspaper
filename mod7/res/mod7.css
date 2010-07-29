@@ -81,6 +81,10 @@ table#section_selects {
 	height:108px;
 }
 
+#al_folded {
+	border:1px solid gray;
+}
+
 #workflow_comment {
 	width:400px; 
 	height:41px;
@@ -98,7 +102,7 @@ table#section_selects {
 }
 
 .tx_newspaper_mod7 #wf {
-	border: 1px solid gray;
+	border:1px solid gray;
 	margin-top:20px;
 	padding:10px;
 	width:650px;
@@ -108,7 +112,7 @@ table#section_selects {
 	margin-top:20px;
 }
 .tx_newspaper_mod7 #buttons table {
-	border: 1px solid gray;
+	border:1px solid gray;
 	width:650px;
 }
 .tx_newspaper_mod7 #buttons td {

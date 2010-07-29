@@ -1,4 +1,6 @@
 {* debug *}
+{* template for non-section article lists *}
+
 {if $singlemode}
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
