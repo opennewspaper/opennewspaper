@@ -1247,7 +1247,10 @@ JSCODE;
 			// section article list
 			$selection = $input['sections_selected'];
 			// calculate which / how many placers to show
-			$tree = $this->calculatePlacementTreeFromSelection($selection);
+			
+			// \todo make order tsconfigurable
+			$tree = array_reverse($this->calculatePlacementTreeFromSelection($selection));
+			
 			$smarty_template = 'mod7_placement_section.tpl';
 		} elseif (isset($input['articlelistid']) && $input['articlelistid']) {
 			// read article list
@@ -1299,7 +1302,7 @@ JSCODE;
 			}
 			if ($al != null) {
 				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // render backend, store if saved, close if closed
-		} else {
+			} else {
 				$articlelistFullrecordBackend = 'Error'; // \todo: localization
 			}
 				
