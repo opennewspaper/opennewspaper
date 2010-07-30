@@ -928,7 +928,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		return $tags;
     }
 
-    public function getRelatedArticles($hidden = false) {
+    public function getRelatedArticles($hidden_ones_too = false) {
 
         $rows = tx_newspaper::selectRows(
             self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
@@ -939,7 +939,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' ON ' . self::article_related_table . '.uid_foreign= a_foreign.uid',
             '(uid_local = ' . $this->getUid() .
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
-                ($hidden? '': 'AND (a_foreign.hidden = 0)')
+                ($hidden_ones_too? '': 'AND (a_foreign.hidden = 0)')
         );
 
         $related_articles = array();
@@ -983,13 +983,14 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
             'uid_local = ' . $this->getUid()
         );
 
-    	$uids = array(0);
-    	foreach ($rows as $article) {
-    		$uids[] = $article['uid_foreign'];
-    	}
+        $uids = array(0);
+        foreach ($rows as $article) {
+            $uids[] = $article['uid_foreign'];
+        }
+        t3lib_div::devlog('removeDanglingRelations()', 'newspaper', 0, array('rows'=>$rows, 'uids'=>$uids));
 
-    	$where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
-    	$rows = tx_newspaper::deleteRows(
+        $where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
+        $rows = tx_newspaper::deleteRows(
             self::article_related_table,
             $where
         );
