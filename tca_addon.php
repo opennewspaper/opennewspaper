@@ -53,19 +53,19 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 
 //	// remove kickstarter generated palette configuration
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title;;;;2-2-2, ', ', title, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser;;;;3-3-3, ', ', teaser, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);	
+	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser;;;;3-3-3, ', ', teaser, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 
 	// detach starttime and endtime from hidden field palette
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden;;1;;1-1-1, ', 'hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 
 //	// add kicker, title and teaser to a palette, move kicker, title and teaser for list views in secondary option
-//	// add main fields kicker, title and teaser to palette 2 (in order to render these 3 fields in 1 row) 
+//	// add main fields kicker, title and teaser to palette 2 (in order to render these 3 fields in 1 row)
 //	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][2]['showitem'] = 'kicker;;3, title, teaser';
-//	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][2]['canNotCollapse'] = 1;  
+//	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][2]['canNotCollapse'] = 1;
 
 	// add list view fields to palette 3
 	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][3]['showitem'] = 'kicker_list, title_list, teaser_list';
-	// create virtual field "kicker_title_teaser", use to attach palette 2 (kicker, title and teaser in 1 row) ... 
+	// create virtual field "kicker_title_teaser", use to attach palette 2 (kicker, title and teaser in 1 row) ...
 //	$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser'] = array(
 //		'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser',
 //		'config' => array(
@@ -77,10 +77,10 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 //	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', kicker, ', ', kicker_title_teaser;;2, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 //	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 //	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-	
+
 	// create virtual field "kicker_title_teaser_for_listview", use to attach palette 2 (kicker, title and teaser for list viwes in 1 row) ...
 	// if at least on of the three fields is enabled in the backend
-	if (tx_newspaper_UtilMod::isAvailableInTceform('tx_newspaper_article', array('kicker_list', 'title_list', 'teaser_list'))) {	
+	if (tx_newspaper_UtilMod::isAvailableInTceform('tx_newspaper_article', array('kicker_list', 'title_list', 'teaser_list'))) {
 		$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser_for_list_views'] = array(
 			'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser_for_list_views',
 			'config' => array(
@@ -93,7 +93,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 		$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title_list, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 		$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser_list, ', ', kicker_title_teaser_for_list_views;;3, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 	}
-	
+
 
 	// append tab "time control" (starttime and endtime were attached to a secondary option, so they have to added here too)
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] .= ', --div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_timecontrol, starttime, endtime';
@@ -106,7 +106,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', workflow_status,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_workflow, workflow_status,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', tags,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_tags, tags,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', related,', ',--div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_related, related,', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-	
+
 //t3lib_div::devlog('TCA modified', 'np', 0, $GLOBALS['TCA']['tx_newspaper_article']['types'][0]);
 
 
@@ -116,7 +116,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	$TCA['tx_newspaper_article']['ctrl']['requestUpdate'] = 'no_rte';
 	// insert mode=no_rte to make usage of RTE configurable per article
 	$TCA['tx_newspaper_article']['types']['0']['showitem'] = str_replace('rte_transform[mode=ts_css', 'rte_transform[flag=no_rte|mode=ts_css', $TCA['tx_newspaper_article']['types']['0']['showitem']);
-	
+
 
 
 
@@ -128,11 +128,11 @@ $GLOBALS['TCA']['tx_newspaper_article']['columns']['endtime']['config']['eval'] 
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['publish_date']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['endtime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_article']['columns']['publish_date']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_article']['columns']['publish_date']['config']['size'] = '12';
 
 
 $TCA['tx_newspaper_section']['columns']['default_articletype']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
-/// add user function for page type and page zone type in section records 
+/// add user function for page type and page zone type in section records
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPagePageZoneList';
@@ -144,6 +144,8 @@ $TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = '
 unset($TCA['tx_newspaper_section']['columns']['template_set']['config']['items']['0']);
 $TCA['tx_newspaper_section']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array ("lower" => "1");
+
+$TCA["tx_newspaper_section"]["columns"]["section_name"]["config"]["size"] = 80;
 
 
 unset($TCA['tx_newspaper_page']['columns']['template_set']['config']['items']['0']);
@@ -161,8 +163,8 @@ $TCA['tx_newspaper_articlelist']['columns']['list_uid']['config']['range'] = arr
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['endtime']['config']['size'] = '12';  
-$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1'; 
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['endtime']['config']['size'] = '12';
+$GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_table']['config']['readOnly'] = '1';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['list_uid']['config']['readOnly'] = '1';
 $GLOBALS['TCA']['tx_newspaper_articlelist']['columns']['section_id']['config']['readOnly'] = '1';
 $TCA['tx_newspaper_articlelist_manual']['columns']['num_articles']['config']['range'] = array ('lower' => '1');
@@ -182,7 +184,7 @@ $TCA["tx_newspaper_extra"]["columns"]["origin_uid"]["config"]["range"] = array (
 $GLOBALS['TCA']['tx_newspaper_extra']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra']['columns']['endtime']['config']['size'] = '12';
 
 $TCA["tx_newspaper_extra_articlelist"]["columns"]["first_article"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_extra_articlelist"]["columns"]["num_articles"]["config"]["range"] = array ("lower" => "1");
@@ -190,29 +192,29 @@ $TCA["tx_newspaper_extra_articlelist"]["columns"]["articlelist"]["config"]["mini
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['endtime']['config']['size'] = '12';  
-$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['first_article']['config']['eval'] = 'required';  
-$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['num_articles']['config']['eval'] = 'required';  
+$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['endtime']['config']['size'] = '12';
+$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['first_article']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['num_articles']['config']['eval'] = 'required';
 
 $GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['endtime']['config']['size'] = '12';
 
 $GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['endtime']['config']['size'] = '12';
 
 $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_container']['columns']['endtime']['config']['size'] = '12';
 
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['endtime']['config']['size'] = '12';
 // hide field "tag type" in form "extra: control tag zone" and store value for type control tag
 $TCA['tx_newspaper_extra_controltagzone']['columns']['tag_type']['config'] = array(
 	'type' => 'user',
@@ -223,27 +225,27 @@ $TCA['tx_newspaper_extra_controltagzone']['columns']['tag_type']['config'] = arr
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['endtime']['config']['size'] = '12';
 
 /// add entries for template set dropdowns for Extras
 unset($TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']);
 $TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
-$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['size'] = 1;	
+$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['size'] = 1;
 $TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['maxitems'] = 1;
 $TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['type'] = 'select';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['endtime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_externallinks']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_externallinks']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_externallinks']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_externallinks']['columns']['endtime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_externallinks']['columns']['starttime']['config']['eval'] = 'datetime';
 
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['endtime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = 10240; // 10 mb \todo: make configurable
 
 $TCA["tx_newspaper_extra_mostcommented"]["columns"]["hours"]["config"]["range"] = array ( "lower" => "1" );
@@ -252,26 +254,26 @@ $TCA["tx_newspaper_extra_mostcommented"]["columns"]["num_favorites"]["config"]["
 $GLOBALS['TCA']['tx_newspaper_extra_searchresults']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_searchresults']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_searchresults']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_searchresults']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_searchresults']['columns']['endtime']['config']['size'] = '12';
 
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['endtime']['config']['size'] = '12';  
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['eval'] = 'required';  
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['range']['lower'] = 1;  
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'required';  
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;  
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['endtime']['config']['size'] = '12';
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['range']['lower'] = 1;
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;
 
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['size'] = '12';
 
 $GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['starttime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['endtime']['config']['size'] = '12';  
+$GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['endtime']['config']['size'] = '12';
 
 
 $TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["range"] = array (
