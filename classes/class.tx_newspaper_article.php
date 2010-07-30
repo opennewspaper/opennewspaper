@@ -1079,19 +1079,6 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         $article->removeDanglingRelations();
     }
 
-    private static function cleanRelatedArticles($article_uid) {
-        if (!intval($article_uid)) return;
-        $article = new tx_newspaper_Article(intval($article_uid));
-
-        try {
-            $article->getAttribute('uid');
-        } catch (tx_newspaper_Exception $e) {
-            return;
-        }
-
-        $article->removeDanglingRelations();
-    }
-
     private static function modifyTagSelection($table, $field) {
         if('tx_newspaper_article' === $table && 'tags' === $field) {
 //t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));
