@@ -928,7 +928,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		return $tags;
     }
 
-    public function getRelatedArticles() {
+    public function getRelatedArticles($hidden = false) {
 
         $rows = tx_newspaper::selectRows(
             self::article_related_table . '.uid_local, ' . self::article_related_table .'.uid_foreign',
@@ -939,7 +939,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
                 ' ON ' . self::article_related_table . '.uid_foreign= a_foreign.uid',
             '(uid_local = ' . $this->getUid() .
                 ' OR uid_foreign = ' . $this->getUid() . ')' .
-                ' AND (a_foreign.hidden = 0)'
+                ($hidden? '': 'AND (a_foreign.hidden = 0)')
         );
 
         $related_articles = array();
@@ -962,7 +962,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     /// Make sure that an article related to \c $this has also \c $this as relation.
     private function ensureRelatedArticlesAreBidirectional() {
 
-    	foreach ($this->getRelatedArticles() as $related_article) {
+    	foreach ($this->getRelatedArticles(true) as $related_article) {
 	    	$row = tx_newspaper::selectZeroOrOneRows(
 	    	    'uid_local', self::article_related_table,
 	    	    'uid_foreign = ' . $this->getUid() . ' AND uid_local = ' . $related_article->getUid());
@@ -1067,6 +1067,19 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
     private static function cleanRelatedArticles($article_uid) {
 
+        if (!intval($article_uid)) return;
+        $article = new tx_newspaper_Article(intval($article_uid));
+
+        try {
+            $article->getAttribute('uid');
+        } catch (tx_newspaper_Exception $e) {
+            return;
+        }
+
+        $article->removeDanglingRelations();
+    }
+
+    private static function cleanRelatedArticles($article_uid) {
         if (!intval($article_uid)) return;
         $article = new tx_newspaper_Article(intval($article_uid));
 
