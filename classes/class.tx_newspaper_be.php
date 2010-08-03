@@ -402,7 +402,7 @@ function findElementsByName(name, type) {
  *  'width' => '[int+]' (default: 530)
  *  'height' => '[int+]' (default: 80)
  *  'maxlen' => '[int+]' (default: 1000)
- *  not yet implemented: 'useCouter' => '1' (default: 0; if set, a counter shows how many character are still avialbalbe in the textarea field)
+ *  'useCountdown' => '1' (default: 0; if set, a countdown shows how many character are still available in the textarea field)
  * 
  *  \param $PA
  *  \param $fobj
@@ -415,7 +415,7 @@ function findElementsByName(name, type) {
 		$width = (intval($PA['fieldConf']['config']['width']) > 0)? intval($PA['fieldConf']['config']['width']) : 530;
 		$height = (intval($PA['fieldConf']['config']['height']) > 0)? intval($PA['fieldConf']['config']['height']) : 80;
 		$maxLen = (intval($PA['fieldConf']['config']['maxLen']) > 0)? intval($PA['fieldConf']['config']['maxLen']) : 1000;
-		$useCounter = (intval($PA['fieldConf']['config']['useCounter']))? true : false;
+		$useCountdown = (intval($PA['fieldConf']['config']['useCountdown']))? true : false;
 		
 		$uniq = $PA['field'] . $PA['row']['uid']; // unique string based on field name and record uid
 
@@ -425,27 +425,27 @@ function findElementsByName(name, type) {
 		// add js function (name extended with field name and uid, so js func name is unique)
 		// add typo3 like html code with additional newspaper textarea according to given configuration
 		$html = '<style type="text/css">
-#counter_' . $uniq . ' {
+#countdown_' . $uniq . ' {
   float:left;
   margin-left:10px; 
   margin-top:2px;
 }
 </style>
 <script type="text/javascript">
-  function ' . $jsFuncName . '(field, maxLen, counterField) {
+  function ' . $jsFuncName . '(field, maxLen, countdownField) {
       if (field.value.length > maxLen) {
           field.value = field.value.substring(0, maxLen);
       } 
-      if (counterField) { 
-          document.getElementById(counterField).innerHTML = parseInt(maxLen - field.value.length); 
+      if (countdownField) { 
+          document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length); 
       }
 }
 </script>
 ';
-		if ($useCounter) {
-			// add textarea AND a counter
-			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'counter_' . $uniq . '\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
-<div id="counter_' . $uniq . '">' . intval($maxLen - strlen(utf8_decode($PA['row'][$PA['field']]))) . '</div>';
+		if ($useCountdown) {
+			// add textarea AND a countdown
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'countdown_' . $uniq . '\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
+<div id="countdown_' . $uniq . '">' . intval($maxLen - strlen(utf8_decode($PA['row'][$PA['field']]))) . '</div>';
 		} else {
 			// add textarea only
 			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
@@ -454,6 +454,36 @@ function findElementsByName(name, type) {
 
 		return $html;	
 	}
+	
+	
+/// Userfunc for a input field in the backend with newspaper conf
+/** WARNING: DOES NOT WORK FOR required FIELDS
+ *  Configuration array
+ *  'type' => 'user'
+ *  'userFunc' => 'tx_newspaper_be->renderInput'
+ *  'width' => '[int+]' (default: 530)
+ *  'height' => '[int+]' (default: 80)
+ * 
+ *  \param $PA
+ *  \param $fobj
+ *  \return HTML code
+ */
+	function renderInput($PA, $fobj) {
+//t3lib_div::debug($PA); die();
+
+		$width = (intval($PA['fieldConf']['config']['width']) > 0)? 'width:' . intval($PA['fieldConf']['config']['width']) . 'px;' : 'width:288px';
+		$height = (intval($PA['fieldConf']['config']['height']) > 0)? 'height:' . intval($PA['fieldConf']['config']['height']) . 'px;' : '';
+
+		$html = '<input type="text" ';
+		$html .= 'onchange="typo3form.fieldGet(\'' . $PA['itemFormElName'] . '\',\'\',\'\',0,\'\');';
+		$html .= 'TBE_EDITOR.fieldChanged(\'' . $PA['table'] . '\',\'' . $PA ['row']['uid'] . '\',\'' . $PA['field']. '\',\'' . $PA['itemFormElName'] . '\');" ';
+		$html .= 'maxlength="256" class="formField" style="' . $width . $height . '" value="' . htmlspecialchars($PA['itemFormElValue']) . '" name="' . $PA['itemFormElName'] . '_hr">';
+		$html .= '<input type="hidden" value="' . htmlspecialchars($PA['itemFormElValue']) . '" name="' . $PA['itemFormElName'] . '">';
+		
+		return $html;
+	}	
+	
+	
 
 
 /// function to render extras (article or pagezone_page)

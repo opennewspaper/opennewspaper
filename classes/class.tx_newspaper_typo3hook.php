@@ -56,6 +56,9 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
 //t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
 
+		// process newspaper hooks
+		tx_newspaper_article::getSingleField_postProcess($table, $field, $row, $out, $PA, $that);
+
 		// replace element browser (EB) with tx_newspaper article browser
 		if ($this->replaceEbWithArticleBrowser($table, $field)) {
 			// add table and field name to js function name

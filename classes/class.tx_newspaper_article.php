@@ -1019,7 +1019,9 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
         self::modifyTagSelection($table, $field);
     }
-
+    public static function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
+        self::modifyFieldWidth($table, $field, $out);
+    }
 	public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
 		if (strtolower($table) == 'tx_newspaper_article') {
 			// hide default articles in list module, only concrete article are visible in list module
@@ -1090,6 +1092,23 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
         }
 
     }
+
+	// \todo: make tsconfigurable !!!
+    private static function modifyFieldWidth($table, $field, &$out) {
+        if($table == 'tx_newspaper_article') {
+//t3lib_div::devLog('modifyFieldWidth()', 'newspaper', 0, array('table' => $table, 'field' => $field, 'out' => $out));
+			switch(strtolower($field)) {
+				case 'kicker':
+					$out = str_replace('style="width:288px;"', 'style="width:230px;"', $out);
+				break;
+				case 'title':
+					$out = str_replace('style="width:288px;"', 'style="width:210px;"', $out);
+				break;
+        	}
+        }
+    }
+
+
 
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
