@@ -128,7 +128,7 @@ display:none;
 
 
 {* all article lists or manual lists only, if $SEMIAUTO_AL_FOLDED is set *}
-	<table border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+	<table border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;" id="hide-empty">
 		<tr>
 			{foreach from=$tree item="level" name="levelloop"}
 			<td valign="top" class="level">

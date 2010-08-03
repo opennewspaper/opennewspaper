@@ -7,6 +7,16 @@ if (path.indexOf('typo3conf/ext/newspaper') == -1) {
 
 var refreshCheck;
 
+//hide tablecells containing only hidden elements
+function hideEmptyTablecells() {
+    $('#placement > #hide-empty tr').children().each(function() {
+            var visibleKids = $(this).children().is(':visible');
+                if(!visibleKids) {
+                    $(this).hide();
+                }
+            });
+}
+
 // show spinner
 function showProgress() {
 	$("#progress").css("display", "inline");
@@ -422,7 +432,8 @@ function saveSections() {
 				$("#placement").html(data);
 				$("#" + elementId).unselectAllOptions();
 				connectPlacementEvents();
-				hideProgress();
+				hideEmptyTablecells();
+                hideProgress();
 			}
 		);
 		return false;	
