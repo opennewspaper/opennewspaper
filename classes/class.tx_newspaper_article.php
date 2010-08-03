@@ -1112,7 +1112,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
+t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST, 'backtrace' => debug_backtrace()));
 		if (strtolower($table) == 'tx_newspaper_article' &&
 			(
 				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
@@ -1158,7 +1158,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 					}
 					$starttime = $article->getAttribute('starttime');
 				} else {
-					// new article, $id equal NEW_something
+					// new article, $id equals NEW_something
 					$starttime = 0; // if timestart would have been set, it would be part of $fieldArray
 				}
 			}
@@ -1183,6 +1183,34 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 			$this->setAttribute('publish_date', $fakeFieldArray['publish_date']);
 			$this->setAttribute('tstamp', time());
 		}
+	}
+	
+	
+	// \todo: replace with newspaper hook handling, see #1055
+	/// This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
+	/// This function write the hidden status into the database immediately
+	/** \param $uid article uid
+	 *  \param $hidden boolean value specifying if the article is hidden or published
+	 */
+	public function storeHiddenStatusWithHooks($hidden) {
+t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('hidden' => $hidden));
+
+			$hidden_value = $hidden? true : false;
+
+			// prepare datamap			
+			$datamap['tx_newspaper_article'][$this->getUid()] = array(
+				'hidden' => $hidden_value
+			);
+			
+			// use datamap, so all save hooks get called
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, array());
+			$tce->process_datamap();
+
+			// store in object
+			$this->setAttribute('hidden', $hidden_value);
+//			$this->setPublishDateIfNeeded();
+
 	}
 
 

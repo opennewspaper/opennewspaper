@@ -327,11 +327,12 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 					$log['place'] = true;
 					if (isset($statusHidePublish['hide'])) {
 						$log['hidden'] = true;
-						$article->setAttribute('hidden', true);
+						$article->storeHiddenStatusWithHooks(true);
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
-						$article->setAttribute('hidden', false);
+						$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
 						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+						$article->store();
 					}
 					$article->store();
 					$this->writeLog($input, $log);

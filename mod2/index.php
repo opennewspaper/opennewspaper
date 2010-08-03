@@ -515,45 +515,24 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			// prepare array with data to be stored
 			switch($hidden_status) {
 				case 'hidden':
-					$fA = array('hidden' => 1);
+					$hidden = 1;
 				break;
 				case 'visible':
-					$fA = array('hidden' => 0);
+					$hidden = 0;
 				break;
 				default:
 					return;
 			}
 
 			// store data and call article save hooks then
-			$this->storeHiddenStatusWithHooks($article_uid, $fA);
+			$article = new tx_newspaper_article($article_uid);
+			$article->storeHiddenStatusWithHooks($hidden);
 			
 			// redirect to module (in order to remove article_visibility and article_uid from url)
 			header('Location: index.php');
 
 		}
 	}
-	
-	// \todo: replace with newspaper hook handling, see #1055
-	/// This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
-	/** \param $uid article uid
-	 *  \param $fieldArray data for tce datamap
-	 */
-	private function storeHiddenStatusWithHooks($uid, array $fieldArray) {
-//t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('uid' => $uid, 'fieldArray' => $fieldArray));
-			if (!intval($uid)) {
-				return false;
-			}
-			
-			// prepare datamap array data
-			$datamap['tx_newspaper_article'][intval($uid)] = $fieldArray;
-			
-			// use datamap, so all save hooks get called
-			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
-			$tce->start($datamap, array());
-			$tce->process_datamap();
-	}
-
-
 
 
 	/// create where part of sql statement for current filter setting
