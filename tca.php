@@ -8,7 +8,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -16,7 +16,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -28,7 +28,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -44,80 +44,80 @@ $TCA["tx_newspaper_extra_image"] = array (
 				)
 			)
 		),
-		"pool" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.pool",
+		"pool" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.pool",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.title",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"image_file" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image_file",
+		"image_file" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image_file",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => "gif,png,jpeg,jpg",
-				"max_size" => 500,
+				"allowed" => "gif,png,jpeg,jpg",	
+				"max_size" => 500,	
 				"uploadfolder" => "uploads/tx_newspaper",
-				"show_thumbs" => 1,
-				"size" => 1,
+				"show_thumbs" => 1,	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"credit" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.credit",
+		"credit" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.credit",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"caption" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.caption",
+		"caption" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.caption",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "40",
+				"cols" => "40",	
 				"rows" => "3",
 			)
 		),
-		"normalized_filename" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.normalized_filename",
+		"normalized_filename" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.normalized_filename",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"kicker" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.kicker",
+		"kicker" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.kicker",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"source" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.source",
+		"source" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.source",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"type" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.type",
+		"type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.type",		
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
@@ -126,28 +126,28 @@ $TCA["tx_newspaper_extra_image"] = array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.type.I.2", "2"),
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.type.I.3", "3"),
 				),
-				"size" => 1,
+				"size" => 1,	
 				"maxitems" => 1,
 			)
 		),
-		"alttext" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.alttext",
+		"alttext" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.alttext",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"tags" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.tags",
+		"tags" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.tags",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_extra_image_tags_mm",
 			)
 		),
@@ -169,61 +169,61 @@ $TCA["tx_newspaper_section"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
 	"columns" => array (
-		"section_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.section_name",
+		"section_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.section_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "80",
-				"max" => "80",
+				"type" => "input",	
+				"size" => "48",	
+				"max" => "80",	
 				"eval" => "required",
 			)
 		),
-		"articles_allowed" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.articles_allowed",
+		"articles_allowed" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.articles_allowed",		
 			"config" => Array (
 				"type" => "check",
 				"default" => 1,
 			)
 		),
-		"parent_section" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.parent_section",
+		"parent_section" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.parent_section",		
 			"config" => Array (
-				"type" => "select",
+				"type" => "select",	
 				"items" => Array (
 					Array("",0),
 				),
-				"foreign_table" => "tx_newspaper_section",
-				"foreign_table_where" => "ORDER BY tx_newspaper_section.uid",
-				"size" => 1,
+				"foreign_table" => "tx_newspaper_section",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_section.uid",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"default_articletype" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.default_articletype",
+		"default_articletype" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.default_articletype",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_articletype",
-				"foreign_table_where" => "ORDER BY tx_newspaper_articletype.uid",
-				"size" => 1,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_articletype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_articletype.uid",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"pagetype_pagezone" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone",
+		"pagetype_pagezone" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.pagetype_pagezone",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"articlelist" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.articlelist",
+		"articlelist" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.articlelist",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -237,15 +237,15 @@ $TCA["tx_newspaper_section"] = array (
 				"default" => 0
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set",		
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.template_set.I.0", "0"),
 				),
-				"size" => 1,
+				"size" => 1,	
 				"maxitems" => 1,
 			)
 		),
@@ -267,54 +267,54 @@ $TCA["tx_newspaper_page"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_page"]["feInterface"],
 	"columns" => array (
-		"section" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.section",
+		"section" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.section",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_section",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"pagetype_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.pagetype_id",
+		"pagetype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.pagetype_id",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_pagetype",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_pagetype",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"inherit_pagetype_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.inherit_pagetype_id",
+		"inherit_pagetype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.inherit_pagetype_id",		
 			"config" => Array (
-				"type" => "select",
+				"type" => "select",	
 				"items" => Array (
 					Array("",0),
 				),
-				"foreign_table" => "tx_newspaper_pagetype",
-				"foreign_table_where" => "ORDER BY tx_newspaper_pagetype.uid",
-				"size" => 1,
+				"foreign_table" => "tx_newspaper_pagetype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_pagetype.uid",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.template_set",		
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_page.template_set.I.0", "0"),
 				),
-				"size" => 1,
+				"size" => 1,	
 				"maxitems" => 1,
 			)
 		),
@@ -336,37 +336,37 @@ $TCA["tx_newspaper_pagezone"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone"]["feInterface"],
 	"columns" => array (
-		"name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.name",
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.name",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"page_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.page_id",
+		"page_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.page_id",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_page",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_page",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"pagezone_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.pagezone_table",
+		"pagezone_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.pagezone_table",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"pagezone_uid" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.pagezone_uid",
+		"pagezone_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone.pagezone_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -398,37 +398,37 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezone_page"]["feInterface"],
 	"columns" => array (
-		"pagezonetype_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.pagezonetype_id",
+		"pagezonetype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.pagezonetype_id",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_pagezonetype",
-				"foreign_table_where" => "ORDER BY tx_newspaper_pagezonetype.uid",
-				"size" => 1,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_pagezonetype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_pagezonetype.uid",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"pagezone_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.pagezone_id",
+		"pagezone_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.pagezone_id",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"extras" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.extras",
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.extras",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_extra",
-				"foreign_table_where" => "ORDER BY tx_newspaper_extra.uid",
-				"size" => 5,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_extra",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_extra.uid",	
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 100,
-				"MM" => "tx_newspaper_pagezone_page_extras_mm",
+				"maxitems" => 100,	
+				"MM" => "tx_newspaper_pagezone_page_extras_mm",	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -464,21 +464,21 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 				),
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.template_set",		
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.template_set.I.0", "0"),
 				),
-				"size" => 1,
+				"size" => 1,	
 				"maxitems" => 1,
 			)
 		),
-		"inherits_from" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.inherits_from",
+		"inherits_from" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezone_page.inherits_from",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -506,11 +506,11 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,publish_date,kicker,title,teaser,kicker_list,title_list,teaser_list,text,no_rte,author,modification_user,source_id,source_object,sections,extras,name,is_template,pagezonetype_id,template_set,inherits_from,tags,related,workflow_status"
+		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,author,kicker,title,teaser,kicker_list,title_list,teaser_list,text,no_rte,publish_date,modification_user,source_id,source_object,sections,extras,name,is_template,pagezonetype_id,template_set,inherits_from,tags,related,workflow_status"
 	),
 	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -518,7 +518,7 @@ $TCA["tx_newspaper_article"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -530,7 +530,7 @@ $TCA["tx_newspaper_article"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -546,85 +546,81 @@ $TCA["tx_newspaper_article"] = array (
 				)
 			)
 		),
-		"articletype_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.articletype_id",
+		"articletype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.articletype_id",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_articletype",
-				"foreign_table_where" => "ORDER BY tx_newspaper_articletype.uid",
-				"size" => 1,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_articletype",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_articletype.uid",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"publish_date" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.publish_date",
+		"author" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.author",		
 			"config" => Array (
-				"type"     => "input",
-				"size"     => "8",
-				"max"      => "20",
-				"eval"     => "date",
-				"checkbox" => "0",
-				"default"  => "0"
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
-		"kicker" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker",
+		"kicker" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required",
 			)
 		),
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required",
 			)
 		),
-		"teaser" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser",
+		"teaser" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "40",
+				"cols" => "40",	
 				"rows" => "5",
 			)
 		),
-		"kicker_list" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker_list",
+		"kicker_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.kicker_list",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"title_list" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title_list",
+		"title_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.title_list",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"teaser_list" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser_list",
+		"teaser_list" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.teaser_list",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "40",
+				"cols" => "40",	
 				"rows" => "5",
 			)
 		),
-		"text" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.text",
+		"text" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.text",		
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -642,71 +638,75 @@ $TCA["tx_newspaper_article"] = array (
 				),
 			)
 		),
-		"no_rte" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.no_rte",
+		"no_rte" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.no_rte",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"author" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.author",
+		"publish_date" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.publish_date",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type"     => "input",
+				"size"     => "8",
+				"max"      => "20",
+				"eval"     => "date",
+				"checkbox" => "0",
+				"default"  => "0"
 			)
 		),
-		"modification_user" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.modification_user",
+		"modification_user" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.modification_user",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "be_users",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "be_users",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"source_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_id",
+		"source_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_id",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"source_object" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_object",
+		"source_object" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.source_object",		
 			"config" => Array (
 				"type" => "none",
 			)
 		),
-		"sections" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.sections",
+		"sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.sections",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_section",
-				"foreign_table_where" => "ORDER BY tx_newspaper_section.uid",
-				"size" => 3,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_section",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_section.uid",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_article_sections_mm",
 			)
 		),
-		"extras" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.extras",
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.extras",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_extra",
-				"foreign_table_where" => "ORDER BY tx_newspaper_extra.uid",
-				"size" => 5,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_extra",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_extra.uid",	
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 100,
-				"MM" => "tx_newspaper_article_extras_mm",
+				"maxitems" => 100,	
+				"MM" => "tx_newspaper_article_extras_mm",	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -742,24 +742,24 @@ $TCA["tx_newspaper_article"] = array (
 				),
 			)
 		),
-		"name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.name",
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.name",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"is_template" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.is_template",
+		"is_template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.is_template",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"pagezonetype_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.pagezonetype_id",
+		"pagezonetype_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.pagezonetype_id",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -773,21 +773,21 @@ $TCA["tx_newspaper_article"] = array (
 				"default" => 0
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.template_set",		
 			"config" => Array (
 				"type" => "select",
 				"items" => Array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.template_set.I.0", "0"),
 				),
-				"size" => 1,
+				"size" => 1,	
 				"maxitems" => 1,
 			)
 		),
-		"inherits_from" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.inherits_from",
+		"inherits_from" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.inherits_from",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -801,35 +801,35 @@ $TCA["tx_newspaper_article"] = array (
 				"default" => 0
 			)
 		),
-		"tags" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.tags",
+		"tags" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.tags",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_tag",
-				"foreign_table_where" => "ORDER BY tx_newspaper_tag.uid",
-				"size" => 3,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_tag",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_tag.uid",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_article_tags_mm",
 			)
 		),
-		"related" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.related",
+		"related" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.related",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_article",
-				"size" => 5,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_article_related_mm",
 			)
 		),
-		"workflow_status" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.workflow_status",
+		"workflow_status" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_article.workflow_status",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -845,7 +845,7 @@ $TCA["tx_newspaper_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, publish_date, kicker, title;;;;2-2-2, teaser;;;;3-3-3, kicker_list, title_list, teaser_list, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], no_rte, author, modification_user, source_id, source_object, sections, extras, name, is_template, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, author, kicker, title;;;;2-2-2, teaser;;;;3-3-3, kicker_list, title_list, teaser_list, text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], no_rte, publish_date, modification_user, source_id, source_object, sections, extras, name, is_template, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -861,7 +861,7 @@ $TCA["tx_newspaper_extra"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -869,7 +869,7 @@ $TCA["tx_newspaper_extra"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -881,7 +881,7 @@ $TCA["tx_newspaper_extra"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -897,17 +897,17 @@ $TCA["tx_newspaper_extra"] = array (
 				)
 			)
 		),
-		"extra_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_table",
+		"extra_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_table",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"extra_uid" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_uid",
+		"extra_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.extra_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -921,9 +921,9 @@ $TCA["tx_newspaper_extra"] = array (
 				"default" => 0
 			)
 		),
-		"position" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.position",
+		"position" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.position",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -937,9 +937,9 @@ $TCA["tx_newspaper_extra"] = array (
 				"default" => 0
 			)
 		),
-		"paragraph" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.paragraph",
+		"paragraph" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.paragraph",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -953,9 +953,9 @@ $TCA["tx_newspaper_extra"] = array (
 				"default" => 0
 			)
 		),
-		"origin_uid" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.origin_uid",
+		"origin_uid" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.origin_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -969,41 +969,41 @@ $TCA["tx_newspaper_extra"] = array (
 				"default" => 0
 			)
 		),
-		"is_inheritable" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.is_inheritable",
+		"is_inheritable" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.is_inheritable",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"show_extra" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.show_extra",
+		"show_extra" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.show_extra",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"gui_hidden" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.gui_hidden",
+		"gui_hidden" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.gui_hidden",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"notes" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.notes",
+		"notes" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.notes",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra.template_set",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -1025,7 +1025,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionlist"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -1033,7 +1033,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1045,7 +1045,7 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1061,9 +1061,9 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				)
 			)
 		),
-		"first_article" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.first_article",
+		"first_article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.first_article",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1077,9 +1077,9 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				"default" => 0
 			)
 		),
-		"num_articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.num_articles",
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.num_articles",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1111,7 +1111,7 @@ $TCA["tx_newspaper_articlelist"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -1119,7 +1119,7 @@ $TCA["tx_newspaper_articlelist"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1131,7 +1131,7 @@ $TCA["tx_newspaper_articlelist"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1147,27 +1147,27 @@ $TCA["tx_newspaper_articlelist"] = array (
 				)
 			)
 		),
-		"notes" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.notes",
+		"notes" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.notes",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required",
 			)
 		),
-		"list_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.list_table",
+		"list_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.list_table",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required",
 			)
 		),
-		"list_uid" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.list_uid",
+		"list_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.list_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1181,14 +1181,14 @@ $TCA["tx_newspaper_articlelist"] = array (
 				"default" => 0
 			)
 		),
-		"section_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.section_id",
+		"section_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist.section_id",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_section",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -1211,44 +1211,44 @@ $TCA["tx_newspaper_pagetype"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_pagetype"]["feInterface"],
 	"columns" => array (
-		"type_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.type_name",
+		"type_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.type_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,uniqueInPid",
 			)
 		),
-		"normalized_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.normalized_name",
+		"normalized_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.normalized_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,alphanum,nospace,uniqueInPid",
 			)
 		),
-		"is_article_page" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.is_article_page",
+		"is_article_page" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.is_article_page",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"get_var" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_var",
+		"get_var" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_var",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"get_value" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_value",
+		"get_value" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagetype.get_value",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -1270,27 +1270,27 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_pagezonetype"]["feInterface"],
 	"columns" => array (
-		"type_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.type_name",
+		"type_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.type_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,uniqueInPid",
 			)
 		),
-		"normalized_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.normalized_name",
+		"normalized_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.normalized_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,alphanum,nospace,uniqueInPid",
 			)
 		),
-		"is_article" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.is_article",
+		"is_article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_pagezonetype.is_article",		
 			"config" => Array (
 				"type" => "check",
 			)
@@ -1313,18 +1313,18 @@ $TCA["tx_newspaper_log"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_log"]["feInterface"],
 	"columns" => array (
-		"table_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_name",
+		"table_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required",
 			)
 		),
-		"table_uid" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_uid",
+		"table_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.table_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1338,34 +1338,34 @@ $TCA["tx_newspaper_log"] = array (
 				"default" => 0
 			)
 		),
-		"be_user" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.be_user",
+		"be_user" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.be_user",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "be_users",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "be_users",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"action" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.action",
+		"action" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.action",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
-				"max" => "30",
+				"type" => "input",	
+				"size" => "30",	
+				"max" => "30",	
 				"eval" => "required",
 			)
 		),
-		"comment" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.comment",
+		"comment" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.comment",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
@@ -1387,21 +1387,21 @@ $TCA["tx_newspaper_articletype"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_articletype"]["feInterface"],
 	"columns" => array (
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.title",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,uniqueInPid",
 			)
 		),
-		"normalized_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.normalized_name",
+		"normalized_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articletype.normalized_name",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"eval" => "required,alphanum,nospace,uniqueInPid",
 			)
 		),
@@ -1423,7 +1423,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_typo3_ce"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -1431,7 +1431,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1443,7 +1443,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1459,21 +1459,21 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				)
 			)
 		),
-		"pool" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.pool",
+		"pool" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.pool",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"content_elements" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.content_elements",
+		"content_elements" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.content_elements",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tt_content",
-				"size" => 5,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tt_content",	
+				"size" => 5,	
 				"minitems" => 0,
 				"maxitems" => 32,
 			)
@@ -1496,7 +1496,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_articlelist"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1508,7 +1508,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1524,29 +1524,29 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				)
 			)
 		),
-		"description" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.description",
+		"description" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.description",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"articlelist" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.articlelist",
+		"articlelist" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.articlelist",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_articlelist",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_articlelist",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"first_article" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.first_article",
+		"first_article" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.first_article",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1560,9 +1560,9 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				"default" => 0
 			)
 		),
-		"num_articles" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.num_articles",
+		"num_articles" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.num_articles",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1576,33 +1576,33 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				"default" => 0
 			)
 		),
-		"template" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template",
+		"template" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"header" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.header",
+		"header" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.header",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"image" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.image",
+		"image" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.image",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
-				"max_size" => 500,
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
 				"uploadfolder" => "uploads/tx_newspaper",
-				"show_thumbs" => 1,
-				"size" => 1,
+				"show_thumbs" => 1,	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -1625,7 +1625,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_textbox"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1637,7 +1637,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1653,24 +1653,24 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				)
 			)
 		),
-		"pool" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.pool",
+		"pool" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.pool",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"title" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.title",
+		"title" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.title",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"text" => Array (
-			"exclude" => 0,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.text",
+		"text" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.text",		
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -1688,14 +1688,14 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				),
 			)
 		),
-		"image" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.image",
+		"image" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.image",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_extra_image",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra_image",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -1718,7 +1718,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_externallinks"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1730,7 +1730,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1746,31 +1746,31 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				)
 			)
 		),
-		"pool" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.pool",
+		"pool" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.pool",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.title",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"links" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.links",
+		"links" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.links",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_externallinks",
-				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",
-				"size" => 5,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_externallinks",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -1806,11 +1806,11 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 				),
 			)
 		),
-		"template" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.template",
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.template",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -1832,7 +1832,7 @@ $TCA["tx_newspaper_externallinks"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_externallinks"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1844,7 +1844,7 @@ $TCA["tx_newspaper_externallinks"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1860,12 +1860,12 @@ $TCA["tx_newspaper_externallinks"] = array (
 				)
 			)
 		),
-		"url" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_externallinks.url",
+		"url" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_externallinks.url",		
 			"config" => Array (
-				"type" => "input",
-				"size" => "30",
+				"type" => "input",	
+				"size" => "30",	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"link" => Array(
@@ -1897,7 +1897,7 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_displayarticles"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -1909,7 +1909,7 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -1925,9 +1925,9 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 				)
 			)
 		),
-		"todo" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_displayarticles.todo",
+		"todo" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_displayarticles.todo",		
 			"config" => Array (
 				"type" => "check",
 			)
@@ -1950,22 +1950,22 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_manual"]["feInterface"],
 	"columns" => array (
-		"articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.articles",
+		"articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.articles",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_article",
-				"size" => 10,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 10,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_articlelist_manual_articles_mm",
 			)
 		),
-		"num_articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.num_articles",
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.num_articles",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -1979,77 +1979,77 @@ $TCA["tx_newspaper_articlelist_manual"] = array (
 				"default" => 0
 			)
 		),
-		"filter_sections" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sections",
+		"filter_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sections",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_section",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_tags_include" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_include",
+		"filter_tags_include" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_include",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_tags_exclude" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_exclude",
+		"filter_tags_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_tags_exclude",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_articlelist_exclude" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_articlelist_exclude",
+		"filter_articlelist_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_articlelist_exclude",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_articlelist",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_articlelist",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_sql_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_table",
+		"filter_sql_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_table",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
-		"filter_sql_where" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_where",
+		"filter_sql_where" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_where",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
-		"filter_sql_order_by" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_order_by",
+		"filter_sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_manual.filter_sql_order_by",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -2071,22 +2071,22 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_articlelist_semiautomatic"]["feInterface"],
 	"columns" => array (
-		"articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles",
+		"articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.articles",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_article",
-				"size" => 10,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 10,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"MM" => "tx_newspaper_articlelist_semiautomatic_articles_mm",
 			)
 		),
-		"num_articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.num_articles",
+		"num_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.num_articles",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -2100,84 +2100,84 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 				"default" => 0
 			)
 		),
-		"filter_sections" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sections",
+		"filter_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sections",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_section",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"subsequent_sections" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.subsequent_sections",
+		"subsequent_sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.subsequent_sections",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"filter_tags_include" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_include",
+		"filter_tags_include" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_include",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_tags_exclude" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_exclude",
+		"filter_tags_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_tags_exclude",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_articlelist_exclude" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_articlelist_exclude",
+		"filter_articlelist_exclude" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_articlelist_exclude",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_articlelist",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_articlelist",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"filter_sql_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_table",
+		"filter_sql_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_table",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
-		"filter_sql_where" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_where",
+		"filter_sql_where" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_where",		
 			"config" => Array (
 				"type" => "text",
-				"cols" => "30",
+				"cols" => "30",	
 				"rows" => "5",
 			)
 		),
-		"filter_sql_order_by" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_order_by",
+		"filter_sql_order_by" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_articlelist_semiautomatic.filter_sql_order_by",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -2199,30 +2199,30 @@ $TCA["tx_newspaper_tag"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.title",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"tag" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag",
+		"tag" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"tag_type" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",
+		"tag_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag_type",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag_type",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
@@ -2245,7 +2245,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_mostcommented"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2253,7 +2253,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -2265,7 +2265,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -2281,9 +2281,9 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				)
 			)
 		),
-		"hours" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.hours",
+		"hours" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.hours",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -2297,9 +2297,9 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				"default" => 0
 			)
 		),
-		"num_favorites" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.num_favorites",
+		"num_favorites" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.num_favorites",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -2313,25 +2313,25 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 				"default" => 0
 			)
 		),
-		"display_num" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.display_num",
+		"display_num" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.display_num",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"display_time" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.display_time",
+		"display_time" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.display_time",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"template" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.template",
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.template",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -2353,7 +2353,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_comment_cache"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2361,39 +2361,39 @@ $TCA["tx_newspaper_comment_cache"] = array (
 				'default' => '0'
 			)
 		),
-		"article" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.article",
+		"article" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.article",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_article",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"kicker" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.kicker",
+		"kicker" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.kicker",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"title" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.title",
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.title",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"author" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.author",
+		"author" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_comment_cache.author",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -2415,7 +2415,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2423,7 +2423,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -2435,7 +2435,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -2451,70 +2451,70 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				)
 			)
 		),
-		"template_set" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.template_set",
+		"template_set" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.template_set",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"pool" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.pool",
+		"pool" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.pool",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"author_name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_name",
+		"author_name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_name",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"is_author" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.is_author",
+		"is_author" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.is_author",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"author_id" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_id",
+		"author_id" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.author_id",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"image_file" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.image_file",
+		"image_file" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.image_file",		
 			"config" => Array (
 				"type" => "group",
 				"internal_type" => "file",
-				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
-				"max_size" => 500,
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 500,	
 				"uploadfolder" => "uploads/tx_newspaper",
-				"show_thumbs" => 1,
-				"size" => 1,
+				"show_thumbs" => 1,	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"photo_source" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.photo_source",
+		"photo_source" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.photo_source",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"bio_text" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.bio_text",
+		"bio_text" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.bio_text",		
 			"config" => Array (
 				"type" => "text",
 				"cols" => "30",
@@ -2550,7 +2550,7 @@ $TCA["tx_newspaper_tag_zone"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_tag_zone"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2558,11 +2558,11 @@ $TCA["tx_newspaper_tag_zone"] = array (
 				'default' => '0'
 			)
 		),
-		"name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_zone.name",
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_zone.name",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -2584,7 +2584,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_controltagzone"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2592,7 +2592,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -2604,7 +2604,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -2620,34 +2620,34 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				)
 			)
 		),
-		"tag_zone" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_zone",
+		"tag_zone" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_zone",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag_zone",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag_zone",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"tag_type" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_type",
+		"tag_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_type",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"default_extra" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.default_extra",
+		"default_extra" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.default_extra",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_extra",
-				"size" => 3,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra",	
+				"size" => 3,	
 				"minitems" => 0,
 				"maxitems" => 10,
 			)
@@ -2670,49 +2670,49 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_controltag_to_extra"]["feInterface"],
 	"columns" => array (
-		"tag" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag",
+		"tag" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"tag_type" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_type",
+		"tag_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_type",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"tag_zone" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_zone",
+		"tag_zone" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_zone",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag_zone",
-				"size" => 1,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag_zone",	
+				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
-		"extra_table" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_table",
+		"extra_table" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_table",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"extra_uid" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_uid",
+		"extra_uid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_uid",		
 			"config" => Array (
 				"type"     => "input",
 				"size"     => "4",
@@ -2744,7 +2744,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_combolinkbox"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2752,7 +2752,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -2764,7 +2764,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -2780,35 +2780,35 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 				)
 			)
 		),
-		"show_related_articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.show_related_articles",
+		"show_related_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.show_related_articles",		
 			"config" => Array (
 				"type" => "check",
 			)
 		),
-		"manually_selected_articles" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.manually_selected_articles",
+		"manually_selected_articles" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.manually_selected_articles",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_article",
-				"size" => 3,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_article",	
+				"size" => 3,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"internal_links" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.internal_links",
+		"internal_links" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.internal_links",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_externallinks",
-				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",
-				"size" => 3,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_externallinks",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -2844,16 +2844,16 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 				),
 			)
 		),
-		"external_links" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.external_links",
+		"external_links" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.external_links",		
 			"config" => Array (
-				"type" => "select",
-				"foreign_table" => "tx_newspaper_externallinks",
-				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",
-				"size" => 3,
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_externallinks",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_externallinks.uid",	
+				"size" => 3,	
 				"minitems" => 0,
-				"maxitems" => 100,
+				"maxitems" => 100,	
 				"wizards" => Array(
 					"_PADDING" => 2,
 					"_VERTICAL" => 1,
@@ -2907,7 +2907,7 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_searchresults"]["feInterface"],
 	"columns" => array (
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -2919,7 +2919,7 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -2935,34 +2935,34 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 				)
 			)
 		),
-		"sections" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.sections",
+		"sections" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.sections",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_section",
-				"size" => 2,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 2,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
 		),
-		"search_term" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.search_term",
+		"search_term" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.search_term",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"tags" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.tags",
+		"tags" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.tags",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_tag",
-				"size" => 2,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_tag",	
+				"size" => 2,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
@@ -2985,7 +2985,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_container"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -2993,7 +2993,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -3005,7 +3005,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -3021,14 +3021,14 @@ $TCA["tx_newspaper_extra_container"] = array (
 				)
 			)
 		),
-		"extras" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.extras",
+		"extras" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.extras",		
 			"config" => Array (
-				"type" => "group",
-				"internal_type" => "db",
-				"allowed" => "tx_newspaper_extra",
-				"size" => 4,
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra",	
+				"size" => 4,	
 				"minitems" => 0,
 				"maxitems" => 100,
 			)
@@ -3051,11 +3051,11 @@ $TCA["tx_newspaper_tag_type"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_tag_type"]["feInterface"],
 	"columns" => array (
-		"name" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.name",
+		"name" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.name",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -3077,7 +3077,7 @@ $TCA["tx_newspaper_extra_ad"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_ad"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -3085,7 +3085,7 @@ $TCA["tx_newspaper_extra_ad"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -3097,7 +3097,7 @@ $TCA["tx_newspaper_extra_ad"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -3113,11 +3113,11 @@ $TCA["tx_newspaper_extra_ad"] = array (
 				)
 			)
 		),
-		"template" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.template",
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.template",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),
@@ -3139,7 +3139,7 @@ $TCA["tx_newspaper_extra_generic"] = array (
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_generic"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (
+		'hidden' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => array (
@@ -3147,7 +3147,7 @@ $TCA["tx_newspaper_extra_generic"] = array (
 				'default' => '0'
 			)
 		),
-		'starttime' => array (
+		'starttime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
 			'config'  => array (
@@ -3159,7 +3159,7 @@ $TCA["tx_newspaper_extra_generic"] = array (
 				'checkbox' => '0'
 			)
 		),
-		'endtime' => array (
+		'endtime' => array (		
 			'exclude' => 1,
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
 			'config'  => array (
@@ -3175,11 +3175,11 @@ $TCA["tx_newspaper_extra_generic"] = array (
 				)
 			)
 		),
-		"template" => Array (
-			"exclude" => 1,
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_generic.template",
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_generic.template",		
 			"config" => Array (
-				"type" => "input",
+				"type" => "input",	
 				"size" => "30",
 			)
 		),

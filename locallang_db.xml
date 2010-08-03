@@ -49,7 +49,7 @@
 			<label index="tx_newspaper_pagezone_page.inherits_from">Page zone the placement is inherited from</label>
 			<label index="tx_newspaper_article">Article</label>
 			<label index="tx_newspaper_article.articletype_id">Article type</label>
-			<label index="tx_newspaper_article.publish_date">Publish date</label>
+			<label index="tx_newspaper_article.author">Author</label>
 			<label index="tx_newspaper_article.kicker">Kicker</label>
 			<label index="tx_newspaper_article.title">Title</label>
 			<label index="tx_newspaper_article.teaser">Teaser</label>
@@ -58,7 +58,7 @@
 			<label index="tx_newspaper_article.teaser_list">Teaser for list view, if different</label>
 			<label index="tx_newspaper_article.text">Article text</label>
 			<label index="tx_newspaper_article.no_rte">Do not use the RTE</label>
-			<label index="tx_newspaper_article.author">Author</label>
+			<label index="tx_newspaper_article.publish_date">Publish date</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.source_id">Unique ID in newspaper editing system</label>
 			<label index="tx_newspaper_article.source_object">Source the article was imported from (serialized object)</label>
@@ -258,7 +258,7 @@
 			<label index="tx_newspaper_pagezone_page.inherits_from">Seitenbereich von dem die Bestückung geerbt wird</label>
 			<label index="tx_newspaper_article">Artikel</label>
 			<label index="tx_newspaper_article.articletype_id">Artikeltyp</label>
-			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
+			<label index="tx_newspaper_article.author">Autor</label>
 			<label index="tx_newspaper_article.kicker">Dachzeile</label>
 			<label index="tx_newspaper_article.title">Titel</label>
 			<label index="tx_newspaper_article.teaser">Teaser</label>
@@ -267,7 +267,7 @@
 			<label index="tx_newspaper_article.teaser_list">Teaser für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.text">Artikeltext</label>
 			<label index="tx_newspaper_article.no_rte">RTE nicht verwenden</label>
-			<label index="tx_newspaper_article.author">Autor</label>
+			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.source_id">Unique ID im Redaktionssystem der Zeitung</label>
 			<label index="tx_newspaper_article.source_object">Quelle aus der der Artikel importiert wurde (serialisiertes Objekt)</label>
