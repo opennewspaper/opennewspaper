@@ -11,7 +11,7 @@ var refreshCheck;
 function hideEmptyTablecells() {
     $('#placement > #hide-empty tr').children().each(function() {
             var visibleKids = $(this).children().is(':visible');
-                if(!visibleKids) {
+                if(!visibleKids && $(this).context.tagName == 'TD') {
                     $(this).hide();
                 }
             });
