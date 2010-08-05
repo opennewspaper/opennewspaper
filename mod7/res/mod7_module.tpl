@@ -168,7 +168,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 				{if $workflow_permissions.hide}
 					<input type="button" value="{$lang.placehide}" class="placehide" />
 				{elseif $workflow_permissions.publish}
-					<input type="button" value="{$lang.placepublish}" class="placepublish" />
+					<input type="button" value="{$lang.placepublish}" class="placepublish greenframe" />
 				{/if}
 			{/if}
 		</td>
