@@ -1534,6 +1534,7 @@ JSCODE;
 			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_button_articlebrowser', false, 14, 14)),
 			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_edit_articlelist', false)),
 			'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '', '', '', false, 0, 0, true),
+			'close' => tx_newspaper_BE::renderIcon('gfx/close.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod7/locallang.xml:label_close', false))
 		);
 		return $icon;
 	}

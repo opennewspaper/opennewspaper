@@ -58,6 +58,7 @@
 	padding:2px;
 	margin:0 0 20px;
 	border:0;
+	min-width:672px;
 }
 
 table#articleinfo {
@@ -107,13 +108,16 @@ table#section_selects {
 	padding:10px;
 	width:650px;
 }
+.tx_newspaper_mod7 #wf_title {
+	margin-bottom:3px;
+}
 
 .tx_newspaper_mod7 #buttons {
 	margin-top:20px;
 }
 .tx_newspaper_mod7 #buttons table {
 	border:1px solid gray;
-	width:650px;
+	width:672px;
 }
 .tx_newspaper_mod7 #buttons td {
 	padding:10px;

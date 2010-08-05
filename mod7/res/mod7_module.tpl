@@ -13,7 +13,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 <script src="res/mod7.js" type="text/javascript"></script>
 
 <h2>
-	{$lang.title} 
+	<a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title} 
 	<img src="res/move-spinner.gif" alt="" id="progress" />
 </h2>
 <div style="padding-top: 5px;" />
@@ -135,16 +135,17 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 
 {* article list save all/cancel buttons *}
-
+{* See #1141; Move cancel button to top, remove "save all article lists" button
 <div id="bottons_al">
 	<input type="button" value="{$lang.cancel}" class="cancel" />
 	<input type="button" value="{$lang.saveall}" class="saveall" id="saveall" />
 </div>
-
+*}
 
 
 {* workflow comments *}
 <div id="wf">
+<div id="wf_title">{$lang.label_message}</div>
 <textarea name="tx_newspaper_mod7[workflow_comment]" id="workflow_comment"></textarea>
 {$workflowlog}
 </div>

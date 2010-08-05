@@ -59,6 +59,8 @@
 			<label index="label_articlelist_fullrecord">Configure article list</label>
 			<label index="semiauto_list_is_folded">Article list: see above</label>
 			<label index="toggle_semiauto_al_folded">Toggle view for automatic article lists</label>
+			<label index="label_message">Message</label>
+			<label index="label_close">Close</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Artikel-Platzierung</label>
@@ -113,6 +115,8 @@
 			<label index="label_articlelist_fullrecord">Artikelliste konfigurieren</label>
 			<label index="semiauto_list_is_folded">Artikelliste: siehe oben bei den eingeklappen Listen</label>
 			<label index="toggle_semiauto_al_folded">Automatische Artikellisten ein-/ausklappen</label>
+			<label index="label_message">Nachricht</label>
+			<label index="label_close">Schließen</label>
 		</languageKey>
 	</data>
 </T3locallang>

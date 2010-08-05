@@ -86,7 +86,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						if (!isset($input['articleid'])) {
 							$input['articleid'] = 0; //isset($input['placearticleuid'])? $input['placearticleuid'] : 0; // needed for standalone form (singleplacement)
 						}
-t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
+//t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						// handle ajax
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
@@ -148,6 +148,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
                                 die($this->resortArticlelist($input, $input['ajaxcontroller']));
                             break;
 						}
+
 						// draw the header
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod7');
 						$this->doc->backPath = $BACK_PATH;
@@ -179,10 +180,10 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 						$this->doc = t3lib_div::makeInstance('mediumDoc');
 						$this->doc->backPath = $BACK_PATH;
 
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
+						$this->content .= $this->doc->startPage($LANG->getLL('title'));
+						$this->content .= $this->doc->header($LANG->getLL('title'));
+						$this->content .= $this->doc->spacer(5);
+						$this->content .= $this->doc->spacer(10);
 					}
 				}
 				
@@ -460,7 +461,7 @@ t3lib_div::devlog('mod7 main()', 'np', 0, array('input' => $input));
 				 *  \return \c true
 				 */
 				function saveSection($input) {
-t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
 					
@@ -517,7 +518,7 @@ t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input
 							case 'tx_newspaper_articlelist_manual' :
 								$result = $al->assembleFromUIDs($articleIds);
 							break;
-							case 'tx_newspaper_srticlelist_semiautomatic' :
+							case 'tx_newspaper_articlelist_semiautomatic' :
 								$articleIdsAndOffsets = array ();
 								for ($i = 0; $i < count($articleIds); ++$i) {
 									$articleIdsAndOffsets[] = array(
@@ -718,7 +719,7 @@ t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input
 				 * @return	void
 				 */
 				function printContent()	{
-					$this->content.=$this->doc->endPage();
+					$this->content .= $this->doc->endPage();
 					echo $this->content;
 				}
 				
@@ -731,8 +732,8 @@ t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input
 				function moduleContent()	{
 					switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1:
-							$content='';
-							$this->content.=$this->doc->section('',$content,0,1);
+							$content = '';
+							$this->content .= $this->doc->section('', $content, 0, 1);
 						break;
 					}
 				}
