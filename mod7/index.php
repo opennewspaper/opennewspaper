@@ -328,12 +328,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$log['place'] = true;
 					if (isset($statusHidePublish['hide'])) {
 						$log['hidden'] = true;
-						$article->storeHiddenStatusWithHooks(true);
+						$this->hideArticle($article);
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
-						$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
-						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
-						$article->store();
+						$this->publishArticle($article);
 					}
 					$article->store();
 					$this->writeLog($input, $log);
@@ -354,11 +352,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					);
 					if (isset($statusHidePublish['hide'])) {
 						$log['hidden'] = true;
-						$article->setAttribute('hidden', true);
+						$this->hideArticle($article);
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
-						$article->setAttribute('hidden', false);
-						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+						$this->publishArticle($article);
 					}
 					$article->store();					
 					$this->writeLog($input, $log);
@@ -379,11 +376,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					);
 					if (isset($statusHidePublish['hide'])) {
 						$log['hidden'] = true;
-						$article->setAttribute('hidden', true);
+						$this->hideArticle($article);
 					} elseif (isset($statusHidePublish['publish'])) {
 						$log['hidden'] = false;
-						$article->setAttribute('hidden', false);
-						$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+						$this->publishArticle($article);
 					}
 					$article->store();
 					$this->writeLog($input, $log);
@@ -396,12 +392,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function putArticleOnline($input) {
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
-					$article->setAttribute('hidden', 0);
-					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+					$log['hidden'] = false;
+					$this->publishArticle($article);
 					$article->store();
-					$this->writeLog($input, array(
-						'hidden' => false
-					));
+					$this->writeLog($input, $log);
 					return true;
 				}
 				
@@ -411,13 +405,24 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function putArticleOffline($input) {
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
-					$article->setAttribute('hidden', 1);
+					$log['hidden'] = true;
+					$this->hideArticle($article);
 					$article->store();
-					$this->writeLog($input, array(
-						'hidden' => true
-					));
+					$this->writeLog($input, $log);
 					return true;	
 				}
+				
+				
+				private function hideArticle(tx_newspaper_article $article) {
+					$article->storeHiddenStatusWithHooks(true);
+				}
+				private function publishArticle(tx_newspaper_article $article) {
+					$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
+					$article->setPublishDateIfNeeded(); // make sure the publish_date is set correctly
+					$article->store();
+				}
+				
+				
 				
 				/// write workflow log entry for manual comment (if a manual comment was entered)
 				/**

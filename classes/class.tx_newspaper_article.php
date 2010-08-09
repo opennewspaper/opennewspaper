@@ -694,7 +694,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 *  	belong to.
 	 */
 	public function setSections(array $uids) {
-t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
+//t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 		// 	Ensure that it's reasonably safe to delete Article-Section relations
 		foreach ($uids as $uid) {
 			if (!$uid instanceof tx_newspaper_Section) {
@@ -1112,7 +1112,7 @@ t3lib_div::devlog('setSections()', 'newspaper', 0, array($uids));
 
 	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST, 'backtrace' => debug_backtrace()));
+//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST, 'backtrace' => debug_backtrace()));
 		if (strtolower($table) == 'tx_newspaper_article' &&
 			(
 				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
@@ -1209,7 +1209,6 @@ t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('hidden'
 
 			// store in object
 			$this->setAttribute('hidden', $hidden_value);
-//			$this->setPublishDateIfNeeded();
 
 	}
 
