@@ -570,13 +570,11 @@ body {
 
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
 	{* load default source initially *}
-{literal}
 	<script type="text/javascript">
-		window.onload = function() {
+		window.onload = function() {ldelim}
 			changeSource('{$DEFAULT_SOURCE}', '')
-		}
+		{rdelim}
 	</script>
-{/literal}	
 {/if} 
 
 
