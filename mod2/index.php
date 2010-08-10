@@ -465,7 +465,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				$settings['section'] = '';
 			} 
 		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
-//	reactivate after #1041 is fixed (recursive section search)		$settings['section'] = $_REQUEST['s']; 
+			$settings['section'] = $_REQUEST['s']; 
 		}
 		if (!array_key_exists('text', $settings) || $forceReset) {
 			$settings['text'] = '';
@@ -619,8 +619,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$uids = array();
 		foreach($sectionUids as $sectionUid) {
 			$uids[] = $sectionUid['uid'];
+			$s = new tx_newspaper_section(intval($sectionUid['uid']));
+			if ($recursive) {
+				foreach($s->getChildSections(true) as $sub_section) {
+					$uids[] = $sub_section->getUid();
+				}
+			}
 		}
-		$sectionUidList = implode(',', $uids);
+		$sectionUidList = implode(',', array_unique($uids));
 		
 		if (!$sectionUidList) {
 			// no matching section found, so no article in result set
