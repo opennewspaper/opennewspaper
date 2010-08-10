@@ -27,8 +27,13 @@
 					{* article list available, class for article list is known *}
 					<tr><th scope="col" colspan="3">{$articlelist->getAttribute('notes')}</th></tr>
 					<tr>
+						<td>
+							{section name=i start=0 step=1 loop=$AL_HEIGHT}
+								<div class="counter">{$smarty.section.i.iteration}</div>
+							{/section}
+						</td>
 					    <td>
-							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="9" class="multiple-select ressort-select placement-select {if $articlelist_type == "tx_newspaper_articlelist_manual"} manual-list {/if} ">
+							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if $articlelist_type == "tx_newspaper_articlelist_manual"} manual-list {/if} ">
 								{foreach from=$articles item="list" name="al_loop" key="key"}
 									<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
 								{/foreach}

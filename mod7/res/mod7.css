@@ -161,3 +161,9 @@ table#section_selects {
 .np_wf_link a.less:hover {
 	background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_up_over.gif);
 }
+
+
+
+.tx_newspaper_mod7 .counter { 
+	text-align:right; 
+}
