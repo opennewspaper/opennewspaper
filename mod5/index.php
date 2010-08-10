@@ -372,9 +372,22 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
+		$smarty->assign('DEFAULT_SOURCE', $this->getDefaultSource()); // select this radio button by default
+		
 		$this->content .= $this->doc->section('', $smarty->fetch('mod5_newarticle.tmpl'), 0, 1);
 		$this->content.=$this->doc->spacer(10);
 		
+	}
+	
+	/// gets the default source for importing articles
+	// \return name of source configured in TSConfig (newspaper.article.defaultSource), or "new" if not set
+	private function getDefaultSource() {
+		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()));
+//t3lib_div::devlog('getDefaultSource()', 'newspaper', 0, array('tsc' => $tsc['newspaper.']));
+		if (!isset($tsc['newspaper.']['article.']['defaultSource'])) {
+			return 'new'; // default source: just a plain new article
+		}
+		return $tsc['newspaper.']['article.']['defaultSource'];
 	}
 	
 	/// creates a new article
