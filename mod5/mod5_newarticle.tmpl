@@ -496,7 +496,7 @@ body {
 					{* read registered sources *}
 					{foreach from=$IMPORT_SOURCE item=source key=key}
 {* \todo: correct typo in   id="soucre_{$key}"   *}
-						<input id="soucre_{$key}" {if $DEFAULT_SOURCE == $key}checked="checked"{else}onblur="elseXXX();"{/if} type="radio" name="tx_newspaper_mod5[type]" onclick="changeSource('{$key}', '')"> <label for="soucre_{$key}">{$source->getTitle()}</label> 
+						<input id="soucre_{$key}" {if $DEFAULT_SOURCE == $key}checked="checked"{/if} type="radio" name="tx_newspaper_mod5[type]" onclick="changeSource('{$key}', '')"> <label for="soucre_{$key}">{$source->getTitle()}</label> 
 					{/foreach}
 				</td>
 			</tr>
@@ -568,7 +568,16 @@ body {
 	{/if}
 </div>	
 
-
+{if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
+	{* load default source initially *}
+{literal}
+	<script type="text/javascript">
+		window.onload = function() {
+			changeSource('{$DEFAULT_SOURCE}', '')
+		}
+	</script>
+{/literal}	
+{/if} 
 
 
 {*
