@@ -2,7 +2,7 @@
 
 
 
-/// newspaper configuration; added here because this file is included when accssing hooks even if the newspaper framework is NOT available
+/// newspaper configuration; added here because this file is included when accessing hooks even if the newspaper framework is NOT available
 
 // replace element browser (EB) with article browser; array of fields in
 //$GLOBALS['newspaper']['tx_newspaper_article']['replaceEBwithArticleBrowser'][name_of_db_table] = array(field_list) 
@@ -73,6 +73,13 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			// replace eb with article browser
 			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $row['uid'] . '); return false;" >';
 			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
+		}
+
+		// call registered hooks
+		foreach (tx_newspaper::getRegisteredSaveHooks() as $hook_object) {
+			if (method_exists($hook_object, 'getSingleField_postProcess')) {
+				$hook_object->getSingleField_postProcess($table, $field, $row, $out, $PA, $that);
+			}
 		}
 
 	}
