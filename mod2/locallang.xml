@@ -60,6 +60,16 @@
 			<label index="label.page_prev">Previous hits</label>
 			<label index="label.page_next">Next hits</label>
 			<label index="label.page_hits">Hit(s)</label>
+			
+			<label index="label_module_title">Production list</label>
+			<label index="label_state">State</label>
+			<label index="label_article">Article</label>
+			<label index="label_messages">Messages</label>
+			<label index="label_not_yet_published">not yet published</label>
+			<label index="label_published">Published</label>
+			<label index="label_by_part">by</label>
+			<label index="label_messages_show">Show all messages</label>
+			<label index="label_messages_hide">Fold messages</label>
 
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -117,6 +127,17 @@
 			<label index="label.page_prev">Vorige</label>
 			<label index="label.page_next">Nächste</label>
 			<label index="label.page_hits">Treffer</label>
+			
+			<label index="label_module_title">Produktionsliste</label>
+			<label index="label_state">Status</label>
+			<label index="label_article">Artikel</label>
+			<label index="label_messages">Nachrichten</label>
+			<label index="label_not_yet_published">noch nicht publiziert</label>
+			<label index="label_published">Publiziert</label>
+			<label index="label_by_part">von</label>
+			<label index="label_messages_show">Alle Nachrichten anzeigen</label>
+			<label index="label_messages_hide">Nachrichten ausblenden</label>
+
 
 		</languageKey>
 	</data>

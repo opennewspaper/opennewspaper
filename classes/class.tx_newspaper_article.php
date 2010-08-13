@@ -728,7 +728,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			'tx_newspaper_article_sections_mm',
 			'uid_local = '.$this->getUid(),
 			'',
-			'',
+			'sorting',
 			$limit? "0, $limit": ''
 		);
 

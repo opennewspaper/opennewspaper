@@ -269,10 +269,15 @@ function changeWorkflowStatus(role, hidden_status) {
     	';
     }
     
-    private static function getComments($table, $table_uid, $limit = 0) {
-        $comments = tx_newspaper::selectRows("FROM_UNIXTIME( `crdate`, '%d.%m.%Y %H:%i' ) as created, be_user, action, comment",'tx_newspaper_log',
-                    'table_name = \''.$table.'\' AND table_uid = '.$table_uid, '','crdate desc', ($limit > 0) ? $limit : '') ;
-        
+    public static function getComments($table, $table_uid, $limit = 0) {
+        $comments = tx_newspaper::selectRows(
+			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, action, comment",
+			'tx_newspaper_log',
+            'table_name = \''.$table.'\' AND table_uid = '.$table_uid, 
+			'',
+			'crdate desc', 
+			($limit > 0) ? $limit : ''
+		);
         return $comments;
     }
 

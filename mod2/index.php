@@ -221,6 +221,21 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'time_controlled_now_and_future' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_and_future', false),
 			'time_controlled_now_but_will_end' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_but_will_end', false),
 			'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
+			'module_title' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_module_title', false),
+			'state' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_state', false),
+			'article' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_article', false),
+			'messages' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_messages', false),
+			'not_yet_published' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_not_yet_published', false),
+			'published' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_published', false),
+			'by_part' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_by_part', false),
+			'flag_hidden' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.unhide', false),
+			'flag_published' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.hide', false),
+			'flag_placement' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.article_placement', false),
+			'flag_preview' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false),
+			'flag_edit' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false),
+			'flag_delete' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.delete_article', false),
+			'messages_show' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_messages_show', false),
+			'messages_hide' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_messages_hide', false),
 		));
 
 		$smarty->assign('GO_LABEL', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.go', false));
@@ -310,8 +325,20 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
 			// add role title
 			$row[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($row[$i]['workflow_status']);
-			// add workflowlog data to $row
+			 
+			//add workflowlog data to $row - simple version for mod2_main.tmpl
 			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
+			
+			// add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
+			$row[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
+			
+			// add sections
+			$a = new tx_newspaper_article(intval($row[$i]['uid']));
+			$sections = array();
+			foreach($a->getSections() as $current_section) {
+				$sections[] = $current_section->getAttribute('section_name');
+			}
+			$row[$i]['sections'] = implode(', ', $sections);
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 		$smarty->assign('workflowlog_javascript', tx_newspaper_workflow::getJavascript()); // add js once only
@@ -335,11 +362,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('_POST', t3lib_div::_POST()); // add _post data (for setting default values)
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
+		$smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
 		
 		if ($this->isArticleBrowser()) {
 			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser 
 		}
-		return $smarty->fetch('mod2_main.tmpl'); // production list
+		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
 	}
 
 	/// \return true if an article browser is rendered, false if production list is rendered
@@ -451,7 +479,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			} elseif ($this->isProductionList()) {
 				$settings['role'] = tx_newspaper_workflow::getRole(); // current role of be_user
 			} else {
-				t3lib_div::devlog('addDefaultFilterValues(): unknown type', 'newspaper', 3, array('settings' => $settings, 'type' => $type));
+				t3lib_div::devlog('addDefaultFilterValues(): unknown type', 'newspaper', 3, array('settings' => $settings));
 			}
 		}
 		if (!array_key_exists('author', $settings) || $forceReset) {
