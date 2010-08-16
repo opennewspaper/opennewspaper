@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 {literal}
 
@@ -733,8 +733,8 @@ function deleteArticle(article_uid) {
 	    
 		<div class="listrow r3">
 			
-			<div> {* \todo: display number of messages *}
-				<a href ="#" onclick="toggle('messages{$DATA[i].uid}'); return false;" class="more_messages">{$LABEL.messages_show}</a>
+			<div> 
+				<a href ="#" onclick="toggle('messages{$DATA[i].uid}'); return false;" class="more_messages">{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})</a>
 			</div>
 			
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
