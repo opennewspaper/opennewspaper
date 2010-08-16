@@ -232,11 +232,13 @@
 					{else}
 						{* old version, display a message where to find the article list: $lang.semiauto_list_is_folded *}
 						{* hide complete div *}
+{if !$singlemode}
 <style>
 #al{$section.section->getUid()} {ldelim}
 display:none;
 {rdelim}
 </style>
+{/if}
 					{/if}
 				</div>
 				{/foreach}
