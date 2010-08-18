@@ -470,6 +470,9 @@ function changeWorkflowStatus(role, hidden_status) {
 
 		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
 			$fieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite (if set) / set value of field "hidden" 
+			if (!isset($fieldArray['tstamp'])) {
+				$fieldArray['tstamp'] = time(); // modify tstamp if hidden status changes
+			}
 		}
 		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
 			return; // value not set, so can't decide if the status changed 
@@ -478,6 +481,9 @@ function changeWorkflowStatus(role, hidden_status) {
 			return; // status wasn't changed, so don't store value
 		}
 		$fieldArray['workflow_status'] = $request['workflow_status']; // change workflow status
+		if (!isset($fieldArray['tstamp'])) {
+			$fieldArray['tstamp'] = time(); // modify tstamp if workflow status changed
+		}
 //t3lib_div::devlog('checkIfWorkflowStatusChanged() - leave', 'newspaper', 0, array('fieldArray' => $fieldArray));
 	}
 
@@ -539,7 +545,7 @@ function changeWorkflowStatus(role, hidden_status) {
 						'comment' => $action
 					));
 				}
-				
+//t3lib_div::devlog('processAndLogWorkflow()', 'newspaper', 0, array('fieldArray' => $fieldArray, 'backtrace' => debug_backtrace()));				
 				/// check if auto log entry for change of workflow status should be written (article only)
 				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
