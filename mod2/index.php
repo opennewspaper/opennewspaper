@@ -330,7 +330,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
 			
 			// add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
-			$row[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
+			$comments = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
+			$comments = tx_newspaper_workflow::addUsername($comments);
+			$row[$i]['workflowlog_v2'] = $comments;
 			
 			// add sections
 			$a = new tx_newspaper_article(intval($row[$i]['uid']));

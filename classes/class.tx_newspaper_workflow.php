@@ -296,7 +296,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }
 
-    private static function addUsername($comments) {
+    public static function addUsername($comments) {
         $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
         foreach($comments as $i => $comment) {
             $userId = $comment['be_user'];
