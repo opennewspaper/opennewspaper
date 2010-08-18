@@ -987,7 +987,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
         foreach ($rows as $article) {
             $uids[] = $article['uid_foreign'];
         }
-        t3lib_div::devlog('removeDanglingRelations()', 'newspaper', 0, array('rows'=>$rows, 'uids'=>$uids));
+//t3lib_div::devlog('removeDanglingRelations()', 'newspaper', 0, array('rows'=>$rows, 'uids'=>$uids));
 
         $where = 'uid_foreign = ' . $this->getUid() . ' AND uid_local NOT IN (' . implode(', ', $uids) . ')';
         $rows = tx_newspaper::deleteRows(
@@ -1068,7 +1068,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
     }
 
     private static function cleanRelatedArticles($article_uid) {
-        t3lib_div::devlog('cleanRelatedArticles()', 'newspaper', 0, array('$article_uid'=>$article_uid));
+//t3lib_div::devlog('cleanRelatedArticles()', 'newspaper', 0, array('$article_uid'=>$article_uid));
 
         if (!intval($article_uid)) return;
         $article = new tx_newspaper_Article(intval($article_uid));
