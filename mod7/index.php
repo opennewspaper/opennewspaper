@@ -277,6 +277,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('backenduser', $backendUser);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('ICON', $this->al_be->getArticlelistIcons());
+					$smarty->assign('SPINNER', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod7/res/move-spinner.gif');
 					$smarty->assign('workflow_permissions', array(
 						'hide' => ($article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('hide'),
 						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('publish'),
