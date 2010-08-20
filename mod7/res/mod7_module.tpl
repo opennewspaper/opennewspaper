@@ -130,7 +130,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 
 {* placement *}
-<div id="placement">{$SPINNER}</div>
+<div id="placement"><img src="{$SPINNER}"></div>
 
 
 
