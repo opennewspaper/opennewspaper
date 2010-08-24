@@ -203,7 +203,7 @@ body {
 	display:none;
 	position:absolute;
 	margin:8px 0 0 375px;
-	padding:0 0 8px 10px;	
+	padding:0 0 8px 10px;
 	overflow:visible;
 	z-index:50;
 	background-color:#E7E7E7;
@@ -299,6 +299,21 @@ body {
 	color:#C61940;
 }
 
+#modlist .more_feld, #modlist .less_feld {	
+	filter:alpha(opacity=90);
+	-moz-opacity:0.90;
+	-khtml-opacity:0.90;
+	opacity:0.90;
+}	
+
+#modlist .less_feld {	
+	filter:alpha(opacity=90);
+	-moz-opacity:0.90;
+	-khtml-opacity:0.90;
+	opacity:0.90;
+	position:absolute;	
+}	
+
 #modlist p.message.error_message {
 	color:#C61940;
 	font-weight:bold;
@@ -315,7 +330,7 @@ body {
     padding:4px 8px  8px 25px;
 	width:225px;
 	display:block;
-	margin:-8px 0 7px -10px;	
+	margin:-8px 0 7px -10px;
 	background-color:#FFF;
 }
 
@@ -327,9 +342,9 @@ body {
     background-repeat:no-repeat;
     background-position:10px 8px;
     padding:4px 8px  8px 25px;
-	background-color:#FFF;
-	display:block;
-	margin:-8px 0 7px -10px;
+	background-color: #FFF;
+	display: block;
+	margin: -8px 0 7px -10px;
 }
 	
 #modlist a.more_messages:hover {
@@ -429,13 +444,14 @@ body {
 	
 #tx_newspaper_mod3 .hide {
 	position:absolute;
-	display:none;
+	display:block;
 	z-index:50;		
-	margin:0 0 0 202px;
+	margin:0 0 0 169px;
 }
 
-#tx_newspaper_mod3 .hide div{
-	padding:3px;
+#tx_newspaper_mod3 .hide div {
+	padding-left: 2px;
+	padding-right: 2px;
 	background-color:#FFF;
 	text-align:center;
 	display:inline-block;
@@ -677,7 +693,7 @@ function deleteArticle(article_uid) {
 			} online{/if}">
 			{if $DATA[i].hidden == 0}
 				{if $IS_DUTY_EDITOR || $IS_ADMIN}
-					<a class="statButton" href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">
+					<a title="{$LABEL.flag_published}" class="statButton" href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">
 				{/if}
 				<img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_online.png">
 				{if $IS_DUTY_EDITOR || $IS_ADMIN}
@@ -685,7 +701,7 @@ function deleteArticle(article_uid) {
 				{/if}
 			{else}
 				{if $IS_DUTY_EDITOR || $IS_ADMIN}
-					<a class="statButton" href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">
+					<a title="{$LABEL.flag_hidden}" class="statButton" href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">
 				{/if}
 				<img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_offline.png">
 				{if $IS_DUTY_EDITOR || $IS_ADMIN}
@@ -715,7 +731,7 @@ function deleteArticle(article_uid) {
 		</div>
 		
 		<div class="listrow r2">
-			<h2 class="kicker">{$DATA[i].kicker}</h2>
+			<h2 class="kicker">{if $LOCKED_ARTICLE[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg|escape:"htlmall"}{/if}{$DATA[i].kicker}</h2>
 			<h1>{$DATA[i].title}</h1>
 			<div class="titelinfo">{* year is shown only if tstamp year does NOT equal the current year *}
 				<p>
@@ -733,10 +749,12 @@ function deleteArticle(article_uid) {
 	    
 		<div class="listrow r3">
 			
+<!--
 			<div> 
 				<a href ="#" onclick="toggle('messages{$DATA[i].uid}'); return false;" class="more_messages">{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})</a>
 			</div>
-			
+-->	
+
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
 				<p class="autor">{$comment.username}</p>
 				<p class="autor right"> <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>&nbsp;{$comment.crdate|date_format:"%H:%M:%S"}</p> 
@@ -783,8 +801,9 @@ function deleteArticle(article_uid) {
 				{/if}
 				{if $IS_DUTY_EDITOR}<a title="{$LABEL.flag_placement}" href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"><img src="../res/be/img/edit_placement.png" width="30" height="30"></a>{/if}
 				<a title="{$LABEL.flag_preview}" href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_preview.png" width="30" height="30"></a>
-				<a title="{$LABEL.flag_edit}" href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a> 
+				<a title="{$LABEL.flag_edit} (#{$DATA[i].uid})" href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a> 
 				<a title="{$LABEL.flag_delete}" href="#" onclick="deleteArticle({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_delete.png" width="30" height="30"></a>
+				<a title="{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggle('messages{$DATA[i].uid}'); return false;"><img src="../res/be/css/arrow-270.png" alt="" width="30" height="30"></a>
 			</div>
 		</div>
 	</div>

@@ -136,7 +136,7 @@
 			<label index="label_published">Publiziert</label>
 			<label index="label_by_part">von</label>
 			<label index="label_messages_show">Alle Nachrichten anzeigen</label>
-			<label index="label_messages_hide">Nachrichten ausblenden</label>
+			<label index="label_messages_hide">Nachrichten einklappen</label>
 
 
 		</languageKey>
