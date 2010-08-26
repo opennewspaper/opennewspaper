@@ -666,11 +666,18 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     public static function logExecutionTime() {
         $execution_time = microtime(true)-self::$execution_start_time;
         $execution_time_ms = 1000*$execution_time;
-        t3lib_div::devlog('logExecutionTime', 'newspaper', 0, array('execution time' => $execution_time_ms, 'backtrace' => debug_backtrace()));
+        t3lib_div::devlog('logExecutionTime', 'newspaper', 0, array('execution time' => $execution_time_ms, 'object' => self::getTimedObject()));
         
         self::writeNewspaperLogEntry('logRenderTime', $message);
     }
     
+    private static function getTimedObject() {
+        $backtrace = array_slice(debug_backtrace, 0, 5);
+        foreach($backtrace as $function) {
+        	if ($function['class'] == 'tx_newspaper') continue;
+        	return $function['object'];
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
 
 	/// get absolute path to Typo3 installation
