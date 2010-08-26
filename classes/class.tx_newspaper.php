@@ -672,7 +672,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     }
     
     private static function getTimedObject() {
-        $backtrace = array_slice(debug_backtrace, 0, 5);
+        $backtrace = array_slice(debug_backtrace(), 0, 5);
         foreach($backtrace as $function) {
         	if ($function['class'] == 'tx_newspaper') continue;
         	return $function['object'];
