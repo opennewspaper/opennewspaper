@@ -303,6 +303,9 @@ class tx_newspaper_Page
 	 *  \return The rendered page as HTML (or whatever your template does) 
 	 */
  	public function render($template_set = '') {
+        
+        tx_newspaper::startExecutionTimer();
+        
 		/// Check the parent Section and own attributes whether to use a specific template set
  		if ($this->getParentSection()->getAttribute('template_set')) {
 			$template_set = $this->getParentSection()->getAttribute('template_set');
@@ -327,8 +330,12 @@ class tx_newspaper_Page
  		}
 		$this->smarty->assign('page_zones', $rendered);
 		
-		/// Return the rendered page
- 		return $this->smarty->fetch($this);
+        /// Return the rendered page
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
  	}
 
  	///	Lists all tx_newspaper_Page s with the given tx_newspaper_PageType
