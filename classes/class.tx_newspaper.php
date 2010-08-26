@@ -34,7 +34,11 @@ class tx_newspaper  {
 	const article_get_parameter = 'art';
 	///	The \c GET parameter which determines which page type is displayed
 	const pagetype_get_parameter = 'pagetype';
-	
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //      DB functions
+    ////////////////////////////////////////////////////////////////////////////
+    
 	/// Returns whether a specified record is available in the DB
 	public static function isPresent($table, $where, $use_enable_fields = true) {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
@@ -50,15 +54,6 @@ class tx_newspaper  {
         return true;
 		
 	}
-	
-	private static function writeFunctionAndArgumentsToLog($type) {
-		$backtrace = debug_backtrace();
-		$previous_function = $backtrace[1];
-		$function_name = $previous_function['function'];
-		$args = join("\n", $previous_function['args']);
-		self::writeNewspaperLogEntry($type, "$function_name\n$args");
-	}
-
 
 	/// Execute a \c SELECT query and return the amount of records in the result set
 	/** enableFields() are taken into account.
@@ -565,7 +560,6 @@ class tx_newspaper  {
 		return intval($row[0]['max_sorting']);
 	}
 
-
 	/// Check if at least one record exists in given table
 	/**  Enable fields for BE/FE are taken into account.
 	 *  
@@ -585,6 +579,19 @@ class tx_newspaper  {
 		} catch (tx_newspaper_EmptyResultException $e) {
 			return false;
 		}
+	}
+
+    ////////////////////////////////////////////////////////////////////////////
+    //      Logging functions
+    ////////////////////////////////////////////////////////////////////////////
+
+    /// Logs the current operation
+    private static function writeFunctionAndArgumentsToLog($type) {
+		$backtrace = debug_backtrace();
+		$previous_function = $backtrace[1];
+		$function_name = $previous_function['function'];
+		$args = join("\n", $previous_function['args']);
+		self::writeNewspaperLogEntry($type, "$function_name\n$args");
 	}
 
 	/// write newspaper log entry
@@ -652,18 +659,19 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		
 	}
 
-	/// Check if given class name is an abstract class
-	/** \param $class class name
-	 *  \return \c true if abstract class, \c false else (or if no class at all)
-	 */
-	public static function isAbstractClass($class) {
-		$abstract = false;
-		if (class_exists($class)) {
-			$tmp = new ReflectionClass($class);
-			$abstract = $tmp->isAbstract();
-		}
-		return $abstract;
-	}
+    public static function startExecutionTimer() {
+        self::$execution_start_time = microtime(true);
+    }
+    
+    public static function logExecutionTime() {
+        $execution_time = microtime(true)-self::$execution_start_time;
+        $execution_time_ms = 1000*$execution_time;
+        t3lib_div::devlog('logExecutionTime', 'newspaper', 0, array('execution time' => $execution_time_ms, 'backtrace' => debug_backtrace()));
+        
+        self::writeNewspaperLogEntry('logRenderTime', $message);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
 
 	/// get absolute path to Typo3 installation
 	/** \param $endsWithSlash determines if the returned path ends with a slash
@@ -751,26 +759,22 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 		return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
 	}
-	
-	/// Get the tx_newspaper_Section object of the page currently displayed
-	/** Currently, that means it returns the tx_newspaper_Section record which
-	 *  lies on the current Typo3 page. This implementation may change, but this
-	 *  function is required to always return the correct tx_newspaper_Section.
-	 * 
-	 *  \return The tx_newspaper_Section object the plugin currently works on
-	 *  \throw tx_newspaper_IllegalUsageException if the current page is not 
-	 * 		associated with a tx_newspaper_Section.
-	 */
-	public static function getSection() {
-		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
 
-        if (!$section_uid) {
-        	throw new tx_newspaper_IllegalUsageException('No section associated with current page');
-        }
-		
-		return new tx_newspaper_Section($section_uid);
+    ////////////////////////////////////////////////////////////////////////////
+
+	/// Check if given class name is an abstract class
+	/** \param $class class name
+	 *  \return \c true if abstract class, \c false else (or if no class at all)
+	 */
+	public static function isAbstractClass($class) {
+		$abstract = false;
+		if (class_exists($class)) {
+			$tmp = new ReflectionClass($class);
+			$abstract = $tmp->isAbstract();
+		}
+		return $abstract;
 	}
-	
+
 	/// Return the name of the SQL table \p $class is persistently stored in
 	/** \param $class either object or a class name to find the SQL table for
 	 *  \return The lower-cased class name of \p $class (= name of associated
@@ -813,41 +817,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		}
 		return false;
 	}
-	
-	/// checks if a string starts with a specific text
-	/** \param $haystack string to searched
-	 *  \param $needle string to search for
-	 *  \param $caseSensitive specifies if the search is case-sensitive (default=false)
-	 */
-	public static function startsWith($haystack, $needle, $caseSensitive=false) {
-		if ($caseSensitive) {
-    		return (strpos($haystack, $needle) === 0);
-		}
-		return (stripos($haystack, $needle) === 0);
-	}
-	
 
-	/// Get a list of all the attributes/DB fields an object (or class) has
-	/** \param $object An object of the desired class, or the class name as string
-	 *  \return The list of attributes
-	 */
-	public static function getAttributes($object) {
-		global $TCA;
-		$object = self::getTable($object);
-		t3lib_div::loadTCA($object);
-		return array_keys($TCA[$object]['columns']);
-	}
-	
-	/// The \c GET parameter which determines the article UID
-	public static function GET_article() {
-		return self::article_get_parameter;
-	}
+    ////////////////////////////////////////////////////////////////////////////
 
-	///	The \c GET parameter which determines which page type is displayed
-	public static function GET_pagetype() {
-		return self::pagetype_get_parameter;
-	}
-	
 	/// Create a HTML link with text and URL using the \c typolink() API function 
 	/** \param  $text the text to be displayed
 	 *  \param  $params target and optional \c GET parameters as parameter => value
@@ -991,7 +963,62 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$link = self::typolink('', $params, $conf);
 		return $link['href'];
 	}
+
+    ////////////////////////////////////////////////////////////////////////////
+
+	/// checks if a string starts with a specific text
+	/** \param $haystack string to searched
+	 *  \param $needle string to search for
+	 *  \param $caseSensitive specifies if the search is case-sensitive (default=false)
+	 */
+	public static function startsWith($haystack, $needle, $caseSensitive=false) {
+		if ($caseSensitive) {
+    		return (strpos($haystack, $needle) === 0);
+		}
+		return (stripos($haystack, $needle) === 0);
+	}
 	
+
+	/// Get a list of all the attributes/DB fields an object (or class) has
+	/** \param $object An object of the desired class, or the class name as string
+	 *  \return The list of attributes
+	 */
+	public static function getAttributes($object) {
+		global $TCA;
+		$object = self::getTable($object);
+		t3lib_div::loadTCA($object);
+		return array_keys($TCA[$object]['columns']);
+	}
+	
+	/// The \c GET parameter which determines the article UID
+	public static function GET_article() {
+		return self::article_get_parameter;
+	}
+
+	///	The \c GET parameter which determines which page type is displayed
+	public static function GET_pagetype() {
+		return self::pagetype_get_parameter;
+	}
+
+	/// Get the tx_newspaper_Section object of the page currently displayed
+	/** Currently, that means it returns the tx_newspaper_Section record which
+	 *  lies on the current Typo3 page. This implementation may change, but this
+	 *  function is required to always return the correct tx_newspaper_Section.
+	 * 
+	 *  \return The tx_newspaper_Section object the plugin currently works on
+	 *  \throw tx_newspaper_IllegalUsageException if the current page is not 
+	 * 		associated with a tx_newspaper_Section.
+	 */
+	public static function getSection() {
+		$section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
+
+        if (!$section_uid) {
+        	throw new tx_newspaper_IllegalUsageException('No section associated with current page');
+        }
+		
+		return new tx_newspaper_Section($section_uid);
+	}
+
 	/// Find out whether we are displaying a tx_newpaper_Article right now
 	/** \return true, if on an Article tx_newspaper_Page
 	 */
@@ -1066,7 +1093,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	private static $registered_sources = array();
 	
 	private static $registered_savehooks = array();
-	
+    
+    private static $execution_start_time = 0;
+    
 }
 
 ?>
