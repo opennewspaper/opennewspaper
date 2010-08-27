@@ -491,11 +491,11 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 	}
 	
 	function load_article() {
-t3lib_div::devlog('load_article 1', 'np', 0, array());
-$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
+		$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 t3lib_div::devlog('load_article', 'np', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
+t3lib_div::devlog('load_article', 'np', 0, array($source_id,$path));
 		$source = tx_newspaper::getRegisteredSource($source_id);
 
 		$article = new tx_newspaper_Article();
