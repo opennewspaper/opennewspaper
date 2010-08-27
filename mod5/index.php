@@ -493,7 +493,6 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 	function load_article() {
 t3lib_div::devlog('load_article 1', 'np', 0, array());
 $input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
-		return '?????';
 t3lib_div::devlog('load_article', 'np', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
@@ -513,7 +512,10 @@ t3lib_div::devlog('load_article', 'np', 0, $input);
 		$smarty->assign('source_id', $source_id);
 		$smarty->assign('source_path', $path);
 		
-		die($smarty->fetch('mod5_articlepreview.tmpl'));
+		$result = $smarty->fetch('mod5_articlepreview.tmpl');
+t3lib_div::devlog('load_article', 'np', 0, array($result));
+		
+		die($result);
 	}
 
     function import_article(array $input) {
