@@ -625,6 +625,18 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR teaser LIKE "%' . 
 				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR text LIKE "%' . 
 				addslashes(trim(t3lib_div::_GP('text'))) . '%")';
+			if (substr(trim(t3lib_div::_GP('text')), 0, 1) == '#') {
+				// looking for an article uid?
+				$uid = intval(substr(trim(t3lib_div::_GP('text')), 1));
+				if (trim(t3lib_div::_GP('text')) == '#' . $uid) {
+					// text contains a query like #[int], so search for this uid ONLY
+					$where['uid'] = $uid; 
+					return array(
+						'table' => $table,
+						'where' => 'uid=' . $uid
+					);				
+				}
+			} 
 		}
 //t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('where' => $where, 'table' => $table));
 		return array(
