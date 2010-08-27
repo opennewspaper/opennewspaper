@@ -489,6 +489,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 	
 	function load_article(array $input) {
+t3lib_div::devlog('load_article', '', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
@@ -497,7 +498,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$source->readFields($article, 
 							array('title', 'teaser', 'text'), 
 							new tx_newspaper_SourcePath($path));
-							
+		
 		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
 		
@@ -510,21 +511,20 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		die($smarty->fetch('mod5_articlepreview.tmpl'));
 	}
 
-	function import_article(array $input) {
+    function import_article(array $input) {
 
 		$section = new tx_newspaper_Section(intval($input['section']));
 		$articletype = new tx_newspaper_ArticleType(intval($input['articletype']));
-		
+
         $source = tx_newspaper::getRegisteredSource($input['source_id']);
 		$path = new tx_newspaper_SourcePath($input['source_path']);
-		
-		
+
 		$new_article = $this->createAndImportArticle($articletype, $section, $source, $path);
 
 		$this->logImport($new_article, $input);
-		
+
 		$this->redirectToArticleMask($new_article, $input);
-	}
+    }
 
 	/// Create an article of requested type, perform the import, set necessary attributes and store the article
 	/** This function violates the "do one thing" rule clearly... anyway, still
@@ -534,11 +534,11 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	 * @param $section section the article belogs to - needed for the default extras.
 	 * @param $source  source the article is imported from.
 	 */
-	private function createAndImportArticle(tx_newspaper_ArticleType $type, 
-	                                        tx_newspaper_Section $section, 
-	                                        tx_newspaper_Source $source, 
-	                                        tx_newspaper_SourcePath $path) {
-	                                   
+    private function createAndImportArticle(tx_newspaper_ArticleType $type, 
+                                            tx_newspaper_Section $section, 
+                                            tx_newspaper_Source $source, 
+                                            tx_newspaper_SourcePath $path) {
+                                   
         $new_article = $section->createNewArticle($type);
         $new_article->setAttribute('articletype_id', $type->getUid());
 
