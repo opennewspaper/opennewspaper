@@ -105,7 +105,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 					die($this->browse_path($input));
 				case 'load_article' :
 t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
-					$response = $this->load_article($input);
+					$response = $this->load_article();
 					die($response);
 // \todo: Helge, still needed?
 //				case 'import_article' :
@@ -490,7 +490,7 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
                '</option>' . "\n";
 	}
 	
-	function load_article(array $input) {
+	function load_article() {
 t3lib_div::devlog('load_article', '', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
