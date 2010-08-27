@@ -104,8 +104,8 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 				case 'browse_path' :
 					die($this->browse_path($input));
 				case 'load_article' :
-#					die($this->load_article($input));
-					die('pups');
+					$response = $this->load_article($input);
+					die($response);
 // \todo: Helge, still needed?
 //				case 'import_article' :
 //					die($this->import_article($input));
