@@ -491,7 +491,7 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 	}
 	
 	function load_article() {
-t3lib_div::devlog('load_article', '', 0, $input);
+t3lib_div::devlog('load_article 1', '', 0, array());
 		return '?????';
 $input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 t3lib_div::devlog('load_article', '', 0, $input);
