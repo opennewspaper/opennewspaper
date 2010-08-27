@@ -99,7 +99,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 
-//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
+t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
