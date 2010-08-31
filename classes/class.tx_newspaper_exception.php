@@ -36,10 +36,12 @@ class tx_newspaper_Exception extends Exception {
 	/** \param $message Additional info about the Exception being thrown
 	 */
 	public function __construct($message) {
-		t3lib_div::devlog('Exception thrown: ' . $message, 
-						  'newspaper', 
-						  3, 
-						  array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH));
+		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB) {
+			t3lib_div::devlog('Exception thrown: ' . $message, 
+							  'newspaper', 
+							  3, 
+							  array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH));
+		}
         parent::__construct($message);
     }
 
