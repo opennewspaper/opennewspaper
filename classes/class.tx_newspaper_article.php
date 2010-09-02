@@ -142,11 +142,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 				$this->attributes = $this->readExtraItem($this->getUid(), $this->getTable());
 			}
 
+			$this->setTypo3Attributes();
+
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
 			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
+
+			$this->setTypo3Attributes();
+
 			$this->setUid(
 				tx_newspaper::insertRows(
 					$this->getTable(), $this->attributes
@@ -1093,13 +1098,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
     }
 
 
-	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray
+	/// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray (so for typo3 save hook usage only)
 	private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
 //t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST, 'backtrace' => debug_backtrace()));
 		if (strtolower($table) == 'tx_newspaper_article' &&
 			(
 				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
-				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) // called by self::setPublishDateIfNeeded() or hidden field is configured to be visible in backend
+				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) 
 			)
 		) {
 
@@ -1150,33 +1155,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 
 	}
-
-	/// sets the publish date if needed
-	/** The publish date needs to be set if the attribute hidden changes to 0 and
-	 *  no publish_date is stored so far.
-	 *  This method just SETS the publish_date attribute, but DOES NOT store the article
-	 */
-	public function setPublishDateIfNeeded() {
-		$fakeFieldArray = array(
-			'hidden' => $this->getAttribute('hidden')
-		);
-		self::addPublishDateIfNotSet('', $this->getTable(), $this->getUid(), $fakeFieldArray);
-		if (isset($fakeFieldArray['publish_date'])) {
-			// addPublishDateIfNotSet() added a new publish_date in $fakeFieldArray, so set that date as publish_date
-			$this->setAttribute('publish_date', $fakeFieldArray['publish_date']);
-			$this->setAttribute('tstamp', time());
-		}
+	
+	/// Set attributes used by Typo3
+	private function setTypo3Attributes() {
+		$this->setAttribute('tstamp', time());
 	}
-	
-	
+
 	// \todo: replace with newspaper hook handling, see #1055
 	/// This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
-	/// This function write the hidden status into the database immediately
+	/// This function writes the hidden status into the database immediately
 	/** \param $uid article uid
 	 *  \param $hidden boolean value specifying if the article is hidden or published
 	 */
 	public function storeHiddenStatusWithHooks($hidden) {
-t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('hidden' => $hidden));
 
 			$hidden_value = $hidden? true : false;
 
@@ -1192,7 +1183,13 @@ t3lib_div::devlog('storeHiddenStatusWithHooks()', 'newspaper', 0, array('hidden'
 
 			// store in object
 			$this->setAttribute('hidden', $hidden_value);
-
+			
+			if ($hidden == 0) {
+				// if article is published the publsih date might have been stored in save hook, so re-read it from db
+				$articleFromDb = new tx_newspaper_article($this->getUid());
+				$this->setAttribute('publish_date', $articleFromDb->getAttribute('publish_date'));
+			}
+			
 	}
 
 
