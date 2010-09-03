@@ -205,7 +205,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 
 
-	 public static function renderBackend($table, $tableUid, $allComments=false) {
+	 public static function renderBackend($table, $tableUid, $allComments=true, $showFoldLinks=false) {
         if(!$table || !$tableUid) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
@@ -217,7 +217,7 @@ function changeWorkflowStatus(role, hidden_status) {
         }
 
         $comments = self::addUsername($comments);
-        return self::renderTemplate($comments, $tableUid, $allComments);
+        return self::renderTemplate($comments, $tableUid, $allComments, $showFoldLinks);
     }
     
     /// return javascript for ajax calls
@@ -281,13 +281,14 @@ function changeWorkflowStatus(role, hidden_status) {
         return $comments;
     }
 
-    private static function renderTemplate($comments, $tableUid, $allComments=false) {
+    private static function renderTemplate($comments, $tableUid, $allComments=true, $showFoldLinks=false) {
 		global $LANG;
 		self::addUsername($comments);
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
 		$smarty->assign('tableUid', $tableUid);
 		$smarty->assign('allComments', $allComments);
+		$smarty->assign('showFoldLinks', $showFoldLinks);
 		$smarty->assign('LABEL', array(
 			'more' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_more_link', false),
 			'less' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_less_link', false)
@@ -533,6 +534,7 @@ function changeWorkflowStatus(role, hidden_status) {
 					} else {
 						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_published', false);
 					}
+//t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
@@ -545,7 +547,7 @@ function changeWorkflowStatus(role, hidden_status) {
 						'comment' => $action
 					));
 				}
-//t3lib_div::devlog('processAndLogWorkflow()', 'newspaper', 0, array('fieldArray' => $fieldArray, 'backtrace' => debug_backtrace()));				
+				
 				/// check if auto log entry for change of workflow status should be written (article only)
 				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(

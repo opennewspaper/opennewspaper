@@ -287,7 +287,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					));
 					$smarty->assign('workflowlog', 
 						tx_newspaper_workflow::getJavascript() .
-						tx_newspaper_workflow::renderBackend('tx_newspaper_article', $input['articleid'])
+						tx_newspaper_workflow::renderBackend('tx_newspaper_article', $input['articleid'], false, true)
 					);
 					return $smarty->fetch('mod7_module.tpl');
 				}

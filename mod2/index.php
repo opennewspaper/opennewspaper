@@ -343,7 +343,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$row[$i]['sections'] = implode(', ', $sections);
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
-		$smarty->assign('workflowlog_javascript', tx_newspaper_workflow::getJavascript()); // add js once only
 
 		// add information for time controlled articles
 		for ($i = 0; $i < sizeof($row); $i++) {
