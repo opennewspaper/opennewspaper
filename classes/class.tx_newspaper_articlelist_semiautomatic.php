@@ -156,6 +156,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Whether articles from subsections should be recursively included in the list.
 	const include_articles_from_subsections = false;
 	
+	/// Whether to enable sticky articles. Currently the implementation is buggy.
+	const enable_sticky_articles = false;
+	
+	/// Whether to write information about sorting operations to devlog.
+	const debug_resort_operations = false;
+	
 	/// Construct a tx_newspaper_ArticleList_Semiautomatic.
 	/** This constructor is used to set the default section filter
 	 *  \param $uid UID of the record in the corresponding SQL table
@@ -291,14 +297,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		// the offset is updated in any case
         $old_order[$index][1] -= $distance;
 
-        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array(
-            'uid' => $old_order[$index][0],
-            'index'=>$index,
-            'shuffle_value' => $shuffle_value,
-            'new index' => $new_index,
-            'distance' => $distance,
-            'new offset' => $old_order[$index][1]
-        ));
+        if (self::debug_resort_operations) {
+            t3lib_div::devlog('resortArticle()', 'newspaper', 0, array(
+                'uid' => $old_order[$index][0],
+                'index'=>$index,
+                'shuffle_value' => $shuffle_value,
+                'new index' => $new_index,
+                'distance' => $distance,
+                'new offset' => $old_order[$index][1]
+            ));
+        }
         if ($new_index == $index) return;
         
         self::swap($old_order, $index, $new_index);
@@ -374,11 +382,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
      *  \param $old_order List of article/offset pairs to be checked and corrected.
      */
 	private function cleanupOffsets(array &$old_order) {
+
+        if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
         
 		$this->getRawUids();
 
-        $is_at_top_of_list = true;
-        t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
+        $is_at_top_of_list = self::enable_sticky_articles;
+        
         for ($index = 0; $index < sizeof($old_order); $index++) {
 		    $entry = $old_order[$index];
 			$uid = $entry[0];
@@ -393,13 +403,14 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			if ($raw_index-$offset != $index) {
 				
 				$required_offset = $raw_index-$index;
-				t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array(
-					'index'=>$index,
-					'raw index'=>$raw_index,
-					'offset'=>$offset,
-					'required offset'=>$required_offset)
-				);
-				
+				if (self::debug_resort_operations) {
+					t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array(
+						'index'=>$index,
+						'raw index'=>$raw_index,
+						'offset'=>$offset,
+						'required offset'=>$required_offset)
+					);
+				}
 				
 				if ($required_offset < $offset && $is_at_top_of_list) {
 					continue;
@@ -411,7 +422,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			
 			$is_at_top_of_list = false;
 		}
-		t3lib_div::devlog('cleanupOffsets() output', 'newspaper', 0, $old_order);
+		
+		if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() output', 'newspaper', 0, $old_order);
 	}
 		
 	/// Updates or insert a record with the corresponding offset. 
