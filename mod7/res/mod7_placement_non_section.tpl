@@ -35,7 +35,7 @@
 					    <td>
 							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if $articlelist_type == "tx_newspaper_articlelist_manual"} manual-list {/if} ">
 								{foreach from=$articles item="list" name="al_loop" key="key"}
-									<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
+									<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>										
 								{/foreach}
 							</select>
 						</td>
