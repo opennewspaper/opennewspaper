@@ -917,9 +917,9 @@ DESC';
 	private function sortArticles(array $articles) {
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
-			$article['article']->getAttribute('uid');
+			$uid = $article['article']->getAttribute('uid');
 			$new_index = $i-$article['offset'];
-			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $article['article']->getAttribute('uid'), 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
+			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			if (isset($new_articles[$new_index])) {
 				/*  if the new index is already populated, we need to shift 
 				 *  every article at and after that index one place down,  
@@ -927,6 +927,7 @@ DESC';
 				 */
 				$keys = array_keys($new_articles);
 				rsort($keys);
+				t3lib_div::devlog('sortArticle '.$uid, 'newspaper', 0, $keys);
 				foreach($keys as $old_index) {
 					if ($old_index < $new_index) break;
 					$new_articles[$old_index+1] = $new_articles[$old_index];
