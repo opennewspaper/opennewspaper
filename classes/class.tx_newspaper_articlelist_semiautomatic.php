@@ -921,6 +921,7 @@ DESC';
 			$new_index = $i-$article['offset'];
 			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			if (isset($new_articles[$new_index])) {
+				t3lib_div::devlog('new article', 'newspaper', 0, $new_articles[$new_index]);
 				$offset_of_occupying_article = self::offsetOfArticle($new_articles[$new_index], $articles);
 				if ($offset_of_occupying_article > 0) {
 					/*  if the new index is already populated, we need to shift 
@@ -941,7 +942,9 @@ DESC';
 					 * article up.
 					 */
 					$new_index--;
-				}
+				} else throw new tx_newspaper_Exception(
+					'But, but, but... the article in the occupied place has not even been shuffled!'
+				);
 			}
 			$new_articles[$new_index] = $article;
 		}
