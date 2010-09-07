@@ -61,13 +61,13 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	private $ll = array();
 	private $prefixId = 'tx_newspaper_mod9';
 
-				/**
-				 * Main function of the module. Write the content to $this->content
-				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
-				 */
-				function main()	{
+	/**
+	 * Main function of the module. Write the content to $this->content
+	 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
+	 *
+	 * @return	[type]		...
+	 */
+	function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 					
 					$access = $BE_USER->user['uid']? true : false; // \todo: better check needed

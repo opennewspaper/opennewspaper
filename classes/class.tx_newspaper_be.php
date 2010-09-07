@@ -24,7 +24,7 @@ class tx_newspaper_BE {
 	
 	private static $backend_files_added = false; // are js/css files added for backend
 
-
+	const num_articles_in_articlelist = 10;
 
 /// backend: render list of pages and pagezones for section
 
@@ -1287,7 +1287,7 @@ JSCODE;
 			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
 			
 			// fill the articlelist with articles
-			$article_list = $al->getArticles(9999);
+			$article_list = $al->getArticles(self::num_articles_in_articlelist);
 			$articles = array();
 			foreach ($article_list as $article) {
 				if ($al->getTable() == 'tx_newspaper_articlelist_manual') {
@@ -1440,7 +1440,7 @@ JSCODE;
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
 		$listType = strtolower(get_class($section->getArticleList()));
-		$articleList = $section->getArticleList()->getArticles(9999);
+		$articleList = $section->getArticleList()->getArticles(self::num_articles_in_articlelist);
 		
 		// get offsets for semiautomtic list
 		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
@@ -1473,7 +1473,7 @@ JSCODE;
 		$al_uid = intval($this->extractElementId($articlelistId));
 		
 		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
-		$articleList = $al->getArticles(9999);
+		$articleList = $al->getArticles(self::num_articles_in_articlelist);
 		$listType = $al->getTable();
 
 		// get offsets
