@@ -903,9 +903,7 @@ DESC';
 
 		return $offsets;
 	}
-	
-	const EPSILON = 0.0001;
-	
+		
 	/// Sort articles, taking their offsets into account
 	/** 
 	 *  \param $articles array(
@@ -920,20 +918,17 @@ DESC';
 	private function sortArticles(array $articles) {
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
-			$uid = $article['article']->getAttribute('uid');
 			$scaled_offset = $article['offset']*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
-			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
+			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $article['article']->getAttribute('uid'), 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			$new_articles["$new_index"] = $article;
 		}
 		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
 		ksort($new_articles);
 		return $new_articles;
 	}
-	
-	private static function offsetOfArticle(array $article) {
-		return $article['offset'];
-	}
+
+	const EPSILON = 0.0001;
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
 	/** For example, all occurrences of \c $art are replaced with 
