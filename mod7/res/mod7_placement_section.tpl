@@ -115,8 +115,8 @@
 							
 						</table>
 						
-						{if $isde && isset($section.articlelist) && !$article} {* don't show buttons in placement mask, see #1221 *}
-							<div align="right">
+						{if $isde && isset($section.articlelist)}
+							<div align="right" {if !$singlemode}style="display:none;"{/if}>
 								<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
 								<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
 							</div>
@@ -227,12 +227,10 @@
 					
 					{if !$SEMIAUTO_AL_FOLDED || $singlemode || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
 						{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
-							{if !$article} {* don't show buttons in placement mask, see #1221 *}
-								<div align="right">
-									<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
-									<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
-								</div>
-							{/if}
+							<div align="right" {if !$singlemode}style="display:none;"{/if}>
+								<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
+								<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
+							</div>
 						{/if}
 					{else}
 						{* old version, display a message where to find the article list: $lang.semiauto_list_is_folded *}
