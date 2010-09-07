@@ -191,7 +191,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		foreach ($articles_sorted as $i => $article) {
 			$articles[] = $article['article'];
 		}
-		t3lib_div::devlog('getArticles()', 'newspaper', 0, $articles);
+
 		return $articles;
 	}
 
