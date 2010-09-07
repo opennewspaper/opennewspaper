@@ -416,12 +416,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				
 				private function hideArticle(tx_newspaper_article $article) {
 					$article->storeHiddenStatusWithHooks(true);
-					$article->setAttribute();
-					$article->store();
 				}
 				private function publishArticle(tx_newspaper_article $article) {
 					$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
-					$article->store();
 				}
 				
 				
