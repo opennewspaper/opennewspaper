@@ -191,8 +191,8 @@ class tx_newspaper_BE {
 	
 	
 	/// Returns whether or not template set are used in the backend
-	public static function useTemplateSets() {
-        $key = 'use_template_sets';
+	public static function useTemplateSetsForSections() {
+        $key = 'use_template_sets_for_sections';
         $value = tx_newspaper::getNewspaperConfig($key);
 
         if (!isset($value[$key])) {
@@ -631,7 +631,7 @@ function findElementsByName(name, type) {
 			
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
-			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSets()); // are template set dropdowns visible or not
+			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForSections()); // are template set dropdowns visible or not
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available 
