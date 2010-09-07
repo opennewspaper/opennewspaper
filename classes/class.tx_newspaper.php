@@ -14,12 +14,6 @@
  */
 class tx_newspaper  {
 
-	// basic newspaper configuration
-	
-	// \todo: set to true if template set are fully functional
-	const USE_TEMPLATE_SETS = false; // if set to false, no template set form fields are visible in the backend
-
-
 	///	Whether to use Typo3's command- and datamap functions for DB operations
 	/** If this constant is set to true, Typo3 command- or datamap functions are
 	 *  used wherever appropriate. 
@@ -973,6 +967,26 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     ////////////////////////////////////////////////////////////////////////////
 
+
+	/// \return array [key]=value if $key is fopund in config file, emtpy array else
+	public static function getNewspaperConfig($key) {
+		
+		if (!self::$newspaperConfig) {
+			$newspaper_config_file = t3lib_extMgm::extPath('newspaper') . '/newspaper.conf';
+	        if (is_readable($newspaper_config_file)) {
+	            self::$newspaperConfig = parse_ini_file($newspaper_config_file);
+	        }
+		}
+
+		if (isset(self::$newspaperConfig[$key])) {
+			return array($key => self::$newspaperConfig[$key]);
+		}
+		
+		return array(); 
+        
+	}
+
+
 	/// checks if a string starts with a specific text
 	/** \param $haystack string to searched
 	 *  \param $needle string to search for
@@ -1102,6 +1116,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	private static $registered_savehooks = array();
     
     private static $execution_start_time = 0;
+  
+  	private static $newspaperConfig = null;
+  	
     
 }
 
