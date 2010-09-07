@@ -904,9 +904,12 @@ DESC';
 		return $offsets;
 	}
 	
+	const EPSILON = 0.0001;
+	
 	/// Sort articles, taking their offsets into account
-	/** \param $articles array(
-	 * 		array(
+	/** 
+	 *  \param $articles array(
+	 * 	array(
 	 * 			'article' => tx_newspaper_Article object
 	 * 			'offset' => offset to move article up or down in array
 	 * 		)
@@ -918,34 +921,9 @@ DESC';
 		$new_articles = array();
 		foreach ($articles as $i => $article) {
 			$uid = $article['article']->getAttribute('uid');
-			$new_index = $i-$article['offset'];
+			$scaled_offset = $article['offset']*(1+self::EPSILON);
+			$new_index = $i-$scaled_offset;
 			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
-			if (isset($new_articles[$new_index])) {
-				t3lib_div::devlog('new article', 'newspaper', 0, $new_articles[$new_index]);
-				$offset_of_occupying_article = self::offsetOfArticle($new_articles[$new_index]);
-				if ($offset_of_occupying_article > 0) {
-					/*  if the new index is already populated, we need to shift 
-					 *  every article at and after that index one place down,  
-					 *  starting with the last.
-					 */
-					$keys = array_keys($new_articles);
-					rsort($keys);
-					t3lib_div::devlog('sortArticle '.$uid, 'newspaper', 0, $keys);
-					foreach($keys as $old_index) {
-						if ($old_index < $new_index) break;
-						$new_articles[$old_index+1] = $new_articles[$old_index];
-						unset($new_articles[$old_index]);
-					}
-				} else if ($offset_of_occupying_article < 0) {
-					/* occupying article has already been downshifted; instead 
-					 * of shifting it down further, we need to shift the current
-					 * article up.
-					 */
-					$new_index--;
-				} else throw new tx_newspaper_Exception(
-					'But, but, but... the article in the occupied place has not even been shuffled!'
-				);
-			}
 			$new_articles[$new_index] = $article;
 		}
 		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
