@@ -953,12 +953,15 @@ DESC';
 		return $new_articles;
 	}
 	
-	private static function offsetOfArticle(tx_newspaper_Article $article, array $articles) {
-		foreach($articles as $current_article) {
+	private static function offsetOfArticle(array $article, array $articles) {
+/*		foreach($articles as $current_article) {
 			if ($current_article['article']->getUid() == $article->getUid()) {
 				return $current_article['offset'];
 			}
 		}
+*/	
+	t3lib_div::devlog('offsetOfArticle', 'newspaper', 0, $article);
+
 	}
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
