@@ -924,7 +924,7 @@ DESC';
 			$scaled_offset = $article['offset']*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
 			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
-			$new_articles[$new_index] = $article;
+			$new_articles["$new_index"] = $article;
 		}
 		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
 		ksort($new_articles);
