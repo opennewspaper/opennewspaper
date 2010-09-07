@@ -935,6 +935,7 @@ DESC';
 			}
 			$new_articles[$new_index] = $article;
 		}
+		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
 		ksort($new_articles);
 		return $new_articles;
 	}
