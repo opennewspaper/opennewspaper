@@ -922,7 +922,7 @@ DESC';
 			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			if (isset($new_articles[$new_index])) {
 				t3lib_div::devlog('new article', 'newspaper', 0, $new_articles[$new_index]);
-				$offset_of_occupying_article = self::offsetOfArticle($new_articles[$new_index], $articles);
+				$offset_of_occupying_article = self::offsetOfArticle($new_articles[$new_index]);
 				if ($offset_of_occupying_article > 0) {
 					/*  if the new index is already populated, we need to shift 
 					 *  every article at and after that index one place down,  
@@ -953,15 +953,8 @@ DESC';
 		return $new_articles;
 	}
 	
-	private static function offsetOfArticle(array $article, array $articles) {
-/*		foreach($articles as $current_article) {
-			if ($current_article['article']->getUid() == $article->getUid()) {
-				return $current_article['offset'];
-			}
-		}
-*/	
-	t3lib_div::devlog('offsetOfArticle', 'newspaper', 0, $article);
-
+	private static function offsetOfArticle(array $article) {
+		return $article['offset'];
 	}
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
