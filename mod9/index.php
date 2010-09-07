@@ -48,7 +48,10 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 define('DEBUG_OUTPUT', false); // show position etc.
 
 /**
- * Module 'Placement' for the 'newspaper' extension.
+ * Module 'Section lists' for the 'newspaper' extension.
+ * 
+ * This Module allows to edit the order of articles in an article list belonging
+ * to a section.
  *
  * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
