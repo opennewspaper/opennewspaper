@@ -767,7 +767,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$articles_sorted = $this->sortArticles($articles);
 		$articles = array();
 		foreach ($articles_sorted as $i => $article) {
-			$articles[] = array($article['article']['uid'], $article['offset']);
+			$articles[] = array($article['article']->getUid(), $article['offset']);
 		}
 		t3lib_div::devlog('getSortedArticles()', 'newspaper', 0, $articles);
 
