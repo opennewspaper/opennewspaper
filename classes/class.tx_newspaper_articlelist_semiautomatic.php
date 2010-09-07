@@ -921,17 +921,26 @@ DESC';
 			$new_index = $i-$article['offset'];
 			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $uid, 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			if (isset($new_articles[$new_index])) {
-				/*  if the new index is already populated, we need to shift 
-				 *  every article at and after that index one place down,  
-				 *  starting with the last.
-				 */
-				$keys = array_keys($new_articles);
-				rsort($keys);
-				t3lib_div::devlog('sortArticle '.$uid, 'newspaper', 0, $keys);
-				foreach($keys as $old_index) {
-					if ($old_index < $new_index) break;
-					$new_articles[$old_index+1] = $new_articles[$old_index];
-					unset($new_articles[$old_index]);
+				$offset_of_occupying_article = self::offsetOfArticle($new_articles[$new_index], $articles);
+				if ($offset_of_occupying_article > 0) {
+					/*  if the new index is already populated, we need to shift 
+					 *  every article at and after that index one place down,  
+					 *  starting with the last.
+					 */
+					$keys = array_keys($new_articles);
+					rsort($keys);
+					t3lib_div::devlog('sortArticle '.$uid, 'newspaper', 0, $keys);
+					foreach($keys as $old_index) {
+						if ($old_index < $new_index) break;
+						$new_articles[$old_index+1] = $new_articles[$old_index];
+						unset($new_articles[$old_index]);
+					}
+				} else if ($offset_of_occupying_article < 0) {
+					/* occupying article has already been downshifted; instead 
+					 * of shifting it down further, we need to shift the current
+					 * article up.
+					 */
+					$new_index--;
 				}
 			}
 			$new_articles[$new_index] = $article;
@@ -939,6 +948,14 @@ DESC';
 		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
 		ksort($new_articles);
 		return $new_articles;
+	}
+	
+	private static function offsetOfArticle(tx_newspaper_Article $article, array $articles) {
+		foreach($articles as $current_article) {
+			if ($current_article['article']->getUid() == $article->getUid()) {
+				return $current_article['offset'];
+			}
+		}
 	}
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
