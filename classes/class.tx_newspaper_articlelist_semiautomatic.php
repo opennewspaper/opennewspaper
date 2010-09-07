@@ -156,9 +156,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Whether articles from subsections should be recursively included in the list.
 	const include_articles_from_subsections = false;
 	
-	/// Whether to enable sticky articles. Currently the implementation is buggy.
-	const enable_sticky_articles = false;
-	
 	/// Whether to write information about sorting operations to devlog.
 	const debug_resort_operations = false;
 	
@@ -382,48 +379,24 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
      *  \param $old_order List of article/offset pairs to be checked and corrected.
      */
 	private function cleanupOffsets(array &$old_order) {
-
+/*
         if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
         
 		$this->getRawUids();
 
-        $is_at_top_of_list = self::enable_sticky_articles;
-        
         for ($index = 0; $index < sizeof($old_order); $index++) {
 		    $entry = $old_order[$index];
 			$uid = $entry[0];
-			$offset = $entry[1];
-			
-			if ($offset == 0) {
-				$is_at_top_of_list = false;
-				continue;
-			}
 			
 			$raw_index = array_search($uid, $this->raw_uids);
-			if ($raw_index-$offset != $index) {
 				
-				$required_offset = $raw_index-$index;
-				if (self::debug_resort_operations) {
-					t3lib_div::devlog('cleanupOffsets()', 'newspaper', 0, array(
-						'index'=>$index,
-						'raw index'=>$raw_index,
-						'offset'=>$offset,
-						'required offset'=>$required_offset)
-					);
-				}
+			$required_offset = $raw_index-$index;
 				
-				if ($required_offset < $offset && $is_at_top_of_list) {
-					continue;
-				}
-								
-				$old_order[$index][1] = $required_offset;
-				
-			}
-			
-			$is_at_top_of_list = false;
+			$old_order[$index][1] = $required_offset;
 		}
 		
 		if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() output', 'newspaper', 0, $old_order);
+*/		
 	}
 		
 	/// Updates or insert a record with the corresponding offset. 
