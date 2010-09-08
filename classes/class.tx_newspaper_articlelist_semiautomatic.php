@@ -875,7 +875,7 @@ DESC';
 		$new_articles = array();
 
 		foreach ($articles as $i => $article) {
-			if (array_key_exists('offset')) $offset_key = 'offset';
+			if (array_key_exists('offset', $article)) $offset_key = 'offset';
 			else $offset_key = 1;
 			$scaled_offset = $article[$offset_key]*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
