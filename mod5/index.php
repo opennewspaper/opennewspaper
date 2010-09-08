@@ -330,6 +330,7 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 			'no_section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section', false),
 			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
 			'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
+			'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
 		));		
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
