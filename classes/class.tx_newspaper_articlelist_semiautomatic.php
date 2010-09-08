@@ -268,16 +268,19 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Finds the position of article with UID \p $uid in the array \p $old_order.
 	private static function indexOfArticle($uid, array $old_order) {
 	    for ($i = 0; $i < sizeof($old_order); $i++) {
-            self::checkArticleOffsetValidity($old_order[$i]);
+            $article_offset = $old_order[$i];
 
-            $current_uid = $old_order[$i][0];
+            self::checkArticleOffsetValidity($article_offset);
+            
+            $current_uid = $article_offset[0];
 	    	if ($current_uid == $uid) return $i;
 
-            $current_uid = $old_order[$i]['uid'];
-	    	if ($current_uid == $uid) return $i;
-
+			if ($article_offset['article'] instanceof tx_newspaper_Article) {
+	            $current_uid = $article_offset['article']->getUid();
+		    	if ($current_uid == $uid) return $i;
+			}
 	    }
-	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found in array ' . print_r($old_order, 1));
+	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found in ' . print_r($old_order, 1));
 	}
 	
 	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
