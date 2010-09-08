@@ -285,7 +285,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
 
-		$old_order[$index]['offset'] += $shuffle_value;
+		$old_order[$index][1] += $shuffle_value;
 
 		$old_order = $this->sortArticles($old_order);
         t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('new order'=>$old_order));
