@@ -875,8 +875,9 @@ DESC';
 		$new_articles = array();
 
 		foreach ($articles as $i => $article) {
-			self::checkArticleOffsetValid($article);
-			$scaled_offset = $article['offset']*(1+self::EPSILON);
+			if (array_key_exists('offset')) $offset_key = 'offset';
+			else $offset_key = 1;
+			$scaled_offset = $article[$offset_key]*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
 			$new_articles["$new_index"] = $article;
 		}
@@ -888,11 +889,6 @@ DESC';
 
 	const EPSILON = 0.0001;
 	
-	private static function checkArticleOffsetValid(array $article) {
-		if (intval($article['article'])) {
-			throw new tx_newspaper_InconsistencyException('"article" in Article/Offset pair is not an article UID');
-		}
-	}
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
 	/** For example, all occurrences of \c $art are replaced with 
