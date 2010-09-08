@@ -242,7 +242,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		}
 
 		if ($operation->shuffleValue()) {
-           	$this->resortArticle($index, $operation->shuffleValue(), $old_order);
+           	$this->resortArticle($operation->getUid(), $operation->shuffleValue(), $old_order);
         } else if ($operation->isToTop()) {
            	$this->sortArticleToTop($index, $old_order);
         } else if ($operation->isToBottom()) {
@@ -250,8 +250,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         } else {
         	throw new tx_newspaper_IllegalUsageException('WTF is that: ' . $operation);
         }
-
-        $this->cleanupOffsets($old_order);
 
         return $old_order;
 	}
@@ -279,15 +277,24 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 	
 	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
-	private function resortArticle($index, $shuffle_value, array &$old_order) {
-        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('index'=>$index, 'shuffle'=>$shuffle_value, 'old order'=>$old_order));
+	private function resortArticle($uid, $shuffle_value, array &$old_order) {
+        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('uid'=>$uid, 'shuffle'=>$shuffle_value, 'old order'=>$old_order));
         if (abs($shuffle_value) != 1) {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
 
-		$old_order[$index][1] += $shuffle_value;
+		$articles = $this->getArticlesAndOffsets(self::num_raw_uids);
 
-		$old_order = $this->sortArticles($old_order);
+		foreach ($old_order as $old_article) {
+			$index = self::indexOfArticle($old_article[0], $articles);
+			$articles[$index]['offset'] = $old_article[1];
+		}
+
+		$index = self::indexOfArticle($uid, $articles);
+
+		$articles[$index]['offset'] += $shuffle_value;
+
+		$old_order = $this->sortArticles($articles);
         t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('new order'=>$old_order));
 	}
 	
@@ -349,38 +356,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         unset($old_order[$index]);
         array_unshift($old_order, $entry);
     }
-        
-    /// If the offsets in \p $old_order are confused, return them to a valid state.
-    /** The position of each article in \p $old_order is compared to the position it
-     *  has in the unchanged list of articles, sorted by SQL. If the offset differs
-     *  from the difference in array index, it is calculated correctly.
-     *  
-     *  Articles which are at the top of the list and have too big an offset are not
-     *  corrected, because they are marked as "sticky". 
-     *
-     *  \param $old_order List of article/offset pairs to be checked and corrected.
-     */
-	private function cleanupOffsets(array &$old_order) {
-/*
-        if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() input', 'newspaper', 0, $old_order);
-        
-		$this->getRawUids();
-
-        for ($index = 0; $index < sizeof($old_order); $index++) {
-		    $entry = $old_order[$index];
-			$uid = $entry[0];
-			
-			$raw_index = array_search($uid, $this->raw_uids);
-				
-			$required_offset = $raw_index-$index;
-				
-			$old_order[$index][1] = $required_offset;
-		}
-		
-		if (self::debug_resort_operations) t3lib_div::devlog('cleanupOffsets() output', 'newspaper', 0, $old_order);
-*/		
-	}
-		
+    
 	/// Updates or insert a record with the corresponding offset. 
 	private function updateOffset($uid_local, $uid_foreign, $offset) {
 		if (tx_newspaper::updateRows(
@@ -704,6 +680,19 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	private function getSortedArticles($number, $start = 0) {
 		
+		$articles = $this->getArticlesAndOffsets($number, $start);
+		
+		$articles_sorted = $this->sortArticles($articles);
+		$articles = array();
+		foreach ($articles_sorted as $i => $article) {
+			$articles[] = array($article['article']->getUid(), $article['offset']);
+		}
+		t3lib_div::devlog('getSortedArticles()', 'newspaper', 0, array('uids'=>$uids, 'offsets' => $offsets, 'articles' => $articles));
+
+		return array_slice($articles_sorted, 0, $number);
+	}
+
+	private function getArticlesAndOffsets($number, $start = 0) {
 		/*	Because articles may be moved off the bottom of the list, we need a
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */
@@ -718,17 +707,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				'offset' => intval($offsets[$uid])
 			);
 		}
-
-		$articles_sorted = $this->sortArticles($articles);
-		$articles = array();
-		foreach ($articles_sorted as $i => $article) {
-			$articles[] = array($article['article']->getUid(), $article['offset']);
-		}
-		t3lib_div::devlog('getSortedArticles()', 'newspaper', 0, array('uids'=>$uids, 'offsets' => $offsets, 'articles' => $articles));
-
-		return array_slice($articles_sorted, 0, $number);
+		return $articles;
 	}
-
 	/// Get the UIDs of articles found by the conditions defining the list
 	/** \param $number Number of articles to return
 	 *  \param $start Index of first article sought
