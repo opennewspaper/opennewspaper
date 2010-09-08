@@ -272,8 +272,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
             $current_uid = $old_order[$i][0];
 	    	if ($current_uid == $uid) return $i;
+
+            $current_uid = $old_order[$i]['uid'];
+	    	if ($current_uid == $uid) return $i;
+
 	    }
-	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found');
+	    throw new tx_newspaper_Exception('UID ' . $uid . ' not found in array ' . print_r($old_order, 1));
 	}
 	
 	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
