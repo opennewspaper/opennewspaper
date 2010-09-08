@@ -872,17 +872,20 @@ DESC';
 	 */
 	private static function sortArticles(array $articles) {
 
-		$new_articles = array();
+		$temp_articles = array();
 
 		foreach ($articles as $i => $article) {
 			if (array_key_exists('offset', $article)) $offset_key = 'offset';
 			else $offset_key = 1;
 			$scaled_offset = $article[$offset_key]*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
-			$new_articles["$new_index"] = $article;
+			$temp_articles["$new_index"] = $article;
 		}
 
-		ksort($new_articles);
+		ksort($temp_articles);
+		
+		$new_articles = array();
+		foreach($temp_articles as $article) $new_articles[] = $article;
 
 		return $new_articles;
 	}
