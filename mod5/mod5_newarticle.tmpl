@@ -478,9 +478,12 @@ body {
 		{* at least one section and one article type available, so wizard be can used *}
 		<script type="text/javascript">{literal}
 			function executeSubmit(type) {
-			selIdx = document.getElementsByName('tx_newspaper_mod5[section]')[0].selectedIndex;
-			if (selIdx == -1) {
+			if (document.getElementsByName('tx_newspaper_mod5[section]')[0].selectedIndex == -1) {
 				alert("{/literal}{$MESSAGE.no_section_chosen}{literal}");
+				return false;
+			}
+			if (document.getElementsByName('source_path')[0].selectedIndex == -1) {
+				alert("{/literal}{$MESSAGE.no_article_chosen}{literal}");
 				return false;
 			}
 			document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
