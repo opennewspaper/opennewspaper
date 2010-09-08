@@ -890,7 +890,7 @@ DESC';
 	
 	private static function checkArticleOffsetValid(array $article) {
 		if (!$article['article'] instanceof tx_newspaper_Article) {
-			throw new tx_newspaper_InternalInconsistencyError('"article" in Article/Offset pair is not an article');
+			throw new tx_newspaper_InconsistencyException('"article" in Article/Offset pair is not an article');
 		}
 	}
 	
