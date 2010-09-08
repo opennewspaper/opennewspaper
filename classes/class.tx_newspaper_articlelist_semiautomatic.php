@@ -301,7 +301,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		$articles[$index]['offset'] += $shuffle_value;
 
-		$old_order = $this->sortArticles($articles);
+		$temp_order = $this->sortArticles($articles);
+		
+		$old_order = array();
+		foreach ($temp_order as $temp_article_offset) {
+			$old_order[] = array(
+				$temp_article_offset['article']->getUid(),
+				$temp_article_offset['offset']
+			);
+		}
+		
         t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('new order'=>$old_order));
 	}
 	
