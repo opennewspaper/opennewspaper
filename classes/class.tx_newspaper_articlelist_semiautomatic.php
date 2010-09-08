@@ -252,7 +252,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         }
 
         $this->cleanupOffsets($old_order);
-                
+
         return $old_order;
 	}
 	
@@ -285,28 +285,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
 
-        $new_index = self::generateValidIndex($index-$shuffle_value);
-		$distance = $this->distance($old_order[$index], $old_order[$new_index]);
-		
-		/// it must still be possible to sort articles up if they're on top
-		if (!$distance) $distance = -1;
-		
-		// the offset is updated in any case
-        $old_order[$index][1] -= $distance;
+		$old_order[$index] += $shuffle_value;
 
-        if (self::debug_resort_operations) {
-            t3lib_div::devlog('resortArticle()', 'newspaper', 0, array(
-                'uid' => $old_order[$index][0],
-                'index'=>$index,
-                'shuffle_value' => $shuffle_value,
-                'new index' => $new_index,
-                'distance' => $distance,
-                'new offset' => $old_order[$index][1]
-            ));
-        }
-        if ($new_index == $index) return;
-        
-        self::swap($old_order, $index, $new_index);
+		$old_order = self::sortArticles($old_order);
 	}
 	
 	private static function swap(array &$old_order, $index, $new_index) {
@@ -888,16 +869,18 @@ DESC';
 	 *  \return $articles sorted, taking offsets into account
 	 *  \attention repeatedly calling this function will garble the results!
 	 */
-	private function sortArticles(array $articles) {
+	private static function sortArticles(array $articles) {
+
 		$new_articles = array();
+
 		foreach ($articles as $i => $article) {
 			$scaled_offset = $article['offset']*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
-			t3lib_div::devlog('sortArticles', 'newspaper', 0, array('uid' => $article['article']->getAttribute('uid'), 'i' => $i, 'offset'=> $article['offset'], 'new index'=>$new_index));
 			$new_articles["$new_index"] = $article;
 		}
-		t3lib_div::devlog('new articles before ksort', 'newspaper', 0, $new_articles);
+
 		ksort($new_articles);
+
 		return $new_articles;
 	}
 
