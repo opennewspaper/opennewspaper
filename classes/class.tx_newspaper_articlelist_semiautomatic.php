@@ -285,9 +285,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
 
-		$old_order[$index] += $shuffle_value;
+		$old_order[$index]['offset'] += $shuffle_value;
 
-		$old_order = self::sortArticles($old_order);
+		$old_order = $this->sortArticles($old_order);
         t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('new order'=>$old_order));
 	}
 	
@@ -875,6 +875,7 @@ DESC';
 		$new_articles = array();
 
 		foreach ($articles as $i => $article) {
+			self::checkArticleOffsetValid($article);
 			$scaled_offset = $article['offset']*(1+self::EPSILON);
 			$new_index = $i-$scaled_offset;
 			$new_articles["$new_index"] = $article;
@@ -886,6 +887,12 @@ DESC';
 	}
 
 	const EPSILON = 0.0001;
+	
+	private static function checkArticleOffsetValid(array $article) {
+		if (!$article['article'] instanceof tx_newspaper_Article) {
+			throw new tx_newspaper_InternalInconsistencyError('"article" in Article/Offset pair is not an article');
+		}
+	}
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
 	/** For example, all occurrences of \c $art are replaced with 
