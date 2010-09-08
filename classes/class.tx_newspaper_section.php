@@ -542,7 +542,13 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 			array('id' => $this->getTypo3PageID())
 		);
 	}
-	
+
+	public function getTemplateSet() {
+		if ($this->getAttribute('template_set')) $this->getAttribute('template_set');
+		if (!$this->getParentSection()) return '';
+		return $this->getParentSection()->getTemplateSet();
+	}
+
 	///	Get all tx_newspaper_Section records in the DB.
 	/** \param $articlesAllowedOnly if set to true only section with the
 	 *       articles_allowed flag set are returned
@@ -574,11 +580,11 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 				$additional_where .= ')';
 			}
 		}
-		
+
 		if ($articlesAllowedOnly) {
 			$additional_where .= ' AND articles_allowed=1';
 		}
-		
+
 		// add sysfolder id
 		$additional_where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()); 
 		

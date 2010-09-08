@@ -307,8 +307,8 @@ class tx_newspaper_Page
         tx_newspaper::startExecutionTimer();
         
 		/// Check the parent Section and own attributes whether to use a specific template set
- 		if ($this->getParentSection()->getAttribute('template_set')) {
-			$template_set = $this->getParentSection()->getAttribute('template_set');
+ 		if ($this->getParentSection()->getTemplateSet()) {
+			$template_set = $this->getParentSection()->getTemplateSet();
 		}
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
