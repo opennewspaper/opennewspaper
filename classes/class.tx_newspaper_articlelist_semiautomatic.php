@@ -889,8 +889,8 @@ DESC';
 	const EPSILON = 0.0001;
 	
 	private static function checkArticleOffsetValid(array $article) {
-		if (!$article['article'] instanceof tx_newspaper_Article) {
-			throw new tx_newspaper_InconsistencyException('"article" in Article/Offset pair is not an article');
+		if (intval($article['article'])) {
+			throw new tx_newspaper_InconsistencyException('"article" in Article/Offset pair is not an article UID');
 		}
 	}
 	
