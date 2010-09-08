@@ -280,7 +280,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	
 	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
 	private function resortArticle($index, $shuffle_value, array &$old_order) {
-				
+        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('index'=>$index, 'shuffle'=>$shuffle_value, 'old order'=>$old_order));
         if (abs($shuffle_value) != 1) {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
@@ -288,6 +288,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$old_order[$index] += $shuffle_value;
 
 		$old_order = self::sortArticles($old_order);
+        t3lib_div::devlog('resortArticle()', 'newspaper', 0, array('new order'=>$old_order));
 	}
 	
 	private static function swap(array &$old_order, $index, $new_index) {
