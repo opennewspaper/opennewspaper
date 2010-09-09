@@ -482,7 +482,8 @@ body {
 				alert("{/literal}{$MESSAGE.no_section_chosen}{literal}");
 				return false;
 			}
-			if (document.getElementsByName('source_path')[0].selectedIndex == -1) {
+			if (document.getElementById('new').value != 'newarticle' && document.getElementsByName('source_path')[0].selectedIndex == -1) {
+				// check if an article to be imported is chosen (if an articvle is to be imported)
 				alert("{/literal}{$MESSAGE.no_article_chosen}{literal}");
 				return false;
 			}
