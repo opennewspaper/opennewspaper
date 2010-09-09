@@ -202,12 +202,13 @@ body {
 #modlist .allMessages {
 	display:none;
 	position:absolute;
-	margin:8px 0 0 375px;
-	padding:0 0 8px 10px;
+	margin:0 0 0 375px;
+	padding:8px 0 8px 10px;
 	overflow:visible;
 	z-index:50;
-	background-color:#E7E7E7;
+	background-color:#999999;
 	width:248px;
+	min-height:100px;
 }
 	
 #modlist .head {
@@ -284,6 +285,10 @@ body {
 	color:#777;
 	float:left;
 }
+#modlist .allMessages p.autor {
+	color:#eeeeee;
+}
+
 
 #modlist p.right {
 	float:right;
@@ -522,12 +527,15 @@ body {
 		if (document.getElementById(el).style.display == 'block') {
 			// hide comments
 	 		document.getElementById(el).style.display = 'none';
+	 		document.getElementById('b_' + el).src = '../res/be/css/arrow-270.png';
 	 		el_previous = null;
 	 	} else {
 	 		document.getElementById(el).style.display = 'block';
+	 		document.getElementById('b_' + el).src = '../res/be/css/arrow-90.png';
 		 	// hide old comments (if any) 
 		 	if (el_previous != null) {
 		 		document.getElementById(el_previous).style.display = 'none';
+		 		document.getElementById('b_' + el_previous).src = '../res/be/css/arrow-270.png';
 		 	}
 		 	el_previous = el;
 	 	}
@@ -748,11 +756,11 @@ function deleteArticle(article_uid) {
 	    
 		<div class="listrow r3">
 			
-<!--
+{*
 			<div> 
 				<a href ="#" onclick="toggle('messages{$DATA[i].uid}'); return false;" class="more_messages">{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})</a>
 			</div>
--->	
+*}
 
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
 				<p class="autor">{$comment.username}</p>
@@ -765,11 +773,11 @@ function deleteArticle(article_uid) {
 			<!-- All Messages / hidden -->
 		
 			<div id="messages{$DATA[i].uid}" class="allMessages">
-			
+{*			
 			<div>
 				<a href ="#" onclick="toggle('messages{$DATA[i].uid}'); return false;" class="less_messages" href="">{$LABEL.messages_hide}</a>
 			</div>
-
+*}
 {* \todo: message are rendered twice -> only one should be used ... *}				
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
 				<p class="autor">{$comment.username}</p>
@@ -802,7 +810,7 @@ function deleteArticle(article_uid) {
 				<a title="{$LABEL.flag_preview}" href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_preview.png" width="30" height="30"></a>
 				<a title="{$LABEL.flag_edit} (#{$DATA[i].uid})" href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a> 
 				<a title="{$LABEL.flag_delete}" href="#" onclick="deleteArticle({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_delete.png" width="30" height="30"></a>
-				<a title="{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggle('messages{$DATA[i].uid}'); return false;"><img src="../res/be/css/arrow-270.png" alt="" width="30" height="30"></a>
+				<a title="{$LABEL.messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggle('messages{$DATA[i].uid}'); return false;"><img src="../res/be/css/arrow-270.png" id="b_messages{$DATA[i].uid}" alt="" width="30" height="30"></a>
 			</div>
 		</div>
 	</div>
