@@ -475,15 +475,17 @@ body {
 		
 <form action="index.php" name="newarticlewizard">
 
-		{* at least one section and one article type available, so wizard be can used *}
-		<script type="text/javascript">{literal}
-//alert(document.getElementById('new').value); alert(document.getElementsByName('source_path')[0].selectedIndex);
-			function executeSubmit(type) {
-//			if (document.getElementById('new').value != 'newarticle' && document.getElementsByName('source_path')[0].selectedIndex == -1) {
-//				// check if an article to be imported is chosen (if an articvle is to be imported)
-//				alert("{/literal}{$MESSAGE.no_article_chosen}{literal}");
-//				return false;
-//			}
+	{* at least one section and one article type available, so wizard be can used *}
+	<script type="text/javascript">{literal}
+		function executeSubmit(type) {
+			if (!document.getElementById('new').checked) {
+				// article is to be imported
+					if (document.getElementsByName('source_path')[0].selectedIndex == -1) {
+					// check if an article to be imported is selected
+					alert("{/literal}{$MESSAGE.no_article_chosen}{literal}");
+					return false;
+				}
+			}
 			if (document.getElementsByName('tx_newspaper_mod5[section]')[0].selectedIndex == -1) {
 				alert("{/literal}{$MESSAGE.no_section_chosen}{literal}");
 				return false;
@@ -491,7 +493,7 @@ body {
 			document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
 			document.forms[0].submit();
 		}{/literal}
-		</script>
+	</script>
 
 {* chose new typo3 article or import source *}		
 		<table class="full">
