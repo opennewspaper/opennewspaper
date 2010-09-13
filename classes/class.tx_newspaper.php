@@ -661,16 +661,16 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 
     public static function startExecutionTimer() {
-        if (!self::$execution_time_stack) self::$execution_time_stack = new SplStack;
-        self::$execution_time_stack->push(microtime(true));
+#        if (!self::$execution_time_stack) self::$execution_time_stack = new SplStack;
+#        self::$execution_time_stack->push(microtime(true));
         
-#        self::$execution_start_time = microtime(true);
+        self::$execution_start_time = microtime(true);
     }
     
     public static function logExecutionTime() {
-        $start_time = self::$execution_time_stack->pop();
-#        $execution_time = microtime(true)-self::$execution_start_time;
-        $execution_time = microtime(true)-$start_time;
+#        $start_time = self::$execution_time_stack->pop();
+        $execution_time = microtime(true)-self::$execution_start_time;
+#        $execution_time = microtime(true)-$start_time;
         
         $execution_time_ms = 1000*$execution_time;
         $timing_info = array('execution time' => $execution_time_ms . ' ms', 'object' => self::getTimedObject());
