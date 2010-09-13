@@ -661,13 +661,19 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 
     public static function startExecutionTimer() {
-        self::$execution_start_time = microtime(true);
+        if (!self::$execution_time_stack) self::$execution_time_stack = new SplStack;
+        self::$execution_time_stack->push(microtime(true));
+        
+#        self::$execution_start_time = microtime(true);
     }
     
     public static function logExecutionTime() {
-        $execution_time = microtime(true)-self::$execution_start_time;
+        $start_time = self::$execution_time_stack->pop();
+#        $execution_time = microtime(true)-self::$execution_start_time;
+        $execution_time = microtime(true)-$start_time;
+        
         $execution_time_ms = 1000*$execution_time;
-        $timing_info = array('execution time' => $execution_time_ms, 'object' => self::getTimedObject());
+        $timing_info = array('execution time' => $execution_time_ms . ' ms', 'object' => self::getTimedObject());
         self::devlog('logExecutionTime', $timing_info);
     }
     
@@ -993,7 +999,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         
 	}
 
-
 	/// checks if a string starts with a specific text
 	/** \param $haystack string to searched
 	 *  \param $needle string to search for
@@ -1124,8 +1129,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     
     private static $execution_start_time = 0;
   
-  	private static $newspaperConfig = null;
-  	
+    private static $newspaperConfig = null;
+    
+    private static $execution_time_stack = null;
     
 }
 
