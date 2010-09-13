@@ -579,6 +579,13 @@ class tx_newspaper  {
     //      Logging functions
     ////////////////////////////////////////////////////////////////////////////
 
+    /// I've had enough of supplying all these useless parameters to devlog! Here's a wrapper function.
+    public static function devlog($message, $data = array(), $extension = 'newspaper', $level = 0) {
+        if (!is_array($data)) $data = array($data);
+        t3lib_div::devlog($message, $extension, $level, $data);
+        
+    }
+
     /// Logs the current operation
     private static function writeFunctionAndArgumentsToLog($type) {
 		$backtrace = debug_backtrace();
