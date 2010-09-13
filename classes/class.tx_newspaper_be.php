@@ -24,7 +24,7 @@ class tx_newspaper_BE {
 	
 	private static $backend_files_added = false; // are js/css files added for backend
 
-	const num_articles_in_articlelist = 10;
+	const num_articles_in_articlelist = 100;
 
 /// backend: render list of pages and pagezones for section
 
