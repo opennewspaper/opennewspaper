@@ -71,6 +71,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_image.tmpl
 	 */
 	public function render($template_set = '') {
+		
+        tx_newspaper::startExecutionTimer();
+        
 		self::getTSConfig();
 
 		$this->prepare_render($template_set);
@@ -78,7 +81,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$this->smarty->assign('basepath', self::$basepath);
 		$this->smarty->assign('sizes', self::$sizes);
 		
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	/// A short description that makes an Extra uniquely identifiable in the BE

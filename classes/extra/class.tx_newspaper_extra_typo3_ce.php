@@ -37,6 +37,8 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
+        tx_newspaper::startExecutionTimer();
+
 		$ret = '';
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 
@@ -75,6 +77,9 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 				$ret .= $cObj->RECORDS($tt_content_conf);
 			}
 		}
+		
+        tx_newspaper::logExecutionTime();
+		
 		return $ret;
 	}
 

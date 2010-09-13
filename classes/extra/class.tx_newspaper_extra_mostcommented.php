@@ -37,6 +37,8 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 			)
 		);
 
+        tx_newspaper::startExecutionTimer();
+        
 		$this->prepare_render($template_set);
 				
 		$template = $this->getAttribute('template');
@@ -48,7 +50,11 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 
 		$this->smarty->assign('articles', $this->getMostCommented());
 
-		return $this->smarty->fetch($template);
+        $rendered = $this->smarty->fetch($template);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public static function getModuleName() {

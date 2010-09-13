@@ -55,7 +55,9 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_articlelist.tmpl
 	 */
 	public function render($template_set = '') {
-
+        
+        tx_newspaper::startExecutionTimer();
+        
 		$this->prepare_render($template_set);
 		
 		try {
@@ -87,8 +89,12 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		);
 		*/
 		$this->smarty->assign('articles', $articles);
-		
-		return $this->smarty->fetch($template);
+ 
+        $rendered = $this->smarty->fetch($template);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public static function getModuleName() {

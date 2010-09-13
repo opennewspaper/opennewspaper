@@ -40,6 +40,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
+        tx_newspaper::startExecutionTimer();
 
 		$this->prepare_render($template_set);
 
@@ -51,7 +52,11 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 			$smarty->assign('rendered_image', $image->render());
 		}
 		
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	/** Displays the title and the beginning of the text.

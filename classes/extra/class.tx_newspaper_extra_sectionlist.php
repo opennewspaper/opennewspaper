@@ -33,6 +33,9 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	 *  \todo WHat if the current section has no article list? (is this even possible?)
 	 */
 	public function render($template_set = '') {
+
+        tx_newspaper::startExecutionTimer();
+
 		$this->prepare_render($template_set);
 		
 		$list = tx_newspaper::getSection()->getArticleList();
@@ -43,7 +46,11 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		
 		$this->smarty->assign('articles', $articles);
 		
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public static function getModuleName() {

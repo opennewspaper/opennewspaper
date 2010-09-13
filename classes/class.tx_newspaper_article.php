@@ -216,6 +216,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// Default articles should never contain text that is displayed.
 		if ($this->getAttribute('is_template')) return;
 
+        tx_newspaper::startExecutionTimer();
+
 		/** Check whether to use a specific template set.
 		 *	This must be done regardless if this is a template used to define
 		 *	default placements for articles, or an actual article.
@@ -296,10 +298,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			}
 		}
 
-#t3lib_div::devlog('$paragraphs', 'newspaper', 0, $paragraphs);
 		$this->smarty->assign('paragraphs', $paragraphs);
 		$this->smarty->assign('attributes', $this->attributes);
 		$ret = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
 
 		return $ret;
 	}

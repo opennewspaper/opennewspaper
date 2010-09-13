@@ -27,8 +27,16 @@ class tx_newspaper_Extra_Ad extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_ad.tmpl
 	 */	
 	public function render($template_set = '') {
+        
+        tx_newspaper::startExecutionTimer();
+        
 		$this->prepare_render($template_set);
-		return $this->smarty->fetch($this);
+ 
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public function getDescription() {

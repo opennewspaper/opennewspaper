@@ -162,6 +162,9 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_searchresults.tmpl
 	 */
 	public function render($template_set = '') {
+
+        tx_newspaper::startExecutionTimer();
+
 		$this->prepare_render($template_set);
 		
 	    // add special hits to smarty array
@@ -170,7 +173,11 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		// perform the search on all articles
 		$this->smarty->assign('articles', $this->searchArticles($this->search));
 		
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public static function getModuleName() {

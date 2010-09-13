@@ -58,7 +58,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_controltagzone.tmpl
 	 */
 	public function render($template_set = '') {
-		
+        
+        tx_newspaper::startExecutionTimer();
+        
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
 		
@@ -74,7 +76,11 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 
 		$this->smarty->assign('extras', $rendered_extras);
 		
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	/// Displays the Tag Zone operating on.

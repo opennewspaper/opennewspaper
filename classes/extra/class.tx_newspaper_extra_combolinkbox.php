@@ -42,6 +42,9 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_combolinkbox.tmpl
 	 */
 	public function render($template_set = '') {
+        
+        tx_newspaper::startExecutionTimer();
+        
 		$this->getAttribute('uid');
 		t3lib_div::devlog('tx_newspaper_Extra_ComboLinkBox','newspaper',0, $this);
 		$this->prepare_render($template_set);
@@ -64,7 +67,11 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 			$this->smarty->assign('external_links', $this->getExternalLinks());
 		}
 
-		return $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	/// Displays the Tag Zone operating on.

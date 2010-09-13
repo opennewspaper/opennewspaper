@@ -32,8 +32,6 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 		}
 	}
 	
-	
-	
 	/// A description to identify the bio box in the BE
 	/** Shows the author's name and the start of the text.
 	 */
