@@ -1127,7 +1127,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   
     private static $newspaperConfig = null;
     
-    private static $execution_time_stack = array;
+    private static $execution_time_stack = array();
     
 }
 
