@@ -1,8 +1,5 @@
 <?php
 
-#t3lib_div::devlog('class.tx_newspaper.php loaded', 'newspaper', 0);
-
-
 /// Utility class which provides static functions. A namespace, so to speak.
 /** Because PHP has introduced namespaces only with PHP 5.3, and we started
  *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
@@ -661,16 +658,15 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	}
 
     public static function startExecutionTimer() {
-#        if (!self::$execution_time_stack) self::$execution_time_stack = new SplStack;
-#        self::$execution_time_stack->push(microtime(true));
+        self::$execution_time_stack[] = microtime(true);
         
         self::$execution_start_time = microtime(true);
     }
     
     public static function logExecutionTime() {
-#        $start_time = self::$execution_time_stack->pop();
-        $execution_time = microtime(true)-self::$execution_start_time;
-#        $execution_time = microtime(true)-$start_time;
+        $start_time = array_pop(self::$execution_time_stack);
+#        $execution_time = microtime(true)-self::$execution_start_time;
+        $execution_time = microtime(true)-$start_time;
         
         $execution_time_ms = 1000*$execution_time;
         $timing_info = array('execution time' => $execution_time_ms . ' ms', 'object' => self::getTimedObject());
@@ -1131,7 +1127,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   
     private static $newspaperConfig = null;
     
-    private static $execution_time_stack = null;
+    private static $execution_time_stack = array;
     
 }
 
