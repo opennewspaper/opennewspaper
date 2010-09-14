@@ -120,10 +120,6 @@ class tx_newspaper_Page
 	 		foreach ($this->pageZones as $page_zone) {
 	 		    $ret .= $page_zone . "\n";
 	 		}
-	 		$ret .= 'attributes: ';
-	 		foreach ($this->attributes as $key => $value) {
-	 	        $ret .= "$key: $value\n";
-	 		}
 	 		$ret .= (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
 	 			('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
 				'');
