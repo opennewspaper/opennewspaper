@@ -116,11 +116,17 @@ class tx_newspaper_Page
 	 			   'UID: ' . $this->getUid() . " \n" .
 					($this->parentSection? ('parentSection: ' . $this->parentSection->getUid() . " \n"): '') .
 	 			   'condition: ' . $this->condition . " \n" .
-	 			   'pageZones: ' . print_r($this->pageZones, 1) . " \n" .
-	 			   'attributes: ' . print_r($this->attributes, 1) . " \n" .
-	 			   (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
-	 			   		('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
-						'');
+	 			   'pageZones: ';
+	 		foreach ($this->pageZones as $page_zone) {
+	 		    $ret .= $page_zone . "\n";
+	 		}
+	 		$ret .= 'attributes: ';
+	 		foreach ($this->attributes as $key => $value) {
+	 	        $ret .= "$key: $value\n";
+	 		}
+	 		$ret .= (($this->getPageType() && $this->getPageType() instanceof tx_newspaper_PageType)? 
+	 			('pagetype: ' . $this->getPageType()->getUid() . ' (' . $this->getPageType()->getAttribute('type_name') . ") \n"): 
+				'');
  		} catch (Exception $e) {
  			$ret = 'Page ' . $this->getUid() . ': __toString() threw an exception: ' . $e;
  		} 
