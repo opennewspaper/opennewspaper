@@ -22,13 +22,32 @@ class tx_newspaper_Extra_Generic extends tx_newspaper_Extra {
 		}	
 	}
 	
-	/** Render an empty ad.
-	/*  Smarty template:
-	 *  \include res/templates/tx_newspaper_extra_ad.tmpl
+	/** Render an empty generic element. 
+	 *  So the "content" is set by the template ...
+	 *
+	 *  Smarty template:
+	 *  \include res/templates/tx_newspaper_extra_generic.tmpl
 	 */	
 	public function render($template_set = '') {
+        
+        tx_newspaper::startExecutionTimer();
+        
 		$this->prepare_render($template_set);
-		return $this->smarty->fetch($this);
+		
+		$template = $this->getAttribute('template');
+		if ($template) {
+			if (strpos($template, '.tmpl') === false) {
+				$template .= '.tmpl';
+			}
+		} else {
+			$template = $this;
+		}
+
+        $rendered = $this->smarty->fetch($template);
+        
+        tx_newspaper::logExecutionTime();
+        
+        return $rendered;
 	}
 
 	public function getDescription() {

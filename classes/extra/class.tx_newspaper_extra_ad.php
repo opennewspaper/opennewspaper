@@ -31,8 +31,17 @@ class tx_newspaper_Extra_Ad extends tx_newspaper_Extra {
         tx_newspaper::startExecutionTimer();
         
 		$this->prepare_render($template_set);
- 
-        $rendered = $this->smarty->fetch($this);
+		
+		$template = $this->getAttribute('template');
+		if ($template) {
+			if (strpos($template, '.tmpl') === false) {
+				$template .= '.tmpl';
+			}
+		} else {
+			$template = $this;
+		}
+
+        $rendered = $this->smarty->fetch($template);
         
         tx_newspaper::logExecutionTime();
         
