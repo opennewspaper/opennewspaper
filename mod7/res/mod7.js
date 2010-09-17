@@ -216,11 +216,13 @@ function updateArticleList(listId, offsetAndId, lastSelectedOption) {
 
 function reselectLastOption(listId, lastSelectedOption) {
     var regExp = lastSelectedOption;
-    if(lastSelectedOption.indexOf('_') > -1) {
-        var artId = lastSelectedOption.split('_').pop();
-        regExp = new RegExp('_'+ artId + '$');
-    }
-    $('#' + listId).selectOptions(regExp);
+	if (lastSelectedOption) {
+		if (lastSelectedOption.indexOf('_') > -1) {
+			var artId = lastSelectedOption.split('_').pop();
+			regExp = new RegExp('_' + artId + '$');
+		}
+		$('#' + listId).selectOptions(regExp);
+	}
 }
 
 
