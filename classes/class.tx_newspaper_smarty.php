@@ -264,8 +264,6 @@ class tx_newspaper_Smarty extends Smarty {
 				}
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 					$temporary_searchpath[] = $page_template_dir;
-				} else {
-					tx_newspaper::devlog('no page template dir: ' . $page_template_dir);
 				}
 			}
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
@@ -295,6 +293,8 @@ class tx_newspaper_Smarty extends Smarty {
 		//	then for the page specific ones
 		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
+		} else {
+			tx_newspaper::devlog('no page template dir: ' . $page_template_dir);
 		}
 
 		//	finally those common for all pages and page zones
