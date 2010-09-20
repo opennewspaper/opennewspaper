@@ -97,6 +97,8 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  */
 class tx_newspaper_Smarty extends Smarty {
 	
+	const debug_search_path = true;
+	
 	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
 	
 	const pagename_for_all_pagezones = 'common';
@@ -161,7 +163,7 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = tx_newspaper_Smarty::default_template_set) {
-		t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
+		self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
 		
 		$this->templateset = $template_set;
 		$this->assign('template_set', $template_set);
@@ -171,7 +173,7 @@ class tx_newspaper_Smarty extends Smarty {
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
 		$page_type->getAttribute('uid');
-		t3lib_div::devlog('setPageType', 'np', 0, array('pt'=>$page_type));
+		self::debug_search_path && t3lib_div::devlog('setPageType', 'np', 0, array('pt'=>$page_type));
 		$this->pagetype = $page_type;
 	}
 	
@@ -193,7 +195,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		false && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
+		self::debug_search_path && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
@@ -205,7 +207,7 @@ class tx_newspaper_Smarty extends Smarty {
 				$this->compile_dir .= $compile_dir;
 				file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
 				
-				false && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
+				self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
 				$this->template_dir = $dir;	
 				
 				break;
