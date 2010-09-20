@@ -28,6 +28,9 @@ function getViewportHeight() {
 	return document.getElementsByTagName('body')[0].clientHeight;
 }
 
+// used for creating new extras (select box options: [class name]|[sysfolder uid])
+// \param str String with Pipes, example: "abc|def|ghi"
+// \param pos Number of element to be extracted (starting with 0); false if this elemet does not exist
 function splitAtPipe(str, pos){
 	str = str + '';
 	part = str.split("|");
@@ -39,7 +42,7 @@ function splitAtPipe(str, pos){
 
 
 
-
+// used for closing subModal box in placement module
 function extract_querystring(querystring, param) {
 	querystring = unescape(querystring);
 	if (querystring.substring(0, 1) == '?' || querystring.substring(0, 1) == '&') {
