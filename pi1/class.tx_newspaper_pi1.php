@@ -55,7 +55,7 @@ class tx_newspaper_pi1 extends tslib_pibase {
 
 			$page = new tx_newspaper_PageType($_GET);
 			$page->getAttribute('uid');
-			t3lib_div::devlog('page type', 'np', 0, $page);
+
 			/// Get the tx_newspaper_Section object associated with the current Typo3 page
 			$section = $this->getSection();
 			if (!($section instanceof tx_newspaper_Section))
