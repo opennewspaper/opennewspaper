@@ -124,8 +124,12 @@ class tx_newspaper_Smarty extends Smarty {
 
 	public function __toString() {
 		$this->assembleSearchPath();
-		return 'tx_newspaper_Smarty object: search path = ' . print_r($this->templateSearchPath, 1) .
-			"\n" . 'assigned variables = ' . print_r($this->get_template_vars(), 1);
+		return "tx_newspaper_Smarty object:\n" .
+		'this->templateset = ' . $this->templateset . "\n" .
+		'this->pagetype = ' . $this->pagetype . "\n" .
+		'this->pagezonetype = ' . $this->pagezonetype . "\n" .
+		'search path = ' . print_r($this->templateSearchPath, 1) . "\n" .
+		'assigned variables = ' . print_r($this->get_template_vars(), 1);
 	}
 	
 	public function setTemplateSearchPath(array $path) {
