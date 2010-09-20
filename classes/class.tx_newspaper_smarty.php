@@ -264,6 +264,8 @@ class tx_newspaper_Smarty extends Smarty {
 				}
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 					$temporary_searchpath[] = $page_template_dir;
+				} else {
+					tx_newspaper::devlog('no page template dir: ' . $page_template_dir);
 				}
 			}
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
