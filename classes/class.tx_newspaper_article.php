@@ -1222,7 +1222,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		$pagetype = new tx_newspaper_PageType($_GET);
 		
-tx_newspaper::devlog(getCurrentPage(array($section, $pagetype)));
+tx_newspaper::devlog("getCurrentPage", array($section, $pagetype));
 		return new tx_newspaper_Page($section, $pagetype);
 	}
 
