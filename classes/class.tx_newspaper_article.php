@@ -446,6 +446,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $this->pagezonetype;
 	}
 
+	public function getParentPage() {
+		return $this->getCurrentPage();
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	//
