@@ -277,6 +277,8 @@ class tx_newspaper_Smarty extends Smarty {
 		} else {
 			$page_name = self::pagename_for_all_pagezones;
 		}
+		tx_newspaper::devlog('page name: ' . $page_name);
+		
 		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
 		
 		//	first look for the page zone specific templates
