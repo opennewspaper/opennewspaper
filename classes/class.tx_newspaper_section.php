@@ -607,6 +607,20 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	static public function getModuleName() { return 'np_section'; }
 	
 	
+	/// Get root section(s)
+	/// \return root section(s)
+	public static function getRootSections() {
+		$root = array();
+		foreach(tx_newspaper_section::getAllSections(false) as $section) { // check all sections ...
+			if (!$section->getParentSection()) {
+				$root[] = $section; // no parent, so root section
+			}
+		}
+		return $root;
+	}
+	
+	
+	
 	/// Typo3  hooks
 	
 	/// \todo: documentation

@@ -148,7 +148,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
 		}
-
+//t3lib_div::devlog('sh post leave', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 	}
 
 	/// checks if the combination of get_var and get_value is unique for every page type
@@ -387,6 +387,11 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			// update button in extension manager was pressed AND current extension is newspaper, so create all non-existing newspaper sysfolders
 			tx_newspaper_sysfolder::createAll();
 		}
+	}
+	
+	
+	function releaseLocks($table, $uid, $user_id, $doSave) {
+t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 'uid' => $uid, 'user_id' => $user_id, 'doSave' => $doSave));
 	}
 	
 }	

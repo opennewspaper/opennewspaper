@@ -104,12 +104,9 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 				case 'browse_path' :
 					die($this->browse_path($input));
 				case 'load_article' :
-t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
+//t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 					$response = $this->load_article();
 					die($response);
-// \todo: Helge, still needed?
-//				case 'import_article' :
-//					die($this->import_article($input));
 				case 'change_role': 
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
@@ -161,6 +158,13 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 							// "imported" article
 							$this->import_article($input);
 					}
+				break;
+				case 'w_pz':
+					// wizard: activate/de-activate pagezones
+					$this->processWizardPagezone($input);
+				break;
+				case 'w_inheritance':
+					// wizard: set inheritabnce source for pagezones
 				break;
 				default: 
 					$this->moduleContent(); // Render start wizard page
@@ -219,6 +223,8 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcuts', false);
 		$label['manage_usercomments'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_manage_usercomments', false);
 		$label['newspaper_functions'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_newspaper_functions', false);
+		$label['admin_wizard_pagezone'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_pagezone', false);
+		$label['admin_wizard_inheritance'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_inheritance', false);
 	
 		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
 		$smarty->assign('MANAGE_USERCOMMENTS_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_usercomments', false)));
@@ -265,6 +271,8 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
 		}
+		
+		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		
@@ -280,7 +288,100 @@ t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, 
 			'sorting'
 		);
 	}	
-				
+
+
+	/// wizard functions
+	
+	/** Renders/executes wizard: activate/de-activate pagezones
+	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
+	 *  \return Wizard page (steps within wizard or success message) (and processes commands)
+	 */
+	private function processWizardPagezone(array $input) {
+//t3lib_div::devlog('processWizardPagezone()', 'newspaper', 0, array('input' => $input));
+		
+		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
+		
+		// render basic form / display chosen page type and pagezone type
+		$backend = $this->renderWizardPagezoneSelector($input);
+		
+		if (isset($input['pagezonetype_uid'])) {
+			// so a pagezone type is chosen, start specific wizard
+			$smarty = new tx_newspaper_Smarty();
+			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
+			$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+			$smarty->assign('input', $input);
+			$backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
+		}
+
+		$this->content .= $this->doc->section('', $backend, 0, 1);
+		$this->content.=$this->doc->spacer(10);
+	
+	}
+	
+	
+	/** Renders wizard: choose page type and pagezone type
+	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
+	 *  \return Wizard page (steps within wizard)
+	 */
+	private function renderWizardPagezoneSelector(array $input) {
+t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input' => $input));
+		
+		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
+		
+		
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
+
+		$smarty_sub = new tx_newspaper_Smarty();
+		$smarty_sub->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
+		
+		// assign labels to smarty templates
+		$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+		$smarty_sub->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+
+/*
+// currently not in use, root section(s) are read from database directly
+		if (!isset($input['section'])) {
+			// no section set, so get section uid in first step
+			$sections = tx_newspaper_section::getAllSections(false);
+//t3lib_div::devlog('processWizardPagezone()', 'newspaper', 0, array('sections' => $sections, 'path' => $sections[0]->getSectionPath()));
+			$smarty_sub->assign('sections', $sections);
+			$currentStep = $smarty_sub->fetch('mod5_wizard_section.tmpl');
+		}
+*/
+
+		// get object or null
+		$pagetype = (intval($input['pagetype_uid']))? new tx_newspaper_pagetype(intval($input['pagetype_uid'])) : null;
+		$pagezonetype = (intval($input['pagezonetype_uid']))? new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid'])) : null;		
+
+		$currentStep = '';
+		if (!$pagetype) {
+			// no pagetype set, so get pagetype uid in second step
+			$pageTypes = tx_newspaper_pagetype::getAvailablePageTypes();
+			$smarty_sub->assign('page_types', $pageTypes); 
+			$currentStep = $smarty_sub->fetch('mod5_wizard_pagetype.tmpl');
+		} elseif (!$pagezonetype) {
+			// no pagezonetype set, so get pagezonetype uid in third step
+			$smarty_sub->assign('pagetype', $pagetype);
+			$pagezoneTypes = tx_newspaper_pagezonetype::getAvailablePagezoneTypes();
+			$smarty_sub->assign('pagezone_types', $pagezoneTypes); 
+			$currentStep = $smarty_sub->fetch('mod5_wizard_pagezonetype.tmpl');
+		}
+		$smarty->assign('currentStep', $currentStep);
+
+		$smarty->assign('root_sections', tx_newspaper_section::getRootSections());
+		$smarty->assign('pagetype', $pagetype);
+		$smarty->assign('pagezonetype', $pagezonetype);
+
+$smarty->assign('input', $input);
+
+		$this->content .= $this->doc->section('', $smarty->fetch('mod5_wizard_base.tmpl'), 0, 1);
+		$this->content.=$this->doc->spacer(10);
+	
+	}
+	
+	
+
 	/// \return array of latest tx_newspaper_article's
 	private function getLatestArticles() {
 /// \todo: set limit per tsconfig or for each user individually

@@ -65,6 +65,14 @@ td {
 </div>
 <br />	
 
+{if $IS_ADMIN}
+<div class="box_hl">{$LABEL.admin_wizards}</div>
+<div class="box">	
+	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_pz">{$WIZARD_ICON} {$LABEL.admin_wizard_pagezone}</a><br />
+	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_inheritance">{$WIZARD_ICON} {$LABEL.admin_wizard_inheritance}</a><br />
+</div>
+<br />	
+{/if}
 	
 	
 <div class="box_hl">{$LABEL.latest_articles}</div>

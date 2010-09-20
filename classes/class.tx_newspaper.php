@@ -977,7 +977,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     ////////////////////////////////////////////////////////////////////////////
 
 
-	/// \return array [key]=value if $key is fopund in config file, emtpy array else
+	/// \return array [key]=value if $key is found in config file, emtpy array else
 	public static function getNewspaperConfig($key) {
 		
 		if (!self::$newspaperConfig) {

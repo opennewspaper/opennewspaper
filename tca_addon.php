@@ -146,8 +146,6 @@ unset($TCA['tx_newspaper_section']['columns']['template_set']['config']['items']
 $TCA['tx_newspaper_section']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array ("lower" => "1");
 
-$TCA["tx_newspaper_section"]["columns"]["section_name"]["config"]["size"] = 80;
-
 
 unset($TCA['tx_newspaper_page']['columns']['template_set']['config']['items']['0']);
 $TCA['tx_newspaper_page']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
