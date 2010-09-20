@@ -230,10 +230,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
-		if ($this->getCurrentPage()->getUID()) {
+		$page = $this->getCurrentPage();
+#		if ($this->getCurrentPage()->getUID()) {
 					tx_newspaper::devlog('booh!', $this->smarty);
-			$this->smarty->setPageType($this->getCurrentPage());
-		}
+			$this->smarty->setPageType($page);
+#		}
 		if ($this->getPageZoneType()) {
 					tx_newspaper::devlog('bah!', $this->smarty);
 			$this->smarty->setPageZoneType($this);
