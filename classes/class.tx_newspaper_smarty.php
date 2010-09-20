@@ -317,6 +317,7 @@ class tx_newspaper_Smarty extends Smarty {
 	}
 	
 	private function pagezoneTemplates($page_template_dir) {
+tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
 
 		$temporary_searchpath = array();
 
