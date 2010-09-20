@@ -1220,7 +1220,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		} else {
 			$section = tx_newspaper::getSection();
 		}
-		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
+		$pagetype = new tx_newspaper_PageType($_GET);
+		
+tx_newspaper::devlog(getCurrentPage(array($section, $pagetype)));
+		return new tx_newspaper_Page($section, $pagetype);
 	}
 
 	/// Split the article's text into an array, one entry for each paragraph
