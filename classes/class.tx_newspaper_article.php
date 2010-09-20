@@ -230,16 +230,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($template_set) {
 			$this->smarty->setTemplateSet($template_set);
 		}
+
 		$page = $this->getCurrentPage();
-#		if ($this->getCurrentPage()->getUID()) {
-					tx_newspaper::devlog('booh!', $this->smarty);
-			$this->smarty->setPageType($page);
-#		}
-		if ($this->getPageZoneType()) {
-					tx_newspaper::devlog('bah!', $this->smarty);
-			$this->smarty->setPageZoneType($this);
-		}
-		tx_newspaper::devlog('smarty at beginning of function', $this->smarty);
+		$this->smarty->setPageType($page);
+
+		$this->smarty->setPageZoneType($this);
 
 		/** Assemble the text paragraphs and extras in an array of the form:
 		 *  \code
@@ -1223,7 +1218,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 		$pagetype = new tx_newspaper_PageType($_GET);
 		
-tx_newspaper::devlog("getCurrentPage", array($section->getAttribute('section_name'), $pagetype->getAttribute('type_name')));
 		return new tx_newspaper_Page($section, $pagetype);
 	}
 
