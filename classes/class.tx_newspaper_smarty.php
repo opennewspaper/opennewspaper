@@ -173,7 +173,7 @@ class tx_newspaper_Smarty extends Smarty {
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
 		$page_type->getAttribute('uid');
-		self::debug_search_path && t3lib_div::devlog('setPageType', 'np', 0, array('pt'=>$page_type));
+		self::debug_search_path && ttx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
 		$this->pagetype = $page_type;
 	}
 	
