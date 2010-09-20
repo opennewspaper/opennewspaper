@@ -172,14 +172,15 @@ class tx_newspaper_Smarty extends Smarty {
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
-		$page_type->getAttribute('uid');
 		self::debug_search_path && tx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
 		$this->pagetype = $page_type;
 	}
 	
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
-		$this->pagezonetype = $pagezone->getPageZoneType();
+		$pagezone_type = $pagezone->getPageZoneType();
+		self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_type->getAttribute('type_name'));
+		$this->pagezonetype = $pagezone_type;
 	}
 		
 	/// Render a template, scanning several directories for it
@@ -295,8 +296,6 @@ class tx_newspaper_Smarty extends Smarty {
 		//	then for the page specific ones
 		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
-		} else {
-			tx_newspaper::devlog('no page template dir: ' . $page_template_dir);
 		}
 
 		//	finally those common for all pages and page zones

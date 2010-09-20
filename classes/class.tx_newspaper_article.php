@@ -236,6 +236,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if ($this->getPageZoneType()) {
 			$this->smarty->setPageZoneType($this);
 		}
+		tx_newspaper::devlog('smarty at beginning of function', $this->smarty);
 
 		/** Assemble the text paragraphs and extras in an array of the form:
 		 *  \code
