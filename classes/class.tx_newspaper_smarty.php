@@ -325,6 +325,7 @@ class tx_newspaper_Smarty extends Smarty {
 				$this->pagezonetype->getAttribute('normalized_name'):
 				strtolower($this->pagezonetype->getAttribute('type_name'));
 			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
+tx_newspaper::devlog($pagezone_template_dir);
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
