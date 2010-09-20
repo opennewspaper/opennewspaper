@@ -145,13 +145,13 @@ class tx_newspaper_Smarty extends Smarty {
 
 		$root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($root_page);
-//t3lib_div::devlog('getAvailableTemplateSets', 'newspaper', 0, array($root_page, $TSConfig));
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
 		
 		$basepath = tx_newspaper::createAbsolutePath($basepath, PATH_site);
-		if (!is_dir($basepath . '/template_sets/'))
+		if (!is_dir($basepath . '/template_sets/')) {
 			throw new tx_newspaper_PathNotFoundException('Templates could\'t be found. Is TSConfig newspaper.defaultTemplate set to the correct path?', $basepath . '/template_sets/');
-
+		}
+		
 		$basedir = dir($basepath . '/template_sets/');
 		while (false !== ($template_set = $basedir->read())) {
 			if (substr($template_set, 0, 1) != '.' && is_dir($basepath . '/template_sets/' . $template_set)) {
@@ -246,7 +246,34 @@ class tx_newspaper_Smarty extends Smarty {
 	 *  \endcode
 	 */
 	private function assembleSearchPath() {
-		global $TYPO3_CONF_VARS;
+		
+		$temporary_searchpath = $this->searchpathFromTemplateSet();
+		
+		$page_name = $this->pagename();
+		
+		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
+		
+		//	first look for the page zone specific templates
+		$temporary_searchpath = array_merge($temporary_searchpath, 
+											$this->pagezoneTemplates($page_template_dir));
+		
+		//	then for the page specific ones
+		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
+			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
+		}
+
+		//	finally those common for all pages and page zones
+		$temporary_searchpath[] = 'template_sets/' . self::default_template_set;
+		
+		//  and the default templates delivered with the newspaper extension
+		$temporary_searchpath = array_merge($temporary_searchpath, 
+											$this->defaultTemplatePaths());
+
+		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
+	}
+
+	private function searchpathFromTemplateSet() {
+
 		$temporary_searchpath = array();
 
 		if ($this->templateset &&
@@ -274,7 +301,10 @@ class tx_newspaper_Smarty extends Smarty {
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
 		}
 		
-		//	default template set
+		return $temporary_searchpath;
+	}
+	
+	private function pagename() {
 		if ($this->pagetype) {
 			$page_name = $this->pagetype->getAttribute('normalized_name')?
 				$this->pagetype->getAttribute('normalized_name'):
@@ -282,11 +312,14 @@ class tx_newspaper_Smarty extends Smarty {
 		} else {
 			$page_name = self::pagename_for_all_pagezones;
 		}
-		tx_newspaper::devlog('page name: ' . $page_name);
-		
-		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
-		
-		//	first look for the page zone specific templates
+
+		return $page_name;		
+	}
+	
+	private function pagezoneTemplates($page_template_dir) {
+
+		$temporary_searchpath = array();
+
 		if ($this->pagezonetype) {
 			$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 				$this->pagezonetype->getAttribute('normalized_name'):
@@ -296,16 +329,16 @@ class tx_newspaper_Smarty extends Smarty {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
 		}
-
-		//	then for the page specific ones
-		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
-			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
-		}
-
-		//	finally those common for all pages and page zones
-		$temporary_searchpath[] = 'template_sets/' . self::default_template_set;
 		
-		//  and the default templates delivered with the newspaper extension
+		return $temporary_searchpath;
+	}
+	
+	private function defaultTemplatePaths() {
+
+		global $TYPO3_CONF_VARS;
+
+		$temporary_searchpath = array();
+
 		$temporary_searchpath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
 
 		foreach (explode(',', $TYPO3_CONF_VARS['EXT']['extList']) as $ext) {
@@ -313,9 +346,10 @@ class tx_newspaper_Smarty extends Smarty {
 				$temporary_searchpath[] = PATH_typo3conf . 'ext/' . $ext . '/res/templates';
 			}
 		}
-		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
-	}
 
+		return $temporary_searchpath;
+	}
+	
 	private $templateset = '';
 	private $pagetype = null;
 	private $pagezonetype = null;
