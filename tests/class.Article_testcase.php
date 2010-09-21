@@ -43,7 +43,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		try {
 			$this->checkOutput($this->article->render());
 		} catch (tx_newspaper_Exception $e) {
-			$this->fail($e->message());
+			$this->fail($e->getMessage());
 		}
 	}
 
