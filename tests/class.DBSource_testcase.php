@@ -76,7 +76,11 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 		$attrs = tx_newspaper_Article::getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
-			if (!$this->article->getAttribute($req)) $failed[] = $req;
+			try {
+				if (!$this->article->getAttribute($req)) $failed[] = $req;
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				$failed[] = $req;
+			}
 		}		
 		if ($failed) {
 			$this->fail("Required attribute(s) ".implode(', ', $failed).
@@ -92,7 +96,11 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 		$attrs = $this->article->getAttributeList();
 		$failed = array();
 		foreach ($attrs as $req) {
-			if (!$this->article->getAttribute($req)) $failed[] = $req;
+			try {
+				if (!$this->article->getAttribute($req)) $failed[] = $req;
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				$failed[] = $req;
+			}
 		}		
 		if ($failed) {
 			$this->fail("Required attribute(s) ".implode(', ', $failed).
@@ -106,7 +114,11 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 		$failed = array();
 		foreach ($articles as $art) {
 			foreach ($attrs as $req) {
-				if (!$art->getAttribute($req)) $failed[] = array($art->getUid(), $req);
+				try {
+					if (!$art->getAttribute($req)) $failed[] = array($art->getUid(), $req);
+				} catch (tx_newspaper_WrongAttributeException $e) {
+					$failed[] = $req;
+				}
 			}		
 		}
 		if ($failed) {
