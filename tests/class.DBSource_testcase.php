@@ -74,14 +74,9 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 	public function test_readArticle() {
 		$this->article = $this->source->readArticle('tx_newspaper_Article', $this->uid);
 		$attrs = tx_newspaper_Article::getAttributeList();
-		$failed = array();
-		foreach ($attrs as $req) {
-			try {
-				if (!$this->article->getAttribute($req)) $failed[] = $req;
-			} catch (tx_newspaper_WrongAttributeException $e) {
-				$failed[] = $req;
-			}
-		}		
+
+		$failed = $this->checkRequiredAttributes($this->article, $attrs);
+		
 		if ($failed) {
 			$this->fail("Required attribute(s) ".implode(', ', $failed).
 						" not in article read via source->readArticle()");
@@ -94,14 +89,9 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 	public function test_readArticleWithObject() {
 		$this->article = $this->source->readArticle($this->article, $this->uid);
 		$attrs = $this->article->getAttributeList();
-		$failed = array();
-		foreach ($attrs as $req) {
-			try {
-				if (!$this->article->getAttribute($req)) $failed[] = $req;
-			} catch (tx_newspaper_WrongAttributeException $e) {
-				$failed[] = $req;
-			}
-		}		
+
+		$failed = $this->checkRequiredAttributes($this->article, $attrs);
+
 		if ($failed) {
 			$this->fail("Required attribute(s) ".implode(', ', $failed).
 						" not in article read via source->readArticle()");
@@ -111,20 +101,20 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 	public function test_readArticles() {
 		$articles = $this->source->readArticles('tx_newspaper_Article', $this->uidList);
 		$attrs = tx_newspaper_Article::getAttributeList();
-		$failed = array();
+		$all_failed = array();
+		
 		foreach ($articles as $art) {
-			foreach ($attrs as $req) {
-				try {
-					if (!$art->getAttribute($req)) $failed[] = array($art->getUid(), $req);
-				} catch (tx_newspaper_WrongAttributeException $e) {
-					$failed[] = $req;
-				}
-			}		
+			$failed = $this->checkRequiredAttributes($art, $attrs);
+			if ($failed) $all_failed[$art->getUid()] = $failed;
 		}
-		if ($failed) {
+		if ($all_failed) {
 			$err = '';
-			foreach ($failed as $fail) 
-				$err .= 'attribute '.$fail[1].' in Article '.$fail[0].', ';
+			foreach ($all_failed as $uid => $fail_one) {
+				foreach ($fail_one as $fail) {
+					$err .= 'attribute ' . $fail . ', ';
+				}
+				$err .= 'in article ' . $uid;
+			}
 			$this->fail("Required attribute(s): $err".
 						" not in article read via source->readArticles()");
 		}			
@@ -197,6 +187,21 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 		/// \todo actually write an extra and compare the written extra to the original
 	}
 	*/
+
+	////////////////////////////////////////////////////////////////////////////
+	
+	private function checkRequiredAttributes(tx_newspaper_Article $article, array $attrs) {
+		$failed = array();
+		foreach ($attrs as $req) {
+			try {
+				if (!$article->getAttribute($req)) $failed[] = $req;
+			} catch (tx_newspaper_WrongAttributeException $e) {
+				$failed[] = $req;
+			}
+		}
+		return $failed;
+	}
+	
 	private $source = null;				///< the local RedsysSource
 	private $field = null;				///< single article field to read
 	private $fieldList = array();		///< list of article fields to read
