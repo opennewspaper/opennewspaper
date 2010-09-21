@@ -97,7 +97,7 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  */
 class tx_newspaper_Smarty extends Smarty {
 	
-	const debug_search_path = true;
+	const debug_search_path = false;
 	
 	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
 	
