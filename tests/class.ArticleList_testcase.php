@@ -28,13 +28,13 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     public function test_StoreArticleListTwice() {
 
         $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
-        $this->assertEquals(1, count($row), 'Expected one entry table tx_newspaper_articlelist.');
+        $old_count = count($row);
 
         $al = tx_newspaper_ArticleList_Factory::getInstance()->create($row['uid']);
         $al->store();
 
         $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
-        $this->assertEquals(1, count($row), 'A duplicated articlelist was stored.');
+        $this->assertEquals($old_count+1, count($row), 'A duplicated articlelist was stored.');
 
     }
 
