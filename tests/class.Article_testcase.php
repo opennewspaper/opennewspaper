@@ -40,7 +40,11 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	public function test_render() {
-		$this->checkOutput($this->article->render());
+		try {
+			$this->checkOutput($this->article->render());
+		} catch (tx_newspapr_Exception $e) {
+			$this->fail($e->message());
+		}
 	}
 
 	public function test_renderingOrder() {
@@ -156,7 +160,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		/// No source should be returned, because none has been set
 		$this->assertNull($this->article->getSource());
 		$source = new tx_newspaper_DBSource();
-		$this->article->setSource($source);
+		$this->article->setSource(array($source));
 		$this->assertEquals($this->article->getSource(), $source);
 	}
 	public function test_getUid() {
