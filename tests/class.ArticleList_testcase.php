@@ -14,10 +14,15 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $this->clearDatabase();
     }
     
-    public function test_StoreArticleList() {
+    public function test_SetAbstractArticleListAttribute() {
         $al = new tx_newspaper_ArticleList_Semiautomatic(0, $this->dummySection);
-        $al->setAttribute('notes', 'dummy-section-al');
-        $al->store();
+		try {
+	        $al->setAttribute('notes', 'dummy-section-al');
+	        $al->store();
+		} catch (tx_newspaper_Exception $e) {
+			$this->fail('Could not set attribute \'notes\' correctly');
+		}
+		
     }
 
     public function test_StoreArticleListTwice() {
