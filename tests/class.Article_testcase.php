@@ -32,16 +32,11 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	private $oldDbConn = null;
 
 	public function test_createArticle() {
-		try {
 		$temp = new tx_newspaper_Article($this->uid);
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_Article);
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 		$this->assertTrue($temp instanceof tx_newspaper_ExtraIface);
-		} catch (Exception $e) {
-			debug_print_backtrace();
-			$this->fail($e->getMessage());
-		}
 	}
 	
 	public function test_render() {
