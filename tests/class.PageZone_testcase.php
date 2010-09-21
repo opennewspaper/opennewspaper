@@ -427,6 +427,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	public function test_moveExtraAfter() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$extras = $pagezone->getExtras();
+			if (sizeof($extras) < 2) {
+				$this->fail("fixture error: not enough extras on page zone to run test");
+			}
+			$this->assert($extras[0] instanceof tx_newspaper_Extra);
+			$this->assert($extras[1] instanceof tx_newspaper_Extra);
 			$pagezone->moveExtraAfter($extras[0], $extras[1]->getOriginUid());
 			$new_extras = $pagezone->getExtras();
 			//	find $extra[0] and $extra[1] in $new_extras
