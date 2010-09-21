@@ -38,7 +38,6 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue($temp instanceof tx_newspaper_Article);
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 		$this->assertTrue($temp instanceof tx_newspaper_ExtraIface);
-		$this->checkOutput($temp->render());
 		} catch (Exception $e) {
 			debug_print_backtrace();
 			$this->fail($e->getMessage());
