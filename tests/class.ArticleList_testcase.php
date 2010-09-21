@@ -29,6 +29,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
         $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
         $old_count = count($row);
+        print_r($row);
 
         $al = tx_newspaper_ArticleList_Factory::getInstance()->create($row['uid']);
         $al->store();
