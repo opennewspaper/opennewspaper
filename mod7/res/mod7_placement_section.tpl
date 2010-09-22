@@ -84,11 +84,9 @@
 										<a href="#" class="movedown" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
 											{$ICON.down}
 										</a>
-{*	Hotfix: hide "to bottom" in semi auto list 
 										<a href="#" class="movetobottom" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
 											{$ICON.group_tobottom}
 										</a>
-*}
 										<br />
 									</td>
 								</tr>
@@ -180,12 +178,9 @@
 									<a href="#" class="movedown" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
 										{$ICON.down}
 									</a>
-{*	Hotfix: hide "to bottom" in semi auto list *}
-{if $section.listtype|lower == "tx_newspaper_articlelist_manual"}
 									<a href="#" class="movetobottom" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
 										{$ICON.group_tobottom}
 									</a>
-{/if}
 									<br />
 									{if $section.listtype|lower == "tx_newspaper_articlelist_manual"}
 										{if $article}
