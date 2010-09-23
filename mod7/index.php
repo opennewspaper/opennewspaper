@@ -489,7 +489,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$sectionType = get_class($section->getArticleList());
 
 t3lib_div::devlog('saveSection() single section', 'newspaper', 0, array('section' => $section->getAttribute('section_name'), 'al type' => $sectionType, 'count(articles)' => count($articleIds)));
-$start = time();						
+$start = microtime();						
 						// save differently depending on list type
 						switch(strtolower($sectionType)) {
 							case 'tx_newspaper_articlelist_manual' :
@@ -508,8 +508,8 @@ $start = time();
 							default:
 								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
 						}
-$end = time();
-t3lib_div::devlog('saveSection() end', 'newspaper', 0, array('exec time (sec)' => intval(($end-$start)/1000), 'exec time' => intval(($end-$start))));
+$end = microtime();
+t3lib_div::devlog('saveSection() end', 'newspaper', 0, array('exec time' => intval(($end-$start)/1000), 'exec time (sec)' => intval(($end-$start))));
 						return true;
 						
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
