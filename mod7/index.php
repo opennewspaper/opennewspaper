@@ -295,7 +295,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				
 
 				// save all the selected sections for an article
-				function saveSectionsForArticle ($input) {
+				function saveSectionsForArticle($input) {
 					$sectionIds = array();
 					// we take all the sections out of the strings like 10|11|12, 10|14|17, ...
 					if (is_array($input['sections_selected'])) {
@@ -465,7 +465,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function saveSection($input) {
-//t3lib_div::devlog('saveSection($input)', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('saveSection()', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
 					
@@ -487,7 +487,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$sectionId = $this->al_be->extractElementId($input['section']);
 						$section = new tx_newspaper_section ($sectionId);
 						$sectionType = get_class($section->getArticleList());
-						
+
+t3lib_div::devlog('saveSection() single section', 'newspaper', 0, array('section' => $section->getAttribute('section_name'), 'al type' => $sectionType, 'count(articles)' => count($articleIds)));
+$start = time();						
 						// save differently depending on list type
 						switch(strtolower($sectionType)) {
 							case 'tx_newspaper_articlelist_manual' :
@@ -506,7 +508,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							default:
 								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
 						}
-	
+$end = time();
+t3lib_div::devlog('saveSection() end', 'newspaper', 0, array('exec time (sec)' => intval(($end-$start)/1000), 'exec time' => intval(($end-$start))));
 						return true;
 						
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
