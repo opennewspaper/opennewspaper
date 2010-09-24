@@ -1301,7 +1301,7 @@ JSCODE;
 			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
 			
 			// fill the articlelist with articles
-			$article_list = $al->getArticles(self::num_articles_in_articlelist);
+			$article_list = $this->getArticleListMaxArticles($al);
 			$articles = array();
 			foreach ($article_list as $article) {
 				if ($al->getTable() == 'tx_newspaper_articlelist_manual') {
@@ -1454,8 +1454,8 @@ JSCODE;
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
 		$listType = strtolower(get_class($section->getArticleList()));
-		$articleList = $section->getArticleList()->getArticles(self::num_articles_in_articlelist);
-		
+		$articleList = $this->getArticleListMaxArticles($section->getArticleList());
+
 		// get offsets for semiautomtic list
 		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
 			$articleUids = $this->getArticleIdsFromArticleList($articleList);
@@ -1487,7 +1487,7 @@ JSCODE;
 		$al_uid = intval($this->extractElementId($articlelistId));
 		
 		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
-		$articleList = $al->getArticles(self::num_articles_in_articlelist);
+		$articleList = $this->getArticleListMaxArticles($al);
 		$listType = $al->getTable();
 
 		// get offsets
@@ -1518,6 +1518,16 @@ JSCODE;
 //t3lib_div::devlog('getArticleListByArticlelistId()', 'newspaper', 0, array('result' => $result));
 		return $result;
 	}
+	
+	
+	/// \returns article from the article list $al (check the number of max articles in the article list AND self::num_articles_in_articlelist) 
+	private function getArticleListMaxArticles(tx_newspaper_articlelist $al) {
+		$max = ($al->getAttribute('num_articles'))? 
+			min($al->getAttribute('num_articles'), self::num_articles_in_articlelist) : 
+			self::num_articles_in_articlelist;
+		return $al->getArticles($max);
+	}
+	
 	
 	/// extract the section uid out of the select elements mames that are
 	/// like "placer_10_11_12" where we need the "12" out of it
