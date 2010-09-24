@@ -188,7 +188,6 @@
 			<label index="tx_newspaper_extra_controltagzone.default_extra">Default extra(s) - shown when no tag present</label>
 			<label index="tx_newspaper_controltag_to_extra">Map of Extras to control tags and tag zones</label>
 			<label index="tx_newspaper_controltag_to_extra.tag">Tag</label>
-			<label index="tx_newspaper_controltag_to_extra.tag_type">Tag type</label>
 			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tag zone</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra type</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra UID</label>
@@ -205,6 +204,9 @@
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tx_newspaper_tag_type">Tag type</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
+			<label index="tx_newspaper_tag_type.basic_type.I.0">Content tag</label>
+			<label index="tx_newspaper_tag_type.basic_type.I.1">Control tag</label>
+			<label index="tx_newspaper_tag_type.basic_type">Basic type</label>
 			<label index="tx_newspaper_extra_ad">Extra: Ad</label>
 			<label index="tx_newspaper_extra_ad.template">Display template</label>
 			<label index="tx_newspaper_extra_generic">Extra: Generic</label>
@@ -397,7 +399,6 @@
 			<label index="tx_newspaper_extra_controltagzone.default_extra">Defaultextra(s) - angezeigt wenn es kein Steuertag gibt</label>
 			<label index="tx_newspaper_controltag_to_extra">Zuordnung von Extras zu Steuertags und Tagzonen</label>
 			<label index="tx_newspaper_controltag_to_extra.tag">Tag</label>
-			<label index="tx_newspaper_controltag_to_extra.tag_type">Tagart</label>
 			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tagzone</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_table">Extra-Typ</label>
 			<label index="tx_newspaper_controltag_to_extra.extra_uid">Extra-UID</label>
@@ -414,6 +415,9 @@
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
 			<label index="tx_newspaper_tag_type">Tagtyp</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
+			<label index="tx_newspaper_tag_type.basic_type.I.0">Inhaltliches tag</label>
+			<label index="tx_newspaper_tag_type.basic_type.I.1">Steuertag</label>
+			<label index="tx_newspaper_tag_type.basic_type">Grundtyp</label>
 			<label index="tx_newspaper_extra_ad">Extra: Werbung</label>
 			<label index="tx_newspaper_extra_ad.template">Designvorlage</label>
 			<label index="tx_newspaper_extra_generic">Extra: Allgemeines Element</label>

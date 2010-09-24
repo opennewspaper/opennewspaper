@@ -786,8 +786,8 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
+	sorting int(10) DEFAULT '0' NOT NULL,
 	tag blob NOT NULL,
-	tag_type tinytext NOT NULL,
 	tag_zone blob NOT NULL,
 	extra_table tinytext NOT NULL,
 	extra_uid int(11) DEFAULT '0' NOT NULL,
@@ -876,6 +876,7 @@ CREATE TABLE tx_newspaper_tag_type (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	name tinytext NOT NULL,
+	basic_type int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

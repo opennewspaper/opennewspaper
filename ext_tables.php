@@ -14,6 +14,51 @@ t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Display Ressorts/Articles");
 if (TYPO3_MODE=="BE")	$TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_newspaper_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_newspaper_pi1_wizicon.php';
 
 
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
+if (TYPO3_MODE == 'BE')	{
+		
+}
+
+
 t3lib_extMgm::addToInsertRecords('tx_newspaper_extra_image');
 
 $TCA["tx_newspaper_extra_image"] = array (
@@ -562,12 +607,12 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
-		'default_sortby' => "ORDER BY crdate",	
+		'sortby' => 'sorting',	
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_controltag_to_extra.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "tag, tag_type, tag_zone, extra_table, extra_uid",
+		"fe_admin_fieldList" => "tag, tag_zone, extra_table, extra_uid",
 	)
 );
 
@@ -652,7 +697,7 @@ $TCA["tx_newspaper_tag_type"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_tag_type.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "name",
+		"fe_admin_fieldList" => "name, basic_type",
 	)
 );
 

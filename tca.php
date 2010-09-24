@@ -2666,7 +2666,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 $TCA["tx_newspaper_controltag_to_extra"] = array (
 	"ctrl" => $TCA["tx_newspaper_controltag_to_extra"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "tag,tag_type,tag_zone,extra_table,extra_uid"
+		"showRecordFieldList" => "tag,tag_zone,extra_table,extra_uid"
 	),
 	"feInterface" => $TCA["tx_newspaper_controltag_to_extra"]["feInterface"],
 	"columns" => array (
@@ -2680,14 +2680,6 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
-			)
-		),
-		"tag_type" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.tag_type",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
 			)
 		),
 		"tag_zone" => Array (		
@@ -2728,7 +2720,7 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "tag;;;;1-1-1, tag_type, tag_zone, extra_table, extra_uid")
+		"0" => array("showitem" => "tag;;;;1-1-1, tag_zone, extra_table, extra_uid")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3047,7 +3039,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 $TCA["tx_newspaper_tag_type"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag_type"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "name"
+		"showRecordFieldList" => "name,basic_type"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag_type"]["feInterface"],
 	"columns" => array (
@@ -3059,9 +3051,20 @@ $TCA["tx_newspaper_tag_type"] = array (
 				"size" => "30",
 			)
 		),
+		"basic_type" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type",		
+			"config" => Array (
+				"type" => "radio",
+				"items" => Array (
+					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type.I.0", "1"),
+					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type.I.1", "2"),
+				),
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "name;;;;1-1-1")
+		"0" => array("showitem" => "name;;;;1-1-1, basic_type")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
