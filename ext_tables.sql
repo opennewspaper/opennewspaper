@@ -768,7 +768,6 @@ CREATE TABLE tx_newspaper_extra_controltagzone (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	tag_zone blob NOT NULL,
-	tag_type tinytext NOT NULL,
 	default_extra blob NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -789,8 +788,7 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 	sorting int(10) DEFAULT '0' NOT NULL,
 	tag blob NOT NULL,
 	tag_zone blob NOT NULL,
-	extra_table tinytext NOT NULL,
-	extra_uid int(11) DEFAULT '0' NOT NULL,
+	extra blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

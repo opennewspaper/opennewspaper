@@ -596,7 +596,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_controltagzone.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, tag_zone, tag_type, default_extra",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, tag_zone, default_extra",
 	)
 );
 
@@ -612,7 +612,7 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_controltag_to_extra.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "tag, tag_zone, extra_table, extra_uid",
+		"fe_admin_fieldList" => "tag, tag_zone, extra",
 	)
 );
 

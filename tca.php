@@ -2580,7 +2580,7 @@ $TCA["tx_newspaper_tag_zone"] = array (
 $TCA["tx_newspaper_extra_controltagzone"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_controltagzone"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,tag_zone,tag_type,default_extra"
+		"showRecordFieldList" => "hidden,starttime,endtime,tag_zone,default_extra"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_controltagzone"]["feInterface"],
 	"columns" => array (
@@ -2632,14 +2632,6 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"tag_type" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_type",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
 		"default_extra" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.default_extra",		
@@ -2654,7 +2646,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, tag_zone, tag_type, default_extra")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, tag_zone, default_extra")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2666,7 +2658,7 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 $TCA["tx_newspaper_controltag_to_extra"] = array (
 	"ctrl" => $TCA["tx_newspaper_controltag_to_extra"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "tag,tag_zone,extra_table,extra_uid"
+		"showRecordFieldList" => "tag,tag_zone,extra"
 	),
 	"feInterface" => $TCA["tx_newspaper_controltag_to_extra"]["feInterface"],
 	"columns" => array (
@@ -2694,33 +2686,21 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"extra_table" => Array (		
+		"extra" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_table",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
-		"extra_uid" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_controltag_to_extra.extra_uid",		
-			"config" => Array (
-				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
-				"eval"     => "int",
-				"checkbox" => "0",
-				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
-				),
-				"default" => 0
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_extra",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "tag;;;;1-1-1, tag_zone, extra_table, extra_uid")
+		"0" => array("showitem" => "tag;;;;1-1-1, tag_zone, extra")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
