@@ -19,9 +19,9 @@ define('DEBUG_OUTPUT', false); // show position etc.
 /** \todo Oliver: document me!
  */
 class tx_newspaper_BE {
-	
+
 	private static $smarty = null;
-	
+
 	private static $backend_files_added = false; // are js/css files added for backend
 
 	const num_articles_in_articlelist = 100;
@@ -37,10 +37,10 @@ class tx_newspaper_BE {
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_page', false);
 		}
 		$section_uid = intval($PA['row']['uid']);
-		
+
 		$page_types = tx_newspaper_PageType::getAvailablePageTypes(); // get page type objects
 		$pagezone_types = tx_newspaper_PageZoneType::getAvailablePageZoneTypes(); // get page zone type objects
-		
+
 		$data = array(); // information for be rendering
 
 		// add data for ACTIVE page types
@@ -60,7 +60,7 @@ class tx_newspaper_BE {
 		}
 
 		// add delete ajax call to each activated page, add activate ajax call to each non-activated page
-		// add delete ajax call to each activated pagezone, add activate ajax call to each non-activated pagezone 
+		// add delete ajax call to each activated pagezone, add activate ajax call to each non-activated pagezone
 		// and add page type name
 		// and add pagezone type name
 		for ($i = 0; $i < sizeof($page_types); $i++) {
@@ -72,13 +72,13 @@ class tx_newspaper_BE {
 					/// get ACTIVE page zone type id for ACTIVE page in loop
 					for ($j = 0; $j < sizeof($pagezone_types); $j++) {
 						if ($pagezone_types[$j]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
-							// active pagezone type found 	
+							// active pagezone type found
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
 							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
 							$data[$i]['pagezones'][$j]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown($active_pagezone->getTable(), $active_pagezone->getUid(), $active_pagezone->getAttribute('template_set'));
 							break;
-						} 
+						}
 					}
 				}
 				// add ajax call to each non-activated pagezone type (and add pagezone type name)
@@ -104,29 +104,29 @@ class tx_newspaper_BE {
 			if (is_array($data[$i]['pagezones'])) {
 				ksort($data[$i]['pagezones'], SORT_NUMERIC); // sort array, so order of pagezone is fixed
 				// renumber indeces (in case an entry was unset; so {section} can still be used in smarty)
-				$data[$i]['pagezones'] = array_values($data[$i]['pagezones']); 
+				$data[$i]['pagezones'] = array_values($data[$i]['pagezones']);
 			}
-			
+
 		}
 //t3lib_div::devlog('data apz', 'np', 0, $data);
-		/// generate be html code using smarty 
+		/// generate be html code using smarty
  		self::$smarty = new tx_newspaper_Smarty();
 		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
- 
+
 		// add skinned icons
 		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_page_in_section', false)));
 		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_page_in_section', false)));
 		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_page_in_section', false)));
 		self::$smarty->assign('CLEAR_ICON', self::renderIcon('', '', '', '', true));
 		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', ''));
-		
+
 
 		// add title and message
 		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_page_in_section', false));
 
 		/// add data rows
 		self::$smarty->assign('DATA', $data);
-		
+
 		$html = '';
 		if (!$PA['AJAX_CALL']) {
 			$html = '';
@@ -135,14 +135,14 @@ class tx_newspaper_BE {
 			self::$smarty->assign('AJAX_CALL', false);
 		}
 		$html .= self::$smarty->fetch('pagetype4section.tmpl');
-		
+
 		return $html;
 
-	}	
-	
-	
+	}
+
+
 /// template set functions
-	
+
 	/// itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
 	function addTemplateSetDropdownEntries(&$params, &$pObj) {
 		$this->readTemplateSetItems($params);
@@ -153,17 +153,17 @@ class tx_newspaper_BE {
 	 * If template named default is found, it is moved to first position in the dropdown
 	 */
 	private function readTemplateSetItems(&$params) {
-		global $LANG; 
-		
+		global $LANG;
+
 		$default_found = false;
-		
+
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
 
 		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		for ($i = 0; $i < sizeof($templateset); $i++) {
 			if ($templateset[$i] != 'default') {
-				$params['items'][] = array($templateset[$i], $templateset[$i]);				
+				$params['items'][] = array($templateset[$i], $templateset[$i]);
 			} else {
 				$default_found = true;
 			}
@@ -180,7 +180,7 @@ class tx_newspaper_BE {
 		$params = array();
 		self::readTemplateSetItems($params); // call by reference ...
 
-		$html = '<select id="templateset_' . $uid . '" onchange="storeTemplateSet(\'' . $table . '\', ' . $uid . ', this.options[this.selectedIndex].value); return false;">'; //         
+		$html = '<select id="templateset_' . $uid . '" onchange="storeTemplateSet(\'' . $table . '\', ' . $uid . ', this.options[this.selectedIndex].value); return false;">'; //
 		foreach($params['items'] as $item) {
 			$selected = ($item[1] == $default_value)? ' selected="selected"' : ''; // item[0] = title, item[1] = value to store
 			$html .= '<option value="' . $item[1] . '"' . $selected . '>' . $item[0] . '</option>';
@@ -188,8 +188,8 @@ class tx_newspaper_BE {
 		$html .= '</select>';
 		return $html;
 	}
-	
-	
+
+
 	/// Returns whether or not template set are used in the backend
 	public static function useTemplateSetsForSections() {
         $key = 'use_template_sets_for_sections';
@@ -198,29 +198,29 @@ class tx_newspaper_BE {
         if (!isset($value[$key])) {
         	return true; // default
         }
-        
+
         return (bool) $value[$key];
 
 	}
-		
-		
-		
+
+
+
 /// pagezone inheritance source functions
-		
+
 	/// itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
 	function addInheritancePageDropdownEntries(&$params, &$pObj) {
 		$this->readInheritancePageItems($params);
 	}
 
 	private function readInheritancePageItems(&$params) {
-		global $LANG; 
-		
+		global $LANG;
+
 		$pages = array('dummy', 'test', 'aha');
 
 		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		for ($i = 0; $i < sizeof($pages); $i++) {
-			$params['items'][] = array($pages[$i], $pages[$i]);				
+			$params['items'][] = array($pages[$i], $pages[$i]);
 		}
 
 	}
@@ -233,7 +233,7 @@ class tx_newspaper_BE {
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
 		global $LANG;
-/// \todo: move js to external file ... but how to handle localization then? And access to $PA?		
+/// \todo: move js to external file ... but how to handle localization then? And access to $PA?
 echo "
 <script language='javascript'>
  function processArticlelist() {
@@ -245,18 +245,18 @@ echo "
  		alert('Dropdown for article list cannot be found');
  		return false;
  	}
- 	
+
  	selIndex = selectbox.selectedIndex;
-	
+
 	if (isNaN(selectbox.options[selIndex].value)) {
 		// value is a class name -> create new super table record for article list
 		document.getElementById('edit_articlelist').style.display = 'none';
 		document.getElementById('NO_edit_articlelist').style.display = 'inline';
 	} else {
 		document.getElementById('edit_articlelist').style.display = 'inline';
-		document.getElementById('NO_edit_articlelist').style.display = 'none';		
+		document.getElementById('NO_edit_articlelist').style.display = 'none';
 	}
- 		
+
  }
 
 function findElementsByName(name, type) {
@@ -269,11 +269,11 @@ function findElementsByName(name, type) {
 
 </script>
 ";
-		
-		
-		
+
+
+
 		global $LANG;
-//t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));		
+//t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
 			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
@@ -289,7 +289,7 @@ function findElementsByName(name, type) {
 			// article list couldn't be fetched, so create a new default article list
 			$s->assignDefaultArticleList();
 			$s_al = $s->getArticleList();
-			
+
 			// overwrite article list uids in $PA with new article list uids
 			$PA['row']['articlelist'] = $s_al->getAbstractUid();
 			$PA['itemFormElValue'] = $s_al->getAbstractUid();
@@ -303,20 +303,20 @@ function findElementsByName(name, type) {
 			}
 			$selItems[] = array($al_available[$i]->getTitle(), $value, '');
 		}
-		
-		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);	
 
-		$obj = new t3lib_TCEforms(); 
-	
+		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);
+
+		$obj = new t3lib_TCEforms();
+
 		// add javascript to onchange field
 		$PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] = 'processArticlelist(); ' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'];
-	
+
 		// set configuration
 		$config['type'] = 'select';
 		$config['size'] = 1;
 		$config['maxitems'] = 1;
 		$config['form_type'] = 'select';
-	
+
 		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
 
 		// $out .= ' ' . self::renderEditIcon4ArticleList($s->getArticleList()); // might be needed later, see renderEditIcon4ArticleList()
@@ -342,18 +342,18 @@ function findElementsByName(name, type) {
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
-		
+
 		$data = array();
-		
+
 		for ($i = 0; $i < sizeof($extra); $i++) {
-			
+
 			//	don't display extras for which attribute gui_hidden is set
 			if ($extra[$i]->getAttribute('gui_hidden')) continue;
-			
+
 			$extra_data = array(
 				'extra_type' => $extra[$i]->getTitle(),
 				'uid' => $extra[$i]->getExtraUid(),
-				'title' => $extra[$i]->getDescription(), 
+				'title' => $extra[$i]->getDescription(),
 				'origin_placement' => $extra[$i]->isOriginExtra(),
 				'origin_uid' => $extra[$i]->getOriginUid(),
 				'concrete_table' => $extra[$i]->getTable(),
@@ -364,50 +364,50 @@ function findElementsByName(name, type) {
 				'template_set' => $extra[$i]->getAttribute('template_set'),
                 'tstamp' => $extra[$i]->getAttribute('tstamp'),
 			);
-			// the following attributes aren't always available 
+			// the following attributes aren't always available
 			try {
 				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
 			} catch (tx_newspaper_WrongAttributeException $e) {
-			
+
 			}
 			try {
 				$extra_data['show'] = $extra[$i]->getAttribute('show_extra');
 			} catch (tx_newspaper_WrongAttributeException $e) {
-				
+
 			}
 			try {
 				$extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
 			} catch (tx_newspaper_WrongAttributeException $e) {
-				
+
 			}
 			try {
 				$extra_data['position'] = $extra[$i]->getAttribute('position');
 			} catch (tx_newspaper_WrongAttributeException $e) {
-			
+
 			}
-			
+
 			// render html dropdown and add to array
 			$extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);
-			
+
 			$data[] = $extra_data;
 
 		}
 		return $data;
-	} 
-	
-	
+	}
+
+
 /// \todo: is this really needed?
-	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)	
+	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)
 	function renderArticleKickerTtitleTeaser($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
-		return '';	
+		return '';
 	}
-	/// render dummy field for kicker, title and teaser in list views in order to place these 3 field in 1 row (in a palette)	
+	/// render dummy field for kicker, title and teaser in list views in order to place these 3 field in 1 row (in a palette)
 	function renderArticleKickerTtitleTeaserForListviews($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
-		return '';	
+		return '';
 	}
-	
+
 
 /// Userfunc for a texarea field in the backend with newspaper conf
 /** Configuration array
@@ -417,7 +417,7 @@ function findElementsByName(name, type) {
  *  'height' => '[int+]' (default: 80)
  *  'maxlen' => '[int+]' (default: 1000)
  *  'useCountdown' => '1' (default: 0; if set, a countdown shows how many character are still available in the textarea field)
- * 
+ *
  *  \param $PA
  *  \param $fobj
  *  \return HTML code
@@ -430,7 +430,7 @@ function findElementsByName(name, type) {
 		$height = (intval($PA['fieldConf']['config']['height']) > 0)? intval($PA['fieldConf']['config']['height']) : 80;
 		$maxLen = (intval($PA['fieldConf']['config']['maxLen']) > 0)? intval($PA['fieldConf']['config']['maxLen']) : 1000;
 		$useCountdown = (intval($PA['fieldConf']['config']['useCountdown']))? true : false;
-		
+
 		$uniq = $PA['field'] . $PA['row']['uid']; // unique string based on field name and record uid
 
 // \todo: move as one function to an external js file
@@ -441,7 +441,7 @@ function findElementsByName(name, type) {
 		$html = '<style type="text/css">
 #countdown_' . $uniq . ' {
   float:left;
-  margin-left:10px; 
+  margin-left:10px;
   margin-top:2px;
 }
 </style>
@@ -449,9 +449,9 @@ function findElementsByName(name, type) {
   function ' . $jsFuncName . '(field, maxLen, countdownField) {
       if (field.value.length > maxLen) {
           field.value = field.value.substring(0, maxLen);
-      } 
-      if (countdownField) { 
-          document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length); 
+      }
+      if (countdownField) {
+          document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length);
       }
 }
 </script>
@@ -463,13 +463,13 @@ function findElementsByName(name, type) {
 		} else {
 			// add textarea only
 			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
-			
+
 		}
 
-		return $html;	
+		return $html;
 	}
-	
-	
+
+
 /// Userfunc for a input field in the backend with newspaper conf
 /** WARNING: DOES NOT WORK FOR required FIELDS
  *  Configuration array
@@ -477,7 +477,7 @@ function findElementsByName(name, type) {
  *  'userFunc' => 'tx_newspaper_be->renderInput'
  *  'width' => '[int+]' (default: 530)
  *  'height' => '[int+]' (default: 80)
- * 
+ *
  *  \param $PA
  *  \param $fobj
  *  \return HTML code
@@ -493,11 +493,11 @@ function findElementsByName(name, type) {
 		$html .= 'TBE_EDITOR.fieldChanged(\'' . $PA['table'] . '\',\'' . $PA ['row']['uid'] . '\',\'' . $PA['field']. '\',\'' . $PA['itemFormElName'] . '\');" ';
 		$html .= 'maxlength="256" class="formField" style="' . $width . $height . '" value="' . htmlspecialchars($PA['itemFormElValue']) . '" name="' . $PA['itemFormElName'] . '_hr">';
 		$html .= '<input type="hidden" value="' . htmlspecialchars($PA['itemFormElValue']) . '" name="' . $PA['itemFormElName'] . '">';
-		
+
 		return $html;
-	}	
-	
-	
+	}
+
+
 
 
 /// function to render extras (article or pagezone_page)
@@ -537,14 +537,14 @@ function findElementsByName(name, type) {
 //t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, array('data' => $data, 'extra_data' => $extra_data));
 		if (!$is_concrete_article) {
 			// so it's no concrete article (= default article or pagezone_page)
-			
+
 			$s = $pz->getParentPage()->getParentSection();
 			$pages = $s->getSubPages(); // get activate pages for current section
 			$pagetype = array();
 			for ($i = 0; $i < sizeof($pages); $i++) {
-				$pagetype[] = $pages[$i]->getPageType(); 
+				$pagetype[] = $pages[$i]->getPageType();
 			}
-			
+
 			$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
 			$pagezonetype = array();
 			for ($i = 0; $i < sizeof($pagezones); $i++) {
@@ -618,23 +618,23 @@ function findElementsByName(name, type) {
 			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra', false)));
 		}
 
-		
-	
+
+
 		// pagezones are rendered by a separate smarty template - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = self::getPagezoneSmartyObject();
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
-		$pagezone = array();         
+		$pagezone = array();
 		for ($i = 0; $i < sizeof($extra_data); $i++) {
-			
+
 			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currently edited page zone?
-			
+
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForSections()); // are template set dropdowns visible or not
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
-					// render pagezone table only if extras are available 
+					// render pagezone table only if extras are available
 					$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
 					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_page.tmpl');
 				} else {
@@ -643,19 +643,19 @@ function findElementsByName(name, type) {
 			} else {
 				// needed for concrete articles
 				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
-				
+
 				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_defaultextra_in_article', false)));
 				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_in_article', false)));
-	
-				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);                
+
+				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp['extras']);
 				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
 				$smarty_pz->assign('MESSAGE', $message);
-                
+
                	switch(self::getExtraBeDisplayMode()) {
                		case BE_EXTRA_DISPLAY_MODE_TABBED:
 		                 // tabbed backend, set which tab to show after loading
-                          $lastTab = 'overview';                          
+                          $lastTab = 'overview';
                           if(isset($_REQUEST['lastTab'])) { //is set after reload
                             $lastTab = $_REQUEST['lastTab'];
                           } else if(isset($extra_data[0][0])) { //when opened first time
@@ -665,11 +665,11 @@ function findElementsByName(name, type) {
                          tx_newspaper_BE::addNewExtraData($smarty_pz);
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;
-               		case BE_EXTRA_DISPLAY_MODE_SUBMODAL: 
+               		case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
                		default:
 		                 // just a list of extras
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
-               	} 
+               	}
 			}
 		}
 
@@ -731,7 +731,7 @@ function findElementsByName(name, type) {
             $smarty->assign('NEW_AT_TOP', true);
         }
     }
-	
+
 
     public function renderTagControlsInArticle(&$PA, $fobj) {
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
@@ -765,7 +765,7 @@ function findElementsByName(name, type) {
         }
 //t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
         return implode(',', $items);
-        
+
     }
 
     private function addTagInputField($selectBox, $articleId, $tagType) {
@@ -779,12 +779,12 @@ function findElementsByName(name, type) {
      * @param  $what string that will be searched
      * @param  $with string  that will be inserted
      * @param  string $pattern Regexp
-     * @param bool $reinsertMatch if true (default) $with will be inserteted before the match which will be inserted as well. 
+     * @param bool $reinsertMatch if true (default) $with will be inserteted before the match which will be inserted as well.
      * @return replaced text or complete text if no match was found
      */
     private function replaceIncludingEndOfLine($what, $with, $pattern, $reinsertMatch = true) {
         $newText = $this->replaceEol($what);
-        $toReplace = '|('.$pattern.')|m'; // with 'm' option . matches EOL  
+        $toReplace = '|('.$pattern.')|m'; // with 'm' option . matches EOL
         preg_match($toReplace, $newText, $matches);
         $hasMatches = (count($matches) > 0);
         if($hasMatches) {
@@ -871,8 +871,7 @@ function findElementsByName(name, type) {
                 return "<ul>" + ret.join('') + "</ul>";
             }
       var MyCompleter = Class.create(Autocompleter.Local, {
-
-                     getUpdatedChoices: function() {
+                    getUpdatedChoices: function() {
                         var serverChoices = this.options.selector(this);
                         var currentChoice = this._getCurrentInputAsPartialList();
                         var allChoices = serverChoices.replace(/<ul>/, currentChoice);
@@ -880,14 +879,14 @@ function findElementsByName(name, type) {
                      },
 
                      _getCurrentInputAsPartialList: function() {
-                        return "<ul><li>" + this.getToken() + "<" + "/li>";
+                            return "<ul><li>" + this.getToken() + "<" + "/li>";
                      },
 
-                     selectEntry : function(\$super) {
-                        \$super();
+                     selectEntry : function(\$super) {                        
+                         \$super();
                         this.element.value = '';
                      }
-            });   
+            });
     document.observe("dom:loaded", function() {
         $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         $$('[name="data[tx_newspaper_article][$articleId][tags_ctrl]_sel"]')[0].hide();
@@ -900,34 +899,50 @@ function findElementsByName(name, type) {
         }
 
         //create completer and tag caches for content- and control-tags
-        createTagCompletion('tags', mapSelector, false);
+        createTagCompletion('tags', mapSelector, insertTag, true);
         //without timeout the second autosuggest is not created properly, maybe because of ajax.
-        window.setTimeout(function() {createTagCompletion('tags_ctrl', mapSelector)}, 1000);
+        window.setTimeout(function() {createTagCompletion('tags_ctrl', mapSelector, addOnlyExistingTag, false)}, 1000);
      });
 
-     function createTagCompletion(tagType, mySelector, stop) {
+    /**
+     * insertTagFunction is the function to be called when inserting tags
+     * though it is possible too add different logic whether adding content- or control-tags
+     */
+    function createTagCompletion(tagType, mySelector, insertTagFunction, addCurrentInput) {
         //get all tags so they are cached
         return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
                                 parameters: {param: 'tag-getall', type: tagType},
                                 onSuccess: function(request) {
                                                 var serverTags = request.responseText.evalJSON();
-                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);                                                
+                                                var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
                                                 new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_'+tagType, choices, {
-                                                    selector : mySelector,                                                    
+                                                    selector : mySelector,
                                                     afterUpdateElement : function(currInput, selectedElement) {
-                                                                            insertTag(currInput, selectedElement, tagType);
+                                                                            insertTagFunction(currInput, selectedElement, tagType);
                                                                          }
-                                                });                                                
-                                           },                                
+                                                });
+                                           },
                             });
      }
 
+     /**
+      * only existing tags are allowed
+      */
+     function addOnlyExistingTag(currInput, selectedElement, tagType) {
+         if(selectedElement.id) {
+            setFormValueFromBrowseWin('data[tx_newspaper_article][$articleId]['+tagType+']',selectedElement.id, selectedElement.innerHTML); TBE_EDITOR.fieldChanged('tx_newspaper_article','$articleId','tags','data[tx_newspaper_article][$articleId][tags]');
+         }
+     }
 
+
+     /**
+      * adds tags and creates non-exising ones
+      */
      function insertTag(currInput, selectedElement, tagType) {
-        if(!selectedElement.id) {
+         if(!selectedElement.id) {
             //neuen tag einfügen
-            new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {                    
+            new top.Ajax.Request(path +  'typo3conf/ext/newspaper/mod1/index.php', {
                     method: 'get',
                     parameters: {param : 'tag-insert', type : tagType, tag : selectedElement.innerHTML},
                     onSuccess: function(request) {
@@ -949,13 +964,13 @@ JSCODE;
 			return array(); // no data needed article was newly created in t3 list module
 		}
 
-		if ($pz instanceof tx_newspaper_article && $pz->getAttribute('is_template') == 0) { 
+		if ($pz instanceof tx_newspaper_article && $pz->getAttribute('is_template') == 0) {
 			return array(); // no data needed if concrete article
 		}
-		
+
 		$s = $pz->getParentPage()->getParentSection();
 		return array(
-				'section' => array_reverse($s->getSectionPath()), 
+				'section' => array_reverse($s->getSectionPath()),
 				'page_type' => $pz->getParentPage()->getPageType(),
 				'page_id' => $pz->getParentPage()->getUid(),
 				'pagezone_type' => $pz->getPageZoneType(),
@@ -967,7 +982,7 @@ JSCODE;
 
 	private static function getPagezoneSmartyObject() {
 		global $LANG;
-	
+
 		$label['extra'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra', false);
 		$label['show'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show', false);
 		$label['pass_down'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pass_down', false);
@@ -982,12 +997,12 @@ JSCODE;
 
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
-	
+
 		$smarty_pz->assign('LABEL', $label);
-	
+
 		$smarty_pz->assign('SAVE_ICON', tx_newspaper_BE::renderIcon('gfx/savedok.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_save_extra', false)));
 		$smarty_pz->assign('UNDO_ICON', tx_newspaper_BE::renderIcon('gfx/undo.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_undo_extra', false)));
-	
+
 		$smarty_pz->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
 		$smarty_pz->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
 		$smarty_pz->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_edit_extra', false)));
@@ -997,7 +1012,7 @@ JSCODE;
 		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 //		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
 		$smarty_pz->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
-	
+
 		return $smarty_pz;
 	}
 
@@ -1023,7 +1038,7 @@ JSCODE;
         $data = array();
         $data['extras'] = $extra_data;
 		return $data;
-	
+
 	}
 
 
@@ -1050,13 +1065,13 @@ JSCODE;
 	function getWorkflowCommentBackend($PA, $fobj) {
 		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
-		
+
 		/// add workflow comment field (using smarty)
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 
 		$html .= $smarty->fetch('workflow_comment.tmpl');
-		
+
 		$html .= tx_newspaper_workflow::getJavascript();
 		$html .= tx_newspaper_workflow::renderBackend('tx_newspaper_article', $PA['row']['uid']);
 
@@ -1064,11 +1079,11 @@ JSCODE;
 	}
 
 
-	/// get html for this icon (may include an anchor) 
+	/// get html for this icon (may include an anchor)
 	/** \param $image path to icon in typo3 skin; if path start with a "/" t3 skinning is bypassed and the file is referenced directly
 	 *  \param $id if set, $id will be inserted as an html id
 	 *  \param $title title for title flag of img
-	 *  \param $ahref 
+	 *  \param $ahref
 	 *  \param $replaceWithCleargifIfEmpty if set to true the icon is replaced with clear.gif, if $ahref is empty
 	 *  \param $width width in px
 	 *  \param $height height in px
@@ -1139,17 +1154,17 @@ JSCODE;
 			break;
 			case BE_EXTRA_DISPLAY_MODE_TABBED:
 			default:
-				self::$backend_files_added = true; // nothing to add 
+				self::$backend_files_added = true; // nothing to add
 			break;
 		}
 	}
 
-	
+
 	// read tsconfig to render configured backend (default: subModal)
 	public static function getExtraBeDisplayMode() {
 		// read tsconfig from root newspaper sysfolder
 		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPidRootfolder());
-		
+
 		if (isset($tsc['newspaper.']['be.']['extra_in_article_mode'])) {
 			switch (strtolower($tsc['newspaper.']['be.']['extra_in_article_mode'])) {
 				case 'tabbed':
@@ -1164,7 +1179,7 @@ JSCODE;
 		return BE_EXTRA_DISPLAY_MODE_SUBMODAL; // default
 	}
 
-	
+
 	/// Generates some dummy content based on "Lorem ipsum"
 	/** \param $numberOfParagrahs Number of Paragraphs to render
 	 *  \param $wrapInP If set to true the paragraphs are wrapped in <p>...</p>
@@ -1198,7 +1213,7 @@ JSCODE;
 			'Mauris ut libero neque, et luctus odio. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam est orci, malesuada vel accumsan ut, rhoncus nec lorem. Nulla dapibus, libero vel ultrices faucibus, odio nisi ultricies enim, quis fermentum neque felis ut libero. Aliquam magna risus, molestie et fermentum sit amet, ultrices vitae ligula. Nam ipsum lectus, consectetur id feugiat et, ornare nec dui. Nam porta nunc vel magna ullamcorper accumsan. Nullam et metus quam, quis fringilla tellus. Proin sapien dolor, iaculis eget dictum non, congue vitae felis. Maecenas tempus dapibus metus condimentum egestas. Ut est nunc, egestas id aliquet in, dictum quis libero. Vivamus nec accumsan arcu. Phasellus interdum laoreet lacus, nec suscipit nunc pellentesque a. In ultricies, lorem ac sodales pretium, enim felis consectetur nibh, sollicitudin eleifend lorem odio sed purus. Nulla facilisi. Duis ligula turpis, porta nec tincidunt ut, tincidunt vel justo. Nam lacinia ornare dui. Suspendisse aliquam laoreet lorem, vel tempor magna porta sed. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse feugiat velit sit amet lorem dignissim vel tempor nulla adipiscing.',
 			'Aliquam erat volutpat. Proin egestas auctor tincidunt. Morbi eu commodo mi. Nulla quis felis eu dolor cursus blandit. Aliquam erat volutpat. In quis magna purus, consectetur commodo elit. Nulla libero leo, posuere in ornare et, bibendum blandit nibh. Suspendisse potenti. Fusce quis metus at massa varius gravida eget in eros. Aenean adipiscing tortor lacus, viverra tempus erat. Phasellus vitae purus elit. Nulla vulputate fringilla eleifend. Fusce quis est ante. Proin viverra, mi non dapibus luctus, tortor felis dignissim ante, pharetra tincidunt arcu nisl at est. Cras tincidunt suscipit mauris, quis elementum eros hendrerit eu. Vestibulum vitae tortor libero, sed tempus mauris. Maecenas non imperdiet dolor. Vestibulum vel neque velit, tincidunt malesuada ligula. Suspendisse accumsan, quam vel tincidunt tempus, erat tellus lacinia ligula, ac ultrices justo mauris at nisi.',
 			'Quisque lacinia dolor sit amet nibh laoreet aliquet. Mauris quis tellus libero. Ut accumsan facilisis magna et fringilla. Integer lacinia mauris at arcu tempor tempor tempor ante consequat. In dapibus rutrum auctor. Pellentesque eget magna sem, sit amet consectetur nisl. Praesent lacinia feugiat faucibus. Praesent leo elit, interdum quis consequat nec, varius quis tortor. In convallis congue urna, a tristique est pharetra et. Pellentesque eu lectus id sapien lobortis accumsan sit amet sed tellus. Vestibulum viverra congue eros, et ullamcorper turpis ullamcorper ut. Donec convallis vulputate tellus, et porta neque pulvinar blandit.',
-			'Fusce ac orci vestibulum tortor mollis ultrices. Sed dolor leo, pharetra quis placerat sit amet, porttitor vel eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut vestibulum bibendum mauris sit amet fermentum. In sed est mi, et mattis odio. Sed porta elit eu libero pulvinar consectetur. Vivamus tempor faucibus erat quis tincidunt. Phasellus ultricies nisl vitae magna tempor vehicula. Nullam sodales mattis purus a imperdiet. Pellentesque non metus ante. Nullam rhoncus accumsan odio commodo aliquam. Sed dapibus nibh at turpis convallis in commodo ante ultricies. In tincidunt orci sapien, in viverra tellus. Vestibulum posuere aliquet bibendum. Phasellus et ullamcorper felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vulputate iaculis dapibus.', 	
+			'Fusce ac orci vestibulum tortor mollis ultrices. Sed dolor leo, pharetra quis placerat sit amet, porttitor vel eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut vestibulum bibendum mauris sit amet fermentum. In sed est mi, et mattis odio. Sed porta elit eu libero pulvinar consectetur. Vivamus tempor faucibus erat quis tincidunt. Phasellus ultricies nisl vitae magna tempor vehicula. Nullam sodales mattis purus a imperdiet. Pellentesque non metus ante. Nullam rhoncus accumsan odio commodo aliquam. Sed dapibus nibh at turpis convallis in commodo ante ultricies. In tincidunt orci sapien, in viverra tellus. Vestibulum posuere aliquet bibendum. Phasellus et ullamcorper felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vulputate iaculis dapibus.',
 		);
 		$loremShort = array(
 			'Integer ullamcorper feugiat pretium. Nullam id leo neque. Pellentesque at facilisis eros.',
@@ -1225,7 +1240,7 @@ JSCODE;
 			'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ',
 			'Proin egestas auctor tincidunt. Morbi eu commodo mi. Nulla quis felis eu dolor cursus blandit. Aliquam erat volutpat. ',
 			'Mauris quis tellus libero. Ut accumsan facilisis magna et fringilla. Integer lacinia mauris at arcu tempor tempor tempor ante consequat. ',
-			'Sed dolor leo, pharetra quis placerat sit amet, porttitor vel eros. ', 	
+			'Sed dolor leo, pharetra quis placerat sit amet, porttitor vel eros. ',
 		);
 		$content = array();
 		for ($i = 0; $i < $numberOfParagrahs; $i++) {
@@ -1233,7 +1248,7 @@ JSCODE;
 				$content[] = $loremShort[rand(0, sizeof($loremShort)-1)];
 			} else {
 				$content[] = $loremLong[rand(0, sizeof($loremLong)-1)];
-			} 
+			}
 		}
 		for ($i = 0; $i < sizeof($content); $i++) {
 			if ($wrapInP) {
@@ -1254,27 +1269,27 @@ JSCODE;
 
 
 	// article list functions (for mod7)
-	
+
 	public function renderSinglePlacement($input) {
 //t3lib_div::devlog('be::renderSinglePlacement()', 'newspaper', 0, array('input' => $input));
 		if (isset($input['sectionid'])) {
 			// render section article list
 			$input = array(
-				'sections_selected' => array($input['sectionid']), 
+				'sections_selected' => array($input['sectionid']),
 				'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0,
 				'fullrecord' => (isset($input['fullrecord']))? $input['fullrecord'] : 0
 			);
-			
+
 			return $this->renderPlacement($input, true);
 		}
 		if (isset($input['articlelistid'])) {
 			// render NON-section article list
 			return $this->renderPlacement($input, true);
-		}	
+		}
 	}
-	
+
 	/// render the placement editors according to sections selected for article
-	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered, 
+	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
 	 *  if not, a button to call the article browser is displayed.
 	 * \todo: docuemnt $input array types ...
 	 */
@@ -1291,15 +1306,15 @@ JSCODE;
 			// section article list
 			$selection = $input['sections_selected'];
 			// calculate which / how many placers to show
-			
+
 			// \todo make order tsconfigurable
 			$tree = array_reverse($this->calculatePlacementTreeFromSelection($selection));
-			
+
 			$smarty_template = 'mod7_placement_section.tpl';
 		} elseif (isset($input['articlelistid']) && $input['articlelistid']) {
 			// read article list
 			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
-			
+
 			// fill the articlelist with articles
 			$article_list = $this->getArticleListMaxArticles($al);
 			$articles = array();
@@ -1309,7 +1324,7 @@ JSCODE;
 				}
 				if ($al->getTable() == 'tx_newspaper_articlelist_semiautomatic') {
 					$articleUids = $this->getArticleIdsFromArticleList($al);
-					$offsetList = $al->getOffsets($articleUids);	
+					$offsetList = $al->getOffsets($articleUids);
 
 					$offset = $offsetList[$article->getAttribute('uid')];
 					if ($offset > 0) {
@@ -1318,7 +1333,7 @@ JSCODE;
 					$articles[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 				}
 			}
-			
+
 			$smarty_template = 'mod7_placement_non_section.tpl';
 		} else {
 			$al = null; // no article list
@@ -1332,8 +1347,8 @@ JSCODE;
 		} else {
 			$article = null; // no article id given; so an icon for the article browser is rendered
 		}
-		
-		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not 
+
+		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
 
 		// render full record backend if paramter fullrecord is set to 1
 		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
@@ -1349,20 +1364,20 @@ JSCODE;
 			} else {
 				$articlelistFullrecordBackend = 'Error'; // \todo: localization
 			}
-				
+
 		} else {
 			$articlelistFullrecordBackend = '';
 		}
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend, 'al' => $al));
 
 
-		// get locallang labels 
+		// get locallang labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
 		$localLang = $localLang[$GLOBALS['LANG']->lang];
-				
+
 		// render
 		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));					
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 		$smarty->assign('tree', $tree);
 		$smarty->assign('article', $article);
 		$smarty->assign('articlelist', $al);
@@ -1375,18 +1390,18 @@ JSCODE;
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
 		$smarty->assign('ICON', $this->getArticlelistIcons());
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-		
+
 		$smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
 		$smarty->assign('AL_BACKEND', $articlelistFullrecordBackend);
-		
+
 		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
-		
-		$smarty->assign('AL_HEIGHT', $this->getArticleListHeight()); 
-		
-//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));		
+
+		$smarty->assign('AL_HEIGHT', $this->getArticleListHeight());
+
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
 		return $smarty->fetch($smarty_template);
 	}
-	
+
 	/// Gets the height (rows) for an article list select box
 	private function getArticleListHeight() {
 		return 10; // \todo: make tsconfigurable
@@ -1396,8 +1411,8 @@ JSCODE;
 	/// calculate a "minimal" (tree-)list of sections
 	private function calculatePlacementTreeFromSelection($selection) {
 		$result = array();
-		
-		//\todo: re-arrange sorting here to achieve different positioning in frontend					
+
+		//\todo: re-arrange sorting here to achieve different positioning in frontend
 		for ($i = 0; $i < count($selection); ++$i) {
 			$selection[$i] = explode('|', $selection[$i]);
 			$ressort = array();
@@ -1428,7 +1443,7 @@ JSCODE;
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
 					// get data (for title display) for each section
 					$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
-					// add article list and list type to tree structure for last element only 
+					// add article list and list type to tree structure for last element only
 					if (($k+1) == count($tree[$i][$j])) {
 						$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
 						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId($tree[$i][$j][$k]['uid'], $articleId);
@@ -1449,7 +1464,7 @@ JSCODE;
 
 	/// get a list of articles by a section id
 	function getArticleListBySectionId($sectionId, $articleId = false) {
-		
+
 		$result = array();
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
@@ -1459,9 +1474,9 @@ JSCODE;
 		// get offsets for semiautomtic list
 		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
 			$articleUids = $this->getArticleIdsFromArticleList($articleList);
-			$offsetList = $section->getArticleList()->getOffsets($articleUids);	
+			$offsetList = $section->getArticleList()->getOffsets($articleUids);
 		}
-		
+
 		// fill the section placers from their articlelists
 		foreach ($articleList as $article) {
 			if ($listType == 'tx_newspaper_articlelist_manual') {
@@ -1477,15 +1492,15 @@ JSCODE;
 		}
 		return $result;
 	}
-	
-	
+
+
 		/// get a list of articles by a section id
 	function getArticleListByArticlelistId($articlelistId, $articleId = false) {
-		
+
 		$result = array();
-		
+
 		$al_uid = intval($this->extractElementId($articlelistId));
-		
+
 		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
 		$articleList = $this->getArticleListMaxArticles($al);
 		$listType = $al->getTable();
@@ -1493,7 +1508,7 @@ JSCODE;
 		// get offsets
 		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
 			$articleUids = $this->getArticleIdsFromArticleList($articleList);
-			$offsetList = $al->getOffsets($articleUids);	
+			$offsetList = $al->getOffsets($articleUids);
 		}
 
 		// prepend the article we are working on to list for semiautomatic lists
@@ -1518,17 +1533,17 @@ JSCODE;
 //t3lib_div::devlog('getArticleListByArticlelistId()', 'newspaper', 0, array('result' => $result));
 		return $result;
 	}
-	
-	
-	/// \returns article from the article list $al (check the number of max articles in the article list AND self::num_articles_in_articlelist) 
+
+
+	/// \returns article from the article list $al (check the number of max articles in the article list AND self::num_articles_in_articlelist)
 	private function getArticleListMaxArticles(tx_newspaper_articlelist $al) {
-		$max = ($al->getAttribute('num_articles'))? 
-			min($al->getAttribute('num_articles'), self::num_articles_in_articlelist) : 
+		$max = ($al->getAttribute('num_articles'))?
+			min($al->getAttribute('num_articles'), self::num_articles_in_articlelist) :
 			self::num_articles_in_articlelist;
 		return $al->getArticles($max);
 	}
-	
-	
+
+
 	/// extract the section uid out of the select elements mames that are
 	/// like "placer_10_11_12" where we need the "12" out of it
 	function extractElementId($sectionId) {
@@ -1538,8 +1553,8 @@ JSCODE;
 		}
 		return $sectionId;
 	}
-	
-	
+
+
 	/// extract just the article-uids from an article list
 	function getArticleIdsFromArticleList($articleList) {
 		// collect all article uids
@@ -1549,8 +1564,8 @@ JSCODE;
 		}
 		return $articleUids;
 	}
-	
-	
+
+
 	public function getArticlelistIcons() {
 		global $LANG;
 		$icon = array(
@@ -1569,7 +1584,7 @@ JSCODE;
 		);
 		return $icon;
 	}
-	
+
 }
 
 ?>
