@@ -652,7 +652,7 @@ CREATE TABLE tx_newspaper_tag (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	tag tinytext NOT NULL,
-	tag_type blob NOT NULL,
+	tag_type int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
