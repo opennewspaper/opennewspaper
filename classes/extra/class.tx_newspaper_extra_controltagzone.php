@@ -114,20 +114,26 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *  \return UIDs of control tags for the currently displayed Article
 	 */
 	private function getControlTags() {
-		$tag_uids = array();
 		
+		// build where part checking all control tag types
+		$where = self::article_tag_mm_table . '.uid_local = ' . $article->getUid();
+		$where .= ' AND ' . tx_newspaper_tag::getTagTypesWhere(tx_newspaper_tag::getControltagTypes());
+
+		$tag_uids = array();
 		if (intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
 			$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
 			$tags = tx_newspaper::selectRows(
 				self::tag_table . '.uid',
 				self::tag_table . 
 					' JOIN ' . self::article_tag_mm_table . 
-					' ON ' . self::tag_table . '.uid = ' . self::article_tag_mm_table . '.uid_foreign',
-				self::article_tag_mm_table . '.uid_local = ' . $article->getUid() .
-				' AND ' . self::tag_table . '.tag_type = \'' . tx_newspaper::getControlTagType() .'\''
+					' ON ' . self::tag_table . '.uid=' . self::article_tag_mm_table . '.uid_foreign',
+				$where
 			);
 
-			foreach ($tags as $tag) $tag_uids[] = $tag['uid']; 
+			foreach ($tags as $tag) {
+				$tag_uids[] = $tag['uid'];
+			}
+			 
 		}
 		return $tag_uids;
 	}
@@ -147,7 +153,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			$extras_data = tx_newspaper::selectRows(
 				'extra_uid, extra_table', self::controltag_to_extra_table,
 				'tag = ' . $control_tag .
-				' AND tag_zone = ' . $this->getAttribute('tag_zone')
+				' AND tag_zone = ' . $this->getAttribute('tag_zone'),
+				'',
+				'sorting'
 			);
 
 			if ($extras_data) {
@@ -196,15 +204,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				$dossier_get_parameter => $tag
 			));
 		return $url;
-	}
-	
-	
-	
-	/// backend functions
-	
-	/// hides field tag zone type in extra tag control tag zone and set the value for "control tag" in a hidden field 
-	public static function renderBackendFieldTagType($PA, $fObj=null) {
-		return '<input type="hidden" value="' . tx_newspaper::getControlTagType() . '" name="' . $PA['itemFormElName'] . '">';
 	}
 	
 }

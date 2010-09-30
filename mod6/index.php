@@ -197,6 +197,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		
 		$this->smarty->assign('tag_zones', self::getAvailableTagZones());
 		$this->smarty->assign('tags', self::getAvailableTags());
+//t3lib_div::devlog('mod6', 'newspaper', 0, array('tags' => self::getAvailableTags()));
 		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());				
 				
 		$data = tx_newspaper::selectRows(
@@ -274,9 +275,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 	///	Returns all tx_newspaper_Tag s
 	static private function getAvailableTags() {
+		$where = tx_newspaper_tag::getTagTypesWhere(tx_newspaper_tag::getControlTagTypes());
+//t3lib_div::devlog('getAvailableTags()', 'newspaper', 0, array('controlTagTypes' => $controlTagTypes, 'where' => $where));
+		if (!$controlTagTypes) {
+			return array();
+		}
 		return tx_newspaper::selectRows(
-			'uid, tag', self::tag_table,
-			'tag_type = ' . tx_newspaper::getControlTagType() 
+			'uid, tag', 
+			self::tag_table,
+			$where
 		);
 	}
 

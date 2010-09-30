@@ -41,34 +41,17 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		}
 	}
 
-    /**
-     * Creates a new Controltag
-     * @static
-     * @return void
-     */
-    public static function createControlTag($value = null) {
-        return self::createTag(tx_newspaper::getControlTagType(), $value);
-    }
-
-    /**
-     * Creates a new Contenttag
-     * @static
-     * @return void
-     */
+    /// Creates a new content tag
+    /// \return tx_newspaper_tag object
     public static function createContentTag($value = null) {
-        return self::createTag(tx_newspaper::getContentTagType(), $value);
-    }
-
-    private static function createTag($tagType, $value) {
         $tag = new tx_newspaper_Tag();
-        $tag->setAttribute('tag_type', $tagType);
-        if($value) {
+        $tag->setAttribute('tag_type', self::getContentTagType());
+        if ($value) {
             $tag->setAttribute('tag', $value);
         }
-
         return $tag;
     }
-	
+
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		try {
@@ -190,6 +173,57 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		
 		return $return;
 	}
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	/// Tag type handling
+	
+	///	SQL table matching tx_newspaer_Extra s to Control Tags and Tag Zones
+	const tag_type_table = 'tx_newspaper_tag_type';
+	
+	/// Get all control tag types
+	/// \return array of control tag type uids	
+	public static function getControlTagTypes() {
+		$types = array();
+		$row = tx_newspaper::selectRows(
+			'uid',
+			self::tag_type_table,
+			'basic_type=2' . tx_newspaper::enableFields(self::tag_type_table) 
+		);
+		foreach($row as $type) {
+			$types[] = $type['uid'];
+		}
+		return $types;
+	}
+
+	/// Get a where part of an sql statement selecting all tag types specified in $tag
+	/// \param $tag array with tag type uids
+	/// \return where part for an sql statement (bracketed)
+	public static function getTagTypesWhere(array $tagTypes) {
+		if (!$tagTypes) {
+			return ' (1) ';
+		}
+		$where = '';
+		foreach ($tagTypes as $tagType) {
+			$where .= (($where)? ' OR ' : '') . 'tag_type=' . $tagType;
+		}
+		return ' (' . $where . ')';
+	}
+
+	/// Get the content tag type 
+	/// \return uid of content tags type (there's only one content tag type allowed in the system); or 0 if no content tag type can be found
+    public static function getContentTagType() {
+		$row = tx_newspaper::selectRows(
+			'uid',
+			self::tag_type_table,
+			'basic_type=1' . tx_newspaper::enableFields(self::tag_type_table) 
+		);
+		if ($row) {
+			return $row[0]['uid']; // there shouldn't be a second content tag type ...
+		}
+		return 0;
+    }	
+	
 	
 	////////////////////////////////////////////////////////////////////////////
 	

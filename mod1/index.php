@@ -296,9 +296,13 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
      * @return uid of inserted tag
      */
     private function processTagInsert() {
+		// control tags can only be created with the list module - so this function isn't used for control tags ... and it CAN'T be used for control tags
         if(isset($_REQUEST['tag'])) {
             $tagValue = $_REQUEST['tag'];
             $type = $this->getTagTypeFromRequest();
+            if ($type === false) {
+            	return; // shouldn't be called, better safe than sorry
+            }
             $tag = new tx_newspaper_Tag();
 		    $tag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
             $tag->setAttribute('tag_type', $type);
@@ -311,21 +315,29 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
     }
 
     private function processTagGetAll() {
-        $tagType = $this->getTagTypeFromRequest();
-        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'tag_type = '.$tagType);
+        if (!$tagTypes = $this->getTagTypeFromRequest()) {
+        	return ''; // no tag types, no tags
+        }
+        $where = tx_newspaper_tag::getTagTypesWhere($tagTypes);
+        $results = tx_newspaper::selectRows(
+			'uid, tag', 
+			'tx_newspaper_tag', 
+			$where
+		);
         $tags = array();
         foreach($results as $result) {
             $tags[$result['uid']] = $result['tag'];
         }
+//t3lib_div::devlog('processTagGetAll()', 'newspaper', 0, array('tagTypes' => $tagTypes, 'where' => $where, 'tags' => $tags, 'query' => tx_newspaper::$query));
         exit(json_encode($tags));
     }
 
     private function getTagTypeFromRequest() {
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-        if($type === 'tags') {
-            return tx_newspaper::getContentTagType();
-        } else if($type === 'tags_ctrl') {
-            return tx_newspaper::getControlTagType();
+        if ($type == 'tags') {
+            return array(tx_newspaper_tag::getContentTagType());
+        } else if ($type == 'tags_ctrl') {
+            return tx_newspaper_tag::getControlTagTypes(); 
         } else {
             throw new tx_newspaper_Exception('unknown tag_type \''.$type.'\'');
         }

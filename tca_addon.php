@@ -175,6 +175,14 @@ $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config'][
 $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['type'] = 'user';
 $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
+// set labels for abstract extras
+$TCA['tx_newspaper_extra']['ctrl']['label'] = 'uid';
+$TCA['tx_newspaper_extra']['ctrl']['label_alt'] = 'extra_table,extra_uid';
+$TCA['tx_newspaper_extra']['ctrl']['label_alt_force'] = true;
+
+// in case the label field "title" is not visible in the backend
+$TCA['tx_newspaper_extra_image']['ctrl']['label_alt'] = 'uid';
+
 
 $TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_extra"]["columns"]["position"]["config"]["range"] = array ("lower" => "0");
@@ -214,12 +222,6 @@ $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['starttime']['co
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_controltagzone']['columns']['endtime']['config']['size'] = '12';
-// hide field "tag type" in form "extra: control tag zone" and store value for type control tag
-$TCA['tx_newspaper_extra_controltagzone']['columns']['tag_type']['config'] = array(
-	'type' => 'user',
-	'userFunc' => 'tx_newspaper_Extra_ControlTagZone->renderBackendFieldTagType',
-	'noTableWrapping' => 1
-);
 
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['endtime']['config']['eval'] = 'datetime';

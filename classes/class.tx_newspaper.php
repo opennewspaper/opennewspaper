@@ -1087,19 +1087,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return self::$registered_sources[$key];
 	}
 	
-	/// Value for field \c tag_type of table \c tx_newspaper_tag denoting dossier tags	
-	public static function getControlTagType() {
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$ctt = intval($TSConfig['newspaper.']['control_tag_type']);
-		return $ctt? $ctt: 2;
-	}
-
-    public static function getContentTagType() {
-        $TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$ctt = intval($TSConfig['newspaper.']['content_tag_type']);
-		return $ctt? $ctt: 1;
-    }
-	
 	public static function registerSaveHook($class) {
 		self::$registered_savehooks[] = $class;
 	}
