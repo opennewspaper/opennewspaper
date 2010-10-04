@@ -2195,7 +2195,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 $TCA["tx_newspaper_tag"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "title,tag,tag_type"
+		"showRecordFieldList" => "title,tag,tag_type,section"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
@@ -2241,9 +2241,21 @@ $TCA["tx_newspaper_tag"] = array (
 				),
 			)
 		),
+		"section" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.section",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_newspaper_section",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "title;;;;2-2-2, tag;;;;3-3-3, tag_type")
+		"0" => array("showitem" => "title;;;;2-2-2, tag;;;;3-3-3, tag_type, section")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

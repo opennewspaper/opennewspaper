@@ -160,6 +160,7 @@
 			<label index="tx_newspaper_tag.title">Title</label>
 			<label index="tx_newspaper_tag.tag">Tag</label>
 			<label index="tx_newspaper_tag.tag_type">Tag type</label>
+			<label index="tx_newspaper_tag.section">Associated section</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Most commented articles</label>
 			<label index="tx_newspaper_extra_mostcommented.hours">Maximum age (in hours) for comments to consider</label>
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Number of displayed articles</label>
@@ -369,6 +370,7 @@
 			<label index="tx_newspaper_tag.title">Titel / Dossier</label>
 			<label index="tx_newspaper_tag.tag">Schlagwort</label>
 			<label index="tx_newspaper_tag.tag_type">Tagart</label>
+			<label index="tx_newspaper_tag.section">Ressort</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Meistkommentierte Artikel</label>
 			<label index="tx_newspaper_extra_mostcommented.hours">Zeit, in der Kommentare gerechnet werden (in Stunden)</label>
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Anzahl angezeigter Favoriten</label>

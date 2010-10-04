@@ -653,6 +653,7 @@ CREATE TABLE tx_newspaper_tag (
 	title tinytext NOT NULL,
 	tag tinytext NOT NULL,
 	tag_type int(11) DEFAULT '0' NOT NULL,
+	section blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
