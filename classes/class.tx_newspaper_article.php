@@ -239,94 +239,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		return $ret;
 	}
 
-    /** Check whether to use a specific template set.
-     *  This must be done regardless if this is a template used to define
-     *  default placements for articles, or an actual article.
-     */
-    private function setTemplateSet($template_set) {
-        if ($this->getAttribute('template_set')) {
-            $template_set = $this->getAttribute('template_set');
-        }
-
-        /// Configure Smarty rendering engine.
-        if ($template_set) {
-            $this->smarty->setTemplateSet($template_set);
-        }
-    }
-
-	/** Assemble the text paragraphs and extras in an array of the form:
-     *  \code
-     *  array(
-     *      $paragraph_number => array(
-     *          "text" => $text_of_paragraph,
-     *          "spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
-     *          "extras" => array(
-     *              $position => array(
-     *                  "extra_name" => get_class(),
-     *                  "content" => $rendered_extra
-     *              ),
-     *              ...
-     *          )
-     *      ),
-     *      ...
-     *  )
-     *  \endcode
-     */
-	private function assembleTextParagraphs(array $text_paragraphs) {
-        $paragraphs = array();
-        $spacing = 0;
-        foreach ($text_paragraphs as $index => $text_paragraph) {
-
-            $paragraph = array();
-            if (trim($text_paragraph)) {
-                $paragraph['text'] = $text_paragraph;
-                $paragraph['spacing'] = intval($spacing);
-                $spacing = 0;
-                foreach ($this->getExtras() as $extra) {
-                    if ($extra->getAttribute('paragraph') == $index ||
-                        sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
-                        $paragraph['extras'][$extra->getAttribute('position')] = array();
-                        $paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
-                        $paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
-                    }
-                }
-                /*  Braindead PHP does not sort arrays automatically, even if
-                 *  the keys are integers. So if you, e.g., insert first $a[4]
-                 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
-                 *  Thus, you must call ksort.
-                 */
-                if ($paragraph['extras']) ksort($paragraph['extras']);
-                $paragraphs[] = $paragraph;
-            } else {
-                //  empty paragraph, increase spacing value to next paragraph
-                $spacing++;
-            }
-        }
-
-        return $paragraphs;
-	}
-
-    /** Make sure all extras are rendered, even those whose \c paragraph
-     *  attribute is greater than the number of text paragraphs or less
-     *  than its negative.
-     */
-	private function addExtrasWithBadParagraphNumbers(array &$paragraphs, $number_of_text_paragraphs) {
-        foreach ($this->getExtras() as $extra) {
-            if ($extra->getAttribute('paragraph')+$number_of_text_paragraphs < 0) {
-                $paragraphs[0]['extras'][] = $extra->render($template_set);
-            } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
-                $paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
-            }
-        }
-	}
-
-    private function assignSmartyVariables(array $paragraphs) {
-        $this->smarty->assign('paragraphs', $paragraphs);
-        $this->smarty->assign('attributes', $this->attributes);
-        $this->smarty->assign('extras', $this->getExtras());
-        $this->smarty->assign('link', $this->getLink());
-    }
-
 	/// Read data from table \p $table with UID \p $uid
 	/** \param $uid UID of the record to read
 	 *  \param $table SQL table to read record from
@@ -823,93 +735,100 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			} // \todo: log errors?
 		}
 
-/*
-		$must_should_have_extras = array_unique(array_merge($at->getTSConfigSettings('musthave'), $at->getTSConfigSettings('shouldhave')));
-		$must_should_have_extras_simple = array();
-		foreach($must_should_have_extras as $extra) {
-			$tsc = explode(':', $extra);
-			$must_should_have_extras_simple[] = $tsc[0]; // cut off value for position, if set
-		}
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 1', 'newspaper', 0, array('mse' => $must_should_have_extras, 'mse_simple' => $must_should_have_extras_simple));
+        // here was a very long, commented-out section. if you need it, retrieve it from svn rev. 9041.
 
-		// get extras on default article for the primary section of this article
-		if (!$primarySection = $this->getPrimarySection()) {
-			// no primary section found, so no section assigned, so no extra missing ...
-			return array();
-		}
-		if (!$defaultArticle = $primarySection->getDefaultArticle()) {
-			// no default article found, so no extras missing ...
-			return array();
-		}
-		$defaultExtras = $defaultArticle->getExtras();
-
-
-//t3lib_div::devlog('getMissingDefaultExtras() default extras', 'newspaper', 0, array('de' => $defaultExtras));
-		if (is_array($defaultExtras)) {
-			// get extras assigned to this article
-			$concreteExtras = $this->getExtras();
-			/// check which default extras are already assigned to this article
-			foreach($defaultExtras as $keyDefault => $defaultExtra) {
-				foreach($concreteExtras as $keyConcrete => $concreteExtra) {
-					if ($defaultExtra->getOriginUid() == $concreteExtra->getOriginUid()) {
-						/// default extra found in concrete article, so no shortcut needed
-						unset($defaultExtras[$keyDefault]);
-
-						// check if this extra type is a must or should have extra
-						$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
-						if ($key !== false) {
-							// an extra of this type was found, so no shortcut needed for this extra type
-							unset($must_should_have_extras[$key]);
-							unset($must_should_have_extras_simple[$key]);
-						}
-					}
-				}
-			}
-		}
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 2', 'newspaper', 0, array('mse' => $must_should_have_extras));
-
-		/// search for extras that are already assigned to the article (and are configured as must-have or should-have extra but are NOT placed in the default article)
-		foreach($concreteExtras as $keyConcrete => $concreteExtra) {
-			$key = array_search($concreteExtra->getTable(), $must_should_have_extras_simple);
-			if ($key !== false) {
-				// an extra of this type was found, so no shortcut needed for this extra type
-				unset($must_should_have_extras[$key]);
-				unset($must_should_have_extras_simple[$key]);
-			}
-		}
-
-
-		/// create shortcuts for missing "default" extras in the concrete article
-		foreach($defaultExtras as $defaultExtra) {
-			$shortcuts[] = $defaultExtra;
-			// check if this extra type is a must or should have extra
-			$key = array_search($defaultExtra->getTable(), $must_should_have_extras_simple);
-			if ($key !== false) {
-				// an extra of this type was found, so no shortcut needed
-				unset($must_should_have_extras[$key]);
-				unset($must_should_have_extras_simple[$key]);
-			}
-		}
-//t3lib_div::devlog('getMissingDefaultExtras() mustshouldhave 3', 'newspaper', 0, array('mse' => $must_should_have_extras, 's' => $shortcuts));
-
-		/// create shortcuts for remaining must-have / should-have extras
-		// the array holds extra class names, not objects!
-		foreach($must_should_have_extras_simple as $key => $extra_class) {
-			if (class_exists($extra_class)) {
-				$tsc = explode(':', $extra_class);
-				$e = new $extra_class($tsc[0]);
-				if (sizeof($tsc) > 1) {
-					$e->setAttribute('paragraph', intval($tsc[1])); // add paragraph for extra
-				}
-				$shortcuts[] = $e;
-			} else {
-				t3lib_div::devlog('tx_newspaper_Article::getMissingDefaultExtras()', 'newspaper', 2, array('Class ' . $extra_class . ' unknown. Was set as must-have or should-have extra for article type ' . $at->getAttribute('title') . ' in section ' . $this->getPrimarySection()->getAttribute('section_name')));
-			}
-		}
-*/
-//t3lib_div::devlog('getMissingDefaultExtras() shortcuts', 'newspaper', 0, array('s' => $shortcuts));
 		return $shortcuts;
 	}
+
+
+    /** Check whether to use a specific template set.
+     *  This must be done regardless if this is a template used to define
+     *  default placements for articles, or an actual article.
+     */
+    private function setTemplateSet($template_set) {
+        if ($this->getAttribute('template_set')) {
+            $template_set = $this->getAttribute('template_set');
+        }
+
+        /// Configure Smarty rendering engine.
+        if ($template_set) {
+            $this->smarty->setTemplateSet($template_set);
+        }
+    }
+
+    /** Assemble the text paragraphs and extras in an array of the form:
+     *  \code
+     *  array(
+     *      $paragraph_number => array(
+     *          "text" => $text_of_paragraph,
+     *          "spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
+     *          "extras" => array(
+     *              $position => array(
+     *                  "extra_name" => get_class(),
+     *                  "content" => $rendered_extra
+     *              ),
+     *              ...
+     *          )
+     *      ),
+     *      ...
+     *  )
+     *  \endcode
+     */
+    private function assembleTextParagraphs(array $text_paragraphs) {
+        $paragraphs = array();
+        $spacing = 0;
+        foreach ($text_paragraphs as $index => $text_paragraph) {
+
+            $paragraph = array();
+            if (trim($text_paragraph)) {
+                $paragraph['text'] = $text_paragraph;
+                $paragraph['spacing'] = intval($spacing);
+                $spacing = 0;
+                foreach ($this->getExtras() as $extra) {
+                    if ($extra->getAttribute('paragraph') == $index ||
+                        sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
+                        $paragraph['extras'][$extra->getAttribute('position')] = array();
+                        $paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
+                        $paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
+                    }
+                }
+                /*  Braindead PHP does not sort arrays automatically, even if
+                 *  the keys are integers. So if you, e.g., insert first $a[4]
+                 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
+                 *  Thus, you must call ksort.
+                 */
+                if ($paragraph['extras']) ksort($paragraph['extras']);
+                $paragraphs[] = $paragraph;
+            } else {
+                //  empty paragraph, increase spacing value to next paragraph
+                $spacing++;
+            }
+        }
+
+        return $paragraphs;
+    }
+
+    /** Make sure all extras are rendered, even those whose \c paragraph
+     *  attribute is greater than the number of text paragraphs or less
+     *  than its negative.
+     */
+    private function addExtrasWithBadParagraphNumbers(array &$paragraphs, $number_of_text_paragraphs) {
+        foreach ($this->getExtras() as $extra) {
+            if ($extra->getAttribute('paragraph')+$number_of_text_paragraphs < 0) {
+                $paragraphs[0]['extras'][] = $extra->render($template_set);
+            } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
+                $paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
+            }
+        }
+    }
+
+    private function assignSmartyVariables(array $paragraphs) {
+        $this->smarty->assign('paragraphs', $paragraphs);
+        $this->smarty->assign('attributes', $this->attributes);
+        $this->smarty->assign('extras', $this->getExtras());
+        $this->smarty->assign('link', $this->getLink());
+    }
+
 
 	/// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.
 	/** \param $class name of extra class
