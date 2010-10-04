@@ -218,93 +218,114 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
         tx_newspaper::startExecutionTimer();
 
-		/** Check whether to use a specific template set.
-		 *	This must be done regardless if this is a template used to define
-		 *	default placements for articles, or an actual article.
-		 */
-		if ($this->getAttribute('template_set')) {
-			$template_set = $this->getAttribute('template_set');
-		}
-
-		/// Configure Smarty rendering engine.
-		if ($template_set) {
-			$this->smarty->setTemplateSet($template_set);
-		}
+        $this->setTemplateSet($template_set);
 
 		$page = $this->getCurrentPage();
 		$this->smarty->setPageType($page);
 
 		$this->smarty->setPageZoneType($this);
 
-		/** Assemble the text paragraphs and extras in an array of the form:
-		 *  \code
-		 *  array(
-		 *  	$paragraph_number => array(
-		 * 			"text" => $text_of_paragraph,
-		 *    		"spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
-		 *          "extras" => array(
-		 *				$position => array(
-         *					"extra_name" => get_class(),
-         * 					"content" => $rendered_extra
-       	 *				),
-		 * 		 		...
-		 * 			)
-		 * 		),
-		 * 		...
-		 *  )
-		 *  \endcode
-		 */
 		$text_paragraphs = $this->splitIntoParagraphs();
-		$paragraphs = array();
-		$spacing = 0;
-		foreach ($text_paragraphs as $index => $text_paragraph) {
+		$paragraphs = self::assembleTextParagraphs($text_paragraphs);
 
-			$paragraph = array();
-			if (trim($text_paragraph)) {
-				$paragraph['text'] = $text_paragraph;
-				$paragraph['spacing'] = intval($spacing);
-				$spacing = 0;
-				foreach ($this->getExtras() as $extra) {
-					if ($extra->getAttribute('paragraph') == $index ||
-						sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
-						$paragraph['extras'][$extra->getAttribute('position')] = array();
-						$paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
-						$paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
-					}
-				}
-				/*  Braindead PHP does not sort arrays automatically, even if
-				 *  the keys are integers. So if you, e.g., insert first $a[4]
-				 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
-				 *  Thus, you must call ksort.
-				 */
-				if ($paragraph['extras']) ksort($paragraph['extras']);
-				$paragraphs[] = $paragraph;
-			} else {
-				//	empty paragraph, increase spacing value to next paragraph
-				$spacing++;
-			}
-		}
+		$this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
 
-		/** Make sure all extras are rendered, even those whose \c paragraph
-		 *  attribute is greater than the number of text paragraphs or less
-		 *  than its negative.
-		 */
-		foreach ($this->getExtras() as $extra) {
-			if ($extra->getAttribute('paragraph')+sizeof($text_paragraphs) < 0) {
-				$paragraphs[0]['extras'][] = $extra->render($template_set);
-			} else if ($extra->getAttribute('paragraph') > sizeof($text_paragraphs)) {
-				$paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
-			}
-		}
+		$this->assignSmartyVariables($paragraphs);
 
-		$this->smarty->assign('paragraphs', $paragraphs);
-		$this->smarty->assign('attributes', $this->attributes);
 		$ret = $this->smarty->fetch($this);
-        
+
         tx_newspaper::logExecutionTime();
 
 		return $ret;
 	}
+
+    /** Check whether to use a specific template set.
+     *  This must be done regardless if this is a template used to define
+     *  default placements for articles, or an actual article.
+     */
+    private function setTemplateSet($template_set) {
+        if ($this->getAttribute('template_set')) {
+            $template_set = $this->getAttribute('template_set');
+        }
+
+        /// Configure Smarty rendering engine.
+        if ($template_set) {
+            $this->smarty->setTemplateSet($template_set);
+        }
+    }
+
+	/** Assemble the text paragraphs and extras in an array of the form:
+     *  \code
+     *  array(
+     *      $paragraph_number => array(
+     *          "text" => $text_of_paragraph,
+     *          "spacing" => {0, 1, 2, ...},             // for empty paragraphs after text
+     *          "extras" => array(
+     *              $position => array(
+     *                  "extra_name" => get_class(),
+     *                  "content" => $rendered_extra
+     *              ),
+     *              ...
+     *          )
+     *      ),
+     *      ...
+     *  )
+     *  \endcode
+     */
+	private static function assembleTextParagraphs(array $text_paragraphs) {
+        $paragraphs = array();
+        $spacing = 0;
+        foreach ($text_paragraphs as $index => $text_paragraph) {
+
+            $paragraph = array();
+            if (trim($text_paragraph)) {
+                $paragraph['text'] = $text_paragraph;
+                $paragraph['spacing'] = intval($spacing);
+                $spacing = 0;
+                foreach ($this->getExtras() as $extra) {
+                    if ($extra->getAttribute('paragraph') == $index ||
+                        sizeof($text_paragraphs)+$extra->getAttribute('paragraph') == $index) {
+                        $paragraph['extras'][$extra->getAttribute('position')] = array();
+                        $paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
+                        $paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
+                    }
+                }
+                /*  Braindead PHP does not sort arrays automatically, even if
+                 *  the keys are integers. So if you, e.g., insert first $a[4]
+                 *  and then $a[2], $a == array ( 4 => ..., 2 => ...).
+                 *  Thus, you must call ksort.
+                 */
+                if ($paragraph['extras']) ksort($paragraph['extras']);
+                $paragraphs[] = $paragraph;
+            } else {
+                //  empty paragraph, increase spacing value to next paragraph
+                $spacing++;
+            }
+        }
+
+        return $paragraphs;
+	}
+
+    /** Make sure all extras are rendered, even those whose \c paragraph
+     *  attribute is greater than the number of text paragraphs or less
+     *  than its negative.
+     */
+	private function addExtrasWithBadParagraphNumbers(array &$paragraphs, $number_of_text_paragraphs) {
+        foreach ($this->getExtras() as $extra) {
+            if ($extra->getAttribute('paragraph')+$number_of_text_paragraphs < 0) {
+                $paragraphs[0]['extras'][] = $extra->render($template_set);
+            } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
+                $paragraphs[sizeof($paragraphs)-1]['extras'][] = $extra->render($template_set);
+            }
+        }
+	}
+
+    private function assignSmartyVariables(array $paragraphs) {
+        $this->smarty->assign('paragraphs', $paragraphs);
+        $this->smarty->assign('attributes', $this->attributes);
+        $this->smarty->assign('extras', $this->getExtras());
+        $this->smarty->assign('link', $this->getLink());
+    }
 
 	/// Read data from table \p $table with UID \p $uid
 	/** \param $uid UID of the record to read
@@ -932,10 +953,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
         }
         $where .= ' AND uid_local=' .$this->getUid();
         $tag_ids = tx_newspaper::selectMMQuery(
-			'uid_foreign', 
+			'uid_foreign',
 			$this->getTable(),
-            'tx_newspaper_article_tags_mm', 
-			'tx_newspaper_tag', 
+            'tx_newspaper_article_tags_mm',
+			'tx_newspaper_tag',
 			$where
 		);
 
@@ -1117,7 +1138,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		if (strtolower($table) == 'tx_newspaper_article' &&
 			(
 				(isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
-				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0) 
+				(isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0)
 			)
 		) {
 
@@ -1168,7 +1189,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		}
 
 	}
-	
+
 	/// Set attributes used by Typo3
 	private function setTypo3Attributes() {
 		$this->setAttribute('tstamp', time());
@@ -1184,11 +1205,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 			$hidden_value = $hidden? true : false;
 
-			// prepare datamap			
+			// prepare datamap
 			$datamap['tx_newspaper_article'][$this->getUid()] = array(
 				'hidden' => $hidden_value
 			);
-			
+
 			// use datamap, so all save hooks get called
 			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 			$tce->start($datamap, array());
@@ -1196,13 +1217,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 			// store in object
 			$this->setAttribute('hidden', $hidden_value);
-			
+
 			if ($hidden == 0) {
 				// if article is published the publsih date might have been stored in save hook, so re-read it from db
 				$articleFromDb = new tx_newspaper_article($this->getUid());
 				$this->setAttribute('publish_date', $articleFromDb->getAttribute('publish_date'));
 			}
-			
+
 	}
 
 
@@ -1228,7 +1249,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 			$section = tx_newspaper::getSection();
 		}
 		$pagetype = new tx_newspaper_PageType($_GET);
-		
+
 		return new tx_newspaper_Page($section, $pagetype);
 	}
 
