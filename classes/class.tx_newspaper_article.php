@@ -243,6 +243,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->smarty->setPageType($page);
 
         $this->smarty->setPageZoneType($this);
+
+        $this->callRenderHooks();
+
     }
 
     /// Read data from table \p $table with UID \p $uid
@@ -892,6 +895,23 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
+    /// Registers a hook that is called during prepare_render()
+    /** \param $class Name of the class which defines the render-hook as static method
+     *  \param $function Static method of \p $class, which takes two arguments: the article 
+     *      object and the article's Smarty member.
+     *  \attention PHP 5.0.x does not include the static methods when checking with
+     *      \c method_exists(). Therefore, this function will not with a PHP version prior
+     *      to 5.1.
+     *  \attention It seems I cannot check for the number of arguments to $function.
+     *      I cannot make sure that \p $function takes the correct arguments. The caller
+     *      must ensure that function takes a \c tx_newspaper_Article and a \c tx_newspaper_Smarty.
+     */
+    public static function registerRenderHook($class, $function) {
+        if (!class_exists($class)) return;
+        if (!method_exists($class, $function)) return;
+        self::$render_hooks[$class] = $function;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //
     //	protected functions
@@ -1188,6 +1208,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->setAttribute('tstamp', time());
     }
 
+    private function callRenderHooks() {
+        foreach (self::$render_hooks as $class => $method) {
+            $class::$method($this, $this->smarty);
+        }
+    }
+
     /**
      * Joins tags from control- and content-selectboxes so both are stored in a single table.
      * @static
@@ -1357,6 +1383,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         'tx_newspaper_taz_RedsysSource' => '',
         'tx_newspaper_DBSource' => 'tx_hptazarticle_list'
     );
+
+    private static $render_hooks = array();
 
 }
 
