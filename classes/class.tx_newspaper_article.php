@@ -1210,7 +1210,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     private function callRenderHooks() {
         foreach (self::$render_hooks as $class => $method) {
-            $class::$method($this, $this->smarty);
+            $object_to_call_static_method_on = new $class();
+            $object_to_call_static_method_on->$method($this, $this->smarty);
         }
     }
 
