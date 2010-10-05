@@ -47,7 +47,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	 */
 	public function __construct($uid = 0) {
 		$this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
-		$this->smarty = new tx_newspaper_Smarty();
 
 		if ($uid) {
 			$this->setUid($uid);
@@ -216,14 +215,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 		/// Default articles should never contain text that is displayed.
 		if ($this->getAttribute('is_template')) return;
 
-        tx_newspaper::startExecutionTimer();
+    tx_newspaper::startExecutionTimer();
 
-        $this->setTemplateSet($template_set);
-
-		$page = $this->getCurrentPage();
-		$this->smarty->setPageType($page);
-
-		$this->smarty->setPageZoneType($this);
+    $this->prepare_render($template_set);
 
 		$text_paragraphs = $this->splitIntoParagraphs();
 		$paragraphs = $this->assembleTextParagraphs($text_paragraphs);
@@ -234,10 +228,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 
 		$ret = $this->smarty->fetch($this);
 
-        tx_newspaper::logExecutionTime();
+    tx_newspaper::logExecutionTime();
 
 		return $ret;
 	}
+
+  protected function prepare_render(&$template_set = '') {
+		$this->smarty = new tx_newspaper_Smarty();
+
+    $this->setTemplateSet($template_set);
+
+		$page = $this->getCurrentPage();
+		$this->smarty->setPageType($page);
+
+		$this->smarty->setPageZoneType($this);
+  }
 
 	/// Read data from table \p $table with UID \p $uid
 	/** \param $uid UID of the record to read
@@ -741,20 +746,20 @@ class tx_newspaper_Article extends tx_newspaper_PageZone
 	}
 
 
-    /** Check whether to use a specific template set.
+  /** Check whether to use a specific template set.
      *  This must be done regardless if this is a template used to define
      *  default placements for articles, or an actual article.
      */
-    private function setTemplateSet($template_set) {
-        if ($this->getAttribute('template_set')) {
-            $template_set = $this->getAttribute('template_set');
-        }
-
-        /// Configure Smarty rendering engine.
-        if ($template_set) {
-            $this->smarty->setTemplateSet($template_set);
-        }
+  private function setTemplateSet($template_set) {
+    if ($this->getAttribute('template_set')) {
+      $template_set = $this->getAttribute('template_set');
     }
+
+    /// Configure Smarty rendering engine.
+    if ($template_set) {
+      $this->smarty->setTemplateSet($template_set);
+    }
+  }
 
     /** Assemble the text paragraphs and extras in an array of the form:
      *  \code
