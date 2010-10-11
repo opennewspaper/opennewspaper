@@ -72,7 +72,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 		
-        tx_newspaper::startExecutionTimer();
+    tx_newspaper::startExecutionTimer();
         
 		self::getTSConfig();
 
@@ -81,11 +81,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		$this->smarty->assign('basepath', self::$basepath);
 		$this->smarty->assign('sizes', self::$sizes);
 		
-        $rendered = $this->smarty->fetch($this);
+    $rendered = $this->smarty->fetch($this);
         
-        tx_newspaper::logExecutionTime();
+    tx_newspaper::logExecutionTime();
         
-        return $rendered;
+    return $rendered;
 	}
 
 	/// A short description that makes an Extra uniquely identifiable in the BE
@@ -250,12 +250,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 				' ' . self::convert_options .
 			 	' \'' . PATH_site . $source . '\'' .
 				' \'' . PATH_site . $target . '\'';
-			$return = array();
+        $return = array();
     		    		
     		exec($convert, $return);
     		
-    		t3lib_div::devlog('command line for convert', 'newspaper', 0, 
-    						  $convert);
+    		t3lib_div::devlog('command line for convert', 'newspaper', 0, $convert);
     		if ($return) t3lib_div::devlog('convert output', 'newspaper', 0, $return);
     	}
     }
@@ -273,7 +272,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     /** \param $img Image file name
      *  \param $dimension Width and height of the desired image 
      *  \return whether resized image already exists
-	 */
+     */
     protected static function imgIsResized($img, $dimension) {
     	return file_exists(self::imageResizedName($img, $dimension));
     }
@@ -343,8 +342,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	///	Where Typo3 stores uploaded images
 	const uploads_folder = 'uploads/tx_newspaper';
 	
-    /// path to \c convert(1)
-    const convert = '/usr/bin/convert';
+  /// path to \c convert(1)
+  const convert = '/usr/bin/convert';
 
 	/// Name of the size for thumbnail images displayed in the BE
 	const thumbnail_name = 'thumbnail';
