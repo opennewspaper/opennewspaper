@@ -2979,7 +2979,7 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 $TCA["tx_newspaper_extra_container"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_container"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,extras"
+		"showRecordFieldList" => "hidden,starttime,endtime,extras,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_container"]["feInterface"],
 	"columns" => array (
@@ -3031,9 +3031,17 @@ $TCA["tx_newspaper_extra_container"] = array (
 				"maxitems" => 100,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, extras")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, extras, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")

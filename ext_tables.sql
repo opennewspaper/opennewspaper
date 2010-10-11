@@ -857,6 +857,7 @@ CREATE TABLE tx_newspaper_extra_container (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	extras blob NOT NULL,
+	template tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

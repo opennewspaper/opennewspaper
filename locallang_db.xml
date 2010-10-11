@@ -201,6 +201,7 @@
 			<label index="tx_newspaper_extra_searchresults.tags">Preset tags</label>
 			<label index="tx_newspaper_extra_container">Extra: Container for Extras</label>
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
+			<label index="tx_newspaper_extra_container.template">Display template</label>
 			<label index="tx_newspaper_tag_type">Tag type</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
 			<label index="tx_newspaper_tag_type.basic_type.I.0">Content tag</label>
@@ -411,6 +412,7 @@
 			<label index="tx_newspaper_extra_searchresults.tags">Voreingestellte Tags</label>
 			<label index="tx_newspaper_extra_container">Extra: Extra-Container</label>
 			<label index="tx_newspaper_extra_container.extras">Extras</label>
+			<label index="tx_newspaper_extra_container.template">Designvorlage</label>
 			<label index="tx_newspaper_tag_type">Tagtyp</label>
 			<label index="tx_newspaper_tag_type.name">Name</label>
 			<label index="tx_newspaper_tag_type.basic_type.I.0">Inhaltliches tag</label>
