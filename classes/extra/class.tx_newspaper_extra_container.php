@@ -61,7 +61,7 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 
 	/// Displays the Tag Zone operating on.
 	public function getDescription() {
-		$ret = "<p>Container:</p>\n";
+		$ret = '';
 		foreach ($this->getExtras() as $extra) {
 			$ret .= '<p>' . $extra->getDescription() . "</p>\n";
 		}
