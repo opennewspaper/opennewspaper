@@ -44,7 +44,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_sectionlist.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_textbox.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_typo3_ce.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_container.php');
 
 /// Factory class to create the correct kind of tx_newspaper_Extra from a UID
 /** Problem: The tx_newspaper_Extra is stored in a table for the abstract
@@ -134,5 +133,8 @@ class tx_newspaper_Extra_Factory {
 	private static $extra2pagezone_table =  'tx_newspaper_pagezone_page_extras_mm';
  	
 }
+
+// The following must be included AFTER the definition of tx_newspaper_Extra_Factory
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_container.php');
  
 ?>

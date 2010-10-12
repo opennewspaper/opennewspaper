@@ -72,9 +72,9 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 	 */
 	private function getExtras() {
 		$extra = array();
-		$factory = new tx_newspaper_ExtraFactory(); // temporary fix; won't work in reality
+
 		foreach (explode(',', $this->getAttribute('extras')) as $uid) {
-			$extra[] = $factory->create($uid);
+			$extra[] = tx_newspaper_ExtraFactory::getInstance()->create($uid);
 		}
 
 		return $extra;
