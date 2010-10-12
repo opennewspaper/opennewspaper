@@ -16,9 +16,9 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 	}
 
 	public function __toString() {
-		$ret = "Container:\n";
+		$ret = "<p>Container:</p>\n";
 		foreach ($this->getExtras() as $extra) {
-			$ret .= $extra->__toString() . "\n";
+			$ret .= '<p>' . $extra->__toString() . "</p>\n";
 		}
 		return $ret;
 	}
@@ -61,7 +61,11 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 
 	/// Displays the Tag Zone operating on.
 	public function getDescription() {
-		return $this->__toString();
+		$ret = "<p>Container:</p>\n";
+		foreach ($this->getExtras() as $extra) {
+			$ret .= '<p>' . $extra->getDescription() . "</p>\n";
+		}
+		return $ret;
 	}
 
 	public static function getModuleName() {
