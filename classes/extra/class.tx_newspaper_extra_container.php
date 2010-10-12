@@ -46,7 +46,8 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 				
 		$this->prepare_render($template_set);
 
-		$this->smarty->assign('extras', $rendered_extras);
+		$this->smarty->assign('extras', $extras);
+		$this->smarty->assign('rendered_extras', $rendered_extras);
 		
 		$template = $this->getAttribute('template');
         if (!$template) $template = $this;
