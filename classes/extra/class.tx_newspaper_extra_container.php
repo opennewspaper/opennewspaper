@@ -16,7 +16,11 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 	}
 
 	public function __toString() {
-		return 'Container::__toString()';
+		$ret = "Container:\n";
+		foreach ($this->getExtras() as $extra) {
+			$ret .= $extra->__toString() . "\n";
+		}
+		return $ret;
 	}
 	
 	/// Assigns extras to be rendered to the smarty template and renders it.
@@ -45,7 +49,7 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 		$this->smarty->assign('extras', $rendered_extras);
 		
 		$template = $this->getAttribute('template');
-        if (!$template) $themplate = $this;
+        if (!$template) $template = $this;
         
         $rendered = $this->smarty->fetch($template);
         
