@@ -46,10 +46,13 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
 		$this->smarty->assign('title', $this->getAttribute('title'));
 		$this->smarty->assign('text', $this->getAttribute('text'));
-		if ($this->getAttribute('image')) {
-			$image = new tx_newspaper_Extra_Image(intval($this->getAttribute('image')));
-			$smarty->assign('image', $image);
-			$smarty->assign('rendered_image', $image->render());
+		$image = $this->getAttribute('image');
+		if ($image) {
+			if (intval($image)) {
+				$image = new tx_newspaper_Extra_Image(intval($image));
+				$this->smarty->assign('image', $image);
+				$this->smarty->assign('rendered_image', $image->render());
+			}
 		}
 		
         $rendered = $this->smarty->fetch($this);
