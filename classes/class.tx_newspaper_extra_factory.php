@@ -35,6 +35,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_bio.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_controltagzone.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_combolinkbox.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_container.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_displayarticles.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_externallinks.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_image.php');
@@ -135,6 +136,5 @@ class tx_newspaper_Extra_Factory {
 }
 
 // The following must be included AFTER the definition of tx_newspaper_Extra_Factory
-require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_container.php');
  
 ?>
