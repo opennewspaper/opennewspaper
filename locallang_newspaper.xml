@@ -81,6 +81,7 @@
 			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
 			<label index="title_tx_newspaper_extra_bio">Bio box</label>
 			<label index="title_tx_newspaper_extra_controltagzone">Control tag zone</label>
+            <label index="title_tx_newspaper_extra_container">Container for Extras</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
 			<label index="title_tx_newspaper_extra_externallinks">External links</label>
 			<label index="title_tx_newspaper_extra_image">Image</label>
@@ -129,6 +130,7 @@
 			<label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
 			<label index="title_tx_newspaper_extra_bio">Biokasten</label>
 			<label index="title_tx_newspaper_extra_controltagzone">Steuertag-Bereich</label>
+            <label index="title_tx_newspaper_extra_container">Container für Extras</label>
 			<label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
 			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
 			<label index="title_tx_newspaper_extra_image">Bild</label>
