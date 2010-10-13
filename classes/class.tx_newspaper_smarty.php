@@ -280,19 +280,9 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 			if ($this->pagetype) {
 				$page_name = $this->getPageName();
 				$page_template_dir =  $this->getTemplateSetFolder() . '/'. $page_name;
-				if ($this->pagezonetype) {
-					$pagezone_name = $this->getPageZoneName();
-					$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
-					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
-						$temporary_searchpath[] = $pagezone_template_dir;
-					}
-					$common_pagezone_dir = $this->getTemplateSetFolder() . '/'. self::pagename_for_all_pagezones;
-					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
-						$temporary_searchpath[] = $common_pagezone_dir;
-					} else {
-tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
-					}
-				}
+
+				$temporary_searchpath = $temporary_searchpath + $this->pagezoneTemplates($page_template_dir);
+
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 					$temporary_searchpath[] = $page_template_dir;
 				}
@@ -304,9 +294,6 @@ tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 	}
 	
 	private function getTemplateSetFolder() {
-		if (!$this->templateset) {
-			$this->setTemplateSet();
-		}
 		return $this->basepath . '/template_sets/' . $this->templateset;
 	}
 	
@@ -338,6 +325,10 @@ tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 	}
 	
 	private function pagezoneTemplates($page_template_dir) {
+		if (!$this->templateset) {
+			$this->setTemplateSet();
+		}
+
 self::debug_search_path && tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
 
 		$temporary_searchpath = array();
@@ -349,13 +340,19 @@ self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
-					$common_pagezone_dir = $this->getTemplateSetFolder() . '/'. self::pagename_for_all_pagezones;
-					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
-						$temporary_searchpath[] = $common_pagezone_dir;
-					} else {
-tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
-					}
-			
+
+			$common_page_dir = $this->getTemplateSetFolder() . '/'. self::pagename_for_all_pagezones;
+			if (file_exists($common_page_dir) && is_dir($common_page_dir)) {
+				$common_pagezone_dir = $common_page_dir . '/' . $pagezone_name;
+				if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
+					$temporary_searchpath[] = $common_pagezone_dir;
+				}
+
+				$temporary_searchpath[] = $common_page_dir;
+			} else {
+tx_newspaper::devlog('!!! common not found !!!', $common_page_dir);
+			}
+
 		}
 		
 		return $temporary_searchpath;
