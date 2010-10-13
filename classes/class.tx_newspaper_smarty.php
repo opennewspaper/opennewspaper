@@ -296,6 +296,8 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 					$common_pagezone_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. self::pagename_for_all_pagezones;
 					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
 						$temporary_searchpath[] = $common_pagezone_dir;
+					} else {
+tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 					}
 				}
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
