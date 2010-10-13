@@ -277,17 +277,16 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 		$temporary_searchpath = array();
 
 		if ($this->templateSetFolderExists()) {
-			$template_base_dir = ;
 			if ($this->pagetype) {
 				$page_name = $this->getPageName();
-				$page_template_dir =  $template_base_dir . '/'. $page_name;
+				$page_template_dir =  $this->getTemplateSetFolder() . '/'. $page_name;
 				if ($this->pagezonetype) {
 					$pagezone_name = $this->getPageZoneName();
 					$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
 					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 						$temporary_searchpath[] = $pagezone_template_dir;
 					}
-					$common_pagezone_dir = $template_base_dir . '/'. self::pagename_for_all_pagezones;
+					$common_pagezone_dir = $this->getTemplateSetFolder() . '/'. self::pagename_for_all_pagezones;
 					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
 						$temporary_searchpath[] = $common_pagezone_dir;
 					} else {
