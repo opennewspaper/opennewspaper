@@ -304,6 +304,9 @@ tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 	}
 	
 	private function getTemplateSetFolder() {
+		if (!$this->templateset) {
+			$this->setTemplateSet();
+		}
 		return $this->basepath . '/template_sets/' . $this->templateset;
 	}
 	
@@ -340,9 +343,7 @@ self::debug_search_path && tx_newspaper::devlog("pagezoneTemplates $page_templat
 		$temporary_searchpath = array();
 
 		if ($this->pagezonetype) {
-			$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
-				$this->pagezonetype->getAttribute('normalized_name'):
-				strtolower($this->pagezonetype->getAttribute('type_name'));
+			$pagezone_name = $this->getPageZoneName();
 			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
 self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
