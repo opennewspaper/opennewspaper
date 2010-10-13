@@ -293,6 +293,10 @@ class tx_newspaper_Smarty extends Smarty {
 					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 						$temporary_searchpath[] = $pagezone_template_dir;
 					}
+					$common_pagezone_dir = self::pagename_for_all_pagezones;
+					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
+						$temporary_searchpath[] = $common_pagezone_dir;
+					}
 				}
 				if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 					$temporary_searchpath[] = $page_template_dir;
