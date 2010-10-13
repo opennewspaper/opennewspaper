@@ -249,7 +249,7 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 		
 		$temporary_searchpath = $this->searchpathFromTemplateSet();
 		
-		$page_name = $this->pagename();
+		$page_name = $this->getPageName();
 		
 		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
 		
@@ -276,24 +276,18 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 
 		$temporary_searchpath = array();
 
-		if ($this->templateset &&
-			file_exists($this->basepath . '/template_sets/' . $this->templateset) &&
-			is_dir($this->basepath . '/template_sets/' . $this->templateset)
-		   ) {
+		if ($this->templateSetFolderExists()) {
+			$template_base_dir = $this->basepath . '/template_sets/' . $this->templateset;
 			if ($this->pagetype) {
-				$page_name = $this->pagetype->getAttribute('normalized_name')?
-					$this->pagetype->getAttribute('normalized_name'):
-					strtolower($this->pagetype->getAttribute('type_name'));
-				$page_template_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. $page_name;
+				$page_name = $this->getPageName();
+				$page_template_dir =  $template_base_dir . '/'. $page_name;
 				if ($this->pagezonetype) {
-					$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
-						$this->pagezonetype->getAttribute('normalized_name'):
-						strtolower($this->pagezonetype->getAttribute('type_name'));
+					$pagezone_name = $this->getPageZoneName();
 					$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
 					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 						$temporary_searchpath[] = $pagezone_template_dir;
 					}
-					$common_pagezone_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. self::pagename_for_all_pagezones;
+					$common_pagezone_dir = $template_base_dir . '/'. self::pagename_for_all_pagezones;
 					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
 						$temporary_searchpath[] = $common_pagezone_dir;
 					} else {
@@ -310,7 +304,15 @@ tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 		return $temporary_searchpath;
 	}
 	
-	private function pagename() {
+	private function templateSetFolderExists() {
+		if (!$this->templateset) return false;
+		if (!file_exists($this->basepath . '/template_sets/' . $this->templateset)) return false;
+		if (!is_dir($this->basepath . '/template_sets/' . $this->templateset)) return false;
+		return true;
+	}
+	
+	
+	private function getPageName() {
 		if ($this->pagetype) {
 			$page_name = $this->pagetype->getAttribute('normalized_name')?
 				$this->pagetype->getAttribute('normalized_name'):
@@ -320,6 +322,13 @@ tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
 		}
 
 		return $page_name;		
+	}
+	
+	private function getPageZoneName() {
+		$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
+						$this->pagezonetype->getAttribute('normalized_name'):
+						strtolower($this->pagezonetype->getAttribute('type_name'));
+		return $pagezone_name;
 	}
 	
 	private function pagezoneTemplates($page_template_dir) {
@@ -336,6 +345,13 @@ self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
+					$common_pagezone_dir = $template_base_dir . '/'. self::pagename_for_all_pagezones;
+					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
+						$temporary_searchpath[] = $common_pagezone_dir;
+					} else {
+tx_newspaper::devlog('!!! common not found !!!', $common_pagezone_dir);
+					}
+			
 		}
 		
 		return $temporary_searchpath;
