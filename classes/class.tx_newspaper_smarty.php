@@ -97,7 +97,7 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  */
 class tx_newspaper_Smarty extends Smarty {
 	
-	const debug_search_path = false;
+	const debug_search_path = true;
 	
 	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
 	
@@ -167,7 +167,7 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = tx_newspaper_Smarty::default_template_set) {
-		self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
+self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
 		
 		$this->templateset = $template_set;
 		$this->assign('template_set', $template_set);
@@ -176,14 +176,14 @@ class tx_newspaper_Smarty extends Smarty {
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
-		self::debug_search_path && tx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
+self::debug_search_path && tx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
 		$this->pagetype = $page_type;
 	}
 	
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
 		$pagezone_type = $pagezone->getPageZoneType();
-		self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_type->getAttribute('type_name'));
+self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_type->getAttribute('type_name'));
 		$this->pagezonetype = $pagezone_type;
 	}
 		
@@ -200,7 +200,7 @@ class tx_newspaper_Smarty extends Smarty {
 		}
 		
 		$this->assembleSearchPath();
-		self::debug_search_path && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
+self::debug_search_path && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
 	
 		foreach ($this->templateSearchPath as $dir) {
 			//	if not absolute path, prepend $this->basepath
@@ -212,7 +212,7 @@ class tx_newspaper_Smarty extends Smarty {
 				$this->compile_dir .= $compile_dir;
 				file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
 				
-				self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
+self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
 				$this->template_dir = $dir;	
 				
 				break;
@@ -321,7 +321,7 @@ class tx_newspaper_Smarty extends Smarty {
 	}
 	
 	private function pagezoneTemplates($page_template_dir) {
-tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
+self::debug_search_path && tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
 
 		$temporary_searchpath = array();
 
@@ -330,7 +330,7 @@ tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
 				$this->pagezonetype->getAttribute('normalized_name'):
 				strtolower($this->pagezonetype->getAttribute('type_name'));
 			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
-tx_newspaper::devlog($pagezone_template_dir);
+self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
