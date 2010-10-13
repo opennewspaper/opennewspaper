@@ -293,7 +293,7 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 					if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 						$temporary_searchpath[] = $pagezone_template_dir;
 					}
-					$common_pagezone_dir = self::pagename_for_all_pagezones;
+					$common_pagezone_dir = $this->basepath . '/template_sets/' . $this->templateset . '/'. self::pagename_for_all_pagezones;
 					if (file_exists($common_pagezone_dir) && is_dir($common_pagezone_dir)) {
 						$temporary_searchpath[] = $common_pagezone_dir;
 					}
