@@ -48,47 +48,48 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolde
  */
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
-	/// Create a tx_newspaper_Extra_Image
-	public function __construct($uid = 0) {
-		if ($uid) {
-			parent::__construct($uid); 
-		}
-	}
-	
-	public function __toString() {
-		$ret = '';
-		try{
-			$ret .= 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid();
-			$ret .= ' (Title: ' . $this->getAttribute('title') . ')';
-		} catch (Exception $e) {  }
-		return $ret;	
-	}
-	
-	/** Assigns image attributes and TSConfig parameters to smarty template,
-	 *  then renders it.
-	 *  
-	 *  Smarty template:
-	 *  \include res/templates/tx_newspaper_extra_image.tmpl
-	 */
-	public function render($template_set = '') {
-		
-    tx_newspaper::startExecutionTimer();
-        
-		self::getTSConfig();
+    /// Create a tx_newspaper_Extra_Image
+    public function __construct($uid = 0) {
+        if ($uid) {
+            parent::__construct($uid); 
+        }
+    }
 
-		$this->prepare_render($template_set);
-		
-		$this->smarty->assign('basepath', self::$basepath);
-		$this->smarty->assign('sizes', self::$sizes);
-		
-    $rendered = $this->smarty->fetch($this);
-        
-    tx_newspaper::logExecutionTime();
-        
-    return $rendered;
-	}
+    public function __toString() {
+        $ret = '';
+        try{
+            $ret .= 'Extra: UID ' . $this->getExtraUid() . ', Image: UID ' . $this->getUid();
+            $ret .= ' (Title: ' . $this->getAttribute('title') . ')';
+        } catch (Exception $e) {  }
+        return $ret;	
+    }
 
-	/// A short description that makes an Extra uniquely identifiable in the BE
+    /** Assigns image attributes and TSConfig parameters to smarty template,
+     *  then renders it.
+     *  
+     *  Smarty template:
+     *  \include res/templates/tx_newspaper_extra_image.tmpl
+     */
+    public function render($template_set = '') {
+
+        tx_newspaper::startExecutionTimer();
+
+        self::getTSConfig();
+
+        $this->prepare_render($template_set);
+
+        $this->smarty->assign('basepath', self::$basepath);
+        $this->smarty->assign('sizes', self::$sizes);
+        $this->smarty->assign('type', $this->getImageType());
+
+        $rendered = $this->smarty->fetch($this);
+
+        tx_newspaper::logExecutionTime();
+
+        return $rendered;
+    }
+
+    /// A short description that makes an Extra uniquely identifiable in the BE
 	/** Displays title and UID of the image, as well as a thumbnail of it.
 	 */
 	public function getDescription() {
@@ -121,9 +122,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public static function getModuleName() {
 		return 'np_image';
 	}
-	
+
 	public static function dependsOnArticle() { return false; }
-	
+
 	/// Get the array of possible image sizes registered in TSConfig
 	public function getSizes() {
 		self::getTSConfig();
@@ -135,7 +136,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		self::getTSConfig();
 		return self::$basepath;
 	}
-	
+
 	/// Save hook function, called from the global save hook
 	/** Resizes the uploaded image into all sizes specified in TSConfig.
 	 * 
@@ -172,10 +173,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			self::resizeImages($fieldArray[self::image_file_field]);
 		}
 	}
-	
-	////////////////////////////////////////////////////////////////////////////
-	
-	/// If image needs resizing, resize it to all sizes defined in TSConfig
+
+    ////////////////////////////////////////////////////////////////////////////
+
+    /// If image needs resizing, resize it to all sizes defined in TSConfig
 	/** The image sizes are defined as
 	 *  \code
 	 *  newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}
@@ -334,45 +335,45 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		return $TSConfig;		
 	}
-	
-	private function getImageType() {
-		$type_index = $this->getAttribute('type');
-		$type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
-		$type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
-		return $type_string;
-	}
-	
-	/// The field which carries the image file
-	const image_file_field = 'image_file';
-	
-	///	Where Typo3 stores uploaded images
-	const uploads_folder = 'uploads/tx_newspaper';
-	
-  /// path to \c convert(1)
-  const convert = '/usr/bin/convert';
 
-	/// Name of the size for thumbnail images displayed in the BE
-	const thumbnail_name = 'thumbnail';
-	/// Default size for thumbnail images displayed in the BE (overridable with TSConfig)
-	const thumbnail_size = '64x64';
+    private function getImageType() {
+        $type_index = $this->getAttribute('type');
+        $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
+        $type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
+        return $type_string;
+    }
 
-	/// Default quality for JPEG compression. 
-	/** Overridden by \p $TYPO3_CONF_VARS['GFX']['jpg_quality'].
-	 */
-	const default_jpeg_quality = 90;
-	
-	/// Other options to \c convert(1)
-	const convert_options = '';
+    /// The field which carries the image file
+    const image_file_field = 'image_file';
 
-	/// Whether to keep aspect ratio when resizing images 
-	const contain_aspect_ratio = false;
-	
-	/// The path to the image storage directory, relative to the Typo3 installation directory
-	private static $basepath = null;
-	
-	/// The list of image sizes, predefined in TSConfig
-	private static $sizes = array();
-	
+    ///	Where Typo3 stores uploaded images
+    const uploads_folder = 'uploads/tx_newspaper';
+
+    /// path to \c convert(1)
+    const convert = '/usr/bin/convert';
+
+    /// Name of the size for thumbnail images displayed in the BE
+    const thumbnail_name = 'thumbnail';
+    /// Default size for thumbnail images displayed in the BE (overridable with TSConfig)
+    const thumbnail_size = '64x64';
+
+    /// Default quality for JPEG compression. 
+    /** Overridden by \p $TYPO3_CONF_VARS['GFX']['jpg_quality'].
+     */
+    const default_jpeg_quality = 90;
+
+    /// Other options to \c convert(1)
+    const convert_options = '';
+
+    /// Whether to keep aspect ratio when resizing images 
+    const contain_aspect_ratio = false;
+
+    /// The path to the image storage directory, relative to the Typo3 installation directory
+    private static $basepath = null;
+
+    /// The list of image sizes, predefined in TSConfig
+    private static $sizes = array();
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image());
