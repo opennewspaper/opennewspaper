@@ -449,12 +449,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  	rearrange the articles
 	 */
 	public function displayListedArticles($PA, $fobj) {
-//t3lib_div::devlog('displayListedArticles()', 'newspaper', 0, array('PA' => $PA));		
-		global $LANG;
 
 		if (intval($PA['row']['uid']) == 0) {
 			// probably a new record
-			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_unsaved', false);
+			return tx_newspaper::getTranslation('message_tx_newspaper_articlelist_unsaved');
 		}
 
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
@@ -466,7 +464,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 	 	$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
 			$smarty->assign('articles', $articles_sorted);
-			$smarty->assign('message_empty', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_tx_newspaper_articlelist_empty', false));
+			$smarty->assign('message_empty', tx_newspaper::getTranslation('message_tx_newspaper_articlelist_empty'));
 	
 			return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 		} else {
@@ -596,13 +594,11 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// A short description that makes an Article List identifiable in the BE.
 	public function getDescription() {
 		
-		global $LANG;
-		
 		$ret = $this->getTitle();
 		
 		if ($this->getAttribute('filter_sections')) {
 			$ret .= "<br />\n" . 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_included_sections', false) . ':';
+				tx_newspaper::getTranslation('label_articlelist_included_sections') . ':';
 			$sep = '';
 			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
 				$section = new tx_newspaper_Section($section_uid);
@@ -613,7 +609,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		
 		if ($this->getAttribute('filter_tags_include')) {
 			$ret .= "<br />\n" . 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_included_tags', false) . ':';
+				tx_newspaper::getTranslation('label_articlelist_included_tags') . ':';
 			$sep = '';
 			foreach (explode(',', $this->getAttribute('filter_tags_include')) as $tag_uid) {
 				$ret .= new tx_newspaper_Tag($tag_uid);
@@ -623,7 +619,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		if ($this->getAttribute('filter_tags_exclude')) {
 			$ret .= "<br />\n" . 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_excluded_tags', false) . ':';
+				tx_newspaper::getTranslation('label_articlelist_excluded_tags') . ':';
 			$sep = '';
 			foreach (explode(',', $this->getAttribute('filter_tags_exclude')) as $tag_uid) {
 				$ret .= new tx_newspaper_Tag($tag_uid);
@@ -633,7 +629,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		if ($this->getAttribute('filter_articlelist_exclude')) {
 			$ret .= "<br />\n" . 
-				$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_articlelist_excluded_articlelist', false) . ':';
+				tx_newspaper::getTranslation('label_articlelist_excluded_articlelist') . ':';
 			$articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create($this->getAttribute('filter_articlelist_exclude'));
 			$ret .= $articlelist->getDescription();
 		}

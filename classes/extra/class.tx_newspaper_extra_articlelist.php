@@ -35,13 +35,12 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		return 'Display a list of articles: ' . 
 			$this->articlelist->getDescription();
 		} catch (tx_newspaper_DBException $e) {
-			global $LANG;
 			return 
 				'<table><tr><td valign="middle">' .
 					tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '') .
 				'</td><td>' . 
-					$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_articlelist_missing_deleted', false) . '<br />' .
-					$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_select_another_articlelist', false) .
+					tx_newspaper::getTranslation('message_articlelist_missing_deleted') . '<br />' .
+					tx_newspaper::getTranslation('message_select_another_articlelist') .
 				'</td></tr></table>';
 		}
 		

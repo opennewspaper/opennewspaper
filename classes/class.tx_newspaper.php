@@ -770,6 +770,20 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
 	}
 
+	public static function getTranslation($key, $translation_file = 'locallang_newspaper.xml', $extension = 'newspaper') {
+		global $LANG;
+
+		if ($translation_file === false) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "false" parameter when refactoring!'); }
+		if ($translation_file === true) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "true" parameter when refactoring!'); }
+		
+		if (!($LANG instanceof language)) {
+			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init('default');
+		}
+
+		return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
+	}
     ////////////////////////////////////////////////////////////////////////////
 
 	/// Check if given class name is an abstract class

@@ -38,7 +38,6 @@ class tx_newspaper_Workflow {
 	 *  \return html code with all the needed buttons
 	 */
 	public static function getWorkflowButtons($row) {
-		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 		
 		$hidden = $row['hidden'];
@@ -119,43 +118,42 @@ function changeWorkflowStatus(role, hidden_status) {
 	 */
 	private static function renderWorkflowButtons($hidden, $button) {
 //t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));
-		global $LANG;
 		
 		$content = '<span style="margin-left:20px;">&nbsp;</span>'; // left margin for first button
 		
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
-			$content .= self::renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_hide', false), $hidden, true);
+			$content .= self::renderWorkflowButton(false, tx_newspaper::getTranslation('label_workflow_hide'), $hidden, true);
 		} elseif ($hidden && $button['publish']) {
-			$content .= self::renderWorkflowButton(false, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_publish', false), $hidden, true);
+			$content .= self::renderWorkflowButton(false, tx_newspaper::getTranslation('label_workflow_publish'), $hidden, true);
 		}
 		
 		/// check / revise / place
 		if ($button['check']) {
-			$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check', false), -1, false);
+			$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, tx_newspaper::getTranslation('label_workflow_check'), -1, false);
 			if (!$hidden && $button['hide']) {
-				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_hide', false), $hidden, true);
+				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, tx_newspaper::getTranslation('label_workflow_check_hide'), $hidden, true);
 			} elseif ($hidden && $button['publish']) {
-				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_check_publish', false), $hidden, true);
+				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, tx_newspaper::getTranslation('label_workflow_check_publish'), $hidden, true);
 			}
 		}
 		if ($button['revise']) {
-			$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise', false), -1, false);
+			$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, tx_newspaper::getTranslation('label_workflow_revise'), -1, false);
 			if (!$hidden && $button['hide']) {
-				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_hide', false), $hidden, true);
+				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, tx_newspaper::getTranslation('label_workflow_revise_hide'), $hidden, true);
 			} elseif ($hidden && $button['publish']) {
-				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_revise_publish', false), $hidden, true);
+				$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_EDITORIAL_STAFF, tx_newspaper::getTranslation('label_workflow_revise_publish'), $hidden, true);
 			}
 		}
 // deprecated, \todo: how to call placement form???
 //		if (NP_SHOW_PLACE_BUTTONS) {
 //			// hide place buttons until opening placement form feature is implemented
 //			if ($button['place']) {
-//				$content .= self::renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place', false), -1);
+//				$content .= self::renderWorkflowButton(2, tx_newspaper::getTranslation('label_workflow_place'), -1);
 //				if (!$hidden && $button['hide'])
-//					$content .= self::renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_hide', false), $hidden);
+//					$content .= self::renderWorkflowButton(2, tx_newspaper::getTranslation('label_workflow_place_hide'), $hidden);
 //				elseif ($hidden && $button['publish'])
-//					$content .= self::renderWorkflowButton(2, $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_place_publish', false), $hidden);
+//					$content .= self::renderWorkflowButton(2, tx_newspaper::getTranslation('label_workflow_place_publish'), $hidden);
 //			}
 //		}
 		return $content;
@@ -282,7 +280,6 @@ function changeWorkflowStatus(role, hidden_status) {
     }
 
     private static function renderTemplate($comments, $tableUid, $allComments=true, $showFoldLinks=false) {
-		global $LANG;
 		self::addUsername($comments);
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
@@ -290,8 +287,8 @@ function changeWorkflowStatus(role, hidden_status) {
 		$smarty->assign('allComments', $allComments);
 		$smarty->assign('showFoldLinks', $showFoldLinks);
 		$smarty->assign('LABEL', array(
-			'more' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_more_link', false),
-			'less' => $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_less_link', false)
+			'more' => tx_newspaper::getTranslation('log_more_link'),
+			'less' => tx_newspaper::getTranslation('log_less_link')
 		));
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');
@@ -415,27 +412,25 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// \return message: what status change took place
 	public static function getWorkflowStatusChangedComment($new_role, $old_role) {
-		global $LANG;
-		$log = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_change', false);
+		$log = tx_newspaper::getTranslation('label_workflow_role_change');
 		$log = str_replace('###OLD_ROLE###', self::getRoleTitle($old_role), $log);
 		$log = str_replace('###NEW_ROLE###', self::getRoleTitle($new_role), $log);
 		return $log;
 //		return  . ' --> ' . self::getRoleTitle($new_role);
-//		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_new', false) . ' "' . 
-//			self::getRoleTitle($new_role) . '", ' . //$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($new_role), false) . '", ' . 
-//			$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_old', false) . '"' .
-//			self::getRoleTitle($old_role) . '"'; // $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_' . intval($old_role), false) . '"';
+//		return tx_newspaper::getTranslation('label_workflow_role_new') . ' "' . 
+//			self::getRoleTitle($new_role) . '", ' . //tx_newspaper::getTranslation('label_workflow_role_' . intval($new_role), false) . '", ' . 
+//			tx_newspaper::getTranslation('label_workflow_role_old') . '"' .
+//			self::getRoleTitle($old_role) . '"'; // tx_newspaper::getTranslation('label_workflow_role_' . intval($old_role), false) . '"';
 	}
 
 	public static function getRoleTitle($role) {
-		global $LANG;
 		switch($role) {
 			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
-				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
+				return tx_newspaper::getTranslation('label_workflow_role_editorialstaff');
 			case NP_ACTIVE_ROLE_DUTY_EDITOR:
-				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
+				return tx_newspaper::getTranslation('label_workflow_role_dutyeditor');
 			case NP_ACTIVE_ROLE_NONE:
-				return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
+				return tx_newspaper::getTranslation('label_workflow_role_none');
 		}
 		t3lib_div::devlog('getRoleTitle() - unknown role', 'newspaper', 3, array('role' => $role));
 		return '[' . $role . ']'; // no role title available
@@ -512,7 +507,6 @@ function changeWorkflowStatus(role, hidden_status) {
 	
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
-		global $LANG;
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
@@ -530,9 +524,9 @@ function changeWorkflowStatus(role, hidden_status) {
 				$current_time = time(); // make sure all log entries written in this run have the same time
 				if (array_key_exists('hidden', $fieldArray)) {
 					if ($table == 'tx_newspaper_article') {
-						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_article_published', false);
+						$action = $fieldArray['hidden']? tx_newspaper::getTranslation('log_article_hidden') : tx_newspaper::getTranslation('log_article_published');
 					} else {
-						$action = $fieldArray['hidden']? $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_hidden', false) : $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_record_published', false);
+						$action = $fieldArray['hidden']? tx_newspaper::getTranslation('log_record_hidden') : tx_newspaper::getTranslation('log_record_published');
 					}
 //t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 					tx_newspaper::insertRows('tx_newspaper_log', array(

@@ -30,11 +30,10 @@ class tx_newspaper_BE {
 
 	/// either called by userfunc in be or ajax
 	public static function renderPagePageZoneList($PA, $fObj=null) {
-		global $LANG;
 //t3lib_div::devlog('render ppzlist $pa', 'np', 0, $PA);
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
-			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_page', false);
+			return tx_newspaper::getTranslation('message_section_not_saved_page');
 		}
 		$section_uid = intval($PA['row']['uid']);
 
@@ -52,7 +51,7 @@ class tx_newspaper_BE {
 					$data[$i]['ACTIVE'] = true;
 					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
 					$data[$i]['DEFAULT_ARTICLE_PAGE'] = $active_page->getPageType()->getAttribute('is_article_page');
-					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_pagezone_in_page')) . '\');';
 					$data[$i]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_page', $active_page->getUid(), $active_page->getAttribute('template_set'));
 					break;
 				}
@@ -75,7 +74,7 @@ class tx_newspaper_BE {
 							// active pagezone type found
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
-							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_delete_pagezone_in_page', false)) . '\');';
+							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_pagezone_in_page')) . '\');';
 							$data[$i]['pagezones'][$j]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown($active_pagezone->getTable(), $active_pagezone->getUid(), $active_pagezone->getAttribute('template_set'));
 							break;
 						}
@@ -92,14 +91,14 @@ class tx_newspaper_BE {
 							unset($data[$i]['pagezones'][$j]); // so remove data collected so far for this combination
 						} else {
 							// active pagezone type found ['ACTIVE'] = false;
-							$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_pagezone_in_page', false)) . '\');';
+							$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_new_pagezone_in_page')) . '\');';
 						}
 					}
 				}
 			} else {
 				// page type not active, so no pagezones to display
 				$data[$i]['ACTIVE'] = false;
-				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_types[$i]->getUid() . ', \'' . addslashes($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_check_new_page_in_section', false)) . '\');';
+				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_types[$i]->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_new_page_in_section')) . '\');';
 			}
 			if (is_array($data[$i]['pagezones'])) {
 				ksort($data[$i]['pagezones'], SORT_NUMERIC); // sort array, so order of pagezone is fixed
@@ -114,15 +113,15 @@ class tx_newspaper_BE {
 		self::$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 
 		// add skinned icons
-		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_page_in_section', false)));
-		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_new_page_in_section', false)));
-		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_delete_page_in_section', false)));
+		self::$smarty->assign('EDIT_ICON', self::renderIcon('gfx/edit2.gif', '', tx_newspaper::getTranslation('flag_edit_page_in_section')));
+		self::$smarty->assign('ADD_ICON', self::renderIcon('gfx/new_file.gif', '', tx_newspaper::getTranslation('flag_new_page_in_section')));
+		self::$smarty->assign('DELETE_ICON', self::renderIcon('gfx/garbage.gif', '', tx_newspaper::getTranslation('message_delete_page_in_section')));
 		self::$smarty->assign('CLEAR_ICON', self::renderIcon('', '', '', '', true));
 		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', ''));
 
 
 		// add title and message
-		self::$smarty->assign('TITLE', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_title_page_in_section', false));
+		self::$smarty->assign('TITLE', tx_newspaper::getTranslation('message_title_page_in_section'));
 
 		/// add data rows
 		self::$smarty->assign('DATA', $data);
@@ -153,13 +152,12 @@ class tx_newspaper_BE {
 	 * If template named default is found, it is moved to first position in the dropdown
 	 */
 	private function readTemplateSetItems(&$params) {
-		global $LANG;
 
 		$default_found = false;
 
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
 
-		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
+		$params['items'][] = array(tx_newspaper::getTranslation('entry_templateset_inherit'), ''); // empty entry -> templateset is inherited
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		for ($i = 0; $i < sizeof($templateset); $i++) {
 			if ($templateset[$i] != 'default') {
@@ -213,11 +211,10 @@ class tx_newspaper_BE {
 	}
 
 	private function readInheritancePageItems(&$params) {
-		global $LANG;
 
 		$pages = array('dummy', 'test', 'aha');
 
-		$params['items'][] = array($LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:entry_templateset_inherit', false), ''); // empty entry -> templateset is inherited
+		$params['items'][] = array(tx_newspaper::getTranslation('entry_templateset_inherit'), ''); // empty entry -> templateset is inherited
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		for ($i = 0; $i < sizeof($pages); $i++) {
 			$params['items'][] = array($pages[$i], $pages[$i]);
@@ -232,7 +229,6 @@ class tx_newspaper_BE {
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
-		global $LANG;
 /// \todo: move js to external file ... but how to handle localization then? And access to $PA?
 echo "
 <script language='javascript'>
@@ -270,13 +266,10 @@ function findElementsByName(name, type) {
 </script>
 ";
 
-
-
-		global $LANG;
 //t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
 			/// new section record, so no "real" section uid available
-			return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_section_not_saved_articlelist', false);
+			return tx_newspaper::getTranslation('message_section_not_saved_articlelist');
 		}
 		$section_uid = intval($PA['row']['uid']);
 
@@ -304,7 +297,7 @@ function findElementsByName(name, type) {
 			$selItems[] = array($al_available[$i]->getTitle(), $value, '');
 		}
 
-		$nMV_label = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:error_dropdown_invalid_articlelist', false);
+		$nMV_label = tx_newspaper::getTranslation('error_dropdown_invalid_articlelist');
 
 		$obj = new t3lib_TCEforms();
 
@@ -508,8 +501,12 @@ function findElementsByName(name, type) {
 		return self::renderBackendPageZone($article, false);
 	}
 
+	/// Returns the translation of \p $key, using \c mod3/locallang.xml as translation file
+	private static function getTranslation($key) {
+		return tx_newspaper::getTranslation($key, 'mod3/locallang.xml');
+	}
+
 	public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
-		global $LANG;
 
 		$data = array();
 		$extra_data = array();
@@ -571,16 +568,16 @@ function findElementsByName(name, type) {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 
-		$label['show_levels_above'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_levels_above', false);
-		$label['show_visible_only'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show_visible_only', false);
-		$label['pagetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagetype', false);
-		$label['pagezonetype'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pagezonetype', false);
-		$label['pagezone_inheritancesource'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource', false);
-		$label['pagezone_inheritancesource_upper'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_upper', false);
-		$label['pagezone_inheritancesource_none'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:pagezone_inheritancesource_none', false);
-		$label['title'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:title', false);
-		$message['pagezone_empty'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_pagezone_empty', false);
-        $message['confirmation'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_unsaved_data', false);
+		$label['show_levels_above'] = self::getTranslation('label_show_levels_above');
+		$label['show_visible_only'] = self::getTranslation('label_show_visible_only');
+		$label['pagetype'] = self::getTranslation('label_pagetype');
+		$label['pagezonetype'] = self::getTranslation('label_pagezonetype');
+		$label['pagezone_inheritancesource'] = self::getTranslation('pagezone_inheritancesource');
+		$label['pagezone_inheritancesource_upper'] = self::getTranslation('pagezone_inheritancesource_upper');
+		$label['pagezone_inheritancesource_none'] = self::getTranslation('pagezone_inheritancesource_none');
+		$label['title'] = self::getTranslation('title');
+		$message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
+        $message['confirmation'] = self::getTranslation('message_unsaved_data');
 
 		$smarty->assign('LABEL', $label);
 		$smarty->assign('MESSAGE', $message);
@@ -588,7 +585,7 @@ function findElementsByName(name, type) {
 		$smarty->assign('PAGETYPE', $pagetype);
 		$smarty->assign('PAGEZONETYPE', $pagezonetype);
 		$smarty->assign('SHOW_LEVELS_ABOVE', $show_levels_above);
-		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', self::getTranslation('label_new_top')));
 		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
 		$smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
@@ -613,9 +610,9 @@ function findElementsByName(name, type) {
 
 		/// "new to top" buttons vary for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
 		if ($data[0]['pagezone_type'] instanceof tx_newspaper_article && $data[0]['pagezone_type']->getAttribute('is_article') == 0) {
-			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_top')));
 		} else {
-			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra', false)));
+			$smarty->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_extra')));
 		}
 
 
@@ -642,10 +639,10 @@ function findElementsByName(name, type) {
 				}
 			} else {
 				// needed for concrete articles
-				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_top', false)));
+				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_top')));
 
-				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_defaultextra_in_article', false)));
-				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_in_article', false)));
+				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_defaultextra_in_article')));
+				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', self::getTranslation('label_new_extra_in_article')));
 
 				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp['extras']);
@@ -684,8 +681,6 @@ function findElementsByName(name, type) {
 
 // \todo: how are $new_at_top and $paragraph used? are those vars used at all???
     private static function addNewExtraData(&$smarty) {
-        global $LANG;
-//debug(array($origin_uid, $pz_uid, $paragraph));
 
         // convert params, sent by js, so false is given as string, not a boolean
 /// \todo: switch to 0/1 instead of false/true
@@ -702,11 +697,11 @@ function findElementsByName(name, type) {
 
 
         $label = $smarty->get_template_vars('LABEL');
-        $label['new_extra_new'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_new', false);
-        $label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
+        $label['new_extra_new'] = self::getTranslation('label_new_extra_new');
+        $label['new_extra_from_pool'] = self::getTranslation('label_new_extra_from_pool');
 
         $message = $smarty->get_template_vars('MESSAGE');
-        $message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
+        $message['no_extra_selected'] = self::getTranslation('message_no_extra_selected');
 
         /// list of registered extras
         $extra = tx_newspaper_Extra::getRegisteredExtras();
@@ -985,36 +980,35 @@ JSCODE;
 	}
 
 	private static function getPagezoneSmartyObject() {
-		global $LANG;
 
-		$label['extra'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_extra', false);
-		$label['show'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_show', false);
-		$label['pass_down'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_pass_down', false);
-		$label['inherits_from'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_inherits_from', false);
-		$label['commands'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_commands', false);
-		$label['extra_delete_confirm'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_delete_confirm', false);
-		$label['paragraph'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_paragraph', false);
-		$label['notes'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_notes', false);
-		$label['templateset'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_templateset', false);
-		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_shortcuts', false);
-	    $label['overview'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:overview', false);
+		$label['extra'] = self::getTranslation('label_extra');
+		$label['show'] = self::getTranslation('label_show');
+		$label['pass_down'] = self::getTranslation('label_pass_down');
+		$label['inherits_from'] = self::getTranslation('label_inherits_from');
+		$label['commands'] = self::getTranslation('label_commands');
+		$label['extra_delete_confirm'] = self::getTranslation('message_delete_confirm');
+		$label['paragraph'] = self::getTranslation('label_paragraph');
+		$label['notes'] = self::getTranslation('label_notes');
+		$label['templateset'] = self::getTranslation('label_templateset');
+		$label['shortcuts'] = self::getTranslation('label_shortcuts');
+	    $label['overview'] = self::getTranslation('overview');
 
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 
 		$smarty_pz->assign('LABEL', $label);
 
-		$smarty_pz->assign('SAVE_ICON', tx_newspaper_BE::renderIcon('gfx/savedok.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_save_extra', false)));
-		$smarty_pz->assign('UNDO_ICON', tx_newspaper_BE::renderIcon('gfx/undo.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_undo_extra', false)));
+		$smarty_pz->assign('SAVE_ICON', tx_newspaper_BE::renderIcon('gfx/savedok.gif', '', self::getTranslation('label_save_extra')));
+		$smarty_pz->assign('UNDO_ICON', tx_newspaper_BE::renderIcon('gfx/undo.gif', '', self::getTranslation('label_undo_extra')));
 
-		$smarty_pz->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_hide', false)));
-		$smarty_pz->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_unhide', false)));
-		$smarty_pz->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_edit_extra', false)));
-		$smarty_pz->assign('MOVE_UP_ICON', tx_newspaper_BE::renderIcon('gfx/button_up.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_up', false)));
-		$smarty_pz->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_move_down', false)));
-		$smarty_pz->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_below', false)));
-		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
-//		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_delete', false)));
+		$smarty_pz->assign('HIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', self::getTranslation('label_hide')));
+		$smarty_pz->assign('UNHIDE_ICON', tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', self::getTranslation('label_unhide')));
+		$smarty_pz->assign('EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', self::getTranslation('label_edit_extra')));
+		$smarty_pz->assign('MOVE_UP_ICON', tx_newspaper_BE::renderIcon('gfx/button_up.gif', '', self::getTranslation('label_move_up')));
+		$smarty_pz->assign('MOVE_DOWN_ICON', tx_newspaper_BE::renderIcon('gfx/button_down.gif', '', self::getTranslation('label_move_down')));
+		$smarty_pz->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_below')));
+		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', self::getTranslation('label_delete')));
+//		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', self::getTranslation('label_delete')));
 		$smarty_pz->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
 
 		return $smarty_pz;
@@ -1067,7 +1061,6 @@ JSCODE;
 /// workflow logging functions
 // \todo: BUTTONS: rewrite for alt_doc xlass in workflow class
 	function getWorkflowCommentBackend($PA, $fobj) {
-		global $LANG;
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 
 		/// add workflow comment field (using smarty)
@@ -1570,6 +1563,8 @@ JSCODE;
 	}
 
 
+	/** \todo typo or not? \c renderIcon('...gif','',$LANG->sL('...',false,14,14)) or \c renderIcon('...gif','',$LANG->sL('...',false),14,14) ?
+	 */
 	public function getArticlelistIcons() {
 		global $LANG;
 		$icon = array(

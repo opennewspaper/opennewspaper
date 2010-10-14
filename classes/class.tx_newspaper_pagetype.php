@@ -134,13 +134,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	}
 	
 	public function getTitle() {
-		global $LANG;
-		if (!($LANG instanceof language)) {
-			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
-			$LANG = t3lib_div::makeInstance('language');
-			$LANG->init('default');
-		}
-		return $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_' . $this->getTable(), false);	
+		return tx_newspaper::getTranslation('title_' . $this->getTable());
 	}
 
  	public function getTable() { return tx_newspaper::getTable($this); }

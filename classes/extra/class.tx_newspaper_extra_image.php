@@ -93,7 +93,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 */
 	public function getDescription() {
 		self::getTSConfig();
-		global $LANG;
 		
 		if ($this->getAttribute(self::image_file_field)) {
 			$thumbnail_file = PATH_site . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
@@ -104,13 +103,13 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 			} else {
 				$image_tag = tx_newspaper_BE::renderIcon(
 					'gfx/icon_warning.gif', '', 
-					$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_image_missing', false)
+					tx_newspaper::getTranslation('message_image_missing')
 				);
 			}
 		} else {
 			$image_tag = tx_newspaper_BE::renderIcon(
 					'gfx/icon_warning2.gif', '', 
-					$LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_image_unset', false)
+					tx_newspaper::getTranslation('message_image_unset',)
 			);
 		}
 		
@@ -334,6 +333,13 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		}
 
 		return $TSConfig;		
+	}
+	
+	private function getImageType() {
+		$type_index = $this->getAttribute('type');
+		$type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
+		$type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
+		return $type_string;
 	}
 	
 	/// The field which carries the image file
