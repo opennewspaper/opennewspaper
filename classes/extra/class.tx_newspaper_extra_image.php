@@ -109,7 +109,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		} else {
 			$image_tag = tx_newspaper_BE::renderIcon(
 					'gfx/icon_warning2.gif', '', 
-					tx_newspaper::getTranslation('message_image_unset',)
+					tx_newspaper::getTranslation('message_image_unset')
 			);
 		}
 		
