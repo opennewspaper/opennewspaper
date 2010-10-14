@@ -2,25 +2,28 @@
 <!-- start res/templates/tx_newspaper_extra_image.tmpl -->
 
 {* Image
+
    Variables:
 
-   $basepath		path to the image directories
-   $sizes			list of the present sizes
-   $template_set	template set used, if any
+   $basepath        path to the image directories
+   $sizes           list of the present sizes
+   $template_set    template set used, if any
 
-   $attributes		attributes as stored in DB. notable attributes include:
-   	 	title		title to be displayed above the image
-	 	image_file	name of image file  
-	 	caption		caption line to be displayed under the image
-	 	normalized_filename
-	 	kicker  
-	 	credit  
-	 	source  
-	 	type  	
-	 	alttext
-	 	tags 
+   $attributes      attributes as stored in DB. notable attributes include:
+        title       title to be displayed above the image
+        image_file  name of image file  
+        caption     caption line to be displayed under the image
+        normalized_filename
+        kicker  
+        credit  
+        source  
+        type        Image type (Photo, diagram, stone carving, whatever) as index
+        alttext
+        tags 
 
-   $extra_attributes	attributes for abstract extra record as stored in DB
+   $extra_attributes    attributes for abstract extra record as stored in DB
+
+   $type            Image type (Photo, diagram, stone carving, whatever) as string
 
 *}
 
@@ -28,8 +31,14 @@
 
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
-	<img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}" 
-		 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+    <img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}" 
+         alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
 {if $attributes.caption}<p>{$attributes.caption}</p>{/if}
-
+{if $attributes.credit}<p>Credit: {$attributes.credit}</p>{/if}
+{if $attributes.source}
+    <p>
+        {if $type}{$type}{else}Source{/if}:
+        {$attributes.source}
+    </p>
+{/if}
 <!--  end  res/templates/tx_newspaper_extra_image.tmpl -->
