@@ -244,6 +244,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->smarty->setPageZoneType($this);
 
+        $this->smarty->assign('article', $this);
+        
         $this->callRenderHooks();
 
     }
