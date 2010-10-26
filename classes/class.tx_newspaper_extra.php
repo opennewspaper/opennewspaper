@@ -252,6 +252,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 		$this->smarty->assign('attributes', $this->attributes);
 		$this->smarty->assign('extra_attributes', $this->extra_attributes);
+		
+        $this->smarty->assign('extra', $this);		
 	}
 	
 	///	Default implementation of the render() function
