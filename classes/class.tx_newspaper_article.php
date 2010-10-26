@@ -864,12 +864,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
-    // \todo: replace with newspaper hook handling, see #1055
-    /// This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
-    /// This function writes the hidden status into the database immediately
-
-    /** \param $uid article uid
+    /** This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
+     *  This function writes the hidden status into the database immediately.
+     *  \param $uid article uid
      *  \param $hidden boolean value specifying if the article is hidden or published
+     *  \todo: replace with newspaper hook handling, see #1055.
      */
     public function storeHiddenStatusWithHooks($hidden) {
 
@@ -959,13 +958,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $paragraphs = array();
 
         foreach ($temp_paragraphs as $paragraph) {
-            /// Remove the test of the \c "<p>" - tag from every line.
-            $paragraph = trim(substr($paragraph, strpos($paragraph, '>') + 1));
-            /** Each paragraph now should end with a \c "</p>". If it doesn't, the
-             *  text is not well-formed. In any case, we must remove the \c "</p>".
-             */
-            $paragraph = str_replace('</p>', '', $paragraph);
-
+            
+            $paragraph = self::trimPTags($paragraph);
+            
             /// Now we split the paragraph at line breaks.
             $sub_paragraphs = explode("\n", $paragraph);
 
@@ -976,6 +971,27 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         return $paragraphs;
     }
+    
+    /// Remove the rest of the \c "<p>" - tag from every line.
+    private static function trimPTags($paragraph) {
+        $paragraph = self::trimLeadingKet($paragraph);
+        
+        /** Each paragraph now should end with a \c "</p>". If it doesn't, the
+         *  text is not well-formed. In any case, we must remove the \c "</p>".
+         */
+        $paragraph = str_replace('</p>', '', $paragraph);
+        
+        return $paragraph;
+    }
+    private static function trimLeadingKet($paragraph) {
+        $paragraph_start = strpos($paragraph, '>');
+        if ($paragraph_start !== false) {
+            $paragraph = substr($paragraph, $paragraph_start + 1);
+        }
+        $paragraph = trim($paragraph);
+        
+        return $paragraph;
+    } 
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
 
