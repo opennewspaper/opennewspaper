@@ -337,7 +337,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 
     private function getImageType() {
-        if (!in_array(tx_newspaper::getAttributes($this), 'type')) return false;
+        if (!in_array('type', tx_newspaper::getAttributes($this))) return false;
         
         $type_index = $this->getAttribute('type');
         $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
