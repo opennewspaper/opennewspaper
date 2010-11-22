@@ -881,7 +881,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	/** Thanks to typo3.net user semidark. Function lifted from
 	 *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544 
 	 */
-	private static function buildTSFE() {
+	public static function buildTSFE() {
 		
 		$page_id = 1;	/// \todo Ensure that this is a valid page ID
 		
