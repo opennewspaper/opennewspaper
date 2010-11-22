@@ -468,7 +468,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	private function addDefaultFilterValues(array $settings, $forceReset=false) {
 //t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array($settings, $type));
 		if (!array_key_exists('range', $settings)) {
-			$settings['range'] = 'today';
+			$settings['range'] = 'day_2'; // \todo: make tsconfigurable
 		}
 		if (!array_key_exists('hidden', $settings)) {
 			$settings['hidden'] = 'all';
