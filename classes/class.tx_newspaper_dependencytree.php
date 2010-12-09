@@ -85,7 +85,7 @@ class tx_newspaper_DependencyTree {
 }
 
 function getArticleLists(tx_newspaper_Article $article) {
-    
+    return array();
 }
 
 function getArticlePage(tx_newspaper_Section $section) {
