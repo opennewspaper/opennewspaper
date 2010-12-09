@@ -848,6 +848,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
             self::makeRelatedArticlesBidirectional($id);
             self::cleanRelatedArticles($id);
+            
+            if (!intval($id)) return;
+            $article = new tx_newspaper_Article(intval($id));
+
+            try {
+                $article->getAttribute('uid');
+            } catch (tx_newspaper_Exception $e) {
+                return;
+            }
+            
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+            $tree->executeActionsOnPages();
+            
         }
     }
 
@@ -1407,5 +1420,5 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
 }
 
-//tx_newspaper::registerSaveHook(new tx_newspaper_Article());
+tx_newspaper::registerSaveHook(new tx_newspaper_Article());
 ?>

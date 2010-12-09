@@ -196,6 +196,7 @@ if (TYPO3_MODE == 'BE')	{
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');	
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_workflow.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_typo3hook.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dependencytree.php');
 }
 
 ?>
