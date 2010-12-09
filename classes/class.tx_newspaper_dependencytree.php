@@ -6,8 +6,13 @@ class tx_newspaper_DependencyTree {
     /** \param $article The article which is changed.
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
+        $tree = new tx_newspaper_DependencyTree;
         // article pages of all sections $article is in
+        $tree->addArticlePages($article->getSections());
         // all pages which display an article list $article is in
+        $tree->addArticleListPages(getArticleLists($article));
+        
+        return $tree;
     }
     
     /// Generates the tree of pages that change when a tx_newspaper_Extra changes.
@@ -48,6 +53,18 @@ class tx_newspaper_DependencyTree {
     
     ////////////////////////////////////////////////////////////////////////////
     
+    private function addArticlePages(array $sections) {
+        if (!is_array($this->pages_on_level[1])) $this->pages_on_level[1] = array();
+        foreach ($sections as $section) {
+            $article_page = getArticlePage($section);
+            $this->pages_on_level[1][] = $article_page;
+        }
+    }
+    
+    private function addArticleListPages(array $article_lists) {
+        
+    }
+    
     /** \code 
      *  array(
      *    1 => array ( pages on first level ),
@@ -65,6 +82,16 @@ class tx_newspaper_DependencyTree {
     private static $registered_actions = array();
     
 }
+
+function getArticleLists(tx_newspaper_Article $article) {
+    
+}
+
+function getArticlePage(tx_newspaper_Section $section) {
+    $articlepagetype = tx_newspaper_PageType::getArticlePageType();
+    return $section->getSubPage($articlepagetype);
+}
+
 
 function isCallback($action) {
     if (is_string($action)) {
