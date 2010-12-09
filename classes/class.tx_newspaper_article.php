@@ -585,10 +585,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                             'NOT parent_section', '', 'uid'
             );
             $section = new tx_newspaper_Section($section_data['uid']);
-        } else {
-            $typo3page = $section->getTypo3PageID();
         }
-
+        
+        $typo3page = $section->getTypo3PageID();
+        
         return tx_newspaper::typolink_url(
                 array(
                     'id' => $typo3page,
