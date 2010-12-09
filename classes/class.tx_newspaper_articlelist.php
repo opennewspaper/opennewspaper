@@ -302,7 +302,15 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		} catch (tx_newspaper_Exception $e) {
 			return false;
 		}
-	} 
+	}
+	
+	/// Tests whether \p $article is in the article list.
+	/** \param $article The article tested for.
+	 *  \param $max_index How many articles are checked.
+	 */
+	public function doesContainArticle(tx_newspaper_Article $article, $max_index) {
+		return false;
+	}
 
  	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
 	/** This is probably necessary because a concrete ArticleList has been freshly

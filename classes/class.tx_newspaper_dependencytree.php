@@ -2,15 +2,16 @@
 
 class tx_newspaper_DependencyTree {
     
+    const article_list_length = 10;
+    
     /// Generates the tree of pages that change when a tx_newspaper_Article changes.
     /** \param $article The article which is changed.
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
     	tx_newspaper::devlog('generate from article', $article->getUid());
         $tree = new tx_newspaper_DependencyTree;
-        // article pages of all sections $article is in
+
         $tree->addArticlePages($article->getSections());
-        // all pages which display an article list $article is in
         $tree->addArticleListPages(getArticleLists($article));
         
         return $tree;
@@ -19,7 +20,7 @@ class tx_newspaper_DependencyTree {
     /// Generates the tree of pages that change when a tx_newspaper_Extra changes.
     /** \param $extra The web element which is changed.
      */ 
-    static public function makeFromExtra(tx_newspaper_Extra $extra) {
+    static public function generateFromExtra(tx_newspaper_Extra $extra) {
         // if in article(s): generateFromArticle() for all articles
         // if on page zone directly: all pages which contain all page zones
     }
@@ -54,6 +55,7 @@ class tx_newspaper_DependencyTree {
     
     ////////////////////////////////////////////////////////////////////////////
     
+    /// Adds article pages of all sections $article is in
     private function addArticlePages(array $sections) {
         if (!is_array($this->pages_on_level[1])) $this->pages_on_level[1] = array();
         foreach ($sections as $section) {
@@ -62,6 +64,7 @@ class tx_newspaper_DependencyTree {
         }
     }
     
+    /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
         
     }
@@ -84,15 +87,31 @@ class tx_newspaper_DependencyTree {
     
 }
 
-function getArticleLists(tx_newspaper_Article $article) {
-    return array();
-}
-
+/// Returns the article page associated with \p $section
 function getArticlePage(tx_newspaper_Section $section) {
     $articlepagetype = tx_newspaper_PageType::getArticlePageType();
     return $section->getSubPage($articlepagetype);
 }
 
+/// Returns array of all article lists \p $article belongs to
+function getArticleLists(tx_newspaper_Article $article) {
+    
+    $all_article_lists = getAllArticleLists();
+    $article_lists = array();
+    
+    foreach ($all_article_lists as $list) {
+        if ($list->doesContainArticle($article, tx_newspaper_DependencyTree::article_list_length)) {
+            $article_lists[] = $list;
+        }
+    }
+    return $article_lists;
+}
+
+function getAllArticleLists() {
+    
+    return array();
+    
+}
 
 function isCallback($action) {
     if (is_string($action)) {
