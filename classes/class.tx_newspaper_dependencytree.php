@@ -6,6 +6,7 @@ class tx_newspaper_DependencyTree {
     /** \param $article The article which is changed.
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
+    	tx_newspaper::devlog('generate from article', $article->getUid());
         $tree = new tx_newspaper_DependencyTree;
         // article pages of all sections $article is in
         $tree->addArticlePages($article->getSections());
