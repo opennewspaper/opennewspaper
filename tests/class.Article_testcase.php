@@ -264,11 +264,11 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
             $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
         }
 
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
+        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
         $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet');
 
-        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagType());
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
+        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagTypes());
+        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
         $this->assertEquals(1, count($tags), 'One Controltags expected.');
     }
 	
