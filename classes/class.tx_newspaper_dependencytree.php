@@ -1,5 +1,15 @@
 <?php
 
+/** Levels of dependency for articles:
+ *  # article pages displaying the article 
+ *  #- as URL or GET parameters
+ *  # section pages displaying the article 
+ *  #- contain a sectionlist Extra which displays an article list which has a
+ *     section_id pointing to a non-hidden, non-deleted section
+ *  # article pages displaying articles related to the article
+ *  # any pages displaying article lists other than section lists which contain
+ *    the article
+ */
 class tx_newspaper_DependencyTree {
     
     const article_list_length = 10;
