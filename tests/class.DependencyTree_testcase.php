@@ -17,13 +17,10 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function test_getPages() {
         
         $uid = $this->fixture->getArticleUid();
-        print_r($uid);
         $article = new tx_newspaper_Article($uid);
-        print_r($this->fixture->getParentSectionUid());
-        print_r($article->getSections());
-        print_r(tx_newspaper::selectRowsDirect('uid_local, uid_foreign', 'tx_newspaper_article_sections_mm', 'uid_local = ' . $uid));
         
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+        print_r($tree);
         
         $pages = $tree->getPages();
         
