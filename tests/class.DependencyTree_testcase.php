@@ -13,6 +13,13 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function tearDown() {
         $this->clearDatabase();
     }
+    
+    public function test_getArticlePage() {
+        $section_uid = $this->fixture->getParentSectionUid();
+        $section = new tx_newspaper_Section($section_uid);
+        $this->assertTrue(!(getArticlePage($section) == null));
+        
+    }
 
     public function test_getPages() {
         
