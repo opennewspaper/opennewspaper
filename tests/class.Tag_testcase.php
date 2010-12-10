@@ -14,7 +14,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         parent::setUp();
         $this->tag = new tx_newspaper_Tag();
         $this->tag->setAttribute('tag', 'test-tag-1');
-        $this->tag->setAttribute('tag_type', tx_newspaper::getControlTagType());
+        $this->tag->setAttribute('tag_type', tx_newspaper::getControlTagTypes());
         $this->tag->store();
     }
 
