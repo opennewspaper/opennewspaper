@@ -388,6 +388,18 @@ class tx_newspaper_hierarchy {
 			'get_var' => 'blah',
 			'get_value' => '1',
 		),			
+		array(
+			'pid' => '2827',
+			'tstamp' => '1234567890',
+			'crdate' => '1234567890',
+			'cruser_id' => '1',
+			'sorting' => '2048',
+			'deleted' => '0',
+			'type_name' => 'Unit Test - Artikelseite',
+			'normalized_name' => 'artikelseite',
+			'get_var' => 'art',
+			'is_article_page' => 1,
+		),			
 	);
 	
 	private $page_table = 'tx_newspaper_page';
