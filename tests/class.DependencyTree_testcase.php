@@ -17,9 +17,11 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function test_getPages() {
         
         $uid = $this->fixture->getArticleUid();
+        print_r($uid);
         $article = new tx_newspaper_Article($this->uid);
         print_r($this->fixture->getParentSectionUid());
         print_r($article->getSections());
+        tx_newspaper::selectRowsDirect('*', 'tx_newspaper_article_sections_mm');
         
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
         

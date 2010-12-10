@@ -147,8 +147,8 @@ class tx_newspaper_hierarchy {
 		$this->article2section_uid = tx_newspaper::insertRows(
 			'tx_newspaper_article_sections_mm',
 			array(
-				'uid_foreign' => $this->article_uid,
-				'uid_local' => $this->getParentSectionUid()
+				'uid_local' => $this->article_uid,
+				'uid_foreign' => $this->getParentSectionUid()
 			));
 	}
 	
