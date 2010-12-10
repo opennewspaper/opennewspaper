@@ -21,7 +21,9 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
         
+        $pages = $tree->getPages();
         
+        print_r($pages);
     }
     private $dummySection;
 
