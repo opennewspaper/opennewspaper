@@ -156,7 +156,6 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 			$pt->getTable(),
 			'deleted = 0' // . ' AND pid = ' . $sf->getPid($pt)
 		);
-        print_r($row);
 
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
