@@ -18,7 +18,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $uid = $this->fixture->getArticleUid();
         print_r($uid);
-        $article = new tx_newspaper_Article($this->uid);
+        $article = new tx_newspaper_Article($uid);
         print_r($this->fixture->getParentSectionUid());
         print_r($article->getSections());
         print_r(tx_newspaper::selectRowsDirect('uid_local, uid_foreign', 'tx_newspaper_article_sections_mm', 'uid_local = ' . $uid));
