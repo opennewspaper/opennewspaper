@@ -63,62 +63,62 @@ class test_DBSource_testcase extends tx_newspaper_database_testcase {
 						  'readFields(Titel, Text) returned text: '.$this->article->getAttribute('text'));
 	}
 
-	public function test_Attributes() {
-		$attrs = tx_newspaper_Article::getAttributeList();
-		foreach ($this->reqFields as $field) {
-			if (!in_array($field, $attrs)) 
-				$this->fail("Required attribute $field not in Article::getRequiredAttributes()");
-		}	
-	}
+//	public function test_Attributes() {
+//		$attrs = tx_newspaper_Article::getAttributeList();
+//		foreach ($this->reqFields as $field) {
+//			if (!in_array($field, $attrs)) 
+//				$this->fail("Required attribute $field not in Article::getRequiredAttributes()");
+//		}	
+//	}
 
-	public function test_readArticle() {
-		$this->article = $this->source->readArticle('tx_newspaper_Article', $this->uid);
-		$attrs = tx_newspaper_Article::getAttributeList();
+//	public function test_readArticle() {
+//		$this->article = $this->source->readArticle('tx_newspaper_Article', $this->uid);
+//		$attrs = tx_newspaper_Article::getAttributeList();
+//
+//		$failed = $this->checkRequiredAttributes($this->article, $attrs);
+//		
+//		if ($failed) {
+//			$this->fail("Required attribute(s) ".implode(', ', $failed).
+//						" not in article read via source->readArticle()");
+//		}
+//		
+//		$this->setExpectedException('tx_newspaper_WrongClassException');
+//		$this->source->readArticle('es gibt mich nicht, schmeiss ne exception!', $this->uid);
+//	}
 
-		$failed = $this->checkRequiredAttributes($this->article, $attrs);
-		
-		if ($failed) {
-			$this->fail("Required attribute(s) ".implode(', ', $failed).
-						" not in article read via source->readArticle()");
-		}
-		
-		$this->setExpectedException('tx_newspaper_WrongClassException');
-		$this->source->readArticle('es gibt mich nicht, schmeiss ne exception!', $this->uid);
-	}
+//	public function test_readArticleWithObject() {
+//		$this->article = $this->source->readArticle($this->article, $this->uid);
+//		$attrs = $this->article->getAttributeList();
+//
+//		$failed = $this->checkRequiredAttributes($this->article, $attrs);
+//
+//		if ($failed) {
+//			$this->fail("Required attribute(s) ".implode(', ', $failed).
+//						" not in article read via source->readArticle()");
+//		}
+//	}
 
-	public function test_readArticleWithObject() {
-		$this->article = $this->source->readArticle($this->article, $this->uid);
-		$attrs = $this->article->getAttributeList();
-
-		$failed = $this->checkRequiredAttributes($this->article, $attrs);
-
-		if ($failed) {
-			$this->fail("Required attribute(s) ".implode(', ', $failed).
-						" not in article read via source->readArticle()");
-		}
-	}
-
-	public function test_readArticles() {
-		$articles = $this->source->readArticles('tx_newspaper_Article', $this->uidList);
-		$attrs = tx_newspaper_Article::getAttributeList();
-		$all_failed = array();
-		
-		foreach ($articles as $art) {
-			$failed = $this->checkRequiredAttributes($art, $attrs);
-			if ($failed) $all_failed[$art->getUid()] = $failed;
-		}
-		if ($all_failed) {
-			$err = '';
-			foreach ($all_failed as $uid => $fail_one) {
-				foreach ($fail_one as $fail) {
-					$err .= 'attribute ' . $fail . ', ';
-				}
-				$err .= 'in article ' . $uid;
-			}
-			$this->fail("Required attribute(s): $err".
-						" not in article read via source->readArticles()");
-		}			
-	}
+//	public function test_readArticles() {
+//		$articles = $this->source->readArticles('tx_newspaper_Article', $this->uidList);
+//		$attrs = tx_newspaper_Article::getAttributeList();
+//		$all_failed = array();
+//		
+//		foreach ($articles as $art) {
+//			$failed = $this->checkRequiredAttributes($art, $attrs);
+//			if ($failed) $all_failed[$art->getUid()] = $failed;
+//		}
+//		if ($all_failed) {
+//			$err = '';
+//			foreach ($all_failed as $uid => $fail_one) {
+//				foreach ($fail_one as $fail) {
+//					$err .= 'attribute ' . $fail . ', ';
+//				}
+//				$err .= 'in article ' . $uid;
+//			}
+//			$this->fail("Required attribute(s): $err".
+//						" not in article read via source->readArticles()");
+//		}			
+//	}
 	
 	public function test_SourcePath() {
 		$path = new tx_newspaper_SourcePath('blah');

@@ -47,101 +47,101 @@ class test_TBO_testcase extends tx_newspaper_database_testcase {
 	
 	/// Test whether the PI returns the correct pages.
 	/** Content of the page zones and extras is tested below */
-	public function test_main() {
-		$this->fail('test not yet ready!');
-		$this->doTestContains($this->pi->main('', null), 'Testressort');
-		
-		$this->doTestContains($this->pi->main('', null), 'Ressortseite');
-
-		$_GET['page'] = 100;
-		$this->doTestContains($this->pi->main('', null), 'RSS');
-		unset($_GET['page']);
-
-		$_GET['art'] = $this->article_uid;
-		$this->doTestContains($this->pi->main('', null), 'Artikelseite');
-	}
+//	public function test_main() {
+//		$this->fail('test not yet ready!');
+//		$this->doTestContains($this->pi->main('', null), 'Testressort');
+//		
+//		$this->doTestContains($this->pi->main('', null), 'Ressortseite');
+//
+//		$_GET['page'] = 100;
+//		$this->doTestContains($this->pi->main('', null), 'RSS');
+//		unset($_GET['page']);
+//
+//		$_GET['art'] = $this->article_uid;
+//		$this->doTestContains($this->pi->main('', null), 'Artikelseite');
+//	}
 	
-	public function test_PageZone_ressort() {
-		$this->fail('test not yet ready!');
-		$output = $this->pi->main('', null);
-		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 1');
-		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
-		$this->doTestContains($output, 'uid: 1');
-		$this->doTestContains($output, 'name: Test-Seitenbereich auf Ressortseite - 1');
-		$this->doTestContains($output, 'pagezone_id: X');
-
-		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 2');
-		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
-		$this->doTestContains($output, 'uid: 2');
-		$this->doTestContains($output, 'name: Test-Seitenbereich auf Ressortseite - 2');
-		$this->doTestContains($output, 'pagezone_id: Y');
-	}
+//	public function test_PageZone_ressort() {
+//		$this->fail('test not yet ready!');
+//		$output = $this->pi->main('', null);
+//		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 1');
+//		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
+//		$this->doTestContains($output, 'uid: 1');
+//		$this->doTestContains($output, 'name: Test-Seitenbereich auf Ressortseite - 1');
+//		$this->doTestContains($output, 'pagezone_id: X');
+//
+//		$this->doTestContains($output, 'Test-Seitenbereich auf Ressortseite - 2');
+//		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
+//		$this->doTestContains($output, 'uid: 2');
+//		$this->doTestContains($output, 'name: Test-Seitenbereich auf Ressortseite - 2');
+//		$this->doTestContains($output, 'pagezone_id: Y');
+//	}
 	
-	public function test_PageZone_rss() {
-		$this->fail('test not yet ready!');
-		$_GET['page'] = 100;
-		// The following tests page header, not zone, and is therefore disabled
-		// $this->doTestContains($this->pi->main('', null), 'Class: tx_newspaper_PageZone_Page');
-		$output = $this->pi->main('', null);
-		$this->doTestContains($output, 'Test-Seitenbereich RSS');
-		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
-		unset($_GET['page']);
-	}
+//	public function test_PageZone_rss() {
+//		$this->fail('test not yet ready!');
+//		$_GET['page'] = 100;
+//		// The following tests page header, not zone, and is therefore disabled
+//		// $this->doTestContains($this->pi->main('', null), 'Class: tx_newspaper_PageZone_Page');
+//		$output = $this->pi->main('', null);
+//		$this->doTestContains($output, 'Test-Seitenbereich RSS');
+//		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
+//		unset($_GET['page']);
+//	}
 	
-	public function test_PageZone_article() {
-		$_GET['art'] = $this->fixture->getArticleUid();
-		$output = $this->pi->main('', null);
-
-		$this->doTestContains($output, 'Test-Seitenbereich auf Artikelseite - 1');
-		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
-		$this->doTestContains($output, 'uid: 3');
-		$this->doTestContains($output, 'name: Test-Seitenbereich auf Artikelseite - 1');
-		$this->doTestContains($output, 'pagezone_id: Z');
-/*
-		$this->doTestContains($output, 'Artikel als Seitenbereich');
-		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Article');
-		$this->doTestContains($output, 'uid: 1');
-		$this->doTestContains($output, 'name: Artikel als Seitenbereich');
-		$this->doTestContains($output, 'pagezone_id: A');
-*/		
-		unset($_GET['art']);
-	}
+//	public function test_PageZone_article() {
+//		$_GET['art'] = $this->fixture->getArticleUid();
+//		$output = $this->pi->main('', null);
+//
+//		$this->doTestContains($output, 'Test-Seitenbereich auf Artikelseite - 1');
+//		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Page');
+//		$this->doTestContains($output, 'uid: 3');
+//		$this->doTestContains($output, 'name: Test-Seitenbereich auf Artikelseite - 1');
+//		$this->doTestContains($output, 'pagezone_id: Z');
+///*
+//		$this->doTestContains($output, 'Artikel als Seitenbereich');
+//		$this->doTestContains($output, 'Class: tx_newspaper_PageZone_Article');
+//		$this->doTestContains($output, 'uid: 1');
+//		$this->doTestContains($output, 'name: Artikel als Seitenbereich');
+//		$this->doTestContains($output, 'pagezone_id: A');
+//*/		
+//		unset($_GET['art']);
+//	}
 	
-	public function test_Extras_ressort() {
-		$this->fail('test not yet ready!');
-		$output = $this->pi->main('', null);
-		$this->doTestContains($output, 'Image 1');
-		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/BSD_-_Daemon_tux_thumb');
-		$this->doTestContains($output, 'Caption for image 1');
-
-		$this->doTestContains($output, 'Image 2 Titel');
-		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/kari.080524.gif"');
-		$this->doTestContains($output, 'Image 2 Caption');
-	}
+//	public function test_Extras_ressort() {
+//		$this->fail('test not yet ready!');
+//		$output = $this->pi->main('', null);
+//		$this->doTestContains($output, 'Image 1');
+//		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/BSD_-_Daemon_tux_thumb');
+//		$this->doTestContains($output, 'Caption for image 1');
+//
+//		$this->doTestContains($output, 'Image 2 Titel');
+//		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/kari.080524.gif"');
+//		$this->doTestContains($output, 'Image 2 Caption');
+//	}
 	
-	public function test_Extras_article() {
-		$_GET['art'] = $this->article_uid;
-		$output = $this->pi->main('', null);
-		
-		$this->doTestContains($output, 'Image 4');
-		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/120px-GentooFreeBSD-logo.svg_02.png"');
-		$this->doTestContains($output, 'Daemonic Gentoo');
-		
-		$this->doTestContains($output, 'title\[5\]');
-		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/lolcatsdotcomoh5o6d9hdjcawys6.jpg"');
-		$this->doTestContains($output, 'caption\[5\]');
-		
-	}
+//	public function test_Extras_article() {
+//		$_GET['art'] = $this->article_uid;
+//		$output = $this->pi->main('', null);
+//		
+//		$this->doTestContains($output, 'Image 4');
+//		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/120px-GentooFreeBSD-logo.svg_02.png"');
+//		$this->doTestContains($output, 'Daemonic Gentoo');
+//		
+//		$this->doTestContains($output, 'title\[5\]');
+//		$this->doTestContains($output, 'img src="uploads\/tx_newspaper\/lolcatsdotcomoh5o6d9hdjcawys6.jpg"');
+//		$this->doTestContains($output, 'caption\[5\]');
+//		
+//	}
 
-	public function test_Article() {
-		$_GET['art'] = $this->article_uid;
-		$output = $this->pi->main('', null);
-		$this->doTestContains($output, 'Neuer Artikel');
-		$this->doTestContains($output, 'Nummer eins');
-		$this->doTestContains($output, 'Artikel ist im Lande');
-		$this->doTestContains($output, 'Test Text');
-		$this->doTestContains($output, 'Nicht ein einziges sinnvolles Wort');
-	}
+//	public function test_Article() {
+//		$_GET['art'] = $this->article_uid;
+//		$output = $this->pi->main('', null);
+//		$this->doTestContains($output, 'Neuer Artikel');
+//		$this->doTestContains($output, 'Nummer eins');
+//		$this->doTestContains($output, 'Artikel ist im Lande');
+//		$this->doTestContains($output, 'Test Text');
+//		$this->doTestContains($output, 'Nicht ein einziges sinnvolles Wort');
+//	}
 	
 	////////////////////////////////////////////////////////////////////////////
 		

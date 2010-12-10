@@ -240,37 +240,37 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 //		$this->assertTrue(sizeof($articles) == 0);
 //	}
 
-    public function test_getTags() {
-        $tagnames = array('test-tag-1', 'test-tag-2', 'test-tag-3');
-        $tagType = tx_newspaper_Tag::getContentTagType();
-        $articleId = $this->article->getUid();
-
-        $tags = $this->article->getTags();
-        $this->assertEquals(0, count($tags), "No tags expected");
-
-        $this->insertTag($articleId, $tagnames[0], $tagType);
-        $tags = $this->article->getTags();
-        $this->assertEquals(1, count($tags), "One tag expected");
-
-        $this->insertTag($articleId, $tagnames[1], $tagType);
-        $tags = $this->article->getTags();
-        $this->assertEquals(2, count($tags), "Two tags expected");
-
-        $this->insertTag($articleId, $tagnames[2], $tagType);
-        $tags = $this->article->getTags();
-        $this->assertEquals(3, count($tags), "Three tags expected");
-
-        foreach($tags as $i => $tag) {
-            $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
-        }
-
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
-        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet');
-
-        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagTypes());
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
-        $this->assertEquals(1, count($tags), 'One Controltags expected.');
-    }
+//    public function test_getTags() {
+//        $tagnames = array('test-tag-1', 'test-tag-2', 'test-tag-3');
+//        $tagType = tx_newspaper_Tag::getContentTagType();
+//        $articleId = $this->article->getUid();
+//
+//        $tags = $this->article->getTags();
+//        $this->assertEquals(0, count($tags), "No tags expected");
+//
+//        $this->insertTag($articleId, $tagnames[0], $tagType);
+//        $tags = $this->article->getTags();
+//        $this->assertEquals(1, count($tags), "One tag expected");
+//
+//        $this->insertTag($articleId, $tagnames[1], $tagType);
+//        $tags = $this->article->getTags();
+//        $this->assertEquals(2, count($tags), "Two tags expected");
+//
+//        $this->insertTag($articleId, $tagnames[2], $tagType);
+//        $tags = $this->article->getTags();
+//        $this->assertEquals(3, count($tags), "Three tags expected");
+//
+//        foreach($tags as $i => $tag) {
+//            $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
+//        }
+//
+//        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
+//        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet');
+//
+//        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagTypes());
+//        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
+//        $this->assertEquals(1, count($tags), 'One Controltags expected.');
+//    }
 	
 	////////////////////////////////////////////////////////////////////////////
 
