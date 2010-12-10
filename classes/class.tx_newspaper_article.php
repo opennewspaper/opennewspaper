@@ -701,7 +701,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                         'sorting',
                         $limit ? "0, $limit" : ''
         );
-
+echo 'getSections(): '; print_r($section_ids);
         $sections = array();
         foreach ($section_ids as $id) {
             $sections[] = new tx_newspaper_Section($id['uid_foreign']);
