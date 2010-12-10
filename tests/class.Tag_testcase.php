@@ -8,7 +8,7 @@
  */
 require_once(PATH_typo3conf.'ext/newspaper/classes/class.tx_newspaper_exception.php');
 
-class test_Tag_testcase extends tx_newspaper_database_testcase {
+class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
 
     public function setUp() {
         parent::setUp();
