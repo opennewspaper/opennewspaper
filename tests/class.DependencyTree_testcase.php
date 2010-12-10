@@ -21,7 +21,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article = new tx_newspaper_Article($this->uid);
         print_r($this->fixture->getParentSectionUid());
         print_r($article->getSections());
-        print_r(tx_newspaper::selectRowsDirect('*', 'tx_newspaper_article_sections_mm'));
+        print_r(tx_newspaper::selectRowsDirect('uid_local, uid_foreign', 'tx_newspaper_article_sections_mm'));
         
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
         
