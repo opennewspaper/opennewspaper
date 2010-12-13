@@ -167,7 +167,7 @@ class tx_newspaper_hierarchy {
 				$page['pagetype_id'] = $this->pagetype_uids[$i];
 #				// $page['inherit_pagetype_id'] = ...?;
 				$this->page_uids[] = tx_newspaper::insertRows($this->page_table, $page);
-				print_r($page);
+				echo '<p>'; print_r($page); echo '</p>';
 			}
 		}
 	}
