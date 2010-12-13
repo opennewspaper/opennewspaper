@@ -166,7 +166,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
     static public function getArticlePageType() {
         $pagetypes = self::getAvailablePageTypes('is_article_page');
-        				echo '<p>'; print_r($pagetypes); echo '</p>';
+        				echo '<p>Article page types: '; print_r($pagetypes); echo '</p>';
         
         foreach ($pagetypes as $pagetype) {
             if ($pagetype->getAttribute('is_article_page')) return $pagetype;
