@@ -112,8 +112,39 @@ function getAllArticleListPages(array $article_lists) {
 }
 
 function getArticleListPages(tx_newspaper_ArticleList $article_list) {
-	$pages = array();
 	
+	$extras = getAllExtras($article_list);
+	
+	$pagezones = array();
+	foreach ($extras as $extra) {
+		$pagezones += getAllPageZones($extra);
+	}
+	$pagezones = array_unique($pagezones);
+	
+	$pages = array();
+	foreach ($pagezones as $pagezone) {
+		$pages += getAllPages($pagezone);
+	}
+	$pages = array_unique($pages);
+	
+	return $pages;
+}
+
+/// get all extras that reference $article_list
+function getAllExtras(tx_newspaper_ArticleList $article_list) {
+	$extras = array();
+	return $extras;
+}
+
+/// get all page zones that contain \p $extra
+function getAllPageZones(tx_newspaper_Extra $extra) {
+	$pagezones = array();
+	return $pagezones;
+}
+
+/// get all pages that contain $pagezone
+function getAllPages(tx_newspaper_Pagezone $pagezone) {
+	$pages = array();
 	return $pages;
 }
 
