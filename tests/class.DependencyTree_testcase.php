@@ -17,7 +17,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function test_getArticlePage() {
         $section_uid = $this->fixture->getParentSectionUid();
         $section = new tx_newspaper_Section($section_uid);
-        $this->assertTrue(!(getArticlePage($section) == null));
+        $article_page = getArticlePage($section);
+        $this->assertFalse($article_page == null);
         
     }
 

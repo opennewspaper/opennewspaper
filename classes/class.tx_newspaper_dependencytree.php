@@ -100,6 +100,7 @@ class tx_newspaper_DependencyTree {
 /// Returns the article page associated with \p $section
 function getArticlePage(tx_newspaper_Section $section) {
     $articlepagetype = tx_newspaper_PageType::getArticlePageType();
+    print_r ($articlepagetype);
     return $section->getSubPage($articlepagetype);
 }
 

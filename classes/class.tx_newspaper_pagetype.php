@@ -149,7 +149,6 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	 */
 	public static function getAvailablePageTypes() {
 		$sf = tx_newspaper_Sysfolder::getInstance();
-        print_r($sf);
 		$pt = new tx_newspaper_PageType();
 		$row = tx_newspaper::selectRows(
 			'*', 
