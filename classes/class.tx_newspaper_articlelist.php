@@ -309,6 +309,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \param $max_index How many articles are checked.
 	 */
 	public function doesContainArticle(tx_newspaper_Article $article, $max_index) {
+		$articles_to_check = $this->getArticles($max_index);
+		foreach ($articles_to_check as $checked_article) {
+			if ($article->getUid() == $checked_article->getUid()) return true;
+		}
 		return false;
 	}
 

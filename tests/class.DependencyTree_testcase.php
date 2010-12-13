@@ -61,6 +61,10 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThanOrEqual(1, sizeof($affected_article_lists));
         debugStuff($affected_article_lists);
         
+        foreach ($affected_article_lists as $list) {
+            $this->assertTrue($list->doesContainArticle($article));
+        }
+        
     }
 
     private $dummySection;
