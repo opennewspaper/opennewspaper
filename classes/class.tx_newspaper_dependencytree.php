@@ -119,7 +119,14 @@ function getAffectedArticleLists(tx_newspaper_Article $article) {
 
 function getAllArticleLists() {
     
-    return array();
+    $article_list_uids = tx_newspaper::selectRows('uid', 'tx_newspaper_article_list');
+    $article_lists = array();
+    
+    foreach ($article_list_uids as $uid) {
+        $article_lists[] = tx_newspaper_ArticleList_Factory::getInstance()->create($uid);
+    }
+    
+    return $article_lists;
     
 }
 
