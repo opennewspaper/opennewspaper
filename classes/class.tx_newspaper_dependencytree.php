@@ -132,7 +132,29 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 
 /// get all extras that reference $article_list
 function getAllExtras(tx_newspaper_ArticleList $article_list) {
+	
+	$article_list_extra_uids = tx_newspaper::selectRows(
+		'uid', 'tx_newspaper_extra_articlelist',
+		'articlelist = ' . $article_list->getUid()
+	);
+	
+	
 	$extras = array();
+	
+	foreach ($article_list_extra_uids as $record) {
+		$extra_uids = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_extra',
+			'extra_uid = ' . $record['uid'] . ' AND extra_table = \'' . 'tx_newspaper_extra_articlelist' . '\''
+		);
+		
+		// ...
+		foreach ($extra_uids as $uid) {
+			$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
+		} 
+	}
+	
+	// then the same for sectionlist extras...
+	
 	return $extras;
 }
 
