@@ -41,9 +41,18 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $pagetype = $page->getPageType();
         $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
-        debugStuff($pagetype);
+    }
+    
+    public function test_getArticleLists() {
         
     }
+    
+    public function test_getAllArticleLists() {
+        $article_lists = getAllArticleLists();
+        $this->assertTrue(is_array($article_lists));
+        $this->assertGreaterThanOrEqual(sizeof($article_lists), 1);
+    }
+    
 
     private $dummySection;
 

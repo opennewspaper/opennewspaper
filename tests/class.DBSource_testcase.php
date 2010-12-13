@@ -10,7 +10,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class taz_RedsysSource
-class test_DBSource_testcase extends tx_newspaper_database_testcase {
+class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 
 	function setUp() {
 		parent::setUp();
