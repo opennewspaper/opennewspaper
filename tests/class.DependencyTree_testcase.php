@@ -28,11 +28,14 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article = new tx_newspaper_Article($uid);
         
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
-        debugStuff($tree);
         
         $pages = $tree->getPages();
+
+        $this->assertTrue(sizeof($pages > 0));
         
-        debugStuff($pages);
+        $page = $pages[0];
+        debugStuff($page);
+        
     }
 
     private $dummySection;
