@@ -62,7 +62,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         debugStuff($affected_article_lists);
         
         foreach ($affected_article_lists as $list) {
-            $this->assertTrue($list->doesContainArticle($article));
+            $this->assertTrue($list->doesContainArticle($article, tx_newspaper_DependencyTree::article_list_length));
         }
         
     }
