@@ -32,7 +32,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $pages = $tree->getPages();
         
-        debugStuffC($pages);
+        debugStuff($pages);
     }
 
     private $dummySection;
