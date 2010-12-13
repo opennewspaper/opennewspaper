@@ -43,7 +43,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     function debugStuff($stuff) {
         echo '<p>'.
         str_replace(' ', '&nbsp;',
-            str_replace("\n", "<br />\n", print_r($stuff, 1))
+            str_replace("\n", "<br/>\n", print_r($stuff, 1))
         ) .
         '</p>';
     }
