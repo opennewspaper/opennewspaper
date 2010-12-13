@@ -43,7 +43,15 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
     }
     
-    public function test_getArticleLists() {
+    public function test_getAffectedArticleLists() {
+        $uid = $this->fixture->getArticleUid();
+        $article = new tx_newspaper_Article($uid);
+      
+        $affected_article_lists = getAffectedArticleLists($article);
+        
+        $this->assertTrue(is_array($affected_article_lists));
+        $this->assertGreaterThanOrEqual(sizeof($affected_article_lists), 1);
+        debugStuff($affected_article_lists);
         
     }
     
@@ -51,6 +59,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article_lists = getAllArticleLists();
         $this->assertTrue(is_array($article_lists));
         $this->assertGreaterThanOrEqual(sizeof($article_lists), 1);
+        debugStuff($article_lists);
     }
     
 

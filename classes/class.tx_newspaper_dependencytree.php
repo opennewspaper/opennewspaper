@@ -104,7 +104,7 @@ function getArticlePage(tx_newspaper_Section $section) {
 }
 
 /// Returns array of all article lists \p $article belongs to
-function getArticleLists(tx_newspaper_Article $article) {
+function getAffectedArticleLists(tx_newspaper_Article $article) {
     
     $all_article_lists = getAllArticleLists();
     $article_lists = array();
