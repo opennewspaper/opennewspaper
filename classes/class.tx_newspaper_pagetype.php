@@ -147,13 +147,14 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	/// get all available page types
 	/** \return array of all available page types objects
 	 */
-	public static function getAvailablePageTypes() {
+	public static function getAvailablePageTypes($condition = '') {
 		$sf = tx_newspaper_Sysfolder::getInstance();
 		$pt = new tx_newspaper_PageType();
 		$row = tx_newspaper::selectRows(
 			'*', 
 			$pt->getTable(),
 			'deleted = 0' // . ' AND pid = ' . $sf->getPid($pt)
+			. ($condition? ' AND ' . $condition: '')
 		);
 
 		$list = array();
@@ -164,7 +165,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 	}
 
     static public function getArticlePageType() {
-        $pagetypes = self::getAvailablePageTypes();
+        $pagetypes = self::getAvailablePageTypes('is_article_page');
         				echo '<p>'; print_r($pagetypes); echo '</p>';
         
         foreach ($pagetypes as $pagetype) {
