@@ -153,7 +153,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 		$row = tx_newspaper::selectRows(
 			'*', 
 			$pt->getTable(),
-			'deleted = 0' // . ' AND pid = ' . $sf->getPid($pt)
+			'NOT deleted' // . ' AND pid = ' . $sf->getPid($pt)
 			. ($condition? ' AND ' . $condition: '')
 		);
 
