@@ -39,6 +39,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         // assert that affected page is article page of affected section
         $section = $page->getParentSection();
         debugStuff($section);
+        $this->assertEquals($section, $article->getPrimarySection());
         $pagetype = $page->getPageType();
         debugStuff($pagetype);
         
