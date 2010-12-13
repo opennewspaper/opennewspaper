@@ -112,7 +112,9 @@ function getAllArticleListPages(array $article_lists) {
 }
 
 function getArticleListPages(tx_newspaper_ArticleList $article_list) {
+	$pages = array();
 	
+	return $pages;
 }
 
 /// Returns array of all article lists \p $article belongs to

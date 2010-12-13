@@ -76,8 +76,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     ////////////////////////////////////////////////////////////////////////////
     
     private function checkIsfilledArray($thing, $size = 1) {
-        $this->assertTrue(is_array($thing));
-        $this->assertGreaterThanOrEqual($size, sizeof($thing));
+        $this->assertTrue(is_array($thing), 'Not an array');
+        $this->assertGreaterThanOrEqual($size, sizeof($thing), 'Array size < ' . $size);
     }
 
     private $dummySection;
