@@ -22,7 +22,7 @@ class tx_newspaper_DependencyTree {
         $tree = new tx_newspaper_DependencyTree;
 
         $tree->addArticlePages($article->getSections());
-        $tree->addArticleListPages(getArticleLists($article));
+        $tree->addArticleListPages(getAffectedArticleLists($article));
         
         return $tree;
     }
