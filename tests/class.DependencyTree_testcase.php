@@ -46,9 +46,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     
     public function test_getAllArticleLists() {
         $article_lists = getAllArticleLists();
-        $this->assertTrue(is_array($article_lists));
-        $this->assertGreaterThanOrEqual(1, sizeof($article_lists));
-        debugStuff($article_lists);
+        $this->checkIsfilledArray($article_lists);
     }
     
     public function test_getAffectedArticleLists() {
@@ -57,14 +55,29 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
       
         $affected_article_lists = getAffectedArticleLists($article);
         
-        $this->assertTrue(is_array($affected_article_lists));
-        $this->assertGreaterThanOrEqual(1, sizeof($affected_article_lists));
-        debugStuff($affected_article_lists);
+        $this->checkIsfilledArray($affected_article_lists);
         
         foreach ($affected_article_lists as $list) {
             $this->assertTrue($list->doesContainArticle($article, tx_newspaper_DependencyTree::article_list_length));
         }
         
+    }
+
+    public function test_getArticleListPages() {
+        $al_uid = $this->fixture->getArticlelistUid();
+        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        
+        $pages = getArticleListPages($article_list);
+        
+        $this->checkIsfilledArray($pages);
+        
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    
+    private function checkIsfilledArray($thing, $size = 1) {
+        $this->assertTrue(is_array($thing));
+        $this->assertGreaterThanOrEqual($size, sizeof($thing));
     }
 
     private $dummySection;

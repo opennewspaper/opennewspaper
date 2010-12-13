@@ -103,6 +103,18 @@ function getArticlePage(tx_newspaper_Section $section) {
     return $section->getSubPage($articlepagetype);
 }
 
+function getAllArticleListPages(array $article_lists) {
+	$pages = array();
+	foreach ($article_lists as $list) {
+		$pages += getArticleListPages($list);
+	}
+	return array_unique($pages);
+}
+
+function getArticleListPages(tx_newspaper_ArticleList $article_list) {
+	
+}
+
 /// Returns array of all article lists \p $article belongs to
 function getAffectedArticleLists(tx_newspaper_Article $article) {
     
