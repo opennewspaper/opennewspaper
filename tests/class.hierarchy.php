@@ -428,6 +428,17 @@ class tx_newspaper_hierarchy {
 			'inherit_pagetype_id' => '',
 			'template_set' => 'Unit Test',
 		),		
+		array(	
+			'pid' => '2474',
+			'tstamp' => '1234567890',
+			'crdate' => '1234567890',
+			'cruser_id' => '1',
+			'deleted' => '0',
+			'section' => '',
+			'pagetype_id' => '',
+			'inherit_pagetype_id' => '',
+			'template_set' => 'Unit Test',
+		),		
 	);
 
 	/// The Pages in the hierarchy as a flat array of objects
