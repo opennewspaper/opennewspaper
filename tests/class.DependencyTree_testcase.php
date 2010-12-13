@@ -34,13 +34,13 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue(sizeof($pages) > 0);
         
         $page = $pages[0];
-        debugStuff($page);
-        
+
         // assert that affected page is article page of affected section
         $section = $page->getParentSection();
-        debugStuff($section);
         $this->assertEquals($section, $article->getPrimarySection());
+
         $pagetype = $page->getPageType();
+        $this->assertTrue($pagetype->getAttribute('is_article_page'));
         debugStuff($pagetype);
         
     }
