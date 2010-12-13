@@ -50,7 +50,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $affected_article_lists = getAffectedArticleLists($article);
         
         $this->assertTrue(is_array($affected_article_lists));
-        $this->assertGreaterThanOrEqual(sizeof($affected_article_lists), 1);
+        $this->assertGreaterThanOrEqual(1, sizeof($affected_article_lists));
         debugStuff($affected_article_lists);
         
     }
@@ -58,7 +58,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function test_getAllArticleLists() {
         $article_lists = getAllArticleLists();
         $this->assertTrue(is_array($article_lists));
-        $this->assertGreaterThanOrEqual(sizeof($article_lists), 1);
+        $this->assertGreaterThanOrEqual(1, sizeof($article_lists));
         debugStuff($article_lists);
     }
     
