@@ -122,8 +122,8 @@ function getAllArticleLists() {
     $article_list_uids = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
     $article_lists = array();
     
-    foreach ($article_list_uids as $uid) {
-        $article_lists[] = tx_newspaper_ArticleList_Factory::getInstance()->create($uid);
+    foreach ($article_list_uids as $record) {
+        $article_lists[] = tx_newspaper_ArticleList_Factory::getInstance()->create($record['uid']);
     }
     
     return $article_lists;
