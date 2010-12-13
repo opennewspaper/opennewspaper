@@ -31,7 +31,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $pages = $tree->getPages();
 
-        $this->assertTrue(sizeof($pages > 0));
+        $this->assertTrue(sizeof($pages) > 0);
         
         $page = $pages[0];
         debugStuff($page);
