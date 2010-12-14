@@ -38,8 +38,8 @@ class tx_newspaper_hierarchy {
 		$this->createSectionHierarchy();
 		$this->createPages();
 		$this->createPageZones();
-		$this->createExtras();
 		$this->createArticleList();
+		$this->createExtras();
 		$this->createArticle();
 	}
 	

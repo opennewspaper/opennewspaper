@@ -6,8 +6,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
         parent::setUp();
-        $sectionUid = tx_newspaper::insertRows('tx_newspaper_section', array('section_name' => 'dunmy'));
-        $this->dummySection = new tx_newspaper_Section($sectionUid);
     }
 
     public function tearDown() {
@@ -92,10 +90,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue(is_array($thing), 'Not an array');
         $this->assertGreaterThanOrEqual($size, sizeof($thing), 'Array size < ' . $size);
     }
-
-    private $dummySection;
-
-
+    
 }
 
     function debugStuff($stuff) {
