@@ -8,12 +8,50 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         parent::setUp();
     }
     
+    // to do: organize tests so that tests of dependent functions are executed after those they depend on
+    
+    // to do: test high level functions and let them fail for now
+    
+    public function test_getArticlePages() {
+        $this->fail('To do');
+    }
+
+    public function test_getSectionPages() {
+        $this->fail('To do');
+    }
+
+    public function test_getRelatedArticlePages() {
+        $this->fail('To do');
+    }
+
     public function test_getArticlePage() {
         $section_uid = $this->fixture->getParentSectionUid();
         $section = new tx_newspaper_Section($section_uid);
         $article_page = getArticlePage($section);
         $this->assertFalse($article_page == null);
         
+        $this->fail('To do???');
+    }
+
+    public function test_getArticleListPages() {
+        $al_uid = $this->fixture->getArticlelistUid();
+        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        
+        $pages = getArticleListPages($article_list);
+        
+        $this->checkIsfilledArray($pages);
+        
+        foreach ($pages as $page) {
+            $this->checkIsValidPage($page);
+        }
+        
+        $tree = $this->createTree();
+
+        $this->fail('To do');
+    }
+
+    public function test_executeActionsOnPages() {
+        $this->fail('To do');
     }
 
     public function test_getPages() {
@@ -55,9 +93,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
     }
 
-    public function test_getSectionPages() {
-        $this->markTestSkipped('To do');
-    }
     
     public function test_getAllExtras() {
         
@@ -107,20 +142,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
     }
     
-    public function test_getArticleListPages() {
-        $al_uid = $this->fixture->getArticlelistUid();
-        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
-        
-        $pages = getArticleListPages($article_list);
-        
-        $this->checkIsfilledArray($pages);
-        
-        foreach ($pages as $page) {
-            $this->checkIsValidPage($page);
-        }
-        
-        $tree = $this->createTree();
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     
