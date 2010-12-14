@@ -168,7 +168,7 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 	$extras = array();
 	
 	foreach ($article_list_extra_uids as $record) {
-		$extras += getAbstractExtras($record['uid'], $extra_type);
+		$extras = array_merge($extras, getAbstractExtras($record['uid'], $extra_type));
 	}
 	
 	return $extras;
