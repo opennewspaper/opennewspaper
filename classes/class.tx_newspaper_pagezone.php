@@ -854,6 +854,7 @@ print_r($this->pagezone_attributes);
 	 *  \return UID of abstract PageZone record
 	 */ 
 	public function createPageZoneRecord() {
+		echo "<p>createPageZoneRecord()</p>";
 		/// Check if record is already present in page zone table
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', 'tx_newspaper_pagezone', 
