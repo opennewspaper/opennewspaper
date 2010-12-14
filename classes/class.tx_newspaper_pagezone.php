@@ -99,10 +99,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */
 		if (array_key_exists($attribute, $this->attributes)) {
 			return $this->attributes[$attribute];
- 		}
- 		if (!$this->pagezone_attributes) {
- 		}
-print_r($this->pagezone_attributes);
+		}
+		if (!$this->pagezone_attributes) {
+			$this->pagezone_attributes = tx_newspaper::selectOneRow(
+				'*', 'tx_newspaper_pagezone', 
+				'pagezone_table = \'' . $this->getTable() . '\' AND pagezone_uid = ' . $this->getUid()
+			);
+		}
+
  		if (array_key_exists($attribute, $this->pagezone_attributes)) {
 			return $this->pagezone_attributes[$attribute];
  		}
