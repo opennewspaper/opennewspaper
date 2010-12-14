@@ -97,11 +97,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		/** For reasons explained in readExtras() the attributes are read in the
 		 *  constructor, so we don't read the attributes here 
 		 */
-		if (!array_key_exists($attribute, $this->attributes)) {
-        	throw new tx_newspaper_WrongAttributeException($attribute);
+		if (array_key_exists($attribute, $this->attributes)) {
+			return $this->attributes[$attribute];
  		}
-		
-		return $this->attributes[$attribute];
+ 		if (array_key_exists($attribute, $this->pagezone_attributes)) {
+			return $this->pagezone_attributes[$attribute];
+ 		}
+
+		throw new tx_newspaper_WrongAttributeException($attribute);
 	}
 
 	
@@ -1181,6 +1184,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
  	protected $smarty = null;		///< Smarty object for rendering
  	
  	protected $attributes = array();	///< array of attributes
+ 	protected $pagezone_attributes = array(); ///< array of attributes for the parent part of the record
  	protected $extras = array();		///< array of tx_newspaper_Extra s
  	protected $pagezonetype = null;
  	
