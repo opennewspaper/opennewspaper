@@ -109,7 +109,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
                 $page = getPage($pagezone);
                 $this->assertTrue(is_object($page));
                 $this->assertTrue($page instanceof tx_newspaper_Page);
-                $this->assertGreaterThan(intval($page->getAttribute('uid')), 0);
+                $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
             }
         }
         
@@ -123,6 +123,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $this->checkIsfilledArray($pages);
         
+        debugStuff($pages);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -142,12 +143,12 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 }
 
-    function debugStuff($stuff) {
-        echo '<p>'.
+function debugStuff($stuff) {
+    echo '<p>'.
         str_replace(' ', '&nbsp;',
             str_replace("\n", "<br/>\n", print_r($stuff, 1))
         ) .
         '</p>';
-    }
+}
 
 ?>
