@@ -62,7 +62,7 @@ class tx_newspaper_DependencyTree {
 
         $pages = array();
         for ($level = 1; $level <= $depth; $level++) {
-            $pages += $this->pages_on_level[$level];
+            $pages = array_merge($pages, $this->pages_on_level[$level]);
         }
         return $pages;
     }
@@ -128,7 +128,7 @@ function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
 function getAllArticleListPages(array $article_lists) {
 	$pages = array();
 	foreach ($article_lists as $list) {
-		$pages += getArticleListPages($list);
+		$pages = array_merge($pages, getArticleListPages($list));
 	}
 	return array_unique($pages);
 }
@@ -139,13 +139,13 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 	
 	$pagezones = array();
 	foreach ($extras as $extra) {
-		$pagezones += getAllPageZones($extra);
+		$pagezones = array_merge($pagezons, getAllPageZones($extra));
 	}
 	$pagezones = array_unique($pagezones);
 	
 	$pages = array();
 	foreach ($pagezones as $pagezone) {
-		$pages += getAllPages($pagezone);
+		$pages = array_merge($pages, getAllPages($pagezone));
 	}
 	$pages = array_unique($pages);
 	
@@ -164,7 +164,6 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 		'articlelist = ' . $article_list->getUid()
 	);
 	
-	print_r($article_list_extra_uids);
 	$extras = array();
 	
 	foreach ($article_list_extra_uids as $record) {
