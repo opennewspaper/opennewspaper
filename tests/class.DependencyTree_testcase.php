@@ -83,14 +83,18 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $article_list = $this->createArticleList();
         $extras = getAllExtras($article_list);
-        $pagezones = getAllPageZones($extras);
         
-        debugStuff($pagezones);
+        foreach ($extras as $extra) {
+            
+            $pagezones = getAllPageZones($extra);
         
-        $this->checkIsfilledArray($pagezones, 2);
-        foreach ($pagezones as $pagezone) {
-            $this->assertTrue(is_object($pagezone));
-            $this->assertTrue($pagezone instanceof tx_newspaper_Pagezone);
+            debugStuff($pagezones);
+        
+            $this->checkIsfilledArray($pagezones);
+            foreach ($pagezones as $pagezone) {
+                $this->assertTrue(is_object($pagezone));
+                $this->assertTrue($pagezone instanceof tx_newspaper_Pagezone);
+            }
         }
     }
     
