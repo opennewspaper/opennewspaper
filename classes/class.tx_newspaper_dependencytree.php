@@ -192,7 +192,17 @@ function getAbstractExtras($concrete_extra_uid, $extra_table) {
 
 /// get all page zones that contain \p $extra
 function getAllPageZones(tx_newspaper_Extra $extra) {
+	
+	$pagezone_uids = tx_newspaper::selectRows(
+		'uid_local', 'tx_newspaper_pagezone_page_extras_mm',
+		'uid_foreign = ' . $extra->getExtraUid()
+	);
+	
 	$pagezones = array();
+	foreach ($pagezone_uids as $uid) {
+		$pagezones = new tx_newspaper_Pagezone_Page($uid['uid']);
+	}
+	
 	return $pagezones;
 }
 
