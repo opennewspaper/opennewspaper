@@ -107,7 +107,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'pagezone_table = \'' . $this->getTable() . '\' AND pagezone_uid = ' . $this->getUid()
 			);
  			} catch (tx_newspaper_Exception $e) {
- 				debug_print_backtrace();
+				echo '<p>'.
+				        str_replace(' ', '&nbsp;',
+				            str_replace("\n", "<br/>\n", print_r(debug_backtrace(), 1))
+				        ) .
+				        '</p>'; 				
  			}
  		}
 print_r($this->pagezone_attributes);
