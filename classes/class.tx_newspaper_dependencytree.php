@@ -154,11 +154,7 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 
 /// get all extras that reference $article_list
 function getAllExtras(tx_newspaper_ArticleList $article_list) {
-	
-	$extras = getAllExtrasOfType('tx_newspaper_extra_articlelist', $article_list);
-	$extras += getAllSectionlistExtras($article_list);
-	
-	return $extras;
+	return getAllExtrasOfType('tx_newspaper_extra_articlelist', $article_list);
 }
 
 function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list) {
