@@ -145,7 +145,7 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 	
 	$pages = array();
 	foreach ($pagezones as $pagezone) {
-		$pages = array_merge($pages, getAllPages($pagezone));
+		$pages[] = getPage($pagezone);
 	}
 	$pages = array_unique($pages);
 	
@@ -207,9 +207,8 @@ function getAllPageZones(tx_newspaper_Extra $extra) {
 }
 
 /// get all pages that contain $pagezone
-function getAllPages(tx_newspaper_Pagezone $pagezone) {
-	$pages = array();
-	return $pages;
+function getPage(tx_newspaper_Pagezone $pagezone) {
+	return new tx_newspaper_Page(intval($pagezone->getAttribute('page_id')));
 }
 
 /// Returns array of all article lists \p $article belongs to

@@ -87,15 +87,32 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         foreach ($extras as $extra) {
             
             $pagezones = getAllPageZones($extra);
-        
-            debugStuff($pagezones);
-        
+            
             $this->checkIsfilledArray($pagezones);
             foreach ($pagezones as $pagezone) {
                 $this->assertTrue(is_object($pagezone));
                 $this->assertTrue($pagezone instanceof tx_newspaper_Pagezone);
+                $this->assertGreaterThan(intval($pagezone->getAttribute('uid')), 0);
             }
         }
+    }
+    
+    public function test_getPage() {
+        $article_list = $this->createArticleList();
+        $extras = getAllExtras($article_list);
+        
+        foreach ($extras as $extra) {
+            
+            $pagezones = getAllPageZones($extra);
+            
+            foreach ($pagezones as $pagezone) {
+                $page = getPage($pagezone);
+                $this->assertTrue(is_object($page));
+                $this->assertTrue($page instanceof tx_newspaper_Page);
+                $this->assertGreaterThan(intval($page->getAttribute('uid')), 0);
+            }
+        }
+        
     }
     
     public function test_getArticleListPages() {
