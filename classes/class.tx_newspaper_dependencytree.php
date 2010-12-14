@@ -55,52 +55,82 @@ class tx_newspaper_DependencyTree {
         }
     }
     
-    /// Returns all affected pages up to a specified depth.
-    public function getPages($depth = 0) {
-        
-        if ($depth == 0) $depth = sizeof($this->pages_on_level);
-        if ($depth > sizeof($this->pages_on_level)) $depth = sizeof($this->pages_on_level);
-
-        $pages = array();
-        for ($level = 1; $level <= $depth; $level++) {
-            $pages = array_merge($pages, $this->pages_on_level[$level]);
-        }
-        return $pages;
+    public function getArticlePages() {
+        return $this->article_pages;
     }
     
+    public function getSectionPages() {
+        return $this->section_pages;
+    }
+    
+    public function getRelatedArticlePages() {
+        return $this->related_article_pages;
+    }
+    
+    public function getArticlelistPages() {
+        return $this->articlelist_pages;
+    }
+    
+    /// Returns all affected pages up to a specified depth.
+    /** Kept only for backwards compatibility.
+     */
+    public function getPages($depth = 0) {
+        
+        if ($depth == 0) $depth = 4;
+
+        $pages = array();
+        if ($depth >= 1) {
+            $pages = array_merge($pages, $this->getArticlePages());
+        }
+        if ($depth >= 2) {
+            $pages = array_merge($pages, $this->getSectionPages());
+        }
+        if ($depth >= 3) {
+            $pages = array_merge($pages, $this->getRelatedArticlePages());
+        }
+        if ($depth >= 4) {
+            $pages = array_merge($pages, $this->getArticlelistPages());
+        }
+        
+        return $pages;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     
     /// Adds article pages of all sections $article is in
     /** \todo Only clear cache for the affected article, not the entire page
      */
     private function addArticlePages(array $sections) {
-        if (!is_array($this->pages_on_level[1])) $this->pages_on_level[1] = array();
-        foreach ($sections as $section) {
-            $article_page = getArticlePage($section);
-            $this->pages_on_level[1][] = $article_page;
-        }
+        $this->article_pages = array_merge($this->article_pages, getAllArticlePages($sections));
+        $this->article_pages = array_unique($this->article_pages);
     }
     
     private function addSectionPages(array $sections) {
-        
+        foreach ($sections as $section) {
+           
+        }
+        $this->section_pages = array_unique($this->section_pages);
+    }
+    
+    private function addRelatedArticles(tx_newspaper_Article $article) {
+        $related = $article->getRelatedArticles();
+        foreach ($related as $related_article) {
+            $sections = $related_article->getSections();
+            $this->related_article_pages = array_merge($this->related_article_pages, getAllArticlePages($sections));
+            $this->related_article_pages = array_merge($this->related_article_pages, getAllSectionPages($sections));
+        }
+        $this->related_article_pages = array_unique($this->related_article_pages);
     }
     
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
-        $this->pages_on_level[4] = getAllArticleListPages($article_lists);
+        $this->articlelist_pages = getAllArticleListPages($article_lists);
     }
     
-    /** \code 
-     *  array(
-     *    1 => array ( pages on first level ),
-     *    2 => array ( ... ),
-     *    ...
-     *  )
-     * \endcode
-     */
-    private $pages_on_level = array(
-        1 => array(), 2 => array(), 3 => array(), 4 => array()
-    );
+    private $article_pages = array();   ///< Article pages of the sections containing the article
+    private $section_pages = array();   ///< Section overview pages containing the article
+    private $related_article_pages = array();   ///< Pages showing articles related to the article
+    private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
     
     private static function addAction($action) {
         self::$registered_actions[] = $action;
@@ -110,10 +140,23 @@ class tx_newspaper_DependencyTree {
     
 }
 
+function getAllArticlePages(array $sections) {
+	$article_pages = array();
+    foreach ($sections as $section) {
+        $article_page = getArticlePage($section);
+        $article_pages[] = $article_page;
+    }
+    return $article_pages;
+}
+
 /// Returns the article page associated with \p $section
 function getArticlePage(tx_newspaper_Section $section) {
     $articlepagetype = tx_newspaper_PageType::getArticlePageType();
     return $section->getSubPage($articlepagetype);
+}
+
+function getAllSectionPages(array $sections) {
+    return array();
 }
 
 /*
