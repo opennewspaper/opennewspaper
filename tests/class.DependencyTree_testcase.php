@@ -92,7 +92,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
             foreach ($pagezones as $pagezone) {
                 $this->assertTrue(is_object($pagezone));
                 $this->assertTrue($pagezone instanceof tx_newspaper_Pagezone);
-                $this->assertGreaterThan(intval($pagezone->getAttribute('uid')), 0);
+                $this->assertGreaterThan(0, intval($pagezone->getAttribute('uid')));
             }
         }
     }
