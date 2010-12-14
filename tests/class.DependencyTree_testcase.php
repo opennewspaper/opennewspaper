@@ -63,6 +63,19 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
     }
 
+    public function test_getSectionPages() {
+        $this->markTestSkipped('To do');
+    }
+    
+    public function test_getAllExtras() {
+        
+        $al_uid = $this->fixture->getArticlelistUid();
+        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        
+        $extras = getAllExtras($article_list);
+        debugStuff($extras);
+    }
+    
     public function test_getArticleListPages() {
         $al_uid = $this->fixture->getArticlelistUid();
         $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);

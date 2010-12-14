@@ -59,10 +59,9 @@ class tx_newspaper_DependencyTree {
         
         if ($depth == 0) $depth = sizeof($this->pages_on_level);
         if ($depth > sizeof($this->pages_on_level)) $depth = sizeof($this->pages_on_level);
-        echo $depth; echo "<br/>";
+
         $pages = array();
         for ($level = 1; $level <= $depth; $level++) {
-        	echo $level.": "; print_r($this->pages_on_level[$level]); echo "<br/>";
             $pages += $this->pages_on_level[$level];
         }
         return $pages;
