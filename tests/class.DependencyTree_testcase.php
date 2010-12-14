@@ -11,7 +11,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function tearDown() {
-        $this->clearDatabase();
+#        $this->clearDatabase();
     }
     
     public function test_getArticlePage() {
