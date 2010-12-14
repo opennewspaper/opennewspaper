@@ -67,16 +67,30 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     
     public function test_getAllExtras() {
         
-        $al_uid = $this->fixture->getArticlelistUid();
-        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        $article_list = $this->createArticleList();
         
         $extras = getAllExtras($article_list);
         
-        $this->assertGreaterThanOrEqual(2, sizeof($extras));
+        $this->checkIsfilledArray($extras, 2);
         foreach ($extras as $extra) {
             $this->assertTrue(is_object($extra));
             $this->assertTrue($extra instanceof tx_newspaper_Extra_ArticleList);
             $this->assertTrue($extra->getAttribute('articlelist') == $this->fixture->getArticlelistUid());
+        }
+    }
+    
+    public function test_getAllPageZones() {
+        
+        $article_list = $this->createArticleList();
+        $extras = getAllExtras($article_list);
+        $pagezones = getAllPageZones($extras);
+        
+        debugStuff($pagezones);
+        
+        $this->checkIsfilledArray($pagezones, 2);
+        foreach ($pagezones as $pagezone) {
+            $this->assertTrue(is_object($pagezone));
+            $this->assertTrue($pagezone instanceof tx_newspaper_Pagezone);
         }
     }
     
@@ -97,6 +111,14 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThanOrEqual($size, sizeof($thing), 'Array size < ' . $size);
     }
     
+    private function createArticleList() {
+        
+        $al_uid = $this->fixture->getArticlelistUid();
+        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        
+        return $article_list;
+        
+    }
 }
 
     function debugStuff($stuff) {
