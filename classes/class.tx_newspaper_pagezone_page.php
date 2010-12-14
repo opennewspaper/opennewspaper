@@ -54,10 +54,6 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		    $this->readAttributes($this->getTable(), $uid);
 		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
 		    $this->pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
-		    $this->pagezone_attributes = tx_newspaper::selectOneRow(
-				'*', 'tx_newspaper_pagezone', 
-				'pagezone_table = \'tx_newspaper_pagezone_page\' AND pagezone_uid = ' . $this->getUid()
-			);
 		}
 		
  	}
