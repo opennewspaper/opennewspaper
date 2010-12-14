@@ -59,13 +59,13 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 				'pagezone_table = \'' . $this->getTable() . '\' AND pagezone_uid = ' . $this->getUid()
 			);		    
 		} else {
-			echo "pagezune_page c'tor called without UID";
+/*			echo "pagezune_page c'tor called without UID";
 			echo '<p>'.
         str_replace(' ', '&nbsp;',
             str_replace("\n", "<br/>\n", print_r(debug_backtrace(), 1))
         ) .
         '</p>';
-		}
+*/		}
 		
  	}
 
