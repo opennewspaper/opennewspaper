@@ -101,10 +101,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			return $this->attributes[$attribute];
  		}
  		if (!$this->pagezone_attributes) {
-			$this->pagezone_attributes = tx_newspaper::selectOneRow(
-				'*', 'tx_newspaper_pagezone', 
-				'pagezone_table = \'' . $this->getTable() . '\' AND pagezone_uid = ' . $this->getUid()
-			);
  		}
 print_r($this->pagezone_attributes);
  		if (array_key_exists($attribute, $this->pagezone_attributes)) {
@@ -853,7 +849,6 @@ print_r($this->pagezone_attributes);
 			' AND pagezone_uid = ' . $this->getUid()	
 		);
 		if ($row['uid']) return $row['uid'];
-		echo "<p>createPageZoneRecord()</p>";
 		
 		/// read typo3 fields to copy into page zone table
 		$row = tx_newspaper::selectOneRow(
