@@ -164,7 +164,7 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 		'articlelist = ' . $article_list->getUid()
 	);
 	
-	
+	print_r($article_list_extra_uids);
 	$extras = array();
 	
 	foreach ($article_list_extra_uids as $record) {
