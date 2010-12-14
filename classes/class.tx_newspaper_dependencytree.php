@@ -201,7 +201,7 @@ function getAllPageZones(tx_newspaper_Extra $extra) {
 	$pagezones = array();
 	foreach ($pagezone_uids as $uid) {
 		print_r($uid);
-		$pagezones[] = new tx_newspaper_Pagezone_Page($uid['uid']);
+		$pagezones[] = new tx_newspaper_Pagezone_Page($uid['uid_local']);
 	}
 	
 	return $pagezones;
