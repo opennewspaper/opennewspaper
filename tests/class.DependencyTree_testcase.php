@@ -71,8 +71,13 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
         
         $extras = getAllExtras($article_list);
-        foreach ($extras as $extra) $extra->getAttribute('uid');
-        debugStuff($extras);
+        
+        $this->assertGreaterThanOrEqual(2, sizeof($extras));
+        foreach ($extras as $extra) {
+            $this->assertTrue(is_object($extra));
+            $this->assertTrue($extra instanceof tx_newspaper_Extra_ArticleList);
+            $this->assertTrue($extra->getAttribute('articlelist') == $this->fixture->getArticlelistUid());
+        }
     }
     
     public function test_getArticleListPages() {
