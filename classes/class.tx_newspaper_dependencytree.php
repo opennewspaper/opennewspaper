@@ -22,6 +22,7 @@ class tx_newspaper_DependencyTree {
         $tree = new tx_newspaper_DependencyTree;
 
         $tree->addArticlePages($article->getSections());
+        $tree->addSectionPages($article->getSections());
         $tree->addArticleListPages(getAffectedArticleLists($article));
         
         return $tree;
@@ -74,9 +75,13 @@ class tx_newspaper_DependencyTree {
         }
     }
     
+    private function addSectionPages(array $sections) {
+        
+    }
+    
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
-        
+        $this->pages_on_level[4] = getAllArticleListPages($article_lists);
     }
     
     /** \code 
@@ -101,6 +106,18 @@ class tx_newspaper_DependencyTree {
 function getArticlePage(tx_newspaper_Section $section) {
     $articlepagetype = tx_newspaper_PageType::getArticlePageType();
     return $section->getSubPage($articlepagetype);
+}
+
+
+function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
+	
+	$section_id = intval($article_list->getAttribute('section_id'));
+	if (!$section_id) return array();
+	
+	
+	$extras = array();
+	
+	return $extras;
 }
 
 function getAllArticleListPages(array $article_lists) {
@@ -133,8 +150,16 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 /// get all extras that reference $article_list
 function getAllExtras(tx_newspaper_ArticleList $article_list) {
 	
+	$extras = getAllExtrasOfType('tx_newspaper_extra_articlelist', $article_list);
+	$extras += getAllSectionlistExtras($article_list);
+	
+	return $extras;
+}
+
+function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list) {
+	
 	$article_list_extra_uids = tx_newspaper::selectRows(
-		'uid', 'tx_newspaper_extra_articlelist',
+		'uid', $extra_type,
 		'articlelist = ' . $article_list->getUid()
 	);
 	
@@ -142,18 +167,24 @@ function getAllExtras(tx_newspaper_ArticleList $article_list) {
 	$extras = array();
 	
 	foreach ($article_list_extra_uids as $record) {
-		$extra_uids = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_extra',
-			'extra_uid = ' . $record['uid'] . ' AND extra_table = \'' . 'tx_newspaper_extra_articlelist' . '\''
-		);
-		
-		// ...
-		foreach ($extra_uids as $uid) {
-			$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
-		} 
+		$extras += getAbstractExtras($record['uid'], $extra_type);
 	}
 	
-	// then the same for sectionlist extras...
+	return $extras;
+}
+
+
+function getAbstractExtras($concrete_extra_uid, $extra_table) {
+	$extra_uids = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_extra',
+			'extra_uid = ' . $concrete_extra_uid . ' AND extra_table = \'' . $extra_table . '\''
+	);
+	
+	$extras = array();
+	
+	foreach ($extra_uids as $uid) {
+		$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
+	} 
 	
 	return $extras;
 }
