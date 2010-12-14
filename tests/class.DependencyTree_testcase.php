@@ -27,6 +27,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $page = $pages[0];
 
         // assert that affected page is article page of affected section
+        $article = $this->createArticle();
         $section = $page->getParentSection();
         $this->assertEquals($section, $article->getPrimarySection());
 
@@ -134,6 +135,10 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
     }
     
+    private function createArticle() {
+        $uid = $this->fixture->getArticleUid();
+        $article = new tx_newspaper_Article($uid);
+    }
     private function createArticleList() {
         
         $al_uid = $this->fixture->getArticlelistUid();
@@ -144,9 +149,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
     
     private function createTree() {
-        $uid = $this->fixture->getArticleUid();
-        $article = new tx_newspaper_Article($uid);
-        
+        $article = $this->createArticle();
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
         
         return $tree;
