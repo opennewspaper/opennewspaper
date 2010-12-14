@@ -840,14 +840,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return UID of abstract PageZone record
 	 */ 
 	public function createPageZoneRecord() {
-		print('createPageZoneRecord()<br/>');
 		/// Check if record is already present in page zone table
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid', 'tx_newspaper_pagezone', 
 			'pagezone_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->getTable(), $this->getTable()) .
 			' AND pagezone_uid = ' . $this->getUid()	
 		);
-		print_r($row);
 		if ($row['uid']) return $row['uid'];
 		
 		/// read typo3 fields to copy into page zone table
