@@ -176,6 +176,7 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 
 
 function getAbstractExtras($concrete_extra_uid, $extra_table) {
+	print_r($concrete_extra_uid);
 	$extra_uids = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_extra',
 			'extra_uid = ' . $concrete_extra_uid . ' AND extra_table = \'' . $extra_table . '\''
