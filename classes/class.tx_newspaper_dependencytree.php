@@ -92,7 +92,9 @@ class tx_newspaper_DependencyTree {
      *  )
      * \endcode
      */
-    private $pages_on_level = array();
+    private $pages_on_level = array(
+        array(), array(), array(), array()
+    );
     
     private static function addAction($action) {
         self::$registered_actions[] = $action;
