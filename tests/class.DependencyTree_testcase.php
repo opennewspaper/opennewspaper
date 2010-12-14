@@ -71,6 +71,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
         
         $extras = getAllExtras($article_list);
+        foreach ($extras as $extra) $extra->getAttribute('uid');
         debugStuff($extras);
     }
     
