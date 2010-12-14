@@ -23,6 +23,7 @@ class tx_newspaper_DependencyTree {
 
         $tree->addArticlePages($article->getSections());
         $tree->addSectionPages($article->getSections());
+        $tree->addRelatedArticles($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
         
         return $tree;
@@ -70,6 +71,8 @@ class tx_newspaper_DependencyTree {
     ////////////////////////////////////////////////////////////////////////////
     
     /// Adds article pages of all sections $article is in
+    /** \todo Only clear cache for the affected article, not the entire page
+     */
     private function addArticlePages(array $sections) {
         if (!is_array($this->pages_on_level[1])) $this->pages_on_level[1] = array();
         foreach ($sections as $section) {
@@ -113,7 +116,7 @@ function getArticlePage(tx_newspaper_Section $section) {
     return $section->getSubPage($articlepagetype);
 }
 
-
+/*
 function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
 	
 	$section_id = intval($article_list->getAttribute('section_id'));
@@ -124,6 +127,7 @@ function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
 	
 	return $extras;
 }
+*/
 
 function getAllArticleListPages(array $article_lists) {
 	$pages = array();
@@ -172,7 +176,6 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 	
 	return $extras;
 }
-
 
 function getAbstractExtras($concrete_extra_uid, $extra_table) {
 

@@ -7,10 +7,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     public function setUp() {
         parent::setUp();
     }
-
-    public function tearDown() {
-#        $this->clearDatabase();
-    }
     
     public function test_getArticlePage() {
         $section_uid = $this->fixture->getParentSectionUid();
@@ -22,10 +18,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_getPages() {
         
-        $uid = $this->fixture->getArticleUid();
-        $article = new tx_newspaper_Article($uid);
-        
-        $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+        $tree = $this->createTree();
         
         $pages = $tree->getPages();
 
@@ -107,9 +100,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
             
             foreach ($pagezones as $pagezone) {
                 $page = getPage($pagezone);
-                $this->assertTrue(is_object($page));
-                $this->assertTrue($page instanceof tx_newspaper_Page);
-                $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
+                $this->checkIsValidPage($page);
             }
         }
         
@@ -123,7 +114,11 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $this->checkIsfilledArray($pages);
         
-        debugStuff($pages);
+        foreach ($pages as $page) {
+            $this->checkIsValidPage($page);
+        }
+        
+        $tree = $this->createTree();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -133,6 +128,12 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThanOrEqual($size, sizeof($thing), 'Array size < ' . $size);
     }
     
+    private function checkIsValidPage($page) {
+        $this->assertTrue(is_object($page));
+        $this->assertTrue($page instanceof tx_newspaper_Page);
+        $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
+    }
+    
     private function createArticleList() {
         
         $al_uid = $this->fixture->getArticlelistUid();
@@ -140,6 +141,15 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         return $article_list;
         
+    }
+    
+    private function createTree() {
+        $uid = $this->fixture->getArticleUid();
+        $article = new tx_newspaper_Article($uid);
+        
+        $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+        
+        return $tree;
     }
 }
 
