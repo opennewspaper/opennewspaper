@@ -138,6 +138,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     private function createArticle() {
         $uid = $this->fixture->getArticleUid();
         $article = new tx_newspaper_Article($uid);
+        
+        return $article;
     }
     private function createArticleList() {
         
