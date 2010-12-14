@@ -139,7 +139,7 @@ function getArticleListPages(tx_newspaper_ArticleList $article_list) {
 	
 	$pagezones = array();
 	foreach ($extras as $extra) {
-		$pagezones = array_merge($pagezons, getAllPageZones($extra));
+		$pagezones = array_merge($pagezones, getAllPageZones($extra));
 	}
 	$pagezones = array_unique($pagezones);
 	
@@ -175,7 +175,7 @@ function getAllExtrasOfType($extra_type, tx_newspaper_ArticleList $article_list)
 
 
 function getAbstractExtras($concrete_extra_uid, $extra_table) {
-	print_r($concrete_extra_uid);
+
 	$extra_uids = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_extra',
 			'extra_uid = ' . $concrete_extra_uid . ' AND extra_table = \'' . $extra_table . '\''
