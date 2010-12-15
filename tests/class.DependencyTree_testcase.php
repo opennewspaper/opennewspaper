@@ -122,7 +122,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
             
             foreach ($pagezones as $pagezone) {
                 $page = getPage($pagezone);
-                $this->checkIsValidPage($page);
+                $this->checkIsValidNewspaperPage($page);
             }
         }
         
