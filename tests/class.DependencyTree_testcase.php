@@ -148,7 +148,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     private $called_pages = array();
     
     public function pageActionIsExecuted(tx_newspaper_Page $page) {
-    	$called_pages[] = page;
+    	$this->called_pages[] = page;
     }
 
     public function test_executeActionsOnPages() {
@@ -158,6 +158,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $tree->executeActionsOnPages();
         
+        $this->checkIsPageArray($this->called_pages);
+
         print_r($this->called_pages);
         $this->fail('To do');
     }
