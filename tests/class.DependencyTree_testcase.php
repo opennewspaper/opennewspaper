@@ -27,7 +27,10 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $pages = $tree->getArticlePages();
         
         $this->checkIsfilledArray($pages);
-        $this->fail('To do');
+        
+        foreach ($pages as $page) {
+            $this->checkIsValidPage($page);
+        }
     }
 
     // Tests related to getSectionPages()
