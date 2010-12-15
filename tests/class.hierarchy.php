@@ -218,8 +218,8 @@ class tx_newspaper_hierarchy {
 	}
 	
 	private function createImageExtras(tx_newspaper_Pagezone $pagezone) {
-		foreach($this->extra_data as $i => $extra) {
-			$this->createExtraFromData($this->concrete_extra_table, $extra, $this->extra_pos[$i], $pagezone);
+		foreach($this->image_extra_data as $i => $extra) {
+			$this->createExtraFromData($this->image_extra_table, $extra, $this->extra_pos[$i], $pagezone);
 		}
 	}
 	private function createArticlelistExtras(tx_newspaper_Pagezone $pagezone) {
@@ -230,12 +230,14 @@ class tx_newspaper_hierarchy {
 	}
 	
 	private function createSectionlistExtras() {
+		$pagezonetype_for_sectionlist = new tx_newspaper_PageZoneType($this->pagezonetype_uids[0]);
 		foreach ($this->section_uids as $section_uid) {
 			$section = new tx_newspaper_Section($section_uid);
 			$pages = $section->getActivePages();
 			foreach ($pages as $page) {
 				if ($page->getPageType()->getAttribute('is_article_page')) continue;
-				print_r($page);
+				$pagezone = $page->getPageZone($pagezonetype_for_sectionlist);
+				$this->createExtraFromData($this->sectionlist_extra_table, $this->sectionlist_extra_data, 0, $pagezone);
 			}
 		}
 	}
@@ -528,9 +530,9 @@ class tx_newspaper_hierarchy {
 	
 	private $extra_uids = array();
     private $extra_table = 'tx_newspaper_extra';
-	private $concrete_extra_table = 'tx_newspaper_extra_image';
+	private $image_extra_table = 'tx_newspaper_extra_image';
 	private $extra2pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';	
-	public $extra_data = array(
+	public $image_extra_data = array(
 		array(
 			'pid' => 2573,
 			'tstamp' => 1234567890,
@@ -600,6 +602,19 @@ class tx_newspaper_hierarchy {
 			'first_article' => 1,
 			'num_articles' => 10,	
 		),
+	);
+
+	private $sectionlist_extra_table = 'tx_newspaper_extra_sectionlist';
+	private $sectionlist_extra_data = array(
+		'pid' => 2573,
+		'tstamp' => 1234567890,
+		'crdate' => 1234567890,
+		'cruser_id' => 1,
+		'deleted' => 0,
+		'starttime' => 0,
+		'endtime' => 0,
+		'first_article' => 1,
+		'num_articles' => 10,	
 	);
 	
 	private $article_table = 'tx_newspaper_article';
