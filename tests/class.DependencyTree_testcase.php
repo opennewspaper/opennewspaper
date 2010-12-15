@@ -147,6 +147,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_executeActionsOnPages() {
         tx_newspaper_DependencyTree::registerAction(array($this, 'pageActionIsExecuted'));
+        tx_newspaper_DependencyTree::registerAction('pageActionIsExecuted');
         
         $tree = $this->createTree();
         
@@ -225,6 +226,10 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         return $tree;
     }
 }
+
+    function pageActionIsExecuted(tx_newspaper_Page $page) {
+        echo $page->getUid() . "<br >";
+    }
 
 function debugStuff($stuff) {
     echo '<p>'.
