@@ -370,7 +370,7 @@ function isClassOrObject($thing) {
     return ((is_string($thing) && class_exists($thing)) || is_object($thing));
 }
 
-function debugPage(tx_newspaper_Page $page) {
+function debugPage(tx_newspaper_CachablePage $page) {
     tx_newspaper::devlog($page->getUid(), 
     					 $page->getParentSection()->getAttribute('section_name') . $page->getPageType()->getAttribute('type_name'));
 }
