@@ -257,7 +257,7 @@ class tx_newspaper_hierarchy {
 	
 	private function createExtraFromData($table, array $concrete_extra_data, $position, tx_newspaper_Pagezone $pagezone) {
 		$extra_uid = tx_newspaper::insertRows($table, $concrete_extra_data);
-		$extra_object = new $this->$table($extra_uid);
+		$extra_object = new $table($extra_uid);
 				
 		tx_newspaper::updateRows(
 			$this->extra_table, 
