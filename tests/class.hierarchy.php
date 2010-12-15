@@ -168,7 +168,7 @@ class tx_newspaper_hierarchy {
 				array(
 					'uid_local' => $this->article_uid,
 					'uid_foreign' => $this->related_article_uid,
-				));
+				)
 		);
 	}
 	
