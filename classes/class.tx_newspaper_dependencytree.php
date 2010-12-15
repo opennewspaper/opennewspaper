@@ -7,6 +7,12 @@ class tx_newspaper_CachablePage {
         $this->newspaper_article = $article;
     }
     
+    public function __toString() {
+        $string = $this->newspaper_page->__toString();
+        if ($this->newspaper_article) $string .= $this->newspaper_article->__toString();
+        return $string;
+    }
+    
     public function equals(tx_newspaper_CachablePage $other) {
         if ($this->getNewspaperPage()->getUid() != $other->getNewspaperPage()->getUid()) return false;
         if ($this->newspaper_article) {
