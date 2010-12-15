@@ -178,6 +178,9 @@ class tx_newspaper_DependencyTree {
         $this->articlelist_pages = array_unique($this->articlelist_pages);
     }
     
+    /// Ensure that a dependency tree is not created other than by the generator functions.
+    private function __construct() { }
+    
     private $article_pages = array();   ///< Article pages of the sections containing the article
     private $section_pages = array();   ///< Section overview pages containing the article
     private $related_article_pages = array();   ///< Pages showing articles related to the article
