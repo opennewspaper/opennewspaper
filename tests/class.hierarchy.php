@@ -218,28 +218,9 @@ class tx_newspaper_hierarchy {
 	}
 	
 	private function createImageExtras(tx_newspaper_Pagezone $pagezone) {
-			foreach($this->extra_data as $i => $extra) {
-				$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
-				$extra_object = new $this->concrete_extra_table($extra_uid);
-				
-				tx_newspaper::updateRows(
-					$this->extra_table, 
-					'uid = ' . $extra_object->getExtraUid(), 
-					array(
-						'position' => $this->extra_pos[$i],
-						'origin_uid' => $extra_object->getExtraUid(),                        
-					)
-				);
-			
-				tx_newspaper::insertRows(
-					$pagezone->getExtra2PagezoneTable(),
-					array(
-						'uid_local' => $pagezone->getUid(),
-						'uid_foreign' => $extra_object->getExtraUid()
-					));
-                $this->extra_uids[] = $extra_object->getExtraUid();
-			}
-		
+		foreach($this->extra_data as $i => $extra) {
+			$this->createExtraFromData($this->concrete_extra_table, $extra, $this->extra_pos[$i], $pagezone);
+		}
 	}
 	private function createArticlelistExtras(tx_newspaper_Pagezone $pagezone) {
 			foreach($this->articlelist_extra_data as $i => $extra) {
@@ -269,6 +250,30 @@ class tx_newspaper_hierarchy {
 	
 	private function createSectionlistExtras() {
 		
+	}
+	
+	private function createExtraFromData($table, array $concrete_extra_data, $position, tx_newspaper_Pagezone $pagezone) {
+		$extra_uid = tx_newspaper::insertRows($table, $concrete_extra_data);
+		$extra_object = new $this->concrete_extra_table($extra_uid);
+				
+		tx_newspaper::updateRows(
+			$this->extra_table, 
+			'uid = ' . $extra_object->getExtraUid(), 
+			array(
+				'position' => $position,
+				'origin_uid' => $extra_object->getExtraUid(),
+			)
+		);
+			
+		tx_newspaper::insertRows(
+			$pagezone->getExtra2PagezoneTable(),
+			array(
+				'uid_local' => $pagezone->getUid(),
+				'uid_foreign' => $extra_object->getExtraUid()
+			));
+		
+		$this->extra_uids[] = $extra_object->getExtraUid();
+
 	}
 	
 	private function removeExtras() {
