@@ -146,7 +146,17 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     // Tests related to executeActionsOnPages()
 
     public function test_executeActionsOnPages() {
+        tx_newspaper_DependencyTree::registerAction(array($this, 'pageActionIsExecuted'));
+        
+        $tree = $this->createTree();
+        
+        $tree->executeActionsOnPages();
+        
         $this->fail('To do');
+    }
+    
+    private function pageActionIsExecuted(tx_newspaper_Page $page) {
+        echo $page->getUid() . "<br >";
     }
 
     // Tests related to getPages()
