@@ -147,7 +147,8 @@ class tx_newspaper_DependencyTree {
     
     private function addSectionPages(array $sections) {
         foreach ($sections as $section) {
-           $this->section_pages = array_merge($this->section_pages, getAllPagesWithSectionListExtra($section));
+            $pages = getAllPagesWithSectionListExtra($section);
+            $this->section_pages = array_merge($this->section_pages, makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
     }
@@ -156,8 +157,10 @@ class tx_newspaper_DependencyTree {
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
-            $this->related_article_pages = array_merge($this->related_article_pages, getAllArticlePages($sections));
-            $this->related_article_pages = array_merge($this->related_article_pages, getAllSectionPages($sections));
+            $pages = getAllArticlePages($sections);
+            $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
+            $pages = getAllSectionPages($sections);
+            $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
     }
