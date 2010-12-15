@@ -48,7 +48,15 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $pages = $tree->getRelatedArticlePages();
 
         $this->checkIsPageArray($pages);
-        $this->fail('To do');
+        
+        // check that the related article appears in different sections than the
+        // original, as defined in the fixture
+        $article_pages = $tree->getArticlePages();
+        foreach ($pages as $related_page) {
+            foreach ($article_pages as $article_page) {
+                $this->assertFalse($related_page->getUid() == $article_page->getUid());
+            }
+        }
     }
 
     // Tests related to getArticlelistPages()
