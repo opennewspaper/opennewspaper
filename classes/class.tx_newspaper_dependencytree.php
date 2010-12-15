@@ -173,7 +173,9 @@ class tx_newspaper_DependencyTree {
     
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
-        $this->articlelist_pages = getAllArticleListPages($article_lists);
+        $pages = getAllArticleListPages($article_lists);
+        $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
+        $this->articlelist_pages = array_unique($this->articlelist_pages);
     }
     
     private $article_pages = array();   ///< Article pages of the sections containing the article
