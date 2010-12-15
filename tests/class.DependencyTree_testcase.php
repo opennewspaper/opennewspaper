@@ -155,7 +155,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->fail('To do');
     }
     
-    private static function pageActionIsExecuted(tx_newspaper_Page $page) {
+    private function pageActionIsExecuted(tx_newspaper_Page $page) {
         echo $page->getUid() . "<br >";
     }
 

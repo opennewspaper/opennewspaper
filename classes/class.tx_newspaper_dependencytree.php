@@ -133,7 +133,11 @@ class tx_newspaper_DependencyTree {
     private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
     
     private static function addAction($action) {
-        self::$registered_actions[] = $action;
+        if (is_callable($action)) {
+            self::$registered_actions[] = $action;
+        } else {
+            print_r($action);
+        }
     }
     
     private static $registered_actions = array();
