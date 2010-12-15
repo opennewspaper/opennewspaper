@@ -61,8 +61,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             $temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
         }
 
-        foreach($this->fixture->extra_data as $i => $value) {
-            $this->assertEquals($this->fixture->extra_data[$i]['caption'], $temp[$i]->getAttribute('caption'));
+        foreach($this->fixture->image_extra_data as $i => $value) {
+            $this->assertEquals($this->fixture->image_extra_data[$i]['caption'], $temp[$i]->getAttribute('caption'));
         }
 		
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
