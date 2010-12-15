@@ -203,8 +203,9 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     
     private function checkIsValidPage($page) {
         $this->assertTrue(is_object($page), '$page is not an object: ' . print_r($page, 1));
-        $this->assertTrue($page instanceof tx_newspaper_Page);
-        $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
+        $this->assertTrue($page instanceof tx_newspaper_CachablePage);
+        $np_page = $page->getNewspaperPage();
+        $this->assertGreaterThan(0, intval($np_page->getAttribute('uid')));
     }
     
     private function checkIsPageArray(array $pages) {

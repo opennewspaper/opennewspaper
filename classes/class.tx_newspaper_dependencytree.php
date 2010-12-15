@@ -371,8 +371,9 @@ function isClassOrObject($thing) {
 }
 
 function debugPage(tx_newspaper_CachablePage $page) {
-    tx_newspaper::devlog($page->getUid(), 
-    					 $page->getParentSection()->getAttribute('section_name') . $page->getPageType()->getAttribute('type_name'));
+    $np_page = $page->getNewspaperPage();
+    tx_newspaper::devlog($np_page->getUid(), 
+    					 $np_page->getParentSection()->getAttribute('section_name') . $np_page->getPageType()->getAttribute('type_name'));
 }
 
 tx_newspaper_DependencyTree::registerAction('debugPage');
