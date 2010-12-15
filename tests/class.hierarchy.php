@@ -226,7 +226,29 @@ class tx_newspaper_hierarchy {
 		foreach($this->articlelist_extra_data as $i => $extra) {
 			$extra['articlelist'] = $this->getAbstractArticlelistUid();
 			$this->createExtraFromData($this->articlelist_extra_table, $extra, $this->extra_pos[$i], $pagezone);
-		}
+/*
+				$extra_uid = tx_newspaper::insertRows($this->articlelist_extra_table, $extra);
+				$extra_object = new $this->articlelist_extra_table($extra_uid);
+				
+				tx_newspaper::updateRows(
+					$this->extra_table, 
+					'uid = ' . $extra_object->getExtraUid(), 
+					array(
+						'position' => $this->extra_pos[$i],
+						'origin_uid' => $extra_object->getExtraUid(),                        
+					)
+				);
+			
+				tx_newspaper::insertRows(
+					$pagezone->getExtra2PagezoneTable(),
+					array(
+						'uid_local' => $pagezone->getUid(),
+						'uid_foreign' => $extra_object->getExtraUid()
+					));
+                $this->extra_uids[] = $extra_object->getExtraUid();
+*/
+			}
+		
 	}
 	
 	private function createSectionlistExtras() {
@@ -235,7 +257,7 @@ class tx_newspaper_hierarchy {
 	
 	private function createExtraFromData($table, array $concrete_extra_data, $position, tx_newspaper_Pagezone $pagezone) {
 		$extra_uid = tx_newspaper::insertRows($table, $concrete_extra_data);
-		$extra_object = new $this->concrete_extra_table($extra_uid);
+		$extra_object = new $this->$table($extra_uid);
 				
 		tx_newspaper::updateRows(
 			$this->extra_table, 
