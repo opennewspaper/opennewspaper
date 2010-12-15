@@ -160,24 +160,26 @@ function getAllSectionPages(array $sections) {
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
-    $pages = $section->getActivePages();
-    print_r($pages);
-    // ...
+    $all_pages = $section->getActivePages();
+    $pages = array();
+    
+    foreach ( $all_pages as $page) {
+       if (doesContainSectionListExtra($page)) $pages[] = $page;
+    }
     
     return $pages;
 }
-/*
-function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
-	
-	$section_id = intval($article_list->getAttribute('section_id'));
-	if (!$section_id) return array();
-	
-	
-	$extras = array();
-	
-	return $extras;
+
+function doesContainSectionListExtra(tx_newspaper_Page $page) {
+    $pagezones = $page->getPageZones();
+    foreach ($pagezones as $pagezone) {
+        $extras = $pagezone->getExtras();
+        foreach ($extras as $extra) {
+            if ($extra instanceof tx_newspaper_extra_SectionList) return true;
+        }
+    }
+    return false;
 }
-*/
 
 function getAllArticleListPages(array $article_lists) {
 	$pages = array();
