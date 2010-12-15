@@ -216,7 +216,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     private function checkIsPageArray(array $pages) {
         $this->checkIsFilledArray($pages);
         foreach ($pages as $page) {
-            $this->checkIsValidPage($page);
+            $this->checkIsValidCachablePage($page);
         }
     }
     
