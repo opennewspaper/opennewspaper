@@ -17,7 +17,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $section = new tx_newspaper_Section($section_uid);
         $article_page = getArticlePage($section);
         
-        $this->checkIsValidPage($article_page);
+        $this->checkIsValidNewspaperPage($article_page);
     }
 
     public function test_getArticlePages() {
@@ -147,8 +147,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     private $called_pages = array();
     
-    public function pageActionIsExecuted(tx_newspaper_Page $page) {
-    	$this->called_pages[] = $page;
+    public function pageActionIsExecuted(tx_newspaper_CachablePage $page) {
+    	$this->called_pages[] = $page->getNewspaperPage();
     }
 
     public function test_executeActionsOnPages() {
@@ -201,11 +201,16 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThanOrEqual($size, sizeof($thing), 'Array size < ' . $size);
     }
     
-    private function checkIsValidPage($page) {
+    private function checkIsValidNewspaperPage($page) {
+        $this->assertTrue(is_object($page), '$page is not an object: ' . print_r($page, 1));
+        $this->assertTrue($page instanceof tx_newspaper_Page);
+        $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
+    }
+    
+    private function checkIsValidCachablePage($page) {
         $this->assertTrue(is_object($page), '$page is not an object: ' . print_r($page, 1));
         $this->assertTrue($page instanceof tx_newspaper_CachablePage);
-        $np_page = $page->getNewspaperPage();
-        $this->assertGreaterThan(0, intval($np_page->getAttribute('uid')));
+        $this->checkIsValidNewspaperPage($page->getNewspaperPage());
     }
     
     private function checkIsPageArray(array $pages) {
