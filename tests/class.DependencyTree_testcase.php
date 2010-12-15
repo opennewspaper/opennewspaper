@@ -54,7 +54,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $article_pages = $tree->getArticlePages();
         foreach ($pages as $related_page) {
             foreach ($article_pages as $article_page) {
-                $this->assertFalse($related_page->getUid() == $article_page->getUid());
+                $this->assertFalse($related_page->equals($article_page));
             }
         }
     }
