@@ -21,27 +21,23 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_getArticlePages() {
-    
+        
         $tree = $this->createTree();
         
         $pages = $tree->getArticlePages();
         
-        $this->checkIsfilledArray($pages);
-        
-        foreach ($pages as $page) {
-            $this->checkIsValidPage($page);
-        }
+        $this->checkIsPageArray($pages);
     }
 
     // Tests related to getSectionPages()
 
     public function test_getSectionPages() {
+        
         $tree = $this->createTree();
         
         $pages = $tree->getSectionPages();
-
-        $this->checkIsfilledArray($pages);
-        $this->fail('To do');
+        
+        $this->checkIsPageArray($pages);
     }
 
     // Tests related to getRelatedArticlePages()
@@ -51,7 +47,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $pages = $tree->getRelatedArticlePages();
 
-        $this->checkIsfilledArray($pages);
+        $this->checkIsPageArray($pages);
         $this->fail('To do');
     }
 
@@ -75,7 +71,6 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         }
         
     }
-
     
     public function test_getAllExtras() {
         
@@ -131,15 +126,13 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $pages = getArticleListPages($article_list);
         
-        $this->checkIsfilledArray($pages);
-        
-        foreach ($pages as $page) {
-            $this->checkIsValidPage($page);
-        }
+        $this->checkIsPageArray($pages);
         
         $tree = $this->createTree();
-
-        $this->fail('To do');
+        
+        $pages = $tree->getArticleListPages($article_list);
+        
+        $this->checkIsPageArray($pages);
     }
 
     // Tests related to executeActionsOnPages()
@@ -183,6 +176,13 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue(is_object($page));
         $this->assertTrue($page instanceof tx_newspaper_Page);
         $this->assertGreaterThan(0, intval($page->getAttribute('uid')));
+    }
+    
+    private function checkIsPageArray(array $pages) {
+        $this->checkIsFilledArray($pages);
+        foreach ($pages as $page) {
+            $this->checkIsValidPage($page);
+        }
     }
     
     private function createArticle() {

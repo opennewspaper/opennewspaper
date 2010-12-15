@@ -107,7 +107,7 @@ class tx_newspaper_DependencyTree {
     
     private function addSectionPages(array $sections) {
         foreach ($sections as $section) {
-           
+           $this->section_pages = array_merge($this->section_pages, getAllPagesWithSectionListExtra($section));
         }
         $this->section_pages = array_unique($this->section_pages);
     }
@@ -159,6 +159,13 @@ function getAllSectionPages(array $sections) {
     return array();
 }
 
+function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
+    $pages = $section->getActivePages();
+    print_r($pages);
+    // ...
+    
+    return $pages;
+}
 /*
 function getAllSectionlistExtras(tx_newspaper_ArticleList $article_list) {
 	

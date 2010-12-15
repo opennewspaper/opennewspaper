@@ -161,8 +161,11 @@ class tx_newspaper_hierarchy {
 		foreach ($this->pagetype_data as $pagetype) {
 			$this->pagetype_uids[] = tx_newspaper::insertRows($this->pagetype_table, $pagetype);
 		}
+		$sf = tx_newspaper_Sysfolder::getInstance();
+		$pid = $sf->getPid(new tx_newspaper_Page());
 		foreach ($this->section_uids as $section_uid) {
 			foreach ($this->page_data as $i => $page) {
+				$page['pid'] = $pid;
 				$page['section'] = $section_uid;
 				$page['pagetype_id'] = $this->pagetype_uids[$i];
 #				// $page['inherit_pagetype_id'] = ...?;
