@@ -40,14 +40,14 @@ class tx_newspaper_hierarchy {
 		$this->createPageZones();
 		$this->createArticleList();
 		$this->createExtras();
-		$this->createArticle();
+		$this->createArticles();
 	}
 	
 	/** For whatever reason, __destruct is not automatically called when the
 	 *  unit test is over. This function must be called explicitly to clean up.
 	 */
 	public function removeAllJunkManually() {
-		$this->removeArticle();
+		$this->removeArticles();
 		$this->removeArticleList();
 		$this->removeExtras();
 		$this->removePageZones();
@@ -142,7 +142,7 @@ class tx_newspaper_hierarchy {
 		$this->delete($this->articlelist_table, 'list_uid = '.$this->articlelist_id);
 	}
 	
-	private function createArticle() {
+	private function createArticles() {
 		$this->article_uid = tx_newspaper::insertRows($this->article_table, $this->article_data);
 		$this->article2section_uid = tx_newspaper::insertRows(
 			'tx_newspaper_article_sections_mm',
@@ -150,9 +150,21 @@ class tx_newspaper_hierarchy {
 				'uid_local' => $this->article_uid,
 				'uid_foreign' => $this->getParentSectionUid()
 			));
+			
+		$this->related_article_uid = tx_newspaper::insertRows($this->article_table, $this->related_article_data);
+		$parent_section = new tx_newspaper_Section($this->getParentSectionUid());
+		$child_sections = $parent_section->getChildSections(true);
+		foreach ($child_sections as $child_section) {
+			tx_newspaper::insertRows(
+				'tx_newspaper_article_sections_mm',
+				array(
+					'uid_local' => $this->related_article_uid,
+					'uid_foreign' => $child_section->getUid()
+				));
+		}		
 	}
 	
-	private function removeArticle() {
+	private function removeArticles() {
 		$this->delete($this->article_table, $this->article_uid);
 		$this->delete('tx_newspaper_article_sections_mm', 'uid_local ='.$this->article_uid.' and uid_foreign = '.$this->getParentSectionUid());
 	}	
@@ -644,6 +656,33 @@ class tx_newspaper_hierarchy {
 		'articletype_id' => 0,
 		'inherits_from' => 0,
 	);
+	
+	private $related_article_uid = null;
+	private $related_article_data = array(
+		'pid' => 2574,
+		'tstamp' => 1234806796,
+		'crdate' => 1232647355,
+		'cruser_id' => 1,
+		'deleted' => 0,
+		'hidden' => 0,
+		'starttime' => 0,
+		'endtime' => 0,
+		'title' => "Nummer zwei!",
+		'extras' => 0,
+		'teaser' => "Dieser Artikel ist verknuepft mit Artikel eins!",
+		'text' => "<p>Juhu!</p>",
+		'author' => "Test Text",
+		'sections' => 2,
+		'source_id' => 1,
+		'source_object' => "",
+		'name' => "",
+		'is_template' => 0,
+		'pagezonetype_id' => 1,
+		'workflow_status' => 0,
+		'articletype_id' => 0,
+		'inherits_from' => 0,
+	);
+	
 	
 	private $extra_pos = array(
 		1024, 2048, 4096
