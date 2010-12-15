@@ -1,5 +1,34 @@
 <?php
 
+class tx_newspaper_CachablePage {
+    
+    public function __construct(tx_newspaper_Page $page, tx_newspaper_article $article = null) {
+        $this->newspaper_page = $page;
+        $this->newspaper_article = $article;
+    }
+    
+    public function getNewspaperPage() {
+        return $this->newspaper_page;
+    }
+    
+    public function getURL() {
+        
+    }
+    
+    public function getTypo3Page() {
+        
+    }
+    
+    public function getGETParameters() {
+        
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    
+    private $newspaper_page = null;
+    private $newspaper_article = null;
+}
+
 /** Levels of dependency for articles:
  *  # article pages displaying the article 
  *  #- as URL or GET parameters
@@ -101,7 +130,8 @@ class tx_newspaper_DependencyTree {
     /** \todo Only clear cache for the affected article, not the entire page
      */
     private function addArticlePages(array $sections) {
-        $this->article_pages = array_merge($this->article_pages, getAllArticlePages($sections));
+        $pages = getAllArticlePages($sections);
+        $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages));
         $this->article_pages = array_unique($this->article_pages);
     }
     
@@ -140,6 +170,14 @@ class tx_newspaper_DependencyTree {
     
     private static $registered_actions = array();
     
+}
+
+function makeCachablePages(array $pages) {
+    $cachable_pages = array();
+    foreach($pages as $page) {
+        $cachable_pages[] = new tx_newspaper_CachablePage($page);
+    }
+    return $cachable_pages;
 }
 
 function getAllArticlePages(array $sections) {
