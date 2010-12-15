@@ -160,8 +160,12 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         $this->checkIsPageArray($this->called_pages);
 
-        print_r($this->called_pages);
-        $this->fail('To do');
+        foreach ($this->fixture->getPages() as $checked_page) {
+            $this->assertTrue(
+                in_array($checked_page, $this->called_pages),
+                'Action not called for page ' . $checked_page
+            );
+        }
     }
     
 

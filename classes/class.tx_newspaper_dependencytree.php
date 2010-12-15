@@ -135,8 +135,6 @@ class tx_newspaper_DependencyTree {
     private static function addAction($action) {
         if (is_callable($action)) {
             self::$registered_actions[] = $action;
-        } else {
-            print_r($action);
         }
     }
     
