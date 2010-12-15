@@ -210,6 +210,14 @@ class tx_newspaper_hierarchy {
 
 			$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_uids[0]);
 
+		
+		$this->createImageExtras($pagezone);
+		$this->createArticlelistExtras($pagezone);
+//		}
+		$this->createSectionlistExtras();
+	}
+	
+	private function createImageExtras(tx_newspaper_Pagezone $pagezone) {
 			foreach($this->extra_data as $i => $extra) {
 				$extra_uid = tx_newspaper::insertRows($this->concrete_extra_table, $extra);
 				$extra_object = new $this->concrete_extra_table($extra_uid);
@@ -231,7 +239,9 @@ class tx_newspaper_hierarchy {
 					));
                 $this->extra_uids[] = $extra_object->getExtraUid();
 			}
-			
+		
+	}
+	private function createArticlelistExtras(tx_newspaper_Pagezone $pagezone) {
 			foreach($this->articlelist_extra_data as $i => $extra) {
 				$extra['articlelist'] = $this->getAbstractArticlelistUid();
 				$extra_uid = tx_newspaper::insertRows($this->articlelist_extra_table, $extra);
@@ -254,7 +264,11 @@ class tx_newspaper_hierarchy {
 					));
                 $this->extra_uids[] = $extra_object->getExtraUid();
 			}
-//		}
+		
+	}
+	
+	private function createSectionlistExtras() {
+		
 	}
 	
 	private function removeExtras() {
