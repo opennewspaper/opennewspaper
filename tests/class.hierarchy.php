@@ -161,7 +161,15 @@ class tx_newspaper_hierarchy {
 					'uid_local' => $this->related_article_uid,
 					'uid_foreign' => $child_section->getUid()
 				));
-		}		
+		}
+		
+		tx_newspaper::insertRows(
+				'tx_newspaper_article_related_mm',
+				array(
+					'uid_local' => $this->article_uid,
+					'uid_foreign' => $this->related_article_uid,
+				));
+		);
 	}
 	
 	private function removeArticles() {
