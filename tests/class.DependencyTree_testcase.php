@@ -10,70 +10,50 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     
     // to do: organize tests so that tests of dependent functions are executed after those they depend on
     
-    // to do: test high level functions and let them fail for now
+    // Tests related to getArticlePages()
     
-    public function test_getArticlePages() {
-        $this->fail('To do');
-    }
-
-    public function test_getSectionPages() {
-        $this->fail('To do');
-    }
-
-    public function test_getRelatedArticlePages() {
-        $this->fail('To do');
-    }
-
     public function test_getArticlePage() {
         $section_uid = $this->fixture->getParentSectionUid();
         $section = new tx_newspaper_Section($section_uid);
         $article_page = getArticlePage($section);
-        $this->assertFalse($article_page == null);
         
-        $this->fail('To do???');
+        $this->checkIsValidPage($article_page);
     }
 
-    public function test_getArticleListPages() {
-        $al_uid = $this->fixture->getArticlelistUid();
-        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+    public function test_getArticlePages() {
+    
+        $tree = $this->createTree();
         
-        $pages = getArticleListPages($article_list);
+        $pages = $tree->getArticlePages();
         
         $this->checkIsfilledArray($pages);
-        
-        foreach ($pages as $page) {
-            $this->checkIsValidPage($page);
-        }
-        
-        $tree = $this->createTree();
-
         $this->fail('To do');
     }
 
-    public function test_executeActionsOnPages() {
+    // Tests related to getSectionPages()
+
+    public function test_getSectionPages() {
+        $tree = $this->createTree();
+        
+        $pages = $tree->getSectionPages();
+
+        $this->checkIsfilledArray($pages);
         $this->fail('To do');
     }
 
-    public function test_getPages() {
-        
+    // Tests related to getRelatedArticlePages()
+
+    public function test_getRelatedArticlePages() {
         $tree = $this->createTree();
         
-        $pages = $tree->getPages();
+        $pages = $tree->getRelatedArticlePages();
 
-        $this->assertTrue(sizeof($pages) > 0);
-        
-        $page = $pages[0];
-
-        // assert that affected page is article page of affected section
-        $article = $this->createArticle();
-        $section = $page->getParentSection();
-        $this->assertEquals($section, $article->getPrimarySection());
-
-        $pagetype = $page->getPageType();
-        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+        $this->checkIsfilledArray($pages);
+        $this->fail('To do');
     }
-    
-    
+
+    // Tests related to getArticlelistPages()
+
     public function test_getAllArticleLists() {
         $article_lists = getAllArticleLists();
         $this->checkIsfilledArray($article_lists);
@@ -141,6 +121,52 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         }
         
     }
+
+    public function test_getArticleListPages() {
+        $al_uid = $this->fixture->getArticlelistUid();
+        $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+        
+        $pages = getArticleListPages($article_list);
+        
+        $this->checkIsfilledArray($pages);
+        
+        foreach ($pages as $page) {
+            $this->checkIsValidPage($page);
+        }
+        
+        $tree = $this->createTree();
+
+        $this->fail('To do');
+    }
+
+    // Tests related to executeActionsOnPages()
+
+    public function test_executeActionsOnPages() {
+        $this->fail('To do');
+    }
+
+    // Tests related to getPages()
+
+    public function test_getPages() {
+        
+        $tree = $this->createTree();
+        
+        $pages = $tree->getPages();
+
+        $this->assertTrue(sizeof($pages) > 0);
+        
+        $page = $pages[0];
+
+        // assert that affected page is article page of affected section
+        $article = $this->createArticle();
+        $section = $page->getParentSection();
+        $this->assertEquals($section, $article->getPrimarySection());
+
+        $pagetype = $page->getPageType();
+        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+    }
+    
+    
     
 
     ////////////////////////////////////////////////////////////////////////////
