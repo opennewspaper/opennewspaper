@@ -230,7 +230,14 @@ class tx_newspaper_hierarchy {
 	}
 	
 	private function createSectionlistExtras() {
-		
+		foreach ($this->section_uids as $section_uid) {
+			$section = new tx_newspaper_Section($section_uid);
+			$pages = $section->getActivePages();
+			foreach ($pages as $page) {
+				if ($page->getPageType()->getAttribute('is_article_page')) continue;
+				print_r($page);
+			}
+		}
 	}
 	
 	private function createExtraFromData($table, array $concrete_extra_data, $position, tx_newspaper_Pagezone $pagezone) {
