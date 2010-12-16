@@ -94,11 +94,13 @@ class tx_newspaper_DependencyTree {
     
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
+        tx_newspaper::startExecutionTimer();
         foreach ($this->getPages($depth) as $page) {
             foreach (self::$registered_actions as $action) {
                 call_user_func($action, $page);
             }
         }
+        tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
     
     public function getArticlePages() {
@@ -152,7 +154,7 @@ class tx_newspaper_DependencyTree {
         $pages = getAllArticlePages($sections);
         $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
         $this->article_pages = array_unique($this->article_pages);
-        tx_newspaper::logExecutionTime();
+        tx_newspaper::logExecutionTime('addArticlePages()');
     }
     
     private function addSectionPages(array $sections) {
@@ -162,7 +164,7 @@ class tx_newspaper_DependencyTree {
             $this->section_pages = array_merge($this->section_pages, makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
-        tx_newspaper::logExecutionTime();
+        tx_newspaper::logExecutionTime('addSectionPages()');
     }
     
     private function addRelatedArticles(tx_newspaper_Article $article) {
@@ -176,7 +178,7 @@ class tx_newspaper_DependencyTree {
             $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
-        tx_newspaper::logExecutionTime();
+        tx_newspaper::logExecutionTime('addRelatedArticles()');
     }
     
     /// Adds all pages which display an article list in the supplied array
@@ -185,7 +187,7 @@ class tx_newspaper_DependencyTree {
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
-        tx_newspaper::logExecutionTime();
+        tx_newspaper::logExecutionTime('addArticleListPages()');
     }
     
     /// Ensure that a dependency tree is not created other than by the generator functions.
