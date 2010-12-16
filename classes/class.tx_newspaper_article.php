@@ -858,8 +858,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                 return;
             }
             
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
-            $tree->executeActionsOnPages();
+#            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+#            $tree->executeActionsOnPages();
             
         }
     }
