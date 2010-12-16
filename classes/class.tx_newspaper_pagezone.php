@@ -1051,6 +1051,37 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
         return $this->extras; 
     }
 
+    public function getExtrasOf($extra_class) {
+
+        if ($extra_class instanceof tx_newspaper_Extra) {
+            $extra_class = tx_newspaper::getTable($extra_class);
+        }
+
+        $extras = array();
+
+        if ($this->extras) { // use the cached array of extras
+            foreach ($this->getExtras() as $extra) {
+                if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
+                    $extras[] = $extra;
+                }
+            }
+        } else {
+            $uids = tx_newspaper::selectRows(
+                'DISTINCT uid_foreign', 
+                $this->getExtra2PagezoneTable(), 
+                'uid_local = ' . $this->getUid(), 
+                '', '', '', false
+            );
+            if (empty($uids)) return $extras;
+            
+            foreach ($uids as $uid) {
+                print_r($uid);
+            }
+        }
+
+        return $extras;
+    }
+    
 	
 	/// Read Extras from DB
 	/** Objective: Read tx_newspaper_Extra array and attributes from the base  
@@ -1078,47 +1109,49 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
  	protected function readExtras($uid, $hidden_too = false) {
  	
  		$uids = tx_newspaper::selectRows(
-			'DISTINCT uid_foreign', $this->getExtra2PagezoneTable(), "uid_local = $uid", '', '', '', false
+			'DISTINCT uid_foreign', 
+			$this->getExtra2PagezoneTable(), 
+			"uid_local = $uid", 
+			'', '', '', false
 		);
-
-		if ($uids) {
-        	foreach ($uids as $uid) {
-        		try {
-					//  assembling the query manually here cuz we want to ignore enable fields
-					$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-						'deleted, gui_hidden, show_extra', 
-						tx_newspaper_Extra_Factory::getExtraTable(),
-						'uid = ' . $uid['uid_foreign']);
-					$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			
-			        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-					if (!$deleted['deleted'] && 
-					    (!$deleted['gui_hidden'] || $hidden_too) && 
-						!(TYPO3_MODE != 'BE' && 
-						!$deleted['show_extra'])) {
+		if (empty($uids)) return;
+		
+        foreach ($uids as $uid) {
+        	try {
+				//  assembling the query manually here cuz we want to ignore enable fields
+				$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+					'deleted, gui_hidden, show_extra', 
+					tx_newspaper_Extra_Factory::getExtraTable(),
+					'uid = ' . $uid['uid_foreign']);
+				$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		
+		        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				if (!$deleted['deleted'] && 
+				    (!$deleted['gui_hidden'] || $hidden_too) && 
+					!(TYPO3_MODE != 'BE' && 
+					!$deleted['show_extra'])) {
 	
-	        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
-		        		$this->extras[] = $extra;
-					} else {
-						/// \todo remove association table entry, but only if really deleted
-					}
-        		} catch (tx_newspaper_EmptyResultException $e) {
-        			/// \todo remove association table entry
-					t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
-        		}
+        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+	        		$this->extras[] = $extra;
+				} else {
+					/// \todo remove association table entry, but only if really deleted
+				}
+       		} catch (tx_newspaper_EmptyResultException $e) {
+       			/// \todo remove association table entry
+				t3lib_div::debug('Extra ' . $uid['uid_foreign'] . ': EmptyResult! '. $e);
         	}
-		} 
- 	}
- 	
+        }
+	}
 
- 	/// Ordering function to keep Extras in the order in which they appear on the PageZone
- 	/** Supplied as parameter to usort() in getExtras().
- 	 *  \param $extra1 first Extra to compare
- 	 *  \param $extra2 second Extra to compare
- 	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
- 	 * 			== 0 if their position is the same 
- 	 */
- 	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
+
+	/// Ordering function to keep Extras in the order in which they appear on the PageZone
+	/** Supplied as parameter to usort() in getExtras().
+	 *  \param $extra1 first Extra to compare
+	 *  \param $extra2 second Extra to compare
+	 *  \return < 0 if $extra1 comes before $extra2, > 0 if it comes after, 
+	 * 			== 0 if their position is the same 
+	 */
+	static protected function compareExtras(tx_newspaper_ExtraIface $extra1, 
  									 		tx_newspaper_ExtraIface $extra2) {
  		return $extra1->getAttribute('position')-$extra2->getAttribute('position');			 	
 	}
