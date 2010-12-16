@@ -90,7 +90,9 @@ class tx_newspaper_DependencyTree {
      *    tx_newspaper_Page as argument.
      */ 
     static public function registerAction($action) {
-        if (isCallback($action)) self::addAction($action);
+        if (is_callable($action)) {
+            self::$registered_actions[] = $action;
+        }
     }
     
     /// Executes the registered actions on all pages in the tree up to a specified depth.
@@ -200,13 +202,7 @@ class tx_newspaper_DependencyTree {
     private $section_pages = array();   ///< Section overview pages containing the article
     private $related_article_pages = array();   ///< Pages showing articles related to the article
     private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
-    
-    private static function addAction($action) {
-        if (is_callable($action)) {
-            self::$registered_actions[] = $action;
-        }
-    }
-    
+        
     private static $registered_actions = array();
     
 }
