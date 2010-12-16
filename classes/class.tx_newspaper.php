@@ -663,13 +663,18 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         self::$execution_start_time = microtime(true);
     }
     
-    public static function logExecutionTime() {
-        $start_time = array_pop(self::$execution_time_stack);
-#        $execution_time = microtime(true)-self::$execution_start_time;
-        $execution_time = microtime(true)-$start_time;
+    public static function logExecutionTime($message = '') {
         
+        $start_time = array_pop(self::$execution_time_stack);
+        $execution_time = microtime(true)-$start_time;
         $execution_time_ms = 1000*$execution_time;
-        $timing_info = array('execution time' => $execution_time_ms . ' ms', 'object' => self::getTimedObject());
+        
+        $timing_info = array(
+            'execution time' => $execution_time_ms . ' ms',
+            'object' => self::getTimedObject(),
+            'message' => $message
+        );
+        
         self::devlog('logExecutionTime', $timing_info);
     }
     
