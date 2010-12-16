@@ -28,15 +28,15 @@ class tx_newspaper_CachablePage {
     }
     
     public function getURL() {
-        
+        throw new tx_newspaper_NotYetImplementedException();
     }
     
     public function getTypo3Page() {
-        
+        throw new tx_newspaper_NotYetImplementedException();
     }
     
     public function getGETParameters() {
-        
+        throw new tx_newspaper_NotYetImplementedException();
     }
     
     ////////////////////////////////////////////////////////////////////////////
