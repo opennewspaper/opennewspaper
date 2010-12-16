@@ -1085,7 +1085,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
             );
             
             foreach ($uids as $uid) {
-                $extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+                $extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid']);
             }
         }
 
