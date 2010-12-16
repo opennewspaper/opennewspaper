@@ -1059,7 +1059,7 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
 
         $extras = array();
 
-        if ($this->extras) { // use the cached array of extras
+        if ($this->extras && false) { // use the cached array of extras
             foreach ($this->getExtras() as $extra) {
                 if (tx_newspaper::getTable($extra) == strtolower($extra_class)) {
                     $extras[] = $extra;
