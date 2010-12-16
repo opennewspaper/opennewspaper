@@ -63,13 +63,14 @@ class tx_newspaper_DependencyTree {
     /** \param $article The article which is changed.
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
-    	tx_newspaper::devlog('generate from article', $article->getUid());
+        tx_newspaper::startExecutionTimer();
         $tree = new tx_newspaper_DependencyTree;
 
         $tree->addArticlePages($article);
         $tree->addSectionPages($article->getSections());
         $tree->addRelatedArticles($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
+        tx_newspaper::logExecutionTime();
         
         return $tree;
     }
@@ -146,21 +147,26 @@ class tx_newspaper_DependencyTree {
     /** \todo Only clear cache for the affected article, not the entire page
      */
     private function addArticlePages(tx_newspaper_Article $article) {
+        tx_newspaper::startExecutionTimer();
         $sections = $article->getSections();
         $pages = getAllArticlePages($sections);
         $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
         $this->article_pages = array_unique($this->article_pages);
+        tx_newspaper::logExecutionTime();
     }
     
     private function addSectionPages(array $sections) {
+        tx_newspaper::startExecutionTimer();
         foreach ($sections as $section) {
             $pages = getAllPagesWithSectionListExtra($section);
             $this->section_pages = array_merge($this->section_pages, makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
+        tx_newspaper::logExecutionTime();
     }
     
     private function addRelatedArticles(tx_newspaper_Article $article) {
+        tx_newspaper::startExecutionTimer();
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -170,13 +176,16 @@ class tx_newspaper_DependencyTree {
             $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
+        tx_newspaper::logExecutionTime();
     }
     
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
+        tx_newspaper::startExecutionTimer();
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
+        tx_newspaper::logExecutionTime();
     }
     
     /// Ensure that a dependency tree is not created other than by the generator functions.
