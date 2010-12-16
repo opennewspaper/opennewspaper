@@ -66,7 +66,7 @@ class tx_newspaper_DependencyTree {
     	tx_newspaper::devlog('generate from article', $article->getUid());
         $tree = new tx_newspaper_DependencyTree;
 
-        $tree->addArticlePages($article->getSections());
+        $tree->addArticlePages($article);
         $tree->addSectionPages($article->getSections());
         $tree->addRelatedArticles($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
@@ -145,9 +145,10 @@ class tx_newspaper_DependencyTree {
     /// Adds article pages of all sections $article is in
     /** \todo Only clear cache for the affected article, not the entire page
      */
-    private function addArticlePages(array $sections) {
+    private function addArticlePages(tx_newspaper_Article $article) {
+        $sections = $article->getSections();
         $pages = getAllArticlePages($sections);
-        $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages));
+        $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
         $this->article_pages = array_unique($this->article_pages);
     }
     
@@ -164,7 +165,7 @@ class tx_newspaper_DependencyTree {
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
             $pages = getAllArticlePages($sections);
-            $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
+            $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages, $article));
             $pages = getAllSectionPages($sections);
             $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
         }
@@ -196,10 +197,10 @@ class tx_newspaper_DependencyTree {
     
 }
 
-function makeCachablePages(array $pages) {
+function makeCachablePages(array $pages, tx_newspaper_Article $article = null) {
     $cachable_pages = array();
     foreach($pages as $page) {
-        $cachable_pages[] = new tx_newspaper_CachablePage($page);
+        $cachable_pages[] = new tx_newspaper_CachablePage($page, $article);
     }
     return $cachable_pages;
 }
@@ -381,5 +382,6 @@ function debugPage(tx_newspaper_CachablePage $page) {
     					 $np_page->getParentSection()->getAttribute('section_name') . $np_page->getPageType()->getAttribute('type_name'));
 }
 
-tx_newspaper_DependencyTree::registerAction('debugPage');
+// tx_newspaper_DependencyTree::registerAction('debugPage');
+
 ?>
