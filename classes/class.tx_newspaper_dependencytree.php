@@ -236,7 +236,7 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
     
     static $section_list_pages = array();
     
-    if (!isset($section_list_pages[$section])) {
+    if (!isset($section_list_pages[$section->__toString()])) {
         $all_pages = $section->getActivePages();
         $pages = array();
         
@@ -244,12 +244,12 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
             if (doesContainSectionListExtra($page)) $pages[] = $page;
         }
         
-        $section_list_pages[$section] = $pages;
+        $section_list_pages[$section->__toString()] = $pages;
     }
     
     tx_newspaper::logExecutionTime('getAllPagesWithSectionListExtra()');
     
-    return $section_list_pages[$section];
+    return $section_list_pages[$section->__toString()];
 }
 
 function doesContainSectionListExtra(tx_newspaper_Page $page) {
