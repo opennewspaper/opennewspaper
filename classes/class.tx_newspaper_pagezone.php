@@ -1066,17 +1066,26 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
                 }
             }
         } else {
-            $uids = tx_newspaper::selectRows(
+            $records = tx_newspaper::selectRows(
                 'DISTINCT uid_foreign', 
                 $this->getExtra2PagezoneTable(), 
                 'uid_local = ' . $this->getUid(), 
                 '', '', '', false
             );
-            if (empty($uids)) return $extras;
+            if (empty($records)) return $extras;
             
-            foreach ($uids as $uid) {
-                print_r($uid);
+            $uids = array(0);
+            foreach ($records as $record) {
+                $uids[] = $record['uid_foreign'];
             }
+            
+            $uids = tx_newspaper::selectRows(
+                'uid', tx_newspaper_Extra_Factory::getExtraTable(),
+                'uid IN (' . implode(', ', $uids) . ') AND extra_table = \'' . strtolower($extra_class) . '\''
+            );
+            
+            print_r($uids);
+            
         }
 
         return $extras;
