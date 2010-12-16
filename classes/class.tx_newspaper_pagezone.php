@@ -1084,8 +1084,9 @@ if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
                 'uid IN (' . implode(', ', $uids) . ') AND extra_table = \'' . strtolower($extra_class) . '\''
             );
             
-            print_r($uids);
-            
+            foreach ($uids as $uid) {
+                $extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+            }
         }
 
         return $extras;
