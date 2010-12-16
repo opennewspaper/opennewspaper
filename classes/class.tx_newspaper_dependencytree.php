@@ -70,7 +70,7 @@ class tx_newspaper_DependencyTree {
         $tree->addSectionPages($article->getSections());
         $tree->addRelatedArticles($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
-        tx_newspaper::logExecutionTime();
+        tx_newspaper::logExecutionTime('generateFromArticle()');
         
         return $tree;
     }
@@ -231,16 +231,25 @@ function getArticlePage(tx_newspaper_Section $section) {
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
-        tx_newspaper::startExecutionTimer();
-    $all_pages = $section->getActivePages();
-    $pages = array();
     
-    foreach ($all_pages as $page) {
-       if (doesContainSectionListExtra($page)) $pages[] = $page;
+    tx_newspaper::startExecutionTimer();
+    
+    static $section_list_pages = array();
+    
+    if (!isset($section_list_pages[$section])) {
+        $all_pages = $section->getActivePages();
+        $pages = array();
+        
+        foreach ($all_pages as $page) {
+            if (doesContainSectionListExtra($page)) $pages[] = $page;
+        }
+        
+        $section_list_pages[$section] = $pages;
     }
-        tx_newspaper::logExecutionTime('getAllPagesWithSectionListExtra()');
     
-    return $pages;
+    tx_newspaper::logExecutionTime('getAllPagesWithSectionListExtra()');
+    
+    return $section_list_pages[$section];
 }
 
 function doesContainSectionListExtra(tx_newspaper_Page $page) {
