@@ -233,12 +233,14 @@ function getArticlePage(tx_newspaper_Section $section) {
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
+        tx_newspaper::startExecutionTimer();
     $all_pages = $section->getActivePages();
     $pages = array();
     
     foreach ($all_pages as $page) {
        if (doesContainSectionListExtra($page)) $pages[] = $page;
     }
+        tx_newspaper::logExecutionTime('getAllPagesWithSectionListExtra()');
     
     return $pages;
 }
