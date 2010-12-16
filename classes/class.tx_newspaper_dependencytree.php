@@ -253,9 +253,9 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 }
 
 function doesContainSectionListExtra(tx_newspaper_Page $page) {
-    $pagezones = $page->getActivePageZones();
+    $pagezones = $page->getPageZones();
     foreach ($pagezones as $pagezone) {
-        $extras = $pagezone->getExtrasOf('tx_newspaper_extra_SectionList');
+        $extras = $pagezone->getExtras();
         foreach ($extras as $extra) {
             if ($extra instanceof tx_newspaper_extra_SectionList) return true;
         }
