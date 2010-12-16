@@ -81,6 +81,7 @@ class tx_newspaper_DependencyTree {
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
         // if in article(s): generateFromArticle() for all articles
         // if on page zone directly: all pages which contain all page zones
+        throw new tx_newspaper_NotYetImplementedException();
     }
     
     /// Registers an action that is executed for every page in the tree on demand.
@@ -231,15 +232,11 @@ function getArticlePage(tx_newspaper_Section $section) {
     return $section->getSubPage($articlepagetype);
 }
 
-function getAllSectionPages(array $sections) {
-    return array();
-}
-
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
     $all_pages = $section->getActivePages();
     $pages = array();
     
-    foreach ( $all_pages as $page) {
+    foreach ($all_pages as $page) {
        if (doesContainSectionListExtra($page)) $pages[] = $page;
     }
     
@@ -358,33 +355,18 @@ function getAffectedArticleLists(tx_newspaper_Article $article) {
 
 function getAllArticleLists() {
     
-    $article_list_uids = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
-    $article_lists = array();
+    static $all_article_lists = array();
     
-    foreach ($article_list_uids as $record) {
-        $article_lists[] = tx_newspaper_ArticleList_Factory::getInstance()->create($record['uid']);
-    }
+    if (empty($all_article_lists)) {
+        $article_list_uids = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
     
-    return $article_lists;
-    
-}
-
-function isCallback($action) {
-    if (is_string($action)) {
-        return (function_exists($action));
-    }
-        
-    if (is_array($action) && sizeof($action) > 1) {
-        if (isClassOrObject($action[0])) {
-            return (method_exists($action[0], $action[1]));
+        foreach ($article_list_uids as $record) {
+            $all_article_lists[] = tx_newspaper_ArticleList_Factory::getInstance()->create($record['uid']);
         }
     }
     
-    return false;
-}
-
-function isClassOrObject($thing) {
-    return ((is_string($thing) && class_exists($thing)) || is_object($thing));
+    return $all_article_lists;
+    
 }
 
 function debugPage(tx_newspaper_CachablePage $page) {
