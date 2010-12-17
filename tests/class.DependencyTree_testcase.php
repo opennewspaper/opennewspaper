@@ -5,7 +5,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_t
 class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
-        parent::setUp();
+        if (!$this->is_fixture_set_up) {
+            parent::setUp();
+            $this->is_fixture_set_up = true;
+        }
     }
     
     // to do: organize tests so that tests of dependent functions are executed after those they depend on
@@ -244,6 +247,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         
         return $tree;
     }
+    
+    private $is_fixture_set_up = false;
 }
 
     function pageActionIsExecuted(tx_newspaper_Page $page) {
