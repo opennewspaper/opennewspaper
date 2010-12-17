@@ -11,7 +11,10 @@
  class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
  	
  		function setUp($createFixture = true) {
- 			echo "tx_newspaper_database_testcase::setUp()";
+        	echo "tx_newspaper_database_testcase::setUp()";
+ 			
+ 			if ($this->skip_setup_because_no_data_have_changed) return;
+ 			
  			$this->createDatabase();
  			$this->cleanDatabase();
 			$this->useTestDatabase();             
@@ -91,6 +94,8 @@
 		
  		
  		protected  $fixture = null ;		//< Testdata
+ 		
+ 		protected $skip_setup_because_no_data_have_changed = false;
  		
  }
 ?>

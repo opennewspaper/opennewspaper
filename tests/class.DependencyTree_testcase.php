@@ -6,10 +6,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
         echo "test_DependencyTree_testcase::setUp()";
-        if (!$this->is_fixture_set_up) {
-            parent::setUp();
-            $this->is_fixture_set_up = true;
-        }
+        parent::setUp();
+        $this->skip_setup_because_no_data_have_changed = true;
     }
     
     // to do: organize tests so that tests of dependent functions are executed after those they depend on
