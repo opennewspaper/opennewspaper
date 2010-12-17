@@ -13,7 +13,6 @@
  		function setUp($createFixture = true) {
  			
  			if (self::$skip_setup_because_no_data_have_changed) return;
-        	echo "tx_newspaper_database_testcase::setUp()";
  			
  			$this->createDatabase();
  			$this->cleanDatabase();
