@@ -12,7 +12,7 @@
  	
  		function setUp($createFixture = true) {
  			
- 			if ($this->skip_setup_because_no_data_have_changed) return;
+ 			if (self::$skip_setup_because_no_data_have_changed) return;
         	echo "tx_newspaper_database_testcase::setUp()";
  			
  			$this->createDatabase();
@@ -96,7 +96,7 @@
  		protected  $fixture = null ;		//< Testdata
  		
  		/// If you want to run setUp() only once per testcase, set this variable in the testcase's setUp().
- 		protected $skip_setup_because_no_data_have_changed = false;
+ 		protected static $skip_setup_because_no_data_have_changed = false;
  		
  }
 ?>
