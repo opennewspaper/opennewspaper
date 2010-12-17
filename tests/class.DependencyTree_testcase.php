@@ -5,6 +5,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_t
 class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
+        echo "test_DependencyTree_testcase::setUp()";
         if (!$this->is_fixture_set_up) {
             parent::setUp();
             $this->is_fixture_set_up = true;

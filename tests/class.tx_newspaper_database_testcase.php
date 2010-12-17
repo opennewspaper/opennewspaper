@@ -11,6 +11,7 @@
  class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
  	
  		function setUp($createFixture = true) {
+ 			echo "tx_newspaper_database_testcase::setUp()";
  			$this->createDatabase();
  			$this->cleanDatabase();
 			$this->useTestDatabase();             
