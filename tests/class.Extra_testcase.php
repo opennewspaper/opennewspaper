@@ -260,7 +260,23 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_getSearchResults() {
 		$extra = new tx_newspaper_Extra_Image();
 		$results = $extra->getSearchResults('Unit Test');
+		
 		$this->assertGreaterThanOrEqual(3, sizeof($results));
+		foreach ($results as $result) {
+			$this->assertTrue($result instanceof tx_newspaper_Extra_Image); 
+		}
+		
+		$extra = new tx_newspaper_extra_articlelist();
+		$results = $extra->getSearchResults('Unit Test');
+		
+		$this->assertGreaterThanOrEqual(2, sizeof($results));
+		foreach ($results as $result) {
+			$this->assertTrue($result instanceof tx_newspaper_extra_articlelist);
+			$this->assertThat(
+				$result->getAttribute('description'),
+				$this->stringContains('Unit Test', false)	
+			);
+		}
 		
 	}
 //	public function test_duplicate() {
