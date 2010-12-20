@@ -16,7 +16,7 @@
 		<form action="" method="post" id="placementform">
 		{if $article}
 			<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
-			<input type="hidden" value="{$article->getAttribute('kicker')}: {$article->getAttribute('title')}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
+			<input type="hidden" value="{$article->getAttribute('kicker')|escape:html}: {$article->getAttribute('title')|escape:html}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
 		{/if}
 	{/if}
 	<div class="tx_newspaper_mod7">
