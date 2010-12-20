@@ -256,6 +256,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		$this->assertContains('author_name', $fields);
 		$this->assertContains('bio_text', $fields);
 	}
+
+	public function test_getSearchResults() {
+		$extra = new tx_newspaper_Extra_Image();
+		$results = $extra->getSearchResults('Unit Test');
+		$this->assertGreaterThanOrEqual(3, sizeof($results));
+		
+	}
 //	public function test_duplicate() {
 //		$this->fail('test not yet ready!');
 //		foreach($this->extras_to_test as $extra_class) {
