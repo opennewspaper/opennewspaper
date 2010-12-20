@@ -136,7 +136,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		self::getTSConfig();
 		return self::$basepath;
 	}
-
+	
+	public function getSearchFields() {
+		return array('title', 'caption', 'kicker');
+	}
+	
 	/// Save hook function, called from the global save hook
 	/** Resizes the uploaded image into all sizes specified in TSConfig.
 	 * 

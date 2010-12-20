@@ -44,6 +44,10 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 				'...': '');
 	}
 
+	public function getSearchFields() {
+		return array('author_name', 'bio_text');
+	}
+
 	public static function getModuleName() {
 		return 'np_bio'; 
 	}

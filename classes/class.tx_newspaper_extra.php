@@ -414,6 +414,41 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return $pooled_extras;
 	}
 	
+	/// The fields which are searched for in fulltext searches for extras
+	/** Non-static because static functions do not allow late binding.
+	 */
+	public function getSearchFields() {
+		return array();
+	}
+	
+	public function getSearchResults($search_term,
+									 $offset = 0, $number = 10, $hidden = false, 
+									 $order_by = 'tstamp DESC') {
+		
+		$search_where_parts = $this->getSearchFields();
+		if (empty($search_where_parts)) return;
+		
+		foreach ($search_where_parts as $key => $field) {
+			$search_where_parts[$key] = $field . ' LIKE \'%' . $search_term . '%\'';
+		}
+		$search_where = implode(' AND ', $search_where_parts);
+		$search_where .= ' AND NOT deleted';
+		if (!$hidden) $search_where .= ' AND NOT hidden';
+		
+		$table = $this->getTable();
+		$uids = tx_newspaper::selectRowsDirect(
+			'uid', $table, $search_where,
+			'', $order_by, "$offset, $limit"
+		);
+		
+		$extras = array();
+		foreach ($uids as $uid) {
+			$extras[] = new $table($uid['uid']);
+		}
+		
+		return $extras;
+	}
+	
 	/// Checks if a tx_newspaper_Extra is registered.
 	/** \param $extra tx_newspaper_Extra of the type to be checked.
 	 *  \return \c true if \p $extra is registered (else \c false).
