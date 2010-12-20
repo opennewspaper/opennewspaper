@@ -244,6 +244,18 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		/// \todo check if all fields are consistent
 	}
 	
+	public function test_getSearchFields() {
+		$extra = new tx_newspaper_Extra_Image();
+		$fields = $extra->getSearchFields();
+		$this->assertContains('title', $fields);
+		$this->assertContains('caption', $fields);
+		$this->assertContains('kicker', $fields);
+		
+		$extra = new tx_newspaper_Extra_Bio();
+		$fields = $extra->getSearchFields();
+		$this->assertContains('author_name', $fields);
+		$this->assertContains('bio_text', $fields);
+	}
 //	public function test_duplicate() {
 //		$this->fail('test not yet ready!');
 //		foreach($this->extras_to_test as $extra_class) {
