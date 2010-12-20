@@ -431,14 +431,14 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		foreach ($search_where_parts as $key => $field) {
 			$search_where_parts[$key] = $field . ' LIKE \'%' . $search_term . '%\'';
 		}
-		$search_where = implode(' AND ', $search_where_parts);
+		$search_where = implode(' OR ', $search_where_parts);
 		$search_where .= ' AND NOT deleted';
 		if (!$hidden) $search_where .= ' AND NOT hidden';
 		
 		$table = $this->getTable();
 		$uids = tx_newspaper::selectRowsDirect(
 			'uid', $table, $search_where,
-			'', $order_by, "$offset, $limit"
+			'', $order_by, "$offset, $number"
 		);
 		
 		$extras = array();
