@@ -421,38 +421,83 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return array();
 	}
 	
-	public function getSearchResults($search_term,
+	/// Get Extras available for given search term
+	/** \param $search_term String to be searched for
+	 *  \param $hidden Determines if hidden Extras should be taken into account
+	 *                 (they are if set to true)
+	 *  \return Array of Extras according to filter settings
+	 */
+	public function getSearchResults($search_term = '',
 									 $offset = 0, $number = 10, $hidden = false, 
 									 $order_by = 'tstamp DESC') {
 		
-		$search_where_parts = $this->getSearchFields();
-		if (empty($search_where_parts)) return;
-		
 		$table = $this->getTable();
 		
-		foreach ($search_where_parts as $key => $field) {
-			$search_where_parts[$key] = $field . ' LIKE \'%' . $search_term . '%\'';
-		}
-		$search_where = implode(' OR ', $search_where_parts);
-		$search_where .= ' AND NOT deleted';
-		if (!$hidden) {
-			if (tx_newspaper::fieldExists($table, 'hidden')) {
-				$search_where .= ' AND NOT hidden';
-			}
-		}
-		
 		$uids = tx_newspaper::selectRowsDirect(
-			'uid', $table, $search_where,
-			'', $order_by, "$offset, $number"
+			'uid', 
+			$table, 
+			$this->getSeachWhere($search_term, $hidden),
+			'', 
+			$order_by, 
+			"$offset, $number"
 		);
 		
 		$extras = array();
 		foreach ($uids as $uid) {
 			$extras[] = new $table($uid['uid']);
 		}
-		
+
 		return $extras;
 	}
+	
+	/// Count Extras available for given search term
+	/** \param $search_term String to be searched for
+	 *  \param $hidden Determines if hidden Extras should be taken into account
+	 *                 (they are if set to true)
+	 *  \return Number of Extras found
+	 */
+	public function countSearchResults($search_term='', $hidden=false) {
+		$row = tx_newspaper::selectRowsDirect(
+			'COUNT(*) AS c', 
+			$this->getTable(), 
+			$this->getSeachWhere($search_term, $hidden)
+		);
+		return $row[0]['c'];	
+	}
+	
+	/// Get where part SQL statement to select Extras
+	/** \param $search_term String to be searched for
+	 *  \param $hidden Determines if hidden Extras should be taken into account
+	 *                 (they are if set to true)
+	 *  \return Part to be used a WHERE part in an SQL statement 
+	 */
+	private function getSeachWhere($search_term='', $hidden=false) {
+		
+		if ($search_term) {
+			$search_where_parts = $this->getSearchFields();
+			foreach ($search_where_parts as $key => $field) {
+				$search_where_parts[$key] = $field . ' LIKE \'%' . $search_term . '%\'';
+			}
+			
+			$search_where = implode(' OR ', $search_where_parts);
+			if ($search_where) {
+				// set parantheses, so following "AND" can be used correctly 
+				$search_where = '(' . $search_where . ')';  
+			}
+		} else {
+			$search_where = '1';
+		}
+		
+		$search_where .= ' AND NOT deleted';
+
+		if (!$hidden && tx_newspaper::fieldExists($this->getTable(), 'hidden')) {
+			$search_where .= ' AND NOT hidden';
+		}
+
+		return $search_where;
+		
+	} 
+	
 	
 	/// Checks if a tx_newspaper_Extra is registered.
 	/** \param $extra tx_newspaper_Extra of the type to be checked.
