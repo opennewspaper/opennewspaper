@@ -1,0 +1,27 @@
+<div id="browse">
+
+{if $BROWSE_PREV >= 0}
+  <a href="#" onclick="browserResults({$BROWSE_PREV}); return false;">{$LL.labelPrev}</a>
+{else}
+  {$LL.labelPrev}
+{/if} 
+
+ - 
+
+{if $HIT_COUNT > 1} {* more than 1 hit found *}
+  {$HIT_FIRST} {$LL.labelHitsTo} {$HIT_LAST} ({$HIT_COUNT} {$LL.labelHits})
+{elseif $HIT_COUNT == 1}     {* 1 hit *}
+  1 {$LL.labelHit}
+{else}                       {* no hit *}
+  0 {$LL.labelHits} 
+{/if}  
+
+ - 
+
+{if $BROWSE_NEXT}
+  <a href="#" onclick="browserResults({$BROWSE_NEXT}); return false;">{$LL.labelNext}</a>
+{else}
+  {$LL.labelNext}
+{/if}
+
+</div>

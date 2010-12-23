@@ -1,0 +1,14 @@
+
+table {
+	padding:2px;
+	margin:2px;
+}
+
+td {
+	border:1px solid gray;
+	vertical-align:top;
+}
+
+img {
+	border:none;
+}

@@ -7,12 +7,38 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Extra</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="labelSearch">Search</label>
+			<label index="labelExtra">Extra</label>
+			<label index="labelNoExtra">--</label>
+			<label index="labelText">Text</label>
+			<label index="errorNoExtraChosen">Please chosen an extra type</label>
+			<label index="titleUid">uid</label>
+			<label index="titleDescription">Description</label>
+			<label index="labelHits">hits</label>
+			<label index="labelHit">hit</label>
+			<label index="labelHitsTo">to</label>
+			<label index="labelPrev">Previous</label>
+			<label index="labelNext">Next</label>
+			<label index="labelAdd">Add</label>
+			<label index="labelAddClose">Add and close</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Extra</label>
+			<label index="labelSearch">Suchen</label>
+			<label index="labelExtra">Web-Element</label>
+			<label index="labelNoExtra">--</label>
+			<label index="labelText">Text</label>
+			<label index="errorNoExtraChosen">Bitte wählen Sie ein Extra aus.</label>
+			<label index="titleUid">uid</label>
+			<label index="titleDescription">Beschreibung</label>
+			<label index="labelHits">Treffer</label>
+			<label index="labelHit">Treffer</label>
+			<label index="labelHitsTo">bis</label>
+			<label index="labelPrev">zurück</label>
+			<label index="labelNext">vor</label>
+			<label index="labelAdd">Hinzufügen</label>
+			<label index="labelAddClose">Hinzufügen und schließen</label>
+
 		</languageKey>
 	</data>
 </T3locallang>

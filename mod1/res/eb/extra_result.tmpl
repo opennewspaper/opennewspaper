@@ -1,0 +1,13 @@
+{debug}
+
+<table>
+{foreach item=extra from=$extras}
+<tr>
+	<td>
+		<a href="#" onclick="alert('to come ...');">{$ICON.add}</a>
+		<a href="#" onclick="alert('to come ...');">{$ICON.addClose}</a>   
+	</td>
+	<td>{$extra->getDescription()}</td>	
+</tr>
+{/foreach}
+</table>

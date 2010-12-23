@@ -56,10 +56,16 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @package	TYPO3
  */
 class  tx_newspaper_module1 extends t3lib_SCbase {
-				var $pageinfo;
+	var $pageinfo;
+
+	private $prefixId = 'tx_newspaper_mod1';
+	private $input = array(); // stores get/post data
+
+	const FILTER_STEP = 10;
+	
 
 	private function parseParam($param, $length=4) {
-t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
+//t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 		$p = explode('|', $param);
 		if (sizeof($p) != $length)
 			return false;
@@ -353,6 +359,10 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 				function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+					// get ll labels 
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod6/locallang.xml', $GLOBALS['LANG']->lang);
+					$this->localLang = $localLang[$GLOBALS['LANG']->lang];	
+
 					parent::init();
 
 					/*
@@ -380,8 +390,22 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 				function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
+					// Access check!
+					// \todo: better access check
+					$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
+					if (!$access) {
+						die('No access'); // \todo localization 
+					}
 
-// TODO check permissions
+
+					// read data
+					$this->input = t3lib_div::GParrayMerged($this->prefixId);
+t3lib_div::devlog('mod1 main', 'newspaper', 0, array('this->input' => $this->input));
+					// newspaper element browser handling
+					$this->processNewspaperElementBrowser();
+					$this->processNewspaperElementBrowserAjax();
+
+
 //t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (!isset($_REQUEST['param']))
 						return false; // no valid call without params possible
@@ -433,9 +457,175 @@ t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
 
 				}
 
+		// renders newspaper element browsers
+		// controller: eb (= element browser)
+		// types: e=extra, al=article list
+		private function processNewspaperElementBrowser() {
+			
+			if (
+				!$this->input['controller'] || 
+				strtolower($this->input['controller']) != 'eb' || 
+				!$this->input['type'] 
+			) {
+				return; // no newspaper element browser this time
+			}
+
+			// prepare smarty object			
+			$smarty = new tx_newspaper_Smarty();
+			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
+
+			// get ll labels 
+			$tmp = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
+			$smarty->assign('LL', $tmp[$GLOBALS['LANG']->lang]); // localization
+			
+			switch(strtolower($this->input['type'])) {
+				case 'e':
+					// element browser for extras
+					$smarty->assign('formExtras', tx_newspaper_extra::getRegisteredExtras());
+					$filter = $smarty->fetch('extra_filter.tmpl');
+				break;
+//				case 'al':
+//					// element browser for article lists
+//					$filter = $smarty->fetch('filter_articlelist.tmpl');
+//				break;
+				default:
+					t3lib_div::devlog('processNpElementBrowser() - unknown type', 'newspaper', 3, array('this->input' => $this->input));
+					return; // no type given, nothing to do
+			}
+			$smarty->assign('FILTER', $filter);
+			
+			$eb = $smarty->fetch('browser.tmpl');
+			
+			die($eb);
+			
+		}
+		
+
+		// processes newspaper element browsers ajax requests
+		// ajaxcontroller: eb (= element browser)
+		// types: see processNewspaperElementBrowser()
+		private function processNewspaperElementBrowserAjax() {
+			
+			if (
+				!$this->input['ajaxcontroller'] || 
+				strtolower($this->input['ajaxcontroller']) != 'eb' || 
+				!$this->input['type'] 
+			) {
+				return; // no newspaper element browser ajax request this time
+			}
+
+			// prepare smarty object			
+			$smarty = new tx_newspaper_Smarty();
+			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
+
+			// get ll labels 
+			$tmp = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
+			$smarty->assign('LL', $tmp[$GLOBALS['LANG']->lang]); // localization
+			
+			// get icons
+			$smarty->assign('ICON', $this->getIcons());
+			
+			switch(strtolower($this->input['type'])) {
+				case 'e':
+					// extras
+					
+					if (!$this->input['extra']) {
+						$this->dieWithErrorMessage($tmp[$GLOBALS['LANG']->lang]['errorNoExtraChosen']);
+					}
+					$total = $this->countExtras();
+					$smarty->assign('extras', $this->filterExtra());
+					$results = $smarty->fetch('extra_result.tmpl');
+				break;
+				case 'al':
+					// article lists
+die('to come ...');
+				break;
+				default:
+					t3lib_div::devlog('processNpElementBrowserAjax() - unknown type', 'newspaper', 3, array('this->input' => $this->input));
+					return; // no type given, nothing to do
+			}
+			$browse = $this->renderBrowseSequence($total);
+			die($browse . $results);
+		}
 
 
+		private function getIcons() {
+			return array(
+				'add' => tx_newspaper_BE::renderIcon('gfx/add.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod1/locallang.xml:labelAdd', false)),
+				'addClose' => tx_newspaper_BE::renderIcon('gfx/button_right.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod1/locallang.xml:labelAddClose', false)),
+			);
+		}
 
+		private function renderBrowseSequence($total) {
+		
+			$ll = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
+			$localLang = $ll[$GLOBALS['LANG']->lang];	
+			
+			$limit = intval($this->input['step'])? intval($this->input['step']) : self::FILTER_STEP;
+			$start = intval($this->input['pointer']); // defaults to 0
+			
+			$total = intval($total);
+			
+			
+			// prepare smarty object			
+			$smarty = new tx_newspaper_Smarty();
+			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
+			
+			$smarty->assign('BROWSE_PREV', $start-1);
+			$smarty->assign('BROWSE_NEXT', ((($start * $limit) + $limit + 1) <= $total )? $start+1 : '');
+			
+			$smarty->assign('HIT_FIRST', ($start * $limit) + 1);
+			$smarty->assign('HIT_LAST', min($total, ($start * $limit) + $limit));
+
+			$smarty->assign('HIT_COUNT', $total);
+			
+			$smarty->assign('LL', $localLang);
+
+			$browse = $smarty->fetch('browse.tmpl');
+			
+			return $browse;
+			
+		}
+
+		/// \return Extra records (according to filter settings)
+		private function filterExtra() {
+
+			$search_term = $this->input['text'];
+
+			$step = intval($this->input['step'])? intval($this->input['step']) : self::FILTER_STEP;
+			$start = intval($this->input['pointer']) * $step; // defaults to 0
+
+			$hidden = (isset($this->input['hidden']))? intval($this->input['hidden']) : false;
+
+			$e = new $this->input['extra']();
+			$extras = $e->getSearchResults($search_term, $start, $step, $hidden);
+
+			return $extras;
+			
+			$rows = tx_newspaper::selectRows(
+				'*',
+				htmlspecialchars($this->input['extra']),
+				'1' . tx_newspaper::enableFields($this->input['extra']),
+				'',
+				'tstamp DESC',
+				$start . ',' . $step
+			);
+			return $rows;			
+		}
+
+		/// \return total number of Extras matching the filter settings		
+		private function countExtras() {
+			$search_term = $this->input['text'];
+			$hidden = (isset($this->input['hidden']))? intval($this->input['hidden']) : false;
+			
+			$e = new $this->input['extra']();
+			return $e->countSearchResults($search_term, $hidden);
+		}
+		
+
+		private function dieWithErrorMessage($message) {
+			die('<div class="errorMessage">' . $message . '</div>');
+		}
 
 }
 

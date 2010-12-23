@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xml:lang="de-DE" lang="de-DE">
+<head> {* debug *}
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Element browser</title>
+	<link rel="stylesheet" type="text/css" href="res/mod1.css" />
+</head>
+
+<body>
+{* debug *}
+{literal}
+<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+<script type="text/javascript">
+function executeFilter(reset_pointer) {
+	if (reset_pointer) {
+		$("pointer").writeAttribute("value", 0); // reset pointer if a new search is executed
+	}
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: $("eb").serialize(),
+				onCreate: function() {
+					$("results").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+				},
+				onSuccess: function(data) {
+					if (data) {
+						$("results").innerHTML = data.responseText;
+					}
+				}
+			}
+		);
+}
+function browserResults(pointer) {
+	$("pointer").writeAttribute("value", parseInt(pointer)); // set pointer
+	executeFilter(); // execute filter
+}
+</script> {/literal}
+
+<div id="filter">
+	<form name="eb" id="eb">
+		<input id="pointer" type="hidden" name="tx_newspaper_mod1[pointer]" value="0" />
+		<input type="hidden" name="tx_newspaper_mod1[step]" value="10" />
+		{$FILTER}
+	</form>
+</div>
+
+<div id="results"></div>
+
+</body>
+</html>
