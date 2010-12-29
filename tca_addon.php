@@ -286,6 +286,14 @@ $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["rang
 	"lower" => "1"
 );
 
+// set control tag category sorting
+$TCA['tx_newspaper_tag']['columns']['ctrltag_cat']['config']['foreign_table_where'] = 
+	'ORDER BY tx_newspaper_ctrltag_category.sorting';
+// type 1 = content tag, type 2 = control tag
+$TCA['tx_newspaper_tag']['types']['1']['showitem'] = 'tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, section';
+$TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, ctrltag_cat, section';
+
+
 // todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
 
 // for testing image upload sizes (in extra image)
