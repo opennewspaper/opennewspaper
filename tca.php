@@ -2203,11 +2203,13 @@ $TCA["tx_newspaper_tag"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",		
 			"config" => Array (
-				"type" => "radio",
+				"type" => "select",
 				"items" => Array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.0", "1"),
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.1", "2"),
 				),
+				"size" => 1,	
+				"maxitems" => 1,
 			)
 		),
 		"title" => Array (		
@@ -2235,21 +2237,7 @@ $TCA["tx_newspaper_tag"] = array (
 				"foreign_table_where" => "ORDER BY tx_newspaper_ctrltag_category.uid",	
 				"size" => 1,	
 				"minitems" => 0,
-				"maxitems" => 1,	
-				"wizards" => Array(
-					"_PADDING" => 2,
-					"_VERTICAL" => 1,
-					"list" => Array(
-						"type" => "script",
-						"title" => "List",
-						"icon" => "list.gif",
-						"params" => Array(
-							"table"=>"tx_newspaper_ctrltag_category",
-							"pid" => "###CURRENT_PID###",
-						),
-						"script" => "wizard_list.php",
-					),
-				),
+				"maxitems" => 1,
 			)
 		),
 		"section" => Array (		
