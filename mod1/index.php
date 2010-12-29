@@ -343,7 +343,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
         if ($type == 'tags') {
             return array(tx_newspaper_tag::getContentTagType());
         } else if ($type == 'tags_ctrl') {
-            return tx_newspaper_tag::getControlTagTypes(); 
+            return tx_newspaper_tag::getControlTagType(); 
         } else {
             throw new tx_newspaper_Exception('unknown tag_type \''.$type.'\'');
         }

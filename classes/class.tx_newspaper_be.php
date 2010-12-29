@@ -735,35 +735,30 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
 
-        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', array(tx_newspaper_tag::getContentTagType()));
-        $controlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper_tag::getControlTagTypes());
+        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType());
+        $controlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper_tag::getControlTagType());
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         return $this->getFindTagsJs($articleId).$contentTags.$controlTags;
     }
 
-    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, array $tagTypeIds) {
+    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId) {
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$tagType.']';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$tagType;
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeIds);
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId);
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
         return $this->addTagInputField($fld, $articleId, $tagType);
     }
 
-    private function fillItemValues($articleId, array $tagTypes) {
-    	// $where has to start with AND because this where part in prepended with other stuff in tx_newspaper::selectMMQuery()
-        $where = ' AND ' . tx_newspaper_tag::getTagTypesWhere($tagTypes) . ' AND uid_local=' . $articleId;
-        $tags = tx_newspaper::selectMMQuery(
-			'uid_foreign, tag', 
-			'tx_newspaper_article',
-            'tx_newspaper_article_tags_mm', 
-			'tx_newspaper_tag', 
-			$where
-		);
+    private function fillItemValues($articleId, $tagType) {
+        $where .= " AND tag_type = " . $tagType;
+        $where .= " AND uid_local = " . $articleId;
+        $tags = tx_newspaper::selectMMQuery('uid_foreign, tag', 'tx_newspaper_article',
+            'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
         $items = array();
         foreach($tags as $i => $tag) {
-            $items[] = $tags[$i]['uid_foreign'] . '|' . $tags[$i]['tag'];
+            $items[] = $tags[$i]['uid_foreign'].'|'.$tags[$i]['tag'];
         }
-//t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('where' => $where, 'items' => $items, 'tags' => $tags) );
+//t3lib_div::devLog('fillItemValues', 'newspaper', 0, array('items' => $items, 'tags' => $tags) );
         return implode(',', $items);
     }
 
@@ -812,9 +807,9 @@ function findElementsByName(name, type) {
         $articleID = $params['row']['uid'];
         $article = new tx_newspaper_Article($articleID);
         if($params['field'] == 'tags') {
-            $tags = $article->getTags(array(tx_newspaper_tag::getContentTagType()));
+			$tags = $article->getTags(tx_newspaper_tag::getContentTagType());
         } else if($params['field'] == 'tags_ctrl') {
-            $tags = $article->getTags(tx_newspaper_tag::getControlTagTypes());
+            $tags = $article->getTags(tx_newspaper_tag::getControlTagType());
         } else {
             throw new tx_newspaper_Exception('field \''.$params['field'].'\' unkown');
         }

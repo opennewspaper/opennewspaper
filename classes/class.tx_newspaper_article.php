@@ -774,31 +774,23 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /**
-     * \param  $tagtype array with tag type uids; defaults to contentTagType
+     * \param  $tagtype int defaults to contentTagType
      * \return array with tags objects
      */
-    public function getTags(array $tagTypes=null) {
-        if (!$tagTypes) {
-            $tagTypes = array(tx_newspaper_tag::getContentTagType());
+    public function getTags($tagtype = null) {
+        if(!$tagtype) {
+            $tagtype = tx_newspaper::getContentTagType();
         }
-        $where = '';
-        foreach ($tagTypes as $tagType) {
-            $where .= ' AND tag_type=' . $tagType;
-        }
-        $where .= ' AND uid_local=' . $this->getUid();
-        $tag_ids = tx_newspaper::selectMMQuery(
-                        'uid_foreign',
-                        $this->getTable(),
-                        'tx_newspaper_article_tags_mm',
-                        'tx_newspaper_tag',
-                        $where
-        );
+        $where .= " AND tag_type = ".$tagtype;
+        $where .= " AND uid_local = ".$this->getUid();
+        $tag_ids = tx_newspaper::selectMMQuery('uid_foreign', $this->getTable(),
+            'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
 
-        $tags = array();
-        foreach ($tag_ids as $id) {
-            $tags[] = new tx_newspaper_Tag($id['uid_foreign']);
-        }
-        return $tags;
+		$tags = array();
+		foreach ($tag_ids as $id) {
+			$tags[] = new tx_newspaper_Tag($id['uid_foreign']);
+		}
+		return $tags;
     }
 
     public function getRelatedArticles($hidden_ones_too = false) {
