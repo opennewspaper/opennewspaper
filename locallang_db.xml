@@ -157,6 +157,9 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_where">SQL Condition for listed Articles</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_order_by">SQL expression to sort listed articles</label>
 			<label index="tx_newspaper_tag">Tag</label>
+			<label index="tx_newspaper_tag.tag_type.I.0">Content tag</label>
+			<label index="tx_newspaper_tag.tag_type.I.1">Control tag</label>
+			<label index="tx_newspaper_tag.tag_type">Tag type</label>
 			<label index="tx_newspaper_tag.title">Title</label>
 			<label index="tx_newspaper_tag.tag">Tag</label>
 			<label index="tx_newspaper_tag.ctrltag_cat">Control tag category</label>
@@ -365,6 +368,9 @@
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_where">SQL-Bedingung für aufgelistete Artikel</label>
 			<label index="tx_newspaper_articlelist_semiautomatic.filter_sql_order_by">SQL-Ausdruck zum Sortieren aufgelisteter Artikel</label>
 			<label index="tx_newspaper_tag">Schlagworte</label>
+			<label index="tx_newspaper_tag.tag_type.I.0">Content-Tag</label>
+			<label index="tx_newspaper_tag.tag_type.I.1">Steuer-Tag</label>
+			<label index="tx_newspaper_tag.tag_type">Tag-Typ</label>
 			<label index="tx_newspaper_tag.title">Titel / Dossier</label>
 			<label index="tx_newspaper_tag.tag">Schlagwort</label>
 			<label index="tx_newspaper_tag.ctrltag_cat">Steuertag-Kategorie</label>

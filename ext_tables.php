@@ -484,13 +484,14 @@ $TCA["tx_newspaper_tag"] = array (
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
+		'type' => 'tag_type',	
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_tag.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "title, tag, ctrltag_cat, section",
+		"fe_admin_fieldList" => "tag_type, title, tag, ctrltag_cat, section",
 	)
 );
 
