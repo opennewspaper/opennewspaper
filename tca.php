@@ -2195,7 +2195,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 $TCA["tx_newspaper_tag"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "title,tag,tag_type,section"
+		"showRecordFieldList" => "title,tag,ctrltag_cat,section"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
@@ -2215,13 +2215,13 @@ $TCA["tx_newspaper_tag"] = array (
 				"size" => "30",
 			)
 		),
-		"tag_type" => Array (		
+		"ctrltag_cat" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.ctrltag_cat",		
 			"config" => Array (
 				"type" => "select",	
-				"foreign_table" => "tx_newspaper_tag_type",	
-				"foreign_table_where" => "ORDER BY tx_newspaper_tag_type.uid",	
+				"foreign_table" => "tx_newspaper_ctrltag_category",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_ctrltag_category.uid",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,	
@@ -2233,7 +2233,7 @@ $TCA["tx_newspaper_tag"] = array (
 						"title" => "List",
 						"icon" => "list.gif",
 						"params" => Array(
-							"table"=>"tx_newspaper_tag_type",
+							"table"=>"tx_newspaper_ctrltag_category",
 							"pid" => "###CURRENT_PID###",
 						),
 						"script" => "wizard_list.php",
@@ -2255,7 +2255,7 @@ $TCA["tx_newspaper_tag"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "title;;;;2-2-2, tag;;;;3-3-3, tag_type, section")
+		"0" => array("showitem" => "title;;;;2-2-2, tag;;;;3-3-3, ctrltag_cat, section")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3050,43 +3050,6 @@ $TCA["tx_newspaper_extra_container"] = array (
 
 
 
-$TCA["tx_newspaper_tag_type"] = array (
-	"ctrl" => $TCA["tx_newspaper_tag_type"]["ctrl"],
-	"interface" => array (
-		"showRecordFieldList" => "name,basic_type"
-	),
-	"feInterface" => $TCA["tx_newspaper_tag_type"]["feInterface"],
-	"columns" => array (
-		"name" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.name",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
-		"basic_type" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type",		
-			"config" => Array (
-				"type" => "radio",
-				"items" => Array (
-					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type.I.0", "1"),
-					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag_type.basic_type.I.1", "2"),
-				),
-			)
-		),
-	),
-	"types" => array (
-		"0" => array("showitem" => "name;;;;1-1-1, basic_type")
-	),
-	"palettes" => array (
-		"1" => array("showitem" => "")
-	)
-);
-
-
-
 $TCA["tx_newspaper_extra_ad"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_ad"]["ctrl"],
 	"interface" => array (
@@ -3206,6 +3169,33 @@ $TCA["tx_newspaper_extra_generic"] = array (
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
+	)
+);
+
+
+
+$TCA["tx_newspaper_ctrltag_category"] = array (
+	"ctrl" => $TCA["tx_newspaper_ctrltag_category"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "title"
+	),
+	"feInterface" => $TCA["tx_newspaper_ctrltag_category"]["feInterface"],
+	"columns" => array (
+		"title" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_ctrltag_category.title",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+				"eval" => "required,unique",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "title;;;;2-2-2")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
 	)
 );
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');

@@ -652,7 +652,7 @@ CREATE TABLE tx_newspaper_tag (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	tag tinytext NOT NULL,
-	tag_type int(11) DEFAULT '0' NOT NULL,
+	ctrltag_cat int(11) DEFAULT '0' NOT NULL,
 	section blob NOT NULL,
 	
 	PRIMARY KEY (uid),
@@ -866,25 +866,6 @@ CREATE TABLE tx_newspaper_extra_container (
 
 
 #
-# Table structure for table 'tx_newspaper_tag_type'
-#
-CREATE TABLE tx_newspaper_tag_type (
-	uid int(11) NOT NULL auto_increment,
-	pid int(11) DEFAULT '0' NOT NULL,
-	tstamp int(11) DEFAULT '0' NOT NULL,
-	crdate int(11) DEFAULT '0' NOT NULL,
-	cruser_id int(11) DEFAULT '0' NOT NULL,
-	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	name tinytext NOT NULL,
-	basic_type int(11) DEFAULT '0' NOT NULL,
-	
-	PRIMARY KEY (uid),
-	KEY parent (pid)
-);
-
-
-
-#
 # Table structure for table 'tx_newspaper_extra_ad'
 #
 CREATE TABLE tx_newspaper_extra_ad (
@@ -919,6 +900,25 @@ CREATE TABLE tx_newspaper_extra_generic (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	template tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_newspaper_ctrltag_category'
+#
+CREATE TABLE tx_newspaper_ctrltag_category (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	sorting int(10) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	title tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
