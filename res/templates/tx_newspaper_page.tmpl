@@ -15,8 +15,8 @@
 {* Because this is a generic template, a foreach loop is used here.
    In production, it is probably more adequate to place the page zones by hand,
    such as:
-   	<div class="left_column">$page_zones.left_column</div>
-   	<div class="right_column">$page_zones.right_column</div>
+   	<div class="left_column">{$page_zones.left_column}</div>
+   	<div class="right_column">{$page_zones.right_column}</div>
    That way you have full control over how you wrap the page zones.
 *}
 {foreach from=$page_zones key=name item=content}
