@@ -567,12 +567,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /** \param $section Section from which the link is generated. Defaults to
      * 		using the article's primary section.
      *  \param $pagetype tx_newspaper_PageType of the wanted tx_newspaper_Page.
-     *  \todo Handle links to articles in sections other than their primary section.
      *  \todo Handle PageType other than article page.
      *  \todo Check if target page has an Article display Extra,
      * 		tx_newspaper_Extra_DisplayArticles.
      */
-    public function getLink(tx_newspaper_Section $section = null, tx_newspaper_PageType $pagetype = null) {
+    public function getLink(tx_newspaper_Section $section = null,
+                            tx_newspaper_PageType $pagetype = null,
+                            array $additional_parameters = array()) {
         if (!$section) {
             $section = $this->getPrimarySection();
         }
@@ -588,12 +589,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
         
         $typo3page = $section->getTypo3PageID();
-        
-        return tx_newspaper::typolink_url(
-                array(
-                    'id' => $typo3page,
-                    tx_newspaper::article_get_parameter => $this->getUid()
-        ));
+
+        $get_vars = array(
+            'id' => $typo3page,
+            tx_newspaper::article_get_parameter => $this->getUid()
+        );
+        $get_vars = array_merge($get_vars, $additional_parameters);
+        $get_vars = array_unique($get_vars);
+
+        return tx_newspaper::typolink_url($get_vars);
     }
 
     /// Get a list of all attributes in the tx_newspaper_Article table.
