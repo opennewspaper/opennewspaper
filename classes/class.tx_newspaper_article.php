@@ -994,6 +994,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
     private static function trimLeadingKet($paragraph) {
         $paragraph_start = strpos($paragraph, '>');
+        tx_newspaper::devlog('trimLeadingKet 1', $paragraph_start);
+
         if ($paragraph_start !== false) {
             $paragraph = substr($paragraph, $paragraph_start + 1);
         }
