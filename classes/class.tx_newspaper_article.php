@@ -222,7 +222,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $text_paragraphs = $this->splitIntoParagraphs();
         $paragraphs = $this->assembleTextParagraphs($text_paragraphs);
-tx_newspaper::devlog('render', array('text_paragraphs' => $text_paragraphs, 'paragraphs' => $paragraphs));
+
         $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
 
         $this->assignSmartyVariables($paragraphs);
@@ -965,9 +965,11 @@ tx_newspaper::devlog('render', array('text_paragraphs' => $text_paragraphs, 'par
         $paragraphs = array();
 
         foreach ($temp_paragraphs as $paragraph) {
-            
+            tx_newspaper::devlog('splitIntoParagraphs 1', $paragraph);
+
             $paragraph = self::trimPTags($paragraph);
-            
+            tx_newspaper::devlog('splitIntoParagraphs 2', $paragraph);
+
             /// Now we split the paragraph at line breaks.
             $sub_paragraphs = explode("\n", $paragraph);
 
