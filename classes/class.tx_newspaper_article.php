@@ -965,10 +965,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $paragraphs = array();
 
         foreach ($temp_paragraphs as $paragraph) {
-            tx_newspaper::devlog('splitIntoParagraphs 1', $paragraph);
 
             $paragraph = self::trimPTags($paragraph);
-            tx_newspaper::devlog('splitIntoParagraphs 2', $paragraph);
 
             /// Now we split the paragraph at line breaks.
             $sub_paragraphs = explode("\n", $paragraph);
@@ -994,7 +992,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
     private static function trimLeadingKet($paragraph) {
         $paragraph_start = strpos($paragraph, '>');
-        tx_newspaper::devlog('trimLeadingKet 1', $paragraph_start);
 
         if ($paragraph_start !== false && $paragraph_start <= 1) {
             $paragraph = substr($paragraph, $paragraph_start + 1);
