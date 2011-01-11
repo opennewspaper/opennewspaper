@@ -222,7 +222,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $text_paragraphs = $this->splitIntoParagraphs();
         $paragraphs = $this->assembleTextParagraphs($text_paragraphs);
-
+tx_newspaper::devlog('render', array('text_paragraphs' => $text_paragraphs, 'paragraphs' => $paragraphs));
         $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
 
         $this->assignSmartyVariables($paragraphs);
