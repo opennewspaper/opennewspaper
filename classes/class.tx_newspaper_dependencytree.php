@@ -30,8 +30,9 @@ class tx_newspaper_CachablePage {
     public function getURL() {
         if (class_exists('tx_newspaper_taz_URLGenerator')) {
             if (!$this->article) {
-                tx_newspaper::devlog('getURL()', array($this->newspaper_article, $this->newspaper_page));
+                tx_newspaper::devlog('getURL()', $this->newspaper_page);
             } else {
+                tx_newspaper::devlog('getURL()', array($this->newspaper_article, $this->newspaper_page));
                 $generator = new tx_newspaper_taz_URLGenerator($this->newspaper_article);
                 return $generator->getCanonicalUrl();
             }
