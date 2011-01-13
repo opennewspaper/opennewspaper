@@ -92,6 +92,8 @@ class tx_newspaper_DependencyTree {
     static public function registerAction($action) {
         if (is_callable($action)) {
             self::$registered_actions[] = $action;
+        } else {
+            tx_newspaper::devlog('not callable', $action);
         }
     }
     
