@@ -91,10 +91,10 @@ class tx_newspaper_DependencyTree {
      */ 
     static public function registerAction($action) {
         if (is_callable($action)) {
-            print('callable:'); print_r($action);
+            die('callable:'. print_r($action,1));
             self::$registered_actions[] = $action;
         } else {
-            print('not callable:'); print_r($action);
+            die('not callable:'. print_r($action,1));
         }
     }
     
