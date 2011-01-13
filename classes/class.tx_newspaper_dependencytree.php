@@ -171,7 +171,6 @@ class tx_newspaper_DependencyTree {
     }
     
     private function addRelatedArticles(tx_newspaper_Article $article) {
-        tx_newspaper::startExecutionTimer();
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -183,16 +182,13 @@ class tx_newspaper_DependencyTree {
             }
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
-        tx_newspaper::logExecutionTime('addRelatedArticles()');
     }
     
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
-        tx_newspaper::startExecutionTimer();
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
-        tx_newspaper::logExecutionTime('addArticleListPages()');
     }
     
     /// Ensure that a dependency tree is not created other than by the generator functions.
