@@ -853,10 +853,11 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             } catch (tx_newspaper_Exception $e) {
                 return;
             }
-            
+/*
+ * can't decide yet whether that should go here or in a specialized render hook.
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
             $tree->executeActionsOnPages();
-            
+*/            
         }
     }
 
