@@ -28,7 +28,11 @@ class tx_newspaper_CachablePage {
     }
     
     public function getURL() {
-        throw new tx_newspaper_NotYetImplementedException();
+        if (class_exists('tx_newspaper_taz_URLGenerator')) {
+            $generator = new tx_newspaper_taz_URLGenerator();
+            return $generator->getCanonicalUrl();
+        }
+        else throw new tx_newspaper_NotYetImplementedException();
     }
     
     public function getTypo3Page() {
@@ -94,7 +98,7 @@ class tx_newspaper_DependencyTree {
 #            die('callable:'. print_r($action,1));
             self::$registered_actions[] = $action;
         } else {
-#            die('not callable:'. print_r($action,1));
+#!!            die('not callable:'. print_r($action,1));
         }
     }
     
