@@ -29,7 +29,7 @@ class tx_newspaper_CachablePage {
     
     public function getURL() {
         if (class_exists('tx_newspaper_taz_URLGenerator')) {
-            $generator = new tx_newspaper_taz_URLGenerator();
+            $generator = new tx_newspaper_taz_URLGenerator($this->newspaper_article);
             return $generator->getCanonicalUrl();
         }
         else throw new tx_newspaper_NotYetImplementedException();
