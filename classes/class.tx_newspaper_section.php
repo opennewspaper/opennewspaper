@@ -522,11 +522,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 //t3lib_div::devlog('s getArticles row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$a = new tx_newspaper_Article(intval($row[$i]['uid_local']));
-			$list[] = $a;
-			if (sizeof($list) == $limit) {
-				return $list;
-			}	
+			$list[] = new tx_newspaper_Article(intval($row[$i]['uid_local']));
 		}
 		return $list;
 	}
