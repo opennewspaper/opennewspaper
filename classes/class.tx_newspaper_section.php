@@ -508,23 +508,25 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	}
 	
 	
-	public function getArticles($limit = 10) {
+	/// Get array with article objects assigned to this section (limited by $limit)
+	public function getArticles($limit=10) {
 		$limit = intval($limit);
 		$row = tx_newspaper::selectRows(
-			'uid_local',
-			'tx_newspaper_article_sections_mm',
-			'uid_foreign=' . $this->getUid()
+			'mm.uid_local',
+			'tx_newspaper_article_sections_mm mm, tx_newspaper_article a',
+			'mm.uid_foreign=' . $this->getUid() . ' AND mm.uid_foreign=a.uid AND a.deleted=0',
+			'',
+			'',
+			$limit
 		);
-//t3lib_div::devlog('s getArticles row', 'newspaper', 0, $row);
+//t3lib_div::devlog('s getArticles row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$a = new tx_newspaper_Article(intval($row[$i]['uid_local']));
-			if ($a->getAttribute('deleted') == 0) {
-				$list[] = $a;
-				if (sizeof($list) == $limit) {
-					return $list;
-				}	
-			} 
+			$list[] = $a;
+			if (sizeof($list) == $limit) {
+				return $list;
+			}	
 		}
 		return $list;
 	}
