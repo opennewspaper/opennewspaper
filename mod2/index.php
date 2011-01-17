@@ -311,18 +311,23 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 					'msg' => htmlentities($t['msg'])
 				);
 			}
-			// add be_user
-			$be_user_uid = $row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'];
-			if ($be_user_uid) {
-				$be_user = tx_newspaper::selectOneRow(
-					'username, realName',
-					'be_users',
-					'uid=' . $be_user_uid
-				);
-			} else {
-				$be_user['username'] = '---'; // no be_user stored in article
-			}
-			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
+			
+//			// add be_user; currently not used in smarty template
+//			$be_user_uid = $row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'];
+//			if ($be_user_uid) {
+//				$be_user = tx_newspaper::selectZeroOrOneRows(
+//					'username, realName',
+//					'be_users',
+//					'uid=' . $be_user_uid
+//				);
+//				if (!$be_user['username']) {
+//					$be_user['username'] = '---'; // stored be_user is deleted
+//				}
+//			} else {
+//				$be_user['username'] = '---'; // no be_user stored in article
+//			}
+//			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
+
 			// add role title
 			$row[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($row[$i]['workflow_status']);
 			 
