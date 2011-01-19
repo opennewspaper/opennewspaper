@@ -37,6 +37,8 @@ class tx_newspaper_CachablePage {
         }
 
         /// \todo additional GET parameters, page type
+        $type = $this->newspaper_page->getPageType();
+        t3lib_div::devlog('getGETParameters',$type->getCondition());
 
         return $parameters;
     }
