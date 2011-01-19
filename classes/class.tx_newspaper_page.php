@@ -474,7 +474,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  		}
  		return $this->parentSection; 
  	}
- 	
+
+    public function getTypo3PageID() {
+        return $this->getParentSection()->getTypo3PageID();
+    }
+
  	/// Find page of same page type under parent section.	*/
  	public function getParentPageOfSameType() {
 	 	
