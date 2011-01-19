@@ -86,6 +86,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  	public function getCondition() { 
  		return $this->condition . tx_newspaper::enableFields(tx_newspaper::getTable($this)); 
  	}
+    public function getGETParameters() {
+        return $this->get_parameters;
+    }
 
  	public function getID() { return $this->getAttribute('uid'); }
  	
@@ -206,6 +209,7 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  		if ($input[tx_newspaper::GET_pagetype()]) { 
 			$this->condition = 'get_var = \'' . tx_newspaper::GET_pagetype() .
 				'\' AND get_value = \'' . $input[tx_newspaper::GET_pagetype()] . '\'';
+            $this->get_parameters[tx_newspaper::GET_pagetype()] = $input[tx_newspaper::GET_pagetype()];
  		} else {
  			
  			// Try to deduce the page type from other GET parameters.
@@ -276,5 +280,6 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  	private $uid = 0;
  	private $condition = '1';
  	private $attributes = array();
+    private $get_parameters = array();
 }
 ?>
