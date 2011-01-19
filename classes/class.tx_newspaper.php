@@ -688,6 +688,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     
     ////////////////////////////////////////////////////////////////////////////
 
+    public static function getTSConfig() {
+        $root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
+        return t3lib_BEfunc::getPagesTSconfig($root_page);
+    }
+
 	/// get absolute path to Typo3 installation
 	/** \param $endsWithSlash determines if the returned path ends with a slash
 	 *  \return absolute path to Typo3 installation
