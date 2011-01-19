@@ -30,7 +30,7 @@ class tx_newspaper_CachablePage {
     public function getGETParameters() {
 
         $parameters = array(
-            'id' => $this->getTypo3Page(),
+            'id' => $this->getTypo3PageID(),
         );
         if ($this->newspaper_article) {
             $parameters[tx_newspaper::article_get_parameter] = $this->newspaper_article->getUid();
