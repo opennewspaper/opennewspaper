@@ -465,9 +465,10 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	}
 
 	///	The tx_newspaper_Section under which this tx_newspaper_Page lies
-	/** \return The tx_newspaper_Section under which this tx_newspaper_Page lies
+    /**
+     * @return tx_newspaper_Section The section under which this page lies
 	 */
- 	public function getParentSection() { 
+ 	public function getParentSection() {
  		if (!$this->parentSection) {
  			$this->parentSection = new tx_newspaper_Section(intval($this->getAttribute('section')));
  		}
