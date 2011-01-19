@@ -46,7 +46,12 @@ class tx_newspaper_CachablePage {
     }
     
     public function getTypo3Page() {
-        throw new tx_newspaper_NotYetImplementedException();
+        if (!$this->newspaper_page) {
+            throw new tx_newspaper_IllegalUsageException(
+                'tx_newspaper_CachablePage::getTypo3Page() called without a Newspaper page'
+            );
+        }
+        return $this->newspaper_page->getParentSection()->getTypo3PageID();
     }
         
     ////////////////////////////////////////////////////////////////////////////
