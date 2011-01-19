@@ -116,10 +116,8 @@ class tx_newspaper_DependencyTree {
     public function executeActionsOnPages($depth = 0) {
 #        tx_newspaper::startExecutionTimer();
         tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
-        foreach ($this->getPages($depth) as $page) {
-            foreach (self::$registered_actions as $action) {
-                call_user_func($action, $page);
-            }
+        foreach (self::$registered_actions as $action) {
+            call_user_func($action, $this->getPages($depth));
         }
 #        tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
