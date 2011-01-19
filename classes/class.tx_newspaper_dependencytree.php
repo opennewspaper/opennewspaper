@@ -26,30 +26,29 @@ class tx_newspaper_CachablePage {
     public function getNewspaperPage() {
         return $this->newspaper_page;
     }
+
+    public function getGETParameters() {
+
+        $parameters = array(
+            'id' => $this->getTypo3Page(),
+        );
+        if ($this->newspaper_article) {
+            $parameters[tx_newspaper::article_get_parameter] = $this->newspaper_article->getUid();
+        }
+
+        /// \todo additional GET parameters, page type
+
+        return $parameters;
+    }
     
     public function getURL() {
-        if (class_exists('tx_newspaper_taz_URLGenerator')) {
-            if (!$this->article) {
-                if (!$this->newspaper_page) return '';
-                tx_newspaper::devlog('getURL() page', $this->newspaper_page);
-                return('!p' . $this->newspaper_page->getParentSection()->getTypo3PageID());
-            } else {
-                tx_newspaper::devlog('getURL() article', array($this->newspaper_article, $this->newspaper_page));
-                $generator = new tx_newspaper_taz_URLGenerator($this->newspaper_article);
-                return $generator->getCanonicalUrl();
-            }
-        }
-        else throw new tx_newspaper_NotYetImplementedException();
+        throw new tx_newspaper_NotYetImplementedException();
     }
     
     public function getTypo3Page() {
         throw new tx_newspaper_NotYetImplementedException();
     }
-    
-    public function getGETParameters() {
-        throw new tx_newspaper_NotYetImplementedException();
-    }
-    
+        
     ////////////////////////////////////////////////////////////////////////////
     
     private $newspaper_page = null;
