@@ -46,6 +46,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     public static function createContentTag($value = null) {
         $tag = new tx_newspaper_Tag();
         $tag->setAttribute('tag_type', self::getContentTagType());
+        $newTag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         if ($value) {
             $tag->setAttribute('tag', $value);
         }
@@ -53,23 +54,83 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
 
-// \todo oliver: remove TAG_TYPE!
     /// Creates a new control tag
     /**
-     * \param $controlTagType uid of control tag type record
+     * \param $controlTagCat uid of control tag category record
      * \param $tag name of tag
      * \param $title name of dossier etc. associated with this control tag
      * \param $section uid of section associated with this control tag
      * \return tx_newspaper_tag object 
      */
-    public static function createControlTag($controlTagType, $tag, $title='', $section=0) {
+    public static function createControlTag($controlTagCat, $tag, $title='', $section=0) {
         $newTag = new tx_newspaper_tag();
-        $newTag->setAttribute('tag_type', intval($controlTagType));
+        $newTag->setAttribute('tag_type', self::getControlTagType());
+        $newTag->setAttribute('ctrltag_cat', intval($controlTagCat));
         $newTag->setAttribute('tag', $tag);
         $newTag->setAttribute('title', $title);
         $newTag->setAttribute('section', intval($section));
+        $newTag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         return $newTag;
     }
+    
+    /// \return Array with all control tag categories
+    public static function getAllControltagCategories() {
+    	return tx_newspaper::selectRows(
+    		'uid,title',
+    		self::ctrltag_cat_table,
+    		'1' . tx_newspaper::enableFields(self::ctrltag_cat_table),
+    		'',
+    		'sorting'
+    	);
+    }
+
+    /// \return Array with all control tags for given $category
+    public static function getAllControlTags($category) {
+    	$category = intval($category);
+    	$rows = tx_newspaper::selectRows(
+    		'uid',
+    		self::tag_table,
+    		'tag_type=' . self::getControltagType() . ' AND ctrltag_cat=' . $category  . tx_newspaper::enableFields(self::tag_table),
+    		'',
+    		'tag'
+    	);
+    	$tags = array();
+    	foreach($rows as $row) {
+    		$tags[] = new tx_newspaper_tag($row['uid']);
+    	}
+    	return $tags;
+    }
+
+
+    /// \return Array with all tag zones
+    public static function getAllTagZones() {
+    	return tx_newspaper::selectRows(
+    		'uid,name',
+    		self::tagzone_table,
+    		'1' . tx_newspaper::enableFields(self::tagzone_table),
+    		'',
+    		'name'
+    	);
+    }
+    
+    
+    /// \param $tz_uid uid of taz zone
+    /// \return Array with Extras assigned to tag zone identified by $tz_uid 
+    public function getTagzoneExtras($tz_uid) {
+    	$rows = tx_newspaper::selectRows(
+    		'extra_uid',
+    		self::ctrltag_to_extra,
+    		'tag=' . $this->getUid() . ' AND tag_zone=' . intval($tz_uid),
+    		'',
+    		'sorting'
+    	);
+    	$extras = array();
+    	foreach($rows as $row) {
+    		$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['extra_uid']);
+    	}
+    	return $extras;
+    }
+
 
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
@@ -156,6 +217,16 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	
 	static public function getModuleName() { return 'np_tag'; }
 	
+	
+	/// Get all tag zones (array with uids) this tag is assigned to
+	public function getTagZones() {
+    	return tx_newspaper::selectRows(
+    		'DISTINCT tag_zone',
+    		self::ctrltag_to_extra,
+    		'tag=' . $this->getUid() . tx_newspaper::enableFields(self::ctrltag_to_extra)
+    	);
+	}	
+	
 	/// Given a partial tag, return all possible completions for that tag
 	/** \param $fragment A string to interpret as a part of a tag
 	 *  \param $max Maximum number of hints returned
@@ -192,42 +263,41 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	////////////////////////////////////////////////////////////////////////////
 	/// Tag type handling
 	
-	///	SQL table matching tx_newspaer_Extra s to Control Tags and Tag Zones
-	const tag_type_table = 'tx_newspaper_tag_type';
+
+	/// SQL table storing tags
+	const tag_table = 'tx_newspaper_tag';
 	
+	/// SQL table storing control tag categories
+	const ctrltag_cat_table = 'tx_newspaper_ctrltag_category';
+
+	/// SQL table storing tag zones
+	const tagzone_table = 'tx_newspaper_tag_zone';
+	
+	/// SQL table assigning control tags and extras to tag zones 
+	const ctrltag_to_extra = 'tx_newspaper_controltag_to_extra';
+
+
+
 	/// Get control tag type
 	/// \return 2 hard coded	
 	public static function getControlTagType() {
 		return 2; // hard coded
 	}
 
-
-	// \return true if control tag $tag is already stored in the database
-	public static function doesControlTagAlreadyExist($tag) {
+	/// Checks if a tag title and control tag category combination is already in use
+	/** \param $tag Tag title
+	 *  \param $ctrltagtype uid of control tag type
+	 *  \return true if control tag $tag is already stored in the database for given $ctrltagtype 
+	 */
+	public static function doesControlTagAlreadyExist($tag, $ctrltagtype) {
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid',
 			'tx_newspaper_tag',
-			'tag="' . $tag . '" AND ' . self::getTagTypesWhere(tx_newspaper_tag::getControlTagTypes())
+			'tag="' . $tag . '" AND tag_type=' . self::getControlTagType()
 		);
-		return (isset($row['uid']) > 0);
+		return (isset($row['uid']) && $row['uid'] > 0);
 	}
 
-
-
-// \todo oliver: REMOVE ...
-	/// Get a where part of an sql statement selecting all tag types specified in $tag
-	/// \param $tag array with tag type uids
-	/// \return where part for an sql statement (bracketed)
-	public static function getTagTypesWhere(array $tagTypes) {
-		if (!$tagTypes) {
-			return ' (1) ';
-		}
-		$where = '';
-		foreach ($tagTypes as $tagType) {
-			$where .= (($where)? ' OR ' : '') . 'tag_type=' . $tagType;
-		}
-		return ' (' . $where . ')';
-	}
 
 	/// Get the content tag type 
 	/// \return 1 (hard coded)

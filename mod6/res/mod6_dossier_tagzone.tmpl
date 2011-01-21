@@ -1,0 +1,26 @@
+{debug}
+<!-- begin mod6/res/mod6_dossier_tagzone.tmpl -->
+
+{* Variables:
+	TAG
+	TAGZONES_USED
+	TAGZONES_ALL
+*}
+
+<div id="tagzones">
+	<div id="tz_used">
+		<strong>{$LANG.label_tagzones_active}</strong><br /><br />
+		{foreach from=$TAGZONES_USED item=tz}
+			{$TAGZONES_ALL[$tz.tag_zone].name}<br />
+			{foreach from=$TAGZONES_USED_EXTRAS[$tz.tag_zone] item=extra}
+				{$extra->getDescription()} <br />
+				<a href="#" onclick="removeExtraFromTagzone(); return false;">{$ICON.remove}</a> <a href="#" onclick="replaceExtraInTagzone(); return false;">{$ICON.replace}</a>
+			{/foreach}
+		{/foreach}
+	</div>
+	<div id="tz_unused">
+		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
+	</div>
+</div>
+
+<!-- end mod6/res/mod6_dossier_tagzone.tmpl -->

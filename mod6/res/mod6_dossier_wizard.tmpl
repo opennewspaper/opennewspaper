@@ -1,0 +1,70 @@
+{* debug *}
+<!-- begin mod6/res/mod6_dossier_wizard.tmpl -->
+
+{include file="../../mod3/res/mod3.css"}
+
+{* Variables:
+	$DATA.tag             tag entered in form 
+	$DATA.controltagtype  list of tag zones in the system, form:
+	$DATA.section         section uid
+	$SECTIONS             all available sections
+	$CTRLTAGCATS          all control tag categories
+	$LANG.[...]           localization stuff
+*}
+
+{if $noCtrlTagCatAvailable}
+<div>
+	{$LANG.wizard_dossier_no_ctrltagcat}<br /><br />
+</div>
+{elseif $wizardDossierContinue}
+<div>
+	{$LANG.label_wizard_dossier_success}<br /><br />
+	{$LANG.label_wizard_dossier_continue}
+</div>
+{else}
+
+<div>
+	<label for="tx_newspaper_mod6[ctrltagcat]">{$LANG.label_ctrltagcat}</label>
+	<select name="tx_newspaper_mod6[ctrltagcat]">
+	{foreach from=$CTRLTAGCATS item=ctrltagcat}
+		<option value="{$ctrltagcat.uid}"{if $ctrltagcat.uid == $DATA.ctrltagcat} selected="selected"{/if}>{$ctrltagcat.title}</option>
+	{/foreach}
+	</select>
+</div>
+
+<div>
+	<label for="tx_newspaper_mod6[tag]">{$LANG.label_tag}</label>
+	<input name="tx_newspaper_mod6[tag]" type="text" value="{$DATA.tag|escape:html}" />
+	{if $ERROR.tagNotUnique && !$ERROR.tagEmpty}
+	<span class="error_message">{$LANG.wizard_dossier_tag_not_unique}</span>
+	{/if}
+	{if $ERROR.tagEmpty && $DATA.submitted}
+	<span class="error_message">{$LANG.wizard_dossier_tag_missing}</span>
+	{/if}
+</div>
+
+<div>
+	<label for="tx_newspaper_mod6[title]">{$LANG.label_title}</label>
+	<input name="tx_newspaper_mod6[title]" type="text" value="{$DATA.title|escape:html}" />
+	{if $ERROR.titleMissing && $DATA.submitted}
+	<span class="error_message">{$LANG.wizard_dossier_title_missing}</span>
+	{/if}
+</div>
+	
+<div>
+	<label name="tx_newspaper_mod6[section]">{$LANG.label_section}</label>
+	<select name="tx_newspaper_mod6[section]">
+		<option value="0"{if $DATA.section == 0} selected="selected"{/if}></option>
+	{foreach from=$SECTIONS item=section}
+		<option value="{$section->getUid()}"{if $section->getUid() == $DATA.section} selected="selected"{/if}>{$section->getAttribute('section_name')}</option>
+	{/foreach}
+	</select>
+	{if $ERROR.sectionMissing && $DATA.submitted}
+	<span class="error_message">{$LANG.wizard_dossier_section_missing}</span>
+	{/if}
+</div>
+
+<input type="submit" value="{$LANG.label_wizard_dossier_submit}" class="submit" />
+
+{/if}
+<!-- end mod6/res/mod6_dossier_wizard.tmpl -->

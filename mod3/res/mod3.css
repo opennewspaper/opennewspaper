@@ -31,5 +31,28 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 .gray {
   color: #909090;
 }
+
+
+/* mod6 styles */
+
+body#ext-newspaper-mod6-index-php label {
+	width:125px;
+	margin-bottom:10px;
+	display:inline-block;
+}
+body#ext-newspaper-mod6-index-php input, select {
+	width:200px;
+	margin-bottom:10px;
+	clear:both;
+}
+body#ext-newspaper-mod6-index-php input.submit {
+	width:auto;
+}
+.error_message {
+	color:red;
+	font-weight:bold;
+}
+
 </style> 
+
 {/literal}

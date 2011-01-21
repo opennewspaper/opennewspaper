@@ -1,0 +1,125 @@
+{debug}
+<!-- begin mod6/res/mod6_dossier_manage.tmpl -->
+
+{* Variables:
+	$DATA.tag             tag entered in form 
+	$DATA.controltagtype  list of tag zones in the system, form:
+	$DATA.section         section uid
+	$SECTIONS             all available sections
+	$CTRLTAGCATS          all control tag categories
+	$LANG.[...]           localization stuff
+*}
+
+
+{include file="../../mod3/res/mod3.css"}
+
+{literal}
+<style>
+#tz_used {
+	float:left;
+	margin-right:20px;
+}
+#tz_unused {
+	float:left;
+}
+
+</style>
+<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+<script type="text/javascript">
+function changeCtrlTagCat(uid) {
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxCtrlTagCat]=' + parseInt(uid),
+				onCreate: function() {
+					$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
+					$("tx_newspaper_mod6[tag]").descendants().each(Element.remove); // clear tag select box
+				},
+				onSuccess: function(data) {
+					if (data) {
+						// insert tags into select box
+						options = data.responseText.evalJSON();
+						for(i = 0; i < options.length; i++) {
+							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(splitParam(options[i], 0), splitParam(options[i], 1));
+						}
+						$("tz").innerHTML = ''; // remove spinner
+					}
+				}
+			}
+		);
+}
+
+function changeTag(uid) {
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxTag]=' + parseInt(uid),
+				onCreate: function() {
+					$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
+				},
+				onSuccess: function(data) {
+					if (data) {
+						$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner 
+					}
+				}
+			}
+		);
+}
+
+function removeExtraFromTagzone() {
+alert('to come');
+}
+
+function replaceExtraInTagzone() {
+alert('to come');
+}
+
+
+// if left = 1 string left of pipe is returned, else right part is returned
+function splitParam(param, left) {
+	if (left != 1) left = 0;
+	p = param.indexOf('|');
+	if (p < 1) return '';
+	if (left == 1) {
+		return param.substring(0, p);
+	} else {
+		return param.substring(p+1);
+	}
+}
+</script>
+{/literal}
+
+
+{if $noCtrlTagCatAvailable}
+<div>
+	{$LANG.wizard_dossier_no_ctrltagcat}<br /><br />
+</div>
+{else}
+
+
+<div>
+	<label for="tx_newspaper_mod6[ctrltagcat]">{$LANG.label_ctrltagcat}</label>
+	<select name="tx_newspaper_mod6[ctrltagcat]" onchange="changeCtrlTagCat(this.value); return false;">
+	{foreach from=$CTRLTAGCATS item=ctrltagcat}
+		<option value="{$ctrltagcat.uid}"{if $ctrltagcat.uid == $DATA.ctrltagcat} selected="selected"{/if}>{$ctrltagcat.title}</option>
+	{/foreach}
+	</select>
+</div>
+
+<div>
+	<label for="tx_newspaper_mod6[tag]">{$LANG.label_tag}</label>
+	<select name="tx_newspaper_mod6[tag]" id="tx_newspaper_mod6[tag]" onchange="changeTag(this.value); return false;">
+		<option value="0"></option>
+	{foreach from=$TAGS item=tag}
+		<option value="{$tag->getUid()}"{if $tag->getUid() == $DATA.tag} selected="selected"{/if}>{$tag->getAttribute('tag')}</option>
+	{/foreach}
+	</select>
+</div>
+
+<div id="tz"></div>
+
+
+{/if}
+<!-- end mod6/res/mod6_dossier_manage.tmpl -->

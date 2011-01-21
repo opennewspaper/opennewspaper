@@ -7,12 +7,47 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Control Tag Control</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
-			<label index="function3">Function #3</label>
+			<label index="manage_dossiers">Manage dossiers</label>
+			<label index="manage_tagzones">Manage tag zones</label>
+			<label index="wizard_dossier">Dossier wizard</label>
+			<label index="label_create_dossier">Create dossier</label>
+			<label index="wizard_dossier_no_ctrltagcat">Please create a control tag category before using the dossier wizard.</label>
+			<label index="wizard_dossier_tag_not_unique">The tag is already is use. Please change the tag name or edit that tag.</label>
+			<label index="wizard_dossier_tag_missing">Please enter the name of the control tag.</label>
+			<label index="wizard_dossier_title_missing">Please enter the title of the dossier.</label>
+			<label index="wizard_dossier_section_missing">Please chose the associated section</label>
+			<label index="label_wizard_dossier_submit">Create dossier</label>
+			<label index="label_wizard_dossier_success">The dossier has been created sucessfully.</label>
+			<label index="label_wizard_dossier_continue">Please select "Manage dossiers" to continue.</label>
+			<label index="label_tag">Tag</label>
+			<label index="label_title">Dossier title</label>
+			<label index="label_ctrltagcat">Control tag category</label>
+			<label index="label_section">Section</label>
+			<label index="label_manage_dossier">Manage dossier</label>
+			<label index="label_tagzones_active">Active tag zones</label>
+			<label index="label_tagzones_unused">Unused tag zones</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Steuertagsteuerung</label>
+			<label index="manage_dossiers">Dossiers verwalten</label>
+			<label index="manage_tagzones">Steuertagzonen verwalten</label>
+			<label index="wizard_dossier">Dossier-Wizard</label>
+			<label index="label_create_dossier">Dossier anlegen</label>
+			<label index="wizard_dossier_no_ctrltagcat">Bitte legen Sie eine Steuertag-Kategorie an, bevor Sie den Dossier-Wizard verwenden.</label>
+			<label index="wizard_dossier_tag_not_unique">Der Tag ist bereits in Nutzung. Bitte ändern Sie den Tag-Namen oder editieren Sie das entsprechende Tag.</label>
+			<label index="wizard_dossier_tag_missing">Bitte geben Sie den Namen des Steuertags ein.</label>
+			<label index="wizard_dossier_title_missing">Bitte geben Sie den Namen des Dossiers ein.</label>
+			<label index="wizard_dossier_section_missing">Bitte wählen Sie ein Ressort aus.</label>
+			<label index="label_wizard_dossier_submit">Dossier anlegen</label>
+			<label index="label_wizard_dossier_success">Das Dossier wurde erfolgreich angelegt.</label>
+			<label index="label_wizard_dossier_continue">Bitte wählen Sie "Dossiers verwalten", um fortzufahren.</label>
+			<label index="label_tag">Tag</label>
+			<label index="label_title">Dossier-Titel</label>
+			<label index="label_ctrltagcat">Steuertag-Kategorie</label>
+			<label index="label_section">Ressort</label>
+			<label index="label_manage_dossier">Dossier verwalten</label>
+			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
+			<label index="label_tagzones_unused">Freie Steuertag-Bereiche</label>
 		</languageKey>
 	</data>
 </T3locallang>
