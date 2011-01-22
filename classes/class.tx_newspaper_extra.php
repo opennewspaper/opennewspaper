@@ -473,8 +473,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	private function getSeachWhere($search_term='', $hidden=false) {
 		
-		if ($search_term) {
-			$search_where_parts = $this->getSearchFields();
+		if ($search_term && $search_where_parts = $this->getSearchFields()) {
 			foreach ($search_where_parts as $key => $field) {
 				$search_where_parts[$key] = $field . ' LIKE \'%' . $search_term . '%\'';
 			}
