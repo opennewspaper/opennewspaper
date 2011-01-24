@@ -114,7 +114,7 @@
 			<label index="label_articlelist_excluded_tags">Ausgeschlossene Tag(s)</label>
             <label index="message_no_controltag_selected">Kein Steuertag ausgewählt</label>
             <label index="message_articlelist_missing_deleted">
-                Dieses Extra bezieht sich auf eine fehlende oder gelöschte Artikelliste. 
+                Dieses Extra bezieht sich auf eine fehlende oder gelöschte Artikelliste.
             </label>
             <label index="message_select_another_articlelist">
                 Bitte wählen Sie eine andere Artikelliste.
@@ -172,12 +172,12 @@
 			<label index="log_import_source_path">Pfad</label>
             <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
             <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
-			<label index="label_tab_article_article">Artikel</label>
+			<label index="label_tab_article_article">[ Artikel bearbeiten ]</label>
 			<label index="label_tab_article_extra">Web-Elemente</label>
 			<label index="label_tab_article_workflow">Nachrichten</label>
-			<label index="label_tab_article_tags">Tags</label>
-			<label index="label_tab_article_related">Verknüpfte Artikel</label>
-			<label index="label_tab_article_timecontrol">Zeitsteuerung</label>
+			<label index="label_tab_article_tags">Schlagworte</label>
+			<label index="label_tab_article_related">Verlinkte Artikel</label>
+			<label index="label_tab_article_timecontrol">Zeitzündung</label>
 			<label index="label_tab_article_additional">Erweitere Daten</label>
 			<label index="title_section_articlelist">Artikelliste für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
 			<label index="label_kicker_title_teaser">Artikel-Kopfdaten</label>

@@ -134,9 +134,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray', 
 										 $status, $table, $id, $fieldArray, $that);
 
-//        $fieldArray['tags'] = 2;
-//        $_REQUEST['data'][$table][$id]['tags'] = '7,8';
-		
 /// \todo move to sysfolder class	
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();

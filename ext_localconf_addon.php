@@ -38,7 +38,6 @@
 		$sysfolder = ''; // \todo, see #603
 	
 		// hide some fields
-		// hide some tables
 		t3lib_extMgm::addPageTSConfig('
 			TCEFORM.tx_newspaper_article.hidden.disabled = 1 
 			TCEFORM.tx_newspaper_article.source_id.disabled = 1
@@ -108,7 +107,7 @@
 			TCEFORM.tx_newspaper_extra_typo3_ce.endtime.disabled = 1
 			TCEFORM.tx_newspaper_extra_typo3_ce.hidden.disabled = 1
 	
-			// \todo enable after functionlaity is implemented, see #1111		
+			// \todo enable after functionality is implemented, see #1111		
 			TCEFORM.tx_newspaper_articlelist_semiautomatic.subsequent_sections.disabled = 1
 	
 			mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
