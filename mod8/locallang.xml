@@ -6,13 +6,25 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Tag</label>
+			<label index="sectionDelete">Delete Tags</label>
+            <label index="title">Administer Tags</label>
 			<label index="deleteTag">Delete Tag</label>
 			<label index="mergeTags">Merge Tags</label>
 			<label index="function3">Function #3</label>
+            <label index="delete">Delete</label>
+            <label index="tagInUse">Tag is connected to an article and can not be deleted.</label>
+            <label index="tagDeleted">Tag was deleted.</label>
+            <label index="deleteSelected">Delete selected tag.</label>
+            <label index="sectionMerge">Merge Tags</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="title">Tag</label>
+			<label index="sectionDelete">Tag löschen</label>
+            <label index="title">Tag Verwaltung</label>
+            <label index="delete">Löschen</label>
+            <label index="tagInUse">Artikel sind mit diesem Tag verbunden.Er kann nicht gelöscht werden.</label>
+            <label index="tagDeleted">Tag wurde gelöscht.</label>
+            <label index="deleteSelected">Ausgewählten Tag löschen.</label>
+            <label index="sectionMerge">Tags zusammenführen</label>
 		</languageKey>
 	</data>
 </T3locallang>

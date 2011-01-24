@@ -28,6 +28,7 @@ unset($MCONF);
 require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
+require_once('../classes/class.tx_newspaper_tag.php');
 
 $LANG->includeLLFile('EXT:newspaper/mod8/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
@@ -181,51 +182,66 @@ t3lib_div::devlog('mod8 main()', 'np', 0, array('input' => $input));
 				 * @return	void
 				 */
 				function moduleContent($input)	{
-					switch((string)$this->MOD_SETTINGS['function'])	{
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod8/locallang.xml', $GLOBALS['LANG']->lang);
+					$localLang = $localLang[$GLOBALS['LANG']->lang];
+
+                    switch((string)$this->MOD_SETTINGS['function'])	{
 						case 1: //delete Tag
-                            $content = $this->renderDeleteModule($input);
+                            $content = $this->renderDeleteModule($input, $localLang);
+                            $section = 'sectionDelete';
 						    break;
                         case 2: // merge tags
-                            $content='<div align=center><strong>Menu item #2...</strong></div>';
+                            $content= $this->renderMergeModul($input);
+                            $section = 'sectionMerge';
                             break;
                         case 3:
                             $content='<div align=center><strong>Menu item #3...</strong></div>';
                             break;
                     }
-                    $this->content.=$this->doc->section('Message #1:',$content,0,1);
+                    $this->content.=$this->doc->section($localLang[$section],$content,0,1);
                 }
 
-                private function renderDeleteModule($input) {
-                    if(isset($input['submit']) && isset($input['tags'])) {
-                        /*
+                          /*
                          SELECT uid_foreign
 FROM `tx_newspaper_article_tags_mm` tags_mm, `tx_newspaper_article` article
 WHERE tags_mm.uid_local = article.uid
 AND article.deleted =0
 LIMIT 0 , 30
-*/                           echo "in if";
-//                        try {
-                            $res = tx_newspaper::selectRows('uid_local', 'tx_newspaper_article_tags_mms', 'uid_foreign = '.$input['tags']);
-                        print_r($res);
-//                        } catch(tx_newspaper_EmptyResultException $e) {
-//                            //No result tag can be deleted
-//                            tx_newspaper::updateRows('tx_newspaper_tag', 'uid = '.$input['tags'], array('deleted' => 1));
-//                        }
+*/
+                private function renderDeleteModule($input, $lang) {
+                    $tags = array();
+                    $messageKey = null;
+                    if(isset($input['submit']) && isset($input['tags'])) {
+                        $tag = new tx_newspaper_tag($input['tags']);
+                        $rows = tx_newspaper::selectRows('uid_local', 'tx_newspaper_article_tags_mm', 'uid_foreign = '.$tag->getUid());
+                        if(count($rows) > 0) {
+                            $messageKey = 'tagInUse';
+                        } else {
+                            tx_newspaper::updateRows('tx_newspaper_tag', 'uid = '.$tag->getUid(), array('deleted' => 1));
+                            $messageKey = 'tagDeleted';
+                        }
                     }
                     $tempTags = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'deleted = 0');
-                    $tags = array();
                     foreach($tempTags as $tag) {
                         $tags[$tag['uid']] = $tag['tag'];
                     }
-                    $smarty = $this->getSmarty();
+
+                    $smarty = $this->getSmarty('moduleDelete', $lang);
                     $smarty->assign('tags', $tags);
-                    $smarty->assign('lang', array('delete' => 'Löschen'));
+                    $smarty->assign('message', $messageKey);
                     return $smarty->fetch('mod8_module.tpl');
                 }
 
-                private function getSmarty() {
+                private function renderMergeModul($input) {
+
+                    $smarty = $this->getSmarty('moduleMerge', $lang);
+                }
+
+                private function getSmarty($modul, $localLang) {
                     $smarty = new tx_newspaper_Smarty();
                     $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod8/res/'));
+                    $smarty->assign($modul, true);
+                    $smarty->assign('lang', $localLang);
 
                     return $smarty;
                 }
