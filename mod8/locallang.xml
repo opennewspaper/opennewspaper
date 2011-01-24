@@ -7,8 +7,8 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Tag</label>
-			<label index="function1">Function #1</label>
-			<label index="function2">Function #2</label>
+			<label index="deleteTag">Delete Tag</label>
+			<label index="mergeTags">Merge Tags</label>
 			<label index="function3">Function #3</label>
 		</languageKey>
 		<languageKey index="de" type="array">
