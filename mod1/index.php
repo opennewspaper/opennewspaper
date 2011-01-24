@@ -321,20 +321,12 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
     }
 
     private function processTagGetAll() {
-        if (!$tagTypes = $this->getTagTypeFromRequest()) {
-        	return ''; // no tag types, no tags
-        }
-        $where = tx_newspaper_tag::getTagTypesWhere($tagTypes);
-        $results = tx_newspaper::selectRows(
-			'uid, tag', 
-			'tx_newspaper_tag', 
-			$where
-		);
+        $tagType = $this->getTagTypeFromRequest();
+        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'tag_type = '.$tagType);
         $tags = array();
         foreach($results as $result) {
             $tags[$result['uid']] = $result['tag'];
         }
-//t3lib_div::devlog('processTagGetAll()', 'newspaper', 0, array('tagTypes' => $tagTypes, 'where' => $where, 'tags' => $tags, 'query' => tx_newspaper::$query));
         exit(json_encode($tags));
     }
 

@@ -2,7 +2,7 @@
 <!-- begin mod6/res/mod6_dossier_manage.tmpl -->
 
 {* Variables:
-	$DATA.tag             tag entered in form 
+	$DATA.tag             tag entered in form
 	$DATA.controltagtype  list of tag zones in the system, form:
 	$DATA.section         section uid
 	$SECTIONS             all available sections
@@ -22,10 +22,12 @@
 #tz_unused {
 	float:left;
 }
-
 </style>
 <script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
 <script type="text/javascript">
+{/literal}
+var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
+{literal}
 function changeCtrlTagCat(uid) {
 	var request = new Ajax.Request(
 		"index.php",
@@ -61,18 +63,34 @@ function changeTag(uid) {
 				},
 				onSuccess: function(data) {
 					if (data) {
-						$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner 
+						$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner
 					}
 				}
 			}
 		);
 }
 
-function removeExtraFromTagzone() {
-alert('to come');
+function removeExtraFromTagzone(tz_uid, e_uid) {
+	if (confirm(confirmMessage)) {
+		var request = new Ajax.Request(
+			"index.php",
+				{
+					method: 'get',
+					parameters: 'tx_newspaper_mod6[AjaxRemoveExtraFromTagZone]=1' + "&tx_newspaper_mod6[tz_uid]=" + parseInt(tz_uid) + "&tx_newspaper_mod6[e_uid]=" + parseInt(e_uid) + "&tx_newspaper_mod6[tag_uid]=" + parseInt($("tx_newspaper_mod6[tag]").value),
+					onCreate: function() {
+						$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
+					},
+					onSuccess: function(data) {
+						if (data) {
+							$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner
+						}
+					}
+				}
+		);
+	}
 }
 
-function replaceExtraInTagzone() {
+function addExtraToTagzone() {
 alert('to come');
 }
 

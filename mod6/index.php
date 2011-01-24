@@ -40,42 +40,42 @@ class fullWidthDoc_mod6 extends template {
 }
 
 
-/// Module 'Control Tag Control' for the 'newspaper' extension. 
+/// Module 'Control Tag Control' for the 'newspaper' extension.
 /** A BE for assigning shown tx_newspaper_Extra s to a combination of
  *  tx_newspaper_Tag and tx_newspaper_TagZone. By placing a
  *  tx_newspaper_Extra_ControlTagZone Extra and assigning it a tag zone, a
  *  dossier can be supplied with Extras shown only with tx_newspaper_Article s
  *  which are tagged with a specific tx_newspaper_Tag.
- * 
+ *
  *  The central function which handles all the action is moduleContent().
  *
  * \author	Helge Preuss <helge.preuss@gmail.com>
  */
 class  tx_newspaper_module6 extends t3lib_SCbase {
-	
+
 	private $prefixId = 'tx_newspaper_mod6';
 	private $localLang = null; // localization stuff
-	
+
 	var $pageinfo;
 
 	private $smarty = null;				///< tx_newspaper_Smarty rendering engine
-	
-	
-	
+
+
+
 	///	Table mapping tx_newspaper_Extra s to tag zones and tx_newspaper_Tag s
 	const controltag_to_extra_table = 'tx_newspaper_controltag_to_extra';
-	
+
 //	///	Table listing the possible tag zones
 //	const tag_zone_table = 'tx_newspaper_tag_zone';
 
 //	///	Table listing the possible tags
 //	const tag_table = 'tx_newspaper_tag';
-	
+
 	///	Fields in the controltag_to_extra_table not to display (system fields)
 	private static $excluded_fields = array(
 		'uid', 'pid', 'tstamp', 'crdate', 'cruser_id'
 	);
-	
+
 	private static $writable_fields = array(
 		'tag', 'tag_zone', 'extra_table', 'extra_uid'
 	);
@@ -84,15 +84,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	/// Initializes the Module
 	/** Initializes a tx_newspaper_Smarty instance and a \c language object for
 	 *  internationalization of BE messages.
-	 * 
+	 *
 	 * \return	void
 	 */
 	function init()	{
 		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-		// get ll labels 
+		// get ll labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod6/locallang.xml', $GLOBALS['LANG']->lang);
-		$this->localLang = $localLang[$GLOBALS['LANG']->lang];	
+		$this->localLang = $localLang[$GLOBALS['LANG']->lang];
 
 		$this->smarty = new tx_newspaper_Smarty();
 		$this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod6/res/'));
@@ -103,14 +103,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init('default');
 		}
-		
+
 		parent::init();
 
 	}
 
 	/// Adds items to the ->MOD_MENU array. Used for the function menu selector.
 	/** \todo Make a real menu. Options: manage dossiers, create new tags.
-	 */ 
+	 */
 	function menuConfig()	{
 		global $LANG;
 		$this->MOD_MENU = array(
@@ -194,20 +194,20 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	/// Generates the module content, depending on the menu values chosen.
 	/** Prints a list of present tag zone/tag/extra combinations and enables the
 	 *  user to select each of those.
-	 * 
+	 *
 	 *  \todo Create new tags if the function menu is thus selected
 	 *  \todo paging of entries
 	 *  \todo don't create a new combination on every POST
 	 */
 	function moduleContent()	{
 		global $LANG;
-	
+
 		$input = t3lib_div::GParrayMerged($this->prefixId);
 t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->MOD_SETTINGS['function'], 'input' => $input));
-		
+
 		// check for AJAX request first
 		$this->processAjax($input); // executin will die, if an Ajax request was processed
-		
+
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 'manage_dossiers':
 				$this->manageDossiers($input);
@@ -224,9 +224,9 @@ t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->M
 
 
 	}
-	
-	
-	/// Check if an AJAX reuqest is to be processed. If yes, generate response and die.
+
+
+	/// Check if an AJAX request is to be processed. If yes, generate response and die.
 	private function processAjax(array $input) {
 
 		if (isset($input['AjaxCtrlTagCat'])) {
@@ -245,9 +245,20 @@ t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->M
 			die($this->renderTagZoneBackend(intval($input['AjaxTag'])));
 		}
 
+		if (isset($input['AjaxRemoveExtraFromTagZone'])) {
+			// set deleted flag for this tag zone, control tag and extra record
+			tx_newspaper::deleteRows(
+				'tx_newspaper_controltag_to_extra',
+				intval($input['tz_uid']),
+				'tag_zone',
+				'tag=' . intval($input['tag_uid']) . ' AND extra=' . intval($input['e_uid'])
+			);
+			die($this->renderTagZoneBackend(intval($input['tag_uid']))); // render new tag zone backend
+		}
+
 
 	}
-	
+
 	/// Render tag zone backend for "Manage dossiers" module
 	private function renderTagZoneBackend($uid) {
 		$tag = new tx_newspaper_tag(intval($uid));
@@ -269,8 +280,8 @@ t3lib_div::devlog('tz', 'newspaper', 0, $row);
 t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
 		return $this->smarty->fetch('mod6_dossier_tagzone.tmpl');
 	}
-	
-	
+
+
 	// backend for new dossier wizard
 	private function createDossier($input) {
 //t3lib_div::devlog('createDossier()', 'newspaper', 0, array('input' => $input));
@@ -281,11 +292,11 @@ t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag,
 		$error = array(
 			'tagNotUnique' => $this->checkTagNotUnique($input['tag'], $input['ctrltagcat']), // true, if tag is not unique
 			'tagEmpty' => ($input['tag'] == ''),  // tag name is mandatory
-			'titleMissing' => ($input['title'] == ''), // title is mandatory 
+			'titleMissing' => ($input['title'] == ''), // title is mandatory
 			'sectionMissing' => ($input['section'] == 0), // associated section is mandatory
-			'noCtrlTagCatAvailable' => (sizeof($cats) == 0) // dossier wizard can't be used without control tag categories 
+			'noCtrlTagCatAvailable' => (sizeof($cats) == 0) // dossier wizard can't be used without control tag categories
 		);
-		$this->smarty->assign('ERROR', $error); 
+		$this->smarty->assign('ERROR', $error);
 
 		if ($submitted && !$this->containsError($error)) {
 			// valid data submitted ... so store data
@@ -301,22 +312,22 @@ t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag,
 					'title' => (isset($input['title']))? $input['title'] : '',
 					'section' => (isset($input['section']))? $input['section'] : 0,
 					'submitted' => $submitted, // true if form was submitted, false if form was just opened
-				) 
+				)
 			);
 			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSections(false));
 			$this->smarty->assign('CTRLTAGCATS', $cats);
 		}
-		
+
 		// render backend
 		$this->content .= $this->doc->section(
-			$this->localLang['label_create_dossier'], 
+			$this->localLang['label_create_dossier'],
 			$this->smarty->fetch('mod6_dossier_wizard.tmpl'),
-			0, 
+			0,
 			1
 		);
 
 	}
-	
+
 	// \return true, if at least one item in array $error is true, else false
 	private function containsError(array $error) {
 		foreach($error as $item) {
@@ -326,7 +337,7 @@ t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag,
 		}
 		return false;
 	}
-	
+
 	/// \return false, if tag is unique (for control tag category) or empty, else true; tag is ALWAYS a control tag
 	private function checkTagNotUnique($tag, $ctrltagcat) {
 		if (!$tag) {
@@ -334,11 +345,11 @@ t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag,
 		}
 		return tx_newspaper_tag::doesControlTagAlreadyExist($tag, $ctrltagcat);
 	}
-	
-	
-	
+
+
+
 	// backend for managing tag zones
-	private function manageTagzones($input) {	
+	private function manageTagzones($input) {
 t3lib_div::devlog('manageTagzones() - not implemented yet', 'newspaper', 0, array('input' => $input));
 	}
 
@@ -354,54 +365,54 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
 		$submitted = (bool) (count($input)); // check if form was submitted ...
 
 		$error = array(
-			'noCtrlTagCatAvailable' => (sizeof($tagCats) == 0) // control tag catgeories are mandatory 
+			'noCtrlTagCatAvailable' => (sizeof($tagCats) == 0) // control tag catgeories are mandatory
 		);
-		$this->smarty->assign('ERROR', $error); 
-		
+		$this->smarty->assign('ERROR', $error);
+
 		// get chosen ctrl tag cat (or use first cat as default)
-		$ctrltagcat = (isset($input['ctrltagcat']))? 
-			intval($input['ctrltagcat']) : 
+		$ctrltagcat = (isset($input['ctrltagcat']))?
+			intval($input['ctrltagcat']) :
 			(isset($tagCats[0]['uid']))? intval($tagCats[0]['uid']): 0;
-			
+
 		if ($ctrltagcat > 0) {
 			// assign data to smarty
 			$this->smarty->assign('DATA',
 				array(
 					'submitted' => $submitted, // true if form was submitted, false if form was just opened
-				) 
+				)
 			);
 			$this->smarty->assign('CTRLTAGCATS', $tagCats);
 			$this->smarty->assign('TAGS', tx_newspaper_tag::getAllControlTags($ctrltagcat));
 		}
-		
-		
+
+
 		// render backend
 		$this->content .= $this->doc->section(
-			$this->localLang['label_manage_dossier'], 
+			$this->localLang['label_manage_dossier'],
 			$this->smarty->fetch('mod6_dossier_manage.tmpl'),
-			0, 
+			0,
 			1
 		);
-		
+
 t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCats, 'submitted' => $submitted));
-		
+
 	}
 
-	
+
 //	// backend for managing dossiers
 //	private function manageDossiersOLD($input) {
 //t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
 //		$this->handlePOST();
-//		
+//
 //		$this->smarty->assign('tag_zones', self::getAvailableTagZones());
 //		$this->smarty->assign('tags', self::getAvailableTags());
 ////t3lib_div::devlog('mod6', 'newspaper', 0, array('tags' => self::getAvailableTags()));
-//		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());				
-//				
+//		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());
+//
 //		$data = tx_newspaper::selectRows(
 //			'*', self::controltag_to_extra_table, '', '', 'uid DESC'
 //		);
-//				
+//
 //		if ($data) {
 //			foreach ($data as $index => $row) {
 //				$tag = tx_newspaper::selectOneRow(
@@ -412,28 +423,28 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCat
 //					'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
 //				);
 //				$data[$index]['tag_zone'] = $tag_zone['name'];
-//						
+//
 //				try {
 //					$extra = new $row['extra_table']($row['extra_uid']);
 //					$data[$index]['extra_uid'] = $extra->getDescription();
 //				} catch (tx_newspaper_EmptyResultException $e) {
-//					$data[$index]['extra_uid'] = 
+//					$data[$index]['extra_uid'] =
 //						'<input name="extra_uid[' . $data[$index]['uid'] . ']" />';
 //				}
 //			}
 //			$this->smarty->assign('data', $data);
-//							
+//
 //		}
 //		$this->content .= $this->doc->section(
-//			'Message #1:', 
+//			'Message #1:',
 //			$this->smarty->fetch('mod6.tmpl'),
 //			0, 1
 //		);
 //	}
-//	
-//	
+//
+//
 //	////////////////////////////////////////////////////////////////////////////
-//	
+//
 //	/// Handle user input
 //	/** Creates a new tag zone/tag/extra combination if the user entered one.
 //	 */
@@ -461,13 +472,13 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCat
 //       			}
 //   				$this->content .= '<p>' . tx_newspaper::$query . '</p>';
 //			}
-//		}		
+//		}
 //	}
-//	
+//
 //	///	Returns all tag zones
 //	static private function getAvailableTagZones() {
 //		return tx_newspaper::selectRows(
-//			'uid, name', 
+//			'uid, name',
 //			self::tag_zone_table,
 //			'1' . tx_newspaper::enableFields(self::tag_zone_table)
 //		);
@@ -477,7 +488,7 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCat
 //	static private function getAvailableTags() {
 //		return tx_newspaper::selectRows(
 //			'uid, tag', self::tag_table,
-//			'tag_type = ' . tx_newspaper_tag::getControlTagType() 
+//			'tag_type = ' . tx_newspaper_tag::getControlTagType()
 //		);
 //	}
 
@@ -486,13 +497,13 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCat
 //		$extra_types = array();
 //		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
 //			$extra_types[] = array(
-//				'table' => $registered_extra->getTable(), 
+//				'table' => $registered_extra->getTable(),
 //				'title' =>$registered_extra->getTitle()
 //			);
 //		}
 //		return $extra_types;
 //	}
-	
+
 }
 
 

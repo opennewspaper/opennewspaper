@@ -1,9 +1,9 @@
 <?php
 /**
  *  \file class.tx_newspaper_tag.php
- * 
+ *
  *  This file is part of the TYPO3 extension "newspaper".
- * 
+ *
  *  Copyright notice
  *
  *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
@@ -24,16 +24,16 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- *  
+ *
  *  \author Oliver Sch�rder <typo3@schroederbros.de>
  *  \date Mar 25, 2009
  */
- 
+
 /// Tag
 /** \todo document me!
  */
 class tx_newspaper_Tag implements tx_newspaper_StoredObject {
-	
+
 	public function __construct($uid = 0) {
 		$uid = intval($uid);
 		if ($uid > 0) {
@@ -60,7 +60,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      * \param $tag name of tag
      * \param $title name of dossier etc. associated with this control tag
      * \param $section uid of section associated with this control tag
-     * \return tx_newspaper_tag object 
+     * \return tx_newspaper_tag object
      */
     public static function createControlTag($controlTagCat, $tag, $title='', $section=0) {
         $newTag = new tx_newspaper_tag();
@@ -72,7 +72,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         $newTag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         return $newTag;
     }
-    
+
     /// \return Array with all control tag categories
     public static function getAllControltagCategories() {
     	return tx_newspaper::selectRows(
@@ -112,21 +112,21 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     		'name'
     	);
     }
-    
-    
+
+
     /// \param $tz_uid uid of taz zone
-    /// \return Array with Extras assigned to tag zone identified by $tz_uid 
+    /// \return Array with Extras assigned to tag zone identified by $tz_uid
     public function getTagzoneExtras($tz_uid) {
     	$rows = tx_newspaper::selectRows(
-    		'extra_uid',
+    		'extra',
     		self::ctrltag_to_extra,
-    		'tag=' . $this->getUid() . ' AND tag_zone=' . intval($tz_uid),
+    		'tag=' . $this->getUid() . ' AND tag_zone=' . intval($tz_uid) . tx_newspaper::enableFields(self::ctrltag_to_extra),
     		'',
     		'sorting'
     	);
     	$extras = array();
     	foreach($rows as $row) {
-    		$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['extra_uid']);
+    		$extras[] = tx_newspaper_Extra_Factory::getInstance()->create($row['extra']);
     	}
     	return $extras;
     }
@@ -137,16 +137,16 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	public function __toString() {
 		try {
 			return $this->getAttribute('tag');
-		} catch (tx_newspaper_Exception $e) { 
+		} catch (tx_newspaper_Exception $e) {
 			return 'Unstored tx_newspaper_Tag object';
 		}
 	}
-	
+
 	public function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-				'*', 
+				'*',
 				tx_newspaper::getTable($this),
 				'uid=' . $this->getUid() . tx_newspaper::enableFields(tx_newspaper::getTable($this))
 			);
@@ -167,7 +167,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
 		}
-		
+
 		$this->attributes[$attribute] = $value;
 	}
 
@@ -207,17 +207,17 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	public function getUid() {
 		return intval($this->uid);
 	}
-	
+
 	public function setUid($uid) {
 		$this->uid = $uid;
 	}
-	
+
 	/// \return Name of the database table the object's data are stored in
 	public function getTable() { return tx_newspaper::getTable($this); }
-	
+
 	static public function getModuleName() { return 'np_tag'; }
-	
-	
+
+
 	/// Get all tag zones (array with uids) this tag is assigned to
 	public function getTagZones() {
     	return tx_newspaper::selectRows(
@@ -225,8 +225,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     		self::ctrltag_to_extra,
     		'tag=' . $this->getUid() . tx_newspaper::enableFields(self::ctrltag_to_extra)
     	);
-	}	
-	
+	}
+
 	/// Given a partial tag, return all possible completions for that tag
 	/** \param $fragment A string to interpret as a part of a tag
 	 *  \param $max Maximum number of hints returned
@@ -236,9 +236,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * 		has been searched for.
 	 *  \return Array of tags (UIDs as key and tagname as value) that match \p $fragment
 	 */
-	static public function getCompletions($fragment, 
-										  $max = 0, 
-										  $start_only = false, 
+	static public function getCompletions($fragment,
+										  $max = 0,
+										  $start_only = false,
 										  $strong = false) {
 		$results = tx_newspaper::selectRows(
 			'uid, tag', 'tx_newspaper_tag',
@@ -250,36 +250,36 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
 		if ($results) {
 			foreach ($results as $row) {
-				$return[$row['uid']] = str_replace($fragment, 
-										($strong? '<strong>': '') . $fragment . ($strong? '</strong>': ''), 
+				$return[$row['uid']] = str_replace($fragment,
+										($strong? '<strong>': '') . $fragment . ($strong? '</strong>': ''),
 										$row['tag']);
 			}
 		}
-		
+
 		return $return;
 	}
-	
-	
+
+
 	////////////////////////////////////////////////////////////////////////////
 	/// Tag type handling
-	
+
 
 	/// SQL table storing tags
 	const tag_table = 'tx_newspaper_tag';
-	
+
 	/// SQL table storing control tag categories
 	const ctrltag_cat_table = 'tx_newspaper_ctrltag_category';
 
 	/// SQL table storing tag zones
 	const tagzone_table = 'tx_newspaper_tag_zone';
-	
-	/// SQL table assigning control tags and extras to tag zones 
+
+	/// SQL table assigning control tags and extras to tag zones
 	const ctrltag_to_extra = 'tx_newspaper_controltag_to_extra';
 
 
 
 	/// Get control tag type
-	/// \return 2 hard coded	
+	/// \return 2 hard coded
 	public static function getControlTagType() {
 		return 2; // hard coded
 	}
@@ -287,7 +287,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	/// Checks if a tag title and control tag category combination is already in use
 	/** \param $tag Tag title
 	 *  \param $ctrltagtype uid of control tag type
-	 *  \return true if control tag $tag is already stored in the database for given $ctrltagtype 
+	 *  \return true if control tag $tag is already stored in the database for given $ctrltagtype
 	 */
 	public static function doesControlTagAlreadyExist($tag, $ctrltagtype) {
 		$row = tx_newspaper::selectZeroOrOneRows(
@@ -299,14 +299,14 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	}
 
 
-	/// Get the content tag type 
+	/// Get the content tag type
 	/// \return 1 (hard coded)
     public static function getContentTagType() {
 		return 1; // hard coded
-    }	
-	
-	
+    }
+
+
 	////////////////////////////////////////////////////////////////////////////
-	
+
 	private $uid = ''; ///< UID that identifies the tag in the DB
 }

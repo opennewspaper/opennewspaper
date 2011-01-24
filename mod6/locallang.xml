@@ -26,6 +26,7 @@
 			<label index="label_manage_dossier">Manage dossier</label>
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
+			<label index="message_confirm_delete_extra_from_tagzone">You you want to remove this extra?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Steuertagsteuerung</label>
@@ -47,7 +48,8 @@
 			<label index="label_section">Ressort</label>
 			<label index="label_manage_dossier">Dossier verwalten</label>
 			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
-			<label index="label_tagzones_unused">Freie Steuertag-Bereiche</label>
+			<label index="label_tagzones_unused">Verfügbare Steuertag-Bereiche</label>
+			<label index="message_confirm_delete_extra_from_tagzone">Möchten Sie dieses Extra wirklich löschen?</label>
 		</languageKey>
 	</data>
 </T3locallang>

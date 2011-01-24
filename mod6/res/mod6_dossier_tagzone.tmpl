@@ -2,8 +2,11 @@
 <!-- begin mod6/res/mod6_dossier_tagzone.tmpl -->
 
 {* Variables:
+	ICON
+	LANG
 	TAG
 	TAGZONES_USED
+	TAGZONES_USED_EXTRAS // key = tag zone uid
 	TAGZONES_ALL
 *}
 
@@ -14,12 +17,17 @@
 			{$TAGZONES_ALL[$tz.tag_zone].name}<br />
 			{foreach from=$TAGZONES_USED_EXTRAS[$tz.tag_zone] item=extra}
 				{$extra->getDescription()} <br />
-				<a href="#" onclick="removeExtraFromTagzone(); return false;">{$ICON.remove}</a> <a href="#" onclick="replaceExtraInTagzone(); return false;">{$ICON.replace}</a>
+				<a href="#" onclick="removeExtraFromTagzone({$tz.tag_zone}, {$extra->getExtraUid()}); return false;">{$ICON.remove}</a><br /><br />
 			{/foreach}
 		{/foreach}
 	</div>
-	<div id="tz_unused">
+	<div id="tz_unused">To do: die aktiven TZ's ausfiltern<br />
 		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
+			{foreach from=$TAGZONES_ALL item=tz}
+				{* if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS) *}
+					{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone(); return false;">{$ICON.add}</a> <br /><br />
+				{* /if *}
+			{/foreach}
 	</div>
 </div>
 
