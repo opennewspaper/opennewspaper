@@ -217,7 +217,7 @@ LIMIT 0 , 30
 
                     $smarty->assign('tags', $tags);
                     $smarty->assign('message', $messageKey);
-                    return $smarty->fetch('mod8_module.tmpl');
+                    return $smarty->fetch('mod8_deleteTag.tmpl');
                 }
 
                 private function renderMergeModul($action, $input, $smarty) {

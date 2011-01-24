@@ -1,0 +1,7 @@
+h3 { width: 250px; }
+.message { margin-bottom: 10px; }
+.tag_selection {float: left; margin-right: 10px;}
+#tag_merge { width: 300px;}
+#tag_merge_with { width: 300px; float:left;}
+p.description { margin-bottom: 10px; width: 500px; }
+#action { clear: both; padding-top: 10px ;}

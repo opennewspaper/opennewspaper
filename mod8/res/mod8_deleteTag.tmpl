@@ -1,0 +1,12 @@
+<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod8/res/mod8.css" />
+
+{if $lang.$message}
+    <p class="message">
+        {$lang.$message}
+    </p>
+{/if}
+<select name="input[tag]">
+    {html_options options=$tags}
+</select>
+
+<input type="submit" value="{$lang.delete}" name="action[deleteTag]" id="delete" title="{$lang.deleteSelected}" />

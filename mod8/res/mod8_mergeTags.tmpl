@@ -1,0 +1,29 @@
+<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod8/res/mod8.css" />
+
+{if $lang.$message}
+    <p class="message">
+        {$lang.$message}
+    </p>
+{/if}
+<p class="description">
+{$lang.mergeDescription}
+</p>
+
+<div class="tag_selection">
+    <h3>{$lang.tagsToMergeFrom}</h3>
+    <select id="tag_merge" name="input[mergeableTags]" size="10" multiple="multiple">
+        {html_options options=$tags}
+    </select>
+</div>
+<div class="tag_selection">
+    <h3>{$lang.tagToMergeTo}</h3>
+    <select id="tag_merge_with" name="input[tag]" size="1">
+        <option selected="selected" id="0">{$lang.chooseTag}</option>
+        {html_options options=$tags}
+    </select>
+</div>
+
+<div id="action">
+    <p class="message"> {$lang.tagMergeHelp} </p>
+    <input type="submit" value="{$lang.merge}" name="action[mergeTags]" id="delete" title="{$lang.mergeSelected}" />
+</div>    
