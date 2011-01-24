@@ -788,6 +788,7 @@ CREATE TABLE tx_newspaper_controltag_to_extra (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	tag blob NOT NULL,
 	tag_zone blob NOT NULL,
 	extra blob NOT NULL,

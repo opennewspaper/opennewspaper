@@ -609,6 +609,7 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'sortby' => 'sorting',	
+		'delete' => 'deleted',	
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_controltag_to_extra.gif',
 	),

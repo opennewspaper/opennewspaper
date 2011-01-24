@@ -405,8 +405,8 @@
 			<label index="tx_newspaper_controltag_to_extra.tag_zone">Tagzone</label>
 			<label index="tx_newspaper_controltag_to_extra.extra">Web-Element</label>
 			<label index="tx_newspaper_extra_combolinkbox">Extra: Kombi-Linkkasten</label>
-			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Verwandte Artikel anzeigen</label>
-			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manuell ausgewählte Artikel</label>
+			<label index="tx_newspaper_extra_combolinkbox.show_related_articles">Verlinkte Artikel anzeigen</label>
+			<label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Weitere Artikel</label>
 			<label index="tx_newspaper_extra_combolinkbox.internal_links">Interne Links</label>
 			<label index="tx_newspaper_extra_combolinkbox.external_links">Externe Links</label>
 			<label index="tx_newspaper_extra_searchresults">Extra: Suchresultate</label>
