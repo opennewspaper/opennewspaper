@@ -25,7 +25,10 @@ class tx_newspaper  {
 	const article_get_parameter = 'art';
 	///	The \c GET parameter which determines which page type is displayed
 	const pagetype_get_parameter = 'pagetype';
-    
+
+    /// Whether to measure the execution times of functions
+    const log_execution_times = false;
+
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
@@ -674,8 +677,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
             'object' => self::getTimedObject(),
             'message' => $message
         );
-        
-        self::devlog('logExecutionTime', $timing_info);
+
+        if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
     }
     
     private static function getTimedObject() {
