@@ -35,8 +35,8 @@ class tx_newspaper_Exception extends Exception {
 	/// Constructor which also writes a stack backtrace to the devlog
 	/** \param $message Additional info about the Exception being thrown
 	 */
-	public function __construct($message) {
-		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB) {
+	public function __construct($message, $write_message = true) {
+		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB && $write_message) {
 			t3lib_div::devlog('Exception thrown: ' . $message, 
 							  'newspaper', 
 							  3, 
@@ -90,8 +90,8 @@ class tx_newspaper_InconsistencyException extends tx_newspaper_Exception {
 
 	/** \param $message Message about what is wrong
 	 */ 
-	public function __construct($message) {
-        parent::__construct("Internal inconsistency discovered: $message");
+	public function __construct($message, $write_message = true) {
+        parent::__construct("Internal inconsistency discovered: $message", $write_message);
     }	
 }
 

@@ -1041,8 +1041,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
 
         // Loop ended without a match
-        throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
-                ' not found in array of Extras!');
+        throw new tx_newspaper_InconsistencyException(
+            'Extra ' . $extra->getUid() . ' not found in array of Extras!',
+            false
+        );
     }
 
     /// Ordering function to keep Extras in the same order as they appear on the PageZone

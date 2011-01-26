@@ -567,9 +567,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */	
 	public function moveExtraAfter(tx_newspaper_Extra $move_extra, $origin_uid = 0, $recursive = true) {
 
-		///	Check that $move_extra is really on $this
-		$this->indexOfExtra($move_extra);
-		
+        try {
+            ///	Check that $move_extra is really on $this
+            $this->indexOfExtra($move_extra);
+        } catch (tx_newspaper_InconsistencyException $e) {
+            throw new tx_newspaper_InconsistencyException($e->getMessage(), true);    
+        }
+
 		$move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 
 		/// Write Extra to DB
