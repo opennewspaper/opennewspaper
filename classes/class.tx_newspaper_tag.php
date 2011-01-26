@@ -102,15 +102,20 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
 
-    /// \return Array with all tag zones
+    /// \return Array with all tag zones (key = tag zon uid)
     public static function getAllTagZones() {
-    	return tx_newspaper::selectRows(
+    	$row = tx_newspaper::selectRows(
     		'uid,name',
     		self::tagzone_table,
     		'1' . tx_newspaper::enableFields(self::tagzone_table),
     		'',
     		'name'
     	);
+    	$tagzones = array();
+    	for ($i = 0; $i < sizeof($row); $i++) {
+			$tagzones[$row[$i]['uid']] = $row[$i];
+    	}
+    	return $tagzones;
     }
 
 

@@ -1,4 +1,4 @@
-{debug}
+{* debug *}
 <!-- begin mod6/res/mod6_dossier_tagzone.tmpl -->
 
 {* Variables:
@@ -21,12 +21,12 @@
 			{/foreach}
 		{/foreach}
 	</div>
-	<div id="tz_unused">To do: die aktiven TZ's ausfiltern<br />
+	<div id="tz_unused">
 		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
 			{foreach from=$TAGZONES_ALL item=tz}
-				{* if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS) *}
+				{if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS)}
 					{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone(); return false;">{$ICON.add}</a> <br /><br />
-				{* /if *}
+				{/if}
 			{/foreach}
 	</div>
 </div>
