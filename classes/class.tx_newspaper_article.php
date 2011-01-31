@@ -1044,7 +1044,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         throw new tx_newspaper_InconsistencyException(
             'Extra ' . $extra->getExtraUid() . '(' .
             $extra->getTable() . ' ' . $extra->getUid() .
-            ') not found in array of Extras!',
+            ') not found in array of Extras for article ' .
+            $this->getUid(),
             true
         );
     }
