@@ -825,6 +825,8 @@ function findElementsByName(name, type) {
 
     private function getFindTagsJs($articleId) {
         return <<<JSCODE
+<link rel="stylesheet" type="text/css" href="ext/newspaper/res/be/autocomplete.css" />    
+<script type="text/javascript" src="contrib/scriptaculous/scriptaculous.js?load=builder,effects,controls,dragdrop"></script>
     <script language="JavaScript">
         var mapSelector = function(instance) {
                 var ret = []; // Beginning matches
@@ -1141,6 +1143,7 @@ JSCODE;
 		// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
 		$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
+        $GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');        
 
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
