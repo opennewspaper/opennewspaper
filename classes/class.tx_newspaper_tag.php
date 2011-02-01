@@ -46,7 +46,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     public static function createContentTag($value = null) {
         $tag = new tx_newspaper_Tag();
         $tag->setAttribute('tag_type', self::getContentTagType());
-        $newTag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+        $tag->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         if ($value) {
             $tag->setAttribute('tag', $value);
         }
