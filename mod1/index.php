@@ -322,7 +322,11 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
     private function processTagGetAll() {
         $tagType = $this->getTagTypeFromRequest();
-        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'tag_type = '.$tagType);
+        $where = 'tag_type = '.$tagType;
+        if(isset($_REQUEST['ctrlCat']) && $tagType == tx_newspaper_Tag::getControlTagType()) {
+            $where .= ' AND ctrltag_cat = '.$_REQUEST['ctrlCat'];
+        }
+        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', $where);
         $tags = array();
         foreach($results as $result) {
             $tags[$result['uid']] = $result['tag'];
@@ -333,9 +337,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
     private function getTagTypeFromRequest() {
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
         if ($type == 'tags') {
-            return array(tx_newspaper_tag::getContentTagType());
-        } else if ($type == 'tags_ctrl') {
-            return tx_newspaper_tag::getControlTagType(); 
+            return tx_newspaper_tag::getContentTagType();
+        } else if (stristr($type,'tags_ctrl')) {
+            return tx_newspaper_tag::getControlTagType();
         } else {
             throw new tx_newspaper_Exception('unknown tag_type \''.$type.'\'');
         }
@@ -386,13 +390,13 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// \todo: better access check
 					$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 					if (!$access) {
-						die('No access'); // \todo localization 
+						die('No access'); // \todo localization
 					}
 
 
 					// read data
 					$this->input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('mod1 main', 'newspaper', 0, array('this->input' => $this->input));
+//t3lib_div::devlog('mod1 main', 'newspaper', 0, array('this->input' => $this->input));
 					// newspaper element browser handling
 					$this->processNewspaperElementBrowser();
 					$this->processNewspaperElementBrowserAjax();

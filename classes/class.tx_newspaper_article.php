@@ -781,12 +781,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      * \param  $tagtype int defaults to contentTagType
      * \return array with tags objects
      */
-    public function getTags($tagtype = null) {
+    public function getTags($tagtype = null, $category =  null) {
         if(!$tagtype) {
             $tagtype = tx_newspaper::getContentTagType();
         }
         $where .= " AND tag_type = ".$tagtype;
         $where .= " AND uid_local = ".$this->getUid();
+        if($category) {
+            $where .= " AND ctrltag_cat = ".intval($category);
+        }
         $tag_ids = tx_newspaper::selectMMQuery('uid_foreign', $this->getTable(),
             'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
 
@@ -1262,9 +1265,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      */
     private static function joinTags(&$incomingFieldArray, $table, $id, $that) {
 //t3lib_div::devlog('joinTags()', 'newspaper', 0, array('incommingFields' => $incomingFieldArray));
-        if ($table == 'tx_newspaper_article' && isset($incomingFieldArray['tags']) && isset($incomingFieldArray['tags_ctrl'])) {
+        if ($table == 'tx_newspaper_article' && isset($incomingFieldArray['tags'])) {
             $tags = $incomingFieldArray['tags'];
-            $ctrlTags = $incomingFieldArray['tags_ctrl'];
+
+            foreach($incomingFieldArray as $field => $value) {
+                if(stristr($field, 'tags_ctrl')) {
+                    $ctrlTags .= $value;
+                }
+            }
             if ($ctrlTags) {
                 $tags = explode(",", $tags);
                 $ctrlTags = explode(",", $ctrlTags);

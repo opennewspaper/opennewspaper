@@ -736,22 +736,32 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['form_type'] = 'select';
 
         $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType());
-        $controlTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags_ctrl', tx_newspaper_tag::getControlTagType());
+        $ctrlCats = tx_newspaper_Tag::getAllControltagCategories();
+        $controlTags = '';
+        $ctrlUids = array();
+        foreach($ctrlCats as $cat) {
+            $tagType = 'tags_ctrl_'.$cat['uid'];
+            $controlTags .= $this->createTagSelectElement($PA, $obj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['uid']);
+            $ctrlUids[] = $cat['uid'];
+        }
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
-        return $this->getFindTagsJs($articleId).$contentTags.$controlTags;
+        return $this->getFindTagsJs($articleId, implode(',', $ctrlUids)).$contentTags.$controlTags;
     }
 
-    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId) {
+    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId, $category = false) {
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$tagType.']';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$tagType;
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId);
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId, $category);
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
         return $this->addTagInputField($fld, $articleId, $tagType);
     }
 
-    private function fillItemValues($articleId, $tagType) {
+    private function fillItemValues($articleId, $tagType, $category = false) {
         $where .= " AND tag_type = " . $tagType;
         $where .= " AND uid_local = " . $articleId;
+        if($category)
+            $where .= ' AND ctrltag_cat=' . $category;
+
         $tags = tx_newspaper::selectMMQuery('uid_foreign, tag', 'tx_newspaper_article',
             'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
         $items = array();
@@ -808,8 +818,9 @@ function findElementsByName(name, type) {
         $article = new tx_newspaper_Article($articleID);
         if($params['field'] == 'tags') {
 			$tags = $article->getTags(tx_newspaper_tag::getContentTagType());
-        } else if($params['field'] == 'tags_ctrl') {
-            $tags = $article->getTags(tx_newspaper_tag::getControlTagType());
+        } else if(stristr($params['field'], 'tags_ctrl')) {
+            $category = array_pop(explode('_',$params['field']));
+            $tags = $article->getTags(tx_newspaper_tag::getControlTagType(), $category);
         } else {
             throw new tx_newspaper_Exception('field \''.$params['field'].'\' unkown');
         }
@@ -823,7 +834,7 @@ function findElementsByName(name, type) {
 
 
 
-    private function getFindTagsJs($articleId) {
+    private function getFindTagsJs($articleId, $ctrlCatUids) {
         return <<<JSCODE
 <link rel="stylesheet" type="text/css" href="ext/newspaper/res/be/autocomplete.css" />    
 <script type="text/javascript" src="contrib/scriptaculous/scriptaculous.js?load=builder,effects,controls,dragdrop"></script>
@@ -885,8 +896,6 @@ function findElementsByName(name, type) {
                      }
             });
     document.observe("dom:loaded", function() {
-        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
-        $$('[name="data[tx_newspaper_article][$articleId][tags_ctrl]_sel"]')[0].hide();
         var path = window.location.pathname;
         var test = path.substring(path.lastIndexOf("/") - 5);
         if (test.substring(0, 6) == "typo3/") {
@@ -895,21 +904,29 @@ function findElementsByName(name, type) {
             path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
         }
 
+        var ctrlCats = [$ctrlCatUids];
+        $$('[name="data[tx_newspaper_article][$articleId][tags]_sel"]')[0].hide();
         //create completer and tag caches for content- and control-tags
-        createTagCompletion('tags', mapSelector, insertTag, true);
-        //without timeout the second autosuggest is not created properly, maybe because of ajax.
-        window.setTimeout(function() {createTagCompletion('tags_ctrl', mapSelector, addOnlyExistingTag, false)}, 1000);
+        createTagCompletion('tags', mapSelector, insertTag, true, null);
+        ctrlCats.each(
+                function(ctrlCat) {
+                    var ctrlCatName = 'tags_ctrl_'+ ctrlCat;
+                    $$('[name="data[tx_newspaper_article][$articleId]['+ctrlCatName+']_sel"]')[0].hide();
+
+                    //without timeout the second autosuggest is not created properly, maybe because of ajax.
+                    window.setTimeout(function() {createTagCompletion(ctrlCatName, mapSelector, addOnlyExistingTag, false, ctrlCat)}, 1000);
+        });
      });
 
     /**
      * insertTagFunction is the function to be called when inserting tags
      * though it is possible too add different logic whether adding content- or control-tags
      */
-    function createTagCompletion(tagType, mySelector, insertTagFunction, addCurrentInput) {
+    function createTagCompletion(tagType, mySelector, insertTagFunction, addCurrentInput, ctrlCatId) {
         //get all tags so they are cached
         return new top.Ajax.Request(path + 'typo3conf/ext/newspaper/mod1/index.php', {
                                 method: 'get',
-                                parameters: {param: 'tag-getall', type: tagType},
+                                parameters: {param: 'tag-getall', type: tagType, ctrlCat: ctrlCatId},
                                 onSuccess: function(request) {
                                                 var serverTags = request.responseText.evalJSON();
                                                 //had problems when using !serverTags instead serverTags == false
