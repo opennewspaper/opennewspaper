@@ -864,6 +864,7 @@ function findElementsByName(name, type) {
                   ret = ret.concat(partial.slice(0, instance.options.choices - ret.length));
                 return "<ul>" + ret.join('') + "</ul>";
             }
+
       var MyCompleter = Class.create(Autocompleter.Local, {
                     getUpdatedChoices: function() {
                         var serverChoices = this.options.selector(this);
@@ -876,7 +877,7 @@ function findElementsByName(name, type) {
                             return "<ul><li>" + this.getToken() + "<" + "/li>";
                      },
 
-                     selectEntry : function(\$super) {                        
+                     selectEntry : function(\$super) {
                          \$super();
                         this.element.value = '';
                      }
@@ -909,6 +910,7 @@ function findElementsByName(name, type) {
                                 parameters: {param: 'tag-getall', type: tagType},
                                 onSuccess: function(request) {
                                                 var serverTags = request.responseText.evalJSON();
+                                                //had problems when using !serverTags instead serverTags == false
                                                 var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
                                                 new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_'+tagType, choices, {
                                                     selector : mySelector,
