@@ -9,17 +9,33 @@
 		executeFilter(1);
 		return false;
 	}
+	function setTextfieldVisibility(item) {
+		switch(item) {
+{/literal}
+	{foreach from=$formExtras item=extra}
+
+{if $extra->getSearchFields()}case '{$extra->getTable()}':
+{/if}
+	{/foreach}
+{literal}
+				mode = 'inline';
+			break;
+			default:
+				mode = 'none';
+		}
+		document.getElementById("textfield").style.display = mode;
+	}
 </script>
 {/literal}
 	<input type="hidden" name="tx_newspaper_mod1[ajaxcontroller]" value="eb" /> {* element browser ... *}
 	<input type="hidden" name="tx_newspaper_mod1[type]" value="e" />            {* ... searching for extras *}
 	<input type="hidden" name="tx_newspaper_mod1[hidden]" value="0" />          {* visible Extras only *}
 
-	<label for="tx_newspaper_mod1[extra]">{$LL.labelExtra}</label> <select id="tx_newspaper_mod1[extra]" name="tx_newspaper_mod1[extra]">
+	<label for="tx_newspaper_mod1[extra]">{$LL.labelExtra}</label> <select onchange="setTextfieldVisibility(this.value); return false;" id="tx_newspaper_mod1[extra]" name="tx_newspaper_mod1[extra]">
 		<option value="">{$LL.labelNoExtra}</option>
 {foreach from=$formExtras item=extra}
 		<option value="{$extra->getTable()}"> {$extra->getTitle()} </option>
 {/foreach}
 	</select>
-	<label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input onkeyup="checkEnter(event.keyCode); return false;" type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" />
+	<span id="textfield" style="display:none;"><label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input onkeyup="checkEnter(event.keyCode); return false;" type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" /></span>
 	<input type="button" value="{$LL.labelSearch}" onclick="executeFilter(1);" />
