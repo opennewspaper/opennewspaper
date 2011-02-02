@@ -61,7 +61,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	private $prefixId = 'tx_newspaper_mod1';
 	private $input = array(); // stores get/post data
 
-	const FILTER_STEP = 10;
+	const FILTER_STEP = 20;
 
 
 	private function parseParam($param, $length=4) {
