@@ -106,6 +106,7 @@
 			<label index="label_shortcuts">Shortcuts</label>
             <label index="overview">Überblick</label>
             <label index="message_unsaved_data">Nicht gespeicherte Änderungen gehen verloren. Fortfahren?</label>
+            <label index="label_content_tag">allg. Schlagworte</label>
 		</languageKey>
 	</data>
 </T3locallang>

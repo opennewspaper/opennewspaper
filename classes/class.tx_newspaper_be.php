@@ -735,25 +735,27 @@ function findElementsByName(name, type) {
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
 
-        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType());
+        $contentTagTitle = self::getTranslation('label_content_tag');
+        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType(),$contentTagTitle);
         $ctrlCats = tx_newspaper_Tag::getAllControltagCategories();
         $controlTags = '';
         $ctrlUids = array();
         foreach($ctrlCats as $cat) {
             $tagType = 'tags_ctrl_'.$cat['uid'];
-            $controlTags .= $this->createTagSelectElement($PA, $obj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['uid']);
+            $controlTags .= $this->createTagSelectElement($PA, $obj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['title'], $cat['uid']);
             $ctrlUids[] = $cat['uid'];
         }
 //t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         return $this->getFindTagsJs($articleId, implode(',', $ctrlUids)).$contentTags.$controlTags;
     }
 
-    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId, $category = false) {
+    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId, $title ,$category = false) {
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$tagType.']';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$tagType;
         $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId, $category);
         $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
-        return $this->addTagInputField($fld, $articleId, $tagType);
+        $fld = $this->addTagInputField($fld, $articleId, $tagType);
+        return str_replace($obj->getLL('l_items'), $title, $fld);
     }
 
     private function fillItemValues($articleId, $tagType, $category = false) {
@@ -836,7 +838,7 @@ function findElementsByName(name, type) {
 
     private function getFindTagsJs($articleId, $ctrlCatUids) {
         return <<<JSCODE
-<link rel="stylesheet" type="text/css" href="ext/newspaper/res/be/autocomplete.css" />    
+<link rel="stylesheet" type="text/css" href="ext/newspaper/res/be/autocomplete.css" />
 <script type="text/javascript" src="contrib/scriptaculous/scriptaculous.js?load=builder,effects,controls,dragdrop"></script>
     <script language="JavaScript">
         var mapSelector = function(instance) {
@@ -1160,7 +1162,7 @@ JSCODE;
 		// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
 		$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-        $GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');        
+        $GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
 
 		switch(self::getExtraBeDisplayMode()) {
 			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
