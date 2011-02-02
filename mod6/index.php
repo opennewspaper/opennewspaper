@@ -203,7 +203,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		global $LANG;
 
 		$input = t3lib_div::GParrayMerged($this->prefixId);
-t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->MOD_SETTINGS['function'], 'input' => $input));
+//t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->MOD_SETTINGS['function'], 'input' => $input));
 
 		// check for AJAX request first
 		$this->processAjax($input); // executin will die, if an Ajax request was processed
@@ -228,6 +228,22 @@ t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->M
 
 	/// Check if an AJAX request is to be processed. If yes, generate response and die.
 	private function processAjax(array $input) {
+
+		if (isset($input['ajaxController'])) {
+			switch($input['ajaxController']) {
+				case 'manageDossiers':
+					// create new abstract record for given concrete etxra
+					$abstractUid = tx_newspaper_extra::createExtraRecord(intval($input['uid']), htmlspecialchars($input['className']), true);
+					$extra = tx_newspaper_Extra_Factory::getInstance()->create($abstractUid);
+					// add this extra to tag zone and tag
+					$tag = new tx_newspaper_tag(intval($input['tag_uid']));
+//t3lib_div::devlog('processAjax()', 'newspaper', 0, array('abst uid' => $abstractUid, 'e' => $extra, 'tag_uid' => $input['tag_uid'], 'tag' => $tag));
+					$tag->addExtraToTagZone($extra, intval($input['tz_uid']));
+					die();
+				default:
+					t3lib_div::devlog('Unknown AJAX controller in mod6', 'newspaper', 3, array('input' => $input));
+			}
+		}
 
 		if (isset($input['AjaxCtrlTagCat'])) {
 			// ctrl tag category was changed -> read tags for new cat
@@ -265,7 +281,7 @@ t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->M
 		$tagzones = $tag->getTagzones();
 		$tz_extras = array();
 		foreach($tagzones as $row) {
-t3lib_div::devlog('tz', 'newspaper', 0, $row);
+//t3lib_div::devlog('tz', 'newspaper', 0, $row);
 			$tz_extras[$row['tag_zone']] = $tag->getTagzoneExtras($row['tag_zone']);
 		}
 		$this->smarty->assign('TAG', $tag);
@@ -277,7 +293,7 @@ t3lib_div::devlog('tz', 'newspaper', 0, $row);
 			'replace' => tx_newspaper_be::renderIcon('gfx/import_update.gif', ''),
 			'add' => tx_newspaper_be::renderIcon('gfx/plusbullet2.gif', '')
 		));
-t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
+//t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
 		return $this->smarty->fetch('mod6_dossier_tagzone.tmpl');
 	}
 
@@ -357,7 +373,7 @@ t3lib_div::devlog('manageTagzones() - not implemented yet', 'newspaper', 0, arra
 
 	// backend for managing dossiers
 	private function manageDossiers($input) {
-t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
 
 		// get control tag categories
 		$tagCats = tx_newspaper_tag::getAllControltagCategories();
@@ -394,115 +410,9 @@ t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
 			1
 		);
 
-t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCats, 'submitted' => $submitted));
+//t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCats, 'submitted' => $submitted));
 
 	}
-
-
-//	// backend for managing dossiers
-//	private function manageDossiersOLD($input) {
-//t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
-//		$this->handlePOST();
-//
-//		$this->smarty->assign('tag_zones', self::getAvailableTagZones());
-//		$this->smarty->assign('tags', self::getAvailableTags());
-////t3lib_div::devlog('mod6', 'newspaper', 0, array('tags' => self::getAvailableTags()));
-//		$this->smarty->assign('extra_types', self::getAvailableExtraTypes());
-//
-//		$data = tx_newspaper::selectRows(
-//			'*', self::controltag_to_extra_table, '', '', 'uid DESC'
-//		);
-//
-//		if ($data) {
-//			foreach ($data as $index => $row) {
-//				$tag = tx_newspaper::selectOneRow(
-//					'tag', 'tx_newspaper_tag', 'uid = ' . $row['tag']
-//				);
-//				$data[$index]['tag'] = $tag['tag'];
-//				$tag_zone = tx_newspaper::selectOneRow(
-//					'name', 'tx_newspaper_tag_zone', 'uid = ' . $row['tag_zone']
-//				);
-//				$data[$index]['tag_zone'] = $tag_zone['name'];
-//
-//				try {
-//					$extra = new $row['extra_table']($row['extra_uid']);
-//					$data[$index]['extra_uid'] = $extra->getDescription();
-//				} catch (tx_newspaper_EmptyResultException $e) {
-//					$data[$index]['extra_uid'] =
-//						'<input name="extra_uid[' . $data[$index]['uid'] . ']" />';
-//				}
-//			}
-//			$this->smarty->assign('data', $data);
-//
-//		}
-//		$this->content .= $this->doc->section(
-//			'Message #1:',
-//			$this->smarty->fetch('mod6.tmpl'),
-//			0, 1
-//		);
-//	}
-//
-//
-//	////////////////////////////////////////////////////////////////////////////
-//
-//	/// Handle user input
-//	/** Creates a new tag zone/tag/extra combination if the user entered one.
-//	 */
-//	private function handlePOST() {
-//		if ($_POST) {
-//			//	reorder $_POST so it is arranged as an array (
-//			//		UIDs => array (field names => field values))
-//			$data_by_uid = array();
-//			foreach ($_POST as $field => $rows) {
-//				if (in_array($field, self::$writable_fields)) {
-//					foreach ($rows as $uid => $row) {
-//						if (!$data_by_uid[$uid]) $data_by_uid[$uid] = array();
-//						$data_by_uid[$uid][$field] = $row;
-//					}
-//				}
-//			}
-//			foreach ($data_by_uid as $uid => $values) {
-//       			if ($uid == 0) {
-//	       			// insert the shit if uid == 0 and an Extra is selected
-//	       			if (intval($values['extra_uid']))
-//						tx_newspaper::insertRows(self::controltag_to_extra_table, $values);
-//       			} else {
-//		   			// update otherwise
-//					tx_newspaper::updateRows(self::controltag_to_extra_table, 'uid = ' . $uid, $values);
-//       			}
-//   				$this->content .= '<p>' . tx_newspaper::$query . '</p>';
-//			}
-//		}
-//	}
-//
-//	///	Returns all tag zones
-//	static private function getAvailableTagZones() {
-//		return tx_newspaper::selectRows(
-//			'uid, name',
-//			self::tag_zone_table,
-//			'1' . tx_newspaper::enableFields(self::tag_zone_table)
-//		);
-//	}
-
-//	///	Returns all control tags
-//	static private function getAvailableTags() {
-//		return tx_newspaper::selectRows(
-//			'uid, tag', self::tag_table,
-//			'tag_type = ' . tx_newspaper_tag::getControlTagType()
-//		);
-//	}
-
-//	///	Returns all classes which have registered as an tx_newspaper_Extra
-//	static private function getAvailableExtraTypes() {
-//		$extra_types = array();
-//		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registered_extra) {
-//			$extra_types[] = array(
-//				'table' => $registered_extra->getTable(),
-//				'title' =>$registered_extra->getTitle()
-//			);
-//		}
-//		return $extra_types;
-//	}
 
 }
 

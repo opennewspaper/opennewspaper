@@ -25,7 +25,7 @@
 		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
 			{foreach from=$TAGZONES_ALL item=tz}
 				{if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS)}
-					{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone(); return false;">{$ICON.add}</a> <br /><br />
+					{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone({$tz.uid}); return false;">{$ICON.add}</a> <br /><br />
 				{/if}
 			{/foreach}
 	</div>

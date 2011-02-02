@@ -1,13 +1,13 @@
-{debug}
+{* debug *}
 
 <table>
 {foreach item=extra from=$extras}
 <tr>
 	<td>
-		<a href="#" onclick="alert('to come ...');">{$ICON.add}</a>
-		<a href="#" onclick="alert('to come ...');">{$ICON.addClose}</a>   
+		{if $INPUT.allowMultipleSelection}<a href="#" onclick="choseRecord('{$extra->getTable()}', {$extra->getUid()}, 0); return false;">{$ICON.add}</a>{/if}
+		<a href="#" onclick="choseRecord('{$extra->getTable()}', {$extra->getUid()}, 1); return false;">{$ICON.addClose}</a>
 	</td>
-	<td>{$extra->getDescription()}</td>	
+	<td>{$extra->getDescription()}</td>
 </tr>
 {/foreach}
 </table>

@@ -1,14 +1,15 @@
 {* debug *}
+{* \todo: check if extra::getSearchFields() is empty -> if yes, hide text  input field in onchage in dropdown *}
 	<input type="hidden" name="tx_newspaper_mod1[ajaxcontroller]" value="eb" /> {* element browser ... *}
 	<input type="hidden" name="tx_newspaper_mod1[type]" value="e" />            {* ... searching for extras *} 
-	<input type="hidden" name="tx_newspaper_mod1[hidden]" value="0" />          {* non-hodden Extras only *}
+	<input type="hidden" name="tx_newspaper_mod1[hidden]" value="0" />          {* visible Extras only *}
 	
-	<label for="tx_newspaper_mod1[extra]">{$LL.labelExtra}</label><select id="tx_newspaper_mod1[extra]" name="tx_newspaper_mod1[extra]">
+	<label for="tx_newspaper_mod1[extra]">{$LL.labelExtra}</label> <select id="tx_newspaper_mod1[extra]" name="tx_newspaper_mod1[extra]">
 		<option value="">{$LL.labelNoExtra}</option>
 {foreach from=$formExtras item=extra}
 		<option value="{$extra->getTable()}"> {$extra->getTitle()} </option>
 {/foreach}
 	</select>
-	<label for="tx_newspaper_mod1[text]">{$LL.labelText}</label><input type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" />
+	<label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" />
 	<input type="button" value="{$LL.labelSearch}" onclick="executeFilter(1);" />
 	

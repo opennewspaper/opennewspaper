@@ -136,6 +136,28 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	return $extras;
     }
 
+    /**
+     *  \param $extra Extra object
+     *  \param $tz_uid uid of tag zone
+     *  \return true id record was written else false
+     */
+    public function addExtraToTagzone(tx_newspaper_extra $extra, $tz_uid) {
+    	$tz_uid = intval($tz_uid);
+    	if ($tz_uid) {
+    		$uid = tx_newspaper::insertRows(self::ctrltag_to_extra, array(
+				'tag' => $this->getUid(),
+				'extra' => $extra->getExtraUid(),
+				'tag_zone' => $tz_uid,
+				'pid' => tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_tag()),
+				'crdate' => time(),
+				'tstamp' => time()
+				// 'cruser_id' => ... \todo
+			));
+			return true;
+    	}
+    	return false;
+    }
+
 
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.

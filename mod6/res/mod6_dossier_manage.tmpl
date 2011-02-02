@@ -28,6 +28,13 @@
 {/literal}
 var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
 {literal}
+
+var tz_uid = null; // stores tag zone uid when opening the element browser popup
+
+function getTagzoneUid() {
+	return tz_uid;
+}
+
 function changeCtrlTagCat(uid) {
 	var request = new Ajax.Request(
 		"index.php",
@@ -70,6 +77,9 @@ function changeTag(uid) {
 		);
 }
 
+function reloadTagzone(uid) {
+	changeTag(uid);
+}
 function removeExtraFromTagzone(tz_uid, e_uid) {
 	if (confirm(confirmMessage)) {
 		var request = new Ajax.Request(
@@ -90,8 +100,17 @@ function removeExtraFromTagzone(tz_uid, e_uid) {
 	}
 }
 
-function addExtraToTagzone() {
-alert('to come');
+
+// \todo move window.open to some element browser lib
+function addExtraToTagzone(uid) {
+	tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extr should be added to
+	// open element browser popup
+	var w = window.open(
+		"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers",
+		"npeb",
+		"width=800,height=500"
+	);
+	w.focus();
 }
 
 

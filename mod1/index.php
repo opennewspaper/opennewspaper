@@ -62,7 +62,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	private $input = array(); // stores get/post data
 
 	const FILTER_STEP = 10;
-	
+
 
 	private function parseParam($param, $length=4) {
 //t3lib_div::devlog('newspaper parseparam', 'newspaper', 0, $param);
@@ -77,7 +77,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	private function processExtraForm() {
 		if (!$param = $this->parseParam($_REQUEST['param']))
 			return false;
-			
+
 		// prepare JSON response data
 		$tmp = array();
 		$tmp['id'] = $param[0] . '[' . $param[1] . ']' . $param[2] . '[' . $param[3] . ']';
@@ -92,7 +92,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 	function processExtraToggleVisibility() {
 		if (!$param = $this->parseParam($_REQUEST['param'], 5))
-			return false;	
+			return false;
 
 		// prepare JSON response data
 		$tmp = array();
@@ -108,7 +108,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 #t3lib_div::devlog('/mod1/index.php visibility ajax json', 'newspaper', 0, $tmp);
 #header("Content-Type: application/json");
 		echo json_encode($tmp);
-		exit();			
+		exit();
 	}
 
 //TODO: move to Extra class
@@ -123,7 +123,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 	function processExtraDelete() {
 		if (!$param = $this->parseParam($_REQUEST['param']))
-			return false;	
+			return false;
 
 		// prepare JSON response data
 		$tmp = array();
@@ -132,9 +132,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 #t3lib_div::devlog('/mod1/index.php delete ajax json', 'newspaper', 0, $tmp);
 #header("Content-Type: application/json");
 		echo json_encode($tmp);
-		exit();			
+		exit();
 	}
-	
+
 //TODO: save hook -> deleted Extra -> delete all relations
 //move to Extra class
 	function deleteExtra($table, $uid) {
@@ -151,7 +151,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 	function splitParams() {
 		if (!isset($_REQUEST['param'])) return array();
-	
+
 		/// structure [test1]#|[test2]#
 		$p = explode('|', $_REQUEST['param']); // split given params
 
@@ -173,7 +173,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 //new stuff for section, this is in use
 	function processActivatePageType() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papt param', 'newspaper', 0, 'param' => $param);
 
@@ -196,36 +196,36 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		$p->setAttribute('crdate', time());
 		$p->setAttribute('tstamp', time());
 		$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$dummy = $p->store(); 
+		$dummy = $p->store();
 //t3lib_div::devlog('papt after store', 'newspaper', 0, $dummy);
 		$PA['row']['uid'] = $param['section']; // simulate call from be
-		$PA['AJAX_CALL'] = true; 
+		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
 	}
-	
+
 	function processDeletePage() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papt param', 'newspaper', 0, 'param' => $param);
 
 		// delete page and subsequent abstract and concrete pagezones
 		$p = new tx_newspaper_page(intval($param['page']));
 		$p->delete();
-		
+
 		$PA['row']['uid'] = $param['section']; // simulate call from be
-		$PA['AJAX_CALL'] = true; 
+		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
 		echo json_encode($tmp);
 		exit();
-	}	
-	
+	}
+
 	function processActivatePageZoneType() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papzt param', 'newspaper', 0, 'param' => $param);
-		
+
 		// check if this pagetype REALLY isn't active
 		$p = new tx_newspaper_page(intval($param['page']));
 		$apz = $p->getActivePagezones();
@@ -236,16 +236,16 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				return;
 			}
 		}
-		
+
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
-			$p, 
+			$p,
 			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
 		);
 		$pz->setAttribute('crdate', time());
 		$pz->setAttribute('tstamp', time());
 		$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 		$pz->store();
-		
+
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
@@ -253,14 +253,14 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		exit();
 	}
 	function processDeletePageZone() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');	
+		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
 
-		// delete abstract and concrete pagezone		
+		// delete abstract and concrete pagezone
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($param['pagezone']));
 		$pz->delete();
-		
+
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
@@ -355,9 +355,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					// get ll labels 
+					// get ll labels
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod6/locallang.xml', $GLOBALS['LANG']->lang);
-					$this->localLang = $localLang[$GLOBALS['LANG']->lang];	
+					$this->localLang = $localLang[$GLOBALS['LANG']->lang];
 
 					parent::init();
 
@@ -405,17 +405,17 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 //t3lib_div::devlog('ajax $_REQUEST', 'newspaper', 0, $_REQUEST);
 					if (!isset($_REQUEST['param']))
 						return false; // no valid call without params possible
-					
+
 
 					// workflow log display
 					if ($_REQUEST['param'] == 'workflowlog') {
 						$this->processWorkflowLog();
 					}
 
-					
+
 					if (isset($_REQUEST['extra_modalbox']) || isset($_REQUEST['extra_iframe']))
 						$this->processExtraForm(); // AJAX call for Extra form (modalbox or iframe)
-					
+
 					if (isset($_REQUEST['extra_toggle_visibility']))
 						$this->processExtraToggleVisibility(); // AJAX call for toggle visibility
 
@@ -448,7 +448,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					/// as the module is used for ajax only so far, why not use it as the shortcut for the section list module?
 //<a onclick="return jumpTo('2',this,'pages2',0);" href="#">np_section</a>
 //top.goToModule('web_list');this.blur();return false;
-					
+
 					return false; // if processing was successful, the script died after the AJAX request was answered; if params weren't valid return false anyway
 
 				}
@@ -457,23 +457,23 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		// controller: eb (= element browser)
 		// types: e=extra, al=article list
 		private function processNewspaperElementBrowser() {
-			
+
 			if (
-				!$this->input['controller'] || 
-				strtolower($this->input['controller']) != 'eb' || 
-				!$this->input['type'] 
+				!$this->input['controller'] ||
+				strtolower($this->input['controller']) != 'eb' ||
+				!$this->input['type']
 			) {
 				return; // no newspaper element browser this time
 			}
 
-			// prepare smarty object			
+			// prepare smarty object
 			$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
 
-			// get ll labels 
+			// get ll labels
 			$tmp = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
 			$smarty->assign('LL', $tmp[$GLOBALS['LANG']->lang]); // localization
-			
+
 			switch(strtolower($this->input['type'])) {
 				case 'e':
 					// element browser for extras
@@ -488,43 +488,62 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					t3lib_div::devlog('processNpElementBrowser() - unknown type', 'newspaper', 3, array('this->input' => $this->input));
 					return; // no type given, nothing to do
 			}
+
+			if (!isset($this->input['allowMultipleSelection'])) {
+				$this->input['allowMultipleSelection'] = true;
+			} else {
+				$this->input['allowMultipleSelection'] = (bool) $this->input['allowMultipleSelection'];
+			}
+
+			// add choseRecord js according to jsType setting
+			switch($this->input['jsType']) {
+				case 'manageDossiers':
+					$smarty->assign('CHOSERECORD', file_get_contents('res/eb/js/choseRecord_manageDossiers.js'));
+				break;
+				default:
+					t3lib_div::devlog('mod 1 - Element browser - unknown jsType', 'newspaper', 3, array('input' => $this->input));
+			}
+
+			$smarty->assign('INPUT', $this->input);
 			$smarty->assign('FILTER', $filter);
-			
+
 			$eb = $smarty->fetch('browser.tmpl');
-			
+
 			die($eb);
-			
+
 		}
-		
+
 
 		// processes newspaper element browsers ajax requests
 		// ajaxcontroller: eb (= element browser)
 		// types: see processNewspaperElementBrowser()
 		private function processNewspaperElementBrowserAjax() {
-			
+//t3lib_div::devlog('processNewspaperElementBrowserAjax()', 'newspaper', 0, array('input' => $this->input));
 			if (
-				!$this->input['ajaxcontroller'] || 
-				strtolower($this->input['ajaxcontroller']) != 'eb' || 
-				!$this->input['type'] 
+				!$this->input['ajaxcontroller'] ||
+				strtolower($this->input['ajaxcontroller']) != 'eb' ||
+				!$this->input['type']
 			) {
 				return; // no newspaper element browser ajax request this time
 			}
 
-			// prepare smarty object			
+			// prepare smarty object
 			$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
 
-			// get ll labels 
+			// get ll labels
 			$tmp = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
 			$smarty->assign('LL', $tmp[$GLOBALS['LANG']->lang]); // localization
-			
+
+			$smarty->assign('INPUT', $this->input);
+
 			// get icons
 			$smarty->assign('ICON', $this->getIcons());
-			
+
 			switch(strtolower($this->input['type'])) {
 				case 'e':
 					// extras
-					
+
 					if (!$this->input['extra']) {
 						$this->dieWithErrorMessage($tmp[$GLOBALS['LANG']->lang]['errorNoExtraChosen']);
 					}
@@ -532,10 +551,10 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					$smarty->assign('extras', $this->filterExtra());
 					$results = $smarty->fetch('extra_result.tmpl');
 				break;
-				case 'al':
-					// article lists
-die('to come ...');
-				break;
+//				case 'al':
+//					// article lists
+// \todo ...
+//				break;
 				default:
 					t3lib_div::devlog('processNpElementBrowserAjax() - unknown type', 'newspaper', 3, array('this->input' => $this->input));
 					return; // no type given, nothing to do
@@ -553,34 +572,34 @@ die('to come ...');
 		}
 
 		private function renderBrowseSequence($total) {
-		
+
 			$ll = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
-			$localLang = $ll[$GLOBALS['LANG']->lang];	
-			
+			$localLang = $ll[$GLOBALS['LANG']->lang];
+
 			$limit = intval($this->input['step'])? intval($this->input['step']) : self::FILTER_STEP;
 			$start = intval($this->input['pointer']); // defaults to 0
-			
+
 			$total = intval($total);
-			
-			
-			// prepare smarty object			
+
+
+			// prepare smarty object
 			$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
-			
+
 			$smarty->assign('BROWSE_PREV', $start-1);
 			$smarty->assign('BROWSE_NEXT', ((($start * $limit) + $limit + 1) <= $total )? $start+1 : '');
-			
+
 			$smarty->assign('HIT_FIRST', ($start * $limit) + 1);
 			$smarty->assign('HIT_LAST', min($total, ($start * $limit) + $limit));
 
 			$smarty->assign('HIT_COUNT', $total);
-			
+
 			$smarty->assign('LL', $localLang);
 
 			$browse = $smarty->fetch('browse.tmpl');
-			
+
 			return $browse;
-			
+
 		}
 
 		/// \return Extra records (according to filter settings)
@@ -597,7 +616,7 @@ die('to come ...');
 			$extras = $e->getSearchResults($search_term, $start, $step, $hidden);
 
 			return $extras;
-			
+
 			$rows = tx_newspaper::selectRows(
 				'*',
 				htmlspecialchars($this->input['extra']),
@@ -606,18 +625,18 @@ die('to come ...');
 				'tstamp DESC',
 				$start . ',' . $step
 			);
-			return $rows;			
+			return $rows;
 		}
 
-		/// \return total number of Extras matching the filter settings		
+		/// \return total number of Extras matching the filter settings
 		private function countExtras() {
 			$search_term = $this->input['text'];
 			$hidden = (isset($this->input['hidden']))? intval($this->input['hidden']) : false;
-			
+
 			$e = new $this->input['extra']();
 			return $e->countSearchResults($search_term, $hidden);
 		}
-		
+
 
 		private function dieWithErrorMessage($message) {
 			die('<div class="errorMessage">' . $message . '</div>');
