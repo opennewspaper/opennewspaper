@@ -60,6 +60,10 @@ function changeCtrlTagCat(uid) {
 }
 
 function changeTag(uid) {
+	uid = parseInt(uid);
+	if (!uid) {
+		return; // nothing to do (select empty row in dropdown)
+	}
 	var request = new Ajax.Request(
 		"index.php",
 			{
