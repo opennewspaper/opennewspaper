@@ -46,7 +46,7 @@ function closeElementBrowser() {
 </script>
 
 <div id="filter">
-	<form name="eb" id="eb">
+	<form name="eb" id="eb" onsubmit="return false;"> {* onsubmit="return false;" -> Ajax submits only *}
 		<input id="pointer" type="hidden" name="tx_newspaper_mod1[pointer]" value="0" />
 		<input type="hidden" name="tx_newspaper_mod1[step]" value="10" />
 		<input type="hidden" name="tx_newspaper_mod1[allowMultipleSelection]" value="{$INPUT.allowMultipleSelection}" />
