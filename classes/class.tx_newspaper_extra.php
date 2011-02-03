@@ -240,16 +240,19 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		}
 
 		$pagezone = $this->getPageZone();
-		$page = $pagezone->getParentPage();
-		
-		$this->smarty->setPageZoneType($pagezone);
-		
-		if ($page) {
-			$this->smarty->setPageType($page);
-		} else {
-			tx_newspaper::devlog('no page', array($page, $pagezone));
-		}
+        if ($pagezone instanceof tx_newspaper_PageZone) {
+            $page = $pagezone->getParentPage();
 
+            $this->smarty->setPageZoneType($pagezone);
+
+            if ($page) {
+                $this->smarty->setPageType($page);
+            } else {
+                tx_newspaper::devlog('no page', array($page, $pagezone));
+            }
+        } else {
+            tx_newspaper::devlog('no pagezone', 'extra: ' . $this->getExtraUid());
+        }
 		$this->smarty->assign('attributes', $this->convertRteFields($this->attributes));
 		$this->smarty->assign('extra_attributes', $this->extra_attributes);
 		
