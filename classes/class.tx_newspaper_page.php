@@ -553,8 +553,10 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		} else {
-			$this->attributes = tx_newspaper::selectOneRow('*', $this->getTable(),
-				'section = ' . $this->parentSection->getAttribute('uid') . 
+            if (! $this->getParentSection() instanceof tx_newspaper_Section ) return;
+			$this->attributes = tx_newspaper::selectOneRow(
+                '*', $this->getTable(),
+				'section = ' . $this->getParentSection()->getAttribute('uid') .
 				' AND pagetype_id = ' . $this->pagetype->getID()
 			);
 			$this->setUid($this->attributes['uid']);
