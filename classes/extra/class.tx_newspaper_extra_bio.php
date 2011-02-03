@@ -69,8 +69,25 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
     public static function processDatamap_postProcessFieldArray(
         $status, $table, $id, &$fieldArray, $that
     ) {
-        tx_newspaper::devlog('savehook', array($status, $table, $id, &$fieldArray, $that));
-		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+        /*  in a static function, there is no object to call. prior to PHP 5.3,
+         *  there is no way to find out which class we are in.
+         */
+        if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 3) || (PHP_MAJOR_VERSION > 5)) {
+            $extra_table = strtolower(get_called_class());
+        } else {
+            $extra_table = 'tx_newspaper_extra_bio';
+        }
+        if ($table != $extra_table) return;
+
+        self::getTSConfig(); // called after class check, otherwise TSConfig for images is read for every record stored in typo3
+
+		t3lib_div::devlog('bio save hook', 'newspaper', 0,
+			array('status' => $status, 'table' => $table, 'id' => $id,
+				  'fieldArray' => $fieldArray, 'that' => $that));
+
+        if ($fieldArray[self::image_file_field]) {
+            self::resizeImages($fieldArray[self::image_file_field]);
+        }
     }
 
 }
