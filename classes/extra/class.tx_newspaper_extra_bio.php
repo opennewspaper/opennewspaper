@@ -69,6 +69,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
     public static function processDatamap_postProcessFieldArray(
         $status, $table, $id, &$fieldArray, $that
     ) {
+        tx_newspaper::devlog('savehook', array($status, $table, $id, &$fieldArray, $that));
 		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
     }
 
