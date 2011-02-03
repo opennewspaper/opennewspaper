@@ -128,7 +128,12 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 			);
 
 			foreach ($tags as $tag) $tag_uids[] = $tag['uid']; 
-		}
+		} else {
+            if (intval(t3lib_div::_GP('dossier'))) {
+                $tag_uids[] = intval(t3lib_div::_GP('dossier'));
+            }
+        }
+        
 		return $tag_uids;
 	}
 	
