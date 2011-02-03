@@ -746,9 +746,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		} else {
 			$order_by = '
 CASE
-  WHEN publish_date = \'0\'
-  THEN tstamp
-  ELSE publish_date
+  WHEN tx_newspaper_article.publish_date = \'0\'
+  THEN tx_newspaper_article.tstamp
+  ELSE tx_newspaper_article.publish_date
 END 
 DESC';
 		}
