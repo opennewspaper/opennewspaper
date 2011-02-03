@@ -314,7 +314,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	 * 
 	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
 	 */
-	private static function getTSConfig() {
+	protected static function getTSConfig() {
 		
 		if (self::$basepath && self::$sizes) return;
 		
