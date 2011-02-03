@@ -51,7 +51,7 @@ class tx_newspaper_BE {
 					$data[$i]['ACTIVE'] = true;
 					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
 					$data[$i]['DEFAULT_ARTICLE_PAGE'] = $active_page->getPageType()->getAttribute('is_article_page');
-					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_pagezone_in_page')) . '\');';
+					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_page_in_section')) . '\');';
 					$data[$i]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_page', $active_page->getUid(), $active_page->getAttribute('template_set'));
 					break;
 				}
