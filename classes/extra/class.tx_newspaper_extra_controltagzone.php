@@ -77,7 +77,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		$this->smarty->assign('extras', $rendered_extras);
 		
         $rendered = $this->smarty->fetch($this);
-        
+        tx_newspaper::devlog('tagzone', array($control_tags, $extras));
         tx_newspaper::logExecutionTime();
         
         return $rendered;
@@ -90,7 +90,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				'name', self::tag_zone_table, 
 				'uid = ' . $this->getAttribute('tag_zone')
 			);
-			return $this->getTitle() . '(' . $tag_zone['name'] . ')';
+			return $this->getTitle() . ' (' . $tag_zone['name'] . ')';
 		} catch (tx_newspaper_DBException $e) { 
 			return $this->getTitle() . ' (' .
 				   tx_newspaper::getTranslation('message_no_controltag_selected') .
@@ -155,7 +155,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				foreach ($extras_data as $extra_data) {
                     $extra[$control_tag] = tx_newspaper_Extra_Factory::getInstance()->create($extra_data['extra']);
 				}
-				break;
 			}
 		}
 		
@@ -165,8 +164,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 				foreach (explode(',', $this->getAttribute('default_extra')) as $extra_uid) {
 					$extra[] = tx_newspaper_Extra_Factory::getInstance()->create($extra_uid);
 				}
-			} else {
-				return;
 			}
 		}
 		return $extra;
