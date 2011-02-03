@@ -27,7 +27,7 @@ class tx_newspaper  {
 	const pagetype_get_parameter = 'pagetype';
 
     /// Whether to measure the execution times of functions
-    const log_execution_times = true;
+    const log_execution_times = false;
 
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
