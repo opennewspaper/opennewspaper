@@ -53,6 +53,25 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 	}
 	
 	public static function dependsOnArticle() { return true; }
+
+    /// Save hook function, called from the global save hook
+    /** Resizes the uploaded image into all sizes specified in TSConfig.
+     *
+     *  \todo Appends the UID of the Extra_Image to the image file name.
+     *  \todo Normalizes field \p normalized_filename.
+     *
+     *  Damn the Typo3 documentation, I was unable to find authoritative docs
+     *  for processDatamap_postProcessFieldArray(). Here's what i could deduce.
+     *  \param $table The table of the record that is to be stored
+     *  \param $id The UID of the record that is to be stored
+     *  \param $fieldArray The values to be stored, as a reference so they can be changed
+     */
+    public static function processDatamap_postProcessFieldArray(
+        $status, $table, $id, &$fieldArray, $that
+    ) {
+		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+    }
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Bio());
