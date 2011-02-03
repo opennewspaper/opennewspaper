@@ -816,6 +816,7 @@ DESC';
 			if (intval($result['uid'])) $uids[] = intval($result['uid']);
 		}
 
+        tx_newspaper::devlog('article list', array(tx_newspaper::$query, $uids));
 		return $uids;
 	}
 	
