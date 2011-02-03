@@ -8,6 +8,7 @@
 		<languageKey index="default" type="array">
 			<label index="title">Control Tag Control</label>
 			<label index="manage_dossiers">Manage dossiers</label>
+            <label index="manage_articles">Manage articles</label>
 			<label index="manage_tagzones">Manage tag zones</label>
 			<label index="wizard_dossier">Dossier wizard</label>
 			<label index="label_create_dossier">Create dossier</label>
@@ -31,6 +32,7 @@
 		<languageKey index="de" type="array">
 			<label index="title">Steuertagsteuerung</label>
 			<label index="manage_dossiers">Dossiers verwalten</label>
+            <label index="manage_articles">Artikel verwalten</label>
 			<label index="manage_tagzones">Steuertagzonen verwalten</label>
 			<label index="wizard_dossier">Dossier-Wizard</label>
 			<label index="label_create_dossier">Dossier anlegen</label>

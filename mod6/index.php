@@ -118,6 +118,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				'manage_dossiers' => $LANG->getLL('manage_dossiers'),
 //				'manage_tagzones' => $LANG->getLL('manage_tagzones'),
 				'wizard_dossier' => $LANG->getLL('wizard_dossier'),
+                'manage_articles' => $LANG->getLL('manage_articles'),
 			)
 		);
 		parent::menuConfig();
@@ -212,6 +213,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			case 'manage_dossiers':
 				$this->manageDossiers($input);
 			break;
+            case 'manage_articles':
+                $this->manageArticles($input);
+            break;
 //			case 'manage_tagzones':
 //				$this->manageTagzones($input);
 //			break;
@@ -369,7 +373,10 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 t3lib_div::devlog('manageTagzones() - not implemented yet', 'newspaper', 0, array('input' => $input));
 	}
 
-
+    // backend for managing tag zones
+    private function manageArticles($input) {
+t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, array('input' => $input));
+    }
 
 	// backend for managing dossiers
 	private function manageDossiers($input) {
