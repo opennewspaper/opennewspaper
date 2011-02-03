@@ -887,7 +887,7 @@ DESC';
 	
 	///	Replace a substring denoted as a variable with the corresponding GET parameter
 	/** For example, all occurrences of \c $art are replaced with 
-	 *  \c $)GET['art']. If \c $)GET['art'] is not set, the variable is
+	 *  \c $_GET['art']. If \c $_GET['art'] is not set, the variable is
 	 *  unchanged.
 	 * 
 	 *  \param $string The string to be expanded.
