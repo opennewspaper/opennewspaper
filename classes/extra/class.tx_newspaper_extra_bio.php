@@ -57,4 +57,6 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Bio());
 
+tx_newspaper::registerSaveHook(new tx_newspaper_extra_Bio());
+
 ?>
