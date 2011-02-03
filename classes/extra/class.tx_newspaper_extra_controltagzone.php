@@ -153,7 +153,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 
 			if ($extras_data) {
 				foreach ($extras_data as $extra_data) {
-                    if (class_exists($extra_data)) {
+                    if (class_exists($extra_data['extra_table'])) {
 					    $extra[$control_tag] = new $extra_data['extra_table']($extra_data['extra_uid']);
                     } else {
                         tx_newspaper::devlog("class '$extra_data' does not exist", $extras_data);
