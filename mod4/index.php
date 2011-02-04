@@ -578,7 +578,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		// get all concrete extra table where records should exist
 		$abstract_extra_type_row = tx_newspaper::selectRows(
 			'DISTINCT extra_table',
-			'tx_newspaper_extra'
+			'tx_newspaper_extra',
+			'extra_table!=""'
 		);
 		for($i = 0; $i < sizeof($abstract_extra_type_row); $i++) {
 //debug($abstract_extra_type_row[$i]['extra_table']);
@@ -597,8 +598,9 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 	        	$abstract_row[$row['extra_uid']] = $row['uid']; // key = uid of concrete extra, value = uid of abstract extra
 	        }
 	        $GLOBALS['TYPO3_DB']->sql_free_result($res);
-//debug($abstract_row);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+//t3lib_div::debug($abstract_extra_type_row[$i]);
+
+	        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
 				$abstract_extra_type_row[$i]['extra_table'],
 				'deleted=0'
