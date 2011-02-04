@@ -82,12 +82,13 @@ class tx_newspaper_DependencyTree {
     static public function generateFromArticle(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
         $tree = new tx_newspaper_DependencyTree($article);
-
+/*
         $tree->addArticlePages($article);
         $tree->addSectionPages($article->getSections());
         $tree->addRelatedArticles($article);
         $tree->addDossierPages($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
+*/
         tx_newspaper::logExecutionTime('generateFromArticle()');
         
         return $tree;
