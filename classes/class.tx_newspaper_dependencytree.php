@@ -81,11 +81,12 @@ class tx_newspaper_DependencyTree {
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
-        $tree = new tx_newspaper_DependencyTree;
+        $tree = new tx_newspaper_DependencyTree($article);
 
         $tree->addArticlePages($article);
         $tree->addSectionPages($article->getSections());
         $tree->addRelatedArticles($article);
+        $tree->addDossierPages($article);
         $tree->addArticleListPages(getAffectedArticleLists($article));
         tx_newspaper::logExecutionTime('generateFromArticle()');
         
@@ -123,21 +124,39 @@ class tx_newspaper_DependencyTree {
     }
     
     public function getArticlePages() {
+        if (!$this->article_pages_filled) {
+            $this->addArticlePages($this->article);
+        }
         return $this->article_pages;
     }
     
     public function getSectionPages() {
+        if (!$this->section_pages_filled) {
+            $this->addSectionPages($this->article->getSections());
+        }
         return $this->section_pages;
     }
     
     public function getRelatedArticlePages() {
+        if (!$this->related_article_pages_filled) {
+            $this->addRelatedArticles($this->article);
+        }
         return $this->related_article_pages;
     }
     
     public function getArticlelistPages() {
+        if (!$this->articlelist_pages_filled) {
+            $this->addArticleListPages(getAffectedArticleLists($this->article));
+        }
         return $this->articlelist_pages;
     }
-    
+
+    public function getDossierPages() {
+        if (!$this->dossier_pages_filled) {
+            $this->addDossierPages($this->article);
+        }
+        return $this->dossier_pages;
+    }
     /// Returns all affected pages up to a specified depth.
     /** Kept only for backwards compatibility.
      */
@@ -168,25 +187,28 @@ class tx_newspaper_DependencyTree {
     /** \todo Only clear cache for the affected article, not the entire page
      */
     private function addArticlePages(tx_newspaper_Article $article) {
-#        tx_newspaper::startExecutionTimer();
+        tx_newspaper::startExecutionTimer();
         $sections = $article->getSections();
         $pages = getAllArticlePages($sections);
         $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
         $this->article_pages = array_unique($this->article_pages);
-#        tx_newspaper::logExecutionTime('addArticlePages()');
+        $this->article_pages_filled = true;
+        tx_newspaper::logExecutionTime('addArticlePages()');
     }
     
     private function addSectionPages(array $sections) {
-#        tx_newspaper::startExecutionTimer();
+        tx_newspaper::startExecutionTimer();
         foreach ($sections as $section) {
             $pages = getAllPagesWithSectionListExtra($section);
             $this->section_pages = array_merge($this->section_pages, makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
-#        tx_newspaper::logExecutionTime('addSectionPages()');
+        $this->section_pages_filled = true;
+        tx_newspaper::logExecutionTime('addSectionPages()');
     }
     
     private function addRelatedArticles(tx_newspaper_Article $article) {
+        tx_newspaper::startExecutionTimer();
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -198,23 +220,46 @@ class tx_newspaper_DependencyTree {
             }
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
+        $this->related_article_pages_filled = true;
+        tx_newspaper::logExecutionTime('addRelatedArticles()');
     }
-    
+
+    private function addDossierPages(tx_newspaper_Article $article) {
+        throw new tx_newspaper_NotYetImplementedException();
+        tx_newspaper::startExecutionTimer();
+
+        $this->dossier_pages_filled = true;
+        tx_newspaper::logExecutionTime('addDossierPages()');
+    }
+
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
+        tx_newspaper::startExecutionTimer();
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
+        $this->articlelist_pages_filled = true;
+        tx_newspaper::logExecutionTime('addArticleListPages()');
     }
     
     /// Ensure that a dependency tree is not created other than by the generator functions.
-    private function __construct() { }
+    private function __construct(tx_newspaper_Article $article) {
+        $this->article = $article;
+    }
+
+    private $article = null;
     
     private $article_pages = array();   ///< Article pages of the sections containing the article
+    private $article_pages_filled = false;
     private $section_pages = array();   ///< Section overview pages containing the article
+    private $section_pages_filled = false;
     private $related_article_pages = array();   ///< Pages showing articles related to the article
+    private $related_article_pages_filled = false;
+    private $dossier_pages = array();   ///< Pages showing article as part of a dossier
+    private $dossier_pages_filled = false;
     private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
-        
+    private $articlelist_pages_filled = false;
+
     private static $registered_actions = array();
     
 }
