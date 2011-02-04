@@ -141,20 +141,20 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 //t3lib_div::devlog('where', 'newspaper', 0, array('where' => $this->createWherePart()));
 
 		global $LANG;
-		
+
 		$this->processGP();
 		$this->processGPController(); // check if a controller was used (hide/unhide/delete article)
 
 		$where = $this->createWherePart(); // get conditions for sql statement
 
 		if ($where !== false) {
-			
+
 			$count = tx_newspaper::countRows($where['table'], $where['where']);
-			
+
 			$row = tx_newspaper::selectRows(
 				'*',
 				$where['table'],
-				$where['where'], 
+				$where['where'],
 				'',
 				'tstamp DESC',
 				intval(t3lib_div::_GP('start_page'))*intval(t3lib_div::_GP('step')) . ', ' . (intval(t3lib_div::_GP('step')))
@@ -170,10 +170,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 //t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));
 	}
 
-	
+
 	function renderBackendSmarty($row, $count) {
 		global $LANG;
-		
+
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
@@ -226,6 +226,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'article' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_article', false),
 			'messages' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_messages', false),
 			'not_yet_published' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_not_yet_published', false),
+			'not_yet_published_BUT_ONLINE' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_not_yet_published_BUT_ONLINE', false),
 			'published' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_published', false),
 			'by_part' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_by_part', false),
 			'flag_hidden' => $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.unhide', false),
@@ -269,13 +270,13 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('FORM_TABLE', (t3lib_div::_GP('form_table'))? t3lib_div::_GP('form_table') : '');
 		$smarty->assign('FORM_FIELD', (t3lib_div::_GP('form_field'))? t3lib_div::_GP('form_field') : '');
 		$smarty->assign('FORM_UID', intval(t3lib_div::_GP('form_uid'))? intval(t3lib_div::_GP('form_uid')) : 0);
-		
-		$smarty->assign('AB4AL', (t3lib_div::_GP('ab4al'))? t3lib_div::_GP('ab4al') : ''); // article browser for article lists
-        $smarty->assign('select_box_id', (t3lib_div::_GP('select_box_id'))? t3lib_div::_GP('select_box_id') : ''); // selectbox id for article browser        
 
-		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);		
-		
-		$smarty->assign('IS_ARTICLE_BROWSER', (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al'))? 1 : 0); // set flag if mod2 should be rendered as moderation list or as article browser 
+		$smarty->assign('AB4AL', (t3lib_div::_GP('ab4al'))? t3lib_div::_GP('ab4al') : ''); // article browser for article lists
+        $smarty->assign('select_box_id', (t3lib_div::_GP('select_box_id'))? t3lib_div::_GP('select_box_id') : ''); // selectbox id for article browser
+
+		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
+
+		$smarty->assign('IS_ARTICLE_BROWSER', (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al'))? 1 : 0); // set flag if mod2 should be rendered as moderation list or as article browser
 
 		/// build browse sequence
 		if (intval(t3lib_div::_GP('start_page')) > 0) {
@@ -289,15 +290,15 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		} else {
 			$smarty->assign('URL_NEXT', '');
 		}
-		
+
 		$smarty->assign('MODULE5_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
-		
-		
+
+
 		/// build url for switch visibility button
 		// \todo: check what's that '###ARTILCE_UID###' needed for?
 		$smarty->assign('URL_HIDE_UNHIDE', tx_newspaper_UtilMod::convertPost2Querystring(array('uid' => '###ARTILCE_UID###')));
-		
+
 		$smarty->assign('URL_PLAIN', tx_newspaper_UtilMod::convertPost2Querystring());
 
 		// check if article is locked, add be_user to array and add workflow log
@@ -311,7 +312,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 					'msg' => htmlentities($t['msg'])
 				);
 			}
-			
+
 //			// add be_user; currently not used in smarty template
 //			$be_user_uid = $row[$i]['modification_user']? $row[$i]['modification_user'] : $row[$i]['cruser_id'];
 //			if ($be_user_uid) {
@@ -326,19 +327,19 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 //			} else {
 //				$be_user['username'] = '---'; // no be_user stored in article
 //			}
-//			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];  
+//			$row[$i]['be_user'] = $be_user['realName']? $be_user['realName'] : $be_user['username'];
 
 			// add role title
 			$row[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($row[$i]['workflow_status']);
-			 
+
 			//add workflowlog data to $row - simple version for mod2_main.tmpl
 			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
-			
+
 			// add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
 			$comments = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
 			$comments = tx_newspaper_workflow::addUsername($comments);
 			$row[$i]['workflowlog_v2'] = $comments;
-			
+
 			// add sections
 			$a = new tx_newspaper_article(intval($row[$i]['uid']));
 			$sections = array();
@@ -352,7 +353,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		// add information for time controlled articles
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_yet', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
-			$row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_anymore', false), $row[$i]['starttime'] ,$row[$i]['endtime']); 
+			$row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_not_anymore', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_and_future', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_time_controlled_now_but_will_end', false), $row[$i]['starttime'] ,$row[$i]['endtime']);
 		}
@@ -369,20 +370,20 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		$smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
-		
+
 		if ($this->isArticleBrowser()) {
-			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser 
+			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser
 		}
 		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
 	}
 
 	/// \return true if an article browser is rendered, false if production list is rendered
 	private function isArticleBrowser() {
-		return t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al');	
+		return t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al');
 	}
-	/// \return true if production list is rendered, false if an article browser is rendered 
+	/// \return true if production list is rendered, false if an article browser is rendered
 	private function isProductionList() {
-		return !$this->isArticleBrowser();	
+		return !$this->isArticleBrowser();
 	}
 
 	/// \return true if role filter equals the current role of the be_user, else false
@@ -406,12 +407,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		if ((sizeof(t3lib_div::_POST()) == 0) && (sizeof(t3lib_div::_GET()) == 0)) {
 			/// module is called from menu
-			
-			$storedFilter = $this->getFilter(); 
+
+			$storedFilter = $this->getFilter();
 			if (is_array($storedFilter)) {
 				// use stored filter
-				$storedFilter = $this->addDefaultFilterValues($storedFilter, true); 
-				$_POST = $storedFilter; 
+				$storedFilter = $this->addDefaultFilterValues($storedFilter, true);
+				$_POST = $storedFilter;
 			} else {
 				// set default filter setting
 				$_POST = $this->addDefaultFilterValues($_POST, true);
@@ -429,7 +430,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		} elseif (t3lib_div::_GP('reset_filter') != '') {
 			// if "reset" button was pressed, read filter default settings
 			$_POST = $this->addDefaultFilterValues(array());
-			unset($_POST['reset_filter']); 			
+			unset($_POST['reset_filter']);
 		}
 
 		$this->storeFilter();
@@ -497,9 +498,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if ($this->isProductionList()) {
 			if (!array_key_exists('section', $settings) || $forceReset) {
 				$settings['section'] = '';
-			} 
+			}
 		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
-			$settings['section'] = $_REQUEST['s']; 
+			$settings['section'] = $_REQUEST['s'];
 		}
 		if (!array_key_exists('text', $settings) || $forceReset) {
 			$settings['text'] = '';
@@ -510,7 +511,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if (!array_key_exists('start_page', $settings) || $forceReset) {
 			$settings['start_page'] = 0;
 		}
-		
+
 		return $settings;
 	}
 
@@ -524,7 +525,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$input = t3lib_div::GParrayMerged($this->prefixId);
 //t3lib_div::devlog('processGPController()', 'np', 0, array('input' => $input, 'article_uid' => $article_uid, '_GP(article_visibility)' => t3lib_div::_GP('article_visibility')));
-		
+
 		if (isset($input['controller'])) {
 			switch($input['controller']) {
 				case 'delete':
@@ -535,12 +536,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			unset($_POST['article_uid']);
 			return; // don't check visibility if controller was set
 		}
-		
+
 		if (t3lib_div::_GP('article_visibility') != '') {
-			
+
 			// publish/hide icon used in production list
-			
-			$hidden_status = strtolower(t3lib_div::_GP('article_visibility')); 
+
+			$hidden_status = strtolower(t3lib_div::_GP('article_visibility'));
 
 			// unset parameters (so they are not added to querystring later)
 			unset($_POST['article_visibility']);
@@ -561,7 +562,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			// store data and call article save hooks then
 			$article = new tx_newspaper_article($article_uid);
 			$article->storeHiddenStatusWithHooks($hidden);
-			
+
 			// redirect to module (in order to remove article_visibility and article_uid from url)
 			header('Location: index.php');
 
@@ -574,25 +575,25 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	private function createWherePart() {
 //t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('_request' => $_REQUEST));
 		$where = array();
-		
+
 		if (trim(t3lib_div::_GP('section'))) {
-			$where_section = $this->getWhereForSection(t3lib_div::_GP('section')); 
+			$where_section = $this->getWhereForSection(t3lib_div::_GP('section'));
 			if ($where_section === false) {
 				return false; // no matching section found, so not article in search result
 			}
 			$table = 'tx_newspaper_article a, tx_newspaper_article_sections_mm mm';
-			$where['section'] = 'a.uid=mm.uid_local AND mm.uid_foreign IN (' . $where_section . ')'; //  
+			$where['section'] = 'a.uid=mm.uid_local AND mm.uid_foreign IN (' . $where_section . ')'; //
 		} else {
-			$table = 'tx_newspaper_article';	
+			$table = 'tx_newspaper_article';
 		}
-		
+
 		$where['deleted'] = 'deleted=0';
 		$where['is_template'] = 'is_template=0';
 		$where['tstamp'] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp(t3lib_div::_GP('range'));
-		
+
 		// get articles from correct sysfolder only
 		$where['pid'] = 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
-		
+
 		switch(strtolower(t3lib_div::_GP('hidden'))) {
 			case 'on':
 				$where['hidden'] = 'hidden=1';
@@ -614,8 +615,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			default:
 				// nothing to do
 		}
-		
-		
+
+
 		if (trim(t3lib_div::_GP('author'))) {
 			$where['author'] = 'author LIKE "%' . addslashes(trim(t3lib_div::_GP('author'))) . '%"';
 		}
@@ -625,28 +626,28 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 
 		if (trim(t3lib_div::_GP('text'))) {
-			$where['text'] = '(title LIKE "%' . addslashes(trim(t3lib_div::_GP('text'))) . '%" OR kicker LIKE "%' . 
-				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR teaser LIKE "%' . 
-				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR text LIKE "%' . 
+			$where['text'] = '(title LIKE "%' . addslashes(trim(t3lib_div::_GP('text'))) . '%" OR kicker LIKE "%' .
+				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR teaser LIKE "%' .
+				addslashes(trim(t3lib_div::_GP('text'))) . '%" OR text LIKE "%' .
 				addslashes(trim(t3lib_div::_GP('text'))) . '%")';
 			if (substr(trim(t3lib_div::_GP('text')), 0, 1) == '#') {
 				// looking for an article uid?
 				$uid = intval(substr(trim(t3lib_div::_GP('text')), 1));
 				if (trim(t3lib_div::_GP('text')) == '#' . $uid) {
 					// text contains a query like #[int], so search for this uid ONLY
-					$where['uid'] = $uid; 
+					$where['uid'] = $uid;
 					return array(
 						'table' => $table,
 						'where' => 'uid=' . $uid
-					);				
+					);
 				}
-			} 
+			}
 		}
 //t3lib_div::devlog('createWherePart()', 'newspaper', 0, array('where' => $where, 'table' => $table));
 		return array(
 			'table' => $table,
 			'where' => implode(' AND ', $where)
-		);				
+		);
 	}
 
 
@@ -673,7 +674,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			}
 		}
 		$sectionUidList = implode(',', array_unique($uids));
-		
+
 		if (!$sectionUidList) {
 			// no matching section found, so no article in result set
 			return false;
@@ -693,7 +694,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$hidden['all'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_hidden_all', false);
 		$hidden['on'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_hidden_on', false);
 		$hidden['off'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:option.status_hidden_off', false);
-		return $hidden;		
+		return $hidden;
 	}
 	private function getRoleArray() {
 		global $LANG;
@@ -702,7 +703,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$role[NP_ACTIVE_ROLE_EDITORIAL_STAFF] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
 		$role[NP_ACTIVE_ROLE_DUTY_EDITOR] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
 		$role[NP_ACTIVE_ROLE_NONE] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
-		return $role;		
+		return $role;
 	}
 	private function getRangeArray() {
 		global $LANG;

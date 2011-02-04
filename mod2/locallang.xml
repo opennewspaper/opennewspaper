@@ -7,7 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="title">Moderation list</label>
-			
+
 			<label index="label.status_hidden">Show articles</label>
 			<label index="option.status_hidden_all">all</label>
 			<label index="option.status_hidden_on">hidden only</label>
@@ -15,8 +15,8 @@
 
 			<label index="label_status_role">Active role</label>
 			<label index="label_status_role_all">All roles</label>
-			
-			<label index="label.range">Time range</label>			
+
+			<label index="label.range">Time range</label>
 			<label index="option.range_today">today</label>
 			<label index="option.range_day">day</label>
 			<label index="option.range_days">days</label>
@@ -32,7 +32,7 @@
 			<label index="label_title_time_controlled">Time controlled</label>
 			<label index="label_title_commands">Commands</label>
 			<label index="label_title_role">Role</label>
-			
+
 			<label index="label_time_controlled_not_yet">Will be activated at ###STARTTIME###</label>
 			<label index="label_time_controlled_not_anymore">Ended on ###ENDTIME###</label>
 			<label index="label_time_controlled_now_and_future">Was activated at ###STARTTIME###</label>
@@ -56,16 +56,17 @@
 			<label index="label.article_add">Add article to list ...</label>
 			<label index="label.delete_article">Delete article</label>
 			<label index="message_delete_article">Do you really want to delete this article?</label>
-			
+
 			<label index="label.page_prev">Previous hits</label>
 			<label index="label.page_next">Next hits</label>
 			<label index="label.page_hits">Hit(s)</label>
-			
+
 			<label index="label_module_title">Production list</label>
 			<label index="label_state">State</label>
 			<label index="label_article">Article</label>
 			<label index="label_messages">Messages</label>
 			<label index="label_not_yet_published">not yet published</label>
+			<label index="label_not_yet_published_BUT_ONLINE">ERROR: publish date is missing!</label>
 			<label index="label_published">Published</label>
 			<label index="label_by_part">by</label>
 			<label index="label_messages_show">Show all messages</label>
@@ -74,7 +75,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Produktionsliste</label>
-			
+
 			<label index="label.status_hidden">Artikel anzeigen</label>
 			<label index="option.status_hidden_all">Alle</label>
 			<label index="option.status_hidden_on">Nur versteckte</label>
@@ -82,8 +83,8 @@
 
 			<label index="label_status_role">Rolle</label>
 			<label index="label_status_role_all">Alle Rollen</label>
-			
-			<label index="label.range">Zeitfenster</label>			
+
+			<label index="label.range">Zeitfenster</label>
 			<label index="option.range_today">Heute</label>
 			<label index="option.range_day">Tag</label>
 			<label index="option.range_days">Tage</label>
@@ -99,7 +100,7 @@
 			<label index="label_title_time_controlled">Zeitgezündet</label>
 			<label index="label_title_commands">Funktion</label>
 			<label index="label_title_role">Rolle</label>
-			
+
 			<label index="label_time_controlled_not_yet">Startdatum/-uhrzeit wird sein: ###STARTTIME###</label>
 			<label index="label_time_controlled_not_anymore">Enddatum/-uhrzeit: ###ENDTIME###</label>
 			<label index="label_time_controlled_now_and_future">Startdatum/-uhrzeit war: ###STARTTIME###</label>
@@ -123,22 +124,21 @@
 			<label index="label.article_add">Zu Liste hinzufügen</label>
 			<label index="label.delete_article">Artikel löschen</label>
 			<label index="message_delete_article">Möchten Sie diesen Artikel wirklich löschen?</label>
-			
+
 			<label index="label.page_prev">Vorige</label>
 			<label index="label.page_next">Nächste</label>
 			<label index="label.page_hits">Treffer</label>
-			
+
 			<label index="label_module_title">Produktionsliste</label>
 			<label index="label_state">Status</label>
 			<label index="label_article">Artikel</label>
 			<label index="label_messages">Nachrichten</label>
 			<label index="label_not_yet_published">noch nicht publiziert</label>
+			<label index="label_not_yet_published_BUT_ONLINE">FEHLER: Das Publikationsdatum ist nicht gesetzt!</label>
 			<label index="label_published">Publiziert</label>
 			<label index="label_by_part">von</label>
 			<label index="label_messages_show">Alle Nachrichten anzeigen</label>
 			<label index="label_messages_hide">Nachrichten einklappen</label>
-
-
 		</languageKey>
 	</data>
 </T3locallang>
