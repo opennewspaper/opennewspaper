@@ -494,10 +494,14 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkArticleMissingPublishDate'),
 				'param' => array()
 			),
-
 			array(
 				'title' => 'Abstract extra: concrete extra missing',
 				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraConcreteExtraMissing'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Abstract extra: extra_table or extra_uid missing',
+				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraTable'),
 				'param' => array()
 			),
 			array(
@@ -547,6 +551,26 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			),
 		);
 		return $f;
+	}
+
+	static function checkAbstractExtraTable() {
+		$rows = tx_newspaper::selectRows(
+			'uid,extra_table,extra_uid',
+			'tx_newspaper_extra',
+			'(extra_table="" OR extra_uid<=0)',
+			'',
+			'uid'
+		);
+		if (!sizeof($rows)) {
+			return true;
+		}
+		$msg = sizeof($rows) . ' problem(s) found<br />';
+		$msg .= '<table border="1" cellpadding="1" cellspacing="0"><tr><td>uid</td><td>extra_table</td><td>extra_uid</td></tr>';
+		foreach($rows as $row) {
+			$msg .= '<tr><td>' . $row['uid'] . '</td><td>' . $row['extra_table'] . '</td><td>' . $row['extra_uid'] . '</td></tr>';
+		}
+		$msg .= '</table><br />';
+		return $msg;
 	}
 
 	static function checkSectionWithMultipleButSamePageType() {
