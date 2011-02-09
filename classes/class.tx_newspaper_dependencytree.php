@@ -82,13 +82,6 @@ class tx_newspaper_DependencyTree {
     static public function generateFromArticle(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
         $tree = new tx_newspaper_DependencyTree($article);
-/*
-        $tree->addArticlePages($article);
-        $tree->addSectionPages($article->getSections());
-        $tree->addRelatedArticles($article);
-        $tree->addDossierPages($article);
-        $tree->addArticleListPages(getAffectedArticleLists($article));
-*/
         tx_newspaper::logExecutionTime('generateFromArticle()');
         
         return $tree;
@@ -116,12 +109,12 @@ class tx_newspaper_DependencyTree {
     
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
-#        tx_newspaper::startExecutionTimer();
+        tx_newspaper::startExecutionTimer();
         tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
         foreach (self::$registered_actions as $action) {
             call_user_func($action, $this->getPages($depth));
         }
-#        tx_newspaper::logExecutionTime('executeActionsOnPages()');
+        tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
     
     public function getArticlePages() {
@@ -158,6 +151,7 @@ class tx_newspaper_DependencyTree {
         }
         return $this->dossier_pages;
     }
+
     /// Returns all affected pages up to a specified depth.
     /** Kept only for backwards compatibility.
      */
@@ -229,6 +223,11 @@ class tx_newspaper_DependencyTree {
         throw new tx_newspaper_NotYetImplementedException();
         tx_newspaper::startExecutionTimer();
 
+        $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
+        if (empty($tags)) return;
+
+        
+        
         $this->dossier_pages_filled = true;
         tx_newspaper::logExecutionTime('addDossierPages()');
     }

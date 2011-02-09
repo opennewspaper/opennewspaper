@@ -69,7 +69,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		
 		$rendered_extras = array();
 		foreach ($extras as $tag => $extra) {
-			$extra->assignSmartyVar(array('dossier_link' => $this->getDossierLink($tag)));
+			$extra->assignSmartyVar(array('dossier_link' => self::getDossierLink($tag)));
 			$rendered_extras[] = $extra->render();
 		}
 				
@@ -182,7 +182,9 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 *   	in TSConfig
 	 *  \todo make GET parameter 'dossier' configurable
 	 */
-	private function getDossierLink($tag) {
+	static public function getDossierLink($tag) {
+
+        if ($tag instanceof tx_newspaper_Tag) $tag = $tag->getUid();
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
 		$dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
 		if (!$dossier_page) {
