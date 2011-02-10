@@ -10,7 +10,7 @@
 			<label index="manage_dossiers">Manage dossiers</label>
             <label index="manage_articles">Manage articles</label>
 			<label index="manage_tagzones">Manage tag zones</label>
-			<label index="wizard_dossier">Dossier wizard</label>
+			<label index="wizard_dossier">Create dossier</label>
 			<label index="label_create_dossier">Create dossier</label>
 			<label index="wizard_dossier_no_ctrltagcat">Please create a control tag category before using the dossier wizard.</label>
 			<label index="wizard_dossier_tag_not_unique">The tag is already is use. Please change the tag name or edit that tag.</label>
@@ -34,7 +34,7 @@
 			<label index="manage_dossiers">Dossiers verwalten</label>
             <label index="manage_articles">Artikel verwalten</label>
 			<label index="manage_tagzones">Steuertagzonen verwalten</label>
-			<label index="wizard_dossier">Dossier-Wizard</label>
+			<label index="wizard_dossier">Dossier anlegen</label>
 			<label index="label_create_dossier">Dossier anlegen</label>
 			<label index="wizard_dossier_no_ctrltagcat">Bitte legen Sie eine Steuertag-Kategorie an, bevor Sie den Dossier-Wizard verwenden.</label>
 			<label index="wizard_dossier_tag_not_unique">Der Tag ist bereits in Nutzung. Bitte ändern Sie den Tag-Namen oder editieren Sie das entsprechende Tag.</label>
