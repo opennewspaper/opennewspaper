@@ -127,8 +127,10 @@ class tx_newspaper_DependencyTree {
     
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
+
         tx_newspaper::startExecutionTimer();
         tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
+
         foreach (self::$registered_actions as $action) {
             $function = $action['function'];
             $when = $action['when'];
@@ -140,8 +142,9 @@ class tx_newspaper_DependencyTree {
             if ($when && self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
             if ($when && self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
 
-            call_user_func($action, $pages);
+            call_user_func($function, $pages);
         }
+        
         tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
     
