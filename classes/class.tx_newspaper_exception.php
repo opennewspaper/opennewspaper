@@ -37,7 +37,7 @@ class tx_newspaper_Exception extends Exception {
 	 */
 	public function __construct($message, $write_message = true) {
 		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB && $write_message) {
-            $backtrace = array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH);
+            $backtrace = debug_backtrace();
             for ($i = 0; $i < sizeof($backtrace); $i++) {
                 unset($backtrace[$i]['object']);
             }
@@ -46,7 +46,7 @@ class tx_newspaper_Exception extends Exception {
 #							  'newspaper',
 #							  3,
 #							  );
-            print_r($backtrace);
+            echo(str_replace("\n", "<br />\n", print_r(array_slice($backtrace, 1, self::BACKTRACE_DEPTH), 1)));
 		}
         parent::__construct($message);
     }
