@@ -41,7 +41,7 @@ class tx_newspaper_Exception extends Exception {
 							  'newspaper', 
 							  3, 
 							  array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH));
-            print_r(array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH));
+            print_r(array_slice(debug_backtrace(), 1, self::BACKTRACE_DEPTH));
 		}
         parent::__construct($message);
     }
