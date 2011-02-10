@@ -148,8 +148,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     private $called_pages = array();
 
-    public function pageActionIsExecuted(tx_newspaper_CachablePage $page) {
-    	$this->called_pages[] = $page->getNewspaperPage();
+    public function pageActionIsExecuted(array $pages) {
+    	$this->called_pages = array_merge($this->called_pages, $pages);
     }
 
     public function test_executeActionsOnPages() {
