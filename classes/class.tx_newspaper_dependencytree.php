@@ -83,7 +83,13 @@ class tx_newspaper_CachablePage {
 class tx_newspaper_DependencyTree {
     
     const article_list_length = 10;
-    
+
+    const ACT_ON_ARTICLES = 1;
+    const ACT_ON_SECTION_PAGES = 2;
+    const ACT_ON_RELATED_ARTICLES = 4;
+    const ACT_ON_DOSSIER_PAGES = 8;
+    const ACT_ON_ARTICLE_LIST_PAGES = 16;
+
     /// Generates the tree of pages that change when a tx_newspaper_Article changes.
     /** \param $article The article which is changed.
      */
@@ -109,9 +115,13 @@ class tx_newspaper_DependencyTree {
      *    http://php.net/manual/en/function.call-user-func.php) and takes a
      *    tx_newspaper_Page as argument.
      */ 
-    static public function registerAction($action) {
+    static public function registerAction($action,
+                                          $when = 3) {
         if (is_callable($action)) {
-            self::$registered_actions[] = $action;
+            self::$registered_actions[] = array(
+                'function' => $action,
+                'when' => $when
+            );
         }
     }
     
@@ -120,7 +130,17 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::startExecutionTimer();
         tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
         foreach (self::$registered_actions as $action) {
-            call_user_func($action, $this->getPages($depth));
+            $function = $action['function'];
+            $when = $action['when'];
+            $pages = array();
+
+            if ($when && self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
+            if ($when && self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
+            if ($when && self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
+            if ($when && self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
+            if ($when && self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
+
+            call_user_func($action, $pages);
         }
         tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
