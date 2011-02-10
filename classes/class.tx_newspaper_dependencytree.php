@@ -2,9 +2,12 @@
 
 class tx_newspaper_CachablePage {
     
-    public function __construct(tx_newspaper_Page $page, tx_newspaper_article $article = null) {
+    public function __construct(tx_newspaper_Page $page,
+                                tx_newspaper_article $article = null,
+                                $additional_parameters = array()) {
         $this->newspaper_page = $page;
         $this->newspaper_article = $article;
+        $this->get_parameters = $additional_parameters;
     }
     
     public function __toString() {
@@ -35,8 +38,11 @@ class tx_newspaper_CachablePage {
         if ($this->newspaper_article) {
             $parameters[tx_newspaper::article_get_parameter] = $this->newspaper_article->getUid();
         }
+        if ($this->get_parameters) {
+            $parameters = array_merge($parameters, $this->get_parameters);
+        }
 
-        /// \todo additional GET parameters, page type
+        /// \todo page type
         $type = $this->newspaper_page->getPageType();
 #        t3lib_div::devlog('getGETParameters',$type->getCondition());
 
@@ -60,6 +66,8 @@ class tx_newspaper_CachablePage {
     
     private $newspaper_page = null;
     private $newspaper_article = null;
+    private $get_parameters = array();
+    
 }
 
 /** Levels of dependency for articles:
@@ -226,7 +234,14 @@ class tx_newspaper_DependencyTree {
         $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
         if (empty($tags)) return;
 
-        
+        $typo3page = tx_newspaper::getDossierPageID();
+        $dossier_section = tx_newspaper_Section::getSectionForTypo3Page($typo3page);
+        $dossier_page = new tx_newspaper_Page($dossier_section);
+        foreach ($tags as $tag) {
+            $this->dossier_pages[] = new tx_newspaper_CachablePage(
+                $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
+            );
+        }
         
         $this->dossier_pages_filled = true;
         tx_newspaper::logExecutionTime('addDossierPages()');

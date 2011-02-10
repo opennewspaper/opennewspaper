@@ -296,7 +296,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	
 	/// \return The UID of the associated Typo3 page 
 	public function getTypo3PageID() {
-		try{
+		try {
 			$row = tx_newspaper::selectOneRow('uid', 'pages', 
 											  'tx_newspaper_associated_section = ' . $this->getUid());
 		} catch (tx_newspaper_DBException $e) {
@@ -610,7 +610,19 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		return $root;
 	}
 	
-	
+	static public function getSectionForTypo3Page($typo_page_id) {
+
+        $row = tx_newspaper::selectZeroOrOneRows(
+            'tx_newspaper_associated_section', 'pages',
+            'uid = ' . $typo_page_id
+        );
+        $section_uid = intval($row['uid']);
+
+        if (!$section_uid) return null;
+
+        return new tx_newspaper_Section($section_uid);
+
+    }
 	
 	/// Typo3  hooks
 	
@@ -652,10 +664,6 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 			} 
 		}
 	}
-	
-
-
-
 
 
  	private $attributes = array();					///< The member variables

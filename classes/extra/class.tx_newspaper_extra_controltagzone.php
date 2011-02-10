@@ -33,8 +33,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	const tag_table = 'tx_newspaper_tag';
 	///	SQL table associating tx_newspaper_Tag s with tx_newspaper_Article s 
 	const article_tag_mm_table = 'tx_newspaper_article_tags_mm';
-	/// GET-parameter describing the wanted control tag for a dossier
-	const default_dossier_get_parameter = 'dossier';
 		
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -185,21 +183,13 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	static public function getDossierLink($tag) {
 
         if ($tag instanceof tx_newspaper_Tag) $tag = $tag->getUid();
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
-		if (!$dossier_page) {
-			throw new tx_newspaper_IllegalUsageException(
-				'No dossier page defined. Please set newspaper.dossier_page_id in TSConfig!'
-			);
-		}
-		
-		$dossier_get_parameter = $TSConfig['newspaper.']['dossier_get_parameter'];
-		if (!$dossier_get_parameter) $dossier_get_parameter = self::default_dossier_get_parameter;
+
+        $dossier_page = tx_newspaper::getDossierPageID();
 		
 		$url = tx_newspaper::typolink_url(
 			array(
 				'id' => $dossier_page,
-				$dossier_get_parameter => $tag
+				tx_newspaper::getDossierGETParameter() => $tag
 			));
 		return $url;
 	}

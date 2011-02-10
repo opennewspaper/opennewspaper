@@ -29,6 +29,9 @@ class tx_newspaper  {
     /// Whether to measure the execution times of functions
     const log_execution_times = false;
 
+    /// GET-parameter describing the wanted control tag for a dossier
+    const default_dossier_get_parameter = 'dossier';
+    
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
@@ -696,6 +699,29 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         return t3lib_BEfunc::getPagesTSconfig($root_page);
     }
 
+    public static function getDossierPageID() {
+
+        $TSConfig = self::getTSConfig();
+
+        $dossier_page = intval($TSConfig['newspaper.']['dossier_page_id']);
+        if (!$dossier_page) {
+            throw new tx_newspaper_IllegalUsageException(
+                'No dossier page defined. Please set newspaper.dossier_page_id in TSConfig!'
+            );
+        }
+        return $dossier_page;
+    }
+
+    public static function getDossierGETParameter() {
+
+        $TSConfig = self::getTSConfig();
+        $dossier_get_parameter = $TSConfig['newspaper.']['dossier_get_parameter'];
+        if (!$dossier_get_parameter) $dossier_get_parameter = self::default_dossier_get_parameter;
+
+        return $dossier_get_parameter;
+    }
+
+
 	/// get absolute path to Typo3 installation
 	/** \param $endsWithSlash determines if the returned path ends with a slash
 	 *  \return absolute path to Typo3 installation
@@ -797,6 +823,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 		return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
 	}
+
     ////////////////////////////////////////////////////////////////////////////
 
 	/// Check if given class name is an abstract class
