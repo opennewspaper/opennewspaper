@@ -856,11 +856,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             } catch (tx_newspaper_Exception $e) {
                 return;
             }
-/*
- * can't decide yet whether that should go here or in a specialized render hook.
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
-            $tree->executeActionsOnPages();
-*/            
+
+            self::updateDependencyTree($article);
         }
     }
 
@@ -1312,6 +1309,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
 
         $article->removeDanglingRelations();
+    }
+
+    private static function updateDependencyTree(tx_newspaper_Article $article) {
+
+        $ts_config = tx_newspaper::getTSConfig();
+        if ($ts_config['newspaper.']['use_dependency_tree']) {
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+            $tree->executeActionsOnPages();
+        }
     }
 
     private static function modifyTagSelection($table, $field) {
