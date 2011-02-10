@@ -169,7 +169,29 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
             );
         }
     }
-    
+
+    public function test_ActionsForDifferentPageTypes_Article() {
+        tx_newspaper_DependencyTree::registerAction(
+            array($this, 'pageActionIsExecuted'),
+            tx_newspaper_DependencyTree::ACT_ON_ARTICLES
+        );
+
+        $tree = $this->createTree();
+
+        $tree->executeActionsOnPages();
+
+        $this->checkIsPageArray($this->called_pages);
+
+        $page = $this->called_pages[0];
+
+        // assert that affected page is article page of affected section
+        $article = $this->createArticle();
+        $section = $page->getNewspaperPage()->getParentSection();
+        $this->assertEquals($section, $article->getPrimarySection());
+
+        $pagetype = $page->getNewspaperPage()->getPageType();
+        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+    }
 
     // Tests related to getPages()
 

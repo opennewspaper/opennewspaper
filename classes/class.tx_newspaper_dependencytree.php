@@ -248,15 +248,13 @@ class tx_newspaper_DependencyTree {
     }
 
     private function addDossierPages(tx_newspaper_Article $article) {
-        throw new tx_newspaper_NotYetImplementedException();
+
         tx_newspaper::startExecutionTimer();
 
         $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
         if (empty($tags)) return;
 
-        $typo3page = tx_newspaper::getDossierPageID();
-        $dossier_section = tx_newspaper_Section::getSectionForTypo3Page($typo3page);
-        $dossier_page = new tx_newspaper_Page($dossier_section);
+        $dossier_page = getDossierPage();
         foreach ($tags as $tag) {
             $this->dossier_pages[] = new tx_newspaper_CachablePage(
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
@@ -264,6 +262,7 @@ class tx_newspaper_DependencyTree {
         }
         
         $this->dossier_pages_filled = true;
+
         tx_newspaper::logExecutionTime('addDossierPages()');
     }
 
@@ -353,6 +352,13 @@ function doesContainSectionListExtra(tx_newspaper_Page $page) {
         }
     }
     return false;
+}
+
+function getDossierPage() {
+    $typo3page = tx_newspaper::getDossierPageID();
+    $dossier_section = tx_newspaper_Section::getSectionForTypo3Page($typo3page);
+
+    return new tx_newspaper_Page($dossier_section);
 }
 
 function getAllArticleListPages(array $article_lists) {
