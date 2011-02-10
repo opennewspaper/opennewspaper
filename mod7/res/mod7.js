@@ -31,8 +31,8 @@ function hideProgress() {
 // open preview window
 function showArticlePreview() {
 	window.open(
-		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(), 
-		"preview", 
+		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val(),
+		"preview",
 		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
 	);
 }
@@ -57,7 +57,7 @@ function getArticleToBePlacedUid() {
 // insert article in manual article list
 function insertArticle(elementId) {
 	$("#" + elementId).addOption(
-		$("#placearticleuid").val(), 
+		$("#placearticleuid").val(),
 		$("#placearticletitle").val()
 	);
 	$("#" + elementId).moveOptionsUp(true); // move article to top
@@ -79,7 +79,7 @@ function displayInsertOrDelButton(elementId){
 		buttonListId = elementId.substring(8);
 	} else {
 		buttonListId = elementId.selector.substring(8);
-	} 
+	}
 	if ($(elementId.selector).containsOption(getArticleToBePlacedUid())) {
 		// article to be placed is PLACED in list
 		$("#addbutton_" + buttonListId).hide();
@@ -95,12 +95,12 @@ function displayInsertOrDelButton(elementId){
 function isDirty() {
     var saveIt = false;
     $("select.placement-select").each(function(index, item) {
-        $("input[title='" + item.id + "']").each(function(index, item) {            
-            if ($(item).hasClass("unsaved")) {				
+        $("input[title='" + item.id + "']").each(function(index, item) {
+            if ($(item).hasClass("unsaved")) {
                 saveIt = true;
 			}
   		});
-	});    
+	});
     return saveIt;
 }
 
@@ -110,8 +110,8 @@ function saveAllSections () {
 		var saveIt = false;
 		$("input[title='" + item.id + "']").each(function(index, item) {
 			if ($(item).hasClass("unsaved")) {
-				saveIt = true;		
-			}	
+				saveIt = true;
+			}
   		});
 		if (saveIt) {
 			saveArticleList(item.id, false);
@@ -236,15 +236,17 @@ function collectSections () {
 
 
 function closePlacement() {
-	top.goToModule('txnewspaperMmain_txnewspaperM2'); 
+	top.goToModule('txnewspaperMmain_txnewspaperM2');
 	return false;
 }
 
 
+/*
+ * re-activate once the check is fixed ...
 function checkForRefresh () {
 	var allSections = collectSections();
 	if (allSections.length > 0) {
-		
+
 		//we collect the values of the selects manually so that we do not have
 		//to select and unselect all options visually when the user is working
 		//on them we build them as the following string:
@@ -256,16 +258,16 @@ function checkForRefresh () {
 			var selectValues = new Array();
 			$("select#" + allSections[i] + " option").each(function(index, item) {
 				selectValues.push($(item).val());
-			});		
-			selectValues = allSections[i] + ":" + selectValues.join("|")	
+			});
+			selectValues = allSections[i] + ":" + selectValues.join("|")
 			allSelectValues.push(selectValues);
 		}
 		allSelectValues = allSelectValues.join("/");
-		
+
 		showProgress();
 		$.getJSON(
-			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"), 
-			$("#placementform").serialize(), 
+			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"),
+			$("#placementform").serialize(),
 			function(data) {
 				$.each(data, function(index, item){
 					if (!item) {
@@ -279,6 +281,7 @@ function checkForRefresh () {
 		);
 	}
 }
+*/
 
 
 function executeAJAX (action, close) {
@@ -287,8 +290,8 @@ function executeAJAX (action, close) {
 	}
 	showProgress();
 	$.get(
-		path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action, 
-		$("#placementform").serialize(), 
+		path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action,
+		$("#placementform").serialize(),
 		function (data) {
 			if (data) {
 				saveAllSections();
@@ -346,7 +349,7 @@ function connectPlacementEvents() {
 		return false;
   	});
 	$("table.articles .movetotop").click(function() {
-        resortArticleList(this.rel, 'top', true);        
+        resortArticleList(this.rel, 'top', true);
 		return false;
   	});
 	$("table.articles .movetobottom").click(function() {
@@ -393,7 +396,7 @@ function connectPlacementEvents() {
                 },
                 false,
                 displayInsertOrDelButton, ["#" + this.title] //displayInsertOrDelButton, [{"elementId": "#" + this.title}]
-            );        
+            );
     		$("input.refresh[title=" +  this.title + "]").removeClass("unsaved");
 	    	$("input.save[title=" +  this.title + "]").removeClass("unsaved");
             $('#' + this.title).removeAttr('multiple');
@@ -411,15 +414,16 @@ function connectPlacementEvents() {
             if (everythingSaved()) {
                 $("input#saveall").removeClass("unsaved");
             }
-        }            
+        }
 		return false;
   	});
 }
 
 
 function startCheckCountdown () {
-	window.clearInterval(refreshCheck);
-	refreshCheck = window.setInterval("checkForRefresh()", 60000);
+// re-activate once the check is fixed ...
+//	window.clearInterval(refreshCheck);
+//	refreshCheck = window.setInterval("checkForRefresh()", 60000);
 }
 
 
@@ -428,8 +432,8 @@ function saveSections() {
 		$("#" + elementId).selectAllOptions();
 		showProgress();
 		$.get(
-			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections", 
-			$("#placementform").serialize(), 
+			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections",
+			$("#placementform").serialize(),
 			function (data) {
 				$("#placement").html(data);
 				$("#" + elementId).unselectAllOptions();
@@ -438,7 +442,7 @@ function saveSections() {
                 hideProgress();
 			}
 		);
-		return false;	
+		return false;
 }
 
 function setFormValueOpenBrowser_AL(selectBoxId, section_filter) {
@@ -453,7 +457,7 @@ function setFormValueOpenBrowser_AL(selectBoxId, section_filter) {
 
 
 $(document).ready(function(){
-	
+
 	if ($("#savesections").length) {
 		// execute only if full articlelist placement module (don't include if articlelist placement is standalone version)
 		connectSectionEvents();
@@ -465,15 +469,15 @@ $(document).ready(function(){
 		// add listener to articlelist selectbox
 		connectPlacementEvents();
 	}
-	
+
 	startCheckCountdown();
 
-	$("#checkrefresh").click(function() {
-		checkForRefresh();
-		return false;
-	});
-	
-	
+//	$("#checkrefresh").click(function() {
+//		checkForRefresh();
+//		return false;
+//	});
+
+
 	if ($(".addresort").length) {
 		$(".addresort").click(function() {
 			$("#" + this.id).copyOptions("#" + this.title, "selected");
@@ -482,112 +486,112 @@ $(document).ready(function(){
 			return false;
 	  	});
 	}
-	
+
 	if ($(".cancel").length) {
 		$(".cancel").click(function() {
 			closePlacement();
 			return false;
 		});
 	}
-	
+
 	if ($(".sendtodutyeditor").length) {
 		$(".sendtodutyeditor").click(function() {
 			executeAJAX("sendarticletodutyeditor");
 			return false;
 		});
 	}
-		
+
 	if ($(".sendtodutyeditorhide").length) {
 		$(".sendtodutyeditorhide").click(function() {
 			executeAJAX("sendarticletodutyeditorhide");
 			return false;
 		});
 	}
-	
+
 	if ($(".sendtodutyeditorpublish").length) {
 		$(".sendtodutyeditorpublish").click(function(){
 			executeAJAX("sendarticletodutyeditorpublish");
 			return false;
 		});
 	}
-	
+
 	if ($(".sendtoeditor").length) {
 		$(".sendtoeditor").click(function () {
 			executeAJAX("sendarticletoeditor");
 			return false;
 		});
 	}
-	
+
 	if ($(".sendtoeditorhide").length) {
 		$(".sendtoeditorhide").click(function () {
 			executeAJAX("sendarticletoeditorhide");
 			return false;
 		});
 	}
-	
+
 	if ($(".sendtoeditorpublish").length) {
 		$(".sendtoeditorpublish").click(function () {
 			executeAJAX("sendarticletoeditorpublish");
 			return false;
 		});
 	}
-	
+
 	if ($(".place").length) {
 		$(".place").click(function () {
 			executeAJAX("placearticle");
 			return false;
 		});
 	}
-	
+
 	if ($(".placehide").length) {
 		$(".placehide").click(function () {
 			executeAJAX("placearticlehide");
 			return false;
 		});
 	}
-	
+
 	if ($(".placepublish").length) {
 		$(".placepublish").click(function(){
 			executeAJAX("placearticlepublish");
 			return false;
 		});
 	}
-	
+
 	if ($(".putonline").length) {
 		$(".putonline").click(function(){
 			executeAJAX("putarticleonline");
 			return false;
 		});
 	}
-	
+
 	if ($(".putoffline").length) {
 		$(".putoffline").click(function(){
 			executeAJAX("putarticleoffline");
 			return false;
 		});
 	}
-	
+
 	if ($(".saveall").length) {
 		$(".saveall").click(function () {
 			executeAJAX("justsave", false);
 			return false;
 		});
 	}
-		
+
 	if ($("#filter").length) {
 		$("#filter").keyup(function () {
 			filterAvailableSections();
 			return false;
 		});
 	}
-	
-	if ($("#preview").length) {	
+
+	if ($("#preview").length) {
 		$("#preview").click(function () {
 			showArticlePreview();
 			return false;
 		});
 	}
-	
+
 });
 
 
@@ -599,7 +603,7 @@ function stacktrace() {
  var f = arguments.callee;
  var s = "";
  while (f) {
-  s += (re.exec(f))[1] + '('; 
+  s += (re.exec(f))[1] + '(';
   for (i = 0; i < f.arguments.length - 1; i++) {
    s += "'" + f.arguments[i] + "', ";
   }
