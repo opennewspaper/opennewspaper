@@ -44,9 +44,9 @@ class tx_newspaper_Exception extends Exception {
 
 #			t3lib_div::devlog('Exception thrown: ' . $message,
 #							  'newspaper',
-#							  3,
+#							  print_r(array_slice($backtrace, 1, self::BACKTRACE_DEPTH),
 #							  );
-            echo(str_replace("\n", "<br />\n", print_r(array_slice($backtrace, 1, self::BACKTRACE_DEPTH), 1)));
+#            echo(str_replace("\n", "<br />\n", print_r(array_slice($backtrace, 1, self::BACKTRACE_DEPTH), 1)));
 		}
         parent::__construct($message);
     }
