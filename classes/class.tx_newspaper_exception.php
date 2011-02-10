@@ -37,11 +37,16 @@ class tx_newspaper_Exception extends Exception {
 	 */
 	public function __construct($message, $write_message = true) {
 		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB && $write_message) {
+            $backtrace = array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH);
+            for ($i = 0; $i < sizeof($backtrace); $i++) {
+                unset($backtrace[$i]['object']);
+            }
+
 #			t3lib_div::devlog('Exception thrown: ' . $message,
 #							  'newspaper',
 #							  3,
-#							  array_slice(debug_backtrace(), 0, self::BACKTRACE_DEPTH));
-            print_r(array_slice(debug_backtrace(), 3, self::BACKTRACE_DEPTH-2));
+#							  );
+            print_r($backtrace);
 		}
         parent::__construct($message);
     }
