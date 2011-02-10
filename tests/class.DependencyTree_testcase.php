@@ -156,9 +156,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         tx_newspaper_DependencyTree::registerAction(array($this, 'pageActionIsExecuted'));
 
         $tree = $this->createTree();
-        echo('pre exe');
         $tree->executeActionsOnPages();
-        echo('post exe');
+
 
         $this->checkIsPageArray($this->called_pages);
 

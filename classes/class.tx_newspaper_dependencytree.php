@@ -133,7 +133,6 @@ class tx_newspaper_DependencyTree {
 
         foreach (self::$registered_actions as $action) {
             $function = $action['function'];
-            print_r($function);
             $when = $action['when'];
             $pages = array();
 
