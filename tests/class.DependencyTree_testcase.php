@@ -266,9 +266,9 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->checkSectionMatches($page);
 
         $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'), 'Page is not article page: ' . print_r($page, 1));
-        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Page is section page: ' . print_r($page, 1));
-        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Page is section page: ' . print_r($page, 1));
+        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'), 'Page is not article page: ' . print_r($page->getNewspaperPage(), 1));
+        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Page is section page: ' . print_r($page->getNewspaperPage(), 1));
+        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Page is section page: ' . print_r($page->getNewspaperPage(), 1));
     }
 
     private function checkSectionMatches(tx_newspaper_CachablePage $page) {

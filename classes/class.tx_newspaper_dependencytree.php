@@ -131,9 +131,8 @@ class tx_newspaper_DependencyTree {
     
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
-echo sizeof(self::$registered_actions)."<br />";
+
         tx_newspaper::startExecutionTimer();
-#        tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
 
         foreach (self::$registered_actions as $action) {
             $function = $action['function'];
