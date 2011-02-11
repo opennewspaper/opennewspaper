@@ -140,11 +140,11 @@ echo sizeof(self::$registered_actions)."<br />";
             $when = $action['when'];
             $pages = array();
 
-            if ($when && self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
-            if ($when && self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
-            if ($when && self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
-            if ($when && self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
-            if ($when && self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
+            if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
+            if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
+            if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
+            if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
+            if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
 
             call_user_func($function, $pages);
         }
