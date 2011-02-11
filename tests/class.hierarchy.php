@@ -170,13 +170,29 @@ class tx_newspaper_hierarchy {
 					'uid_foreign' => $this->related_article_uid,
 				)
 		);
+
+        $this->createControlTag();
 	}
 	
 	private function removeArticles() {
 		$this->delete($this->article_table, $this->article_uid);
 		$this->delete('tx_newspaper_article_sections_mm', 'uid_local ='.$this->article_uid.' and uid_foreign = '.$this->getParentSectionUid());
 	}	
-	
+
+    private function createControlTag() {
+        $this->control_tag_id = tx_newspaper::insertRows(
+			'tx_newspaper_tag', $this->control_tag_data
+        );
+        tx_newspaper::insertRows(
+                'tx_newspaper_article_tags_mm',
+                array(
+                    'uid_local' => $this->article_uid,
+                    'uid_foreign' => $this->control_tag_id
+                )
+        );
+        
+    }
+
 	private function createPages() {
 		foreach ($this->pagetype_data as $pagetype) {
 			$this->pagetype_uids[] = tx_newspaper::insertRows($this->pagetype_table, $pagetype);
@@ -338,7 +354,8 @@ class tx_newspaper_hierarchy {
 		"DELETE FROM `tx_newspaper_extra_image` WHERE deleted",
 		"DELETE FROM `tx_newspaper_extra_articlelist` WHERE description LIKE 'Unit Test%'",
 		"DELETE FROM `tx_newspaper_extra_articlelist` WHERE deleted",
-		"DELETE FROM `tx_newspaper_extra` WHERE deleted"
+		"DELETE FROM `tx_newspaper_extra` WHERE deleted",
+        "DELETE FROM `tx_newspaper_tag` WHERE tag = 'control tag'",
 	);
 	
 	private function delete($table, $uids_or_where) {
@@ -691,7 +708,18 @@ class tx_newspaper_hierarchy {
 		'inherits_from' => 0,
 	);
 	
-	
+	private $control_tag_data = array(
+        'tstamp' => 1234806796,
+        'crdate' => 1232647355,
+        'cruser_id' => 1,
+        'deleted' => 0,
+        'tag' => 'control tag',
+        'tag_type' => 2,
+        'ctrltag_cat' => 1
+    );
+    private $control_tag_id = 0;
+
+
 	private $extra_pos = array(
 		1024, 2048, 4096
 	);
