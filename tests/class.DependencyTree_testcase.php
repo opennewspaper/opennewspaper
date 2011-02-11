@@ -173,12 +173,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_ActionsForDifferentPageTypes_Article() {
-        tx_newspaper_DependencyTree::clearRegisteredActions();
-        $this->called_pages = array();
-        tx_newspaper_DependencyTree::registerAction(
-            array($this, 'pageActionIsExecuted'),
-            tx_newspaper_DependencyTree::ACT_ON_ARTICLES
-        );
+
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
 
         $tree = $this->createTree();
 
@@ -192,12 +188,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_ActionsForDifferentPageTypes_Section() {
-        tx_newspaper_DependencyTree::clearRegisteredActions();
-        $this->called_pages = array();
-        tx_newspaper_DependencyTree::registerAction(
-            array($this, 'pageActionIsExecuted'),
-            tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES
-        );
+
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
 
         $tree = $this->createTree();
 
@@ -211,19 +203,15 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_ActionsForDifferentPageTypes_Related() {
-        tx_newspaper_DependencyTree::clearRegisteredActions();
-        $this->called_pages = array();
-        tx_newspaper_DependencyTree::registerAction(
-            array($this, 'pageActionIsExecuted'),
-            tx_newspaper_DependencyTree::ACT_ON_RELATED_ARTICLES
-        );
+
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
 
         $tree = $this->createTree();
 
         $tree->executeActionsOnPages();
 
         $this->checkIsPageArray($this->called_pages);
-echo sizeof($this->called_pages) . "<br />";
+
         foreach ($this->called_pages as $i => $page) {
             $pagetype = $page->getNewspaperPage()->getPageType();
             $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($pagetype, 1));

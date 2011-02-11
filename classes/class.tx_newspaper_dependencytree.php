@@ -166,7 +166,6 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getRelatedArticlePages() {
-        echo "getRelatedArticlePages<br />";
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
         }
@@ -246,10 +245,6 @@ class tx_newspaper_DependencyTree {
             $sections = $related_article->getSections();
             $pages = getAllArticlePages($sections);
             $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages, $article));
-#            foreach ($sections as $section) {
-#                $pages = getAllPagesWithSectionListExtra($section);
-#                $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages));
-#            }
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
         $this->related_article_pages_filled = true;
