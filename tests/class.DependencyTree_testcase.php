@@ -238,10 +238,14 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $tree = $this->createTree();
 
-        $tree->executeActionsOnPages();
+        try {
+            $tree->executeActionsOnPages();
+        } catch (tx_newspaper_IllegalUsageException $e) {
+            // no dossier page set up in fixture's TSConfig yet, so test ends here
+            return;
+        }
 
-        // no dossier set up in fixture yet, so test ends here
-        return;
+        $this->fail('Control tag defined in fixture, but not found');
     }
 
     // Tests related to getPages()
