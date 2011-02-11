@@ -154,6 +154,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_executeActionsOnPages() {
         tx_newspaper_DependencyTree::clearRegisteredActions();
+        $this->called_pages = array();
         tx_newspaper_DependencyTree::registerAction(array($this, 'pageActionIsExecuted'));
 
         $tree = $this->createTree();
@@ -173,6 +174,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_ActionsForDifferentPageTypes_Article() {
         tx_newspaper_DependencyTree::clearRegisteredActions();
+        $this->called_pages = array();
         tx_newspaper_DependencyTree::registerAction(
             array($this, 'pageActionIsExecuted'),
             tx_newspaper_DependencyTree::ACT_ON_ARTICLES
@@ -191,6 +193,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_ActionsForDifferentPageTypes_Section() {
         tx_newspaper_DependencyTree::clearRegisteredActions();
+        $this->called_pages = array();
         tx_newspaper_DependencyTree::registerAction(
             array($this, 'pageActionIsExecuted'),
             tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES
@@ -201,10 +204,57 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $tree->executeActionsOnPages();
 
         $this->checkIsPageArray($this->called_pages);
-        echo sizeof ($this->called_pages)."<br />";
 
         foreach ($this->called_pages as $i => $page) {
-            echo "$i ";
+            $this->checkIsSectionPage($page);
+        }
+    }
+
+    public function test_ActionsForDifferentPageTypes_Related() {
+        tx_newspaper_DependencyTree::clearRegisteredActions();
+        $this->called_pages = array();
+        tx_newspaper_DependencyTree::registerAction(
+            array($this, 'pageActionIsExecuted'),
+            tx_newspaper_DependencyTree::ACT_ON_RELATED_ARTICLES
+        );
+
+        $tree = $this->createTree();
+
+        $tree->executeActionsOnPages();
+
+        $this->checkIsPageArray($this->called_pages);
+
+        foreach ($this->called_pages as $i => $page) {
+            $pagetype = $page->getNewspaperPage()->getPageType();
+            $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($pagetype, 1));
+        }
+    }
+    
+    public function test_ActionsForDifferentPageTypes_Articlelist() {
+
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
+
+        $tree = $this->createTree();
+
+        $tree->executeActionsOnPages();
+
+        $this->checkIsPageArray($this->called_pages);
+
+        foreach ($this->called_pages as $i => $page) {
+#            $this->checkIsSectionPage($page);
+        }
+    }
+    public function test_ActionsForDifferentPageTypes_Dossier() {
+
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_DOSSIER_PAGES);
+
+        $tree = $this->createTree();
+
+        $tree->executeActionsOnPages();
+
+        $this->checkIsPageArray($this->called_pages);
+
+        foreach ($this->called_pages as $i => $page) {
             $this->checkIsSectionPage($page);
         }
     }
@@ -259,7 +309,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->checkSectionMatches($page);
 
         $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($page, 1));
+        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($pagetype, 1));
     }
 
     private function checkIsSectionPage(tx_newspaper_CachablePage $page) {
@@ -294,6 +344,15 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
 
         return $tree;
+    }
+
+    private function setupRegisteredFunction($when) {
+        tx_newspaper_DependencyTree::clearRegisteredActions();
+        $this->called_pages = array();
+        tx_newspaper_DependencyTree::registerAction(
+            array($this, 'pageActionIsExecuted'),
+            $when
+        );
     }
 
     private $is_fixture_set_up = false;
