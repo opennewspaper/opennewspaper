@@ -274,7 +274,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     private function checkSectionMatches(tx_newspaper_CachablePage $page) {
         $article = $this->createArticle();
         $section = $page->getNewspaperPage()->getParentSection();
-        $this->assertEquals($section, $article->getPrimarySection());
+        $this->assertEquals($section->getUid(), $article->getPrimarySection()->getUid());
     }
 
     private function createArticle() {
