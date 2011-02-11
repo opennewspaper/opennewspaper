@@ -182,7 +182,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($this->called_pages);
 
-        foreach ($this->called_pages as $page) {
+        foreach ($this->called_pages as $i => $page) {
+            echo "$i ";
             $this->checkIsArticlePageForSection($page);
         }
     }
@@ -199,7 +200,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($this->called_pages);
 
-        foreach ($this->called_pages as $page) {
+        foreach ($this->called_pages as $i => $page) {
+            echo "$i ";
             $this->checkIsSectionPage($page);
         }
     }
@@ -254,16 +256,16 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $this->checkSectionMatches($page);
 
         $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page');
+        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($page, 1));
     }
 
     private function checkIsSectionPage(tx_newspaper_CachablePage $page) {
         $this->checkSectionMatches($page);
 
         $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'), 'Page is not article page');
-        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Page is section page');
-        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Page is section page');
+        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'), 'Page is not article page: ' . print_r($page, 1));
+        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Page is section page: ' . print_r($page, 1));
+        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Page is section page: ' . print_r($page, 1));
     }
 
     private function checkSectionMatches(tx_newspaper_CachablePage $page) {
