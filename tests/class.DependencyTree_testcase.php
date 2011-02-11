@@ -264,11 +264,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     private function checkIsSectionPage(tx_newspaper_CachablePage $page) {
         $this->checkSectionMatches($page);
-
-        $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'), 'Page is not article page');
-        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Page is section page: get_var = ' . print_r($pagetype, 1));
-        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Page is section page: get_value = ' . print_r($pagetype, 1));
+        $this->assertTrue(doesContainSectionListExtra($page->getNewspaperPage()), 'Page has section list');
     }
 
     private function checkSectionMatches(tx_newspaper_CachablePage $page) {
