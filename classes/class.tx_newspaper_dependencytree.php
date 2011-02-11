@@ -149,6 +149,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getArticlePages() {
+        echo "getArticlePages";
         if (!$this->article_pages_filled) {
             $this->addArticlePages($this->article);
         }
@@ -156,6 +157,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getSectionPages() {
+        echo "getSectionPages";
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
         }
@@ -163,6 +165,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getRelatedArticlePages() {
+        echo "getRelatedArticlePages";
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
         }
@@ -170,6 +173,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getArticlelistPages() {
+        echo "getArticlelistPages";
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
         }
@@ -177,6 +181,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getDossierPages() {
+        echo "getArticlePagetDossierPagesges";
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
         }
