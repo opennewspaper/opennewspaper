@@ -182,7 +182,26 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($this->called_pages);
 
-        $this->checkIsArticlePageForSection($this->called_pages[0]);
+        foreach ($this->called_pages as $page) {
+            $this->checkIsArticlePageForSection($page);
+        }
+    }
+
+    public function test_ActionsForDifferentPageTypes_Section() {
+        tx_newspaper_DependencyTree::registerAction(
+            array($this, 'pageActionIsExecuted'),
+            tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES
+        );
+
+        $tree = $this->createTree();
+
+        $tree->executeActionsOnPages();
+
+        $this->checkIsPageArray($this->called_pages);
+
+        foreach ($this->called_pages as $page) {
+            $this->checkIsSectionPage($page);
+        }
     }
 
     // Tests related to getPages()
@@ -232,12 +251,25 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     /// assert that affected page is article page of affected section
     private function checkIsArticlePageForSection(tx_newspaper_CachablePage $page) {
-        $article = $this->createArticle();
-        $section = $page->getNewspaperPage()->getParentSection();
-        $this->assertEquals($section, $article->getPrimarySection());
+        $this->checkSectionMatches($page);
 
         $pagetype = $page->getNewspaperPage()->getPageType();
         $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+    }
+
+    private function checkIsSectionPage(tx_newspaper_CachablePage $page) {
+        $this->checkSectionMatches($page);
+
+        $pagetype = $page->getNewspaperPage()->getPageType();
+        $this->assertFalse((bool)$pagetype->getAttribute('is_article_page'));
+        $this->assertEquals('', $pagetype->getAttribute('get_var'), 'Pagetype is Section Page');
+        $this->assertEquals('', $pagetype->getAttribute('get_value'), 'Pagetype is Section Page');
+    }
+
+    private function checkSectionMatches(tx_newspaper_CachablePage $page) {
+        $article = $this->createArticle();
+        $section = $page->getNewspaperPage()->getParentSection();
+        $this->assertEquals($section, $article->getPrimarySection());
     }
 
     private function createArticle() {
