@@ -127,7 +127,7 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
-
+print_r(self::$registered_actions); echo "<br />";
         tx_newspaper::startExecutionTimer();
 #        tx_newspaper::devlog('executeActionsOnPages()', $this->getPages($depth));
 
@@ -149,7 +149,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getArticlePages() {
-        echo "getArticlePages";
+        echo "getArticlePages<br />";
         if (!$this->article_pages_filled) {
             $this->addArticlePages($this->article);
         }
@@ -157,7 +157,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getSectionPages() {
-        echo "getSectionPages";
+        echo "getSectionPages<br />";
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
         }
@@ -165,7 +165,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getRelatedArticlePages() {
-        echo "getRelatedArticlePages";
+        echo "getRelatedArticlePages<br />";
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
         }
@@ -173,7 +173,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getArticlelistPages() {
-        echo "getArticlelistPages";
+        echo "getArticlelistPages<br />";
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
         }
@@ -181,7 +181,7 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getDossierPages() {
-        echo "getArticlePagetDossierPagesges";
+        echo "getDossierPages<br />";
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
         }
