@@ -174,7 +174,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_ActionsForDifferentPageTypes_Article() {
 
-        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLES);
 
         $tree = $this->createTree();
 
@@ -189,7 +189,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_ActionsForDifferentPageTypes_Section() {
 
-        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES);
 
         $tree = $this->createTree();
 
@@ -204,7 +204,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     public function test_ActionsForDifferentPageTypes_Related() {
 
-        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES);
+        $this->setupRegisteredFunction(tx_newspaper_DependencyTree::ACT_ON_RELATED_ARTICLES);
 
         $tree = $this->createTree();
 
