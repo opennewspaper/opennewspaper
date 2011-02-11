@@ -182,9 +182,9 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($this->called_pages);
 
-        echo sizeof($this->called_pages) . "<br />";
+#        echo sizeof($this->called_pages) . "<br />";
         foreach ($this->called_pages as $i => $page) {
-            echo "$i ";
+            echo "$i " . print_r($page->getGETParameters(), 1) . "<br />";
             $this->checkIsArticlePageForSection($page);
         }
     }
