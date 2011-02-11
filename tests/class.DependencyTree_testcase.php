@@ -153,6 +153,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_executeActionsOnPages() {
+        tx_newspaper_DependencyTree::clearRegisteredActions();
         tx_newspaper_DependencyTree::registerAction(array($this, 'pageActionIsExecuted'));
 
         $tree = $this->createTree();
@@ -171,6 +172,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_ActionsForDifferentPageTypes_Article() {
+        tx_newspaper_DependencyTree::clearRegisteredActions();
         tx_newspaper_DependencyTree::registerAction(
             array($this, 'pageActionIsExecuted'),
             tx_newspaper_DependencyTree::ACT_ON_ARTICLES
@@ -192,6 +194,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_ActionsForDifferentPageTypes_Section() {
+        tx_newspaper_DependencyTree::clearRegisteredActions();
         tx_newspaper_DependencyTree::registerAction(
             array($this, 'pageActionIsExecuted'),
             tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES

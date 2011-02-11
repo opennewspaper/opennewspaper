@@ -125,6 +125,10 @@ class tx_newspaper_DependencyTree {
         }
     }
 
+    static public function clearRegisteredActions() {
+        self::$registered_actions = array();
+    }
+    
     /// Executes the registered actions on all pages in the tree up to a specified depth.
     public function executeActionsOnPages($depth = 0) {
 print_r(self::$registered_actions); echo "<br />";
