@@ -173,7 +173,6 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getArticlelistPages() {
-        echo "getArticlelistPages<br />";
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
         }
@@ -181,7 +180,6 @@ class tx_newspaper_DependencyTree {
     }
 
     public function getDossierPages() {
-        echo "getDossierPages<br />";
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
         }
