@@ -223,7 +223,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         $tree->executeActionsOnPages();
 
         $this->checkIsPageArray($this->called_pages);
-
+echo sizeof($this->called_pages) . "<br />";
         foreach ($this->called_pages as $i => $page) {
             $pagetype = $page->getNewspaperPage()->getPageType();
             $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'), 'Page is article page: ' . print_r($pagetype, 1));
