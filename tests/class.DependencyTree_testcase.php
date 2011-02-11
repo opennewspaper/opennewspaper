@@ -182,15 +182,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($this->called_pages);
 
-        $page = $this->called_pages[0];
-
-        // assert that affected page is article page of affected section
-        $article = $this->createArticle();
-        $section = $page->getNewspaperPage()->getParentSection();
-        $this->assertEquals($section, $article->getPrimarySection());
-
-        $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+        $this->checkIsArticlePageForSection($this->called_pages[0]);
     }
 
     // Tests related to getPages()
@@ -203,15 +195,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->assertTrue(sizeof($pages) > 0);
 
-        $page = $pages[0];
-
-        // assert that affected page is article page of affected section
-        $article = $this->createArticle();
-        $section = $page->getNewspaperPage()->getParentSection();
-        $this->assertEquals($section, $article->getPrimarySection());
-
-        $pagetype = $page->getNewspaperPage()->getPageType();
-        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+        $this->checkIsArticlePageForSection($pages[0]);
     }
 
 
@@ -246,12 +230,23 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
         }
     }
 
+    /// assert that affected page is article page of affected section
+    private function checkIsArticlePageForSection(tx_newspaper_CachablePage $page) {
+        $article = $this->createArticle();
+        $section = $page->getNewspaperPage()->getParentSection();
+        $this->assertEquals($section, $article->getPrimarySection());
+
+        $pagetype = $page->getNewspaperPage()->getPageType();
+        $this->assertTrue((bool)$pagetype->getAttribute('is_article_page'));
+    }
+
     private function createArticle() {
         $uid = $this->fixture->getArticleUid();
         $article = new tx_newspaper_Article($uid);
 
         return $article;
     }
+
     private function createArticleList() {
 
         $al_uid = $this->fixture->getArticlelistUid();
@@ -271,9 +266,9 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
     private $is_fixture_set_up = false;
 }
 
-    function pageActionIsExecuted(tx_newspaper_Page $page) {
-        echo $page->getUid() . "<br >";
-    }
+function pageActionIsExecuted(tx_newspaper_Page $page) {
+    echo $page->getUid() . "<br >";
+}
 
 function debugStuff($stuff) {
     echo '<p>'.
