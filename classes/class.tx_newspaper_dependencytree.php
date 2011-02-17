@@ -266,7 +266,7 @@ class tx_newspaper_DependencyTree {
         }
  
  */
-        tx_newspaper::devlog('addDossierPages', $dossier_page);
+        tx_newspaper::devlog('addDossierPages', $dossier_page->__toString());
 
         $this->dossier_pages_filled = true;
 
