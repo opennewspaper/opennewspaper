@@ -562,10 +562,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
                 tx_newspaper::devlog('oops!');
                 return;
             }
+            tx_newspaper::devlog('readAttributesFromDB ..', array($parent->getAttribute('uid'), $type->getID()));
 
 			$this->attributes = tx_newspaper::selectOneRow(
                 '*', $this->getTable(),
-				'section = ' . $this->getParentSection()->getAttribute('uid') .
+				'section = ' . $parent->getAttribute('uid') .
 				' AND pagetype_id = ' . $type->getID()
 			);
             tx_newspaper::devlog('readAttributesFromDB attr', $this->attributes());
