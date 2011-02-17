@@ -372,8 +372,9 @@ function getDossierPage() {
         throw new tx_newspaper_IllegalUsageException('Typo3 page ' . $typo3page . ' is not associated with a newspaper section');
     }
     tx_newspaper::devlog('getDossierPage section', $dossier_section->getUid());
-
-    return new tx_newspaper_Page($dossier_section);
+    $page = new tx_newspaper_Page($dossier_section);
+    $page->getAttribute('uid'); // read attributes from db
+    return $page;
 }
 
 function getAllArticleListPages(array $article_lists) {
