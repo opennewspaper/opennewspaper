@@ -616,7 +616,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
             'tx_newspaper_associated_section', 'pages',
             'uid = ' . $typo_page_id
         );
-        $section_uid = intval($row['uid']);
+        $section_uid = intval($row['tx_newspaper_associated_section']);
 
         tx_newspaper::devlog('getSectionForTypo3Page('.$typo_page_id.')', array($row, $section_uid));
         if (!$section_uid) return null;
