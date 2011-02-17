@@ -554,14 +554,19 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		} else {
-            if (! $this->getParentSection() instanceof tx_newspaper_Section ) {
-                tx_newspaper::devlog('oops! no?');
+            $parent = $this->getParentSection();
+            if (! $parent instanceof tx_newspaper_Section ) return;
+
+            $type = $this->getPageType();
+            if (!$type instanceof tx_newspaper_PageType) {
+                tx_newspaper::devlog('oops!');
                 return;
             }
+
 			$this->attributes = tx_newspaper::selectOneRow(
                 '*', $this->getTable(),
 				'section = ' . $this->getParentSection()->getAttribute('uid') .
-				' AND pagetype_id = ' . $this->getPageType()->getID()
+				' AND pagetype_id = ' . ->getID()
 			);
             tx_newspaper::devlog('readAttributesFromDB attr', $this->attributes());
             tx_newspaper::devlog('readAttributesFromDB query', tx_newspaper::$query);
