@@ -548,17 +548,22 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	 *  out here.
 	 */
 	protected function readAttributesFromDB() {
+        tx_newspaper::devlog('readAttributesFromDB');
+
 		if ($this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		} else {
+            tx_newspaper::devlog('readAttributesFromDB parent', $this->getParentSection());
             if (! $this->getParentSection() instanceof tx_newspaper_Section ) return;
 			$this->attributes = tx_newspaper::selectOneRow(
                 '*', $this->getTable(),
 				'section = ' . $this->getParentSection()->getAttribute('uid') .
 				' AND pagetype_id = ' . $this->getPageType()->getID()
 			);
+            tx_newspaper::devlog('readAttributesFromDB attr', $this->attributes());
+            tx_newspaper::devlog('readAttributesFromDB query', tx_newspaper::$query);
 			$this->setUid($this->attributes['uid']);
 		}
 	}
