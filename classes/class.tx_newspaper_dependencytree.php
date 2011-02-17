@@ -262,7 +262,7 @@ class tx_newspaper_DependencyTree {
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
             );
             $this->dossier_pages[] = $page;
-            $temp[] = $page->getURL();
+            $temp[] = $page->getGETParameters();
         }
         tx_newspaper::devlog('addDossierPages', $temp);
 
