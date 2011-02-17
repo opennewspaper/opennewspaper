@@ -61,8 +61,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
         
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
-        tx_newspaper::devlog('tagzone', array($control_tags, $extras));
-		
+
 		if (!$extras) return;
 		
 		$rendered_extras = array();
