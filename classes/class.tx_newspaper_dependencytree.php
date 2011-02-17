@@ -256,7 +256,7 @@ class tx_newspaper_DependencyTree {
         if (empty($tags)) return;
 
         $temp = array();
-        $dossier_page = getDossierPage();
+/*      $dossier_page = getDossierPage();
         foreach ($tags as $tag) {
             $page = new tx_newspaper_CachablePage(
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
@@ -264,6 +264,8 @@ class tx_newspaper_DependencyTree {
             $this->dossier_pages[] = $page;
             $temp[] = $page->getGETParameters();
         }
+ 
+ */
         tx_newspaper::devlog('addDossierPages', $temp);
 
         $this->dossier_pages_filled = true;
