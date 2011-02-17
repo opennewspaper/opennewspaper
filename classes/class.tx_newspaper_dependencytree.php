@@ -255,7 +255,6 @@ class tx_newspaper_DependencyTree {
         $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
         if (empty($tags)) return;
 
-        tx_newspaper::devlog('addDossierPages 1');
         $temp = array();
         try {
             $dossier_page = getDossierPage();
@@ -372,6 +371,7 @@ function getDossierPage() {
     if (!$dossier_section instanceof tx_newspaper_Section) {
         throw new tx_newspaper_IllegalUsageException('Typo3 page ' . $typo3page . ' is not associated with a newspaper section');
     }
+    tx_newspaper::devlog('getDossierPage section', $dossier_section->getUid());
 
     return new tx_newspaper_Page($dossier_section);
 }
