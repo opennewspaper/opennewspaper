@@ -256,19 +256,14 @@ class tx_newspaper_DependencyTree {
         if (empty($tags)) return;
 
         $dossier_page = getDossierPage();
-        tx_newspaper::devlog('addDossierPages 2', $dossier_page->getUid());
+        if (!$dossier_page instanceof tx_newspaper_Page) return;
 
-        $temp = array();
         foreach ($tags as $tag) {
             $page = new tx_newspaper_CachablePage(
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
             );
             $this->dossier_pages[] = $page;
-            $temp[] = $page->getGETParameters();
         }
- 
-        tx_newspaper::devlog('addDossierPages 3', $temp);
-
 
         $this->dossier_pages_filled = true;
 
@@ -376,12 +371,8 @@ function getDossierPage() {
         ' AND pagetype_id = ' . '1'
     );
     $uid = intval($row['uid']);
-    tx_newspaper::devlog('getDossierPage page uid', $uid);
 
-    $page = new tx_newspaper_Page($uid);
-#    $page->getAttribute('uid'); // read attributes from db
-#    tx_newspaper::devlog('getDossierPage page uid read');
-    return $page;
+    return new tx_newspaper_Page($uid);
 }
 
 function getAllArticleListPages(array $article_lists) {
