@@ -373,7 +373,9 @@ function getDossierPage() {
     }
     tx_newspaper::devlog('getDossierPage section', $dossier_section->getUid());
     $page = new tx_newspaper_Page($dossier_section);
+    tx_newspaper::devlog('getDossierPage page created');
     $page->getAttribute('uid'); // read attributes from db
+    tx_newspaper::devlog('getDossierPage page uid read');
     return $page;
 }
 
