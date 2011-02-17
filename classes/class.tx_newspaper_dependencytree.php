@@ -257,7 +257,11 @@ class tx_newspaper_DependencyTree {
 
         tx_newspaper::devlog('addDossierPages 1');
         $temp = array();
-      $dossier_page = getDossierPage();
+        try {
+            $dossier_page = getDossierPage();
+        } catch (Exception $e) {
+            tx_newspaper::devlog('addDossierPages Error');
+        }
 /*        foreach ($tags as $tag) {
             $page = new tx_newspaper_CachablePage(
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
@@ -267,7 +271,7 @@ class tx_newspaper_DependencyTree {
         }
  
  */
-        tx_newspaper::devlog('addDossierPages 2', $dossier_page->__toString());
+        tx_newspaper::devlog('addDossierPages 2', $dossier_page->getUid());
 
         $this->dossier_pages_filled = true;
 
