@@ -554,7 +554,6 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		} else {
-            tx_newspaper::devlog('readAttributesFromDB parent', $this->getParentSection());
             if (! $this->getParentSection() instanceof tx_newspaper_Section ) {
                 tx_newspaper::devlog('oops! no?');
                 return;
