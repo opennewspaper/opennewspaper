@@ -255,13 +255,16 @@ class tx_newspaper_DependencyTree {
         $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
         if (empty($tags)) return;
 
+        $temp = array();
         $dossier_page = getDossierPage();
         foreach ($tags as $tag) {
-            $this->dossier_pages[] = new tx_newspaper_CachablePage(
+            $page = new tx_newspaper_CachablePage(
                 $dossier_page, null, array(tx_newspaper::getDossierGETParameter() => $tag->getUid())
             );
+            $this->dossier_pages[] = $page;
+            $temp[] = $page->getURL();
         }
-        tx_newspaper::devlog('addDossierPages'/*, $this->dossier_pages*/);
+        tx_newspaper::devlog('addDossierPages', $temp);
 
         $this->dossier_pages_filled = true;
 
