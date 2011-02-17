@@ -618,6 +618,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
         );
         $section_uid = intval($row['uid']);
 
+        tx_newspaper::devlog('getSectionForTypo3Page('.$typo_page_id.')', array($row, $section_uid));
         if (!$section_uid) return null;
 
         return new tx_newspaper_Section($section_uid);
