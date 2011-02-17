@@ -566,7 +566,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 			$this->attributes = tx_newspaper::selectOneRow(
                 '*', $this->getTable(),
 				'section = ' . $this->getParentSection()->getAttribute('uid') .
-				' AND pagetype_id = ' . ->getID()
+				' AND pagetype_id = ' . $type->getID()
 			);
             tx_newspaper::devlog('readAttributesFromDB attr', $this->attributes());
             tx_newspaper::devlog('readAttributesFromDB query', tx_newspaper::$query);
