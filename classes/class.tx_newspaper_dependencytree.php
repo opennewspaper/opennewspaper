@@ -255,6 +255,7 @@ class tx_newspaper_DependencyTree {
         $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
         if (empty($tags)) return;
 
+        tx_newspaper::devlog('addDossierPages 1');
         $temp = array();
       $dossier_page = getDossierPage();
 /*        foreach ($tags as $tag) {
@@ -266,7 +267,7 @@ class tx_newspaper_DependencyTree {
         }
  
  */
-        tx_newspaper::devlog('addDossierPages', $dossier_page->__toString());
+        tx_newspaper::devlog('addDossierPages 2', $dossier_page->__toString());
 
         $this->dossier_pages_filled = true;
 
