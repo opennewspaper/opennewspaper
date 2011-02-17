@@ -372,10 +372,18 @@ function getDossierPage() {
         throw new tx_newspaper_IllegalUsageException('Typo3 page ' . $typo3page . ' is not associated with a newspaper section');
     }
     tx_newspaper::devlog('getDossierPage section', $dossier_section->getUid());
-    $page = new tx_newspaper_Page($dossier_section);
-    tx_newspaper::devlog('getDossierPage page created');
-#    $page->getAttribute('uid'); // read attributes from db
-#    tx_newspaper::devlog('getDossierPage page uid read');
+
+    $row = tx_newspaper::selectOneRow(
+        'uid', 'tx_newspaper_page',
+        'section = ' . $dossier_section->getUid() .
+        ' AND pagetype_id = ' . '1'
+    );
+    $uid = intval($row['uid']);
+    tx_newspaper::devlog('getDossierPage page uid', $uid);
+
+    $page = new tx_newspaper_Page($uid);
+    $page->getAttribute('uid'); // read attributes from db
+    tx_newspaper::devlog('getDossierPage page uid read');
     return $page;
 }
 
