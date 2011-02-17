@@ -529,9 +529,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  	/** \return tx_newspaper_PageType of the current tx_newspaper_Page
  	 */
  	public function getPageType() {
-# 		if (!$this->pagetype) {
+ 		if (!$this->pagetype) {
  			$this->pagetype = new tx_newspaper_PageType(intval($this->getAttribute('pagetype_id')));
-# 		} 
+ 		}
  		return $this->pagetype; 
  	}
  	
@@ -558,7 +558,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
             $parent = $this->getParentSection();
             if (! $parent instanceof tx_newspaper_Section ) return;
 
-            $type = $this->getPageType();
+            $type = $this->pagetype;
             if (!$type instanceof tx_newspaper_PageType) return;
 
 			$this->attributes = tx_newspaper::selectOneRow(
