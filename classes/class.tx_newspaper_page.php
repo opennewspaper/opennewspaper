@@ -548,6 +548,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	 *  out here.
 	 */
 	protected function readAttributesFromDB() {
+        tx_newspaper::devlog('readAttributesFromDB');
 
 		if ($this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
