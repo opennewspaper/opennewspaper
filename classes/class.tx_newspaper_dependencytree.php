@@ -364,6 +364,9 @@ function doesContainSectionListExtra(tx_newspaper_Page $page) {
 function getDossierPage() {
     $typo3page = tx_newspaper::getDossierPageID();
     $dossier_section = tx_newspaper_Section::getSectionForTypo3Page($typo3page);
+    if (!$dossier_section instanceof tx_newspaper_Section) {
+        throw new tx_newspaper_IllegalUsageException('Typo3 page ' . $typo3page . ' is not associated with a newspaper section');
+    }
 
     return new tx_newspaper_Page($dossier_section);
 }
