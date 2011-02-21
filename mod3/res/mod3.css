@@ -1,35 +1,35 @@
-{* this is a smarty template though it us called css *}
+{* this is a smarty template though it's called *.css *}
 {literal}
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
   overflow: auto;
 }
 .mod3_table {
-  table-layout: auto; 
-  border: 1px solid gray; 
-  padding: 0; 
-  margin: 0 0 21px 0; 
- border-collapse: collapse; 
+  table-layout: auto;
+  border:1px solid gray;
+  padding:0;
+  margin:0 0 21px 0;
+ border-collapse:collapse;
 }
 .mod3_td {
-  vertical-align: top;
-  border: 1px solid #e8e8e8;
+  vertical-align:top;
+  border:1px solid #e8e8e8;
 }
 .bg1 {
-  background-color: #f0f0f0;
+  background-color:#f0f0f0;
 }
 .bg2 {
-  background-color: #d0d0d0;
+  background-color:#d0d0d0;
 }
 .kicker {
-  color: #c61940;
+  color:#c61940;
 }
 .comment_box {
-  display: none;
-  background-color: white;
-} 
+  display:none;
+  background-color:white;
+}
 .gray {
-  color: #909090;
+  color:#909090;
 }
 
 
@@ -53,6 +53,6 @@ body#ext-newspaper-mod6-index-php input.submit {
 	font-weight:bold;
 }
 
-</style> 
+</style>
 
 {/literal}
