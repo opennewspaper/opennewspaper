@@ -1,9 +1,13 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
-t3lib_extMgm::addPItoST43($_EXTKEY, 'pi1/class.tx_newspaper_pi1.php', '_pi1', 'list_type', 1);
+  ## Extending TypoScript from static template uid=43 to set up userdefined tag:
+t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
+	tt_content.CSS_editor.ch.tx_newspaper_pi1 = < plugin.tx_newspaper_pi1.CSS_editor
+',43);
+
+
+t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_newspaper_pi1.php','_pi1','list_type',1);
 
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_section=1
@@ -14,9 +18,9 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
-	# CONFIGURATION of RTE in table "tx_newspaper_article", field "text_910b25c266"
+	# CONFIGURATION of RTE in table "tx_newspaper_article", field "text"
 	# ***************************************************************************************
-RTE.config.tx_newspaper_article.text_910b25c266 {
+RTE.config.tx_newspaper_article.text {
   hidePStyleItems = H1, H4, H5, H6
   proc.exitHTMLparser_db=1
   proc.exitHTMLparser_db {
@@ -42,9 +46,9 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
-	# CONFIGURATION of RTE in table "tx_newspaper_extra_textbox", field "text_a431c4d31b"
+	# CONFIGURATION of RTE in table "tx_newspaper_extra_textbox", field "text"
 	# ***************************************************************************************
-RTE.config.tx_newspaper_extra_textbox.text_a431c4d31b {
+RTE.config.tx_newspaper_extra_textbox.text {
   hidePStyleItems = H1, H4, H5, H6
   proc.exitHTMLparser_db=1
   proc.exitHTMLparser_db {

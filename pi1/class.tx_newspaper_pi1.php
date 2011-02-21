@@ -46,7 +46,6 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	 *  \return	The content that is displayed on the website
 	 */
 	function main($content,$conf)	{
-
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();

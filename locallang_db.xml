@@ -16,11 +16,11 @@
 			<label index="tx_newspaper_extra_image.normalized_filename">File name of the image, normalized for SEO</label>
 			<label index="tx_newspaper_extra_image.kicker">Kicker</label>
 			<label index="tx_newspaper_extra_image.source">Image Source</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.0">Photo</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.1">Diagram</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.2">Table</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.3">Screenshot</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539">Image type</label>
+			<label index="tx_newspaper_extra_image.type.I.0">Photo</label>
+			<label index="tx_newspaper_extra_image.type.I.1">Diagram</label>
+			<label index="tx_newspaper_extra_image.type.I.2">Table</label>
+			<label index="tx_newspaper_extra_image.type.I.3">Screenshot</label>
+			<label index="tx_newspaper_extra_image.type">Image type</label>
 			<label index="tx_newspaper_extra_image.alttext">Alt-text</label>
 			<label index="tx_newspaper_extra_image.tags">Tags</label>
 			<label index="tx_newspaper_section">Section</label>
@@ -56,7 +56,7 @@
 			<label index="tx_newspaper_article.kicker_list">Kicker for list view, if different</label>
 			<label index="tx_newspaper_article.title_list">Title for list view, if different</label>
 			<label index="tx_newspaper_article.teaser_list">Teaser for list view, if different</label>
-			<label index="tx_newspaper_article.text_910b25c266">Article text</label>
+			<label index="tx_newspaper_article.text">Article text</label>
 			<label index="tx_newspaper_article.no_rte">Do not use the RTE</label>
 			<label index="tx_newspaper_article.publish_date">Publish date</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
@@ -105,7 +105,7 @@
 			<label index="tx_newspaper_log.table_name">Table</label>
 			<label index="tx_newspaper_log.table_uid">Table uid</label>
 			<label index="tx_newspaper_log.be_user">Backend user</label>
-			<label index="tx_newspaper_log.action_12e2aa009c">Action</label>
+			<label index="tx_newspaper_log.action">Action</label>
 			<label index="tx_newspaper_log.comment">Comment</label>
 			<label index="tx_newspaper_articletype">Article type</label>
 			<label index="tx_newspaper_articletype.title">Title</label>
@@ -124,7 +124,7 @@
 			<label index="tx_newspaper_extra_textbox">Extra: Text box</label>
 			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_textbox.title">Title</label>
-			<label index="tx_newspaper_extra_textbox.text_a431c4d31b">Text</label>
+			<label index="tx_newspaper_extra_textbox.text">Text</label>
 			<label index="tx_newspaper_extra_textbox.image">Image</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: External links</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Add to Pool</label>
@@ -229,11 +229,11 @@
 			<label index="tx_newspaper_extra_image.normalized_filename">Dateiname des Bildes, wird fuer SEO normalisiert</label>
 			<label index="tx_newspaper_extra_image.kicker">Dachzeile</label>
 			<label index="tx_newspaper_extra_image.source">Bildquelle</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.0">Foto</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.1">Grafik</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.2">Tabelle</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539.I.3">Screenshot</label>
-			<label index="tx_newspaper_extra_image.type_8fe8a1e539">Bildtyp</label>
+			<label index="tx_newspaper_extra_image.type.I.0">Foto</label>
+			<label index="tx_newspaper_extra_image.type.I.1">Grafik</label>
+			<label index="tx_newspaper_extra_image.type.I.2">Tabelle</label>
+			<label index="tx_newspaper_extra_image.type.I.3">Screenshot</label>
+			<label index="tx_newspaper_extra_image.type">Bildtyp</label>
 			<label index="tx_newspaper_extra_image.alttext">Alt-Text</label>
 			<label index="tx_newspaper_extra_image.tags">Schlagworte</label>
 			<label index="tx_newspaper_section">Ressort</label>
@@ -269,7 +269,7 @@
 			<label index="tx_newspaper_article.kicker_list">Dachzeile für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.title_list">Titel für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.teaser_list">Teaser für Listenansicht, wenn anders</label>
-			<label index="tx_newspaper_article.text_910b25c266">Artikeltext</label>
+			<label index="tx_newspaper_article.text">Artikeltext</label>
 			<label index="tx_newspaper_article.no_rte">RTE nicht verwenden</label>
 			<label index="tx_newspaper_article.publish_date">Veröffentlichungsdatum</label>
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
@@ -318,7 +318,7 @@
 			<label index="tx_newspaper_log.table_name">Table</label>
 			<label index="tx_newspaper_log.table_uid">Table uid</label>
 			<label index="tx_newspaper_log.be_user">Backend-User</label>
-			<label index="tx_newspaper_log.action_12e2aa009c">Aktion</label>
+			<label index="tx_newspaper_log.action">Aktion</label>
 			<label index="tx_newspaper_log.comment">Kommentar</label>
 			<label index="tx_newspaper_articletype">Artikeltyp</label>
 			<label index="tx_newspaper_articletype.title">Titel</label>
@@ -337,7 +337,7 @@
 			<label index="tx_newspaper_extra_textbox">Extra: Textkasten</label>
 			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_textbox.title">Titel</label>
-			<label index="tx_newspaper_extra_textbox.text_a431c4d31b">Text</label>
+			<label index="tx_newspaper_extra_textbox.text">Text</label>
 			<label index="tx_newspaper_extra_textbox.image">Bild</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: Externe Links</label>
 			<label index="tx_newspaper_extra_externallinks.pool">Zum Pool hinzufügen</label>

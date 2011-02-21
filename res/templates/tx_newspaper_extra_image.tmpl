@@ -1,45 +1,43 @@
 
-<!-- start res/templates/tx_newspaper_extra_image.tmpl -->
+<!-- start artikelseite/hauptspalte/tx_newspaper_extra_image.tmpl -->
+
 
 {* Image
-
    Variables:
 
-   $basepath        path to the image directories
-   $sizes           list of the present sizes
-   $template_set    template set used, if any
+   $basepath		path to the image directories
+   $sizes			list of the present sizes
+   $template_set	template set used, if any
 
-   $attributes      attributes as stored in DB. notable attributes include:
-        title       title to be displayed above the image
-        image_file  name of image file  
-        caption     caption line to be displayed under the image
-        normalized_filename
-        kicker  
-        credit  
-        source  
-        type        Image type (Photo, diagram, stone carving, whatever) as index
-        alttext
-        tags 
+   $attributes		attributes as stored in DB. notable attributes include:
+   	 	title		title to be displayed above the image
+	 	image_file	name of image file  
+	 	caption		caption line to be displayed under the image
+	 	normalized_filename
+	 	kicker  
+	 	credit  
+	 	source  
+	 	type  	
+	 	alttext
+	 	tags 
 
-   $extra_attributes    attributes for abstract extra record as stored in DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
 
-   $type            Image type (Photo, diagram, stone carving, whatever) as string
-
-   $extra               the rendered extra as PHP object
 *}
 
-<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+<h2>temporary extra_image.tmpl</h2>
 
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
-    <img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}" 
-         alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
-{if $attributes.caption}<p>{$attributes.caption}</p>{/if}
-{if $attributes.credit}<p>Credit: {$attributes.credit}</p>{/if}
-{if $attributes.source}
-    <p>
-        {if $type}{$type}{else}Source{/if}:
-        {$attributes.source}
-    </p>
+{if $dossier_link}
+        <a href="{$dossier_link}">
 {/if}
-<!--  end  res/templates/tx_newspaper_extra_image.tmpl -->
+        <img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}"
+                 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+{if $dossier_link}
+        </a>
+{/if}
+
+{if $attributes.caption}<p>{$attributes.caption}</p>{/if}
+
+<!--  end  artikelseite/hauptspalte/tx_newspaper_extra_image.tmpl -->
