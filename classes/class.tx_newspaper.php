@@ -5,22 +5,22 @@
  *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
  *  used, all utility functions for \c newspaper are moved into class tx_newspaper,
  *  which simulates a namespace.
- * 
- *  \todo Reorder according to functionality (e.g. DB operations, class logic 
+ *
+ *  \todo Reorder according to functionality (e.g. DB operations, class logic
  * 		etc.)
  */
 class tx_newspaper  {
 
 	///	Whether to use Typo3's command- and datamap functions for DB operations
 	/** If this constant is set to true, Typo3 command- or datamap functions are
-	 *  used wherever appropriate. 
-	 * 
-	 *  These functions have side effects which are not yet fully explored and 
+	 *  used wherever appropriate.
+	 *
+	 *  These functions have side effects which are not yet fully explored and
 	 *  seem to make more trouble than they're worth. That's why they're turned
-	 *  off currently.  
+	 *  off currently.
 	 */
 	const use_datamap = false;
-	
+
 	/// The \c GET parameter which determines the article UID
 	const article_get_parameter = 'art';
 	///	The \c GET parameter which determines which page type is displayed
@@ -31,25 +31,25 @@ class tx_newspaper  {
 
     /// GET-parameter describing the wanted control tag for a dossier
     const default_dossier_get_parameter = 'dossier';
-    
+
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
-    
+
 	/// Returns whether a specified record is available in the DB
 	public static function isPresent($table, $where, $use_enable_fields = true) {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'uid', $table, 
+			'uid', $table,
 			$where . ($use_enable_fields? self::enableFields($table): ''));
 		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		
+
 		if (!$res) return false;
         $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        if (!$row['uid']) return false; 
+        if (!$row['uid']) return false;
         return true;
-		
+
 	}
 
 	/// Execute a \c SELECT query and return the amount of records in the result set
@@ -64,15 +64,15 @@ class tx_newspaper  {
 	public static function countRows($table, $where='1', $groupBy='') {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
-		
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) {
 			$GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		}
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			'COUNT(*) AS c', 
-			$table, 
-			$where . self::enableFields($table), 
+			'COUNT(*) AS c',
+			$table,
+			$where . self::enableFields($table),
 			$groupBy
 		);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
@@ -82,9 +82,9 @@ class tx_newspaper  {
 	        if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	$count = $row['c'];
 	        }
-	        
+
 	        self::writeNewspaperLogEntry('logDbSelect', 'selectRows, #results: ' . $count);
-	        
+
 			return $count;
 		} else {
 			throw new tx_newspaper_NoResException(self::$query);
@@ -93,7 +93,7 @@ class tx_newspaper  {
 
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
-	 * 
+	 *
 	 *  \param $fields Fields to \c SELECT
 	 *  \param $table Table to \c SELECT \c FROM
 	 *  \param $where \c WHERE - clause (defaults to selecting all records)
@@ -104,7 +104,7 @@ class tx_newspaper  {
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
 	 */
-	public static function selectZeroOrOneRows($fields, $table, $where = '1', 
+	public static function selectZeroOrOneRows($fields, $table, $where = '1',
 											   $groupBy = '', $orderBy = '', $limit = '') {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
@@ -112,22 +112,22 @@ class tx_newspaper  {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where . self::enableFields($table), 
+			$fields, $table, $where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
-		
+
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
-        
+
         self::writeNewspaperLogEntry('logDbSelect', 'selectZeroOrOneRows, success');
-        
+
         return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
 
 	/// Execute a \c SELECT query, check the result, return \em exactly one record
 	/** enableFields() are taken into account.
-	 * 
+	 *
 	 *  \param $fields Fields to \c SELECT
 	 *  \param $table Table to \c SELECT \c FROM
 	 *  \param $where \c WHERE - clause (defaults to selecting all records)
@@ -137,39 +137,39 @@ class tx_newspaper  {
 	 *  \return The result of the query as associative array
 	 *  \throw tx_newspaper_NoResException if no result is found, probably due
 	 * 		to a SQL syntax error
-	 *  \throw tx_newspaper_EmptyResultException if the SQL query returns no 
+	 *  \throw tx_newspaper_EmptyResultException if the SQL query returns no
 	 * 		result
 	 */
 	public static function selectOneRow($fields, $table, $where = '1',
 										$groupBy = '', $orderBy = '', $limit = '') {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
-		
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, $where . self::enableFields($table), 
+			$fields, $table, $where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
-		
+
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
-        
+
         $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
+
 		if (!$row) {
 			throw new tx_newspaper_EmptyResultException(self::$query);
 		}
 
 		self::writeNewspaperLogEntry('logDbSelect', 'selectOneRow, success');
 
-		return $row;		
+		return $row;
 	}
 
 	/// Execute a \c SELECT query, check the result, return all records
 	/** enableFields() are taken into account.
-	 * 
+	 *
 	 *  \param $fields Fields to \c SELECT
 	 *  \param $table Table to \c SELECT \c FROM
 	 *  \param $where \c WHERE - clause (defaults to selecting all records)
@@ -184,12 +184,12 @@ class tx_newspaper  {
 									  $groupBy = '', $orderBy = '', $limit = '') {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
-		
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, 
-			$where . self::enableFields($table), 
+			$fields, $table,
+			$where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
 
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
@@ -199,16 +199,16 @@ class tx_newspaper  {
 	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	$rows[] = $row;
 	        }
-	        
+
 	        self::writeNewspaperLogEntry('logDbSelect', 'selectRows, #results: ' . sizeof($rows));
-	        
+
 			return $rows;
 		} else throw new tx_newspaper_NoResException(self::$query);
 	}
 
 	/// Execute a \c SELECT query, check the result, return all records
 	/** enableFields() are NOT taken into account, that's why this method is called selectRowsDIRECT
-	 * 
+	 *
 	 *  \param $fields Fields to \c SELECT
 	 *  \param $table Table to \c SELECT \c FROM
 	 *  \param $where \c WHERE - clause (defaults to selecting all records)
@@ -223,14 +223,14 @@ class tx_newspaper  {
 									  $groupBy = '', $orderBy = '', $limit = '') {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
-		
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-			$fields, $table, 
-			$where, 
-			$groupBy, 
-			$orderBy, 
+			$fields, $table,
+			$where,
+			$groupBy,
+			$orderBy,
 			$limit
 		);
 
@@ -240,9 +240,9 @@ class tx_newspaper  {
 	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 	        	$rows[] = $row;
 	        }
-	        
+
 	        self::writeNewspaperLogEntry('logDbSelect', 'selectRowsDirect, #results: ' . sizeof($rows));
-	        
+
 			return $rows;
 		} else {
 			throw new tx_newspaper_NoResException(self::$query);
@@ -250,7 +250,7 @@ class tx_newspaper  {
 	}
 
 	/// Execute a \c SELECT query on M-M related tables
-	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the 
+	/** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the
 	 *	SQL query is retained for debugging as \c tx_newspaper::$query.
 	 *
 	 *	\param $select Field list for \c SELECT
@@ -273,7 +273,7 @@ class tx_newspaper  {
 										 $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
 
 		self::writeFunctionAndArgumentsToLog('logDbSelect');
-		
+
 		if($foreign_table == $local_table) {
 			$foreign_table_as = $foreign_table . uniqid('_join');
 		}
@@ -284,14 +284,14 @@ class tx_newspaper  {
 			$mmWhere .= ($foreign_table_as ? $foreign_table_as : $foreign_table) .
 						'.uid='.$mm_table.'.uid_foreign';
 		}
-		
+
 		if ($local_table) $table = $local_table . ',';
 		$table .= $mm_table;
 		if ($foreign_table) {
 			$table .= ',' . $foreign_table;
 			if ($foreign_table_as) $table .= ' AS '.$foreign_table_as;
 		}
-		
+
 		return tx_newspaper::selectRows(
 			$select, $table, $mmWhere.' '.$whereClause,
 			$groupBy, $orderBy, $limit
@@ -299,11 +299,11 @@ class tx_newspaper  {
 	}
 
 	/// Inserts a record into a SQL table
-	/** If the class constant \c tx_newspaper::use_datamap is set, the data is 
+	/** If the class constant \c tx_newspaper::use_datamap is set, the data is
 	 *  written using \c process_datamap(), which fills in all needed fields and
 	 *  calls the save hook. Otherwise, \c $GLOBALS['TYPO3_DB']->INSERTquery() is
-	 *  called. 
-	 * 
+	 *  called.
+	 *
 	 *  \param $table SQL table to insert into
 	 *  \param $row Data as key=>value pairs
 	 *  \return uid of inserted record
@@ -314,7 +314,7 @@ class tx_newspaper  {
 	public static function insertRows($table, array $row) {
 
 		if (!$row) return;
-		
+
 		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
 		global $TCA;
@@ -325,7 +325,7 @@ class tx_newspaper  {
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
 		if (isset($TCA[$table]) && self::use_datamap) {
-		
+
 			///	Assemble a datamap with a new UID
 			$new_id = 'NEW'.uniqid('');
 			$datamap = array(
@@ -338,23 +338,23 @@ class tx_newspaper  {
 			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 			$tce->start($datamap, null);
 			$tce->process_datamap();
-			
+
 			if (count($tce->errorLog)){
 				/// Set tx_newspaper::$query so the user can see what was attempted
 				self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
 				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
 			}
-			
+
 			return $tce->substNEWwithIDs[$new_id];
 		} else {
 			self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
 			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
-	
+
 			if (!$res) {
 	        	throw new tx_newspaper_NoResException(self::$query);
 	        }
-	        
-	        return $GLOBALS['TYPO3_DB']->sql_insert_id();        			
+
+	        return $GLOBALS['TYPO3_DB']->sql_insert_id();
 		}
 	}
 
@@ -371,9 +371,9 @@ class tx_newspaper  {
 		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
 		unset ($row['uid']);
-		
+
 		self::setTimestampIfPresent($table, $row);
-		
+
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
@@ -381,9 +381,9 @@ class tx_newspaper  {
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
         }
-        
+
         return $GLOBALS['TYPO3_DB']->sql_affected_rows();
-        
+
 	}
 
 	/// Deletes a record from a DB table
@@ -392,7 +392,7 @@ class tx_newspaper  {
 	 *  save hook. Otherwise, if \p $table is recorded in \c $TCA, its field
 	 *  'deleted' is set to 1. If \p $table is not recorded in \c $TCA (which is
 	 *  the case for MM tables), an SQL \c DELETE query is executed.
-	 * 
+	 *
 	 *  \param $table SQL table to delete a record from
 	 *  \param $uids_or_where Array of UIDs to delete, a single UID to delete
 	 *  	(must be an integer), or a \c WHERE condition as string
@@ -404,9 +404,9 @@ class tx_newspaper  {
 	 *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
 	 */
 	public static function deleteRows($table, $uids_or_where, $key='uid', $additional_where='') {
-		
+
 		if (!$uids_or_where) return;
-		
+
 
 		self::writeFunctionAndArgumentsToLog('logDbInsertUpdateDelete');
 
@@ -425,7 +425,7 @@ class tx_newspaper  {
 			} else if (is_int($uids_or_where)) {
 				$uids_or_where = $key . '=' . $uids_or_where;
 			}
-			
+
 			$where_parts[] = $uids_or_where;
 			if ($additional_where) {
 				$where_parts[] = $additional_where;
@@ -434,10 +434,10 @@ class tx_newspaper  {
 
 			if (isset($TCA[$table])) {
 				self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, array('deleted' => 1));
-			} else {		
+			} else {
 				self::$query = $GLOBALS['TYPO3_DB']->DELETEquery($table, $where);
 			}
-//t3lib_div::devlog('deleteRows()', 'newspaper', 0, array('query' => self::$query));			
+//t3lib_div::devlog('deleteRows()', 'newspaper', 0, array('query' => self::$query));
 
 			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
@@ -445,10 +445,10 @@ class tx_newspaper  {
         		throw new tx_newspaper_NoResException(self::$query);
         	}
 		}
-		
-        return $GLOBALS['TYPO3_DB']->sql_affected_rows();        
+
+        return $GLOBALS['TYPO3_DB']->sql_affected_rows();
 	}
-	
+
 	/// Deletes a record from a DB table using a Typo3 command map
 	/**
 	 *  \param $table SQL table to delete a record from
@@ -470,7 +470,7 @@ class tx_newspaper  {
 			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
 		}
 //t3lib_div::devlog('deleteUsingCmdMap()', 'newspaper', 0, array('number rows' => $GLOBALS['TYPO3_DB']->sql_affected_rows()));
-		return $GLOBALS['TYPO3_DB']->sql_affected_rows(); 
+		return $GLOBALS['TYPO3_DB']->sql_affected_rows();
 	}
 
 	/// If \p $table has a \c tstamp field, set it to current time in \p $row
@@ -479,7 +479,7 @@ class tx_newspaper  {
 			$row['tstamp'] = time();
 		}
 	}
-	
+
 	/// Returns true if SQL table \p $table has a field called \p $field
 	public static function fieldExists($table, $field) {
 	    return in_array($field, self::getFields($table));
@@ -491,34 +491,34 @@ class tx_newspaper  {
 		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
 
 		if (!$res) throw new tx_newspaper_NoResException(self::$query);
-	
+
 		$fields = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$fields[] = $row['Field'];
 		}
-		
+
 	    return $fields;
 	}
-	
+
 	/// Returns an array which has the fields of SQL table \p $table as keys
 	public static function makeArrayFromFields($table) {
 		$fields = self::getFields($table);
 		$array = array();
-		
+
 		foreach ($fields as $field) $array[$field] = null;
-		
+
 		return $array;
 	}
-	
-	/// \c WHERE clause to filter out unwanted records 
+
+	/// \c WHERE clause to filter out unwanted records
 	/** Returns a part of a \c WHERE clause which will filter out records with
 	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
 	 *  be included used); switch for BE/FE is included.
-	 * 
+	 *
 	 *  \param $table name of db table to check
-	 *  \param $show_hidden [0|1] specifies if hidden records are to be included 
+	 *  \param $show_hidden [0|1] specifies if hidden records are to be included
 	 * 		(ignored if in FE)
-	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an  
+	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an
 	 * 		empty string, if not applicable.
 	 */
 	static public function enableFields($table, $show_hidden = 1) {
@@ -527,7 +527,7 @@ class tx_newspaper  {
 		if (!isset($TCA[$table])) return '';
 
 		require_once(PATH_t3lib . '/class.t3lib_page.php');
-	
+
 		if (TYPO3_MODE == 'FE') {
 			// use values defined in admPanel config (override given $show_hidden param)
 			// see: enableFields() in t3lib_pageSelect
@@ -539,11 +539,11 @@ class tx_newspaper  {
 		/// show everything but deleted records in backend, if deleted flag is existing for given table
 		if (isset($GLOBALS['TCA'][$table]['ctrl']['delete']))
 			return ' AND ' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
-	
-		return '';		
+
+		return '';
 	}
 
-	/// Gets sorting position for next element in a MM table 
+	/// Gets sorting position for next element in a MM table
 	/** \param $table name of MM table
 	 *  \param $uid_local
 	 *  \return sorting position of element inserted as last element
@@ -559,7 +559,7 @@ class tx_newspaper  {
 
 	/// Check if at least one record exists in given table
 	/**  Enable fields for BE/FE are taken into account.
-	 *  
+	 *
 	 *  \return \c true, if at least one record availabe in given table
 	 */
 	public static function atLeastOneRecord($table) {
@@ -570,7 +570,7 @@ class tx_newspaper  {
 				'1',
 				'',
 				'',
-				1		
+				1
 			);
 			return true;
 		} catch (tx_newspaper_EmptyResultException $e) {
@@ -586,7 +586,7 @@ class tx_newspaper  {
     public static function devlog($message, $data = array(), $extension = 'newspaper', $level = 0) {
         if (!is_array($data)) $data = array($data);
         t3lib_div::devlog($message, $extension, $level, $data);
-        
+
     }
 
     /// Logs the current operation
@@ -602,7 +602,7 @@ class tx_newspaper  {
 	/** \param $type type configured in extension manager (f.ex. logDBInsertUpdateDelete)
 	 *  \param $message string to be added to log file
 	 *  \return \c true if log entry was written \c false else
-	 */		
+	 */
 	private static function writeNewspaperLogEntry($type, $message) {
 		if (!$logfile = self::getNewspaperLogfile($type)) {
 			return false;
@@ -616,27 +616,27 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 		if (!$fp = @fopen($logfile, 'a')) {
 			return false;
-		} 
+		}
 		if (!@fwrite($fp, $message)) {
 			return false;
 		}
 		!@fclose($fp);
 		return true;
 	}
-	
+
 	/// find out which newspaper log file should be used
 	/** \param $type type configured in extension manager (f.ex. logDBInsertUpdateDelete)
 	 *  \return \c file name of log file if log should be written and can be written, \c false else
-	 */	
+	 */
 	private static function getNewspaperLogfile($type) {
 		/// get em configuration
 		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
-		
+
 		if (!isset($em_conf[$type]) || !$em_conf[$type]) {
 			return false; // unknown type or type not set to true
 		}
-	
-		/// get log file name 
+
+		/// get log file name
 		switch($type) {
 			case 'logDbInsertUpdateDelete':
 			case 'logDbSelect':
@@ -653,28 +653,28 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 			}
 		}
 
-		
+
 		/// check if log file can be used
 		if (!@is_writable($logfile)) {
 			return false; /// \todo: throw error
 		}
-		
+
 		return $logfile; // log should be written, log file is configured and writable
-		
+
 	}
 
     public static function startExecutionTimer() {
         self::$execution_time_stack[] = microtime(true);
-        
+
         self::$execution_start_time = microtime(true);
     }
-    
+
     public static function logExecutionTime($message = '') {
-        
+
         $start_time = array_pop(self::$execution_time_stack);
         $execution_time = microtime(true)-$start_time;
         $execution_time_ms = 1000*$execution_time;
-        
+
         $timing_info = array(
             'execution time' => $execution_time_ms . ' ms',
             'object' => self::getTimedObject(),
@@ -683,7 +683,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
         if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
     }
-    
+
     private static function getTimedObject() {
         $backtrace = array_slice(debug_backtrace(), 0, 5);
         foreach($backtrace as $function) {
@@ -691,7 +691,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
             return $function['object'];
         }
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////
 
     public static function getTSConfig() {
@@ -725,11 +725,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	/// get absolute path to Typo3 installation
 	/** \param $endsWithSlash determines if the returned path ends with a slash
 	 *  \return absolute path to Typo3 installation
-	 */ 
+	 */
 	public static function getAbsolutePath($endsWithSlash=true) {
-		
+
 		$path = self::getBasePath();
-		
+
 		if ($endsWithSlash) {
 			// append "/", if missing
 			if ($path == '') {
@@ -742,37 +742,37 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 			// remove last "/", if any
 			$path = rtrim($path, '/');
 		}
-		
+
 		// first character in ABSOLUTE path must be a "/"
 		if (substr($path, 0, 1) != '/') {
 			$path = '/' . $path;
 		}
-		
+
 		return $path;
 	}
 
 	private static function getBasePath() {
-		
+
 		if (self::isTazSpambusterHackNeeded()) return self::tazSpambusterHack();
-		
+
 		/// \todo replace by a version NOT using EM conf (check t3lib_div)
 		$em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
-		
+
 		if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
 			throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
 		}
-		
+
 		return trim($em_conf['newspaperTypo3Path']);
 	}
 
 	private static function isTazSpambusterHackNeeded() {
-		return (stripos($_SERVER['HTTP_HOST'], 'spambuster.taz.de') !== false);	
+		return (stripos($_SERVER['HTTP_HOST'], 'spambuster.taz.de') !== false);
 	}
-	
+
 	private static function tazSpambusterHack() {
 		return '/onlinetaz/red';
 	}
-	
+
 	/// prepends the given absolute path part if path to check is no absolute path
 	/** \param $path2check path to check if it's an absolute path
 	 *  \param $absolutePath this path is prepended to $path2check; no
@@ -788,21 +788,21 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$absolutePath = str_replace('\\', '/', $absolutePath);
 
 		if ($absolutePath == '')
-			return preg_replace('#/+#', '/', $path2check); // nothing to prepend, just return $path2check 
-		
-		if ($path2check == '') 
-			return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend 
+			return preg_replace('#/+#', '/', $path2check); // nothing to prepend, just return $path2check
 
-		$newpath = $path2check; 
-		// prepend absolute path, if needed			
+		if ($path2check == '')
+			return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend
+
+		$newpath = $path2check;
+		// prepend absolute path, if needed
 		if (TYPO3_OS == 'WIN') {
 			if ($path2check[1] != ':') {
-				// windows 
+				// windows
 				$newpath = $absolutePath . '/' . $path2check;
 			}
 		} else {
 			// linux etc.
-			if ($path2check[0] != '/') 
+			if ($path2check[0] != '/')
 				$newpath = $absolutePath . '/' . $path2check;
 		}
 
@@ -814,7 +814,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 		if ($translation_file === false) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "false" parameter when refactoring!'); }
 		if ($translation_file === true) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "true" parameter when refactoring!'); }
-		
+
 		if (!($LANG instanceof language)) {
 			require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
 			$LANG = t3lib_div::makeInstance('language');
@@ -861,10 +861,10 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$class_name = strtolower($class_name);
 		$child_list = array();
 		foreach(get_declared_classes() as $cl) {
-			if (strtolower(get_parent_class($cl)) == $class_name && strtolower($cl) != $class_name) 
+			if (strtolower(get_parent_class($cl)) == $class_name && strtolower($cl) != $class_name)
 				$child_list[] = $cl;
 		}
-		return $child_list;	
+		return $child_list;
 	}
 
 	/// Check if a given class implements a given interface
@@ -884,30 +884,30 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     ////////////////////////////////////////////////////////////////////////////
 
-	/// Create a HTML link with text and URL using the \c typolink() API function 
+	/// Create a HTML link with text and URL using the \c typolink() API function
 	/** \param  $text the text to be displayed
 	 *  \param  $params target and optional \c GET parameters as parameter => value
 	 *  \param  $conf optional TypoScript configuration array
 	 *  \return array ['text'], ['href']
-	 * 
+	 *
 	 *  \todo I don't think typolink() is called even once in \c tx_newspaper. Scrap
 	 *  	this function and put all functionality into typolink_url().
 	 */
     public static function typolink($text, array $params = array(), array $conf = array()) {
-		
+
 		if (TYPO3_MODE == 'BE') {
 			self::buildTSFE();
 			if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
 				throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
 			}
 		}
-		
+
 		self::makeLocalCObj();
 
 		self::flattenParamsArray($params);
 
 		$temp_conf = self::makeTSConfForTypolink($params, $conf);
-		
+
     	//	call typolink_URL() and return data
     	$data = array(
 			'text' => $text,
@@ -919,45 +919,45 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 	/// populate \c $GLOBALS['TSFE'] even if we're in the BE
 	/** Thanks to typo3.net user semidark. Function lifted from
-	 *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544 
+	 *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544
 	 */
 	public static function buildTSFE() {
-		
+
 		$page_id = 1;	/// \todo Ensure that this is a valid page ID
-		
+
 		/* Declare */
 		$temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
-	 
+
 			/* Begin */
 		if (!is_object($GLOBALS['TT'])) {
 			$GLOBALS['TT'] = new t3lib_timeTrack;
 			$GLOBALS['TT']->start();
 		}
-	 
+
 		if (!is_object($GLOBALS['TSFE'])) {
 			//*** Builds TSFE object
 			$GLOBALS['TSFE'] = new $temp_TSFEclassName($GLOBALS['TYPO3_CONF_VARS'],$page_id,0,0,0,0,0,0);
-	 
+
 			//*** Builds sub objects
 			$GLOBALS['TSFE']->tmpl = t3lib_div::makeInstance('t3lib_tsparser_ext');
 			$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
-	 
+
 			//*** init template
 			$GLOBALS['TSFE']->tmpl->tt_track = 0;// Do not log time-performance information
 			$GLOBALS['TSFE']->tmpl->init();
-	 
+
 			$rootLine = $GLOBALS['TSFE']->sys_page->getRootLine($page_id);
-	 
+
 			//*** This generates the constants/config + hierarchy info for the template.
-	 
+
 			$GLOBALS['TSFE']->tmpl->runThroughTemplates($rootLine,$template_uid);
 			$GLOBALS['TSFE']->tmpl->generateConfig();
 			$GLOBALS['TSFE']->tmpl->loaded=1;
-	 
+
 			//*** Get config array and other init from pagegen
 			$GLOBALS['TSFE']->getConfigArray();
 			$GLOBALS['TSFE']->linkVars = ''.$GLOBALS['TSFE']->config['config']['linkVars'];
-	 
+
 			if ($GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'])
 			{
 				foreach (t3lib_div::trimExplode(',',$GLOBALS['TSFE']->config['config']['simulateStaticDocuments_pEnc_onlyP'],1) as $temp_p)
@@ -975,7 +975,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		if (!self::$local_cObj) {
 	        self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
     	    self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
-		}		
+		}
 	}
 
 	/// Make sure \p $params is a one-dimensional array
@@ -989,10 +989,10 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 			}
 		}
 	}
-	
+
 	///	set TypoScript config array - yeah I know, it's not TSConfig!
 	private static function makeTSConfForTypolink(array $params, array $conf) {
-		
+
 		if ($conf) $temp_conf = $conf;
 		else $temp_conf = array();
 
@@ -1012,7 +1012,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         	}
 	    }
         if (!$no_cache) $temp_conf['useCacheHash'] = 1;
-		
+
 		return $temp_conf;
 	}
 
@@ -1021,7 +1021,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 * 		details, eg. http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
 	 *  \param  $conf Optional TypoScript configuration array, if present. See
 	 * 		TSRef.
-	 *  \return Generated URL										  
+	 *  \return Generated URL
 	 */
 	public static function typolink_url(array $params = array(), array $conf = array()) {
 		$link = self::typolink('', $params, $conf);
@@ -1033,7 +1033,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 	/// \return array [key]=value if $key is found in config file, emtpy array else
 	public static function getNewspaperConfig($key) {
-		
+
 		if (!self::$newspaperConfig) {
 			$newspaper_config_file = t3lib_extMgm::extPath('newspaper') . '/newspaper.conf';
 	        if (is_readable($newspaper_config_file)) {
@@ -1044,9 +1044,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		if (isset(self::$newspaperConfig[$key])) {
 			return array($key => self::$newspaperConfig[$key]);
 		}
-		
-		return array(); 
-        
+
+		return array();
+
 	}
 
 	/// checks if a string starts with a specific text
@@ -1060,7 +1060,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		}
 		return (stripos($haystack, $needle) === 0);
 	}
-	
+
 
 	/// Get a list of all the attributes/DB fields an object (or class) has
 	/** \param $object An object of the desired class, or the class name as string
@@ -1072,7 +1072,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		t3lib_div::loadTCA($object);
 		return array_keys($TCA[$object]['columns']);
 	}
-	
+
 	/// The \c GET parameter which determines the article UID
 	public static function GET_article() {
 		return self::article_get_parameter;
@@ -1087,9 +1087,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	/** Currently, that means it returns the tx_newspaper_Section record which
 	 *  lies on the current Typo3 page. This implementation may change, but this
 	 *  function is required to always return the correct tx_newspaper_Section.
-	 * 
+	 *
 	 *  \return The tx_newspaper_Section object the plugin currently works on
-	 *  \throw tx_newspaper_IllegalUsageException if the current page is not 
+	 *  \throw tx_newspaper_IllegalUsageException if the current page is not
 	 * 		associated with a tx_newspaper_Section.
 	 */
 	public static function getSection() {
@@ -1098,7 +1098,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         if (!$section_uid) {
         	throw new tx_newspaper_IllegalUsageException('No section associated with current page');
         }
-		
+
 		return new tx_newspaper_Section($section_uid);
 	}
 
@@ -1110,7 +1110,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$is_article_page = $pagetype->getAttribute('is_article_page');
 		return $is_article_page;
 	}
-	
+
 	public static function currentURL() {
 		$hostname = $_SERVER['SERVER_NAME'];
 		$baseURI = explode($hostname, t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
@@ -1118,12 +1118,12 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		$url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
 		return $url;
 	}
-	
+
 	/// \return current protocol and host
 	public static function currentProtocolHost() {
 		return 'http' . ($_SERVER['HTTPS']? 's': '') . '://' . $_SERVER['SERVER_NAME'];
 	}
-	
+
 	public static function registerSource($key, tx_newspaper_Source $new_source) {
 		self::$registered_sources[$key] = $new_source;
 	}
@@ -1140,36 +1140,55 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		}
 		return self::$registered_sources[$key];
 	}
-	
+
 	public static function registerSaveHook($class) {
 		self::$registered_savehooks[] = $class;
 	}
-	
+
 	public static function getRegisteredSaveHooks() {
 		return self::$registered_savehooks;
 	}
-	
+
+	// Register $extKey so extKey's tca.php is loaded after newspaper/tca_php_addon.php is loaded
+	public static function registerSubTca($extKey) {
+		if (t3lib_extMgm::isLoaded($extKey)) {
+			self::$registeredSubTca[] = $extKey;
+		}
+	}
+
+	/// Load tca.php from all registered extensions (so modifications are visible in newspaper)
+	public static function loadSubTca() {
+		foreach(self::$registeredSubTca as $extKey) {
+			$file = PATH_typo3conf . 'ext/' . $extKey . '/tca.php';
+			if (is_readble($file)) {
+				require_once $file;
+			}
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////
-	
-	/** SQL queries are stored as a static member variable, so they can be 
-	 *  accessed for debugging from outside the function if a query does not  
+
+	/** SQL queries are stored as a static member variable, so they can be
+	 *  accessed for debugging from outside the function if a query does not
 	 *  return the desired result.
-	 */ 
-	public static $query = ''; 
-	
+	 */
+	public static $query = '';
+
 	/// a \c tslib_cObj object used to generate typolinks
 	private static $local_cObj = null;
-	
+
 	private static $registered_sources = array();
-	
+
 	private static $registered_savehooks = array();
-    
+
+	private static $registeredSubTca = array();
+
     private static $execution_start_time = 0;
-  
+
     private static $newspaperConfig = null;
-    
+
     private static $execution_time_stack = array();
-    
+
 }
 
 ?>

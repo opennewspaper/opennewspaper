@@ -287,7 +287,7 @@ $TCA["tx_newspaper_controltag_to_extra"]["columns"]["extra_uid"]["config"]["rang
 );
 
 // set control tag category sorting
-$TCA['tx_newspaper_tag']['columns']['ctrltag_cat']['config']['foreign_table_where'] = 
+$TCA['tx_newspaper_tag']['columns']['ctrltag_cat']['config']['foreign_table_where'] =
 	'ORDER BY tx_newspaper_ctrltag_category.sorting';
 // type 1 = content tag, type 2 = control tag
 $TCA['tx_newspaper_tag']['types']['1']['showitem'] = 'tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, section';
@@ -298,4 +298,9 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 
 // for testing image upload sizes (in extra image)
 //$TCA['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = 1000;
+
+
+
+	tx_newspaper::loadSubTca(); // make sure modifications in sub extension are loaded too
+
 ?>
