@@ -71,14 +71,14 @@ $TCA['tx_newspaper_extra_searchresults']['ctrl']['iconfile'] =
 $TCA['tx_newspaper_tag_zone']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_tag_zone.gif';
 $TCA['tx_newspaper_extra_ad']['ctrl']['iconfile'] =
-	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_ad.gif';	
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_ad.gif';
 $TCA['tx_newspaper_extra_generic']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_generic.gif';
 $TCA['tx_newspaper_ctrltag_category']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_ctrltag_category.gif';
-			
+
 if (TYPO3_MODE == 'BE') {
-	
+
 	// remove range check for set range for role in be_users in table pages
 	unset($TCA['pages']['columns']['set range for role in be_users']['config']['range']);
 
@@ -89,7 +89,7 @@ if (TYPO3_MODE == 'BE') {
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM9', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod9/'); // placing articles in section article lists
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM7', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod7/'); // placing articles in article lists (non-section) + backend for manual and semiatumatic article lists
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM3', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod3/'); // placement
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM6', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod6/'); // control tags
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM6', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod6/'); // manage/create dossiers
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM8', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod8/'); // tag admin
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM4', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod4/'); // admin tools
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/'); // AJAX stuff
@@ -97,13 +97,13 @@ if (TYPO3_MODE == 'BE') {
 	/// add newspaper to Plugin-in list
 	/// records are stored in sysfolders with module set to 'newspaper'
 	$TCA['pages']['columns']['module']['config']['items'][] = array('Newspaper', 'newspaper');
-	
+
 	/// add icon for newspaper sysfolders
 	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/icons/icon_tx_newspaper_sysf.gif');
 
 	// force reloading article backend when article type changes
 	$GLOBALS['TCA']['tx_newspaper_article']['ctrl']['requestUpdate'] .= ',articletype_id';
-	
+
 
 	// set range for role in be_users
 	$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (

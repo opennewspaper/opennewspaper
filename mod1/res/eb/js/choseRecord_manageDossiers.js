@@ -1,5 +1,5 @@
 function choseRecord(className, uid, close) {
-
+// \todo : on error
 	if (close == 1) {
 		close = true;
 	} else {

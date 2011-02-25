@@ -30,6 +30,13 @@ require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
 $LANG->includeLLFile('EXT:newspaper/mod6/locallang.xml');
+
+// read additional xml files (hook)
+foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
+	$LANG->includeLLFile($file);
+}
+
+
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
@@ -93,6 +100,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		// get ll labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod6/locallang.xml', $GLOBALS['LANG']->lang);
 		$this->localLang = $localLang[$GLOBALS['LANG']->lang];
+
+		// read additional locallang files (hook)
+		foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
+			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper_taz/locallang_newspaper_taz.xml', $GLOBALS['LANG']->lang);
+			$this->localLang = array_merge($this->localLang, $localLang[$GLOBALS['LANG']->lang]);
+		}
 
 		$this->smarty = new tx_newspaper_Smarty();
 		$this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod6/res/'));

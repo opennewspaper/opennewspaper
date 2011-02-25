@@ -11,7 +11,7 @@ define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
 define('NP_ACTIVE_ROLE_NONE', 1000);
 
 
-define('NP_WORKLFOW_LOG_UNKNOWN', 0); 
+define('NP_WORKLFOW_LOG_UNKNOWN', 0);
 define('NP_WORKLFOW_LOG_HIDE', 1);
 define('NP_WORKLFOW_LOG_PUBLISH', 2);
 define('NP_WORKLFOW_LOG_CHANGE_ROLE', 3);
@@ -26,20 +26,20 @@ define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow but
 define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
 
 
- 
-class tx_newspaper_Workflow {   
+
+class tx_newspaper_Workflow {
 
 	// render workflow storage buttons for tx_newspaper_areticle given in $row
 	/** Depending on the workflow and the hidden field status various combinations of buttons can be rendered
 	 *  hide if article is published, publish if article is hidden
 	 *  show buttons: send to editorial staff or duty editor
 	 *  and combinations of role and hidden status
-	 *  \param $row article data as associative array 
+	 *  \param $row article data as associative array
 	 *  \return html code with all the needed buttons
 	 */
 	public static function getWorkflowButtons($row) {
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
-		
+
 		$hidden = $row['hidden'];
 		$workflow = intval($row['workflow_status']);
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('workflow' => $workflow, 'hidden' => $hidden));
@@ -47,7 +47,7 @@ class tx_newspaper_Workflow {
 		// create hidden field to store workflow_status (might be modified by JS when workflow buttons are used)
 		$html = '<input id="workflow_status" name="workflow_status" type="hidden" value="' . $workflow . '" />';
 		$html .= '<input name="workflow_status_ORG" type="hidden" value="' . $workflow . '" />';
-		
+
 		// if hidden_status equals -1, the hidden status wasn't changed by hide/publish button
 		// if hidden_status DOES NOT equal -1, the hide/publish button was pressed, so IGNORE the value of the "hidden" field
 		$html .= '<input id="hidden_status" name="hidden_status" type="hidden" value="-1" />'; // init with -1
@@ -81,7 +81,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			$button['publish'] = tx_newspaper_workflow::isFunctionalityAvailable('publish');
 		}
 		switch($workflow) {
-			case NP_ACTIVE_ROLE_EDITORIAL_STAFF: 
+			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
 				// active role: editor (Redakteur)
 				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
 				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
@@ -118,16 +118,16 @@ function changeWorkflowStatus(role, hidden_status) {
 	 */
 	private static function renderWorkflowButtons($hidden, $button) {
 //t3lib_div::devlog('renderWorkflowButtons', 'newspaper', 0, array('button' => $button));
-		
+
 		$content = '<span style="margin-left:20px;">&nbsp;</span>'; // left margin for first button
-		
+
 		/// hide / publish
 		if (!$hidden && $button['hide']) {
 			$content .= self::renderWorkflowButton(false, tx_newspaper::getTranslation('label_workflow_hide'), $hidden, true);
 		} elseif ($hidden && $button['publish']) {
 			$content .= self::renderWorkflowButton(false, tx_newspaper::getTranslation('label_workflow_publish'), $hidden, true);
 		}
-		
+
 		/// check / revise / place
 		if ($button['check']) {
 			$content .= self::renderWorkflowButton(NP_ACTIVE_ROLE_DUTY_EDITOR, tx_newspaper::getTranslation('label_workflow_check'), -1, false);
@@ -158,9 +158,9 @@ function changeWorkflowStatus(role, hidden_status) {
 //		}
 		return $content;
 	}
-	
+
 	/// render a workflow button for an article
-	/** \param $new_role if false, the role hasn't changes, else new role 
+	/** \param $new_role if false, the role hasn't changes, else new role
 	 *  \param $title Title for the button
 	 *  \param $hidden Specifies the hidden sdtatus of the current article
 	 *  \param $changeHiddenStatus if true the hidden status changes when the button is pressed
@@ -168,7 +168,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	 */
 	private static function renderWorkflowButton($new_role, $title, $hidden, $changeHiddenStatus=false) {
 //t3lib_div::devlog('renderWorkflowButton()', 'newspaper', 0, array('new_role' => $new_role, 'title' => $title, 'hidden' => $hidden, 'overWriteNoCloseConstValue' => $overWriteNoCloseConstValue));
-		
+
 		if (!$changeHiddenStatus) {
 			$hideen= -1;
 		} else {
@@ -178,27 +178,27 @@ function changeWorkflowStatus(role, hidden_status) {
 		if ($new_role !== false) {
 			$js = 'changeWorkflowStatus(' . intval($new_role) . ', ' . $hidden . '); ';
 		} else {
-			$js = 'changeWorkflowStatus(-1, ' . $hidden . '); '; 
+			$js = 'changeWorkflowStatus(-1, ' . $hidden . '); ';
 		}
 
-        $js .= 'return tabManagement.submitTabs(this);'; 
-		
+        $js .= 'return tabManagement.submitTabs(this);';
+
 // \todo: add only if needed
 		$html = $title . '<input style="margin-right:20px;" title="' . $title . '"';
-		$html .= ' onclick="' . $js . '" '; // add js call 
+		$html .= ' onclick="' . $js . '" '; // add js call
 		if (NP_ARTICLE_WORKFLOW_NOCLOSE) {
 			// don't close after saving (for "just save" button or for test purposes)
 			$html .= 'name="_savedok" src="sysext/t3skin/icons/gfx/savedok.gif" ';
 		} else {
 			// live version, save and close
-			$html .= 'name="_saveandclosedok" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" ';			
+			$html .= 'name="_saveandclosedok" src="sysext/t3skin/icons/gfx/saveandclosedok.gif" ';
 		}
 		$html .= 'width="16" type="image" height="16" class="c-inputButton"/>';
 		return $html;
 	}
-	
-	
-	
+
+
+
 
 
 
@@ -217,7 +217,7 @@ function changeWorkflowStatus(role, hidden_status) {
         $comments = self::addUsername($comments);
         return self::renderTemplate($comments, $tableUid, $allComments, $showFoldLinks);
     }
-    
+
     /// return javascript for ajax calls
     /** This method is needed because the moderation list (mod3) shows multiple workflow log comment on one page
      *  On that page the JS should only be added once ...
@@ -237,7 +237,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
             var test = path.substring(path.lastIndexOf("/") - 5);
             if (test.substring(0, 6) == "typo3/") {
-            	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3" 
+            	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
             } else if (path.indexOf("typo3conf/ext/newspaper/") > 0) {
             	path = path.substring(0, path.indexOf("typo3conf/ext/newspaper/"));
             }
@@ -246,8 +246,8 @@ function changeWorkflowStatus(role, hidden_status) {
                         parameters :{
                         	"param" : "workflowlog",
                         	"AJAX_CALL" : true,
-                        	"show_all_comments" : all_comments, 
-                        	"tbl" : "tx_newspaper_article", 
+                        	"show_all_comments" : all_comments,
+                        	"tbl" : "tx_newspaper_article",
                         	"tbl_uid" : uid
                         },
                         onSuccess : showMessage,
@@ -266,14 +266,14 @@ function changeWorkflowStatus(role, hidden_status) {
     	</script>
     	';
     }
-    
+
     public static function getComments($table, $table_uid, $limit = 0) {
         $comments = tx_newspaper::selectRows(
 			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, action, comment",
 			'tx_newspaper_log',
-            'table_name = \''.$table.'\' AND table_uid = '.$table_uid, 
+            'table_name = \''.$table.'\' AND table_uid = '.$table_uid,
 			'',
-			'crdate desc', 
+			'crdate desc',
 			($limit > 0) ? $limit : ''
 		);
         return $comments;
@@ -298,13 +298,13 @@ function changeWorkflowStatus(role, hidden_status) {
         $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
         foreach($comments as $i => $comment) {
             $userId = $comment['be_user'];
-            $userdata= $beFunc->getUserNames('username, uid, realName', 'AND uid ='.$userId);            
+            $userdata= $beFunc->getUserNames('username, uid, realName', 'AND uid ='.$userId);
             $comments[$i]['username'] = $userdata[$userId]['realName']? $userdata[$userId]['realName'] : $userdata[$userId]['username'];
         }
 
         return $comments;
     }
- 
+
 
 	/// \return role set in be_users (or false if not available)
 	public static function getRole() {
@@ -313,7 +313,8 @@ function changeWorkflowStatus(role, hidden_status) {
 			return $GLOBALS['BE_USER']->user['tx_newspaper_role'];
 		}
 		// check session then
-		if ($_COOKIE['be_typo_user']) {	
+// \todo: does this make sense??? No access to table be_sessions???
+		if ($_COOKIE['be_typo_user']) {
 			$row = tx_newspaper::selectOneRow(
 				'tx_newspaper_role',
 				'be_users',
@@ -321,9 +322,9 @@ function changeWorkflowStatus(role, hidden_status) {
 			);
 			return $row['tx_newspaper_role'];
 		}
-		return false; 
+		return false;
 	}
-	
+
 	/// \return true if be_user has newspaper role "duty editor"
 	public static function isDutyEditor() {
 		$role = self::getRole();
@@ -340,10 +341,10 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 		return ($role == 0);
 	}
-	
-	
+
+
 	/// Changes the newspaper role of the be_user
-	/** 
+	/**
 	 * The role of the be_user will be set to the given new role in $new_role.
 	 * The filter for the moderation list is modified to filter the list according to the new role.
 	 * \param $new_role value for the new role to change to
@@ -363,7 +364,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		$storedFilter = unserialize($GLOBALS['BE_USER']->getModuleData('tx_newspaper/mod2/index.php/filter'));
 		$storedFilter['role'] = intval($new_role);
 		$GLOBALS['BE_USER']->pushModuleData("tx_newspaper/mod2/index.php/filter", serialize($storedFilter));
-		return true;  
+		return true;
 	}
 
 
@@ -405,7 +406,7 @@ function changeWorkflowStatus(role, hidden_status) {
 				}
 			break;
 		}
-		
+
 		return false;
 	}
 
@@ -417,8 +418,8 @@ function changeWorkflowStatus(role, hidden_status) {
 		$log = str_replace('###NEW_ROLE###', self::getRoleTitle($new_role), $log);
 		return $log;
 //		return  . ' --> ' . self::getRoleTitle($new_role);
-//		return tx_newspaper::getTranslation('label_workflow_role_new') . ' "' . 
-//			self::getRoleTitle($new_role) . '", ' . //tx_newspaper::getTranslation('label_workflow_role_' . intval($new_role), false) . '", ' . 
+//		return tx_newspaper::getTranslation('label_workflow_role_new') . ' "' .
+//			self::getRoleTitle($new_role) . '", ' . //tx_newspaper::getTranslation('label_workflow_role_' . intval($new_role), false) . '", ' .
 //			tx_newspaper::getTranslation('label_workflow_role_old') . '"' .
 //			self::getRoleTitle($old_role) . '"'; // tx_newspaper::getTranslation('label_workflow_role_' . intval($old_role), false) . '"';
 	}
@@ -435,7 +436,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		t3lib_div::devlog('getRoleTitle() - unknown role', 'newspaper', 3, array('role' => $role));
 		return '[' . $role . ']'; // no role title available
 	}
-	
+
 
 
  	// typo3 save hook ...
@@ -455,7 +456,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		if (strtolower($table) != 'tx_newspaper_article') {
 			return; // workflow status is currently defined for newspaper articles only
 		}
-		
+
 		if (isset($_REQUEST['tx_newspaper_mod7'])) {
 			// mod7 - moderation list
 			$request = $_REQUEST['tx_newspaper_mod7']; // slightly different in mod7 (article placement in lists)
@@ -465,13 +466,13 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 
 		if (array_key_exists('hidden_status', $request) && $request['hidden_status'] != -1 && $request['hidden_status'] != $request['data'][$table][$id]['hidden']) {
-			$fieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite (if set) / set value of field "hidden" 
+			$fieldArray['hidden'] = $request['hidden_status']; // if hide/publish button was used, overwrite (if set) / set value of field "hidden"
 			if (!isset($fieldArray['tstamp'])) {
 				$fieldArray['tstamp'] = time(); // modify tstamp if hidden status changes
 			}
 		}
 		if (!array_key_exists('workflow_status', $request) || !array_key_exists('workflow_status_ORG', $request)) {
-			return; // value not set, so can't decide if the status changed 
+			return; // value not set, so can't decide if the status changed
 		}
 		if ($request['workflow_status'] == $request['workflow_status_ORG']) {
 			return; // status wasn't changed, so don't store value
@@ -485,7 +486,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// write to log directly
 	/** \param $table name of table the log entry is associated with
-	 *  \param $id id of record in $table  
+	 *  \param $id id of record in $table
 	 *  \param $comment comment to log
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
@@ -495,19 +496,19 @@ function changeWorkflowStatus(role, hidden_status) {
 		tx_newspaper::insertRows('tx_newspaper_log', array(
 			'pid' => 0,
 			'tstamp' => $current_time,
-			'crdate' => $current_time, 
-			'cruser_id' => $GLOBALS['BE_USER']->user['uid'], 
+			'crdate' => $current_time,
+			'cruser_id' => $GLOBALS['BE_USER']->user['uid'],
 			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
-			'table_name' => $table, 
+			'table_name' => $table,
 			'table_uid' => $id,
 			'action' => $type,
 			'comment' => $comment
 		));
-	} 
-	
+	}
+
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));		
+//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
@@ -517,9 +518,9 @@ function changeWorkflowStatus(role, hidden_status) {
 
 				self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
 
-//debug($GLOBALS['BE_USER']);				
+//debug($GLOBALS['BE_USER']);
 				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
-				
+
 				/// check if auto log entry for hiding/publishing newspaper record should be written
 				$current_time = time(); // make sure all log entries written in this run have the same time
 				if (array_key_exists('hidden', $fieldArray)) {
@@ -532,42 +533,42 @@ function changeWorkflowStatus(role, hidden_status) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
-						'crdate' => $current_time, 
-						'cruser_id' => $be_user, 
+						'crdate' => $current_time,
+						'cruser_id' => $be_user,
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
+						'table_name' => $table,
 						'table_uid' => $id,
 						'action' => $fieldArray['hidden']? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
 						'comment' => $action
 					));
 				}
-				
+
 				/// check if auto log entry for change of workflow status should be written (article only)
 				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
-						'crdate' => $current_time, 
-						'cruser_id' => $be_user, 
+						'crdate' => $current_time,
+						'cruser_id' => $be_user,
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
+						'table_name' => $table,
 						'table_uid' => $id,
 						'action' => NP_WORKLFOW_LOG_CHANGE_ROLE,
 						'comment' => self::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG']))
 					));
 				}
-				
+
 				/// check if manual comment should be written (this log record should always be written LAST)
 				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
 					tx_newspaper::insertRows('tx_newspaper_log', array(
 						'pid' => $fieldArray['pid'],
 						'tstamp' => $current_time,
-						'crdate' => $current_time, 
-						'cruser_id' => $be_user, 
+						'crdate' => $current_time,
+						'cruser_id' => $be_user,
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table, 
+						'table_name' => $table,
 						'table_uid' => $id,
-						'action' => NP_WORKLFOW_LOG_USERCOMMENT, 
+						'action' => NP_WORKLFOW_LOG_USERCOMMENT,
 						'comment' => $_REQUEST['workflow_comment']
 					));
 				}
@@ -578,5 +579,5 @@ function changeWorkflowStatus(role, hidden_status) {
 }
 
 //tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
- 
+
 ?>
