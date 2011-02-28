@@ -738,7 +738,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *	\return The tx_newspaper_PageZone this tx_newspaper_Extra is placed
 	 *      upon, or \c null
 	 */
-	protected function getPageZone() {
+	public function getPageZone() {
 		/// Check if the Extra is associated with an article...
 		foreach (array('tx_newspaper_article_extras_mm' => 'tx_newspaper_Article',
 						/// ...or a page zone...

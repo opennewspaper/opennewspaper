@@ -1,5 +1,6 @@
 <?php
 
+/// A structure for a newspaper object representable as a combination of GET-parameters
 class tx_newspaper_CachablePage {
 
     public function __construct(tx_newspaper_Page $page,
@@ -70,50 +71,114 @@ class tx_newspaper_CachablePage {
 
 }
 
-/** Levels of dependency for articles:
- *  # article pages displaying the article
- *  #- as URL or GET parameters
- *  # section pages displaying the article
- *  #- contain a sectionlist Extra which displays an article list which has a
- *     section_id pointing to a non-hidden, non-deleted section
- *  # article pages displaying articles related to the article
- *  # any pages displaying article lists other than section lists which contain
- *    the article
+/// A structure which traces objects which are affected by changes on another object and performs actions on them.
+/** Because all newspaper rendering takes place independent of Typo3, a mechanism
+ *  is needed to tell Typo3 to clear the page cache for all newspaper page which
+ *  are affected by a change in an object.
+ *
+ *  A change that can affect other newspaper pages can be either to an article
+ *  or to a web element ("extra"). [1] E.g. a change in an article title must be
+ *  reflected on the section overview page which features the article. A change
+ *  in an Extra displayed on an article page must be reflected in all articles
+ *  which are rendered on that page. And many others.
+ *
+ *  A dependency tree is built either for an article or an extra. The article
+ *  which triggered the generation of the dependency tree is from now on called
+ *  "the affected article", and the extra "the affected extra".
+ *
+ *  In order to be as flexible as possible, the dependency tree does not restrict
+ *  itself to clearing the Typo3 Page Cache. Instead, it allows actions to be
+ *  registered which are executed for specific objects which are changed by a
+ *  change in the affected object. That makes the control of more advanced
+ *  caching mechanisms possible.
+ *
+ *  Objects which are changed by a change in the affected article:
+ *  -# article pages displaying the article
+ *  -# section pages displaying the article
+ *    -# contain a tx_newspaper_Extra_Sectionlist which displays an article list
+ *       which has a section_id pointing to a non-hidden, non-deleted section
+ *  -# article pages displaying articles related to the article
+ *  -# dossier pages where the dossier contains the article
+ *  -# any pages displaying article lists other than section lists which contain
+ *     the article
+ *
+ *  Objects which are changed by a change in the affected extra:
+ *  -# If the extra is on a section page, this page and all pages which inherit
+ *     from it in the page hierarchy.
+ *  -# If the extra is on an article page, this page and all articles which are
+ *     rendered on this page. Also, the same for all article pages which inherit
+ *     from the page.
+ *
+ *  [1] In fact such a change can also happen on a PageZone, a Page or a Section,
+ *    but we are not concerned with those here.
  */
 class tx_newspaper_DependencyTree {
 
+    /// Length up to which an article is searched for on article lists displayed on pages.
     const article_list_length = 10;
 
+    /// Maximum number of articles which are retroactively re-rendered when the placement of an article page is changed.
+    const limit_for_articles_on_placement_change = 50;
+
+    /// An action marked with this flag is executed on dependent articles.
     const ACT_ON_ARTICLES = 1;
+    /// An action marked with this flag is executed on the section page(s) the affected article appears upon.
     const ACT_ON_SECTION_PAGES = 2;
+    /// An action marked with this flag is executed on articles related to the affected article.
     const ACT_ON_RELATED_ARTICLES = 4;
+    /// An action marked with this flag is executed on dossier pages the affected article appears upon.
     const ACT_ON_DOSSIER_PAGES = 8;
+    /// An action marked with this flag is executed on pages where the affected article appears in an article list.
     const ACT_ON_ARTICLE_LIST_PAGES = 16;
 
     /// Generates the tree of pages that change when a tx_newspaper_Article changes.
-    /** \param $article The article which is changed.
+    /** @param $article The article which is changed. \p $article is from now on
+     *    called "the affected article". 
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
-        $tree = new tx_newspaper_DependencyTree($article);
+        $tree = new tx_newspaper_DependencyTree();
+        $tree->setArticle($article);
         tx_newspaper::logExecutionTime('generateFromArticle()');
 
         return $tree;
     }
 
     /// Generates the tree of pages that change when a tx_newspaper_Extra changes.
-    /** \param $extra The web element which is changed.
+    /** @param $extra The web element which is changed. \p $extra is from now on
+     *   called "the affected extra".
      */
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
-        // if in article(s): generateFromArticle() for all articles
-        // if on page zone directly: all pages which contain all page zones
-        throw new tx_newspaper_NotYetImplementedException();
+        $pagezone = $extra->getPageZone();
+        $tree = new tx_newspaper_DependencyTree();
+        if ($pagezone instanceof tx_newspaper_Article) {
+            /// \todo or maybe not: if in article(s): generateFromArticle() for all articles.
+            $tree->markAsCleared();
+        } else if ($pagezone instanceof tx_newspaper_PageZone_Page) {
+            $tree->setExtra($extra);
+        } else {
+            $tree->markAsCleared();
+            # throw new tx_newspaper_InconsistencyException('Page zone is neither article nor page: ' . get_class($pagezone));
+        }
+        
+        return $tree;
     }
 
     /// Registers an action that is executed for every page in the tree on demand.
-    /** \param $action A function that can be called via call_user_func() (see
+    /** The actions are stored in an array whose entries are arrays of the form
+     *  \code array(
+     *     'function' => <the registered function>,
+     *     'when' => <flag mask describing on which objects the function is applied>
+     *   ) \endcode
+     *  @param $action A function that can be called via call_user_func() (see
      *    http://php.net/manual/en/function.call-user-func.php) and takes a
      *    tx_newspaper_Page as argument.
+     *  @param $when A combination of flags that describes for which types of
+     *    affected objects the registered action is executed. See
+     *    \c tx_newspaper_DependencyTree::ACT_ON_ARTICLES, \c tx_newspaper_DependencyTree::ACT_ON_SECTION_PAGES,
+     *    \c tx_newspaper_DependencyTree::ACT_ON_RELATED_ARTICLES, \c tx_newspaper_DependencyTree::ACT_ON_DOSSIER_PAGES,
+     *    \c tx_newspaper_DependencyTree::ACT_ON_ARTICLE_LIST_PAGES.
+     *    Defaults to \c ACT_ON_ARTICLES|ACT_ON_SECTION_PAGES.
      */
     static public function registerAction($action,
                                           $when = 3) {
@@ -125,12 +190,13 @@ class tx_newspaper_DependencyTree {
         }
     }
 
+    /// Unregister all registered actions.
     static public function clearRegisteredActions() {
         self::$registered_actions = array();
     }
     
-    /// Executes the registered actions on all pages in the tree up to a specified depth.
-    public function executeActionsOnPages($depth = 0) {
+    /// Executes the registered actions on all pages in the tree for which they are registered.
+    public function executeActionsOnPages() {
 
         tx_newspaper::startExecutionTimer();
 
@@ -151,6 +217,7 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
 
+    /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
         if (!$this->article_pages_filled) {
             $this->addArticlePages($this->article);
@@ -158,6 +225,7 @@ class tx_newspaper_DependencyTree {
         return $this->article_pages;
     }
 
+    /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
@@ -165,6 +233,7 @@ class tx_newspaper_DependencyTree {
         return $this->section_pages;
     }
 
+    /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
@@ -172,6 +241,7 @@ class tx_newspaper_DependencyTree {
         return $this->related_article_pages;
     }
 
+    /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
@@ -179,6 +249,7 @@ class tx_newspaper_DependencyTree {
         return $this->articlelist_pages;
     }
 
+    /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
@@ -210,11 +281,31 @@ class tx_newspaper_DependencyTree {
         return array_unique($pages);
     }
 
+    /// Returns number of articles which are retroactively re-rendered when the placement of an article page is changed.
+    public static function limitForArticlesOnPlacementChange() {
+        $tsconfig = tx_newspaper::getTSConfig();
+        $limit = intval($tsconfig['newspaper.']['limit_for_articles_on_placement_change']);
+        if ($limit) return $limit;
+        return self::limit_for_articles_on_placement_change;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
-    /// Adds article pages of all sections $article is in
-    /** \todo Only clear cache for the affected article, not the entire page
-     */
+    /// Ensure that a dependency tree is not created other than by the generator functions.
+    private function __construct() { }
+
+    private function setArticle(tx_newspaper_Article $article) {
+        $this->article = $article;
+    }
+
+    private function setExtra(tx_newspaper_Extra $extra) {
+        $this->extra = $extra;
+
+        $pagezone = $this->extra->getPageZone();
+        $this->addAllExtraPagesForPagezone($pagezone);
+    }
+
+    /// Adds article pages of all sections \p $article is in
     private function addArticlePages(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
         $sections = $article->getSections();
@@ -280,12 +371,38 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::logExecutionTime('addArticleListPages()');
     }
 
-    /// Ensure that a dependency tree is not created other than by the generator functions.
-    private function __construct(tx_newspaper_Article $article) {
-        $this->article = $article;
+    private function addAllExtraPagesForPagezone(tx_newspaper_Pagezone_Page $pagezone) {
+
+        foreach ($pagezone->getInheritanceHierarchyDown() as $current_pagezone) {
+            $this->addCachablePagesForPage(getPage($current_pagezone));
+        }
+
+        $this->markAsCleared();
     }
 
+    private function markAsCleared() {
+        $this->article_pages_filled = true;
+        $this->section_pages_filled = true;
+        $this->related_article_pages = true;
+        $this->dossier_pages_filled = true;
+        $this->articlelist_pages_filled = true;
+    }
+
+    private function addCachablePagesForPage(tx_newspaper_Page $page) {
+        if ($page->getPageType() == tx_newspaper_PageType::getArticlePageType()) {
+            $this->article_pages = array_merge($this->article_pages, allArticlePagesForPage($page));
+        } else if ($page->getPageType() == tx_newspaper_PageType::getSectionPageType()) {
+            $this->section_pages[] = new tx_newspaper_CachablePage($page);
+        } else if ($page->getTypo3PageID() == tx_newspaper::getDossierPageID()) {
+            /// \todo add dossier pages
+            tx_newspaper::devlog('add dossier page', $page->getUid());
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     private $article = null;
+    private $extra = null;
 
     private $article_pages = array();   ///< Article pages of the sections containing the article
     private $article_pages_filled = false;
@@ -488,6 +605,20 @@ function getAllArticleLists() {
 
     return $all_article_lists;
 
+}
+
+/// Returns the page and all articles that are displayed on it.
+/** Condition: \p $page is an article page. This is not checked. */
+function allArticlePagesForPage(tx_newspaper_Page $page) {
+
+    $section = $page->getParentSection();
+    $articles = $section->getArticles(tx_newspaper_DependencyTree::limitForArticlesOnPlacementChange());
+
+    $pages = array();
+    foreach ($articles as $article) {
+        $pages[] = new tx_newspaper_CachablePage($page, $article);
+    }
+    return $pages;
 }
 
 function debugPage(tx_newspaper_CachablePage $page) {
