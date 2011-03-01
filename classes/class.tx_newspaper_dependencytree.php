@@ -181,12 +181,18 @@ class tx_newspaper_DependencyTree {
      *    Defaults to \c ACT_ON_ARTICLES|ACT_ON_SECTION_PAGES.
      */
     static public function registerAction($action,
-                                          $when = 3) {
+                                          $when = 3,
+                                          $key = '') {
         if (is_callable($action)) {
-            self::$registered_actions[] = array(
+            $new_action = array(
                 'function' => $action,
                 'when' => $when
             );
+            if ($key) {
+                self::$registered_actions[$key] =  $new_action;
+            } else {
+                self::$registered_actions[] =  $new_action;
+            }
         }
     }
 
@@ -196,22 +202,18 @@ class tx_newspaper_DependencyTree {
     }
     
     /// Executes the registered actions on all pages in the tree for which they are registered.
-    public function executeActionsOnPages() {
+    public function executeActionsOnPages($key = '') {
 
         tx_newspaper::startExecutionTimer();
 
-        foreach (self::$registered_actions as $action) {
-            $function = $action['function'];
-            $when = $action['when'];
-            $pages = array();
-
-            if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
-            if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
-            if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
-            if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
-            if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
-
-            call_user_func($function, $pages);
+        if ($key) {
+            if (isset(self::$registered_actions[$key])) {
+                $this->executeActionOnPages(self::$registered_actions[$key]);
+            }
+        } else {
+            foreach (self::$registered_actions as $action) {
+                $this->executeActionOnPages($action);
+            }
         }
 
         tx_newspaper::logExecutionTime('executeActionsOnPages()');
@@ -303,6 +305,20 @@ class tx_newspaper_DependencyTree {
 
         $pagezone = $this->extra->getPageZone();
         $this->addAllExtraPagesForPagezone($pagezone);
+    }
+
+    private function executeActionOnPages(array $action) {
+        $function = $action['function'];
+        $when = $action['when'];
+        $pages = array();
+
+        if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
+        if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
+        if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
+        if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
+        if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
+
+        call_user_func($function, $pages);
     }
 
     /// Adds article pages of all sections \p $article is in
