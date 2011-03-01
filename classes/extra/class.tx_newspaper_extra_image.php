@@ -294,12 +294,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         fclose($f);
 
         if ($return) {
-			taz_base::degub("Achtung: das Uebertragen der hochgeladenen Bilder auf den Live-Server ist fehlgeschlagen!");
-			taz_base::degub("Es kann sein, dass Bilder fuer diesen Artikel nicht angekommen sind. Vergewissere Dich bitte, bevor Du den Artikel sichtbar stellst.");
-			taz_base::degub("Im folgenden etwas Debug-Information, die Dir vielleicht weiterhilft, und die du an ".self::$devAddress." schicken kannst, um das Problem zu beheben.");
-			taz_base::degub($command,0);
-			taz_base::degub($output,0);
-			taz_base::degub($return,0);
+			tx_newspaper::devlog(
+                "Transfer of uploaded images to live server failed!",
+                array('command' => $command, 'output' => $output, 'return value' => $return)
+            );
 		}
 
 	}
