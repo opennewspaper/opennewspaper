@@ -824,6 +824,49 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
 	}
 
+
+    /// Symbol used as a replacement for whitespace characters by normalizeString().
+    const space = '_';
+
+    /// Normalizes a string to a basic subset of ASCII, for use in e.g. URLs.
+    /** - Convert spaces to underscores
+     *  - Convert non A-Z characters to ASCII equivalents
+     *  - Convert some special things like the 'ae'-character
+     *  - Strip off all other symbols
+     *  Works with the character set defined as "forceCharset", if defined. Otherwise
+     *  uses the charset used by \p $string.
+     *
+     *  Adapted from Extension RealURL: tx_realurl_advanced::encodeTitle()
+     *
+     * @param	$string		String to clean up
+     * @return	string		Encoded \p $string, passed through rawurlencode() = ready to put in the URL.
+     */
+    private static function normalizeString($string) {
+
+        $cs_converter = $GLOBALS['TSFE']->csConvObj;
+        if (!$cs_converter instanceof t3lib_cs) return $string;
+
+        // Fetch character set:
+        $charset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : $GLOBALS['TSFE']->defaultCharSet;
+
+        // Convert to lowercase:
+        $normalizedString = $cs_converter->conv_case($charset, $string, 'toLower');
+
+        // Convert some special tokens to the space character:
+        $normalizedString = preg_replace('/[ -+_]+/', self::space, $normalizedString); // convert spaces
+
+        // Convert extended letters to ascii equivalents:
+        $normalizedString = $cs_converter->specCharsToASCII($charset, $normalizedString);
+
+        $normalizedString = preg_replace('[^a-zA-Z0-9\\' . self::space . ']', '', $normalizedString); // strip the rest
+        $normalizedString = preg_replace('\\' . self::space . '+', self::space, $normalizedString); // Convert multiple 'spaces' to a single one
+        $normalizedString = trim($normalizedString, self::space);
+
+        // Return encoded URL:
+        return rawurlencode($normalizedString);
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
 	/// Check if given class name is an abstract class
