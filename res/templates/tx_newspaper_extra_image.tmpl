@@ -30,13 +30,16 @@
 {if $attributes.kicker}<h5>{$attributes.kicker}</h5>{/if}
 {if $attributes.title}<h4>{$attributes.title}</h4>{/if}
 {if $dossier_link}
-        <a href="{$dossier_link}">
+<a href="{$dossier_link}">
+{else}
+<a href="{$basepath}/{$sizes.popup}/{$attributes.image_file}"
+   target="fullImage"
+   onclick="vHWin=window.open('{$basepath}/{$sizes.popup}/{$attributes.image_file}','fullImage','width=800,height=400');vHWin.focus();return false;"
+   shape="rect">
 {/if}
-        <img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}"
-                 alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
-{if $dossier_link}
-        </a>
-{/if}
+<img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}"
+     alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+</a>
 
 {if $attributes.caption}<p>{$attributes.caption}</p>{/if}
 
