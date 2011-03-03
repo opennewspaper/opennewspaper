@@ -841,7 +841,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
      * @param	$string		String to clean up
      * @return	string		Encoded \p $string, passed through rawurlencode() = ready to put in the URL.
      */
-    private static function normalizeString($string) {
+    public static function normalizeString($string) {
 
         $cs_converter = $GLOBALS['TSFE']->csConvObj;
         if (!$cs_converter instanceof t3lib_cs) return $string;
