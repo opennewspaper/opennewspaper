@@ -146,11 +146,9 @@ class tx_newspaper_DependencyTree {
 
     static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
         tx_newspaper::startExecutionTimer();
-        tx_newspaper::devlog('generateFromArticlelist 1');
         $tree = new tx_newspaper_DependencyTree();
         if ($list->isSectionList()) {
             $tree->setList($list);
-            tx_newspaper::devlog('generateFromArticlelist 2');
         }
         tx_newspaper::logExecutionTime('generateFromArticlelist()');
 
