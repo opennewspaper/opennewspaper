@@ -36,7 +36,6 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 		## t3 developer log error handling 
 		#  tx_newspaper::devlog("render", $rendered); 
 		
-		/** 
 		$this->prepare_render($template_set);
 		
 		$template = $this->getAttribute('template');
@@ -49,7 +48,6 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 		}
 
         $rendered = $this->smarty->fetch($template);   
-		*/
         
         return $rendered;
 	}
