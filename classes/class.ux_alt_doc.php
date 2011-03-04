@@ -22,7 +22,10 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		}
 
 		// check if an Extra is to be placed on a pagezone or an article
-		if (strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false) {
+		if (
+			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false &&
+			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/closeTab.html') === false
+		) {
 			// no non-Typo3 params found, so show all buttons
 			return parent::getButtons();
 		}
