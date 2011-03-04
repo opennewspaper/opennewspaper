@@ -59,10 +59,9 @@
   *  \endcode
   *  after defining the class. See tx_newspaper_ArticleList_Manual for an
   *  example.
+  *  \todo: rename field "notes", should be "title" (see #595)
   */
 abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
-
-/// \todo: rename field "notes", should be "title" (see #595)
 
 	/// Construct a tx_newspaper_ArticleList
 	/** \param $uid UID of the record in the corresponding SQL table
@@ -303,7 +302,21 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			return false;
 		}
 	}
-	
+
+    public function getSection() {
+
+        if (!$this->isSectionList()) {
+            throw new tx_newspaper_IllegalUsageException('Article list ' . $this->getUid() . ' is not a section list');
+        }
+
+        $section_id = intval($this->getAttribute('section_id'));
+        if (!$section_id) {
+            throw new tx_newspaper_IllegalUsageException('Article list ' . $this->getUid() . ' does not have an associated section');
+        }
+
+        return new tx_newspaper_Section($section_id);
+    }
+
 	/// Tests whether \p $article is in the article list.
 	/** \param $article The article tested for.
 	 *  \param $max_index How many articles are checked.
@@ -461,7 +474,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		if (self::isRegisteredArticleList($table)) {
 			self::writeAbstractRecordIfNeeded($status, $table, $id, $that);
 		}
-
+        self::updateDependencyTree($table, $id);
 	}
 	
 	/// checks if an abstract record needs to be written after creating a concrete article list in the list module
@@ -484,7 +497,22 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$concrete_al->createArticleListRecord($concrete_al_uid, $table);
 		}	
 	}
-	
+
+    private static function updateDependencyTree($table, $id) {
+
+        $ts_config = tx_newspaper::getTSConfig();
+        if ($ts_config['newspaper.']['use_dependency_tree']) {
+            if (strtolower($table) == 'tx_newspaper_articlelist') {
+                $list = tx_newspaper_ArticleList_Factory::getInstance()->create($id);
+            } else {
+                $list = new $table($id);
+            }
+
+            $tree = tx_newspaper_DependencyTree::generateFromArticlelist($list);
+            $tree->executeActionsOnPages();
+        }
+    }
+
 	/// TCEforms hook
 	public static function getMainFields_preProcess($table, $row, $that) {
 		// check concrete article lists first ...

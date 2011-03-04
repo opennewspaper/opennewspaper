@@ -144,11 +144,23 @@ class tx_newspaper_DependencyTree {
         return $tree;
     }
 
+    static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
+        tx_newspaper::startExecutionTimer();
+        $tree = new tx_newspaper_DependencyTree();
+        if ($list->isSectionList()) {
+            $tree->setList($list);
+        }
+        tx_newspaper::logExecutionTime('generateFromArticlelist()');
+
+        return $tree;
+    }
+
     /// Generates the tree of pages that change when a tx_newspaper_Extra changes.
     /** @param $extra The web element which is changed. \p $extra is from now on
      *   called "the affected extra".
      */
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
+        tx_newspaper::startExecutionTimer();
         $pagezone = $extra->getPageZone();
         $tree = new tx_newspaper_DependencyTree();
         if ($pagezone instanceof tx_newspaper_Article) {
@@ -160,7 +172,8 @@ class tx_newspaper_DependencyTree {
             $tree->markAsCleared();
             # throw new tx_newspaper_InconsistencyException('Page zone is neither article nor page: ' . get_class($pagezone));
         }
-        
+        tx_newspaper::logExecutionTime('generateFromExtra()');
+
         return $tree;
     }
 
@@ -298,6 +311,11 @@ class tx_newspaper_DependencyTree {
 
     private function setArticle(tx_newspaper_Article $article) {
         $this->article = $article;
+    }
+
+    private function setList(tx_newspaper_Articlelist $list) {
+        $this->addSectionPages(array($list->getSection()));
+        $this->markAsCleared();
     }
 
     private function setExtra(tx_newspaper_Extra $extra) {
