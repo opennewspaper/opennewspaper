@@ -474,7 +474,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		if (self::isRegisteredArticleList($table)) {
 			self::writeAbstractRecordIfNeeded($status, $table, $id, $that);
 		}
-        self::updateDependencyTree($table, $id);
 	}
 	
 	/// checks if an abstract record needs to be written after creating a concrete article list in the list module
@@ -498,16 +497,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		}	
 	}
 
-    private static function updateDependencyTree($table, $id) {
+    private static function updateDependencyTree(tx_newspaper_ArticleList $list) {
 
         $ts_config = tx_newspaper::getTSConfig();
         if ($ts_config['newspaper.']['use_dependency_tree']) {
-            if (strtolower($table) == 'tx_newspaper_articlelist') {
-                $list = tx_newspaper_ArticleList_Factory::getInstance()->create($id);
-            } else {
-                $list = new $table($id);
-            }
-
             $tree = tx_newspaper_DependencyTree::generateFromArticlelist($list);
             $tree->executeActionsOnPages();
         }
@@ -578,13 +571,13 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
 	/// Call all registered save hooks
 	protected function callSaveHooks() {
-tx_newspaper::devlog('callSaveHooks');
 		foreach (self::$registered_savehooks as $hook_class) {
 			if (!is_object($hook_class)) $hook_class = new $hook_class();
 			if (method_exists($hook_class, 'articleListSaveHook')) {
 				$hook_class->articleListSaveHook($this);
 			}
-		}		
+		}
+        self::updateDependencyTree($this);
 	}
 	
 	/// \return $TCA for this article list (abstract and concrete)
