@@ -9,7 +9,8 @@
 <body>
 {* debug *}
 {literal}
-<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+
+<script language="javascript" type="text/javascript" src="res/eb/js/eb.js"> </script>
 <script type="text/javascript">
 function executeFilter(reset_pointer) {
 	if (reset_pointer) {
@@ -36,10 +37,6 @@ function browserResults(pointer) {
 	executeFilter(); // execute filter
 }
 
-function closeElementBrowser() {
-	opener.focus();
-	self.close();
-}
 {/literal}
 {$CHOSERECORD}
 

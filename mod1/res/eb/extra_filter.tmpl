@@ -1,7 +1,13 @@
 {* debug *}
-{* \todo: check if extra::getSearchFields() is empty -> if yes, hide text  input field in onchage in dropdown *}
-{literal}
+<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
 <script type="text/javascript">
+
+	var sysFolder = new Object(); // see http://de.selfhtml.org/javascript/objekte/array.htm#assoziative_arrays
+{foreach from=$formExtras item=extra}
+	sysFolder["{$extra->getTable()}"] = {$extra->getSysfolderPid()};
+{/foreach}
+
+{literal}
 	function checkEnter(code) {
 		if (code != 13) {
 			return;
@@ -13,7 +19,6 @@
 		switch(item) {
 {/literal}
 	{foreach from=$formExtras item=extra}
-
 {if $extra->getSearchFields()}case '{$extra->getTable()}':
 {/if}
 	{/foreach}
@@ -24,7 +29,38 @@
 				mode = 'none';
 		}
 		document.getElementById("textfield").style.display = mode;
+
+		document.getElementById("search").style.display = (item == '')? 'none' : 'inline';
+		document.getElementById("new").style.display = (item == '')? 'none' : 'inline';
+
 	}
+
+	function newExtra() {
+		var extraClass = document.getElementById("tx_newspaper_mod1[extra]").value;
+		var extraSysfolder = sysFolder[extraClass]; // get uid of sysfolder the extra will be stored in
+		var path = window.location.pathname;
+		path = path.substring(0, path.indexOf("/typo3conf/")) + "/";
+
+		// create Typo3 record
+		var request = new Ajax.Request(
+			'../mod1/index.php',
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod1[ajaxController]=createNewExtra&tx_newspaper_mod1[extraClass]=' + extraClass,
+				onError: function() {
+					alert('Error! Please retry creating the extra.');
+				},
+				onSuccess: function(response) {
+					var data = response.responseText.evalJSON(true);
+					var returnUrl = escape(path + "typo3conf/ext/newspaper/mod1/res/eb/closeNewExtra.html?tx_newspaper_mod1[newExtraClass]=" + extraClass + "&tx_newspaper_mod1[newExtraUid]=" + data.uid);
+					var url = path + "typo3/alt_doc.php?returnUrl=" + returnUrl + "&edit[" + extraClass + "][" + data.uid + "]=edit&tx_newspaper_mod1[newExtraInElementBrowser]=1";
+					self.location.href = url;
+				}
+			}
+		);
+
+	}
+
 </script>
 {/literal}
 	<input type="hidden" name="tx_newspaper_mod1[ajaxcontroller]" value="eb" /> {* element browser ... *}
@@ -37,5 +73,6 @@
 		<option value="{$extra->getTable()}"> {$extra->getTitle()} </option>
 {/foreach}
 	</select>
-	<span id="textfield" style="display:none;"><label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input onkeyup="checkEnter(event.keyCode); return false;" type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" /></span>
-	<input type="button" value="{$LL.labelSearch}" onclick="executeFilter(1);" />
+	<span id="textfield" style="display:none; margin-left:20px;"><label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input onkeyup="checkEnter(event.keyCode); return false;" type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" /></span>
+	<span id="search" style="display:none; margin-left:20px;"><input type="button" value="{$LL.labelSearch}" onclick="executeFilter(1);" /></span>
+	<span id="new" style="display:none; margin-left:20px;"><input type="button" value="{$LL.labelNewExtra}" onclick="newExtra();" /></span>

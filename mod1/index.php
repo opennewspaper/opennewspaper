@@ -519,6 +519,22 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		// types: see processNewspaperElementBrowser()
 		private function processNewspaperElementBrowserAjax() {
 //t3lib_div::devlog('processNewspaperElementBrowserAjax()', 'newspaper', 0, array('input' => $this->input));
+
+			// Check if AJAX request should perform a simple operation and return data using JSON
+			switch($this->input['ajaxController']) {
+				case 'createNewExtra':
+					$extra = new $this->input['extraClass']();
+					$extra->setAttribute('crdate', time());
+					$extra->setAttribute('tstamp', time());
+					$extra->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+					$extra->store(); // \todo: store() create an abtract record too, but this isn't needed here ...
+					die(json_encode(array('uid' => $extra->getUid()))); // return uid
+				break;
+			}
+
+
+
+			// Check if AJAX request is to be processed here
 			if (
 				!$this->input['ajaxcontroller'] ||
 				strtolower($this->input['ajaxcontroller']) != 'eb' ||
@@ -526,6 +542,10 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			) {
 				return; // no newspaper element browser ajax request this time
 			}
+
+
+
+			// AJAX request returns Smarty based HTML code
 
 			// prepare smarty object
 			$smarty = new tx_newspaper_Smarty();

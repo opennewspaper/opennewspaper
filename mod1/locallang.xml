@@ -8,6 +8,7 @@
 		<languageKey index="default" type="array">
 			<label index="title">Extra</label>
 			<label index="labelSearch">Search</label>
+			<label index="labelNewExtra">Create new extra</label>
 			<label index="labelExtra">Extra</label>
 			<label index="labelNoExtra">--</label>
 			<label index="labelText">Text</label>
@@ -25,6 +26,7 @@
 		<languageKey index="de" type="array">
 			<label index="title">Extra</label>
 			<label index="labelSearch">Suchen</label>
+			<label index="labelNewExtra">Neues Extra anlegen</label>
 			<label index="labelExtra">Web-Element</label>
 			<label index="labelNoExtra">--</label>
 			<label index="labelText">Text</label>
