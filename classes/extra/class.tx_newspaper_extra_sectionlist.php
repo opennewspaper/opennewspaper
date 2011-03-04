@@ -45,6 +45,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		$articles = $list->getArticles($num, $first);
 		
 		$this->smarty->assign('articles', $articles);
+        $this->smarty->assign('section_id', tx_newspaper::getSection()->getUid());
 		
         $rendered = $this->smarty->fetch($this);
 
