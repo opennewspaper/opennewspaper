@@ -578,7 +578,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	
 	/// Call all registered save hooks
 	protected function callSaveHooks() {
-
+tx_newspaper::devlog('callSaveHooks');
 		foreach (self::$registered_savehooks as $hook_class) {
 			if (!is_object($hook_class)) $hook_class = new $hook_class();
 			if (method_exists($hook_class, 'articleListSaveHook')) {
