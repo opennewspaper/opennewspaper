@@ -57,7 +57,7 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 	public function getDescription() {
 		return substr(
 		
-			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('notes'), 
+			$this->getAttribute('notes'), 
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 	
