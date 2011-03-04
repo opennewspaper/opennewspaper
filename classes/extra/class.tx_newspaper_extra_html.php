@@ -33,8 +33,7 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 				
 		$rendered = $this->getAttribute('html');
 		
-		## die folgende zeile sorgt nach entfernung der Auskommentierung  ggfs. für eine 
-		# Fehlerausgabe im Typo3-Developer-Log:
+		## t3 developer log error handling 
 		#  tx_newspaper::devlog("render", $rendered); 
 		
 		/** 
