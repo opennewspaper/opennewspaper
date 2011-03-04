@@ -6,18 +6,27 @@ class ux_SC_alt_doc extends SC_alt_doc {
 	protected function getButtons()	{
 		global $TCA,$LANG;
 
+//debug($this->elementsData, 'elementsData');
+//debug($this->editconf, 'editconf');
+//debug($this->elementsData[0]['table'], 'table');
+//debug($_REQUEST, '$_request');
 
-//debug($this->elementsData);
-//debug($this->editconf);
-//debug($this->elementsData[0]['table']);
-		
 		if (!tx_newspaper::startsWith($this->elementsData[0]['table'], 'tx_newspaper')) {
 			// no newspaper stuff found, so let typo3 handle this on its own ;-)
 			return parent::getButtons();
 		}
 
+		if ($_REQUEST['tx_newspaper_mod1']['newExtraInElementBrowser']) {
+			//new Extra in Extra element browser, all buttons are needed (well, preview isn't really needed ...)
+			return parent::getButtons();
+		}
 
-		
+		// check if an Extra is to be placed on a pagezone or an article
+		if (strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false) {
+			// no non-Typo3 params found, so show all buttons
+			return parent::getButtons();
+		}
+
 		// add workflow buttons to newspaper articles (and remove docheader2)
 		if ($this->elementsData[0]['table'] == 'tx_newspaper_article') {
             $buttons = array(
@@ -54,24 +63,24 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
             // CLOSE button:
             $buttons['close'] = self::getStyleToHideDocheader2() . '
-	
+
 	<!-- dummy button for iframe testing -->
 	<script type="text/javascript">
 		function frameTest(buttonName) {
-	
+
 			var iframeDok = top.window.frames[\'popupFrame\'].document;
-	
+
 			var saveDokInputX = iframeDok.createElement("input");
 			saveDokInputX.setAttribute("name", buttonName + ".x");
 			saveDokInputX.setAttribute("type", "hidden");
-	
+
 			var saveDokInputY = iframeDok.createElement("input");
 			saveDokInputY.setAttribute("name", buttonName + ".y");
 			saveDokInputY.setAttribute("type", "hidden");
-	
+
 			iframeDok.forms[0].appendChild(saveDokInputX);
 			iframeDok.forms[0].appendChild(saveDokInputY);
-	
+
 			iframeDok.forms[0].submit();
 			return false;
 		}
@@ -79,9 +88,9 @@ class ux_SC_alt_doc extends SC_alt_doc {
 			frameTest(that.name);
 		}
 	</script>
-	
-					
-					
+
+
+
 					<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.
                     '<img'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/closedok.gif','width="21" height="16"').' class="c-inputButton" title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc',1).'" alt="" />'.
                     '</a>';
@@ -141,20 +150,20 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 		// hide, delete, save&new and save&preview buttons (and docheader2) for extras
-		if (!tx_newspaper::isAbstractClass($this->elementsData[0]['table'])) {			
+		if (!tx_newspaper::isAbstractClass($this->elementsData[0]['table'])) {
 			if (tx_newspaper::classImplementsInterface($this->elementsData[0]['table'], 'tx_newspaper_ExtraIface')) {
 				// newspaper extra is being edited, don't show show delete, view, new and close buttons
 				$buttons = parent::getButtons();
 				$buttons['save_view'] = '';
 				$buttons['save_new'] = '';
-				
+
 				if (!$this->isInPlacementModule() && (tx_newspaper_be::getExtraBeDisplayMode() == BE_EXTRA_DISPLAY_MODE_TABBED)) {
 					// no close buttons, if tabbed backend for extras in CONCRETE articles
 					$buttons['save_close'] = '';
 					$buttons['close'] = '';
-				} // but do show close buttons in placement module, because in that module 
-				// mis-use delete button to add css code and hide docheader2 
-				$buttons['delete'] = self::getStyleToHideDocheader2(); 
+				} // but do show close buttons in placement module, because in that module
+				// mis-use delete button to add css code and hide docheader2
+				$buttons['delete'] = self::getStyleToHideDocheader2();
 				return $buttons;
 			}
 		}
@@ -162,14 +171,14 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 		// no need to modify the button array for this newspaper record, so let Typo3 handle this call ...
 		return parent::getButtons();
-		
+
 	}
-	
+
 	/// very simple check if the users is editing in the placement module (mod3)
 	private function isInPlacementModule() {
 		return (strpos($this->returnUrl, 'newspaper/mod3/res/close.html') !== false);
 	}
-	
+
 	private function getJsForArticlePreview() {
 		return '<script language="javascript">
 	var path = window.location.pathname;
@@ -177,25 +186,25 @@ class ux_SC_alt_doc extends SC_alt_doc {
 /// \todo: based on mod7, how to merge into 1 js file?
 function showArticlePreview(article_uid) {
 	window.open(
-		path + "typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid, 
-		"preview", 
+		path + "typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid,
+		"preview",
 		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
 	);
 }
 </script>
 <a href="#" onclick="showArticlePreview('. $this->elementsData[0]['uid'] . '); return false;">' . tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)) . '</a>';
 	}
-	
-	
+
+
 	private static function getStyleToHideDocheader2() {
-		return '<!-- hide docheader2 (csh and path info) --> 
+		return '<!-- hide docheader2 (csh and path info) -->
 <style>
 #typo3-docheader-row2 { display:none; }
 div#typo3-docbody { top:20px; }
 </style>
 ';
 	}
-	
+
 }
 
 ?>
