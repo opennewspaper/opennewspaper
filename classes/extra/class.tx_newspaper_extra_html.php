@@ -31,12 +31,12 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 	 */	
 	public function render($template_set = '') {
 				
-		$rendered = $this->getAttribute('html');
-		
 		## t3 developer log error handling 
 		#  tx_newspaper::devlog("render", $rendered); 
 		
 		$this->prepare_render($template_set);
+		
+		$this->smarty->assign('html', $this->getAttribute('html'));
 		
 		$template = $this->getAttribute('template');
 		if ($template) {
