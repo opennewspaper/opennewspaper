@@ -1,9 +1,9 @@
 <?php
 /**
  *  \file class.tx_newspaper_section.php
- * 
+ *
  *  This file is part of the TYPO3 extension "newspaper".
- * 
+ *
  *  Copyright notice
  *
  *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
@@ -24,17 +24,17 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- *  
+ *
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Jan 8, 2009
  */
- 
+
 /// A section of an online edition of a newspaper
 /** Currently just a dummy
- * 
+ *
  */
 class tx_newspaper_Section implements tx_newspaper_StoredObject {
-	
+
 	/// Construct a tx_newspaper_Section given the UID of the SQL record
 	public function __construct($uid = 0) {
 		if ($uid) {
@@ -54,14 +54,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function getAttribute($attribute) {
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
-				'*', $this->getTable(), 'uid = ' . $this->getUid() 
+				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-		
+
 		if (!array_key_exists($attribute, $this->attributes)) {
         	throw new tx_newspaper_WrongAttributeException($attribute);
 		}
-		
+
 		return $this->attributes[$attribute];
 	}
 
@@ -74,7 +74,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-		
+
 		$this->attributes[$attribute] = $value;
 	}
 
@@ -82,8 +82,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function store() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-	
-	
+
+
 	/// \return true if section can be accessed (FE/BE use enableFields)
 	public function isValid() {
 		// check if section is valid
@@ -114,12 +114,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 *  As some attribute are changed (crdate f.ex) the new article gets stored in this method.
 	 * \param $new_al article list object of the new article list
 	 * \return uid of abstract article list
-	 */ 
+	 */
 	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
-		
+
 		try {
 			$current_al = $this->getArticleList(); // get current article list
-			
+
 			// "delete" (= set deleted flag) previous concrete article list before writing the new one
 			// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
 			tx_newspaper::updateRows(
@@ -143,7 +143,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 		/// try to re-activate an old deleted article list for the new article list type
 
-		// read newest abstract article list of new article list's type (record is deleted; was before or was set deleted by the updareRows() abobe)		
+		// read newest abstract article list of new article list's type (record is deleted; was before or was set deleted by the updareRows() abobe)
 		$al_abstract = tx_newspaper::selectRowsDirect(
 			'*',
 			'tx_newspaper_articlelist',
@@ -173,7 +173,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				);
 				return $al_abstract[0]['uid']; // uid of abstract article list
 			}
-		} 
+		}
 
 		// no article list found to re-activate, so create a new one
 		$new_al->store(); // store new article list
@@ -182,14 +182,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		$title = tx_newspaper::getTranslation('title_section_articlelist');
 		$title = str_replace('###SECTION###', $this->getAttribute('section_name'), $title);
 		$title = str_replace('###ARTICLELIST_TYPE###', $new_al->getTitle(), $title);
-		tx_newspaper::updateRows( 
+		tx_newspaper::updateRows(
 			'tx_newspaper_articlelist',
 			'uid=' . $new_al->getAbstractUid(),
 			array(
 				'notes' => $title
 			)
 		);
-		
+
 		return $new_al->getAbstractUid();
 
 	}
@@ -197,16 +197,16 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 
 	public function getArticleList() {
-		if (!$this->articlelist) { 
+		if (!$this->articlelist) {
 			$list = tx_newspaper::selectOneRow(
 				'uid', self::$list_table, 'section_id  = ' . $this->getUid()
 			);
 			$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create($list['uid'], $this);
 		}
 
-		return $this->articlelist; 
+		return $this->articlelist;
 	}
-	
+
 	public function getParentSection() {
 		if ($this->getAttribute('parent_section')) {
 			return new tx_newspaper_Section($this->getAttribute('parent_section'));
@@ -225,31 +225,49 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				'uid', $this->getTable(),
 				'parent_section = ' . $this->getUid()
 			);
-		
+
 		$sections = array();
 		if ($row) foreach ($row as $section_uid) {
 			$child =  new tx_newspaper_Section($section_uid['uid']);
 			$sections[] = $child;
 			if ($recursive) {
-				$sections = array_merge($sections, 
+				$sections = array_merge($sections,
 										$child->getChildSections($recursive));
 			}
 		}
 
 		return $sections;
 	}
-	
+
 	/// \return uid of parent abstract record for concrete article list associated with section
 	public function getAbstractArticleListUid() {
 		return $this->getAttribute('articlelist');
 	}
-	
-	/// Returns all pages attached to the current section 
+
+
+	/// Activate a page for this section
+	/// \return true if page was activated, false if page has been active already
+	public function activatePage(tx_newspaper_PageType $type) {
+		if ($this->getSubPage($type)) {
+			return false; // page has been activated already
+		}
+
+		$p = new tx_newspaper_Page($this, $type);
+		$p->store();
+		$p->setAttribute('crdate', time());
+		$p->setAttribute('tstamp', time());
+		$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+		$p->store();
+
+		return true;
+	}
+
+	/// Returns all pages attached to the current section
 	public function getSubPages() {
         if (!$this->subPages) {
             $row = tx_newspaper::selectRows(
                 'uid', 'tx_newspaper_page',
-                'section = ' . $this->getAttribute('uid') 
+                'section = ' . $this->getAttribute('uid')
             );
      		foreach ($row as $record) {
  			    $this->subPages[] = new tx_newspaper_Page((int)$record['uid']);
@@ -257,17 +275,16 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
         }
  		return $this->subPages;
  	}
- 	
+
  	/// Finds the page under the current section that has the required page type.
  	public function getSubPage(tx_newspaper_PageType $type) {
  		foreach ($this->getSubPages() as $page) {
  			if ($page->getPageType()->getUid() == $type->getUid())
  				return $page;
  		}
- 		///	\todo or throw?
  		return null;
  	}
- 	
+
  	/// Finds a pages of specified page type under the current section or its children.
  	/** If this section has the specified page type activated, that page is returned.
  	 *  Else all activated pages in the child sections are returned. Each section
@@ -276,28 +293,28 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	public function getSubPagesRecursively(tx_newspaper_PageType $type) {
  		$sub_page = $this->getSubPage($type);
  		if ($sub_page instanceof tx_newspaper_Page) return array($sub_page);
- 		
+
  		$sub_pages = array();
  		foreach ($this->getChildSections() as $sub_section) {
  			$sub_pages = array_merge($sub_pages, $sub_section->getSubPagesRecursively($type));
  		}
  		return $sub_pages;
  	}
- 	
+
  	/// gets an array of sections up the rootline
 	/// \return array tx_newspaper_Section objects, up the rootline
 	public function getSectionPath($path = array()) {
 		$path[] = $this;
 		if ($this->getParentSection()) {
-			return $this->getParentSection()->getSectionPath($path);			
-		} 
+			return $this->getParentSection()->getSectionPath($path);
+		}
 		return $path;
-	}	
-	
-	/// \return The UID of the associated Typo3 page 
+	}
+
+	/// \return The UID of the associated Typo3 page
 	public function getTypo3PageID() {
 		try {
-			$row = tx_newspaper::selectOneRow('uid', 'pages', 
+			$row = tx_newspaper::selectOneRow('uid', 'pages',
 											  'tx_newspaper_associated_section = ' . $this->getUid());
 		} catch (tx_newspaper_DBException $e) {
 			throw new tx_newspaper_IllegalUsageException(
@@ -309,10 +326,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		}
 		return intval($row['uid']);
 	}
-	
-	/** \return the Article PageZone (PageZoneType has is_article set) on the 
+
+	/** \return the Article PageZone (PageZoneType has is_article set) on the
 	 * 		Page marked as the Article Page, or \c null.
-	 */ 
+	 */
 	public function getDefaultArticle() {
 		foreach ($this->getSubPages() as $sub_page) {
 			foreach ($sub_page->getActivePageZones() as $pagezone) {
@@ -323,39 +340,39 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		}
 		return null; // no default article found
 	}
- 	
- 	
+
+
  	/** Create a new article based on TSConfig settings for musthave extras
  	 *  \param $at article type object
  	 */
  	public function createNewArticle(tx_newspaper_articletype $at) {
  		$new_article = new tx_newspaper_article();
- 		
+
  		$new_article->setAttribute('crdate', time());
  		$new_article->setAttribute('tstamp', time());
- 		 		
+
  		$new_article->store(); // store article before adding the section (otherwise no uid available)
  		$new_article->addSection($this);
- 		
+
  		// \todo: check if extra is placed on $this->getDefaultArticle(), if default article are to be used at all
- 		// if yes: copy matching extras from default article if any, else create empty extra (as implemented below) 
- 		
+ 		// if yes: copy matching extras from default article if any, else create empty extra (as implemented below)
+
 		///	Create extras configured in TSConfig
 		$must_have_extras = $at->getTSConfigSettings('musthave'); // read configured must have extras
 		foreach($must_have_extras as $key => $default_extra) {
-			// $default_extra contains a class name or 
+			// $default_extra contains a class name or
 			// a class name extended with ":" and a default paragraph for the extra
-			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2	
+			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2
 			list($extra_class, $paragraph) = explode(':', $default_extra);
 			$paragraph = intval($paragraph);
-//t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));			
+//t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
 
 			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
 				$new_extra = new $extra_class();
-				
+
 				//	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
 				$new_extra->store();
-				
+
 		 		$new_extra->setAttribute('crdate', time());
 		 		$new_extra->setAttribute('tstamp', time());
 
@@ -363,9 +380,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 				$new_extra->setAttribute('show_extra', 1);
 				$new_extra->setAttribute('paragraph', $paragraph);
 				$new_extra->setAttribute('position', 0);
-				
+
 				$new_extra->store();						//	Final store()
-				
+
 				/// Write association table entry article -> extra
 				/// \todo $new_article->relateExtra2Article($new_extra)?
 				tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
@@ -380,18 +397,18 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
  		return $new_article;
  	}
- 	
- 	
- 	
- 	/** Create a new article from the article with the default placement as 
+
+
+
+ 	/** Create a new article from the article with the default placement as
  	 *  specified in the Article PageZone of the Article Page of the Section.
- 	 * 
+ 	 *
  	 *  Extras which are mandatory for an Article in this Section (specified in
- 	 *  TSConfig for the Typo3 page in which the current Section lies) are 
+ 	 *  TSConfig for the Typo3 page in which the current Section lies) are
  	 *  created. If the Extra is placed in the default placement Article, it is
  	 *  copied. Else, a new Extra of the specified class is created hidden with
  	 *  paragraph and position set to (0,0).
- 	 * 
+ 	 *
  	 *  \param $at article type object
  	 */
 /* // note: code not working properly: default extra handling dev stopped ...
@@ -399,7 +416,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
  		if (!$new_article = $this->getDefaultArticle()) {
 			// no default article found, so no article to copy, just return a new empty article
-			return new tx_newspaper_article(); 			
+			return new tx_newspaper_article();
  		}
  		if (!$new_article instanceof tx_newspaper_Article) {
  			throw new tx_newspaper_InconsistencyException('getDefaultArticle() did not return an Article!');
@@ -412,9 +429,9 @@ t3lib_div::devlog('at tsc musthave', 'newspaper', 0, array('musthave' => $must_h
  		$new_article->setAttribute('uid', 0);
  		$new_article->setUid(0);
  		$new_article->store();
- 		
+
  		$new_article->clearExtras();
- 		
+
  		$new_article->setAttribute('is_template', 0);
 
  		$new_article->setAttribute('crdate', time());
@@ -429,33 +446,33 @@ t3lib_div::devlog('at tsc musthave', 'newspaper', 0, array('musthave' => $must_h
 				unset($must_have_extras[$key]);
 			}
 		}
-		
+
 		///	Create extras configured in TSConfig
 		/// Extras get either copied from default article (if available) or are created empty
 		foreach($must_have_extras as $key => $default_extra) {
 
-			// $default_extra contains a class name or 
+			// $default_extra contains a class name or
 			// a class name extended with ":" and a default paragraph for the extra
-			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2	
+			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2
 			list($extra_class, $paragraph) = explode(':', $default_extra);
 			$paragraph = intval($paragraph);
-t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));			
+t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
 
 			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
 				$new_extra = new $extra_class();
-				
+
 				//	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
 				$new_extra->store();
-				
+
 		 		$new_extra->setAttribute('crdate', time());
 		 		$new_extra->setAttribute('tstamp', time());
-				
+
 				$new_extra->setAttribute('show_extra', 0);
 				$new_extra->setAttribute('paragraph', $paragraph);
 				$new_extra->setAttribute('position', 0);
-				
+
 				$new_extra->store();						//	Final store()
-				
+
 				/// Write association table entry article -> extra
 				/// \todo $new_article->relateExtra2Article($new_extra)?
 				tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
@@ -468,11 +485,11 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 			}
 		}
 
-		false && t3lib_div::devlog('extras', 'newspaper', 0, 
+		false && t3lib_div::devlog('extras', 'newspaper', 0,
 			array('default extras' => $default_extras,
 				'must have extras' => $must_have_extras,
 				'extras' => $new_article->getExtras()));
- 		 		
+
  		// set main section
  		$new_article->addSection($this);
  		$new_article->store();
@@ -480,14 +497,14 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
  		return $new_article;
  	}
  */
- 	
+
  	public function getTable() {
 		return tx_newspaper::getTable($this);
 	}
-	
+
 	public function setUid($uid) { $this->uid = intval($uid); }
 	public function getUid() { return $this->uid; }
-	
+
 	/// get active pages for current Section
 	/// \return array uids of active pages objects for given section
 	public function getActivePages() {
@@ -506,8 +523,8 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 		return $list;
 	}
-	
-	
+
+
 	/// Get array with article objects assigned to this section (limited by $limit)
 	public function getArticles($limit=10) {
 		$limit = intval($limit);
@@ -526,7 +543,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 		return $list;
 	}
-	
+
 	///	Generate a URL which links to the "section overview" page of the Section
 	public function getLink() {
 		return tx_newspaper::typolink_url(
@@ -543,21 +560,21 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	///	Get all tx_newspaper_Section records in the DB.
 	/** \param $articlesAllowedOnly if set to true only section with the
 	 *       articles_allowed flag set are returned
-	 *  \param $sort_by Field of the \c tx_newspaper_section SQL table to sort 
+	 *  \param $sort_by Field of the \c tx_newspaper_section SQL table to sort
 	 * 		results by.
 	 *  \return tx_newspaper_Section objects in the DB.
 	 */
 	public static function getAllSections($articlesAllowedOnly=true, $sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
 		$excluded = $TSConfig['newspaper.']['excluded_sections'];
-		
+
 		$excluded_sections = array();
 		$additional_where = '';
 		if ($excluded) {
 			foreach (explode(',', $excluded) as $excluded_section_uid) {
 				$excluded_section = new tx_newspaper_Section($excluded_section_uid);
 				$excluded_sections = array_merge(
-					$excluded_sections, 
+					$excluded_sections,
 					array($excluded_section),
 					$excluded_section->getChildSections(true));
 			}
@@ -577,8 +594,8 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 
 		// add sysfolder id
-		$additional_where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()); 
-		
+		$additional_where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
+
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
@@ -586,18 +603,18 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 			'',
 			$sort_by
 		);
-		
+
 		$s = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
 		}
 		return $s;
 	}
-	
-	
+
+
 	static public function getModuleName() { return 'np_section'; }
-	
-	
+
+
 	/// Get root section(s)
 	/// \return root section(s)
 	public static function getRootSections() {
@@ -609,7 +626,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 		return $root;
 	}
-	
+
 	static public function getSectionForTypo3Page($typo_page_id) {
 
         $row = tx_newspaper::selectZeroOrOneRows(
@@ -623,9 +640,9 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
         return new tx_newspaper_Section($section_uid);
 
     }
-	
+
 	/// Typo3  hooks
-	
+
 	/// \todo: documentation
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
@@ -636,32 +653,32 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 	}
 
-	/// \todo: documentation	
+	/// \todo: documentation
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
 		if ($table != 'tx_newspaper_section') {
 			return; // no section processed, nothing to do
 		}
-		
+
 		// check if the article list was changed
 		if (!isset($fieldArray['articlelist'])) {
 			return; // article list wasn't changed, nothing to do
-		}	
-		
+		}
+
 //t3lib_div::devlog('al1 fiealdArray[al]', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
 		if (tx_newspaper::isAbstractClass($fieldArray['articlelist']) || !class_exists($fieldArray['articlelist'])) {
-			return; // well, ... can't create an object for an abstract or non-existing class 
+			return; // well, ... can't create an object for an abstract or non-existing class
 		}
-		
+
 		// note: the value in the backend dropdown is the name of the article list class ($fieldArray['articlelist'])
-		
+
 		if (new $fieldArray['articlelist']() instanceof tx_newspaper_articlelist) {
 //t3lib_div::devlog('sh post in section', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id));
-			// new article list class is a valid article list class, so change article list for this section now				
+			// new article list class is a valid article list class, so change article list for this section now
 			$s = new tx_newspaper_Section(intval($id)); // create section object
 			$new_al = new $fieldArray['articlelist'](0, $s);
 			if ($abstract_uid = $s->replaceArticleList($new_al)) {
 				$fieldArray['articlelist'] = $abstract_uid; // store uid of abtracte article list in section, if replacing was successful
-			} 
+			}
 		}
 	}
 
@@ -671,11 +688,11 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	private $articlelist = null;
 	private $uid = 0;
 	private $abstract_articlelist_id = 0;
- 	
+
  	/// table which stores the tx_newspaper_ArticleList associated with this section
  	static private $list_table = 'tx_newspaper_articlelist';
  }
- 
+
 tx_newspaper::registerSaveHook(new tx_newspaper_Section());
 
 ?>

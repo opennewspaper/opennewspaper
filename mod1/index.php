@@ -175,29 +175,15 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	function processActivatePageType() {
 		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
-//t3lib_div::devlog('papt param', 'newspaper', 0, 'param' => $param);
+//t3lib_div::devlog('papt param', 'newspaper', 0, array('param' => $param));
 
-		// check if this pagetype REALLY isn't active
+		// get section
 		$s = new tx_newspaper_Section(intval($param['section']));
-		$ap = $s->getActivePages();
-		foreach($ap as $active_page) {
-			if ($active_page->getPageType()->getUid() == intval($param['pagetype'])) {
-				// for some reason this page type has been activated already
-				t3lib_div::devlog('Page type #' . intval($param['pagetype']) . ' already active for section #' . $s->getUid(), 'newspaper', 3);
-				return;
-			}
-		}
 
-		$p = new tx_newspaper_Page(
-			$s,
-			new tx_newspaper_PageType(intval($param['pagetype']))
-		);
-		$p->store();
-		$p->setAttribute('crdate', time());
-		$p->setAttribute('tstamp', time());
-		$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$dummy = $p->store();
-//t3lib_div::devlog('papt after store', 'newspaper', 0, $dummy);
+		// activate page
+		$s->activatePage(new tx_newspaper_PageType(intval($param['pagetype'])));
+
+		// re-render backend
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
@@ -226,26 +212,13 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		$param = $this->splitParams();
 //t3lib_div::devlog('papzt param', 'newspaper', 0, 'param' => $param);
 
-		// check if this pagetype REALLY isn't active
+		//get page
 		$p = new tx_newspaper_page(intval($param['page']));
-		$apz = $p->getActivePagezones();
-		foreach($apz as $active_pagezone) {
-			if ($active_pagezone->getPagezoneType()->getUid() == intval($param['pagezonetype'])) {
-				// for some reason this pagezone type has been activated already
-				t3lib_div::devlog('Pagezone type #' . intval($param['pagezonetype']) . ' already active for page #' . $p->getUid(), 'newspaper', 3);
-				return;
-			}
-		}
 
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
-			$p,
-			new tx_newspaper_PageZoneType(intval($param['pagezonetype']))
-		);
-		$pz->setAttribute('crdate', time());
-		$pz->setAttribute('tstamp', time());
-		$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$pz->store();
+		// activate pagezone
+		$p->activatePagezone(new tx_newspaper_PagezoneType(intval($param['pagezonetype'])));
 
+		// re-render backend
 		$PA['row']['uid'] = $param['section']; // simulate call from be
 		$PA['AJAX_CALL'] = true;
 		$tmp['html'] = tx_newspaper_BE::renderPagePageZoneList($PA);
