@@ -101,9 +101,6 @@ if (TYPO3_MODE == 'BE') {
 	/// add icon for newspaper sysfolders
 	$ICON_TYPES['newspaper'] = array('icon' => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/icons/icon_tx_newspaper_sysf.gif');
 
-	// force reloading article backend when article type changes
-	$GLOBALS['TCA']['tx_newspaper_article']['ctrl']['requestUpdate'] .= ',articletype_id';
-
 
 	// set range for role in be_users
 	$TCA['be_users']['columns']['tx_newspaper_role']['config']['range'] = array (
