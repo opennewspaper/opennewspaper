@@ -259,6 +259,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 		$p->store();
 
+		$this->subPages[] = $p; // add page to subPages array, so it's available right away
+
 		return true;
 	}
 

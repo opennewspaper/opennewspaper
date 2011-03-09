@@ -1,8 +1,0 @@
-{* debug *}
-
-{* currently not in use *}
-
-{foreach from=$sections item=section}
-	{foreach from=$section->getSectionPath() item=path}{$path->getAttribute('section_name')}/{/foreach}
-	<br />
-{/foreach}

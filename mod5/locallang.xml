@@ -42,6 +42,8 @@
 			<label index="label_admin_wizard_pagezonetype">Page zone type</label>
 			<label index="label_admin_wizard_pagezone_activate">Activate the chosen pagezone type for the chosen page type.</label>
 			<label index="label_admin_wizard_pagezone_deactivate">De-activate the chosen pagezone type for the chosen page type. ARE YOU SURE YOU WANT TO DO THIS? This action can't be undone. Web elements placed on these pagezone can't be restored.</label>
+			<label index="message_admin_wizard_pagezone_activate_success">The pagezones have been activated successfully.</label>
+			<label index="message_admin_wizard_pagezone_deactivate_success">The pagezones have been de-activated successfully.</label>
 			<label index="label_admin_wizard_inheritance">Pagezone: inheritance source (recursivly)</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -81,6 +83,8 @@
 			<label index="label_admin_wizard_pagezonetype">Seitenbereichstyp</label>
 			<label index="label_admin_wizard_pagezone_activate">Ausgewählten Seitenbereich für den ausgewählten Seitentyp freischalten</label>
 			<label index="label_admin_wizard_pagezone_deactivate">Ausgewählten Seitenbereich für den ausgewählten Seitentyp löschen. SIND SIE SICHER? Diese Aktion kann nicht widerrufen werden. Platzierte Web-Elemete können nicht wiederhergestellt werden.</label>
+			<label index="message_admin_wizard_pagezone_activate_success">Die Seitenbereiche wurden erfolgreich aktiviert.</label>
+			<label index="message_admin_wizard_pagezone_deactivate_success">Die Seitenbereiche wurden erfolgreich gelöscht.</label>
 			<label index="label_admin_wizard_inheritance">Seitenbereich: Vererbungsquelle bestummen (rekursiv)</label>
 		</languageKey>
 	</data>

@@ -214,6 +214,14 @@ class tx_newspaper_Page
 		return false;
 	}
 
+	/// Adds pagezone $pz to pageZones attribute array
+	private function appendPagezone(tx_newspaper_pagezone $pz) {
+		if ($this->pageZones === true) {
+			$this->pageZones = array();
+		}
+		$this->pageZones[] = $pz;
+	}
+
 	public function getTitle() {
 		return tx_newspaper::getTranslation('title_' . $this->getTable());
 	}
@@ -528,7 +536,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 	/// \return true if pagezone was activated, false if pagezone has been active already
 	public function activatePagezone(tx_newspaper_PagezoneType $type) {
 		if ($this->getPageZone($type)) {
-			return false;
+			return false; // pagezone has been activated already
 		}
 
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
@@ -539,6 +547,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 		$pz->setAttribute('tstamp', time());
 		$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 		$pz->store();
+
+		$this->appendPagezone($pz); // add pagezone to pageZones array, so it's available right away
 
 		return true;
 

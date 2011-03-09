@@ -1,0 +1,19 @@
+{* debug *}
+
+{literal}
+<script type="text/javascript">
+	function checkConfirmation(msg, url) {
+		if (confirm(msg)) {
+			self.location.href = url;
+		}
+	}
+</script>
+{/literal}
+
+{if !$input.action}
+	<div> {$LL.label_admin_wizard_please_chose} </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_pagezone_activate}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=1');">{$LL.label_admin_wizard_pagezone_activate}</a> </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_pagezone_deactivate}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=-1');">{$LL.label_admin_wizard_pagezone_deactivate}</a> </div>
+{else}
+
+{/if}

@@ -49,12 +49,12 @@ class fullWidthDoc_mod5 extends template {
  * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module5 extends t3lib_SCbase {
-	
+
 	const prefixId = 'tx_newspaper_mod5';
-	
+
 	const number_of_latest_articles = 10;
 	const shortcut_group = 5;
-	
+
 	var $pageinfo;
 
 	/**
@@ -99,7 +99,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			// get "pi"vars
 			$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 
-t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
+//t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 			switch ($input['ajaxcontroller']) {
 				case 'browse_path' :
 					die($this->browse_path($input));
@@ -107,11 +107,11 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 //t3lib_div::devlog('case load_article', 'newspaper', 0, array('input' => $input, '_request' => $_REQUEST));
 					$response = $this->load_article();
 					die($response);
-				case 'change_role': 
+				case 'change_role':
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
 			}
-			
+
 			// Draw the header.
 			$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod5');
 			$this->doc->backPath = $BACK_PATH;
@@ -143,7 +143,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 
 
 			switch ($input['controller']) {
-				case 'new_article_wizard': 
+				case 'new_article_wizard':
 					$this->new_article_backend($input); // fills $this->doc with the new article wizard backend
 				break;
 				case 'new_article_create':
@@ -166,12 +166,12 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 				case 'w_inheritance':
 					// wizard: set inheritabnce source for pagezones
 				break;
-				default: 
+				default:
 					$this->moduleContent(); // Render start wizard page
-			}		
+			}
 
 			$this->content.=$this->doc->spacer(10);
-			
+
 		} else {
 			// If no access or if ID == zero
 
@@ -183,7 +183,7 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 			$this->content.=$this->doc->spacer(5);
 			$this->content.=$this->doc->spacer(10);
 		}
-				
+
 	}
 
 	/**
@@ -205,11 +205,11 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 	function moduleContent()	{
 		$this->content .= $this->doc->section('', $this->renderBackendSmarty(), 0, 1);
 	}
-				
+
 	private function renderBackendSmarty() {
 		global $LANG;
 
-		
+
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
@@ -225,14 +225,14 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 		$label['newspaper_functions'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_newspaper_functions', false);
 		$label['admin_wizard_pagezone'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_pagezone', false);
 		$label['admin_wizard_inheritance'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_inheritance', false);
-	
+
 		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
 		$smarty->assign('MANAGE_USERCOMMENTS_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_usercomments', false)));
 		$smarty->assign('SHORTCUT_BE_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_typo3', false)));
 		$smarty->assign('SHORTCUT_NEWSPAPER_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_newspaper', false)));
 		$smarty->assign('ROLE_ICON', tx_newspaper_BE::renderIcon('gfx/i/be_users.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_role', false)));
-	
-	
+
+
 		$message['demo'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_demo', false);
 
 		$smarty->assign('LABEL', $label);
@@ -240,15 +240,15 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 
 		/// newspaper roles
 		$role = tx_newspaper_workflow::getRole();
-		$changeto_value = ($role == NP_ACTIVE_ROLE_DUTY_EDITOR)? NP_ACTIVE_ROLE_EDITORIAL_STAFF : NP_ACTIVE_ROLE_DUTY_EDITOR; // 
+		$changeto_value = ($role == NP_ACTIVE_ROLE_DUTY_EDITOR)? NP_ACTIVE_ROLE_EDITORIAL_STAFF : NP_ACTIVE_ROLE_DUTY_EDITOR; //
 		$smarty->assign('ROLE', array(
 			'current' => tx_newspaper_workflow::getRoleTitle($role),
 			'changeto' => tx_newspaper_workflow::getRoleTitle($changeto_value),
-			'changeto_value' => $changeto_value 
+			'changeto_value' => $changeto_value
 		));
 
 
-		/// latest articles		
+		/// latest articles
  		$smarty_article = new tx_newspaper_Smarty();
 		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 		$smarty_article->assign('ARTICLE', $this->getLatestArticles());
@@ -263,22 +263,22 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
-		
+
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
-		
+
 //		$smarty->assign('SECTION', tx_newspaper_Section::getAllSections());
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
 		}
-		
+
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
-		
+
 		return $smarty->fetch('mod5.tmpl');
-	}		
-	
+	}
+
 	private function getShortcuts() {
 		return tx_newspaper::selectRows(
 			'*',
@@ -287,84 +287,106 @@ t3lib_div::devlog('mod5 main()', 'newspaper', 0, array('input' => $input, '_requ
 			'',
 			'sorting'
 		);
-	}	
+	}
 
 
 	/// wizard functions
-	
+
 	/** Renders/executes wizard: activate/de-activate pagezones
 	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
 	 *  \return Wizard page (steps within wizard or success message) (and processes commands)
 	 */
 	private function processWizardPagezone(array $input) {
 //t3lib_div::devlog('processWizardPagezone()', 'newspaper', 0, array('input' => $input));
-		
+
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
-		
+
 		// render basic form / display chosen page type and pagezone type
 		$backend = $this->renderWizardPagezoneSelector($input);
-		
-		if (isset($input['pagezonetype_uid'])) {
-			// so a pagezone type is chosen, start specific wizard
-			$smarty = new tx_newspaper_Smarty();
-			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
-			$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
-			$smarty->assign('input', $input);
-			$backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
+
+		if (isset($input['pagetype_uid']) && isset($input['pagezonetype_uid'])) {
+			$pagetype = new tx_newspaper_pagetype(intval($input['pagetype_uid']));
+			$pagezonetype = new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid']));
+			if (!isset($input['action'])) {
+				// so a pagezone type is chosen, start specific wizard
+				$smarty = new tx_newspaper_Smarty();
+				$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
+				$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+				$smarty->assign('input', $input);
+				$backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
+			} else {
+				// action is chosen, so perform action now ...
+				if ($input['action'] == 1) {
+					// activate ...
+					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
+						foreach($rootSection->getChildSections(true) as $s) {
+							$s->activatePage($pagetype);
+							$p = $s->getSubPage($pagetype);
+							$p->activatePagezone($pagezonetype);
+						}
+					}
+					// insert backend success message
+					$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_pagezone_activate_success'];
+				} elseif ($input['action'] == -1) {
+					// delete ...
+					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
+						foreach($rootSection->getChildSections(true) as $s) {
+							$p = $s->getSubPage($pagetype);
+							$pz = $p->getPagezone($pagezonetype);
+							$pz->delete();
+							// \todo: delete page if last pagezone is deleted?
+						}
+					}
+					// insert backend success message
+					$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_pagezone_deactivate_success'];
+				} else {
+					t3lib_div::devlog('processWizardPagezone(): Unknown action type', 'newspaper', 3, array('input' => $input));
+				}
+			}
 		}
 
 		$this->content .= $this->doc->section('', $backend, 0, 1);
 		$this->content.=$this->doc->spacer(10);
-	
+
 	}
-	
-	
+
+
 	/** Renders wizard: choose page type and pagezone type
 	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
 	 *  \return Wizard page (steps within wizard)
 	 */
 	private function renderWizardPagezoneSelector(array $input) {
 t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input' => $input));
-		
+
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
-		
-		
+
+
 		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
 
 		$smarty_sub = new tx_newspaper_Smarty();
-		$smarty_sub->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/'));
-		
+		$smarty_sub->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
+
 		// assign labels to smarty templates
 		$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
 		$smarty_sub->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
 
-/*
-// currently not in use, root section(s) are read from database directly
-		if (!isset($input['section'])) {
-			// no section set, so get section uid in first step
-			$sections = tx_newspaper_section::getAllSections(false);
-//t3lib_div::devlog('processWizardPagezone()', 'newspaper', 0, array('sections' => $sections, 'path' => $sections[0]->getSectionPath()));
-			$smarty_sub->assign('sections', $sections);
-			$currentStep = $smarty_sub->fetch('mod5_wizard_section.tmpl');
-		}
-*/
 
 		// get object or null
 		$pagetype = (intval($input['pagetype_uid']))? new tx_newspaper_pagetype(intval($input['pagetype_uid'])) : null;
-		$pagezonetype = (intval($input['pagezonetype_uid']))? new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid'])) : null;		
+		$pagezonetype = (intval($input['pagezonetype_uid']))? new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid'])) : null;
 
 		$currentStep = '';
 		if (!$pagetype) {
 			// no pagetype set, so get pagetype uid in second step
 			$pageTypes = tx_newspaper_pagetype::getAvailablePageTypes();
-			$smarty_sub->assign('page_types', $pageTypes); 
+			$smarty_sub->assign('page_types', $pageTypes);
 			$currentStep = $smarty_sub->fetch('mod5_wizard_pagetype.tmpl');
 		} elseif (!$pagezonetype) {
 			// no pagezonetype set, so get pagezonetype uid in third step
 			$smarty_sub->assign('pagetype', $pagetype);
-			$pagezoneTypes = tx_newspaper_pagezonetype::getAvailablePagezoneTypes();
-			$smarty_sub->assign('pagezone_types', $pagezoneTypes); 
+			$pagezoneTypes = tx_newspaper_pagezonetype::getAvailablePagezoneTypes(false);
+			$smarty_sub->assign('pagezone_types', $pagezoneTypes);
 			$currentStep = $smarty_sub->fetch('mod5_wizard_pagezonetype.tmpl');
 		}
 		$smarty->assign('currentStep', $currentStep);
@@ -373,20 +395,20 @@ t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input
 		$smarty->assign('pagetype', $pagetype);
 		$smarty->assign('pagezonetype', $pagezonetype);
 
-$smarty->assign('input', $input);
+		$smarty->assign('input', $input); // add params
 
 		$this->content .= $this->doc->section('', $smarty->fetch('mod5_wizard_base.tmpl'), 0, 1);
 		$this->content.=$this->doc->spacer(10);
-	
+
 	}
-	
-	
+
+
 
 	/// \return array of latest tx_newspaper_article's
 	private function getLatestArticles() {
 /// \todo: set limit per tsconfig or for each user individually
 /// \todo: move to tx_newspaper_article?
-		
+
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_article',
@@ -395,22 +417,22 @@ $smarty->assign('input', $input);
 			'tstamp DESC',
 			self::number_of_latest_articles
 		);
-	
+
 		$article = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$article[] = new tx_newspaper_Article(intval($row[$i]['uid']));
 		}
-		
+
 		return $article;
-		
+
 	}
-	
+
 	/// render new article wizard backend
 	/// \param $input paramter extracted from url
 	private function new_article_backend(array $input) {
-//t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0, array('input' => $input));		
+//t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0, array('input' => $input));
 		global $LANG;
-		
+
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 
@@ -432,7 +454,7 @@ $smarty->assign('input', $input);
 			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
 			'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
 			'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
-		));		
+		));
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 		$smarty->assign('SHOW_LOREM', ($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.use_lorem') != 0));
@@ -440,13 +462,13 @@ $smarty->assign('input', $input);
 		$sources = tx_newspaper::getRegisteredSources();
 tx_newspaper::devlog('index.php', $sources);
 		$smarty->assign('IMPORT_SOURCE', $sources);
-		
+
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 
 		// \todo: TSConfig + more than 1 start section
 		$start_section = new tx_newspaper_section(1); // ATTENTION: 1 is hard coded section "Start" !!!
 		$start_sections = $start_section->getChildSections(false);
-		
+
 		$sub_sections = array();
 		foreach($start_sections as $key => $current_sub_section) {
 			// check if main section on level 1 can take articles. add to section2 if yes (only selectbox2 sections can be chosen)
@@ -466,7 +488,7 @@ tx_newspaper::devlog('index.php', $sources);
 				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
 			}
 		}
-		
+
 		$smarty->assign('SECTION1', $start_sections);
 		$smarty->assign('SECTION2', $sub_sections);
 //t3lib_div::devlog('new article wizard', 'newspaper', 0, array('start_sections' => $start_sections, 'sub_sections' => $sub_sections));
@@ -476,14 +498,14 @@ tx_newspaper::devlog('index.php', $sources);
 		}
 
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
-		
+
 		$smarty->assign('DEFAULT_SOURCE', $this->getDefaultSource()); // select this radio button by default
-		
+
 		$this->content .= $this->doc->section('', $smarty->fetch('mod5_newarticle.tmpl'), 0, 1);
 		$this->content.=$this->doc->spacer(10);
-		
+
 	}
-	
+
 	/// gets the default source for importing articles
 	// \return name of source configured in TSConfig (newspaper.article.defaultSource), or "new" if not set
 	private function getDefaultSource() {
@@ -494,16 +516,16 @@ tx_newspaper::devlog('index.php', $sources);
 		}
 		return $tsc['newspaper.']['article.']['defaultSource'];
 	}
-	
+
 	/// creates a new article
-	private function createNewArticle($input) { 
+	private function createNewArticle($input) {
 		/// just a plain typo3 article
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
-			
+
 		$new_article = $s->createNewArticle($at);
 //t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
-//t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));			
+//t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));
 		$new_article->setAttribute('articletype_id', $input['articletype']);
 
 		// add creation date and user
@@ -527,72 +549,72 @@ tx_newspaper::devlog('index.php', $sources);
 		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
 				'typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
 				$new_article->getUid() . ']=edit';
-		header('Location: ' . $url);				
+		header('Location: ' . $url);
 	}
-	
+
 	function browse_path(array $input) {
 
             t3lib_div::devlog('browse_path', 'mod5', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
-		
+
 		$menu = $this->makeBrowseMenu($source_id, $path, $source);
-		
+
 		die($menu);
 	}
-	
+
 	private function makeBrowseMenu($source_id, $path, tx_newspaper_Source $source) {
-        		
+
 		$width = (intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) > 0)? intval($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.article_source.browser_width')) : 430; // 430px is default
-        
+
         $ret = '<select name="' . $this->prefixId . 'source_path" size="10" style="width: ' . $width . 'px; float: left; margin-right: 16px; height: 400px;">' . "\n";
-        
+
         $ret .= $this->makeMenuHeader($source_id, $path);
-        
+
         foreach ($source->browse(new tx_newspaper_SourcePath($path)) as $entry) {
             $ret .= $this->makeMenuEntry($source_id, $source, $entry);
         }
         $ret .= '</select>' . "<br />\n";
-        
+
         return $ret;
 	}
-	
+
 	private function makeMenuHeader($source_id, $path) {
-        
+
 		global $LANG;
-		
+
         $ret = '<option onclick="changeSource(\'' . $source_id . '\',\'\')"' . '>Top</option>' . "<br />\n";
         $ret .= '<option onclick="changeSource(\'' . $source_id . '\',\'' . $path . '\')"' . '>' .
-                ($path? $LANG->getLL('label_reload'): '') . ' ' . 
+                ($path? $LANG->getLL('label_reload'): '') . ' ' .
                 $path . '</option>' . "<br />\n";
-                
+
         return $ret;
-	} 
-	
+	}
+
 	private function makeMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
         if ($entry->isText()) {
             return $this->makeArticleMenuEntry($source_id, $source, $entry);
         } else {
             return $this->makeFolderMenuEntry($source_id, $entry);
-        }  
+        }
 	}
-	
+
 	private function makeArticleMenuEntry($source_id, tx_newspaper_Source $source, tx_newspaper_SourcePath $entry) {
-        return '<option title="' . utf8_encode($entry->getTitle()) . 
-                     '" onclick="loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' . 
+        return '<option title="' . utf8_encode($entry->getTitle()) .
+                     '" onclick="loadArticle(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' .
                     utf8_encode($entry->getTitle()) .
-                    ' [' . $source->getProductionStatus($entry) . ']' . 
+                    ' [' . $source->getProductionStatus($entry) . ']' .
                 '</option>' . "\n";
 	}
-	
+
 	private function makeFolderMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
-		return '<option title="' . utf8_encode($entry->getTitle()) . 
-                     '" onclick="changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' . 
-                   utf8_encode($entry->getTitle()) . 
+		return '<option title="' . utf8_encode($entry->getTitle()) .
+                     '" onclick="changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' .
+                   utf8_encode($entry->getTitle()) .
                '</option>' . "\n";
 	}
-	
+
 	function load_article() {
 		$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
 t3lib_div::devlog('load_article', 'np', 0, $input);
@@ -604,25 +626,25 @@ t3lib_div::devlog('load_article', 'np', 0, array($source));
 
 		$article = new tx_newspaper_Article();
 t3lib_div::devlog('load_article', 'np', 0, array($article));
-		$source->readFields($article, 
-							array('title', 'teaser', 'text'), 
+		$source->readFields($article,
+							array('title', 'teaser', 'text'),
 							new tx_newspaper_SourcePath($path));
 t3lib_div::devlog('load_article', 'np', 0, array($article));
-		
+
 		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
 t3lib_div::devlog('load_article', 'np', 0, array($import_info));
-		
+
 		$smarty = new tx_newspaper_Smarty();
 t3lib_div::devlog('load_article', 'np', 0, array($smarty));
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
 		$smarty->assign('article', $article);
 		$smarty->assign('source_id', $source_id);
 		$smarty->assign('source_path', $path);
-		
+
 		$result = $smarty->fetch('mod5_articlepreview.tmpl');
 t3lib_div::devlog('load_article', 'np', 0, array($result));
-		
+
 		die($result);
 	}
 
@@ -643,32 +665,32 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 
 	/// Create an article of requested type, perform the import, set necessary attributes and store the article
 	/** This function violates the "do one thing" rule clearly... anyway, still
-	 *  better than leaving everything in import_article(). 
-	 * 
+	 *  better than leaving everything in import_article().
+	 *
 	 * @param $type    the selected article type.
 	 * @param $section section the article belogs to - needed for the default extras.
 	 * @param $source  source the article is imported from.
 	 */
-    private function createAndImportArticle(tx_newspaper_ArticleType $type, 
-                                            tx_newspaper_Section $section, 
-                                            tx_newspaper_Source $source, 
+    private function createAndImportArticle(tx_newspaper_ArticleType $type,
+                                            tx_newspaper_Section $section,
+                                            tx_newspaper_Source $source,
                                             tx_newspaper_SourcePath $path) {
-                                   
+
         $new_article = $section->createNewArticle($type);
         $new_article->setAttribute('articletype_id', $type->getUid());
 
         $source->readArticle($new_article, $path);
-        
+
         // add creation date and user
         $new_article->setAttribute('crdate', time());
         $new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         $new_article->setAttribute('hidden', 1); // hide imported article
 
         $new_article->store();
-		
+
         return $new_article;
 	}
-	
+
 	/// Note import parameters in workflow log for \p $new_article.
 	private function logImport(tx_newspaper_Article $new_article, array $input) {
         $comment = $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import', false);
@@ -679,16 +701,16 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
             $comment .= ', ' . $GLOBALS['LANG']->sL('LLL:EXT:newspaper/locallang_newspaper.xml:log_import_source_path', false) . ': ' . $input['source_path'];
         }
         tx_newspaper_Workflow::directLog('tx_newspaper_article', $new_article->getUid(), $comment, NP_WORKLFOW_LOG_IMPORT);
-		
+
 	}
-	
+
 	/// Redirect the browser to the article mask for further editing after the import.
 	private function redirectToArticleMask(tx_newspaper_Article $new_article, array $input=array()) {
         $path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
 
-        /*  volle URL muss angegeben werden, weil manche browser sonst 
+        /*  volle URL muss angegeben werden, weil manche browser sonst
          *  'http://' davorhaengen.
-         */         
+         */
         $url_parts = explode('/typo3', tx_newspaper::currentURL());
         $base_url = $url_parts[0];
 
@@ -696,23 +718,23 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
         $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
                 '/typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
                 $new_article->getUid() . ']=edit';
-                
-        header('Location: ' . $url); // redirect to article backend 
-	} 
-	
+
+        header('Location: ' . $url); // redirect to article backend
+	}
+
 	private function changeRole(array $input) {
 //t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
 		tx_newspaper_workflow::changeRole(intval($input['new_role']));
 	}
-	
+
 	private function extractCallingModule(array $input=array()) {
 		return (intval($input['calling_module']))? intval($input['calling_module']) : 5; // 5 (= this module) is default
 	}
-	
-	
+
+
 }
 
-	
+
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod5/index.php']);
 }
