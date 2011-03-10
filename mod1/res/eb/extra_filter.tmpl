@@ -76,3 +76,7 @@
 	<span id="textfield" style="display:none; margin-left:20px;"><label for="tx_newspaper_mod1[text]">{$LL.labelText}</label> <input onkeyup="checkEnter(event.keyCode); return false;" type="text" id="tx_newspaper_mod1[text]" name="tx_newspaper_mod1[text]" /></span>
 	<span id="search" style="display:none; margin-left:20px;"><input type="button" value="{$LL.labelSearch}" onclick="executeFilter(1);" /></span>
 	<span id="new" style="display:none; margin-left:20px;"><input type="button" value="{$LL.labelNewExtra}" onclick="newExtra();" /></span>
+
+<script type="text/javascript">
+	setTextfieldVisibility(document.getElementById("tx_newspaper_mod1[extra]").value); {* an extra might be preselected, so show search field and new button *}
+</script>
