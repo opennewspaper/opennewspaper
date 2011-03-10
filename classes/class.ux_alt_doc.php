@@ -21,14 +21,14 @@ class ux_SC_alt_doc extends SC_alt_doc {
 			return parent::getButtons();
 		}
 
-		// check if an Extra is to be placed on a pagezone or an article
-		if (
-			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false &&
-			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/closeTab.html') === false
-		) {
-			// no non-Typo3 params found, so show all buttons
-			return parent::getButtons();
-		}
+//		// check if an Extra is to be placed on a pagezone or an article
+//		if (
+//			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false &&
+//			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/closeTab.html') === false
+//		) {
+//			// no non-Typo3 params found, so show all buttons
+//			return parent::getButtons();
+//		}
 
 		// add workflow buttons to newspaper articles (and remove docheader2)
 		if ($this->elementsData[0]['table'] == 'tx_newspaper_article') {
