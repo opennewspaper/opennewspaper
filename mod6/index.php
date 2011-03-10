@@ -301,6 +301,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 //t3lib_div::devlog('tz', 'newspaper', 0, $row);
 			$tz_extras[$row['tag_zone']] = $tag->getTagzoneExtras($row['tag_zone']);
 		}
+
+		$this->smarty->assign('TSCONFIG', $this->getTagzoneConfig()); // TSConfig settings
 		$this->smarty->assign('TAG', $tag);
 		$this->smarty->assign('TAGZONES_USED', $tagzones);
 		$this->smarty->assign('TAGZONES_USED_EXTRAS', $tz_extras);
@@ -394,7 +396,6 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 	// backend for managing dossiers
 	private function manageDossiers($input) {
 //t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('input' => $input));
-
 		// get control tag categories
 		$tagCats = tx_newspaper_tag::getAllControltagCategories();
 
@@ -432,6 +433,27 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 
 //t3lib_div::devlog('manageDossiers()', 'newspaper', 0, array('tagCats' => $tagCats, 'submitted' => $submitted));
 
+	}
+
+	/// \return array with tagzone configuration: key=tagzone uid, value = extra class or empty
+	// \todo: move to tagzone class?
+	private function getTagzoneConfig() {
+		require_once  PATH_typo3conf . '/ext/newspaper/tx_newspaper_include.php';
+		$tsc = tx_newspaper::getTSConfig();
+		if (!$conf = $tsc['newspaper.']['dossierWizard.']['mustHaveTagezones']) {
+			return array(); // nothing found ...
+		}
+
+		$data = array();
+		foreach(t3lib_div::trimExplode(',', $conf) as $line) {
+			$cmd = t3lib_div::trimExplode('|', $line);
+			if (sizeof($cmd) > 1) {
+				$data[intval($cmd[0])] = $cmd[1];
+			} else {
+				$data[intval($cmd[0])] = '';
+			}
+		}
+		return $data;
 	}
 
 }

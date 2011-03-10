@@ -694,6 +694,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     ////////////////////////////////////////////////////////////////////////////
 
+    /// \return Array with TSConfig set in newspaper root folder
     public static function getTSConfig() {
         $root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
         return t3lib_BEfunc::getPagesTSconfig($root_page);

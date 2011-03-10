@@ -438,7 +438,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			) {
 				return; // no newspaper element browser this time
 			}
-
+//t3lib_div::devlog('eb', 'newspaper', 0, array('input' => $this->input));
 			// prepare smarty object
 			$smarty = new tx_newspaper_Smarty();
 			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod1/res/eb'));
@@ -446,6 +446,8 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			// get ll labels
 			$tmp = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod1/locallang.xml', $GLOBALS['LANG']->lang);
 			$smarty->assign('LL', $tmp[$GLOBALS['LANG']->lang]); // localization
+
+			$smarty->assign('INPUT', $this->input);
 
 			switch(strtolower($this->input['type'])) {
 				case 'e':
@@ -477,7 +479,6 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					t3lib_div::devlog('mod 1 - Element browser - unknown jsType', 'newspaper', 3, array('input' => $this->input));
 			}
 
-			$smarty->assign('INPUT', $this->input);
 			$smarty->assign('FILTER', $filter);
 
 			$eb = $smarty->fetch('browser.tmpl');

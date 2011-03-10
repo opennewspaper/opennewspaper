@@ -8,6 +8,7 @@
 	TAGZONES_USED
 	TAGZONES_USED_EXTRAS // key = tag zone uid
 	TAGZONES_ALL
+	TSCONFIG
 *}
 
 <div id="tagzones">
@@ -25,7 +26,14 @@
 		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
 			{foreach from=$TAGZONES_ALL item=tz}
 				{if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS)}
-					{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone({$tz.uid}); return false;">{$ICON.add}</a> <br /><br />
+					{if array_key_exists($tz.uid, $TSCONFIG)}
+						<div class="tz_musthave">
+{assign var="idx" value=$tz.uid} {* make current tagzone uid accessibale for Smarty *}
+					{/if}
+						{$tz.name} (#{$tz.uid}) <a href="#" onclick="addExtraToTagzone({$tz.uid}{if array_key_exists($tz.uid, $TSCONFIG)}, '{$TSCONFIG.$idx}'{/if}); return false;">{$ICON.add}</a> <br /><br />
+					{if array_key_exists($tz.uid, $TSCONFIG)}
+						</div>
+					{/if}
 				{/if}
 			{/foreach}
 	</div>
