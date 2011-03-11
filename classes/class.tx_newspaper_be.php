@@ -1350,9 +1350,9 @@ JSCODE;
 			$article = null; // no article id given; so an icon for the article browser is rendered
 		}
 
-		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
-
         tx_newspaper::devlog('renderPlacement SQL queries', tx_newspaper::getLoggedQueries());
+
+		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
 
 		// get locallang labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
