@@ -1300,8 +1300,6 @@ JSCODE;
 	 */
 	public function renderPlacement($input, $singleMode=false) {
 
-        tx_newspaper::startLoggingQueries();
-
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
 		if (
 			(isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) || // section article list
@@ -1343,16 +1341,7 @@ JSCODE;
 			$al = null; // no article list
 		}
 
-		if (isset($input['placearticleuid']) && $input['placearticleuid']) {
-			// grab the article, if an article id was given
-			$article = $this->getArticleByArticleId($input['placearticleuid']); // render add/remove article button (for given article id)
-			// grab the data for all the placers needed to be displayed
-//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
-		} else {
-			$article = null; // no article id given; so an icon for the article browser is rendered
-		}
-
-        tx_newspaper::devlog('renderPlacement SQL queries', tx_newspaper::getLoggedQueries());
+        $article = $this->getArticleForPlacement($input);
 
 		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
 
@@ -1386,6 +1375,18 @@ JSCODE;
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
 		return $smarty->fetch($smarty_template);
 	}
+
+    /// grab the article, if an article id was given
+    private function getArticleForPlacement(array $input) {
+        if (isset($input['placearticleuid']) && $input['placearticleuid']) {
+            return $this->getArticleByArticleId($input['placearticleuid']); // render add/remove article button (for given article id)
+            // grab the data for all the placers needed to be displayed
+//t3lib_div::devlog('mod7', 'newspaper', 0, array('tree' => $tree));
+        } else {
+            return null; // no article id given; so an icon for the article browser is rendered
+        }
+
+    }
 
 	/// render full record backend if paramter fullrecord is set to 1
     private function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al = null) {
@@ -1446,8 +1447,8 @@ JSCODE;
 
 
 	/// get article and offset lists for a set of sections
-	function fillPlacementWithData($tree, $articleId) {
-        tx_newspaper::startLoggingQueries();
+	function fillPlacementWithData(array $tree, $articleId) {
+#        tx_newspaper::startLoggingQueries();
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
@@ -1468,7 +1469,7 @@ JSCODE;
 				}
 			}
 		}
-        tx_newspaper::devlog('fillPlacementWithData SQL queries', tx_newspaper::getLoggedQueries());
+#        tx_newspaper::devlog('fillPlacementWithData SQL queries', tx_newspaper::getLoggedQueries());
 
 		return $tree;
 	}
@@ -1476,6 +1477,7 @@ JSCODE;
 
 	/// get a list of articles by a section id
 	function getArticleListBySectionId($sectionId, $articleId = false) {
+        tx_newspaper::startLoggingQueries();
 
 		$result = array();
 		$sectionId = $this->extractElementId($sectionId);
@@ -1502,6 +1504,7 @@ JSCODE;
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
+        tx_newspaper::devlog('getArticleListBySectionId SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
 
