@@ -32,6 +32,8 @@ class tx_newspaper  {
     /// GET-parameter describing the wanted control tag for a dossier
     const default_dossier_get_parameter = 'dossier';
 
+    const default_max_logged_queries = 1000;
+
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
@@ -91,6 +93,46 @@ class tx_newspaper  {
 		}
 	}
 
+    public static function startLoggingQueries() {
+
+        self::startExecutionTimer();
+
+        self::$are_queries_logged = true;
+    }
+
+    public static function getLoggedQueries() {
+
+        $queries = self::$logged_queries;
+        self::$logged_queries = array();
+        self::$are_queries_logged = false;
+
+        $timing = self::getTimingInfo();
+        $queries = array_merge($queries, $timing);
+
+        return $queries;
+    }
+
+    public static function setNumLoggedQueries($num = self::default_max_logged_queries) {
+        self::$max_logged_queries = $num;
+    }
+
+    private static function logQuery() {
+        if (self::$are_queries_logged) {
+            if (sizeof(self::$logged_queries) > self::$max_logged_queries) {
+                self::$are_queries_logged = false;
+                self::$logged_queries[] = 'Number of maximum logged queries exceeded; turning off logging.';
+                self::$logged_queries[] = 'Call tx_newspaper::setMaxLoggedQueries() to increase the number of logged queries.';
+            } else {
+                self::$logged_queries[] = self::$query;
+            }
+        }
+    }
+
+    private static function executeQuery() {
+        self::logQuery();
+        return $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+    }
+    
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 *
@@ -114,7 +156,7 @@ class tx_newspaper  {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
@@ -150,7 +192,7 @@ class tx_newspaper  {
 		self::$query = $GLOBALS['TYPO3_DB']->SELECTquery(
 			$fields, $table, $where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
@@ -192,7 +234,7 @@ class tx_newspaper  {
 			$where . self::enableFields($table),
 			$groupBy, $orderBy, $limit);
 
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 
 		if ($res) {
 	        $rows = array();
@@ -234,7 +276,7 @@ class tx_newspaper  {
 			$limit
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 		if ($res) {
 	        $rows = array();
 	        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -348,7 +390,7 @@ class tx_newspaper  {
 			return $tce->substNEWwithIDs[$new_id];
 		} else {
 			self::$query = $GLOBALS['TYPO3_DB']->INSERTquery($table, $row);
-			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+            $res = self::executeQuery();
 
 			if (!$res) {
 	        	throw new tx_newspaper_NoResException(self::$query);
@@ -376,7 +418,7 @@ class tx_newspaper  {
 
 		if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 		self::$query = $GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $row);
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 
 		if (!$res) {
         	throw new tx_newspaper_NoResException(self::$query);
@@ -439,7 +481,7 @@ class tx_newspaper  {
 			}
 //t3lib_div::devlog('deleteRows()', 'newspaper', 0, array('query' => self::$query));
 
-			$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+            $res = self::executeQuery();
 
 			if (!$res) {
         		throw new tx_newspaper_NoResException(self::$query);
@@ -488,7 +530,7 @@ class tx_newspaper  {
 	/// Returns the fields that are present in SQL table \p $table
 	public static function getFields($table) {
 		self::$query = "SHOW COLUMNS FROM $table";
-		$res = $GLOBALS['TYPO3_DB']->sql_query(self::$query);
+        $res = self::executeQuery();
 
 		if (!$res) throw new tx_newspaper_NoResException(self::$query);
 
@@ -671,17 +713,21 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     public static function logExecutionTime($message = '') {
 
+        $timing_info = self::getTimingInfo();
+        $timing_info['message'] = $message;
+
+        if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
+    }
+
+    private static function getTimingInfo() {
         $start_time = array_pop(self::$execution_time_stack);
         $execution_time = microtime(true)-$start_time;
         $execution_time_ms = 1000*$execution_time;
 
-        $timing_info = array(
+        return array(
             'execution time' => $execution_time_ms . ' ms',
             'object' => self::getTimedObject(),
-            'message' => $message
         );
-
-        if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
     }
 
     private static function getTimedObject() {
@@ -1218,6 +1264,12 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 	 */
 	public static $query = '';
 
+    private static $logged_queries = array();
+
+    private static $are_queries_logged = false;
+
+    private static $max_logged_queries = self::default_max_logged_queries;
+    
 	/// a \c tslib_cObj object used to generate typolinks
 	private static $local_cObj = null;
 
