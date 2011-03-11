@@ -1299,7 +1299,9 @@ JSCODE;
 	 *  \return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
+
         tx_newspaper::startLoggingQueries();
+
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
 		if (
 			(isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) || // section article list
@@ -1445,6 +1447,7 @@ JSCODE;
 
 	/// get article and offset lists for a set of sections
 	function fillPlacementWithData($tree, $articleId) {
+        tx_newspaper::startLoggingQueries();
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
@@ -1465,6 +1468,8 @@ JSCODE;
 				}
 			}
 		}
+        tx_newspaper::devlog('fillPlacementWithData SQL queries', tx_newspaper::getLoggedQueries());
+
 		return $tree;
 	}
 
