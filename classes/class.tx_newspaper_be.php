@@ -1551,14 +1551,20 @@ JSCODE;
 	}
 
 
-	/// \returns article from the article list $al (check the number of max articles in the article list AND self::num_articles_in_articlelist)
+	/// \return articles from the article list $al (check the number of max articles in the article list AND self::getNumArticlesInArticleList())
 	private function getArticleListMaxArticles(tx_newspaper_articlelist $al) {
 		$max = ($al->getAttribute('num_articles'))?
-			min($al->getAttribute('num_articles'), self::num_articles_in_articlelist) :
-			self::num_articles_in_articlelist;
+			min($al->getAttribute('num_articles'), self::getNumArticlesInArticleList()) :
+			self::getNumArticlesInArticleList();
 		return $al->getArticles($max);
 	}
 
+    private static function getNumArticlesInArticleList() {
+        if (tx_newspaper::getTSConfigVar('num_articles_in_article_list_be')) {
+            return tx_newspaper::getTSConfigVar('num_articles_in_article_list_be');
+        }
+        return self::num_articles_in_articlelist;
+    }
 
 	/// extract the section uid out of the select elements mames that are
 	/// like "placer_10_11_12" where we need the "12" out of it

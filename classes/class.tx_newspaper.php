@@ -746,6 +746,15 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         return t3lib_BEfunc::getPagesTSconfig($root_page);
     }
 
+    private static $tsconfig = array();
+    public static function getTSConfigVar($key) {
+        if (empty(self::$tsconfig)) self::$tsconfig = self::getTSConfig();
+        if (!is_array($key)) {
+            return self::$tsconfig[$key];
+        }
+        throw new tx_newspaper_NotYetImplementedException('Multidimensional TSConfig');
+    }
+
     public static function getDossierPageID() {
 
         $TSConfig = self::getTSConfig();
