@@ -24,7 +24,8 @@ class tx_newspaper_BE {
 
 	private static $backend_files_added = false; // are js/css files added for backend
 
-	const num_articles_in_articlelist = 50;
+	const default_num_articles_in_articlelist = 50;
+    const num_articles_tsconfig_var = 'num_articles_in_article_list_be';
 
 /// backend: render list of pages and pagezones for section
 
@@ -1457,7 +1458,7 @@ JSCODE;
 					// add article list and list type to tree structure for last element only
 					if (($k+1) == count($tree[$i][$j])) {
 						$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
-						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId($tree[$i][$j][$k]['uid'], $articleId);
+						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId($tree[$i][$j][$k]['uid']);
 						if (strtolower($tree[$i][$j][$k]['listtype']) == 'tx_newspaper_articlelist_manual') {
 							$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
 						} else {
@@ -1476,7 +1477,7 @@ JSCODE;
 
 
 	/// get a list of articles by a section id
-	function getArticleListBySectionId($sectionId, $articleId = false) {
+	function getArticleListBySectionId($sectionId) {
 
         tx_newspaper::startLoggingQueries();
 
@@ -1505,7 +1506,7 @@ JSCODE;
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
-        tx_newspaper::devlog('getArticleListBySectionId(' . $sectionId . ', ' . $articleId .') SQL queries', tx_newspaper::getLoggedQueries());
+        tx_newspaper::devlog('getArticleListBySectionId(' . $section->getAttribute('section_name') .') SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
 
@@ -1560,10 +1561,10 @@ JSCODE;
 	}
 
     private static function getNumArticlesInArticleList() {
-        if (tx_newspaper::getTSConfigVar('num_articles_in_article_list_be')) {
-            return tx_newspaper::getTSConfigVar('num_articles_in_article_list_be');
+        if (tx_newspaper::getTSConfigVar(self::num_articles_tsconfig_var)) {
+            return tx_newspaper::getTSConfigVar(self::num_articles_tsconfig_var);
         }
-        return self::num_articles_in_articlelist;
+        return self::default_num_articles_in_articlelist;
     }
 
 	/// extract the section uid out of the select elements mames that are
