@@ -1386,7 +1386,7 @@ JSCODE;
 	}
 
 	/// render full record backend if paramter fullrecord is set to 1
-    private function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al) {
+    private function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al = null) {
 		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
 			if ($al == null) {
 				// article list hasn't been read
