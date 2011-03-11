@@ -1062,20 +1062,6 @@ JSCODE;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /// workflow logging functions
 // \todo: BUTTONS: rewrite for alt_doc xlass in workflow class
 	function getWorkflowCommentBackend($PA, $fobj) {
@@ -1308,8 +1294,7 @@ JSCODE;
 	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
 	 *  if not, a button to call the article browser is displayed.
 	 * \todo: docuemnt $input array types ...
-	 */
-	/** in comparison the the displayed ones in the form
+	 *  in comparison the the displayed ones in the form
 	 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 	 *  \return ?
 	 */
@@ -1367,26 +1352,7 @@ JSCODE;
 
 		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
 
-		// render full record backend if paramter fullrecord is set to 1
-		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
-			if ($al == null) {
-				// article list hasn't been read
-				if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
-					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // cget article list for first (and only) section
-					$al = $s->getArticleList();
-				}
-			}
-			if ($al != null) {
-				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // render backend, store if saved, close if closed
-			} else {
-				$articlelistFullrecordBackend = 'Error'; // \todo: localization
-			}
-
-		} else {
-			$articlelistFullrecordBackend = '';
-		}
-//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend, 'al' => $al));
-
+        tx_newspaper::devlog('renderPlacement SQL queries', tx_newspaper::getLoggedQueries());
 
 		// get locallang labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
@@ -1409,16 +1375,39 @@ JSCODE;
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
 
 		$smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
-		$smarty->assign('AL_BACKEND', $articlelistFullrecordBackend);
+		$smarty->assign('AL_BACKEND', $this->getArticlelistFullrecordBackend($input, $al));
 
 		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
 
 		$smarty->assign('AL_HEIGHT', $this->getArticleListHeight());
 
-        tx_newspaper::devlog('renderPlacement SQL queries', tx_newspaper::getLoggedQueries());
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
 		return $smarty->fetch($smarty_template);
 	}
+
+	/// render full record backend if paramter fullrecord is set to 1
+    private function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al) {
+		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
+			if ($al == null) {
+				// article list hasn't been read
+				if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
+					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // cget article list for first (and only) section
+					$al = $s->getArticleList();
+				}
+			}
+			if ($al != null) {
+				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // render backend, store if saved, close if closed
+			} else {
+				$articlelistFullrecordBackend = 'Error'; // \todo: localization
+			}
+
+		} else {
+			$articlelistFullrecordBackend = '';
+		}
+
+//t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend, 'al' => $al));
+        return $articlelistFullrecordBackend;
+    }
 
 	/// Gets the height (rows) for an article list select box
 	private function getArticleListHeight() {
