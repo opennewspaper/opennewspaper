@@ -1504,7 +1504,7 @@ JSCODE;
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
-        tx_newspaper::devlog('getArticleListBySectionId SQL queries', tx_newspaper::getLoggedQueries());
+        tx_newspaper::devlog('getArticleListBySectionId(' . $sectionId . ', ' . $articleId .') SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
 
