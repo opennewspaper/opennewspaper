@@ -1314,6 +1314,7 @@ JSCODE;
 	 *  \return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
+        tx_newspaper::startLoggingQueries();
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
 		if (
 			(isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) || // section article list
@@ -1414,6 +1415,7 @@ JSCODE;
 
 		$smarty->assign('AL_HEIGHT', $this->getArticleListHeight());
 
+        tx_newspaper::devlog('renderPlacement SQL queries', tx_newspaper::getLoggedQueries());
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
 		return $smarty->fetch($smarty_template);
 	}
