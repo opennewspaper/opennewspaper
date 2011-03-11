@@ -1477,13 +1477,14 @@ JSCODE;
 
 	/// get a list of articles by a section id
 	function getArticleListBySectionId($sectionId, $articleId = false) {
-        tx_newspaper::startLoggingQueries();
 
 		$result = array();
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
 		$listType = strtolower(get_class($section->getArticleList()));
 		$articleList = $this->getArticleListMaxArticles($section->getArticleList());
+
+        tx_newspaper::startLoggingQueries();
 
 		// get offsets for semiautomtic list
 		if ($listType == 'tx_newspaper_articlelist_semiautomatic') {
