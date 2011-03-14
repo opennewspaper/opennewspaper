@@ -1448,7 +1448,7 @@ JSCODE;
 
 
 	/// get article and offset lists for a set of sections
-	function fillPlacementWithData(array $tree, $articleId) {
+	function fillPlacementWithData($tree, $articleId) {
 #        tx_newspaper::startLoggingQueries();
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
