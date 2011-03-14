@@ -14,7 +14,7 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
         parent::setUp();
         $this->tag = new tx_newspaper_Tag();
         $this->tag->setAttribute('tag', 'test-tag-1');
-        $this->tag->setAttribute('tag_type', tx_newspaper_Tag::getControlTagTypes());
+        $this->tag->setAttribute('tag_type', tx_newspaper_Tag::getControlTagType());
         $this->tag->store();
     }
 
@@ -116,7 +116,7 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
         $duplicateTag->setAttribute('tag', 'test-tag');
         $duplicateTag->setAttribute('tag_type', 1);
         $duplicateTag->store();
-        
+
         $this->assertEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids did not match. Duplicated tag in database.');
 
     }
@@ -126,12 +126,12 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
         $tag->setAttribute('tag', 'test');
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
-        $this->assertEquals(tx_newspaper::getContentTagType(), $tag->getAttribute('tag_type'));
+        $this->assertEquals(tx_newspaper_tag::getContentTagType(), $tag->getAttribute('tag_type'));
 
-        $tag = tx_newspaper_Tag::createContentTag('test');        
+        $tag = tx_newspaper_Tag::createContentTag('test');
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
-        $this->assertEquals(tx_newspaper::getContentTagType(), $tag->getAttribute('tag_type'));
+        $this->assertEquals(tx_newspaper_tag::getContentTagType(), $tag->getAttribute('tag_type'));
     }
 
     public function test_createControlTag() {
@@ -139,12 +139,12 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
         $tag->setAttribute('tag', 'test');
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
-        $this->assertEquals(tx_newspaper::getControlTagType(), $tag->getAttribute('tag_type'));
+        $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
 
         $tag = tx_newspaper_Tag::createControlTag('test');
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
-        $this->assertEquals(tx_newspaper::getControlTagType(), $tag->getAttribute('tag_type'));
+        $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
     }
 
     public function test_storeSameValueDifferentType() {
