@@ -31,6 +31,16 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
 class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
     const article_related_table = 'tx_newspaper_article_related_mm';
 
+    public static function createFromArray(array $data) {
+        $article = new tx_newspaper_Article();
+        foreach (tx_newspaper::getFields('tx_newspaper_article') as $key) {
+            $article->attributes[$key] = $data[$key];
+        }
+        $article->setUid($data['uid']);
+
+        return $article;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //
     //	magic methods ( http://php.net/manual/language.oop5.magic.php )

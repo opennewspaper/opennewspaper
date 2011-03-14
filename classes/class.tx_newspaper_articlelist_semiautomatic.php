@@ -192,7 +192,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		return $articles;
 	}
 
-	/// Makes a persistant article list from an array of UIDs with their respective offsets.
+	/// Makes a persistent article list from an array of UIDs with their respective offsets.
 	/** \param $uids \code array (
 	 *     array($article_uid, $article_offset),
 	 *     ...

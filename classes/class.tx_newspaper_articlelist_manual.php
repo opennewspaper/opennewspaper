@@ -60,12 +60,12 @@ SELECT tx_newspaper_articlelist_manual_articles_mm.uid_foreign
 FROM tx_newspaper_articlelist_manual_articles_mm
 JOIN tx_newspaper_article ON tx_newspaper_articlelist_manual_articles_mm.uid_foreign = tx_newspaper_article.uid
 WHERE
-uid_local = 5 AND hidden = 0
+uid_local = ${articlelist_uid} AND hidden = 0
 ORDER BY sorting ASC
 LIMIT 0, 10
  */				
 		$results = tx_newspaper::selectRows(
-				self::mm_table . '.uid_foreign',
+				self::article_table . '.*',
 				self::mm_table . 
 					' JOIN ' . self::article_table . 
 					' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
@@ -78,7 +78,7 @@ LIMIT 0, 10
 		
 		$articles = array();
 		foreach ($results as $row) {
-			$articles[] = new tx_newspaper_Article($row['uid_foreign']);
+			$articles[] = tx_newspaper_Article::createFromArray($row);
 		}
 		
 		return $articles;

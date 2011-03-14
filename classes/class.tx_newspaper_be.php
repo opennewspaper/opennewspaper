@@ -1449,7 +1449,6 @@ JSCODE;
 
 	/// get article and offset lists for a set of sections
 	function fillPlacementWithData($tree, $articleId) {
-#        tx_newspaper::startLoggingQueries();
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
@@ -1470,7 +1469,6 @@ JSCODE;
 				}
 			}
 		}
-#        tx_newspaper::devlog('fillPlacementWithData SQL queries', tx_newspaper::getLoggedQueries());
 
 		return $tree;
 	}
@@ -1506,6 +1504,7 @@ JSCODE;
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
+        
         tx_newspaper::devlog('getArticleListBySectionId(' . $section->getAttribute('section_name') .') SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
