@@ -29,11 +29,17 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.p
  *  The Extras must be placed in an Article or in a PageZone.
  */
 class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper_ArticleIface, tx_newspaper_WritesLog {
+
     const article_related_table = 'tx_newspaper_article_related_mm';
 
     public static function createFromArray(array $data) {
+
+        if (empty(self::$article_fields)) {
+            self::$article_fields = tx_newspaper::getFields('tx_newspaper_article');
+        }
+
         $article = new tx_newspaper_Article();
-        foreach (tx_newspaper::getFields('tx_newspaper_article') as $key) {
+        foreach (self::$article_fields as $key) {
             $article->attributes[$key] = $data[$key];
         }
         $article->setUid($data['uid']);
@@ -1404,6 +1410,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     private $source = null;
     /// Object to delegate operations to
     private $articleBehavior = null;
+
+    /// list of fields of the tx_newspaper_article table
+    private static $article_fields = array();
 
     ///	List of attributes that together constitute an Article
     /** \todo update */
