@@ -709,8 +709,16 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */
 		$uids = $this->getRawArticleUIDs(2*$number, $start);
-		
-		$offsets = $this->getOffsets($uids);
+
+        if ($this->get_articles_uses_array) {
+            $actual_uids = array();
+            foreach ($uids as $article_data) {
+                $actual_uids[] = $article_data['uid'];
+            }
+            $offsets = $this->getOffsets($actual_uids);
+        } else {
+		    $offsets = $this->getOffsets($uids);
+        }
 		
 		$articles = array();
 		foreach ($uids as $uid) {
