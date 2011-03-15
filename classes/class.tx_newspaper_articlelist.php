@@ -251,8 +251,8 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	abstract function getArticles($number, $start = 0);
 
     ///
-    public function useOptimizedGetArticles(boolean $do) {
-        $this->get_articles_uses_array = $do;
+    public function useOptimizedGetArticles($do) {
+        $this->get_articles_uses_array = (boolean)$do;
     }
 
 	/// Get a single tx_newspaper_Article at place \p $index in the List
