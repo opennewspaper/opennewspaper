@@ -8,6 +8,7 @@
 	$SECTIONS             all available sections
 	$CTRLTAGCATS          all control tag categories
 	$LANG.[...]           localization stuff
+	$ICON
 *}
 
 
@@ -26,6 +27,20 @@
 	border:1px solid #c61940;
 	margin-bottom:5px;
 	padding:3px;
+}
+#article_batch {
+	padding-top:30px;
+	clear:both;
+}
+#batch_trigger {
+	cursor:pointer;
+	margin-bottom:4px;
+}
+#article_batch_form img {
+	padding:3px;
+}
+#button {
+  clear:both;
 }
 </style>
 <script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
@@ -62,6 +77,7 @@ function changeCtrlTagCat(uid) {
 				}
 			}
 		);
+	showArticleBackend(0);
 }
 
 function changeTag(uid) {
@@ -85,6 +101,7 @@ function changeTag(uid) {
 				}
 			}
 		);
+	showArticleBackend(1);
 }
 
 function reloadTagzone(uid) {
@@ -126,9 +143,103 @@ function addExtraToTagzone(uid, extraClass) {
 }
 
 
+function showArticleBackend(state) {
+	if (state != 1) {
+		var display = 'none';
+	} else {
+		var display = 'block';
+	}
+	document.getElementById("article_batch").style.display = display;
+}
+function toggleBatchForm() {
+	if (document.getElementById('article_batch_form').style.display != 'block') {
+		document.getElementById('article_batch_form').style.display = 'block';
+	} else {
+		document.getElementById('article_batch_form').style.display = 'none';
+	}
+}
+
+function setFormValueOpenBrowser_A() {
+// \todo: path - lib solution needed ...
+var path = window.location.pathname;
+path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+if (path.indexOf('typo3conf/ext/newspaper') == -1) {
+	path += 'typo3conf/ext/newspaper'; // modify path if called from within a module
+}
+
+    var url = path + '/mod2/index.php?ab4al=1&select_box_id=tx_newspaper_mod6[articles]';
+    browserWin = window.open(url,"Typo3WinBrowser","height=350,width=650,status=0,menubar=0,resizable=1,scrollbars=1");
+    browserWin.focus();
+}
+
+
+function addOption(uid, kicker, title) {
+
+	var s = document.getElementById('tx_newspaper_mod6[articles]');
+
+	uid = parseInt(uid);
+	// don't add if uid is known already ...
+	for (var i = 0; i < s.options.length; i++) {
+		if (uid == s.options[i].value) {
+			return false; // this article has been added to the list already
+		}
+	}
+
+	// attach article to select box
+	s.options[s.length] = new Option(kicker + ': ' + title, uid, false, false);
+
+}
+function removeOptions() {
+	var s = document.getElementById('tx_newspaper_mod6[articles]');
+	found = true;// check at least one time ...
+	while (found) {
+		found = false;
+		for (var i = 0; i < s.options.length; i++) {
+			if (s.options[i].selected && !found) {
+				s.options[i] = null;
+				found = true;
+			}
+		}
+	}
+}
+
+
+// assign tag to all articles in article selectbox
+function batchAttachTag() {
+	var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
+
+	// collect article uids
+	var s = document.getElementById('tx_newspaper_mod6[articles]');
+	var aUids = '';
+	for (var i = 0; i < s.options.length; i++) {
+		aUids += s.options[i].value;
+		if (i < s.options.length-1) {
+			aUids += ',';
+		}
+	}
+
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + tag + '&tx_newspaper_mod6[articleUids]=' + aUids,
+				onCreate: function() {
+					$("processSpinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+				},
+				onSuccess: function(data) {
+					$("tx_newspaper_mod6[articles]").descendants().each(Element.remove); // clear article select box
+					$("processSpinner").innerHTML = ''; // remove spinner
+				}
+			}
+		);
+
+}
+
 // if left = 1 string left of pipe is returned, else right part is returned
 function splitParam(param, left) {
-	if (left != 1) left = 0;
+	if (left != 1) {
+		left = 0;
+	}
 	p = param.indexOf('|');
 	if (p < 1) return '';
 	if (left == 1) {
@@ -169,6 +280,20 @@ function splitParam(param, left) {
 
 <div id="tz"></div>
 
+<div id="article_batch" style="display:none;">
+	<div id="batch_trigger" onclick="toggleBatchForm(); return false;">{$LANG.label_wizard_dossier_article_tag}</div>
+	<div id="article_batch_form" style="display:none;">
+		<div style="float:left;"><select id="tx_newspaper_mod6[articles]" multiple="multiple" size="12"> </select></div>
+		<div style="float:left;">
+			<a href="#" onclick="setFormValueOpenBrowser_A(); return false;">{$ICON.articlebrowser}</a><br />
+			<a href="#" onclick="removeOptions(); return false;">{$ICON.x}</a>
+		</div>
+		<span id="processSpinner"></span>
+		<div id="button">
+			<input onclick="batchAttachTag()" type="button" value="{$LANG.label_attach_tag_button}" /></div>
+		</div>
+	</div>
+</div>
 
 {/if}
 <!-- end mod6/res/mod6_dossier_manage.tmpl -->

@@ -261,7 +261,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->smarty->setPageZoneType($this);
 
         $this->smarty->assign('article', $this);
-        
+
         $this->callRenderHooks();
 
     }
@@ -603,7 +603,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             );
             $section = new tx_newspaper_Section($section_data['uid']);
         }
-        
+
         $typo3page = $section->getTypo3PageID();
 
         $get_vars = array(
@@ -793,13 +793,45 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return self::$extra_2_pagezone_table;
     }
 
+	/// Attach a tag to the article
+	/**
+	 * \param $newTag Tag (either content or control tag)
+	 * \return true if tag was assigned, false if not (because the tag has been assigned already)
+	 */
+    public function attachTag(tx_newspaper_tag $newTag) {
+
+    	// read tags (of same type as the tag to be attached right now) that are already attached to this article
+		$tags = $this->getTags($newTag->getAttribute('tag_type'));
+		foreach($tags as $tag) {
+			if ($tag->getUid() == $newTag->getUid()) {
+				return false; // tag has been attached already
+			}
+		}
+
+		// calculate position of tag to be attached
+		$tags = $this->getTags(tx_newspaper_tag::getContentTagType()); // read content tags
+		$newPosition = sizeof($tags);
+    	$tags = $this->getTags(tx_newspaper_tag::getControlTagType()); // read control tags
+    	$newPosition += sizeof($tags) + 1; // new pos: behind all other tags attached to this article
+
+    	// attach tag
+		tx_newspaper::insertRows('tx_newspaper_article_tags_mm', array(
+			'uid_local' => $this->getUid(),
+			'uid_foreign' => $newTag->getUid(),
+			'sorting' => $newPosition
+		));
+
+		return true; // a new tag was attached to the article
+    }
+
+
     /**
      * \param  $tagtype int defaults to contentTagType
      * \return array with tags objects
      */
     public function getTags($tagtype = null, $category =  null) {
         if(!$tagtype) {
-            $tagtype = tx_newspaper::getContentTagType();
+            $tagtype = tx_newspaper_tag::getContentTagType();
         }
         $where .= " AND tag_type = ".$tagtype;
         $where .= " AND uid_local = ".$this->getUid();
@@ -863,7 +895,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
             self::makeRelatedArticlesBidirectional($id);
             self::cleanRelatedArticles($id);
-            
+
             if (!intval($id)) return;
             $article = new tx_newspaper_Article(intval($id));
 
@@ -924,7 +956,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /// Registers a hook that is called during prepare_render()
     /** \param $class Name of the class which defines the render-hook as static method
-     *  \param $function Static method of \p $class, which takes two arguments: the article 
+     *  \param $function Static method of \p $class, which takes two arguments: the article
      *      object and the article's Smarty member.
      *  \attention PHP 5.0.x does not include the static methods when checking with
      *      \c method_exists(). Therefore, this function will not with a PHP version prior
@@ -999,16 +1031,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         return $paragraphs;
     }
-    
+
     /// Remove the rest of the \c "<p>" - tag from every line.
     private static function trimPTags($paragraph) {
         $paragraph = self::trimLeadingKet($paragraph);
-        
+
         /** Each paragraph now should end with a \c "</p>". If it doesn't, the
          *  text is not well-formed. In any case, we must remove the \c "</p>".
          */
         $paragraph = str_replace('</p>', '', $paragraph);
-        
+
         return $paragraph;
     }
     private static function trimLeadingKet($paragraph) {
@@ -1018,9 +1050,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $paragraph = substr($paragraph, $paragraph_start + 1);
         }
         $paragraph = trim($paragraph);
-        
+
         return $paragraph;
-    } 
+    }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
 
@@ -1254,7 +1286,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                         $where
         );
     }
-    
+
     /// Set attributes used by Typo3
     private function setTypo3Attributes() {
         $this->setAttribute('tstamp', time());

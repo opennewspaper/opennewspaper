@@ -131,7 +131,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				'manage_dossiers' => $LANG->getLL('manage_dossiers'),
 //				'manage_tagzones' => $LANG->getLL('manage_tagzones'),
 				'wizard_dossier' => $LANG->getLL('wizard_dossier'),
-                'manage_articles' => $LANG->getLL('manage_articles'),
+//              'manage_articles' => $LANG->getLL('manage_articles'), // \todo: this wizard still needed? moved to 'manage dossiers'
 			)
 		);
 		parent::menuConfig();
@@ -262,6 +262,19 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 		}
 
+		if (isset($input['AjaxBatchAttachTag']) && intval($input['AjaxBatchAttachTag'])) {
+			// batch assign tag to articles
+			foreach(t3lib_div::trimExplode(',', $input['articleUids']) as $aUid) {
+				$aUid = intval($aUid);
+				if ($aUid) {
+					$a = new tx_newspaper_Article($aUid);
+					$t = new tx_newspaper_tag(intval($input['AjaxBatchAttachTag']));
+					$a->attachTag($t);
+				}
+			}
+			die();
+		}
+
 		if (isset($input['AjaxCtrlTagCat'])) {
 			// ctrl tag category was changed -> read tags for new cat
 			$tags = tx_newspaper_tag::getAllControlTags(intval($input['AjaxCtrlTagCat']));
@@ -310,7 +323,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$this->smarty->assign('ICON', array(
 			'remove' => tx_newspaper_be::renderIcon('gfx/clearout.gif', ''),
 			'replace' => tx_newspaper_be::renderIcon('gfx/import_update.gif', ''),
-			'add' => tx_newspaper_be::renderIcon('gfx/plusbullet2.gif', '')
+			'add' => tx_newspaper_be::renderIcon('gfx/plusbullet2.gif', ''),
+			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
+			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
 		));
 //t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
 		return $this->smarty->fetch('mod6_dossier_tagzone.tmpl');
@@ -420,6 +435,11 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 			);
 			$this->smarty->assign('CTRLTAGCATS', $tagCats);
 			$this->smarty->assign('TAGS', tx_newspaper_tag::getAllControlTags($ctrltagcat));
+
+			$this->smarty->assign('ICON', array(
+				'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
+				'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
+			));
 		}
 
 

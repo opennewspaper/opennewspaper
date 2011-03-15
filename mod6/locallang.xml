@@ -20,10 +20,12 @@
 			<label index="label_wizard_dossier_submit">Create dossier</label>
 			<label index="label_wizard_dossier_success">The dossier has been created sucessfully.</label>
 			<label index="label_wizard_dossier_continue">Please select "Manage dossiers" to continue.</label>
+			<label index="label_wizard_dossier_article_tag">Assign tag to articles &gt;&gt;</label>
 			<label index="label_tag">Tag</label>
 			<label index="label_title">Dossier title</label>
 			<label index="label_ctrltagcat">Control tag category</label>
 			<label index="label_section">Section</label>
+			<label index="label_attach_tag_button">Attach tag to articles</label>
 			<label index="label_manage_dossier">Manage dossier</label>
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
@@ -44,10 +46,12 @@
 			<label index="label_wizard_dossier_submit">Dossier anlegen</label>
 			<label index="label_wizard_dossier_success">Das Dossier wurde erfolgreich angelegt.</label>
 			<label index="label_wizard_dossier_continue">Bitte wählen Sie "Dossiers verwalten", um fortzufahren.</label>
+			<label index="label_wizard_dossier_article_tag">Das gewählte Tag Artikeln zuweisen &gt;&gt;</label>
 			<label index="label_tag">Tag</label>
 			<label index="label_title">Dossier-Titel</label>
 			<label index="label_ctrltagcat">Steuertag-Kategorie</label>
 			<label index="label_section">Ressort</label>
+			<label index="label_attach_tag_button">Tag den Artikeln zuweisen</label>
 			<label index="label_manage_dossier">Dossier verwalten</label>
 			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
 			<label index="label_tagzones_unused">Verfügbare Steuertag-Bereiche</label>
