@@ -724,7 +724,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		foreach ($uids as $uid) {
 			$articles[] = array(
 				'article' => $this->get_articles_uses_array? tx_newspaper_Article::createFromArray($uid): new tx_newspaper_Article($uid),
-				'offset' => intval($offsets[$uid])
+				'offset' => intval($this->get_articles_uses_array? $offsets[$uid['uid']]: $offsets[$uid])
 			);
 		}
 		return $articles;
