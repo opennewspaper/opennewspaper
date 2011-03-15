@@ -715,7 +715,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		$articles = array();
 		foreach ($uids as $uid) {
 			$articles[] = array(
-				'article' => new tx_newspaper_Article($uid),
+				'article' => $this->get_articles_uses_array? tx_newspaper_Article::createFromArray($uid): new tx_newspaper_Article($uid),
 				'offset' => intval($offsets[$uid])
 			);
 		}
@@ -797,7 +797,7 @@ DESC';
 		
 		try {
 			$results = tx_newspaper::selectRows(
-				'DISTINCT tx_newspaper_article.uid', 
+				($this->get_articles_uses_array? 'tx_newspaper_article.*': 'DISTINCT tx_newspaper_article.uid'),
 				$table,
 				$where,
 				'',
@@ -811,6 +811,8 @@ DESC';
 		}
 #t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
 
+        if ($this->get_articles_uses_array) return $results;
+        
 		$uids = array();
 		foreach ($results as $result) {
 			if (intval($result['uid'])) $uids[] = intval($result['uid']);

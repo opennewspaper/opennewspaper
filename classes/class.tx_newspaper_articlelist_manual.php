@@ -65,7 +65,7 @@ ORDER BY sorting ASC
 LIMIT 0, 10
  */				
 		$results = tx_newspaper::selectRows(
-				self::article_table . '.*',
+				($this->get_articles_uses_array? self::article_table . '.*': self::mm_table . '.uid_foreign'),
 				self::mm_table . 
 					' JOIN ' . self::article_table . 
 					' ON ' . self::mm_table . '.uid_foreign = ' . self::article_table . '.uid',
@@ -78,7 +78,11 @@ LIMIT 0, 10
 		
 		$articles = array();
 		foreach ($results as $row) {
-			$articles[] = tx_newspaper_Article::createFromArray($row);
+            if ($this->get_articles_uses_array) {
+                $articles[] = tx_newspaper_Article::createFromArray($row);
+            } else {
+                $articles[] = new tx_newspaper_Article($row['uid_foreign']);
+            }
 		}
 		
 		return $articles;

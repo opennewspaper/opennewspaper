@@ -250,6 +250,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	abstract function getArticles($number, $start = 0);
 
+    ///
+    public function useOptimizedGetArticles(boolean $do) {
+        $this->get_articles_uses_array = $do;
+    }
+
 	/// Get a single tx_newspaper_Article at place \p $index in the List
 	/** \param $index The place in the list at which the Article is wanted,
 	 * 		starting with 0.
@@ -760,6 +765,8 @@ body {
 	protected $abstract_attributes = array();
 	/// tx_newspaper_Section this Article List is associated with, if any
 	protected $section = null;
+
+    protected $get_articles_uses_array = false;
 
 	/// SQL table for persistence for the abstract record
 	static protected $table = 'tx_newspaper_articlelist';

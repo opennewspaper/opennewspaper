@@ -1556,6 +1556,7 @@ JSCODE;
 		$max = ($al->getAttribute('num_articles'))?
 			min($al->getAttribute('num_articles'), self::getNumArticlesInArticleList()) :
 			self::getNumArticlesInArticleList();
+        $al->useOptimizedGetArticles(true);
 		return $al->getArticles($max);
 	}
 
