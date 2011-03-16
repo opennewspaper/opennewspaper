@@ -1,15 +1,15 @@
-{* debug *} 
+{* debug *}
 {literal}
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
   overflow: auto;
 }
 table {
-  table-layout: auto; 
-  border: 1px solid gray; 
-  padding: 0; 
-  margin: 0; 
-  border-collapse: collapse; 
+  table-layout: auto;
+  border: 1px solid gray;
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse;
 }
 td {
   vertical-align: top;
@@ -27,7 +27,7 @@ td {
 .comment_box {
   display: none;
   background-color: white;
-} 
+}
 .gray {
   color: #909090;
 }
@@ -54,56 +54,56 @@ td {
 }
 </style>
 {/literal}
- 
+
 
 <div id="wizards" style="display: block">
 
 
 <div class="box_hl">{$LABEL.wizards}</div>
-<div class="box">	
+<div class="box">
 	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=new_article_wizard">{$WIZARD_ICON} {$LABEL.new_article}</a><br />
 </div>
-<br />	
+<br />
 
 {if $IS_ADMIN}
 <div class="box_hl">{$LABEL.admin_wizards}</div>
-<div class="box">	
+<div class="box">
 	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_pz">{$WIZARD_ICON} {$LABEL.admin_wizard_pagezone}</a><br />
 	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_inheritance">{$WIZARD_ICON} {$LABEL.admin_wizard_inheritance}</a><br />
 </div>
-<br />	
+<br />
 {/if}
-	
-	
+
+
 <div class="box_hl">{$LABEL.latest_articles}</div>
-<div class="box">	
+<div class="box">
 	{$ARTICLELIST}
 </div>
 <br />
 
 
-	
-<div class="box_hl">{$LABEL.shortcuts}</div>	
-<div class="box">	
+
+<div class="box_hl">{$LABEL.shortcuts}</div>
+<div class="box">
 	{section name=i loop=$SHORTCUT}
 	  <a href="{$SHORTCUT[i].url}">{$SHORTCUT_BE_ICON} {$SHORTCUT[i].description}</a><br />
 	{/section}
-</div>	
+</div>
 <br />
 
 <!--
-<div class="box_hl">{$LABEL.manage_usercomments}</div>	
-<div class="box">		
+<div class="box_hl">{$LABEL.manage_usercomments}</div>
+<div class="box">
 	{$MANAGE_USERCOMMENTS_ICON} US-Klimapolitik (Hans, 12.06.2009, 12:45:23)</a><br />
 	{$MANAGE_USERCOMMENTS_ICON} Kitas (Petra, 12.06.2009, 12:43:23)</a><br />
 	{$MANAGE_USERCOMMENTS_ICON} Zensursula (Michael, 12.06.2009, 12:41:15)</a><br />
 	{$MANAGE_USERCOMMENTS_ICON} Datenschutz (Monika, 12.06.2009, 12:40:57)</a><br />
 </div>
 <br />
--->	
-	
-<div class="box_hl">{$LABEL.newspaper_functions}</div>	
-<div class="box">		
+-->
+
+<div class="box_hl">{$LABEL.newspaper_functions}</div>
+<div class="box">
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM2'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Moderation list</a><br />
 	<a href="#" onclick="top.goToModule('txnewspaperMmain_txnewspaperM3'); return false;">{$SHORTCUT_NEWSPAPER_ICON} Placement</a><br />
 	<a href="index.php?tx_newspaper_mod5[ajaxcontroller]=change_role&amp;tx_newspaper_mod5[new_role]={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: <strong>{$ROLE.current}</strong>)<br />

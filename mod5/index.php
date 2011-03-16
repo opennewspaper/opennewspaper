@@ -164,7 +164,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					$this->processWizardPagezone($input);
 				break;
 				case 'w_inheritance':
-					// wizard: set inheritabnce source for pagezones
+					// wizard: set inheritance source for pagezones
+					$this->processWizardInheritanceSource($input);
 				break;
 				default:
 					$this->moduleContent(); // Render start wizard page
@@ -211,7 +212,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 
  		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/dashboard/'));
 
 		$label['new_article'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false);
 		$label['new_article_button'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false);
@@ -250,7 +251,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		/// latest articles
  		$smarty_article = new tx_newspaper_Smarty();
-		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty_article->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/dashboard/'));
 		$smarty_article->assign('ARTICLE', $this->getLatestArticles());
 		$smarty_article->assign('ARTICLE_EDIT_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.edit_article', false)));
 		$smarty_article->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/'); // path to typo3, needed for edit article
@@ -350,6 +351,45 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 	}
 
+	/** Renders/executes wizard: set inheritance source
+	 * Iteration 1: Leave root sections untouched, set all subsequent section to "inherit from above"
+	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
+	 *  \return Wizard page (steps within wizard or success message) (and processes commands)
+	 */
+	private function processWizardInheritanceSource(array $input) {
+//t3lib_div::devlog('processWizardInheritanceSource()', 'newspaper', 0, array('input' => $input));
+		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
+
+		$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/inheritance/'));
+
+		$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+
+		if (isset($input['action']) && $input['action'] == 1) {
+			// run wizard
+			foreach(tx_newspaper_section::getRootSections() as $rootSection) {
+				// ignore root section page zone (these are used to define the inheritance sources)
+				foreach($rootSection->getChildSections(true) as $s) {
+					// all sub sections ...
+					foreach($s->getActivePages() as $p) {
+						// all active pages ...
+						foreach($p->getActivePageZones() as $pz) {
+							// all active pagezones ...
+//							$pz->changeParent(0);// set to default: inherit from same page type above
+						}
+					}
+				}
+			}
+
+			$smarty->assign('SUCCESS', true);
+		}
+
+		$backend = $smarty->fetch('mod5_wizard_base.tmpl');
+
+		$this->content .= $this->doc->section('', $backend, 0, 1);
+		$this->content.=$this->doc->spacer(10);
+
+	}
 
 	/** Renders wizard: choose page type and pagezone type
 	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
@@ -434,7 +474,7 @@ t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input
 		global $LANG;
 
  		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/dashboard/'));
 
 		$smarty->assign('LABEL', array(
 			'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
@@ -547,7 +587,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 		// add calling module to url in order to return to the correct calling module ...
 		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
-				'typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
+				'typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
 				$new_article->getUid() . ']=edit';
 		header('Location: ' . $url);
 	}
@@ -637,7 +677,7 @@ t3lib_div::devlog('load_article', 'np', 0, array($import_info));
 
 		$smarty = new tx_newspaper_Smarty();
 t3lib_div::devlog('load_article', 'np', 0, array($smarty));
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/'));
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/preview/'));
 		$smarty->assign('article', $article);
 		$smarty->assign('source_id', $source_id);
 		$smarty->assign('source_path', $path);
@@ -716,7 +756,7 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 
 		// add calling module to url in order to return to the correct calling module ...
         $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-                '/typo3conf/ext/newspaper/mod5/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
+                '/typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
                 $new_article->getUid() . ']=edit';
 
         header('Location: ' . $url); // redirect to article backend
