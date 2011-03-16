@@ -320,7 +320,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid',
 			'tx_newspaper_tag',
-			'tag="' . $tag . '" AND tag_type=' . self::getControlTagType()
+			'tag="' . $tag . '" AND tag_type=' . self::getControlTagType().
+			' AND ctrltag_cat = '.intval($ctrltagtype)
 		);
 		return (isset($row['uid']) && $row['uid'] > 0);
 	}
