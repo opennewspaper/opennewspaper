@@ -299,7 +299,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
         if(isset($_REQUEST['ctrlCat']) && $tagType == tx_newspaper_Tag::getControlTagType()) {
             $where .= ' AND ctrltag_cat = '.$_REQUEST['ctrlCat'];
         }
-        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', $where);
+        $results = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', $where, '', 'tag');
         $tags = array();
         foreach($results as $result) {
             $tags[$result['uid']] = $result['tag'];
