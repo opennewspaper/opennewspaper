@@ -8,14 +8,10 @@
  */
 require_once(PATH_typo3conf.'ext/newspaper/classes/class.tx_newspaper_exception.php');
 
-class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
+class test_Tag_testcase extends tx_newspaper_database_testcase {
 
     public function setUp() {
-        parent::setUp();
-        $this->tag = new tx_newspaper_Tag();
-        $this->tag->setAttribute('tag', 'test-tag-1');
-        $this->tag->setAttribute('tag_type', tx_newspaper_Tag::getControlTagType());
-        $this->tag->store();
+        parent::setUp(false);
     }
 
     /**
@@ -23,10 +19,12 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
      * @return void
      */
     public function test_readTag() {
-        $actualTag = new tx_newspaper_Tag($this->tag->getUid());
-        $this->assertEquals($this->tag->getUid(), $actualTag->getUid());
-        $this->assertEquals($this->tag->getAttribute('tag'), $actualTag->getAttribute('tag'), 'Tags does not match');
-        $this->assertEquals($this->tag->getAttribute('tag_type'), $actualTag->getAttribute('tag_type'), 'Tagtype does not match');
+        $tag = tx_newspaper_Tag::createControlTag(1,'test-tag');
+		$tag->store();
+		$actualTag = new tx_newspaper_Tag($tag->getUid());
+        $this->assertEquals($tag->getUid(), $actualTag->getUid());
+        $this->assertEquals($tag->getAttribute('tag'), $actualTag->getAttribute('tag'), 'Tags does not match');
+        $this->assertEquals($tag->getAttribute('tag_type'), $actualTag->getAttribute('tag_type'), 'Tagtype does not match');
         $expectedPid = tx_newspaper_Sysfolder::getInstance()->getPid($actualTag);
         $this->assertEquals($expectedPid, $actualTag->getAttribute('pid'), 'Sysfolder does not match');
     }
@@ -119,12 +117,41 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
 
         $this->assertEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids did not match. Duplicated tag in database.');
 
+		$aCtrlTag = tx_newspaper_Tag::createControlTag(1, 'test-tag');
+		$aCtrlTag->store();
+
+		$duplicateCtrlTag = tx_newspaper_Tag::createControlTag(1, 'test-tag');
+		$duplicateCtrlTag->store();
+
+		$this->assertEquals($aCtrlTag->getUid(), $duplicateCtrlTag->getUid(), 'Uids did not match. Duplicated tag in database.');
+
+
     }
+
+	public function test_storeCtrlTagOnlyOnce() {
+		$aTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
+        $aTag->store();
+
+        $duplicateTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
+        $duplicateTag->store();
+
+        $this->assertEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids did not match. Duplicated tag in database.');
+	}
+
+	public function test_storeCtrlTagTwiceInDifferentCategories() {
+		$aTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
+        $aTag->store();
+
+        $duplicateTag = tx_newspaper_Tag::createControlTag(2,'test-tag');
+        $duplicateTag->store();
+
+        $this->assertNotEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids do match. Same tag in different categories should be allowed.');
+	}
 
     public function test_createContentTag() {
         $tag = tx_newspaper_Tag::createContentTag();
         $tag->setAttribute('tag', 'test');
-        $tag->store();
+		$tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getContentTagType(), $tag->getAttribute('tag_type'));
 
@@ -135,20 +162,34 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
     }
 
     public function test_createControlTag() {
-        $tag = tx_newspaper_Tag::createControlTag();
+        $tagCatId = 1;
+		$tag = tx_newspaper_Tag::createControlTag($tagCatId, 'test');
         $tag->setAttribute('tag', 'test');
         $tag->store();
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
+		$this->assertEquals($tagCatId, $tag->getAttribute('ctrltag_cat'));
 
-        $tag = tx_newspaper_Tag::createControlTag('test');
+        $tag = tx_newspaper_Tag::createControlTag($tagCatId, 'test2');
         $tag->store();
-        $this->assertEquals('test', $tag->getAttribute('tag'));
+        $this->assertEquals('test2', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
+		$this->assertEquals($tagCatId, $tag->getAttribute('ctrltag_cat'));
+
+		try {
+			$tag = new tx_newspaper_Tag();
+			$tag->setAttribute('tag', 'test');
+			$tag->setAttribute('tag_type', tx_newspaper_Tag::getControlTagType());
+			$tag->store();
+			$this->fail('store a ctrl tag without category was possible');
+		} catch(Exception $e) {
+			//expected
+		}
     }
 
+
     public function test_storeSameValueDifferentType() {
-        $controlTag = tx_newspaper_Tag::createControlTag('test');
+        $controlTag = tx_newspaper_Tag::createControlTag(1, 'test');
         $contentTag = tx_newspaper_Tag::createContentTag('test');
 
         $contentTag->store();
@@ -160,6 +201,4 @@ class xtest_Tag_testcasex extends tx_newspaper_database_testcase {
         $this->assertNotEquals($controlTag->getUid(), $contentTag->getUid(), 'Tags of different type and same content should be allowed');
     }
 
-
-    private $tag;
 }

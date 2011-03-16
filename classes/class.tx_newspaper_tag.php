@@ -210,10 +210,20 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             throw new tx_newspaper_IllegalUsageException($message);
         }
 
-        if (!$this->attributes) $this->readAttributesFromDB();
+		if(self::getControlTagType() === intval($this->getAttribute('tag_type'))) {
+			if(!$this->getAttribute('ctrltag_cat')) {
+				throw new tx_newspaper_IllegalUsageException('[tag: \''.$this->getAttribute('tag').'\' has no category');
+			}
+		}
+
+		if (!$this->attributes) $this->readAttributesFromDB();
+
 
         $where = 'tag = \'' . $this->getAttribute('tag') . '\' AND tag_type = ' . $this->getAttribute('tag_type');
-		$result = tx_newspaper::selectRows('uid, tag_type, pid', $this->getTable(), $where);
+		if($this->getAttribute('tag_type') === self::getControlTagType()) {
+			$where .= ' AND ctrltag_cat = ' . intval($this->getAttribute('ctrltag_cat'));
+		}
+		$result = tx_newspaper::selectRows('uid, tag_type, ctrltag_cat, pid', $this->getTable(), $where);
 
         if(count($result) > 0) {
             $this->uid = $result[0]['uid'];
