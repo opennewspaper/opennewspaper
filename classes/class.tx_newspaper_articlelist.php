@@ -70,6 +70,8 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
 
+        $this->useOptimizedGetArticles(false);
+
 		if (intval($uid)) {
 			$this->setUid($uid);
 	 		$this->attributes = tx_newspaper::selectOneRow(
@@ -252,7 +254,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
     ///
     public function useOptimizedGetArticles($do) {
-        $this->get_articles_uses_array = (boolean)$do;
+        $this->select_method_strategy = SelectMethodFactory::create($do);
     }
 
 	/// Get a single tx_newspaper_Article at place \p $index in the List
@@ -766,7 +768,7 @@ body {
 	/// tx_newspaper_Section this Article List is associated with, if any
 	protected $section = null;
 
-    protected $get_articles_uses_array = false;
+    protected $select_method_strategy = null;
 
 	/// SQL table for persistence for the abstract record
 	static protected $table = 'tx_newspaper_articlelist';
@@ -783,6 +785,94 @@ body {
 		'pid', 'crdate', 'cruser_id'
 	);
 
+}
+
+interface SelectMethodStrategy {
+    public function createArticle(array $row);
+
+    // methods for manual article list
+    public function fieldsToSelect();
+
+    // methods for semiautomatic article list
+    public function getUids(array $uids);
+    public function getOffset(array $offsets, $uid);
+    public function rawArticleUIDs(array $select_results);
+    public function selectFields();
+}
+
+class SelectMethodAllAtOnceStrategy implements SelectMethodStrategy {
+    public function createArticle(array $row){
+        return tx_newspaper_Article::createFromArray($row);
+    }
+
+    public function fieldsToSelect() {
+        return tx_newspaper_ArticleList_Manual::article_table . '.*';
+    }
+
+    public function getUids(array $uids) {
+        $actual_uids = array();
+        foreach ($uids as $article_data) {
+            $actual_uids[] = $article_data['uid'];
+        }
+        return $actual_uids;
+    }
+
+    public function getOffset(array $offsets, $uid) {
+        return intval($offsets[$uid['uid']]);
+    }
+
+    public function rawArticleUIDs(array $select_results) {
+        return $select_results;
+    }
+
+    public function selectFields() {
+        return 'tx_newspaper_article.*';
+    }
+
+}
+
+class SelectMethodSingleStrategy implements SelectMethodStrategy {
+
+    public function createArticle(array $row) {
+        return new tx_newspaper_Article($row['uid_foreign']);        
+    }
+
+    public function fieldsToSelect() {
+        return tx_newspaper_ArticleList_Manual::mm_table . '.uid_foreign';
+    }
+
+    public function selectFields() {
+        return 'DISTINCT tx_newspaper_article.uid';
+    }
+
+
+    public function getUids(array $uids) {
+        return $uids;
+    }
+
+
+    public function getOffset(array $offsets, $uid) {
+        return intval($offsets[$uid]);
+    }
+
+    public function rawArticleUIDs(array $select_results) {
+        $uids = array();
+        foreach ($select_results as $result) {
+            if (intval($result['uid'])) $uids[] = intval($result['uid']);
+        }
+
+        return $uids;
+    }
+
+
+}
+
+class SelectMethodFactory {
+
+    public static function create($get_articles_uses_array) {
+        if ($get_articles_uses_array) return new SelectMethodAllAtOnceStrategy();
+        else return new SelectMethodSingleStrategy();
+    }
 }
 
 ?>

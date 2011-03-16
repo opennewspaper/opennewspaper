@@ -710,21 +710,13 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		 */
 		$uids = $this->getRawArticleUIDs(2*$number, $start);
 
-        if ($this->get_articles_uses_array) {
-            $actual_uids = array();
-            foreach ($uids as $article_data) {
-                $actual_uids[] = $article_data['uid'];
-            }
-            $offsets = $this->getOffsets($actual_uids);
-        } else {
-		    $offsets = $this->getOffsets($uids);
-        }
+        $offsets = $this->getOffsets($this->select_method_strategy->getUids($uids));
 		
 		$articles = array();
 		foreach ($uids as $uid) {
 			$articles[] = array(
-				'article' => $this->get_articles_uses_array? tx_newspaper_Article::createFromArray($uid): new tx_newspaper_Article($uid),
-				'offset' => intval($this->get_articles_uses_array? $offsets[$uid['uid']]: $offsets[$uid])
+				'article' => $this->select_method_strategy->createArticle($uid),
+				'offset' => $this->select_method_strategy->getOffset($offsets, $uid)
 			);
 		}
 		return $articles;
@@ -741,92 +733,25 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function getRawArticleUIDs($number, $start = 0) {
 
-		$table = $this->getAttribute('filter_sql_table');
-		if (!$table) $table = 'tx_newspaper_article';
-		
-		$where = $this->getAttribute('filter_sql_where');
-		if (!$where) $where = '1';
-		if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
-		$where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
-		
-		if ($this->getAttribute('filter_sql_order_by')) {
-			$order_by = $this->getAttribute('filter_sql_order_by');
-		} else {
-			$order_by = '
-CASE
-  WHEN tx_newspaper_article.publish_date = \'0\'
-  THEN tx_newspaper_article.tstamp
-  ELSE tx_newspaper_article.publish_date
-END 
-DESC';
-		}
-		
-		if ($this->getAttribute('filter_sections')) {
-			$sections = array();
-			foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
-				$sections[] = $section_uid;
-				if (self::include_articles_from_subsections) {
-					//	add subsections to search clause
-					$section = new tx_newspaper_Section($section_uid);
-					$child_sections = $section->getChildSections(true);
-					if ($child_sections) {
-						foreach ($child_sections as $child_section) {
-							$sections[] = $child_section->getUid();
-						}
-					}
-				}
-			}
-			$table .= ' JOIN tx_newspaper_article_sections_mm' .
-					  '   ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local';
-
-			$where .= ' AND tx_newspaper_article_sections_mm.uid_foreign IN (' . 
-							implode(', ', $sections) . ')';
-		}
-		
-		if ($this->getAttribute('filter_tags_include')) {
-
-			$table .= ' JOIN tx_newspaper_article_tags_mm' .
-					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
-
-			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign IN (' . 
-							$this->getAttribute('filter_tags_include') . ')';
-		}
-		
-		if ($this->getAttribute('filter_tags_exclude')) {
-
-			$table .= ' JOIN tx_newspaper_article_tags_mm' .
-					  '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
-
-			$where .= ' AND tx_newspaper_article_tags_mm.uid_foreign NOT IN (' . 
-							$this->getAttribute('filter_tags_exclude') . ')';
-		}
-
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 		
 		try {
 			$results = tx_newspaper::selectRows(
-				($this->get_articles_uses_array? 'tx_newspaper_article.*': 'DISTINCT tx_newspaper_article.uid'),
-				$table,
-				$where,
+				$this->select_method_strategy->selectFields(),
+				$this->selectTable(),
+				$this->selectWhere(),
 				'',
-				$order_by,
-				intval($start) . ', ' . intval($number)
+				$this->selectOrderBy(),
+				$this->selectLimit($start, $number)
 			);
 		} catch (tx_newspaper_DBException $e) {
-			//  This guards agains article lists which use GET varaiables, 
+			//  This guards against article lists which use GET varaiables,
 			//	which are not set in the BE
 			$results = array();	
 		}
 #t3lib_div::devlog('tx_newspaper::$query', 'newspaper', 0, array('query' => tx_newspaper::$query, 'results' => $results));
 
-        if ($this->get_articles_uses_array) return $results;
-        
-		$uids = array();
-		foreach ($results as $result) {
-			if (intval($result['uid'])) $uids[] = intval($result['uid']);
-		}
-
-		return $uids;
+        return $this->select_method_strategy->rawArticleUIDs($results);
 	}
 	
 	/// Get all offsets for the supplied UIDs
@@ -860,7 +785,88 @@ DESC';
 
 		return $offsets;
 	}
-		
+
+    private function selectTable() {
+        $table = $this->getAttribute('filter_sql_table');
+        if (!$table) $table = 'tx_newspaper_article';
+
+        if ($this->getAttribute('filter_tags_include')) {
+            $table .= ' JOIN tx_newspaper_article_tags_mm' .
+                      '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
+        }
+        if ($this->getAttribute('filter_tags_exclude')) {
+
+            $table .= ' JOIN tx_newspaper_article_tags_mm' .
+                      '   ON tx_newspaper_article.uid = tx_newspaper_article_tags_mm.uid_local';
+        }
+
+        if ($this->getAttribute('filter_sections')) {
+            $table .= ' JOIN tx_newspaper_article_sections_mm' .
+                      '   ON tx_newspaper_article.uid = tx_newspaper_article_sections_mm.uid_local';
+        }
+
+        return $table;
+    }
+
+
+    private function selectWhere() {
+        $where = $this->getAttribute('filter_sql_where');
+        if (!$where) $where = '1';
+        if (strpos($where, '$') !== false) $where = self::expandGETParameter($where);
+        $where .= tx_newspaper::enableFields('tx_newspaper_article', (TYPO3_MODE == 'BE'));
+
+        if ($this->getAttribute('filter_tags_include')) {
+            $where .= ' AND tx_newspaper_article_tags_mm.uid_foreign IN (' .
+                            $this->getAttribute('filter_tags_include') . ')';
+        }
+
+        if ($this->getAttribute('filter_tags_exclude')) {
+            $where .= ' AND tx_newspaper_article_tags_mm.uid_foreign NOT IN (' .
+                            $this->getAttribute('filter_tags_exclude') . ')';
+        }
+
+        if ($this->getAttribute('filter_sections')) {
+            $sections = array();
+            foreach (explode(',', $this->getAttribute('filter_sections')) as $section_uid) {
+                $sections[] = $section_uid;
+                if (self::include_articles_from_subsections) {
+                    //	add subsections to search clause
+                    $section = new tx_newspaper_Section($section_uid);
+                    $child_sections = $section->getChildSections(true);
+                    if ($child_sections) {
+                        foreach ($child_sections as $child_section) {
+                            $sections[] = $child_section->getUid();
+                        }
+                    }
+                }
+            }
+            $where .= ' AND tx_newspaper_article_sections_mm.uid_foreign IN (' .
+                            implode(', ', $sections) . ')';
+        }
+
+        return $where;
+    }
+
+    private function selectOrderBy() {
+        if ($this->getAttribute('filter_sql_order_by')) {
+            $order_by = $this->getAttribute('filter_sql_order_by');
+        } else {
+            $order_by = '
+CASE
+  WHEN tx_newspaper_article.publish_date = \'0\'
+  THEN tx_newspaper_article.tstamp
+  ELSE tx_newspaper_article.publish_date
+END
+DESC';
+        }
+
+        return $order_by;
+    }
+
+    private function selectLimit($start, $number) {
+        return intval($start) . ', ' . intval($number);
+    }
+
 	/// Sort articles, taking their offsets into account
 	/** 
 	 *  \param $articles array(
