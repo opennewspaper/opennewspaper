@@ -863,8 +863,8 @@ function findElementsByName(name, type) {
                             } else if (entry.length >= instance.options.partialChars &&
                               instance.options.partialSearch && foundPos != -1) {
                               if (instance.options.fullSearch || /\s/.test(elem.substr(foundPos-1,1))) {
-                                partial.push('<li id="'+pair.key+'">' + elem.substr(0, foundPos) + "<strong>" +
-                                  elem.substr(foundPos, entry.length) + "</strong>" + elem.substr(
+                                partial.push('<li id="'+pair.key+'">' + elem.substr(0, foundPos) +
+                                  elem.substr(foundPos, entry.length) + elem.substr(
                                   foundPos + entry.length) + "</li>");
                                 break;
                               }
@@ -1504,7 +1504,7 @@ JSCODE;
 				$result[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
 			}
 		}
-        
+
         tx_newspaper::devlog('getArticleListBySectionId(' . $section->getAttribute('section_name') .') SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
