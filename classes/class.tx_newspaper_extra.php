@@ -361,6 +361,25 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	}
 
+	/// Checks TCA to set attribute to default value, if a default value is set
+	// \todo: currently only checkboxes are processed (see http://typo3.org/documentation/document-library/core-documentation/doc_core_api/4.1.0/view/4/2/ for other types)
+	public function setDefaultValues() {
+		t3lib_div::loadTCA($this->getTable()); // make sure TCA for this extra is available
+
+		foreach($GLOBALS['TCA'][$this->getTable()]['columns'] as $fieldName => $fieldData) {
+//t3lib_div::devlog('setDefaultValues()', 'newspaper', 0, array('fieldName' => $fieldName, 'fieldData' => $fieldData));
+
+			switch($fieldData['config']['type']) {
+				case 'check':
+					if ($fieldData['config']['default'] == 1) {
+						$this->setAttribute($fieldName, 1);
+					}
+				break;
+			}
+
+		}
+	}
+
 	/// A short description that makes an Extra uniquely identifiable in the BE
 	/** This function should be overridden in every class that can be pooled, to
 	 *  provide the BE user a way to find an Extra to create a new Extra from.
