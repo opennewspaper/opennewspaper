@@ -2782,6 +2782,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.show_related_articles",		
 			"config" => Array (
 				"type" => "check",
+				"default" => 1,
 			)
 		),
 		"manually_selected_articles" => Array (		

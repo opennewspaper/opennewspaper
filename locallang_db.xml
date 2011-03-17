@@ -276,7 +276,7 @@
 			<label index="tx_newspaper_article.modification_user">Modification user</label>
 			<label index="tx_newspaper_article.source_id">Unique ID im Redaktionssystem der Zeitung</label>
 			<label index="tx_newspaper_article.source_object">Quelle aus der der Artikel importiert wurde (serialisiertes Objekt)</label>
-			<label index="tx_newspaper_article.sections">Ressorts in denen dieser Artikel erscheint</label>
+			<label index="tx_newspaper_article.sections">Ressorts, in denen dieser Artikel erscheint</label>
 			<label index="tx_newspaper_article.extras">Extras</label>
 			<label index="tx_newspaper_article.name">Name des Seitenbereichs</label>
 			<label index="tx_newspaper_article.is_template">Dieser Artikel wird auf einer Seite eingesetzt, um als Vorlage für alle tatsächlichen Artikel zu dienen</label>
