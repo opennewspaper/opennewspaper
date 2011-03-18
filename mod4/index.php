@@ -117,7 +117,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
-			$basePath = (tx_newspaper::getBasePath() != '/')? tx_newspaper::getBasePath() . '/' : '';
+			$basePath = (tx_newspaper::getBasePath() != '/')? tx_newspaper::getBasePath() . '/' : '/';
 
 			// JavaScript
 			$this->doc->JScode = '
