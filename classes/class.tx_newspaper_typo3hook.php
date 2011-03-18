@@ -148,7 +148,14 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 //t3lib_div::devlog('sh post leave', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 	}
 
-    function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that) {
+
+    function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, 'subst id' => $that->substNEWwithIDs)); // , $_REQUEST
+        // pass hook to newspaper classes
+        tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
+        tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
+        tx_newspaper_extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
+
         $this->handleRegisteredSaveHooks('processDatamap_afterDatabaseOperations',
                                          $status, $table, $id, $fieldArray, $that);
     }
@@ -372,15 +379,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 
 
-	function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, 'subst id' => $that->substNEWwithIDs)); // , $_REQUEST
-		// pass hook to newspaper classes
-		tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
-		tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
-		tx_newspaper_extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
-	}
-
-	
 	
 	/// Extension manager (EM) hook
 	function tsStyleConfigForm($_funcRef, $_params, $that=null) {
