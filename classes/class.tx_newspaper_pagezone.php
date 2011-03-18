@@ -735,13 +735,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         tx_newspaper::devlog("changeParent($new_parent_uid)");
 		foreach ($this->getExtras() as $extra) {
 			if ($extra->isOriginExtra()) {
+                tx_newspaper::devlog("hide origin extra", $extra);
 				/// Hide and move to end of page zone
 				$extra->setAttribute('show_extra', 0);
 				$extra->store();
 			} else {
+                tx_newspaper::devlog("remove extra", $extra);
 				/// Delete Extra, also on sub-PageZones
 				$this->removeExtra($extra, true);
 			}
+            tx_newspaper::devlog("...done");
 		}
         tx_newspaper::devlog("extras removed");
 
