@@ -109,7 +109,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 
 	/** \todo some documentation would be nice ;-) */
-	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
@@ -226,11 +226,11 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		}
 	}
 
-	private function handleImageUploads($status, $table, $id, &$fieldArray, $that) {
+	private function handleImageUploads($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 		tx_newspaper_Extra_Image::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 	}
 
-	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, $fieldArray, $that) {
+	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
 			if (method_exists($savehook_object, $savehook_name)) {
 //t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
