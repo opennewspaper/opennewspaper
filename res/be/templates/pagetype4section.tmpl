@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 {*
 	$TITLE
 	$AJAX_CALL
@@ -20,11 +20,11 @@
 {if $TITLE}{$TITLE}<br />{/if}
 {section name=i loop=$DATA}
 {if $DATA[i].ACTIVE == 1}
-	{$OK_ICON} <strong>{$DATA[i].type_name}</strong> {$DATA[i].TEMPLATE_SET_HTML} <a href="{$DATA[i].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
+	{$OK_ICON} <strong>{$DATA[i].type_name}</strong> {if $USE_TEMPLATE_SETS}{$DATA[i].TEMPLATE_SET_HTML}{/if} <a href="{$DATA[i].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
 	<div style="margin-bottom: 10px; margin-left: 30px;">
 	{section name=j loop=$DATA[i].pagezones}
 		{if $DATA[i].pagezones[j].ACTIVE == 1}
-			{$OK_ICON} {$DATA[i].pagezones[j].type_name} {$DATA[i].pagezones[j].TEMPLATE_SET_HTML} <a href="{$DATA[i].pagezones[j].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
+			{$OK_ICON} {$DATA[i].pagezones[j].type_name} {if $USE_TEMPLATE_SETS}{$DATA[i].pagezones[j].TEMPLATE_SET_HTML}{/if} <a href="{$DATA[i].pagezones[j].AJAX_DELETE_URL}">{$DELETE_ICON}</a><br />
 		{else}
 			<a href="{$DATA[i].pagezones[j].AJAX_ACTIVATE_URL}">{$ADD_ICON}</a> {$DATA[i].pagezones[j].type_name}<br />
 		{/if}

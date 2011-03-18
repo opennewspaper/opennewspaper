@@ -120,6 +120,8 @@ class tx_newspaper_BE {
 		self::$smarty->assign('CLEAR_ICON', self::renderIcon('', '', '', '', true));
 		self::$smarty->assign('OK_ICON', self::renderIcon('gfx/icon_ok2.gif', '', ''));
 
+		self::$smarty->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForSections()); // are template set dropdowns visible or not
+
 
 		// add title and message
 		self::$smarty->assign('TITLE', tx_newspaper::getTranslation('message_title_page_in_section'));
@@ -189,17 +191,24 @@ class tx_newspaper_BE {
 	}
 
 
-	/// Returns whether or not template set are used in the backend
+	/// Returns whether or not template sets for sections are used in the backend (newspaper.conf)
 	public static function useTemplateSetsForSections() {
-        $key = 'use_template_sets_for_sections';
+        return self::useTemplateSets('use_template_sets_for_sections');
+	}
+
+	/// Returns whether or not template sets for content placement are used in the backend (newspaper.conf)
+	public static function useTemplateSetsForContentPlacement() {
+        return self::useTemplateSets('use_template_sets_for_content_placement');
+	}
+
+	/// Returns whether or not template sets are used in the backend for given key; deafults to true
+	private static function useTemplateSets($key) {
         $value = tx_newspaper::getNewspaperConfig($key);
 
         if (!isset($value[$key])) {
         	return true; // default
         }
-
         return (bool) $value[$key];
-
 	}
 
 
@@ -629,7 +638,7 @@ function findElementsByName(name, type) {
 
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
-			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForSections()); // are template set dropdowns visible or not
+			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForContentPlacement()); // are template set dropdowns visible or not
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available
