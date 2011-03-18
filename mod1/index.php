@@ -370,6 +370,10 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// read data
 					$this->input = t3lib_div::GParrayMerged($this->prefixId);
 //t3lib_div::devlog('mod1 main', 'newspaper', 0, array('this->input' => $this->input));
+
+					// Basic AJAX handling
+					$this->processAjaxRequest();
+
 					// newspaper element browser handling
 					$this->processNewspaperElementBrowser();
 					$this->processNewspaperElementBrowserAjax();
@@ -485,6 +489,17 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 			die($eb);
 
+		}
+
+
+		/// Process AJAX requests, if any. Terminates with die() if AJAX request.
+		private function processAjaxRequest() {
+			switch($this->input['ajaxController']) {
+				case 'fixPubDate':
+					// update publish date for published articles without publish date
+					die($this->fixPublishDate());
+				break;
+			}
 		}
 
 
