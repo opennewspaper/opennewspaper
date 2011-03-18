@@ -290,23 +290,22 @@ body {
 				</select>
 				<label>{$LABEL.pagezonetype}</label>
 
-{* de-activated, see #1434 *}
-{*				<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)"> *}
+				<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
 {* 0 -> default inheritance mode, read upper level *}
-{* 					<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option> *}
+					<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
 {* page zone being activated for other page on the same level *}
-{*					{section name=j loop=$INHERITANCESOURCE}
+					{section name=j loop=$INHERITANCESOURCE}
 						{if $INHERITANCESOURCE[j]->getAbstractUid() == $DATA[i].inherits_from}
 							<option selected="selected"
 						{else}
 							<option
 						{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $ADMIN && $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
-					{/section} *}
+					{/section}
 {* -1 -> no inheritance *}
-{* 					<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option> *}
+					<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
 {* future feature; <option value="-2" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo:use TSConfig setting</option> *}
-{*				</select>
-				<label>{$LABEL.pagezone_inheritancesource}</label> *}
+				</select>
+				<label>{$LABEL.pagezone_inheritancesource}</label>
 
 			{/if}
 			{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
