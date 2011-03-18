@@ -503,7 +503,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \todo DELETE WHERE origin_uid = ...
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
-	
+
+        tx_newspaper::devlog("removeExtra($remove_extra, $recursive)");
+        
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
@@ -511,7 +513,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
 			}
 		}
-		
+		tx_newspaper::devlog("finished removing on inheriting page zones");
+
 		$index = -1;
 		try {
 			$index = $this->indexOfExtra($remove_extra);
@@ -519,6 +522,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			//	Extra not found, nothing to do
 			return false;
 		}
+        tx_newspaper::devlog("index: $index");
 		unset($this->extras[$index]);
 		
 		tx_newspaper::deleteRows(
@@ -526,19 +530,22 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_local = ' . $this->getUid() .
 				' AND uid_foreign = ' . $remove_extra->getExtraUid()
 			);
-			
+        tx_newspaper::devlog("deleted mm entry");
+
 		/// Delete the abstract record
 		tx_newspaper::deleteRows(
 			tx_newspaper_Extra_Factory::getExtraTable(), 
 			array($remove_extra->getExtraUid())
 		);
-		
+        tx_newspaper::devlog("deleted abstract record");
+
 		/** If abstract record was the last one linking to the concrete Extra,
 		 *  \em and the concrete Extra is not pooled, delete the concrete Extra
 		 *  too.
 		 */
 		try {
 			if (!$remove_extra->getAttribute('pool')) {
+                tx_newspaper::devlog("delete concrete record...");
 				$count = tx_newspaper::selectOneRow(
 					'COUNT(*) AS num', 
 					tx_newspaper_Extra_Factory::getExtraTable(),
@@ -549,6 +556,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				if (!intval($count['num'])) {
 					$remove_extra->deleteIncludingReferences();
 				}
+                tx_newspaper::devlog("...done");
+
 			}
 		} catch (tx_newspaper_WrongAttributeException $e) { }
 		
