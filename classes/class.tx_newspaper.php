@@ -132,7 +132,7 @@ class tx_newspaper  {
         self::logQuery();
         return $GLOBALS['TYPO3_DB']->sql_query(self::$query);
     }
-    
+
 	/// Execute a \c SELECT query, check the result, return zero or one record(s)
 	/** enableFields() are taken into account.
 	 *
@@ -807,7 +807,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 		return $path;
 	}
 
-	private static function getBasePath() {
+	public static function getBasePath() {
 
 		if (self::isTazSpambusterHackNeeded()) return self::tazSpambusterHack();
 
@@ -1278,7 +1278,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     private static $are_queries_logged = false;
 
     private static $max_logged_queries = self::default_max_logged_queries;
-    
+
 	/// a \c tslib_cObj object used to generate typolinks
 	private static $local_cObj = null;
 
