@@ -636,6 +636,51 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			die('<div class="errorMessage">' . $message . '</div>');
 		}
 
+
+		/// Fixes missing publish date for published articles with publish date missing
+		/** 1. Try to get publish date from workflow log
+		 *  2. Use article's tstamp
+		 *  \todo: move to mod6, but some weird Typo3 path problem there ...
+		 */
+
+		private function fixPublishDate() {
+			$rows = tx_newspaper::selectRows('*', 'tx_newspaper_article', 'deleted=0 AND hidden=0 AND publish_date=0');
+			$count = array();
+			foreach($rows as $row) {
+				$a = new tx_newspaper_article($row['uid']);
+				// trying to get publish date from workflow log
+				$wf = tx_newspaper::selectZeroOrOneRows(
+					'tstamp',
+					'tx_newspaper_log',
+					'table_name="tx_newspaper_article" AND table_uid=' . $a->getUid() . ' AND action=2', // action 2 -> publish article
+					'',
+					'tstamp DESC',
+					1
+				);
+				if (isset($wf['tstamp'])) {
+//t3lib_div::devlog('fixPublishDate()', 'newspaper', 0, array('wf_record' => $wf));
+					// use timestamp the article was published last time
+					$a->setAttribute('publish_date', $wf['tstamp']);
+					$count['wf']++;
+				} else {
+					// use article's timestamp
+					if ($a->getAttribute('tstamp')) {
+						$a->setAttribute('publish_date', $a->getAttribute('tstamp'));
+						$count['tstamp']++;
+					} else {
+						$count['wontfix']++;
+					}
+				}
+				$a->store();
+			}
+
+			$msg = 'Used timestamp from workflowe log (best method): ' . $count['wf'];
+			$msg .= ', used article\'s timestamp: ' . $count['tstamp'];
+			$msg .= ', problem couldn\'t be fixed: ' . $count['wontfix'];
+
+			return $msg;
+		}
+
 }
 
 

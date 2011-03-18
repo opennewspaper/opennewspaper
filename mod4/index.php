@@ -30,7 +30,7 @@
 
 /// \todo:
 /**
- * Inconsistency check fï¿½r Extras:
+ * Inconsistency check für Extras:
  * alle PZs auslesen
  * dazu alle Extra auslesen und indexOfExtra() aufrufen (try catch)
  */
@@ -125,6 +125,8 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 						document.location = URL;
 					}
 				</script>
+				<script type="text/javascript" src="contrib/prototype/prototype.js"> </script>
+				<script type="text/javascript" src="' . tx_newspaper::getBasePath() . '/typo3conf/ext/newspaper/mod4/res/mod4.js"> </script>
 			';
 			$this->doc->postCode='
 				<script language="javascript" type="text/javascript">
@@ -687,7 +689,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 
 
-	/// searches published articles (hidden==0) with no publish date set (publish_date==0)
+	/// Searches published articles (hidden==0) with no publish date set (publish_date==0)
 	static function checkArticleMissingPublishDate() {
 		$msg = '';
 
@@ -696,6 +698,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			$msg .= 'Article #' . $row['uid'] . '<br />';
 		}
 		if ($msg != '') {
+			$msg .= '<br /><i><a href="#" onclick="fixPublishDate(); return false;">Fix all publish dates &gt;&gt;</a></i> <span id="pubDateSpinner"></span><br /><br />';
 			return $msg;
 		}
 		return true; // no problems found
