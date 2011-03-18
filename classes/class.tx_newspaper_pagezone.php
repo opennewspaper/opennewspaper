@@ -664,6 +664,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getInheritanceHierarchyDown($including_myself = true, 
 												$hierarchy = array()) {
 
+        tx_newspaper::devlog("getInheritanceHierarchyDown($including_myself, ", print_r($hierarchy,1));
 		if ($including_myself) $hierarchy[] = $this;
 		
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
