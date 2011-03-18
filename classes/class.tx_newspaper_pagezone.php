@@ -703,6 +703,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         tx_newspaper::devlog("heirs", $heirs);
 
 		foreach ($heirs as $heir) {
+            if (intval($heir['uid']) == $this->getUid()) continue;
 			$inheriting_pagezone = new $table($heir['uid']);
 			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
