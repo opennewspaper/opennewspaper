@@ -670,6 +670,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($including_myself) $hierarchy[] = $this;
 		
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
+        tx_newspaper::devlog("explicitly inheriting pagezone hierarchy added");
 
 		if (!$this->getParentPage()) return $hierarchy;
 
@@ -692,19 +693,21 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	/// Reads page zones which have been explicitly set to inherit from \c $this.
 	private function getExplicitlyInheritingPagezoneHierarchy() {
-		
+		tx_newspaper::devlog("getExplicitlyInheritingPagezoneHierarchy()");
 		$hierarchy = array();
 		
 		$table = tx_newspaper::getTable($this);
 		$heirs = tx_newspaper::selectRows(
 			'uid', $table, 'inherits_from = ' . $this->getUid()
 		);
-		
+        tx_newspaper::devlog("heirs", $heirs);
+
 		foreach ($heirs as $heir) {
 			$inheriting_pagezone = new $table($heir['uid']);
 			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
-		
+        tx_newspaper::devlog("hierarchy", $hierarchy);
+
 		return $hierarchy;
 	}
 
