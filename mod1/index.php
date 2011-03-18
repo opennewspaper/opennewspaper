@@ -689,7 +689,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				$a->store();
 			}
 
-			$msg = 'Used timestamp from workflowe log (best method): ' . $count['wf'];
+			$msg = 'Used timestamp from workflow log (best method): ' . $count['wf'];
 			$msg .= ', used article\'s timestamp: ' . $count['tstamp'];
 			$msg .= ', problem couldn\'t be fixed: ' . $count['wontfix'];
 
