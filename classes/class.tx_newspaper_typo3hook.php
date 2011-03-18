@@ -148,6 +148,11 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 //t3lib_div::devlog('sh post leave', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 	}
 
+    function processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that) {
+        $this->handleRegisteredSaveHooks('processDatamap_afterDatabaseOperations',
+                                         $status, $table, $id, $fieldArray, $that);
+    }
+
 	/// checks if the combination of get_var and get_value is unique for every page type
 	private function checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id) {
 		if ($table == 'tx_newspaper_pagetype') {
