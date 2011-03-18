@@ -732,6 +732,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	 */
 	public function changeParent($new_parent_uid) {
 
+        tx_newspaper::devlog("changeParent($new_parent_uid)");
 		foreach ($this->getExtras() as $extra) {
 			if ($extra->isOriginExtra()) {
 				/// Hide and move to end of page zone
@@ -742,7 +743,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$this->removeExtra($extra, true);
 			}
 		}
-		
+        tx_newspaper::devlog("extras removed");
+
 		$parent_uid = intval($new_parent_uid);
 				
 		if ($parent_uid < 0) {
@@ -752,13 +754,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		} else {
 			$parent_zone = tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
 		}
+        tx_newspaper::devlog("parent zone", $parent_zone);
 
 		if ($parent_zone) $this->copyExtrasFrom($parent_zone);
+        tx_newspaper::devlog("extras copied");
 
 		$this->setAttribute('inherits_from', $parent_uid);
 		$this->setAttribute('tstamp', time());
 		$this->store();
-		
+        tx_newspaper::devlog("stored");
+
 	}
 	
 
