@@ -664,9 +664,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getInheritanceHierarchyDown($including_myself = true, 
 												$hierarchy = array()) {
 
-        tx_newspaper::devlog("getInheritanceHierarchyDown($including_myself): recursion " . $this->recursion_level);
-        $this->recursion_level++;
-        if ($this->recursion_level > 20) return;
+        tx_newspaper::devlog("getInheritanceHierarchyDown($including_myself): recursion " . self::$recursion_level);
+        self::$recursion_level++;
+        if (self::$recursion_level > 20) return;
 		if ($including_myself) $hierarchy[] = $this;
 		
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
@@ -689,7 +689,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		}
 		return $hierarchy;
 	}
-    private $recursion_level = 0;
+    private static $recursion_level = 0;
 
 	/// Reads page zones which have been explicitly set to inherit from \c $this.
 	private function getExplicitlyInheritingPagezoneHierarchy() {
