@@ -117,6 +117,8 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 			$this->doc->backPath = $BACK_PATH;
 			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
 
+			$basePath = tx_newspaper::getBasePath()? tx_newspaper::getBasePath() . '/' : '';
+
 			// JavaScript
 			$this->doc->JScode = '
 				<script language="javascript" type="text/javascript">
@@ -126,7 +128,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 					}
 				</script>
 				<script type="text/javascript" src="contrib/prototype/prototype.js"> </script>
-				<script type="text/javascript" src="' . tx_newspaper::getBasePath() . '/typo3conf/ext/newspaper/mod4/res/mod4.js"> </script>
+				<script type="text/javascript" src="' . $basePath . 'typo3conf/ext/newspaper/mod4/res/mod4.js"> </script>
 			';
 			$this->doc->postCode='
 				<script language="javascript" type="text/javascript">

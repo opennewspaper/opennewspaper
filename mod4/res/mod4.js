@@ -1,11 +1,8 @@
 
 // Fix publish date for published articles without a publish date set
 function fixPublishDate() {
-console.log('##');
 
-
-
-var request = new Ajax.Request(
+	var request = new Ajax.Request(
 		'../typo3conf/ext/newspaper/mod1/index.php',
 		{
 			method: 'get',
@@ -19,7 +16,5 @@ var request = new Ajax.Request(
 			}
 		}
 	);
-
-
 
 }
