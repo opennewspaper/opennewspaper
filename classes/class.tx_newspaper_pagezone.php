@@ -509,6 +509,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+                tx_newspaper::devlog("inheriting pagezone: $inheriting_pagezone");
 				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
 				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
 			}
