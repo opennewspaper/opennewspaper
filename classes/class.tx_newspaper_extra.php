@@ -808,7 +808,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records if a new extra is added to a pagezone
-/// \todo: explain in detail what's happening here!
+    /** \todo: explain in detail what's happening here!
+     */
 	private static function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
 		if (tx_newspaper::isAbstractClass($table)) {
 			return; // abstract class, nothing to do
@@ -826,7 +827,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 			// get uid of new concrete extra (that was just stored)
 			if (!$concrete_extra_uid = intval($that->substNEWwithIDs[$id])) {
-				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . 'could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
+				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . ' could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
 				die('Fatal error: New extra ' . $table . ' could not be created. <b>Please contact developers.</b> Please <i>reload</i> the backend if you cannot access the backend anymore.');
 			}
 
