@@ -254,7 +254,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
     ///
     public function useOptimizedGetArticles($do) {
-        $this->select_method_strategy = SelectMethodFactory::create($do);
+        $this->select_method_strategy = SelectMethodStrategy::create($do);
     }
 
 	/// Get a single tx_newspaper_Article at place \p $index in the List
@@ -787,21 +787,27 @@ body {
 
 }
 
-interface SelectMethodStrategy {
-    public function createArticle(array $row);
+abstract class SelectMethodStrategy {
+
+    public static function create($get_articles_uses_array) {
+        if ($get_articles_uses_array) return new SelectMethodAllAtOnceStrategy();
+        else return new SelectMethodSingleStrategy();
+    }
+
+    abstract public function createArticle($row);
 
     // methods for manual article list
-    public function fieldsToSelect();
+    abstract public function fieldsToSelect();
 
     // methods for semiautomatic article list
-    public function getUids(array $uids);
-    public function getOffset(array $offsets, $uid);
-    public function rawArticleUIDs(array $select_results);
-    public function selectFields();
+    abstract public function getUids(array $uids);
+    abstract public function getOffset(array $offsets, $uid);
+    abstract public function rawArticleUIDs(array $select_results);
+    abstract public function selectFields();
 }
 
-class SelectMethodAllAtOnceStrategy implements SelectMethodStrategy {
-    public function createArticle(array $row){
+class SelectMethodAllAtOnceStrategy extends SelectMethodStrategy {
+    public function createArticle($row){
         return tx_newspaper_Article::createFromArray($row);
     }
 
@@ -831,10 +837,11 @@ class SelectMethodAllAtOnceStrategy implements SelectMethodStrategy {
 
 }
 
-class SelectMethodSingleStrategy implements SelectMethodStrategy {
+class SelectMethodSingleStrategy extends SelectMethodStrategy {
 
-    public function createArticle(array $row) {
-        return new tx_newspaper_Article($row['uid_foreign']);        
+    public function createArticle($row) {
+        if (is_array($row)) return new tx_newspaper_Article($row['uid_foreign']);
+        else return new tx_newspaper_Article(intval($row));
     }
 
     public function fieldsToSelect() {
@@ -865,14 +872,6 @@ class SelectMethodSingleStrategy implements SelectMethodStrategy {
     }
 
 
-}
-
-class SelectMethodFactory {
-
-    public static function create($get_articles_uses_array) {
-        if ($get_articles_uses_array) return new SelectMethodAllAtOnceStrategy();
-        else return new SelectMethodSingleStrategy();
-    }
 }
 
 ?>
