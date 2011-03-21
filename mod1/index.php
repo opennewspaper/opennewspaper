@@ -455,6 +455,14 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 			switch(strtolower($this->input['type'])) {
 				case 'e':
+					// check if newOnly parameter is set. create extra right away if so
+					if ($this->input['newOnly'] == 1 && $this->input['extraClassPreselect']) {
+						$extra = $this->createNewConcreteExtra($this->input['extraClassPreselect']);
+	  					$returnUrl = tx_newspaper::encodeUrlBasic(tx_newspaper::getBasePath() . "typo3conf/ext/newspaper/mod1/res/eb/closeNewExtra.html?tx_newspaper_mod1[newExtraClass]=" . $this->input['extraClassPreselect'] . "&tx_newspaper_mod1[newExtraUid]=" . $extra->getUid());
+						$url = tx_newspaper::getBasePath() . "typo3/alt_doc.php?returnUrl=" . $returnUrl . "&edit[" . $extra->getTable() . "][" . $extra->getUid() . "]=edit&tx_newspaper_mod1[newExtraInElementBrowser]=1";
+						header('Location: ' . $url);
+					}
+
 					// element browser for extras
 					$smarty->assign('formExtras', tx_newspaper_extra::getRegisteredExtras());
 					$filter = $smarty->fetch('extra_filter.tmpl');
@@ -492,6 +500,22 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		}
 
 
+		/// Creates a concrete extra (in Typo3 database)
+		/**
+		 * \param $extraClass Class of Extra to be created
+		 * \return Extra
+		 * \todo: where to move this function to???
+		 */
+		private function createNewConcreteExtra($extraClass) {
+			$extra = new $extraClass();
+			$extra->setAttribute('crdate', time());
+			$extra->setAttribute('tstamp', time());
+			$extra->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+			$extra->store();
+			return $extra;
+		}
+
+
 		/// Process AJAX requests, if any. Terminates with die() if AJAX request.
 		private function processAjaxRequest() {
 			switch($this->input['ajaxController']) {
@@ -512,11 +536,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			// Check if AJAX request should perform a simple operation and return data using JSON
 			switch($this->input['ajaxController']) {
 				case 'createNewExtra':
-					$extra = new $this->input['extraClass']();
-					$extra->setAttribute('crdate', time());
-					$extra->setAttribute('tstamp', time());
-					$extra->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-					$extra->store(); // \todo: store() create an abtract record too, but this isn't needed here ...
+					$extra = $this->createNewConcreteExtra($this->input['extraClass']);
 					die(json_encode(array('uid' => $extra->getUid()))); // return uid
 				break;
 			}

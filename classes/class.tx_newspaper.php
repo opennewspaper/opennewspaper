@@ -923,6 +923,16 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     }
 
 
+    /// Basic url encoding: encodes '?', '=' and '&' only
+    /// \param $url URL to be encoded
+    /// \return encoded URL
+    public static function encodeUrlBasic($url) {
+		$chars = array('?', '=', '&');
+		$replaceWith = array('%3F', '%3D', '%26');
+		return str_replace($chars, $replaceWith, $url);
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
 	/// Check if given class name is an abstract class

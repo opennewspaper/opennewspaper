@@ -131,11 +131,13 @@ function removeExtraFromTagzone(tz_uid, e_uid) {
 // \todo move window.open to some element browser lib
 function addExtraToTagzone(uid, extraClass) {
 	tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
+
 	var extraPreselect = (typeof(extraClass) == 'undefined')? '' : '&tx_newspaper_mod1[extraClassPreselect]=' + extraClass;
+	var newOnly = (extraPreselect)? '&tx_newspaper_mod1[newOnly]=1' : ''; // if an Exra is pre-selected, create it right away
 
 	// open element browser popup
 	var w = window.open(
-		"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers" + extraPreselect,
+		"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers" + extraPreselect + newOnly,
 		"npeb",
 		"width=800,height=500"
 	);
