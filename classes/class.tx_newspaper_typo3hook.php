@@ -37,22 +37,6 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
         tx_newspaper_Article::getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that);
 	}
 
-	/// the checkbox is_article in pagezonetype can't be unchecked once it was set
-	/** \param $table table name in hook
-	 *  \param $field name of single field currently processed in hook 
-	 *  \param $row data to be written
-	 *  \return void 
-	 */
-	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {
-		if ($table == 'tx_newspaper_pagezonetype' && $field == 'is_article' && $row['is_article'] == 1) {
-			t3lib_div::loadTCA($table); // Make sure full $TCA array for table 'tx_newspaper_pagezonetype' is loaded
-			// once the checkbox is checked, it can't be undone!
-			unset($GLOBALS['TCA'][$table]['columns']['is_article']['config']['type']);
-			$GLOBALS['TCA'][$table]['columns']['is_article']['config']['type'] = 'none';
-		}
-	}
-
-
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
 //t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
 
@@ -84,16 +68,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 	}
 
-	/// replaces element browser with article browser
-	private function replaceEbWithArticleBrowser($table, $field) {
-//t3lib_div::devlog('replaceEbWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
-		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
-		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser'][another_table] = array(field1, ... fieldn);
-		return 	array_key_exists('replaceEBwithArticleBrowser', $GLOBALS['newspaper']) &&
-				array_key_exists(strtolower($table), $GLOBALS['newspaper']['replaceEBwithArticleBrowser']) && 
-				in_array(strtolower($field), $GLOBALS['newspaper']['replaceEBwithArticleBrowser'][strtolower($table)]);
-	}
-	
 	function getMainFields_preProcess($table, $row, $that) {
 //t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
 		// pass down hook to newspaper classes
@@ -160,6 +134,72 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
                                          $status, $table, $id, $fieldArray, $that);
     }
 
+	/// command map hooks
+
+	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
+//t3lib_div::devlog('command pre enter', 'newspaper', 0, array('command' => $command, 'table' => $table, 'id' => $id, 'value' => $value));
+//t3lib_div::debug($that); die();
+		if ($command == 'delete') {
+			$this->checkIfArticletypeCanBeDeleted($table, $id);
+			$this->checkIfSectionCanBeDeleted($table, $id);
+			$this->checkIfPageTypeCanBeDeleted($table, $id);
+			$this->checkIfPageZoneTypeCanBeDeleted($table, $id);
+/// \todo: check if articles are assigned to section
+/// \todo: check if pages are assigned to section
+
+			// pass hook to newspaper classes
+			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $that);
+		}
+	}
+
+	function processDatamap_afterAllOperations($that) {
+		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
+			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
+				$savehook_object->processDatamap_afterAllOperations($that);
+			}
+		}
+	}
+
+
+	/// Extension manager (EM) hook
+	function tsStyleConfigForm($_funcRef, $_params, $that=null) {
+//t3lib_div::devlog('tsStyleConfigForm()', 'newspaper', 0, array('dummy' => $_params->CMD, '_funcRef' => $_funcRef, 'print_r _params' => print_r($_params, true)));
+		if (isset($_params->CMD['showExt']) && strtolower($_params->CMD['showExt']) == 'newspaper') {
+			// update button in extension manager was pressed AND current extension is newspaper, so create all non-existing newspaper sysfolders
+			tx_newspaper_sysfolder::createAll();
+		}
+	}
+
+
+	function releaseLocks($table, $uid, $user_id, $doSave) {
+t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 'uid' => $uid, 'user_id' => $user_id, 'doSave' => $doSave));
+	}
+
+	/// the checkbox is_article in pagezonetype can't be unchecked once it was set
+	/** \param $table table name in hook
+	 *  \param $field name of single field currently processed in hook
+	 *  \param $row data to be written
+	 *  \return void
+	 */
+	private function checkCantUncheckIsArticlePageZoneType($table, $field, $row) {
+		if ($table == 'tx_newspaper_pagezonetype' && $field == 'is_article' && $row['is_article'] == 1) {
+			t3lib_div::loadTCA($table); // Make sure full $TCA array for table 'tx_newspaper_pagezonetype' is loaded
+			// once the checkbox is checked, it can't be undone!
+			unset($GLOBALS['TCA'][$table]['columns']['is_article']['config']['type']);
+			$GLOBALS['TCA'][$table]['columns']['is_article']['config']['type'] = 'none';
+		}
+	}
+
+	/// replaces element browser with article browser
+	private function replaceEbWithArticleBrowser($table, $field) {
+//t3lib_div::devlog('replaceEbWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
+		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
+		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser'][another_table] = array(field1, ... fieldn);
+		return 	array_key_exists('replaceEBwithArticleBrowser', $GLOBALS['newspaper']) &&
+				array_key_exists(strtolower($table), $GLOBALS['newspaper']['replaceEBwithArticleBrowser']) &&
+				in_array(strtolower($field), $GLOBALS['newspaper']['replaceEBwithArticleBrowser'][strtolower($table)]);
+	}
+    
 	/// checks if the combination of get_var and get_value is unique for every page type
 	private function checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id) {
 		if ($table == 'tx_newspaper_pagetype') {
@@ -247,32 +287,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			if (method_exists($savehook_object, $savehook_name)) {
 //t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
-			}
-		}
-	}
-
-	/// command map hooks 
-	
-	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
-//t3lib_div::devlog('command pre enter', 'newspaper', 0, array('command' => $command, 'table' => $table, 'id' => $id, 'value' => $value));
-//t3lib_div::debug($that); die();
-		if ($command == 'delete') {
-			$this->checkIfArticletypeCanBeDeleted($table, $id);
-			$this->checkIfSectionCanBeDeleted($table, $id);
-			$this->checkIfPageTypeCanBeDeleted($table, $id);
-			$this->checkIfPageZoneTypeCanBeDeleted($table, $id);
-/// \todo: check if articles are assigned to section
-/// \todo: check if pages are assigned to section
-			
-			// pass hook to newspaper classes			
-			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $that);
-		}
-	}
-
-	function processDatamap_afterAllOperations($that) {
-		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
-			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
-				$savehook_object->processDatamap_afterAllOperations($that);
 			}
 		}
 	}
@@ -379,21 +393,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 
 
-	
-	/// Extension manager (EM) hook
-	function tsStyleConfigForm($_funcRef, $_params, $that=null) {
-//t3lib_div::devlog('tsStyleConfigForm()', 'newspaper', 0, array('dummy' => $_params->CMD, '_funcRef' => $_funcRef, 'print_r _params' => print_r($_params, true)));
-		if (isset($_params->CMD['showExt']) && strtolower($_params->CMD['showExt']) == 'newspaper') {
-			// update button in extension manager was pressed AND current extension is newspaper, so create all non-existing newspaper sysfolders
-			tx_newspaper_sysfolder::createAll();
-		}
-	}
-	
-	
-	function releaseLocks($table, $uid, $user_id, $doSave) {
-t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 'uid' => $uid, 'user_id' => $user_id, 'doSave' => $doSave));
-	}
-	
+
 }	
 
 ?>
