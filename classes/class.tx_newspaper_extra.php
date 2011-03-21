@@ -811,7 +811,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
     /** \todo: explain in detail what's happening here!
      */
 	private static function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
-        tx_newspaper::devlog("writeRecordsIfNewExtraOnPageZone($status, $table, $id, ...");
+        tx_newspaper::devlog("writeRecordsIfNewExtraOnPageZone($status, $table, $id, ...", debug_backtrace());
 		if (tx_newspaper::isAbstractClass($table)) {
 			return; // abstract class, nothing to do
 		}
