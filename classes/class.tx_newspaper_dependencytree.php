@@ -340,12 +340,14 @@ class tx_newspaper_DependencyTree {
     }
 
     /// Adds article pages of all sections \p $article is in
-    private function addArticlePages(tx_newspaper_Article $article) {
+    private function addArticlePages(tx_newspaper_Article $article = null) {
         tx_newspaper::startExecutionTimer();
-        $sections = $article->getSections();
-        $pages = getAllArticlePages($sections);
-        $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
-        $this->article_pages = array_unique($this->article_pages);
+        if ($article) {
+            $sections = $article->getSections();
+            $pages = getAllArticlePages($sections);
+            $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
+            $this->article_pages = array_unique($this->article_pages);
+        }
         $this->article_pages_filled = true;
         tx_newspaper::logExecutionTime('addArticlePages()');
     }
