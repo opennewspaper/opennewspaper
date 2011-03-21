@@ -750,7 +750,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *    - These are currently limited to two (for tx_newspaper_Article and
 	 *      tx_newspaper_PageZone_Page), but there is no guarantee that that
 	 *      stays this way (although it is highly likely). When that happens,
-	 *      this function must be changed. Bad software design!
+	 *      this function must be changed. Bad software design! No cookie for me!
 	 *    - The order in which these MM-tables are checked for the
 	 *      tx_newspaper_Extra is pretty arbitrary.
 	 *
@@ -811,6 +811,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
     /** \todo: explain in detail what's happening here!
      */
 	private static function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
+        tx_newspaper::devlog("writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that");
 		if (tx_newspaper::isAbstractClass($table)) {
 			return; // abstract class, nothing to do
 		}
