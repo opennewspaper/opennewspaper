@@ -84,10 +84,9 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
-//t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
-        // if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook()!
+        // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
@@ -102,10 +101,6 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		/// check if the combination of get param name and value is unique
 		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
-		/// handle uploads of tx_newspaper_Extra_Image
-		/// \todo do it in handleRegisteredSaveHooks()
-//		$this->handleImageUploads($status, $table, $id, $fieldArray, $that);
-				
 		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray', 
 										 $status, $table, $id, $fieldArray, $that);
 
@@ -120,14 +115,11 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 #t3lib_div::devlog('sh post fields modified', 'newspaper', 0, $fieldArray);
 			}
 		}
-//t3lib_div::devlog('sh post leave', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 	}
 
-
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-//t3lib_div::devlog('adbo after enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, 'subst id' => $that->substNEWwithIDs)); // , $_REQUEST
         // pass hook to newspaper classes
-        // if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook()!
+        // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
         tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
         tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
         tx_newspaper_Extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
@@ -290,7 +282,6 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
             if (self::isAlreadyHandledExplicitlyInSavehook($savehook_name, $savehook_object)) continue;
 
 			if (method_exists($savehook_object, $savehook_name)) {
-//t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
 			}
 		}
