@@ -128,7 +128,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
         // pass hook to newspaper classes
         tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
         tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
-        tx_newspaper_extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
+        tx_newspaper_Extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
 
         $this->handleRegisteredSaveHooks('processDatamap_afterDatabaseOperations',
                                          $status, $table, $id, $fieldArray, $that);
@@ -284,6 +284,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 
 	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
+            tx_newspaper::devlog(get_class($savehook_object));
 			if (method_exists($savehook_object, $savehook_name)) {
 //t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
