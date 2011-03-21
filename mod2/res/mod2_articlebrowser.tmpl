@@ -32,11 +32,15 @@ td {
 	// for article list module (select box is rendered with newspaper ext)
 
 	function insertElementNpStyle(uid, kicker, title, element, doClose) {
-		var selectBox = parent.window.opener.document.getElementById(element);
+	    var selectBox = parent.window.opener.$('#' + element);
+	    if (selectBox == null) {
+	    	// hack: this happens in dossier wizard
+			selectBox = parent.window.opener.document.getElementById(element);
+		}
 
 	    if (element != 'tx_newspaper_mod6[articles]') {
-	    	// \todo: remove this ugly hack
-	    	selectBox.addOptionAboveSelected(uid, kicker, title);
+			// \todo: remove this ugly hack
+			selectBox.addOptionAboveSelected(uid, kicker, title);
 			parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
 		} else {
 			parent.window.opener.addOption(uid, kicker, title);
