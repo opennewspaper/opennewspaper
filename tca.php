@@ -2649,9 +2649,12 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_zone",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_tag_zone",	
+				"type" => "select",	
+				"items" => Array (
+					Array("",0),
+				),
+				"foreign_table" => "tx_newspaper_tag_zone",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_tag_zone.uid",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,

@@ -769,7 +769,7 @@ CREATE TABLE tx_newspaper_extra_controltagzone (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
-	tag_zone blob NOT NULL,
+	tag_zone int(11) DEFAULT '0' NOT NULL,
 	default_extra blob NOT NULL,
 	
 	PRIMARY KEY (uid),
