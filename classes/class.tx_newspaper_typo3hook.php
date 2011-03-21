@@ -87,6 +87,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 //t3lib_div::devlog('sh post enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
+        // if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook()!
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
@@ -126,6 +127,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('adbo after enter', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, 'subst id' => $that->substNEWwithIDs)); // , $_REQUEST
         // pass hook to newspaper classes
+        // if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook()!
         tx_newspaper_Section::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
         tx_newspaper_ArticleList::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
         tx_newspaper_Extra::processDatamap_afterDatabaseOperations($status, $table, $id, $fieldArray, $that);
@@ -284,7 +286,9 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 
 	private function handleRegisteredSaveHooks($savehook_name, $status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
-            tx_newspaper::devlog(get_class($savehook_object));
+
+            if (self::isAlreadyHandledExplicitlyInSavehook($savehook_name, $savehook_object)) continue;
+
 			if (method_exists($savehook_object, $savehook_name)) {
 //t3lib_div::devlog('handleRegisteredSaveHooks()', 'newspaper', 0, array('class' => get_class($savehook_object), 'hook' => $savehook_name, 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 				$savehook_object->$savehook_name($status, $table, $id, $fieldArray, $that);
@@ -292,6 +296,19 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 		}
 	}
 
+    /// Here is a hack to avoid objects handled explicitly in the savehook functions to be handled again in handleRegisteredSaveHooks().
+    private static function isAlreadyHandledExplicitlyInSavehook($savehook_name, $savehook_object) {
+        if ($savehook_object instanceof tx_newspaper_Section) return true;
+        if (strtolower($savehook_name) == strtolower('processDatamap_afterDatabaseOperations')) {
+            if ($savehook_object instanceof tx_newspaper_Extra) return true;
+            if ($savehook_object instanceof tx_newspaper_ArticleList) return true;
+        }
+        if (strtolower($savehook_name) == strtolower('processDatamap_postProcessFieldArray')) {
+            if ($savehook_object instanceof tx_newspaper_Workflow) return true;
+            if ($savehook_object instanceof tx_newspaper_Article) return true;
+        }
+        return false;
+    }
 
 	private function checkIfSectionCanBeDeleted($table, $id) {
 		if ($table == 'tx_newspaper_section') {
