@@ -517,66 +517,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		return true;
 	}
 
-    private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
-        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
-            if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
-        }
-    }
-
-    private function removeExtraFromArray(tx_newspaper_Extra $remove_extra) {
-        $index = -1;
-        try {
-            $index = $this->indexOfExtra($remove_extra);
-        } catch (tx_newspaper_InconsistencyException $e) {
-            //	Extra not found, nothing to do
-            return false;
-        }
-        unset($this->extras[$index]);
-
-        return true;
-    }
-
-    private function removeExtraFromMMTable(tx_newspaper_Extra $remove_extra) {
-        tx_newspaper::deleteRows(
-                $this->getExtra2PagezoneTable(),
-                'uid_local = ' . $this->getUid() .
-                ' AND uid_foreign = ' . $remove_extra->getExtraUid()
-            );
-    }
-
-    private static function removeAbstractExtraRecord(tx_newspaper_Extra $remove_extra) {
-        tx_newspaper::deleteRows(
-            tx_newspaper_Extra_Factory::getExtraTable(),
-            array($remove_extra->getExtraUid())
-        );
-    }
-
-    /** If abstract record was the last one linking to the concrete Extra,
-     *  \em and the concrete Extra is not pooled, delete the concrete Extra
-     *  too.
-     */
-	private static function removeConcreteExtraIfLastInstance(tx_newspaper_Extra $remove_extra) {
-        try {
-            if (!$remove_extra->getAttribute('pool')) {
-                if (!self::getNumberOfReferencesToConcreteExtra($remove_extra)) {
-                    $remove_extra->deleteIncludingReferences();
-                }
-            }
-        } catch (tx_newspaper_WrongAttributeException $e) { }
-    }
-
-    private static function getNumberOfReferencesToConcreteExtra(tx_newspaper_Extra $extra) {
-        $count = tx_newspaper::selectOneRow(
-            'COUNT(*) AS num',
-            tx_newspaper_Extra_Factory::getExtraTable(),
-            'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(
-                $extra->getTable(), $extra->getTable()) .
-            ' AND extra_uid = ' . $extra->getUid()
-        );
-        return intval($count['num']);
-    }
-
 	/// Move an Extra present on the PageZone after another Extra, defined by its origin UID
 	/** \param $move_extra The Extra to be moved
 	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
@@ -675,55 +615,46 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getInheritanceHierarchyDown($including_myself = true, 
 												$hierarchy = array()) {
 
-        tx_newspaper::devlog("getInheritanceHierarchyDown($including_myself): recursion " . self::$recursion_level);
-        self::$recursion_level++;
-        if (self::$recursion_level > 20) return;
 		if ($including_myself) $hierarchy[] = $this;
 		
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
-        tx_newspaper::devlog("explicitly inheriting pagezone hierarchy added");
 
 		if (!$this->getParentPage()) return $hierarchy;
 
-		/// look for page zones on pages in section down the section hierarchy
-		$sub_pages = $this->getParentPage()->getSubPagesOfSameType();
-        tx_newspaper::devlog("sub pages", $sub_pages);
-
-		foreach ($sub_pages as $sub_page) {
-            tx_newspaper::devlog("sub page: $sub_page");
-			$inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
-            tx_newspaper::devlog("inheriting page zone: $inheriting_pagezone");
-
-			if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
-				$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
-			}
-		}
-        self::$recursion_level--;
-		return $hierarchy;
+        return $this->addInheritingPagezonesDownTheHierarchy($hierarchy);
 	}
-    private static $recursion_level = 0;
 
 	/// Reads page zones which have been explicitly set to inherit from \c $this.
 	private function getExplicitlyInheritingPagezoneHierarchy() {
-		tx_newspaper::devlog("getExplicitlyInheritingPagezoneHierarchy()");
 		$hierarchy = array();
 		
 		$table = tx_newspaper::getTable($this);
 		$heirs = tx_newspaper::selectRows(
 			'uid', $table, 'inherits_from = ' . $this->getUid()
 		);
-        tx_newspaper::devlog("heirs", $heirs);
 
 		foreach ($heirs as $heir) {
             if (intval($heir['uid']) == $this->getUid()) continue;
 			$inheriting_pagezone = new $table($heir['uid']);
 			$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 		}
-        tx_newspaper::devlog("hierarchy", $hierarchy);
 
 		return $hierarchy;
 	}
 
+		/// look for page zones on pages in section down the section hierarchy
+    private function addInheritingPagezonesDownTheHierarchy(array $hierarchy) {
+        $sub_pages = $this->getParentPage()->getSubPagesOfSameType();
+
+        foreach ($sub_pages as $sub_page) {
+            $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
+            if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
+                $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+            }
+        }
+
+        return $hierarchy;
+    }
 
 	/// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,
@@ -958,6 +889,68 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	//	protected functions
 	//
 	////////////////////////////////////////////////////////////////////////////
+
+
+    private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
+        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
+            if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
+        }
+    }
+
+    private function removeExtraFromArray(tx_newspaper_Extra $remove_extra) {
+        $index = -1;
+        try {
+            $index = $this->indexOfExtra($remove_extra);
+        } catch (tx_newspaper_InconsistencyException $e) {
+            //	Extra not found, nothing to do
+            return false;
+        }
+        unset($this->extras[$index]);
+
+        return true;
+    }
+
+    private function removeExtraFromMMTable(tx_newspaper_Extra $remove_extra) {
+        tx_newspaper::deleteRows(
+                $this->getExtra2PagezoneTable(),
+                'uid_local = ' . $this->getUid() .
+                ' AND uid_foreign = ' . $remove_extra->getExtraUid()
+            );
+    }
+
+    private static function removeAbstractExtraRecord(tx_newspaper_Extra $remove_extra) {
+        tx_newspaper::deleteRows(
+            tx_newspaper_Extra_Factory::getExtraTable(),
+            array($remove_extra->getExtraUid())
+        );
+    }
+
+    /** If abstract record was the last one linking to the concrete Extra,
+     *  \em and the concrete Extra is not pooled, delete the concrete Extra
+     *  too.
+     */
+	private static function removeConcreteExtraIfLastInstance(tx_newspaper_Extra $remove_extra) {
+        try {
+            if (!$remove_extra->getAttribute('pool')) {
+                if (!self::getNumberOfReferencesToConcreteExtra($remove_extra)) {
+                    $remove_extra->deleteIncludingReferences();
+                }
+            }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
+    }
+
+    private static function getNumberOfReferencesToConcreteExtra(tx_newspaper_Extra $extra) {
+        $count = tx_newspaper::selectOneRow(
+            'COUNT(*) AS num',
+            tx_newspaper_Extra_Factory::getExtraTable(),
+            'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(
+                $extra->getTable(), $extra->getTable()) .
+            ' AND extra_uid = ' . $extra->getUid()
+        );
+        return intval($count['num']);
+    }
+
 
 	/// Find next free position after the Extra whose origin_uid attribute matches $origin_uid
 	/** Side effect: finds the paragraph of the Extra matching \p $origin_uid
