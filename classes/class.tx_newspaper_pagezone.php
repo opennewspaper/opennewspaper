@@ -504,17 +504,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
-        tx_newspaper::devlog("removeExtra($remove_extra, $recursive)");
-        
 		if ($recursive) {
 			///	Remove Extra on inheriting PageZones first
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-                tx_newspaper::devlog("inheriting pagezone: $inheriting_pagezone");
 				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
 				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
 			}
 		}
-		tx_newspaper::devlog("finished removing on inheriting page zones");
 
 		$index = -1;
 		try {
@@ -523,7 +519,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			//	Extra not found, nothing to do
 			return false;
 		}
-        tx_newspaper::devlog("index: $index");
 		unset($this->extras[$index]);
 		
 		tx_newspaper::deleteRows(
@@ -531,14 +526,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_local = ' . $this->getUid() .
 				' AND uid_foreign = ' . $remove_extra->getExtraUid()
 			);
-        tx_newspaper::devlog("deleted mm entry");
 
 		/// Delete the abstract record
 		tx_newspaper::deleteRows(
 			tx_newspaper_Extra_Factory::getExtraTable(), 
 			array($remove_extra->getExtraUid())
 		);
-        tx_newspaper::devlog("deleted abstract record");
 
 		/** If abstract record was the last one linking to the concrete Extra,
 		 *  \em and the concrete Extra is not pooled, delete the concrete Extra
@@ -546,7 +539,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */
 		try {
 			if (!$remove_extra->getAttribute('pool')) {
-                tx_newspaper::devlog("delete concrete record...");
 				$count = tx_newspaper::selectOneRow(
 					'COUNT(*) AS num', 
 					tx_newspaper_Extra_Factory::getExtraTable(),
@@ -557,8 +549,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				if (!intval($count['num'])) {
 					$remove_extra->deleteIncludingReferences();
 				}
-                tx_newspaper::devlog("...done");
-
 			}
 		} catch (tx_newspaper_WrongAttributeException $e) { }
 		
@@ -687,6 +677,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				$hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
 			}
 		}
+        self::$recursion_level--;
 		return $hierarchy;
 	}
     private static $recursion_level = 0;
@@ -747,7 +738,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	/// Change parent Page Zone
 	/** - Hide Extras placed on this Page Zone
-	 *  - Copy Extras from new parent
+	 *  - Inherit Extras from new parent
 	 *  \param $parent_uid UID of parent Page Zone, or if 0, inherit from next
 	 *      page zone above, or if < 0, don't inherit at all
  	 */
@@ -1051,13 +1042,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \param $hidden_too Whether to search in GUI-hidden extras as well
 	 */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
-if(0)        t3lib_div::devlog('findExtraByOriginUID()', 'newspaper', 0, array(
-	        'pagezone_uid' => $this->getUid(),
-	        '$origin_uid' => $origin_uid, 
-	        '$hidden_too' => intval($hidden_too),
-            'getExtras()' => $this->getExtras($hidden_too))
-        );
-        
 		foreach ($this->getExtras($hidden_too) as $extra) {
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
