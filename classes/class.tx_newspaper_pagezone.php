@@ -504,58 +504,79 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
-		if ($recursive) {
-			///	Remove Extra on inheriting PageZones first
-			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				$copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
-				if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
-			}
-		}
+		if ($recursive) $this->removeExtraOnInheritingPagezones($remove_extra);
 
-		$index = -1;
-		try {
-			$index = $this->indexOfExtra($remove_extra);
-		} catch (tx_newspaper_InconsistencyException $e) {
-			//	Extra not found, nothing to do
-			return false;
-		}
-		unset($this->extras[$index]);
-		
-		tx_newspaper::deleteRows(
-				$this->getExtra2PagezoneTable(),
-				'uid_local = ' . $this->getUid() .
-				' AND uid_foreign = ' . $remove_extra->getExtraUid()
-			);
+        if (!$this->removeExtraFromArray($remove_extra)) return false;
 
-		/// Delete the abstract record
-		tx_newspaper::deleteRows(
-			tx_newspaper_Extra_Factory::getExtraTable(), 
-			array($remove_extra->getExtraUid())
-		);
+        $this->removeExtraFromMMTable($remove_extra);
 
-		/** If abstract record was the last one linking to the concrete Extra,
-		 *  \em and the concrete Extra is not pooled, delete the concrete Extra
-		 *  too.
-		 */
-		try {
-			if (!$remove_extra->getAttribute('pool')) {
-				$count = tx_newspaper::selectOneRow(
-					'COUNT(*) AS num', 
-					tx_newspaper_Extra_Factory::getExtraTable(),
-					'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(
-						$remove_extra->getTable(), $remove_extra->getTable()) .
-					' AND extra_uid = ' . $remove_extra->getUid()
-				);
-				if (!intval($count['num'])) {
-					$remove_extra->deleteIncludingReferences();
-				}
-			}
-		} catch (tx_newspaper_WrongAttributeException $e) { }
-		
+        self::removeAbstractExtraRecord($remove_extra);
+
+        self::removeConcreteExtraIfLastInstance($remove_extra);
+
 		return true;
 	}
-	
-	
+
+    private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
+        foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
+            if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
+        }
+    }
+
+    private function removeExtraFromArray(tx_newspaper_Extra $remove_extra) {
+        $index = -1;
+        try {
+            $index = $this->indexOfExtra($remove_extra);
+        } catch (tx_newspaper_InconsistencyException $e) {
+            //	Extra not found, nothing to do
+            return false;
+        }
+        unset($this->extras[$index]);
+
+        return true;
+    }
+
+    private function removeExtraFromMMTable(tx_newspaper_Extra $remove_extra) {
+        tx_newspaper::deleteRows(
+                $this->getExtra2PagezoneTable(),
+                'uid_local = ' . $this->getUid() .
+                ' AND uid_foreign = ' . $remove_extra->getExtraUid()
+            );
+    }
+
+    private static function removeAbstractExtraRecord(tx_newspaper_Extra $remove_extra) {
+        tx_newspaper::deleteRows(
+            tx_newspaper_Extra_Factory::getExtraTable(),
+            array($remove_extra->getExtraUid())
+        );
+    }
+
+    /** If abstract record was the last one linking to the concrete Extra,
+     *  \em and the concrete Extra is not pooled, delete the concrete Extra
+     *  too.
+     */
+	private static function removeConcreteExtraIfLastInstance(tx_newspaper_Extra $remove_extra) {
+        try {
+            if (!$remove_extra->getAttribute('pool')) {
+                if (!self::getNumberOfReferencesToConcreteExtra($remove_extra)) {
+                    $remove_extra->deleteIncludingReferences();
+                }
+            }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
+    }
+
+    private static function getNumberOfReferencesToConcreteExtra(tx_newspaper_Extra $extra) {
+        $count = tx_newspaper::selectOneRow(
+            'COUNT(*) AS num',
+            tx_newspaper_Extra_Factory::getExtraTable(),
+            'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr(
+                $extra->getTable(), $extra->getTable()) .
+            ' AND extra_uid = ' . $extra->getUid()
+        );
+        return intval($count['num']);
+    }
+
 	/// Move an Extra present on the PageZone after another Extra, defined by its origin UID
 	/** \param $move_extra The Extra to be moved
 	 *  \param $origin_uid The origin UID of the Extra after which $new_extra
