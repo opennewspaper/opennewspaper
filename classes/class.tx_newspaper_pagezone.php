@@ -168,7 +168,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		/// \todo store Extras placed on $this
 		if ($this->getExtras()) {
 			foreach ($this->extras as $extra) {
-				t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
+#				t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
 #				$extra_uid = $extra->store();
 #				$extra_table = $extra->getTable();
 #				$this->relateExtra2Article($extra);
@@ -744,6 +744,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
+        tx_newspaper::devlog("changeParent($parent_zone)");
         foreach ($parent_zone->getExtras() as $extra_to_copy) {
             $this->insertExtraAfter($extra_to_copy);
         }
@@ -753,7 +754,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->setAttribute('inherits_from', intval($new_parent_uid));
         $this->setAttribute('tstamp', time());
         $this->store();
-        tx_newspaper::devlog("stored");
     }
 
 	public function getExtraOrigin(tx_newspaper_Extra $extra) {
