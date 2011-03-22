@@ -460,7 +460,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	
-	/// Add an extra after the Extra which is on the original page zone as $origin_uid
+	/// Add an extra after the Extra which is on the original page zone as \p $origin_uid
 	/** \param $insert_extra The new, fully instantiated Extra to insert
 	 *  \param $origin_uid UID of \p $insert_extra on the PageZone where it was
 	 * 		originally added. 
@@ -713,11 +713,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function removeInheritedExtras() {
         foreach ($this->getExtras() as $extra) {
             if (!$extra->isOriginExtra()) {
-                tx_newspaper::devlog("remove extra", $extra);
                 /// Delete Extra, also on sub-PageZones
                 $this->removeExtra($extra, true);
             }
-            tx_newspaper::devlog("...done");
         }
 
     }
@@ -725,12 +723,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function hideOriginExtras() {
         foreach ($this->getExtras() as $extra) {
             if ($extra->isOriginExtra()) {
-                tx_newspaper::devlog("hide origin extra", $extra);
                 /// Hide and move to end of page zone
                 $extra->setAttribute('show_extra', 0);
                 $extra->store();
             }
-            tx_newspaper::devlog("...done");
         }
     }
 
@@ -748,8 +744,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-        // temporary result of refactoring
-        $this->copyExtrasFrom($parent_zone);
+        foreach ($parent_zone->getExtras() as $extra_to_copy) {
+            $this->insertExtraAfter($extra_to_copy, $extra_to_copy->getOriginUid(), true);
+        }
     }
 
     private function storeWithNewParent($new_parent_uid) {
