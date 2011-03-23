@@ -52,7 +52,23 @@
 				},
 				onSuccess: function(response) {
 					var data = response.responseText.evalJSON(true);
-					var returnUrl = escape(path + "typo3conf/ext/newspaper/mod1/res/eb/closeNewExtra.html?tx_newspaper_mod1[newExtraClass]=" + extraClass + "&tx_newspaper_mod1[newExtraUid]=" + data.uid);
+					switch(extractQuerystringDirect('tx_newspaper_mod1[jsType]')) {
+						case 'Typo3':
+							var returnUrl = escape(
+								path + "typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraTypo3.html?" +
+								"tx_newspaper_mod1[newExtraClass]=" + extraClass +
+								"&tx_newspaper_mod1[newExtraUid]=" + data.uid +
+								"&tx_newspaper_mod1[table]=" + extractQuerystringDirect('tx_newspaper_mod1[table]') +
+								"&tx_newspaper_mod1[field]=" + extractQuerystringDirect('tx_newspaper_mod1[field]') +
+								"&tx_newspaper_mod1[uid]=" + extractQuerystringDirect('tx_newspaper_mod1[uid]') +
+								"&tx_newspaper_mod1[abstractUid]=" + data.abstractUid
+							);
+						break;
+						case 'manageDossiers':
+							var returnUrl = escape(path + "typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraManageDossiers.html?tx_newspaper_mod1[newExtraClass]=" + extraClass + "&tx_newspaper_mod1[newExtraUid]=" + data.uid);
+						break;
+					}
+
 					var url = path + "typo3/alt_doc.php?returnUrl=" + returnUrl + "&edit[" + extraClass + "][" + data.uid + "]=edit&tx_newspaper_mod1[newExtraInElementBrowser]=1";
 					self.location.href = url;
 				}

@@ -3,10 +3,9 @@
  * @param className Extra class
  * @param uid       uid of concrete Extra in given Extra class
  * @param close     1 to close popup window
- * @param indexphp  Path to mod6/index.php, defaults to "../mod6/index.php"
  * @return
  */
-function choseRecord(className, uid, close, indexphp) {
+function choseRecord(className, uid, close) {
 	if (close == 1) {
 		close = true;
 	} else {

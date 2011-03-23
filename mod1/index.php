@@ -458,7 +458,16 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// check if newOnly parameter is set. create extra right away if so
 					if ($this->input['newOnly'] == 1 && $this->input['extraClassPreselect']) {
 						$extra = $this->createNewConcreteExtra($this->input['extraClassPreselect']);
-	  					$returnUrl = tx_newspaper::encodeUrlBasic(tx_newspaper::getBasePath() . "typo3conf/ext/newspaper/mod1/res/eb/closeNewExtra.html?tx_newspaper_mod1[newExtraClass]=" . $this->input['extraClassPreselect'] . "&tx_newspaper_mod1[newExtraUid]=" . $extra->getUid());
+						$returnUrl = tx_newspaper::encodeUrlBasic(
+							tx_newspaper::getBasePath() .
+							"typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraManageDossiers.html?' .
+							'tx_newspaper_mod1[newExtraClass]=" . $this->input['extraClassPreselect'] .
+							"&tx_newspaper_mod1[newExtraUid]=" . $extra->getUid() .
+							'&tx_newspaper_mod1[table]=' . $this->input['table'] .
+							'&tx_newspaper_mod1[field]=' . $this->input['field'] .
+							'&tx_newspaper_mod1[uid]=' . $this->input['uid'] .
+							'&tx_newspaper_mod1[abstractUid]=' . $extra->getExtraUid()
+						);
 						$url = tx_newspaper::getBasePath() . "typo3/alt_doc.php?returnUrl=" . $returnUrl . "&edit[" . $extra->getTable() . "][" . $extra->getUid() . "]=edit&tx_newspaper_mod1[newExtraInElementBrowser]=1";
 						header('Location: ' . $url);
 					}
@@ -540,7 +549,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			switch($this->input['ajaxController']) {
 				case 'createNewExtra':
 					$extra = $this->createNewConcreteExtra($this->input['extraClass']);
-					die(json_encode(array('uid' => $extra->getUid()))); // return uid
+					die(json_encode(array('uid' => $extra->getUid(), 'abstractUid' => $extra->getExtraUid()))); // return uids
 				break;
 			}
 
