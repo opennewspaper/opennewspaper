@@ -19,11 +19,11 @@ function getViewportHeight() {
 	if (typeof document.innerHeight != 'undefined') {
 	  // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
 	  return document.innerHeight;
-	} 
+	}
 	if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientHeight != 'undefined' && document.documentElement.clientHeight != 0) {
 	  // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
 	  return document.documentElement.clientHeight;
-	} 
+	}
 	// older versions of IE
 	return document.getElementsByTagName('body')[0].clientHeight;
 }
@@ -41,8 +41,11 @@ function splitAtPipe(str, pos){
 }
 
 
+function extractQuerystringDirect(param) {
+	return extract_querystring(window.location.search, param);
+}
 
-// used for closing subModal box in placement module
+
 function extract_querystring(querystring, param) {
 	querystring = unescape(querystring);
 	if (querystring.substring(0, 1) == '?' || querystring.substring(0, 1) == '&') {

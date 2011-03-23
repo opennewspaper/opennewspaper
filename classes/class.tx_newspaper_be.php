@@ -1619,6 +1619,65 @@ JSCODE;
 		return $icon;
 	}
 
+	/// replaces element browser with article browser
+	/**
+	 *
+	 * \param $table Typo3 table
+	 * \param $field Field in table
+	 * \param uid of the record
+	 * \param $out   HTML code that might be processed (if configured in $GLOBALS['newspaper']['replaceEBwithArticleBrowser'])
+	 * \return void
+	 */
+	public static function checkReplaceEbWithArticleBrowser($table, $field, $uid, &$out) {
+//t3lib_div::devlog('checkReplaceEbWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
+		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
+		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser'][another_table] = array(field1, ... fieldn);
+		if (self::checkEbConfig($table, $field, 'replaceEBwithArticleBrowser')) {
+			// add table and field name to js function name
+			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
+			$js = '<script type="text/javascript">
+function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
+  var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode="+mode+"&bparams="+params+"&form_table="+form_table+"&form_field="+form_field+"&form_uid="+form_uid;
+  browserWin = window.open(url,"Typo3WinBrowser","height=350,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
+  browserWin.focus();
+}
+</script>';
+			// replace eb with article browser
+			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $uid . '); return false;" >';
+			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
+		}
+	}
+
+
+	public static function checkReplaceEbWithExtraBrowser($table, $field, $uid, &$out) {
+//t3lib_div::devlog('checkReplaceEbWithExtraBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, 'field' => $field, 'uid' => $uid));
+		//$GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
+		//$GLOBALS['newspaper']['replaceEBwithExtraBrowser'][another_table] = array(field1, ... fieldn);
+		if (self::checkEbConfig($table, $field, 'replaceEBwithExtraBrowser')) {
+			// add table and field name to js function name
+			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
+			$js = '<script type="text/javascript">
+function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
+  var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=1&tx_newspaper_mod1[jsType]=Typo3&tx_newspaper_mod1[table]=' . $table . '&tx_newspaper_mod1[field]=' . $field . '&tx_newspaper_mod1[uid]=' . $uid . '";
+  browserWin = window.open(url,"Typo3WinBrowser","height=800,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
+  browserWin.focus();
+}
+</script>';
+			// replace eb with article browser
+			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', \'' . $uid . '\'); return false;" >';
+			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
+//t3lib_div::devlog('checkReplaceEbWithExtraBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field, 'out' => $out));
+		}
+	}
+
+	/// \return true if table and field are set for key, else false
+	private static function checkEbConfig($table, $field, $key) {
+		//$GLOBALS['newspaper'][$key][$table] = array($field1, ... $fieldn);
+		return array_key_exists($key, $GLOBALS['newspaper']) &&
+			array_key_exists(strtolower($table), $GLOBALS['newspaper'][$key]) &&
+			in_array(strtolower($field), $GLOBALS['newspaper'][$key][strtolower($table)]);
+	}
+
 }
 
 ?>

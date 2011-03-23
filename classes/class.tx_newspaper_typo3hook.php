@@ -5,14 +5,14 @@
 /// newspaper configuration; added here because this file is included when accessing hooks even if the newspaper framework is NOT available
 
 // replace element browser (EB) with article browser; array of fields in
-//$GLOBALS['newspaper']['tx_newspaper_article']['replaceEBwithArticleBrowser'][name_of_db_table] = array(field_list) 
+//$GLOBALS['newspaper']['tx_newspaper_article']['replaceEBwithArticleBrowser'][name_of_db_table] = array(field_list)
 $GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_article'] = array('related'); // fields in articles
-$GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_articlelist_manual'] = array('articles');
 $GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_extra_combolinkbox'] = array('manually_selected_articles'); // \todo: replace with mod7 be (see #609)
 /** \todo
  * set newspaper configuration using framework?
- * example: tx_newspaper::setConfReplaceElementBrowserWithArticleBrowser([table], [field]);
+ * example: tx_newspaper::setConfigReplaceElementBrowser([table], [field], [key, f.e.x: 'replaceEBwithArticleBrowser');
  */
+$GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_extra_controltagzone'] = array('default_extra');
 
 
 
@@ -23,10 +23,10 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
-		
+
 		// pass down to newspaper hooks
 		tx_newspaper_article::getDBlistQuery($table, $pageId, $additionalWhereClause, $selectedFieldsList, $parentObject);
-		
+
 	}
 
 
@@ -38,26 +38,16 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
-//t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
+//if ($table=='tx_newspaper_extra_controltagzone' && $field=='default_extra') t3lib_div::devlog('getSingleField_postProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row,  'out' => $out, 'PA' => $PA, 'that' => $that, '_REQUEST' => $_REQUEST));
 
 		// process newspaper hooks
 		tx_newspaper_article::getSingleField_postProcess($table, $field, $row, $out, $PA, $that);
 
-		// replace element browser (EB) with tx_newspaper article browser
-		if ($this->replaceEbWithArticleBrowser($table, $field)) {
-			// add table and field name to js function name
-			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
-			$js = '<script type="text/javascript">
-function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
-  var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode="+mode+"&bparams="+params+"&form_table="+form_table+"&form_field="+form_field+"&form_uid="+form_uid;
-  browserWin = window.open(url,"Typo3WinBrowser","height=350,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
-  browserWin.focus();
-}
-</script>';
-			// replace eb with article browser
-			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $row['uid'] . '); return false;" >';
-			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
-		}
+		// replace element browser (EB) with tx_newspaper article browser, if configured
+		tx_newspaper_be::checkReplaceEbWithArticleBrowser($table, $field, $row['uid'], $out);
+
+		// replace element browser (EB) with tx_newspaper extra browser, if configured
+		tx_newspaper_be::checkReplaceEbWithExtraBrowser($table, $field, $row['uid'], $out);
 
 		// call registered hooks
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $hook_object) {
@@ -69,7 +59,7 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 
 	function getMainFields_preProcess($table, $row, $that) {
-//t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));	
+//t3lib_div::devlog('getMainFields_preProcess', 'newspaper', 0, array('table' => $table, 'row' => $row));
 		// pass down hook to newspaper classes
 		tx_newspaper_articlelist::getMainFields_preProcess($table, $row, $that);
 	}
@@ -90,21 +80,21 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
-		
+
 
 		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
 
 		/// check if a page zone type with is_article flag set is allowed
-		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id); 
-		
+		$this->checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id);
+
 		/// check if the combination of get param name and value is unique
 		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
-		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray', 
+		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray',
 										 $status, $table, $id, $fieldArray, $that);
 
-/// \todo move to sysfolder class	
+/// \todo move to sysfolder class
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
 			/// check if a newspaper record is saved and make sure it's stored in the appropriate sysfolder
@@ -193,24 +183,24 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 				array_key_exists(strtolower($table), $GLOBALS['newspaper']['replaceEBwithArticleBrowser']) &&
 				in_array(strtolower($field), $GLOBALS['newspaper']['replaceEBwithArticleBrowser'][strtolower($table)]);
 	}
-    
+
 	/// checks if the combination of get_var and get_value is unique for every page type
 	private function checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id) {
 		if ($table == 'tx_newspaper_pagetype') {
-			
+
 			// get values for get_var and get_value and check if current record id is to be added to sql statement
 			if (substr($id, 0, 3) == 'NEW') {
 				// new record, so all fields are available in $fieldArray
 				$param = $fieldArray['get_var'];
-				$value = $fieldArray['get_value']; 
+				$value = $fieldArray['get_value'];
 				$where['id'] = ''; // new record, so don't exclude this record from sql statement
 			} else {
 				$where['id'] = ' AND uid<>' . $id . ' '; // exclude current record from sql statement
-				
+
 				if (isset($fieldArray['get_var']) && isset($fieldArray['get_value'])) {
-					// existing record and both fields needed are set in $fieldArray 
+					// existing record and both fields needed are set in $fieldArray
 					$param = $fieldArray['get_var'];
-					$value = $fieldArray['get_value']; 
+					$value = $fieldArray['get_value'];
 				} else {
 					// at least one value is missing in $fieldArray (for existing records), so read data from record
 					$row = tx_newspaper::selectOneRow(
@@ -222,16 +212,16 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 					$value = (isset($fieldArray['get_value']))? $fieldArray['get_value'] : $row['get_value'];
 				}
 			}
-			
+
 			// check if the values for get_var and get_values that are to be saved are unique in the database
 			$row = tx_newspaper::selectRows(
 				'uid,type_name',
 				$table,
 				'deleted=0 ' . $where['id'] . ' AND get_var="' . $param . '" AND get_value="' . $value . '"'
 			);
-			
+
 			if (sizeof($row) > 0) {
-				die('Error: the combination of get variable and value must be unique. The used combination is already assigned to page type #' . 
+				die('Error: the combination of get variable and value must be unique. The used combination is already assigned to page type #' .
 					$row[0]['uid'] . ' (' . $row[0]['type_name'] . ').<br /><br /><a href="javascript:history.back();">Click here to retry</a>');
 			}
 
@@ -243,13 +233,13 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 		if (strtolower($table) != 'tx_newspaper_article' || $status != 'update')
 			return false;
 		$fieldArray['modification_user'] = $GLOBALS['BE_USER']->user['uid'];
-		return true; 
+		return true;
 	}
 
 	private function checkPageZoneWithIsArticleFlagAllowed($fieldArray, $table, $id) {
-		$pzt = new tx_newspaper_PageZoneType(); 
-		if  ($table == $pzt->getTable() && 
-			isset($fieldArray['is_article']) && 
+		$pzt = new tx_newspaper_PageZoneType();
+		if  ($table == $pzt->getTable() &&
+			isset($fieldArray['is_article']) &&
 			$fieldArray['is_article'] == 1 &&
 			($status = 'new' || $status == 'update')
 		) {
@@ -258,7 +248,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 			$pid = $sf->getPid($pzt);
 			$where = 'pid=' . $pid . ' AND deleted=0 AND is_article=1';
 			if ($status != 'new') { /// no uid if new record (NEW49b018c614878)
-				$where .= ' AND uid !=' . $id; 				
+				$where .= ' AND uid !=' . $id;
 			}
 			$row = tx_newspaper::selectRows(
 				'uid, type_name',
@@ -304,7 +294,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 	private function checkIfSectionCanBeDeleted($table, $id) {
 		if ($table == 'tx_newspaper_section') {
 			$id = intval($id);
-			
+
 			// look for child sections
 			$s = new tx_newspaper_section($id);
 			$children = $s->getChildSections();
@@ -312,33 +302,33 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 				$content = 'This section can\'t be deleted, because of existing child sections:<br />';
 				for ($i = 0; $i < sizeof($children); $i++) {
 					$content .= '- ' . $children[$i]->getAttribute('section_name') . '<br /';
-				}	
+				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
 			}
-			
+
 			// look for pages assigned to this section
 			$pages = $s->getActivePages();
 			if (sizeof($pages) > 0) {
 				$content = 'This section can\'t be deleted, because assigned pages are existing:<br />';
 				for ($i = 0; $i < sizeof($pages); $i++) {
 					$content .= '- ' . $pages[$i]->getPageType()->getAttribute('type_name') . '<br />';
-				}	
+				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
-			}			 
-			
+			}
+
 			// look for articles assigned to section
 			$articles = $s->getArticles(5);
 			if (sizeof($articles) > 0) {
 				$content = 'This section can\'t be deleted, because assigned articles are existing:<br />';
 				for ($i = 0; $i < sizeof($articles); $i++) {
 					$content .= '- ' . $articles[$i]->getDescription() . '<br />';
-				}	
+				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
-			}				
-			
+			}
+
 		}
 	}
 
@@ -351,7 +341,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 				$content = 'This article type can\'t be deleted, because at least one article is using this article type. Find examples below (list might be much longer)<br /><br />';
 				for ($i = 0; $i < sizeof($list); $i++) {
 /// \todo: try catch for getAttribute calls?
-					$content .= ($i+1) . '. ' . $list[$i]->getAttribute('kicker') . ': ' . $list[$i]->getAttribute('title') . ' (#'. $list[$i]->getAttribute('uid') . ')<br />';  
+					$content .= ($i+1) . '. ' . $list[$i]->getAttribute('kicker') . ': ' . $list[$i]->getAttribute('title') . ' (#'. $list[$i]->getAttribute('uid') . ')<br />';
 				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
@@ -370,7 +360,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 					$content .= ($i+1) . '. Section <i>';
 					$tmp_section = new tx_newspaper_Section(intval($list[$i]->getAttribute('section')));
 					$content .= $tmp_section->getAttribute('section_name');
-					$content .= '</i><br />';  
+					$content .= '</i><br />';
 				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
@@ -380,7 +370,7 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 
 	private function checkIfPageZoneTypeCanBeDeleted($table, $id) {
 		if ($table == 'tx_newspaper_pagezonetype') {
-			$list = tx_newspaper_Page::listPagesWithPageZoneType(new tx_newspaper_PageZoneType($id), 5); // try to get 5 pages with the pagezone type assigned  
+			$list = tx_newspaper_Page::listPagesWithPageZoneType(new tx_newspaper_PageZoneType($id), 5); // try to get 5 pages with the pagezone type assigned
 			if (sizeof($list) > 0) {
 				/// pagezones using this pagezone type are assigned to pages, so this pagezone type can't be deleted
 				$content = 'This page zone type can\'t be deleted, because at least one page is using this page zone type. Find examples below (list might be much longer)<br /><br />';
@@ -390,19 +380,19 @@ t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 
 					$content .= $tmp_section->getAttribute('section_name');
 					$content .= '</i> on Page <i>';
 					$tmp_pt = new tx_newspaper_PageType(intval($list[$i]->getAttribute('pagetype_id')));
-					$content .= $tmp_pt->getAttribute('type_name'); 
-					$content .= '</i><br />';  
+					$content .= $tmp_pt->getAttribute('type_name');
+					$content .= '</i><br />';
 				}
 				$content .= '<br /><br /><a href="javascript:history.back();">Go back</a>';
 				die($content);
 			}
-		}		
+		}
 	}
 
 
 
 
 
-}	
+}
 
 ?>

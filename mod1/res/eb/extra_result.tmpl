@@ -4,8 +4,15 @@
 {foreach item=extra from=$extras}
 <tr>
 	<td>
+{if ($INPUT.jsType == 'Typo3')}
+		{* Typo3 stores the abstzract record *}
+		{if $INPUT.allowMultipleSelection}<a href="#" onclick="choseRecord('tx_newspaper_extra', {$extra->getExtraUid()}, 0); return false;">{$ICON.add}</a>{/if}
+		<a href="#" onclick="choseRecord('tx_newspaper_extra', {$extra->getExtraUid()}, 1); return false;">{$ICON.addClose}</a>
+{else}
+		{* return the concrete record data *}
 		{if $INPUT.allowMultipleSelection}<a href="#" onclick="choseRecord('{$extra->getTable()}', {$extra->getUid()}, 0); return false;">{$ICON.add}</a>{/if}
 		<a href="#" onclick="choseRecord('{$extra->getTable()}', {$extra->getUid()}, 1); return false;">{$ICON.addClose}</a>
+{/if}
 	</td>
 	<td>{$extra->getDescription()}</td>
 </tr>

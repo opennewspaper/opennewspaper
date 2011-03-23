@@ -487,6 +487,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				case 'manageDossiers':
 					$smarty->assign('CHOSERECORD', file_get_contents('res/eb/js/choseRecord_manageDossiers.js'));
 				break;
+				case 'Typo3':
+					$smarty->assign('CHOSERECORD', file_get_contents('res/eb/js/choseRecord_Typo3.js'));
+				break;
 				default:
 					t3lib_div::devlog('mod 1 - Element browser - unknown jsType', 'newspaper', 3, array('input' => $this->input));
 			}

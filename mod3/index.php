@@ -415,7 +415,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 	private function check4Ajax() {
 		/// \todo: check permissions
-t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_name]' => $_SERVER['SCRIPT_NAME']));
+//t3lib_div::devlog('_request mod3 ajax', 'newspaper', 0, array('request' => $_REQUEST, '_server[script_name]' => $_SERVER['SCRIPT_NAME']));
 
 		// delete etxra
 		if (t3lib_div::_GP('extra_delete') == 1) {

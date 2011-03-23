@@ -11,6 +11,7 @@
 {literal}
 
 <script language="javascript" type="text/javascript" src="res/eb/js/eb.js"> </script>
+<script language="javascript" type="text/javascript" src="../res/be/newspaper.js"> </script>
 <script type="text/javascript">
 function executeFilter(reset_pointer) {
 	if (reset_pointer) {
@@ -48,6 +49,7 @@ function browserResults(pointer) {
 		<input type="hidden" name="tx_newspaper_mod1[step]" value="10" />
 		<input type="hidden" name="tx_newspaper_mod1[allowMultipleSelection]" value="{$INPUT.allowMultipleSelection}" />
 		{$FILTER}
+		{$HIDDENFIELDS}
 	</form>
 </div>
 
