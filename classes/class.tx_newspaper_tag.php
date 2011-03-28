@@ -119,7 +119,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
     /// \return Name of tag zone for given $uid
-    public static function getAllTagZoneName($uid) {
+    public static function getTagZoneName($uid) {
     	$uid = intval($uid);
     	$row = tx_newspaper::selectRows(
     		'name',
@@ -133,6 +133,19 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		}
     }
 
+    /// \return Name of tag zone for given $uid
+    public function getCategoryName() {
+    	$row = tx_newspaper::selectRows(
+    		'title',
+    		'tx_newspaper_ctrltag_category',
+    		'uid=' . $this->getAttribute('ctrltag_cat') . tx_newspaper::enableFields('tx_newspaper_ctrltag_category')
+    	);
+    	if ($row) {
+    		return $row[0]['title'];
+		} else {
+			return '';
+		}
+	}
 
 
     /// \param $tz_uid uid of taz zone

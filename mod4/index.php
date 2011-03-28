@@ -437,12 +437,29 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 	        // is extra placed in a tagzone?
 			$row = tx_newspaper::selectZeroOrOneRows(
-				'extra, tag_zone',
+				'*',
 				'tx_newspaper_controltag_to_extra',
 				'extra=' . $uid
 			);
 			if ($row) {
-				$ret .= '<p>Placed in tagzone #' . $row['uid_local'] . ' (' . tx_newspaper_tag::getAllTagZoneName($row['tag_zone']) . ')<p>';
+				$tag = new tx_newspaper_tag(intval($row['tag']));
+				$ret .= '<p>Placed in tagzone #' . $row['tag_zone'] . ' (' . tx_newspaper_tag::getTagZoneName($row['tag_zone']) . ') for ';
+				$ret .= '<i>';
+				if ($tag->getAttribute('tag_type') == tx_newspaper_tag::getContentTagType()) {
+					$ret .= 'content tag ';
+				} elseif ($tag->getAttribute('tag_type') == tx_newspaper_tag::getControlTagType()) {
+					$ret .= 'control tag ';
+				} else {
+					$ret .= ' UNKNOWN TAG TYPE ';
+				}
+				$ret .= '</i>';
+				$ret .= '<b>' . addslashes($tag->getAttribute('tag')) . '</b>';
+				if ($tag->getAttribute('tag_type') == tx_newspaper_tag::getControlTagType()) {
+					$ret .= ' in dossier <b>' . $tag->getAttribute('title') . '</b>';
+					$ret .= ' with control tag category <b>' . $tag->getCategoryName() . '</b>';
+
+				}
+
 			}
 
         }
