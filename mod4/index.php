@@ -406,45 +406,46 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 $ret .= '<p><strong>No such extra: ' . $uid . '.</strong></p>';
                 continue;
             }
+
+            // is extra placed in an article?
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'uid_local',
+				'tx_newspaper_article_extras_mm',
+				'uid_foreign=' . $uid
+			);
+			if ($row) {
+				$a = new tx_newspaper_Article(intval($row['uid_local']));
+				$ret .= '<p>Placed in article #' . $row['uid_local'] . ' (';
+				$ret .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title');
+				$ret .= ')<p>';
+			}
+
+	        // is extra placed on a pagezone_page?
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'uid_local',
+				'tx_newspaper_pagezone_page_extras_mm',
+				'uid_foreign=' . $uid
+			);
+			if ($row) {
+				$pz = new tx_newspaper_PageZone_Page(intval($row['uid_local']));
+				$ret .= '<p>Placed on pagezone page #' . $row['uid_local'] . ' (';
+				$ret .= $pz->getPageZoneType()->getAttribute('type_name') . ' <- ';
+				$ret .= $pz->getParentPage()->getPageType()->getAttribute('type_name') . ' (#' . $pz->getParentPage()->getUid() . ') <- ';
+				$ret .= $pz->getParentPage()->getParentSection()->getAttribute('section_name') . ' (#' . $pz->getParentPage()->getParentSection()->getUid() . ')';
+				$ret .= ')<p>';
+			}
+
+	        // is extra placed in a tagzone?
+			$row = tx_newspaper::selectZeroOrOneRows(
+				'extra, tag_zone',
+				'tx_newspaper_controltag_to_extra',
+				'extra=' . $uid
+			);
+			if ($row) {
+				$ret .= '<p>Placed in tagzone #' . $row['uid_local'] . ' (' . tx_newspaper_tag::getAllTagZoneName($row['tag_zone']) . ')<p>';
+			}
+
         }
-
-        // is extra placed in an article?
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid_local',
-			'tx_newspaper_article_extras_mm',
-			'uid_foreign=' . $extra_id
-		);
-		if ($row) {
-			$a = new tx_newspaper_Article(intval($row['uid_local']));
-			$ret .= '<p>Placed in article #' . $row['uid_local'] . ' (';
-			$ret .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title');
-			$ret .= ')<p>';
-		}
-
-        // is extra placed on a pagezone_page?
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid_local',
-			'tx_newspaper_pagezone_page_extras_mm',
-			'uid_foreign=' . $extra_id
-		);
-		if ($row) {
-			$pz = new tx_newspaper_PageZone_Page(intval($row['uid_local']));
-			$ret .= '<p>Placed on pagezone page #' . $row['uid_local'] . ' (';
-			$ret .= $pz->getPageZoneType()->getAttribute('type_name') . ' <- ';
-			$ret .= $pz->getParentPage()->getPageType()->getAttribute('type_name') . ' (#' . $pz->getParentPage()->getUid() . ') <- ';
-			$ret .= $pz->getParentPage()->getParentSection()->getAttribute('section_name') . ' (#' . $pz->getParentPage()->getParentSection()->getUid() . ')';
-			$ret .= ')<p>';
-		}
-
-        // is extra placed in a tagzone?
-		$row = tx_newspaper::selectZeroOrOneRows(
-			'extra, tag_zone',
-			'tx_newspaper_controltag_to_extra',
-			'extra=' . $extra_id
-		);
-		if ($row) {
-			$ret .= '<p>Placed in tagzone #' . $row['uid_local'] . ' (' . tx_newspaper_tag::getAllTagZoneName($row['tag_zone']) . ')<p>';
-		}
 
         return $ret;
     }
