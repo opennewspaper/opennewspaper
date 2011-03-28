@@ -62,6 +62,16 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 	/// Root of the Typo3 installation for links in the BE
 	const INSTALLATION_ROOT = '';
 
+	private static $mmTables = array(
+		'tx_newspaper_articlelist_manual_articles_mm',
+		'tx_newspaper_article_extras_mm',
+		'tx_newspaper_article_related_mm',
+		'tx_newspaper_article_sections_mm',
+		'tx_newspaper_article_tags_mm',
+		'tx_newspaper_extra_image_tags_mm',
+		'tx_newspaper_pagezone_page_extras_mm'
+	);
+
 	/**
 	 * Initializes the Module
 	 * @return	void
@@ -186,9 +196,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 
 		global $LANG;
 
-		switch((string)$this->MOD_SETTINGS['function'])	{
-			case 1:
-				$content = '
+		$content = '
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {
   overflow: auto;
@@ -197,9 +205,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 								The database is checked for inconsistent data.
 								<hr />';
 //								GET:'.t3lib_div::view_array($_GET).'<br />'.
-//								'POST:'.t3lib_div::view_array($_POST).'<br />'.
+//								'POST:'.t3lib_div::view_array($_POST).'<br />';
 
-
+		switch((string)$this->MOD_SETTINGS['function'])	{
+			case 1:
 				$f = $this->getListOfDbConsistencyChecks();
 				for ($i = 0; $i < sizeof($f); $i++) {
 					$content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
@@ -214,7 +223,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
 				break;
 			case 2:
-				$content = '<div align=center><strong>' . $LANG->getLL('mod4_record_info') . '</strong></div>';
+				$content .= '<div align=center><strong>' . $LANG->getLL('mod4_record_info') . '</strong></div>';
 
 				$content .= self::getInfoForm();
 
@@ -266,7 +275,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		$ret .= self::getSectionInfo($mod_post['section_id']);
     	}
         if ($mod_post['article_id']) {
-            $ret .= self::getArticleInfo($mod_post['article_id']);
+            $ret .= self::getArticleInfo($mod_post['article_id'], true);
         }
         if ($mod_post['extra_id']) {
             $ret .= self::getExtraInfo($mod_post['extra_id']);
@@ -326,7 +335,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     		$pages = $section->getActivePages();
             if ($pages) {
             	foreach ($pages as $page) {
-            	   $ret .= self::getPageInfo($page->getUID());
+            	   $ret .= self::getPageInfo($page->getUid());
             	}
             	$ret .=  '<hr />';
             } else {
@@ -335,9 +344,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
             // ... articles. usually, lots.
             $uids = tx_newspaper::selectRows(
-                'uid_local', 'tx_newspaper_article_sections_mm',
+                'uid_local',
+                'tx_newspaper_article_sections_mm',
                 'uid_foreign = ' . $section->getUid(),
-                '', 'uid_local ASC'
+                '',
+                'uid_local ASC'
             );
             if ($uids) {
             	$ret .= '<p>Associated articles:</p>';
@@ -352,7 +363,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
     	return $ret;
     }
 
-    static function getArticleInfo($article_id) {
+    /**
+     * \param $article_id article uid
+     * \param $showExtraInfo whether to show Extra detial sinformation or not
+     * \return html code
+     */
+    static function getArticleInfo($article_id, $showExtraInfo=false) {
         $ret = '';
         foreach (explode(',', $article_id) as $uid) {
             try {
@@ -366,9 +382,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             	continue;
             }
 
-            foreach ($article->getExtras() as $extra) {
-            	$ret .= self::getExtraInfo($extra->getExtraUid());
+            if ($showExtraInfo) {
+	            foreach ($article->getExtras() as $extra) {
+	            	$ret .= self::getExtraInfo($extra->getExtraUid());
+	            }
             }
+
         }
         return $ret;
     }
@@ -388,6 +407,45 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
                 continue;
             }
         }
+
+        // is extra placed in an article?
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid_local',
+			'tx_newspaper_article_extras_mm',
+			'uid_foreign=' . $extra_id
+		);
+		if ($row) {
+			$a = new tx_newspaper_Article(intval($row['uid_local']));
+			$ret .= '<p>Placed in article #' . $row['uid_local'] . ' (';
+			$ret .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title');
+			$ret .= ')<p>';
+		}
+
+        // is extra placed on a pagezone_page?
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid_local',
+			'tx_newspaper_pagezone_page_extras_mm',
+			'uid_foreign=' . $extra_id
+		);
+		if ($row) {
+			$pz = new tx_newspaper_PageZone_Page(intval($row['uid_local']));
+			$ret .= '<p>Placed on pagezone page #' . $row['uid_local'] . ' (';
+			$ret .= $pz->getPageZoneType()->getAttribute('type_name') . ' <- ';
+			$ret .= $pz->getParentPage()->getPageType()->getAttribute('type_name') . ' (#' . $pz->getParentPage()->getUid() . ') <- ';
+			$ret .= $pz->getParentPage()->getParentSection()->getAttribute('section_name') . ' (#' . $pz->getParentPage()->getParentSection()->getUid() . ')';
+			$ret .= ')<p>';
+		}
+
+        // is extra placed in a tagzone?
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'extra, tag_zone',
+			'tx_newspaper_controltag_to_extra',
+			'extra=' . $extra_id
+		);
+		if ($row) {
+			$ret .= '<p>Placed in tagzone #' . $row['uid_local'] . ' (' . tx_newspaper_tag::getAllTagZoneName($row['tag_zone']) . ')<p>';
+		}
+
         return $ret;
     }
 
@@ -398,7 +456,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
         		$concrete_list = tx_newspaper_ArticleList_Factory::getInstance()->create(intval(trim($uid)));
 	            $ret .= '<p>' .
 	                        'Article list: ' . self::getRecordLink('tx_newspaper_articlelist', $concrete_list->getAbstractUid()) .
-	                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) .
+	                        ' (' . $concrete_list->getTable() . ' ' . self::getRecordLink($concrete_list->getTable(), $concrete_list->getUid()) . ')' .
 	                    '</p>';
         	} catch (tx_newspaper_DBException $e) {
                 $ret .= '<p><strong>No such article list: ' . $uid . '.</strong></p>';
@@ -408,8 +466,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             $articles = $concrete_list->getArticles(10);
             if ($articles) {
             	foreach ($articles as $article) {
-            		$ret .= '<p>&nbsp;&nbsp;Article' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
-            		    ' - ' . $article->getAttribute('title') . '</p>';
+            		$ret .= '<p>&nbsp;&nbsp;Article #' . self::getRecordLink('tx_newspaper_article', $article->getUid()) .
+            		    ' - ' . $article->getAttribute('title') . ': ' . $article->getAttribute('title') . '</p>';
             	}
             } else {
             	$ret .= '<p>&nbsp;&nbsp;No articles.</p>';
@@ -443,6 +501,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
             	foreach ($pagezones as $pagezone) {
             		$ret .= self::getPageZoneInfo($pagezone->getAbstractUid());
             	}
+            	$ret .= '<p>&nbsp;</p>';
             } else {
             	$ret .= '<p>&nbsp;&nbsp;No page zones.</p>';
             }
@@ -494,8 +553,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
  */
 		$f = array(
 			array(
-				'title' => 'Article: missing publish date for published articles',
-				'class_function' => array('tx_newspaper_module4', 'checkArticleMissingPublishDate'),
+				'title' => 'mm tables: uid_local or uid_foreign  equals 0',
+				'class_function' => array('tx_newspaper_module4', 'checkMmUidZero'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Abstract extra: concrete extra missing',
+				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraConcreteExtraMissing'),
 				'param' => array()
 			),
 			array(
@@ -575,6 +639,27 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		}
 		$msg .= '</table><br />';
 		return $msg;
+	}
+
+	static function checkMmUidZero() {
+		$msg = '';
+		foreach (self::$mmTables as $table) {
+			$rows = tx_newspaper::selectRows(
+				'uid_local, uid_foreign',
+				$table,
+				'uid_local=0 OR uid_foreign=0'
+			);
+			if ($rows) {
+				$msg .= '<p><b>' . $table . '</b></p>';
+				foreach ($rows as $row) {
+					$msg .= '<p>' . $row['uid_local'] . ', ' . $row['uid_foreign'] . '<p>';
+				}
+			}
+		}
+		if ($msg != '') {
+			return $msg;
+		}
+		return true;
 	}
 
 	static function checkSectionWithMultipleButSamePageType() {

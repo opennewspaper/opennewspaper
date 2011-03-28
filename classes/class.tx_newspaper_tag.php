@@ -102,7 +102,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
 
-    /// \return Array with all tag zones (key = tag zon uid)
+    /// \return Array with all tag zones (key = tag zone uid)
     public static function getAllTagZones() {
     	$row = tx_newspaper::selectRows(
     		'uid,name',
@@ -117,6 +117,22 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	}
     	return $tagzones;
     }
+
+    /// \return Name of tag zone for given $uid
+    public static function getAllTagZoneName($uid) {
+    	$uid = intval($uid);
+    	$row = tx_newspaper::selectRows(
+    		'name',
+    		self::tagzone_table,
+    		'uid=' . $uid . tx_newspaper::enableFields(self::tagzone_table)
+    	);
+		if ($row) {
+    		return $row[0]['name'];
+		} else {
+			return '';
+		}
+    }
+
 
 
     /// \param $tz_uid uid of taz zone
