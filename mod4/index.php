@@ -453,10 +453,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 					$ret .= ' UNKNOWN TAG TYPE ';
 				}
 				$ret .= '</i>';
-				$ret .= '<b>' . addslashes($tag->getAttribute('tag')) . '</b>';
+				$ret .= '<b>' . addslashes($tag->getAttribute('tag')) . '</b> (#' . $tag->getUid() . ')';
 				if ($tag->getAttribute('tag_type') == tx_newspaper_tag::getControlTagType()) {
 					$ret .= ' in dossier <b>' . $tag->getAttribute('title') . '</b>';
-					$ret .= ' with control tag category <b>' . $tag->getCategoryName() . '</b>';
+					$ret .= ' with control tag category <b>' . $tag->getCategoryName() . '</b> (#' . $tag->getAttribute('ctrltag_cat') . ')';
 
 				}
 
