@@ -458,7 +458,9 @@ class tx_newspaper_DependencyTree {
 function makeCachablePages(array $pages, tx_newspaper_Article $article = null) {
     $cachable_pages = array();
     foreach($pages as $page) {
-        $cachable_pages[] = new tx_newspaper_CachablePage($page, $article);
+        if ($page instanceof tx_newspaper_Page) {
+            $cachable_pages[] = new tx_newspaper_CachablePage($page, $article);
+        }
     }
     return $cachable_pages;
 }
@@ -467,7 +469,7 @@ function getAllArticlePages(array $sections) {
 	$article_pages = array();
     foreach ($sections as $section) {
         $article_page = getArticlePage($section);
-        $article_pages[] = $article_page;
+        if ($article_page instanceof tx_newspaper_Page) $article_pages[] = $article_page;
     }
     return $article_pages;
 }
