@@ -28,7 +28,7 @@ function loadJsCssFile(filename, filetype, param) {
 		var fileref = document.createElement('script');
 		fileref.setAttribute("type", "text/javascript");
         if(param) {
-            filename = filename + '?' + param; 
+            filename = filename + '?' + param;
         }
         fileref.setAttribute("src", filename );
 	} else if (filetype == "css") { //if filename is an external CSS file
@@ -58,7 +58,7 @@ function loadJsCssFile(filename, filetype, param) {
 		}
 		return false; // no reference could be found
 	}
-	
+
 
 	/// returns the reload type for ajax call depending on the flag "is_concrete_article"
 	function get_onSuccess_function(is_concrete_article) {
@@ -81,7 +81,7 @@ function loadJsCssFile(filename, filetype, param) {
 		return url + "&no_cache=" + new Date().getTime();
 	}
 
-	
+
 	/// "processing spinner" over whole page
 	function processing_page() {
 		img = document.createElement('img');
@@ -95,12 +95,12 @@ function loadJsCssFile(filename, filetype, param) {
 		layer.appendChild(img);
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	}
-	
+
 	function processing_in_article() {
 		document.getElementById('extras').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';
 	}
 
-	
+
 	/// direct reload (no popup/modalbox involved ...)
 	function reload_page(data) {
 		if (data.responseText == '') {
@@ -117,7 +117,7 @@ function loadJsCssFile(filename, filetype, param) {
 		document.getElementById('extras').innerHTML = data.responseText;
         tabManagement.clearTabCache();
 	}
-	
+
 	/// the list of extras has to be reloaded from the server (needed for modal box or saveField ajax calls)
 	function reload_in_article(pz_uid) {
 		if (t3BackendObject == top) {
@@ -134,14 +134,14 @@ function loadJsCssFile(filename, filetype, param) {
 				onSuccess: response_in_article
 			}
 		);
-	}	
-		
-	
-	
-	
-	
+	}
+
+
+
+
+
 /// functions for placement module only ////////////////////////////////////////
-	
+
 	/// toggle checkbox "Show levels above"
 	function toggle_show_levels_above(checked) {
 		var request = new top.Ajax.Request(
@@ -153,8 +153,8 @@ function loadJsCssFile(filename, filetype, param) {
 				onSuccess: reload
 			}
 		);
-	}	
-	
+	}
+
 	/// toggle checkbox "Show visible extras only"
 	function toggle_show_visible_only(checked) {
 		var request = new top.Ajax.Request(
@@ -166,18 +166,18 @@ function loadJsCssFile(filename, filetype, param) {
 				onSuccess: reload
 			}
 		);
-	}		
+	}
 
-	
-	
+
+
 /// functions for placement pagezone_page //////////////////////////////////////
-	
-	
-	
-	
-	
-/// functions for placement (default) article //////////////////////////////////	
-		
+
+
+
+
+
+/// functions for placement (default) article //////////////////////////////////
+
 	/// AJAX call: create extra on article, started by shortcut link
 	function extra_shortcut_create(article_uid, extra_class, extra_uid, paragraph, show) {
 		var request = new top.Ajax.Request(
@@ -196,13 +196,13 @@ function loadJsCssFile(filename, filetype, param) {
 			}
 		);
 	}
-		
-		
-		
 
-	
+
+
+
+
 /// functions for placement article AND concrete article ///////////////////////
-	
+
 	/// AJAX call: delete extra on pagezone_page or article
 	function extra_delete(pz_uid, extra_uid, message, is_concrete_article, extra_class) {
 		if (!confirm(message)) return; // user must confirm that he knows what he's doing
@@ -216,7 +216,7 @@ function loadJsCssFile(filename, filetype, param) {
 			}
 		);
 	}
-	
+
 	/// AJAX call: move extra on pagezone_page or article
 	function extra_move_after(origin_uid, pz_uid, extra_uid, is_concrete_article) {
 //alert(top.path + "typo3conf/ext/newspaper/mod3/index.php");
@@ -230,10 +230,10 @@ function loadJsCssFile(filename, filetype, param) {
 			}
 		);
 	}
-	
+
 	/// prepare AJAX call in modal box: edit extra on pagezone_page or article
 	function extra_edit(table, uid, pz_uid, is_concrete_article) {
-/// \todo: add be_mode            
+/// \todo: add be_mode
 			subModalExtraEdit(table, uid, pz_uid, is_concrete_article);
 	}
 
@@ -241,9 +241,9 @@ function loadJsCssFile(filename, filetype, param) {
 	function extra_insert_after(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {
 /// \todo: add be_mode
 		subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article);
-	}	
-	
-	
+	}
+
+
 	/// store data in field (if field is changed a undo/store option is added to field; one field editable at a time)
 	function extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article) {
 		switch(type) {
@@ -264,25 +264,25 @@ function loadJsCssFile(filename, filetype, param) {
 			}
 		);
 	}
-	
-	
 
-	
+
+
+
 
 /// functions for concrete articles only /////////////////////////////////////////
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 /// modal box functions
-	
+
 	// new at top = show input field for paragraph
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {
-		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var width = Math.min(700, top.getViewportWidth() - 100);
 		var height = top.getViewportHeight() - 50;
 		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
 		top.showPopWin(
@@ -293,16 +293,16 @@ function loadJsCssFile(filename, filetype, param) {
 			false // no submodal close button
 		);
 	}
-	
+
 	function subModalExtraEdit(table, uid, pz_uid, is_concrete_article) {
-		var width = Math.min(700, top.getViewportWidth() - 100); 
+		var width = Math.min(700, top.getViewportWidth() - 100);
 		var height = top.getViewportHeight() - 50;
 		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
 		top.showPopWin(
 			t3BackendObject.path + "typo3/alt_doc.php?returnUrl=" + closehtml + "&edit[" + table + "][" + uid + "]=edit",
-			width, 
-			height, 
-			null, 
+			width,
+			height,
+			null,
 			false // no submodal close button
 		);
 	}
@@ -367,7 +367,7 @@ function loadJsCssFile(filename, filetype, param) {
 		);
 	}
 
-	
+
 	function inheritancesource_change(pz_uid, value) {
 	var request = new top.Ajax.Request(
 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
@@ -380,8 +380,53 @@ function loadJsCssFile(filename, filetype, param) {
 	);
 }
 
-	
-	
+// clipboard functions
+
+	function extra_cut(pagezone_uid, extra_uid) {
+		extra_cut_copy(pagezone_uid, extra_uid, 'cutClipboard');
+	}
+	function extra_copy(pagezone_uid, extra_uid) {
+		extra_cut_copy(pagezone_uid, extra_uid, 'copyClipboard');
+	}
+	function extra_cut_copy(pagezone_uid, extra_uid, type) {
+		var request = new top.Ajax.Request(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{
+				method: 'get',
+				parameters: "tx_newspaper_mod3[ajaxController]=" + type + "&tx_newspaper_mod3[e_uid]=" + extra_uid + "&tx_newspaper_mod3[pz_uid]=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			}
+		);
+	}
+
+	function extra_paste(origin_uid, pagezone_uid, message) {
+		if (!confirm(message)) {
+			return; // user must confirm that he knows what he's doing
+		}
+		var request = new top.Ajax.Request(
+ 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+ 			{
+				method: 'get',
+				parameters: "tx_newspaper_mod3[ajaxController]=pasteClipboard&tx_newspaper_mod3[origin_uid]=" + origin_uid + "&tx_newspaper_mod3[pz_uid]=" + pagezone_uid + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			}
+		);
+	}
+
+	function clear_clipboard() {
+		var request = new top.Ajax.Request(
+			top.path + "typo3conf/ext/newspaper/mod3/index.php",
+			{
+				method: 'get',
+				parameters: "tx_newspaper_mod3[ajaxController]=clearClipboard" + "&no_cache=" + new Date().getTime(),
+				onCreate: processing,
+				onSuccess: reload
+			}
+		);
+	}
+
 
 /// \to do: remove after all calls are switched to page/article version ????
 	function processing() {
@@ -400,7 +445,7 @@ function loadJsCssFile(filename, filetype, param) {
 		layer.appendChild(img);
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	}
-	
+
 	// direct reload (no popup/modalbox involved ...)
 	function reload(data) {
 		if (data.responseText == '') {
@@ -413,20 +458,20 @@ function loadJsCssFile(filename, filetype, param) {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-/// handling paragraphs and notes in pagezone_page and article	
-	
+
+
+
+
+
+
+
+/// handling paragraphs and notes in pagezone_page and article
+
 	document.enter_para_uid = null; // if set to false, a paragraph might be changed
 	document.def_para = new Array(); // stores the current value for all paragraphs being displayed
 	document.enter_notes_uid = null; // if set to false, a note might be changed
 	document.def_notes = new Array(); // stores the current value for all notes being displayed
-	
+
 	// note: if paragraph AND notes are filed in the same form, data is lost if both types contains unsaved data
 	function enterField(extra_uid, type) {
 		old_type_uid = eval("document.enter_" + type + '_uid');
@@ -437,10 +482,10 @@ function loadJsCssFile(filename, filetype, param) {
 		}
 
 		// \todo: type check ...
-		
+
 		document.getElementById(type + '_td_' + extra_uid).style.backgroundColor = 'red';
 		document.getElementById('save_' + type + '_' + extra_uid).style.display = 'inline';
-		
+
 		switch(type) {
 			case 'para':
 				document.enter_para_uid = extra_uid;
@@ -449,13 +494,13 @@ function loadJsCssFile(filename, filetype, param) {
 				document.enter_notes_uid = extra_uid;
 			break;
 		}
-		
+
 	}
 
 	function undoField(extra_uid, type) {
-		
+
 		if (type == null) return false;
-		
+
 //top.console.log('undo   type: ' + type + 'e uid: ' + extra_uid);
 		document.getElementById(type + '_td_' + extra_uid).style.backgroundColor = '';
 		document.getElementById('save_' + type + '_' + extra_uid).style.display = 'none';
@@ -470,14 +515,14 @@ function loadJsCssFile(filename, filetype, param) {
 				document.enter_notes_uid = null;
 			break;
 		}
-		
+
 	}
 
 	function saveField(pz_uid, extra_uid, type, is_concrete_article) {
 		var value = document.getElementById(type + '_' + extra_uid).value;
 //top.console.log("save " + value + ', e uid: ' + extra_uid);
 		extra_save_field(pz_uid, extra_uid, value, type, is_concrete_article);
-		
+
 		// store this value as new default (not needed if page is reloaded ...)
 /*
 		switch(type) {
@@ -488,7 +533,7 @@ function loadJsCssFile(filename, filetype, param) {
 				document.def_notes[extra_uid] = value;
 			break;
 		}
-*/		
+*/
 	}
 
 
@@ -752,4 +797,4 @@ document.observe('dom:loaded', function() {
 });
 
 
-//{/literal}	
+//{/literal}

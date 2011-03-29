@@ -1,4 +1,5 @@
 {* this is a smarty template though it's called *.css *}
+{* \todo: why is this a smarty template ???? *}
 {literal}
 <style type="text/css">
 body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-php, body#typo3-mod-web-info-index-php, body#typo3-mod-web-func-index-php, body#typo3-mod-user-ws-index-php, body#typo3-mod-user-ws-workspaceforms-php, body#typo3-mod-php, body#typo3-mod-tools-em-index-php, body#typo3-pagetree, body#typo3-db-new-php, body#typo3-move-el-php, body#typo3-show-rechis-php, body#ext-cms-layout-db-layout-php, body#ext-tstemplate-ts-index-php, body#ext-version-cm1-index-php, body#ext-setup-mod-index-php, body#ext-tsconfig-help-mod1-index-php, body#ext-lowlevel-dbint-index-php, body#ext-lowlevel-config-index-php, body#ext-cms-layout-db-new-content-el-php {

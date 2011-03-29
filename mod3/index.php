@@ -45,15 +45,11 @@ class fullWidthDoc_mod3 extends template {
 
 
 
-//var_dump(debug_backtrace());
-//debug($_REQUEST, '_reuqest');
-
 $LANG->includeLLFile('EXT:newspaper/mod3/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-define('DEBUG_OUTPUT', true); // show position etc.
 
 /**
  * Module 'Placement' for the 'newspaper' extension.
@@ -62,6 +58,9 @@ define('DEBUG_OUTPUT', true); // show position etc.
  */
 class  tx_newspaper_module3 extends t3lib_SCbase {
 	var $pageinfo;
+
+	private $prefixId = 'tx_newspaper_mod3';
+	private $input = array(); // stores param data \todo: replace all params with prefixed params
 
 	private $section_id;
 	private $page_id;
@@ -144,23 +143,24 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	/** \param $origin_uid origin UID of Extra after which to insert a new one
 	 *  \param $pz_uid uid of pagezone (can be pagezone_page, default article or concrete article)
 	 *  \param $paragraph If in an Article, paragraph in which to insert
+	 *  \todo: check if obsolete
 	 */
 	private function processExtraInsertAfter($origin_uid, $pz_uid, $paragraph=false) {
-
-		$e = new tx_newspaper_Extra_Image();
-		$e->setAttribute('title', '');
-		$e->store();
-		$e->setAttribute('show_extra', 1);
-		$e->setAttribute('is_inheritable', 1);
-
-		$e->store();
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-		$pz->insertExtraAfter($e, intval($origin_uid));
-
-		if ($pz->isConcreteArticle()) {
-			echo tx_newspaper_be::renderBackendPageZone($pz, false);
-		}
-
+t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array('origin_uid' => $origin_uid, 'pz_uid' => $pz_uid, 'paragraph' => $paragraph, 'backtrace' => debug_backtrace()));
+//		$e = new tx_newspaper_Extra_Image();
+//		$e->setAttribute('title', '');
+//		$e->store();
+//		$e->setAttribute('show_extra', 1);
+//		$e->setAttribute('is_inheritable', 1);
+//
+//		$e->store();
+//		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
+//		$pz->insertExtraAfter($e, intval($origin_uid));
+//
+//		if ($pz->isConcreteArticle()) {
+//			echo tx_newspaper_be::renderBackendPageZone($pz, false);
+//		}
+//
 		die();
 	}
 
@@ -470,8 +470,27 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 		}
 
 
+//t3lib_div::devlog('params in mod3', 'newspaper', 0, array('input' => $this->input));
 
-
+		switch($this->input['ajaxController']) {
+		// clipboard functions
+			case 'cutClipboard':
+				tx_newspaper_be::copyExtraToClipboard($this->input, true);
+				die();
+			break;
+			case 'copyClipboard':
+				tx_newspaper_be::copyExtraToClipboard($this->input);
+				die();
+			break;
+			case 'clearClipboard':
+				tx_newspaper_be::clearClipboard();
+				die();
+			break;
+			case 'pasteClipboard':
+				tx_newspaper_be::processPasteFromClipboard($this->input);
+				die();
+			break;
+		}
 
 
 		if (t3lib_div::_GP('extra_set_show') == 1) {
@@ -675,6 +694,8 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 				 * @return	[type]		...
 				 */
 				function main()	{
+
+					$this->input = t3lib_div::GParrayMerged($this->prefixId); // store params
 
 					$this->check4Ajax(); /// if this is an ajax call, the request gets process and execution of this file ends with die()
 

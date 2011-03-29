@@ -27,6 +27,8 @@ class tx_newspaper_BE {
 	const default_num_articles_in_articlelist = 50;
     const num_articles_tsconfig_var = 'num_articles_in_article_list_be';
 
+    const clipboardKey = 'tx_newspaper/mod3/index.php/clipboard'; // store data in be_user
+
 /// backend: render list of pages and pagezones for section
 
 	/// either called by userfunc in be or ajax
@@ -586,6 +588,13 @@ function findElementsByName(name, type) {
 		$label['pagezone_inheritancesource_upper'] = self::getTranslation('pagezone_inheritancesource_upper');
 		$label['pagezone_inheritancesource_none'] = self::getTranslation('pagezone_inheritancesource_none');
 		$label['title'] = self::getTranslation('title');
+		$label['clipboard'] = self::getTranslation('label_clipboard');
+		$label['clipboard_cut'] = self::getTranslation('label_clipboard_cut');
+		$label['clipboard_copied'] = self::getTranslation('label_clipboard_copied');
+		$label['clear_clipboard'] = self::getTranslation('label_clear_clipboard');
+	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
+	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
+
 		$message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
         $message['confirmation'] = self::getTranslation('message_unsaved_data');
 
@@ -599,6 +608,7 @@ function findElementsByName(name, type) {
 		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
 		$smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
+		$smarty->assign('CLEAR_CLIPBOARD_ICON', tx_newspaper_BE::renderIcon('gfx/closedok.gif', '', self::getTranslation('label_clear_clipboard')));
 
 		if (!$is_concrete_article) {
 			// add possible inheritance sources for this page zone
@@ -639,6 +649,7 @@ function findElementsByName(name, type) {
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
 			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForContentPlacement()); // are template set dropdowns visible or not
+			$smarty_pz->assign('CLIPBOARD', self::getClipboardData());
 			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
 				if (sizeof($extra_data[$i]) > 0) {
 					// render pagezone table only if extras are available
@@ -684,6 +695,35 @@ function findElementsByName(name, type) {
 
 		// admins might see a little more ...
 		$smarty->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
+
+		// clipboard
+		$clipboard = self::getClipboardData();
+		if ($clipboard) {
+			if ($e = tx_newspaper_Extra_Factory::getInstance()->create(intval($clipboard['extraUid']))) {
+				// store clipboard data
+				$smarty->assign('CLIPBOARD', $clipboard);
+
+				// read pagezone data
+				$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($clipboard['pagezoneUid']));
+				$pz_title = $pz->getParentPage()->getParentSection()->getAttribute('section_name') . ' / ';
+				$pz_title .= $pz->getParentPage()->getPageType()->getAttribute('type_name') . ' / ';
+				$pz_title .= $pz->getPagezoneType()->getAttribute('type_name');
+
+				// read extra data
+				$e_title = $e->getTitle() . ' (#' . $e->getUid() . ')';
+				$smarty->assign('CLIPBOARD_DATA', array(
+					'pz' => $pz_title,
+					'e'  => $e_title
+				));
+
+				// Smaryt stuff
+				$smarty->assign('COPY_PASTE_ICON', tx_newspaper_BE::renderIcon('gfx/clip_pasteafter.gif', '', self::getTranslation('label_copy_paste')));
+				$smarty->assign('CUT_PASTE_ICON', tx_newspaper_BE::renderIcon('gfx/clip_pasteafter.gif', '', self::getTranslation('label_cut_paste')));
+			} else {
+				self::clearClipboard(); // extra not valid, so clear clipboard
+			}
+		}
+
 
 		return $smarty->fetch('mod3.tmpl');
 	}
@@ -736,6 +776,72 @@ function findElementsByName(name, type) {
             $smarty->assign('NEW_AT_TOP', true);
         }
     }
+
+
+
+
+
+// clipboard functions
+
+	/**
+	 * Stores cut or copied extra in be_user
+	 * \param array $input Params (probably by Ajax request)
+	 * \param $cut if true, the extra is cut, else copied
+	 * \return void
+	 */
+	public static function copyExtraToClipboard(array $input, $cut=false) {
+//t3lib_div::devlog('cut/copy','newspaper', 0, array('pagezoneUid' => $input['e_uid'], 'extraUid' => $input['pz_uid'], 'type' => $cut? 'cut' : 'copy'));
+		$GLOBALS['BE_USER']->pushModuleData(self::clipboardKey, serialize(array(
+			'pagezoneUid' => $input['pz_uid'],
+			'extraUid' => $input['e_uid'],
+			'type' => $cut? 'cut' : 'copy'
+		)));
+	}
+
+	public function processPasteFromClipboard(array $input) {
+		$clipboard = self::getClipboardData();
+t3lib_div::devlog('paste', 'newspaper', 0, array('clipboard' => $clipboard, 'input' => $input));
+
+		// get extra in clipboard
+		$e_old = tx_newspaper_Extra_Factory::getInstance()->create(intval($clipboard['extraUid']));
+
+		// copy or cut extra
+		if ($clipboard['type'] == 'copy') {
+			$e = clone $e_old; // copy the extra
+		} else {
+			$e = $e_old; // cut extra
+		}
+
+		// get target pagezone
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($input['pz_uid']));
+
+		// insert extra
+		$pz->insertExtraAfter($e, intval($input['origin_uid']), true);
+
+		if ($clipboard['type'] == 'cut') {
+			// delete cut extra and clear clipboard
+			$pz_old = tx_newspaper_PageZone_Factory::getInstance()->create(intval($clipboard['pagezoneUid']));
+			$pz_old->removeExtra($e_old, true);
+			self::clearClipboard(); // clear clipboard
+		}
+
+	}
+
+
+	/// Clears extra from clipboard in be_user
+	public static function clearClipboard() {
+		$GLOBALS['BE_USER']->pushModuleData(self::clipboardKey, serialize(array()));
+	}
+
+	// \return Clipboard datra array (pagezoneUid, extraUid, type (cut|copy))
+	public static function getClipboardData() {
+		return unserialize($GLOBALS['BE_USER']->getModuleData(self::clipboardKey));
+	}
+
+
+
+
+
 
 
     public function renderTagControlsInArticle(&$PA, $fobj) {
@@ -1020,6 +1126,8 @@ JSCODE;
 		$label['templateset'] = self::getTranslation('label_templateset');
 		$label['shortcuts'] = self::getTranslation('label_shortcuts');
 	    $label['overview'] = self::getTranslation('overview');
+	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
+	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
 
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
@@ -1037,6 +1145,10 @@ JSCODE;
 		$smarty_pz->assign('NEW_BELOW_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_below')));
 		$smarty_pz->assign('DELETE_ICON', tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', self::getTranslation('label_delete')));
 //		$smarty_pz->assign('REMOVE_ICON', tx_newspaper_BE::renderIcon('gfx/selectnone.gif', '', self::getTranslation('label_delete')));
+		$smarty_pz->assign('COPY_ICON', tx_newspaper_BE::renderIcon('gfx/clip_copy.gif', '', self::getTranslation('label_copy')));
+		$smarty_pz->assign('CUT_ICON', tx_newspaper_BE::renderIcon('gfx/clip_cut.gif', '', self::getTranslation('label_cut')));
+		$smarty_pz->assign('COPY_PASTE_ICON', tx_newspaper_BE::renderIcon('gfx/clip_pasteafter.gif', '', self::getTranslation('label_copy_paste')));
+		$smarty_pz->assign('CUT_PASTE_ICON', tx_newspaper_BE::renderIcon('gfx/clip_pasteafter.gif', '', self::getTranslation('label_cut_paste')));
 		$smarty_pz->assign('EMPTY_ICON', '<img src="clear.gif" width=16" height="16" alt="" />');
 
 		return $smarty_pz;
@@ -1677,6 +1789,18 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 			array_key_exists(strtolower($table), $GLOBALS['newspaper'][$key]) &&
 			in_array(strtolower($field), $GLOBALS['newspaper'][$key][strtolower($table)]);
 	}
+
+
+
+
+	// Typo3 hooks
+
+	/// Do some clean up when user logs off Typo3, called by Typo3 log off hook
+	public function cleanUpBeforeLogoff() {
+		self::clearClipboard();
+	}
+
+
 
 }
 

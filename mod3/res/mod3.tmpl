@@ -1,6 +1,6 @@
 {* debug *}
 
-{include file="mod3.css"} {* css for processin extras *}
+{include file="mod3.css"} {* css for processing extras *}
 <script type="text/javascript">
     {include file="mod3.js"}  {* js for extra processing extras *}
 </script>
@@ -84,6 +84,10 @@ body {
 	width:150px;
 }
 
+#clipboard {
+	margin-top:18px;
+}
+
 /*  hits */
 
 #browsePages {
@@ -94,7 +98,7 @@ body {
 
 #browsePages a {
 	text-decoration:none;
-	display:block;
+	display:inline;
 }
 
 #browsePages .left {
@@ -216,7 +220,7 @@ body {
 	position:absolute;
 	display:none;
 	z-index:50;
-	width:70px;
+	width:120px;
 	border:1px solid grey;
 	padding:5px;
 	background-color:white;
@@ -318,7 +322,35 @@ body {
 			{* checkbox:show visible extras only *}
 			{*	<input type="checkbox" {if $SHOW_VISIBLE_ONLY}checked="checked" {/if} onchange="javascript:toggle_show_visible_only(this.checked);" /> {$LABEL.show_visible_only} *}
 			{* dropdown:tagzone extra visibility (yes, no, only) *}
+
+
+{if $CLIPBOARD}
+<div id="clipboard">
+
+<b>{$LABEL.clipboard}</b><br />
+
+{if $CLIPBOARD.type == 'copy'}
+	{$LABEL.clipboard_copied}
+{else}
+	{$LABEL.clipboard_cut}
+{/if}<br />
+
+{$CLIPBOARD_DATA.pz}<br />
+{$CLIPBOARD_DATA.e}<br />
+
+<br />
+
+<a href="javascript:clear_clipboard();">{$CLEAR_CLIPBOARD_ICON} {$LABEL.clear_clipboard}</a>
+</div>
+{/if}
+
+
 		</div>  <!-- filter close-->
+
+
+
+
+
 		</form>
 	{/if}
 
@@ -334,6 +366,15 @@ body {
 	{/if}
 			</strong></p>
 			<a href="#" onclick="extra_insert_after(0, {$DATA[i].pagezone_id}, {if ($DATA[i].pagezone_type->getAttribute('is_article') == 1)}0{else}false{/if}, false, 0); return false;">{$NEW_TOP_ICON}</a>
+
+			{if $CLIPBOARD} {* clipboard filled *}
+				{if $CLIPBOARD.type == 'cut'} {* cut/paste = move *}
+			  		<a href="javascript:extra_paste(0, {$DATA[i].pagezone_id}, '{$LABEL.extra_cut_paste_confirm}');">{$CUT_PASTE_ICON}</a>
+			  	{else} {* copy/paste = copy *}
+			  		<a href="javascript:extra_paste(0, {$DATA[i].pagezone_id}, '{$LABEL.extra_copy_paste_confirm}');">{$COPY_PASTE_ICON}</a>
+			  	{/if}
+			{/if}
+
 {/if}
 		</div>  <!--  close browsePages -->
 

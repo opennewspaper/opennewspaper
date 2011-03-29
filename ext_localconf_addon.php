@@ -26,6 +26,10 @@
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/mod/tools/em/index.php']['tsStyleConfigForm'][] = 'EXT:newspaper/classes/class.tx_newspaper_typo3hook.php:tx_newspaper_Typo3Hook->tsStyleConfigForm';
 
 
+	// register log off hook
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['logoff_pre_processing'][] = 'tx_newspaper_BE->cleanUpBeforeLogoff';
+
+
 	// XCLASS extending typo3/alt_doc.php
 	$GLOBALS['TYPO3_CONF_VARS']['BE']['XCLASS']['typo3/alt_doc.php'] = t3lib_extMgm::extPath('newspaper') . 'classes/class.ux_alt_doc.php';
 
