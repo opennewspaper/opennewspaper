@@ -699,7 +699,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         tx_newspaper::devlog("changeParent($new_parent_uid)");
         $this->removeInheritedExtras();
         $this->hideOriginExtras();
-        tx_newspaper::devlog("extras removed");
 
         $parent_zone = $this->getParentZone($new_parent_uid);
         tx_newspaper::devlog("parent zone", $parent_zone);
@@ -711,23 +710,28 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
     private function removeInheritedExtras() {
+        $debug_extras = array();
         foreach ($this->getExtras() as $extra) {
             if (!$extra->isOriginExtra()) {
+                $debug_extras[] = $extra;
                 /// Delete Extra, also on sub-PageZones
                 $this->removeExtra($extra, true);
             }
         }
-
+        tx_newspaper::devlog("inherited extras removed", $debug_extras);
     }
 
     private function hideOriginExtras() {
+        $debug_extras = array();
         foreach ($this->getExtras() as $extra) {
             if ($extra->isOriginExtra()) {
+                $debug_extras[] = $extra;
                 /// Hide and move to end of page zone
                 $extra->setAttribute('show_extra', 0);
                 $extra->store();
             }
         }
+        tx_newspaper::devlog("origin extras hidden", $debug_extras);
     }
 
     private function getParentZone($new_parent_uid) {
@@ -744,7 +748,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-        tx_newspaper::devlog("changeParent($parent_zone)");
+        tx_newspaper::devlog("inheritExtrasFrom($parent_zone)");
         foreach ($parent_zone->getExtras() as $extra_to_copy) {
             $this->insertExtraAfter($extra_to_copy);
         }
