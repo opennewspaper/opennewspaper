@@ -750,8 +750,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
         tx_newspaper::devlog("inheritExtrasFrom($parent_zone)");
         foreach ($parent_zone->getExtras() as $extra_to_copy) {
-            $this->insertExtraAfter($extra_to_copy);
+            $this->inheritExtra($extra_to_copy);
         }
+    }
+
+    private function inheritExtra(tx_newspaper_Extra $extra) {
+        $new_extra = clone $extra;
+        $this->insertExtraAfter($new_extra);
     }
 
     private function storeWithNewParent($new_parent_uid) {
