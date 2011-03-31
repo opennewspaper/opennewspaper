@@ -331,6 +331,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
 		}
+        if (self::$debug_shit) tx_newspaper::devlog("getPageZoneType(): $this", $this->pagezonetype);
 		return $this->pagezonetype; 
 	}
 
@@ -1095,7 +1096,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		while ($current_page) {
 			
 			$current_page = $current_page->getParentPageOfSameType();
-#            if (self::$debug_shit) tx_newspaper::devlog("....Page: $current_page");
 			if (!$current_page instanceof tx_newspaper_Page) break;
 			
 			/** Look for PageZone of the same type. If no active PageZone is
