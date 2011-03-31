@@ -741,7 +741,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         if ($parent_uid < 0) {
             return null;
         } else if ($parent_uid == 0) {
-            return $this->getParentPageZoneOfSameType();
+            self::$debug_shit = true;
+            $parent = $this->getParentPageZoneOfSameType();
+            self::$debug_shit = false;
+            return $parent;
         } else {
             return tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
         }
@@ -1094,22 +1097,22 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		while ($current_page) {
 			
 			$current_page = $current_page->getParentPageOfSameType();
-            tx_newspaper::devlog("....Page: $current_page");
+            if (self::$debug_shit) tx_newspaper::devlog("....Page: $current_page");
 			if (!$current_page instanceof tx_newspaper_Page) break;
 			
 			/** Look for PageZone of the same type. If no active PageZone is
 			 *  found, continue looking in the parent section.
 			 */	
 			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
-                tx_newspaper::devlog("........Page zone to check: $parent_pagezone");
+                if (self::$debug_shit) tx_newspaper::devlog("........Page zone to check: $parent_pagezone");
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType()) {
-                    tx_newspaper::devlog("........Found: $parent_pagezone");
+                    if (self::$debug_shit) tx_newspaper::devlog("........Found: $parent_pagezone");
 					return $parent_pagezone;
                 }
 			}
 			
 		}
-		
+		if (self::$debug_shit) tx_newspaper::devlog("parent page zone of same type not found: $this!");
 		return null;
 		
 	}
