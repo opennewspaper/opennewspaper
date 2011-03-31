@@ -703,8 +703,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $parent_zone = $this->getParentZone($new_parent_uid);
         tx_newspaper::devlog("parent zone", $parent_zone);
 
-		if ($parent_zone) $this->inheritExtrasFrom($parent_zone);
-        tx_newspaper::devlog("extras copied");
+		if ($parent_zone) {
+            $this->inheritExtrasFrom($parent_zone);
+            tx_newspaper::devlog("extras copied");
+        }
 
         $this->storeWithNewParent($new_parent_uid);
 	}
@@ -1088,6 +1090,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  found.
 	 */
 	protected function getParentPageZoneOfSameType() {
+        tx_newspaper::devlog("getParentPageZoneOfSameType()");
 		$current_page = $this->getParentPage();
 		while ($current_page) {
 			
