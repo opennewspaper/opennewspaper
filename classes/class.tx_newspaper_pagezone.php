@@ -718,7 +718,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
                 $this->removeExtra($extra, true);
             }
         }
-        tx_newspaper::devlog("inherited extras removed", $debug_extras);
     }
 
     private function hideOriginExtras() {
@@ -731,7 +730,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
                 $extra->store();
             }
         }
-        tx_newspaper::devlog("origin extras hidden", $debug_extras);
     }
 
     private function getParentZone($new_parent_uid) {
@@ -1104,7 +1102,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  found, continue looking in the parent section.
 			 */	
 			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
-                if (self::$debug_shit) tx_newspaper::devlog("........Page zone to check: $parent_pagezone");
+#                if (self::$debug_shit) tx_newspaper::devlog("........Page zone to check: $parent_pagezone");
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType()) {
 					return $parent_pagezone;
                 }
