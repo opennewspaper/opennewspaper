@@ -186,6 +186,10 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
 	public static function dependsOnArticle() { return false; }
 
+    protected function searchSpecialHits($search_term) {
+        return array('<!-- Search for special keywords not yet implemented! -->');
+    }
+
 	///	Performs the search on all articles.
 	/** Also searches the configured Extras (as in \c self::$extra_fields) for
 	 *  the term. The search ist executed once for every configured Extra table
