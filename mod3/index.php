@@ -310,6 +310,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 				$e = new $extra_class();
 				$e->setAttribute('crdate', time());
 	 			$e->setAttribute('tstamp', time());
+	 			$e->setDefaultValues(); // set default values set in TCA
 				// Call store() so that the Extra is persistent, so that setAttribute() can see that
 				// attribute 'paragraph' belongs to extra_attributes
 				$extra_uid = $e->store();
