@@ -329,7 +329,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if (!$this->pagezonetype) {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
-            $this->pagezonetype->getAttribute('type_name'); // read in the attributes
 		}
 		return $this->pagezonetype; 
 	}
@@ -346,7 +345,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			'tx_newspaper_pagezone',
 			'deleted=0 AND pagezone_uid=' . $this->getUid() . ' AND pagezone_table="' .$this->getTable() . '"'
 		);
-#t3lib_div::devlog('gau', 'newspaper', 0, array($this->getUid(), $this->getTable(), intval($row['uid'])));	
 		return intval($row['uid']);
 	}
 
@@ -700,7 +698,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->hideOriginExtras();
 
         $parent_zone = $this->getParentZone($new_parent_uid);
-        tx_newspaper::devlog("parent zone", $parent_zone);
 
 		if ($parent_zone) {
             $this->inheritExtrasFrom($parent_zone);
@@ -1109,7 +1106,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			
 		}
-#		if (self::$debug_shit) tx_newspaper::devlog("parent page zone of same type not found: $this!");
+
 		return null;
 		
 	}
