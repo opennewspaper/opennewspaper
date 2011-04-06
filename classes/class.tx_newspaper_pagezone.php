@@ -90,7 +90,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	//	interface tx_newspaper_StoredObject
 	//
 	////////////////////////////////////////////////////////////////////////////
-
  	
 	
 	function getAttribute($attribute) {
@@ -1095,7 +1094,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		while ($current_page) {
 			
 			$current_page = $current_page->getParentPageOfSameType();
-#            if (self::$debug_shit) tx_newspaper::devlog("....Page: $current_page");
 			if (!$current_page instanceof tx_newspaper_Page) break;
 			
 			/** Look for PageZone of the same type. If no active PageZone is
@@ -1109,7 +1107,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			
 		}
-		if (self::$debug_shit) tx_newspaper::devlog("parent page zone of same type not found: $this!");
+#		if (self::$debug_shit) tx_newspaper::devlog("parent page zone of same type not found: $this!");
 		return null;
 		
 	}
