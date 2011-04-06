@@ -39,13 +39,13 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	const max_search_results = 1000;
 	
 	/// Whether to log search terms
-	private $log_searches = true;
+	private static $log_searches = true;
 	
 	/// Whether to log search results
-	private $log_results = true;
+	private static $log_results = true;
 	
 	/// Path to log file
-	private $log_file = '/www/onlinetaz/logs/search.log';
+	private static $log_file = '/www/onlinetaz/logs/search.log';
 	
 	/// GET parameter used to pass search term
 	const search_GET_var = 'search';
@@ -83,7 +83,10 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	
 	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Tag
 	const article_tag_mm = 'tx_newspaper_article_tags_mm';
-	
+
+    const article_extra_mm = 'tx_newspaper_article_extra_mm';
+    const extra_table = 'tx_newspaper_extra';
+
 	/// Definition of umlauts which MySQL cannot match case-insensitively
 	private static $umlauts = array (
 		'ä' => 'Ä', 'ö' => 'Ö', 'ü' => 'Ü', 'Ä' => 'ä', 'Ö' => 'ö', 'Ü' => 'ü'
@@ -133,7 +136,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	/// Search term
 	private $search = '';
 
-	////////////////////////////////////////////////////////////////////////////	
+    ////////////////////////////////////////////////////////////////////////////
 	
 	/** \todo Populate class members from $_GET or otherwise:
 	 *    - section restriction
@@ -530,6 +533,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 				$article['text_score'] +
 				self::extra_score_factor*$article['extra_score'];
 	}
+
 }
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SearchResults());
 
