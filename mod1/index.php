@@ -460,9 +460,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 						$extra = $this->createNewConcreteExtra($this->input['extraClassPreselect']);
 						$returnUrl = tx_newspaper::encodeUrlBasic(
 							tx_newspaper::getBasePath() .
-							"typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraManageDossiers.html?' .
-							'tx_newspaper_mod1[newExtraClass]=" . $this->input['extraClassPreselect'] .
-							"&tx_newspaper_mod1[newExtraUid]=" . $extra->getUid() .
+							'typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraManageDossiers.html?' .
+							'tx_newspaper_mod1[newExtraClass]=' . $this->input['extraClassPreselect'] .
+							'&tx_newspaper_mod1[newExtraUid]=' . $extra->getUid() .
 							'&tx_newspaper_mod1[table]=' . $this->input['table'] .
 							'&tx_newspaper_mod1[field]=' . $this->input['field'] .
 							'&tx_newspaper_mod1[uid]=' . $this->input['uid'] .

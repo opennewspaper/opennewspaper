@@ -14,8 +14,8 @@
 <body>
 
 <script type="text/javascript">
-	var extraClass = extract_querystring(window.location.search, 'tx_newspaper_mod1[newExtraClass]');
-	var extraUid = extract_querystring(window.location.search, 'tx_newspaper_mod1[newExtraUid]');
+	var extraClass = extractQuerystringDirect('tx_newspaper_mod1[newExtraClass]');
+	var extraUid = extractQuerystringDirect('tx_newspaper_mod1[newExtraUid]');
 	choseRecord(extraClass, extraUid, 1, '../../../../mod6/index.php');
 </script>
 

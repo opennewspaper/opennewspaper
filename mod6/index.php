@@ -220,7 +220,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 //t3lib_div::devlog('moduleContent()', 'newspaper', 0, array('setting' => $this->MOD_SETTINGS['function'], 'input' => $input));
 
 		// check for AJAX request first
-		$this->processAjax($input); // executin will die, if an Ajax request was processed
+		$this->processAjax($input); // execution will die, if an Ajax request was processed
 
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 'manage_dossiers':
