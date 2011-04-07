@@ -16,10 +16,10 @@ CREATE TABLE tx_newspaper_pagezone_page (
 
 # Modifications for table 'tx_newspaper_article'
 CREATE TABLE tx_newspaper_article (
-    text LONGTEXT NOT NULL
+    text longtext NOT NULL
 	template_set tinytext NOT NULL
-	FULLTEXT KEY `title` (`title`, `kicker`, `title_list`, `kicker_list`)
-	FULLTEXT KEY `text` (`teaser`, `teaser_list`, `text`, `author`)
+	FULLTEXT KEY title (title,kicker,title_list,kicker_list)
+	FULLTEXT KEY text (teaser,teaser_list,text,author)
 );
 
 # Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
@@ -28,21 +28,21 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
 );
 
 # Fulltext index for Extra: Image
-CREATE TABLE `tx_newspaper_extra_image` (
-  FULLTEXT KEY `title` (`title`,`kicker`,`caption`)
+CREATE TABLE tx_newspaper_extra_image (
+  FULLTEXT KEY title (title,kicker,caption)
 );
 
 # Fulltext index for Extra: Textbox
-CREATE TABLE `tx_newspaper_extra_textbox` (
-  FULLTEXT KEY `title` (`title`,`text`)
+CREATE TABLE tx_newspaper_extra_textbox (
+  FULLTEXT KEY title (title,text)
 );
 
 # Fulltext index for Extra: Image
-CREATE TABLE `tx_newspaper_extra_bio` (
-  FULLTEXT KEY `title` (`author_name`, `bio_text`)
+CREATE TABLE tx_newspaper_extra_bio (
+  FULLTEXT KEY title (author_name,bio_text)
 );
 
 # Index on pagetype.get_var to speed up lookup of page types
-CREATE TABLE `tx_newspaper_pagetype` (
-  INDEX `get_var` ( `get_var` ( 8 ) )
-); 
+CREATE TABLE tx_newspaper_pagetype (
+  INDEX get_var (get_var(8))
+);
