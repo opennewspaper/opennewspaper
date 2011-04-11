@@ -329,7 +329,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		if (!$this->pagezonetype) {
 			$pagezonetype_id = $this->getUid()? $this->getAttribute('pagezonetype_id'): 0;
 			$this->pagezonetype = new tx_newspaper_PageZoneType($pagezonetype_id);
-		}
+            $this->pagezonetype->getAttribute('type_name'); // read in the attributes
+        }
 		return $this->pagezonetype; 
 	}
 
@@ -1098,7 +1099,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  found, continue looking in the parent section.
 			 */	
 			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
-                $wtf = $parent_pagezone->getPageZoneType()->getAttribute('type_name');
+#                $wtf = $parent_pagezone->getPageZoneType()->getAttribute('type_name');
 
 				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType()) {
 					return $parent_pagezone;
