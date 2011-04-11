@@ -76,8 +76,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         $this->prepare_render($template_set);
 
-        $this->smarty->assign('basepath', $this->getBasepath());
-        $this->smarty->assign('sizes', $this->getSizes());
+        $this->smarty->assign('basepath', self::getBasepath());
+        $this->smarty->assign('sizes', self::getSizes());
         $this->smarty->assign('widths', self::getWidths());
         $this->smarty->assign('heights', self::getHeights());
         $this->smarty->assign('type', $this->getImageType());
@@ -126,7 +126,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return false; }
 
 	/// Get the array of possible image sizes registered in TSConfig
-	public function getSizes() {
+	public static function getSizes() {
 		self::getTSConfig();
 		return self::$sizes;
 	}
@@ -153,7 +153,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     }
 
 	/// Get the path from root to the images directory, as registered in TSConfig
-	public function getBasepath() {
+	public static function getBasepath() {
 		self::getTSConfig();
 		return self::$basepath;
 	}
