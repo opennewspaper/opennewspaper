@@ -74,12 +74,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         tx_newspaper::startExecutionTimer();
 
-        self::getTSConfig();
-
         $this->prepare_render($template_set);
 
-        $this->smarty->assign('basepath', self::$basepath);
-        $this->smarty->assign('sizes', self::$sizes);
+        $this->smarty->assign('basepath', $this->getBasepath());
+        $this->smarty->assign('sizes', $this->getSizes());
+        $this->smarty->assign('widths', self::getWidths());
+        $this->smarty->assign('heights', self::getHeights());
         $this->smarty->assign('type', $this->getImageType());
 
         $rendered = $this->smarty->fetch($this);
@@ -130,6 +130,27 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		self::getTSConfig();
 		return self::$sizes;
 	}
+
+    public static function getWidths() {
+        self::fillWidthOrHeightArray(self::$widths, 0);
+        return self::$widths;
+    }
+
+    public static function getHeights() {
+        self::fillWidthOrHeightArray(self::$heights, 1);
+        return self::$heights;
+    }
+
+    private static function fillWidthOrHeightArray(array &$what, $index) {
+        if (empty($what)) {
+            foreach (self::getSizes() as $size) {
+                $width_and_height = explode('x', $size);
+                if (isset($width_and_height[$index])) {
+                    $what[] = $width_and_height[$index];
+                }
+            }
+        }
+    }
 
 	/// Get the path from root to the images directory, as registered in TSConfig
 	public function getBasepath() {
@@ -377,6 +398,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
     /// The list of image sizes, predefined in TSConfig
     private static $sizes = array();
+    /// The list of image widths, predefined as sizes in TSConfig
+    private static $widths = array();
+    /// The list of image heights, predefined as sizes in TSConfig
+    private static $heights = array();
 
 }
 
