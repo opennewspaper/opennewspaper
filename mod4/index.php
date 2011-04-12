@@ -635,6 +635,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkUnknownWorkflowStatus'),
 				'param' => array()
 			),
+			array(
+				'title' => 'Check if all template_set fields are set to "default"',
+				'class_function' => array('tx_newspaper_module4', 'checkForDefaultTemplateSet'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
@@ -675,6 +680,40 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			}
 		}
 		if ($msg != '') {
+			return $msg;
+		}
+		return true;
+	}
+
+	static function checkForDefaultTemplateSet() {
+
+		// if you add here, add in mod1 too ...
+		$templateSetTables = array(
+			'tx_newspaper_section',
+			'tx_newspaper_page',
+			'tx_newspaper_pagezone_page',
+			'tx_newspaper_article',
+			'tx_newspaper_extra'
+		);
+
+		$msg = '';
+		foreach ($templateSetTables as $table) {
+			$rows = tx_newspaper::selectRows(
+				'DISTINCT template_set',
+				$table,
+				'template_set<>"default"',
+				'',
+				'template_set'
+			);
+			if ($rows) {
+				$msg .= '<p><b>' . $table . '</b></p>';
+				foreach ($rows as $row) {
+					$msg .= '<p>Template-set: ' . $row['template_set'] . '<p>';
+				}
+			}
+		}
+		if ($msg != '') {
+			$msg .= '<br /><i><a href="#" onclick="fixDefaultTemplateSet(); return false;">Set all template set fields to "default" &gt;&gt;</a></i> <span id="defaultTemplateSpinner"></span><br /><br />';
 			return $msg;
 		}
 		return true;

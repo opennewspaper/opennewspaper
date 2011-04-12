@@ -535,6 +535,11 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// update publish date for published articles without publish date
 					die($this->fixPublishDate());
 				break;
+				case 'fixDefaultTemplateSet':
+					// set all template_set fields to "default"
+					die($this->fixDefaultTemplateSet());
+				break;
+
 			}
 		}
 
@@ -689,7 +694,6 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		 *  2. Use article's tstamp
 		 *  \todo: move to mod6, but some weird Typo3 path problem there ...
 		 */
-
 		private function fixPublishDate() {
 			$rows = tx_newspaper::selectRows('*', 'tx_newspaper_article', 'deleted=0 AND hidden=0 AND publish_date=0');
 			$count = array();
@@ -724,6 +728,36 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			$msg = 'Used timestamp from workflow log (best method): ' . $count['wf'];
 			$msg .= ', used article\'s timestamp: ' . $count['tstamp'];
 			$msg .= ', problem couldn\'t be fixed: ' . $count['wontfix'];
+
+			return $msg;
+		}
+
+
+		/// Sets all template set fielöds to "default"
+		private function fixDefaultTemplateSet() {
+			// if you add here, add in mod1 too ...
+			$templateSetTables = array(
+				'tx_newspaper_section',
+				'tx_newspaper_page',
+				'tx_newspaper_pagezone_page',
+				'tx_newspaper_article',
+				'tx_newspaper_extra'
+			);
+
+			$msg = '';
+			foreach ($templateSetTables as $table) {
+				$count = tx_newspaper::updateRows(
+					$table,
+					'template_set<>"default" AND deleted=0',
+					array('template_set' => 'default')
+				);
+				if ($count) {
+					$msg .= '<p><strong>' . $table . '</strong>: <i>' . $count . '</i> records fixed';
+				}
+			}
+			if (!$msg) {
+				return '<p>Nothing to do - all template set were set to "default"';
+			}
 
 			return $msg;
 		}
