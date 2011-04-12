@@ -242,22 +242,18 @@ class tx_newspaper_Page
 	 */
 	function getPageZones() {
  		/// Cache tx_newspaper_PageZone list for current page at first call.
-		if (!$this->pageZones) {
+		if (!$this->pagezones_are_already_read) {
 			$uids = tx_newspaper::selectRows(
 	 			'uid', 'tx_newspaper_pagezone',
 				'page_id = '.$this->getAttribute('uid')
 			);
+            $this->pagezones_are_already_read = true;
 
-			if ($uids) {
+            if ($uids) {
 	        	foreach ($uids as $uid) {
 	        		$this->pageZones[] =
 	        			tx_newspaper_PageZone_Factory::getInstance()->create($uid['uid']);
 	        	}
-			} else {
-				/*  no page zones under this page - pagezones attribute is set
-				 *  to true so it is not read again.
-				 */
-				$this->pageZones = true;
 			}
 		}
 
@@ -614,6 +610,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  	private $condition = null;
  	/// tx_newspaper_PageZone s on this page
  	private $pageZones = array();
+    /// marker that is set to true once the page zones are read, to avoid repetitions if there are none
+    private $pagezones_are_already_read = false;
  	/// The member variables
  	private $attributes = array();
 
