@@ -394,7 +394,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals('Inserted 2th', $extra[10]->getAttribute('title'), $message);
 		$this->assertEquals('Inserted 1th', $extra[11]->getAttribute('title'), $message);
 	}
-		
+/*
 	public function test_removeExtra() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$old_extras = $pagezone->getExtras();
@@ -423,7 +423,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			}
 		}
 	}
-
+*/
 //	public function test_moveExtraAfter() {
 //		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 //			$extras = $pagezone->getExtras();
