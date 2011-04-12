@@ -90,7 +90,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 											new tx_newspaper_PageType(array('page' => 666)));
 		$this->page->store();											
 		$this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->page->getPageZones());
-		$this->assertEmpty($this->page->getPageZones());
+		$this->assertTrue(empty($this->page->getPageZones()));
 	}
 
 //	public function testPageZones() {
