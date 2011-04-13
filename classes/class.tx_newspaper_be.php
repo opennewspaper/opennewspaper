@@ -850,6 +850,7 @@ t3lib_div::devlog('paste', 'newspaper', 0, array('clipboard' => $clipboard, 'inp
         $obj = new t3lib_TCEforms();
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
+        $PA['fieldConf']['config']['size'] = '5';
 
         $contentTagTitle = self::getTranslation('label_content_tag');
         $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType(),$contentTagTitle);
