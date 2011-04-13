@@ -1051,6 +1051,7 @@ t3lib_div::devlog('paste', 'newspaper', 0, array('clipboard' => $clipboard, 'inp
                                                 //had problems when using !serverTags instead serverTags == false
                                                 var choices = (serverTags == false) ? new Hash() : new Hash(serverTags);
                                                 new MyCompleter('autocomplete_'+tagType, 'autocomplete_choices_'+tagType, choices, {
+                                                    frequency : 0.01,
                                                     selector : mySelector,
                                                     afterUpdateElement : function(currInput, selectedElement) {
                                                                             insertTagFunction(currInput, selectedElement, tagType);
