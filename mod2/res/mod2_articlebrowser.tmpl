@@ -1,4 +1,8 @@
 {* debug *}
+
+<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js"> </script>
+<script type="text/javascript" src="{$T3PATH}contrib/prototype/prototype.js"> </script>
+
 {literal}
 <style type="text/css">
 table {
@@ -29,35 +33,35 @@ td {
 
 <script language="javascript">
 
-	// for article list module (select box is rendered with newspaper ext)
+  // for article list module (select box is rendered with newspaper ext)
 
-	function insertElementNpStyle(uid, kicker, title, element, doClose) {
-	    var selectBox = parent.window.opener.$('#' + element);
-	    if (selectBox == null) {
-	    	// hack: this happens in dossier wizard
-			selectBox = parent.window.opener.document.getElementById(element);
-		}
+  function insertElementNpStyle(uid, kicker, title, element, doClose) {
+      var selectBox = parent.window.opener.$('#' + element);
+      if (selectBox == null) {
+        // hack: this happens in dossier wizard
+      selectBox = parent.window.opener.document.getElementById(element);
+    }
 
-	    if (element != 'tx_newspaper_mod6[articles]') {
-			// \todo: remove this ugly hack
-			selectBox.addOptionAboveSelected(uid, kicker, title);
-			parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
-		} else {
-			parent.window.opener.addOption(uid, kicker, title);
-		}
-	    if(doClose) {
-	    	parent.close();
-	    }
-	    return false;
-	}
-
-
+      if (element != 'tx_newspaper_mod6[articles]') {
+      // \todo: remove this ugly hack
+      selectBox.addOptionAboveSelected(uid, kicker, title);
+      parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
+    } else {
+      parent.window.opener.addOption(uid, kicker, title);
+    }
+      if(doClose) {
+        parent.close();
+      }
+      return false;
+  }
 
 
-	// for article select boxes rendered by typo3
 
-	var path = window.location.pathname;
-	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+
+  // for article select boxes rendered by typo3
+
+  var path = window.location.pathname;
+  path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
 
 
@@ -65,16 +69,16 @@ td {
 /// in order to get the article and articlelist browser working like the typo3 EB
 
 var BrowseLinks = {
-	elements: {},
-	addElements: function(elements) {
-		BrowseLinks.elements = $H(BrowseLinks.elements).merge(elements).toObject();
-	},
-	focusOpenerAndClose: function(close) {
-		if (close) {
-			parent.window.opener.focus();
-			parent.close();
-		}
-	}
+  elements: {},
+  addElements: function(elements) {
+    BrowseLinks.elements = $H(BrowseLinks.elements).merge(elements).toObject();
+  },
+  focusOpenerAndClose: function(close) {
+    if (close) {
+      parent.window.opener.focus();
+      parent.close();
+    }
+  }
 }
 
 
@@ -109,11 +113,11 @@ function focusOpenerAndClose(close)	{
 
 /// \todo: based from mod7, how to merge into 1 js file?
 function showArticlePreview(article_uid) {
-	window.open(
-		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid,
-		"preview",
-		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
-	);
+  window.open(
+    path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid,
+    "preview",
+    "width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
+  );
 }
 
 </script>
@@ -125,195 +129,234 @@ function showArticlePreview(article_uid) {
 *}
 
 
-<form action="index.php" id="moderation"><input type="hidden" name="start_page" value="{$START_PAGE}" />
-{$RANGE_LABEL}: <select name="range" onchange="this.form.submit()">
-{foreach from=$RANGE key=key item=value}
-{if $key == $_POST.range}
-	<option selected="selected" value="{$key}">{$value}</option>
-{else}
-	<option value="{$key}">{$value}</option>
-{/if}
-{/foreach}
-</select>
 
 
-{$HIDDEN_LABEL}: <select name="hidden" onchange="this.form.submit()">
-{foreach from=$HIDDEN key=key item=value}
-{if $key == $_POST.hidden}
-	<option selected="selected" value="{$key}">{$value}</option>
-{else}
-	<option value="{$key}">{$value}</option>
-{/if}
-{/foreach}
-</select>
 
 
-{$ROLE_LABEL}: <select name="role" onchange="this.form.submit()">
-{foreach from=$ROLE key=key item=value}
-{if $key == $_POST.role}
-	<option selected="selected" value="{$key}">{$value}</option>
-{else}
-	<option value="{$key}">{$value}</option>
-{/if}
-{/foreach}
-</select>
 
 
-<br />
+{* filter *}
 
-{$AUTHOR_LABEL}: <input type="text" name="author" value="{$_POST.author|escape:html}" />
+<form action="index.php" id="moderation" name="moderation">
 
-{$SECTION_LABEL}: <input type="text" name="section" value="{$_POST.section|escape:html}" />
+	{* hidden fields *}
+	<input type="hidden" name="tx_newspaper_mod2[startPage]" id="tx_newspaper_mod2[startPage]" value="{$FILTER.startPage}" />
+	<input type="hidden" name="ab4al" value="{$AB4AL}" />
+	<input type="hidden" name="select_box_id" value="{$select_box_id}" />
+	<input type="hidden" name="form_table" value="{$FORM_TABLE}" />
+	<input type="hidden" name="form_field" value="{$FORM_FIELD}" />
+	<input type="hidden" name="form_uid" value="{$FORM_UID}" />
 
-{$TEXTSEARCH_LABEL}: <input type="text" name="text" value="{$_POST.text|escape:html}" />
+	{* range *}
+	{$LL.label_range}: <select name="tx_newspaper_mod2[range]" onchange="submitFilter('reset_startpage');">
+	{foreach from=$RANGE key=key item=value}
+	{if $key == $FILTER.range}
+		<option selected="selected" value="{$key}">{$value}</option>
+	{else}
+		<option value="{$key}">{$value}</option>
+	{/if}
+	{/foreach}
+	</select>
 
-{$STEP_LABEL}: <select name="step" onchange="this.form.submit()">
-{foreach from=$STEP item=value}
-{if $value == $_POST.step}
-	<option selected="selected" value="{$value}">{$value}</option>
-{else}
-	<option value="{$value}">{$value}</option>
-{/if}
-{/foreach}
-</select>
+	{* hidden status *}
+	{$LL.label_status_hidden_field}: <select name="tx_newspaper_mod2[hidden]" onchange="submitFilter('reset_startpage');">
+	{foreach from=$HIDDEN key=key item=value}
+	{if $key == $FILTER.hidden}
+		<option selected="selected" value="{$key}">{$value}</option>
+	{else}
+		<option value="{$key}">{$value}</option>
+	{/if}
+	{/foreach}
+	</select>
 
-<input type="submit" name="go" value="{$GO_LABEL}" />
+	{* role *}
+	{$LL.label_status_role}: <select name="tx_newspaper_mod2[role]" onchange="submitFilter('reset_startpage');">
+	{foreach from=$ROLE key=key item=value}
+	{if $key == $FILTER.role}
+		<option selected="selected" value="{$key}">{$value}</option>
+	{else}
+		<option value="{$key}">{$value}</option>
+	{/if}
+	{/foreach}
+	</select>
+
+  <br />
+
+	{* author *}
+	{$LL.label_title_author}: <input type="text" name="tx_newspaper_mod2[author]" value="{$FILTER.author|escape:html}" />
+
+	{* section *}
+	{$LL.label_section}: <input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" />
+
+	{* text *}
+	{$LL.label_textsearch}: <input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" />
+
+	{* step / items per page *}
+	{$LL.label_step_items_per_page}: <select name="tx_newspaper_mod2[step]" onchange="submitFilter('reset_startpage');">
+	{foreach from=$STEP item=value}
+	{if $value == $FILTER.step}
+		<option selected="selected" value="{$value}">{$value}</option>
+	{else}
+		<option value="{$value}">{$value}</option>
+	{/if}
+	{/foreach}
+	</select>
+
+	{* submit button *}
+	<input onclick="submitFilter('reset_startpage'); return false;" name="tx_newspaper_mod2[go]" value="{$LL.label_go}" type="button" class="submit" />
+
 
 </form>
 
 <br /><br />
 
-{* add ab4al, if set: article browser for article lists *}
-{* add form_tanle etc. for article browser in list module type backend *}
 
-{if $URL_PREV != ''}
-<a href="index.php?{$URL_PREV}{if $FORM_TABLE}
-&form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
-{/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_PREV_LABEL}</a>
-{else}
-{$PAGE_PREV_LABEL}
+
+
+
+
+
+{* browse sequence *}
+
+
+<div id="browsePages">
+
+{if $FILTER.startPage > 0}
+<a class="left" href="#" onclick="browse(-1);">{$LL.label_page_prev}</a>
 {/if}
- [
-{$PAGE_HITS_LABEL} {$_POST.start_page*$_POST.step+1}
+
+	<strong>
+{$LL.label_page_hits} {$FILTER.startPage*$FILTER.step+1}
  -
-{if ($DATA|@sizeof < $_POST.step) }
-	{math equation="sp*st+sizeof" sp=$_POST.start_page st=$_POST.step sizeof=$DATA|@sizeof}
+{if ($DATA|@sizeof < $FILTER.step) }
+	{math equation="sp*st+sizeof" sp=$FILTER.startPage st=$FILTER.step sizeof=$DATA|@sizeof}
 {else}
-	{math equation="(sp+1)*st" sp=$_POST.start_page st=$_POST.step}
+	{math equation="(sp+1)*st" sp=$FILTER.startPage st=$FILTER.step}
 {/if}
- / {$RESULT_COUNT} ]
-{if $URL_NEXT}
-<a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
-&form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
-{/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_NEXT_LABEL}</a>
-{else}
-{$PAGE_NEXT_LABEL}
+ / {$RESULT_COUNT}
+ 	</strong>
+
+{if $FILTER.startPage < $MAX_PAGE}
+<a class="right" href="#" onclick="browse(1);">{$LL.label_page_next}</a>
 {/if}
+
+</div>  <!--  close browsePages -->
+
+
+  {* add ab4al, if set: article browser for article lists *}
+  {* add form_tanle etc. for article browser in list module type backend *}
+
+  {*
+  {if $URL_PREV != ''}
+  <a href="index.php?{$URL_PREV}{if $FORM_TABLE}
+  &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
+  {/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_PREV_LABEL}</a>
+  {else}
+  {$PAGE_PREV_LABEL}
+  {/if}
+   [
+  {$PAGE_HITS_LABEL} {$FILTER.startPage*$FILTER.step+1}
+   -
+  {if ($DATA|@sizeof < $FILTER.step) }
+    {math equation="sp*st+sizeof" sp=$FILTER.startPage st=$FILTER.step sizeof=$DATA|@sizeof}
+  {else}
+    {math equation="(sp+1)*st" sp=$FILTER.startPage st=$FILTER.step}
+  {/if}
+   / {$RESULT_COUNT} ]
+  {if $URL_NEXT}
+  <a href="index.php?{$URL_NEXT}{if $FORM_TABLE}
+  &form_table={$FORM_TABLE}&form_field={$FORM_FIELD}&form_uid={$FORM_UID}
+  {/if}{if $AB4AL}&ab4al=1{/if}">{$PAGE_NEXT_LABEL}</a>
+  {else}
+  {$PAGE_NEXT_LABEL}
+  {/if}
+  *}
+
+
+
+
+
+
+
+
+{* list with hits *}
 
 <table>
 
-<tr>
-<td></td>
-<td>{$LABEL_TITLE.number} </td>
-<td>{$LABEL_TITLE.article}</td>
-<td>{$LABEL_TITLE.author}</td>
-{if !$IS_ARTICLE_BROWSER}
-  <td>{$LABEL_TITLE.be_user}</td>
-{/if}
-<td>{$LABEL_TITLE.modification_date}</td>
-<td align="center">Visible&nbsp;</td>
-{if !$IS_ARTICLE_BROWSER}
-  <td align="center">{$LABEL_TITLE.commands}&nbsp;</td>
-{/if}
-<td align="center">{$LABEL_TITLE.time_controlled}</td>
-</tr>
+	{* header *}
+	<tr>
+		<td></td>
+		<td>{$LL.label_title_number} </td>
+		<td>{$LL.label_title_article}</td>
+		<td>{$LL.label_title_author}</td>
+		<td>{$LL.label_title_modification_date}</td>
+		<td>{$LL.label_title_published}</td>
+		<td>{$LL.label_title_time_controlled}</td>
+	</tr>
 
-{section name=i loop=$DATA}
-{if ($smarty.section.i.index % 2 == 0)}
+	{* row *}
+
+	{section name=i loop=$DATA}
+	{if ($smarty.section.i.index % 2 == 0)}
 	<tr class="bg1">
-{else}
+	{else}
 	<tr class="bg2">
-{/if}
+	{/if}
+
+	{* record locked *}
 		<td>
 		{if $LOCKED_ARTICLE[i].username != ''}
-			{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg}
+			{$ICON.recordLocked|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg}
 		{/if}
 		</td>
-		<td align="right"> {math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$_POST.start_page st=$_POST.step} </td>
+
+		{* number *}
+		<td align="right"> {math equation="i+1+(st*sp)" i=$smarty.section.i.index sp=$FILTER.startPage st=$FILTER.step} </td>
+
+		{* kicker + title *}
 		<td>
 			<div title="{$DATA[i].teaser}">
-{if $IS_ARTICLE_BROWSER}
-	{if $AB4AL}
-		{* manual article list module *}
-		<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', false);" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
-		<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', true);" href="#">
-	{else}
-		{* article select box rendered by Typo3 *}
-		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ARTICLE_ADD_ICON}</a>&nbsp;
-		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
-	{/if}
-{/if}
+			{if $AB4AL}
+				{* manual article list module *}
+				<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', false);" href="#">{$ICON.addArticle}</a>&nbsp;
+				<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', true);" href="#">
+			{else}
+				{* article select box rendered by Typo3 *}
+				<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ICON.addArticle}</a>&nbsp;
+	      		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+			{/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
-{if !$IS_ARTICLE_BROWSER}
-    </a>
-{/if}
 			</div>
 		</td>
+
+		{* author *}
 		<td> {$DATA[i].author} </td>
-{if !$IS_ARTICLE_BROWSER}
-		<td> {$DATA[i].be_user} </td>
-{/if}
+
+		{* tstamp *}
 		<td> {if $DATA[i].tstamp}{$DATA[i].tstamp|date_format:"%d.%m.%Y %H:%I:%S"}{/if} </td>
-		<td align="center">
-{if !$IS_ARTICLE_BROWSER}
-  {* moderation list, so link visibile icon with hide/unhide functionality *}
-  {if $DATA[i].hidden == 0}
-    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=hidden&article_uid={$DATA[i].uid}">{$HIDE_ICON}</a>
-  {else}
-    <a href="index.php?{$URL_HIDE_UNHIDE}&article_visibility=visible&article_uid={$DATA[i].uid}">{$UNHIDE_ICON}</a>
-  {/if}
-{else}
-  {* article browser, just display visiblity status, but do NOT link the icon *}
-  {if $DATA[i].hidden == 0}
-    {$HIDE_ICON}
-  {else}
-    {$UNHIDE_ICON}
-  {/if}
-{/if}
-		</td>
-{if !$IS_ARTICLE_BROWSER}
-		<td>
-{if $IS_DUTY_EDITOR}<a href="../mod7/index.php?tx_newspaper_mod7[articleid]={$DATA[i].uid}"> {$ARTICLE_PLACEMENT_ICON} </a> {/if}
 
-<a href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;">{$ARTICLE_PREVIEW_ICON}</a>
-<a href="{$T3PATH}alt_doc.php?returnUrl=close.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"> {$ARTICLE_EDIT_ICON} </a>
-{* left here, because (i) button might be needed later, though probably with js call <a href="javascript:toggleComment('comments{$DATA[i].uid}');">{$COMMENT_ICON|replace:'###COMMENT###':$DATA[i].comment}</a> *}
-		</td>
-{/if}
+		{* hidden status *}
 		<td align="center">
-{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
-	{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
-		{$TIME_HIDDEN_ICON}
-	{else}
-		{$TIME_VISIBLE_ICON}
-	{/if}
-{/if}
+			{* article browser, just display visiblity status, but do NOT link the icon *}
+			{if !$DATA[i].hidden}
+			{$ICON.published}
+			{/if}
 		</td>
-	</tr>
 
-{if ($smarty.section.i.index % 2 == 0)}
-	<tr class="bg1">
-{else}
-	<tr class="bg2">
-{/if}
-		<td colspan="2"></td>
-		<td colspan="7">
-{* \todo: fix js, so workflow log is working
-{$DATA[i].workflowlog}
-*}
+		{* time controlled *}
+		<td align="center">
+		{if ($DATA[i].starttime > 0 || $DATA[i].endtime > 0)}
+			{if (($DATA[i].starttime == 0 || $DATA[i].starttime >= $smarty.now) && ($DATA[i].endtime == 0 || $DATA[i].endtime <= $smarty.now))}
+			{$ICON.timeHidden}
+			{else}
+			{$Icon.timeVisible}
+			{/if}
+		{/if}
 		</td>
+
 	</tr>
-{/section}
+	{/section}
+
 </table>
 
-</form><br /><br />
+<br /><br />

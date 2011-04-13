@@ -1,4 +1,4 @@
-<?php 
+<?php
 /***************************************************************
 *  Copyright notice
 *
@@ -52,7 +52,7 @@ class fullWidthDoc_mod7 extends template {
 class  tx_newspaper_module7 extends t3lib_SCbase {
 				var $pageinfo;
 				var $prefixId = 'tx_newspaper_mod7';
-				
+
 				private $al_be = null; // backend object providing the methods for generating the backend for article list placement
 
 				/**
@@ -61,7 +61,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function init()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-	
+
 					parent::init();
 				}
 
@@ -153,7 +153,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod7');
 						$this->doc->backPath = $BACK_PATH;
 						$this->content .= $this->doc->startPage($LANG->getLL('title'));
-						
+
 						$output = '';
 						switch ($input['controller']) {
 							case 'preview' :
@@ -170,7 +170,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							break;
 						}
 						$output = $this->be_wrapInBaseClass($output);
-	
+
 						$this->content .= $this->doc->section('', $output, 0, 1);
 						$this->moduleContent();
 						$this->content .= $this->doc->spacer(10);
@@ -186,8 +186,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$this->content .= $this->doc->spacer(10);
 					}
 				}
-				
-				
+
+
 				function be_wrapInBaseClass ($content) {
 					return '<div class="' . $this->prefixId . '">' . $content . '</div>';
 				}
@@ -198,31 +198,31 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$article = new tx_newspaper_article($articleId);
 					return $article->render();
 				}
-				
-				
+
+
 				// render the main / full module
 				function renderModule ($input) {
 					// check if article placement for article was called
 					if (isset($input['articleid']) && $input['articleid']) {
 						return $this->renderPlacementModule($input);
 					}
-					
+
 					// render article list backend module
 					return $this->renderArticlelistList($input);
 				}
-				
+
 				/// render list of all (non-section) article lists
 				function renderArticlelistList($input) {
 					$al = $this->getAllNonSectionArticleLists();
 //t3lib_div::devlog('getAllNonSectionArticleLists()', 'newspaper', 0, array('al' => $al));
 
-					// get ll labels 
+					// get ll labels
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-					$localLang = $localLang[$GLOBALS['LANG']->lang];					
-					
+					$localLang = $localLang[$GLOBALS['LANG']->lang];
+
 					// prepare: icons ...
 					$al_be = new tx_newspaper_BE();
-					
+
 					// instanciate smarty
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
@@ -234,7 +234,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
 					return $smarty->fetch('mod7_articlelist_list.tmpl');
 				}
-				
+
 				/// \return array with concrete article lists
 				// \todo: move to articlelist class?
 				private function getAllNonSectionArticleLists() {
@@ -251,25 +251,25 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					}
 					return $articlelist;
 				}
-				
-				
-				
+
+
+
 				/// render backend for placing an article into all article lists (depending on the chosen setions)
 				function renderPlacementModule($input) {
 					// get data
 					$article = $this->al_be->getArticleByArticleId($input['articleid']);
 					$sections = $this->renderAllAvailableSections();
 					$sections_active = $this->renderSectionsForArticle($article);
-					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user')); 	
-					// get ll labels 
+					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user'));
+					// get ll labels
 					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-					$localLang = $localLang[$GLOBALS['LANG']->lang];					
+					$localLang = $localLang[$GLOBALS['LANG']->lang];
 
 					// instanciate smarty
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 					$smarty->assign('input', $input);
-					$smarty->assign('article_workflow_status_title', tx_newspaper_workflow::getRoleTitle($article->getAttribute('workflow_status')));						
+					$smarty->assign('article_workflow_status_title', tx_newspaper_workflow::getRoleTitle($article->getAttribute('workflow_status')));
 //t3lib_div::devlog('mod7', 'newspaper', 0, array('article' => $article));
 					$smarty->assign('article', $article);
 					$smarty->assign('sections', $sections);
@@ -285,14 +285,14 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						'revise' => ($article->getAttribute('workflow_status') == 0)? false : tx_newspaper_workflow::isFunctionalityAvailable('revise'),
 						'place' => tx_newspaper_workflow::isFunctionalityAvailable('place'),
 					));
-					$smarty->assign('workflowlog', 
+					$smarty->assign('workflowlog',
 						tx_newspaper_workflow::getJavascript() .
 						tx_newspaper_workflow::renderBackend('tx_newspaper_article', $input['articleid'], false, true)
 					);
 					return $smarty->fetch('mod7_module.tpl');
 				}
-				
-				
+
+
 
 				// save all the selected sections for an article
 				function saveSectionsForArticle($input) {
@@ -311,8 +311,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						return $article->setSections($sectionIds);
 					}
 				}
-				
-				
+
+
 
 
 /// modifying the workflow status of an article
@@ -324,7 +324,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function placeArticle($input, array $statusHidePublish=array()) {
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
-					
+
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_NONE; // \todo: well, this is a hack (simulating a submit)
 					$log['place'] = true;
 					if (isset($statusHidePublish['hide'])) {
@@ -338,7 +338,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$this->writeLog($input, $log);
 					return true;
 				}
-				
+
 				/// send article further to duty editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -349,7 +349,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; // \todo: well, this is a hack ...
 					$log = array(
 						'workflow_status' => NP_ACTIVE_ROLE_DUTY_EDITOR,
-						'workflow_status_ORG' => $input['workflow_status_ORG'] 
+						'workflow_status_ORG' => $input['workflow_status_ORG']
 					);
 					if (isset($statusHidePublish['hide'])) {
 						$log['hidden'] = true;
@@ -358,11 +358,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$log['hidden'] = false;
 						$this->publishArticle($article);
 					}
-					$article->store();					
+					$article->store();
 					$this->writeLog($input, $log);
 					return true;
 				}
-				
+
 				/// send article back to editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -386,7 +386,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$this->writeLog($input, $log);
 					return true;
 				}
-				
+
 				/// set article status to online
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -395,11 +395,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$log['hidden'] = false;
 					$this->publishArticle($article);
-					$article->store();
 					$this->writeLog($input, $log);
 					return true;
 				}
-				
+
 				/// set article status to offline
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -408,21 +407,20 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$log['hidden'] = true;
 					$this->hideArticle($article);
-					$article->store();
 					$this->writeLog($input, $log);
-					return true;	
+					return true;
 				}
-				
-				
+
+
 				private function hideArticle(tx_newspaper_article $article) {
 					$article->storeHiddenStatusWithHooks(true);
 				}
 				private function publishArticle(tx_newspaper_article $article) {
 					$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
 				}
-				
-				
-				
+
+
+
 				/// write workflow log entry for manual comment (if a manual comment was entered)
 				/**
 				 *  \param $input data submitted in form
@@ -433,11 +431,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					if (!isset($input['placearticleuid']) || !intval($input['placearticleuid'])) {
 						return false; // no article uid, no log entry ...
 					}
-					
+
 					// create a "fake" fieldArray
 					$fieldArray = array();
 					if (isset($type['hidden'])) {
-						$fieldArray['hidden'] = $type['hidden']; 
+						$fieldArray['hidden'] = $type['hidden'];
 					}
 					if (isset($type['workflow_status'])) {
 						$fieldArray['workflow_status'] = $type['workflow_status'];
@@ -451,7 +449,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						$fieldArray['workflow_comment'] = $input['workflow_comment'];
 						$_REQUEST['workflow_comment'] = $input['workflow_comment']; // \todo: remove hack, so tx_newspaper_workflow::processAndLogWorkflow() can work
 					}
-//t3lib_div::devlog('writeLog()','newspaper', 0, array('fake fieldArray' => $fieldArray));					
+//t3lib_div::devlog('writeLog()','newspaper', 0, array('fake fieldArray' => $fieldArray));
 					tx_newspaper_workflow::processAndLogWorkflow('update', 'tx_newspaper_article', intval($input['placearticleuid']), $fieldArray);
 					return true;
 				}
@@ -459,7 +457,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 
 
-				
+
 				/// save all the articles of a single section
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -468,7 +466,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 //t3lib_div::devlog('saveSection()', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
-					
+
 					//split offsets from article ids
 					if (isset($articleIds[0]) && strstr($articleIds[0], '_')) {
 						for ($i = 0; $i < count($articleIds); ++$i) {
@@ -477,13 +475,13 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 							$articleIds[$i] = $articleId[1];
 						}
 					}
-					
+
 					$result = false;
-					
+
 					if (substr($input['element'], 0, 7) == 'placer_') {
 						// section article list
-						$input['section'] = $input['element']; // section al type 
-						
+						$input['section'] = $input['element']; // section al type
+
 						$sectionId = $this->al_be->extractElementId($input['section']);
 						$section = new tx_newspaper_section ($sectionId);
 						$sectionType = get_class($section->getArticleList());
@@ -498,7 +496,7 @@ tx_newspaper::startExecutionTimer();
 								$articleIdsAndOffsets = array ();
 								for ($i = 0; $i < count($articleIds); ++$i) {
 									$articleIdsAndOffsets[] = array(
-										$articleIds[$i], 
+										$articleIds[$i],
 										(isset($offsets[$i])) ? $offsets[$i] : '0'
 									);
 								}
@@ -509,15 +507,15 @@ tx_newspaper::startExecutionTimer();
 						}
 tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section_name') . '")');
 						return true;
-						
+
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
 						// non-section-article list
 						$input['al'] = $input['element']; // non-section al type
-						
+
 						$al_uid = intval($this->al_be->extractElementId($input['al']));
-						
+
 						$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
-						
+
 						// save differently depending on list type
 						switch ($al->getTable()) {
 							case 'tx_newspaper_articlelist_manual' :
@@ -527,23 +525,23 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 								$articleIdsAndOffsets = array ();
 								for ($i = 0; $i < count($articleIds); ++$i) {
 									$articleIdsAndOffsets[] = array(
-										$articleIds[$i], 
+										$articleIds[$i],
 										(isset($offsets[$i])) ? $offsets[$i] : '0'
 									);
 								}
 								$result = $al->assembleFromUIDs($articleIdsAndOffsets);
 							break;
 						}
-	
+
 						return true;
-						
+
 					}
-					t3lib_div::devlog('saveSection() - unknown type [element]', 'newspaper', 3, array('input' => $input));					
+					t3lib_div::devlog('saveSection() - unknown type [element]', 'newspaper', 3, array('input' => $input));
 
 				}
-				
-				
-				/// check several article lists if they have been modified in database 
+
+
+				/// check several article lists if they have been modified in database
 				/** in comparison the the displayed ones in the form
 				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return ?
@@ -552,12 +550,12 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 					$input['sections'] = explode('|', $input['sections']);
 					$articleLists = array();
 					$result = array();
-					
+
 					// get data for all sections
 					foreach ($input['sections'] as $section) {
 						$articleLists[$section] = $this->al_be->getArticleListBySectionId($section, $input['placearticleuid']);
 					}
-					
+
 					// explode selected values ourselves as we must not use pivars any more
 					$selectValues = array();
 					$input['sectionvalues'] = explode('/', $input['sectionvalues']);
@@ -565,7 +563,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 						$input['sectionvalues'][$i] = explode(':', $input['sectionvalues'][$i]);
 						$selectValues[$input['sectionvalues'][$i][0]] = explode('|', $input['sectionvalues'][$i][1]);
 					}
-					
+
 					// do a comparison (length and order) between form input and database
 					$i = 0;
 					foreach ($articleLists as $articleListKey => $articleList) {
@@ -590,15 +588,15 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 						}
 						++$i;
 					}
-										
+
 					return $result;
 				}
-				
-				
-				
-				
-				/// get all available sections 
-				/** Get all sections an article can be assigned to 
+
+
+
+
+				/// get all available sections
+				/** Get all sections an article can be assigned to
 				 *  \return \code array (
 				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
 				 * 		...,
@@ -608,10 +606,10 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 				function renderAllAvailableSections() {
 					return $this->prepareSectionOptions(tx_newspaper_section::getAllSections());
 				}
-				
-				/// get all sections assigned to given article 
+
+				/// get all sections assigned to given article
 				/** Get a list of all sections the article is assigned to
-				 * \param $article object containing an article 
+				 * \param $article object containing an article
 				 *  \return \code array (
 				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
 				 * 		...,
@@ -621,10 +619,10 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 				function renderSectionsForArticle(tx_newspaper_Article $article) {
 				 	return $this->prepareSectionOptions($article->getSections());
 				}
-				 
-				/// render html code to be added to a select box 
+
+				/// render html code to be added to a select box
 				/** Render HTML code to be added to the select boxed in the Smarty template
-				 * \param $sections array containg section objects 
+				 * \param $sections array containg section objects
 				 * \return \code array (
 				 * 		"root_section_uid_1|...|current_section_uid_1" => "Root Section 1 > ... > Parent Section 1 > Current Section 1",
 				 * 		...,
@@ -649,7 +647,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 				 }
 
 
-				
+
 				function getBackendUserById ($userId) {
 					// intentionally done without enableFields check
 					$result = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -661,13 +659,13 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 					}
 					return array();
 				}
-				
-				
+
+
 				function updateArticlelist($input) {
 					if (substr($input['element'], 0, 7) == 'placer_') {
 						// section article list
 						$input['section'] = $input['element']; // section al type
-						return json_encode($this->al_be->getArticleListBySectionId($input['section'], $input['placearticleuid'])); 
+						return json_encode($this->al_be->getArticleListBySectionId($input['section'], $input['placearticleuid']));
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
 						// non-section article list
 						$input['al'] = $input['element']; // non-section al type
@@ -679,7 +677,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
                     $sectionId = $this->al_be->extractElementId($input['element']);
                     $section = new tx_newspaper_section ($sectionId);
                     $articleList = $section->getArticleList();
-                    
+
                     if($articleList instanceof tx_newspaper_ArticleList_Semiautomatic) {
                         $selectedArticleId = array_pop(explode('_', $input['sel_article_id']));
                         $oldOrder = array();
@@ -705,7 +703,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 
                         $alOperation = new tx_newspaper_Articlelist_Operation($selectedArticleId, $action);
                         $reorderList = $articleList->resort($oldOrder, $alOperation);
-                        
+
 //        t3lib_div::devlog('mod7 resort', 'np', 0, array('selectedArticleId' => $selectedArticleId, 'new order' => $reorderList));
 
                         //order must be [0] = offset, [1] = articleId
@@ -727,7 +725,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 					$this->content .= $this->doc->endPage();
 					echo $this->content;
 				}
-				
+
 
 				/**
 				 * Generates the module content

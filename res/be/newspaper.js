@@ -41,16 +41,36 @@ function splitAtPipe(str, pos){
 }
 
 
-function extractQuerystringDirect(param) {
-	return extract_querystring(window.location.search, param);
+/**
+ * @param param Param to search for
+ * @param unescaped Boolean: if the querytsring should be unescaped or not
+ * @return Value of the given param in the querystring
+ */
+function extractQuerystringDirect(param, unescaped) {
+	return extract_querystring(window.location.search, param, unescaped);
 }
+/**
+ * @param querystring Querystring to be searched
+ * @param param Param to search for
+ * @param unescaped Boolean: if the querytsring should be unescaped or not (default: true)
+ * @param escapeParam Boolean if param should be escaped (default: false)
+ * @return Value of the given param in the given querystring
+ */
+function extract_querystring(querystring, param, unescaped, escapeParam) {
 
+	if (unescaped == 'undefined' || unescaped == true) {
+		querystring = unescape(querystring); // true is default
+	}
 
-function extract_querystring(querystring, param) {
-	querystring = unescape(querystring);
-	if (querystring.substring(0, 1) == '?' || querystring.substring(0, 1) == '&') {
+	if (escapeParam == true) {
+		param = escape(param); // escape param
+	}
+
+	if (querystring.substring(0, 1) == '?') {
 		querystring = querystring.substring(1);
 	}
+//alert('q: ' + querystring);
+//alert('p: ' + param);
 	var p = querystring.split('&'); // split querystring
 	for (var i = 0; i < p.length; i++) {
 		var pos = p[i].indexOf('=');

@@ -236,7 +236,7 @@ function collectSections () {
 
 
 function closePlacement() {
-	top.goToModule('txnewspaperMmain_txnewspaperM2');
+	self.location.href = "../mod2/index.php?tx_newspaper_mod2[type]=filter&" + unescape(extractQuerystringDirect("tx_newspaper_mod7[mod2Filter]", false));
 	return false;
 }
 

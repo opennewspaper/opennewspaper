@@ -1,4 +1,4 @@
-{* debug *} 
+{* debug *}
 {* main template for placement mask *}
 
 <script type="text/javascript" language="javascript">
@@ -11,9 +11,10 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 <script src="res/jquery-1.3.2.min.js" type="text/javascript"></script>
 <script src="res/jquery.selectboxes.js" type="text/javascript"></script>
 <script src="res/mod7.js" type="text/javascript"></script>
+<script src="../res/be/newspaper.js" type="text/javascript"></script>
 
 <h2>
-	<a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title} 
+	<a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title}
 	<img src="res/move-spinner.gif" alt="" id="progress" />
 </h2>
 <div style="padding-top: 5px;" />
@@ -95,10 +96,10 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 			<a href="#" class="movetotop" rel="sections_selected">
 				{$ICON.group_totop}
 			</a>
-			<br />				
+			<br />
 			<a href="#" class="moveup" rel="sections_selected">
 				{$ICON.up}
-			</a> 
+			</a>
 			<br />
 			<a href="#" class="movedown" rel="sections_selected">
 				{$ICON.down}
@@ -116,10 +117,10 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 	  <tr>
 	  	<td></td>
 	  	<td colspan="2">
-{* \todo: what is updated here???	  	
+{* \todo: what is updated here???
 			<input type="button" value="{$lang.checkforupdates}" name="tx_newspaper_mod7[checkrefresh]" id="checkrefresh" title="" />
 *}
-{* (see #1141) not working: looses some sections, switches first and last section (sometimes) 
+{* (see #1141) not working: looses some sections, switches first and last section (sometimes)
 <input class="input_image" type="image" src="{$ICON.save}" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
 *}
 			<input type="button" value="{$lang.save}" name="tx_newspaper_mod7[submit]" id="savesections" title="sections_selected" />
@@ -164,7 +165,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 				<input type="button" value="{$lang.place}" class="place" />
 			{/if}
 		</td>
-		<td>	
+		<td>
 			{if $workflow_permissions.place}
 				{if $workflow_permissions.hide}
 					<input type="button" value="{$lang.placehide}" class="placehide" />
@@ -174,7 +175,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 			{/if}
 		</td>
 	</tr>
-	
+
 	<tr>
 		<td>
 			{if $workflow_permissions.revise}

@@ -8,25 +8,26 @@
 		<languageKey index="default" type="array">
 			<label index="title">Moderation list</label>
 
-			<label index="label.status_hidden">Show articles</label>
-			<label index="option.status_hidden_all">all</label>
-			<label index="option.status_hidden_on">hidden only</label>
-			<label index="option.status_hidden_off">published only</label>
+			<label index="label_status_hidden_field">Show articles</label>
+			<label index="option_status_hidden_all">all</label>
+			<label index="option_status_hidden_on">hidden only</label>
+			<label index="option_status_hidden_off">published only</label>
 
 			<label index="label_status_role">Active role</label>
 			<label index="label_status_role_all">All roles</label>
 
-			<label index="label.range">Time range</label>
-			<label index="option.range_today">today</label>
-			<label index="option.range_day">day</label>
-			<label index="option.range_days">days</label>
-			<label index="option.range_no_limit">no limit</label>
+			<label index="label_range">Time range</label>
+			<label index="option_range_today">today</label>
+			<label index="option_range_day">day</label>
+			<label index="option_range_days">days</label>
+			<label index="option_range_no_limit">no limit</label>
 
 			<label index="label_title_number">No.</label>
 			<label index="label_title_article">Article</label>
 			<label index="label_title_author">Author</label>
 			<label index="label_title_be_user">BE user</label>
 			<label index="label_title_modification_date">Stored</label>
+			<label index="label_title_published">Published</label>
 			<label index="label_title_visibility">Online</label>
 			<label index="label_title_publish_date">Publish date</label>
 			<label index="label_title_time_controlled">Time controlled</label>
@@ -38,28 +39,29 @@
 			<label index="label_time_controlled_now_and_future">Was activated at ###STARTTIME###</label>
 			<label index="label_time_controlled_now_but_will_end">Was activated at ###STARTTIME###, will end at ###ENDTIME###</label>
 
-			<label index="label.author">Author</label>
-			<label index="label.section">Section</label>
-			<label index="label.textsearch">Text</label>
-			<label index="label.go">Go</label>
-			<label index="label.reset_filter">Reset filter</label>
-			<label index="label.step_items_per_page">Items per page</label>
-			<label index="label.hide">Hide article</label>
-			<label index="label.unhide">Publish article</label>
-			<label index="label.hidden">Hidden</label>
-			<label index="label.published">Published</label>
-			<label index="label.article_placement">Article placement</label>
-			<label index="label.preview_article">Preview article</label>
-			<label index="label.edit_article">Edit article</label>
-			<label index="label.time">This article uses start time and/ or end time</label>
-			<label index="label.internal_comments">View all internal comments for this article</label>
-			<label index="label.article_add">Add article to list ...</label>
-			<label index="label.delete_article">Delete article</label>
+			<label index="label_author">Author</label>
+			<label index="label_section">Section</label>
+			<label index="label_textsearch">Text</label>
+			<label index="flag_textsearch">#[article id] searches this article only</label>
+			<label index="label_go">Go</label>
+			<label index="label_reset_filter">Reset filter</label>
+			<label index="label_step_items_per_page">Items per page</label>
+			<label index="label_hide">Hide article</label>
+			<label index="label_unhide">Publish article</label>
+			<label index="label_hidden">Hidden</label>
+			<label index="label_published">Published</label>
+			<label index="label_article_placement">Article placement</label>
+			<label index="label_preview_article">Preview article</label>
+			<label index="label_edit_article">Edit article</label>
+			<label index="label_time">This article uses start time and/ or end time</label>
+			<label index="label_internal_comments">View all internal comments for this article</label>
+			<label index="label_article_add">Add article to list ...</label>
+			<label index="label_delete_article">Delete article</label>
 			<label index="message_delete_article">Do you really want to delete this article?</label>
 
-			<label index="label.page_prev">Previous hits</label>
-			<label index="label.page_next">Next hits</label>
-			<label index="label.page_hits">Hit(s)</label>
+			<label index="label_page_prev">Previous hits</label>
+			<label index="label_page_next">Next hits</label>
+			<label index="label_page_hits">Hit(s)</label>
 
 			<label index="label_module_title">Production list</label>
 			<label index="label_state">State</label>
@@ -72,29 +74,33 @@
 			<label index="label_messages_show">Show all messages</label>
 			<label index="label_messages_hide">Fold messages</label>
 
+			<label index="label_new_article">New article</label>
+			<label index="label_start_wizard">Wizard</label>
+
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Produktionsliste</label>
 
-			<label index="label.status_hidden">Artikel anzeigen</label>
-			<label index="option.status_hidden_all">Alle</label>
-			<label index="option.status_hidden_on">Nur versteckte</label>
-			<label index="option.status_hidden_off">Nur publizierte</label>
+			<label index="label_status_hidden_field">Artikel anzeigen</label>
+			<label index="option_status_hidden_all">Alle</label>
+			<label index="option_status_hidden_on">Nur versteckte</label>
+			<label index="option_status_hidden_off">Nur publizierte</label>
 
 			<label index="label_status_role">Rolle</label>
 			<label index="label_status_role_all">Alle Rollen</label>
 
-			<label index="label.range">Zeitfenster</label>
-			<label index="option.range_today">Heute</label>
-			<label index="option.range_day">Tag</label>
-			<label index="option.range_days">Tage</label>
-			<label index="option.range_no_limit">Alle</label>
+			<label index="label_range">Zeitfenster</label>
+			<label index="option_range_today">Heute</label>
+			<label index="option_range_day">Tag</label>
+			<label index="option_range_days">Tage</label>
+			<label index="option_range_no_limit">Alle</label>
 
 			<label index="label_title_number">Nr.</label>
 			<label index="label_title_article">Artikel</label>
 			<label index="label_title_author">Autor</label>
 			<label index="label_title_be_user">Online Redakteur</label>
 			<label index="label_title_modification_date">Gespeichert</label>
+			<label index="label_title_published">Publiziert</label>
 			<label index="label_title_visibility">Online</label>
 			<label index="label_title_publish_date">Publikationsdatum</label>
 			<label index="label_title_time_controlled">Zeitgezündet</label>
@@ -106,28 +112,29 @@
 			<label index="label_time_controlled_now_and_future">Startdatum/-uhrzeit war: ###STARTTIME###</label>
 			<label index="label_time_controlled_now_but_will_end">Startdatum/-uhrzeit war: ###STARTTIME###, Enddatum/-uhrzeit: ###ENDTIME###</label>
 
-			<label index="label.author">Autor</label>
-			<label index="label.section">Ressort</label>
-			<label index="label.textsearch">Text</label>
-			<label index="label.go">Zeigen</label>
-			<label index="label.reset_filter">Filter zurücksetzen</label>
-			<label index="label.step_items_per_page">Artikel pro Seite</label>
-			<label index="label.hide">Artikel verstecken</label>
-			<label index="label.unhide">Artikel publizieren</label>
-			<label index="label.hidden">versteckt</label>
-			<label index="label.published">publiziert</label>
-			<label index="label.article_placement">Artikel platzieren</label>
-			<label index="label.preview_article">Vorschau</label>
-			<label index="label.edit_article">Artikel bearbeiten</label>
-			<label index="label.time">Zeitgezündete Artikel</label>
-			<label index="label.internal_comments">Alle Kommentare anzeigen</label>
-			<label index="label.article_add">Zu Liste hinzufügen</label>
-			<label index="label.delete_article">Artikel löschen</label>
+			<label index="label_author">Autor</label>
+			<label index="label_section">Ressort</label>
+			<label index="label_textsearch">Text</label>
+			<label index="flag_textsearch">#[Artikel-Id] sucht nur diesen Artikel</label>
+			<label index="label_go">Zeigen</label>
+			<label index="label_reset_filter">Filter zurücksetzen</label>
+			<label index="label_step_items_per_page">Artikel pro Seite</label>
+			<label index="label_hide">Artikel verstecken</label>
+			<label index="label_unhide">Artikel publizieren</label>
+			<label index="label_hidden">versteckt</label>
+			<label index="label_published">publiziert</label>
+			<label index="label_article_placement">Artikel platzieren</label>
+			<label index="label_preview_article">Vorschau</label>
+			<label index="label_edit_article">Artikel bearbeiten</label>
+			<label index="label_time">Zeitgezündete Artikel</label>
+			<label index="label_internal_comments">Alle Kommentare anzeigen</label>
+			<label index="label_article_add">Zu Liste hinzufügen</label>
+			<label index="label_delete_article">Artikel löschen</label>
 			<label index="message_delete_article">Möchten Sie diesen Artikel wirklich löschen?</label>
 
-			<label index="label.page_prev">Vorige</label>
-			<label index="label.page_next">Nächste</label>
-			<label index="label.page_hits">Treffer</label>
+			<label index="label_page_prev">Vorige</label>
+			<label index="label_page_next">Nächste</label>
+			<label index="label_page_hits">Treffer</label>
 
 			<label index="label_module_title">Produktionsliste</label>
 			<label index="label_state">Status</label>
@@ -139,6 +146,10 @@
 			<label index="label_by_part">von</label>
 			<label index="label_messages_show">Alle Nachrichten anzeigen</label>
 			<label index="label_messages_hide">Nachrichten einklappen</label>
+
+			<label index="label_new_article">Neuer Artikel</label>
+			<label index="label_start_wizard">Wizard</label>
+
 		</languageKey>
 	</data>
 </T3locallang>

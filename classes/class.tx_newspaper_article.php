@@ -924,7 +924,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
-    /** This function uses Typo3 datamap functionality to assure Typo3 save hooks are called, so registered Hooks in newspaper are called too.
+    /** This function uses Typo3 datamap functionality to assure Typo3 save hooks are called,
+     *  so registered Hooks in newspaper are called too.
      *  This function writes the hidden status into the database immediately.
      *  \param $uid article uid
      *  \param $hidden boolean value specifying if the article is hidden or published
@@ -943,15 +944,19 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $tce = t3lib_div::makeInstance('t3lib_TCEmain');
         $tce->start($datamap, array());
         $tce->process_datamap();
+    	if (count($tce->errorLog)){
+			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+		}
 
         // store in object
         $this->setAttribute('hidden', $hidden_value);
 
-        if ($hidden == 0) {
-            // if article is published the publsih date might have been stored in save hook, so re-read it from db
+        if (!$hidden_value) {
+            // if article is published the publish date might have been stored in save hook, so re-read it from db
             $articleFromDb = new tx_newspaper_article($this->getUid());
             $this->setAttribute('publish_date', $articleFromDb->getAttribute('publish_date'));
         }
+        $this->store();
     }
 
     /// Registers a hook that is called during prepare_render()

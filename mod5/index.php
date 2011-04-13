@@ -496,6 +496,8 @@ t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input
 			'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
 		));
 
+		$smarty->assign('INPUT', $input);
+
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 		$smarty->assign('SHOW_LOREM', ($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.use_lorem') != 0));
 
@@ -559,6 +561,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 	/// creates a new article
 	private function createNewArticle($input) {
+//t3lib_div::devlog('createNewArticle()', 'newspaper', 0, array('input' => $input));
 		/// just a plain typo3 article
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
@@ -587,7 +590,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 		// add calling module to url in order to return to the correct calling module ...
 		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
-				'typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
+				'typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModuleAndFilter($input) . '&tx_newspaper_mod5[mod2Filter]=' . $input['mod2Filter'] . '&edit[tx_newspaper_article][' .
 				$new_article->getUid() . ']=edit';
 		header('Location: ' . $url);
 	}
@@ -756,7 +759,7 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 
 		// add calling module to url in order to return to the correct calling module ...
         $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-                '/typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModule($input) . '&edit[tx_newspaper_article][' .
+                '/typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModuleAndFilter($input) . '&edit[tx_newspaper_article][' .
                 $new_article->getUid() . ']=edit';
 
         header('Location: ' . $url); // redirect to article backend
@@ -767,8 +770,11 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 		tx_newspaper_workflow::changeRole(intval($input['new_role']));
 	}
 
-	private function extractCallingModule(array $input=array()) {
-		return (intval($input['calling_module']))? intval($input['calling_module']) : 5; // 5 (= this module) is default
+	private function extractCallingModuleAndFilter(array $input=array()) {
+		$url = 'tx_newspaper_mod5%5Bcalling_module%5D=';
+		$url .= (intval($input['calling_module']))? intval($input['calling_module']) : 5; // 5 (= this module) is default
+		$url .= '&tx_newspaper_mod5%5Bmod2Filter%5D=' . $input['mod2Filter'];
+		return rawurlencode($url);
 	}
 
 

@@ -1,0 +1,519 @@
+<style type="text/css">
+
+/* additional CSS / production list */
+
+body {
+	padding-left:20px;
+	background-color:white;
+}
+
+.red {
+	color:#c61940;
+}
+
+#tx_newspaper_mod3 {
+	width:930px;
+	padding:10px;
+}
+
+#tx_newspaper_mod3 body, p, a, td {
+	font-family:Arial,Helvetica,sans-serif !important;
+	font-size:11px;
+	margin:0;
+	color:black;
+}
+
+#tx_newspaper_mod3 a:hover {
+	color:#C61940;
+}
+
+#tx_newspaper_mod3 h1 {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	text-align:left;
+}
+
+#tx_newspaper_mod3 .headline {
+	text-transform:uppercase;
+	border-bottom:1px solid #AAA;
+	margin-bottom:20px;
+	padding-bottom:5px;
+	width:920px;
+	font-size:18px;
+	font-weight:normal;
+	color:#777;
+}
+
+
+/* wizards */
+
+#wizards {
+	position: absolute;
+	padding: 10px;
+	margin: -8px 0 0 650px;
+	width: 260px;
+}
+
+
+/* filterbox */
+
+#filter {
+	position:absolute;
+	padding:10px;
+	margin:30px 0 0 650px;
+	width:250px;
+	background-color:#EFEDE4;
+	border:1px solid #AAA;
+	clear:left;
+}
+
+#filter br, br {
+	clear:left;
+}
+
+#filter input, #filter select, #filter label, #filter textarea {
+	display:block;
+	float:left;
+	width:150px;
+	margin-bottom:5px;
+	padding:2px 0;
+}
+
+#filter label {
+	width:100px;
+}
+
+#filter label.checkbox {
+	width:200px;
+	}
+
+#filter .cb {
+	width:15px;
+	margin-top:3px;
+}
+
+#filter .submit {
+	padding:0;
+	margin:15px 0 0 100px;
+	width:150px;
+}
+
+/*  hits */
+
+#browsePages {
+	width:630px;
+	margin:10px 30px 17px 0;
+	text-align:center;
+	height:13px;
+}
+
+#browsePages a {
+	text-decoration:none;
+	display:block;
+}
+
+#browsePages .left {
+	float:left;
+}
+
+#browsePages .right {
+	float:right;
+}
+
+#browsePages a.left {
+	text-decoration:none;
+	font-size:10px;
+	text-transform:uppercase;
+    background-image:url(../res/be/img/arrow_left.gif);
+    background-repeat:no-repeat;
+    background-position:0 2px;
+    padding:2px 10px  8px 15px;
+	}
+
+#browsePages a:hover.left {
+	background-image:url(../res/be/img/arrow_left_over.gif);
+}
+
+#browsePages a.right {
+	text-decoration:none;
+	font-size:10px;
+	text-transform:uppercase;
+    background-image:url(../res/be/img/arrow_right.gif);
+    background-repeat:no-repeat;
+    background-position:right 2px;
+    padding:2px 15px  8px 0;
+	}
+
+#browsePages a:hover.right {
+	background-image:url(../res/be/img/arrow_right_over.gif);
+}
+
+#browsePages span {
+	color:#999;
+}
+
+
+/* production list */
+
+#modlist {
+	clear:left;
+}
+
+#modlist .artikel {
+	margin-top:2px;
+	clear:left;
+	width:635pX;
+	display:inline-block;
+	position:relative;
+}
+
+#modlist div.artikel:hover div.listrow {
+	background-color:#E7E7E7;
+}
+
+#modlist div.artikel:hover div.status {
+	background-image:url(../res/be/img/bg_stat_normal_on.gif);
+}
+
+#modlist .listrow {
+	margin-left:2px;
+	padding:8px 0 8px 10px;
+	background-color:#F4F4F4;
+	float:left;
+	height:100px;
+	display:inline-block;
+}
+
+#modlist .r1 {
+	width:50px;
+}
+
+#modlist .r2 {
+	width:299px;
+	position:relative;
+}
+
+#modlist .r3 {
+	width:248px;
+	overflow:hidden;
+}
+
+#modlist .allMessages {
+	display:none;
+	position:absolute;
+	margin:0 0 0 375px;
+	padding:8px 0 8px 10px;
+	overflow:visible;
+	z-index:50;
+	background-color:#999999;
+	width:248px;
+	min-height:100px;
+}
+
+#modlist .head {
+	background-color:#999;
+	height:13px;
+}
+
+#modlist .head p {
+	color:#EEE;
+}
+
+#modlist .status {
+	background-image:url(../res/be/img/bg_stat_normal.gif);
+}
+
+#modlist .online, #modlist div.artikel:hover div.online {
+	background-image:url(../res/be/img/bg_stat_online.gif);
+}
+
+#modlist .status a.statButton {
+	margin:15px 0 0 7px;
+}
+
+#modlist .status img.statWatch {
+	margin:25px 0 0 15px;
+}
+
+#modlist .status p.statRole {
+	width:60px;
+	margin:12px -10px;
+	text-align:center;
+	text-decoration:none;
+	font-size:11px;
+	line-height:10px;
+	color:white;
+    padding:4px 0 3px 0;
+	height:20px;
+}
+
+#modlist .status p.bg_wf0 {
+	background-color:#CC0000;
+}
+
+#modlist .status p.bg_wf1 {
+	background-color:#FFCC00;
+}
+
+#modlist .status p.bg_wf1000 {
+	background-color:#66CC00;
+}
+
+#modlist h1, #browsePages h1 {
+	color:#000;
+	margin:5px 0 0 0;
+	font:normal 20.2px/22px Arial,sans-serif;
+}
+
+#modlist h2 {
+	color:grey;
+	font:12px/12px bold normal Arial,sans-serif;
+	background:none;
+	text-align:left;
+	margin:0;
+	padding:0;
+}
+
+#modlist .r2 div.titelinfo {
+	bottom:10px;
+	position:absolute;
+	margin-top:33px;
+}
+
+#modlist p.autor {
+	color:#777;
+	float:left;
+}
+#modlist .allMessages p.autor {
+	color:#eeeeee;
+}
+
+
+#modlist p.right {
+	float:right;
+	margin-right:10px;
+}
+
+#modlist p.message {
+	clear:both;
+	margin-bottom:4px;
+}
+
+#modlist p.message.important {
+	color:#C61940;
+}
+
+#modlist .more_feld, #modlist .less_feld {
+	filter:alpha(opacity=90);
+	-moz-opacity:0.90;
+	-khtml-opacity:0.90;
+	opacity:0.90;
+}
+
+#modlist .less_feld {
+	filter:alpha(opacity=90);
+	-moz-opacity:0.90;
+	-khtml-opacity:0.90;
+	opacity:0.90;
+	position:absolute;
+}
+
+#modlist p.message.error_message {
+	color:#C61940;
+	font-weight:bold;
+}
+
+
+#modlist a.more_messages {
+	text-decoration:none;
+	font-size:10px;
+	text-transform:uppercase;
+    background-image:url(../res/be/img/m_arrow_down.gif);
+    background-repeat:no-repeat;
+    background-position:10px 8px;
+    padding:4px 8px  8px 25px;
+	width:225px;
+	display:block;
+	margin:-8px 0 7px -10px;
+	background-color:#FFF;
+}
+
+#modlist a.less_messages {
+	text-decoration:none;
+	font-size:10px;
+	text-transform:uppercase;
+    background-image:url(../res/be/img/m_arrow_up.gif);
+    background-repeat:no-repeat;
+    background-position:10px 8px;
+    padding:4px 8px  8px 25px;
+	background-color: #FFF;
+	display: block;
+	margin: -8px 0 7px -10px;
+}
+
+#modlist a.more_messages:hover {
+    background-image:url(../res/be/img/m_arrow_down_on.gif);
+}
+
+#modlist a.less_messages:hover {
+    background-image:url(../res/be/img/m_arrow_up_on.gif);
+}
+
+#modlist a.more {
+	text-decoration:none;
+	font-size:10px;
+	text-transform:uppercase;
+    background-image:url(../res/be/img/arrow_down.gif);
+    background-repeat:no-repeat;
+    background-position:-2px 3px;
+    padding:2px 8px  8px 13px;
+}
+
+#modlist a.more:hover {
+	background-image:url(../res/be/img/arrow_down_over.gif);
+}
+
+#tx_newspaper_mod3 .comments p {
+	color:grey;
+	font-size:9px;
+	margin-bottom:5px;
+}
+
+#modlist a.kicker {
+	text-align:left;
+}
+
+#tx_newspaper_mod3 table {
+	table-layout:auto;
+	padding:0;
+	margin:0;
+	border-collapse:collapse;
+	width:630px;
+}
+
+#tx_newspaper_mod3 table.full {
+	width:920px;
+}
+
+#tx_newspaper_mod3 table a {
+	text-decoration:none;
+	font:normal normal 12px/12px Arial,sans-serif;
+	color:#666;
+	float:left;
+	margin:0 25px 0 8px;
+}
+
+#tx_newspaper_mod3 tr {
+	border-right:1px solid white;
+}
+
+#tx_newspaper_mod3 td {
+	vertical-align:top;
+	border:0;
+	padding:5px;
+}
+
+
+#tx_newspaper_mod3 tr:hover.noborder, #tx_newspaper_mod3 .wrapper.on {
+	background-color:#EFEDE4;
+}
+
+.bg1 {
+	border-bottom:2px solid #DDD;
+}
+
+.noborder {
+	border:0;
+}
+
+.bg2 {
+	background-color:#d0d0d0;
+}
+
+
+.kicker {
+	color:#999;
+}
+
+.comment_box {
+	display:none;
+	background-color:white;
+}
+
+.floatleft {
+	float:left;
+	margin-right:5px;
+}
+
+#tx_newspaper_mod3 .hide {
+	position:absolute;
+	display:none;
+	z-index:50;
+	margin:0 0 0 169px;
+}
+
+#tx_newspaper_mod3 .hide div {
+	padding-left: 2px;
+	padding-right: 2px;
+	background-color:#FFF;
+	text-align:center;
+	display:inline-block;
+}
+
+#tx_newspaper_mod3 .hide div a {
+	width:30px;
+	background-color:#E9E9E9;
+	text-align:center;
+	display:inline-block;
+}
+
+#tx_newspaper_mod3 .hide div a:hover {
+	background-color:#FFF;
+}
+
+#tx_newspaper_mod3 .hide.seitengest {
+	margin:-25px 0 0 35px !important;
+}
+
+#tx_newspaper_mod3 div.artikel:hover .hide {
+	position:absolute;
+	display:block;
+}
+
+#tx_newspaper_mod3 .wrapper {
+	background-color:#FFF;
+	display:inline-block;
+	margin-top:0px;
+	width:630px;
+	padding:0;
+	border-bottom:2px solid #DDDDDD;
+}
+
+#tx_newspaper_mod3 .wrapper:hover {
+	background-color:#EFEDE4;
+}
+
+#tx_newspaper_mod3 .sg {
+	display:block;
+	width:292px;
+	float:left;
+	margin:5px 0;
+	padding:5px 10px;
+}
+
+#tx_newspaper_mod3 .sg.right {
+	margin-left:5px;
+	background-color:#E2E2E2;
+}
+
+#tx_newspaper_mod3 .sg table {
+	margin:-5px -10px !important;
+	width:320px !important;
+}
+
+#tx_newspaper_mod3 .sg img {
+	float:left;
+	margin-right:5px;
+}
+
+</style>
