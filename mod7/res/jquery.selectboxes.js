@@ -672,12 +672,18 @@ $.fn.addOptionAboveSelected = function() {
     var selectList = document.getElementById(selectId);
 
     if(this.selectedOptions().size() == 0) {
-       selectList.add(newOpt, selectList.options[0]);
+
+        try {
+            selectList.add(newOpt, selectList.options[0]);
+        } catch(e) {
+            selectList.add(newOpt);
+        }
+
     } else {
         if(!this.containsOption(value)) {
             var selectedOpt = selectList.options[selectList.selectedIndex];
             this.unselectAllOptions();
-            selectList.add(newOpt, selectedOpt);
+            selectList.insertBefore(newOpt, selectedOpt);
         }
     }
 }
