@@ -1356,7 +1356,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $article->removeDanglingRelations();
     }
 
-    private static function updateDependencyTree(tx_newspaper_Article $article) {
+    public static function updateDependencyTree(tx_newspaper_Article $article) {
 
         $ts_config = tx_newspaper::getTSConfig();
         if ($ts_config['newspaper.']['use_dependency_tree']) {
