@@ -1300,7 +1300,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$this->extra_attributes['uid'] = intval($uid); 
 	}
 
- 	
+
+    public static function updateDependencyTree(tx_newspaper_PageZone $pagezone) {
+
+        $ts_config = tx_newspaper::getTSConfig();
+        if ($ts_config['newspaper.']['use_dependency_tree']) {
+            $tree = tx_newspaper_DependencyTree::generateFromPagezone($pagezone);
+            $tree->executeActionsOnPages();
+        }
+    }
+
 	protected $uid = 0;				///< The UID of the record in the concrete table
  	protected $pagezone_uid = 0;	///< The UID of the record in the abstract PageZone table
  	protected $extra_uid = 0;		///< The UID of the record in the abstract Extra table

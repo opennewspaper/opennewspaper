@@ -119,6 +119,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	private function processInheritanceSourceChange($pz_uid, $new_parent_pagezone_value) {
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // create pagezone or article
 		$pz->changeParent(intval($new_parent_pagezone_value));
+        tx_newspaper_PageZone::updateDependencyTree($pz);
 		die();
 	}
 
@@ -251,7 +252,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 		if ($pz->isConcreteArticle()) {
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
-		}
+		} else {
+            tx_newspaper_PageZone::updateDependencyTree($pz);
+        }
 
 		die();
 	}

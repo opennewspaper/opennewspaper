@@ -177,6 +177,18 @@ class tx_newspaper_DependencyTree {
         return $tree;
     }
 
+    static public function generateFromPagezone(tx_newspaper_Pagezone_Page $pagezone) {
+        $tree = new tx_newspaper_DependencyTree();
+
+        if ($pagezone instanceof tx_newspaper_PageZone_Page) {
+            $tree->addAllExtraPagesForPagezone($pagezone);
+        } else {
+            $tree->markAsCleared();
+        }
+
+        return $tree;
+    }
+
     /// Registers an action that is executed for every page in the tree on demand.
     /** The actions are stored in an array whose entries are arrays of the form
      *  \code array(
