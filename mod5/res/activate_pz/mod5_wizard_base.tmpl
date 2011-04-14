@@ -9,6 +9,16 @@
 </style>
 {/literal}
 
+{literal}
+<script type="text/javascript">
+	function checkConfirmation(msg, url) {
+		if (confirm(msg)) {
+			self.location.href = url;
+		}
+	}
+</script>
+{/literal}
+
 <h3> {$LL.label_admin_wizard_pagezone} </h3>
 
 {if $root_sections}

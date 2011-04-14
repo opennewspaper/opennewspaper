@@ -317,7 +317,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				$backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
 			} else {
 				// action is chosen, so perform action now ...
-				if ($input['action'] == 1) {
+				if ($input['action'] == 'activatePz') {
 					// activate ...
 					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
 						foreach($rootSection->getChildSections(true) as $s) {
@@ -328,13 +328,14 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					}
 					// insert backend success message
 					$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_pagezone_activate_success'];
-				} elseif ($input['action'] == -1) {
+				} elseif ($input['action'] == 'deactivatePz') {
 					// delete ...
 					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
 						foreach($rootSection->getChildSections(true) as $s) {
 							$p = $s->getSubPage($pagetype);
-							$pz = $p->getPagezone($pagezonetype);
-							$pz->delete();
+							if ($pz = $p->getPagezone($pagezonetype)) {
+								$pz->delete();
+							}
 							// \todo: delete page if last pagezone is deleted?
 						}
 					}
@@ -345,6 +346,25 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				}
 			}
 		}
+
+
+		if (isset($input['pagetype_uid']) && $input['action'] == 'deactivateP') {
+			$pagetype = new tx_newspaper_pagetype(intval($input['pagetype_uid']));
+			// delete pages ...
+			foreach(tx_newspaper_section::getRootSections() as $rootSection) {
+				foreach($rootSection->getChildSections(true) as $s) {
+					if ($p = $s->getSubPage($pagetype)) {
+						foreach($p->getPagezones() as $pz) {
+							$pz->delete();
+						}
+						$p->delete();
+					}
+				}
+			}
+			// insert backend success message
+			$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_page_deactivate_success'];
+		}
+
 
 		$this->content .= $this->doc->section('', $backend, 0, 1);
 		$this->content.=$this->doc->spacer(10);
@@ -396,7 +416,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	 *  \return Wizard page (steps within wizard)
 	 */
 	private function renderWizardPagezoneSelector(array $input) {
-t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input' => $input));
 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
 
@@ -427,6 +447,7 @@ t3lib_div::devlog('renderWizardPagezoneSelector()', 'newspaper', 0, array('input
 			$smarty_sub->assign('pagetype', $pagetype);
 			$pagezoneTypes = tx_newspaper_pagezonetype::getAvailablePagezoneTypes(false);
 			$smarty_sub->assign('pagezone_types', $pagezoneTypes);
+			$smarty_sub->assign('input', $input);
 			$currentStep = $smarty_sub->fetch('mod5_wizard_pagezonetype.tmpl');
 		}
 		$smarty->assign('currentStep', $currentStep);

@@ -41,9 +41,11 @@
 			<label index="label_admin_wizard_pagetype">Page type</label>
 			<label index="label_admin_wizard_pagezonetype">Page zone type</label>
 			<label index="label_admin_wizard_pagezone_activate">Activate the chosen pagezone type for the chosen page type.</label>
-			<label index="label_admin_wizard_pagezone_deactivate">De-activate the chosen pagezone type for the chosen page type. ARE YOU SURE YOU WANT TO DO THIS? This action can't be undone. Web elements placed on these pagezone can't be restored.</label>
+			<label index="label_admin_wizard_pagezone_deactivate">De-activate the chosen pagezone type for the chosen page type. ARE YOU SURE YOU WANT TO DO THIS? This action can't be undone. Web elements placed on these pagezones can't be restored.</label>
 			<label index="message_admin_wizard_pagezone_activate_success">The pagezones have been activated successfully.</label>
 			<label index="message_admin_wizard_pagezone_deactivate_success">The pagezones have been de-activated successfully.</label>
+			<label index="label_admin_wizard_page_deactivate">De-activate the chosen page type. ARE YOU SURE YOU WANT TO DO THIS? This action can't be undone. Web elements placed on these pages/pagezones can't be restored.</label>
+			<label index="message_admin_wizard_page_deactivate_success">The pages have been activated successfully.</label>
 			<label index="label_admin_wizard_inheritance">Pagezone: inheritance source (recursivly)</label>
 			<label index="label_admin_wizard_inheritance_activate">Set inheritance source for all pagezone to "Same page type in upper level" - EXCEPT for root sections</label>
 			<label index="message_admin_wizard_inheritance_activate_success">The inheritance source for the pagezones have been set successfully.</label>
@@ -84,9 +86,11 @@
 			<label index="label_admin_wizard_pagetype">Seitentyp</label>
 			<label index="label_admin_wizard_pagezonetype">Seitenbereichstyp</label>
 			<label index="label_admin_wizard_pagezone_activate">Ausgewählten Seitenbereich für den ausgewählten Seitentyp freischalten</label>
-			<label index="label_admin_wizard_pagezone_deactivate">Ausgewählten Seitenbereich für den ausgewählten Seitentyp löschen. SIND SIE SICHER? Diese Aktion kann nicht widerrufen werden. Platzierte Web-Elemete können nicht wiederhergestellt werden.</label>
+			<label index="label_admin_wizard_pagezone_deactivate">Ausgewählten Seitenbereich für den ausgewählten Seitentyp löschen. SIND SIE SICHER? Diese Aktion kann nicht widerrufen werden. Platzierte Web-Elemente können nicht wiederhergestellt werden.</label>
 			<label index="message_admin_wizard_pagezone_activate_success">Die Seitenbereiche wurden erfolgreich aktiviert.</label>
 			<label index="message_admin_wizard_pagezone_deactivate_success">Die Seitenbereiche wurden erfolgreich gelöscht.</label>
+			<label index="label_admin_wizard_page_deactivate">Ausgewählten Seitentyp löschen. SIND SIE SICHER? Diese Aktion kann nicht widerrufen werden. Platzierte Web-Elemente können nicht wiederhergestellt werden.</label>
+			<label index="message_admin_wizard_page_deactivate_success">Die Seiten wurden erfolgreich gelöscht.</label>
 			<label index="label_admin_wizard_inheritance">Seitenbereich: Vererbungsquelle bestimmen (rekursiv)</label>
 			<label index="label_admin_wizard_inheritance_activate">Vererbungsquelle für alle Seitenbereiche setzen auf: "Gleicher Seitentyp/höhere Ebene" - AUSSER Root-Ressorts</label>
 			<label index="message_admin_wizard_inheritance_activate_success">Die Vererbungsquelle für die Seitenbereiche wurden erfolgreich gesetzt.</label>

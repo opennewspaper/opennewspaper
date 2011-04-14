@@ -10,3 +10,8 @@
 {else}
 
 {/if}
+
+{if !$input.action}
+	<div> {$LL.label_admin_wizard_please_chose} </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_page_deactivate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[action]=deactivateP');">{$LL.label_admin_wizard_page_deactivate}</a> </div>
+{/if}
