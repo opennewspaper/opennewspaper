@@ -395,7 +395,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						// all active pages ...
 						foreach($p->getActivePageZones() as $pz) {
 							// all active pagezones ...
-//							$pz->changeParent(0);// set to default: inherit from same page type above
+							$pz->changeParent(0);// set to default: inherit from same page type above
 						}
 					}
 				}
