@@ -44,7 +44,6 @@ class fullWidthDoc_mod3 extends template {
 
 
 
-
 $LANG->includeLLFile('EXT:newspaper/mod3/locallang.xml');
 require_once(PATH_t3lib . 'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
@@ -125,7 +124,7 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 
 
 	/// called via ajax: render list of extras for concrete article
-	/// \param $article_uid uid of concrete(!) article
+	/** \param $article_uid uid of concrete(!) article */
 	private function processReloadExtaInConcreteArticle($article_uid) {
 		$a = new tx_newspaper_article($article_uid);
 		if ($a->isConcreteArticle()) {
@@ -280,20 +279,23 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
     }
 
 	/// called via ajax: toggle show checkbox for extra on pagezone
-	/// \param $extra_uid uid of extra
-	/// \param $show boolean value wheater to show or not this extra
+	/** \param $extra_uid uid of extra
+	 * \param $show boolean value wheater to show or not this extra
+     */
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
+        tx_newspaper_Extra::updateDependencyTree($e);
 		die();
 	}
 
 	/// called via ajax: create an extra (using a shortcut link in "extra in article"); is used in concrete articles only
-	/// \param $article_uid article uid
-	/// \param $extra_class name of extra class (needed if $extra_uid is 0)
-	/// \param $extra_uid if not 0 the uid of the abstract extra to be duplicated
-	/// \param $paragraph paragraph for (non-duplicated) extras
+	/** \param $article_uid article uid
+	 *  \param $extra_class name of extra class (needed if $extra_uid is 0)
+	 *  \param $extra_uid if not 0 the uid of the abstract extra to be duplicated
+	 *  \param $paragraph paragraph for (non-duplicated) extras
+     */
 	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph, $show = 1) {
 //t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid, 'paragraph' => $paragraph));
 		$extra_uid = intval($extra_uid);
@@ -339,6 +341,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$pz->setInherits($e, $pass_down);
 //		$e->setAttribute('is_inheritable', $pass_down);
 //		$e->store();
+        tx_newspaper_Extra::updateDependencyTree($e);
 		die();
 	}
 
@@ -396,18 +399,6 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$obj->store();
 		die();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -684,139 +675,10 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	}
 
 
-
-				/**
-				 * Main function of the module. Write the content to $this->content
-				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
-				 */
-				function main()	{
-
-					$this->input = t3lib_div::GParrayMerged($this->prefixId); // store params
-
-					$this->check4Ajax(); /// if this is an ajax call, the request gets process and execution of this file ends with die()
-
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-
-					$access = $GLOBALS['BE_USER']->user['uid']? true : false; // \todo: better check needed
-
-					if ($access)	{
-
-							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod3');
-						$this->doc->backPath = $BACK_PATH;
-						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
-
-							// JavaScript
-						$this->doc->JScode = '
-							<script language="javascript" type="text/javascript">
-								script_ended = 0;
-								function jumpToUrl(URL)	{
-									document.location = URL;
-								}
-							</script>
-						';
-						$this->doc->postCode='
-							<script language="javascript" type="text/javascript">
-								script_ended = 1;
-								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-							</script>
-						';
-
-						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />' . $LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
-
-						$this->content.=$this->doc->startPage('');
-
-						// Render content:
-						$this->moduleContent();
-
-						$this->content.=$this->doc->spacer(10);
-					} else {
-							// If no access or if ID == zero
-
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
-					}
-
-				}
-
-				/**
-				 * Prints out the module HTML
-				 *
-				 * @return	void
-				 */
-				function printContent()	{
-
-					$this->content.=$this->doc->endPage();
-					echo $this->content;
-				}
-
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent() {
-					global $LANG;
-
-					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
-						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false));
-					}
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagetype')) {
-						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available', false));
-					}
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagezonetype')) {
-						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
-					}
-
-//global $BE_USER; debug(array('section id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"), 'page type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"), 'pagezone type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")));
-					$this->readUidList(); // get ids for section, page and pagezone
-//debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
-//debug($_REQUEST);
-
-					if (!$this->section_id) {
-						if (tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
-							/// check if at least one section exists
-							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false);
-						} else {
-							/// no section id found, just display message to choose a section from the section tree
-							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_chosen', false);
-						}
-					} else if (!$this->page_id) {
-						/// no page has been activated for given section
-						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_page_available_for_section', false);
-					} else if (!$this->pagezone_id) {
-						/// no pagezone has been activated for given page for given section
-						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available_for_page', false);
-					} else {
-						/// render form for pagezone
-						try {
-							$content = tx_newspaper_BE::renderBackendPageZone(
-								tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id)),
-								$this->show_levels_above
-							);
-						} catch(tx_newspaper_PathNotFoundException $e) {
-							// \todo localization
-							die('Templates could\'t be found. Is TSConfig newspaper.defaultTemplate set to the correct path?');
-						}
-
-					}
-
-					$this->content .= $this->doc->section('', $content, 0, 1);
-
-				}
-
-
 	/// read section_is, page_id and pagezone_id (if possible)
-	/// fills $this->section_id, $this->page_id and $this->pagezone_id
-	/// \return void
+	/** fills $this->section_id, $this->page_id and $this->pagezone_id
+	 * \return void
+     */
 	function readUidList() {
 		global $BE_USER;
 		/// \todo: check permissions?
@@ -952,8 +814,133 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 
 
+				/**
+				 * Main function of the module. Write the content to $this->content
+				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
+				 *
+				 * @return	[type]		...
+				 */
+				function main()	{
 
+					$this->input = t3lib_div::GParrayMerged($this->prefixId); // store params
 
+					$this->check4Ajax(); /// if this is an ajax call, the request gets process and execution of this file ends with die()
+
+					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+
+					$access = $GLOBALS['BE_USER']->user['uid']? true : false; // \todo: better check needed
+
+					if ($access)	{
+
+							// Draw the header.
+						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod3');
+						$this->doc->backPath = $BACK_PATH;
+						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+
+							// JavaScript
+						$this->doc->JScode = '
+							<script language="javascript" type="text/javascript">
+								script_ended = 0;
+								function jumpToUrl(URL)	{
+									document.location = URL;
+								}
+							</script>
+						';
+						$this->doc->postCode='
+							<script language="javascript" type="text/javascript">
+								script_ended = 1;
+								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
+							</script>
+						';
+
+						$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />' . $LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
+
+						$this->content.=$this->doc->startPage('');
+
+						// Render content:
+						$this->moduleContent();
+
+						$this->content.=$this->doc->spacer(10);
+					} else {
+							// If no access or if ID == zero
+
+						$this->doc = t3lib_div::makeInstance('mediumDoc');
+						$this->doc->backPath = $BACK_PATH;
+
+						$this->content.=$this->doc->startPage($LANG->getLL('title'));
+						$this->content.=$this->doc->header($LANG->getLL('title'));
+						$this->content.=$this->doc->spacer(5);
+						$this->content.=$this->doc->spacer(10);
+					}
+
+				}
+
+				/**
+				 * Prints out the module HTML
+				 *
+				 * @return	void
+				 */
+				function printContent()	{
+
+					$this->content.=$this->doc->endPage();
+					echo $this->content;
+				}
+
+				/**
+				 * Generates the module content
+				 *
+				 * @return	void
+				 */
+				function moduleContent() {
+					global $LANG;
+
+					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false));
+					}
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagetype')) {
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available', false));
+					}
+					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagezonetype')) {
+						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
+					}
+
+//global $BE_USER; debug(array('section id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/section_id"), 'page type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/page_type_id"), 'pagezone type id' => $BE_USER->getModuleData("tx_newspaper/mod3/index.php/pagezone_type_id")));
+					$this->readUidList(); // get ids for section, page and pagezone
+//debug(array('section id' => $this->section_id, 'page type id' => $this->page_type_id, 'pagezone type id' => $this->pagezone_type_id, 'page id' => $this->page_id, 'pagezone id' => $this->pagezone_id));
+//debug($_REQUEST);
+
+					if (!$this->section_id) {
+						if (tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
+							/// check if at least one section exists
+							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false);
+						} else {
+							/// no section id found, just display message to choose a section from the section tree
+							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_chosen', false);
+						}
+					} else if (!$this->page_id) {
+						/// no page has been activated for given section
+						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_page_available_for_section', false);
+					} else if (!$this->pagezone_id) {
+						/// no pagezone has been activated for given page for given section
+						$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available_for_page', false);
+					} else {
+						/// render form for pagezone
+						try {
+							$content = tx_newspaper_BE::renderBackendPageZone(
+								tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->pagezone_id)),
+								$this->show_levels_above
+							);
+						} catch(tx_newspaper_PathNotFoundException $e) {
+							// \todo localization
+							die('Templates could\'t be found. Is TSConfig newspaper.defaultTemplate set to the correct path?');
+						}
+
+					}
+
+					$this->content .= $this->doc->section('', $content, 0, 1);
+
+				}
 
 
 	/**

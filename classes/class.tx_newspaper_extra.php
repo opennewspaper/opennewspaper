@@ -807,6 +807,14 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		self::writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 	}
 
+    public static function updateDependencyTree(tx_newspaper_Extra $extra) {
+        $ts_config = tx_newspaper::getTSConfig();
+        if ($ts_config['newspaper.']['use_dependency_tree']) {
+            $tree = tx_newspaper_DependencyTree::generateFromExtra($extra);
+            $tree->executeActionsOnPages();
+        }
+    }
+
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records if a new extra is added to a pagezone
     /** \todo: explain in detail what's happening here!
      */

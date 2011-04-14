@@ -267,8 +267,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Read data from table \p $table with UID \p $uid
-
-    /** \param $uid UID of the record to read
+    /**
+     *  \param $uid UID of the record to read
      *  \param $table SQL table to read record from
      *  \return The data contained in the requested record
      *  \todo remove.
@@ -347,9 +347,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //	class tx_newspaper_PageZone
     //
     ////////////////////////////////////////////////////////////////////////////
-    /// Get the list of tx_newspaper_Extra associated with this Article in sorted order
 
-    /** The Extras are sorted by attribute \c paragraph first and
+    /// Get the list of tx_newspaper_Extra associated with this Article in sorted order
+    /**
+     *  The Extras are sorted by attribute \c paragraph first and
      *  \c position second.
      *
      * \param $extra_class The desired type of tx_newspaper_Extra, either as
@@ -386,8 +387,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Add an extra after the Extra which is on the original page zone as $origin_uid
-
-    /** Reimplemented from tx_newspaper_PageZone because concrete Articles don't
+    /**
+     *  Reimplemented from tx_newspaper_PageZone because concrete Articles don't
      *  have PageZones which inherit from them; default article are to be
      *  treated like PageZones. Setting \p $recursive on an concrete Article
      *  would result in an error.
@@ -397,8 +398,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get the tx_newspaper_PageZoneType associated with this Article
-
-    /** \return The tx_newspaper_PageZoneType associated with this Article. If
+    /**
+     *  \return The tx_newspaper_PageZoneType associated with this Article. If
      * 		this is not the one where attribute \p is_article is set, there
      * 		is something weird going on.
      *  \todo Check for \p is_article. No idea how to handle errors though.
@@ -440,8 +441,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Find the first tx_newspaper_Extra of a given type
-
-    /** \param $extra_class The desired type of tx_newspaper_Extra, either as
+    /**
+     *  \param $extra_class The desired type of tx_newspaper_Extra, either as
      *  	object or as class name
      *  \return The first tx_newspaper_Extra of the given class (by appearance
      * 		in article), or \c null.
@@ -454,15 +455,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get article type of article
-
-    /** \return tx_newspaper_ArticleType assigned to this Article
+    /**
+     *  \return tx_newspaper_ArticleType assigned to this Article
      */
     public function getArticleType() {
         return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
     }
 
     /// checks if article is a default article or a concrete article
-
     /** \return \c true if article is a default article (else \c false).
      */
     public function isDefaultArticle() {
@@ -475,7 +475,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Write record in MM table relating an Extra to this article
-
     /** The MM table record is only written if it did not exist beforehand.
      *
      *  If \p $extra did not have a record in the abstract Extra table
@@ -524,7 +523,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Change the paragraph of an Extra recursively on inheriting Articles
-
     /** This function is used to change the paragraph of an Extra on Articles
      *  that serve as templates for the placement of Articles in Sections
      *  ("Default Articles"). Because the \c paragraph attribute must be
@@ -579,7 +577,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
-
     /** \param $section Section from which the link is generated. Defaults to
      * 		using the article's primary section.
      *  \param $pagetype tx_newspaper_PageType of the wanted tx_newspaper_Page.
@@ -617,7 +614,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get a list of all attributes in the tx_newspaper_Article table.
-
     /** \return All attributes in the tx_newspaper_Article table.
      *  \todo A static attribute list sucks. Determine it dynamically.
      */
@@ -626,8 +622,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Gets a list of tx_newspaper_Article objects assigned to given article type
-
-    /** \param $at tx_newspaper_ArticleType object
+    /**
+     *  \param $at tx_newspaper_ArticleType object
      *  \param $limit max number of records to read (default: 10), if negative no limit is used
      *  \return array with tx_newspaper_Article objects
      */
@@ -655,8 +651,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Adds a tx_newspaper_Section to the tx_newspaper_Article.
-
-    /** The new tx_newspaper_Section will be inserted after existing sections.
+    /**
+     *  The new tx_newspaper_Section will be inserted after existing sections.
      *  The Article is listed in tx_newspaper_Section \p $s afterwards.
      *
      *  \param $s New Section
@@ -678,8 +674,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     ///	Sets the sections of an article to exactly the input sections
-
-    /** \param $uids UIDs of the tx_newspaper_Section s which \c $this will
+    /**
+     *  \param $uids UIDs of the tx_newspaper_Section s which \c $this will
      *  	belong to.
      */
     public function setSections(array $uids) {
@@ -707,8 +703,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get the list of tx_newspaper_Section s to which the current article belongs
-
-    /** \param $limit Maximum number of tx_newspaper_Section s to find
+    /**
+     *  \param $limit Maximum number of tx_newspaper_Section s to find
      *  \param $sorted If set, the sections gets sorted level-wise
      *  \return List of tx_newspaper_Section s to which the current article belongs
      */
@@ -730,8 +726,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
-
-    /** \return The tx_newspaper_Section in which \p $this is displayed by
+    /**
+     *  \return The tx_newspaper_Section in which \p $this is displayed by
      *  	default, if no Section context is given, or \c null.
      */
     public function getPrimarySection() {
@@ -743,8 +739,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Gets a list of (configured but) missing extras in the article
-
-    /** It is checked if extras placed on the default article are missing in
+    /**
+     *  It is checked if extras placed on the default article are missing in
      *  the concrete article and if extras configured as must-have or should-
      *  have are missing in the article.
      *  \return array of Extra objects (either existing extras or newly created empty extras)
@@ -1002,7 +998,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Split the article's text into an array, one entry for each paragraph
-
     /** tx_newspaper_Extra are inserted before or after paragraphs. This
      *  function splits the article text so the position of a tx_newspaper_Extra
      *  can be found.
@@ -1060,7 +1055,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
-
     /** Binary search for an Extra, assuming that \c $this->extras is ordered by
      *  paragraph first and position second.
      *
@@ -1106,7 +1100,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Ordering function to keep Extras in the same order as they appear on the PageZone
-
     /** Supplied as parameter to \c usort() in getExtras().
      *  \param $extra1 first tx_newspaper_Extra to compare
      *  \param $extra2 second tx_newspaper_Extra to compare
@@ -1231,7 +1224,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.
-
     /** \param $class name of extra class
      *  \param $paragraph paragraph or false, if paragraph shouldn't be checked
      *  \return true if the extra was found, else false
