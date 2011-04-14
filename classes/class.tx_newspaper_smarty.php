@@ -350,7 +350,7 @@ self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
 
 				$temporary_searchpath[] = $common_page_dir;
 			} else {
-tx_newspaper::devlog('!!! common not found !!!', $common_page_dir);
+tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template directory not found', $common_page_dir);
 			}
 
 		}
