@@ -374,32 +374,26 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	private function processTemplateSetDropdownStore($table, $uid, $value) {
 		$uid = intval($uid);
 
-		switch(strtolower($table)) {
-			case 'tx_newspaper_extra':
-				$obj = tx_newspaper_Extra_Factory::getInstance()->create($uid);
-			break;
-			case 'tx_newspaper_page':
-				$obj = new tx_newspaper_page($uid);
-			break;
-// \todo (oliver) remove if not needed (replaced with pz_p and article; see below)
-//			case 'tx_newspaper_pagezone':
-//				$obj = tx_newspaper_PageZone_Factory::getInstance()->create($uid);
-//			break;
-			case 'tx_newspaper_pagezone_page':
-				$obj = new tx_newspaper_pagezone_page($uid);
-			break;
-			case 'tx_newspaper_article':
-				$obj = new tx_newspaper_article($uid);
-			break;
-
-			default:
-				die('Unknown table for template set: ' . $table);
+		if (strtolower($table) == 'tx_newspaper_extra') {
+            $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+            self::setTemplateSet($extra, $value);
+            tx_newspaper_Extra::updateDependencyTree($extra);
+        } else {
+            $obj = new $table($uid);
+            self::setTemplateSet($obj, $value);
 		}
-		$obj->setAttribute('template_set', $value);
-		$obj->store();
+
 		die();
 	}
 
+    private static function setTemplateSet(tx_newspaper_StoredObject $obj, $value) {
+        try {
+            $obj->setAttribute('template_set', $value);
+            $obj->store();
+        } catch (tx_newspaper_Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
 
 	private function check4Ajax() {
