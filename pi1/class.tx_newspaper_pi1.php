@@ -71,6 +71,8 @@ class tx_newspaper_pi1 extends tslib_pibase {
 
 		} catch (tx_newspaper_DBException $e) {
 
+            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+            
 			$smarty = new tx_newspaper_Smarty();
 			$smarty->assign('_GET', $_GET);
 			$smarty->assign('exception', $e);
