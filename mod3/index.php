@@ -179,6 +179,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 		$pz->insertExtraAfter($copied_extra, $origin_uid);
 
+        tx_newspaper_PageZone::updateDependencyTree($pz);
+
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
 		die();
 	}
@@ -200,6 +202,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 /// \todo: check why SECOND extra records gets written
 		$pz->insertExtraAfter($e, $origin_uid);
 
+        tx_newspaper_PageZone::updateDependencyTree($pz);
+
 //\todo: close.html/close_in_article.html
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
 		die();
@@ -217,6 +221,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$e->store();
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->insertExtraAfter($e, $origin_uid);
+
+        tx_newspaper_PageZone::updateDependencyTree($pz);
 
 		die();
 	}
@@ -236,6 +242,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // re-reading the pagezone ...
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
 		}
+
+        tx_newspaper_PageZone::updateDependencyTree($pz);
 
 		die();
 	}
@@ -339,15 +347,12 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 
 	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
-        tx_newspaper::devlog("processExtraSetPassDown($pz_uid, $extra_uid, $pass_down)");
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz->setInherits($e, $pass_down);
 //		$e->setAttribute('is_inheritable', $pass_down);
 //		$e->store();
-        tx_newspaper::devlog("setInherits() done");
         tx_newspaper_Extra::updateDependencyTree($e);
-        tx_newspaper::devlog("updateDependencyTree() done");
 		die();
 	}
 
