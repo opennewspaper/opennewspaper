@@ -808,10 +808,13 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
     public static function updateDependencyTree(tx_newspaper_Extra $extra) {
+        tx_newspaper::devlog("updateDependencyTree(tx_newspaper_Extra $extra)");
         $ts_config = tx_newspaper::getTSConfig();
         if ($ts_config['newspaper.']['use_dependency_tree']) {
             $tree = tx_newspaper_DependencyTree::generateFromExtra($extra);
+            tx_newspaper::devlog("generateFromExtra() done");
             $tree->executeActionsOnPages();
+            tx_newspaper::devlog("executeActionsOnPages() done");
         }
     }
 
