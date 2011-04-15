@@ -131,6 +131,11 @@ class tx_newspaper_DependencyTree {
     /// An action marked with this flag is executed on pages where the affected article appears in an article list.
     const ACT_ON_ARTICLE_LIST_PAGES = 16;
 
+    public static function useDependencyTree() {
+        $ts_config = tx_newspaper::getTSConfig();
+        return (boolean)$ts_config['newspaper.']['use_dependency_tree'];
+    }
+
     /// Generates the tree of pages that change when a tx_newspaper_Article changes.
     /** @param $article The article which is changed. \p $article is from now on
      *    called "the affected article". 
