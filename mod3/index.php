@@ -339,12 +339,15 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 
 	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
+        tx_newspaper::devlog("processExtraSetPassDown($pz_uid, $extra_uid, $pass_down)");
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz->setInherits($e, $pass_down);
 //		$e->setAttribute('is_inheritable', $pass_down);
 //		$e->store();
+        tx_newspaper::devlog("setInherits() done");
         tx_newspaper_Extra::updateDependencyTree($e);
+        tx_newspaper::devlog("updateDependencyTree() done");
 		die();
 	}
 
