@@ -63,22 +63,22 @@
 
 	{* author *}
 	<label>{$LL.label_author}</label>
-	<input type="text" name="tx_newspaper_mod2[author]" value="{$FILTER.author|escape:html}" />
+	<input type="text" name="tx_newspaper_mod2[author]" value="{$FILTER.author|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 	<br />
 
 	{* be_user *}
 	<label>{$LL.label_title_be_user}</label>
-	<input type="text" name="tx_newspaper_mod2[be_user]" value="{$FILTER.be_user|escape:html}" />
+	<input type="text" name="tx_newspaper_mod2[be_user]" value="{$FILTER.be_user|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 	<br />
 
 	{* section *}
 	<label>{$LL.label_section}</label>
-	<input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" />
+	<input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 	<br />
 
 	{* text *}
 	<label title="{$LL.flag_textsearch}">{$LL.label_textsearch}</label>
-	<input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" />
+	<input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 	<br />
 
 	{* stop / items per page *}

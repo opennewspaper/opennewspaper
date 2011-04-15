@@ -95,7 +95,7 @@ function submitFilter(type) {
 	}
 
 	// type = reset_startpage -> startpage is set to 0, filter setting is used
-	// type = filter -> filter settings remian uinchanged, page is reloaded
+	// type = filter -> filter settings remain unchanged, page is reloaded
 	self.location.href = "index.php?tx_newspaper_mod2[type]=" + type + "&" + $("moderation").serialize();
 
 }
@@ -105,3 +105,12 @@ function browse(page) {
 	submitFilter('filter'); // execute filter (do not reset startPage counter)
 }
 
+
+
+function checkEnter(code) {
+	if (code != 13) {
+		return;
+	}
+	submitFilter('reset_startpage');
+	return false;
+}
