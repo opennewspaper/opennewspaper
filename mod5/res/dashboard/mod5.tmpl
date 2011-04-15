@@ -66,10 +66,10 @@ td {
 <br />
 
 {if $IS_ADMIN}
-<div class="box_hl">{$LABEL.admin_wizards}</div>
+<div class="box_hl" title="{$LABEL.admin_wizards_tsconfig}">{$LABEL.admin_wizards}</div>
 <div class="box">
-	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_pz">{$WIZARD_ICON} {$LABEL.admin_wizard_pagezone}</a><br />
-	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_inheritance">{$WIZARD_ICON} {$LABEL.admin_wizard_inheritance}</a><br />
+	{if $WIZARD_PERMISSION.w_pz}<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_pz">{$WIZARD_ICON} {$LABEL.admin_wizard_pagezone}</a><br />{/if}
+	{if $WIZARD_PERMISSION.w_inheritance}<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_inheritance">{$WIZARD_ICON} {$LABEL.admin_wizard_inheritance}</a><br />{/if}
 </div>
 <br />
 {/if}

@@ -224,6 +224,8 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcuts', false);
 		$label['manage_usercomments'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_manage_usercomments', false);
 		$label['newspaper_functions'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_newspaper_functions', false);
+		$label['admin_wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizards', false);
+		$label['admin_wizards_tsconfig'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizards_tsconfig', false);
 		$label['admin_wizard_pagezone'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_pagezone', false);
 		$label['admin_wizard_inheritance'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_inheritance', false);
 
@@ -233,6 +235,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('SHORTCUT_NEWSPAPER_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_newspaper', false)));
 		$smarty->assign('ROLE_ICON', tx_newspaper_BE::renderIcon('gfx/i/be_users.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_role', false)));
 
+		$smarty->assign('WIZARD_PERMISSION', $this->getTsconfigForAdminWizards());
 
 		$message['demo'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_demo', false);
 
@@ -292,6 +295,24 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 
 	/// wizard functions
+
+
+	/// \return Array with admin wizard access permissions (key = admin wizard key, value=1 -> permissions granted)
+	private function getTsconfigForAdminWizards() {
+
+		$tsc = tx_newspaper::getTSConfig();
+		if (!$tsc['newspaper.']['adminWizards']) {
+			return false;
+		}
+
+		$perms = array();
+		foreach(t3lib_div::trimExplode(',', $tsc['newspaper.']['adminWizards']) as $key => $value) {
+			$perms[$value] = 1;
+		}
+
+		return $perms;
+	}
+
 
 	/** Renders/executes wizard: activate/de-activate pagezones
 	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]

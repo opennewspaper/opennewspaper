@@ -31,6 +31,8 @@
 			<label index="message_no_section_chosen">Please select a target section first</label>
 			<label index="message_no_article_chosen">Please select an article.</label>
             <label index="title">Wizards</label>
+			<label index="label_admin_wizards">Newspaper admin wizards</label>
+			<label index="label_admin_wizards_tsconfig">These wizards can be activated with tsconfig in newspaper root folder (newspaper.adminWizards = w_pz, w_inheritance, ...)</label>
 			<label index="label_admin_wizard_please_chose">Please choose</label>
 			<label index="label_admin_wizard_pagezone">Pagezone: activate/de-activate (recursivly)</label>
 			<label index="label_admin_wizard_root_section_start">Starting at root section(s)</label>
@@ -76,6 +78,8 @@
 			<label index="message_no_section_chosen">Bitte wählen Sie ein Ziel-Ressort aus, um einen Artikel anzulegen.</label>
 			<label index="message_no_article_chosen">Bitte wählen Sie einen Artikel aus.</label>
             <label index="title">Start</label>
+			<label index="label_admin_wizards">Newspaper Admin-Wizards</label>
+			<label index="label_admin_wizards_tsconfig">Die Wizards können per TSConfig in Newspaper-Rootfolder aktiviert werden (newspaper.adminWizards = w_pz, w_inheritance, ...)</label>
 			<label index="label_admin_wizard_please_chose">Bitte wählen Sie</label>
 			<label index="label_admin_wizard_pagezone">Seitenbereich: freischalten/deaktivieren (rekursiv)</label>
 			<label index="label_admin_wizard_root_section_start">Root-Ressort(s)</label>
