@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="/taz426/typo3conf/ext/newspaper/res/be/newspaper.js" type="text/javascript"></script>
+<script src="../../res/be/newspaper.js" type="text/javascript"></script>
 <script>
 	// extract module number to redirect to
 	var mod_num = extractQuerystringDirect("tx_newspaper_mod5[calling_module]", true);
