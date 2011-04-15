@@ -1359,7 +1359,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public static function updateDependencyTree(tx_newspaper_Article $article) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
-            $tree->executeActionsOnPages();
+            $tree->executeActionsOnPages('tx_newspaper_Article');
         }
     }
 
