@@ -1302,7 +1302,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 
     public static function updateDependencyTree(tx_newspaper_PageZone $pagezone) {
-
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tree = tx_newspaper_DependencyTree::generateFromPagezone($pagezone);
             $tree->executeActionsOnPages();

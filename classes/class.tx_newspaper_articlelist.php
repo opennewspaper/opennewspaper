@@ -505,7 +505,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	}
 
     private static function updateDependencyTree(tx_newspaper_ArticleList $list) {
-
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tree = tx_newspaper_DependencyTree::generateFromArticlelist($list);
             $tree->executeActionsOnPages();
