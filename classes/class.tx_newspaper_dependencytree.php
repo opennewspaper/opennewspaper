@@ -141,6 +141,7 @@ class tx_newspaper_DependencyTree {
      *    called "the affected article". 
      */
     static public function generateFromArticle(tx_newspaper_Article $article) {
+        tx_newspaper::devlog("generateFromArticle", debug_backtrace(false));
         tx_newspaper::startExecutionTimer();
         $tree = new tx_newspaper_DependencyTree();
         $tree->setArticle($article);
@@ -165,6 +166,7 @@ class tx_newspaper_DependencyTree {
      *   called "the affected extra".
      */
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
+        tx_newspaper::devlog("generateFromExtra", debug_backtrace(false));
         tx_newspaper::startExecutionTimer();
         $pagezone = $extra->getPageZone();
         $tree = new tx_newspaper_DependencyTree();
