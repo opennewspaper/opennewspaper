@@ -56,7 +56,7 @@ class ErrorExtra extends tx_newspaper_Extra {
         return tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '') .
                $this->message;
     }
-    public function dependsOnArticle() { return false; }
+    public static function dependsOnArticle() { return false; }
 
     private $message;
 }
