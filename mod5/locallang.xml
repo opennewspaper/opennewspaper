@@ -47,7 +47,7 @@
 			<label index="message_webmaster_wizard_pagezone_activate_success">The pagezones have been activated successfully.</label>
 			<label index="message_webmaster_wizard_pagezone_deactivate_success">The pagezones have been de-activated successfully.</label>
 			<label index="label_webmaster_wizard_page_deactivate">De-activate the chosen page type. ARE YOU SURE YOU WANT TO DO THIS? This action can't be undone. Web elements placed on these pages/pagezones can't be restored.</label>
-			<label index="message_webmaster_wizard_page_deactivate_success">The pages have been activated successfully.</label>
+			<label index="message_webmaster_wizard_page_deactivate_success">The pages have been de-activated successfully.</label>
 			<label index="label_webmaster_wizard_inheritance">Pagezone: inheritance source (recursivly)</label>
 			<label index="label_webmaster_wizard_inheritance_activate">Set inheritance source for all pagezone to "Same page type in upper level" - EXCEPT for root sections</label>
 			<label index="message_webmaster_wizard_inheritance_activate_success">The inheritance source for the pagezones have been set successfully.</label>

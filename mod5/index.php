@@ -353,11 +353,12 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 					// delete ...
 					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
 						foreach($rootSection->getChildSections(true) as $s) {
-							$p = $s->getSubPage($pagetype);
-							if ($pz = $p->getPagezone($pagezonetype)) {
-								$pz->delete();
+							if ($p = $s->getSubPage($pagetype)) {
+								if ($pz = $p->getPagezone($pagezonetype)) {
+									$pz->delete();
+								}
+								// \todo: delete page if last pagezone is deleted?
 							}
-							// \todo: delete page if last pagezone is deleted?
 						}
 					}
 					// insert backend success message
