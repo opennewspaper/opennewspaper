@@ -1,7 +1,7 @@
 {* debug *}
 
 {if $pagezone_types}
-<div> {$LL.label_admin_wizard_select_pagezonetype} </div>
+<div> {$LL.label_webmaster_wizard_select_pagezonetype} </div>
 <ul class="w_ul">
 {foreach from=$pagezone_types item=pagezone_type}
   <li> <a href="index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$pagetype->getUid()}&tx_newspaper_mod5[pagezonetype_uid]={$pagezone_type->getUid()}">{$pagezone_type->getAttribute('type_name')}</a> </li>
@@ -12,6 +12,6 @@
 {/if}
 
 {if !$input.action}
-	<div> {$LL.label_admin_wizard_please_chose} </div>
-	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_page_deactivate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[action]=deactivateP');">{$LL.label_admin_wizard_page_deactivate}</a> </div>
+	<div> {$LL.label_webmaster_wizard_please_chose} </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_webmaster_wizard_page_deactivate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[action]=deactivateP');">{$LL.label_webmaster_wizard_page_deactivate}</a> </div>
 {/if}

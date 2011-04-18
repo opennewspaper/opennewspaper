@@ -1,9 +1,9 @@
 {* debug *}
 
 {if !$input.action}
-	<div> {$LL.label_admin_wizard_please_chose} </div>
-	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_pagezone_activate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=activatePz');">{$LL.label_admin_wizard_pagezone_activate}</a> </div>
-	<div><a href="#" onclick="checkConfirmation('{$LL.label_admin_wizard_pagezone_deactivate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=deactivatePz');">{$LL.label_admin_wizard_pagezone_deactivate}</a> </div>
+	<div> {$LL.label_webmaster_wizard_please_chose} </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_webmaster_wizard_pagezone_activate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=activatePz');">{$LL.label_webmaster_wizard_pagezone_activate}</a> </div>
+	<div><a href="#" onclick="checkConfirmation('{$LL.label_webmaster_wizard_pagezone_deactivate|escape:'javascript'}', 'index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$input.pagetype_uid}&tx_newspaper_mod5[pagezonetype_uid]={$input.pagezonetype_uid}&tx_newspaper_mod5[action]=deactivatePz');">{$LL.label_webmaster_wizard_pagezone_deactivate}</a> </div>
 {else}
 
 {/if}

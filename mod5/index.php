@@ -224,10 +224,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$label['shortcuts'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcuts', false);
 		$label['manage_usercomments'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_manage_usercomments', false);
 		$label['newspaper_functions'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_newspaper_functions', false);
-		$label['admin_wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizards', false);
-		$label['admin_wizards_tsconfig'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizards_tsconfig', false);
-		$label['admin_wizard_pagezone'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_pagezone', false);
-		$label['admin_wizard_inheritance'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_admin_wizard_inheritance', false);
+		$label['webmaster_wizards'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_webmaster_wizards', false);
+		$label['webmaster_wizards_tsconfig'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_webmaster_wizards_tsconfig', false);
+		$label['webmaster_wizard_pagezone'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_webmaster_wizard_pagezone', false);
+		$label['webmaster_wizard_inheritance'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_webmaster_wizard_inheritance', false);
 
 		$smarty->assign('WIZARD_ICON', tx_newspaper_BE::renderIcon('gfx/wizard_rte2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_start_wizard', false)));
 		$smarty->assign('MANAGE_USERCOMMENTS_ICON', tx_newspaper_BE::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_usercomments', false)));
@@ -235,7 +235,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('SHORTCUT_NEWSPAPER_ICON', tx_newspaper_BE::renderIcon('gfx/turn_right.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_shortcut_newspaper', false)));
 		$smarty->assign('ROLE_ICON', tx_newspaper_BE::renderIcon('gfx/i/be_users.gif', '', $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_role', false)));
 
-		$smarty->assign('WIZARD_PERMISSION', $this->getTsconfigForAdminWizards());
+		$smarty->assign('WIZARD_PERMISSION', $this->getTsconfigForWebmasterWizards());
 
 		$message['demo'] = $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_demo', false);
 
@@ -297,16 +297,16 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	/// wizard functions
 
 
-	/// \return Array with admin wizard access permissions (key = admin wizard key, value=1 -> permissions granted)
-	private function getTsconfigForAdminWizards() {
+	/// \return Array with webmaster wizard access permissions (key = webmaster wizard key, value=1 -> permissions granted)
+	private function getTsconfigForWebmasterWizards() {
 
 		$tsc = tx_newspaper::getTSConfig();
-		if (!$tsc['newspaper.']['adminWizards']) {
+		if (!$tsc['newspaper.']['webmasterWizards']) {
 			return false;
 		}
 
 		$perms = array();
-		foreach(t3lib_div::trimExplode(',', $tsc['newspaper.']['adminWizards']) as $key => $value) {
+		foreach(t3lib_div::trimExplode(',', $tsc['newspaper.']['webmasterWizards']) as $key => $value) {
 			$perms[$value] = 1;
 		}
 
@@ -348,7 +348,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						}
 					}
 					// insert backend success message
-					$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_pagezone_activate_success'];
+					$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_activate_success'];
 				} elseif ($input['action'] == 'deactivatePz') {
 					// delete ...
 					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
@@ -361,7 +361,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						}
 					}
 					// insert backend success message
-					$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_pagezone_deactivate_success'];
+					$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_deactivate_success'];
 				} else {
 					t3lib_div::devlog('processWizardPagezone(): Unknown action type', 'newspaper', 3, array('input' => $input));
 				}
@@ -383,7 +383,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				}
 			}
 			// insert backend success message
-			$backend = $localLang[$GLOBALS['LANG']->lang]['message_admin_wizard_page_deactivate_success'];
+			$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_page_deactivate_success'];
 		}
 
 
