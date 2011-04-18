@@ -47,6 +47,20 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_textbox.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_extra_typo3_ce.php');
 
+
+class ErrorExtra extends tx_newspaper_Extra {
+    public function __construct($message = '') {
+        $this->message = $message;
+    }
+    public function getDescription() {
+        return tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '') .
+               $this->message;
+    }
+    public function dependsOnArticle() { return false; }
+
+    private $message;
+}
+
 /// Factory class to create the correct kind of tx_newspaper_Extra from a UID
 /** Problem: The tx_newspaper_Extra is stored in a table for the abstract
  *  parent type. At the time of creation, given only a UID, the concrete type
@@ -82,28 +96,30 @@ class tx_newspaper_Extra_Factory {
 	 *  \todo honor deleted and hidden flags
 	 */
 	public function create($uid) {
-		
-		/// Read actual type and UID of the Extra to instantiate from DB
-        $row =  tx_newspaper::selectOneRow(
-			'extra_table, extra_uid', self::$extra_table, "uid = $uid"
-		);
+
+        try {
+            /// Read actual type and UID of the Extra to instantiate from DB
+            $row =  tx_newspaper::selectOneRow(
+                'extra_table, extra_uid', self::$extra_table, "uid = $uid"
+            );
+        } catch (tx_newspaper_Exception $e) {
+            return new ErrorExtra("Extra with UID $uid was not found in DB");
+        }
 
         if (!$row['extra_table']) {
-        	throw new tx_newspaper_DBException('No extra_table in result', 
-											   $row);
+            return new ErrorExtra('No extra_table in result');
         }
-		
-		if (!class_exists($row['extra_table'])) {
-        	throw new tx_newspaper_WrongClassException($row['extra_table']);
-		}
+
+        if (!class_exists($row['extra_table'])) {
+            return new ErrorExtra('Extra class ' . $row['extra_table'] . ' does not exist');
+        }
 
         if (!$row['extra_uid']) {
-        	throw new tx_newspaper_DBException('No extra_uid in result', 
-        									   $row);
+            return new ErrorExtra('No extra_uid in result');
         }
-		
-		$extra = new $row['extra_table']($row['extra_uid']);
-		$extra->setExtraUid($uid);
+
+        $extra = new $row['extra_table']($row['extra_uid']);
+        $extra->setExtraUid($uid);
 		return $extra;
 	}
 	
