@@ -39,7 +39,7 @@
 			{* create new empty extra configured in tsconfig *}
 			<li id="tab_{$extra.extra_class}">
 				<a href="#" onclick="extra_shortcut_create({$DATA.article_id}, '{$extra.extra_class}', 0, {$extra.paragraph}, 1);">{$SHORTCUT_NEWEXTRA_ICON} {$extra.title}</a>
-			</li>				
+			</li>
 		{/foreach}
 		<li id="tab_overview"><a href="#" onclick="tabManagement.show('overview'); this.blur(); return false;">{$LABEL.overview}</a></li>
     </ul>
@@ -66,7 +66,7 @@
 
 
         <input onclick="extra_insert_after_NEW(0, {$DATA.pagezone_id}, {$DATA.article_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if},{$PARAGRAPH_USED}, 1); return false;" type="button" value="{$LABEL.new_extra_new}" />
-        <input onclick="extra_insert_after_POOL(0, {$DATA.pagezone_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if}, {$PARAGRAPH_USED})" type="button" value="{$LABEL.new_extra_from_pool}" />
+{* see #1478        <input onclick="extra_insert_after_POOL(0, {$DATA.pagezone_id}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if}, {$PARAGRAPH_USED})" type="button" value="{$LABEL.new_extra_from_pool}" /> *}
     </div>
     <div id="overview" class="extra_tab">
 	    <script language="javascript" >
@@ -201,5 +201,5 @@
 		{* @Ramon: was macht das hier eigentlich? *}
 		<div id="{$extra.extra_class}"></div>
 	{/foreach}
-    </div>    
+    </div>
 </div>

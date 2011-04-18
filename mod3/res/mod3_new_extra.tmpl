@@ -14,7 +14,7 @@
 	{rdelim}
 
 	function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article) {ldelim}
-		target_uid = article_uid > 0? article_uid : pz_uid; 
+		target_uid = article_uid > 0? article_uid : pz_uid;
 		var closehtml = (in_article)? escape("close_reload_in_concrete_article.html?pz_uid=" + target_uid) : "close.html";
 		new_extra_paragraph_position_data = '';
 {if ($PARAGRAPH_USED == true)}
@@ -31,7 +31,7 @@
 		extra_sysfolder = parseInt(extra_sysfolder);
 		if (extra_class != false) {ldelim} {* extra is related to pagezone in save hook! *}
 			self.location.href = top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/res/" + closehtml + "&edit[" + extra_class + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
-		{rdelim} 
+		{rdelim}
 	{rdelim}
 
 	function extra_insert_after_POOL(origin_uid, pz_uid, in_article) {ldelim}
@@ -50,7 +50,7 @@ if (in_article) alert("pool: in article not yet implemented");
 		if (extra_class != false) {ldelim}
 //self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pool_extra_pz_uid=" + pz_uid + "&pool_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
 			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data
-		{rdelim} 
+		{rdelim}
 	{rdelim}
 
 </script>
@@ -67,7 +67,7 @@ if (in_article) alert("pool: in article not yet implemented");
 
 {* add input field for paragraph (if article) *}
 {if ($PARAGRAPH_USED == true)}
-Paragraph: 
+Paragraph:
 	{if ($NEW_AT_TOP == true)}
 <input id="paragraph" name="paragraph" value="{$PARAGRAPH}" type="text" />
 	{else}
@@ -78,4 +78,4 @@ Paragraph:
 
 
 <input onclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID}, {$ARTICLE_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_new}" />
-<input onclick="extra_insert_after_POOL({$ORIGIN_UID}, {$PZ_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_from_pool}" />
+{* see #1478 <input onclick="extra_insert_after_POOL({$ORIGIN_UID}, {$PZ_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})" type="button" value="{$LABEL.new_extra_from_pool}" /> *}
