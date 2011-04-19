@@ -441,10 +441,11 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 
 
 	/// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
-	/** \return array of active tx_newspaper_PageZone objects for given
+	/** \param $includeDefaultArticle Are default articles included?
+	 *  \return array of active tx_newspaper_PageZone objects for given
 	 *  	tx_newspaper_Page.
 	 */
-	public function getActivePageZones() {
+	public function getActivePageZones($includeDefaultArticle=true) {
 
 		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
 #t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
@@ -461,7 +462,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 #t3lib_div::devlog('gapz', 'newspaper', 0, $row);
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
+			if ($includeDefaultArticle || $row[$i]['pagezone_table'] == 'tx_newspaper_pagezone_page') {
+				$list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
+			}
 		}
 #t3lib_div::debug($list);
 		return $list;

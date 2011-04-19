@@ -411,11 +411,11 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			// run wizard
 			foreach(tx_newspaper_section::getRootSections() as $rootSection) {
 				// ignore root section page zone (these are used to define the inheritance sources)
-				foreach($rootSection->getChildSections(true) as $s) {
+				if ($rootSection) foreach($rootSection->getChildSections(true) as $s) {
 					// all sub sections ...
-					foreach($s->getActivePages() as $p) {
+					if ($s) foreach($s->getActivePages() as $p) {
 						// all active pages ...
-						foreach($p->getActivePageZones() as $pz) {
+						if ($p) foreach($p->getActivePageZones(false) as $pz) {
 							// all active pagezones ...
 							$pz->changeParent(0);// set to default: inherit from same page type above
 						}
