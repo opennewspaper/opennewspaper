@@ -893,7 +893,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return true;
     }
 
-    private static $article_before_db_ops = null;
+    private static $tags_before_db_ops = array();
 
     private static function safelyInstantiateArticle($id) {
         $article = new tx_newspaper_Article(intval($id));
@@ -915,32 +915,32 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::makeRelatedArticlesBidirectional($id);
         self::cleanRelatedArticles($id);
 
-        self::$article_before_db_ops = self::safelyInstantiateArticle($id);
-        tx_newspaper::devlog("article pre ops set to:", self::$article_before_db_ops);
+        $article_before_db_ops = self::safelyInstantiateArticle($id);
+        if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
 
-        if (self::$article_before_db_ops instanceof tx_newspaper_Article) {
-            self::updateDependencyTree(self::$article_before_db_ops, $fieldArray);
-        }
+        self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
+        tx_newspaper::devlog("tags pre ops set to:", self::$tags_before_db_ops);
+
+        self::updateDependencyTree($article_before_db_ops, $fieldArray);
+
     }
 
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
         tx_newspaper::devlog("tx_newspaper_Article::processDatamap_afterDatabaseOperations($status, $table, $id, ", $fieldArray);
         if (!self::isValidForSavehook($table, $id)) return;
-        tx_newspaper::devlog("valid");
-        if (!self::$article_before_db_ops instanceof tx_newspaper_Article) return;
-        tx_newspaper::devlog("article pre ops is set", self::$article_before_db_ops);
+
+        tx_newspaper::devlog("tags pre ops is set", self::$tags_before_db_ops);
 
         $article_after_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
         tx_newspaper::devlog("article post ops is set", $article_after_db_ops);
 
-        $tags_pre = self::$article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
         $tags_post = $article_after_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
 
-        tx_newspaper::devlog("tags", array("pre"=>$tags_pre, "post"=>$tags_post));
+        tx_newspaper::devlog("tags", array("pre"=>self::$tags_before_db_ops, "post"=>$tags_post));
         // ...
         
-        self::$article_before_db_ops = null;
+        self::$tags_before_db_ops = array();
     }
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
