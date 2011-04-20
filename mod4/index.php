@@ -586,7 +586,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'param' => array()
 			),
 			array(
-				'title' => 'Orphaned Extras: Extras which belong to no PageZone or Article',
+				'title' => 'Orphaned Extras: Extras which belong to no PageZone, no Article, no Tagzone, no default extra in Extra Controltagzone',
 				'class_function' => array('tx_newspaper_module4', 'checkOrphanedExtras'),
 				'param' => array()
 			),
