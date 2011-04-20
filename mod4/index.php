@@ -581,11 +581,6 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'param' => array()
 			),
 			array(
-				'title' => 'Abstract extra: concrete extra missing',
-				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraConcreteExtraMissing'),
-				'param' => array()
-			),
-			array(
 				'title' => 'Abstract extra: extra_table or extra_uid missing',
 				'class_function' => array('tx_newspaper_module4', 'checkAbstractExtraTable'),
 				'param' => array()
@@ -971,23 +966,55 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		if (!$row) return true; // no problems found
 
-		$msg = sizeof($row) . ' problems found.<br />';
+		$counter = 0;
 		for($i = 0; $i < sizeof($row); $i++) {
 			try {
 				$concrete = tx_newspaper::selectOneRow(
 					'*', $row[$i]['extra_table'],
 					'uid = ' . $row[$i]['extra_uid']
 				);
-				$msg .= 'Extra #' . $row[$i]['uid'] . '(concrete: ' . $row[$i]['extra_table'] .
-						' #' . $row[$i]['extra_uid'] . ')'.
-						' is not connected to either an article or a page zone:<br /> ' .
-						t3lib_div::view_array ($concrete) . '<br />';
+				if (!self::isExtraAssociatedWithTagzone($row[$i]['uid'])) {
+					$msg .= 'Abstract extra #' . $row[$i]['uid'] . ', concrete extra: ' . $row[$i]['extra_table'] .
+							' #' . $row[$i]['extra_uid'] . '<br />';
+					$counter++;
+				}
 			} catch(tx_newspaper_EmptyResultException $e) {
-				$msg .= 'Extra #' . $row[$i]['extra_uid'] . ' in table ' . $row[$i]['extra_table'] . ' does not exist<br />';
+				// handled in checkAbstractExtraConcreteExtraMissing()
 			}
 		}
 
+		$msg = $counter . ' problem(s) found.<br />' . $msg;
+
 		return $msg;
+	}
+
+	private static function isExtraAssociatedWithTagzone($abstractExtraUid) {
+		$abstractExtraUid = intval($abstractExtraUid);
+
+		// check if extra is assigned to a tagzone
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid',
+			'tx_newspaper_controltag_to_extra',
+			'extra=' . $abstractExtraUid
+		);
+		if ($row['uid']) {
+			return true; // extra is added to a tagzone
+		}
+
+		// check if extra if set as default extra to extra controltagzone
+		$rows = tx_newspaper::selectRows(
+			'default_extra',
+			'tx_newspaper_extra_controltagzone',
+			'default_extra LIKE "%' . $abstractExtraUid . '%"'
+		);
+		foreach($rows as $row) {
+			$uids = t3lib_div::trimExplode(',', $row['default_extra']);
+			if (in_array($abstractExtraUid, $uids)) {
+				return true; // extra is set as default extra for an extra controltagzone
+			}
+		}
+
+		return false; // no hit found ...
 	}
 
 	/// \param $mm_table typo3 mm table where extras are linked
