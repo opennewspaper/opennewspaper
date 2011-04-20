@@ -907,6 +907,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, ", $fieldArray);
         if (!self::isValidForSavehook($table, $id)) return;
 
         self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
@@ -914,6 +915,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::cleanRelatedArticles($id);
 
         self::$article_before_db_ops = self::safelyInstantiateArticle($id);
+        tx_newspaper::devlog("article pre ops set to:", self::$article_before_db_ops);
 
         if (self::$article_before_db_ops instanceof tx_newspaper_Article) {
             self::updateDependencyTree(self::$article_before_db_ops, $fieldArray);

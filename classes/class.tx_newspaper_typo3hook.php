@@ -67,14 +67,14 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// save hooks: new and update
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-//t3lib_div::devlog('sh pre enter', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
+#t3lib_div::devlog('tx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
-#        tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", $fieldArray);
+#tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_postProcessFieldArray($status, $table, $id, ...)", $fieldArray);
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
@@ -109,7 +109,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-#        tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", $fieldArray);
+#tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", $fieldArray);
 
         // pass hook to newspaper classes
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
