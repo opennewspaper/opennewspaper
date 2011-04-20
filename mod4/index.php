@@ -1030,6 +1030,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 			'',
 			'mm.uid_foreign'
 		);
+//t3lib_div::debug(array(tx_newspaper::$query, $row));
 		if (sizeof($row) > 0) {
 			for($i = 0; $i < sizeof($row); $i++) {
 				$msg .= 'Deleted flag set for Extra #' . $row[$i]['uid_foreign'] . '; concrete Extra ' . $row[$i]['extra_table'] . ' #' . $row[$i]['extra_uid'] . '; assigned to ' . $mm_table . ' uid_local #' . $row[$i]['uid_local'] . '<br />';
@@ -1039,12 +1040,13 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		// abstract extra deleted?
 		$row = tx_newspaper::selectRows(
-			'mm.*',
-			$mm_table . ' mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid AND e.uid<=0',
-			'1',
+			'mm.*, e.uid',
+			$mm_table . ' mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid',
+			'e.uid IS NULL', // check if extra record is missing completely
 			'',
 			'mm.uid_foreign'
 		);
+//t3lib_div::debug(array(tx_newspaper::$query, $row));
 		if (sizeof($row) > 0) {
 			for($i = 0; $i < sizeof($row); $i++) {
 				$msg .= 'Extra #' . $row[$i]['uid_foreign'] . ' is deleted; assigned to ' . $mm_table . ' uid_local #' . $row[$i]['uid_local'] . '<br />';
