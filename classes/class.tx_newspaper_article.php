@@ -881,7 +881,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //
     ////////////////////////////////////////////////////////////////////////////
 
-    /** \todo some documentation would be nice ;-) */
+    /**
+     *  - remembers which control tags were present \em before the article was saved
+     *  - merges all types of tags into one field
+     *  \param $incomingFieldArray The values sent to the save hook via POST
+     *  \param $table The SQL table for which this record was saved
+     *  \param $id UID of this record
+     *  \param $that The t3lib_tcemain object handling the datamap that stores the record 
+     */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
 
@@ -903,7 +910,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
     }
-
     private static $tags_before_db_ops = array();
 
     private static function safelyInstantiateArticle($id) {
@@ -921,24 +927,22 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
 
-        self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
-        self::makeRelatedArticlesBidirectional($id);
-        self::cleanRelatedArticles($id);
-
+        self::addPublishDateIfNotSet($id, $fieldArray); // check if publish_date is to be added
+        
         $article = self::safelyInstantiateArticle($id);
         if (!$article instanceof tx_newspaper_Article) return;
 
-        $tags = self::getRemovedTags($article);
-        tx_newspaper::devlog("removed from pD_pPFA", $tags);
+        $article->ensureRelatedArticlesAreBidirectional();
+        $article->removeDanglingRelations();
 
-        self::updateDependencyTree($article, $tags);
+        self::updateDependencyTree($article);
 
     }
 
     private static function getRemovedTags(tx_newspaper_Article $article) {
-        $tags_post = $article->getTags(tx_newspaper_Tag::getControlTagType());
+        $tags_after_db_ops = $article->getTags(tx_newspaper_Tag::getControlTagType());
 
-        $removed_tags = array_diff(self::$tags_before_db_ops, $tags_post);
+        $removed_tags = array_diff(self::$tags_before_db_ops, $tags_after_db_ops);
 
         self::$tags_before_db_ops = array();
 
@@ -1013,9 +1017,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::$render_hooks[$class] = $function;
     }
 
-    public static function updateDependencyTree(tx_newspaper_Article $article, array $removed_tags = array()) {
+    public static function updateDependencyTree(tx_newspaper_Article $article) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $removed_tags);
+            $tags = self::getRemovedTags($article);
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags);
             $tree->executeActionsOnPages('tx_newspaper_Article');
         }
     }
@@ -1373,37 +1378,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
-    /// Make sure that an article related to \c $article_uid has also \c $article_uid as relation.
-    private static function makeRelatedArticlesBidirectional($article_uid) {
-        if (!intval($article_uid))
-            return;
-        $article = new tx_newspaper_Article(intval($article_uid));
-
-        try {
-            $article->getAttribute('uid');
-        } catch (tx_newspaper_Exception $e) {
-            return;
-        }
-
-        $article->ensureRelatedArticlesAreBidirectional();
-    }
-
-    private static function cleanRelatedArticles($article_uid) {
-//t3lib_div::devlog('cleanRelatedArticles()', 'newspaper', 0, array('$article_uid'=>$article_uid));
-
-        if (!intval($article_uid))
-            return;
-        $article = new tx_newspaper_Article(intval($article_uid));
-
-        try {
-            $article->getAttribute('uid');
-        } catch (tx_newspaper_Exception $e) {
-            return;
-        }
-
-        $article->removeDanglingRelations();
-    }
-
     private static function modifyTagSelection($table, $field) {
         if ('tx_newspaper_article' === $table && 'tags' === $field) {
 //t3lib_div::devLog('modifyTagSelection()', 'newspaper', 0, array('table' => $table, 'field' => $field));
@@ -1413,60 +1387,40 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
-    /// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set (checks starttime too); data is added to $fieldArray (so for typo3 save hook usage only)
-    private static function addPublishDateIfNotSet($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('addPublishDateIfNotSet()', 'newspaper', 0, array('time()' => time(), 'status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST, 'backtrace' => debug_backtrace()));
-        if (strtolower($table) == 'tx_newspaper_article' &&
-                (
-                (isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
-                (isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0)
-                )
-        ) {
+    /// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
+    /**
+     *  (checks starttime too); data is added to $fieldArray (so for typo3 save hook usage only)
+     */
+    private static function addPublishDateIfNotSet($id, &$fieldArray) {
+        if (!self::articleWasUnhidden($fieldArray)) return;
 
-            // hidden is 0, so article was just made visible
-
-            $article = null; // might be needed later
-            // if the values for starttime or publish_date are set in $fieldArray, these values MUST be used
-            // (because these new values aren't stored in the database)
-
-            if (isset($fieldArray['publish_date'])) {
-                // publish_date is available in $fieldArray, no need to read from database
-                $publish_date = $fieldArray['publish_date'];
-            } else {
-                // publish_date has to be retrieved
-                if (intval($id)) {
-                    // article was stored before ...
-                    $article = new tx_newspaper_article(intval($id)); // get article
-                    $publish_date = $article->getAttribute('publish_date');
-                } else {
-                    // new article
-                    $publish_date = 0;
-                }
-            }
-
-            if ($publish_date > 0) {
-                return; // publish date has been set already
-            }
-
-            if (isset($fieldArray['starttime'])) {
-                // starttime is available in $fieldArray
-                $starttime = $fieldArray['starttime'];
-            } else {
-                // starttime has to be retrieved
-                if (intval($id)) {
-                    // article was stored before ...
-                    if (!($article instanceof tx_newspaper_article)) {
-                        $article = new tx_newspaper_article(intval($id)); // get article
-                    }
-                    $starttime = $article->getAttribute('starttime');
-                } else {
-                    // new article, $id equals NEW_something
-                    $starttime = 0; // if timestart would have been set, it would be part of $fieldArray
-                }
-            }
-
-            $fieldArray['publish_date'] = max(time(), $starttime); // change publish_date
+        $publish_date = self::getAttributeFromFieldArrayOrArticle($fieldArray, $id, 'publish_date');
+        if ($publish_date > 0) {
+            return; // publish date has been set already
         }
+
+        $starttime = self::getAttributeFromFieldArrayOrArticle($fieldArray, $id, 'starttime');
+
+        $fieldArray['publish_date'] = max(time(), $starttime); // change publish_date
+    }
+
+    private static function articleWasUnhidden(array $fieldArray) {
+        return
+            (isset($_REQUEST['hidden_status']) && $_REQUEST['hidden_status'] == 0) || // workflow button was used to publish the article
+            (isset($fieldArray['hidden']) && $fieldArray['hidden'] == 0);
+    }
+
+    private static function getAttributeFromFieldArrayOrArticle(array $fieldArray, $article_uid, $attribute) {
+        if (isset($fieldArray[$attribute])) {
+            return $fieldArray[$attribute];
+        }
+
+        if (intval($article_uid) == 0) {
+            return 0;   // new article
+        }
+        
+        $article = new tx_newspaper_Article(intval($article_uid)); // get article
+        return $article->getAttribute($attribute);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -1474,7 +1428,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //	private data members
     //
     ////////////////////////////////////////////////////////////////////////////
-    ///< tx_newspaper_Source the tx_newspaper_Article is read from
+    /// tx_newspaper_Source the tx_newspaper_Article is read from
     private $source = null;
     /// Object to delegate operations to
     private $articleBehavior = null;
