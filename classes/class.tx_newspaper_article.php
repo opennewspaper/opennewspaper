@@ -884,6 +884,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /** \todo some documentation would be nice ;-) */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
+        $article_before_db_ops = self::safelyInstantiateArticle($id);
+        if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
+
+        self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
+        tx_newspaper::devlog("tags pre ops set to:", self::$tags_before_db_ops);
+
         self::joinTags($incomingFieldArray, $table, $id, $that);
     }
 
@@ -917,9 +923,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $article_before_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
-
-        self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
-        tx_newspaper::devlog("tags pre ops set to:", self::$tags_before_db_ops);
 
         self::updateDependencyTree($article_before_db_ops, $fieldArray);
 
