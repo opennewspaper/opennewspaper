@@ -1056,9 +1056,10 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		if ($count > 0) {
 			$msg = $count . ' problems found</br>' . $msg;
+			return $msg;
 		}
 
-		return $msg;
+		return true; // no problems found
 	}
 
 
