@@ -934,8 +934,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
         tx_newspaper::devlog("article post ops is set", $article_after_db_ops);
 
-        $tags_pre = self::$article_before_db_ops->getTags();
-        $tags_post = $article_after_db_ops->getTags();
+        $tags_pre = self::$article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
+        $tags_post = $article_after_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
 
         tx_newspaper::devlog("tags", array("pre"=>$tags_pre, "post"=>$tags_post));
         // ...
