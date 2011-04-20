@@ -934,20 +934,26 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
 
-        $article_after_db_ops = self::safelyInstantiateArticle($id);
+        $tags = self::getRemovedTags($id);
+        tx_newspaper::devlog("removed from pD_aDO", $tags);
+    }
+
+    private static function getRemovedTags($article_uid) {
+        $article_after_db_ops = self::safelyInstantiateArticle($article_uid);
         if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
 
         $tags_post = $article_after_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
 
         tx_newspaper::devlog("tags", array("pre"=>self::$tags_before_db_ops, "post"=>$tags_post));
-        if ($tags_post != self::$tags_before_db_ops) {
-            $removed_tags = array_diff($tags_post, self::$tags_before_db_ops);
-            $added_tags = array_diff(self::$tags_before_db_ops, $tags_post);
-            tx_newspaper::devlog("changed!", array("added"=>$added_tags, "removed"=>$removed_tags));
-        }
+        $removed_tags = array_diff(self::$tags_before_db_ops, $tags_post);
+
+        tx_newspaper::devlog("removed tags", $removed_tags);
 
         self::$tags_before_db_ops = array();
+
+        return $removed_tags;
     }
+
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
         self::modifyTagSelection($table, $field);
