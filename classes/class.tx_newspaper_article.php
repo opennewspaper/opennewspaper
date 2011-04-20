@@ -904,6 +904,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             return null;
         }
 
+        return $article;
     }
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
