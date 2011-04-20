@@ -921,11 +921,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_afterDatabaseOperations($status, $table, $id, ", $fieldArray);
         if (!self::isValidForSavehook($table, $id)) return;
+        tx_newspaper::devlog("valid");
         if (!self::$article_before_db_ops instanceof tx_newspaper_Article) return;
+        tx_newspaper::devlog("article pre ops is set", self::$article_before_db_ops);
 
         $article_after_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
+        tx_newspaper::devlog("article post ops is set", $article_after_db_ops);
 
         $tags_pre = self::$article_before_db_ops->getTags();
         $tags_post = $article_after_db_ops->getTags();
