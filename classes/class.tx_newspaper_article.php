@@ -883,26 +883,57 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /** \todo some documentation would be nice ;-) */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
+        if (!self::isValidForSavehook($table, $id)) return;
         self::joinTags($incomingFieldArray, $table, $id, $that);
     }
 
-    public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-        if (strtolower($table) == 'tx_newspaper_article') {
-            self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
-            self::makeRelatedArticlesBidirectional($id);
-            self::cleanRelatedArticles($id);
+    private static function isValidForSavehook($table, $id) {
+        if (strtolower($table) != 'tx_newspaper_article') return false;
+        if (!intval($id)) return false;
+        return true;
+    }
 
-            if (!intval($id)) return;
-            $article = new tx_newspaper_Article(intval($id));
+    private static $article_before_db_ops = null;
 
-            try {
-                $article->getAttribute('uid');
-            } catch (tx_newspaper_Exception $e) {
-                return;
-            }
+    private static function safelyInstantiateArticle($id) {
+        $article = new tx_newspaper_Article(intval($id));
 
-            self::updateDependencyTree($article);
+        try {
+            $article->getAttribute('uid');
+        } catch (tx_newspaper_Exception $e) {
+            return null;
         }
+
+    }
+
+    public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+        if (!self::isValidForSavehook($table, $id)) return;
+
+        self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
+        self::makeRelatedArticlesBidirectional($id);
+        self::cleanRelatedArticles($id);
+
+        self::$article_before_db_ops = self::safelyInstantiateArticle($id);
+
+        if (self::$article_before_db_ops instanceof tx_newspaper_Article) {
+            self::updateDependencyTree(self::$article_before_db_ops, $fieldArray);
+        }
+    }
+
+    public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+        if (!self::isValidForSavehook($table, $id)) return;
+        if (!self::$article_before_db_ops instanceof tx_newspaper_Article) return;
+
+        $article_after_db_ops = self::safelyInstantiateArticle($id);
+        if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
+
+        $tags_pre = self::$article_before_db_ops->getTags();
+        $tags_post = $article_after_db_ops->getTags();
+
+        tx_newspaper::devlog("tags", array("pre"=>$tags_pre, "post"=>$tags_post));
+        // ...
+        
+        self::$article_before_db_ops = null;
     }
 
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
@@ -970,6 +1001,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (!class_exists($class)) return;
         if (!method_exists($class, $function)) return;
         self::$render_hooks[$class] = $function;
+    }
+
+    public static function updateDependencyTree(tx_newspaper_Article $article, array $previous_values) {
+        if (tx_newspaper_DependencyTree::useDependencyTree()) {
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+            $tree->executeActionsOnPages('tx_newspaper_Article');
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -1354,13 +1392,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
 
         $article->removeDanglingRelations();
-    }
-
-    public static function updateDependencyTree(tx_newspaper_Article $article) {
-        if (tx_newspaper_DependencyTree::useDependencyTree()) {
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
-            $tree->executeActionsOnPages('tx_newspaper_Article');
-        }
     }
 
     private static function modifyTagSelection($table, $field) {
