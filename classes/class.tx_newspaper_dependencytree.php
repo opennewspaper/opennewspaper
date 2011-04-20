@@ -140,10 +140,13 @@ class tx_newspaper_DependencyTree {
     /** @param $article The article which is changed. \p $article is from now on
      *    called "the affected article". 
      */
-    static public function generateFromArticle(tx_newspaper_Article $article) {
+    static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
         tx_newspaper::startExecutionTimer();
         $tree = new tx_newspaper_DependencyTree();
         $tree->setArticle($article);
+        if (!empty($removed_tags)) {
+            $tree->setDeletedContentTags($removed_tags);
+        }
         tx_newspaper::logExecutionTime('generateFromArticle()');
 
         return $tree;
@@ -330,6 +333,10 @@ class tx_newspaper_DependencyTree {
         $this->article = $article;
     }
 
+    private function setDeletedContentTags(array $tags) {
+        $this->removed_dossier_tags = $tags;
+    }
+
     private function setList(tx_newspaper_Articlelist $list) {
         $this->addSectionPages(array($list->getSection()));
         $this->markAsCleared();
@@ -396,7 +403,10 @@ class tx_newspaper_DependencyTree {
     private function addDossierPages(tx_newspaper_Article $article) {
         tx_newspaper::startExecutionTimer();
 
-        $tags = $article->getTags(tx_newspaper_Tag::getControlTagType());
+        $tags = array_merge(
+            $article->getTags(tx_newspaper_Tag::getControlTagType()),
+            $this->removed_dossier_tags
+        );
         if (empty($tags)) return;
 
         $dossier_page = getDossierPage();
@@ -465,6 +475,7 @@ class tx_newspaper_DependencyTree {
     private $related_article_pages_filled = false;
     private $dossier_pages = array();   ///< Pages showing article as part of a dossier
     private $dossier_pages_filled = false;
+    private $removed_dossier_tags = array();    ///< Dossier tags which have been deleted
     private $articlelist_pages = array();   ///< Pages displaying article lists containing the article
     private $articlelist_pages_filled = false;
 

@@ -891,9 +891,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     private static function isValidForSavehook($table, $id) {
-        if (strtolower($table) != 'tx_newspaper_article') return false;
-        if (!intval($id)) return false;
-        return true;
+        return (
+            strtolower($table) == 'tx_newspaper_article' &&
+            intval($id) > 0
+        );
     }
 
     private static function saveOldControlTagsForArticle($article_uid) {
@@ -924,18 +925,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::makeRelatedArticlesBidirectional($id);
         self::cleanRelatedArticles($id);
 
-        $article_before_db_ops = self::safelyInstantiateArticle($id);
-        if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
+        $article = self::safelyInstantiateArticle($id);
+        if (!$article instanceof tx_newspaper_Article) return;
 
-        $tags = self::getRemovedTags($article_before_db_ops);
+        $tags = self::getRemovedTags($article);
         tx_newspaper::devlog("removed from pD_pPFA", $tags);
 
-        self::updateDependencyTree($article_before_db_ops);
-
-    }
-
-    public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-        if (!self::isValidForSavehook($table, $id)) return;
+        self::updateDependencyTree($article, $tags);
 
     }
 
@@ -1017,9 +1013,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::$render_hooks[$class] = $function;
     }
 
-    public static function updateDependencyTree(tx_newspaper_Article $article) {
+    public static function updateDependencyTree(tx_newspaper_Article $article, array $removed_tags = array()) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
-            $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
+            $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $removed_tags);
             $tree->executeActionsOnPages('tx_newspaper_Article');
         }
     }
