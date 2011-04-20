@@ -927,6 +927,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $article_before_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
 
+        $tags = self::getRemovedTags($id);
+        tx_newspaper::devlog("removed from pD_pPFA", $tags);
+
         self::updateDependencyTree($article_before_db_ops);
 
     }
@@ -934,8 +937,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
 
-        $tags = self::getRemovedTags($id);
-        tx_newspaper::devlog("removed from pD_aDO", $tags);
     }
 
     private static function getRemovedTags($article_uid) {
@@ -944,10 +945,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $tags_post = $article_after_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
 
-        tx_newspaper::devlog("tags", array("pre"=>self::$tags_before_db_ops, "post"=>$tags_post));
         $removed_tags = array_diff(self::$tags_before_db_ops, $tags_post);
-
-        tx_newspaper::devlog("removed tags", $removed_tags);
 
         self::$tags_before_db_ops = array();
 
