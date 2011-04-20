@@ -815,57 +815,71 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
     }
 
 	/// writes tx_newspaper_extra and tx_newspaper_pagezone_page_extras_mm records if a new extra is added to a pagezone
-    /** \todo: explain in detail what's happening here!
+    /** \todo: explain in detail what's happening here, and in particular, how this function is called!
      */
-	private static function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that) {
+	private static function writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, t3lib_tcemain $that) {
+
+        if (!self::isNewExtraOnPageZone($status, $table)) return;
+
         tx_newspaper::devlog("writeRecordsIfNewExtraOnPageZone($status, $table, $id, ...", debug_backtrace());
-		if (tx_newspaper::isAbstractClass($table)) {
-			return; // abstract class, nothing to do
-		}
 
-		/// Check if a new extra is stored (on pagezone or article)
-		// exclude new articles - articles are extras too but shouldn't be treated like extras here!
-		if ($status == 'new' && $table != 'tx_newspaper_article' && !$_REQUEST['tx_newspaper_mod1']['newExtraInElementBrowser'] && tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface')) {
-			$pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
-			$after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
-			if (!$pz_uid) {
-				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): Illegal value for pagezone uid: #', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
-				die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
-			}
+        $pz = self::getPagezoneForInsertingNewExtra($table, $id);
+        $e = self::instantiateNewExtra($table, $id, $that);
 
-			// get uid of new concrete extra (that was just stored)
-			if (!$concrete_extra_uid = intval($that->substNEWwithIDs[$id])) {
-				t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . ' could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
-				die('Fatal error: New extra ' . $table . ' could not be created. <b>Please contact developers.</b> Please <i>reload</i> the backend if you cannot access the backend anymore.');
-			}
+        self::setDefaultsForNewExtra($e);
 
-			// create abstract record for this concrete extra
-			$abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table, true); // $force=true, there's no abstract record for this extra existing (for this is a totally new extra)
+        self::insertNewExtraOnPagezone($e, $pz);
 
-			// get pagezone (pagezone_page or article)
-			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
-
-			// get extra ...
-			$e = tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
-			// .... add set some default values
-			$e->setAttribute('show_extra', 1);
-			$e->setAttribute('is_inheritable', 1);
-
-			// insert extra on pagezone
-			$pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
-
-			if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
-				// set paragraph
-				$pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
-			} else {
-				$e->store(); // call store() only if changeExtraParagraph() wasn't called (see above)
-			}
-
-		}
+        if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
+            // set paragraph
+            $pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
+        } else {
+            $e->store(); // call store() only if changeExtraParagraph() wasn't called (see above)
+        }
 
 	}
 
+    private static function isNewExtraOnPageZone($status, $table) {
+        return (
+            tx_newspaper::classImplementsInterface($table, 'tx_newspaper_ExtraIface') &&
+            !tx_newspaper::isAbstractClass($table) &&
+            strtolower($table) != 'tx_newspaper_article' &&
+            $status == 'new' &&
+            !$_REQUEST['tx_newspaper_mod1']['newExtraInElementBrowser']
+        );
+    }
 
+    private static function getPagezoneForInsertingNewExtra($table, $id) {
+        $pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
+        if (!$pz_uid) {
+            t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): Illegal value for pagezone uid: #', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
+            die('Fatal error: Illegal value for pagezone uid: #' . $pz_uid . '. Please contact developers');
+        }
+        return tx_newspaper_PageZone_Factory::getInstance()->create($pz_uid);
+    }
+
+    private static function instantiateNewExtra($table, $id, t3lib_tcemain $that) {
+        // get uid of new concrete extra (that was just stored)
+        if (!$concrete_extra_uid = intval($that->substNEWwithIDs[$id])) {
+            t3lib_div::devlog('writeRecordsIfNewExtraOnPageZone(): new id ' . $id . ' could not be substituted', 'newspaper', 3, array('table' => $table, 'id' => $id, 'pz_uid' => $pz_uid));
+            die('Fatal error: New extra ' . $table . ' could not be created. <b>Please contact developers.</b> Please <i>reload</i> the backend if you cannot access the backend anymore.');
+        }
+
+        // create abstract record for this concrete extra
+        $abstract_uid = tx_newspaper_Extra::createExtraRecord($concrete_extra_uid, $table, true); // $force=true, there's no abstract record for this extra existing (for this is a totally new extra)
+
+        return tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
+    }
+
+    private static function setDefaultsForNewExtra(tx_newspaper_Extra &$e) {
+        $e->setAttribute('show_extra', 1);
+        $e->setAttribute('is_inheritable', 1);
+    }
+
+    private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone $pz) {
+        $after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
+        $pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
+    }
 
 	private $uid = 0;			///< Extra's UID in the concrete Extra table
 	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
