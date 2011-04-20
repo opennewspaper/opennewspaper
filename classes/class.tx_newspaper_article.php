@@ -908,8 +908,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, ", $fieldArray);
         if (!self::isValidForSavehook($table, $id)) return;
+        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, ", $fieldArray);
 
         self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
         self::makeRelatedArticlesBidirectional($id);
@@ -926,8 +926,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_afterDatabaseOperations($status, $table, $id, ", $fieldArray);
         if (!self::isValidForSavehook($table, $id)) return;
+        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_afterDatabaseOperations($status, $table, $id, ", $fieldArray);
 
         tx_newspaper::devlog("tags pre ops is set", self::$tags_before_db_ops);
 

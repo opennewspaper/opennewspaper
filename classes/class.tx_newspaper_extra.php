@@ -830,13 +830,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
         self::insertNewExtraOnPagezone($e, $pz);
 
-        if (isset($_REQUEST['paragraph']) && ($pz instanceof tx_newspaper_Article)) {
-            // set paragraph
-            $pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
-        } else {
-            $e->store(); // call store() only if changeExtraParagraph() wasn't called (see above)
-        }
-
+        $pz->changeExtraParagraph($e, intval(t3lib_div::_GP('paragraph'))); // changeExtraParagraph() stores the extras, so no need to store after call this function call
 	}
 
     private static function isNewExtraOnPageZone($status, $table) {
@@ -881,6 +875,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         $pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
     }
 
+    
 	private $uid = 0;			///< Extra's UID in the concrete Extra table
 	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
 
