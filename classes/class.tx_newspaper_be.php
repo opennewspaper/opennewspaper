@@ -592,8 +592,8 @@ function findElementsByName(name, type) {
 		$label['clipboard_cut'] = self::getTranslation('label_clipboard_cut');
 		$label['clipboard_copied'] = self::getTranslation('label_clipboard_copied');
 		$label['clear_clipboard'] = self::getTranslation('label_clear_clipboard');
-	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
-	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
+	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
+	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
 
 		$message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
         $message['confirmation'] = self::getTranslation('message_unsaved_data');
@@ -800,17 +800,13 @@ function findElementsByName(name, type) {
 
 	public function processPasteFromClipboard(array $input) {
 		$clipboard = self::getClipboardData();
-t3lib_div::devlog('paste', 'newspaper', 0, array('clipboard' => $clipboard, 'input' => $input));
+//t3lib_div::devlog('paste', 'newspaper', 0, array('clipboard' => $clipboard, 'input' => $input));
 
 		// get extra in clipboard
 		$e_old = tx_newspaper_Extra_Factory::getInstance()->create(intval($clipboard['extraUid']));
 
-		// copy or cut extra
-		if ($clipboard['type'] == 'copy') {
-			$e = clone $e_old; // copy the extra
-		} else {
-			$e = $e_old; // cut extra
-		}
+		// copy the extra (for both copy and cut)
+		$e = $e_old->duplicate();
 
 		// get target pagezone
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($input['pz_uid']));
@@ -1128,8 +1124,8 @@ JSCODE;
 		$label['templateset'] = self::getTranslation('label_templateset');
 		$label['shortcuts'] = self::getTranslation('label_shortcuts');
 	    $label['overview'] = self::getTranslation('overview');
-	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
-	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
+	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
+	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
 
 		$smarty_pz = new tx_newspaper_Smarty();
 		$smarty_pz->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
