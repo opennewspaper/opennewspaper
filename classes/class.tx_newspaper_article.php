@@ -884,11 +884,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /** \todo some documentation would be nice ;-) */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
-        $article_before_db_ops = self::safelyInstantiateArticle($id);
-        if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
 
-        self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
-        tx_newspaper::devlog("tags pre ops set to:", self::$tags_before_db_ops);
+        self::saveOldControlTagsForArticle($id);
 
         self::joinTags($incomingFieldArray, $table, $id, $that);
     }
@@ -897,6 +894,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (strtolower($table) != 'tx_newspaper_article') return false;
         if (!intval($id)) return false;
         return true;
+    }
+
+    private static function saveOldControlTagsForArticle($article_uid) {
+        $article_before_db_ops = self::safelyInstantiateArticle($article_uid);
+        if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
+
+        self::$tags_before_db_ops = $article_before_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
     }
 
     private static $tags_before_db_ops = array();
@@ -915,7 +919,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
-        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, ", $fieldArray);
 
         self::addPublishDateIfNotSet($status, $table, $id, $fieldArray); // check if publish_date is to be added
         self::makeRelatedArticlesBidirectional($id);
@@ -924,25 +927,25 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $article_before_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_before_db_ops instanceof tx_newspaper_Article) return;
 
-        self::updateDependencyTree($article_before_db_ops, $fieldArray);
+        self::updateDependencyTree($article_before_db_ops);
 
     }
 
     public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
-        tx_newspaper::devlog("tx_newspaper_Article::processDatamap_afterDatabaseOperations($status, $table, $id, ", $fieldArray);
-
-        tx_newspaper::devlog("tags pre ops is set", self::$tags_before_db_ops);
 
         $article_after_db_ops = self::safelyInstantiateArticle($id);
         if (!$article_after_db_ops instanceof tx_newspaper_Article) return;
-        tx_newspaper::devlog("article post ops is set", $article_after_db_ops);
 
         $tags_post = $article_after_db_ops->getTags(tx_newspaper_Tag::getControlTagType());
 
         tx_newspaper::devlog("tags", array("pre"=>self::$tags_before_db_ops, "post"=>$tags_post));
-        // ...
-        
+        if ($tags_post != self::$tags_before_db_ops) {
+            $removed_tags = array_diff($tags_post, self::$tags_before_db_ops);
+            $added_tags = array_diff(self::$tags_before_db_ops, $tags_post);
+            tx_newspaper::devlog("changed!", array("added"=>$added_tags, "removed"=>$removed_tags));
+        }
+
         self::$tags_before_db_ops = array();
     }
 
@@ -1013,7 +1016,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::$render_hooks[$class] = $function;
     }
 
-    public static function updateDependencyTree(tx_newspaper_Article $article, array $previous_values) {
+    public static function updateDependencyTree(tx_newspaper_Article $article) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article);
             $tree->executeActionsOnPages('tx_newspaper_Article');
