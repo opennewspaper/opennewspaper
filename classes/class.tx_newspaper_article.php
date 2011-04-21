@@ -587,6 +587,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public function getLink(tx_newspaper_Section $section = null,
                             tx_newspaper_PageType $pagetype = null,
                             array $additional_parameters = array()) {
+
+        $section = $this->determineRelevantSection($section);
+        $typo3page = $section->getTypo3PageID();
+
+        $get_vars = array(
+            'id' => $typo3page,
+            tx_newspaper::article_get_parameter => $this->getUid()
+        );
+        $get_vars = array_merge($get_vars, $additional_parameters);
+        $get_vars = array_unique($get_vars);
+
+        return tx_newspaper::typolink_url($get_vars);
+    }
+
+    private function determineRelevantSection(tx_newspaper_Section $section = null) {
         if (!$section) {
             $section = $this->getPrimarySection();
         }
@@ -601,16 +616,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $section = new tx_newspaper_Section($section_data['uid']);
         }
 
-        $typo3page = $section->getTypo3PageID();
-
-        $get_vars = array(
-            'id' => $typo3page,
-            tx_newspaper::article_get_parameter => $this->getUid()
-        );
-        $get_vars = array_merge($get_vars, $additional_parameters);
-        $get_vars = array_unique($get_vars);
-
-        return tx_newspaper::typolink_url($get_vars);
+        return $section;
     }
 
     /// Get a list of all attributes in the tx_newspaper_Article table.
