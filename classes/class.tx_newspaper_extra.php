@@ -826,7 +826,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         $pz = self::getPagezoneForInsertingNewExtra($table, $id);
         $e = self::instantiateNewExtra($table, $id, $that);
 
-        self::setDefaultsForNewExtra($e);
+        self::setDefaultsForNewExtra($e, $pz->getTable());
 
         self::insertNewExtraOnPagezone($e, $pz);
 
@@ -865,9 +865,13 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         return tx_newspaper_Extra_Factory::getInstance()->create($abstract_uid);
     }
 
-    private static function setDefaultsForNewExtra(tx_newspaper_Extra &$e) {
-        $e->setAttribute('show_extra', 1);
-        $e->setAttribute('is_inheritable', 1);
+    private static function setDefaultsForNewExtra(tx_newspaper_Extra &$e, $table) {
+		// set show and inherit to 0 if extra is placed on a pagezone_page
+		// set show to 1 if extra is placed in an article
+		$state = ($table == 'tx_newspaper_pagezone_page')? 0 : 1;
+
+        $e->setAttribute('show_extra', $state);
+        $e->setAttribute('is_inheritable', $state);
     }
 
     private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone $pz) {
@@ -875,7 +879,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         $pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
     }
 
-    
+
 	private $uid = 0;			///< Extra's UID in the concrete Extra table
 	protected $extra_uid = 0;	///< Extra's UID in the abstract Extra table
 
