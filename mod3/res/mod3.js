@@ -49,11 +49,10 @@ function loadJsCssFile(filename, filetype, param) {
 	function getTypo3BackendObject() {
 //top.console.log('getTypo3BackendObject()');
 //top.console.log(typeof top.getViewportWidth);
-//alert('+++');
 		if (typeof top.getViewportWidth == 'function') {
 			return top; // called in "normal" typo3 backend
 		}
-		if (typeof opener.top.getViewportWidth == 'function') {
+		if (opener != null && typeof opener.top.getViewportWidth == 'function') {
 			return opener.top; // called in standalone popup
 		}
 		return false; // no reference could be found
