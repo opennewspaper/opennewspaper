@@ -680,7 +680,7 @@ function findElementsByName(name, type) {
                               $lastTab = $extra_data[0][0]['concrete_table'].'_'.$extra_data[0][0]['concrete_uid'];
                           }
                          $smarty_pz->assign('lastTab', $lastTab);
-                         tx_newspaper_BE::addNewExtraData($smarty_pz);
+                         tx_newspaper_BE::addNewExtraData($smarty_pz, tx_newspaper_extra::HIDE_IN_ARTICLE_BE);
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article_tabbed.tmpl'); // whole pagezone
                		break;
                		case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
@@ -730,7 +730,7 @@ function findElementsByName(name, type) {
 
 
 // \todo: how are $new_at_top and $paragraph used? are those vars used at all???
-    private static function addNewExtraData(&$smarty) {
+    private static function addNewExtraData(&$smarty, $type) {
 
         // convert params, sent by js, so false is given as string, not a boolean
 /// \todo: switch to 0/1 instead of false/true
@@ -754,7 +754,7 @@ function findElementsByName(name, type) {
         $message['no_extra_selected'] = self::getTranslation('message_no_extra_selected');
 
         /// list of registered extras
-        $extra = tx_newspaper_Extra::getRegisteredExtras();
+        $extra = tx_newspaper_Extra::getAllowedExtras($type);
 //debug($extra, 'e');
         $smarty->assign('LABEL', $label);
         $smarty->assign('MESSAGE', $message);

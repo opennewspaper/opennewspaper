@@ -574,8 +574,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$label['new_extra_from_pool'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:label_new_extra_from_pool', false);
 		$message['no_extra_selected'] = $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_no_extra_selected', false);
 
-		/// list of registered extras
-		$extra = tx_newspaper_Extra::getRegisteredExtras();
+		/// list of registered and allowed extras
+		$extra = tx_newspaper_Extra::getAllowedExtras(tx_newspaper_extra::HIDE_IN_PLACEMENT);
 //debug($extra, 'e');
 
 		$smarty->assign('LABEL', $label);

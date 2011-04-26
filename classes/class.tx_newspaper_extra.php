@@ -555,6 +555,35 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 
+	/// Get list of registered Extra that are not hidden in TSConfig
+	/**
+	 * TSConfig: newspapre.be.hideExtra.[class name] = value
+	 * Value  0: don't hide (default)
+	 * Value -1: always hide
+	 * Value > 0: Bitmask, see newspaper TSConofig documentation
+	 * \param $type
+	 * \return Array Allowed extras
+	 */
+	static public function getAllowedExtras($type) {
+
+		$type = intval($type);
+
+		$extras = array();
+		foreach(self::getRegisteredExtras() as $extra) {
+
+			// read user tsconfig configuration for current extra
+			$perm = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.hideExtra.' . $extra->getTable());
+
+			if ($perm == self::HIDE_NOWHERE || (($type != self::HIDE_EVERYWHERE) && !($type & $perm))) {
+				// add to array (either HIDE_NOWHERE is configured or the given $type matches the $perm bitmask)
+				$extras[] = $extra;
+			}
+//if($perm) t3lib_div::debug(array('table' => $extra->getTable(), 'type' => $type, 'perm' => $perm, 'bitmask check' => ($type & $perm)));
+		}
+		return $extras;
+	}
+
+
 	/// The module name for the newspaper sysfolder
 	/** For the base class tx_newspaper_Extra this is set to the default folder
 	 *  for data associated with newspaper etxension.
@@ -901,6 +930,13 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	private static $fields_to_copy_into_extra_table = array(
 		'pid', 'crdate', 'cruser_id', 'deleted',
 	);
+
+	// constants for hiding extras
+	// User TSConfig: newspaper.be.hideExtra.[class anme] 0  [value]
+	const HIDE_NOWHERE = 0;
+	const HIDE_EVERYWHERE = -1;
+	const HIDE_IN_ARTICLE_BE = 1;
+	const HIDE_IN_PLACEMENT = 16;
 
 }
 ?>
