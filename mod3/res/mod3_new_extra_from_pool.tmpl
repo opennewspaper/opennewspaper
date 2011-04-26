@@ -24,6 +24,13 @@
 	}
 
 </script>
+
+<style>
+#extra_list {
+	width:300px;
+}
+</style>
+
 {/literal}
 
 
@@ -36,7 +43,7 @@
 	</select>
 	<br /><br />
 	<input onclick="extra_insert_after_POOL_copy({$ORIGIN_UID}, '{$EXTRA_CLASS}', {$PZ_UID}, {$PARAGRAPH}, top.path)" type="button" value="{$LABEL.extra_copy_from_pool}" />
-{* \todo: referenced extra will be implemted later 
+{* \todo: referenced extra will be implemted later
 	<input onclick="extra_insert_after_POOL_ref({$ORIGIN_UID}, '{$EXTRA_CLASS}', {$PZ_UID}, {$PARAGRAPH}, top.path)" type="button" value="{$LABEL.extra_reference_from_pool}" />
 *}
 {else}

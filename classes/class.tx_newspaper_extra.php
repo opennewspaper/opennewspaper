@@ -547,11 +547,27 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		return false;
 	}
 
-	/// Get list of registered tx_newspaper_Extra classes.
+	/// Get sorted list of registered tx_newspaper_Extra classes.
 	/** \return Array with (registered) Extra objects (\em not class names).
 	 */
 	static public function getRegisteredExtras() {
-		return self::$registeredExtra;
+
+		// get extra titles (localized)
+		$extrasUnsorted = array();
+		foreach(self::$registeredExtra as $extra) {
+			$extrasUnsorted[$extra->getTable()] = $extra->getTitle();
+		}
+
+		// sort extras
+		natcasesort($extrasUnsorted);
+
+		// create sorted array
+		$extras = array();
+		foreach($extrasUnsorted as $extraClassname => $title) {
+			$extras[] = new $extraClassname();
+		}
+
+		return $extras;
 	}
 
 

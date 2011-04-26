@@ -55,6 +55,13 @@ if (in_article) alert("pool: in article not yet implemented");
 
 </script>
 
+{literal}
+<style>
+#extra_list {
+	width:300px;
+}
+</style>
+{/literal}
 
 {* render list with registered extras *}
 <select id="extra_list" size="{$LIST_SIZE}" ondblclick="extra_insert_after_NEW({$ORIGIN_UID}, {$PZ_UID}, {$ARTICLE_UID}, {if ($IS_CONCRETE_ARTICLE)}1{else}0{/if})">';

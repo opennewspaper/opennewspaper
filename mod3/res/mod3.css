@@ -54,6 +54,11 @@ body#ext-newspaper-mod6-index-php input.submit {
 	font-weight:bold;
 }
 
+
+#extra_list {
+	width:300px;
+}
+
 </style>
 
 {/literal}
