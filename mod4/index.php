@@ -635,9 +635,72 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkForDefaultTemplateSet'),
 				'param' => array()
 			),
+			array(
+				'title' => 'Check if pages are unique for section and page type',
+				'class_function' => array('tx_newspaper_module4', 'checkPageUniqueness'),
+				'param' => array()
+			),
+			array(
+				'title' => 'Check if pagezone_pages are unique for page and pagezone type',
+				'class_function' => array('tx_newspaper_module4', 'checkPagezonePageUniqueness'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
+
+	static function checkPagezonePageUniqueness() {
+		$rows = tx_newspaper::selectRowsDirect(
+			'pz.uid pz_uid, pz.page_id page_id, pz_p.pagezonetype_id pagezonetype_id',
+			'tx_newspaper_pagezone pz, tx_newspaper_pagezone_page pz_p',
+			'pz.pagezone_table="tx_newspaper_pagezone_page" AND pz.pagezone_uid=pz_p.uid AND pz.deleted=0'
+		);
+//t3lib_div::debug($rows);
+
+		// the combination of page_id and pagezonetype_id needs to be unique
+		$tmp = array();
+		$errorCount = 0;
+		$msg = '';
+		foreach($rows as $idx => $row) {
+			$key = $row['page_id'] . '|' . $row['pagezonetype_id'];
+			$tmp[$key][] = $idx;
+		}
+//t3lib_div::debug($tmp);
+		foreach($tmp as $row) {
+//t3lib_div::debug($row);
+			if (sizeof($row) > 1) {
+				$msg .= 'Error in pagezone_page: page_id and pagezonetype_id not unique, see tables below';
+				foreach($row as $bugIdx) {
+					$errorCount++;
+					$msg .= t3lib_div::view_array($rows[$bugIdx]);
+				}
+			}
+		}
+		if (!$errorCount) {
+			return true;
+		}
+		return $msg;
+	}
+
+	static function checkPageUniqueness() {
+		$rows = tx_newspaper::selectRowsDirect(
+			'COUNT(pagetype_id) AS c, tx_newspaper_page.*',
+			'tx_newspaper_page',
+			'1',
+			'section, pagetype_id HAVING deleted=0 AND c>1'
+		);
+		if (!sizeof($rows)) {
+			return true;
+		}
+		$msg = sizeof($rows) . ' problem(s) found in tx_newspaper_page<br />';
+		$msg .= '<table border="1" cellpadding="1" cellspacing="0"><tr><td>uid</td><td>section</td><td>pagetype_id</td><td>count</td></tr>';
+		foreach($rows as $row) {
+			$msg .= '<tr><td>' . $row['uid'] . '</td><td>' . $row['section'] . '</td><td>' . $row['pagetype_id'] . '</td><td>' . $row['c'] . '</td></tr>';
+		}
+		$msg .= '</table><br />';
+		return $msg;
+	}
+
 
 	static function checkAbstractExtraTable() {
 		$rows = tx_newspaper::selectRows(
