@@ -252,12 +252,30 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			return false; // page has been activated already
 		}
 
-		$p = new tx_newspaper_Page($this, $type);
-		$p->store();
-		$p->setAttribute('crdate', time());
-		$p->setAttribute('tstamp', time());
-		$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$p->store();
+		// check if a deleted page can be re-activated
+		$row = tx_newspaper::selectRowsDirect(
+			'*',
+			'tx_newspaper_page',
+			'section=' . $this->getUid() . ' AND pagetype_id=' . $type->getUid() . ' AND deleted=1',
+			'',
+			'uid DESC',
+			'1'
+		);
+		if ($row) {
+			tx_newspaper::updateRows(
+				'tx_newspaper_page',
+				'uid=' . $row[0]['uid'],
+				array('deleted' => 0, 'tstamp' => time())
+			);
+			$p = new tx_newspaper_Page($this, $type);
+		} else {
+			$p = new tx_newspaper_Page($this, $type);
+			$p->store();
+			$p->setAttribute('crdate', time());
+			$p->setAttribute('tstamp', time());
+			$p->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+			$p->store();
+		}
 
 		$this->subPages[] = $p; // add page to subPages array, so it's available right away
 

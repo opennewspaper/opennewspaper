@@ -538,14 +538,51 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 			return false; // pagezone has been activated already
 		}
 
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
-			$this,
-			$type
+		// pagezone table associated to current pagezone type
+		$pzConcreteTable = ($type->getAttribute('is_article'))? 'tx_newspaper_article' : 'tx_newspaper_pagezone_page';
+
+		// check if a pagezone can be re-activated
+		$row = tx_newspaper::selectRowsDirect(
+			'pz.uid pz_uid, pz_concrete.uid pz_concrete_uid',
+			'tx_newspaper_pagezone pz, ' . $pzConcreteTable . ' pz_concrete',
+			'pz.page_id=' . $this->getUid() . ' AND pz.pagezone_uid=pz_concrete.uid AND pz_concrete.pagezonetype_id=' .
+				$type->getUid() . ' AND pz.deleted=1',
+			'',
+			'pz.uid DESC',
+			'1'
 		);
-		$pz->setAttribute('crdate', time());
-		$pz->setAttribute('tstamp', time());
-		$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-		$pz->store();
+
+		if ($row) {
+
+			// restore abstract record
+			tx_newspaper::updateRows(
+				'tx_newspaper_pagezone',
+				'uid=' . $row[0]['pz_uid'],
+				array('deleted' => 0, 'tstamp' => time())
+			);
+
+			// restore concrete record
+			tx_newspaper::updateRows(
+				$pzConcreteTable,
+				'uid=' . $row[0]['pz_concrete_uid'],
+				array('deleted' => 0, 'tstamp' => time())
+			);
+
+			$pz = tx_newspaper_PageZone_Factory::getInstance()->create($row[0]['pz_uid']);
+
+			// inherit extras (to reflect all changes since this pagezone was deleted)
+			$pz->changeParent($pz->getParentForPlacement());
+
+		} else {
+			$pz = tx_newspaper_PageZone_Factory::getInstance()->createNew(
+				$this,
+				$type
+			);
+			$pz->setAttribute('crdate', time());
+			$pz->setAttribute('tstamp', time());
+			$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+			$pz->store();
+		}
 
 		$this->appendPagezone($pz); // add pagezone to pageZones array, so it's available right away
 
