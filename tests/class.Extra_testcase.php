@@ -31,8 +31,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_nonexistentExtra() {
-		$this->setExpectedException('tx_newspaper_DBException');
-		tx_newspaper_Extra_Factory::getInstance()->create($this->bad_extra_uid);
+		$extra = tx_newspaper_Extra_Factory::getInstance()->create($this->bad_extra_uid);
+        $this->assertTrue($extra instanceof ErrorExtra);
 	}
 
 	public function test_createExtra() {
