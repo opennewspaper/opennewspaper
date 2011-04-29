@@ -307,8 +307,8 @@ class tx_newspaper_hierarchy {
 
         tx_newspaper::insertRows(
             $this->extra_table,
-            'uid = ' . self::broken_extra_uid,
             array(
+                 'uid' => self::broken_extra_uid,
                 'extra_table' => self::broken_extra_table
             )
         );
