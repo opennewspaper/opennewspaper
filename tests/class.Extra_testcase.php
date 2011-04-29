@@ -35,6 +35,11 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue($extra instanceof ErrorExtra);
 	}
 
+    public function test_extraWithBrokenTable() {
+        $extra = tx_newspaper_Extra_Factory::getInstance()->create(self::broken_extra_uid);
+        $this->assertTrue($extra instanceof ErrorExtra);
+    }
+
 	public function test_createExtra() {
         $temp = array();
         foreach($this->extras_to_test as $extra_class) {

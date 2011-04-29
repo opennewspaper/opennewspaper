@@ -251,6 +251,7 @@ class tx_newspaper_hierarchy {
 			$this->createArticlelistExtras($pagezone);
 		}
 		$this->createSectionlistExtras();
+        $this->createBrokenExtra();
 	}
 	
 	private function createImageExtras(tx_newspaper_Pagezone $pagezone) {
@@ -301,7 +302,18 @@ class tx_newspaper_hierarchy {
 		$this->extra_uids[] = $extra_object->getExtraUid();
 
 	}
-	
+
+    private function createBrokenExtra() {
+
+        tx_newspaper::insertRows(
+            $this->extra_table,
+            'uid = ' . self::broken_extra_uid,
+            array(
+                'extra_table' => self::broken_extra_table
+            )
+        );
+    }
+
 	private function removeExtras() {
 		$pagezone = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone_uids[0]);
 
@@ -337,7 +349,10 @@ class tx_newspaper_hierarchy {
 		$this->delete($this->pagezone_page_table, $this->pagezone_page_uids);
 		$this->delete($this->pagezonetype_table, $this->pagezonetype_uids);
 	}	
-	
+
+    const broken_extra_uid = 1000;
+    const broken_extra_table = 'this_is_not_an_existing_table';
+
 	private $delete_all_query = array(
 		"DELETE FROM `tx_newspaper_section` WHERE section_name LIKE 'Unit Test%'",
 		"DELETE FROM `tx_newspaper_section` WHERE deleted",
