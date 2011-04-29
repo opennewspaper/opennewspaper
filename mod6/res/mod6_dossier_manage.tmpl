@@ -42,8 +42,15 @@
 #button {
   clear:both;
 }
+#dossier_title_label, #dossier_title_edit {
+  margin-left:10px;
+}
+#dossier_title {
+  font-weight:bold;
+}
 </style>
 <script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+<script language="javascript" type="text/javascript" src="../res/be/newspaper.js"> </script>
 <script type="text/javascript">
 {/literal}
 var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
@@ -84,6 +91,7 @@ function changeTag(uid) {
 	uid = parseInt(uid);
 	if (!uid) {
 		$("tz").innerHTML = ''; // selected empty row in dropdown, so clear tagzone backend
+		refreshDossierTitle('');
 		return;
 	}
 	var request = new Ajax.Request(
@@ -96,12 +104,57 @@ function changeTag(uid) {
 				},
 				onSuccess: function(data) {
 					if (data) {
-						$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner
+						var tmp = data.responseText.evalJSON();
+						$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
+						refreshDossierTitle(tmp.dossierTitle);
 					}
 				}
 			}
 		);
 	showArticleBackend(1);
+}
+
+function refreshDossierTitle(title) {
+	$("dossier_title").innerHTML = title;
+	if (title) {
+		$("dossier_title_label").innerHTML = '{/literal}{$LANG.label_title}{literal}: ';
+		$("dossier_title_edit").innerHTML = '<a href="#" onclick="changeDossierTitle(); return false;">{/literal}{$ICON.edit}{literal}</a>';
+	} else {
+		$("dossier_title_label").innerHTML = '';
+		$("dossier_title_edit").innerHTML = '';
+	}
+}
+
+function changeDossierTitle() {
+	uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
+	var title = $("dossier_title").innerHTML; // read current title
+	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + hscQuotes(title) + '" />'; // render input form foeld
+	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a>';// render save icon (remove edit icon)
+}
+
+function storeDossierTitle() {
+	var title = $("input_dossier_title").value; // read new title from input field
+	if (title == '') {
+		alert('{/literal}{$LANG.wizard_dossier_title_missing}{literal}');
+		return false;
+	}
+	// store new title
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + escape(title),
+				onCreate: function() {
+					$("dossier_title_edit").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // remove store icon, render spinner
+				},
+				onSuccess: function(data) {
+					if (data) {
+						var title = $("input_dossier_title").value;
+						refreshDossierTitle(title);
+					}
+				}
+			}
+		);
 }
 
 function reloadTagzone(uid) {
@@ -119,7 +172,8 @@ function removeExtraFromTagzone(tz_uid, e_uid) {
 					},
 					onSuccess: function(data) {
 						if (data) {
-							$("tz").innerHTML = data.responseText; // display tag zone backend, remove spinner
+							var tmp = data.responseText.evalJSON();
+							$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
 						}
 					}
 				}
@@ -278,6 +332,7 @@ function splitParam(param, left) {
 		<option value="{$tag->getUid()}"{if $tag->getUid() == $DATA.tag} selected="selected"{/if}>{$tag->getAttribute('tag')}</option>
 	{/foreach}
 	</select>
+	<span id="dossier_title_label"></span><span id="dossier_title"></span><span id="dossier_title_edit"></span>
 </div>
 
 <div id="tz"></div>

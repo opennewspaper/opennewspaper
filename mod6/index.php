@@ -302,6 +302,12 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			die($this->renderTagZoneBackend(intval($input['tag_uid']))); // render new tag zone backend
 		}
 
+		if (isset($input['AjaxStoreDossierTitleUid'])) {
+			$tag = new tx_newspaper_tag(intval($input['AjaxStoreDossierTitleUid']));
+			$tag->setAttribute('title', trim($input['dossierTitle']));
+			$tag->store();
+			die();
+		}
 
 	}
 
@@ -328,7 +334,10 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
 		));
 //t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
-		return $this->smarty->fetch('mod6_dossier_tagzone.tmpl');
+		return json_encode(array(
+			'backend' => $this->smarty->fetch('mod6_dossier_tagzone.tmpl'),
+			'dossierTitle' => $tag->getAttribute('title')
+		));
 	}
 
 
@@ -438,7 +447,9 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 
 			$this->smarty->assign('ICON', array(
 				'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
-				'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
+				'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
+				'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', ''),
+				'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '')
 			));
 		}
 

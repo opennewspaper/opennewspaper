@@ -247,21 +247,31 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
 		if (!$this->attributes) $this->readAttributesFromDB();
 
-
+		// check if tag has been stored in the database already
         $where = 'tag = \'' . $this->getAttribute('tag') . '\' AND tag_type = ' . $this->getAttribute('tag_type');
 		if($this->getAttribute('tag_type') === self::getControlTagType()) {
 			$where .= ' AND ctrltag_cat = ' . intval($this->getAttribute('ctrltag_cat'));
 		}
-		$result = tx_newspaper::selectRows('uid, tag_type, ctrltag_cat, pid', $this->getTable(), $where);
+		$result = tx_newspaper::selectRows('*', $this->getTable(), $where);
 
         if(count($result) > 0) {
-            $this->uid = $result[0]['uid'];
+			// process existing tag
+            $this->setUid($result[0]['uid']); // record is already stored in db, so get uid of taht record
+
+            // check if data was updated
+			$data = array_diff($this->attributes, $result[0]);
+			if ($data) {
+				// record needs to be update ...
+				$data['tstamp'] = time(); // ... so update tstamp
+				tx_newspaper::updateRows($this->getTable(), 'uid=' . $this->getUid(), $data); // and store data
+			}
         } else {
+        	// store new tag
             $createTime = time();
             $this->setAttribute('crdate', $createTime);
 		    $this->setAttribute('tstamp', $createTime);
             $this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
-            $this->uid = tx_newspaper::insertRows($this->getTable(), $this->attributes);
+            $this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
         return $this->getUid();
 	}
