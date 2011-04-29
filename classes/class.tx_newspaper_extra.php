@@ -866,8 +866,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
         if (!self::isNewExtraOnPageZone($status, $table)) return;
 
-        tx_newspaper::devlog("writeRecordsIfNewExtraOnPageZone($status, $table, $id, ...", debug_backtrace());
-
         $pz = self::getPagezoneForInsertingNewExtra($table, $id);
         $e = self::instantiateNewExtra($table, $id, $that);
 
