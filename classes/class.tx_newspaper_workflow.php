@@ -308,21 +308,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// \return role set in be_users (or false if not available)
 	public static function getRole() {
-		// check global object BE_USER first
-		if (isset($GLOBALS['BE_USER']->user['tx_newspaper_role'])) {
-			return $GLOBALS['BE_USER']->user['tx_newspaper_role'];
-		}
-		// check session then
-// \todo: does this make sense??? No access to table be_sessions???
-		if ($_COOKIE['be_typo_user']) {
-			$row = tx_newspaper::selectOneRow(
-				'tx_newspaper_role',
-				'be_users',
-				'uid=' . intval($_COOKIE['be_typo_user']) . ' AND deleted=0'
-			);
-			return $row['tx_newspaper_role'];
-		}
-		return false;
+		return tx_newspaper::getBeUserData('tx_newspaper_role');
 	}
 
 	/// \return true if be_user has newspaper role "duty editor"

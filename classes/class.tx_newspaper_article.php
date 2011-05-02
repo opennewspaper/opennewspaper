@@ -893,7 +893,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  \param $incomingFieldArray The values sent to the save hook via POST
      *  \param $table The SQL table for which this record was saved
      *  \param $id UID of this record
-     *  \param $that The t3lib_tcemain object handling the datamap that stores the record 
+     *  \param $that The t3lib_tcemain object handling the datamap that stores the record
      */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
         if (!self::isValidForSavehook($table, $id)) return;
@@ -934,7 +934,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (!self::isValidForSavehook($table, $id)) return;
 
         self::addPublishDateIfNotSet($id, $fieldArray); // check if publish_date is to be added
-        
+
         $article = self::safelyInstantiateArticle($id);
         if (!$article instanceof tx_newspaper_Article) return;
 
@@ -984,7 +984,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         // prepare datamap
         $datamap['tx_newspaper_article'][$this->getUid()] = array(
-            'hidden' => $hidden_value
+            'hidden' => $hidden_value,
+        	'tstamp' => time(),
+        	'modification_user' => tx_newspaper::getBeUserUid()
         );
 
         // use datamap, so all save hooks get called
@@ -1424,7 +1426,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (intval($article_uid) == 0) {
             return 0;   // new article
         }
-        
+
         $article = new tx_newspaper_Article(intval($article_uid)); // get article
         return $article->getAttribute($attribute);
     }
