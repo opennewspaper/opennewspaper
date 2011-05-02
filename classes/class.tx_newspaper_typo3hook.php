@@ -70,6 +70,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 #t3lib_div::devlog('tx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
+        tx_newspaper::startLoggingQueries();
 	}
 
 	/** \todo some documentation would be nice ;-) */
@@ -109,7 +110,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-#tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", $fieldArray);
+tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", tx_newspaper::getLoggedQueries());
 
         // pass hook to newspaper classes
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
