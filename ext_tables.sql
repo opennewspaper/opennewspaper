@@ -1020,3 +1020,83 @@ CREATE TABLE tx_newspaper_extra_bio (
 CREATE TABLE tx_newspaper_pagetype (
   INDEX get_var (get_var(8))
 );
+
+
+# (kickstarter 0.3.8) blob -> text
+CREATE TABLE tx_newspaper_extra_image (
+	image_file text NOT NULL,
+);
+CREATE TABLE tx_newspaper_page (
+	section text NOT NULL,
+	pagetype_id text NOT NULL
+);
+CREATE TABLE tx_newspaper_pagezone (
+	page_id text NOT NULL
+);
+CREATE TABLE tx_newspaper_article (
+	modification_user text NOT NULL
+);
+CREATE TABLE tx_newspaper_articlelist (
+	section_id text NOT NULL
+);
+CREATE TABLE tx_newspaper_log (
+	be_user text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_typo3_ce (
+	content_elements text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_articlelist (
+	articlelist text NOT NULL,
+	image text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_textbox (
+	image text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_externallinks (
+	links text NOT NULL
+);
+CREATE TABLE tx_newspaper_articlelist_manual (
+	filter_sections text NOT NULL,
+	filter_tags_include text NOT NULL,
+	filter_tags_exclude text NOT NULL,
+	filter_articlelist_exclude text NOT NULL
+);
+CREATE TABLE tx_newspaper_articlelist_semiautomatic (
+	filter_sections text NOT NULL,
+	filter_tags_include text NOT NULL,
+	filter_tags_exclude text NOT NULL,
+	filter_articlelist_exclude text NOT NULL
+);
+CREATE TABLE tx_newspaper_tag (
+	section text NOT NULL
+);
+CREATE TABLE tx_newspaper_comment_cache (
+	article text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_bio (
+	image_file text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_controltagzone (
+	default_extra text NOT NULL
+);
+CREATE TABLE tx_newspaper_controltag_to_extra (
+	tag text NOT NULL,
+	tag_zone text NOT NULL,
+	extra text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_combolinkbox (
+	manually_selected_articles text NOT NULL,
+	internal_links text NOT NULL,
+	external_links text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_searchresults (
+	sections text NOT NULL,
+	tags text NOT NULL
+);
+CREATE TABLE tx_newspaper_extra_container (
+	extras text NOT NULL
+);
+CREATE TABLE pages (
+	tx_newspaper_associated_section text NOT NULL
+);
+
