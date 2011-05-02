@@ -941,6 +941,7 @@ CREATE TABLE tx_newspaper_extra_html (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	html text NOT NULL,
 	template tinytext NOT NULL,
+	description_text tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

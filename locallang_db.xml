@@ -214,6 +214,7 @@
 			<label index="tx_newspaper_extra_html">Extra: HTML</label>
 			<label index="tx_newspaper_extra_html.html">HTML</label>
 			<label index="tx_newspaper_extra_html.template">Template</label>
+			<label index="tx_newspaper_extra_html.description_text">Description</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -428,6 +429,7 @@
 			<label index="tx_newspaper_extra_html">Extra: HTML</label>
 			<label index="tx_newspaper_extra_html.html">HTML</label>
 			<label index="tx_newspaper_extra_html.template">Template</label>
+			<label index="tx_newspaper_extra_html.description_text">Beschreibung</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
