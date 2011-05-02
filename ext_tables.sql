@@ -929,6 +929,26 @@ CREATE TABLE tx_newspaper_ctrltag_category (
 
 
 #
+# Table structure for table 'tx_newspaper_extra_html'
+#
+CREATE TABLE tx_newspaper_extra_html (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	html text NOT NULL,
+	template tinytext NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
