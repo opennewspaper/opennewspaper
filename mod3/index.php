@@ -271,6 +271,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         $extra = new $extra_class;
         $extra->setAttribute('crdate', time());
         $extra->setAttribute('tstamp', time());
+        $extra->setAttribute('cruser_id', tx_newspaper::getBeUserUid());
         $extraUid = $extra->store();
         $extra->setAttribute('paragraph', $paragraph);
         $extra->setAttribute('show_extra', $show);
