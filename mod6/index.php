@@ -264,15 +264,27 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 		if (isset($input['AjaxBatchAttachTag']) && intval($input['AjaxBatchAttachTag'])) {
 			// batch assign tag to articles
+			$msg = '';
+			$count = 0;
 			foreach(t3lib_div::trimExplode(',', $input['articleUids']) as $aUid) {
 				$aUid = intval($aUid);
 				if ($aUid) {
 					$a = new tx_newspaper_Article($aUid);
 					$t = new tx_newspaper_tag(intval($input['AjaxBatchAttachTag']));
-					$a->attachTag($t);
+					if ($a->attachTag($t)) {
+						$msg .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title') . ' (#' . $a->getUid() . ')<br />';
+						$count++;
+					}
 				}
 			}
-			die();
+			if ($count == 0) {
+				$msg = $this->localLang['label_attach_tag_0'];
+			} elseif ($count == 1) {
+				$msg = $this->localLang['label_attach_tag_1'] . '<br />' . $msg;
+			} else {
+				$msg = str_replace('###COUNT###', $count, $this->localLang['label_attach_tag_2plus']) . '<br />' . $msg;
+			}
+			die($msg);
 		}
 
 		if (isset($input['AjaxCtrlTagCat'])) {

@@ -26,6 +26,9 @@
 			<label index="label_ctrltagcat">Control tag category</label>
 			<label index="label_section">Section</label>
 			<label index="label_attach_tag_button">Attach tag to articles</label>
+			<label index="label_attach_tag_0">No article was processed</label>
+			<label index="label_attach_tag_1">1 articcle was processed</label>
+			<label index="label_attach_tag_2plus">###COUNT### articles were processed</label>
 			<label index="label_manage_dossier">Manage dossier</label>
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
@@ -52,6 +55,9 @@
 			<label index="label_ctrltagcat">Steuertag-Kategorie</label>
 			<label index="label_section">Ressort</label>
 			<label index="label_attach_tag_button">Tag den Artikeln zuweisen</label>
+			<label index="label_attach_tag_0">Kein Artikel wurde bearbeitet.</label>
+			<label index="label_attach_tag_1">1 Artikel wurde bearbeitet:</label>
+			<label index="label_attach_tag_2plus">###COUNT### Artikel wurden bearbeitet:</label>
 			<label index="label_manage_dossier">Dossier verwalten</label>
 			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
 			<label index="label_tagzones_unused">Verfügbare Steuertag-Bereiche</label>

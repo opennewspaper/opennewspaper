@@ -80,6 +80,7 @@ function changeCtrlTagCat(uid) {
 							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(splitParam(options[i], 0), splitParam(options[i], 1));
 						}
 						$("tz").innerHTML = ''; // remove spinner
+						$("tag_batch_msg").innerHTML = ''; // clear message
 					}
 				}
 			}
@@ -107,6 +108,7 @@ function changeTag(uid) {
 						var tmp = data.responseText.evalJSON();
 						$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
 						refreshDossierTitle(tmp.dossierTitle);
+						$("tag_batch_msg").innerHTML = ''; // clear message
 					}
 				}
 			}
@@ -281,10 +283,12 @@ function batchAttachTag() {
 				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + tag + '&tx_newspaper_mod6[articleUids]=' + aUids,
 				onCreate: function() {
 					$("processSpinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+					$("tag_batch_msg").innerHTML = ''; // clear message
 				},
 				onSuccess: function(data) {
 					$("tx_newspaper_mod6[articles]").descendants().each(Element.remove); // clear article select box
 					$("processSpinner").innerHTML = ''; // remove spinner
+					$("tag_batch_msg").innerHTML = data.responseText; // show message
 				}
 			}
 		);
@@ -349,6 +353,7 @@ function splitParam(param, left) {
 		<div id="button">
 			<input onclick="batchAttachTag()" type="button" value="{$LANG.label_attach_tag_button}" /></div>
 		</div>
+		<div id="tag_batch_msg"></div>
 	</div>
 </div>
 
