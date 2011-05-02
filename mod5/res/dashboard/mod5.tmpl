@@ -65,7 +65,7 @@ td {
 </div>
 <br />
 
-{if $IS_ADMIN}
+{if $IS_ADMIN && $WIZARD_PERMISSION}
 <div class="box_hl" title="{$LABEL.webmaster_wizards_tsconfig}">{$LABEL.webmaster_wizards}</div>
 <div class="box">
 	{if $WIZARD_PERMISSION.w_pz}<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=w_pz">{$WIZARD_ICON} {$LABEL.webmaster_wizard_pagezone}</a><br />{/if}

@@ -297,16 +297,17 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	/// wizard functions
 
 
-	/// \return Array with webmaster wizard access permissions (key = webmaster wizard key, value=1 -> permissions granted)
+	/** User TSCofnig newspaper.webmasterWizards
+	 * \return Array with webmaster wizard access permissions (key = webmaster wizard key, value=1 -> permissions granted)
+	 */
 	private function getTsconfigForWebmasterWizards() {
 
-		$tsc = tx_newspaper::getTSConfig();
-		if (!$tsc['newspaper.']['webmasterWizards']) {
+		if (!$tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.webmasterWizards')) {
 			return false;
 		}
 
 		$perms = array();
-		foreach(t3lib_div::trimExplode(',', $tsc['newspaper.']['webmasterWizards']) as $key => $value) {
+		foreach(t3lib_div::trimExplode(',', $tsc) as $key => $value) {
 			$perms[$value] = 1;
 		}
 
