@@ -27,7 +27,7 @@ class tx_newspaper  {
   const pagetype_get_parameter = 'pagetype';
 
     /// Whether to measure the execution times of functions
-    const log_execution_times = false;
+    const log_execution_times = true;
 
     /// GET-parameter describing the wanted control tag for a dossier
     const default_dossier_get_parameter = 'dossier';

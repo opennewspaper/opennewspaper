@@ -211,9 +211,6 @@
 			<label index="tx_newspaper_extra_generic.template">Display template</label>
 			<label index="tx_newspaper_ctrltag_category">Control tag categrory</label>
 			<label index="tx_newspaper_ctrltag_category.title">Title</label>
-			<label index="tx_newspaper_extra_html">Extra: HTML</label>
-			<label index="tx_newspaper_extra_html.html">HTML</label>
-			<label index="tx_newspaper_extra_html.template">Display template</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -425,9 +422,6 @@
 			<label index="tx_newspaper_extra_generic.template">Designvorlage</label>
 			<label index="tx_newspaper_ctrltag_category">Steuertag-Kategorie</label>
 			<label index="tx_newspaper_ctrltag_category.title">Titel</label>
-			<label index="tx_newspaper_extra_html">Extra: HTML</label>
-			<label index="tx_newspaper_extra_html.html">HTML</label>
-			<label index="tx_newspaper_extra_html.template">Designvorlage</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>
