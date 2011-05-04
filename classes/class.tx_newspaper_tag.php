@@ -187,6 +187,29 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	return false;
     }
 
+	/**
+	 * Fetches all articles assigned to this tag
+	 * \param $limit Limits the number of articles (default is -1 = no limit)
+	 * \return Array with articles
+	 */
+    public function getArticles($limit=-1) {
+		$select_method_strategy = SelectMethodStrategy::create(true);
+    	$results = tx_newspaper::selectRows(
+			$select_method_strategy->fieldsToSelect(),
+			'tx_newspaper_article, tx_newspaper_article_tags_mm',
+			'tx_newspaper_article_tags_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local',
+			'',
+			'',
+			($limit > 0)? $limit : ''
+		);
+
+		$articles = array();
+		foreach ($results as $row) {
+            $articles[] = $select_method_strategy->createArticle($row);
+		}
+
+		return $articles;
+    }
 
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
