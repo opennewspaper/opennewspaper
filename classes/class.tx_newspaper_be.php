@@ -158,11 +158,18 @@ class tx_newspaper_BE {
 	 */
 	private function readTemplateSetItems(&$params) {
 
+		// check if "inherit from above" should be used
+		$key = 'use_template_sets_with_inherit_above_option';
+		$value = tx_newspaper::getNewspaperConfig($key);
+       	$useInheritAboveOption = (isset($value[$key]))? ((bool) $value[$key]) : true; // true is default
+
 		$default_found = false;
 
 		$templateset = tx_newspaper_smarty::getAvailableTemplateSets();
 
-		$params['items'][] = array(tx_newspaper::getTranslation('entry_templateset_inherit'), ''); // empty entry -> templateset is inherited
+		if ($useInheritAboveOption) {
+			$params['items'][] = array(tx_newspaper::getTranslation('entry_templateset_inherit'), ''); // empty entry -> templateset is inherited
+		}
 		$params['items'][] = array('default', 'default'); // default set is sorted to top of list, if not existing, this entry is removed later
 		for ($i = 0; $i < sizeof($templateset); $i++) {
 			if ($templateset[$i] != 'default') {
@@ -173,7 +180,7 @@ class tx_newspaper_BE {
 		}
 
 		if (!$default_found) {
-			unset($params['items'][1]); // remove entry 'default' (because there's no templateset "default" available)
+			unset($params['items'][array_search('default', $params['items'])]); // remove entry 'default' (because there's no templateset "default" available)
 		}
 	}
 
