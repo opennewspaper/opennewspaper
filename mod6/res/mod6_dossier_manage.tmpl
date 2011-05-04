@@ -39,6 +39,17 @@
 #article_batch_form img {
 	padding:3px;
 }
+
+#article_list_trigger {
+	cursor:pointer;
+	margin-top:20px;
+	margin-bottom:4px;
+	display:none;
+}
+#article_list {
+	display:none;
+}
+
 #button {
   clear:both;
 }
@@ -81,6 +92,8 @@ function changeCtrlTagCat(uid) {
 						}
 						$("tz").innerHTML = ''; // remove spinner
 						$("tag_batch_msg").innerHTML = ''; // clear message
+						$("article_list").innerHTML = ''; // clear article list
+						$("article_list").style.display = 'none'; // clear article list
 					}
 				}
 			}
@@ -89,9 +102,13 @@ function changeCtrlTagCat(uid) {
 }
 
 function changeTag(uid) {
+	$("article_list").style.display = 'none'; // clear article list
 	uid = parseInt(uid);
 	if (!uid) {
 		$("tz").innerHTML = ''; // selected empty row in dropdown, so clear tagzone backend
+		$("article_batch").style.display = "none"; // hide article batch backend
+		$("article_list_trigger").style.display = "none"; // hide list of article assigned to this tag
+		$("article_list").innerHTML = ''; // clear article list
 		refreshDossierTitle('');
 		return;
 	}
@@ -109,6 +126,7 @@ function changeTag(uid) {
 						$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
 						refreshDossierTitle(tmp.dossierTitle);
 						$("tag_batch_msg").innerHTML = ''; // clear message
+						$("article_list").innerHTML = ''; // clear article list
 					}
 				}
 			}
@@ -208,6 +226,7 @@ function showArticleBackend(state) {
 		var display = 'block';
 	}
 	document.getElementById("article_batch").style.display = display;
+	document.getElementById("article_list_trigger").style.display = display;
 }
 function toggleBatchForm() {
 	if (document.getElementById('article_batch_form').style.display != 'block') {
@@ -295,6 +314,30 @@ function batchAttachTag() {
 
 }
 
+// open and get list or close list
+function toggleArticleList() {
+	if (document.getElementById('article_list').style.display != 'block') {
+		document.getElementById('article_list').style.display = 'block';
+		// get assigned articles
+		var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
+		var request = new Ajax.Request(
+			"index.php", {
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxListArticlesForCtrlTag]=' + tag,
+				onCreate: function() {
+					$("article_list").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+				},
+				onSuccess: function(data) {
+					$("article_list").innerHTML = data.responseText;
+				}
+			}
+		);
+	} else {
+		document.getElementById('article_list').style.display = 'none';
+		document.getElementById('article_list').innerHTML = '';
+	}
+}
+
 // if left = 1 string left of pipe is returned, else right part is returned
 function splitParam(param, left) {
 	if (left != 1) {
@@ -356,6 +399,10 @@ function splitParam(param, left) {
 		<div id="tag_batch_msg"></div>
 	</div>
 </div>
+
+<div id="article_list_trigger" onclick="toggleArticleList(); return false;">{$LANG.label_show_article_list}</div>
+<div id="article_list"></div>
+
 
 {/if}
 <!-- end mod6/res/mod6_dossier_manage.tmpl -->

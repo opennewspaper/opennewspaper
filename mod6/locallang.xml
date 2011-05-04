@@ -33,6 +33,7 @@
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
 			<label index="message_confirm_delete_extra_from_tagzone">You you want to remove this extra?</label>
+			<label index="label_show_article_list">Show all articles using this control tag  &gt;&gt;</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Steuertagsteuerung</label>
@@ -62,6 +63,7 @@
 			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
 			<label index="label_tagzones_unused">Verfügbare Steuertag-Bereiche</label>
 			<label index="message_confirm_delete_extra_from_tagzone">Möchten Sie dieses Extra wirklich löschen?</label>
+			<label index="label_show_article_list">Zeige alle Artikel, die dieses Steuertag verwenden &gt;&gt;</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -287,6 +287,26 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			die($msg);
 		}
 
+		if (isset($input['AjaxListArticlesForCtrlTag'])) {
+			$msg = '';
+
+			if ($tag = new tx_newspaper_tag(intval($input['AjaxListArticlesForCtrlTag']))) {
+				$count = 0;
+				foreach($tag->getArticles() as $article) {
+					$count++;
+					$msg .= $count . '. ' . $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (#' . $article->getUid() . ')<br />';
+				}
+			}
+
+			if (!$msg) {
+				$msg = '---'; // \todo a real (and localized) message wouldn't hurt ...
+			}
+
+			die($msg);
+		}
+
+
+
 		if (isset($input['AjaxCtrlTagCat'])) {
 			// ctrl tag category was changed -> read tags for new cat
 			$tags = tx_newspaper_tag::getAllControlTags(intval($input['AjaxCtrlTagCat']));
