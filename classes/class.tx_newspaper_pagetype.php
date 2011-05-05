@@ -215,7 +215,9 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
  		} else {
  			
  			// Try to deduce the page type from other GET parameters.
-			if ($this->find_in_possible_types($input)) return;
+			if ($this->find_in_possible_types($input)) {
+                throw new tx_newspaper_IllegalUsageException('Could not determine page type from GET: ' . print_r($input, 1));
+            }
 			
 			// If none is set, check if an article is requested.
 			if ($input[tx_newspaper::GET_article()]) {
