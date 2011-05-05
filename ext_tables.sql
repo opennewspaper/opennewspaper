@@ -938,7 +938,6 @@ CREATE TABLE tx_newspaper_extra_html (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
-	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	html text NOT NULL,
 	template tinytext NOT NULL,
 	description_text tinytext NOT NULL,

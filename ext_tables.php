@@ -753,14 +753,11 @@ $TCA["tx_newspaper_extra_html"] = array (
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => "ORDER BY crdate",	
 		'delete' => 'deleted',	
-		'enablecolumns' => array (		
-			'disabled' => 'hidden',
-		),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_html.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, html, template, description_text",
+		"fe_admin_fieldList" => "html, template, description_text",
 	)
 );
 

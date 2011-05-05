@@ -3207,18 +3207,10 @@ $TCA["tx_newspaper_ctrltag_category"] = array (
 $TCA["tx_newspaper_extra_html"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_html"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,html,template,description_text"
+		"showRecordFieldList" => "html,template,description_text"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_html"]["feInterface"],
 	"columns" => array (
-		'hidden' => array (		
-			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-			'config'  => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
 		"html" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_html.html",		
@@ -3247,7 +3239,7 @@ $TCA["tx_newspaper_extra_html"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, html, template, description_text")
+		"0" => array("showitem" => "html;;;;1-1-1, template, description_text")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

@@ -55,9 +55,16 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 	/** Displays the title and the beginning of the text.
 	 */
 	public function getDescription() {
+		if ($desc=$this->getAttribute('description_text')) {
+		} elseif ($desc=$this->getAttribute('notes')) {
+		} elseif ($desc=$this->getAttribute('html')) {
+			$desc=preg_replace("/<(.*)?>/U","",$desc);
+		} else {
+			return;
+		}
 		return substr(
 		
-			$this->getAttribute('notes'), 
+			$desc, 
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 	
