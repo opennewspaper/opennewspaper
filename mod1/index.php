@@ -733,24 +733,20 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		}
 
 
-		/// Sets all template set fielöds to "default"
+		/// Sets all template set fields to "default"
 		private function fixDefaultTemplateSet() {
-			// if you add here, add in mod1 too ...
-			$templateSetTables = array(
-				'tx_newspaper_section',
-				'tx_newspaper_page',
-				'tx_newspaper_pagezone_page',
-				'tx_newspaper_article',
-				'tx_newspaper_extra'
-			);
+
+			// get tables to check
+			$templateSetTables = tx_newspaper_be::getTemplateSetTables();
 
 			$msg = '';
 			foreach ($templateSetTables as $table) {
 				$count = tx_newspaper::updateRows(
 					$table,
-					'template_set<>"default" AND deleted=0',
+					'(template_set<>"default" OR ISNULL(template_set)) AND deleted=0',
 					array('template_set' => 'default')
 				);
+//t3lib_div::devlog('fixDefaultTemplateSet()', 'newspaper', 0, array('q' => tx_newspaper::$query));
 				if ($count) {
 					$msg .= '<p><strong>' . $table . '</strong>: <i>' . $count . '</i> records fixed';
 				}

@@ -220,6 +220,22 @@ class tx_newspaper_BE {
         return (bool) $value[$key];
 	}
 
+	/// Returns an array with tables where template sets should be set to "default" (regarding newspaper.conf settings)
+	public static function getTemplateSetTables() {
+		$templateSets = array(
+			'tx_newspaper_page',
+			'tx_newspaper_pagezone_page',
+			'tx_newspaper_article',
+			'tx_newspaper_extra'
+		);
+
+		// check if template sets are hidden for sections
+		if (!self::useTemplateSetsForSections()) {
+			$templateSets[] = 'tx_newspaper_section';
+		}
+//t3lib_div::devlog('tmp', 'np', 0, $templateSets);
+		return $templateSets;
+	}
 
 
 /// pagezone inheritance source functions

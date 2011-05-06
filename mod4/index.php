@@ -745,24 +745,19 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 	static function checkForDefaultTemplateSet() {
 
-		// if you add here, add in mod1 too ...
-		$templateSetTables = array(
-			'tx_newspaper_section',
-			'tx_newspaper_page',
-			'tx_newspaper_pagezone_page',
-			'tx_newspaper_article',
-			'tx_newspaper_extra'
-		);
+		// get tables to check
+		$templateSetTables = tx_newspaper_be::getTemplateSetTables();
 
 		$msg = '';
 		foreach ($templateSetTables as $table) {
 			$rows = tx_newspaper::selectRows(
 				'DISTINCT template_set',
 				$table,
-				'template_set<>"default"',
+				'(template_set<>"default" OR ISNULL(template_set)) AND deleted=0',
 				'',
 				'template_set'
 			);
+//t3lib_div::devlog('checkForDefaultTemplateSet()', 'newspaper', 0, array('q' => tx_newspaper::$query, 'rows' => $rows));
 			if ($rows) {
 				$msg .= '<p><b>' . $table . '</b></p>';
 				foreach ($rows as $row) {
