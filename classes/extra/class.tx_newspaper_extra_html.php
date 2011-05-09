@@ -19,9 +19,9 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 	
 	public function __toString() {
 		try {
-			return 'Extra: UID ' . $this->getExtraUid() . ', Ad Extra: UID ' . $this->getUid();
+			return 'Extra: UID ' . $this->getExtraUid() . ', HTML Extra: UID ' . $this->getUid();
 		} catch(Exception $e) {
-			return "Ad: Exception thrown!" . $e;
+			return "HTML: Exception thrown!" . $e;
 		}	
 	}
 	
