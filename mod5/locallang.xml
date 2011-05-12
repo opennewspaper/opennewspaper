@@ -6,6 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="label_controltype">Control tag</label>
             <label index="label_articletype">Article type</label>
             <label index="label_back_to_wizards">Back to Wizards main page</label>
             <label index="label_error_browsing">Error browsing source</label>
@@ -30,6 +31,7 @@
 			<label index="message_no_section">No section available, so no article can be added. Please create sections (and allow the addition of articles) in order to create articles.</label>
 			<label index="message_no_section_chosen">Please select a target section first</label>
 			<label index="message_no_article_chosen">Please select an article.</label>
+			<label index="message_no_ctrltagtype_available">No control tag type available.</label>
             <label index="title">Wizards</label>
 			<label index="label_webmaster_wizards">Newspaper webmaster wizards</label>
 			<label index="label_webmaster_wizards_tsconfig">These wizards can be activated with tsconfig in newspaper root folder (newspaper.webmasterWizards = w_pz, w_inheritance, ...)</label>
@@ -53,6 +55,7 @@
 			<label index="message_webmaster_wizard_inheritance_activate_success">The inheritance source for the pagezones have been set successfully.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="label_controltype">Steuertag</label>
             <label index="label_articletype">Artikeltyp</label>
             <label index="label_back_to_wizards">Zurück zur Wizard-Startseite</label>
             <label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
@@ -77,6 +80,7 @@
 			<label index="message_no_section">Es kann kein Artikel angelegt werden, da kein Ressort exisiert. Bitte legen Sie ein Ressort an (und geben es für die Aufnahmen von Artikeln frei).</label>
 			<label index="message_no_section_chosen">Bitte wählen Sie ein Ziel-Ressort aus, um einen Artikel anzulegen.</label>
 			<label index="message_no_article_chosen">Bitte wählen Sie einen Artikel aus.</label>
+			<label index="message_no_ctrltagtype_available">Es stehen keine Steuertag-Kategorien zur Verfügung.</label>
             <label index="title">Start</label>
 			<label index="label_webmaster_wizards">Newspaper Webmaster-Wizards</label>
 			<label index="label_webmaster_wizards_tsconfig">Die Wizards können per TSConfig in Newspaper-Rootfolder aktiviert werden (newspaper.webmasterWizards = w_pz, w_inheritance, ...)</label>

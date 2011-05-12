@@ -110,6 +110,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				case 'change_role':
 					$this->changeRole($input); // no die() needed, just change the role and re-render the module
 				break;
+				case 'CtrlTagCat':
+					die($this->getControlTagsForCtrlTagType($input));
+				break;
 			}
 
 			// Draw the header.
@@ -528,6 +531,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'section_base' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_base', false),
 			'section_select' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_select', false),
 			'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
+			'controltag' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_controltype', false),
 			'back_to_wizards' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false),
 			'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
 			'no_sect' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
@@ -538,6 +542,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
 			'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
 			'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
+			'no_ctrltagtype_available' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_ctrltagtype_available', false),
 		));
 
 		$smarty->assign('INPUT', $input);
@@ -550,6 +555,9 @@ tx_newspaper::devlog('index.php', $sources);
 		$smarty->assign('IMPORT_SOURCE', $sources);
 
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
+
+		$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+
 
 		// \todo: TSConfig + more than 1 start section
 		$start_section = new tx_newspaper_section(1); // ATTENTION: 1 is hard coded section "Start" !!!
@@ -605,7 +613,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 	/// creates a new article
 	private function createNewArticle($input) {
-//t3lib_div::devlog('createNewArticle()', 'newspaper', 0, array('input' => $input));
+t3lib_div::devlog('createNewArticle()', 'newspaper', 0, array('input' => $input));
 		/// just a plain typo3 article
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
@@ -614,6 +622,11 @@ tx_newspaper::devlog('index.php', $sources);
 //t3lib_div::devlog('at tsc musthave', 'newspaper', 0, $at->getTSConfigSettings('musthave'));
 //t3lib_div::devlog('at tsc shouldhave', 'newspaper', 0, $at->getTSConfigSettings('shouldhave'));
 		$new_article->setAttribute('articletype_id', $input['articletype']);
+
+		// attach control tag, if any
+		if ($input['controltag'] && $tag = new tx_newspaper_tag(intval($input['controltag']))) {
+			$new_article->attachTag($tag);
+		}
 
 		// add creation date and user
 		$new_article->setAttribute('crdate', time());
@@ -743,7 +756,9 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
         $source = tx_newspaper::getRegisteredSource($input['source_id']);
 		$path = new tx_newspaper_SourcePath($input['source_path']);
 
-		$new_article = $this->createAndImportArticle($articletype, $section, $source, $path);
+		$tag = $input['controltag']? new tx_newspaper_tag(intval($input['controltag'])) : null;
+
+		$new_article = $this->createAndImportArticle($articletype, $section, $source, $path, $tag);
 
 		$this->logImport($new_article, $input);
 
@@ -757,16 +772,24 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 	 * @param $type    the selected article type.
 	 * @param $section section the article belogs to - needed for the default extras.
 	 * @param $source  source the article is imported from.
+	 * @param $path
+	 * @param $tag
 	 */
     private function createAndImportArticle(tx_newspaper_ArticleType $type,
                                             tx_newspaper_Section $section,
                                             tx_newspaper_Source $source,
-                                            tx_newspaper_SourcePath $path) {
+                                            tx_newspaper_SourcePath $path,
+                                            tx_newspaper_tag $tag=null) {
 
         $new_article = $section->createNewArticle($type);
         $new_article->setAttribute('articletype_id', $type->getUid());
 
         $source->readArticle($new_article, $path);
+
+        // atttach tag, if any
+        if ($tag) {
+        	$new_article->attachTag($tag);
+        }
 
         // add creation date and user
         $new_article->setAttribute('crdate', time());
@@ -819,6 +842,18 @@ t3lib_div::devlog('load_article', 'np', 0, array($result));
 		$url .= (intval($input['calling_module']))? intval($input['calling_module']) : 5; // 5 (= this module) is default
 		$url .= '&tx_newspaper_mod5%5Bmod2Filter%5D=' . $input['mod2Filter'];
 		return rawurlencode($url);
+	}
+
+
+	private function getControlTagsForCtrlTagType(array $input) {
+//t3lib_div::devlog('tag', 'newspaper', 0, array('input' => $input));
+		// ctrl tag category was changed -> read tags for new cat
+		$tags = tx_newspaper_tag::getAllControlTags(intval($input['uid']));
+		$option = array();
+		foreach($tags as $tag) {
+			$option[] = $tag->getUid() . '|' . htmlspecialchars($tag->getAttribute('tag'));
+		}
+		die(json_encode($option));
 	}
 
 

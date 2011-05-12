@@ -88,7 +88,7 @@ function changeCtrlTagCat(uid) {
 						// insert tags into select box
 						options = data.responseText.evalJSON();
 						for(i = 0; i < options.length; i++) {
-							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(splitParam(options[i], 0), splitParam(options[i], 1));
+							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
 						}
 						$("tz").innerHTML = ''; // remove spinner
 						$("tag_batch_msg").innerHTML = ''; // clear message
@@ -338,19 +338,6 @@ function toggleArticleList() {
 	}
 }
 
-// if left = 1 string left of pipe is returned, else right part is returned
-function splitParam(param, left) {
-	if (left != 1) {
-		left = 0;
-	}
-	p = param.indexOf('|');
-	if (p < 1) return '';
-	if (left == 1) {
-		return param.substring(0, p);
-	} else {
-		return param.substring(p+1);
-	}
-}
 </script>
 {/literal}
 

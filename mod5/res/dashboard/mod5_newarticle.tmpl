@@ -1,7 +1,8 @@
-{* debug *}
+{debug}
 
 {include file="mod5.js"}  {* js for importing articles *}
-
+<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+<script language="javascript" type="text/javascript" src="../res/be/newspaper.js"> </script>
 {literal}
 <style type="text/css">
 
@@ -55,7 +56,7 @@ body {
 	border-bottom: 1px solid #AAA;
 	margin-bottom: 20px;
 	padding-bottom: 5px;
-	width: 920px;
+	width:1210px;
 	font-size: 18px;
 	font-weight: normal;
 	color: #777;
@@ -230,7 +231,7 @@ body {
 	}
 
 #tx_newspaper_mod3 table.full {
-	width: 920px;
+	width:1210px;
 	}
 
 #tx_newspaper_mod3 table a {
@@ -372,19 +373,37 @@ body {
 #artikelimport {
 	padding: 10px;
 	margin: 20px 0;
-	width: 897px;
+	width: 1188px;
 	background-color: #EFEDE4;
 	border: 1px solid #AAA;
 	display: inline-block;
 	}
-
 
 #tx_newspaper_mod3 #artikelimport select {
 	display: block;
 	width: 280px;
 	margin: 5px 20px 10px 0;
 	padding: 2px 0;
-	}
+	height:120px;
+}
+#tx_newspaper_mod3 #artikelimport #controltag {
+	height:89px;
+	margin-bottom:0;
+}
+#ctrltagcatspinner {
+	margin-left:10px;
+}
+#tx_newspaper_mod3 #artikelimport #controltagfilter {
+	margin-left:0;
+	width:280px;
+}
+#tx_newspaper_mod3 #artikelimport #controltagcat {
+	width:150px;
+	display:inline;
+	margin:0;
+	padding:0;
+	height:14px;
+}
 
 #artikelimport label {
 	margin: 3px 10px 0 0;
@@ -490,10 +509,56 @@ body {
 				alert("{/literal}{$MESSAGE.no_section_chosen}{literal}");
 				return false;
 			}
+
 			document.getElementById('tx_newspaper_mod5[controller]').value = type; // set type
 			document.forms[0].submit();
-		}{/literal}
+		}
+
+
+// control tag functions
+
+	function changeCtrlTagCat(uid) {
+		var request = new Ajax.Request(
+			"index.php", {
+				method: 'get',
+				parameters: 'tx_newspaper_mod5[ajaxcontroller]=CtrlTagCat&tx_newspaper_mod5[uid]=' + parseInt(uid),
+				onCreate: function() {
+					$("ctrltagcatspinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
+					$("controltag").descendants().each(Element.remove); // clear tag select box
+				},
+				onSuccess: function(data) {
+					if (data) {
+						// insert tags into select box
+						options = data.responseText.evalJSON();
+						for(i = 0; i < options.length; i++) {
+							$("controltag").options[$("controltag").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+						}
+						executeCtrlTagFilter();
+						$("ctrltagcatspinner").innerHTML = ''; // remove spinner
+					}
+				}
+			}
+		);
+	}
+
+	// filter tag options in tag select box
+	function executeCtrlTagFilter() {
+		var filter = $("controltagfilter").value.toLowerCase();
+		for(i = 0; i < $("controltag").options.length; i++) {
+			var tag = $("controltag").options[i].text.toLowerCase();
+			if (tag.indexOf(filter) == -1) {
+				// hide tag not matching filter
+				$("controltag").options[i].hide();
+				$("controltag").options[i].selected = false; // remove selection when option gets hidden
+			} else {
+				$("controltag").options[i].show();
+			}
+		}
+
+	}
+
 	</script>
+{/literal}
 
 {* chose new typo3 article or import source *}
 		<table class="full">
@@ -531,6 +596,8 @@ body {
 
 {* select section and article type *}
 		<div id="artikelimport">
+
+			{* base sections *}
 			<div>
 				<label>{$LABEL.section_base}</label> <br />
 				<select id="section1" onchange="changeSectionBox2(this.value)" size="9">
@@ -540,6 +607,7 @@ body {
 				</select>
 			</div>
 
+			{* all available sections *}
 			<div>
 				<label>{$LABEL.section_select}</label> <br />
 				<select name="tx_newspaper_mod5[section]" id="section2" style="display:inline;" size="9"></select> {* empty selectbox, is displayed when opening the form *}
@@ -552,6 +620,7 @@ body {
 				{/foreach}
 			</div>
 
+			{*article type; default value is set when qa section is selected *}
 			<div>
 				<label>{$LABEL.articletype}</label> <br />
 				<select id="articletype" name="tx_newspaper_mod5[articletype]" size="9">
@@ -559,6 +628,25 @@ body {
 					<option value="{$ARTICLETYPE[i]->getUid()}"> {$ARTICLETYPE[i]->getAttribute('title')}</option>
 				{/section}
 		      	</select>
+			</div>
+
+			{* control tags *}
+			<div>
+				<label>{$LABEL.controltag}</label>
+				<select id="controltagcat" name="tx_newspaper_mod5[ctrltagcat]" onchange="changeCtrlTagCat(this.value); return false;">
+				{foreach from=$CTRLTAGCATS item=ctrltagcat}
+					<option value="{$ctrltagcat.uid}"{if $ctrltagcat.uid == $DATA.ctrltagcat} selected="selected"{/if}>{$ctrltagcat.title}</option>
+				{/foreach}
+				</select><span id="ctrltagcatspinner"></span>
+				<br />
+{if $CTRLTAGCATS}
+				<select id="controltag" name="tx_newspaper_mod5[controltag]" size="9">
+					{* filled by AJAX function *}
+		      	</select><br />
+		      	<input id="controltagfilter" value="" onkeyup="executeCtrlTagFilter()" />
+{else}
+<br />{$MESSAGE.no_ctrltagtype_available}
+{/if}
 			</div>
 
 			<br /><br />
@@ -578,14 +666,23 @@ body {
 </div>
 
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
+{literal}
 	{* load default source initially *}
 	<script type="text/javascript">
-		window.onload = function() {ldelim}
+		window.onload = function() {
 			changeSource('{$DEFAULT_SOURCE}', '')
-		{rdelim}
+		}
 	</script>
+{/literal}
 {/if}
 
+{literal}
+<script type="text/javascript">
+	window.onload = function() {
+		changeCtrlTagCat(1);
+	}
+</script>
+{/literal}
 
 {*
 {if $IS_ADMIN}<br /><br /><a href="#" onclick="location.reload(); return false;">Reload</a> {/if}

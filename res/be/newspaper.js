@@ -104,3 +104,22 @@ function stripslashes(str) {
 function hscQuotes(str) {
 	return str.replace(/"/g, "&quot;");
 }
+
+
+//if left = 1 string left of pipe is returned, else right part is returned
+function splitParam(param, left, separator) {
+	if (left != 1) {
+		left = 0;
+	}
+	p = param.indexOf(separator);
+	if (p < 1) return '';
+	if (left == 1) {
+		return param.substring(0, p);
+	} else {
+		return param.substring(p+1);
+	}
+}
+
+function splitParamAtPipe(param, left) {
+	return splitParam(param, left, '|');
+}
