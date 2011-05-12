@@ -197,10 +197,12 @@ function updateArticleList(listId, offsetAndId, lastSelectedOption) {
             //search all option values and compare by article id because offset has changed
             if($(this).val().lastIndexOf(artId) > -1 ) {
                 var newText = $(this).text().split('(');
+                newText.pop(); //removes articlelist offset
+                newText = newText.join('('); // glue text together, restore parentheses
                 if(item[0] > 0) {
-                    newOptions[item.join('_')] = newText[0] + '(+' + item[0] + ')';
+                    newOptions[item.join('_')] = newText + '(+' + item[0] + ')';
                 } else {
-                    newOptions[item.join('_')] = newText[0] + '(' + item[0] + ')';
+                    newOptions[item.join('_')] = newText + '(' + item[0] + ')';
                 }
                 return;
             }
