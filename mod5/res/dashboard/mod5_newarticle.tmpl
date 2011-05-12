@@ -1,4 +1,4 @@
-{debug}
+{* debug *}
 
 {include file="mod5.js"}  {* js for importing articles *}
 <script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
@@ -666,8 +666,8 @@ body {
 </div>
 
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
-{literal}
 	{* load default source initially *}
+{literal}
 	<script type="text/javascript">
 		window.onload = function() {
 			changeSource('{$DEFAULT_SOURCE}', '')
