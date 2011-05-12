@@ -46,7 +46,10 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 		
 		$this->smarty->assign('articles', $articles);
         $this->smarty->assign('section_id', tx_newspaper::getSection()->getUid());
-		
+        $this->smarty->assign('typo3_page', tx_newspaper::getSection()->getTypo3PageID());
+
+        $this->smarty->assign('rootline', self::getRootline());
+
         $rendered = $this->smarty->fetch($this);
 
         tx_newspaper::logExecutionTime('tx_newspaper_extra_SectionList::render()');
@@ -59,6 +62,15 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	}
 
 	public static function dependsOnArticle() { return false; }
+
+    private static function getRootline() {
+        $rootline = tx_newspaper::getSection()->getSectionPath();
+        foreach ($rootline as $key => $section) {
+            $rootline[$key] = $section->getAttribute('section_name');
+        }
+
+        return $rootline;
+    }
 	
 }
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SectionList());
