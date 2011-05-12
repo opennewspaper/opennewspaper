@@ -71,9 +71,9 @@ class tx_newspaper_pi1 extends tslib_pibase {
 			$content .= $page->render();
 
 		} catch (tx_newspaper_DBException $e) {
-            $this->show404($e, self::getDBExceptionTemplate());
+            $content .= $this->show404($e, self::getDBExceptionTemplate());
 		} catch (tx_newspaper_Exception $e) {
-            $this->show404($e, self::getDefaultExceptionTemplate());
+            $content .= $this->show404($e, self::getDefaultExceptionTemplate());
         }
 
 		return $content;

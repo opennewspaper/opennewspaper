@@ -940,6 +940,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $article->ensureRelatedArticlesAreBidirectional();
         $article->removeDanglingRelations();
+        $article->checkSectionIsValid();
 
         self::updateDependencyTree($article);
 
@@ -1343,6 +1344,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                         self::article_related_table,
                         $where
         );
+    }
+
+    private function checkSectionIsValid() {
+        try {
+            $this->getLink();
+        } catch (tx_newspaper_IllegalUsageException $e) {
+            $msg = tx_newspaper::getTranslation('message_section_typo3page_missing');
+            $msg = str_replace('###SECTION###', $this->getPrimarySection()->getAttribute('section_name'), $msg);
+            tx_newspaper_Workflow::directLog($this->getTable(), $this->getUid(), $msg, NP_WORKLFOW_LOG_ERRROR);
+        }
     }
 
     /// Set attributes used by Typo3

@@ -5,21 +5,31 @@
 		<description>Language labels for extension 'newspaper'</description>
 	</meta>
 	<data type="array">
+
 		<languageKey index="default" type="array">
 			<label index="entry_templateset_inherit">Inherit from upper level</label>
 			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
+            <label index="flag_activated_pagezone_in_section">This page zone is activated</label>
 			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
+            <label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
 			<label index="flag_extra_edit">Edit extra</label>
 			<label index="flag_extra_hide">Hide extra</label>
 			<label index="flag_extra_unhide">Unhide extra</label>
 			<label index="flag_extra_delete">Delete extra</label>
-			<label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
 			<label index="flag_new_page_in_section">Activate this page type for this section</label>
-			<label index="flag_activated_pagezone_in_section">This page zone is activated</label>
 			<label index="flag_new_pagezone_in_section">Activate this page zone type for this section and page</label>
 			<label index="label_articlelist_included_sections">Section(s)</label>
 			<label index="label_articlelist_included_tags">Tag(s)</label>
 			<label index="label_articlelist_excluded_tags">Excluded tag(s)</label>
+            <label index="label_kicker_title_teaser">Article header data</label>
+            <label index="label_kicker_title_teaser_for_list_views">Article header data for list views</label>
+            <label index="label_tab_article_article">Article</label>
+            <label index="label_tab_article_extra">Web elements</label>
+            <label index="label_tab_article_workflow">Messages</label>
+            <label index="label_tab_article_tags">Tags</label>
+            <label index="label_tab_article_related">Related articles</label>
+            <label index="label_tab_article_timecontrol">Zeitsteuerung</label>
+            <label index="label_tab_article_additional">Erweitere Daten</label>
 			<label index="label_workflow_hide">Hide</label>
 			<label index="label_workflow_publish">Publish</label>
 			<label index="label_workflow_check">Send to duty editor</label>
@@ -38,15 +48,15 @@
 			<label index="label_workflow_role_old">Old role</label>
 			<label index="label_workflow_role_new">New role</label>
 			<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
-			<label index="log_record_hidden">Record hidden</label>
-			<label index="log_record_published">Record published</label>
 			<label index="log_article_hidden">Article hidden</label>
 			<label index="log_article_published">Article published</label>
-			<label index="log_more_link">More ...</label>
+            <label index="log_import">Article imported</label>
+            <label index="log_import_source_id">Source</label>
+            <label index="log_import_source_path">Path</label>
 			<label index="log_less_link">Less ...</label>
-			<label index="log_import">Article imported</label>
-			<label index="log_import_source_id">Source</label>
-			<label index="log_import_source_path">Path</label>
+            <label index="log_more_link">More ...</label>
+            <label index="log_record_hidden">Record hidden</label>
+            <label index="log_record_published">Record published</label>
 			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
@@ -71,6 +81,12 @@
             <label index="message_select_another_articlelist">
                 Please select another article list.
             </label>
+            <label index="message_section_typo3page_missing">
+                Section ###SECTION### does not have a corresponding Typo3 page.
+                Please create a Typo3 page and link it to section ###SECTION### in the Page Properties, tab "Extended".
+                Otherwise, it will be impossible to display or link to this article.
+            </label>
+            <label index="title_section_articlelist">Article list for section ###SECTION### (###ARTICLELIST_TYPE###)</label>
 			<label index="title_tx_newspaper_article">Article</label>
 			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
@@ -99,21 +115,54 @@
 			<label index="title_tx_newspaper_tag">Tag</label>
 			<label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
-			<label index="label_tab_article_article">Article</label>
-			<label index="label_tab_article_extra">Web elements</label>
-			<label index="label_tab_article_workflow">Messages</label>
-			<label index="label_tab_article_tags">Tags</label>
-			<label index="label_tab_article_related">Related articles</label>
-			<label index="label_tab_article_timecontrol">Zeitsteuerung</label>
-			<label index="label_tab_article_additional">Erweitere Daten</label>
-			<label index="label_kicker_title_teaser">Article header data</label>
-			<label index="label_kicker_title_teaser_for_list_views">Article header data for list views</label>
-			<label index="title_section_articlelist">Article list for section ###SECTION### (###ARTICLELIST_TYPE###)</label>
 		</languageKey>
+
 		<languageKey index="de" type="array">
-			<label index="label_articlelist_included_sections">Ressort(s)</label>
-			<label index="label_articlelist_included_tags">Tag(s)</label>
-			<label index="label_articlelist_excluded_tags">Ausgeschlossene Tag(s)</label>
+            <label index="label_articlelist_included_sections">Ressort(s)</label>
+            <label index="label_articlelist_included_tags">Tag(s)</label>
+            <label index="label_articlelist_excluded_tags">Ausgeschlossene Tag(s)</label>
+            <label index="label_kicker_title_teaser">Artikel-Kopfdaten</label>
+            <label index="label_kicker_title_teaser_for_list_views">Artikel-Kopfdaten für Listenansicht</label>
+            <label index="label_tab_article_article">[ Artikel bearbeiten ]</label>
+            <label index="label_tab_article_extra">Web-Elemente</label>
+            <label index="label_tab_article_workflow">Nachrichten</label>
+            <label index="label_tab_article_tags">Schlagworte</label>
+            <label index="label_tab_article_related">Verlinkte Artikel</label>
+            <label index="label_tab_article_timecontrol">Zeitzündung</label>
+            <label index="label_tab_article_additional">Erweitere Daten</label>
+            <label index="label_workflow_hide">Verstecken</label>
+            <label index="label_workflow_publish">Publizieren</label>
+            <label index="label_workflow_check">Zum CvD</label>
+            <label index="label_workflow_check_hide">Zum CvD &amp; verstecken</label>
+            <label index="label_workflow_check_publish">Zum CvD &amp; publizieren</label>
+            <label index="label_workflow_revise">Zum Redakteur</label>
+            <label index="label_workflow_revise_hide">Zum Redakteur &amp; verstecken</label>
+            <label index="label_workflow_revise_publish">Zum Redakteur &amp; publizieren</label>
+            <label index="label_workflow_place">Platzieren</label>
+            <label index="label_workflow_place_hide">Platzieren &amp; verstecken</label>
+            <label index="label_workflow_place_publish">Platzieren &amp; publizieren</label>
+            <label index="label_workflow_save">Speichern</label>
+            <label index="label_workflow_role_editorialstaff">Redaktion</label>
+            <label index="label_workflow_role_dutyeditor">CvD</label>
+            <label index="label_workflow_role_none">Artikel platziert</label>
+            <label index="label_workflow_role_old">Alte Rolle</label>
+            <label index="label_workflow_role_new">Neue Rolle</label>
+            <label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
+            <label index="log_article_hidden">Artikel versteckt</label>
+            <label index="log_article_published">Artikel publiziert</label>
+            <label index="log_import">Artikel importiert</label>
+            <label index="log_import_source_id">Quelle</label>
+            <label index="log_import_source_path">Pfad</label>
+            <label index="log_less_link">Weniger ...</label>
+            <label index="log_more_link">Mehr ...</label>
+            <label index="log_record_published">Publiziert</label>
+            <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
+            <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
+            <label index="message_section_typo3page_missing">
+                Ressort ###SECTION### hat keine dazugehörige Typo3-Seite.
+                Bitte legen Sie eine Typo3-Seite an und verknüpfen Sie sie mit Ressort ###SECTION### unter den Seiteneigenschaften, Reiter "Extended".
+                Sonst ist es unmöglich, diesen Artikel anzuzeigen oder darauf zu verlinken.
+            </label>
             <label index="message_no_controltag_selected">Kein Steuertag ausgewählt</label>
             <label index="message_articlelist_missing_deleted">
                 Dieses Extra bezieht sich auf eine fehlende oder gelöschte Artikelliste.
@@ -121,6 +170,7 @@
             <label index="message_select_another_articlelist">
                 Bitte wählen Sie eine andere Artikelliste.
             </label>
+            <label index="title_section_articlelist">Artikelliste für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
 			<label index="title_tx_newspaper_article">Artikel</label>
 			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
 			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
@@ -147,44 +197,7 @@
 			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 			<label index="title_tx_newspaper_tag">Tag</label>
-			<label index="label_workflow_hide">Verstecken</label>
-			<label index="label_workflow_publish">Publizieren</label>
-			<label index="label_workflow_check">Zum CvD</label>
-			<label index="label_workflow_check_hide">Zum CvD &amp; verstecken</label>
-			<label index="label_workflow_check_publish">Zum CvD &amp; publizieren</label>
-			<label index="label_workflow_revise">Zum Redakteur</label>
-			<label index="label_workflow_revise_hide">Zum Redakteur &amp; verstecken</label>
-			<label index="label_workflow_revise_publish">Zum Redakteur &amp; publizieren</label>
-			<label index="label_workflow_place">Platzieren</label>
-			<label index="label_workflow_place_hide">Platzieren &amp; verstecken</label>
-			<label index="label_workflow_place_publish">Platzieren &amp; publizieren</label>
-			<label index="label_workflow_save">Speichern</label>
-			<label index="label_workflow_role_editorialstaff">Redaktion</label>
-			<label index="label_workflow_role_dutyeditor">CvD</label>
-			<label index="label_workflow_role_none">Artikel platziert</label>
-			<label index="label_workflow_role_old">Alte Rolle</label>
-			<label index="label_workflow_role_new">Neue Rolle</label>
-			<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
-			<label index="log_record_published">Publiziert</label>
-			<label index="log_article_hidden">Artikel versteckt</label>
-			<label index="log_article_published">Artikel publiziert</label>
-			<label index="log_more_link">Mehr ...</label>
-			<label index="log_less_link">Weniger ...</label>
-			<label index="log_import">Artikel importiert</label>
-			<label index="log_import_source_id">Quelle</label>
-			<label index="log_import_source_path">Pfad</label>
-            <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
-            <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
-			<label index="label_tab_article_article">[ Artikel bearbeiten ]</label>
-			<label index="label_tab_article_extra">Web-Elemente</label>
-			<label index="label_tab_article_workflow">Nachrichten</label>
-			<label index="label_tab_article_tags">Schlagworte</label>
-			<label index="label_tab_article_related">Verlinkte Artikel</label>
-			<label index="label_tab_article_timecontrol">Zeitzündung</label>
-			<label index="label_tab_article_additional">Erweitere Daten</label>
-			<label index="title_section_articlelist">Artikelliste für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
-			<label index="label_kicker_title_teaser">Artikel-Kopfdaten</label>
-			<label index="label_kicker_title_teaser_for_list_views">Artikel-Kopfdaten für Listenansicht</label>
 		</languageKey>
+
 	</data>
 </T3locallang>
