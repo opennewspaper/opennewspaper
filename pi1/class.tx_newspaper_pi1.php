@@ -33,6 +33,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  */
 class tx_newspaper_pi1 extends tslib_pibase {
 	
+    const default_exception_template = 'error_exception.tmpl';
 	const db_exception_template = 'error_db_exception.tmpl';
 	
 	var $prefixId      = 'tx_newspaper_pi1';		// Same as class name
@@ -70,16 +71,10 @@ class tx_newspaper_pi1 extends tslib_pibase {
 			$content .= $page->render();
 
 		} catch (tx_newspaper_DBException $e) {
-
-            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
-            
-			$smarty = new tx_newspaper_Smarty();
-			$smarty->assign('_GET', $_GET);
-			$smarty->assign('exception', $e);
-			
-			$content .= $smarty->fetch(self::db_exception_template); 
-
-		}
+            $this->show404($e, self::getDBExceptionTemplate());
+		} catch (tx_newspaper_Exception $e) {
+            $this->show404($e, self::getDefaultExceptionTemplate());
+        }
 
 		return $content;
 
@@ -92,6 +87,30 @@ class tx_newspaper_pi1 extends tslib_pibase {
 	public function getPage(tx_newspaper_Section $section) {
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
+
+    private function show404(tx_newspaper_Exception $e, $error_template) {
+        header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+
+        $smarty = new tx_newspaper_Smarty();
+        $smarty->assign('_GET', $_GET);
+        $smarty->assign('exception', $e);
+
+        return $smarty->fetch($error_template);
+    }
+
+    private static function getDefaultExceptionTemplate() {
+        if (tx_newspaper::getTSConfigVar('default_exception_template')) {
+            return tx_newspaper::getTSConfigVar('default_exception_template');
+        }
+        return self::default_exception_template;
+    }
+
+    private static function getDBExceptionTemplate() {
+        if (tx_newspaper::getTSConfigVar('db_exception_template')) {
+            return tx_newspaper::getTSConfigVar('db_exception_template');
+        }
+        return self::db_exception_template;
+    }
 }
 
 
