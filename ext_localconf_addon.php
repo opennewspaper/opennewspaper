@@ -117,6 +117,9 @@
 			// \todo enable after functionality is available, see #943
 			TCEFORM.tx_newspaper_extra_textbox.image.disabled = 1
 
+			// \todo: see #1520
+			TCEFORM.tx_newspaper_pagetype.is_article_page.disabled = 1
+
 			mod.web_list.hideTables = tx_newspaper_extra,tx_newspaper_page,tx_newspaper_pagezone,tx_newspaper_pagezone_page
 
 			user.options.hideRecords.pages = ' . $sysfolder . '
