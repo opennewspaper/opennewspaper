@@ -89,8 +89,9 @@ class tx_newspaper_BE {
 					$data[$i]['pagezones'][$j]['type_name'] = $pagezone_types[$j]->getAttribute('type_name');
 					if (!isset($data[$i]['pagezones'][$j]['ACTIVE'])) {
 						// so this pagezone type hasn't been activated
-						if ($pagezone_types[$j]->getAttribute('is_article') && !$data[$i]['DEFAULT_ARTICLE_PAGE']) {
+						if ($pagezone_types[$j]->getAttribute('is_article')) { // re-activate when default articles are used again, see #1518: && !$data[$i]['DEFAULT_ARTICLE_PAGE']) {
 							// default article pagezone for non-default article page, this combinations is not allowed (and nonsense)
+							// \todo: still needed? see #1518
 							unset($data[$i]['pagezones'][$j]); // so remove data collected so far for this combination
 						} else {
 							// active pagezone type found ['ACTIVE'] = false;
@@ -130,6 +131,7 @@ class tx_newspaper_BE {
 
 		/// add data rows
 		self::$smarty->assign('DATA', $data);
+//t3lib_div::devlog('renderPagePageZoneList()', 'newspaper', 0, array('data' => $data));
 
 		$html = '';
 		if (!$PA['AJAX_CALL']) {
