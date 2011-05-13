@@ -179,8 +179,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 				'tag_zone' => $tz_uid,
 				'pid' => tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_tag()),
 				'crdate' => time(),
-				'tstamp' => time()
-				// 'cruser_id' => ... \todo
+				'tstamp' => time(),
+				'cruser_id' => tx_newspaper::getBeUserUid()
 			));
 			return true;
     	}
