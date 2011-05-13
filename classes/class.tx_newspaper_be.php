@@ -73,7 +73,9 @@ class tx_newspaper_BE {
 				foreach($p->getActivePageZones() as $active_pagezone) {
 					/// get ACTIVE page zone type id for ACTIVE page in loop
 					for ($j = 0; $j < sizeof($pagezone_types); $j++) {
-						if ($pagezone_types[$j]->getUid() == $active_pagezone->getPageZoneType()->getUid()) {
+						if ($pagezone_types[$j]->getUid() == $active_pagezone->getPageZoneType()->getUid() &&
+							!$pagezone_types[$j]->getAttribute('is_article') // hide default articles, see #1518
+						) {
 							// active pagezone type found
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
