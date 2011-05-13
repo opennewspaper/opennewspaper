@@ -99,27 +99,19 @@ class tx_newspaper_Smarty extends Smarty {
 	
 	const debug_search_path = false;
 	
-	const DEFAULT_TEMPLATE_DIRECTORY = 'ext/newspaper/res/templates';
+	const default_template_directory = 'ext/newspaper/res/templates';
+    const default_smarty_plugins_dir = 'fileadmin/templates/newspaper/smarty_plugins';
 	
 	const pagename_for_all_pagezones = 'common';
 	const default_template_set = 'default';
 	
 	public function __construct() {
 
-		$tmp = PATH_site . 'typo3temp/';
-		file_exists($tmp . 'smarty_cache') || mkdir($tmp . 'smarty_cache', 0774, true);
-		$this->cache_dir    = $tmp . 'smarty_cache';
-		file_exists($tmp . 'smarty_compile') || mkdir($tmp . 'smarty_compile', 0774, true);
-		$this->compile_dir  = $tmp . 'smarty_compile';
-		file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
-		$this->config_dir   = $tmp . 'smarty_config';
+        $this->setBasePath();
+        $this->setWorkDirectories();
+        $this->setPluginsDirectories();
 
 		$this->caching = false;
-
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
-		$this->basepath = $TSConfig['newspaper.']['defaultTemplate'];
-		if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
-		$this->basepath = str_replace('//', '/', $this->basepath);
 	}
 
 	public function __toString() {
@@ -230,7 +222,35 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 	}
 		
 	////////////////////////////////////////////////////////////////////////////
-	
+
+    private function setWorkDirectories() {
+        $tmp = PATH_site . 'typo3temp/';
+        file_exists($tmp . 'smarty_cache') || mkdir($tmp . 'smarty_cache', 0774, true);
+        $this->cache_dir    = $tmp . 'smarty_cache';
+        file_exists($tmp . 'smarty_compile') || mkdir($tmp . 'smarty_compile', 0774, true);
+        $this->compile_dir  = $tmp . 'smarty_compile';
+        file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
+        $this->config_dir   = $tmp . 'smarty_config';
+    }
+
+    private function setBasePath() {
+        $TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
+        $this->basepath = $TSConfig['newspaper.']['defaultTemplate'];
+        if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
+        $this->basepath = str_replace('//', '/', $this->basepath);
+    }
+
+    private function setPluginsDirectories() {
+        if (tx_newspaper::getTSConfigVar('smarty_plugins_dirs')) {
+            foreach (explode (',', tx_newspaper::getTSConfigVar('smarty_plugins_dirs')) as $plugin_dir) {
+                $this->plugins_dir[] = trim($plugin_dir);
+            }
+        }
+        if (file_exists(PATH_site . self::default_smarty_plugins_dir)) {
+            $this->plugins_dir[] = PATH_site . self::default_smarty_plugins_dir;
+        }
+    }
+
 	///	Sets the path in which Smarty looks for renderable templates
 	/** The template search path consists of the following directories, each 
 	 *	subject to the existence of the necessary parameters: template set, 
@@ -364,7 +384,7 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
 
 		$temporary_searchpath = array();
 
-		$temporary_searchpath[] = PATH_typo3conf . self::DEFAULT_TEMPLATE_DIRECTORY;
+		$temporary_searchpath[] = PATH_typo3conf . self::default_template_directory;
 
 		foreach (explode(',', $TYPO3_CONF_VARS['EXT']['extList']) as $ext) {
 			if (substr($ext, 0, 9) == 'newspaper') {
@@ -384,5 +404,3 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
 	private $templateSearchPath = array();
 
 }
-
-?>
