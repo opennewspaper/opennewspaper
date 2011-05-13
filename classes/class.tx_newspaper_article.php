@@ -1285,6 +1285,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->smarty->assign('extras', $this->getExtras());
         $this->smarty->assign('link', $this->getLink());
 
+        $this->assignTags();
+    }
+
+    private function assignTags() {
         $tags = array();
         foreach ($this->getTags() as $tag) {
             $tags[] = array(
