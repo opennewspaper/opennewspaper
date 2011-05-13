@@ -1074,6 +1074,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
    */
   public static function buildTSFE() {
 
+  	require_once(PATH_t3lib.'class.t3lib_timetrack.php');
+
     $page_id = 1;	/// \todo Ensure that this is a valid page ID
 
     /* Declare */
