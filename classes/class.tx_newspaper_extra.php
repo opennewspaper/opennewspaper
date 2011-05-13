@@ -914,7 +914,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		$state = ($table == 'tx_newspaper_pagezone_page')? 0 : 1;
 
         $e->setAttribute('show_extra', $state);
-        $e->setAttribute('is_inheritable', $state);
+        $e->setAttribute('is_inheritable', 1); // always 1 until #844 is fixed (and un-inherited etxra causes a bug)
     }
 
     private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone $pz) {
