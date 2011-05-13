@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<description>Roles for newspaper extension</description>
+		<type>module</type>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_labels_tablabel">View and change role in newspaper extension</label>
+			<label index="mlang_tabs_tab">Roles</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_labels_tablabel">Rollen der Newspaper-Extension anzeigen und ändern</label>
+			<label index="mlang_tabs_tab">Rollen</label>
+		</languageKey>
+	</data>
+</T3locallang>

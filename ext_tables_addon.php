@@ -112,12 +112,12 @@ if (TYPO3_MODE == 'BE') {
 
 
 //	// add newspaper role module
-//	$pathRole = t3lib_extMgm::extPath('newspaper') . 'mod_role/';
-//	// register toolbar item
-//	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = $pathRole . 'registerToolbarItem.php';
-//	// register AJAX calls
-//	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToEditorialStaff'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToEditorialStaff';
-//	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToDutyEditor'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToDutyEditor';
+	$pathRole = t3lib_extMgm::extPath('newspaper') . 'mod_role/';
+	// register toolbar item
+	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = $pathRole . 'registerToolbarItem.php';
+	// register AJAX calls
+	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToEditorialStaff'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToEditorialStaff';
+	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToDutyEditor'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToDutyEditor';
 
 
 }
