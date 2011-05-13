@@ -1285,7 +1285,17 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->smarty->assign('extras', $this->getExtras());
         $this->smarty->assign('link', $this->getLink());
 
-        // assignTagStuff()
+        $tags = array();
+        foreach ($this->getTags() as $tag) {
+            $tags[] = array(
+                'uid' => $tag->getUid(),
+                'title' => $tag->getAttribute('title'),
+                'tag_type' => $tag->getAttribute('tag_type'),
+                'ctrltag_cat_id' => $tag->getAttribute('ctrltag_cat'),
+                'ctrltag_category' => $tag->getCategoryName()
+            );
+        }
+        $this->smarty->assign('tags', $tags);
     }
 
     /// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.

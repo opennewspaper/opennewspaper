@@ -30,6 +30,16 @@
         author
         text        the raw text as stored in the DB
 
+   $tags = array(
+        array(
+            uid                 uid of the tag
+            title               title as displayed in FE
+            tag_type            1 for content tag, 2 for control tag (see tx_newspaper_Tag::getContentTagType() and tx_newspaper_Tag::getControlTagType())
+            ctrltag_category    name of the control tag category
+            ctrltag_cat_id
+        )
+   )
+
    $extra_attributes    attributes for abstract extra record as stored in DB
 
    $extras  array of extras as PHP object, sorted by paragraph/position
