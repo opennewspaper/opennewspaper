@@ -832,7 +832,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      * \return array with tags objects
      */
     public function getTags($tagtype = null, $category =  null) {
-        $where = "uid_local = " . $this->getUid();
+        $where = " AND uid_local = " . $this->getUid();
 
         if($tagtype) {
             $where .= " AND tag_type = " . $tagtype;
