@@ -832,14 +832,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      * \return array with tags objects
      */
     public function getTags($tagtype = null, $category =  null) {
-        if(!$tagtype) {
-            $tagtype = tx_newspaper_tag::getContentTagType();
+        $where = "uid_local = " . $this->getUid();
+
+        if($tagtype) {
+            $where .= " AND tag_type = " . $tagtype;
         }
-        $where .= " AND tag_type = ".$tagtype;
-        $where .= " AND uid_local = ".$this->getUid();
         if($category) {
-            $where .= " AND ctrltag_cat = ".intval($category);
+            $where .= " AND ctrltag_cat = " . intval($category);
         }
+
         $tag_ids = tx_newspaper::selectMMQuery('uid_foreign', $this->getTable(),
             'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
 
@@ -1283,6 +1284,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->smarty->assign('attributes', $this->attributes);
         $this->smarty->assign('extras', $this->getExtras());
         $this->smarty->assign('link', $this->getLink());
+
+        // assignTagStuff()
     }
 
     /// Checks if an extra type is assigned to this article. If a $paragraph is given, an extra is searched for on that paragraph.
@@ -1348,7 +1351,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     private function checkSectionIsValid() {
         try {
-            $this->getLink();
+            $section = $this->getPrimarySection();
+            $section->getTypo3PageID();
         } catch (tx_newspaper_IllegalUsageException $e) {
             $msg = tx_newspaper::getTranslation('message_section_typo3page_missing');
             $msg = str_replace('###SECTION###', $this->getPrimarySection()->getAttribute('section_name'), $msg);
