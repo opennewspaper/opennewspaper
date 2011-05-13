@@ -665,24 +665,14 @@ body {
 	{/if}
 </div>
 
-{if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
-	{* load default source initially *}
-{literal}
-	<script type="text/javascript">
-		window.onload = function() {
-			changeSource('{$DEFAULT_SOURCE}', '')
-		}
-	</script>
-{/literal}
-{/if}
-
-{literal}
 <script type="text/javascript">
-	window.onload = function() {
-		changeCtrlTagCat(1);
-	}
+	window.onload = function() {ldelim}
+{if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
+		changeSource('{$DEFAULT_SOURCE}', ''); // select default source initially
+{/if}
+		changeCtrlTagCat(1); // load contro tag categories
+	{rdelim}
 </script>
-{/literal}
 
 {*
 {if $IS_ADMIN}<br /><br /><a href="#" onclick="location.reload(); return false;">Reload</a> {/if}
