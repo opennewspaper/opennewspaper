@@ -613,7 +613,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 	/// creates a new article
 	private function createNewArticle($input) {
-t3lib_div::devlog('createNewArticle()', 'newspaper', 0, array('input' => $input));
+//t3lib_div::devlog('createNewArticle()', 'newspaper', 0, array('input' => $input));
 		/// just a plain typo3 article
 		$s = new tx_newspaper_Section($input['section']);
 		$at = new tx_newspaper_ArticleType($input['articletype']);
