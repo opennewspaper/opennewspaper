@@ -74,6 +74,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
+t3lib_div::devlog('processDatamap_postProcessFieldArray()', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
 #tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_postProcessFieldArray($status, $table, $id, ...)", $fieldArray);
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?

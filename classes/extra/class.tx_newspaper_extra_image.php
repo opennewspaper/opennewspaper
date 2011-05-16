@@ -396,14 +396,14 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     const contain_aspect_ratio = false;
 
     /// The path to the image storage directory, relative to the Typo3 installation directory
-    private static $basepath = null;
+    protected static $basepath = null;
 
     /// The list of image sizes, predefined in TSConfig
-    private static $sizes = array();
+    protected static $sizes = array();
     /// The list of image widths, predefined as sizes in TSConfig
-    private static $widths = array();
+    protected static $widths = array();
     /// The list of image heights, predefined as sizes in TSConfig
-    private static $heights = array();
+    protected static $heights = array();
 
 }
 

@@ -3245,5 +3245,46 @@ $TCA["tx_newspaper_extra_html"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+
+
+$TCA["tx_newspaper_extra_freeformimage"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_freeformimage"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "hidden,image_file"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_freeformimage"]["feInterface"],
+	"columns" => array (
+		'hidden' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '0'
+			)
+		),
+		"image_file" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_freeformimage.image_file",		
+			"config" => Array (
+				"type" => "group",
+				"internal_type" => "file",
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 1000,	
+				"uploadfolder" => "uploads/tx_newspaper",
+				"show_thumbs" => 1,	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "hidden;;1;;1-1-1, image_file")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>
