@@ -86,13 +86,13 @@ if (TYPO3_MODE == 'BE') {
 
 	// add main module 'newspaper', add sub modules
 	t3lib_extMgm::addModule('txnewspaperMmain', '',              '', t3lib_extMgm::extPath($_EXTKEY) . 'mod_main/'); // main
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM5', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod5/'); // wizards
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM2', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod2/'); // moderation list (workflow)
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM2', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod2/'); // production list (workflow)
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM9', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod9/'); // placing articles in section article lists
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM7', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod7/'); // placing articles in article lists (non-section) + backend for manual and semiatumatic article lists
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM7', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod7/'); // placing articles in article lists (non-section) + backend for manual and semiautmatic article lists
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM6', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod6/'); // dossiers
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM8', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod8/'); // tag
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM3', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod3/'); // placement
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM6', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod6/'); // manage/create dossiers
-	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM8', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod8/'); // tag admin
+	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM5', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod5/'); // webmaster tools
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM4', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod4/'); // admin tools
 	t3lib_extMgm::addModule('txnewspaperMmain', 'txnewspaperM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/'); // AJAX stuff
 

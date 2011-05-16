@@ -58,12 +58,13 @@ td {
 
 <div id="wizards" style="display: block">
 
-
+{* see #1530
 <div class="box_hl">{$LABEL.wizards}</div>
 <div class="box">
 	<a href="{$MODULE_PATH}index.php?tx_newspaper_mod5[controller]=new_article_wizard">{$WIZARD_ICON} {$LABEL.new_article}</a><br />
 </div>
 <br />
+*}
 
 {if $IS_ADMIN && $WIZARD_PERMISSION}
 <div class="box_hl" title="{$LABEL.webmaster_wizards_tsconfig}">{$LABEL.webmaster_wizards}</div>
@@ -75,6 +76,7 @@ td {
 {/if}
 
 
+{* see #1530
 <div class="box_hl">{$LABEL.latest_articles}</div>
 <div class="box">
 	{$ARTICLELIST}
@@ -109,5 +111,6 @@ td {
 	<a href="index.php?tx_newspaper_mod5[ajaxcontroller]=change_role&amp;tx_newspaper_mod5[new_role]={$ROLE.changeto_value}">{$ROLE_ICON} Change to {$ROLE.changeto}</a> (Currently: <strong>{$ROLE.current}</strong>)<br />
 </div>
 <br />
+*}
 
 </div>

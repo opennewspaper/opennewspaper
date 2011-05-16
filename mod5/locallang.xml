@@ -9,6 +9,7 @@
 			<label index="label_controltype">Control tag</label>
             <label index="label_articletype">Article type</label>
             <label index="label_back_to_wizards">Back to Wizards main page</label>
+			<label index="label_to_productionlist">Go to production list</label>
             <label index="label_error_browsing">Error browsing source</label>
             <label index="label_latest_articles">Latest articles</label>
             <label index="label_manage_usercomments">Manage user comments (DEMO ONLY)</label>
@@ -58,6 +59,7 @@
 			<label index="label_controltype">Steuertag</label>
             <label index="label_articletype">Artikeltyp</label>
             <label index="label_back_to_wizards">Zurück zur Wizard-Startseite</label>
+			<label index="label_to_productionlist">Zur Produktionsliste</label>
             <label index="label_error_browsing">Fehler beim Durchsuchen der Quelle</label>
             <label index="label_latest_articles">Letzte Artikel</label>
             <label index="label_manage_usercomments">Userkommentare verwalten (DEMO)</label>

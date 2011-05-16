@@ -44,7 +44,7 @@ class fullWidthDoc_mod5 extends template {
 
 
 /**
- * Module 'Wizards' for the 'newspaper' extension.
+ * Module 'Webmaster' for the 'newspaper' extension.
  *
  * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
@@ -532,7 +532,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			'section_select' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_select', false),
 			'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
 			'controltag' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_controltype', false),
-			'back_to_wizards' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_back_to_wizards', false),
+			'to_productionlist' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_to_productionlist', false),
 			'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
 			'no_sect' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
 		));
