@@ -1,0 +1,22 @@
+
+<!-- start default/tx_newspaper_extra_freeformimage.tmpl -->
+
+
+{* Image
+   Variables:
+
+   $basepath		path to the image directories
+   $template_set	template set used, if any
+
+   $attributes		attributes as stored in DB. notable attributes include:
+	 	image_file	name of image file
+
+   $extra_attributes	attributes for abstract extra record as stored in DB
+
+*}
+
+<img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}"
+     alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+</a>
+
+<!--  end  artikelseite/hauptspalte/tx_newspaper_extra_image.tmpl -->
