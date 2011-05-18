@@ -526,7 +526,13 @@ body {
 
 // control tag functions
 
-	function changeCtrlTagCat(uid) {
+	function changeCtrlTagCat() {
+		var uid = $("controltagcat").value;
+
+		if (uid == '') {
+			return; // dropdown is empty
+		}
+
 		var request = new Ajax.Request(
 			"index.php", {
 				method: 'get',
@@ -543,8 +549,8 @@ body {
 							$("controltag").options[$("controltag").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
 						}
 						executeCtrlTagFilter();
-						$("ctrltagcatspinner").innerHTML = ''; // remove spinner
 					}
+					$("ctrltagcatspinner").innerHTML = ''; // remove spinner
 				}
 			}
 		);
@@ -642,7 +648,7 @@ body {
 			{* control tags *}
 			<div>
 				<label>{$LABEL.controltag}</label>
-				<select id="controltagcat" name="tx_newspaper_mod5[ctrltagcat]" onchange="changeCtrlTagCat(this.value); return false;">
+				<select id="controltagcat" name="tx_newspaper_mod5[ctrltagcat]" onchange="changeCtrlTagCat(); return false;">
 				{foreach from=$CTRLTAGCATS item=ctrltagcat}
 					<option value="{$ctrltagcat.uid}"{if $ctrltagcat.uid == $DATA.ctrltagcat} selected="selected"{/if}>{$ctrltagcat.title}</option>
 				{/foreach}
@@ -679,7 +685,7 @@ body {
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
 		changeSource('{$DEFAULT_SOURCE}', ''); // select default source initially
 {/if}
-		changeCtrlTagCat(1); // load contro tag categories
+		changeCtrlTagCat(); // load control tag categories
 	{rdelim}
 </script>
 

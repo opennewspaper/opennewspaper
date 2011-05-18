@@ -53,10 +53,14 @@
 #button {
   clear:both;
 }
-#dossier_title_label, #dossier_title_edit {
+#dossier_title_label, #dossier_title_edit,
+#dossier_section_label, #dossier_section_edit, #dossier_section_dropdown {
   margin-left:10px;
 }
-#dossier_title {
+#dossier_section_dropdown {
+	display:none;
+}
+#dossier_title, #dossier_section {
   font-weight:bold;
 }
 </style>
@@ -65,6 +69,7 @@
 <script type="text/javascript">
 {/literal}
 var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
+var titleNotUniqueMesssage = "{$LANG.message_dossier_title_not_unique}";
 {literal}
 
 var tz_uid = null; // stores tag zone uid when opening the element browser popup
@@ -125,6 +130,7 @@ function changeTag(uid) {
 						var tmp = data.responseText.evalJSON();
 						$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
 						refreshDossierTitle(tmp.dossierTitle);
+						displaySection(tmp.sectionTitle, tmp.sectionUid);
 						$("tag_batch_msg").innerHTML = ''; // clear message
 						$("article_list").innerHTML = ''; // clear article list
 					}
@@ -134,25 +140,37 @@ function changeTag(uid) {
 	showArticleBackend(1);
 }
 
+// Display given section title (if any)
 function refreshDossierTitle(title) {
 	$("dossier_title").innerHTML = title;
 	if (title) {
 		$("dossier_title_label").innerHTML = '{/literal}{$LANG.label_title}{literal}: ';
-		$("dossier_title_edit").innerHTML = '<a href="#" onclick="changeDossierTitle(); return false;">{/literal}{$ICON.edit}{literal}</a>';
+		changeTitleShowEditButton();
 	} else {
 		$("dossier_title_label").innerHTML = '';
 		$("dossier_title_edit").innerHTML = '';
 	}
 }
+function changeTitleShowEditButton() {
+	$("dossier_title_edit").innerHTML = '<a href="#" onclick="changeDossierTitle(); return false;">{/literal}{$ICON.edit}{literal}</a>';
+}
+function changeTitleShowStoreCancelButtons() {
+	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a> <a href="#" onclick="cancelDossierTitleEdit(); return false;">{/literal}{$ICON.x}{literal}</a>';
+}
 
+var tmpDossierTitle = '';
+// Remove dossier title display, show dossier title input field to edit title
 function changeDossierTitle() {
 	uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 	var title = $("dossier_title").innerHTML; // read current title
-	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + hscQuotes(title) + '" />'; // render input form foeld
-	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a>';// render save icon (remove edit icon)
+	tmpDossierTitle = title; // store if editing is cancelled
+	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + hscQuotes(title) + '" />'; // render input form field
+	changeTitleShowStoreCancelButtons();
 }
 
+// store new dossier title
 function storeDossierTitle() {
+	var uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 	var title = $("input_dossier_title").value; // read new title from input field
 	if (title == '') {
 		alert('{/literal}{$LANG.wizard_dossier_title_missing}{literal}');
@@ -169,13 +187,88 @@ function storeDossierTitle() {
 				},
 				onSuccess: function(data) {
 					if (data) {
-						var title = $("input_dossier_title").value;
-						refreshDossierTitle(title);
+						var success = data.responseText.evalJSON().success;
+						if (success) {
+							var title = $("input_dossier_title").value;
+							refreshDossierTitle(title);
+						} else {
+							alert(titleNotUniqueMesssage);
+							changeTitleShowStoreCancelButtons(); // show store and cancel buttons again
+						}
 					}
 				}
 			}
 		);
 }
+
+// Cancel dossier title editing, restore title
+function cancelDossierTitleEdit() {
+	refreshDossierTitle(tmpDossierTitle);
+}
+
+
+
+var tmpSectionUid = 0;
+var tmpSectiontitle = "";
+// Display current section
+function displaySection(section, uid) {
+	tmpSectionTitle = section;
+	tmpSectionUid = parseInt(uid);
+	$("dossier_section").innerHTML = section;
+	if (section) {
+		$("dossier_section_label").innerHTML = '{/literal}{$LANG.label_section}{literal}: ';
+		$("dossier_section_edit").innerHTML = '<a href="#" onclick="editSection(); return false;">{/literal}{$ICON.edit}{literal}</a>';
+	} else {
+		$("dossier_section_label").innerHTML = '';
+		$("dossier_section_edit").innerHTML = '';
+	}
+	$("dossier_section").show();
+	$("dossier_section_edit").show();
+	$("dossier_section_dropdown").style.display = "none";
+}
+
+// Edit section (display dropdown, hide text)
+function editSection() {
+	// select current section in dropdown
+
+	for (var i=0; i < $("sections").options.length; i++) {
+		if ($("sections").options[i].value == tmpSectionUid) {
+			$("sections").options[i].selected = true;
+		}
+	}
+
+	$("dossier_section").hide();
+	$("dossier_section_edit").hide();
+	$("dossier_section_dropdown").style.display = "inline";
+}
+
+// store new dossier section
+function storeDossierSection() {
+	var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
+	var sectionUid = $("sections").value; // read new section from select box
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierSectionUid]=' + parseInt(sectionUid) + '&tx_newspaper_mod6[tagUid]=' + parseInt(tagUid),
+				onCreate: function() {
+				},
+				onSuccess: function() {
+					tmpSectionUid = sectionUid;
+					tmpSectionTitle = $("sections").options[$("sections").selectedIndex].text;
+					displaySection(tmpSectionTitle, sectionUid);
+				}
+			}
+		);
+}
+
+// Cancel dossier section editing, restore section display
+function cancelDossierSectionEdit() {
+	displaySection(tmpSectionTitle, tmpSectionUid);
+}
+
+
+
 
 function reloadTagzone(uid) {
 	changeTag(uid);
@@ -367,6 +460,15 @@ function toggleArticleList() {
 	{/foreach}
 	</select>
 	<span id="dossier_title_label"></span><span id="dossier_title"></span><span id="dossier_title_edit"></span>
+	<span id="dossier_section_label"></span><span id="dossier_section"></span><span id="dossier_section_dropdown">
+	<select name="sections" id="sections">
+	{foreach from=$SECTIONS item=section}
+		<option value="{$section->getUid()}">{$section->getAttribute('section_name')}</option>
+	{/foreach}
+	</select>
+		<a href="#" onclick="storeDossierSection(); return false;">{$ICON.save}</a>
+		<a href="#" onclick="cancelDossierSectionEdit(); return false;">{$ICON.x}</a>
+	</span><span id="dossier_section_edit"></span>
 </div>
 
 <div id="tz"></div>

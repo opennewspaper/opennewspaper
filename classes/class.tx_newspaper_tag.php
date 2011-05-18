@@ -211,6 +211,35 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		return $articles;
     }
 
+    /**
+     * Gets the section associated to this control tag
+     * \return Section object for control tag, false, if content tag
+     */
+    public function getSection() {
+		if ($this->getAttribute('tag_type') != self::getControlTagType()) {
+			return false;
+		}
+		return new tx_newspaper_section($this->getAttribute('section'));
+    }
+
+
+    /**
+     * Checks if given title is unique for control tags (always true for content tags)
+     * @param $title Title to check for uniqueness
+     * @return true if title is unique, else false
+     */
+    public function isTitleUnique($title) {
+    	$rows = tx_newspaper::selectRows(
+    		'*',
+    		self::tag_table,
+    		'title LIKE "' . $title . '" AND ' . '
+    			uid<>' . $this->getUid() . ' AND ' .
+    			'tag_type=' . self::getControlTagType() .
+    			tx_newspaper::enableFields(self::tag_table)
+    	);
+		return (sizeof($rows) == 0);
+    }
+
 
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {

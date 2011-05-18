@@ -32,8 +32,10 @@ require_once($BACK_PATH.'template.php');
 $LANG->includeLLFile('EXT:newspaper/mod6/locallang.xml');
 
 // read additional xml files (hook)
-foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
-	$LANG->includeLLFile($file);
+if ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang']) {
+	foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
+		$LANG->includeLLFile($file);
+	}
 }
 
 
@@ -102,9 +104,11 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$this->localLang = $localLang[$GLOBALS['LANG']->lang];
 
 		// read additional locallang files (hook)
-		foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
-			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper_taz/locallang_newspaper_taz.xml', $GLOBALS['LANG']->lang);
-			$this->localLang = array_merge($this->localLang, $localLang[$GLOBALS['LANG']->lang]);
+		if ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang']) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/newspaper']['mod4']['additionalLocallang'] as $file) {
+				$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper_taz/locallang_newspaper_taz.xml', $GLOBALS['LANG']->lang);
+				$this->localLang = array_merge($this->localLang, $localLang[$GLOBALS['LANG']->lang]);
+			}
 		}
 
 		$this->smarty = new tx_newspaper_Smarty();
@@ -335,10 +339,24 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 
 		if (isset($input['AjaxStoreDossierTitleUid'])) {
+
+			$title = trim($input['dossierTitle']);
+
 			$tag = new tx_newspaper_tag(intval($input['AjaxStoreDossierTitleUid']));
-			$tag->setAttribute('title', trim($input['dossierTitle']));
+
+			if (!$tag->isTitleUnique($title)) {
+				die(json_encode(array('success' => false)));
+			}
+
+			$tag->setAttribute('title', $title);
 			$tag->store();
-			die();
+			die(json_encode(array('success' => true)));
+		}
+
+		if (isset($input['AjaxStoreDossierSectionUid'])) {
+			$tag = new tx_newspaper_tag(intval($input['tagUid']));
+			$tag->setAttribute('section', intval($input['AjaxStoreDossierSectionUid'])); // store new section
+			$tag->store();
 		}
 
 	}
@@ -366,9 +384,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
 		));
 //t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
+
+		$s = $tag->getSection();
+
 		return json_encode(array(
 			'backend' => $this->smarty->fetch('mod6_dossier_tagzone.tmpl'),
-			'dossierTitle' => $tag->getAttribute('title')
+			'dossierTitle' => $tag->getAttribute('title'),
+			'sectionTitle' => $s->getAttribute('section_name'),
+			'sectionUid' => $s->getUid()
 		));
 	}
 
@@ -476,6 +499,8 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 			);
 			$this->smarty->assign('CTRLTAGCATS', $tagCats);
 			$this->smarty->assign('TAGS', tx_newspaper_tag::getAllControlTags($ctrltagcat));
+
+			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSections());
 
 			$this->smarty->assign('ICON', array(
 				'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),

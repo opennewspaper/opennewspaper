@@ -23,6 +23,7 @@
 			<label index="label_wizard_dossier_article_tag">Assign tag to articles &gt;&gt;</label>
 			<label index="label_tag">Tag</label>
 			<label index="label_title">Dossier title</label>
+			<label index="label_section">Section</label>
 			<label index="label_ctrltagcat">Control tag category</label>
 			<label index="label_section">Section</label>
 			<label index="label_attach_tag_button">Attach tag to articles</label>
@@ -33,6 +34,7 @@
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
 			<label index="message_confirm_delete_extra_from_tagzone">You you want to remove this extra?</label>
+			<label index="message_dossier_title_not_unique">This title is aleady in use. Please enter another title.</label>
 			<label index="label_show_article_list">Show all articles using this control tag  &gt;&gt;</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -53,6 +55,7 @@
 			<label index="label_wizard_dossier_article_tag">Das gewählte Tag Artikeln zuweisen &gt;&gt;</label>
 			<label index="label_tag">Tag</label>
 			<label index="label_title">Dossier-Titel</label>
+			<label index="label_section">Ressort</label>
 			<label index="label_ctrltagcat">Steuertag-Kategorie</label>
 			<label index="label_section">Ressort</label>
 			<label index="label_attach_tag_button">Tag den Artikeln zuweisen</label>
@@ -63,6 +66,7 @@
 			<label index="label_tagzones_active">Aktive Steuertag-Bereiche</label>
 			<label index="label_tagzones_unused">Verfügbare Steuertag-Bereiche</label>
 			<label index="message_confirm_delete_extra_from_tagzone">Möchten Sie dieses Extra wirklich löschen?</label>
+			<label index="message_dossier_title_not_unique">Dieser Titel wird bereits verwendet. Bitte geben Sie einen anderen Titel ein.</label>
 			<label index="label_show_article_list">Zeige alle Artikel, die dieses Steuertag verwenden &gt;&gt;</label>
 		</languageKey>
 	</data>
