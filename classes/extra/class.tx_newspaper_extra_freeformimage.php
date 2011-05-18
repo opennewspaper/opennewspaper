@@ -52,6 +52,13 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 		return $this->getTitle();
 	}
 
+    public function getUploadFolder() {
+        if (!file_exists('uploads/images/freeform')) {
+            mkdir('uploads/images/freeform');
+        }
+        return 'uploads/images/freeform';
+    }
+
 	/// title for module
 	public static function getModuleName() {
 		return 'np_extra_freeformimage';
