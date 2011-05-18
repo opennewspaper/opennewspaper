@@ -53,10 +53,10 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	}
 
     public function getUploadFolder() {
-        if (!file_exists('uploads/images/freeform')) {
-            mkdir('uploads/images/freeform');
+        if (!file_exists(PATH_site . '/uploads/images/freeform')) {
+            mkdir(PATH_site . '/uploads/images/freeform');
         }
-        return 'uploads/images/freeform';
+        return PATH_site . '/uploads/images/freeform';
     }
 
 	/// title for module
