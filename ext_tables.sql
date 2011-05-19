@@ -968,6 +968,29 @@ CREATE TABLE tx_newspaper_extra_freeformimage (
 
 
 #
+# Table structure for table 'tx_newspaper_extra_sectionteaser'
+#
+CREATE TABLE tx_newspaper_extra_sectionteaser (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	template tinytext NOT NULL,
+	description_text tinytext NOT NULL,
+	is_ctrltag int(11) DEFAULT '0' NOT NULL,
+	num_articles int(11) DEFAULT '0' NOT NULL,
+	num_articles_w_image int(11) DEFAULT '0' NOT NULL,
+	ctrltag_cat int(11) DEFAULT '0' NOT NULL,
+	
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
+
+
+#
 # Table structure for table 'tt_content'
 #
 CREATE TABLE tt_content (
