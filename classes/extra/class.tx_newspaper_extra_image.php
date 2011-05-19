@@ -111,6 +111,10 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return array('title', 'caption', 'kicker');
 	}
 
+    public static function getBasepath() {
+        return tx_newspaper_Image::getBasepath();
+    }
+    
     public static function getSizes() {
         return tx_newspaper_Image::getSizes();
     }
