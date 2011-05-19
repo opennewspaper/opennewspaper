@@ -19,8 +19,6 @@ class tx_newspaper_Image {
         $smarty->assign('sizes', self::getSizes());
         $smarty->assign('widths', self::getWidths());
         $smarty->assign('heights', self::getHeights());
-
-        throw new tx_newspaper_NotYetImplementedException();
     }
 
     public function getThumbnail() {
