@@ -217,6 +217,8 @@
 			<label index="tx_newspaper_extra_html.description_text">Description</label>
 			<label index="tx_newspaper_extra_freeformimage">Extra: Free form image</label>
 			<label index="tx_newspaper_extra_freeformimage.image_file">Image file</label>
+			<label index="tx_newspaper_extra_freeformimage.image_width">Width (optional)</label>
+			<label index="tx_newspaper_extra_freeformimage.image_height">Height (optional)</label>
 			<label index="tx_newspaper_extra_sectionteaser">Extra: Sectionteaser</label>
 			<label index="tx_newspaper_extra_sectionteaser.template">Template</label>
 			<label index="tx_newspaper_extra_sectionteaser.description_text">Description</label>
@@ -443,6 +445,8 @@
 			<label index="tx_newspaper_extra_html.description_text">Beschreibung</label>
 			<label index="tx_newspaper_extra_freeformimage">Extra: Bild in freiem Format</label>
 			<label index="tx_newspaper_extra_freeformimage.image_file">Bilddatei</label>
+			<label index="tx_newspaper_extra_freeformimage.image_width">Breite (optional)</label>
+			<label index="tx_newspaper_extra_freeformimage.image_height">Höhe (optional)</label>
 			<label index="tx_newspaper_extra_sectionteaser">Extra: Ressortteaser</label>
 			<label index="tx_newspaper_extra_sectionteaser.template">Designvorlage</label>
 			<label index="tx_newspaper_extra_sectionteaser.description_text">Beschreibung</label>

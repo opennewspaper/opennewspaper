@@ -960,6 +960,8 @@ CREATE TABLE tx_newspaper_extra_freeformimage (
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	image_file blob NOT NULL,
+	image_width int(11) DEFAULT '0' NOT NULL,
+	image_height int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

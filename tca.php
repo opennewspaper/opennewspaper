@@ -3251,7 +3251,7 @@ $TCA["tx_newspaper_extra_html"] = array (
 $TCA["tx_newspaper_extra_freeformimage"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_freeformimage"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,image_file"
+		"showRecordFieldList" => "hidden,image_file,image_width,image_height"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_freeformimage"]["feInterface"],
 	"columns" => array (
@@ -3278,9 +3278,41 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"image_width" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_freeformimage.image_width",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
+		"image_height" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_freeformimage.image_height",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "1000",
+					"lower" => "10"
+				),
+				"default" => 0
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, image_file")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, image_file, image_width, image_height")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

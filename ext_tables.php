@@ -777,7 +777,7 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_freeformimage.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, image_file",
+		"fe_admin_fieldList" => "hidden, image_file, image_width, image_height",
 	)
 );
 

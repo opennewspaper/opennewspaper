@@ -57,7 +57,7 @@ class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
 	public function getDescription() {
 		if ($desc=$this->getAttribute('description_text')) {
 		} elseif ($desc=$this->getAttribute('notes')) {
-#		} elseif ($desc=$this->getAttribute('html')) {
+// #		} elseif ($desc=$this->getAttribute('html')) {
 			$desc=preg_replace("/<(.*)?>/U","",$desc);
 		} else {
 			return;
