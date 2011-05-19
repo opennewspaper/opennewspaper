@@ -10,7 +10,8 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	/// Constructor
 	public function __construct($uid = 0) {
 		if ($uid) {
-			parent::__construct($uid); 
+			parent::__construct($uid);
+            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
 		}
 	}
 	
@@ -28,22 +29,9 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	 */	
 	public function render($template_set = '') {
         
-        tx_newspaper::startExecutionTimer();
-        
 		$this->prepare_render($template_set);
-		
-		$template = $this->getAttribute('template');
-		if ($template) {
-			if (strpos($template, '.tmpl') === false) {
-				$template .= '.tmpl';
-			}
-		} else {
-			$template = $this;
-		}
 
-        $rendered = $this->smarty->fetch($template);
-        
-        tx_newspaper::logExecutionTime();
+        $rendered = $this->smarty->fetch($this);
         
         return $rendered;
 	}
@@ -53,10 +41,11 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	}
 
     public function getUploadFolder() {
-        if (!file_exists(PATH_site . '/uploads/images/freeform')) {
-            mkdir(PATH_site . '/uploads/images/freeform');
+
+        if (!file_exists(tx_newspaper_Image::getBasepath() . '/freeform')) {
+            mkdir(tx_newspaper_Image::getBasepath() . '/freeform');
         }
-        return PATH_site . '/uploads/images/freeform';
+        return tx_newspaper_Image::getBasepath() . '/freeform';
     }
 
 	/// title for module
