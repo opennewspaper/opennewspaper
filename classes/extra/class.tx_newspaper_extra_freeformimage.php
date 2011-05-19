@@ -1,6 +1,7 @@
 <?php
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_image.php');
 
 /// tx_newspaper_Extra that renders 
 /** This Extra is used to place ads in an article 

@@ -2,6 +2,7 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_image.php');
 
 /// tx_newspaper_Extra that displays an image
 /** This Extra displays an image, along with several parameters such as a title,
