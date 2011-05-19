@@ -111,6 +111,18 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return array('title', 'caption', 'kicker');
 	}
 
+    public static function getSizes() {
+        return tx_newspaper_Image::getSizes();
+    }
+
+    public static function getWidths() {
+        return tx_newspaper_Image::getWidths();
+    }
+
+    public static function getHeights() {
+        return tx_newspaper_Image::getHeights();
+    }
+
 	/// Save hook function, called from the global save hook
 	/** Resizes the uploaded image into all sizes specified in TSConfig.
 	 *
