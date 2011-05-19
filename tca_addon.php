@@ -266,6 +266,8 @@ $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['c
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'required';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;
 
+$TCA["tx_newspaper_extra"]["columns"]["pagezonetype_id"]["config"]["range"] = array ("lower" => "1");
+
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['size'] = '12';
@@ -277,7 +279,10 @@ $GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['starttime']['config']
 $GLOBALS['TCA']['tx_newspaper_extra_typo3_ce']['columns']['endtime']['config']['size'] = '12';
 
 
-$TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["range"] = array (
+$TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles"]["config"]["range"] = array (
+	"lower" => "1"
+);
+$TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles_w_image"]["config"]["range"] = array (
 	"lower" => "1"
 );
 
