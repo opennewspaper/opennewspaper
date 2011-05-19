@@ -12,7 +12,6 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid);
-            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
 		}
 	}
 	
@@ -29,7 +28,9 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_freeformimage.tmpl
 	 */	
 	public function render($template_set = '') {
-        
+
+        $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+
 		$this->prepare_render($template_set);
 
         $rendered = $this->smarty->fetch($this);
@@ -55,6 +56,15 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	}
 	
 	public static function dependsOnArticle() { return false; }
+
+    private function instantiateImage() {
+        if ($this->image == null) {
+            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+        }
+    }
+
+    protected $image = null;
+
 	
 }
 

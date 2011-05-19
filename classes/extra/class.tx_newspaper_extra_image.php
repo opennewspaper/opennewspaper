@@ -53,7 +53,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     public function __construct($uid = 0) {
         if ($uid) {
             parent::__construct($uid);
-            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
         }
     }
 
@@ -76,6 +75,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         tx_newspaper::startExecutionTimer();
 
+        $this->instantiateImage();
+
         $this->prepare_render($template_set);
 
         $this->image->prepare_render($this->smarty);
@@ -93,7 +94,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/** Displays title and UID of the image, as well as a thumbnail of it.
 	 */
 	public function getDescription() {
-
+        $this->instantiateImage();
 		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
             $this->image->getThumbnail();
 	}
@@ -143,6 +144,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
         $type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
         return $type_string;
+    }
+
+    private function instantiateImage() {
+        if ($this->image == null) {
+            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+        }
     }
 
     /// The field which carries the image file
