@@ -27,6 +27,7 @@ class tx_newspaper_Image {
         if ($this->image_file) {
             $thumbnail_file = PATH_site . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
                        '/' . $this->image_file;
+            tx_newspaper::devlog('getThumbnail()', array('image_file'=>$this->image_file, 'thumbnail'=>$thumbnail_file));
             if (file_exists($thumbnail_file)) {
                 return '<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
                        '/' . $this->image_file . '" />';
@@ -195,7 +196,7 @@ class tx_newspaper_Image {
             ' -geometry ' . $width .
                 (self::contain_aspect_ratio? '': ('x' . $height)) .
             ' ' . self::convert_options .
-             ' \'' . PATH_site . $source . '\'' .
+            ' \'' . PATH_site . $source . '\'' .
             ' \'' . PATH_site . $target . '\'';
 
         $return = array();
