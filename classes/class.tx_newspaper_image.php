@@ -70,7 +70,7 @@ class tx_newspaper_Image {
     public function copyTo($folder) {
         self::makeTargetDir($folder);
         if (!file_exists($folder .'/' . $this->image_file)) {
-            copy(self::uploads_folder . '/'. $this->image_file, $folder);
+            copy(self::uploads_folder . '/' . $this->image_file, $folder . '/' . $this->image_file);
         }
     }
 
