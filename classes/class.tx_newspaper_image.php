@@ -22,27 +22,15 @@ class tx_newspaper_Image {
     }
 
     public function getThumbnail() {
-        self::getTSConfig();
-
-        if ($this->image_file) {
-            $thumbnail_file = PATH_site . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
-                       '/' . $this->image_file;
-            tx_newspaper::devlog('getThumbnail()', array('image_file'=>$this->image_file, 'thumbnail'=>$thumbnail_file));
-            if (file_exists($thumbnail_file)) {
-                return '<img src="/' . self::$basepath . '/' . self::$sizes[self::thumbnail_name] .
-                       '/' . $this->image_file . '" />';
-            } else {
-                return tx_newspaper_BE::renderIcon(
-                    'gfx/icon_warning.gif', '',
-                    tx_newspaper::getTranslation('message_image_missing')
-                );
-            }
-        } else {
-            return tx_newspaper_BE::renderIcon(
-                    'gfx/icon_warning2.gif', '',
-                    tx_newspaper::getTranslation('message_image_unset')
-            );
+        if (!$this->image_file) {
+            return self::iconImageUnset();
         }
+
+        if (file_exists(PATH_site . $this->getThumbnailPath())) {
+            return $this->getIcon();
+        }
+
+        return self::iconImageMissing();
     }
 
 
@@ -61,7 +49,7 @@ class tx_newspaper_Image {
 	 */
 	public function resizeImages() {
 
-		self::getTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
+		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
 
 		foreach (self::$sizes as $key => $dimension) {
 
@@ -85,13 +73,13 @@ class tx_newspaper_Image {
 
 	/// Get the path from root to the images directory, as registered in TSConfig
 	public static function getBasepath() {
-		self::getTSConfig();
+		self::readTSConfig();
 		return self::$basepath;
 	}
 
 	/// Get the array of possible image sizes registered in TSConfig
 	public static function getSizes() {
-		self::getTSConfig();
+		self::readTSConfig();
 		return self::$sizes;
 	}
 
@@ -105,7 +93,56 @@ class tx_newspaper_Image {
         return self::$heights;
     }
 
-	///	Read base path and predefined sizes for images
+    ////////////////////////////////////////////////////////////////////////////
+
+    /** copy $basedir to $targetPath on $targetHost	*/
+    private function rsync($basedir, $targetHost, $targetPath) {
+        $command = "rsync " . self::getRsyncOptions() . " \"$basedir\" \"$targetHost:$targetPath\" 2>&1"; // "..." -> space in path
+        $output = array();
+        $return = 0;
+        exec($command, $output, $return);
+        if (self::getRsyncLog()) {
+            exec("date >> " . self::getRsyncLog());
+            $f = fopen(self::getRsyncLog(), "a+");
+            fwrite ($f, "$basedir\n");
+            fwrite ($f, print_r($output,1));
+            fclose($f);
+        }
+
+        if ($return) {
+            tx_newspaper::devlog(
+                "Transfer of uploaded images to live server failed!",
+                array('command' => $command, 'output' => $output, 'return value' => $return)
+            );
+        }
+
+    }
+
+    private function getThumbnailPath() {
+        self::readTSConfig();
+
+        return self::$basepath . '/' . self::$sizes[self::thumbnail_name] . '/' . $this->image_file;
+    }
+
+    private function getIcon() {
+        return '<img src="/' . $this->getThumbnailPath() . '" />';
+    }
+
+    private static function iconImageMissing() {
+        return tx_newspaper_BE::renderIcon(
+            'gfx/icon_warning.gif', '',
+            tx_newspaper::getTranslation('message_image_missing')
+        );
+    }
+
+    private static function iconImageUnset() {
+        return tx_newspaper_BE::renderIcon(
+                'gfx/icon_warning2.gif', '',
+                tx_newspaper::getTranslation('message_image_unset')
+        );
+    }
+
+    ///	Read base path and predefined sizes for images
 	/** The following parameters must be read from the TSConfig for the storage
 	 *  SysFolder for Image Extras:
 	 *  \code
@@ -115,7 +152,7 @@ class tx_newspaper_Image {
 	 *
 	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
 	 */
-	private static function getTSConfig() {
+	private static function readTSConfig() {
 
 		if (self::$basepath && self::$sizes) return;
 
@@ -230,29 +267,6 @@ class tx_newspaper_Image {
     		   self::default_jpeg_quality;
 
     }
-
-	/** copy $basedir to $targetPath on $targetHost	*/
-	private function rsync($basedir, $targetHost, $targetPath) {
-		$command = "rsync " . self::getRsyncOptions() . " \"$basedir\" \"$targetHost:$targetPath\" 2>&1"; // "..." -> space in path
-		$output = array();
-		$return = 0;
-		exec($command, $output, $return);
-        if (self::getRsyncLog()) {
-            exec("date >> " . self::getRsyncLog());
-            $f = fopen(self::getRsyncLog(), "a+");
-            fwrite ($f, "$basedir\n");
-            fwrite ($f, print_r($output,1));
-            fclose($f);
-        }
-
-        if ($return) {
-			tx_newspaper::devlog(
-                "Transfer of uploaded images to live server failed!",
-                array('command' => $command, 'output' => $output, 'return value' => $return)
-            );
-		}
-
-	}
 
     private static function getRsyncLog() {
         if (tx_newspaper::getTSConfigVar('rsync_log')) {
