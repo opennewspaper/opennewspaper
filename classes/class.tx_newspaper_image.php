@@ -213,10 +213,10 @@ class tx_newspaper_Image {
 
     private static function fillWidthOrHeightArray(array &$what, $index) {
         if (empty($what)) {
-            foreach (self::getSizes() as $size) {
+            foreach (self::getSizes() as $key => $size) {
                 $width_and_height = explode('x', $size);
                 if (isset($width_and_height[$index])) {
-                    $what[] = $width_and_height[$index];
+                    $what[$key] = $width_and_height[$index];
                 }
             }
         }
