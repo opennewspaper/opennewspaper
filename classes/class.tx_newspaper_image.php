@@ -195,6 +195,7 @@ class tx_newspaper_Image {
     }
 
     private static function extractDimension($dimension, $key, $index) {
+        tx_newspaper::devlog("extractDimension($dimension, $key, $index)");
         $wxh = explode('x', $dimension);
         $dim = intval($wxh[$index]);
         if (!$dim) {
