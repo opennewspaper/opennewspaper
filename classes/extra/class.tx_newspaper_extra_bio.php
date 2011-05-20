@@ -79,14 +79,9 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
         }
         if ($table != $extra_table) return;
 
-        self::getTSConfig(); // called after class check, otherwise TSConfig for images is read for every record stored in typo3
-
-		t3lib_div::devlog('bio save hook', 'newspaper', 0,
-			array('status' => $status, 'table' => $table, 'id' => $id,
-				  'fieldArray' => $fieldArray, 'that' => $that));
-
         if ($fieldArray[self::image_file_field]) {
-            self::resizeImages($fieldArray[self::image_file_field]);
+            $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
+            $image->resizeImages();
         }
     }
 
