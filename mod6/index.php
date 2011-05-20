@@ -402,11 +402,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 		$cats = tx_newspaper_tag::getAllControltagCategories();
 
+		$tag = new tx_newspaper_tag();// empty tag
+
 		$submitted = (bool) (count($input)); // check if form was submitted ...
 		$error = array(
 			'tagNotUnique' => $this->checkTagNotUnique($input['tag'], $input['ctrltagcat']), // true, if tag is not unique
 			'tagEmpty' => ($input['tag'] == ''),  // tag name is mandatory
 			'titleMissing' => ($input['title'] == ''), // title is mandatory
+			'titleNotUnique' => !$tag->isTitleUnique($input['title']), // title must be unique
 			'sectionMissing' => ($input['section'] == 0), // associated section is mandatory
 			'noCtrlTagCatAvailable' => (sizeof($cats) == 0) // dossier wizard can't be used without control tag categories
 		);

@@ -4,7 +4,7 @@
 {include file="../../mod3/res/mod3.css"}
 
 {* Variables:
-	$DATA.tag             tag entered in form 
+	$DATA.tag             tag entered in form
 	$DATA.controltagtype  list of tag zones in the system, form:
 	$DATA.section         section uid
 	$SECTIONS             all available sections
@@ -49,8 +49,11 @@
 	{if $ERROR.titleMissing && $DATA.submitted}
 	<span class="error_message">{$LANG.wizard_dossier_title_missing}</span>
 	{/if}
+	{if $ERROR.titleNotUnique && $DATA.submitted && $DATA.title}
+	<span class="error_message">{$LANG.message_dossier_title_not_unique}</span>
+	{/if}
 </div>
-	
+
 <div>
 	<label name="tx_newspaper_mod6[section]">{$LANG.label_section}</label>
 	<select name="tx_newspaper_mod6[section]">
