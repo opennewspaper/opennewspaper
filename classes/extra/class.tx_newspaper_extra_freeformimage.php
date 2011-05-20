@@ -32,6 +32,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
         $this->instantiateImage();
 
 		$this->prepare_render($template_set);
+        $this->smarty->assign('basepath', $this->getUploadFolder());
 
         $rendered = $this->smarty->fetch($this);
         tx_newspaper::devlog("tx_newspaper_Extra_FreeFormImage::render()", $rendered);
