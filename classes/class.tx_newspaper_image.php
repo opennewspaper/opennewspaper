@@ -26,6 +26,8 @@ class tx_newspaper_Image {
             return self::iconImageUnset();
         }
 
+        $this->resizeImage(self::getThumbnailWidth(), self::getThumbnailHeight());
+
         if (file_exists(PATH_site . $this->getThumbnailPath())) {
             return $this->getIcon();
         }
@@ -52,24 +54,18 @@ class tx_newspaper_Image {
 		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
 
 		foreach (self::$sizes as $key => $dimension) {
-
 	    	if (self::imgIsResized($this->image_file, $dimension)) continue;
-
-	    	$wxh = explode('x', $dimension);
-	    	$width = intval($wxh[0]);
-	    	$height = intval($wxh[1]);
-	    	if (!$width || !$height) {
-	    		throw new tx_newspaper_IllegalUsageException(
-	    			'TSConfig usage: "newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}". ' . "\n" .
-	    			'Actual TSConfig for this line: ' . 'newspaper.image.size.' . $key . ' = ' . $dimension
-	    		);
-	    	}
-			self::resizeImage($width, $height,
-							  self::uploads_folder . '/'. $this->image_file,
-							  self::$basepath . '/' . self::imageResizedName($this->image_file, $dimension));
+            $this->resizeImage(self::extractWidth($dimension, $key), self::extractHeight($dimension, $key));
 		}
 	}
 
+    public function resizeImage($width, $height) {
+        self::doResizeImage(
+            $width, $height,
+            self::uploads_folder . '/'. $this->image_file,
+            self::$basepath . '/' . self::imageResizedName($this->image_file, "${width}x${height}")
+        );
+    }
 
 	/// Get the path from root to the images directory, as registered in TSConfig
 	public static function getBasepath() {
@@ -122,6 +118,16 @@ class tx_newspaper_Image {
         self::readTSConfig();
 
         return self::$basepath . '/' . self::$sizes[self::thumbnail_name] . '/' . $this->image_file;
+    }
+
+    private static function getThumbnailWidth() {
+        $widths = self::getWidths();
+        return $widths[self::thumbnail_name];
+    }
+
+    private static function getThumbnailHeight() {
+        $heights = self::getHeights();
+        return $heights[self::thumbnail_name];
     }
 
     private function getIcon() {
@@ -179,6 +185,26 @@ class tx_newspaper_Image {
         }
     }
 
+    private static function extractWidth($dimension, $key) {
+        return self::extractDimension($dimension, $key, 0);
+    }
+
+    private static function extractHeight($dimension, $key) {
+        return self::extractDimension($dimension, $key, 1);
+    }
+
+    private static function extractDimension($dimension, $key, $index) {
+        $wxh = explode('x', $dimension);
+        $dim = intval($wxh[$index]);
+        if (!$dim) {
+            throw new tx_newspaper_IllegalUsageException(
+                'TSConfig usage: "newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}". ' . "\n" .
+                'Actual TSConfig for this line: ' . 'newspaper.image.size.' . $key . ' = ' . $dimension
+            );
+        }
+        return $dim;
+    }
+
     private static function fillWidthOrHeightArray(array &$what, $index) {
         if (empty($what)) {
             foreach (self::getSizes() as $size) {
@@ -210,7 +236,7 @@ class tx_newspaper_Image {
      *  \param $target  File name of the resized image, relative to the Typo3
      * 		installation directory
      */
-    private static function resizeImage($width, $height, $source, $target) {
+    private static function doResizeImage($width, $height, $source, $target) {
 
         self::makeTargetDir($target);
 
