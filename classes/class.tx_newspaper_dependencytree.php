@@ -236,9 +236,6 @@ class tx_newspaper_DependencyTree {
     
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-
-        tx_newspaper::startExecutionTimer();
-
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -248,8 +245,6 @@ class tx_newspaper_DependencyTree {
                 $this->executeActionOnPages($action);
             }
         }
-
-        tx_newspaper::logExecutionTime('executeActionsOnPages()');
     }
 
     /// Returns all article pages on which the affected article is shown.

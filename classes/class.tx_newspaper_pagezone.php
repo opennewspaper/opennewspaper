@@ -268,8 +268,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
  	public function render($template_set = '') {
  		
-        tx_newspaper::startExecutionTimer();
- 		
 		/// Check whether to use a specific template set
 		if ($this->getAttribute('template_set')) {
 			$template_set = $this->getAttribute('template_set');
@@ -301,8 +299,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  		$this->smarty->assign('extras', $temp_extras);
 
         $rendered = $this->smarty->fetch($this);
-        
-        tx_newspaper::logExecutionTime();
         
         return $rendered;
  	}

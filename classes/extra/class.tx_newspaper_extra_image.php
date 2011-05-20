@@ -73,8 +73,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
      */
     public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
         $this->instantiateImage();
 
         $this->prepare_render($template_set);
@@ -84,8 +82,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         $this->smarty->assign('type', $this->getImageType());
 
         $rendered = $this->smarty->fetch($this);
-
-        tx_newspaper::logExecutionTime();
 
         return $rendered;
     }

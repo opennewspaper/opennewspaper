@@ -303,8 +303,6 @@ class tx_newspaper_Page
 	 */
  	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
 		/// Check the parent Section and own attributes whether to use a specific template set
  		if ($this->getParentSection()->getTemplateSet()) {
 			$template_set = $this->getParentSection()->getTemplateSet();
@@ -331,8 +329,6 @@ class tx_newspaper_Page
 
         /// Return the rendered page
         $rendered = $this->smarty->fetch($this);
-
-        tx_newspaper::logExecutionTime();
 
         return $rendered;
  	}

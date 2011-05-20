@@ -34,8 +34,6 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
 		$this->prepare_render($template_set);
 		
 		$list = tx_newspaper::getSection()->getArticleList();
@@ -52,8 +50,6 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
         $rendered = $this->smarty->fetch($this);
 
-        tx_newspaper::logExecutionTime('tx_newspaper_extra_SectionList::render()');
-        
         return $rendered;
 	}
 
