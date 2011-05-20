@@ -67,6 +67,31 @@ class tx_newspaper_Image {
         );
     }
 
+    public function copyTo($folder) {
+        self::makeTargetDir($folder);
+        if (!file_exists($folder .'/' . $this->image_file)) {
+            copy(self::uploads_folder . '/'. $this->image_file, $folder);
+        }
+    }
+
+    public function rsyncAllImageFiles() {
+        $target_host = tx_newspaper::getTSConfigVar('rsync_host');
+        $target_path = tx_newspaper::getTSConfigVar('rsync_path');
+        if (empty($target_host) || empty($target_path)) return;
+        $target_user = tx_newspaper::getTSConfigVar('rsync_user');
+        if ($target_user) {
+            $target_host = "$target_user@$target_host";
+        }
+        foreach (self::getSizes() as $size) {
+            $filename = implode('/', array(PATH_site, self::getBasepath(), $size, $this->image_file));
+            $target_file = implode('/', array($target_path, $size, $this->image_file));
+            self::rsync($filename, $target_host, $target_file);
+        }
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    
 	/// Get the path from root to the images directory, as registered in TSConfig
 	public static function getBasepath() {
 		self::readTSConfig();
@@ -89,10 +114,12 @@ class tx_newspaper_Image {
         return self::$heights;
     }
 
+
     ////////////////////////////////////////////////////////////////////////////
 
     /** copy $basedir to $targetPath on $targetHost	*/
-    private function rsync($basedir, $targetHost, $targetPath) {
+    private static function rsync($basedir, $targetHost, $targetPath) {
+
         $command = "rsync " . self::getRsyncOptions() . " \"$basedir\" \"$targetHost:$targetPath\" 2>&1"; // "..." -> space in path
         $output = array();
         $return = 0;
@@ -342,4 +369,9 @@ class tx_newspaper_Image {
     /// Whether to keep aspect ratio when resizing images
     const contain_aspect_ratio = false;
 
+}
+
+/// An image with no image file, instantiated where an image is needed
+class tx_newspaper_NullImage extends tx_newspaper_Image {
+    public function __construct() { }
 }

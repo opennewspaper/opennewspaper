@@ -53,6 +53,9 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     public function __construct($uid = 0) {
         if ($uid) {
             parent::__construct($uid);
+            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+        } else {
+            $this->image = new tx_newspaper_NullImage();
         }
     }
 
@@ -73,8 +76,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
      */
     public function render($template_set = '') {
 
-        $this->instantiateImage();
-
         $this->prepare_render($template_set);
 
         $this->image->prepare_render($this->smarty);
@@ -90,9 +91,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/** Displays title and UID of the image, as well as a thumbnail of it.
 	 */
 	public function getDescription() {
-        $this->instantiateImage();
-		return $this->getAttribute('title') . ' (#' . $this->getUid() . ')' .
-            $this->image->getThumbnail();
+		return $this->getAttribute('title') . $this->image->getThumbnail();
 	}
 
 // title for module
@@ -140,11 +139,11 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	) {
 
 		if ($table != 'tx_newspaper_extra_image') return;
-
-		if ($fieldArray[self::image_file_field]) {
-            $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
-			$image->resizeImages();
-		}
+		if (!isset($fieldArray[self::image_file_field])) return;
+        
+        $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
+        $image->resizeImages();
+        $image->rsyncAllImageFiles();
 	}
 
     ////////////////////////////////////////////////////////////////////////////
@@ -156,12 +155,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
         $type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
         return $type_string;
-    }
-
-    private function instantiateImage() {
-        if ($this->image == null) {
-            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
-        }
     }
 
     /// The field which carries the image file

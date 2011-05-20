@@ -12,7 +12,10 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid);
-		}
+            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+		} else {
+            $this->image = new tx_newspaper_NullImage();
+        }
 	}
 	
 	public function __toString() {
@@ -20,7 +23,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 			return 'Extra: UID ' . $this->getExtraUid() . ', Free Form Image Extra: UID ' . $this->getUid();
 		} catch(Exception $e) {
 			return "Free Form Image: Exception thrown!" . $e;
-		}	
+		}
 	}
 	
 	/// Render an image.
@@ -28,29 +31,30 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	 *  \include res/templates/tx_newspaper_extra_freeformimage.tmpl
 	 */	
 	public function render($template_set = '') {
-        tx_newspaper::startExecutionTimer();
-        $this->instantiateImage();
 
+        $this->image->copyTo($this->getUploadFolder());
+        
 		$this->prepare_render($template_set);
         $this->smarty->assign('basepath', $this->getUploadFolder());
 
         $rendered = $this->smarty->fetch($this);
         tx_newspaper::devlog("tx_newspaper_Extra_FreeFormImage::render()", $rendered);
-        tx_newspaper::logExecutionTime();
+
         return 'tx_newspaper_Extra_FreeFormImage::render()' . $rendered;
 	}
 
 	public function getDescription() {
-        $this->instantiateImage();
 		return $this->image->getThumbnail();
 	}
 
     public function getUploadFolder() {
 
-        if (!file_exists(tx_newspaper_Image::getBasepath() . '/freeform')) {
-            mkdir(tx_newspaper_Image::getBasepath() . '/freeform');
+        $upload_folder_path = tx_newspaper_Image::getBasepath() . '/' . self::upload_folder_name;
+        if (!file_exists($upload_folder_path)) {
+            mkdir($upload_folder_path);
         }
-        return tx_newspaper_Image::getBasepath() . '/freeform';
+        
+        return $upload_folder_path;
     }
 
 	/// title for module
@@ -60,14 +64,9 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	
 	public static function dependsOnArticle() { return false; }
 
-    private function instantiateImage() {
-        if (is_null($this->image)) {
-            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
-        }
-    }
+    private $image = null;
 
-    protected $image = null;
-
+    const upload_folder_name = 'freeform';
 	
 }
 
