@@ -3,12 +3,14 @@
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_image.php');
 
-/// tx_newspaper_Extra that renders 
-/** This Extra is used to place ads in an article 
- */  
+/// tx_newspaper_Extra that renders an image without resizing it
 class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 
-	/// Constructor
+    const upload_folder_name = 'freeform';
+
+    /// The field which carries the image file
+    const image_file_field = 'image_file';
+
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid);
@@ -26,7 +28,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 		}
 	}
 	
-	/// Render an image.
+	/// Render the image.
 	/**  Smarty template:
 	 *  \include res/templates/tx_newspaper_extra_freeformimage.tmpl
 	 */	
@@ -63,12 +65,22 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	
 	public static function dependsOnArticle() { return false; }
 
+    /// Save hook function, called from the global save hook
+    /** Copies the uploaded image to the production server, if that is enabled.
+     */
+    public static function processDatamap_postProcessFieldArray(
+        $status, $table, $id, &$fieldArray, $that
+    ) {
+        if ($table != 'tx_newspaper_extra_freeformimage') return;
+
+        if ($fieldArray[self::image_file_field]) {
+            $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
+            $image->rsyncSingleImageFile(self::upload_folder_name);
+        }
+    }
+
     private $image = null;
 
-    const upload_folder_name = 'freeform';
-	
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_FreeFormImage());
-
-?>

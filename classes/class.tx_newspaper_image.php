@@ -75,19 +75,19 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
-        $target_host = tx_newspaper::getTSConfigVar('rsync_host');
-        $target_path = tx_newspaper::getTSConfigVar('rsync_path');
-        if (empty($target_host) || empty($target_path)) return;
-        $target_user = tx_newspaper::getTSConfigVar('rsync_user');
-        if ($target_user) {
-            $target_host = "$target_user@$target_host";
-        }
         foreach (self::getSizes() as $size) {
-            $filename = implode('/', array(PATH_site, self::getBasepath(), $size, $this->image_file));
-            $target_file = implode('/', array($target_path, $size, $this->image_file));
-            self::rsync($filename, $target_host, $target_file);
+            $this->rsyncSingleImageFile($size);
         }
 
+    }
+
+    public function rsyncSingleImageFile($subfolder) {
+
+        if (!self::isRsyncEnabled()) return;
+
+        $filename = implode('/', array(PATH_site, self::getBasepath(), $subfolder, $this->image_file));
+        $target_file = implode('/', array(self::$rsync_path, $subfolder, $this->image_file));
+        self::rsync($filename, self::$rsync_host, $target_file);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -139,6 +139,24 @@ class tx_newspaper_Image {
             );
         }
 
+    }
+
+    private static function readRsyncOptions() {
+        if (!is_null(self::$rsync_host)) return;
+
+        self::$rsync_host = tx_newspaper::getTSConfigVar('rsync_host');
+        self::$rsync_path = tx_newspaper::getTSConfigVar('rsync_path');
+
+        $target_user = tx_newspaper::getTSConfigVar('rsync_user');
+        if ($target_user) {
+            self::$rsync_host = $target_user . '@' .self::$rsync_host;
+        }
+
+    }
+
+    private static function isRsyncEnabled() {
+        self::readRsyncOptions();
+        return !(empty($target_host) || empty($target_path));
     }
 
     private function getThumbnailPath() {
@@ -345,6 +363,9 @@ class tx_newspaper_Image {
     private static $widths = array();
     /// The list of image heights, predefined as sizes in TSConfig
     private static $heights = array();
+
+    private static $rsync_host = null;
+    private static $rsync_path = null;
 
     /// Name of the size for thumbnail images displayed in the BE
     const thumbnail_name = 'thumbnail';
