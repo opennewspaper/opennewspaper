@@ -21,16 +21,32 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/extra/class.tx_newspaper_ex
  *  \todo Import the box automatically from the pool when the Article is
  * 		imported.
  */
-class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
+class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
 	const description_length = 50; 
+    /// The field which carries the image file
+    const image_file_field = 'image_file';
 
-	/// Boa Constructor ;-)
-	public function __construct($uid = 0) { 
-		if (intval($uid)) {
-			parent::__construct($uid); 
-		}
+	public function __construct($uid = 0) {
+        if ($uid) {
+            parent::__construct($uid);
+            $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field));
+        } else {
+            $this->image = new tx_newspaper_NullImage();
+        }
 	}
+
+    public function render($template_set = '') {
+
+        $this->prepare_render($template_set);
+
+        $this->image->prepare_render($this->smarty);
+
+        $rendered = $this->smarty->fetch($this);
+
+        return $rendered;
+    }
+
 	
 	/// A description to identify the bio box in the BE
 	/** Shows the author's name and the start of the text.
@@ -56,34 +72,19 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra_Image {
 
     /// Save hook function, called from the global save hook
     /** Resizes the uploaded image into all sizes specified in TSConfig.
-     *
-     *  \todo Appends the UID of the Extra_Image to the image file name.
-     *  \todo Normalizes field \p normalized_filename.
-     *
-     *  Damn the Typo3 documentation, I was unable to find authoritative docs
-     *  for processDatamap_postProcessFieldArray(). Here's what i could deduce.
-     *  \param $table The table of the record that is to be stored
-     *  \param $id The UID of the record that is to be stored
-     *  \param $fieldArray The values to be stored, as a reference so they can be changed
      */
     public static function processDatamap_postProcessFieldArray(
         $status, $table, $id, &$fieldArray, $that
     ) {
-        /*  in a static function, there is no object to call. prior to PHP 5.3,
-         *  there is no way to find out which class we are in.
-         */
-        if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 3) || (PHP_MAJOR_VERSION > 5)) {
-            $extra_table = strtolower(get_called_class());
-        } else {
-            $extra_table = 'tx_newspaper_extra_bio';
-        }
-        if ($table != $extra_table) return;
+        if ($table != 'tx_newspaper_extra_bio') return;
 
         if ($fieldArray[self::image_file_field]) {
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
             $image->resizeImages();
         }
     }
+
+    private $image = null;
 
 }
 

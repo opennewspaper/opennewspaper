@@ -49,11 +49,14 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_image.ph
  */
 class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
+    /// The field which carries the image file
+    const image_file_field = 'image_file';
+
     /// Create a tx_newspaper_Extra_Image
     public function __construct($uid = 0) {
         if ($uid) {
             parent::__construct($uid);
-            $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+            $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field));
         } else {
             $this->image = new tx_newspaper_NullImage();
         }
@@ -157,10 +160,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         return $type_string;
     }
 
-    /// The field which carries the image file
-    const image_file_field = 'image_file';
-
-    protected $image = null;
+    private $image = null;
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image());
