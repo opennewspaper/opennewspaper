@@ -60,7 +60,6 @@ class tx_newspaper_Image {
 	}
 
     public function resizeImage($width, $height) {
-        tx_newspaper::devlog('tx_newspaper_Image::resizeImage', array('file'=>$this->image_file, 'w'=>$width, 'h'=>$height));
         self::doResizeImage(
             $width, $height,
             self::uploads_folder . '/'. $this->image_file,
@@ -123,13 +122,11 @@ class tx_newspaper_Image {
 
     private static function getThumbnailWidth() {
         $widths = self::getWidths();
-        tx_newspaper::devlog('getThumbnailWidths()', $widths);
         return $widths[self::thumbnail_name];
     }
 
     private static function getThumbnailHeight() {
         $heights = self::getHeights();
-        tx_newspaper::devlog('getThumbnailHeights()', $heights);
         return $heights[self::thumbnail_name];
     }
 
@@ -189,17 +186,14 @@ class tx_newspaper_Image {
     }
 
     private static function extractWidth($dimension, $key) {
-        tx_newspaper::devlog("extractWidth($dimension, $key)");
         return self::extractDimension($dimension, $key, 0);
     }
 
     private static function extractHeight($dimension, $key) {
-        tx_newspaper::devlog("extractHeight($dimension, $key)");
         return self::extractDimension($dimension, $key, 1);
     }
 
     private static function extractDimension($dimension, $key, $index) {
-        tx_newspaper::devlog("extractDimension($dimension, $key, $index)");
         $wxh = explode('x', $dimension);
         $dim = intval($wxh[$index]);
         if (!$dim) {

@@ -34,8 +34,8 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 		$this->prepare_render($template_set);
 
         $rendered = $this->smarty->fetch($this);
-        
-        return $rendered;
+        tx_newspaper::devlog("tx_newspaper_Extra_FreeFormImage::render()", $rendered);
+        return 'tx_newspaper_Extra_FreeFormImage::render()' . $rendered;
 	}
 
 	public function getDescription() {
