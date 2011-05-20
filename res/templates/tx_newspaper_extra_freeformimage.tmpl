@@ -2,7 +2,7 @@
 <!-- start default/tx_newspaper_extra_freeformimage.tmpl -->
 
 
-{* Image
+{* Raw image without automatic resizing and caption
    Variables:
 
    $basepath		path to the image directories
@@ -10,13 +10,17 @@
 
    $attributes		attributes as stored in DB. notable attributes include:
 	 	image_file	name of image file
+	 	image_width width of image, if given
+	 	image_height height of image, if given
 
    $extra_attributes	attributes for abstract extra record as stored in DB
 
 *}
 
 <img src="{$basepath}/{$sizes.artikel}/{$attributes.image_file}"
-     alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
+     {if $attributes.image_width}width="{$attributes.image_width}"{/if}
+     {if $attributes.image_height}width="{$attributes.image_height}"{/if}
+     alt="" />
 </a>
 
 <!--  end  artikelseite/hauptspalte/tx_newspaper_extra_image.tmpl -->

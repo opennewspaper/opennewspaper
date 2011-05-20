@@ -29,7 +29,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	 */	
 	public function render($template_set = '') {
 
-        $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
+        $this->instantiateImage();
 
 		$this->prepare_render($template_set);
 
@@ -39,7 +39,8 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return $this->getTitle();
+        $this->instantiateImage();
+		return $this->image->getThumbnail();
 	}
 
     public function getUploadFolder() {
@@ -58,7 +59,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return false; }
 
     private function instantiateImage() {
-        if ($this->image == null) {
+        if (is_null($this->image)) {
             $this->image = new tx_newspaper_Image($this->getAttribute('image_file'));
         }
     }
