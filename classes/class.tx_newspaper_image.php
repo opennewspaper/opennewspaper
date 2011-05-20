@@ -123,11 +123,13 @@ class tx_newspaper_Image {
 
     private static function getThumbnailWidth() {
         $widths = self::getWidths();
+        tx_newspaper::devlog('getThumbnailWidths()', $widths);
         return $widths[self::thumbnail_name];
     }
 
     private static function getThumbnailHeight() {
         $heights = self::getHeights();
+        tx_newspaper::devlog('getThumbnailHeights()', $heights);
         return $heights[self::thumbnail_name];
     }
 
