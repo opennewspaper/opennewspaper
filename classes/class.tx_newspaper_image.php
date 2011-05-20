@@ -187,10 +187,12 @@ class tx_newspaper_Image {
     }
 
     private static function extractWidth($dimension, $key) {
+        tx_newspaper::devlog("extractWidth($dimension, $key)");
         return self::extractDimension($dimension, $key, 0);
     }
 
     private static function extractHeight($dimension, $key) {
+        tx_newspaper::devlog("extractHeight($dimension, $key)");
         return self::extractDimension($dimension, $key, 1);
     }
 
