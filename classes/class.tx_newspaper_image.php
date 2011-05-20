@@ -60,6 +60,7 @@ class tx_newspaper_Image {
 	}
 
     public function resizeImage($width, $height) {
+        tx_newspaper::devlog('tx_newspaper_Image::resizeImage', array('file'=>$this->image_file, 'w'=>$width, 'h'=>$height));
         self::doResizeImage(
             $width, $height,
             self::uploads_folder . '/'. $this->image_file,
