@@ -106,6 +106,7 @@
 			<label index="title_tx_newspaper_extra_image">Image</label>
 			<label index="title_tx_newspaper_extra_mostcommented">Most commented articles</label>
 			<label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
+			<label index="title_tx_newspaper_extra_sectionteaser">Sectionteaser</label>
 			<label index="title_tx_newspaper_extra_textbox">Text box</label>
 			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
 			<label index="title_tx_newspaper_page">Page</label>
@@ -191,6 +192,7 @@
 			<label index="title_tx_newspaper_extra_image">Bild</label>
 			<label index="title_tx_newspaper_extra_mostcommented">Meistkommentierte Artikel</label>
 			<label index="title_tx_newspaper_extra_sectionlist">Ressortuebersicht</label>
+			<label index="title_tx_newspaper_extra_sectionteaser">Ressortteaser</label>
 			<label index="title_tx_newspaper_extra_textbox">Textkasten</label>
 			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
 			<label index="title_tx_newspaper_page">Seite</label>

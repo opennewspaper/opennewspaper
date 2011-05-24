@@ -3324,7 +3324,7 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 $TCA["tx_newspaper_extra_sectionteaser"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_sectionteaser"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "template,description_text,is_ctrltag,num_articles,num_articles_w_image,ctrltag_cat"
+		"showRecordFieldList" => "template,description_text,is_ctrltag,ctrltag_cat,num_articles,num_articles_w_image"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionteaser"]["feInterface"],
 	"columns" => array (
@@ -3354,6 +3354,18 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 					Array("LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.is_ctrltag.I.1", "1"),
 				),
 				"size" => 1,	
+				"maxitems" => 1,
+			)
+		),
+		"ctrltag_cat" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.ctrltag_cat",		
+			"config" => Array (
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_ctrltag_category",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_ctrltag_category.uid",	
+				"size" => 1,	
+				"minitems" => 0,
 				"maxitems" => 1,
 			)
 		),
@@ -3389,21 +3401,9 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 				"default" => 0
 			)
 		),
-		"ctrltag_cat" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.ctrltag_cat",		
-			"config" => Array (
-				"type" => "select",	
-				"foreign_table" => "tx_newspaper_ctrltag_category",	
-				"foreign_table_where" => "ORDER BY tx_newspaper_ctrltag_category.uid",	
-				"size" => 1,	
-				"minitems" => 0,
-				"maxitems" => 1,
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "template;;;;1-1-1, description_text, is_ctrltag, num_articles, num_articles_w_image, ctrltag_cat")
+		"0" => array("showitem" => "template;;;;1-1-1, description_text, is_ctrltag, ctrltag_cat, num_articles, num_articles_w_image")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

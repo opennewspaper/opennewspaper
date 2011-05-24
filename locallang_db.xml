@@ -225,9 +225,9 @@
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag.I.0">Section</label>
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag.I.1">Control tag</label>
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag">Control tag or Section</label>
+			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag category</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles">Number of articles</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Number of articles with image</label>
-			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag category</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Section associated with this page</label>
 			<label index="pages.tx_newspaper_module">Newspaper data</label>
@@ -453,9 +453,9 @@
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag.I.0">Ressort</label>
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag.I.1">Steuertag</label>
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag">Steuertag oder Ressort</label>
+			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag-Kategorie</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles">Anzahl der Artikel</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Anzahl der Artikel mit Bild</label>
-			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag-Kategorie</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
 			<label index="pages.tx_newspaper_associated_section">Dieser Seite zugeordnetes Ressort</label>
 			<label index="pages.tx_newspaper_module">Newspaper-Daten</label>

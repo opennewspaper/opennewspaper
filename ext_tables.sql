@@ -982,9 +982,9 @@ CREATE TABLE tx_newspaper_extra_sectionteaser (
 	template tinytext NOT NULL,
 	description_text tinytext NOT NULL,
 	is_ctrltag int(11) DEFAULT '0' NOT NULL,
+	ctrltag_cat int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	num_articles_w_image int(11) DEFAULT '0' NOT NULL,
-	ctrltag_cat int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
