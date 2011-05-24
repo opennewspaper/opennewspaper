@@ -1,7 +1,30 @@
 h3 { width: 250px; }
-.message { margin-bottom: 10px; }
+.message { margin-top:10px; margin-bottom: 10px; }
 .tag_selection {float: left; margin-right: 10px;}
 #tag_merge { width: 300px;}
 #tag_merge_with { width: 300px; float:left;}
 p.description { margin-bottom: 10px; width: 500px; }
-#action { clear: both; padding-top: 10px ;}
+input[type=button] {
+	margin-top:10px;
+}
+
+#tagType {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#tagType input, select, p, h3 {
+	margin-left:10px;
+}
+
+#ctrlTagCat {
+	margin-left:10px;
+}
+
+.description, #message {
+	margin-top:20px;
+	margin-left:10px;
+}
+
+#message {
+	font-weight:bold;
+}

@@ -12,8 +12,8 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Schlagworte</label>
-			<label index="mlang_labels_tabdescr">Tags-Verwaltung</label>
-			<label index="mlang_labels_tablabel">Tags-Verwaltung</label>
+			<label index="mlang_labels_tabdescr">Tag-Verwaltung</label>
+			<label index="mlang_labels_tablabel">Tag-Verwaltung</label>
 		</languageKey>
 	</data>
 </T3locallang>

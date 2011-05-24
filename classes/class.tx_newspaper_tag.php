@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *
- *  \author Oliver Sch�rder <typo3@schroederbros.de>
+ *  \author Oliver Schroeder <typo3@schroederbros.de>
  *  \date Mar 25, 2009
  */
 
@@ -99,6 +99,84 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     		$tags[] = new tx_newspaper_tag($row['uid']);
     	}
     	return $tags;
+    }
+
+
+	/// \return Array with all content tags
+    public static function getAllContentTags() {
+    	$rows = tx_newspaper::selectRows(
+    		'uid',
+    		self::tag_table,
+    		'tag_type=' . self::getContentTagType() . tx_newspaper::enableFields(self::tag_table),
+    		'',
+    		'tag'
+    	);
+    	$tags = array();
+    	foreach($rows as $row) {
+    		$tags[] = new tx_newspaper_tag($row['uid']);
+    	}
+    	return $tags;
+    }
+
+	/**
+	 * The $tagToBeMerged is merged with the current tag
+	 * The $tagToBeMerged is set to null
+	 * \param tx_newspaper_tag $tagToBeMerged
+	 * \return true, if merge was successful, else false
+	 * \todo: tx_newspaper_extra_image_tags_mm if tag are to be used in images
+	 */
+    public function merge(tx_newspaper_tag &$tagToBeMerged) {
+
+    	if ($this->getUid() == $tagToBeMerged->getUid()) {
+    		return false; // no need to merge into itself ...
+    	}
+
+    	// remove tag relations where this tag AND target tag are attached ()would create a duplicate entry otherwise)
+
+    	// get article uids with this (=target) tag attached
+		$articleUids = tx_newspaper::selectRows(
+			'uid_local',
+			'tx_newspaper_article_tags_mm',
+			'uid_foreign=' . $this->getUid()
+		);
+		// make array accessible for explode ...
+		for($i = 0; $i < sizeof($articleUids); $i++) {
+			$articleUids[$i] = $articleUids[$i]['uid_local'];
+		}
+//t3lib_div::devlog('tag::merge() get articles', 'newspaper', 0, array('articleUids' => $articleUids, 'q' => tx_newspaper::$query));
+
+		// remove tag to be merged from articles where this (=target) tag has already been attached
+		if ($articleUids) {
+			tx_newspaper::deleteRows(
+				'tx_newspaper_article_tags_mm',
+				'uid_foreign=' . $tagToBeMerged->getUid() . ' AND uid_local IN (' . implode(',', $articleUids) . ')'
+			);
+		}
+//t3lib_div::devlog('tag::merge() delete duplicates', 'newspaper', 0, array('q' => tx_newspaper::$query));
+
+
+    	// move article tag relation to current tag (from tag to be merged)
+		tx_newspaper::updateRows(
+			'tx_newspaper_article_tags_mm',
+			'uid_foreign=' . $tagToBeMerged->getUid(),
+			array('uid_foreign' => $this->getUid())
+		);
+//t3lib_div::devlog('tag::merge() merge tag', 'newspaper', 0, array('q' => tx_newspaper::$query));
+
+		// delete tag to be merged
+		if (!tx_newspaper::updateRows(
+			'tx_newspaper_tag',
+			'uid=' . $tagToBeMerged->getUid(),
+			array('deleted' => 1)
+		)) {
+			return false;
+		}
+//t3lib_div::devlog('tag::merge() delete tag to be merged', 'newspaper', 0, array('q' => tx_newspaper::$query));
+		$tagToBeMerged = null; // set tag to null, this tag does not exist anymore
+
+// \todo: call dependecy tree, see #1536
+
+    	return true;
     }
 
 

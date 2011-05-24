@@ -1,29 +1,83 @@
-<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod8/res/mod8.css" />
+{* debug *}
 
-{if $lang.$message}
-    <p class="message">
-        {$lang.$message}
-    </p>
-{/if}
+
+<script type="text/javascript">
+	var labelChooseTag = "{$LL.chooseTag}";
+	var messageMergeConfirm = "{$LL.mergeConfirm}";
+	var messagePleaseSelectTargetTag = "{$LL.messageSelectTargetTag}";
+	var messagePleaseSelectSourceTags = "{$LL.messageSelectSourceTags}";
+{literal}
+	function clearOptionsInTarget() {
+		// clear tag select boxes
+		$("tag_merge").descendants().each(Element.remove);
+		$("tag_merge_with").descendants().each(Element.remove);
+	}
+	function addOptionsToTarget(options) {
+		for(i = 0; i < options.length; i++) {
+			$("tag_merge").options[$("tag_merge").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+		}
+		$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(labelChooseTag, -1);
+		for(i = 0; i < options.length; i++) {
+			$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+		}
+	}
+
+	function merge() {
+		var targetTagUid = parseInt($("tag_merge_with").value);
+		if (targetTagUid < 1) {
+			alert(messagePleaseSelectTargetTag);
+			return;
+		}
+
+		var sourceTags = $F("tag_merge").join("|");
+		if (!sourceTags) {
+			alert(messagePleaseSelectSourceTags);
+			return;
+		}
+
+		if (!confirm(messageMergeConfirm)) {
+			return; // user must confirm that he knows what he's doing
+		}
+
+		var request = new Ajax.Request(
+			"index.php", {
+				method: 'get',
+				parameters: 'tx_newspaper_mod8[ajaxController]=mergeTags&tx_newspaper_mod8[sourceTags]=' + sourceTags + '&tx_newspaper_mod8[targetTag]=' + targetTagUid,
+				onCreate: function() {
+					$("spinnerMerge").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+				},
+				onSuccess: function(data) {
+					if (data) {
+						fetchTags(); // re-read tags
+						$("message").innerHTML = data.responseText;
+					}
+					$("spinnerMerge").innerHTML = '';
+				}
+			}
+		);
+	}
+
+</script>
+{/literal}
+
 <p class="description">
-{$lang.mergeDescription}
+{$LL.mergeDescription}
 </p>
 
 <div class="tag_selection">
-    <h3>{$lang.tagsToMergeFrom}</h3>
-    <select id="tag_merge" name="input[mergeableTags]" size="10" multiple="multiple">
+    <h3>{$LL.tagsToMergeFrom}</h3>
+    <select id="tag_merge" size="10" multiple="multiple">
         {html_options options=$tags}
     </select>
+    <p class="message"> {$LL.tagMergeHelp} </p>
 </div>
+
 <div class="tag_selection">
-    <h3>{$lang.tagToMergeTo}</h3>
-    <select id="tag_merge_with" name="input[tag]" size="1">
+    <h3>{$LL.tagToMergeTo}</h3>
+    <select id="tag_merge_with" size="1">
         <option selected="selected" id="0">{$lang.chooseTag}</option>
         {html_options options=$tags}
     </select>
+	<p><input type="button" value="{$LL.mergeSelected}" onclick="merge(); return false;" /><span id="spinnerMerge"></span></p>
+	<div id="message"></div>
 </div>
-
-<div id="action">
-    <p class="message"> {$lang.tagMergeHelp} </p>
-    <input type="submit" value="{$lang.merge}" name="action[mergeTags]" id="delete" title="{$lang.mergeSelected}" />
-</div>    

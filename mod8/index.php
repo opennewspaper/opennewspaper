@@ -50,6 +50,13 @@ class fullWidthDoc extends template {
  */
 class  tx_newspaper_module8 extends t3lib_SCbase {
 
+	const prefixId = 'tx_newspaper_mod8';
+
+	// these attributes are filled in init();
+	private $localLang; // localized labels etc.
+	private $input=array(); // store get params (based on $this->prefixId)
+
+
 				/**
 				 * Initializes the Module
 				 * @return	void
@@ -59,25 +66,33 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 
 					parent::init();
 
-					/*
-					if (t3lib_div::_GP('clear_all_cache'))	{
-						$this->include_once[] = PATH_t3lib.'class.t3lib_tcemain.php';
-					}
-					*/
+					// localized strings
+					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod8/locallang.xml', $GLOBALS['LANG']->lang);
+
+					// localized string for mod8
+					$this->localLang = $localLang[$GLOBALS['LANG']->lang];
+
+					// add some other localized string
+					$this->localLang['npContentTag'] = $LANG->sL('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.0', false);
+					$this->localLang['npCtrlTag'] = $LANG->sL('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.1', false);
+
+
+                    $this->input = t3lib_div::GParrayMerged('$this->prefixId'); // get params
+
 				}
 
 				/**
 				 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-				 *
 				 * @return	void
 				 */
 				function menuConfig()	{
 					global $LANG;
 					$this->MOD_MENU = Array (
 						'function' => Array (
-							'1' => $LANG->getLL('deleteTag'),
+//							'3' => $LANG->getLL('renameTags'),
 							'2' => $LANG->getLL('mergeTags'),
-//							'3' => $LANG->getLL('function3'),
+//							'1' => $LANG->getLL('deleteTag'),
+
 						)
 					);
 					parent::menuConfig();
@@ -86,8 +101,6 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 				/**
 				 * Main function of the module. Write the content to $this->content
 				 * If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
-				 *
-				 * @return	[type]		...
 				 */
 				function main()	{
 					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
@@ -95,7 +108,11 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 					// \todo: better check: currently access to all be_users is granted
 					if (isset($GLOBALS['BE_USER']->user['uid']) && $GLOBALS['BE_USER']->user['uid']) {
 
-                        //todo: Handle Ajax if any, so content is not drawn
+						$this->input = t3lib_div::GParrayMerged(self::prefixId); // store params
+//t3lib_div::devlog('Tag module', 'newspaper', 0, array('input' => $this->input));
+
+						$this->handleAjax(); // ends with die() if and ajax request is processed
+
 
 							// Draw the header.
 						$this->doc = t3lib_div::makeInstance('fullWidthDoc');
@@ -152,7 +169,6 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 
 				/**
 				 * Prints out the module HTML
-				 *
 				 * @return	void
 				 */
 				function printContent()	{
@@ -163,93 +179,107 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 
 				/**
 				 * Generates the module content
-				 *
-				 * @return	void
 				 */
 				function moduleContent()	{
-					$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod8/locallang.xml', $GLOBALS['LANG']->lang);
-					$localLang = $localLang[$GLOBALS['LANG']->lang];
-                    $smarty = $this->getSmarty($localLang);
-
-                    $action = t3lib_div::GParrayMerged('action');
-                    $input = t3lib_div::GParrayMerged('input');
-
-                    switch((string)$this->MOD_SETTINGS['function'])	{
-						case 1: //delete Tag
-                            $content = $this->renderDeleteModule($action, $input, $smarty);
-                            $section = 'sectionDelete';
-						    break;
-                        case 2: // merge tags
-                            $content= $this->renderMergeModul($action, $input, $smarty);
-                            $section = 'sectionMerge';
-                            break;
-                        case 3:
-                            $content='<div align=center><strong>Menu item #3...</strong></div>';
-                            break;
+					$content = $this->renderTagTypeSelection();
+					$smarty = $this->getSmarty();
+					switch((string)$this->MOD_SETTINGS['function'])	{
+						case 1: //delete tag
+							$content .= $smarty->fetch('mod8_deleteTag.tmpl');
+							$title = 'deleteTags';
+						break;
+						case 2: // merge tags
+							$content .= $smarty->fetch('mod8_mergeTags.tmpl');
+							$title = 'mergeTags';
+							break;
+						case 3:
+							$content .= $smarty->fetch('mod8_renameTags.tmpl');
+							$title = 'renameTags';
+						break;
                     }
-                    $this->content.=$this->doc->section($localLang[$section],$content,0,1);
+                    $this->content .= $this->doc->section($this->localLang[$title], $content, 0, 1);
                 }
 
-                          /*
-                         SELECT uid_foreign
-FROM `tx_newspaper_article_tags_mm` tags_mm, `tx_newspaper_article` article
-WHERE tags_mm.uid_local = article.uid
-AND article.deleted =0
-LIMIT 0 , 30
-*/
-                private function renderDeleteModule($action, $input, $smarty) {
-                    $tags = array();
-                    $messageKey = null;
-                    if(isset($action['deleteTag']) && isset($input['tag'])) {
-                        $tag = new tx_newspaper_tag($input['tag']);
-                        $rows = tx_newspaper::selectRows('uid_local', 'tx_newspaper_article_tags_mm', 'uid_foreign = '.$tag->getUid());
-                        if(count($rows) > 0) {
-                            $messageKey = 'tagInUse';
-                        } else {
-                            tx_newspaper::updateRows('tx_newspaper_tag', 'uid = '.$tag->getUid(), array('deleted' => 1));
-                            $messageKey = 'tagDeleted';
-                        }
-                    } else {
-                        $messageKey = 'tagSelect';
-                    }
 
-                    $tags = $this->getTagArray();
+				/**
+				 * Handle AJAX requests in tag module
+				 */
+                private function handleAjax() {
+                	switch ($this->input['ajaxController']) {
+                		case 'changeTagCat':
+							$this->ajaxChangeTagCat();
+						break;
+						case 'mergeTags':
+							$this->ajaxMergeTags();
+						break;
 
-                    $smarty->assign('tags', $tags);
-                    $smarty->assign('message', $messageKey);
-                    return $smarty->fetch('mod8_deleteTag.tmpl');
+                	}
                 }
 
-                private function renderMergeModul($action, $input, $smarty) {
-                    global $LANG;
-                    if(isset($action['merge']) && isset($input['tags']) && isset($input['new_tag'])) {
 
-                    }
-                    $tags = $this->getTagArray();
-                    $smarty->assign('tags', $tags);
-                    $smarty->assign('message', $messageKey);
+                private function ajaxMergeTags() {
+					// extract source tag uids
+                	$sourceTagUids = explode('|', $this->input['sourceTags']);
 
-                    return $smarty->fetch('mod8_mergeTags.tmpl');
+                	// create target tag
+                	$targetTag = new tx_newspaper_tag(intval($this->input['targetTag']));
+
+                	// merge source tags
+                	$mergeCount = 0;
+                	foreach($sourceTagUids as $sourceTagUid) {
+                		if ($targetTag->merge(new tx_newspaper_tag($sourceTagUid))) {
+                			$mergeCount++;
+                		}
+                	}
+
+                	if ($mergeCount) {
+						die($this->localLang['mergeSuccess'] . $mergeCount);
+                	} else {
+						die($this->localLang['mergeFailed']);
+                	}
 
                 }
 
-                private function getSmarty($localLang) {
+                /**
+                 * Fetches all tags requested in $this->input
+                 * Dies with JSON array: tagUid|title
+                 */
+                private function ajaxChangeTagCat() {
+	                if ($this->input['tagType'] == 'content') {
+						$tags = tx_newspaper_tag::getAllContentTags();
+	                } elseif ($this->input['tagType'] == 'ctrl' && $this->input['ctrlTagCat']) {
+						$tags = tx_newspaper_tag::getAllControlTags(intval($this->input['ctrlTagCat']));
+	                } else {
+	                	t3lib_div::devlog('Tag module: unknown tagType', 'newspaper', 3, array('input' => $this->input));
+	                	die();
+	                }
+					$options = array();
+					foreach($tags as $tag) {
+						$options[] = $tag->getUid() . '|' . htmlspecialchars($tag->getAttribute('tag'));
+					}
+					die(json_encode($options));
+               	}
+
+
+               	/**
+               	 * Renders upper part of backend: selection of tag type (and control tag categorie, if tag type is control tag)
+               	 * Tags are fetched via AJAX request
+               	 */
+                private function renderTagTypeSelection() {
+					$smarty = $this->getSmarty();
+					$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+					return $smarty->fetch('mod8_base.tmpl');
+                }
+
+                /// \return Smarty objects with T3PATH and LL (localized strings) assigned already
+                private function getSmarty() {
                     $smarty = new tx_newspaper_Smarty();
                     $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod8/res/'));
-                    $smarty->assign('lang', $localLang);
+                    $smarty->assign('LL', $this->localLang);
                     $smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-
                     return $smarty;
                 }
 
-                private function getTagArray() {
-                    $tempTags = tx_newspaper::selectRows('uid, tag', 'tx_newspaper_tag', 'deleted = 0');
-                    foreach($tempTags as $tag) {
-                        $tags[$tag['uid']] = $tag['tag'];
-                    }
-
-                    return $tags;
-                }
 }
 
 
