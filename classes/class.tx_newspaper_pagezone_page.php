@@ -86,7 +86,14 @@ class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 	public function getExtra2PagezoneTable() {
 		return self::$extra_2_pagezone_table;
 	}
- 	
+
+    public static function updateDependencyTree(tx_newspaper_PageZone_Page $pagezone) {
+        if (tx_newspaper_DependencyTree::useDependencyTree()) {
+            $tree = tx_newspaper_DependencyTree::generateFromPagezone($pagezone);
+            $tree->executeActionsOnPages('tx_newspaper_Extra');
+        }
+    }
+
 	static protected $extra_2_pagezone_table = 'tx_newspaper_pagezone_page_extras_mm';
 }
  

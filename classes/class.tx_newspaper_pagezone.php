@@ -1302,9 +1302,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 
     public static function updateDependencyTree(tx_newspaper_PageZone $pagezone) {
-        if (tx_newspaper_DependencyTree::useDependencyTree()) {
-            $tree = tx_newspaper_DependencyTree::generateFromPagezone($pagezone);
-            $tree->executeActionsOnPages('tx_newspaper_Extra');
+        if (!tx_newspaper_DependencyTree::useDependencyTree()) return;
+
+        /* \todo yeah, instanceof is the devil, but i don't know how to avoid it
+         *  without refactoring updateDependencyTree() to be non-static, and i'm
+         *  not sure of the consequences.
+         */
+        if ($pagezone instanceof tx_newspaper_Article) {
+            tx_newspaper_Article::updateDependencyTree($pagezone);
+        } else {
+            tx_newspaper_PageZone_Page::updateDependencyTree($pagezone);
         }
     }
 
