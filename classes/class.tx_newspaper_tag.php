@@ -310,7 +310,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	$rows = tx_newspaper::selectRows(
     		'*',
     		self::tag_table,
-    		'title LIKE "' . $title . '" AND ' . '
+    		'title LIKE "' . $GLOBALS['TYPO3_DB']->fullQuoteStr($title, self::tag_table) . '" AND ' . '
     			uid<>' . $this->getUid() . ' AND ' .
     			'tag_type=' . self::getControlTagType() .
     			tx_newspaper::enableFields(self::tag_table)

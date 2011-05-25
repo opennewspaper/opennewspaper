@@ -105,6 +105,10 @@ function hscQuotes(str) {
 	return str.replace(/"/g, "&quot;");
 }
 
+function escapeQuotes(str) {
+	return str.replace(/"/g, "%22");
+}
+
 
 //if left = 1 string left of pipe is returned, else right part is returned
 function splitParam(param, left, separator) {

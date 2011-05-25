@@ -181,7 +181,7 @@ function storeDossierTitle() {
 		"index.php",
 			{
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + escape(title),
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + escapeQuotes(title),
 				onCreate: function() {
 					$("dossier_title_edit").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // remove store icon, render spinner
 				},
