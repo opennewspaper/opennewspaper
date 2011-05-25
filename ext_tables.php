@@ -794,7 +794,7 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_sectionteaser.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "template, description_text, is_ctrltag, ctrltag_cat, num_articles, num_articles_w_image",
+		"fe_admin_fieldList" => "template, description_text, is_ctrltag, section, ctrltag_cat, num_articles, num_articles_w_image",
 	)
 );
 
