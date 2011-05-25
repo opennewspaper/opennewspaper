@@ -233,6 +233,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $extra_uid uid of extra
 	 */
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
+        tx_newspaper::devlog("processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid)");
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
