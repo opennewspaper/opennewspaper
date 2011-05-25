@@ -1209,8 +1209,7 @@ JSCODE;
 
 
 
-/// workflow logging functions
-// \todo: BUTTONS: rewrite for alt_doc xlass in workflow class
+	/// Adds workflow log input field and workflow log output to article backend
 	function getWorkflowCommentBackend($PA, $fobj) {
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 
@@ -1222,6 +1221,13 @@ JSCODE;
 
 		$html .= tx_newspaper_workflow::getJavascript();
 		$html .= tx_newspaper_workflow::renderBackend('tx_newspaper_article', $PA['row']['uid']);
+
+		// check if a section or control tag is assigned to the article
+		// \todo: remove when a better way to show messages in articvle backend is available (flash message etc.)
+		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
+		if (!$article->getPrimarySection() && !$article->getTags(tx_newspaper_tag::getControlTagType())) {
+			$html .= '<script type="text/javascript">alert("' . tx_newspaper::getTranslation('message_article_no_section_no_ctrltag') . '");</script>';
+		}
 
 		return $html;
 	}

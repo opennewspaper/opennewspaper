@@ -117,6 +117,7 @@
 			<label index="title_tx_newspaper_tag">Tag</label>
 			<label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
+			<label index="message_article_no_section_no_ctrltag">No section assigned, no control tag assigned to this article</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -201,6 +202,7 @@
 			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 			<label index="title_tx_newspaper_tag">Tag</label>
+			<label index="message_article_no_section_no_ctrltag">Dem Artikel ist weder ein Ressort noch ein Steuertag zugewiesen.</label>
 		</languageKey>
 
 	</data>
