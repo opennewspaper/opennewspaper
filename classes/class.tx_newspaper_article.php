@@ -1365,8 +1365,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     private function checkSectionIsValid() {
         try {
-            $section = $this->getPrimarySection();
-            $section->getTypo3PageID();
+            if ($section = $this->getPrimarySection()) {
+            	$section->getTypo3PageID();
+            }
         } catch (tx_newspaper_IllegalUsageException $e) {
             $msg = tx_newspaper::getTranslation('message_section_typo3page_missing');
             $msg = str_replace('###SECTION###', $this->getPrimarySection()->getAttribute('section_name'), $msg);
