@@ -1367,6 +1367,13 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         try {
             if ($section = $this->getPrimarySection()) {
             	$section->getTypo3PageID();
+            } else {
+	            tx_newspaper_Workflow::directLog(
+	            	$this->getTable(),
+	            	$this->getUid(),
+	            	tx_newspaper::getTranslation('message_article_no_section'),
+	            	NP_WORKLFOW_LOG_ERRROR
+	            );
             }
         } catch (tx_newspaper_IllegalUsageException $e) {
             $msg = tx_newspaper::getTranslation('message_section_typo3page_missing');

@@ -1223,10 +1223,9 @@ JSCODE;
 		$html .= tx_newspaper_workflow::renderBackend('tx_newspaper_article', $PA['row']['uid']);
 
 		// check if a section or control tag is assigned to the article
-		// \todo: remove when a better way to show messages in articvle backend is available (flash message etc.)
-		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
-		if (!$article->getPrimarySection() && !$article->getTags(tx_newspaper_tag::getControlTagType())) {
-			$html .= '<script type="text/javascript">alert("' . tx_newspaper::getTranslation('message_article_no_section_no_ctrltag') . '");</script>';
+		// \todo: remove when a better way to show messages in article backend is available (flash message etc.)
+		if (!$PA['row']['sections']) {
+			$html .= '<script type="text/javascript">alert("' . tx_newspaper::getTranslation('message_article_no_section') . '");</script>';
 		}
 
 		return $html;
