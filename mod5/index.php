@@ -654,7 +654,7 @@ tx_newspaper::devlog('index.php', $sources);
 
 	function browse_path(array $input) {
 
-            t3lib_div::devlog('browse_path', 'mod5', 0, $input);
+#t3lib_div::devlog('browse_path', 'mod5', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
 		$source = tx_newspaper::getRegisteredSource($source_id);
@@ -717,33 +717,25 @@ tx_newspaper::devlog('index.php', $sources);
 
 	function load_article() {
 		$input = t3lib_div::GParrayMerged('tx_newspaper_mod5');
-t3lib_div::devlog('load_article', 'np', 0, $input);
 		$source_id = $input['source_id'];
 		$path = $input['path'];
-t3lib_div::devlog('load_article', 'np', 0, array($source_id,$path));
 		$source = tx_newspaper::getRegisteredSource($source_id);
-t3lib_div::devlog('load_article', 'np', 0, array($source));
 
 		$article = new tx_newspaper_Article();
-t3lib_div::devlog('load_article', 'np', 0, array($article));
 		$source->readFields($article,
 							array('title', 'teaser', 'text'),
 							new tx_newspaper_SourcePath($path));
-t3lib_div::devlog('load_article', 'np', 0, array($article));
 
 		$import_info = '<input type="hidden" name="' . $this->prefixId . 'source_id" value="' . $source_id . '" />' .
 					   '<input type="hidden" name="' . $this->prefixId . 'source_path" value="' . $path . '" />';
-t3lib_div::devlog('load_article', 'np', 0, array($import_info));
 
 		$smarty = new tx_newspaper_Smarty();
-t3lib_div::devlog('load_article', 'np', 0, array($smarty));
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/preview/'));
 		$smarty->assign('article', $article);
 		$smarty->assign('source_id', $source_id);
 		$smarty->assign('source_path', $path);
 
 		$result = $smarty->fetch('mod5_articlepreview.tmpl');
-t3lib_div::devlog('load_article', 'np', 0, array($result));
 
 		die($result);
 	}
