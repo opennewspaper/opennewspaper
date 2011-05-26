@@ -385,7 +385,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2
 			list($extra_class, $paragraph) = explode(':', $default_extra);
 			$paragraph = intval($paragraph);
-//t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
+t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
 
 			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
 				$new_extra = new $extra_class();
