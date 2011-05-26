@@ -20,11 +20,15 @@ input[type=button] {
 	margin-left:10px;
 }
 
-.description, #message {
+.description, #message, #renameBackend {
 	margin-top:20px;
 	margin-left:10px;
 }
 
 #message {
 	font-weight:bold;
+}
+
+#renameBackend {
+	display:none;
 }

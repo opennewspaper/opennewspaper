@@ -307,10 +307,13 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      * @return true if title is unique, else false
      */
     public function isTitleUnique($title) {
+    	if (!$title) {
+    		return false; // empty title not allowed
+    	}
     	$rows = tx_newspaper::selectRows(
-    		'*',
+    		'uid',
     		self::tag_table,
-    		'title LIKE "' . $GLOBALS['TYPO3_DB']->fullQuoteStr($title, self::tag_table) . '" AND ' . '
+    		'title LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($title, self::tag_table) . ' AND ' . '
     			uid<>' . $this->getUid() . ' AND ' .
     			'tag_type=' . self::getControlTagType() .
     			tx_newspaper::enableFields(self::tag_table)
@@ -318,8 +321,28 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		return (sizeof($rows) == 0);
     }
 
+    /**
+     * Checks if given tag name is unique (category aren't checked for control tags, must be unique for all categories)
+     * @param $tagName Tag name to check for uniqueness
+     * @return true if tag name is unique, else false
+     */
+    public function isTagUnique($tagName) {
+    	if (!$tagName) {
+    		return false; // empty tag name not allowed
+    	}
+    	$rows = tx_newspaper::selectRows(
+    		'uid',
+    		self::tag_table,
+    		'tag LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($tagName, self::tag_table) . ' AND ' . '
+    			uid<>' . $this->getUid() . ' AND ' .
+    			'tag_type=' . $this->getTagType() .
+    			tx_newspaper::enableFields(self::tag_table)
+    	);
+		return (sizeof($rows) == 0);
+    }
 
-	/// Convert object to string to make it visible in stack backtraces, devlog etc.
+
+    /// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
 		try {
 			return $this->getAttribute('tag');
@@ -358,6 +381,22 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	}
 
 	/**
+	 * Renames the tag (can only be called on tag already stored)
+	 * @param $newName New tag name
+	 */
+	public function storeRenamedTag($newName) {
+		if (!$this->getUid()) {
+			throw new tx_newspaper_IllegalUsageException('storeRenamedTag() can only be called for tags that has been stored already');
+		}
+		// update record
+		$data['tstamp'] = time();
+		$data['tag'] = $newName;
+		tx_newspaper::updateRows($this->getTable(), 'uid=' . $this->getUid(), $data); // store data
+		$this->setAttribute('tag', $newName);
+	}
+
+
+	/**
      * Stores a tag and prevents duplicate tags by checking content and type.
      * @return uid
      * @throws tx_newspaper_IllegalUsageException
@@ -386,12 +425,12 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
         if(count($result) > 0) {
 			// process existing tag
-            $this->setUid($result[0]['uid']); // record is already stored in db, so get uid of taht record
+            $this->setUid($result[0]['uid']); // record is already stored in db, so get uid of that record
 
             // check if data was updated
 			$data = array_diff($this->attributes, $result[0]);
 			if ($data) {
-				// record needs to be update ...
+				// record needs to be updated ...
 				$data['tstamp'] = time(); // ... so update tstamp
 				tx_newspaper::updateRows($this->getTable(), 'uid=' . $this->getUid(), $data); // and store data
 			}
@@ -404,6 +443,10 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             $this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
         return $this->getUid();
+	}
+
+	public function getTagType() {
+		return $this->getAttribute('tag_type');
 	}
 
 	public function getTitle() {
@@ -490,8 +533,25 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		return 2; // hard coded
 	}
 
-	/// Checks if a tag title and control tag category combination is already in use
-	/** \param $tag Tag title
+
+
+	/// Checks if a content tag is already in use
+	/** \param $tag Name of tag
+	 *  \return true if content tag $tag is already stored in the database
+	 */
+	public static function doesContentTagAlreadyExist($tag) {
+		$row = tx_newspaper::selectZeroOrOneRows(
+			'uid',
+			'tx_newspaper_tag',
+			'tag LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($tag, 'tx_newspaper_tag') .
+				' AND tag_type=' . self::getContentTagType()
+		);
+		return (isset($row['uid']) && $row['uid'] > 0);
+	}
+
+
+	/// Checks if a control tag and control tag category combination is already in use
+	/** \param $tag Name of tag
 	 *  \param $ctrltagtype uid of control tag type
 	 *  \return true if control tag $tag is already stored in the database for given $ctrltagtype
 	 */
@@ -499,8 +559,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		$row = tx_newspaper::selectZeroOrOneRows(
 			'uid',
 			'tx_newspaper_tag',
-			'tag="' . $tag . '" AND tag_type=' . self::getControlTagType().
-			' AND ctrltag_cat = '.intval($ctrltagtype)
+			'tag LIKE ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($tag, 'tx_newspaper_tag') .
+				' AND tag_type=' . self::getControlTagType() .
+				' AND ctrltag_cat = '.intval($ctrltagtype)
 		);
 		return (isset($row['uid']) && $row['uid'] > 0);
 	}

@@ -89,7 +89,7 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 					global $LANG;
 					$this->MOD_MENU = Array (
 						'function' => Array (
-//							'3' => $LANG->getLL('renameTags'),
+							'3' => $LANG->getLL('renameTags'),
 							'2' => $LANG->getLL('mergeTags'),
 //							'1' => $LANG->getLL('deleteTag'),
 
@@ -193,7 +193,11 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 							$title = 'mergeTags';
 							break;
 						case 3:
-							$content .= $smarty->fetch('mod8_renameTags.tmpl');
+							$smarty->assign('ICON', array(
+								'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
+								'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '')
+							));
+							$content .= $smarty->fetch('mod8_renameTag.tmpl');
 							$title = 'renameTags';
 						break;
                     }
@@ -212,8 +216,20 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 						case 'mergeTags':
 							$this->ajaxMergeTags();
 						break;
-
+						case 'renameTag':
+							$this->ajaxRenameTag();
+						break;
                 	}
+                }
+
+
+                private function ajaxRenameTag() {
+					$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
+                	if (!$tag->isTagUnique($this->input['newTagName'])) {
+						die(json_encode(array('success' => false)));
+					}
+					$tag->storeRenamedTag($this->input['newTagName']);
+					die(json_encode(array('success' => true)));
                 }
 
 

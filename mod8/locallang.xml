@@ -22,9 +22,13 @@
 			<label index="messageSelectTargetTag">Please select the target tag.</label>
 			<label index="mergeSuccess">Number of tags merged successfully: </label>
 			<label index="mergeFailed">No tag was merged</label>
-
-
 			<label index="renameTags">Rename Tags</label>
+			<label index="tagRename">Rename tag</label>
+			<label index="renameConfirm">Do you really want to rename the tag?</label>
+			<label index="message_tag_not_unique">The tag is existing already. Please select another name for the tag.</label>
+			<label index="message_tag_renamed">The tag was renamed sucessfully.</label>
+
+
 			<label index="sectionDelete">Delete Tags</label>
 			<label index="deleteTag">Delete Tag</label>
             <label index="delete">Delete</label>
@@ -32,7 +36,6 @@
             <label index="tagDeleted">Tag was deleted.</label>
             <label index="tagSelect">Select a tag to delete.</label>
             <label index="deleteSelected">Delete selected tag.</label>
-
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Schlagworte-Verwaltung</label>
@@ -52,10 +55,13 @@
 			<label index="messageSelectTargetTag">Bitte wählen Sie das Ziel-Schlagwort aus.</label>
 			<label index="mergeSuccess">Erfolfreich zusammengeführte Schlagworte: </label>
 			<label index="mergeFailed">Kein Schlagwort wurde zusammengeführt</label>
-
-
-
 			<label index="renameTags">Schlagworte umbenennen</label>
+			<label index="tagRename">Schlagwort umbenennen</label>
+			<label index="renameConfirm">Soll das Schlagwort wirklich umbenannt werden?</label>
+			<label index="message_tag_not_unique">Der Schlagwort-Name ist bereits vergeben. Bitte geben Sie einen anderen Namen ein.</label>
+			<label index="message_tag_renamed">Das Schlagwort wurde erfolgreich umbenannt.</label>
+
+
 			<label index="sectionDelete">Tag löschen</label>
             <label index="delete">Löschen</label>
             <label index="tagInUse">Artikel sind mit diesem Tag verbunden.Er kann nicht gelöscht werden.</label>
