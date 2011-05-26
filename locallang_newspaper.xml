@@ -117,7 +117,7 @@
 			<label index="title_tx_newspaper_tag">Tag</label>
 			<label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
-			<label index="message_article_no_section">No section is assigned to this article</label>
+			<label index="message_article_no_section">No section is assigned to this article. Please select a section and store in order to edit the article.</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -202,7 +202,7 @@
 			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
 			<label index="title_tx_newspaper_section">Ressort</label>
 			<label index="title_tx_newspaper_tag">Tag</label>
-			<label index="message_article_no_section">Dem Artikel ist kein Ressort zugeordnet.</label>
+			<label index="message_article_no_section">Dem Artikel ist kein Ressort zugeordnet. Bitte weisen Sie dem Artikel ein Ressort zu und speichern, um den Artikel bearbeiten zu können.</label>
 		</languageKey>
 
 	</data>
