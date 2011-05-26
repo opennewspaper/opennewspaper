@@ -72,7 +72,7 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 					// localized string for mod8
 					$this->localLang = $localLang[$GLOBALS['LANG']->lang];
 
-					// add some other localized string
+					// add some other localized strings
 					$this->localLang['npContentTag'] = $LANG->sL('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.0', false);
 					$this->localLang['npCtrlTag'] = $LANG->sL('LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.tag_type.I.1', false);
 
@@ -91,7 +91,7 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 						'function' => Array (
 							'3' => $LANG->getLL('renameTags'),
 							'2' => $LANG->getLL('mergeTags'),
-//							'1' => $LANG->getLL('deleteTag'),
+							'1' => $LANG->getLL('deleteTag'),
 
 						)
 					);
@@ -219,7 +219,24 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 						case 'renameTag':
 							$this->ajaxRenameTag();
 						break;
+						case 'deleteTag':
+							$this->ajaxDeleteTag();
+						break;
                 	}
+                }
+
+
+                private function ajaxDeleteTag() {
+					$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
+					if ($tag->getArticles(1)) {
+						if ($this->input['confirmDetachTags']) {
+							$tag->detach();
+						} else {
+							die(json_encode(array('success' => false, 'attachedTagsFound' => true)));
+						}
+					}
+					$tag->delete();
+					die(json_encode(array('success' => true)));
                 }
 
 

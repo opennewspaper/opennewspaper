@@ -1,11 +1,80 @@
+{* debug *}
 
-{if $lang.$message}
-    <p class="message">
-        {$lang.$message}
-    </p>
-{/if}
-<select name="input[tag]">
-    {html_options options=$tags}
-</select>
 
-<input type="submit" value="{$lang.delete}" name="action[deleteTag]" id="delete" title="{$lang.deleteSelected}" />
+<script type="text/javascript">
+	var labelChooseTag = "{$LL.chooseTag}";
+	var confirmMessage = "{$LL.deleteConfirm}";
+	var confirmDetachMessage = "{$LL.deleteDetachConfirm}";
+	var tagDeletedMesssage = "{$LL.message_tag_deleted}";
+	var messagePleaseSelectTag = "{$LL.messageSelectTag}";
+{* \todo: clearOptionsIntarget() and addOptionsToTarget() -> move to base template *}
+{literal}
+	function clearOptionsInTarget() {
+		// clear tag select boxes
+		$("tag_delete").descendants().each(Element.remove);
+	}
+	function addOptionsToTarget(options) {
+		$("tag_delete").options[$("tag_delete").options.length] = new Option(labelChooseTag, -1);
+		for(i = 0; i < options.length; i++) {
+			$("tag_delete").options[$("tag_delete").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+		}
+	}
+
+	function deleteTag(confirmDetach) {
+		var tagUid = parseInt($("tag_delete").value);
+		if (tagUid < 1) {
+			alert(messagePleaseSelectTag);
+			return;
+		}
+
+		var detachParam = "";
+		if (confirmDetach != true) {
+			confirmDetach = false; // false is default
+		} else {
+			detachParam = "&tx_newspaper_mod8[confirmDetachTags]=1";
+		}
+		if (confirmDetach || confirm(confirmMessage)) {
+			var request = new Ajax.Request(
+				"index.php",
+					{
+						method: 'get',
+						parameters: 'tx_newspaper_mod8[ajaxController]=deleteTag&tx_newspaper_mod8[tagUid]=' + tagUid + detachParam,
+						onCreate: function() {
+							$("spinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
+						},
+						onSuccess: function(data) {
+							if (data) {
+								var success = data.responseText.evalJSON().success;
+								if (success) {
+									$("message").innerHTML = tagDeletedMesssage;
+									fetchTags();
+								} else {
+									if (data.responseText.evalJSON().attachedTagsFound) {
+										if (confirm(confirmDetachMessage)) {
+											deleteTag(true);
+										}
+									} else {
+										alert("Internal error: Could not delete tag.");
+									}
+								}
+							}
+							$("spinner").innerHTML = ''; // hide spinner
+						}
+					}
+				);
+		}
+	}
+
+
+</script>
+{/literal}
+
+<div class="tag_selection">
+    <h3>{$LL.deleteTag}</h3>
+    <select id="tag_delete" size="1">
+        <option selected="selected" id="0">{$lang.chooseTag}</option>
+        {html_options options=$tags}
+    </select>
+    <p><input type="button" value="{$LL.deleteSelectedTag}" onclick="deleteTag(); return false;" /><span id="spinner"></span></p>
+	<div id="message"></div>
+</div>

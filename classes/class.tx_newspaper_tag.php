@@ -300,6 +300,20 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		return new tx_newspaper_section($this->getAttribute('section'));
     }
 
+    /**
+     * Detaches this tag from all records tags can be attached to
+     */
+    public function detach() {
+    	foreach (self::$mmTables as $table) {
+			tx_newspaper::deleteRows(
+				$table,
+				array($this->getUid()),
+				'uid_foreign'
+			);
+    	}
+    }
+
+
 
     /**
      * Checks if given title is unique for control tags (always true for content tags)
@@ -461,6 +475,19 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		$this->uid = $uid;
 	}
 
+	/**
+	 * Deletes the tag (tag is detached from other records first)
+	 */
+	public function delete() {
+		$this->detach();
+		tx_newspaper::updateRows(
+			$this->getTable(),
+			'uid=' . $this->getUid(),
+			array('deleted' => 1)
+		);
+		$this->setUid(0);
+	}
+
 	/// \return Name of the database table the object's data are stored in
 	public function getTable() { return tx_newspaper::getTable($this); }
 
@@ -577,4 +604,10 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	////////////////////////////////////////////////////////////////////////////
 
 	private $uid = ''; ///< UID that identifies the tag in the DB
+
+	// tables where tag attchment is stored
+	private static $mmTables = array(
+		'tx_newspaper_article_tags_mm',
+		'tx_newspaper_extra_image_tags_mm',
+	);
 }
