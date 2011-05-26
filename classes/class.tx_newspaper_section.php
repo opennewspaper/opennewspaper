@@ -385,31 +385,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2
 			list($extra_class, $paragraph) = explode(':', $default_extra);
 			$paragraph = intval($paragraph);
-t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
+//t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
 
 			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
-				$new_extra = new $extra_class();
-
-				//	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
-				$new_extra->store();
-
-		 		$new_extra->setAttribute('crdate', time());
-		 		$new_extra->setAttribute('tstamp', time());
-
-                //todo: switch via tsconfig
-				$new_extra->setAttribute('show_extra', 1);
-				$new_extra->setAttribute('paragraph', $paragraph);
-				$new_extra->setAttribute('position', 0);
-
-				$new_extra->store();						//	Final store()
-
-				/// Write association table entry article -> extra
-				/// \todo $new_article->relateExtra2Article($new_extra)?
-				tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
-					array(
-						'uid_local' => $new_article->getUid(),
-						'uid_foreign' => $new_extra->getExtraUid(),
-				));
+                self::addExtraToArticle($extra_class, $paragraph, $must_have_extras, $key, $new_article);
 			} else {
 				t3lib_div::devlog('Unknown Extra configured in TSConfig', 'newspaper', 3, array('tsconfig' => $extra_class, 'section' => $this, 'articletype' => $at));
 			}
@@ -418,7 +397,36 @@ t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'defa
  		return $new_article;
  	}
 
+    private static function addExtraToArticle($extra_class, $paragraph, array $must_have_extras, $key, tx_newspaper_Article $new_article) {
+        $new_extra = new $extra_class();
 
+        //	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
+        $new_extra->store();
+
+        $new_extra->setAttribute('crdate', time());
+        $new_extra->setAttribute('tstamp', time());
+
+        $new_extra->setAttribute('show_extra', 1); //todo: switch via tsconfig
+        $new_extra->setAttribute('paragraph', $paragraph);
+        $new_extra->setAttribute('position', (self::getShiftValue(sizeof($must_have_extras)) << $key));
+
+        $new_extra->store(); //	Final store()
+
+        /// Write association table entry article -> extra
+        /// \todo $new_article->relateExtra2Article($new_extra)?
+        tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
+                                 array(
+                                      'uid_local' => $new_article->getUid(),
+                                      'uid_foreign' => $new_extra->getExtraUid(),
+                                 ));
+    }
+
+    private static function getShiftValue($num_extras) {
+        $num_bits = PHP_INT_SIZE*8;
+        $max_shift = $num_bits/(intval($num_extras)+1);
+        if ($max_shift < 1) return 1;
+        if ($max_shift > 8) return 8;
+    }
 
  	/** Create a new article from the article with the default placement as
  	 *  specified in the Article PageZone of the Article Page of the Section.
