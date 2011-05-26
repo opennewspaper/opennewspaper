@@ -423,7 +423,7 @@ t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'defa
 
     private static function calculateInsertPosition(array $must_have_extras, $key)
     {
-        tx_newspaper::devlog("shift value", self::getShiftValue(sizeof($must_have_extras)));
+        tx_newspaper::devlog("shift value", (self::getShiftValue(sizeof($must_have_extras)) * ($key + 1)));
         return 1 << (self::getShiftValue(sizeof($must_have_extras)) * ($key + 1));
     }
 
