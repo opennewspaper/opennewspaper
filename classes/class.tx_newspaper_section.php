@@ -408,7 +408,7 @@ t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'defa
 
         $new_extra->setAttribute('show_extra', 1); //todo: switch via tsconfig
         $new_extra->setAttribute('paragraph', $paragraph);
-        $new_extra->setAttribute('position', (self::getShiftValue(sizeof($must_have_extras)) << $key));
+        $new_extra->setAttribute('position', self::calculateInsertPosition($must_have_extras, $key));
 
         $new_extra->store(); //	Final store()
 
@@ -419,6 +419,11 @@ t3lib_div::devlog('createNewArticle', 'newspaper', 0, array('key' => $key, 'defa
                                       'uid_local' => $new_article->getUid(),
                                       'uid_foreign' => $new_extra->getExtraUid(),
                                  ));
+    }
+
+    private static function calculateInsertPosition(array $must_have_extras, $key)
+    {
+        return (1 << (self::getShiftValue(sizeof($must_have_extras)) * ($key + 1)));
     }
 
     private static function getShiftValue($num_extras) {
