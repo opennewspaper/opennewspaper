@@ -1018,6 +1018,9 @@ CREATE TABLE pages (
 CREATE TABLE be_users (
 	tx_newspaper_role int(11) DEFAULT '0' NOT NULL
 );
+
+###
+
 # Modifications for table 'tx_newspaper_section'
 CREATE TABLE tx_newspaper_section (
 	template_set tinytext NOT NULL
@@ -1035,10 +1038,10 @@ CREATE TABLE tx_newspaper_pagezone_page (
 
 # Modifications for table 'tx_newspaper_article'
 CREATE TABLE tx_newspaper_article (
-    text longtext NOT NULL
+    bodytext longtext NOT NULL
 	template_set tinytext NOT NULL
 	FULLTEXT KEY title (title,kicker,title_list,kicker_list)
-	FULLTEXT KEY text (teaser,teaser_list,text,author)
+	FULLTEXT KEY text (teaser,teaser_list,bodytext,author)
 );
 
 # Modifications for table 'tx_newspaper_articlelist_semiautomatic_articles_mm'
@@ -1053,7 +1056,7 @@ CREATE TABLE tx_newspaper_extra_image (
 
 # Fulltext index for Extra: Textbox
 CREATE TABLE tx_newspaper_extra_textbox (
-  FULLTEXT KEY title (title,text)
+  FULLTEXT KEY title (title,bodytext)
 );
 
 # Fulltext index for Extra: Image
