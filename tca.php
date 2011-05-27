@@ -3324,7 +3324,7 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 $TCA["tx_newspaper_extra_sectionteaser"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_sectionteaser"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "template,description_text,is_ctrltag,section,ctrltag_cat,num_articles,num_articles_w_image"
+		"showRecordFieldList" => "template,description_text,is_ctrltag,section,ctrltag_cat,ctrltag,num_articles,num_articles_w_image"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionteaser"]["feInterface"],
 	"columns" => array (
@@ -3381,6 +3381,18 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"ctrltag" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.ctrltag",		
+			"config" => Array (
+				"type" => "select",	
+				"foreign_table" => "tx_newspaper_tag",	
+				"foreign_table_where" => "ORDER BY tx_newspaper_tag.uid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 		"num_articles" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.num_articles",		
@@ -3415,7 +3427,7 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "template;;;;1-1-1, description_text, is_ctrltag, section, ctrltag_cat, num_articles, num_articles_w_image")
+		"0" => array("showitem" => "template;;;;1-1-1, description_text, is_ctrltag, section, ctrltag_cat, ctrltag, num_articles, num_articles_w_image")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

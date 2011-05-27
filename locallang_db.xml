@@ -227,6 +227,7 @@
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag">Control tag or Section</label>
 			<label index="tx_newspaper_extra_sectionteaser.section">Section</label>
 			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag category</label>
+			<label index="tx_newspaper_extra_sectionteaser.ctrltag">Steuertag</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles">Number of articles</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Number of articles with image</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>
@@ -456,6 +457,7 @@
 			<label index="tx_newspaper_extra_sectionteaser.is_ctrltag">Steuertag oder Ressort</label>
 			<label index="tx_newspaper_extra_sectionteaser.section">Ressort</label>
 			<label index="tx_newspaper_extra_sectionteaser.ctrltag_cat">Tag-Kategorie</label>
+			<label index="tx_newspaper_extra_sectionteaser.ctrltag">Controltag</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles">Anzahl der Artikel</label>
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Anzahl der Artikel mit Bild</label>
 			<label index="tt_content.tx_newspaper_extra">Extra</label>

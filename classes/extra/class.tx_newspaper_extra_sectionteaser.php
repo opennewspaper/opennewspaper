@@ -35,8 +35,24 @@ class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
 		#  tx_newspaper::devlog("render", $rendered); 
 		
 		$this->prepare_render($template_set);
-		
-		#$this->smarty->assign('html', $this->getAttribute('html'));
+
+		$num_articles=$this->getAttribute('num_articles');
+		$num_articles_w_image=$this->getAttribute('num_articles_w_image');
+
+		$is_ctrltag = $this->getAttribute('is_ctrltag');
+		if ($is_ctrltag=="0") {
+			$this->smarty->assign("section_or_ctrltag","section");
+			$section = $this->getAttribute('section');
+			$this->smarty->assign("section_id",$section);
+			$is_ctrltag = $this->getAttribute('is_ctrltag');
+			$this->smarty->assign("articles",$section->getArticleList()->getArticles($num_articles));
+		}  elseif ($is_ctrltag=="1") {
+			$this->smarty->assign("section_or_ctrltag","ctrltag");
+			$ctrltag_cat = $this->getAttribute('ctrltag_cat');
+			$this->smarty->assign("ctrltag_cat",$ctrltag_cat);
+			$ctrltag_id = $this->getAttribute('ctrltag_id');
+			$this->smarty->assign("ctrltag_id",$ctrltag_id);
+		}
 		
 		$template = $this->getAttribute('template');
 		if ($template) {

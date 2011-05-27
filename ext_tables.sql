@@ -984,6 +984,7 @@ CREATE TABLE tx_newspaper_extra_sectionteaser (
 	is_ctrltag int(11) DEFAULT '0' NOT NULL,
 	section int(11) DEFAULT '0' NOT NULL,
 	ctrltag_cat int(11) DEFAULT '0' NOT NULL,
+	ctrltag int(11) DEFAULT '0' NOT NULL,
 	num_articles int(11) DEFAULT '0' NOT NULL,
 	num_articles_w_image int(11) DEFAULT '0' NOT NULL,
 	
@@ -1018,9 +1019,6 @@ CREATE TABLE pages (
 CREATE TABLE be_users (
 	tx_newspaper_role int(11) DEFAULT '0' NOT NULL
 );
-
-###
-
 # Modifications for table 'tx_newspaper_section'
 CREATE TABLE tx_newspaper_section (
 	template_set tinytext NOT NULL
