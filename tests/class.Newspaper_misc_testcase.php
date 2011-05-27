@@ -49,7 +49,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		
 		$template_sets_to_test = array('default', 'test_templateset');
 		foreach ($template_sets_to_test as $ts) {
-			if (!file_exists($basepath . 'template_sets/' . $ts)) mkdir ($basepath . 'template_sets/' . $ts);
+			if (!file_exists($basepath . 'template_sets/' . $ts)) mkdir ($basepath . 'template_sets/' . $ts, 0777, true);
 		}
 		
 		$available_template_sets = tx_newspaper_Smarty::getAvailableTemplateSets();

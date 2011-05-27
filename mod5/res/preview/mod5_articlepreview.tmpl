@@ -13,7 +13,7 @@
 
   <h1>{$article->getAttribute('title')}</h1>
   <h5>{$article->getAttribute('teaser')}</h5>
-  <p class="articletext">{$article->getAttribute('text')}</p>
+  <p class="articletext">{$article->getAttribute('bodytext')}</p>
   
   <input type="hidden" name="tx_newspaper_mod5[source_id]" value="{$source_id}" />
   <input type="hidden" name="tx_newspaper_mod5[source_path]" value="{$source_path}" />

@@ -703,7 +703,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 				$wf = tx_newspaper::selectZeroOrOneRows(
 					'tstamp',
 					'tx_newspaper_log',
-					'table_name="tx_newspaper_article" AND table_uid=' . $a->getUid() . ' AND action=2', // action 2 -> publish article
+					'table_name="tx_newspaper_article" AND table_uid=' . $a->getUid() . ' AND operation=2', // operation 2 -> publish article
 					'',
 					'tstamp DESC',
 					1

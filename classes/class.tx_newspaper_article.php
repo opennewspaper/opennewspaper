@@ -1077,7 +1077,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
          *  must be removed. It may not be the case though, if so, the first
          *  paragraph is meaningful and must be kept.
          */
-        $temp_paragraphs = explode('<p', $this->getAttribute('text'));
+        $temp_paragraphs = explode('<p', $this->getAttribute('bodytext'));
         $paragraphs = array();
 
         foreach ($temp_paragraphs as $paragraph) {
@@ -1484,7 +1484,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     ///	List of attributes that together constitute an Article
     /** \todo update */
     private static $attribute_list = array(
-        'title', 'teaser', 'text', 'author'
+        'title', 'teaser', 'bodytext', 'author'
     );
 
     /// Mapping of the attributes to the names they have in the tx_newspaper_Source for each supported tx_newspaper_Source type
@@ -1503,14 +1503,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         'tx_newspaper_taz_RedsysSource' => array(
             'title' => 'Titel',
             'teaser' => 'Titel2',
-            'text' => 'Text',
+            'bodytext' => 'Text',
             'ressort' => 'OnRes',
             'author' => 'Autor'
         ),
         'tx_newspaper_DBSource' => array(
             'title' => 'article_manualtitle',
             'teaser' => 'article_title2',
-            'text' => 'article_manualtext',
+            'bodytext' => 'article_manualtext',
             'ressort' => 'ressort',
             'author' => 'author'
         )

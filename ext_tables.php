@@ -79,7 +79,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_image.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, title, image_file, credit, caption, normalized_filename, kicker, source, type, alttext, tags",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, pool, title, image_file, credit, caption, normalized_filename, kicker, source, image_type, alttext, tags",
 	)
 );
 
@@ -96,7 +96,7 @@ $TCA["tx_newspaper_section"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_section.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "section_name, articles_allowed, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set",
+		"fe_admin_fieldList" => "section_name, show_in_list, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set",
 	)
 );
 
@@ -172,7 +172,7 @@ $TCA["tx_newspaper_article"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_article.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, articletype_id, author, kicker, title, teaser, kicker_list, title_list, teaser_list, text, no_rte, publish_date, modification_user, source_id, source_object, sections, extras, name, is_template, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, articletype_id, author, kicker, title, teaser, kicker_list, title_list, teaser_list, bodytext, no_rte, publish_date, modification_user, source_id, source_object, sections, extras, name, is_template, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status",
 	)
 );
 
@@ -279,7 +279,7 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 $TCA["tx_newspaper_log"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log',		
-		'label'     => 'action',	
+		'label'     => 'operation',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -288,7 +288,7 @@ $TCA["tx_newspaper_log"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_log.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "table_name, table_uid, be_user, action, comment",
+		"fe_admin_fieldList" => "table_name, table_uid, be_user, operation, comment",
 	)
 );
 
@@ -375,7 +375,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_textbox.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "starttime, endtime, pool, title, text, image",
+		"fe_admin_fieldList" => "starttime, endtime, pool, title, bodytext, image",
 	)
 );
 

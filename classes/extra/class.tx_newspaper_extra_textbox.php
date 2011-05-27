@@ -45,7 +45,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 		$this->prepare_render($template_set);
 
 		$this->smarty->assign('title', $this->getAttribute('title'));
-		$this->smarty->assign('text', $this->getAttribute('text'));
+		$this->smarty->assign('text', $this->getAttribute('bodytext'));
 		$image = $this->getAttribute('image');
 		if ($image) {
 			if (intval($image)) {
@@ -66,7 +66,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	 */
 	public function getDescription() {
 		return substr(
-			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('text'), 
+			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('bodytext'),
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 

@@ -18,9 +18,9 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
-	# CONFIGURATION of RTE in table "tx_newspaper_article", field "text"
+	# CONFIGURATION of RTE in table "tx_newspaper_article", field "bodytext"
 	# ***************************************************************************************
-RTE.config.tx_newspaper_article.text {
+RTE.config.tx_newspaper_article.bodytext {
   hidePStyleItems = H1, H4, H5, H6
   proc.exitHTMLparser_db=1
   proc.exitHTMLparser_db {
@@ -46,9 +46,9 @@ t3lib_extMgm::addUserTSConfig('
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
-	# CONFIGURATION of RTE in table "tx_newspaper_extra_textbox", field "text"
+	# CONFIGURATION of RTE in table "tx_newspaper_extra_textbox", field "bodytext"
 	# ***************************************************************************************
-RTE.config.tx_newspaper_extra_textbox.text {
+RTE.config.tx_newspaper_extra_textbox.bodytext {
   hidePStyleItems = H1, H4, H5, H6
   proc.exitHTMLparser_db=1
   proc.exitHTMLparser_db {

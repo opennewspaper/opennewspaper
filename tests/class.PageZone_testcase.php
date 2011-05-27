@@ -7,7 +7,7 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
-require_once(PATH_typo3conf . 'ext/newspaper/tests/class.hierarchy.php');
+require_once(PATH_typo3conf . 'ext/newspaper/tests/class.fixture.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class tx_newspaper_pagezone

@@ -139,7 +139,8 @@ class tx_newspaper_DBException extends tx_newspaper_Exception {
 	 */ 
 	public function __construct($message, $row = array()) {
         parent::__construct("SQL query: \n" . tx_newspaper::$query . 
-							" \nfailed with message: \n$message " .
+							" \nfailed with message: \n'$message' \n" .
+                            "Error: " . mysql_error() . "\n" .
         					($row? print_r($row, 1): ''));
     }
 }

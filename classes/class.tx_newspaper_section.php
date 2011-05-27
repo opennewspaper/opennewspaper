@@ -591,7 +591,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
 	///	Get all tx_newspaper_Section records in the DB.
 	/** \param $articlesAllowedOnly if set to true only section with the
-	 *       articles_allowed flag set are returned
+	 *       show_in_list flag set are returned
 	 *  \param $sort_by Field of the \c tx_newspaper_section SQL table to sort
 	 * 		results by.
 	 *  \return tx_newspaper_Section objects in the DB.
@@ -622,7 +622,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		}
 
 		if ($articlesAllowedOnly) {
-			$additional_where .= ' AND articles_allowed=1';
+			$additional_where .= ' AND show_in_list=1';
 		}
 
 		// add sysfolder id

@@ -24,11 +24,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	private $typo3db = null;
-	
-	public function test_nooop() {
-		//dev test for setup and tear down.
-	}
-	
+		
 	private $oldDbConn = null;
 
 	public function test_createArticle() {
@@ -196,23 +192,23 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		
 		/// change an attribute, store and check
 		$random_string = md5(time());
-		$this->article->setAttribute('text', 
-									 $this->article->getAttribute('text') . $random_string);
+		$this->article->setAttribute('bodytext',
+									 $this->article->getAttribute('bodytext') . $random_string);
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
 		$data = tx_newspaper::selectOneRow(
 			'*', $this->article->getTable(), 'uid = ' . $this->article->getUid());
-		$this->doTestContains($data['text'], $random_string);
+		$this->doTestContains($data['bodytext'], $random_string);
 		
 		/// create an empty article and write it. verify it's been written.
 		$article = new tx_newspaper_Article();
 
 		if ($this->article->getParentPage()) $article->setParentPage($this->article->getParentPage());
 		
-		$article->setAttribute('text', $random_string);
+		$article->setAttribute('bodytext', $random_string);
 		$uid = $article->store();
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
-		$this->assertEquals($data['text'], $random_string);
+		$this->assertEquals($data['bodytext'], $random_string);
 		
 		/// delete article
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($article->getTable(), 'uid = ' . $uid);
@@ -330,7 +326,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	private function checkOutput($output) {
 		$this->doTestContains($output, $this->article_data['title']);
 		$this->doTestContains($output, $this->article_data['teaser']);
-		$this->doTestContains($output, substr($this->article_data['text'], 0, 100));
+		$this->doTestContains($output, substr($this->article_data['bodytext'], 0, 100));
 		$this->doTestContains($output, $this->article_data['author']);
 	}
 	
@@ -374,7 +370,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		'title' => "Nummer eins!",
 		'extras' => 0,
 		'teaser' => "Hey, ein neuer Artikel ist im Lande!",
-		'text' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
+		'bodytext' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
 		'author' => "Test Text",
 		'sections' => 1,
 		'source_id' => 1,

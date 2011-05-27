@@ -5,13 +5,13 @@
             <tr>
                 <td style="padding:2px; vertical-align:top;">{$comment.username} </td>
                 <td style="padding:2px; vertical-align:top; width:100px;">{$comment.created} </td>
-                {* <td style="padding:2px; vertical-align:top;">{$comment.action}</td> *}
-                {if $comment.action == 4} 
+                {* <td style="padding:2px; vertical-align:top;">{$comment.operation}</td> *}
+                {if $comment.operation == 4}
                 	{* user comment *}
-                	<td class="style="padding:2px; vertical-align:top; width:266px;"><strong><span style="color:red;">{$comment.comment|nl2br}</span></strong> </td> 
-                {elseif $comment.action == 6}
+                	<td class="style="padding:2px; vertical-align:top; width:266px;"><strong><span style="color:red;">{$comment.comment|nl2br}</span></strong> </td>
+                {elseif $comment.operation == 6}
                 	{* error msg *}
-                	<td class="style="padding:2px; vertical-align:top; width:266px;"><span style="color:red;">{$comment.comment|nl2br}</span> </td> 
+                	<td class="style="padding:2px; vertical-align:top; width:266px;"><span style="color:red;">{$comment.comment|nl2br}</span> </td>
                 {else}
                 	{* no special formatting *}
                 	<td style="padding:2px; vertical-align:top; width:266px;">{$comment.comment} </td> {* newspaper system comment *}

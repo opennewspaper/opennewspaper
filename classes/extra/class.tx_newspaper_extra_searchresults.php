@@ -63,14 +63,14 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	/** A \c FULLTEXT index must be configured for these fields.
 	 *  \see ext_tables_addon.sql
 	 */
-	private static $text_fields = array('teaser', 'teaser_list', 'text', 'author');
+	private static $text_fields = array('teaser', 'teaser_list', 'bodytext', 'author');
 	
 	/// Extra tables and their fields also searched for the search term.
 	/** A \c FULLTEXT index must be configured for each of these tables/fields.
 	 *  \see ext_tables_addon.sql
 	 */
 	private static $extra_fields = array(
-		'tx_newspaper_extra_textbox' => array('title', 'text'),
+		'tx_newspaper_extra_textbox' => array('title', 'bodytext'),
 		'tx_newspaper_extra_image' => array('title', 'kicker', 'caption'),
 		'tx_newspaper_extra_bio' => array('author_name', 'bio_text'),
 	);

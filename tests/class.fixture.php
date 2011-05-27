@@ -32,7 +32,7 @@
 /// \todo brief description
 /** \todo long description
  */
-class tx_newspaper_hierarchy {
+class tx_newspaper_fixture {
 
 	public function __construct() {
 		$this->createSectionHierarchy();
@@ -350,7 +350,7 @@ class tx_newspaper_hierarchy {
 		$this->delete($this->pagezonetype_table, $this->pagezonetype_uids);
 	}	
 
-    const broken_extra_uid = 1000;
+    const broken_extra_uid = 1000000;
     const broken_extra_table = 'this_is_not_an_existing_table';
 
 	private $delete_all_query = array(
@@ -684,7 +684,7 @@ class tx_newspaper_hierarchy {
 		'title' => "Nummer eins!",
 		'extras' => 0,
 		'teaser' => "Hey, ein neuer Artikel ist im Lande!",
-		'text' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
+		'bodytext' => "<p>Und was fuer einer! Er besteht zu 100% aus Blindtext! Nicht ein einziges sinnvolles Wort. Das soll mir mal einer nachmachen.</p>\r\n<p>  Hier kommt noch etwas mehr Testtext, so dass die erste Zeile nicht so alleine da steht. Und noch mehr Text und noch mehr und noch mehr und... (ad infinitum), denn wir wollen ja einen realistischen Artikel simulieren und da steht ja meistens auch ziemlich viel Text. In manchen Artikeln stehen sogar noch mehr als zwei Absaetze, und diese auch noch prallvoll mit Text, deshalb muss in diesen Blindtext auch ne ganze Menge Text und da kann ich ja nicht schon jetzt, nach nur zwei Absaetzen, aufhoeren Text zu schreiben.</p>\r\n<p>Also darum noch ein dritter Absatz mit noch mehr Text. Ich frage mich, wie oft das Wort \"Text\" schon in diesem Text aufgetaucht ist? Oh, nach dem letzten Satz kann man gleich noch zwei zum Text-Zaehler hinzuzaehlen. Upps, das hab ich gleich noch mal \"Text\" geschrieben.</p>\r\n<p></p>",
 		'author' => "Test Text",
 		'sections' => 1,
 		'source_id' => 1,
@@ -710,7 +710,7 @@ class tx_newspaper_hierarchy {
 		'title' => "Nummer zwei!",
 		'extras' => 0,
 		'teaser' => "Dieser Artikel ist verknuepft mit Artikel eins!",
-		'text' => "<p>Juhu!</p>",
+		'bodytext' => "<p>Juhu!</p>",
 		'author' => "Test Text",
 		'sections' => 2,
 		'source_id' => 1,

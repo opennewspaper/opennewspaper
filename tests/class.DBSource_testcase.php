@@ -16,8 +16,8 @@ class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 		parent::setUp();
 		$this->source = new tx_newspaper_DBSource();
 		$this->article = new tx_newspaper_Article();
-		$this->field = 'text';
-		$this->fieldList = array('title', 'text');
+		$this->field = 'bodytext';
+		$this->fieldList = array('title', 'bodytext');
 		
 		//insert source data
 		$table =  $this->article->sourceTable($this->source);
@@ -38,7 +38,7 @@ class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 			new tx_newspaper_SourcePath(16064),
 		);
 		// manually defined as the required fields for an article object
-		$this->reqFields = array('title', 'teaser', 'text', 'ressort');
+		$this->reqFields = array('title', 'teaser', 'bodytext', 'ressort');
 	}
 	
 	public function test_createSource() {
@@ -50,8 +50,8 @@ class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 	public function test_readField() {
 		$this->source->readField($this->article, $this->field, $this->uid);
 		$this->assertRegExp('/.*einzigen Bushaltestelle im Umkreis von zwei Kilometern.*/', 
-						  $this->article->getAttribute('text'),
-						  'readField(Text) returned text: \''.$this->article->getAttribute('text').'\'');
+						  $this->article->getAttribute('bodytext'),
+						  'readField(Text) returned text: \''.$this->article->getAttribute('bodytext').'\'');
 	}
 
 	public function test_readFields() {
@@ -59,8 +59,8 @@ class xtest_DBSource_testcasex extends tx_newspaper_database_testcase {
 		$this->assertRegExp('/.*Diktatur des Proletariats.*/', $this->article->getAttribute('title'),
 						  'readFields(Titel, Text) returned title: '.$this->article->getAttribute('title'));
 		$this->assertRegExp('/.*einzigen Bushaltestelle im Umkreis von zwei Kilometern.*/', 
-						  $this->article->getAttribute('text'),
-						  'readFields(Titel, Text) returned text: '.$this->article->getAttribute('text'));
+						  $this->article->getAttribute('bodytext'),
+						  'readFields(Titel, Text) returned text: '.$this->article->getAttribute('bodytext'));
 	}
 
 //	public function test_Attributes() {

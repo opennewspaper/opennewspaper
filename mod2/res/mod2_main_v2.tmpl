@@ -211,7 +211,7 @@
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
 				<p class="autor">{$comment.username}</p>
 				<p class="autor right"> <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>&nbsp;{$comment.crdate|date_format:"%H:%M:%S"}</p>
-				<p class="message{if $comment.action == 4}{* manual comment *} important{elseif $comment.action == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
+				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
 			{/foreach}
 		</div>
 
@@ -223,7 +223,7 @@
 			{foreach from=$DATA[i].workflowlog_v2 item=comment}
 				<p class="autor">{$comment.username}</p>
 				<p class="autor right"> <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>&nbsp;{$comment.crdate|date_format:"%H:%M:%S"}</p>
-				<p class="message{if $comment.action == 4}{* manual comment *} important{elseif $comment.action == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
+				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
 			{/foreach}
 
 		</div>

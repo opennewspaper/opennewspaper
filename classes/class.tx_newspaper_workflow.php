@@ -269,7 +269,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
     public static function getComments($table, $table_uid, $limit = 0) {
         $comments = tx_newspaper::selectRows(
-			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, action, comment",
+			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment",
 			'tx_newspaper_log',
             'table_name = \''.$table.'\' AND table_uid = '.$table_uid,
 			'',
@@ -487,7 +487,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
 			'table_name' => $table,
 			'table_uid' => $id,
-			'action' => $type,
+			'operation' => $type,
 			'comment' => $comment
 		));
 	}
@@ -499,7 +499,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
 			$np_obj = new $table();
 
-			/// check if a newspaper record action should be logged
+			/// check if a newspaper record operation should be logged
 			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
 
 				self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
@@ -511,9 +511,9 @@ function changeWorkflowStatus(role, hidden_status) {
 				$current_time = time(); // make sure all log entries written in this run have the same time
 				if (array_key_exists('hidden', $fieldArray)) {
 					if ($table == 'tx_newspaper_article') {
-						$action = $fieldArray['hidden']? tx_newspaper::getTranslation('log_article_hidden') : tx_newspaper::getTranslation('log_article_published');
+						$operation = $fieldArray['hidden']? tx_newspaper::getTranslation('log_article_hidden') : tx_newspaper::getTranslation('log_article_published');
 					} else {
-						$action = $fieldArray['hidden']? tx_newspaper::getTranslation('log_record_hidden') : tx_newspaper::getTranslation('log_record_published');
+						$operation = $fieldArray['hidden']? tx_newspaper::getTranslation('log_record_hidden') : tx_newspaper::getTranslation('log_record_published');
 					}
 //t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
 					tx_newspaper::insertRows('tx_newspaper_log', array(
@@ -524,8 +524,8 @@ function changeWorkflowStatus(role, hidden_status) {
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table,
 						'table_uid' => $id,
-						'action' => $fieldArray['hidden']? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
-						'comment' => $action
+						'operation' => $fieldArray['hidden']? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
+						'comment' => $operation
 					));
 				}
 
@@ -539,7 +539,7 @@ function changeWorkflowStatus(role, hidden_status) {
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table,
 						'table_uid' => $id,
-						'action' => NP_WORKLFOW_LOG_CHANGE_ROLE,
+						'operation' => NP_WORKLFOW_LOG_CHANGE_ROLE,
 						'comment' => self::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG']))
 					));
 				}
@@ -554,7 +554,7 @@ function changeWorkflowStatus(role, hidden_status) {
 						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
 						'table_name' => $table,
 						'table_uid' => $id,
-						'action' => NP_WORKLFOW_LOG_USERCOMMENT,
+						'operation' => NP_WORKLFOW_LOG_USERCOMMENT,
 						'comment' => $_REQUEST['workflow_comment']
 					));
 				}
