@@ -118,7 +118,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			// Draw the header.
 			$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod5');
 			$this->doc->backPath = $BACK_PATH;
-			$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+			$this->doc->form='<form action="" method="post" enctype="multipart/form-data" onsubmit="return false;">'; // don't submit form when enter is pressed
 
 			// JavaScript
 			$this->doc->JScode = '
