@@ -42,7 +42,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	}
 
     /// Creates a new content tag
-    /// \return tx_newspaper_tag object
+    /** \return tx_newspaper_tag object
+     */
     public static function createContentTag($value = null) {
         $tag = new tx_newspaper_Tag();
         $tag->setAttribute('tag_type', self::getContentTagType());
@@ -119,8 +120,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
 	/**
-	 * The $tagToBeMerged is merged with the current tag
-	 * The $tagToBeMerged is set to null
+	 * The \p $tagToBeMerged is merged with the current tag, i.e. Articles which
+     * were tagged with \p $tagToBeMerged are tagged with \c $this.
+	 * The \p $tagToBeMerged is deleted and set to \c null.
 	 * \param tx_newspaper_tag $tagToBeMerged
 	 * \return true, if merge was successful, else false
 	 * \todo: tx_newspaper_extra_image_tags_mm if tag are to be used in images
@@ -132,53 +134,28 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	}
 
     	// remove tag relations where this tag AND target tag are attached ()would create a duplicate entry otherwise)
-
-    	// get article uids with this (=target) tag attached
-		$articleUids = tx_newspaper::selectRows(
-			'uid_local',
-			'tx_newspaper_article_tags_mm',
-			'uid_foreign=' . $this->getUid()
-		);
-		// make array accessible for explode ...
-		for($i = 0; $i < sizeof($articleUids); $i++) {
-			$articleUids[$i] = $articleUids[$i]['uid_local'];
-		}
+        $articleUids = $this->getArticlesForTag();
 //t3lib_div::devlog('tag::merge() get articles', 'newspaper', 0, array('articleUids' => $articleUids, 'q' => tx_newspaper::$query));
 
-		// remove tag to be merged from articles where this (=target) tag has already been attached
-		if ($articleUids) {
-			tx_newspaper::deleteRows(
-				'tx_newspaper_article_tags_mm',
-				'uid_foreign=' . $tagToBeMerged->getUid() . ' AND uid_local IN (' . implode(',', $articleUids) . ')'
-			);
-		}
+        $mergedArticleUids = $tagToBeMerged->getArticlesForTag();
+
+        $tagToBeMerged->removeTagFromArticles($articleUids);
 //t3lib_div::devlog('tag::merge() delete duplicates', 'newspaper', 0, array('q' => tx_newspaper::$query));
 
+        $this->updateRelationsForMergedTag($tagToBeMerged);
+        //t3lib_div::devlog('tag::merge() merge tag', 'newspaper', 0, array('q' => tx_newspaper::$query));
 
-    	// move article tag relation to current tag (from tag to be merged)
-		tx_newspaper::updateRows(
-			'tx_newspaper_article_tags_mm',
-			'uid_foreign=' . $tagToBeMerged->getUid(),
-			array('uid_foreign' => $this->getUid())
-		);
-//t3lib_div::devlog('tag::merge() merge tag', 'newspaper', 0, array('q' => tx_newspaper::$query));
+        $tagToBeMerged->updateDependencyTree($mergedArticleUids);
 
 		// delete tag to be merged
-		if (!tx_newspaper::updateRows(
-			'tx_newspaper_tag',
-			'uid=' . $tagToBeMerged->getUid(),
-			array('deleted' => 1)
-		)) {
+		if (!$tagToBeMerged->delete()) {
 			return false;
 		}
 //t3lib_div::devlog('tag::merge() delete tag to be merged', 'newspaper', 0, array('q' => tx_newspaper::$query));
 		$tagToBeMerged = null; // set tag to null, this tag does not exist anymore
 
-// \todo: call dependecy tree, see #1536
-
-    	return true;
+        return true;
     }
-
 
     /// \return Array with all tag zones (key = tag zone uid)
     public static function getAllTagZones() {
@@ -224,7 +201,6 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 			return '';
 		}
 	}
-
 
     /// \param $tz_uid uid of taz zone
     /// \return Array with Extras assigned to tag zone identified by $tz_uid
@@ -313,8 +289,6 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	}
     }
 
-
-
     /**
      * Checks if given title is unique for control tags (always true for content tags)
      * @param $title Title to check for uniqueness
@@ -354,7 +328,6 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	);
 		return (sizeof($rows) == 0);
     }
-
 
     /// Convert object to string to make it visible in stack backtraces, devlog etc.
 	public function __toString() {
@@ -408,7 +381,6 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		tx_newspaper::updateRows($this->getTable(), 'uid=' . $this->getUid(), $data); // store data
 		$this->setAttribute('tag', $newName);
 	}
-
 
 	/**
      * Stores a tag and prevents duplicate tags by checking content and type.
@@ -480,12 +452,13 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 */
 	public function delete() {
 		$this->detach();
-		tx_newspaper::updateRows(
+		$success = tx_newspaper::updateRows(
 			$this->getTable(),
 			'uid=' . $this->getUid(),
 			array('deleted' => 1)
 		);
-		$this->setUid(0);
+		if ($success) $this->setUid(0);
+        return $success;
 	}
 
 	/// \return Name of the database table the object's data are stored in
@@ -537,8 +510,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	/// Tag type handling
 
+	// Tag type handling
 
 	/// SQL table storing tags
 	const tag_table = 'tx_newspaper_tag';
@@ -552,15 +525,14 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	/// SQL table assigning control tags and extras to tag zones
 	const ctrltag_to_extra = 'tx_newspaper_controltag_to_extra';
 
-
+    const article2tag_table = 'tx_newspaper_article_tags_mm';
 
 	/// Get control tag type
-	/// \return 2 hard coded
+	/** \return 2 hard coded
+     */
 	public static function getControlTagType() {
 		return 2; // hard coded
 	}
-
-
 
 	/// Checks if a content tag is already in use
 	/** \param $tag Name of tag
@@ -575,7 +547,6 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		);
 		return (isset($row['uid']) && $row['uid'] > 0);
 	}
-
 
 	/// Checks if a control tag and control tag category combination is already in use
 	/** \param $tag Name of tag
@@ -600,8 +571,51 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		return 1; // hard coded
     }
 
-
 	////////////////////////////////////////////////////////////////////////////
+
+    /// get article uids with this tag attached
+    private function getArticlesForTag() {
+        $articleUids = tx_newspaper::selectRows(
+            'uid_local',
+            self::article2tag_table,
+            'uid_foreign=' . $this->getUid()
+        );
+
+        for ($i = 0; $i < sizeof($articleUids); $i++) {
+            $articleUids[$i] = $articleUids[$i]['uid_local'];
+        }
+
+        return $articleUids;
+    }
+
+    /// remove tag to be merged from articles where this (=target) tag has already been attached
+    private function removeTagFromArticles(array $articleUids) {
+        if ($articleUids) {
+            tx_newspaper::deleteRows(
+                self::article2tag_table,
+                'uid_foreign=' . $this->getUid() . ' AND uid_local IN (' . implode(',', $articleUids) . ')'
+            );
+        }
+    }
+
+   	/// move article tag relation to current tag (from tag to be merged)
+    private function updateRelationsForMergedTag(tx_newspaper_Tag $tagToBeMerged) {
+        tx_newspaper::updateRows(
+            self::article2tag_table,
+            'uid_foreign=' . $tagToBeMerged->getUid(),
+            array('uid_foreign' => $this->getUid())
+        );
+    }
+
+    private function updateDependencyTree(array $mergedArticleUids)  {
+        if (tx_newspaper_DependencyTree::useDependencyTree()) {
+            foreach ($mergedArticleUids as $uid) {
+                $article = new tx_newspaper_Article($uid);
+                $tree = tx_newspaper_DependencyTree::generateFromArticle($article, array($this));
+                $tree->executeActionsOnPages('tx_newspaper_Article');
+            }
+        }
+    }
 
 	private $uid = ''; ///< UID that identifies the tag in the DB
 
