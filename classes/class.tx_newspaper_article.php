@@ -1299,7 +1299,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                 'ctrltag_category' => $tag->getCategoryName()
             );
         }
-        tx_newspaper::devlog('assignTags()', $tags);
         $this->smarty->assign('tags', $tags);
     }
 
