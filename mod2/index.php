@@ -558,7 +558,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		if (trim($this->input['text'])) {
 			$where['text'] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
 				addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
-				addslashes(trim($this->input['text'])) . '%" OR text LIKE "%' .
+				addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
 				addslashes(trim($this->input['text'])) . '%")';
 			if (substr(trim($this->input['text']), 0, 1) == '#') {
 				// looking for an article uid?
