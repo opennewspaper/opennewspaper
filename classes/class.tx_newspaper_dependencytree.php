@@ -71,6 +71,7 @@ class tx_newspaper_CachablePage {
 
     private function setGetParameterIfArticleHasIt(tx_newspaper_article $article = null, $attribute) {
         if (is_null($article)) return;
+        tx_newspaper::devlog("setGetParameterIfArticleHasIt($attribute)");
 
         if ($article->getAttribute($attribute)) {
             $this->get_parameters[$attribute] = $article->getAttribute($attribute);
