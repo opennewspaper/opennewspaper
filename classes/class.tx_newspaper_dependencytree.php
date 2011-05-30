@@ -9,6 +9,10 @@ class tx_newspaper_CachablePage {
         $this->newspaper_page = $page;
         $this->newspaper_article = $article;
         $this->get_parameters = $additional_parameters;
+
+        $this->setGetParameterIfArticleHasIt($article, 'starttime');
+        $this->setGetParameterIfArticleHasIt($article, 'endtime');
+
     }
 
     public function __toString() {
@@ -64,6 +68,14 @@ class tx_newspaper_CachablePage {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function setGetParameterIfArticleHasIt(tx_newspaper_article $article = null, $attribute) {
+        if (is_null($article)) return;
+
+        if ($article->getAttribute($attribute)) {
+            $this->get_parameters[$attribute] = $article->getAttribute($attribute);
+        }
+    }
 
     private $newspaper_page = null;
     private $newspaper_article = null;
