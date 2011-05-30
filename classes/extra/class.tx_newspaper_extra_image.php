@@ -97,17 +97,26 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return $this->getAttribute('title') . $this->image->getThumbnail();
 	}
 
-// title for module
+    public function getImageType() {
+        if (!in_array('image_type', tx_newspaper::getAttributes($this))) return false;
+
+        $type_index = $this->getAttribute('image_type');
+        $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
+        $type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
+        return $type_string;
+    }
+
+    public function getSearchFields() {
+        return array('title', 'caption', 'kicker');
+    }
+
+    /// Title for module to determine name of SysFolder this extra is stored under
 	public static function getModuleName() {
 		return 'np_image';
 	}
 
 	public static function dependsOnArticle() { return false; }
 
-
-	public function getSearchFields() {
-		return array('title', 'caption', 'kicker');
-	}
 
     public static function getBasepath() {
         return tx_newspaper_Image::getBasepath();
@@ -150,15 +159,6 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	}
 
     ////////////////////////////////////////////////////////////////////////////
-
-    private function getImageType() {
-        if (!in_array('image_type', tx_newspaper::getAttributes($this))) return false;
-
-        $type_index = $this->getAttribute('image_type');
-        $type_language_key = "tx_newspaper_extra_image.type.I.$type_index";
-        $type_string = tx_newspaper::getTranslation($type_language_key, 'locallang_db.xml');
-        return $type_string;
-    }
 
     private $image = null;
 }
