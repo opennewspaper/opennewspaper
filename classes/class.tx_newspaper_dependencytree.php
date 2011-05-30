@@ -67,16 +67,17 @@ class tx_newspaper_CachablePage {
         return $this->newspaper_page->getTypo3PageID();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-    private function setGetParameterIfArticleHasIt(tx_newspaper_article $article = null, $attribute) {
-        if (is_null($article)) return;
-        tx_newspaper::devlog("setGetParameterIfArticleHasIt($attribute)");
-
-        if ($article->getAttribute($attribute)) {
-            $this->get_parameters[$attribute] = $article->getAttribute($attribute);
-        }
+    public function getStarttime() {
+        if (is_null($this->newspaper_article)) return;
+        return $this->newspaper_article->getAttribute('starttime');
     }
+
+    public function getEndtime() {
+        if (is_null($this->newspaper_article)) return;
+        return $this->newspaper_article->getAttribute('endtime');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private $newspaper_page = null;
     private $newspaper_article = null;
