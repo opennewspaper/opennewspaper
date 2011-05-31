@@ -7,7 +7,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     public function setUp() {
         parent::setUp();
         $sectionUid = tx_newspaper::insertRows('tx_newspaper_section', array('section_name' => 'dunmy'));
-        $this->dummySection = new tx_newspaper_Section($sectionUid);
+        $this->dummy_section = new tx_newspaper_Section($sectionUid);
     }
 
     public function tearDown() {
@@ -15,7 +15,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     }
     
     public function test_SetAbstractArticleListAttribute() {
-        $al = new tx_newspaper_ArticleList_Semiautomatic(0, $this->dummySection);
+        $al = new tx_newspaper_ArticleList_Semiautomatic(0, $this->dummy_section);
 		try {
 	        $al->setAttribute('notes', 'dummy-section-al');
 	        $al->store();
@@ -27,19 +27,25 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
     public function test_StoreArticleListTwice() {
 
-        $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
-        $old_count = count($row);
-        $latest = array_pop($row);
-
-        $al = tx_newspaper_ArticleList_Factory::getInstance()->create($latest['uid']);
+        $al = tx_newspaper_ArticleList_Factory::getInstance()->create(self::getLastArticleListUid());
         $al->store();
 
         $row = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist');
-        $this->assertEquals($old_count, count($row), 'Articlelist was stored only once.');
+        $this->assertEquals(self::$num_article_lists, count($row), 'Articlelist was stored only once.');
 
     }
 
-    private $dummySection;
+    private static function getLastArticleListUid() {
+        $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
+        self::$num_article_lists = count($row);
+        $latest = array_pop($row);
+        return intval($latest['uid']);
+    }
+
+
+    private $dummy_section;
+
+    private static $num_article_lists;
 
 }
 
