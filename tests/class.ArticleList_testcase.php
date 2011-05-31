@@ -23,7 +23,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 		} catch (tx_newspaper_Exception $e) {
 			$this->fail('Could not set attribute \'notes\' correctly: ' . $e->getMessage());
 		}
-        $al_copy = tx_newspaper_ArticleList_Factory::getInstance()->create($al->getAbstrictUid());
+        $al_copy = tx_newspaper_ArticleList_Factory::getInstance()->create($al->getAbstractUid());
         try {
             $this->assertEquals(
                 $al_copy->getAttribute('notes'), self::note_to_test,
