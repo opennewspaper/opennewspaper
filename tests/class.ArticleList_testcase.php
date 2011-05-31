@@ -20,7 +20,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 	        $al->setAttribute('notes', 'dummy-section-al');
 	        $al->store();
 		} catch (tx_newspaper_Exception $e) {
-			$this->fail('Could not set attribute \'notes\' correctly');
+			$this->fail('Could not set attribute \'notes\' correctly: ' . $e->getMessage());
 		}
 
     }
