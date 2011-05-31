@@ -35,7 +35,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $al->store();
 
         $row = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist');
-        $this->assertEquals($old_count+1, count($row), 'A duplicated articlelist was stored.');
+        $this->assertEquals($old_count, count($row), 'Articlelist was stored only once.');
 
     }
 
