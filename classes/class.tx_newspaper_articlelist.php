@@ -136,21 +136,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	/// \see tx_newspaper_StoredObject
 	public function setAttribute($attribute, $value) {
-		
-		if (!$this->abstract_attributes) {
-			$this->abstract_attributes = $this->getAbstractUid()? 
-				tx_newspaper::selectOneRow(
-					'*', 'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid()): 
-				array();
-		}
-		if (!$this->attributes) {
-			$this->attributes = $this->getUid()?
-				tx_newspaper::selectOneRow(
-					'*', $this->getTable(), 'uid = ' . $this->getUid()):
-				array();
-		}
 
-		if (!$this->attributes && $this->getUid()) {
+        $this->readAbstractAttributes();
+        $this->readAttributes();
+
+        if (!$this->attributes && $this->getUid()) {
 			$this->attributes = tx_newspaper::selectOneRow(
 					'*', tx_newspaper::getTable($this), 'uid = ' . $this->getUid()
 			);
@@ -165,7 +155,30 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 	}
 
-	/// \see tx_newspaper_StoredObject
+    private function readAbstractAttributes() {
+        if (!empty($this->abstract_attributes)) return;
+
+        if (!$this->getAbstractUid()) {
+            $this->setAbstractUid(
+                $this->createAbstractRecord($this->getUid(), $this->getTable())
+            );
+        }
+        if ($this->getAbstractUid()) {
+            $this->abstract_attributes = tx_newspaper::selectOneRow(
+                        '*', 'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid());
+        }
+    }
+
+    private function readAttributes() {
+        if (!empty($this->attributes)) return;
+
+        if ($this->getUid()) {
+            $this->attributes = tx_newspaper::selectOneRow(
+                        '*', $this->getTable(), 'uid = ' . $this->getUid());
+        }
+    }
+
+    /// \see tx_newspaper_StoredObject
 	public function store() {
 
 		if ($this->getUid()) {
@@ -178,11 +191,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			tx_newspaper::updateRows(
 				'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid(), $this->abstract_attributes
 			);
-			t3lib_div::devlog('store() update', 'newspaper', 0, array(tx_newspaper::$query));
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
-			t3lib_div::devlog('store() update', 'newspaper', 0, array(tx_newspaper::$query));
 		} else {
 			///	Store a newly created article list
 			/// \todo If the PID is not set manually, $tce->process_datamap() fails silently. 
@@ -193,12 +204,10 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 					$this->getTable(), $this->attributes
 				)
 			);
-			t3lib_div::devlog('store() insert', 'newspaper', 0, array(tx_newspaper::$query));
 		}
 
-		/// Ensure the article list has an entry in the abstract super table...
-		$articlelist_uid = $this->createArticleListRecord($this->getUid(), $this->getTable());
-		t3lib_div::devlog('store() createArticleListRecord', 'newspaper', 0, array(tx_newspaper::$query));
+		$articlelist_uid = $this->createAbstractRecord($this->getUid(), $this->getTable());
+
 		return $this->getUid();
 	}
 
@@ -347,9 +356,11 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \return UID of abstract ArticleList record
 	 *  \todo Does it need to be public?
 	 */ 
-	public function createArticleListRecord($uid, $table) {
-
-        if (self::isAbstractRecordPresent($uid, $table)) return;
+	public function createAbstractRecord($uid, $table) {
+        $uid = intval($uid);
+        if (!$uid) return 0;
+        
+        if ($al_uid = self::readAbstractRecordUid($uid, $table)) return $al_uid;
 
         $al_uid = tx_newspaper::insertRows(
             'tx_newspaper_articlelist',
@@ -494,12 +505,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
         return $row;
     }
 
-    private static function isAbstractRecordPresent($uid, $table) {
+    private static function readAbstractRecordUid($uid, $table) {
         $abstract_record = tx_newspaper::selectZeroOrOneRows(
             'uid', 'tx_newspaper_articlelist', "list_uid = $uid AND list_table = '$table'"
         );
 
-        return (!empty($abstract_record));
+        return (intval($abstract_record['uid']));
     }
 
     private static function getFieldsToCopyToAbstractTable($uid, $table) {
