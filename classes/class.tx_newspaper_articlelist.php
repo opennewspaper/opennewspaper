@@ -156,6 +156,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			);
 		}
 
+        tx_newspaper::debug("setAttribute: attributes " . print_r($this->attributes, 1) . ' ||| abstract_attributes' . print_r($this->abstract_attributes, 1))
 		if (array_key_exists($attribute, $this->abstract_attributes)) {
 			$this->abstract_attributes[$attribute] = $value;
 		} else {
