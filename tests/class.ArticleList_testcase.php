@@ -13,15 +13,25 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     public function tearDown() {
         $this->clearDatabase();
     }
-    
+
+    const note_to_test = 'dummy-section-al';
     public function test_SetAbstractArticleListAttribute() {
         $al = tx_newspaper_ArticleList_Factory::getInstance()->create(self::getLastArticleListUid());
 		try {
-	        $al->setAttribute('notes', 'dummy-section-al');
+	        $al->setAttribute('notes', self::note_to_test);
 	        $al->store();
 		} catch (tx_newspaper_Exception $e) {
 			$this->fail('Could not set attribute \'notes\' correctly: ' . $e->getMessage());
 		}
+        $al_copy = tx_newspaper_ArticleList_Factory::getInstance()->create($al->getAbstrictUid());
+        try {
+            $this->assertEquals(
+                $al_copy->getAttribute('notes'), self::note_to_test,
+                $al_copy->getAttribute('notes') . ' == ' . self::note_to_test);
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail('Could not read attribute \'notes\' correctly: ' . $e->getMessage());
+        }
+
 
     }
 
