@@ -495,7 +495,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
     private static function isAbstractRecordPresent($uid, $table) {
         $abstract_record = tx_newspaper::selectZeroOrOneRows(
-            'uid', 'tx_newspaper_articlelist', "list_uid = $uid AND list_table = $table"
+            'uid', 'tx_newspaper_articlelist', "list_uid = $uid AND list_table = '$table'"
         );
 
         return (!empty($abstract_record));
