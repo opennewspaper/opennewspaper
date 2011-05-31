@@ -347,38 +347,20 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 *  \todo Does it need to be public?
 	 */ 
 	public function createArticleListRecord($uid, $table) {
-		/// read typo3 fields to copy into article list super table
-		$row = tx_newspaper::selectOneRow(
-			implode(', ', self::$fields_to_copy_into_articlelist_table),
-			$table,
-			'uid = ' . intval($uid)
-		);
-	
-		/// write the uid and table into articlelist table, with the values read above
-		$row['list_uid'] = $uid;
-		$row['list_table'] = $table;
-		$row['tstamp'] = time();				///< tstamp is set to now
-		
-		// assign article list with section (if any)
-		if ($this->section) {
-			$row['section_id'] = $this->section->getUid();
-		}
 
-		$al_uid = tx_newspaper::insertRows('tx_newspaper_articlelist', $row);
-		
-		/// add article to section (if any)
-		if ($this->section) {
-			tx_newspaper::updateRows(
-				$this->section->getTable(), 
-				'uid=' . $this->section->getUid(),
-				array('articlelist' => $al_uid)	
-			);
-		}
+        if (self::isAbstractRecordPresent($uid, $table)) return;
 
-		return $al_uid; 		
+        $al_uid = tx_newspaper::insertRows(
+            'tx_newspaper_articlelist',
+            $this->prepareAbstractRecord($uid, $table)
+        );
+		
+        $this->addArticleListToSection($al_uid);
+
+        return $al_uid;
 	}
 
-	/// Get UID of abtract article list
+    /// Get UID of abtract article list
 	/** \return UID of abstract ArticleList record, or 0 if no record was found
 	 *  \todo Does it need to be public?
 	 */
@@ -482,7 +464,52 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			self::writeAbstractRecordIfNeeded($status, $table, $id, $that);
 		}
 	}
-	
+
+    private function prepareAbstractRecord($uid, $table) {
+        $row = self::getFieldsToCopyToAbstractTable($uid, $table);
+        $row = $this->fillFieldsForAbstractTable($uid, $row, $table);
+        return $row;
+    }
+
+    private function addArticleListToSection($al_uid) {
+        if ($this->section) {
+            tx_newspaper::updateRows(
+                $this->section->getTable(),
+                'uid=' . $this->section->getUid(),
+                array('articlelist' => $al_uid)
+            );
+        }
+    }
+
+    private function fillFieldsForAbstractTable($uid, $row, $table) {
+        $row['list_uid'] = $uid;
+        $row['list_table'] = $table;
+        $row['tstamp'] = time(); ///< tstamp is set to now
+
+        if ($this->section) {
+            $row['section_id'] = $this->section->getUid();
+        }
+
+        return $row;
+    }
+
+    private static function isAbstractRecordPresent($uid, $table) {
+        $abstract_record = tx_newspaper::selectZeroOrOneRows(
+            'uid', 'tx_newspaper_articlelist', "list_uid = $uid AND list_table = $table"
+        );
+
+        return (!empty($abstract_record));
+    }
+
+    private static function getFieldsToCopyToAbstractTable($uid, $table) {
+        return tx_newspaper::selectOneRow(
+			implode(', ', self::$fields_to_copy_to_abstract_table),
+			$table,
+			'uid = ' . intval($uid)
+		);
+    }
+
+
 	/// checks if an abstract record needs to be written after creating a concrete article list in the list module
 	/** \param $status Status of the current operation, 'new' or 'update
 	 *  \param $table The table currently processing data for
@@ -779,7 +806,7 @@ body {
 	private static $registered_savehooks = array();
 	
 	///	Fields which should be copied from the concrete to the abstract record
-	private static $fields_to_copy_into_articlelist_table = array(
+	private static $fields_to_copy_to_abstract_table = array(
 		'pid', 'crdate', 'cruser_id'
 	);
 
