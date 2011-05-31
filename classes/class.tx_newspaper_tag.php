@@ -246,15 +246,20 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * \param $limit Limits the number of articles (default is -1 = no limit)
 	 * \return Array with articles
 	 */
-    public function getArticles($limit=-1) {
-		$select_method_strategy = SelectMethodStrategy::create(true);
+    public function getArticles($limit=-1,$start=-1) {
+	$select_method_strategy = SelectMethodStrategy::create(true);
+	$lim="";
+	if ($limit>0) {
+		if ($start>=0) { $lim=$start.","; }
+		$lim.=$limit;
+	} 
     	$results = tx_newspaper::selectRows(
 			$select_method_strategy->fieldsToSelect(),
 			'tx_newspaper_article, tx_newspaper_article_tags_mm',
-			'tx_newspaper_article_tags_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local',
+			'tx_newspaper_article_tags_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local'.$sc,
 			'',
-			'',
-			($limit > 0)? $limit : ''
+			'publish_date DESC',
+			$lim
 		);
 
 		$articles = array();

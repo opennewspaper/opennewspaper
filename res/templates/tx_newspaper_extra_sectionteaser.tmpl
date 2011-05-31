@@ -2,14 +2,23 @@
 {* HTML
    Variables:
 
-   $html		contains the html chunk to be displayed
+   $section_or_ctrltag		contains either the string 'section' or 'ctrltag'
+   $id				if this is a section it contains the section-id,
+				if it's a controltag, the tag id
+   $cat				if this is a controltag it contains that tags category
+   $articles			contains an array with the selected article-objects
+   $num_articles		number of articles, if entered in backend
+   $num_articles_w_image	number of articles to be rendered with an image, if
+				entered in backend
 
-   $attributes          attributes as stored in DB. notable attributes include:
-                template 
+   $attributes          	attributes as stored in DB. notable attributes include:
+				template, description_text
 
-   $extra_attributes    attributes for abstract extra record as stored in DB
-
+   $extra_attributes    	attributes for abstract extra record as stored in DB
 *}
-{$html}
-
-<!-- start res/templates/tx_newspaper_extra_sectionteaser.tmpl -->
+{debug}
+{$section_or_ctrltag}: #{$id}
+{section name="i" loop=$articles}
+	{$articles[i]->getAttribute('uid')}{if !$smarty.section.i.last}, {/if}
+{/section}
+<!-- end res/templates/tx_newspaper_extra_sectionteaser.tmpl -->
