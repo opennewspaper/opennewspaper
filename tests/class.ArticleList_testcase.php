@@ -15,7 +15,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     }
     
     public function test_SetAbstractArticleListAttribute() {
-        $al = new tx_newspaper_ArticleList_Semiautomatic(0, $this->dummy_section);
+        $al = tx_newspaper_ArticleList_Factory::getInstance()->create(self::getLastArticleListUid());
 		try {
 	        $al->setAttribute('notes', 'dummy-section-al');
 	        $al->store();
