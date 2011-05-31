@@ -34,8 +34,9 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $al = tx_newspaper_ArticleList_Factory::getInstance()->create($latest['uid']);
         $al->store();
 
-        $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
+        $row = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist');
         $this->assertEquals($old_count+1, count($row), 'A duplicated articlelist was stored.');
+        print_r($row);
 
     }
 
