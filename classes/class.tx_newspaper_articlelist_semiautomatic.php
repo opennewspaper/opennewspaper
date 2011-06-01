@@ -706,7 +706,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */
 		$uids = $this->getRawArticleUIDs(2*$number, $start);
-        tx_newspaper::devlog("getArticlesAndOffsets($number, $start)", $uids);
 
         $offsets = $this->getOffsets($this->select_method_strategy->getUids($uids));
 		
@@ -743,10 +742,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				$this->selectLimit($start, $number)
 			);
 		} catch (tx_newspaper_DBException $e) {
+            tx_newspaper::devlog("error!!($number, $start)", tx_newspaper::$query);
 			//  This guards against article lists which use GET varaiables,
 			//	which are not set in the BE
 			$results = array();	
 		}
+        tx_newspaper::devlog("getRawArticleUIDs($number, $start)", $results);
 
         return $this->select_method_strategy->rawArticleUIDs($results);
 	}
