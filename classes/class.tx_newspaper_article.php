@@ -823,7 +823,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 			'sorting' => $newPosition
 		));
 
-		self::updateDependencyTree($this);
+		self::callSavehooks(array($this->getUid())); // dependency tree etc.
 
 		return true; // a new tag was attached to the article
     }
@@ -1469,6 +1469,30 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $article = new tx_newspaper_Article(intval($article_uid)); // get article
         return $article->getAttribute($attribute);
     }
+
+
+    /**
+	 * Calls savehooks for articles in order to reflect changes processed in savehooks
+	 * \param array $uids Article uids to call savehooks
+	 */
+	public static function callSavehooks(array $uids) {
+		foreach($uids as $uid) {
+			$uid = intval($uid);
+
+			// prepare datamap
+			// \todo: is using tstamp ok? the tstamp gets actually stored ...
+			$datamap['tx_newspaper_article'][$uid] = array('tstamp' => time());
+
+			// use datamap, so all save hooks get called
+			$tce = t3lib_div::makeInstance('t3lib_TCEmain');
+			$tce->start($datamap, array());
+			$tce->process_datamap();
+			if (count($tce->errorLog)){
+				throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+			}
+		}
+	}
+
 
     ////////////////////////////////////////////////////////////////////////////
     //

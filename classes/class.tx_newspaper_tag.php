@@ -133,24 +133,25 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     		return false; // no need to merge into itself ...
     	}
 
-    	// remove tag relations where this tag AND target tag are attached ()would create a duplicate entry otherwise)
+    	// store uids before removing duplicates (see below)
+    	$mergedArticleUids = $tagToBeMerged->getArticlesForTag();
+
+    	// remove tag relations where this tag AND tag to be merged are attached (would create a duplicate entry otherwise)
         $articleUids = $this->getArticlesForTag();
 //t3lib_div::devlog('tag::merge() get articles', 'newspaper', 0, array('articleUids' => $articleUids, 'q' => tx_newspaper::$query));
-
-        $mergedArticleUids = $tagToBeMerged->getArticlesForTag();
-
-        $tagToBeMerged->removeTagFromArticles($articleUids);
+        $tagToBeMerged->removeMergedDuplicateTagsFromArticles($articleUids);
 //t3lib_div::devlog('tag::merge() delete duplicates', 'newspaper', 0, array('q' => tx_newspaper::$query));
 
-        $this->updateRelationsForMergedTag($tagToBeMerged);
+		$this->updateRelationsForMergedTag($tagToBeMerged);
         //t3lib_div::devlog('tag::merge() merge tag', 'newspaper', 0, array('q' => tx_newspaper::$query));
-
-        $tagToBeMerged->updateDependencyTree($mergedArticleUids);
 
 		// delete tag to be merged
 		if (!$tagToBeMerged->delete()) {
 			return false;
 		}
+
+		tx_newspaper_article::callSavehooks($mergedArticleUids);
+
 //t3lib_div::devlog('tag::merge() delete tag to be merged', 'newspaper', 0, array('q' => tx_newspaper::$query));
 		$tagToBeMerged = null; // set tag to null, this tag does not exist anymore
 
@@ -252,7 +253,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	if ($limit>0) {
 		if ($start>=0) { $lim=$start.","; }
 		$lim.=$limit;
-	} 
+	}
     	$results = tx_newspaper::selectRows(
 			$select_method_strategy->fieldsToSelect(),
 			'tx_newspaper_article, tx_newspaper_article_tags_mm',
@@ -286,11 +287,22 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      */
     public function detach() {
     	foreach (self::$mmTables as $table) {
+    		if ($table == 'tx_newspaper_article_tags_mm') {
+    			// store article uids, so savehooks can be called later
+				$articleUids = tx_newspaper::selectRows(
+					'uid_local',
+					$table,
+					'uid_foreign=' . $this->getUid()
+				);
+    		}
 			tx_newspaper::deleteRows(
 				$table,
 				array($this->getUid()),
 				'uid_foreign'
 			);
+    		if ($table == 'tx_newspaper_article' && $articleUids) {
+				tx_newspaper_article::callSavehooks($articleUids);
+    		}
     	}
     }
 
@@ -594,7 +606,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     }
 
     /// remove tag to be merged from articles where this (=target) tag has already been attached
-    private function removeTagFromArticles(array $articleUids) {
+    private function removeMergedDuplicateTagsFromArticles(array $articleUids) {
         if ($articleUids) {
             tx_newspaper::deleteRows(
                 self::article2tag_table,
