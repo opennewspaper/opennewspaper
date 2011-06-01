@@ -182,7 +182,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function getArticles($number, $start = 0) {
 		$articles_sorted = $this->getSortedArticles($number, $start);
-        tx_newspaper::devlog("getArticles($number, $start)", $articles_sorted);
 
 		$articles = array();
 		foreach ($articles_sorted as $i => $article) {
@@ -691,7 +690,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	private function getSortedArticles($number, $start = 0) {
 		
 		$articles = $this->getArticlesAndOffsets($number, $start);
-		
+        tx_newspaper::devlog("getSortedArticles($number, $start)", $articles);
+
 		$articles_sorted = $this->sortArticles($articles);
 		$articles = array();
 		foreach ($articles_sorted as $i => $article) {
