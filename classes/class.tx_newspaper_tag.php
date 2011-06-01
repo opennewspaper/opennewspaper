@@ -259,7 +259,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         $this->setDossierGETParameter();
         $articles = $article_list->getArticles($limit, $start);
         self::resetDossierGETParameter();
-
+tx_newspaper::devlog("getArticlesForDossierTag", $articles);
         return $articles;
     }
 
