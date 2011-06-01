@@ -696,7 +696,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		foreach ($articles_sorted as $i => $article) {
 			$articles[] = array($article['article']->getUid(), $article['offset']);
 		}
-#		t3lib_div::devlog('getSortedArticles()', 'newspaper', 0, array('uids'=>$uids, 'offsets' => $offsets, 'articles' => $articles));
 
 		return array_slice($articles_sorted, 0, $number);
 	}
@@ -731,7 +730,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	public function getRawArticleUIDs($number, $start = 0) {
 
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
-        tx_newspaper::devlog("getRawArticleUIDs($number, $start): enter");
 
 		try {
 			$results = tx_newspaper::selectRowsDirect(
@@ -742,9 +740,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				$this->selectOrderBy(),
 				$this->selectLimit($start, $number)
 			);
-            tx_newspaper::devlog("getRawArticleUIDs($number, $start)", $results);
 		} catch (tx_newspaper_DBException $e) {
-            tx_newspaper::devlog("error!!($number, $start)", tx_newspaper::$query);
 			//  This guards against article lists which use GET varaiables,
 			//	which are not set in the BE
 			$results = array();	
