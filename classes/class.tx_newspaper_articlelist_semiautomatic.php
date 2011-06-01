@@ -734,7 +734,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
         tx_newspaper::devlog("getRawArticleUIDs($number, $start): enter");
 
 		try {
-			$results = tx_newspaper::selectRows(
+			$results = tx_newspaper::selectRowsDirect(
 				$this->select_method_strategy->selectFields(),
 				$this->selectTable(),
 				$this->selectWhere(),
