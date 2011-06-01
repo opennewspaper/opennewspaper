@@ -287,7 +287,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      */
     public function detach() {
     	foreach (self::$mmTables as $table) {
-    		if ($table == 'tx_newspaper_article_tags_mm') {
+    		if ($table == self::article2tag_table) {
     			// store article uids, so savehooks can be called later
 				$articleUids = tx_newspaper::selectRows(
 					'uid_local',
@@ -300,7 +300,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 				array($this->getUid()),
 				'uid_foreign'
 			);
-    		if ($table == 'tx_newspaper_article' && $articleUids) {
+    		if ($table == self::article2tag_table && $articleUids) {
 				tx_newspaper_article::callSavehooks($articleUids);
     		}
     	}
