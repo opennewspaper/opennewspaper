@@ -823,6 +823,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 			'sorting' => $newPosition
 		));
 
+		self::updateDependencyTree($this);
+
 		return true; // a new tag was attached to the article
     }
 
