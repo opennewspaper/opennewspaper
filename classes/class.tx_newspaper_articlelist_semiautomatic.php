@@ -731,7 +731,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	public function getRawArticleUIDs($number, $start = 0) {
 
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
-		
+        tx_newspaper::devlog("getRawArticleUIDs($number, $start): enter");
+
 		try {
 			$results = tx_newspaper::selectRows(
 				$this->select_method_strategy->selectFields(),
