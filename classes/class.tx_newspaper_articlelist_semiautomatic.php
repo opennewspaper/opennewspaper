@@ -690,7 +690,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	private function getSortedArticles($number, $start = 0) {
 		
 		$articles = $this->getArticlesAndOffsets($number, $start);
-        tx_newspaper::devlog("getSortedArticles($number, $start)", $articles);
 
 		$articles_sorted = $this->sortArticles($articles);
 		$articles = array();
@@ -707,6 +706,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */
 		$uids = $this->getRawArticleUIDs(2*$number, $start);
+        tx_newspaper::devlog("getArticlesAndOffsets($number, $start)", $uids);
 
         $offsets = $this->getOffsets($this->select_method_strategy->getUids($uids));
 		
