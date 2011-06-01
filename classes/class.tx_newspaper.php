@@ -580,7 +580,7 @@ class tx_newspaper  {
 
     /// show everything but deleted records in backend, if deleted flag is existing for given table
     if (isset($GLOBALS['TCA'][$table]['ctrl']['delete']))
-      return ' AND ' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
+      return ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
 
     return '';
   }
