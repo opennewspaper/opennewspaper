@@ -572,7 +572,6 @@ class tx_newspaper  {
 
 		$enableFields = '';
 		foreach($allTables as $table) {
-tx_newspaper::devlog($table);
 			if (strpos($table, ' ') != false) {
 				// cut of alias (if any)
 				$table = substr($table, 0, strpos($table, ' '));
