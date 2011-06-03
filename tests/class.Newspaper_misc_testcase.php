@@ -14,7 +14,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 	}
 
 	//	exceptions
-	
+
 	public function test_NoResException() {
 		$this->setExpectedException('tx_newspaper_NoResException');
 		throw new tx_newspaper_NoResException('');
@@ -43,15 +43,15 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 	}
 
 	//	smarty
-	
+
 	public function test_getAvailableTemplateSets() {
 		$basepath = PATH_site . 'fileadmin/templates/newspaper/';
-		
+
 		$template_sets_to_test = array('default', 'test_templateset');
 		foreach ($template_sets_to_test as $ts) {
 			if (!file_exists($basepath . 'template_sets/' . $ts)) mkdir ($basepath . 'template_sets/' . $ts, 0777, true);
 		}
-		
+
 		$available_template_sets = tx_newspaper_Smarty::getAvailableTemplateSets();
 		foreach ($template_sets_to_test as $ts) {
 			if (!in_array($ts, $available_template_sets)) {
@@ -65,7 +65,31 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 			if (is_dir($basepath . 'template_sets/' . $ts) &&
 			 	false) rmdir ($basepath . 'template_sets/' . $ts);
 		}
-				
+
 	}
+
+
+
+
+	// database functions
+
+	public function test_EnableFields1() {
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article'), ' AND tx_newspaper_article.deleted=0');
+	}
+	public function test_EnableFields2() {
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article AS a'), ' AND tx_newspaper_article.deleted=0');
+	}
+	public function test_EnableFields3() {
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_article_sections_mm mm'), ' AND tx_newspaper_article.deleted=0');
+	}
+	public function test_EnableFields4() {
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_section'), ' AND tx_newspaper_article.deleted=0 AND tx_newspaper_section.deleted=0');
+	}
+	public function test_EnableFields5() {
+		$this->assertEquals(tx_newspaper::enableFields('nonexistingtable'), '');
+	}
+
+
+
 }
 ?>

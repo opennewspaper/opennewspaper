@@ -552,37 +552,53 @@ class tx_newspaper  {
     return $array;
   }
 
-  /// \c WHERE clause to filter out unwanted records
-  /** Returns a part of a \c WHERE clause which will filter out records with
-   *  start/end times, deleted flag set, or hidden flag set (if hidden should
-   *  be included used); switch for BE/FE is included.
-   *
-   *  \param $table name of db table to check
-   *  \param $show_hidden [0|1] specifies if hidden records are to be included
-   * 		(ignored if in FE)
-   *  \return \c WHERE part of an SQL statement starting with \c AND; or an
-   * 		empty string, if not applicable.
-   */
-  static public function enableFields($table, $show_hidden = 1) {
-    global $TCA;
-    t3lib_div::loadTCA($table);
-    if (!isset($TCA[$table])) return '';
+	/// \c WHERE clause to filter out unwanted records
+	/** Returns a part of a \c WHERE clause which will filter out records with
+	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
+	 *  be included used); switch for BE/FE is included.
+	 *
+	 *  \param $tableString name of db table to check (can be a comma separated
+	 *         list of tables too)
+	 *  \param $show_hidden [0|1] specifies if hidden records are to be included
+	 * 		(ignored if in FE)
+	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an
+	 * 		empty string, if not applicable.
+	 */
+	static public function enableFields($tableString, $show_hidden = 1) {
+	    require_once(PATH_t3lib . '/class.t3lib_page.php');
 
-    require_once(PATH_t3lib . '/class.t3lib_page.php');
+	    // might be a comma separated list of tables
+		$allTables = explode(',', $tableString);
 
-    if (TYPO3_MODE == 'FE') {
-      // use values defined in admPanel config (override given $show_hidden param)
-      // see: enableFields() in t3lib_pageSelect
-      $show_hidden = ($table=='pages')? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
-      $p = t3lib_div::makeInstance('t3lib_pageSelect');
-      return $p->enableFields($table, $show_hidden);
-    }
+		$enableFields = '';
+		foreach($allTables as $table) {
+tx_newspaper::devlog($table);
+			if (strpos($table, ' ') != false) {
+				// cut of alias (if any)
+				$table = substr($table, 0, strpos($table, ' '));
+			}
+			$table = trim($table);
 
-    /// show everything but deleted records in backend, if deleted flag is existing for given table
-    if (isset($GLOBALS['TCA'][$table]['ctrl']['delete']))
-      return ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
+			t3lib_div::loadTCA($table); // make sure tca is available
 
-    return '';
+			if (isset($GLOBALS['TCA'][$table])) {
+				if (TYPO3_MODE == 'FE') {
+					// use values defined in admPanel config (override given $show_hidden param)
+					// see: enableFields() in t3lib_pageSelect
+					$show_hidden = ($table=='pages')? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
+					$p = t3lib_div::makeInstance('t3lib_pageSelect');
+					$enableFields .= $p->enableFields($table, $show_hidden);
+	    		} else {
+					// Show everything but deleted records in backend, if deleted flag is existing for given table
+    				if (isset($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
+      					$enableFields .= ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
+    				}
+	    		}
+			}
+
+		}
+
+    	return $enableFields;
   }
 
   /// Gets sorting position for next element in a MM table
