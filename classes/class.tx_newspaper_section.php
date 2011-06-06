@@ -561,9 +561,9 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	public function getArticles($limit=10) {
 		$limit = intval($limit);
 		$row = tx_newspaper::selectRows(
-			'mm.uid_local',
-			'tx_newspaper_article_sections_mm mm, tx_newspaper_article a',
-			'mm.uid_foreign=' . $this->getUid() . ' AND mm.uid_foreign=a.uid AND a.deleted=0',
+			'tx_newspaper_article_sections_mm.uid_local',
+			'tx_newspaper_article_sections_mm, tx_newspaper_article',
+			'tx_newspaper_article_sections_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article_sections_mm.uid_local=tx_newspaper_article.uid',
 			'',
 			'',
 			$limit
