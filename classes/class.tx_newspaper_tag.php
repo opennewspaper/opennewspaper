@@ -270,7 +270,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         if ($section instanceof tx_newspaper_Section) {
             return $section->getArticleList();
         }
-        
+
         return null;
     }
 
@@ -293,22 +293,15 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         self::$saved_get = array();
     }
 
-    private function getArticlesOld($limit, $start) {
+    private function getArticlesOld($limit, $start=0) {
         $select_method_strategy = SelectMethodStrategy::create(true);
-        $lim = "";
-        if ($limit > 0) {
-            if ($start >= 0) {
-                $lim = $start . ",";
-            }
-            $lim .= $limit;
-        }
         $results = tx_newspaper::selectRows(
             $select_method_strategy->fieldsToSelect(),
             'tx_newspaper_article, tx_newspaper_article_tags_mm',
             'tx_newspaper_article_tags_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local',
             '',
             'publish_date DESC',
-            $lim
+            ($limit > 0)? "$start, $limit" : ''
         );
 
         $articles = array();
