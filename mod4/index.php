@@ -991,8 +991,8 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		$msg = '';
 		$row = tx_newspaper::selectRows(
 			'uid, articlelist',
-			'tx_newspaper_section s',
-			's.articlelist NOT IN (SELECT uid FROM tx_newspaper_articlelist al WHERE al.deleted=0) AND deleted=0'
+			'tx_newspaper_section',
+			'tx_newspaper_section.articlelist NOT IN (SELECT uid FROM tx_newspaper_articlelist WHERE tx_newspaper_articlelist.deleted=0)'
 		);
 
 		$msg = '';
@@ -1014,12 +1014,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		$row = tx_newspaper::selectRows(
 			'*',
 			'tx_newspaper_extra',
-			'NOT uid in (SELECT uid_foreign FROM `tx_newspaper_pagezone_page_extras_mm`)
-			 AND NOT uid in (SELECT uid_foreign FROM `tx_newspaper_article_extras_mm`)
-			 AND NOT deleted
-			 AND NOT extra_table = "tx_newspaper_article"
-			 AND NOT extra_table = "tx_newspaper_pagezone_page" ',
-			 '', 'uid'
+			'NOT uid in (SELECT uid_foreign FROM tx_newspaper_pagezone_page_extras_mm)
+			 AND NOT uid in (SELECT uid_foreign FROM tx_newspaper_article_extras_mm)
+			 AND NOT extra_table="tx_newspaper_article"
+			 AND NOT extra_table="tx_newspaper_pagezone_page" ',
+			 '',
+			 'uid'
 		);
 
 		if (!$row) return true; // no problems found
@@ -1082,11 +1082,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		// deleted flag set?
 		$row = tx_newspaper::selectRows(
-			'mm.*, e.extra_table, e.extra_uid',
-			$mm_table . ' mm INNER JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid',
-			'e.deleted=1',
+			$mm_table . '.*, tx_newspaper_extra.extra_table, tx_newspaper_extra.extra_uid',
+			$mm_table . ' INNER JOIN tx_newspaper_extra ON ' . $mm_table . '.uid_foreign=tx_newspaper_extra.uid',
+			'1',
 			'',
-			'mm.uid_foreign'
+			$mm_table . '.uid_foreign'
 		);
 //t3lib_div::debug(array(tx_newspaper::$query, $row));
 		if (sizeof($row) > 0) {
@@ -1098,11 +1098,11 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		// abstract extra deleted?
 		$row = tx_newspaper::selectRows(
-			'mm.*, e.uid',
-			$mm_table . ' mm LEFT JOIN tx_newspaper_extra e ON mm.uid_foreign=e.uid',
-			'e.uid IS NULL', // check if extra record is missing completely
+			$mm_table . '.*, tx_newspaper_extra.uid',
+			$mm_table . ' LEFT JOIN tx_newspaper_extra ON ' . $mm_table . '.uid_foreign=tx_newspaper_extra.uid',
+			'tx_newspaper_extra.uid IS NULL', // check if extra record is missing completely
 			'',
-			'mm.uid_foreign'
+			$mm_table . '.uid_foreign'
 		);
 //t3lib_div::debug(array(tx_newspaper::$query, $row));
 		if (sizeof($row) > 0) {
@@ -1130,7 +1130,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		$row = tx_newspaper::selectRows(
 			'uid,workflow_status',
 			'tx_newspaper_article',
-			'deleted=0 AND workflow_status NOT IN (' . $role_ids . ')',
+			'workflow_status NOT IN (' . $role_ids . ')',
 			'',
 			'uid'
 		);
