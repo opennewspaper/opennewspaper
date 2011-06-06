@@ -511,8 +511,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			if ($where_section === false) {
 				return false; // no matching section found, so not article in search result
 			}
-			$table = 'tx_newspaper_article a, tx_newspaper_article_sections_mm mm';
-			$where['section'] = 'a.uid=mm.uid_local AND mm.uid_foreign IN (' . $where_section . ')'; //
+			$table = 'tx_newspaper_article, tx_newspaper_article_sections_mm';
+			$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')'; //
 		} else {
 			$table = 'tx_newspaper_article';
 		}
@@ -566,7 +566,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				if (trim($this->input['text']) == '#' . $uid) {
 					// text contains a query like #[int], so search for this uid ONLY
 					$where['uid'] = $uid;
-					$table = 'tx_newspaper_article a';
+					$table = 'tx_newspaper_article';
 					return array(
 						'table' => $table,
 						'where' => 'uid=' . $uid
