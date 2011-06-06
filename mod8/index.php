@@ -194,8 +194,8 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 							break;
 						case 3:
 							$smarty->assign('ICON', array(
-								'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
-								'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '')
+								'undo' => tx_newspaper_BE::renderIcon('gfx/undo.gif', ''),
+								'save' => tx_newspaper_BE::renderIcon('gfx/saveandclosedok.gif', '')
 							));
 							$content .= $smarty->fetch('mod8_renameTag.tmpl');
 							$title = 'renameTags';
