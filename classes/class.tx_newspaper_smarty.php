@@ -187,48 +187,29 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 	 *  \return The rendered template as HTML (or XML, whatever your template does) 
 	 */
 	public function fetch($template) {
-		if (is_object($template)) {
-			$template = strtolower(get_class($template)) . '.tmpl';
-		}
-		
-		$this->assembleSearchPath();
-self::debug_search_path && t3lib_div::devlog("template search path", "np", 0, array ('template' => $template, 'search path' => $this->templateSearchPath));
-	
-		foreach ($this->templateSearchPath as $dir) {
-			//	if not absolute path, prepend $this->basepath
-			$dir = tx_newspaper::createAbsolutePath($dir, $this->basepath);
-			
-			//	if required template exists in current dir, use this dir
-			if (file_exists($dir . '/' . $template)) {
-				$compile_dir = str_replace($this->basepath, '', $dir);
-				$this->compile_dir .= $compile_dir;
-				file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
-				
-self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath' => $this->basepath, 'template' => $dir . '/' . $template, 'compile dir' => $this->compile_dir));
-				$this->template_dir = $dir;	
-				
-				break;
-			}
-		}
-		
-		if (TYPO3_MODE == 'FE') {
-			//	log the template search path and the used template to admin panel
-			$GLOBALS['TT']->setTSlogMessage('Smarty template search path: ' .
-											print_r($this->templateSearchPath, 1));
-			$GLOBALS['TT']->setTSlogMessage('Smarty template used: ' . $this->template_dir . '/' . $template);
-		}
-		
-		return parent::fetch($template);
+        self::ensureIsTemplateName($template);
+
+        $this->assembleSearchPath();
+
+        $this->findTemplateDir($template);
+
+        $this->logToAdminPanel($template);
+
+        return parent::fetch($template);
 	}
-		
-	////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private function setWorkDirectories() {
         $tmp = PATH_site . 'typo3temp/';
+
         file_exists($tmp . 'smarty_cache') || mkdir($tmp . 'smarty_cache', 0774, true);
         $this->cache_dir    = $tmp . 'smarty_cache';
+
         file_exists($tmp . 'smarty_compile') || mkdir($tmp . 'smarty_compile', 0774, true);
         $this->compile_dir  = $tmp . 'smarty_compile';
+        $this->compile_base_dir = $this->compile_dir;
+
         file_exists($tmp . 'smarty_config') || mkdir($tmp . 'smarty_config', 0774, true);
         $this->config_dir   = $tmp . 'smarty_config';
     }
@@ -323,8 +304,7 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 		if (!is_dir($this->getTemplateSetFolder())) return false;
 		return true;
 	}
-	
-	
+
 	private function getPageName() {
 		if ($this->pagetype) {
 			$page_name = $this->pagetype->getAttribute('normalized_name')?
@@ -349,14 +329,12 @@ self::debug_search_path && t3lib_div::devlog("found", "np", 0, array ('basepath'
 			$this->setTemplateSet();
 		}
 
-self::debug_search_path && tx_newspaper::devlog("pagezoneTemplates $page_template_dir");
-
 		$temporary_searchpath = array();
 
 		if ($this->pagezonetype) {
 			$pagezone_name = $this->getPageZoneName();
 			$pagezone_template_dir = $page_template_dir . '/'. $pagezone_name;
-self::debug_search_path && tx_newspaper::devlog($pagezone_template_dir);
+
 			if (file_exists($pagezone_template_dir) && is_dir($pagezone_template_dir)) {
 				$temporary_searchpath[] = $pagezone_template_dir;
 			}
@@ -394,12 +372,59 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
 
 		return $temporary_searchpath;
 	}
-	
+
+    private function logToAdminPanel($template) {
+        if (TYPO3_MODE == 'FE') {
+            //	log the template search path and the used template to admin panel
+            $GLOBALS['TT']->setTSlogMessage('Smarty template search path: ' .
+                                            print_r($this->templateSearchPath, 1));
+            $GLOBALS['TT']->setTSlogMessage('Smarty template used: ' . $this->template_dir . '/' . $template);
+        }
+    }
+
+    private function findTemplateDir($template) {
+        foreach ($this->templateSearchPath as $dir) {
+            //	if not absolute path, prepend $this->basepath
+            $dir = tx_newspaper::createAbsolutePath($dir, $this->basepath);
+
+            //	if required template exists in current dir, use this dir
+            if ($this->checkIsTemplateDir($dir, $template)) {
+                $this->useTemplateDir($dir);
+                return;
+            }
+        }
+    }
+
+    private function checkIsTemplateDir($dir, $template) {
+			//	if not absolute path, prepend $this->basepath
+			$dir = tx_newspaper::createAbsolutePath($dir, $this->basepath);
+
+			//	if required template exists in current dir, use this dir
+			return (file_exists($dir . '/' . $template));
+    }
+
+    private function useTemplateDir($dir) {
+        $compile_dir = str_replace($this->basepath, '', $dir);
+        $this->compile_dir = $this->compile_base_dir . '/' . $compile_dir;
+        file_exists($this->compile_dir) || mkdir($this->compile_dir, 0774, true);
+
+        $this->template_dir = $dir;
+    }
+
+    private static function ensureIsTemplateName(&$template) {
+        if (is_object($template)) {
+            $template = strtolower(get_class($template)) . '.tmpl';
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
 	private $templateset = '';
 	private $pagetype = null;
 	private $pagezonetype = null;
 
 	private $basepath = '';
+    private $compile_base_dir = '';
 	
 	private $templateSearchPath = array();
 
