@@ -627,6 +627,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			/// If the attributes are not yet in memory, read them now
 			$this->getAttribute('uid');
 
+            tx_newspaper::setDefaultFields($this, array('tstamp'));
+
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
@@ -644,8 +646,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 				);
 			}
 
-			//	Make sure the Extra is stored in the correct SysFolder
-			$this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
+            tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
+
 			//	Write data for concrete Extra
 			$this->setUid(
 				tx_newspaper::insertRows(

@@ -185,7 +185,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			// read attributes initially
 			if (!$this->attributes) {
 				$this->readAttributes($this->getTable(), $this->getUid());
-			}			
+			}
 			
 			tx_newspaper::updateRows(
 				'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid(), $this->abstract_attributes
@@ -194,9 +194,8 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
 		} else {
-			///	Store a newly created article list
-			/// \todo If the PID is not set manually, $tce->process_datamap() fails silently. 
-			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+			/// \todo If the PID is not set manually, $tce->process_datamap() fails silently.
+            tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
 
 			$this->setUid(
 				tx_newspaper::insertRows(

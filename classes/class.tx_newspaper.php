@@ -542,15 +542,15 @@ class tx_newspaper  {
       return $fields;
   }
 
-  /// Returns an array which has the fields of SQL table \p $table as keys
-  public static function makeArrayFromFields($table) {
-    $fields = self::getFields($table);
-    $array = array();
+    /// Returns an array which has the fields of SQL table \p $table as keys
+    public static function makeArrayFromFields($table) {
+        $fields = self::getFields($table);
+        $array = array();
 
-    foreach ($fields as $field) $array[$field] = null;
+        foreach ($fields as $field) $array[$field] = null;
 
-    return $array;
-  }
+        return $array;
+    }
 
 	/// \c WHERE clause to filter out unwanted records
 	/** Returns a part of a \c WHERE clause which will filter out records with
@@ -598,42 +598,71 @@ class tx_newspaper  {
 		}
 
     	return $enableFields;
-  }
-
-  /// Gets sorting position for next element in a MM table
-  /** \param $table name of MM table
-   *  \param $uid_local
-   *  \return sorting position of element inserted as last element
-   */
-  public static function getLastPosInMmTable($table, $uid_local) {
-    $row = self::selectRows(
-      'MAX(sorting) AS max_sorting',
-      $table,
-      'uid_local=' . intval($uid_local)
-    );
-    return intval($row[0]['max_sorting']);
-  }
-
-  /// Check if at least one record exists in given table
-  /**  Enable fields for BE/FE are taken into account.
-   *
-   *  \return \c true, if at least one record availabe in given table
-   */
-  public static function atLeastOneRecord($table) {
-    try {
-      self::selectOneRow(
-        'uid',
-        $table,
-        '1',
-        '',
-        '',
-        1
-      );
-      return true;
-    } catch (tx_newspaper_EmptyResultException $e) {
-      return false;
     }
-  }
+
+    /// Gets sorting position for next element in a MM table
+    /** \param $table name of MM table
+     *  \param $uid_local
+     *  \return sorting position of element inserted as last element
+     */
+    public static function getLastPosInMmTable($table, $uid_local) {
+        $row = self::selectRows(
+          'MAX(sorting) AS max_sorting',
+          $table,
+          'uid_local=' . intval($uid_local)
+        );
+        return intval($row[0]['max_sorting']);
+    }
+
+    /// Check if at least one record exists in given table
+    /**  Enable fields for BE/FE are taken into account.
+     *
+     *  \return \c true, if at least one record availabe in given table
+     */
+    public static function atLeastOneRecord($table) {
+        try {
+          self::selectOneRow(
+            'uid',
+            $table,
+            '1',
+            '',
+            '',
+            1
+          );
+          return true;
+        } catch (tx_newspaper_EmptyResultException $e) {
+          return false;
+        }
+    }
+
+    public static function setDefaultFields(tx_newspaper_StoredObject &$object, array $fields) {
+        foreach (self::getDefaultFieldValues($fields) as $attribute => $value) {
+            $object->setAttribute($attribute, $value);
+        }
+        $object->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($object));
+    }
+
+    public static function getDefaultFieldValues(array $fields) {
+        $values = array();
+        foreach($fields as $field) {
+          if (isset(self::$defaultFields[$field])) {
+            $function = self::$defaultFields[$field];
+            $values[$field] = self::$function();
+          }
+        }
+
+        return $values;
+    }
+
+  private static $defaultFields = array(
+      'tstamp' => 'getTimestamp',
+      'crdate' => 'getTimestamp',
+      'cruser_id' => 'getBeUserID',
+      'modification_user' => 'getBeUserID',
+  );
+
+  private static function getTimestamp() { return time(); }
+  private static function getBeUserID() { return tx_newspaper::getBeUserUid(); }
 
     ////////////////////////////////////////////////////////////////////////////
     //      Logging functions

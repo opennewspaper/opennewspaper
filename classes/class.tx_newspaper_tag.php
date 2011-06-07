@@ -226,19 +226,23 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      */
     public function addExtraToTagzone(tx_newspaper_extra $extra, $tz_uid) {
     	$tz_uid = intval($tz_uid);
-    	if ($tz_uid) {
-    		$uid = tx_newspaper::insertRows(self::ctrltag_to_extra, array(
-				'tag' => $this->getUid(),
-				'extra' => $extra->getExtraUid(),
-				'tag_zone' => $tz_uid,
-				'pid' => tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_tag()),
-				'crdate' => time(),
-				'tstamp' => time(),
-				'cruser_id' => tx_newspaper::getBeUserUid()
-			));
-			return true;
+    	if (!$tz_uid) {
+            return false;
     	}
-    	return false;
+
+        $uid = tx_newspaper::insertRows(
+            self::ctrltag_to_extra,
+            array_merge(
+                array(
+                    'tag' => $this->getUid(),
+                    'extra' => $extra->getExtraUid(),
+                    'tag_zone' => $tz_uid,
+                    'pid' => tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_tag()),
+                ),
+                tx_newspaper::getDefaultFieldValues(array('crdate', 'tstamp', 'cruser_id'))
+            )
+        );
+        return true;
     }
 
 	/**
@@ -298,7 +302,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * \param $limit Limits the number of articles (default is 1000000)
 	 * \return Array with articles
 	 */
-    private function getArticlesDirect($limit=1000000, $start=0) {
+    private function getArticlesDirect($limit = 1000000, $start = 0) {
         $select_method_strategy = SelectMethodStrategy::create(true);
         $results = tx_newspaper::selectRows(
             $select_method_strategy->fieldsToSelect(),
@@ -442,26 +446,11 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      * @throws tx_newspaper_IllegalUsageException
      */
 	public function store() {
-        if(!$this->getAttribute('tag') || trim($this->getAttribute('tag')) === '' || !$this->getAttribute('tag_type') ) {
-            $message = '[tag: \''.$this->getAttribute('tag') .'\', type: \'' . !$this->getAttribute('tag_type') .'\]';
-            $message = 'Can not store tag, it has no content or type. '.$message;
-            throw new tx_newspaper_IllegalUsageException($message);
-        }
-
-		if(self::getControlTagType() === intval($this->getAttribute('tag_type'))) {
-			if(!$this->getAttribute('ctrltag_cat')) {
-				throw new tx_newspaper_IllegalUsageException('[tag: \''.$this->getAttribute('tag').'\' has no category');
-			}
-		}
+        $this->checkTagValid();
 
 		if (!$this->attributes) $this->readAttributesFromDB();
 
-		// check if tag has been stored in the database already
-        $where = 'tag = \'' . $this->getAttribute('tag') . '\' AND tag_type = ' . $this->getAttribute('tag_type');
-		if($this->getAttribute('tag_type') === self::getControlTagType()) {
-			$where .= ' AND ctrltag_cat = ' . intval($this->getAttribute('ctrltag_cat'));
-		}
-		$result = tx_newspaper::selectRows('*', $this->getTable(), $where);
+        $result = $this->readThisFromDB();
 
         if(count($result) > 0) {
 			// process existing tag
@@ -475,17 +464,37 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 				tx_newspaper::updateRows($this->getTable(), 'uid=' . $this->getUid(), $data); // and store data
 			}
         } else {
-        	// store new tag
-            $createTime = time();
-            $this->setAttribute('crdate', $createTime);
-		    $this->setAttribute('tstamp', $createTime);
-            $this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
-            $this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
+            tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
+        	$this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
         return $this->getUid();
 	}
 
-	public function getTagType() {
+    /// check if tag has been stored in the database already
+    private function readThisFromDB() {
+        $where = 'tag = \'' . $this->getAttribute('tag') . '\' AND tag_type = ' . $this->getAttribute('tag_type');
+        if ($this->getAttribute('tag_type') === self::getControlTagType()) {
+            $where .= ' AND ctrltag_cat = ' . intval($this->getAttribute('ctrltag_cat'));
+        }
+
+        return tx_newspaper::selectRows('*', $this->getTable(), $where);
+    }
+
+    private function checkTagValid() {
+        if (!$this->getAttribute('tag') || trim($this->getAttribute('tag')) === '' || !$this->getAttribute('tag_type')) {
+            $message = '[tag: \'' . $this->getAttribute('tag') . '\', type: \'' . !$this->getAttribute('tag_type') . '\]';
+            $message = 'Can not store tag, it has no content or type. ' . $message;
+            throw new tx_newspaper_IllegalUsageException($message);
+        }
+
+        if (self::getControlTagType() === intval($this->getAttribute('tag_type'))) {
+            if (!$this->getAttribute('ctrltag_cat')) {
+                throw new tx_newspaper_IllegalUsageException('[tag: \'' . $this->getAttribute('tag') . '\' has no category');
+            }
+        }
+    }
+
+    public function getTagType() {
 		return $this->getAttribute('tag_type');
 	}
 

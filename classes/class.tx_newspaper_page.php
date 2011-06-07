@@ -155,6 +155,8 @@ class tx_newspaper_Page
 			/// If the attributes are not yet in memory, read them now
 			if (!$this->attributes) $this->readAttributesFromDB();
 
+            tx_newspaper::setDefaultFields($this, array('tstamp'));
+
 			tx_newspaper::updateRows(
 				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
 			);
@@ -164,7 +166,7 @@ class tx_newspaper_Page
 			/** \todo If the PID is not set manually, $tce->process_datamap()
 			 * 		  fails silently.
 			 */
-			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
+            tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
 
 			$this->setUid(
 				tx_newspaper::insertRows(

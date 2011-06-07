@@ -121,66 +121,81 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 	
 	
+    /** \todo ensure page zone type is stored correctly
+     *  \todo store Extras placed on $this
+     */
 	public function store() {
-		/** \todo ensure page zone type is stored correctly
-		 *  \todo store Extras placed on $this
-		 */
-		
-		if ($this->getUid()) {
-			/// If the attributes are not yet in memory, now would be a good time to read them 
-			if (!$this->attributes) {
-				$this->readAttributes($this->getTable(), $this->getUid());
-			}			
-			
-			unset($this->attributes['query']);
-			tx_newspaper::updateRows(
-				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
-			);
-		} else {
-			///	Store a newly created page zone
-			$this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
-			/** \todo If the PID is not set manually, $tce->process_datamap()
-			 * 		  fails silently. 
-			 */
-			$this->attributes['pid'] = tx_newspaper_Sysfolder::getInstance()->getPid($this);
-			unset($this->attributes['query']);
 
-			$this->setUid(
-				tx_newspaper::insertRows(
-					$this->getTable(), $this->attributes
-				)
-			);
-		}
+		if ($this->getUid()) {
+            $this->storeAgain();
+        } else {
+            $this->storeFirstTime();
+        }
 
 		/// Ensure the page zone has an entry in the abstract supertable...
 		$pagezone_uid = $this->createPageZoneRecord($this->getUid(), $this->getTable());
 		
 		/// ... and is attached to the correct page
-		if ($this->getParentPage() instanceof tx_newspaper_Page) {
-			tx_newspaper::updateRows(
-				'tx_newspaper_pagezone', 
-				'uid = ' . $pagezone_uid, 
-				array('page_id' => $this->getParentPage()->getUid())
-			);
-		}
-				
-		/// \todo store Extras placed on $this
-		if ($this->getExtras()) {
-			foreach ($this->extras as $extra) {
-#				t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
-#				$extra_uid = $extra->store();
-#				$extra_table = $extra->getTable();
-#				$this->relateExtra2Article($extra);
-			}
-#			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
-		}
-		
-		return $this->getUid();
+        $this->connectToPage($pagezone_uid);
+
+        $this->storeExtras();
+
+        return $this->getUid();
 		
 	}
-	
-	
-	public function getTitle() {
+
+    protected function connectToPage($pagezone_uid) {
+        if ($this->getParentPage() instanceof tx_newspaper_Page) {
+            tx_newspaper::updateRows(
+                'tx_newspaper_pagezone',
+                'uid = ' . $pagezone_uid,
+                array('page_id' => $this->getParentPage()->getUid())
+            );
+        }
+    }
+
+    /// \todo store Extras placed on $this
+    private function storeExtras() {
+        if ($this->getExtras()) {
+            foreach ($this->extras as $extra) {
+                #				t3lib_div::devlog('extra on pagezone', 'newspaper', 0, $extra);
+                #				$extra_uid = $extra->store();
+                #				$extra_table = $extra->getTable();
+                #				$this->relateExtra2Article($extra);
+            }
+            #			throw new tx_newspaper_NotYetImplementedException('store Extras placed on $this');
+        }
+    }
+
+    ///	Store a newly created page zone
+    private function storeFirstTime() {
+        $this->attributes['pagezonetype_id'] = $this->pagezonetype->getUid();
+        /** \todo If the PID is not set manually, $tce->process_datamap()
+         *           fails silently.
+         */
+        tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
+        unset($this->attributes['query']);
+
+        $this->setUid(
+            tx_newspaper::insertRows(
+                $this->getTable(), $this->attributes
+            )
+        );
+    }
+
+    private function storeAgain() {
+        if (!$this->attributes) {
+            $this->readAttributes($this->getTable(), $this->getUid());
+        }
+
+        tx_newspaper::setDefaultFields($this, array('tstamp'));
+        unset($this->attributes['query']);
+        tx_newspaper::updateRows(
+            $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+        );
+    }
+
+    public function getTitle() {
 		return tx_newspaper::getTranslation('title_' . $this->getTable());
 	
 	}
