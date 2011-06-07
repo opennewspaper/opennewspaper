@@ -97,13 +97,19 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		);
 	}
 
-    public function test_ExplodeByList() {
+    public function test_ExplodeByList_Array() {
+        $this->assertTrue(is_array(self::executeExplodeByList()));
+    }
+
+    public function test_ExplodeByList_Size() {
+        $this->assertEquals(4, sizeof(self::executeExplodeByList()));
+    }
+
+    private static function executeExplodeByList() {
         $separators = array(',', ' ');
         $string = 'dot dot, comma, dash';
-        $result = tx_newspaper::explodeByList($separators, $string);
-        $this->assertTrue(is_array($result));
+        return tx_newspaper::explodeByList($separators, $string);
     }
-    
 
 }
 ?>
