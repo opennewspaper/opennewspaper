@@ -564,10 +564,10 @@ class tx_newspaper  {
 	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an
 	 * 		empty string, if not applicable.
 	 */
-	static public function enableFields($tableString, $show_hidden = 1) {
+	static public function enableFields($tableString) {
 
 		$enableFields = '';
-		foreach(self::explodeByList(array(',', ' '), $tableString) as $table) {
+		foreach(self::extractTablesFromString($tableString) as $table) {
             $enableFields .= self::getEnableFieldsForTable($table);
 		}
 
@@ -605,6 +605,10 @@ class tx_newspaper  {
     static private function isRegisteredTable($table) {
         t3lib_div::loadTCA($table); // make sure tca is available
         return array_key_exists($table, $GLOBALS['TCA']);
+    }
+
+    static private function extractTablesFromString($string) {
+        return self::explodeByList(array(',', ' '), $string);
     }
 
     static public function explodeByList(array $sep, $string) {
