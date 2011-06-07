@@ -243,13 +243,13 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
 	/**
 	 * Fetches all articles assigned to this tag
-	 * \param $limit Limits the number of articles (default is -1 = no limit)
+	 * \param $limit Limits the number of articles (default is 1000000)
 	 * \return Array with articles
 	 */
-    public function getArticles($limit = 1000000,$start = 0) {
+    public function getArticles($limit = 1000000, $start = 0) {
         $article_list = self::getDossierArticleList();
         if (!$article_list) {
-            return $this->getArticlesOld($limit, $start);
+            return $this->getArticlesDirect($limit, $start);
         }
 
         return $this->getArticlesForDossierTag($article_list, $limit, $start);
@@ -293,7 +293,12 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         self::$saved_get = array();
     }
 
-    private function getArticlesOld($limit, $start=0) {
+    /**
+	 * Fetches all articles assigned to this tag, direct datanase access
+	 * \param $limit Limits the number of articles (default is 1000000)
+	 * \return Array with articles
+	 */
+    private function getArticlesDirect($limit=1000000, $start=0) {
         $select_method_strategy = SelectMethodStrategy::create(true);
         $results = tx_newspaper::selectRows(
             $select_method_strategy->fieldsToSelect(),
@@ -311,6 +316,8 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
         return $articles;
     }
+
+
 
     /**
      * Gets the section associated to this control tag
@@ -506,6 +513,17 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 		);
 		if ($success) $this->setUid(0);
         return $success;
+	}
+
+
+	/**
+	 * Calls TYPO3 savehooks for all articles this tag is attached to
+	 */
+	public function callTypo3SavehooksForArticles() {
+		$articles = $this->getArticlesDirect();
+		foreach($articles as $article) {
+			$article->callTypo3Savehooks();
+		}
 	}
 
 	/// \return Name of the database table the object's data are stored in
