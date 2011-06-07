@@ -274,10 +274,15 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				$aUid = intval($aUid);
 				if ($aUid) {
 					$a = new tx_newspaper_Article($aUid);
-					$t = new tx_newspaper_tag(intval($input['AjaxBatchAttachTag']));
-					if ($a->attachTag($t)) {
-						$msg .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title') . ' (#' . $a->getUid() . ')<br />';
-						$count++;
+					try {
+						$a->getAttribute('uid'); // access article in order to check article existence
+						$t = new tx_newspaper_tag(intval($input['AjaxBatchAttachTag']));
+						if ($a->attachTag($t)) {
+							$msg .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title') . ' (#' . $a->getUid() . ')<br />';
+							$count++;
+						}
+					} catch(tx_newspaper_EmptyResultException $e) {
+						// ignore deleted articles
 					}
 				}
 			}
@@ -298,6 +303,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				$count = 0;
 				foreach($tag->getArticles() as $article) {
 					$count++;
+					// de-activated to merge #1564 $msg .= '<input type="checkbox" class="detachTag" id="detach_' . $article->getUid() . '" /> ';
 					$msg .= $count . '. ' . $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (#' . $article->getUid() . ')<br />';
 				}
 			}
@@ -509,7 +515,7 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 				'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
 				'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
 				'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', ''),
-				'save' => tx_newspaper_BE::renderIcon('gfx/savedok.gif', '')
+				'save' => tx_newspaper_BE::renderIcon('gfx/saveandclosedok.gif', '')
 			));
 		}
 
