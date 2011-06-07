@@ -1,5 +1,19 @@
 <?php
 
+class TableDescription {
+    public function __construct($string) {
+
+    }
+
+    public function getTableName() {
+
+    }
+
+    public function getTableAlias() {
+        
+    }
+}
+
 /// Utility class which provides static functions. A namespace, so to speak.
 /** Because PHP has introduced namespaces only with PHP 5.3, and we started
  *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
@@ -567,8 +581,8 @@ class tx_newspaper  {
 	static public function enableFields($tableString) {
 
 		$enableFields = '';
-		foreach(self::extractTablesFromString($tableString) as $table) {
-            $enableFields .= self::getEnableFieldsForTable($table);
+		foreach(self::extractTableDescriptionsFromString($tableString) as $tableDescription) {
+            $enableFields .= self::getEnableFieldsForTable($tableDescription);
 		}
 
     	return $enableFields;
@@ -607,7 +621,7 @@ class tx_newspaper  {
         return array_key_exists($table, $GLOBALS['TCA']);
     }
 
-    static private function extractTablesFromString($string) {
+    static private function extractTableDescriptionsFromString($string) {
         return self::explodeByList(array(',', ' '), $string);
     }
 

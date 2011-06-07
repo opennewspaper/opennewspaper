@@ -111,6 +111,14 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->assertContains('dash', self::executeExplodeByList());
     }
 
+    public function test_TableDescription_simple() {
+        $description = new TableDescription('tx_newspaper_article');
+        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
+        $this->assertEquals($description->getTableAlias(), 'tx_newspaper_article');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     private static function executeExplodeByList() {
         $separators = array(',', ' ');
         $string = 'dot dot, comma, dash';
