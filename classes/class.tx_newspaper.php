@@ -619,6 +619,9 @@ class tx_newspaper  {
         foreach ($parts as $part) {
             $return = array_merge($return, self::explodeByList($sep, $part));
         }
+        for ($i = 0; $i < sizeof($return); $i++) {
+            if (!$return[$i]) unset($return[$i]);
+        }
         return $return;
     }
 
