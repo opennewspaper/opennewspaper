@@ -609,7 +609,7 @@ class tx_newspaper  {
     }
 
     static public function explodeByList(array $sep, $string) {
-        if (sizeof($sep) <2) {
+        if (sizeof($sep) < 2) {
             return explode($sep[0], $string);
         }
 
@@ -617,7 +617,7 @@ class tx_newspaper  {
         $cur_sep = array_pop($sep);
         $parts = explode($cur_sep, $string);
         foreach ($parts as $part) {
-            $return[] = self::explodeByList($sep, $part);
+            $return = array_merge($return, self::explodeByList($sep, $part));
         }
         return $return;
     }
