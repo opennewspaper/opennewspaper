@@ -39,7 +39,7 @@ class tx_newspaper  {
     ////////////////////////////////////////////////////////////////////////////
 
   /// Returns whether a specified record is available in the DB
-  public static function isPresent($table, $where, $use_enable_fields = true) {
+    public static function isPresent($table, $where, $use_enable_fields = true) {
     if (!is_object($GLOBALS['TYPO3_DB'])) $GLOBALS['TYPO3_DB'] = t3lib_div::makeInstance('t3lib_DB');
 
     $query = $GLOBALS['TYPO3_DB']->SELECTquery(
@@ -63,7 +63,7 @@ class tx_newspaper  {
    *  \throw tx_newspaper_NoResException if no result is found, probably due
    * 		to a SQL syntax error
    */
-  public static function countRows($table, $where='1', $groupBy='') {
+    public static function countRows($table, $where='1', $groupBy='') {
 
     self::writeFunctionAndArgumentsToLog('logDbSelect');
 
@@ -598,6 +598,28 @@ class tx_newspaper  {
 		}
 
     	return $enableFields;
+    }
+
+    static private function getRegisteredTables() {
+        return array_keys($GLOBALS['TCA']);
+    }
+
+    static private function isRegisteredTable($table) {
+        return array_key_exists($table, $GLOBALS['TCA']);
+    }
+
+    static public function explodeByList(array $sep, $string) {
+        if (sizeof($sep) <2) {
+            return explode($sep[0], $string);
+        }
+
+        $return = array();
+        $cur_sep = array_pop($sep);
+        $parts = explode($cur_sep, $string);
+        foreach ($parts as $part) {
+            $return[] = self::explodeByList($sep, $part);
+        }
+        return $return;
     }
 
     /// Gets sorting position for next element in a MM table

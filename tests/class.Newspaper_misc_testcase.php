@@ -89,13 +89,21 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		$this->assertEquals(tx_newspaper::enableFields('nonexistingtable'), '');
 	}
 	public function test_EnableFieldsJoin() {
-		$this->assertEquals(tx_newspaper::enableFields(
-			'tx_newspaper_pagezone_page_extras_mm INNER JOIN tx_newspaper_extra ON tx_newspaper_pagezone_page_extras_mm.uid_foreign=tx_newspaper_extra.uid'),
+		$this->assertEquals(
+            tx_newspaper::enableFields(
+			    'tx_newspaper_pagezone_page_extras_mm INNER JOIN tx_newspaper_extra ON tx_newspaper_pagezone_page_extras_mm.uid_foreign=tx_newspaper_extra.uid'
+            ),
 			' AND tx_newspaper_extra.deleted=0'
 		);
 	}
 
-
+    public function test_ExplodeByList() {
+        $separators = array(',', ' ');
+        $string = 'dot dot, comma, dash';
+        $result = tx_newspaper::explodeByList($separators, $string);
+        $this->assertTrue(is_array($result));
+    }
+    
 
 }
 ?>
