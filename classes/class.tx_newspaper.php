@@ -565,46 +565,45 @@ class tx_newspaper  {
 	 * 		empty string, if not applicable.
 	 */
 	static public function enableFields($tableString, $show_hidden = 1) {
-	    require_once(PATH_t3lib . '/class.t3lib_page.php');
-
-	    // might be a comma separated list of tables
-		$allTables = explode(',', $tableString);
 
 		$enableFields = '';
-		foreach($allTables as $table) {
-			if (strpos($table, ' ') != false) {
-				// cut of alias (if any)
-				$table = substr($table, 0, strpos($table, ' '));
-			}
-			$table = trim($table);
-
-			t3lib_div::loadTCA($table); // make sure tca is available
-
-			if (isset($GLOBALS['TCA'][$table])) {
-				if (TYPO3_MODE == 'FE') {
-					// use values defined in admPanel config (override given $show_hidden param)
-					// see: enableFields() in t3lib_pageSelect
-					$show_hidden = ($table=='pages')? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
-					$p = t3lib_div::makeInstance('t3lib_pageSelect');
-					$enableFields .= $p->enableFields($table, $show_hidden);
-	    		} else {
-					// Show everything but deleted records in backend, if deleted flag is existing for given table
-    				if (isset($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
-      					$enableFields .= ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
-    				}
-	    		}
-			}
-
+		foreach(self::explodeByList(array(',', ' '), $tableString) as $table) {
+            $enableFields .= self::getEnableFieldsForTable($table);
 		}
 
     	return $enableFields;
     }
 
-    static private function getRegisteredTables() {
-        return array_keys($GLOBALS['TCA']);
+    private static function getEnableFieldsForTable($table) {
+        $table = trim($table);
+
+        if (self::isRegisteredTable($table)) {
+            if (TYPO3_MODE == 'FE') {
+                return self::getEnableFieldsFE($table);
+            } else {
+                return self::getEnableFieldsBE($table);
+            }
+        }
+    }
+
+    /// Show everything but deleted records in backend, if deleted flag is existing for given table
+    private static function getEnableFieldsBE($table) {
+        t3lib_div::loadTCA($table); // make sure tca is available
+        if (isset($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
+            return ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
+        }
+    }
+
+    /// use values defined in admPanel config (override given $show_hidden param) see: enableFields() in t3lib_pageSelect
+    private static function getEnableFieldsFE($table) {
+        require_once(PATH_t3lib . '/class.t3lib_page.php');
+        $show_hidden = ($table == 'pages') ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
+        $p = t3lib_div::makeInstance('t3lib_pageSelect');
+        return $p->enableFields($table, $show_hidden);
     }
 
     static private function isRegisteredTable($table) {
+        t3lib_div::loadTCA($table); // make sure tca is available
         return array_key_exists($table, $GLOBALS['TCA']);
     }
 

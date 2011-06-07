@@ -106,7 +106,6 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
     }
 
     public function test_ExplodeByList_Content() {
-        print_r(self::executeExplodeByList());
         $this->assertContains('dot', self::executeExplodeByList());
         $this->assertContains('comma', self::executeExplodeByList());
         $this->assertContains('dash', self::executeExplodeByList());
