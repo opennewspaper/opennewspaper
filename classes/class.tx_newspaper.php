@@ -2,16 +2,18 @@
 
 class TableDescription {
     public function __construct($string) {
-
+        $this->table_string = $string;
     }
 
     public function getTableName() {
-
+        return $this->table_string;
     }
 
     public function getTableAlias() {
-        
+        return $this->table_string;
     }
+
+    private $table_string = '';
 }
 
 /// Utility class which provides static functions. A namespace, so to speak.
