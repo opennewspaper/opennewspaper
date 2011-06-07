@@ -1475,7 +1475,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 	 * Calls TYPO3 savehooks for the articles in order to reflect changes
 	 * processed in savehooks (dependency tree etc.)
 	 */
-	public static function callTypo3Savehooks() {
+	public function callTypo3Savehooks() {
 		// prepare datamap
 		// \todo: is using tstamp ok? the tstamp gets actually stored ...
 		$datamap['tx_newspaper_article'][$this->getUid()] = array('tstamp' => time());
