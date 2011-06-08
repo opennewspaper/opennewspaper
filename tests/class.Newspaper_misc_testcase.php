@@ -193,7 +193,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->assertEquals(
             $number,
             sizeof($descriptions),
-            "'$table' yields " . sizeof($descriptions) . ' descriptions'
+            "'$table' yields " . sizeof($descriptions) . ' descriptions: ' . print_r($descriptions, 1)
         );
     }
 
