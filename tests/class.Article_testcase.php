@@ -17,6 +17,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
 		$this->uid = $this->fixture->getArticleUid();
 		$this->article = new tx_newspaper_Article($this->uid);
+        echo $this->article->getAttribute('uid');
 	}
 	
 	function tearDown() {
