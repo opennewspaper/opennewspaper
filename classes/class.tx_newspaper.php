@@ -49,7 +49,11 @@ class TableDescription {
     }
 
     private static function splitOnJoin($string) {
-        return explode(',', $string);
+        $comma_separated = explode(',', $string);
+        for ($i = 0; $i < sizeof($comma_separated); $i++) {
+            $comma_separated[$i] = trim($comma_separated[$i]);
+        }
+        return $comma_separated;
     }
     
     private $table_alias = '';
