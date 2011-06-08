@@ -69,6 +69,7 @@ class TableDescription {
 
     private static function splitStringOnWord($string, $word) {
         $split_position = strpos($string, $word);
+        var_dump($split_position);
         if ($split_position === false) return array($string);
         $first = substr($string, 0, $split_position);
         $second = substr($string, $first+strlen($word));
