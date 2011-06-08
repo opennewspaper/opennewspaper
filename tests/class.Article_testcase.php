@@ -177,19 +177,26 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$behavior->getAttributeList();
 	}
 		
-	public function test_store() {
+	public function test_store_uid() {
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
 
-		/// check that record in DB equals data in memory
-		$data = tx_newspaper::selectOneRow(
-			'*', $this->article->getTable(), 'uid = ' . $this->article->getUid());
-		foreach ($data as $key => $value) {
-			$this->assertEquals($this->article->getAttribute($key), $value);
-		}
-		
 		/// \todo check storing of extras with article
-		
+	}
+
+    public function test_store_AttributesEqual() {
+        $uid = $this->article->store();
+
+        /// check that record in DB equals data in memory
+        $data = tx_newspaper::selectOneRow(
+            '*', $this->article->getTable(), 'uid = ' . $this->article->getUid());
+        foreach ($data as $key => $value) {
+            $this->assertEquals($this->article->getAttribute($key), $value);
+        }
+
+    }
+
+    public function test_store_changed() {
 		/// change an attribute, store and check
 		$random_string = md5(time());
 		$this->article->setAttribute('bodytext',
@@ -199,21 +206,22 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$data = tx_newspaper::selectOneRow(
 			'*', $this->article->getTable(), 'uid = ' . $this->article->getUid());
 		$this->doTestContains($data['bodytext'], $random_string);
-		
+    }
+
+    public function test_store_NewArticle() {
 		/// create an empty article and write it. verify it's been written.
 		$article = new tx_newspaper_Article();
+        $random_string = md5(time());
 
 		if ($this->article->getParentPage()) $article->setParentPage($this->article->getParentPage());
-		
+
 		$article->setAttribute('bodytext', $random_string);
 		$uid = $article->store();
 		$data = tx_newspaper::selectOneRow('*', $article->getTable(), 'uid = ' . $uid);
 		$this->assertEquals($data['bodytext'], $random_string);
-		
-		/// delete article
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery($article->getTable(), 'uid = ' . $uid);
-	}	
-	
+
+    }
+
 	public function test_getSections() {
 		$section = $this->article->getPrimarySection();
 		$this->assertTrue($section instanceof tx_newspaper_Section);
