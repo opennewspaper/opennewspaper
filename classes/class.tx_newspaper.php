@@ -692,18 +692,19 @@ class tx_newspaper  {
 
     /// Show everything but deleted records in backend, if deleted flag is existing for given table
     private static function getEnableFieldsBE(TableDescription $table) {
-        t3lib_div::loadTCA($table); // make sure tca is available
-        if (isset($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
-            return ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
+        $table_name = $table->getTableName();
+        t3lib_div::loadTCA($table_name); // make sure tca is available
+        if (isset($GLOBALS['TCA'][$table_name]['ctrl']['delete'])) {
+            return ' AND ' . $table->getTableAlias() . '.' . $GLOBALS['TCA'][$table_name]['ctrl']['delete'] . '=0';
         }
     }
 
     /// use values defined in admPanel config (override given $show_hidden param) see: enableFields() in t3lib_pageSelect
     private static function getEnableFieldsFE(TableDescription $table) {
         require_once(PATH_t3lib . '/class.t3lib_page.php');
-        $show_hidden = ($table == 'pages') ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
+        $show_hidden = ($table->getTableName() == 'pages') ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
         $p = t3lib_div::makeInstance('t3lib_pageSelect');
-        return $p->enableFields($table, $show_hidden);
+        return $p->enableFields($table->getTableName(), $show_hidden);
     }
 
     static private function isRegisteredTable(TableDescription $table) {
