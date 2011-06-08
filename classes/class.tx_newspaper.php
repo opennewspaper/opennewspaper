@@ -53,8 +53,9 @@ class TableDescription {
         $comma_separated = self::splitOnComma($string);
         $return = array();
         foreach ($comma_separated as $table) {
-            $return = array_merge($return, self::splitStringOnWord($table, 'join'));
+            $return = array_merge($return, self::splitStringOnWord($table, ' join '));
         }
+        print_r ($return);
         return $return;
     }
 
