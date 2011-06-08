@@ -4,6 +4,7 @@ class TableDescription {
 
     static public function createDescriptions($string) {
         $descriptions = array();
+        print_r(self::splitOnJoins($string));
         foreach (self::splitOnJoins($string) as $table) {
             $descriptions[] = new TableDescription($table);
         }
