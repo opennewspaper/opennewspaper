@@ -4,7 +4,7 @@ class TableDescription {
 
     static public function createDescriptions($string) {
         $descriptions = array();
-        foreach (self::splitOnJoin($string) as $table) {
+        foreach (self::splitOnJoins($string) as $table) {
             $descriptions[] = new TableDescription($table);
         }
 
@@ -48,14 +48,32 @@ class TableDescription {
         }
     }
 
-    private static function splitOnJoin($string) {
+    private static function splitOnJoins($string) {
+        $string = strtolower($string);
+        $comma_separated = self::splitOnComma($string);
+        $return = array();
+        foreach ($comma_separated as $table) {
+            $return = array_merge($return, self::splitStringOnWord($table, 'join'));
+        }
+        return $return;
+    }
+
+    private static function splitOnComma($string) {
         $comma_separated = explode(',', $string);
         for ($i = 0; $i < sizeof($comma_separated); $i++) {
             $comma_separated[$i] = trim($comma_separated[$i]);
         }
         return $comma_separated;
     }
-    
+
+    private static function splitStringOnWord($string, $word) {
+        $split_position = strpos($string, $word);
+        if ($split_position === false) return array($string);
+        $first = substr($string, 0, $split_position);
+        $second = substr($string, $first+strlen($word));
+        return array_merge(array($first), self::splitStringOnWord($second, $word));
+    }
+
     private $table_alias = '';
     private $table_name = '';
 

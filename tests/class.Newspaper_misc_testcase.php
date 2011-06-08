@@ -136,11 +136,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 
     public function test_splitOnJoin_NoJoin() {
         foreach (array('tx_newspaper_article', 'tx_newspaper_article as a', 'tx_newspaper_article a') as $table) {
-            $this->assertEquals(
-                1,
-                sizeof(TableDescription::createDescriptions($table)),
-                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
-            );
+            $this->checkNumDescriptions(TableDescription::createDescriptions($table), 1, $table);
         }
     }
 
@@ -148,11 +144,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         foreach (array('tx_newspaper_article, tx_newspaper_section',
                        'tx_newspaper_article as a, tx_newspaper_section as s',
                        'tx_newspaper_article a, tx_newspaper_section s') as $table) {
-            $this->assertEquals(
-                2,
-                sizeof(TableDescription::createDescriptions($table)),
-                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
-            );
+            $this->checkNumDescriptions(TableDescription::createDescriptions($table), 2, $table);
         }
     }
 
@@ -181,20 +173,10 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
                 'tx_newspaper_article RIGHT JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
                 'tx_newspaper_article INNER JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
             ) as $table) {
-            $this->assertEquals(
-                2,
-                sizeof(TableDescription::createDescriptions($table)),
-                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
-            );
+            $this->checkNumDescriptions(TableDescription::createDescriptions($table), 2, $table);
         }
-        $descriptions = TableDescription::createDescriptions(
-            'tx_newspaper_article_related_mm JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_local = tx_newspaper_article.uid JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_foreign= tx_newspaper_article.uid'
-        );
-        $this->assertEquals(
-            3,
-            sizeof($descriptions),
-            $table . ' yields ' . sizeof($descriptions) . ' descriptions'
-        );
+        $table = 'tx_newspaper_article_related_mm JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_local = tx_newspaper_article.uid JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_foreign= tx_newspaper_article.uid';
+        $this->checkNumDescriptions(TableDescription::createDescriptions($table), 3, $table);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -205,6 +187,14 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 
     private function compareAlias(TableDescription $description, $expected) {
         $this->assertEquals($description->getTableAlias(), $expected, 'Alias is ' . $description->getTableAlias() . " Description: $description");
+    }
+
+    private function checkNumDescriptions(array $descriptions, $number, $table) {
+        $this->assertEquals(
+            $number,
+            sizeof($descriptions),
+            "'$table' yields " . sizeof($descriptions) . ' descriptions'
+        );
     }
 
     private static function executeExplodeByList() {
