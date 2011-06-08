@@ -118,7 +118,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->compareAlias($description, 'tx_newspaper_article');
     }
 
-    public function test_TableDescription_alias() {
+    public function test_TableDescription_alias_as() {
         $description = new TableDescription('tx_newspaper_article as a');
         $this->compareName($description, 'tx_newspaper_article');
         $this->compareAlias($description, 'a');
@@ -126,7 +126,9 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $description = new TableDescription('tx_newspaper_article AS a');
         $this->compareName($description, 'tx_newspaper_article');
         $this->compareAlias($description, 'a');
+    }
 
+    public function test_TableDescription_alias() {
         $description = new TableDescription('tx_newspaper_article a');
         $this->compareName($description, 'tx_newspaper_article');
         $this->compareAlias($description, 'a');
