@@ -1,6 +1,16 @@
 <?php
 
 class TableDescription {
+
+    static public function createDescriptions($string) {
+        $descriptions = array();
+        foreach (self::splitOnJoin($string) as $table) {
+            $descriptions[] = new TableDescription($table);
+        }
+
+        return $descriptions;
+    }
+
     public function __construct($string) {
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
@@ -18,7 +28,6 @@ class TableDescription {
     private function extractAlias() {
         if (!$this->table_alias) {
             for ($i = 1; $i < min(sizeof($this->words), 3); $i++) {
-                echo $this->words[$i] . " / ";
                 if (strtolower($this->words[$i]) == 'as') continue;
                 $this->table_alias = $this->words[$i];
             }
@@ -32,6 +41,10 @@ class TableDescription {
         if (!$this->table_name) {
             $this->table_name = $this->words[0];
         }
+    }
+
+    private static function splitOnJoin($string) {
+        return $string;
     }
     
     private $table_alias = '';

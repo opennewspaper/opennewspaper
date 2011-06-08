@@ -134,6 +134,15 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->compareAlias($description, 'a');
     }
 
+    public function test_splitOnJoin_NoJoin() {
+        foreach (array('tx_newspaper_article') as $table) {
+            $this->assertEquals(
+                1,
+                sizeof(TableDescription::createDescriptions($table)),
+                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
+            );
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
 
     private function compareName(TableDescription $description, $expected) {
