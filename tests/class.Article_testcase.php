@@ -179,7 +179,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 		
 	public function test_store_uid() {
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaer_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
 
