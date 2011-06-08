@@ -55,7 +55,6 @@ class TableDescription {
         foreach ($comma_separated as $table) {
             $return = array_merge($return, self::splitStringOnWord($table, ' join '));
         }
-        print_r ($return);
         return $return;
     }
 
@@ -69,7 +68,6 @@ class TableDescription {
 
     private static function splitStringOnWord($string, $word) {
         $split_position = strpos($string, $word);
-        var_dump($split_position);
         if ($split_position === false) return array($string);
         $first = substr($string, 0, $split_position);
         $second = substr($string, $split_position+strlen($word));
