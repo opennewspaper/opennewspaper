@@ -105,6 +105,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->assertEquals(4, sizeof(self::executeExplodeByList()));
     }
 
+    const explode_by_list_string = 'dot dot, comma, dash';
     public function test_ExplodeByList_Content() {
         $this->assertContains('dot', self::executeExplodeByList());
         $this->assertContains('comma', self::executeExplodeByList());
@@ -113,30 +114,37 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 
     public function test_TableDescription_simple() {
         $description = new TableDescription('tx_newspaper_article');
-        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
-        $this->assertEquals($description->getTableAlias(), 'tx_newspaper_article');
+        $this->compareName($description, 'tx_newspaper_article');
+        $this->compareAlias($description, 'tx_newspaper_article');
     }
 
     public function test_TableDescription_alias() {
         $description = new TableDescription('tx_newspaper_article as a');
-        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
-        $this->assertEquals($description->getTableAlias(), 'a');
+        $this->compareName($description, 'tx_newspaper_article');
+        $this->compareAlias($description, 'a');
 
         $description = new TableDescription('tx_newspaper_article AS a');
-        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
-        $this->assertEquals($description->getTableAlias(), 'a');
+        $this->compareName($description, 'tx_newspaper_article');
+        $this->compareAlias($description, 'a');
 
         $description = new TableDescription('tx_newspaper_article a');
-        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
-        $this->assertEquals($description->getTableAlias(), 'a');
+        $this->compareName($description, 'tx_newspaper_article');
+        $this->compareAlias($description, 'a');
     }
 
     ////////////////////////////////////////////////////////////////////////////
 
+    private function compareName(TableDescription $description, $expected) {
+        $this->assertEquals($description->getTableName(), $expected, 'Name is ' . $description->getTableName());
+    }
+
+    private function compareAlias(TableDescription $description, $expected) {
+        $this->assertEquals($description->getTableAlias(), $expected, 'Alias is ' . $description->getTableAlias());
+    }
+
     private static function executeExplodeByList() {
         $separators = array(',', ' ');
-        $string = 'dot dot, comma, dash';
-        return tx_newspaper::explodeByList($separators, $string);
+        return tx_newspaper::explodeByList($separators, self::explode_by_list_string);
     }
 
 }
