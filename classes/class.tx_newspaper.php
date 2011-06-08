@@ -725,7 +725,7 @@ class tx_newspaper  {
 
         return self::removeEmptyStrings($return);
     }
-
+*/
     static public function removeEmptyStrings(array $strings) {
         $return = array();
         foreach($strings as $string) {
@@ -733,7 +733,7 @@ class tx_newspaper  {
         }
         return $strings;
     }
-*/
+
     /// Gets sorting position for next element in a MM table
     /** \param $table name of MM table
      *  \param $uid_local
