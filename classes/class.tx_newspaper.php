@@ -685,8 +685,9 @@ class tx_newspaper  {
     }
 
     static public function removeEmptyStrings(array $strings) {
-        for ($i = 0; $i < sizeof($strings); $i++) {
-            if (!$strings[$i]) unset($strings[$i]);
+        $return = array();
+        foreach($strings as $string) {
+            if ($string) $return[] = $string;
         }
         return $strings;
     }
