@@ -54,14 +54,23 @@ class TableDescription {
     private static function splitOnJoins($string) {
         $string = strtolower($string);
         $comma_separated = self::splitOnComma($string);
-        $return = array();
+        $return1 = array();
         foreach ($comma_separated as $table) {
-            $return = array_merge($return, self::splitStringOnWord($table, ' left join '));
-            $return = array_merge($return, self::splitStringOnWord($table, ' right join '));
-            $return = array_merge($return, self::splitStringOnWord($table, ' inner join '));
-            $return = array_merge($return, self::splitStringOnWord($table, ' join '));
+            $return1 = array_merge($return1, self::splitStringOnWord($table, ' left join '));
         }
-        return $return;
+        $return2 = array();
+        foreach ($return1 as $table) {
+            $return2 = array_merge($return2, self::splitStringOnWord($table, ' right join '));
+        }
+        $return3 = array();
+        foreach ($return2 as $table) {
+            $return3 = array_merge($return3, self::splitStringOnWord($table, ' inner join '));
+        }
+        $return4 = array();
+        foreach ($return3 as $table) {
+            $return4 = array_merge($return4, self::splitStringOnWord($table, ' join '));
+        }
+        return $return4;
     }
 
     private static function splitOnComma($string) {
