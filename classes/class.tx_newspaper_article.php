@@ -925,7 +925,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     private static function isValidForSavehook($table, $id) {
         return (
             strtolower($table) == 'tx_newspaper_article' &&
-            intval($id) > 0
+            intval($id) > 0 &&
+            tx_newspaper::isPresent('tx_newspaper_article', "uid = $id")
         );
     }
 
