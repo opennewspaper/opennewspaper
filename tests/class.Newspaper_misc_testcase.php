@@ -179,6 +179,80 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->checkNumDescriptions(TableDescription::createDescriptions($table), 3, $table);
     }
 
+    public function test_splitOnJoin_Join_Values() {
+        foreach (
+            array(
+                'tx_newspaper_article JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article LEFT JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article RIGHT JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article INNER JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+            ) as $table) {
+            $descriptions = TableDescription::createDescriptions($table);
+            $this->compareName($descriptions[0],  'tx_newspaper_article');
+            $this->compareName($descriptions[1],  'tx_newspaper_section');
+            $this->compareAlias($descriptions[0],  'tx_newspaper_article');
+            $this->compareAlias($descriptions[1],  'tx_newspaper_section');
+        }
+        $table = 'tx_newspaper_article_related_mm JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_local = tx_newspaper_article.uid JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_foreign= tx_newspaper_article.uid';
+        $this->checkNumDescriptions(TableDescription::createDescriptions($table), 3, $table);
+    }
+
+    public function test_splitOnJoin_JoinWithAs_Number() {
+        foreach (
+            array(
+                'tx_newspaper_article a JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a LEFT JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a LEFT JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a RIGHT JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a RIGHT JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a INNER JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a INNER JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+            ) as $table) {
+            $this->checkNumDescriptions(TableDescription::createDescriptions($table), 2, $table);
+        }
+        foreach (
+            array(
+                'tx_newspaper_article_related_mm mm JOIN tx_newspaper_article a ON mm.uid_local = a.uid JOIN tx_newspaper_article b ON mm.uid_foreign= b.uid',
+                'tx_newspaper_article_related_mm AS mm JOIN tx_newspaper_article AS a ON mm.uid_local = a.uid JOIN tx_newspaper_article AS b ON mm.uid_foreign= b.uid',
+            ) as $table) {
+            $this->checkNumDescriptions(TableDescription::createDescriptions($table), 3, $table);
+        }
+    }
+
+    public function test_splitOnJoin_JoinWithAs_Values() {
+        foreach (
+            array(
+                'tx_newspaper_article a JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a LEFT JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a LEFT JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a RIGHT JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a RIGHT JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+                'tx_newspaper_article a INNER JOIN tx_newspaper_section s ON a.section_id = s.uid',
+                'tx_newspaper_article AS a INNER JOIN tx_newspaper_section AS s ON a.section_id = s.uid',
+            ) as $table) {
+            $descriptions = TableDescription::createDescriptions($table);
+            $this->compareName($descriptions[0],  'tx_newspaper_article');
+            $this->compareName($descriptions[1],  'tx_newspaper_section');
+            $this->compareAlias($descriptions[0],  'a');
+            $this->compareAlias($descriptions[1],  's');
+        }
+        foreach (
+            array(
+                'tx_newspaper_article_related_mm mm JOIN tx_newspaper_article a ON mm.uid_local = a.uid JOIN tx_newspaper_article b ON mm.uid_foreign= b.uid',
+                'tx_newspaper_article_related_mm AS mm JOIN tx_newspaper_article AS a ON mm.uid_local = a.uid JOIN tx_newspaper_article AS b ON mm.uid_foreign= b.uid',
+            ) as $table) {
+            $descriptions = TableDescription::createDescriptions($table);
+            $this->compareName($descriptions[0],  'tx_newspaper_article_related_mm');
+            $this->compareName($descriptions[1],  'tx_newspaper_article');
+            $this->compareName($descriptions[2],  'tx_newspaper_article');
+            $this->compareAlias($descriptions[0],  'mm');
+            $this->compareAlias($descriptions[1],  'a');
+            $this->compareAlias($descriptions[2],  'b');
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private function compareName(TableDescription $description, $expected) {
