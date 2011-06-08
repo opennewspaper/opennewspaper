@@ -12,11 +12,12 @@ class TableDescription {
     }
 
     public function __construct($string) {
+        $this->string = $string;
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
 
     public function __toString() {
-        return 'Name: ' . $this->getTableName() . ' Alias: ' . $this->getTableAlias() . 'Words: ' . print_r($this->words, 1);
+        return 'Name: ' . $this->getTableName() . ' Alias: ' . $this->getTableAlias() . " String: '" . $this->string . "' Words: " . print_r($this->words, 1);
     }
 
     public function getTableName() {
