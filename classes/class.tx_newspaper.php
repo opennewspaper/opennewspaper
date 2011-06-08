@@ -72,7 +72,7 @@ class TableDescription {
         var_dump($split_position);
         if ($split_position === false) return array($string);
         $first = substr($string, 0, $split_position);
-        $second = substr($string, $first+strlen($word));
+        $second = substr($string, $split_position+strlen($word));
         return array_merge(array($first), self::splitStringOnWord($second, $word));
     }
 
