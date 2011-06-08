@@ -645,9 +645,58 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'class_function' => array('tx_newspaper_module4', 'checkPagezonePageUniqueness'),
 				'param' => array()
 			),
+			array(
+				'title' => 'List articles with a section assigned',
+				'class_function' => array('tx_newspaper_module4', 'checkArticleWithoutSection'),
+				'param' => array()
+			),
 		);
 		return $f;
 	}
+
+
+	static function checkArticleWithoutSection() {
+		// get article uids for article without a section
+		$rows = tx_newspaper::selectRows(
+			'tx_newspaper_article.uid',
+			'tx_newspaper_article LEFT JOIN tx_newspaper_article_sections_mm ON tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local',
+			'tx_newspaper_article_sections_mm.uid_foreign IS NULL AND tx_newspaper_article.deleted=0 AND tx_newspaper_article.is_template=0'
+		);
+		$errorCount = 0;
+		$msg = '';
+		foreach($rows as $row) {
+			$errorCount++;
+			$article = new tx_newspaper_Article(($row['uid']));
+			$controlTags = $article->getTags(tx_newspaper_tag::getControlTagType());
+
+			if (!$controlTags) {
+				$msg .= '<span style="font-weight:bold;">';
+			} else {
+				$msg .= '<span>';
+			}
+
+			$msg .= $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (#' . $article->getUid() . ') ';
+
+			if ($controlTags) {
+				$msg .= '<i>Control tag(s): ';
+				foreach($controlTags as $controlTag) {
+					$msg .= $controlTag->getAttribute('tag') . ' ';
+				}
+				$msg .= '</i>';
+			} else {
+				$msg .= '<i>Not even a control tag is assigned.</i>';
+			}
+			$msg .= '</span><br (>';
+		}
+
+		if (!$errorCount) {
+			return true;
+		}
+		$msg = $errorCount . ' problem(s) found<br />' . $msg;
+		return $msg;
+
+	}
+
 
 	static function checkPagezonePageUniqueness() {
 		$rows = tx_newspaper::selectRowsDirect(
