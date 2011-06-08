@@ -74,27 +74,25 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 	// database functions
 
 	public function test_EnableFieldsTcaTable() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article'), ' AND tx_newspaper_article.deleted=0');
+        $this->checkEnableFields('tx_newspaper_article', ' AND NOT tx_newspaper_article.deleted');
 	}
 	public function test_EnableFieldsTcaTableAlias() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article AS a'), ' AND a.deleted=0');
+        $this->checkEnableFields('tx_newspaper_article AS a', ' AND NOT a.deleted');
 	}
 	public function test_EnableFields2TcaTables() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_section'), ' AND a.deleted=0 AND tx_newspaper_section.deleted=0');
+        $this->checkEnableFields('tx_newspaper_article a, tx_newspaper_section', ' AND NOT a.deleted AND NOT tx_newspaper_section.deleted');
 	}
 	public function test_EnableFields2TcaTablesAlias() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_article_sections_mm mm'), ' AND a.deleted=0');
+        $this->checkEnableFields('tx_newspaper_article a, tx_newspaper_article_sections_mm mm', ' AND NOT a.deleted');
 	}
 	public function test_EnableFieldsNonExistingTable() {
-		$this->assertEquals(tx_newspaper::enableFields('nonexistingtable'), '');
+        $this->checkEnableFields('nonexistingtable', '');
 	}
 	public function test_EnableFieldsJoin() {
-		$this->assertEquals(
-            tx_newspaper::enableFields(
-			    'tx_newspaper_pagezone_page_extras_mm INNER JOIN tx_newspaper_extra ON tx_newspaper_pagezone_page_extras_mm.uid_foreign=tx_newspaper_extra.uid'
-            ),
-			' AND tx_newspaper_extra.deleted=0'
-		);
+        $this->checkEnableFields(
+            'tx_newspaper_pagezone_page_extras_mm INNER JOIN tx_newspaper_extra ON tx_newspaper_pagezone_page_extras_mm.uid_foreign=tx_newspaper_extra.uid',
+            ' AND NOT tx_newspaper_extra.deleted'
+        );
 	}
 
     public function test_TableDescription_simple() {
@@ -239,6 +237,14 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function checkEnableFields($table, $expected) {
+        $this->assertEquals(
+            tx_newspaper::enableFields($table), $expected,
+            "Enable fields for '$table': '" . tx_newspaper::enableFields($table) . "', expected: '$expected'"
+        );
+
+    }
 
     private function compareName(tx_newspaper_TableDescription $description, $expected) {
         $this->assertEquals(
