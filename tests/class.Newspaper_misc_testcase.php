@@ -96,7 +96,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 			' AND tx_newspaper_extra.deleted=0'
 		);
 	}
-
+/*
     public function test_ExplodeByList_Array() {
         $this->assertTrue(is_array(self::executeExplodeByList()));
     }
@@ -111,7 +111,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->assertContains('comma', self::executeExplodeByList());
         $this->assertContains('dash', self::executeExplodeByList());
     }
-
+*/
     public function test_TableDescription_simple() {
         $description = new TableDescription('tx_newspaper_article');
         $this->compareName($description, 'tx_newspaper_article');

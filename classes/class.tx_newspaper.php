@@ -673,16 +673,14 @@ class tx_newspaper  {
 	static public function enableFields($tableString) {
 
 		$enableFields = '';
-		foreach(self::extractTableDescriptionsFromString($tableString) as $tableDescription) {
+		foreach(TableDescription::createDescriptions($tableString) as $tableDescription) {
             $enableFields .= self::getEnableFieldsForTable($tableDescription);
 		}
 
     	return $enableFields;
     }
 
-    private static function getEnableFieldsForTable($table) {
-        $table = trim($table);
-
+    private static function getEnableFieldsForTable(TableDescription $table) {
         if (self::isRegisteredTable($table)) {
             if (TYPO3_MODE == 'FE') {
                 return self::getEnableFieldsFE($table);
@@ -693,7 +691,7 @@ class tx_newspaper  {
     }
 
     /// Show everything but deleted records in backend, if deleted flag is existing for given table
-    private static function getEnableFieldsBE($table) {
+    private static function getEnableFieldsBE(TableDescription $table) {
         t3lib_div::loadTCA($table); // make sure tca is available
         if (isset($GLOBALS['TCA'][$table]['ctrl']['delete'])) {
             return ' AND ' . $table . '.' . $GLOBALS['TCA'][$table]['ctrl']['delete'] . '=0';
@@ -701,22 +699,18 @@ class tx_newspaper  {
     }
 
     /// use values defined in admPanel config (override given $show_hidden param) see: enableFields() in t3lib_pageSelect
-    private static function getEnableFieldsFE($table) {
+    private static function getEnableFieldsFE(TableDescription $table) {
         require_once(PATH_t3lib . '/class.t3lib_page.php');
         $show_hidden = ($table == 'pages') ? $GLOBALS['TSFE']->showHiddenPage : $GLOBALS['TSFE']->showHiddenRecords;
         $p = t3lib_div::makeInstance('t3lib_pageSelect');
         return $p->enableFields($table, $show_hidden);
     }
 
-    static private function isRegisteredTable($table) {
-        t3lib_div::loadTCA($table); // make sure tca is available
-        return array_key_exists($table, $GLOBALS['TCA']);
+    static private function isRegisteredTable(TableDescription $table) {
+        t3lib_div::loadTCA($table->getTableName()); // make sure tca is available
+        return array_key_exists($table->getTableName(), $GLOBALS['TCA']);
     }
-
-    static private function extractTableDescriptionsFromString($string) {
-        return self::explodeByList(array(',', ' '), $string);
-    }
-
+/*
     static public function explodeByList(array $sep, $string) {
         if (sizeof($sep) < 2) {
             return explode($sep[0], $string);
@@ -739,7 +733,7 @@ class tx_newspaper  {
         }
         return $strings;
     }
-
+*/
     /// Gets sorting position for next element in a MM table
     /** \param $table name of MM table
      *  \param $uid_local
