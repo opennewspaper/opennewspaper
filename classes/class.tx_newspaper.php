@@ -44,7 +44,7 @@ class TableDescription {
     }
 
     private static function splitOnJoin($string) {
-        return array($string);
+        return explode(',', $string);
     }
     
     private $table_alias = '';

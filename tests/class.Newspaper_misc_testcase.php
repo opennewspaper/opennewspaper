@@ -135,7 +135,7 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
     }
 
     public function test_splitOnJoin_NoJoin() {
-        foreach (array('tx_newspaper_article') as $table) {
+        foreach (array('tx_newspaper_article', 'tx_newspaper_article as a', 'tx_newspaper_article a') as $table) {
             $this->assertEquals(
                 1,
                 sizeof(TableDescription::createDescriptions($table)),
@@ -143,6 +143,19 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
             );
         }
     }
+
+    public function test_splitOnJoin_Comma_Number() {
+        foreach (array('tx_newspaper_article, tx_newspaper_section',
+                       'tx_newspaper_article as a, tx_newspaper_section as s',
+                       'tx_newspaper_article a, tx_newspaper_section s') as $table) {
+            $this->assertEquals(
+                2,
+                sizeof(TableDescription::createDescriptions($table)),
+                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
+            );
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private function compareName(TableDescription $description, $expected) {
