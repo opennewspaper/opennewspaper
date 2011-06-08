@@ -117,6 +117,20 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->assertEquals($description->getTableAlias(), 'tx_newspaper_article');
     }
 
+    public function test_TableDescription_alias() {
+        $description = new TableDescription('tx_newspaper_article as a');
+        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
+        $this->assertEquals($description->getTableAlias(), 'a');
+
+        $description = new TableDescription('tx_newspaper_article AS a');
+        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
+        $this->assertEquals($description->getTableAlias(), 'a');
+
+        $description = new TableDescription('tx_newspaper_article a');
+        $this->assertEquals($description->getTableName(), 'tx_newspaper_article');
+        $this->assertEquals($description->getTableAlias(), 'a');
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private static function executeExplodeByList() {

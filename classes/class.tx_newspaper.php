@@ -2,18 +2,36 @@
 
 class TableDescription {
     public function __construct($string) {
-        $this->table_string = $string;
+        $this->words = explode(' ', $string);
     }
 
     public function getTableName() {
-        return $this->table_string;
+        $this->extractName();
+        return $this->table_name;
     }
 
     public function getTableAlias() {
-        return $this->table_string;
+        $this->extractAlias();
+        return $this->table_alias;
     }
 
-    private $table_string = '';
+    private function extractAlias() {
+        if (!$this->table_alias) {
+            
+        }
+    }
+
+    private function extractName() {
+        if (!$this->table_name) {
+            $this->table_name = $this->words[0];
+        }
+    }
+    
+    private $table_alias = '';
+    private $table_name = '';
+
+    private $words = array();
+    
 }
 
 /// Utility class which provides static functions. A namespace, so to speak.
