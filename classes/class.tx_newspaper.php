@@ -34,6 +34,7 @@ class TableDescription {
         if (!$this->table_alias) {
             for ($i = 1; $i < min(sizeof($this->words), 3); $i++) {
                 if (strtolower($this->words[$i]) == 'as') continue;
+                if (strtolower($this->words[$i]) == 'as') break;
                 $this->table_alias = $this->words[$i];
             }
             if (!$this->table_alias) {
