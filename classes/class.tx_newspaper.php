@@ -4,7 +4,6 @@ class TableDescription {
 
     static public function createDescriptions($string) {
         $descriptions = array();
-        print_r(self::splitOnJoins($string));
         foreach (self::splitOnJoins($string) as $table) {
             $descriptions[] = new TableDescription($table);
         }
@@ -13,7 +12,6 @@ class TableDescription {
     }
 
     public function __construct($string) {
-        echo " '$string' ";
         $this->string = $string;
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
@@ -53,12 +51,11 @@ class TableDescription {
 
     private static function splitOnJoins($string) {
         $string = strtolower($string);
-        $comma_separated = self::splitOnComma($string);
-        $return1 = self::splitArrayOnWord($comma_separated, ' left join ');
-        $return2 = self::splitArrayOnWord($return1, ' right join ');
-        $return3 = self::splitArrayOnWord($return2, ' inner join ');
-        $return4 = self::splitArrayOnWord($return3, ' join ');
-        return $return4;
+
+        return self::splitArrayOnArray(
+            self::splitOnComma($string),
+            array(' left join ', ' right join ', ' inner join ', ' join ')
+        );
     }
 
     private static function splitOnComma($string) {
@@ -75,6 +72,14 @@ class TableDescription {
         $first = substr($string, 0, $split_position);
         $second = substr($string, $split_position+strlen($word));
         return array_merge(array($first), self::splitStringOnWord($second, $word));
+    }
+
+    private static function splitArrayOnArray(array $strings, array $words) {
+        $return = $strings;
+        foreach ($words as $word) {
+            $return = self::splitArrayOnWord($return, $word);
+        }
+        return $return;
     }
 
     private static function splitArrayOnWord(array $strings, $word) {
