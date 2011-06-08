@@ -173,6 +173,30 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         $this->compareAlias($descriptions[1],  'tx_newspaper_section');
     }
 
+    public function test_splitOnJoin_Join_Number() {
+        foreach (
+            array(
+                'tx_newspaper_article JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article LEFT JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article RIGHT JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+                'tx_newspaper_article INNER JOIN tx_newspaper_section ON tx_newspaper_article.section_id = tx_newspaper_section.uid',
+            ) as $table) {
+            $this->assertEquals(
+                2,
+                sizeof(TableDescription::createDescriptions($table)),
+                $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
+            );
+        }
+        $descriptions = TableDescription::createDescriptions(
+            'tx_newspaper_article_related_mm JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_local = tx_newspaper_article.uid JOIN tx_newspaper_article ON tx_newspaper_article_related_mm.uid_foreign= tx_newspaper_article.uid'
+        );
+        $this->assertEquals(
+            3,
+            sizeof($descriptions),
+            $table . ' yields ' . sizeof($descriptions) . ' descriptions'
+        );
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private function compareName(TableDescription $description, $expected) {
