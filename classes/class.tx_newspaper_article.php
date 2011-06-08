@@ -824,6 +824,22 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
 
     /**
+     * Detach $tag from this article
+     * @param $tag
+     * @return Number of records processed
+     */
+    public function detachTag(tx_newspaper_tag $tag) {
+    	// detach tag from article
+    	return tx_newspaper::deleteRows(
+    		'tx_newspaper_article_tags_mm',
+    		$this->getUid(),
+			'uid_local',
+			'uid_foreign=' . $tag->getUid()
+		);
+    }
+
+
+    /**
      * \param  $tagtype int defaults to contentTagType
      * \return array with tags objects
      */

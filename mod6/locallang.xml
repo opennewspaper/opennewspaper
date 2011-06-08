@@ -27,15 +27,21 @@
 			<label index="label_ctrltagcat">Control tag category</label>
 			<label index="label_section">Section</label>
 			<label index="label_attach_tag_button">Attach tag to articles</label>
-			<label index="label_attach_tag_0">No article was processed</label>
-			<label index="label_attach_tag_1">1 articcle was processed</label>
-			<label index="label_attach_tag_2plus">###COUNT### articles were processed</label>
+			<label index="label_attach_tag_0">No article was processed.</label>
+			<label index="label_attach_tag_1">1 article was processed:</label>
+			<label index="label_attach_tag_2plus">###COUNT### articles were processed:</label>
 			<label index="label_manage_dossier">Manage dossier</label>
 			<label index="label_tagzones_active">Active tag zones</label>
 			<label index="label_tagzones_unused">Unused tag zones</label>
 			<label index="message_confirm_delete_extra_from_tagzone">You you want to remove this extra?</label>
 			<label index="message_dossier_title_not_unique">This title is aleady in use. Please enter another title.</label>
 			<label index="label_show_article_list">Show all articles using this control tag  &gt;&gt;</label>
+			<label index="label_checkbox_batch_detach_tag">Detach tags from articles</label>
+			<label index="label_checkbox_batch_detach_tag_all_articles">Select all articles</label>
+			<label index="label_checkbox_batch_detach_tag_submit">Detachs tags</label>
+			<label index="label_detach_tag_0">No article was processed.</label>
+			<label index="label_detach_tag_1">1 article was processed:</label>
+			<label index="label_detach_tag_2plus">###COUNT### articles were processed:</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Steuertagsteuerung</label>
@@ -68,6 +74,12 @@
 			<label index="message_confirm_delete_extra_from_tagzone">Möchten Sie dieses Extra wirklich löschen?</label>
 			<label index="message_dossier_title_not_unique">Dieser Titel wird bereits verwendet. Bitte geben Sie einen anderen Titel ein.</label>
 			<label index="label_show_article_list">Zeige alle Artikel, die dieses Steuertag verwenden &gt;&gt;</label>
+			<label index="label_checkbox_batch_detach_tag">Schlagworte aus Artikeln entfernen</label>
+			<label index="label_checkbox_batch_detach_tag_all_articles">Alle Artikel auswählen</label>
+			<label index="label_checkbox_batch_detach_tag_submit">Schlagworte entfernen</label>
+			<label index="label_detach_tag_0">Kein Artikel wurde bearbeitet.</label>
+			<label index="label_detach_tag_1">1 Artikel wurde bearbeitet:</label>
+			<label index="label_detach_tag_2plus">###COUNT### Artikel wurden bearbeitet:</label>
 		</languageKey>
 	</data>
 </T3locallang>

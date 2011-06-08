@@ -49,6 +49,16 @@
 #article_list {
 	display:none;
 }
+#article_list input[type=checkbox] {
+	width:auto;
+	margin:4px;
+}
+.detachTag {
+	display:none;
+}
+#detachTagStuff, #processSpinnerDetach {
+	margin-left:20px;
+}
 
 #button {
   clear:both;
@@ -70,6 +80,10 @@
 {/literal}
 var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
 var titleNotUniqueMesssage = "{$LANG.message_dossier_title_not_unique}";
+var labelCheckboxBatchDetachTag = "{$LANG.label_checkbox_batch_detach_tag}";
+var labelCheckboxBatchDetachTagAllArticles = "{$LANG.label_checkbox_batch_detach_tag_all_articles}";
+var labelCheckboxBatchDetachTagSubmit = "{$LANG.label_checkbox_batch_detach_tag_submit}";
+
 {literal}
 
 var tz_uid = null; // stores tag zone uid when opening the element browser popup
@@ -326,6 +340,7 @@ function toggleBatchForm() {
 		document.getElementById('article_batch_form').style.display = 'block';
 	} else {
 		document.getElementById('article_batch_form').style.display = 'none';
+		$("tag_batch_msg").innerHTML = "";
 	}
 }
 
@@ -421,7 +436,9 @@ function toggleArticleList() {
 					$("article_list").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
 				},
 				onSuccess: function(data) {
-					$("article_list").innerHTML = data.responseText;
+					$("article_list").innerHTML = getDetachTagCheckbox();
+					$("article_list").innerHTML += data.responseText;
+					$("detachTagStuff").style.display = 'none'; // hide initially
 				}
 			}
 		);
@@ -430,6 +447,66 @@ function toggleArticleList() {
 		document.getElementById('article_list').innerHTML = '';
 	}
 }
+
+function getDetachTagCheckbox() {
+	var html = '<div><input id="checkboxDetachTags" onchange="changeCheckboxDetachTag(); return false;" type="checkbox" />' + labelCheckboxBatchDetachTag;
+	html += '<span id="detachTagStuff"><input id="checkboxDetachTagsAllArticles" type="checkbox" onchange="cbDetachAll(); return false;" />' + labelCheckboxBatchDetachTagAllArticles + ' <input type="button" onclick="detachTagFromArticles(); return false;" value="' + labelCheckboxBatchDetachTagSubmit + '" /></span><span id="processSpinnerDetach"></span>';
+	html += '</div>';
+	return html;
+}
+
+function detachTagFromArticles() {
+	var prefixLength = 7; // length of prefix "detach_" vor field name
+	var elements = $$("#article_list .detachTag");
+
+	// collect article uids to detach the tag from
+	var ids = Array();
+	elements.each(function(element) {
+		if (element.checked == true) {
+			var id = parseInt(element.id.substring(prefixLength)); // get substring with article uid
+			ids.push(id);
+		}
+	});
+
+	var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
+	var request = new Ajax.Request(
+		"index.php",
+			{
+				method: 'get',
+				parameters: 'tx_newspaper_mod6[AjaxBatchDetachTag]=' + tagUid + '&tx_newspaper_mod6[articleUids]=' + ids.join(","),
+				onCreate: function() {
+					$("processSpinnerDetach").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
+				},
+				onSuccess: function(data) {
+					$("article_list").innerHTML = data.responseText;
+				}
+			}
+		);
+}
+
+function cbDetachAll() {
+	var checked = $("checkboxDetachTagsAllArticles").checked;
+	var elements = $$("#article_list .detachTag");
+	elements.each(function(element) {
+		element.checked = checked;
+	});
+}
+
+function changeCheckboxDetachTag() {
+	if ($("checkboxDetachTags").checked) {
+		var display = "inline";
+	} else {
+		var display = "none";
+		$("checkboxDetachTagsAllArticles").checked = false; // reset checkbox
+	}
+	$("detachTagStuff").style.display = display;
+	var elements = $$("#article_list .detachTag");
+	elements.each(function(element) {
+		element.style.display = display;
+	});
+}
+
+
 
 </script>
 {/literal}
@@ -491,7 +568,6 @@ function toggleArticleList() {
 
 <div id="article_list_trigger" onclick="toggleArticleList(); return false;">{$LANG.label_show_article_list}</div>
 <div id="article_list"></div>
-
 
 {/if}
 <!-- end mod6/res/mod6_dossier_manage.tmpl -->

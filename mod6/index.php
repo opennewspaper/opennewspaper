@@ -296,6 +296,43 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			die($msg);
 		}
 
+
+
+
+
+			if (isset($input['AjaxBatchDetachTag']) && intval($input['AjaxBatchDetachTag'])) {
+//t3lib_div::devlog('AJAX detach tags', 'newspaper', 0, array('input' => $input));
+			// batch assign tag to articles
+			$msg = '';
+			$count = 0;
+			foreach(t3lib_div::trimExplode(',', $input['articleUids']) as $aUid) {
+				$aUid = intval($aUid);
+				if ($aUid) {
+					$a = new tx_newspaper_Article($aUid);
+					try {
+						$t = new tx_newspaper_tag(intval($input['AjaxBatchDetachTag']));
+						if ($a->detachTag($t)) {
+							$msg .= $a->getAttribute('kicker') . ': ' . $a->getAttribute('title') . ' (#' . $a->getUid() . ')<br />';
+							$count++;
+						}
+					} catch(tx_newspaper_EmptyResultException $e) {
+						// ignore deleted articles
+					}
+				}
+			}
+			if ($count == 0) {
+				$msg = $this->localLang['label_detach_tag_0'];
+			} elseif ($count == 1) {
+				$msg = $this->localLang['label_detach_tag_1'] . '<br />' . $msg;
+			} else {
+				$msg = str_replace('###COUNT###', $count, $this->localLang['label_detach_tag_2plus']) . '<br />' . $msg;
+			}
+			die($msg);
+		}
+
+
+
+
 		if (isset($input['AjaxListArticlesForCtrlTag'])) {
 			$msg = '';
 
@@ -303,7 +340,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				$count = 0;
 				foreach($tag->getArticles() as $article) {
 					$count++;
-					// de-activated to merge #1564 $msg .= '<input type="checkbox" class="detachTag" id="detach_' . $article->getUid() . '" /> ';
+					$msg .= '<input type="checkbox" class="detachTag" id="detach_' . $article->getUid() . '" /> ';
 					$msg .= $count . '. ' . $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (#' . $article->getUid() . ')<br />';
 				}
 			}
