@@ -2,7 +2,7 @@
 
 class TableDescription {
     public function __construct($string) {
-        $this->words = explode(' ', $string);
+        $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
 
     public function getTableName() {
@@ -663,10 +663,15 @@ class tx_newspaper  {
         foreach ($parts as $part) {
             $return = array_merge($return, self::explodeByList($sep, $part));
         }
-        for ($i = 0; $i < sizeof($return); $i++) {
-            if (!$return[$i]) unset($return[$i]);
+
+        return self::removeEmptyStrings($return);
+    }
+
+    static public function removeEmptyStrings(array $strings) {
+        for ($i = 0; $i < sizeof($strings); $i++) {
+            if (!$strings[$i]) unset($strings[$i]);
         }
-        return $return;
+        return $strings;
     }
 
     /// Gets sorting position for next element in a MM table
