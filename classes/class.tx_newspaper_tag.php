@@ -242,6 +242,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
                 tx_newspaper::getDefaultFieldValues(array('crdate', 'tstamp', 'cruser_id'))
             )
         );
+
+        $this->callTypo3SavehooksForArticles(); // dependency tree etc.
+
         return true;
     }
 
@@ -338,6 +341,14 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
      * Detaches this tag from all records tags can be attached to
      */
     public function detach() {
+
+    	// collect articles assigned to this tag
+    	$articleUids = tx_newspaper::selectRows(
+    		'uid_local',
+    		'tx_newspaper_article_tags_mm',
+    		'uid_foreign=' . $this->getUid()
+    	);
+
     	foreach (self::$mmTables as $table) {
 			tx_newspaper::deleteRows(
 				$table,
@@ -345,6 +356,13 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 				'uid_foreign'
 			);
     	}
+
+    	// call save hooks for articles which had the detached tag attached
+		foreach($articleUids as $row) {
+			$article = new tx_newspaper_article($row['uid_local']);
+			$article->callTypo3Savehooks();
+		}
+
     }
 
     /**
@@ -467,6 +485,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
         	$this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
+
+        $this->callTypo3SavehooksForArticles(); // call Typo3 save hooks (triggers dependency tree etc.)
+
         return $this->getUid();
 	}
 
@@ -514,7 +535,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * Deletes the tag (tag is detached from other records first)
 	 */
 	public function delete() {
-		$this->detach();
+		$this->detach(); // this makes sure the dependency tree etc. are processed
 		$success = tx_newspaper::updateRows(
 			$this->getTable(),
 			'uid=' . $this->getUid(),

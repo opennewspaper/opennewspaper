@@ -250,7 +250,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 	/// Check if an AJAX request is to be processed. If yes, generate response and die.
 	private function processAjax(array $input) {
 
+		// newspaper element browser
 		if (isset($input['ajaxController'])) {
+			// add etxra to tagzone
 			switch($input['ajaxController']) {
 				case 'manageDossiers':
 					// create new abstract record for given concrete etxra
@@ -266,6 +268,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			}
 		}
 
+
+		// attach tag to selected articles
 		if (isset($input['AjaxBatchAttachTag']) && intval($input['AjaxBatchAttachTag'])) {
 			// batch assign tag to articles
 			$msg = '';
@@ -297,11 +301,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 
 
-
-
-
-			if (isset($input['AjaxBatchDetachTag']) && intval($input['AjaxBatchDetachTag'])) {
-//t3lib_div::devlog('AJAX detach tags', 'newspaper', 0, array('input' => $input));
+		// detach tag from selected articles
+		if (isset($input['AjaxBatchDetachTag']) && intval($input['AjaxBatchDetachTag'])) {
 			// batch assign tag to articles
 			$msg = '';
 			$count = 0;
@@ -331,8 +332,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 
 
-
-
+		// list articles using tag
 		if (isset($input['AjaxListArticlesForCtrlTag'])) {
 			$msg = '';
 
@@ -353,7 +353,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		}
 
 
-
+		// read tags for control tag category
 		if (isset($input['AjaxCtrlTagCat'])) {
 			// ctrl tag category was changed -> read tags for new cat
 			$tags = tx_newspaper_tag::getAllControlTags(intval($input['AjaxCtrlTagCat']));
@@ -365,22 +365,32 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			die(json_encode($option));
 		}
 
+
+		// render tagzones for selected tag
 		if (isset($input['AjaxTag'])) {
 			// tag was changed -> render tag zone backend
 			die($this->renderTagZoneBackend(intval($input['AjaxTag'])));
 		}
 
+
+		// remove extra from tagzone
 		if (isset($input['AjaxRemoveExtraFromTagZone'])) {
-			// set deleted flag for this tag zone, control tag and extra record
+			$tag = new tx_newspaper_tag(intval($input['tag_uid']));
+			// set deleted flag for this tag zone, control tag and extra uid combination
 			tx_newspaper::deleteRows(
 				'tx_newspaper_controltag_to_extra',
 				intval($input['tz_uid']),
 				'tag_zone',
-				'tag=' . intval($input['tag_uid']) . ' AND extra=' . intval($input['e_uid'])
+				'tag=' . $tag->getUid() . ' AND extra=' . intval($input['e_uid'])
 			);
+
+			$tag->callTypo3SavehooksForArticles(); // make sure Typo3 hooks are called (depedency tree etc.)
+
 			die($this->renderTagZoneBackend(intval($input['tag_uid']))); // render new tag zone backend
 		}
 
+
+		// change dossier title
 		if (isset($input['AjaxStoreDossierTitleUid'])) {
 
 			$title = trim($input['dossierTitle']);
@@ -396,6 +406,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			die(json_encode(array('success' => true)));
 		}
 
+
+		// change section
 		if (isset($input['AjaxStoreDossierSectionUid'])) {
 			$tag = new tx_newspaper_tag(intval($input['tagUid']));
 			$tag->setAttribute('section', intval($input['AjaxStoreDossierSectionUid'])); // store new section

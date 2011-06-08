@@ -186,6 +186,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                 $this->relateExtra2Article($extra);
             }
 
+        $this->callTypo3Savehooks(); // call Typo3 save hooks (triggers dependency tree etc.)
+
         return $this->getUid();
     }
 
@@ -830,12 +832,16 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      */
     public function detachTag(tx_newspaper_tag $tag) {
     	// detach tag from article
-    	return tx_newspaper::deleteRows(
+    	$count = tx_newspaper::deleteRows(
     		'tx_newspaper_article_tags_mm',
     		$this->getUid(),
 			'uid_local',
 			'uid_foreign=' . $tag->getUid()
 		);
+
+		$this->callTypo3Savehooks();
+
+		return $count;
     }
 
 
