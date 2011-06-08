@@ -177,7 +177,22 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$behavior->render();
 		$behavior->getAttributeList();
 	}
-		
+
+    public function test_datamap() {
+        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+
+        $datamap['tx_newspaper_article'][$this->article->getUid()] = array('tstamp' => time());
+
+        // use datamap, so all save hooks get called
+        $tce = t3lib_div::makeInstance('t3lib_TCEmain');
+        $tce->start($datamap, array());
+        $tce->process_datamap();
+        if (count($tce->errorLog)){
+            throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+        }
+
+    }
+
 	public function test_store_uid() {
         $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		$uid = $this->article->store();
@@ -187,7 +202,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 
     public function test_store_AttributesEqual() {
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaer_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
         $uid = $this->article->store();
 
         /// check that record in DB equals data in memory
@@ -200,7 +215,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_store_changed() {
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaer_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// change an attribute, store and check
 		$random_string = md5(time());
 		$this->article->setAttribute('bodytext',
@@ -213,7 +228,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_store_NewArticle() {
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaer_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// create an empty article and write it. verify it's been written.
 		$article = new tx_newspaper_Article();
         $random_string = md5(time());
