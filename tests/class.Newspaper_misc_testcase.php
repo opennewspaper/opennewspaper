@@ -77,13 +77,13 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article'), ' AND tx_newspaper_article.deleted=0');
 	}
 	public function test_EnableFieldsTcaTableAlias() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article AS a'), ' AND tx_newspaper_article.deleted=0');
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article AS a'), ' AND a.deleted=0');
 	}
 	public function test_EnableFields2TcaTables() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_section'), ' AND tx_newspaper_article.deleted=0 AND tx_newspaper_section.deleted=0');
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_section'), ' AND a.deleted=0 AND tx_newspaper_section.deleted=0');
 	}
 	public function test_EnableFields2TcaTablesAlias() {
-		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_article_sections_mm mm'), ' AND tx_newspaper_article.deleted=0');
+		$this->assertEquals(tx_newspaper::enableFields('tx_newspaper_article a, tx_newspaper_article_sections_mm mm'), ' AND a.deleted=0');
 	}
 	public function test_EnableFieldsNonExistingTable() {
 		$this->assertEquals(tx_newspaper::enableFields('nonexistingtable'), '');
@@ -154,6 +154,23 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
                 $table . ' yields ' . sizeof(TableDescription::createDescriptions($table)) . ' descriptions'
             );
         }
+    }
+
+    public function test_splitOnJoin_Comma_Values() {
+        foreach (array('tx_newspaper_article as a, tx_newspaper_section as s',
+                       'tx_newspaper_article a, tx_newspaper_section s') as $table) {
+            $descriptions = TableDescription::createDescriptions($table);
+            $this->compareName($descriptions[0],  'tx_newspaper_article');
+            $this->compareName($descriptions[1],  'tx_newspaper_section');
+            $this->compareAlias($descriptions[0],  'a');
+            $this->compareAlias($descriptions[1],  's');
+        }
+
+        $descriptions = TableDescription::createDescriptions('tx_newspaper_article, tx_newspaper_section');
+        $this->compareName($descriptions[0],  'tx_newspaper_article');
+        $this->compareName($descriptions[1],  'tx_newspaper_section');
+        $this->compareAlias($descriptions[0],  'tx_newspaper_article');
+        $this->compareAlias($descriptions[1],  'tx_newspaper_section');
     }
 
     ////////////////////////////////////////////////////////////////////////////
