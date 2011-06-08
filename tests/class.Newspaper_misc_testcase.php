@@ -176,11 +176,11 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
     ////////////////////////////////////////////////////////////////////////////
 
     private function compareName(TableDescription $description, $expected) {
-        $this->assertEquals($description->getTableName(), $expected, 'Name is ' . $description->getTableName());
+        $this->assertEquals($description->getTableName(), $expected, 'Name is ' . $description->getTableName() . " Description: $description");
     }
 
     private function compareAlias(TableDescription $description, $expected) {
-        $this->assertEquals($description->getTableAlias(), $expected, 'Alias is ' . $description->getTableAlias());
+        $this->assertEquals($description->getTableAlias(), $expected, 'Alias is ' . $description->getTableAlias() . " Description: $description");
     }
 
     private static function executeExplodeByList() {

@@ -15,6 +15,10 @@ class TableDescription {
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
 
+    public function __toString() {
+        return 'Name: ' . $this->getTableName() . ' Alias: ' . $this->getTableAlias() . 'Words: ' . print_r($this->words, 1);
+    }
+
     public function getTableName() {
         $this->extractName();
         return $this->table_name;
