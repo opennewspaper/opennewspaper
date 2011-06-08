@@ -17,7 +17,7 @@ class TableDescription {
 
     private function extractAlias() {
         if (!$this->table_alias) {
-            for ($i = 1; $i < min(sizeof($this->words, 2)); $i++) {
+            for ($i = 1; $i < min(sizeof($this->words), 2); $i++) {
                 if (strtolower($this->words[$i]) == 'as') continue;
                 $this->table_alias = $this->words[$i];
             }
