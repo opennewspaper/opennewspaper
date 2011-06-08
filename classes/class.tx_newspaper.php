@@ -12,6 +12,7 @@ class TableDescription {
     }
 
     public function __construct($string) {
+        echo " '$string' ";
         $this->string = $string;
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
@@ -34,11 +35,7 @@ class TableDescription {
         if (!$this->table_alias) {
             for ($i = 1; $i < min(sizeof($this->words), 3); $i++) {
                 if (strtolower($this->words[$i]) == 'as') continue;
-                if (strtolower($this->words[$i]) == 'join') break;
-                if (strtolower($this->words[$i]) == 'left') break;
-                if (strtolower($this->words[$i]) == 'right') break;
-                if (strtolower($this->words[$i]) == 'inner') break;
-                if (strtolower($this->words[$i]) == 'on') break;
+                if (self::doesNotBeginAlias($this->words[$i])) break;
                 $this->table_alias = $this->words[$i];
             }
             if (!$this->table_alias) {
@@ -80,6 +77,15 @@ class TableDescription {
         $first = substr($string, 0, $split_position);
         $second = substr($string, $split_position+strlen($word));
         return array_merge(array($first), self::splitStringOnWord($second, $word));
+    }
+
+    private static function doesNotBeginAlias($string) {
+        if (strtolower($string) == 'join') return true;
+        if (strtolower($string) == 'left') return true;
+        if (strtolower($string) == 'right') return true;
+        if (strtolower($string) == 'inner') return true;
+        if (strtolower($string) == 'on') return true;
+        return false;
     }
 
     private $table_alias = '';
