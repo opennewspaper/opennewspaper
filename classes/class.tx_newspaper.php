@@ -12,6 +12,7 @@ class TableDescription {
     }
 
     public function __construct($string) {
+        echo "'$string'";
         $this->words = tx_newspaper::removeEmptyStrings(explode(' ', $string));
     }
 
