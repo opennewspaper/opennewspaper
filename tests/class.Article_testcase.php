@@ -179,7 +179,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
 	public function test_store_uid() {
 
-        if ($this->testSkippedBecauseDatamap()) return;
+        if ($this->skipTestBecauseDatamap()) return;
 
         $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		$uid = $this->article->store();
@@ -190,7 +190,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_store_AttributesEqual() {
 
-        if ($this->testSkippedBecauseDatamap()) return;
+        if ($this->skipTestBecauseDatamap()) return;
 
         $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
         $uid = $this->article->store();
@@ -206,7 +206,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_store_changed() {
 
-        if ($this->testSkippedBecauseDatamap()) return;
+        if ($this->skipTestBecauseDatamap()) return;
 
         $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// change an attribute, store and check
@@ -222,7 +222,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_store_NewArticle() {
 
-        if ($this->testSkippedBecauseDatamap()) return;
+        if ($this->skipTestBecauseDatamap()) return;
 
         $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// create an empty article and write it. verify it's been written.
@@ -380,7 +380,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     }
 
-    private function testSkippedBecauseDatamap() {
+    private function skipTestBecauseDatamap() {
         if (!$this->checkDatamapWorks()) {
             $this->skipTest('t3lib_tcemain::process_datamap does not work correctly on this installation');
             return true;
