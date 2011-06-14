@@ -739,6 +739,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
     }
 
+    public static function getExecutionTime() {
+        $timing_info = self::getTimingInfo();
+        return $timing_info['execution time'];
+    }
+
     private static function getTimingInfo() {
         $start_time = array_pop(self::$execution_time_stack);
         $execution_time = microtime(true)-$start_time;
