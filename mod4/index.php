@@ -646,7 +646,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				'param' => array()
 			),
 			array(
-				'title' => 'List articles with a section assigned',
+				'title' => 'List articles with no section assigned',
 				'class_function' => array('tx_newspaper_module4', 'checkArticleWithoutSection'),
 				'param' => array()
 			),
