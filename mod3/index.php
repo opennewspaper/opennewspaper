@@ -438,6 +438,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 			$this->processExtraInsertAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'));
 		}
 tx_newspaper::devlog('g', $_GET);
+tx_newspaper::devlog('p', $_POST);
 		// move etxra
 		if (t3lib_div::_GP('extra_move_after') == 1) {
 			$this->processExtraMoveAfter(t3lib_div::_GP('origin_uid'), t3lib_div::_GP('pz_uid'), t3lib_div::_GP('extra_uid'));
