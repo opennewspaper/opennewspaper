@@ -1094,7 +1094,7 @@ tx_newspaper::devlog('removeExtra()', $remove_extra);
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
 tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too");
 		foreach ($this->getExtras($hidden_too) as $extra) {
-            tx_newspaper::devlog('extra UID: '.$extra->getUid(). ", required: ".$extra->getAttribute('origin_uid'));
+            tx_newspaper::devlog('extra UID: '.$extra->getUid(). ", searched: $origin_uid".", origin_uid: ".$extra->getAttribute('origin_uid'));
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
 		return null;
