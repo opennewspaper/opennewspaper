@@ -499,6 +499,7 @@ tx_newspaper::devlog('insertExtraAfter('.$insert_extra->getExtraUid()."|".$inser
 		$this->addExtra($insert_extra);
 		
 		if ($recursive /* && (boolean)$insert_extra->getAttribute('is_inheritable') */) {
+tx_newspaper::devlog('RECURSIVE!');
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$copied_extra = clone $insert_extra;
