@@ -485,7 +485,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
 
-tx_newspaper::devlog('insertExtraAfter('.$insert_extra->getExtraUid()."$origin_uid, $recursive");
+tx_newspaper::devlog('insertExtraAfter('.$insert_extra->getExtraUid().", $origin_uid, $recursive");
 		/** \todo: it should be possible to set the paragraph BEFORE calling
 		 *   	this function. otherwise a workaround is needed: insert extra to
 		 * 		article and call changeExtraArticle() on the article afterwards
