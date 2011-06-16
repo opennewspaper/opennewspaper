@@ -20,6 +20,17 @@ define('NP_WORKLFOW_LOG_IMPORT', 5);
 define('NP_WORKLFOW_LOG_ERRROR', 6);
 define('NP_WORKLFOW_LOG_WARNING', 7);
 
+define('NP_WORKLFOW_LOG_PLACEMENT_INSERT_AFTER', 20);
+define('NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER', 21);
+define('NP_WORKLFOW_LOG_PLACEMENT_SHOW', 22);
+define('NP_WORKLFOW_LOG_PLACEMENT_INHERIT', 23);
+define('NP_WORKLFOW_LOG_PLACEMENT_DELETE', 24);
+define('NP_WORKLFOW_LOG_PLACEMENT_CUT_PASTE', 25);
+define('NP_WORKLFOW_LOG_PLACEMENT_COPY_PASTE', 26);
+
+define('NP_WORKLFOW_LOG_WEBMASTER_TOOL_INHERITACNE_SOURCE', 40);
+
+
 define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
 
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
@@ -483,8 +494,8 @@ function changeWorkflowStatus(role, hidden_status) {
 			'pid' => 0,
 			'tstamp' => $current_time,
 			'crdate' => $current_time,
-			'cruser_id' => $GLOBALS['BE_USER']->user['uid'],
-			'be_user' => $GLOBALS['BE_USER']->user['uid'], // same value as cruser_id, but this field is visible in backend
+			'cruser_id' => tx_newspaper::getBeUserUid(),
+			'be_user' => tx_newspaper::getBeUserUid(), // same value as cruser_id, but this field is visible in backend
 			'table_name' => $table,
 			'table_uid' => $id,
 			'operation' => $type,

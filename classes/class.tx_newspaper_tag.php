@@ -312,7 +312,12 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             'tx_newspaper_article, tx_newspaper_article_tags_mm',
             'tx_newspaper_article_tags_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local',
             '',
-            'publish_date DESC',
+            'CASE
+  WHEN tx_newspaper_article.publish_date = \'0\'
+  THEN tx_newspaper_article.tstamp
+  ELSE tx_newspaper_article.publish_date
+END
+DESC',
             ($limit > 0)? "$start, $limit" : ''
         );
 
