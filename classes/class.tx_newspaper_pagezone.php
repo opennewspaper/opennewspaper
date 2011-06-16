@@ -508,6 +508,7 @@ tx_newspaper::devlog('RECURSIVE!');
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
 			}
 		}
+        tx_newspaper::devlog('insertExtraAfter() END: '.$insert_extra->getExtraUid()."|".$insert_extra->getOriginUid());
 		return $insert_extra;
 	}
 	
