@@ -806,7 +806,7 @@ tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this
 	 *      upon, or \c null
 	 */
 	public function getPageZone() {
-		/// Check if the Extra is associated with an article...
+		/// Check if the Extra insertExtraAfteris associated with an article...
 		foreach (array('tx_newspaper_article_extras_mm' => 'tx_newspaper_Article',
 						/// ...or a page zone...
 				 	   'tx_newspaper_pagezone_page_extras_mm' => 'tx_newspaper_PageZone_Page')
@@ -889,6 +889,7 @@ tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this
         );
     }
 
+    /** @return tx_newspaper_PageZone */
     private static function getPagezoneForInsertingNewExtra($table, $id) {
         $pz_uid = intval(t3lib_div::_GP('new_extra_pz_uid'));
         if (!$pz_uid) {

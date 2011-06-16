@@ -347,6 +347,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     /// Default implementation for page zones which do not have paragraphs
     public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
+tx_newspaper::devlog("changeExtraParagraph(". $extra->getExtraUid().", $new_paragraph)");
         $extra->store();
     }
 
