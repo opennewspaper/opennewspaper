@@ -1087,11 +1087,14 @@ tx_newspaper::devlog('removeExtra()', $remove_extra);
 	
 
 	///	Given a origin uid, find the Extra which has this value for \p origin_uid
-	/** \param $origin_uid The origin uid of the extra to be found
-	 *  \param $hidden_too Whether to search in GUI-hidden extras as well
-	 */
+	/** @param int $origin_uid The origin uid of the extra to be found
+	 *  @param boolean $hidden_too Whether to search in GUI-hidden extras as well
+	 *  @return tx_newspaper_Extra
+     */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
+tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too");
 		foreach ($this->getExtras($hidden_too) as $extra) {
+            tx_newspaper::devlog('extra UID: '.$extra->getUid(), ", origin_uid: ".$extra->getAttribute('origin_uid'));
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
 		return null;
