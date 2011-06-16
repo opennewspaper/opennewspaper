@@ -623,6 +623,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	public function store() {
+tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this->extra_attributes, 'uid'=>$this->getUid()));
 		if ($this->getUid()) {
 			/// If the attributes are not yet in memory, read them now
 			$this->getAttribute('uid');
