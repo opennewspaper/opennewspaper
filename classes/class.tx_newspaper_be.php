@@ -844,7 +844,10 @@ function findElementsByName(name, type) {
 		if ($clipboard['type'] == 'cut') {
 			// delete cut extra and clear clipboard
 			$pz_old = tx_newspaper_PageZone_Factory::getInstance()->create(intval($clipboard['pagezoneUid']));
-			$pz_old->removeExtra($e_old, true);
+			$success = $pz_old->removeExtra($e_old, true);
+            if (!$success) {
+                tx_newspaper::devlog('removeExtra failed', array('pagezone'=>$pz_old, 'extra'=>$e_old), 'newspaper', 2);
+            }
 			self::clearClipboard(); // clear clipboard
 		}
 
