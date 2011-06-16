@@ -126,3 +126,7 @@ CREATE TABLE pages (
 	tx_newspaper_associated_section text NOT NULL
 );
 
+
+
+CREATE TABLE tx_newspaper_log (
+) ENGINE=InnoDB;
