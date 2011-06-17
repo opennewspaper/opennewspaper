@@ -77,7 +77,8 @@ class ErrorExtra extends tx_newspaper_Extra {
  */
 class tx_newspaper_Extra_Factory {
 	
-	/// Returns the only instance of the tx_newspaper_Extra_Factory Singleton
+	/** @return tx_newspaper_Extra_Factory The only instance of the tx_newspaper_Extra_Factory Singleton
+     */
 	public static function getInstance() {
 		if (self::$instance == null) {
 			self::$instance = new tx_newspaper_Extra_Factory();
@@ -90,7 +91,7 @@ class tx_newspaper_Extra_Factory {
 	 *  instantiates and returns it.
 	 *  
 	 *  \param $uid The UID of the tx_newspaper_Extra in the abstract Extra table
-	 *  \return A fully instantiated concrete Extra of the correct type
+	 *  @return tx_newspaper_Extra A fully instantiated concrete Extra of the correct type
 	 *  \throw tx_newspaper_DBException If a DB operation goes wrong, e.g. when
 	 * 		the abstract UID is not present or hidden by 
 	 * 		tx_newspaper::enableFields(), or if the abstract record is corrupted

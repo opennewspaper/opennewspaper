@@ -1139,8 +1139,9 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
 	
 
 	/// Retrieve the array of Extras on the PageZone, sorted by position
-    /** \param $hidden_too Also get Extras that are hidden because their
+    /** @param bool $hidden_too Also get Extras that are hidden because their
      *        inheritance mode has been set to false
+     *  @return tx_newspaper_Extra[]
      */
     public function getExtras($hidden_too = false) {
 tx_newspaper::devlog("getExtras()", $this->extras);
@@ -1149,7 +1150,8 @@ tx_newspaper::devlog("getExtras()", $this->extras);
         }
 
         usort($this->extras, array(get_class($this), 'compareExtras')); 
-        return $this->extras; 
+        tx_newspaper::devlog("getExtras() after", $this->extras);
+        return $this->extras;
     }
 
     public function getExtrasOf($extra_class) {
@@ -1243,6 +1245,7 @@ tx_newspaper::devlog("getExtras()", $this->extras);
 					!$deleted['show_extra'])) {
 	
         			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
+tx_newspaper::devlog("readExtras()", $extra);
 	        		$this->extras[] = $extra;
 				} else {
 					/// \todo remove association table entry, but only if really deleted
@@ -1351,6 +1354,7 @@ tx_newspaper::devlog("getExtras()", $this->extras);
  	
  	protected $attributes = array();	///< array of attributes
  	protected $pagezone_attributes = array(); ///< array of attributes for the parent part of the record
+    /** @var tx_newspaper_Extra[] */
  	protected $extras = array();		///< array of tx_newspaper_Extra s
  	protected $pagezonetype = null;
  	
