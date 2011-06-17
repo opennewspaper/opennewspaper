@@ -149,7 +149,7 @@ class tx_newspaper_DependencyTree {
 
     /// Generates the tree of pages that change when a tx_newspaper_Article changes.
     /** @param $article The article which is changed. \p $article is from now on
-     *    called "the affected article". 
+     *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
         tx_newspaper::startExecutionTimer();
@@ -244,7 +244,7 @@ class tx_newspaper_DependencyTree {
     static public function clearRegisteredActions() {
         self::$registered_actions = array();
     }
-    
+
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
         if ($key) {

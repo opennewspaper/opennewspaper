@@ -25,7 +25,7 @@
 			<label index="tx_newspaper_extra_image.tags">Tags</label>
 			<label index="tx_newspaper_section">Section</label>
 			<label index="tx_newspaper_section.section_name">Name of the section</label>
-			<label index="tx_newspaper_section.show_in_list">Showin section lists</label>
+			<label index="tx_newspaper_section.show_in_list">Show in section lists</label>
 			<label index="tx_newspaper_section.parent_section">Parent section</label>
 			<label index="tx_newspaper_section.default_articletype">Default Article type</label>
 			<label index="tx_newspaper_section.pagetype_pagezone">Page type / page zone</label>

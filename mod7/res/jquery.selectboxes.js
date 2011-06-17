@@ -712,5 +712,4 @@ $.fn.getOptionValues = function() {
 
 }
 
-
 })(jQuery);

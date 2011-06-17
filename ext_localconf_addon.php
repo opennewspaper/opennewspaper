@@ -110,8 +110,8 @@
 			TCEFORM.tx_newspaper_extra_typo3_ce.starttime.disabled = 1
 			TCEFORM.tx_newspaper_extra_typo3_ce.endtime.disabled = 1
 			TCEFORM.tx_newspaper_extra_typo3_ce.hidden.disabled = 1
-
-			// \todo enable after functionality is implemented, see #1111
+	
+			// \todo enable after functionality is implemented, see #1111		
 			TCEFORM.tx_newspaper_articlelist_semiautomatic.subsequent_sections.disabled = 1
 
 			// \todo enable after functionality is available, see #943
