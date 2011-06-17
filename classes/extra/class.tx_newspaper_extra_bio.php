@@ -77,7 +77,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
         $status, $table, $id, &$fieldArray, $that
     ) {
         if ($table != 'tx_newspaper_extra_bio') return;
-        tx_newspaper::devlog('bio save hook', $fieldArray);
+        tx_newspaper::devlog("bio save hook ($status, $table, $id)" , $fieldArray);
 #$extra = new tx_newspaper_extra_Bio($id);
 #tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());
         if ($fieldArray[self::image_file_field]) {
