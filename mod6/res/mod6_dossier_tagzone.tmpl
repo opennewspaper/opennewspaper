@@ -17,7 +17,7 @@
 			{$TAGZONES_ALL[$tz.tag_zone].name}<br />
 			{foreach from=$TAGZONES_USED_EXTRAS[$tz.tag_zone] item=extra}
 				{$extra->getDescription()} <br />
-				<a href="#" onclick="removeExtraFromTagzone({$tz.tag_zone}, {$extra->getExtraUid()}); return false;">{$ICON.remove}</a> <a onclick="vHWin=window.open('{$ABSOLUTE_PATH}/typo3/alt_doc.php?returnUrl=close.html&amp;edit[{$extra->getTable()}][{$extra->getUid()}]=edit','ad41032cf3f3844ae2a5e68cb9d8339c','width=670,height=500,status=0,menubar=0,scrollbars=1,resizable=1');vHWin.focus();return false;" href="#">{$ICON.edit}</a><br /><br />
+				<a href="#" onclick="removeExtraFromTagzone({$tz.tag_zone}, {$extra->getExtraUid()}); return false;">{$ICON.remove}</a> <a onclick="vHWin=window.open('{$ABSOLUTE_PATH}typo3/alt_doc.php?returnUrl=close.html&amp;edit[{$extra->getTable()}][{$extra->getUid()}]=edit','ad41032cf3f3844ae2a5e68cb9d8339c','width=670,height=500,status=0,menubar=0,scrollbars=1,resizable=1');vHWin.focus();return false;" href="#">{$ICON.edit}</a><br /><br />
 			{/foreach}
 		{/foreach}
 	</div>
