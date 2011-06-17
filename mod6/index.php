@@ -438,7 +438,8 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			'add' => tx_newspaper_be::renderIcon('gfx/plusbullet2.gif', ''),
 			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
 			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
-			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', '')
+			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', ''),
+			'reload' => tx_newspaper_BE::renderIcon('gfx/refresh_n.gif', '')
 		));
 //t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
 

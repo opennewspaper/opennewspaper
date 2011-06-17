@@ -6,7 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Control Tag Control</label>
+			<label index="title">Dossiers</label>
 			<label index="manage_dossiers">Manage dossiers</label>
             <label index="manage_articles">Manage articles</label>
 			<label index="manage_tagzones">Manage tag zones</label>
@@ -44,7 +44,7 @@
 			<label index="label_detach_tag_2plus">###COUNT### articles were processed:</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="title">Steuertagsteuerung</label>
+			<label index="title">Schwerpunkte</label>
 			<label index="manage_dossiers">Dossiers verwalten</label>
             <label index="manage_articles">Artikel verwalten</label>
 			<label index="manage_tagzones">Steuertagzonen verwalten</label>

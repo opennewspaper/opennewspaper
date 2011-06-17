@@ -23,6 +23,15 @@
 #tz_unused {
 	float:left;
 }
+#tz_reload {
+	margin-bottom:3px;
+	display:none;
+}
+#tz_reload img {
+	border:1px solid red;
+}
+
+
 .tz_musthave {
 	border:1px solid #c61940;
 	margin-bottom:5px;
@@ -509,6 +518,9 @@ function changeCheckboxDetachTag() {
 }
 
 
+function showReloadButton() {
+	$("tz_reload").style.display = "block";
+}
 
 </script>
 {/literal}
