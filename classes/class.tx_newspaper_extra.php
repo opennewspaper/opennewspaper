@@ -141,7 +141,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		}
 		return get_class($this) . '-object: UID ' . $this->getUid() .
 			', Extra UID: ' . $this->getExtraUID() .
-			', origin UID: ' . $this->getOriginUid()
+			', origin UID: ' . $this->getAttribute('origin_uid')
 #			   'attributes: ' . print_r($this->attributes, 1)
 			 . "\n";
 	}
