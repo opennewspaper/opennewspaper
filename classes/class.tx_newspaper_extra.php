@@ -756,6 +756,7 @@ tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this
 	 *  \return int the origin uid of an extra (if 0 return abstract extra uid)
 	 */
 	public function getOriginUid() {
+tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraUid().', attribute origin_uid: '.$this->getAttribute('origin_uid'));
 		if ($this->getAttribute('origin_uid'))
 			return intval($this->getAttribute('origin_uid'));
 		else
