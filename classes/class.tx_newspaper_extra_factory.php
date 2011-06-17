@@ -58,6 +58,9 @@ class ErrorExtra extends tx_newspaper_Extra {
         return tx_newspaper_BE::renderIcon('gfx/icon_warning.gif', '') .
                $this->message;
     }
+    public function getAttribute($x) {
+        throw new tx_newspaper_IllegalUsageException('ErrorExtra::getAttribute()');
+    }
     public static function dependsOnArticle() { return false; }
 
     private $message;
