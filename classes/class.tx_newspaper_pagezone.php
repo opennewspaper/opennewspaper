@@ -1143,6 +1143,7 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
      *        inheritance mode has been set to false
      */
     public function getExtras($hidden_too = false) {
+tx_newspaper::devlog("getExtras()", $this->extras);
     	if (empty($this->extras) || $hidden_too) {
             $this->readExtras($this->getUid(), $hidden_too);
         }
