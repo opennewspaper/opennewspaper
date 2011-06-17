@@ -770,6 +770,7 @@ tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraU
 	}
 
     public function setOriginUid($origin_uid) {
+tx_newspaper::devlog("setOriginUid($origin_uid)");
         $this->readExtraAttributes();
         $this->setAttribute('origin_uid', $origin_uid);
         $this->store();
