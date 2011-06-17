@@ -106,7 +106,7 @@ class tx_newspaper_Extra_Factory {
         try {
             /// Read actual type and UID of the Extra to instantiate from DB
             $row =  tx_newspaper::selectOneRow(
-                'origin_uid,extra_table, extra_uid', self::$extra_table, "uid = $uid"
+                'uid,origin_uid,extra_table, extra_uid', self::$extra_table, "uid = $uid"
             );
 tx_newspaper::devlog('create()', $row);
         } catch (tx_newspaper_Exception $e) {
