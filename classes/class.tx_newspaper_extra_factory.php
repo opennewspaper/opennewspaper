@@ -59,7 +59,7 @@ class ErrorExtra extends tx_newspaper_Extra {
                $this->message;
     }
     public function getAttribute($x) {
-        throw new tx_newspaper_IllegalUsageException('ErrorExtra::getAttribute()');
+        throw new tx_newspaper_IllegalUsageException('ErrorExtra::getAttribute()', true);
     }
     public static function dependsOnArticle() { return false; }
 

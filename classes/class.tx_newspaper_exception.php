@@ -106,8 +106,8 @@ class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception {
 
 	/** \param $message Message about what is wrong
 	 */ 
-	public function __construct($message) {
-        parent::__construct("Illegal usage: $message");
+	public function __construct($message, $write_message = false) {
+        parent::__construct("Illegal usage: $message", $write_message);
     }	
 }
 
