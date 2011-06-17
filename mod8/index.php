@@ -92,7 +92,6 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
 							'3' => $LANG->getLL('renameTags'),
 							'2' => $LANG->getLL('mergeTags'),
 							'1' => $LANG->getLL('deleteTag'),
-
 						)
 					);
 					parent::menuConfig();
