@@ -298,9 +298,11 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	public function getAttribute($attribute) {
 $done = "getAttribute($attribute): ";
-		if (!$this->extra_attributes) {
+
+#		if (!$this->extra_attributes) {
             $this->readExtraAttributes();
-        } else $done .= "extra attributes: ".print_r($this->extra_attributes, 1);
+#        }
+        $done .= "extra attributes: ".print_r($this->extra_attributes, 1);
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
