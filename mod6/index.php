@@ -431,12 +431,14 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$this->smarty->assign('TAGZONES_USED', $tagzones);
 		$this->smarty->assign('TAGZONES_USED_EXTRAS', $tz_extras);
 		$this->smarty->assign('TAGZONES_ALL', tx_newspaper_tag::getAllTagzones());
+		$this->smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
 		$this->smarty->assign('ICON', array(
 			'remove' => tx_newspaper_be::renderIcon('gfx/clearout.gif', ''),
 			'replace' => tx_newspaper_be::renderIcon('gfx/import_update.gif', ''),
 			'add' => tx_newspaper_be::renderIcon('gfx/plusbullet2.gif', ''),
 			'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),
-			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', '')
+			'x' => tx_newspaper_BE::renderIcon('gfx/close.gif', ''),
+			'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', '')
 		));
 //t3lib_div::devlog('renderTagZoneBackend()', 'newspaper', 0, array('tag' => $tag, "tz's" => $tag->getTagzones(), "all tz's" => tx_newspaper_tag::getAllTagzones(), 'tz e\'s' => $tz_extras));
 
