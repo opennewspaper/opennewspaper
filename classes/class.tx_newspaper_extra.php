@@ -297,18 +297,15 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	public function getAttribute($attribute) {
-$done = "getAttribute($attribute): ";
 
 		if (!$this->extra_attributes) {
             $this->readExtraAttributes();
         }
-        $done .= "extra attributes: ".print_r($this->extra_attributes, 1);
 		if (!$this->attributes) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-#if ($attribute == 'origin_uid') tx_newspaper::devlog($done);
  		if (array_key_exists($attribute, $this->extra_attributes)) {
 	 		return $this->extra_attributes[$attribute];
  		}
@@ -762,7 +759,7 @@ tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this
 	 */
 	public function getOriginUid() {
         $origin = intval($this->getAttribute('origin_uid'));
-tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraUid().', attribute origin_uid: '.$origin);
+tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraUid().', attribute origin_uid: '.$origin, debug_backtrace());
 		if ($origin)
 			return $origin;
 		else
