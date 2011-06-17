@@ -504,7 +504,7 @@ tx_newspaper::devlog('RECURSIVE!', debug_backtrace());
 			/// Pass down the insertion to PageZones inheriting from $this
 			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
 				$copied_extra = clone $insert_extra;
-				$copied_extra->setAttribute('origin_uid', $insert_extra->getOriginUid());
+				$copied_extra->setOriginUid($insert_extra->getOriginUid());
 				
 				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
 			}

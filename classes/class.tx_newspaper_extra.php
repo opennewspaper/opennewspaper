@@ -334,13 +334,7 @@ if ($attribute == 'origin_uid') tx_newspaper::devlog($done);
     public function setAttribute($attribute, $value) {
 
 		if (!$this->extra_attributes) {
-			if ($this->getExtraUid()) {
-				$this->extra_attributes = tx_newspaper::selectOneRow(
-					'*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid());
-			} else {
-#				$this->extra_attributes = tx_newspaper::makeArrayFromFields('tx_newspaper_extra');
-				$this->extra_attributes = array();
-			}
+            $this->readExtraAttributes();
 		}
 		if (!$this->attributes) {
 			if ($this->getUid()) {
@@ -775,6 +769,11 @@ tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraU
 			return intval($this->getExtraUid());
 	}
 
+    public function setOriginUid($origin_uid) {
+        $this->readExtraAttributes();
+        $this->setAttribute('origin_uid', $origin_uid);
+        $this->store();
+    }
 	/// Checks if this tx_newspaper_Extra was placed on this page zone
 	/** \return \c true if this tx_newspaper_Extra was placed on this page zone
 	 *  \todo Honestly, I don't know what "this page zone" means. Oliver?
