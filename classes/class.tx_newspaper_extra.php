@@ -308,7 +308,7 @@ $done = "getAttribute($attribute): ";
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
 		}
-if ($attribute == 'origin_uid') tx_newspaper::devlog($done);
+#if ($attribute == 'origin_uid') tx_newspaper::devlog($done);
  		if (array_key_exists($attribute, $this->extra_attributes)) {
 	 		return $this->extra_attributes[$attribute];
  		}
@@ -865,6 +865,7 @@ tx_newspaper::devlog("setOriginUid($origin_uid)");
 	 * \param $that t3lib_TCEmain object?
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+tx_newspaper::devlog("processDatamap_afterDatabaseOperations($status, $table, $id)", $fieldArray);
 		self::writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 	}
 
