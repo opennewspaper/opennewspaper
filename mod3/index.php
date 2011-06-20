@@ -246,7 +246,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         tx_newspaper_PageZone::updateDependencyTree($pz);
 
         if (!$pz->isConcreteArticle()) {
-	        self::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
+	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
         }
 
 		die();
@@ -269,7 +269,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         }
 
 		if (!$pz->isConcreteArticle()) {
-	        self::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_DELETE);
+	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_DELETE);
         }
 
 		die();
@@ -310,7 +310,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 		tx_newspaper_Extra::updateDependencyTree($e);
 
-		self::logPlacement('tx_newspaper_extra', $extra_uid, array('show' => $show), NP_WORKLFOW_LOG_PLACEMENT_SHOW);
+		tx_newspaper_workflow::logPlacement('tx_newspaper_extra', $extra_uid, array('show' => $show), NP_WORKLFOW_LOG_PLACEMENT_SHOW);
 
 		die();
 	}
@@ -368,7 +368,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 //		$e->store();
         tx_newspaper_Extra::updateDependencyTree($e);
 
-        self::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid, 'pass_down' => $pass_down), NP_WORKLFOW_LOG_PLACEMENT_INHERIT);
+        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid, 'pass_down' => $pass_down), NP_WORKLFOW_LOG_PLACEMENT_INHERIT);
 
 		die();
 	}
@@ -987,45 +987,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	}
 
 
-	public static function logPlacement($table, $id, array $data, $type) {
 
-		// see: http://php.net/manual/de/function.implode.php#103861
-		$comment = implode(array_map(create_function('$key, $value', 'return $key.":".$value."| ";'), array_keys($data), array_values($data)));
-
-		// \todo: remove when data is written as a seralized array to the database (when a backend module to access this log is available)
-		switch($type) {
-			case 20:
-				$comment .= 'INSERT_AFTER';
-			break;
-			case 21:
-				$comment .= 'MOVE_AFTER';
-			break;
-			case 22:
-				$comment .= 'SHOW';
-			break;
-			case 23:
-				$comment .= 'INHERIT';
-			break;
-			case 24:
-				$comment .= 'DELETE';
-			break;
-			case 25:
-				$comment .= 'CUT_PASTE';
-			break;
-			case 26:
-				$comment .= 'COPY_PASTE';
-			break;
-			case 40:
-				$comment .= 'WEBMASTER_TOOL_INHERITACNE_SOURCE';
-			break;
-			default:
-				$comment .= 'UNKNOWN TYPE ' . intval($type);
-		}
-
-		// write log entry
-		tx_newspaper_Workflow::directLog($table, $id, $comment, $type);
-
-	}
 }
 
 

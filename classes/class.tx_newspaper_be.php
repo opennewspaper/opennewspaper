@@ -841,6 +841,14 @@ function findElementsByName(name, type) {
 		// insert extra
 		$pz->insertExtraAfter($e, intval($input['origin_uid']), true);
 
+		// assemble data for workflow log
+		$log = array(
+			'clipboardType' => $clipboard['type'],
+			'sourcePagezoneUid' => $clipboard['pagezoneUid'],
+			'targetPagezoneUid' => $input['pz_uid'],
+			'targetOriginUid' => $input['origin_uid']
+		);
+
 		if ($clipboard['type'] == 'cut') {
 			// delete cut extra and clear clipboard
 			$pz_old = tx_newspaper_PageZone_Factory::getInstance()->create(intval($clipboard['pagezoneUid']));
@@ -849,7 +857,15 @@ function findElementsByName(name, type) {
                 tx_newspaper::devlog('removeExtra failed', array('pagezone'=>$pz_old, 'extra'=>$e_old), 'newspaper', 2);
             }
 			self::clearClipboard(); // clear clipboard
+
+			$logType = NP_WORKLFOW_LOG_PLACEMENT_CUT_PASTE;
+
+		} else {
+			$logType = NP_WORKLFOW_LOG_PLACEMENT_COPY_PASTE;
 		}
+
+		tx_newspaper_Workflow::logPlacement('tx_newspaper_extra', $clipboard['extraUid'], $log, $logType);
+
 
 	}
 

@@ -503,6 +503,56 @@ function changeWorkflowStatus(role, hidden_status) {
 		));
 	}
 
+
+
+	/**
+	 * Write to workflow log when placement changes are processed
+	 * @param $table Assiciated table
+	 * @param $id Assiciated uid
+	 * @param array $data Data to be stored in lof entry
+	 * @param $type workflow log type (NP_WORKLFOW_LOG_...)
+	 */
+	public static function logPlacement($table, $id, array $data, $type) {
+
+		// see: http://php.net/manual/de/function.implode.php#103861
+		$comment = implode(array_map(create_function('$key, $value', 'return $key.":".$value."| ";'), array_keys($data), array_values($data)));
+
+		// \todo: remove when data is written as a seralized array to the database (when a backend module to access this log is available)
+		switch($type) {
+			case 20:
+				$comment .= 'INSERT_AFTER';
+			break;
+			case 21:
+				$comment .= 'MOVE_AFTER';
+			break;
+			case 22:
+				$comment .= 'SHOW';
+			break;
+			case 23:
+				$comment .= 'INHERIT';
+			break;
+			case 24:
+				$comment .= 'DELETE';
+			break;
+			case 25:
+				$comment .= 'CUT_PASTE';
+			break;
+			case 26:
+				$comment .= 'COPY_PASTE';
+			break;
+			case 40:
+				$comment .= 'WEBMASTER_TOOL_INHERITACNE_SOURCE';
+			break;
+			default:
+				$comment .= 'UNKNOWN TYPE ' . intval($type);
+		}
+
+		// write log entry
+		self::directLog($table, $id, $comment, $type);
+
+	}
+
+
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
 //t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
