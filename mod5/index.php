@@ -422,6 +422,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 						if ($p) foreach($p->getActivePageZones(false) as $pz) {
 							// all active pagezones ...
 							$pz->changeParent(0);// set to default: inherit from same page type above
+							tx_newspaper_Workflow::logPlacement($pz->getTable(), $pz->getUid(), array('newParent' => 0), NP_WORKLFOW_LOG_WEBMASTER_TOOL_INHERITANCE_SOURCE);
 						}
 					}
 				}

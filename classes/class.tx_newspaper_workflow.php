@@ -28,7 +28,7 @@ define('NP_WORKLFOW_LOG_PLACEMENT_DELETE', 24);
 define('NP_WORKLFOW_LOG_PLACEMENT_CUT_PASTE', 25);
 define('NP_WORKLFOW_LOG_PLACEMENT_COPY_PASTE', 26);
 
-define('NP_WORKLFOW_LOG_WEBMASTER_TOOL_INHERITACNE_SOURCE', 40);
+define('NP_WORKLFOW_LOG_WEBMASTER_TOOL_INHERITANCE_SOURCE', 40);
 
 
 define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
@@ -541,7 +541,7 @@ function changeWorkflowStatus(role, hidden_status) {
 				$comment .= 'COPY_PASTE';
 			break;
 			case 40:
-				$comment .= 'WEBMASTER_TOOL_INHERITACNE_SOURCE';
+				$comment .= 'WEBMASTER_TOOL_INHERITANCE_SOURCE';
 			break;
 			default:
 				$comment .= 'UNKNOWN TYPE ' . intval($type);
