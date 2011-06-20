@@ -129,4 +129,6 @@ CREATE TABLE pages (
 
 
 CREATE TABLE tx_newspaper_log (
+	INDEX table_key (table_name(30), table_uid)
 ) ENGINE=InnoDB;
+
