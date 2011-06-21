@@ -1219,30 +1219,15 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
      *        inheritance mode has been set to false
 	 */
  	protected function readExtras($uid, $hidden_too = false) {
- 	
- 		$uids = tx_newspaper::selectRows(
-			'DISTINCT uid_foreign', 
-			$this->getExtra2PagezoneTable(), 
-			"uid_local = $uid", 
-			'', '', '', false
-		);
-		if (empty($uids)) return;
+
+         $uids = $this->getExtraUidsForPagezoneID($uid);
+         if (empty($uids)) return;
 		
         foreach ($uids as $uid) {
         	try {
-				//  assembling the query manually here cuz we want to ignore enable fields
-				$query = $GLOBALS['TYPO3_DB']->SELECTquery(
-					'deleted, gui_hidden, show_extra', 
-					tx_newspaper_Extra_Factory::getExtraTable(),
-					'uid = ' . $uid['uid_foreign']);
-				$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		
-		        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				if (!$deleted['deleted'] && 
-				    (!$deleted['gui_hidden'] || $hidden_too) && 
-					!(TYPO3_MODE != 'BE' && 
-					!$deleted['show_extra'])) {
-	
+                $deleted = self::getAbstractExtraWithoutEnableFields($uid);
+
+                if (self::extraIsDisplayedOnPagezone($deleted, $hidden_too)) {
 	        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 				} else {
 					/// \todo remove association table entry, but only if really deleted
@@ -1254,8 +1239,36 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
         }
 	}
 
+    private function getExtraUidsForPagezoneID($uid) {
+        $uids = tx_newspaper::selectRows(
+            'DISTINCT uid_foreign',
+            $this->getExtra2PagezoneTable(),
+            "uid_local = $uid",
+            '', '', '', false
+        );
+        return $uids;
+    }
 
-	/// Ordering function to keep Extras in the order in which they appear on the PageZone
+    /// assembling the query manually here cuz we want to ignore enable fields
+    private static function getAbstractExtraWithoutEnableFields($uid) {
+        $query = $GLOBALS['TYPO3_DB']->SELECTquery(
+            'deleted, gui_hidden, show_extra',
+            tx_newspaper_Extra_Factory::getExtraTable(),
+            'uid = ' . $uid['uid_foreign']);
+        $res = $GLOBALS['TYPO3_DB']->sql_query($query);
+
+        $deleted = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        return $deleted;
+    }
+
+    private static function extraIsDisplayedOnPagezone(array $extra_data, $hidden_too) {
+        return !$extra_data['deleted'] &&
+               (!$extra_data['gui_hidden'] || $hidden_too) &&
+               !(TYPO3_MODE != 'BE' && !$extra_data['show_extra']);
+    }
+
+
+    /// Ordering function to keep Extras in the order in which they appear on the PageZone
 	/** Supplied as parameter to usort() in getExtras().
 	 *  \param $extra1 first Extra to compare
 	 *  \param $extra2 second Extra to compare
