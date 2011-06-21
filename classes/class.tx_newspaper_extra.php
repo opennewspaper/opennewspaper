@@ -625,49 +625,54 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
 	public function store() {
-tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this->extra_attributes, 'uid'=>$this->getUid()));
 		if ($this->getUid()) {
-			/// If the attributes are not yet in memory, read them now
-			$this->getAttribute('uid');
-
-            tx_newspaper::setDefaultFields($this, array('tstamp'));
-
-			tx_newspaper::updateRows(
-				$this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
-			);
-			tx_newspaper::updateRows(
-				'tx_newspaper_extra',
-				'uid = ' . $this->getExtraUid(),
-				$this->extra_attributes
-			);
-		} else {
-
-			if ($this->extra_attributes) {
-				throw new tx_newspaper_InconsistencyException(
-					'Attributes for abstract Extra have been set before a concrete Extra exists. ' .
-					print_r($this->extra_attributes, 1)
-				);
-			}
-
-            tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
-
-			//	Write data for concrete Extra
-			$this->setUid(
-				tx_newspaper::insertRows(
-					$this->getTable(), $this->attributes
-				)
-			);
-			if (!$this->getUid())
-				t3lib_div::debug(tx_newspaper::$query);
-			//	Write data for abstract Extra
-			$this->setExtraUid(
-				self::createExtraRecord($this->getUid(), $this->getTable())
-			);
+            $this->updateExisting();
+        } else {
+            $this->insertNew();
 		}
 		return $this->getUid();
 	}
 
-	/// Read data of tx_newspaper_Extra
+    private function insertNew() {
+        if ($this->extra_attributes) {
+            throw new tx_newspaper_InconsistencyException(
+                'Attributes for abstract Extra have been set before a concrete Extra exists. ' .
+                print_r($this->extra_attributes, 1)
+            );
+        }
+
+        tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
+
+        //	Write data for concrete Extra
+        $this->setUid(
+            tx_newspaper::insertRows(
+                $this->getTable(), $this->attributes
+            )
+        );
+        if (!$this->getUid())
+            t3lib_div::debug(tx_newspaper::$query);
+        //	Write data for abstract Extra
+        $this->setExtraUid(
+            self::createExtraRecord($this->getUid(), $this->getTable())
+        );
+    }
+
+    private function updateExisting() {
+        $this->getAttribute('uid');
+
+        tx_newspaper::setDefaultFields($this, array('tstamp'));
+
+        tx_newspaper::updateRows(
+            $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+        );
+        tx_newspaper::updateRows(
+            'tx_newspaper_extra',
+            'uid = ' . $this->getExtraUid(),
+            $this->extra_attributes
+        );
+    }
+
+    /// Read data of tx_newspaper_Extra
 	/** \param $uid uid of record in given table
 	 *  \param $table name of table (f.ex \c tx_newspaper_extra_image)
 	 *  \return Array row with Extra data for given uid and table
