@@ -108,7 +108,6 @@ class tx_newspaper_Extra_Factory {
             $row =  tx_newspaper::selectOneRow(
                 'uid,origin_uid,extra_table, extra_uid', self::$extra_table, "uid = $uid"
             );
-tx_newspaper::devlog('create()', $row);
         } catch (tx_newspaper_Exception $e) {
             return new ErrorExtra("Extra with UID $uid was not found in DB");
         }

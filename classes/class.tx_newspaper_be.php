@@ -375,7 +375,6 @@ function findElementsByName(name, type) {
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
 		$extra = $pz->getExtras();
 
-        tx_newspaper::devlog("collectExtras()", $extra);
 		$data = array();
 
 		for ($i = 0; $i < sizeof($extra); $i++) {
