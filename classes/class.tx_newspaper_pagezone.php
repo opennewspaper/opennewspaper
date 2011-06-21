@@ -1072,32 +1072,32 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  Extras are ordered by paragraph first, position second
 	 */
 	protected function indexOfExtra(tx_newspaper_Extra $extra) {
-        $high = sizeof($this->getExtras())-1;
-        $low = 0;
-       
-        while ($high >= $low) {
-            $index_to_check = floor(($high+$low)/2);
+        return $this->binarySearchForExtra($extra, 0, sizeof($this->getExtras())-1);
+	}
+
+    private function binarySearchForExtra($extra, $low_index, $high_index) {
+        while ($high_index >= $low_index) {
+            $index_to_check = floor(($high_index + $low_index) / 2);
             $comparison = $this->getExtra($index_to_check)->getAttribute('position') -
-            			  $extra->getAttribute('position');
-            if ($comparison < 0) $low = $index_to_check+1;
-            elseif ($comparison > 0) $high = $index_to_check-1;
+                          $extra->getAttribute('position');
+            if ($comparison < 0) $low_index = $index_to_check + 1;
+            elseif ($comparison > 0) $high_index = $index_to_check - 1;
             else return $index_to_check;
         }
-		
-		// Loop ended without a match
-		throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
-													  ' not found in array of Extras!');		
-	}
-	
 
-	///	Given a origin uid, find the Extra which has this value for \p origin_uid
+        // Loop ended without a match
+        throw new tx_newspaper_InconsistencyException('Extra ' . $extra->getUid() .
+                                                      ' not found in array of Extras!');
+    }
+
+
+    ///	Given a origin uid, find the Extra which has this value for \p origin_uid
 	/** @param int $origin_uid The origin uid of the extra to be found
 	 *  @param boolean $hidden_too Whether to search in GUI-hidden extras as well
 	 *  @return tx_newspaper_Extra
      */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
 		foreach ($this->getExtras($hidden_too) as $extra) {
-            tx_newspaper::devlog('extra UID: '.$extra->getExtraUid(). ", searched: $origin_uid".", origin_uid: ".$extra->getAttribute('origin_uid'));
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
 		}
 		return null;
