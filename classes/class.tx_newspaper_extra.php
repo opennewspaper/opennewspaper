@@ -759,11 +759,8 @@ tx_newspaper::devlog("extra::store()", array('a'=>$this->attributes, 'ea'=>$this
 	 */
 	public function getOriginUid() {
         $origin = intval($this->getAttribute('origin_uid'));
-tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraUid().', attribute origin_uid: '.$origin, debug_backtrace());
-		if ($origin)
-			return $origin;
-		else
-			return intval($this->getExtraUid());
+		if ($origin) return $origin;
+        return intval($this->getExtraUid());
 	}
 
     public function setOriginUid($origin_uid) {

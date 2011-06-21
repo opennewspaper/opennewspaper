@@ -347,7 +347,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     /// Default implementation for page zones which do not have paragraphs
     public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
-tx_newspaper::devlog("changeExtraParagraph(". $extra->getExtraUid().", $new_paragraph)");
         $extra->store();
     }
 
@@ -486,7 +485,6 @@ tx_newspaper::devlog("changeExtraParagraph(". $extra->getExtraUid().", $new_para
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
 									 $origin_uid = 0, $recursive = true) {
 
-tx_newspaper::devlog('insertExtraAfter('.$insert_extra->getExtraUid()."|".$insert_extra->getOriginUid() .", $origin_uid, $recursive)");
 		/** \todo: it should be possible to set the paragraph BEFORE calling
 		 *   	this function. otherwise a workaround is needed: insert extra to
 		 * 		article and call changeExtraArticle() on the article afterwards
@@ -500,21 +498,27 @@ tx_newspaper::devlog('insertExtraAfter('.$insert_extra->getExtraUid()."|".$inser
 		$this->addExtra($insert_extra);
 		
 		if ($recursive /* && (boolean)$insert_extra->getAttribute('is_inheritable') */) {
-tx_newspaper::devlog('RECURSIVE!', debug_backtrace());
-			/// Pass down the insertion to PageZones inheriting from $this
-			foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
-				$copied_extra = clone $insert_extra;
-				$copied_extra->setOriginUid($insert_extra->getOriginUid());
-				
-				$inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
-			}
-		}
-        tx_newspaper::devlog('insertExtraAfter() END: '.$insert_extra->getExtraUid()."|".$insert_extra->getOriginUid());
+            $this->insertExtraOnInheritingPagezones($insert_extra, $origin_uid);
+        }
+
 		return $insert_extra;
 	}
-	
-	
-	///	Remove a given Extra from the PageZone
+
+    /// Pass down the insertion to PageZones inheriting from \c $this
+    private function insertExtraOnInheritingPagezones($insert_extra, $origin_uid) {
+        foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
+            self::cloneExtraOnPagezone($insert_extra, $inheriting_pagezone, $origin_uid);
+        }
+    }
+
+    private static function cloneExtraOnPagezone($insert_extra, $inheriting_pagezone, $origin_uid) {
+        $copied_extra = clone $insert_extra;
+        $copied_extra->setOriginUid($insert_extra->getOriginUid());
+
+        $inheriting_pagezone->insertExtraAfter($copied_extra, $origin_uid, false);
+    }
+
+    ///	Remove a given Extra from the PageZone
 	/** \param $remove_extra Extra to be removed
 	 *  \param $recursive if true, remove \p $remove_extra on inheriting page zones
 	 *  \return false if $remove_extra was not found, true otherwise
@@ -522,7 +526,6 @@ tx_newspaper::devlog('RECURSIVE!', debug_backtrace());
 	 */
 	public function removeExtra(tx_newspaper_Extra $remove_extra, $recursive = true) {
 
-tx_newspaper::devlog('removeExtra('.$remove_extra->getExtraUid().')', $remove_extra);
 		if ($recursive) $this->removeExtraOnInheritingPagezones($remove_extra);
 
         if (!$this->removeExtraFromArray($remove_extra)) return false;
@@ -1145,7 +1148,7 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
      */
     public function getExtras($hidden_too = false) {
     	if (empty($this->extras) || $hidden_too) {
-            $this->readExtras($this->getUid(), $hidden_too);
+            $this->readExtrasForPagezoneID($this->getUid(), $hidden_too);
         }
 
         usort($this->extras, array(get_class($this), 'compareExtras')); 
@@ -1218,7 +1221,7 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
 	 *  \param $hidden_too Also get Extras that are hidden because their
      *        inheritance mode has been set to false
 	 */
- 	protected function readExtras($uid, $hidden_too = false) {
+ 	protected function readExtrasForPagezoneID($uid, $hidden_too = false) {
 
          $uids = $this->getExtraUidsForPagezoneID($uid);
          if (empty($uids)) return;
