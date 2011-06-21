@@ -299,6 +299,21 @@ $TCA['tx_newspaper_tag']['types']['1']['showitem'] = 'tag_type;;;;1-1-1, title;;
 $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, ctrltag_cat, section';
 
 
+
+// extra section teaser
+	// dropdown sorting
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_section.section_name';
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag_cat']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_ctrltag_category.sorting';
+	// dropdown sorting AND filter control tags depending on selected control tag category
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag']['config']['foreign_table_where'] = 'AND ctrltag_cat=###REC_FIELD_ctrltag_cat### ORDER BY tx_newspaper_tag.tag';
+	// reload backend when changing teaser type or control tag category
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['ctrl']['requestUpdate'] = 'is_ctrltag,ctrltag_cat';
+	// show backend fields depending on value in field "is_ctrltag"
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['displayCond'] = 'FIELD:is_ctrltag:=:0';
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag_cat']['displayCond'] = 'FIELD:is_ctrltag:=:1';
+	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag']['displayCond'] = 'FIELD:is_ctrltag:=:1';
+
+
 // todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
 
 // for testing image upload sizes (in extra image)
