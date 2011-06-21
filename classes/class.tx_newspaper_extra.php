@@ -770,7 +770,7 @@ tx_newspaper::devlog("tx_newspaper_Extra::getOriginUid(): uid ".$this->getExtraU
 tx_newspaper::devlog("setOriginUid($origin_uid)");
         $this->readExtraAttributes();
         $this->setAttribute('origin_uid', $origin_uid);
-        $this->store();
+#        $this->store();
     }
 	/// Checks if this tx_newspaper_Extra was placed on this page zone
 	/** \return \c true if this tx_newspaper_Extra was placed on this page zone
