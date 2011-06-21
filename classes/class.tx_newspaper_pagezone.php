@@ -1144,13 +1144,12 @@ tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
      *  @return tx_newspaper_Extra[]
      */
     public function getExtras($hidden_too = false) {
-tx_newspaper::devlog("getExtras()", $this->extras);
     	if (empty($this->extras) || $hidden_too) {
             $this->readExtras($this->getUid(), $hidden_too);
         }
 
         usort($this->extras, array(get_class($this), 'compareExtras')); 
-        tx_newspaper::devlog("getExtras() after", $this->extras);
+
         return $this->extras;
     }
 
@@ -1244,9 +1243,7 @@ tx_newspaper::devlog("getExtras()", $this->extras);
 					!(TYPO3_MODE != 'BE' && 
 					!$deleted['show_extra'])) {
 	
-        			$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
-tx_newspaper::devlog("readExtras()", $extra);
-	        		$this->extras[] = $extra;
+	        		$this->extras[] = tx_newspaper_Extra_Factory::getInstance()->create($uid['uid_foreign']);
 				} else {
 					/// \todo remove association table entry, but only if really deleted
 				}
