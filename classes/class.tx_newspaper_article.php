@@ -376,9 +376,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                     }
                 }
         }
-
+tx_newspaper::devlog('before usort', array($this->extras, get_class($this), debug_backtrace()));
         usort($this->extras, array(get_class($this), 'compareExtras'));
-
+tx_newspaper::devlog('after usort', array($this->extras));
         return $this->extras;
     }
 
@@ -1194,6 +1194,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         if ($paragraph1 == $paragraph2) {
             return $extra1->getAttribute('position') - $extra2->getAttribute('position');
+        }
+
+		// paragraph 0 is always the first element ...
+        if ($paragraph1 == 0) {
+        	return -1;
+        }
+        if ($paragraph2 == 0) {
+        	return 1;
         }
 
         /** 	Negative paragraphs are sorted at the end, in reverse order.
