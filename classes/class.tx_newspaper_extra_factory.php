@@ -127,6 +127,8 @@ tx_newspaper::devlog('create()', $row);
 
         $extra = new $row['extra_table']($row['extra_uid']);
         $extra->setExtraUid($uid);
+        $extra->setOriginUid($row['origin_uid']);
+        
 		return $extra;
 	}
 	
