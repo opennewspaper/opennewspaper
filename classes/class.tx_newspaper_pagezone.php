@@ -629,11 +629,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	
 
 	/// Get the hierarchy of Page Zones inheriting placement from $this
-	/** \param $including_myself If true, add $this to the list
-	 *  \param $hierarchy List of already found parents (for recursive calling) 
-	 *  \return Inheritance hierarchy of pages inheriting from the current Page 
-	 * 			Zone, ordered downwards, depth-first
-	 */
+    /**
+     * @param bool|\If $including_myself true, add $this to the list
+     * @param array|List $hierarchy of already found parents (for recursive calling)
+     * @return tx_newspaper_Pagezone[] Inheritance hierarchy of pages inheriting from the current Page
+     *             Zone, ordered downwards, depth-first
+     */
 	public function getInheritanceHierarchyDown($including_myself = true, 
 												$hierarchy = array()) {
 
@@ -930,13 +931,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 
     private function removeExtraOnInheritingPagezones(tx_newspaper_Extra $remove_extra) {
-        tx_newspaper::devlog('removeExtraOnInheritingPagezones('.$remove_extra->getExtraUid().')', $remove_extra);
-
         foreach($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
             $copied_extra = $inheriting_pagezone->findExtraByOriginUID($remove_extra->getOriginUid(), true);
-            tx_newspaper::devlog('$copied_extra', $copied_extra);
             if ($copied_extra) $inheriting_pagezone->removeExtra($copied_extra, false);
-            else tx_newspaper::devlog('$copied_extra not found:', $copied_extra);
         }
     }
 
@@ -1099,7 +1096,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  @return tx_newspaper_Extra
      */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
-tx_newspaper::devlog("findExtraByOriginUID($origin_uid, $hidden_too)");
 		foreach ($this->getExtras($hidden_too) as $extra) {
             tx_newspaper::devlog('extra UID: '.$extra->getExtraUid(). ", searched: $origin_uid".", origin_uid: ".$extra->getAttribute('origin_uid'));
 			if ($extra->getAttribute('origin_uid') == $origin_uid) return $extra;
