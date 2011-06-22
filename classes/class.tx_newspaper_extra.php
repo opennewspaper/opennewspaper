@@ -935,6 +935,12 @@ tx_newspaper::devlog("processDatamap_afterDatabaseOperations($status, $table, $i
     private static function insertNewExtraOnPagezone(tx_newspaper_Extra $e, tx_newspaper_PageZone $pz) {
         $after_origin_uid = intval(t3lib_div::_GP('new_extra_after_origin_uid'));
         $pz->insertExtraAfter($e, $after_origin_uid, true); // insert BEFORE setting the paragraph (so the paragraph can be inherited)
+
+        // log placing extras on pagezone_page
+        if ($pz->getTable() == 'tx_newspaper_pagezone_page') {
+			tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz->getAbstractUid(), array('origin uid' => $after_origin_uid, 'extra uid' => $e->getExtraUid()), NP_WORKLFOW_LOG_PLACEMENT_INSERT_AFTER);
+		}
+
     }
 
 
