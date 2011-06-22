@@ -1798,7 +1798,7 @@ JSCODE;
 			$js = '<script type="text/javascript">
 function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
   var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode="+mode+"&bparams="+params+"&form_table="+form_table+"&form_field="+form_field+"&form_uid="+form_uid;
-  browserWin = window.open(url,"Typo3WinBrowser","height=350,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
+  browserWin = window.open(url,"Typo3WinBrowser","height=485,width="+(mode=="db"?925:925)+",status=0,menubar=0,resizable=1,scrollbars=1");
   browserWin.focus();
 }
 </script>';

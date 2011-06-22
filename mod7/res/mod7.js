@@ -452,7 +452,7 @@ function setFormValueOpenBrowser_AL(selectBoxId, section_filter) {
 	if (section_filter) {
 		url += '&s=' + escape(section_filter);
 	}
-    browserWin = window.open(url,"Typo3WinBrowser","height=350,width=650,status=0,menubar=0,resizable=1,scrollbars=1");
+    browserWin = window.open(url,"Typo3WinBrowser","height=485,width=925,status=0,menubar=0,resizable=1,scrollbars=1");
     browserWin.focus();
 }
 
