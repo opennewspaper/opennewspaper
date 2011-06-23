@@ -537,7 +537,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$concrete_al = new $table($concrete_al_uid);
 		if ($concrete_al->getAbstractUid() == 0) {
 			/// no abstract record found, so create a new one
-			$concrete_al->createArticleListRecord($concrete_al_uid, $table);
+			$concrete_al->createAbstractRecord($concrete_al_uid, $table);
 		}	
 	}
 

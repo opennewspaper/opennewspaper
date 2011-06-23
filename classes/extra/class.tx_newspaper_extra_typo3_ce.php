@@ -40,6 +40,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         tx_newspaper::startExecutionTimer();
 
 		$ret = '';
+        /** @var tslib_cObj $cObj  */
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 
 		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
