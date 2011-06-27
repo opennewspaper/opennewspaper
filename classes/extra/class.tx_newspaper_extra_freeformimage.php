@@ -52,7 +52,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 
         $upload_folder_path = tx_newspaper_Image::getBasepath() . '/' . self::upload_folder_name;
         if (!file_exists($upload_folder_path)) {
-            mkdir($upload_folder_path);
+            mkdir($upload_folder_path, 0775, true);
         }
         
         return $upload_folder_path;
