@@ -1419,7 +1419,7 @@ $TCA["tx_newspaper_articletype"] = array (
 $TCA["tx_newspaper_extra_typo3_ce"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_typo3_ce"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,pool,content_elements"
+		"showRecordFieldList" => "hidden,starttime,endtime,pool,content_elements,template,short_description"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_typo3_ce"]["feInterface"],
 	"columns" => array (
@@ -1478,9 +1478,25 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				"maxitems" => 32,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, content_elements")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, content_elements, template, short_description")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2195,7 +2211,7 @@ $TCA["tx_newspaper_articlelist_semiautomatic"] = array (
 $TCA["tx_newspaper_tag"] = array (
 	"ctrl" => $TCA["tx_newspaper_tag"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "tag_type,title,tag,ctrltag_cat,section"
+		"showRecordFieldList" => "tag_type,title,tag,ctrltag_cat,section,deactivated"
 	),
 	"feInterface" => $TCA["tx_newspaper_tag"]["feInterface"],
 	"columns" => array (
@@ -2252,9 +2268,16 @@ $TCA["tx_newspaper_tag"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"deactivated" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_tag.deactivated",		
+			"config" => Array (
+				"type" => "check",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, ctrltag_cat, section")
+		"0" => array("showitem" => "tag_type;;;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, ctrltag_cat, section, deactivated")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

@@ -25,7 +25,7 @@
 			<label index="tx_newspaper_extra_image.tags">Tags</label>
 			<label index="tx_newspaper_section">Section</label>
 			<label index="tx_newspaper_section.section_name">Name of the section</label>
-			<label index="tx_newspaper_section.show_in_list">Show in section lists</label>
+			<label index="tx_newspaper_section.show_in_list">Showin section lists</label>
 			<label index="tx_newspaper_section.parent_section">Parent section</label>
 			<label index="tx_newspaper_section.default_articletype">Default Article type</label>
 			<label index="tx_newspaper_section.pagetype_pagezone">Page type / page zone</label>
@@ -113,6 +113,8 @@
 			<label index="tx_newspaper_extra_typo3_ce">Extra: Typo3 Content Element</label>
 			<label index="tx_newspaper_extra_typo3_ce.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_typo3_ce.content_elements">Typo3 Content Elements to display</label>
+			<label index="tx_newspaper_extra_typo3_ce.template">Template</label>
+			<label index="tx_newspaper_extra_typo3_ce.short_description">Short description</label>
 			<label index="tx_newspaper_extra_articlelist">Extra: Article list</label>
 			<label index="tx_newspaper_extra_articlelist.description">Description</label>
 			<label index="tx_newspaper_extra_articlelist.articlelist">Article list</label>
@@ -164,6 +166,7 @@
 			<label index="tx_newspaper_tag.tag">Tag</label>
 			<label index="tx_newspaper_tag.ctrltag_cat">Control tag category</label>
 			<label index="tx_newspaper_tag.section">Associated section</label>
+			<label index="tx_newspaper_tag.deactivated">De-activated</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Most commented articles</label>
 			<label index="tx_newspaper_extra_mostcommented.hours">Maximum age (in hours) for comments to consider</label>
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Number of displayed articles</label>
@@ -343,6 +346,8 @@
 			<label index="tx_newspaper_extra_typo3_ce">Extra: Typo3 Inhaltselement</label>
 			<label index="tx_newspaper_extra_typo3_ce.pool">In den Vorlagen-Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_typo3_ce.content_elements">Anzuzeigende Typo3-Inhaltselemente</label>
+			<label index="tx_newspaper_extra_typo3_ce.template">Designvorlage</label>
+			<label index="tx_newspaper_extra_typo3_ce.short_description">Kurzbeschreibung</label>
 			<label index="tx_newspaper_extra_articlelist">Extra: Artikelliste</label>
 			<label index="tx_newspaper_extra_articlelist.description">Beschreibung</label>
 			<label index="tx_newspaper_extra_articlelist.articlelist">Artikelliste</label>
@@ -394,6 +399,7 @@
 			<label index="tx_newspaper_tag.tag">Schlagwort</label>
 			<label index="tx_newspaper_tag.ctrltag_cat">Steuertag-Kategorie</label>
 			<label index="tx_newspaper_tag.section">Ressort</label>
+			<label index="tx_newspaper_tag.deactivated">Nicht aktiv</label>
 			<label index="tx_newspaper_extra_mostcommented">Extra: Meistkommentierte Artikel</label>
 			<label index="tx_newspaper_extra_mostcommented.hours">Zeit, in der Kommentare gerechnet werden (in Stunden)</label>
 			<label index="tx_newspaper_extra_mostcommented.num_favorites">Anzahl angezeigter Favoriten</label>
