@@ -22,6 +22,7 @@
 			<td class="mod3_td">{$LABEL.templateset}</td>
 		{/if}
 		<td>{$LABEL.commands}</td>
+		<td> &nbsp; </td>
 		{if ($DEBUG_OUTPUT && $ADMIN)}
 			<td class="mod3_td" align="center">pos</td>
 			<td class="mod3_td" align="center">origin</td>
@@ -83,6 +84,7 @@
 			<a href="javascript:extra_move_after(159, 4, 174);"><img src="../res/be/css/arrow_up.gif" title="Move down" alt=""></a><br />
 			<a href="javascript:extra_move_after(159, 4, 174);"><img src="../res/be/css/arrow_down.gif" title="Move down" alt=""></a>
 *}
+			</td><td class="placementcell">
 			<div class="hide best">
 {* new after *}
 				<a href="javascript:extra_insert_after({$EXTRA_DATA[i].origin_uid}, {$DATA.pagezone_id}, false, false);">{$NEW_BELOW_ICON}</a>
