@@ -13,6 +13,8 @@
 
 {section name=i loop=$rendered}
   <!--
+    {* It's probably not such a great idea to print all attributes of the CE in
+       production. This is just for debugging purposes. *}
     {foreach from=$raw[i] key=attribute item=value}
       {$attribute}: {$value}
     {/foreach}

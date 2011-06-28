@@ -52,12 +52,10 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             $attributes = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
             $raw[] = $attributes;
 
-			//	In BE (for unit tests), RECORDS() can't be used. Just show something.
 			if (TYPO3_MODE == 'BE') {
                 $rendered[] = self::printBasicCE($attributes);
             } else {
                 $rendered[] = self::renderTypo3CE($ce_uid, $cObj);
-
             }
 		}
 
@@ -75,7 +73,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
      *  ce = RECORDS
      *  ce {
      *        tables = tt_content
-     *        source = ...
+     *        source = $ce_uid
      *        dontCheckPid = 1
      *    }
      *  \endcode
@@ -97,8 +95,9 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         return $rendered;
     }
 
-    private static function printBasicCE($attributes)
-    {
+    /**	In BE (for e.g. unit tests), RECORDS() can't be used. Just show something.
+     */
+    private static function printBasicCE($attributes) {
         $rendered = '<h2>' . $attributes['header'] . "</h2>\n" .
                     '<img src="uploads/pics/' . $attributes['image'] . '" />' . "\n" .
                     $attributes['text'] . "\n";
@@ -131,7 +130,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		return 'Content Element ' . $this->getAttribute('content_elements');
 	}
 
-// title for module
+    /// title for module
 	public static function getModuleName() {
 		return 'np_typo3_ce';
 	}
