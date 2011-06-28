@@ -1,6 +1,6 @@
 <!-- start res/templates/tx_newspaper_extra_typo3_ce.tmpl -->
 
-{* Text box
+{* Typo3 Content Element
    Variables:
    $raw	    raw attributes of the content elements as read from DB
    $rendered rendered content elements
@@ -9,11 +9,11 @@
    $extra               the rendered extra as PHP object
 *}
 
-<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+<!--template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates -->
 
 {section name=i loop=$rendered}
   <!--
-    {foreach from=$raw key=attribute item=value}
+    {foreach from=$raw[i] key=attribute item=value}
       {$key}: {$value}
     {/foreach}
   -->
