@@ -903,7 +903,7 @@ tx_newspaper::devlog('after usort', array($this->extras));
     }
 
     private static function getTimeWhereClause($table) {
-        return " AND ( $table.starttime <= " . time() . " AND ( $table.endtime == 0 OR $table.endtime > " . time() . '))';
+        return " AND ( $table.starttime <= " . time() . " AND ( $table.endtime = 0 OR $table.endtime > " . time() . '))';
     }
 
     ////////////////////////////////////////////////////////////////////////////
