@@ -883,21 +883,26 @@ tx_newspaper::devlog('after usort', array($this->extras));
                         self::fakeEnableFieldsForRelated($hidden_ones_too)
         );
 
+        return $this->createRelatedArticlesFromMMUids($rows);
+    }
+
+    private function createRelatedArticlesFromMMUids($rows) {
         $related_articles = array();
 
         foreach ($rows as $row) {
-            if (intval($row['uid_local']) == $this->getUid()) {
-                if (intval($row['uid_foreign']) != $this->getUid()) {
-                    $related_articles[] = new tx_newspaper_Article(intval($row['uid_foreign']));
-                }
-            } else if ($row['uid_foreign'] == $this->getUid()) {
-                if (intval($row['uid_local']) != $this->getUid()) {
-                    $related_articles[] = new tx_newspaper_Article(intval($row['uid_local']));
-                }
-            }
+            $this->addArticleFromRow($related_articles, $row, 'uid_local', 'uid_foreign');
+            $this->addArticleFromRow($related_articles, $row, 'uid_foreign', 'uid_local');
         }
 
         return array_unique($related_articles);
+    }
+
+    private function addArticleFromRow(array &$related, array $row, $local, $foreign) {
+        if (intval($row[$local]) == $this->getUid()) {
+            if (intval($row[$foreign]) != $this->getUid()) {
+                $related[] = new tx_newspaper_Article(intval($row[$foreign]));
+            }
+        }
     }
 
     private static function fakeEnableFieldsForRelated($hidden_ones_too) {
