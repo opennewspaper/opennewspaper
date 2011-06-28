@@ -245,7 +245,7 @@ class tx_newspaper_Image {
             throw new tx_newspaper_IllegalUsageException(
                 'TSConfig usage: "newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}". ' . "\n" .
                 'Actual TSConfig for this line: ' . 'newspaper.image.size.' . $key . ' = ' . $dimension
-            . "extractDimension($dimension, $key, $index)"
+            . " extractDimension($dimension, $key, $index) ".print_r($wxh,1)
             );
         }
         return $dim;
