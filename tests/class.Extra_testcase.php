@@ -296,6 +296,42 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 //		}
 //	}
 
+
+	public function test_GetAttributeShortDescription() {
+		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registeredExtra) {
+			$table = $registeredExtra->getTable();
+			if (strpos($table, 'tx_newspaper_extra') !== false) { // check newspaper (core) extras only
+				$registeredExtra->store(); // save to database so attributes can be read
+
+				//re-read extra
+				$extra = new $table($registeredExtra->getUid());
+
+				try {
+			        $extra->getAttribute('short_description');
+				} catch (tx_newspaper_Exception $e) {
+					$this->fail('Could not get mandatory attribute short_description for extra ' . $extra->getTitle());
+				}
+			}
+		}
+	}
+	public function test_GetAttributeTemplate() {
+		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registeredExtra) {
+			$table = $registeredExtra->getTable();
+			if (strpos($table, 'tx_newspaper_extra') !== false) { // check newspaper (core) extras only
+				$registeredExtra->store(); // save to database so attributes can be read
+
+				//re-read extra
+				$extra = new $table($registeredExtra->getUid());
+
+				try {
+			        $extra->getAttribute('template');
+				} catch (tx_newspaper_Exception $e) {
+					$this->fail('Could not get mandatory attribute template for extra ' . $extra->getTitle());
+				}
+			}
+		}
+	}
+
 	/// Section which contains the objects to be tested
 	private $section_uid = 1;
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist

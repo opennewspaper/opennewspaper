@@ -107,7 +107,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     }
 
     public function getSearchFields() {
-        return array('title', 'caption', 'kicker');
+        return array('short_description', 'title', 'caption', 'kicker');
     }
 
     /// Title for module to determine name of SysFolder this extra is stored under

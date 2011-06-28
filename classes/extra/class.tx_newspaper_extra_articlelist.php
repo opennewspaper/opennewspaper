@@ -96,10 +96,6 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
         return $rendered;
 	}
 
-	public function getSearchFields() {
-		return array('short_description');
-	}
-
 	public static function getModuleName() {
 		return 'np_artlist';
 	}

@@ -442,7 +442,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	/** Non-static because static functions do not allow late binding.
 	 */
 	public function getSearchFields() {
-		return array();
+		return array('short_description');
 	}
 
 	/// Get Extras available for given search term
