@@ -39,6 +39,17 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
         tx_newspaper::startExecutionTimer();
 
+        $this->prepare_render($template_set);
+
+        $template = $this->getAttribute('template');
+        if ($template) {
+            if (strpos($template, '.tmpl') === false) {
+                $template .= '.tmpl';
+            }
+        } else {
+            $template = $this;
+        }
+
 		$ret = '';
         /** @var tslib_cObj $cObj  */
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
