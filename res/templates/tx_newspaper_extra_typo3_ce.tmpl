@@ -1,0 +1,23 @@
+<!-- start res/templates/tx_newspaper_extra_typo3_ce.tmpl -->
+
+{* Text box
+   Variables:
+   $raw	    raw attributes of the content elements as read from DB
+   $rendered rendered content elements
+   $attributes	attributes as stored in DB
+   $extra_attributes	attributes for abstract extra record as stored in DB
+   $extra               the rendered extra as PHP object
+*}
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+
+{section name=i loop=$rendered}
+  <!--
+    {foreach from=$raw key=attribute item=value}
+      {$key}: {$value}
+    {/foreach}
+  -->
+  <div>{$rendered[i]}</div>
+{/section}
+
+<!--  end  res/templates/tx_newspaper_extra_typo3_ce.tmpl -->

@@ -41,6 +41,71 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
         $this->prepare_render($template_set);
 
+        /** @var tslib_cObj $cObj  */
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+
+		$rendered = array();
+        $raw = array();
+
+
+		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
+            $attributes = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
+            $raw[] = $attributes;
+
+			//	In BE (for unit tests), RECORDS() can't be used. Just show something.
+			if (TYPO3_MODE == 'BE') {
+                $rendered[] = self::printBasicCE($attributes);
+            } else {
+                $rendered[] = self::renderTypo3CE($ce_uid, $cObj);
+
+            }
+		}
+
+        $this->smarty->assign('raw', $raw);
+        $this->smarty->assign('rendered', $rendered);
+
+        $ret = $this->smarty->fetch($this->getTemplate());
+        tx_newspaper::logExecutionTime();
+		
+		return $ret;
+	}
+
+    /** Render the TypoScript equivalent of
+     *  \code
+     *  ce = RECORDS
+     *  ce {
+     *        tables = tt_content
+     *        source = ...
+     *        dontCheckPid = 1
+     *    }
+     *  \endcode
+     *  I could render them all at once as a comma-separated list of
+     *  UIDs instead of in a foreach-loop, but I don't trust that
+     *  feature...
+     *
+     * \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
+     * \see http://www.typo3forum.net/forum/extension-modifizieren-neu-erstellen/17955-content-elemente-extension-rendern.html
+     * \see http://www.typo3.net/forum/beitraege/thema/53494/
+     */
+    private static function renderTypo3CE($ce_uid, tslib_cObj $cObj) {
+        $tt_content_conf = array(
+            'tables' => 'tt_content',
+            'source' => intval($ce_uid),
+            'dontCheckPid' => 1
+        );
+        $rendered = $cObj->RECORDS($tt_content_conf);
+        return $rendered;
+    }
+
+    private static function printBasicCE($attributes)
+    {
+        $rendered = '<h2>' . $attributes['header'] . "</h2>\n" .
+                    '<img src="uploads/pics/' . $attributes['image'] . '" />' . "\n" .
+                    $attributes['text'] . "\n";
+        return $rendered;
+    }
+
+    private function getTemplate() {
         $template = $this->getAttribute('template');
         if ($template) {
             if (strpos($template, '.tmpl') === false) {
@@ -49,53 +114,10 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         } else {
             $template = $this;
         }
+        return $template;
+    }
 
-		$ret = '';
-        /** @var tslib_cObj $cObj  */
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-
-		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
-			$ret .= "\n" . '<!-- ' . 
-				print_r( tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid"), 1) .
-				' -->' . "\n";
-			
-			//  \see http://www.nabble.com/rendering-a-modified-tt_content-record-inside-of-plugin-td22804683.html
-			/** Render the TypoScript equivalent of
-			 *  \code
-			 *  ce = RECORDS
-			 *  ce {
-			 *		tables = tt_content 
-			 *		source = ...  
-			 *		dontCheckPid = 1
-			 *	}
-			 *  \endcode
-			 *  I could render them all at once as a comma-separated list of 
-			 *  UIDs instead of in a foreach-loop, but I don't trust that 
-			 *  feature...
-			 */
-			$tt_content_conf = array(
-				'tables' => 'tt_content',
-				'source' => intval($ce_uid),
-				'dontCheckPid' => 1
-			);
-			
-			//	In BE (for unit tests), RECORDS() can't be used. Just show something.
-			if (TYPO3_MODE == 'BE') {
-				$row = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
-				$ret .= '<h2>' . $row['header'] . "</h2>\n" .
-					'<img src="uploads/pics/' . $row['image'] . '" />' . "\n" .
-					$row['text'] . "\n";
-			} else {
-				$ret .= $cObj->RECORDS($tt_content_conf);
-			}
-		}
-		
-        tx_newspaper::logExecutionTime();
-		
-		return $ret;
-	}
-
-	/** If the CE has a header, display the header. Else if it has a titleText,
+    /** If the CE has a header, display the header. Else if it has a titleText,
 	 *  display that. Else just display its UID. 
 	 *  \todo This could probably be improved, especially for multiple CEs.
 	 */

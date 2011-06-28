@@ -950,8 +950,10 @@ tx_newspaper::devlog("processDatamap_afterDatabaseOperations($status, $table, $i
 	private $attributes = array();				///< Attributes of the concrete extra
 	private $extra_attributes = array();		///< Attributes of the abstract extra
 
+    /** @var tx_newspaper_Smarty */
 	protected $smarty = null;					///< tx_newspaper_Smarty rendering engine
 
+    /** @var tx_newspaper_Extra[] */
 	private static $registeredExtra = array();	///< List of registered tx_newspaper_Extra
 
 
