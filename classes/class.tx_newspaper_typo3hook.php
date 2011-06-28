@@ -13,6 +13,7 @@ $GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_extra_comboli
  * example: tx_newspaper::setConfigReplaceElementBrowser([table], [field], [key, f.e.x: 'replaceEBwithArticleBrowser');
  */
 $GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_extra_controltagzone'] = array('default_extra');
+$GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_extra_container'] = array('extras');
 
 
 

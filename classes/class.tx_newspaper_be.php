@@ -31,6 +31,21 @@ class tx_newspaper_BE {
 
 /// backend: render list of pages and pagezones for section
 
+
+    /**
+     * Get label for abstract extras in backend (Typo3 TCA user function)
+     * The label is set in $params (call by reference)
+     * @param $params Data fetched by Typo3
+     */
+    public function getAbstractExtraLabel(&$params) {
+		if ($params['row']['extra_table']) {
+			$e = new $params['row']['extra_table'](intval($params['row']['extra_uid']));
+			$params['title'] = $e->getAttribute('tstamp');
+		} else {
+			$params['title'] = $row['uid'];
+		}
+    }
+
 	/// either called by userfunc in be or ajax
 	public static function renderPagePageZoneList($PA, $fObj=null) {
 //t3lib_div::devlog('render ppzlist $pa', 'np', 0, $PA);

@@ -176,9 +176,10 @@ $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config'][
 $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
 // set labels for abstract extras
-$TCA['tx_newspaper_extra']['ctrl']['label'] = 'uid';
-$TCA['tx_newspaper_extra']['ctrl']['label_alt'] = 'extra_table,extra_uid';
-$TCA['tx_newspaper_extra']['ctrl']['label_alt_force'] = true;
+//$TCA['tx_newspaper_extra']['ctrl']['label'] = 'uid';
+//$TCA['tx_newspaper_extra']['ctrl']['label_alt'] = 'extra_table,extra_uid';
+//$TCA['tx_newspaper_extra']['ctrl']['label_alt_force'] = true;
+$TCA['tx_newspaper_extra']['ctrl']['label_userFunc'] = 'tx_newspaper_be->getAbstractExtraLabel';
 
 // in case the label field "title" is not visible in the backend
 $TCA['tx_newspaper_extra_image']['ctrl']['label_alt'] = 'uid';
