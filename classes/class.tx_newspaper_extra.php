@@ -388,7 +388,9 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 */
 	public function getDescription() {
 		//	default implementation
-		return $this->getTitle() . ' ' . $this->getUid();
+		return ($this->getAttribute('short_description'))?
+			$this->getAttribute('short_description') :
+			$this->getTitle() . ' ' . $this->getUid();
 	}
 
 	public function deleteIncludingReferences() {
