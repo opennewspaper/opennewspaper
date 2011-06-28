@@ -63,7 +63,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
 	public static function dependsOnArticle() { return false; }
 
-    private static function getRootline() {
+    public static function getRootline() {
         $rootline = tx_newspaper::getSection()->getSectionPath();
         foreach ($rootline as $key => $section) {
             $rootline[$key] = $section->getAttribute('section_name');
