@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_newspaper_extra_image"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,pool,title,image_file,credit,caption,normalized_filename,kicker,source,image_type,alttext,tags"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,pool,title,image_file,credit,caption,normalized_filename,kicker,source,image_type,alttext,tags,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
@@ -42,6 +42,14 @@ $TCA["tx_newspaper_extra_image"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"pool" => Array (		
@@ -151,9 +159,17 @@ $TCA["tx_newspaper_extra_image"] = array (
 				"MM" => "tx_newspaper_extra_image_tags_mm",
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, title;;;;2-2-2, image_file;;;;3-3-3, credit, caption, normalized_filename, kicker, source, image_type, alttext, tags")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, pool, title;;;;2-2-2, image_file;;;;3-3-3, credit, caption, normalized_filename, kicker, source, image_type, alttext, tags, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -1021,7 +1037,7 @@ $TCA["tx_newspaper_extra"] = array (
 $TCA["tx_newspaper_extra_sectionlist"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_sectionlist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,first_article,num_articles"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,first_article,num_articles,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionlist"]["feInterface"],
 	"columns" => array (
@@ -1061,6 +1077,14 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"first_article" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.first_article",		
@@ -1093,9 +1117,17 @@ $TCA["tx_newspaper_extra_sectionlist"] = array (
 				"default" => 0
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionlist.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, first_article, num_articles")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, first_article, num_articles, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -1419,7 +1451,7 @@ $TCA["tx_newspaper_articletype"] = array (
 $TCA["tx_newspaper_extra_typo3_ce"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_typo3_ce"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,pool,content_elements,template,short_description"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,pool,content_elements,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_typo3_ce"]["feInterface"],
 	"columns" => array (
@@ -1459,6 +1491,14 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"pool" => Array (		
 			"exclude" => 0,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.pool",		
@@ -1486,17 +1526,9 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 				"size" => "30",
 			)
 		),
-		"short_description" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_typo3_ce.short_description",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, pool, content_elements, template, short_description")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, pool, content_elements, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -1508,7 +1540,7 @@ $TCA["tx_newspaper_extra_typo3_ce"] = array (
 $TCA["tx_newspaper_extra_articlelist"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_articlelist"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,description,articlelist,first_article,num_articles,template,header,image"
+		"showRecordFieldList" => "starttime,endtime,short_description,articlelist,first_article,num_articles,header,image,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_articlelist"]["feInterface"],
 	"columns" => array (
@@ -1540,9 +1572,9 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				)
 			)
 		),
-		"description" => Array (		
-			"exclude" => 0,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.description",		
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.short_description",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -1592,14 +1624,6 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				"default" => 0
 			)
 		),
-		"template" => Array (		
-			"exclude" => 0,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
 		"header" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.header",		
@@ -1623,9 +1647,17 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_articlelist.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, description, articlelist, first_article, num_articles, template, header, image")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, articlelist, first_article, num_articles, header, image, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1637,7 +1669,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 $TCA["tx_newspaper_extra_textbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_textbox"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,pool,title,bodytext,image"
+		"showRecordFieldList" => "starttime,endtime,short_description,pool,title,bodytext,image,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_textbox"]["feInterface"],
 	"columns" => array (
@@ -1667,6 +1699,14 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"pool" => Array (		
@@ -1716,9 +1756,17 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, pool, title;;;;2-2-2, bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/];3-3-3, image")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, pool, title;;;;2-2-2, bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/];3-3-3, image, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1730,7 +1778,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 $TCA["tx_newspaper_extra_externallinks"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_externallinks"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,pool,title,links,template"
+		"showRecordFieldList" => "starttime,endtime,short_description,pool,title,links,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_externallinks"]["feInterface"],
 	"columns" => array (
@@ -1760,6 +1808,14 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_externallinks.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"pool" => Array (		
@@ -1832,7 +1888,7 @@ $TCA["tx_newspaper_extra_externallinks"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, pool, title;;;;2-2-2, links;;;;3-3-3, template")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, pool, title;;;;2-2-2, links;;;;3-3-3, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -1909,7 +1965,7 @@ $TCA["tx_newspaper_externallinks"] = array (
 $TCA["tx_newspaper_extra_displayarticles"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_displayarticles"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,todo"
+		"showRecordFieldList" => "starttime,endtime,short_description,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_displayarticles"]["feInterface"],
 	"columns" => array (
@@ -1941,16 +1997,25 @@ $TCA["tx_newspaper_extra_displayarticles"] = array (
 				)
 			)
 		),
-		"todo" => Array (		
+		"short_description" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_displayarticles.todo",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_displayarticles.short_description",		
 			"config" => Array (
-				"type" => "check",
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_displayarticles.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, todo")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2289,7 +2354,7 @@ $TCA["tx_newspaper_tag"] = array (
 $TCA["tx_newspaper_extra_mostcommented"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_mostcommented"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,hours,num_favorites,display_num,display_time,template"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,hours,num_favorites,display_num,display_time,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_mostcommented"]["feInterface"],
 	"columns" => array (
@@ -2327,6 +2392,14 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_mostcommented.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"hours" => Array (		
@@ -2385,7 +2458,7 @@ $TCA["tx_newspaper_extra_mostcommented"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, hours, num_favorites, display_num, display_time, template")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, hours, num_favorites, display_num, display_time, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2459,7 +2532,7 @@ $TCA["tx_newspaper_comment_cache"] = array (
 $TCA["tx_newspaper_extra_bio"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_bio"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,template_set,pool,author_name,is_author,author_id,image_file,photo_source,bio_text"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,template_set,pool,author_name,is_author,author_id,image_file,photo_source,bio_text,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_bio"]["feInterface"],
 	"columns" => array (
@@ -2497,6 +2570,14 @@ $TCA["tx_newspaper_extra_bio"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"template_set" => Array (		
@@ -2580,9 +2661,17 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				),
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_bio.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/]")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, template_set, pool, author_name, is_author, author_id, image_file, photo_source, bio_text;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2628,7 +2717,7 @@ $TCA["tx_newspaper_tag_zone"] = array (
 $TCA["tx_newspaper_extra_controltagzone"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_controltagzone"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,tag_zone,default_extra"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,tag_zone,default_extra,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_controltagzone"]["feInterface"],
 	"columns" => array (
@@ -2668,6 +2757,14 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"tag_zone" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.tag_zone",		
@@ -2695,9 +2792,17 @@ $TCA["tx_newspaper_extra_controltagzone"] = array (
 				"maxitems" => 10,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_controltagzone.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, tag_zone, default_extra")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, tag_zone, default_extra, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2763,7 +2868,7 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 $TCA["tx_newspaper_extra_combolinkbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_combolinkbox"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,show_related_articles,manually_selected_articles,internal_links,external_links"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,show_related_articles,manually_selected_articles,internal_links,external_links,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_combolinkbox"]["feInterface"],
 	"columns" => array (
@@ -2801,6 +2906,14 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"show_related_articles" => Array (		
@@ -2913,9 +3026,17 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 				),
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, show_related_articles, manually_selected_articles, internal_links, external_links")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, show_related_articles, manually_selected_articles, internal_links, external_links, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -2927,7 +3048,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
 $TCA["tx_newspaper_extra_searchresults"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_searchresults"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,sections,search_term,tags"
+		"showRecordFieldList" => "starttime,endtime,short_description,sections,search_term,tags,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_searchresults"]["feInterface"],
 	"columns" => array (
@@ -2957,6 +3078,14 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2020),
 					'lower' => mktime(0, 0, 0, date('m')-1, date('d'), date('Y'))
 				)
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"sections" => Array (		
@@ -2991,9 +3120,17 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 				"maxitems" => 100,
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_searchresults.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, sections, search_term, tags")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, sections, search_term, tags, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3005,7 +3142,7 @@ $TCA["tx_newspaper_extra_searchresults"] = array (
 $TCA["tx_newspaper_extra_container"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_container"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,extras,template"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,extras,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_container"]["feInterface"],
 	"columns" => array (
@@ -3045,6 +3182,14 @@ $TCA["tx_newspaper_extra_container"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"extras" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_container.extras",		
@@ -3067,7 +3212,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, extras, template")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, extras, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -3079,7 +3224,7 @@ $TCA["tx_newspaper_extra_container"] = array (
 $TCA["tx_newspaper_extra_ad"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_ad"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,template"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_ad"]["feInterface"],
 	"columns" => array (
@@ -3119,6 +3264,14 @@ $TCA["tx_newspaper_extra_ad"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"template" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_ad.template",		
@@ -3129,7 +3282,7 @@ $TCA["tx_newspaper_extra_ad"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -3141,7 +3294,7 @@ $TCA["tx_newspaper_extra_ad"] = array (
 $TCA["tx_newspaper_extra_generic"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_generic"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,template"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_generic"]["feInterface"],
 	"columns" => array (
@@ -3181,6 +3334,14 @@ $TCA["tx_newspaper_extra_generic"] = array (
 				)
 			)
 		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_generic.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"template" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_generic.template",		
@@ -3191,7 +3352,7 @@ $TCA["tx_newspaper_extra_generic"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, template")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -3230,10 +3391,18 @@ $TCA["tx_newspaper_ctrltag_category"] = array (
 $TCA["tx_newspaper_extra_html"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_html"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "html,template,description_text"
+		"showRecordFieldList" => "short_description,html,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_html"]["feInterface"],
 	"columns" => array (
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_html.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"html" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_html.html",		
@@ -3252,17 +3421,9 @@ $TCA["tx_newspaper_extra_html"] = array (
 				"size" => "30",
 			)
 		),
-		"description_text" => Array (		
-			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_html.description_text",		
-			"config" => Array (
-				"type" => "input",	
-				"size" => "30",
-			)
-		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "html;;;;1-1-1, template, description_text")
+		"0" => array("showitem" => "short_description;;;;1-1-1, html, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3274,7 +3435,7 @@ $TCA["tx_newspaper_extra_html"] = array (
 $TCA["tx_newspaper_extra_freeformimage"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_freeformimage"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,image_file,image_width,image_height"
+		"showRecordFieldList" => "hidden,short_description,image_file,image_width,image_height,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_freeformimage"]["feInterface"],
 	"columns" => array (
@@ -3284,6 +3445,14 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 			'config'  => array (
 				'type'    => 'check',
 				'default' => '0'
+			)
+		),
+		"short_description" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_freeformimage.short_description",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
 			)
 		),
 		"image_file" => Array (		
@@ -3333,9 +3502,17 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 				"default" => 0
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_freeformimage.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, image_file, image_width, image_height")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, image_file, image_width, image_height, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -3347,13 +3524,13 @@ $TCA["tx_newspaper_extra_freeformimage"] = array (
 $TCA["tx_newspaper_extra_sectionteaser"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_sectionteaser"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "template,description_text,is_ctrltag,section,ctrltag_cat,ctrltag,num_articles,num_articles_w_image"
+		"showRecordFieldList" => "short_description,description_text,is_ctrltag,section,ctrltag_cat,ctrltag,num_articles,num_articles_w_image,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_sectionteaser"]["feInterface"],
 	"columns" => array (
-		"template" => Array (		
+		"short_description" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.template",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.short_description",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -3448,9 +3625,17 @@ $TCA["tx_newspaper_extra_sectionteaser"] = array (
 				"default" => 0
 			)
 		),
+		"template" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_sectionteaser.template",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "template;;;;1-1-1, description_text, is_ctrltag, section, ctrltag_cat, ctrltag, num_articles, num_articles_w_image")
+		"0" => array("showitem" => "short_description;;;;1-1-1, description_text, is_ctrltag, section, ctrltag_cat, ctrltag, num_articles, num_articles_w_image, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
