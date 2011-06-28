@@ -460,7 +460,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
     public static function isHorizontalInheritanceEnabled() {
-        tx_newspaper::devlog('isHorizontalInheritanceEnabled()', tx_newspaper::getTSConfigVar('horizontal_inheritance_enabled'));
         return intval(tx_newspaper::getTSConfigVar('horizontal_inheritance_enabled'));
     }
 	
