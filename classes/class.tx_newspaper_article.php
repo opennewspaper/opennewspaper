@@ -871,7 +871,7 @@ tx_newspaper::devlog('after usort', array($this->extras));
 
     public function getRelatedArticles($hidden_ones_too = false) {
 
-        $rows = tx_newspaper::selectRows(
+        $rows = tx_newspaper::selectRowsDirect(
                         self::article_related_table . '.uid_local, ' . self::article_related_table . '.uid_foreign',
                         self::article_related_table .
                         ' JOIN ' . $this->getTable() . ' AS a_local' .
