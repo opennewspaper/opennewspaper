@@ -4,9 +4,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 
 /// tx_newspaper_Extra displaying one or several Typo3 Content Elements
 /** Insert this Extra on Page Zones (or Articles, if you find a use for that) to
- *  display an existing Typo3 Content Element. Content Elements can be grouped 
+ *  display an existing Typo3 Content Element. Content Elements can be grouped
  *  to show more than one CE.
- * 
+ *
  *  Attributes:
  *  - \p pool (bool)
  *  - \p content_elements (UIDs to table \p tt_content)
@@ -15,23 +15,23 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
 	public function __construct($uid = 0) {
 		if ($uid) {
-			parent::__construct($uid); 
+			parent::__construct($uid);
 		}
 	}
-	
+
 	public function __toString() {
 		try {
 		return 'Extra: UID ' . $this->getExtraUid() . ', Typo3 CE Extra: UID ' . $this->getUid() .
 				' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';
 		} catch(Exception $e) {
 			return "Typo3 CE: Exception thrown!" . $e;
-		}	
+		}
 	}
-	
+
 	/** Use TypoScript to render the selected Content Elements
-	 * 
+	 *
 	 *  \param $template_set Ignored
-	 * 
+	 *
 	 *  \todo It's probably not wise to print the whole content of the DB records
 	 *  	inside a HTML comment.
 	 */
@@ -64,7 +64,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
         $ret = $this->smarty->fetch($this->getTemplate());
         tx_newspaper::logExecutionTime();
-		
+
 		return $ret;
 	}
 
@@ -117,7 +117,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
     }
 
     /** If the CE has a header, display the header. Else if it has a titleText,
-	 *  display that. Else just display its UID. 
+	 *  display that. Else just display its UID.
 	 *  \todo This could probably be improved, especially for multiple CEs.
 	 */
 	public function getDescription() {
@@ -126,17 +126,17 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 			if ($row['header']) return $row['header'];
 			if ($row['titleText']) return $row['titleText'];
 		} catch (tx_newspaper_DBException $e) { }
-		
-		return 'Content Element ' . $this->getAttribute('content_elements');
+
+		return $this->getAttribute('short_description');
 	}
 
     /// title for module
 	public static function getModuleName() {
 		return 'np_typo3_ce';
 	}
-	
+
 	public static function dependsOnArticle() { return false; }
-	
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_Typo3_CE());

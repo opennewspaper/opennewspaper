@@ -11,15 +11,15 @@ require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_t
 /// testsuite for all extras belonging to the newspaper extension
 class test_Extra_testcase extends tx_newspaper_database_testcase {
 
-	function setUp() {		
+	function setUp() {
 		$this->old_page = $GLOBALS['TSFE']->page;
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
-        parent::setUp();        
+        parent::setUp();
 	}
 
 	function tearDown() {
-		parent::tearDown();	
+		parent::tearDown();
 		$GLOBALS['TSFE']->page = $this->old_page;
 		/// Make sure $_GET is clean
 		unset($_GET['art']);
@@ -27,7 +27,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_getExtraTable() {
-		$this->assertEquals(tx_newspaper_Extra_Factory::getInstance()->getExtraTable(), 'tx_newspaper_extra');	
+		$this->assertEquals(tx_newspaper_Extra_Factory::getInstance()->getExtraTable(), 'tx_newspaper_extra');
 	}
 
 	public function test_nonexistentExtra() {
@@ -52,14 +52,14 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 									$this->attributes_to_test['modulename'][$extra_class]);
 		}
 	}
-	
+
 	public function test_getAttributeUid() {
 		foreach($this->fixture->getExtraUids() as $uid) {
 			$temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 			$this->assertEquals($uid, $temp->getAttribute('uid'), 'uid passed in on object creation does not match with the attribute uid.');
 		}
 	}
-	
+
 	public function test_getAttribute() {
         $temp = array();
         foreach($this->fixture->getExtraUids() as $uid) {
@@ -69,7 +69,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         foreach($this->fixture->image_extra_data as $i => $value) {
             $this->assertEquals($this->fixture->image_extra_data[$i]['caption'], $temp[$i]->getAttribute('caption'));
         }
-		
+
 		$this->setExpectedException('tx_newspaper_WrongAttributeException');
 		$temp[0]->getAttribute('es gibt mich nicht, schmeiss ne exception!');
 	}
@@ -85,7 +85,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_isRegisteredExtra() {
-        $uid = $this->fixture->getExtraUid();		
+        $uid = $this->fixture->getExtraUid();
         $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
         $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
 	}
@@ -98,9 +98,9 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 //	public function test_render() {
-//		
+//
 //		$this->fail('test not yet ready!');
-//		
+//
 //		/// set an article ID for article renderer extra
 //		$_GET['art'] = 1;
 //		foreach($this->extras_to_test as $extra_class) {
@@ -109,7 +109,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 //			/// \todo test the output... how can i do that generically?
 //		}
 //		unset($_GET['art']);
-//	}	
+//	}
 
 //	public function test_store() {
 //		$tmp = array();
@@ -126,7 +126,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 //			foreach ($data as $key => $value) {
 //				$this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
 //			}
-		
+
 			/// change an attribute, store and check
 //			$time = time();
 //			$temp->setAttribute('tstamp', $time);
@@ -144,12 +144,12 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 //			t3lib_div::debug('store() 3 ok');
 //			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
 //			$this->assertEquals($data['tstamp'], $time);
-			
+
 			/// delete extra
 //			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
-			
+
 //		}
-//	}	
+//	}
 
 	public function test_relateExtra2Article() {
 		$article_uid = 1;
@@ -164,7 +164,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
 			/// check that entry for Extra supertable has been written and is equal to new Extra
 			$data = tx_newspaper::selectOneRow(
-				'*', 
+				'*',
 				tx_newspaper_Extra_Factory::getExtraTable(),
 				'extra_table = \'' . strtolower($extra_class) . '\' AND extra_uid = ' . intval($extra_uid)
 			);
@@ -174,18 +174,18 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			$extra_reborn = tx_newspaper_Extra_Factory::getInstance()->create($extra_supertable_uid);
 			$this->assertTrue(is_a($extra_reborn, $extra_class));
 			$this->assertEquals($extra_reborn->getAttribute('crdate'), $crdate);
-			
+
 			/// \todo check that $abstract_uid corresponds to entry in extra supertable
-			
+
 			/// check that MM-relation to the article has been written
 			$data = tx_newspaper::selectOneRow(
-				'*', 
+				'*',
 				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
 				'uid_local = ' . $article_uid . ' AND uid_foreign = ' . intval($extra_supertable_uid)
 			);
 			$this->assertTrue(is_array($data));
 			$this->assertTrue(sizeof($data) > 0);
-			
+
 			/// remove MM relation, superclass table entry and newly created extra
 			tx_newspaper::deleteRows(
 				tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
@@ -198,22 +198,22 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 				true
 			);
 			tx_newspaper::deleteRows($extra->getTable(), 'uid = ' . $extra_uid, true);
-			
-		}	
+
+		}
 	}
-	
+
 //	public function test_getTable() {
-//		foreach(array_merge($this->extras_to_test, 
+//		foreach(array_merge($this->extras_to_test,
 //							$this->extras_to_test_additionally) as $extra_class) {
-//			$temp = new $extra_class(1);            
+//			$temp = new $extra_class(1);
 //			$this->assertEquals(strtolower($extra_class), $temp->getTable());
 //		}
 //	}
-	
+
 	public function test_createExtraRecord() {
 		/// test whether the function runs at all
 		tx_newspaper_Extra::createExtraRecord(
-			$this->extra_uid_to_create_superobject_for, 
+			$this->extra_uid_to_create_superobject_for,
 			$this->extra_table_to_create_superobject_for
 		);
 
@@ -225,7 +225,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
 		$this->assertTrue($row['uid'] > 0);
-		
+
 		/// delete the record from the extra table and check it it really is created anew
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
@@ -233,7 +233,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		/// \todo if i were pedantic, i'd check wheter deletion has really succeeded...
 
 		tx_newspaper_Extra::createExtraRecord(
-			$this->extra_uid_to_create_superobject_for, 
+			$this->extra_uid_to_create_superobject_for,
 			$this->extra_table_to_create_superobject_for
 		);
 
@@ -245,17 +245,17 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
 		);
 		$this->assertTrue($row['uid'] > 0);
-		
+
 		/// \todo check if all fields are consistent
 	}
-	
+
 	public function test_getSearchFields() {
 		$extra = new tx_newspaper_Extra_Image();
 		$fields = $extra->getSearchFields();
 		$this->assertContains('title', $fields);
 		$this->assertContains('caption', $fields);
 		$this->assertContains('kicker', $fields);
-		
+
 		$extra = new tx_newspaper_Extra_Bio();
 		$fields = $extra->getSearchFields();
 		$this->assertContains('author_name', $fields);
@@ -265,24 +265,24 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_getSearchResults() {
 		$extra = new tx_newspaper_Extra_Image();
 		$results = $extra->getSearchResults('Unit Test');
-		
+
 		$this->assertGreaterThanOrEqual(3, sizeof($results));
 		foreach ($results as $result) {
-			$this->assertTrue($result instanceof tx_newspaper_Extra_Image); 
+			$this->assertTrue($result instanceof tx_newspaper_Extra_Image);
 		}
-		
+
 		$extra = new tx_newspaper_extra_articlelist();
 		$results = $extra->getSearchResults('Unit Test');
-		
+
 		$this->assertGreaterThanOrEqual(2, sizeof($results));
 		foreach ($results as $result) {
 			$this->assertTrue($result instanceof tx_newspaper_extra_articlelist);
 			$this->assertThat(
-				$result->getAttribute('description'),
-				$this->stringContains('Unit Test', false)	
+				$result->getAttribute('short_description'),
+				$this->stringContains('Unit Test', false)
 			);
 		}
-		
+
 	}
 //	public function test_duplicate() {
 //		$this->fail('test not yet ready!');
@@ -290,14 +290,14 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 //			$temp = new $extra_class(1);
 //			$time = time();
 //			$temp->setAttribute('crdate', $time);
-//		
+//
 //			$that = $temp->duplicate();
 //			t3lib_div::debug($this); t3lib_div::debug($that);
 //		}
 //	}
-	
+
 	/// Section which contains the objects to be tested
-	private $section_uid = 1;	
+	private $section_uid = 1;
 	private $bad_extra_uid = 2000000000;	///< extra that does not exist
 	/// Extra classes that should be subjected to all tests
 	private $extras_to_test = array(
@@ -320,7 +320,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			'tx_newspaper_Extra_SectionList' => 'np_sect_ls',
 		),
 	);
-	
+
 	/// Helper for common setUp Tasks
 	private $testHelper = null;
 	/// Table which stores the Extra superclass
@@ -329,7 +329,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
 	/// UID of concrete record to test in createExtraRecord()
 	private $extra_uid_to_create_superobject_for = 1;
-	
-	
+
+
 }
 ?>

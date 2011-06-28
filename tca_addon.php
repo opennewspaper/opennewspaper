@@ -230,11 +230,6 @@ $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['starttime']['c
 $GLOBALS['TCA']['tx_newspaper_extra_displayarticles']['columns']['endtime']['config']['size'] = '12';
 
 /// add entries for template set dropdowns for Extras
-unset($TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']);
-$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
-$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['size'] = 1;
-$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['maxitems'] = 1;
-$TCA['tx_newspaper_extra_externallinks']['columns']['template']['config']['type'] = 'select';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_externallinks']['columns']['starttime']['config']['size'] = '12';

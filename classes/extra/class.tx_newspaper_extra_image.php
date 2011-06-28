@@ -94,7 +94,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	/** Displays title and UID of the image, as well as a thumbnail of it.
 	 */
 	public function getDescription() {
-		return $this->getAttribute('title') . $this->image->getThumbnail();
+		return $this->getAttribute('short_description') . $this->image->getThumbnail();
 	}
 
     public function getImageType() {
@@ -121,7 +121,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     public static function getBasepath() {
         return tx_newspaper_Image::getBasepath();
     }
-    
+
     public static function getSizes() {
         return tx_newspaper_Image::getSizes();
     }
@@ -152,7 +152,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		if ($table != 'tx_newspaper_extra_image') return;
 		if (!isset($fieldArray[self::image_file_field])) return;
-        
+
         $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
         $image->resizeImages();
         $image->rsyncAllImageFiles();

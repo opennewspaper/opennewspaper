@@ -1,4 +1,4 @@
-{* debug *}
+{*debug*}
 
 <script language="javascript" >
 	{section name=i loop=$EXTRA_DATA} {* store default values for paragraphs *}
@@ -36,7 +36,7 @@
 {else}
 	<tr class="bg1 noborder"> {* inherited extra, so it CAN'T be edited *}
 {/if}
-		<td>{$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span></td>
+		<td><span class="gray">{$EXTRA_DATA[i].extra_type}</span><br />{$EXTRA_DATA[i].title}</td>
 		<td class="mod3_td" id="notes_td_{$EXTRA_DATA[i].uid}">
 			<input id="notes_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
 			<span style="display: none" id="save_notes_{$EXTRA_DATA[i].uid}"> <a href="#" onclick="saveField({$DATA.pagezone_id}, {$EXTRA_DATA[i].uid}, 'notes', 0); return false;">{$SAVE_ICON}</a> <a href="#" onclick="undoField({$EXTRA_DATA[i].uid}, 'notes'); return false;">{$UNDO_ICON}</a></span>
@@ -119,7 +119,6 @@
 				{else}
 				  {$EMPTY_ICON}
 				{/if}
-
 
 {* delete *}
 				{if $EXTRA_DATA[i].origin_placement == true}

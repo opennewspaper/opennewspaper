@@ -19,7 +19,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
             $this->image = new tx_newspaper_NullImage();
         }
 	}
-	
+
 	public function __toString() {
 		try {
 			return 'Extra: UID ' . $this->getExtraUid() . ', Free Form Image Extra: UID ' . $this->getUid();
@@ -27,15 +27,15 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 			return "Free Form Image: Exception thrown!" . $e;
 		}
 	}
-	
+
 	/// Render the image.
 	/**  Smarty template:
 	 *  \include res/templates/tx_newspaper_extra_freeformimage.tmpl
-	 */	
+	 */
 	public function render($template_set = '') {
 
         $this->image->copyTo($this->getUploadFolder());
-        
+
 		$this->prepare_render($template_set);
         $this->smarty->assign('basepath', $this->getUploadFolder());
 
@@ -45,7 +45,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	}
 
 	public function getDescription() {
-		return $this->image->getThumbnail();
+		return $this->getAttribute('short_description') . $this->image->getThumbnail();
 	}
 
     public function getUploadFolder() {
@@ -54,7 +54,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
         if (!file_exists($upload_folder_path)) {
             mkdir($upload_folder_path, 0775, true);
         }
-        
+
         return $upload_folder_path;
     }
 
@@ -62,7 +62,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 	public static function getModuleName() {
 		return 'np_extra_freeformimage';
 	}
-	
+
 	public static function dependsOnArticle() { return false; }
 
     /// Save hook function, called from the global save hook

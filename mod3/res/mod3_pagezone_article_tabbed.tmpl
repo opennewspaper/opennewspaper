@@ -102,7 +102,7 @@
                         <tr class="bg2">
                     {/if}
             {* note *}
-                            <td class="mod3_td"> {$EXTRA_DATA[i].extra_type}<br /><span class="gray">{$EXTRA_DATA[i].title}</span> </td>
+                            <td class="mod3_td"> <span class="gray">{$EXTRA_DATA[i].extra_type}</span><br />{$EXTRA_DATA[i].title} </td>
                             {if (!$IS_CONCRETE_ARTICLE)}
                                 <td class="mod3_td" id="notes_td_{$EXTRA_DATA[i].uid}">
                                     <input id="notes_{$EXTRA_DATA[i].uid}" onfocus="enterField({$EXTRA_DATA[i].uid}, 'notes'); return false;" style="width: 100px" type="text" value='{$EXTRA_DATA[i].notes|escape:'html'}' />
