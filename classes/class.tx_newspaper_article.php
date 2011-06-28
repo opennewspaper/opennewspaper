@@ -880,7 +880,9 @@ tx_newspaper::devlog('after usort', array($this->extras));
                         ' ON ' . self::article_related_table . '.uid_foreign= a_foreign.uid',
                         '(uid_local = ' . $this->getUid() .
                         ' OR uid_foreign = ' . $this->getUid() . ')' .
-                        ($hidden_ones_too ? '' : 'AND (a_foreign.hidden = 0)')
+                        ($hidden_ones_too ?
+                            '' :
+                            'AND (a_foreign.hidden = 0)' . self::getTimeWhereClause('a_local') . self::getTimeWhereClause('a_foreign'))
         );
 
         $related_articles = array();
@@ -898,6 +900,10 @@ tx_newspaper::devlog('after usort', array($this->extras));
         }
 
         return array_unique($related_articles);
+    }
+
+    private static function getTimeWhereClause($table) {
+        return " AND ( $table.starttime <= " . time() . " AND ( $table.endtime == 0 OR $table.endtime > " . time() . '))';
     }
 
     ////////////////////////////////////////////////////////////////////////////
