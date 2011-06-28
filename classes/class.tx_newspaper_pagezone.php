@@ -451,13 +451,18 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			$inherit_mode = intval($this->getAttribute('inherits_from'));
 	
 			if ($inherit_mode < 0) return null;
-			if ($inherit_mode > 0) 
-				return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
+			if ($inherit_mode > 0 && self::isHorizontalInheritanceEnabled()) {
+                return tx_newspaper_PageZone_Factory::getInstance()->create($inherit_mode);
+            }
 		}
 
 		return $this->getParentPageZoneOfSameType();
 	}
-	
+
+    public static function isHorizontalInheritanceEnabled() {
+        tx_newspaper::devlog('isHorizontalInheritanceEnabled()', tx_newspaper::getTSConfigVar('horizontal_inheritance_enabled'));
+        return intval(tx_newspaper::getTSConfigVar('horizontal_inheritance_enabled'));
+    }
 	
 	/// Get the hierarchy of Page Zones from which the current Zone inherits the placement of its extras
 	/** \param $including_myself If true, add $this to the list
