@@ -37,6 +37,7 @@ CREATE TABLE tx_newspaper_extra_image (
 	source tinytext NOT NULL,
 	image_type int(11) DEFAULT '0' NOT NULL,
 	alttext tinytext NOT NULL,
+	image_url tinytext NOT NULL,
 	tags int(11) DEFAULT '0' NOT NULL,
 	template tinytext NOT NULL,
 	

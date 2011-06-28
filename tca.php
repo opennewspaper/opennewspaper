@@ -4,7 +4,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 $TCA["tx_newspaper_extra_image"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,short_description,pool,title,image_file,credit,caption,normalized_filename,kicker,source,image_type,alttext,tags,template"
+		"showRecordFieldList" => "hidden,starttime,endtime,short_description,pool,title,image_file,credit,caption,normalized_filename,kicker,source,image_type,alttext,image_url,tags,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_image"]["feInterface"],
 	"columns" => array (
@@ -146,6 +146,14 @@ $TCA["tx_newspaper_extra_image"] = array (
 				"size" => "30",
 			)
 		),
+		"image_url" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.image_url",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",
+			)
+		),
 		"tags" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_image.tags",		
@@ -169,7 +177,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, pool, title;;;;2-2-2, image_file;;;;3-3-3, credit, caption, normalized_filename, kicker, source, image_type, alttext, tags, template")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, short_description, pool, title;;;;2-2-2, image_file;;;;3-3-3, credit, caption, normalized_filename, kicker, source, image_type, alttext, image_url, tags, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")

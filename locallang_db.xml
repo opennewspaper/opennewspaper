@@ -22,7 +22,8 @@
 			<label index="tx_newspaper_extra_image.image_type.I.2">Table</label>
 			<label index="tx_newspaper_extra_image.image_type.I.3">Screenshot</label>
 			<label index="tx_newspaper_extra_image.image_type">Image type</label>
-			<label index="tx_newspaper_extra_image.alttext">Alt-text</label>
+			<label index="tx_newspaper_extra_image.alttext">Alt text</label>
+			<label index="tx_newspaper_extra_image.image_url">Link image with URL</label>
 			<label index="tx_newspaper_extra_image.tags">Tags</label>
 			<label index="tx_newspaper_extra_image.template">Design template</label>
 			<label index="tx_newspaper_section">Section</label>
@@ -279,6 +280,7 @@
 			<label index="tx_newspaper_extra_image.image_type.I.3">Screenshot</label>
 			<label index="tx_newspaper_extra_image.image_type">Bildtyp</label>
 			<label index="tx_newspaper_extra_image.alttext">Alt-Text</label>
+			<label index="tx_newspaper_extra_image.image_url">Bild mit URL verlinken</label>
 			<label index="tx_newspaper_extra_image.tags">Schlagworte</label>
 			<label index="tx_newspaper_extra_image.template">Designvorlage</label>
 			<label index="tx_newspaper_section">Ressort</label>
