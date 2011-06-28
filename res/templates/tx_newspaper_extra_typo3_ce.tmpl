@@ -14,7 +14,7 @@
 {section name=i loop=$rendered}
   <!--
     {foreach from=$raw[i] key=attribute item=value}
-      {$key}: {$value}
+      {$attribute}: {$value}
     {/foreach}
   -->
   <div>{$rendered[i]}</div>
