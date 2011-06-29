@@ -435,12 +435,12 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         $tstamp = $this->getStartTimeForSearch();
         if ($tstamp) {
-            $where .= " ( (starttime > 0 AND starttime >= $tstamp) OR (starttime = 0 AND crdate >= $tstamp) ) AND ";
+            $where .= " ( (" . self::article_table . ".starttime > 0 AND " . self::article_table . ".starttime >= $tstamp) OR (" . self::article_table . ".starttime = 0 AND " . self::article_table . ".crdate >= $tstamp) ) AND ";
         }
 
         $tstamp = $this->getEndTimeForSearch();
         if ($tstamp) {
-            $where .= " ( (endtime > 0 AND endtime < $tstamp) OR (endtime = 0 AND crdate < $tstamp) ) AND ";
+            $where .= " ( (" . self::article_table . ".endtime > 0 AND " . self::article_table . ".endtime < $tstamp) OR (" . self::article_table . ".endtime = 0 AND " . self::article_table . ".crdate < $tstamp) ) AND ";
         }
 
         tx_newspaper::devlog('Time clause', $where);
