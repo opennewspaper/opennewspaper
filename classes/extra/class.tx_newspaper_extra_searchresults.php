@@ -245,7 +245,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 				  'MATCH (' . implode(', ', self::$title_fields).') ' .
 					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS title_score, '.
 				  'MATCH (' . implode(', ', self::$text_fields).') ' .
-					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS text_score, ';
+					'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS text_score ';
 
 		if ($this->getSections()) {
 			$table .= ' JOIN ' . self::article_section_mm .
@@ -279,7 +279,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 				'   ON ' . self::extra_table . '.extra_uid = ' . $extra_table . '.uid' .
 				'     AND ' . self::extra_table . '.extra_table = \'' . $extra_table . '\'';
 
-			$current_fields = $fields .
+			$current_fields = $fields . ', ' .
 				'MATCH (' . implode(', ', $fields).') ' .
 				'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS extra_score ';
 
