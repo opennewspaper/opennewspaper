@@ -261,12 +261,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	/// Convert RTE data in data fields (=attributes) to HTML data
 	private function convertRteFields() {
-		require_once(PATH_tslib . 'class.tslib_pibase.php');
-
-		// prepare some Typo3 frontend object
-		tx_newspaper::buildTSFE();
-		$pibase = t3lib_div::makeInstance('tslib_pibase');
-		$pibase->cObj = $GLOBALS['TSFE']->cObj;
 
 		// make sure TCA is available
 		t3lib_div::loadTCA($this->getTable());
@@ -276,7 +270,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 		foreach($this->attributes as $field => $value) {
 			if ($GLOBALS['TCA'][$this->getTable()]['columns'][$field]['config']['wizards']['RTE']) {
 				// so it's an RTE field
-				$attributes[$field] = $pibase->pi_RTEcssText($value);
+				$attributes[$field] = tx_newspaper::convertRteField($value);
 			} else {
 				// no RTE field
 				$attributes[$field] = $value;

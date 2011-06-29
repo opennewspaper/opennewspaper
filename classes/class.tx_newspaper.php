@@ -1206,6 +1206,22 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return $link['href'];
   }
 
+	/**
+	 * Let Typo3 convert links in RTE data
+	 * @param $text unconverted RTE data
+	 * @return Converted RTE data
+	 */
+	public static function convertRteField($text) {
+		require_once(PATH_tslib . 'class.tslib_pibase.php');
+
+		// prepare some Typo3 frontend object
+		tx_newspaper::buildTSFE();
+		$pibase = t3lib_div::makeInstance('tslib_pibase');
+		$pibase->cObj = $GLOBALS['TSFE']->cObj;
+
+		return $pibase->pi_RTEcssText($text);
+	}
+
     ////////////////////////////////////////////////////////////////////////////
 
 
