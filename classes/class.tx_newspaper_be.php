@@ -38,11 +38,15 @@ class tx_newspaper_BE {
      * @param $params Data fetched by Typo3
      */
     public function getAbstractExtraLabel(&$params) {
+//t3lib_div::devlog('getAbstractExtraLabel()', 'newspaper', 0, array('params' => $params));
 		if ($params['row']['extra_table']) {
 			$e = new $params['row']['extra_table'](intval($params['row']['extra_uid']));
-			$params['title'] = $e->getAttribute('tstamp');
-		} else {
-			$params['title'] = $row['uid'];
+			if (!$params['title'] = $e->getAttribute('short_description')) {
+				$params['title'] = $params['row']['extra_table'] . ' #' . $params['row']['extra_uid'] . ' (#' . $params['row']['uid'] . ')';
+			}
+		}
+		if (!$params['title']) {
+			$params['title'] = $params['table'] . ' #' . $params['row']['uid'];
 		}
     }
 
