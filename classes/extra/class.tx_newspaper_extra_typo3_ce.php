@@ -37,8 +37,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
         $this->prepare_render($template_set);
 
         /** @var tslib_cObj $cObj  */
@@ -63,7 +61,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         $this->smarty->assign('rendered', $rendered);
 
         $ret = $this->smarty->fetch($this->getTemplate());
-        tx_newspaper::logExecutionTime();
 
 		return $ret;
 	}
