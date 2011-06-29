@@ -85,7 +85,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	///	Table storing M-M relations between tx_newspaper_Article and tx_newspaper_Tag
 	const article_tag_mm = 'tx_newspaper_article_tags_mm';
 
-    const article_extra_mm = 'tx_newspaper_article_extra_mm';
+    const article_extra_mm = 'tx_newspaper_article_extras_mm';
     const extra_table = 'tx_newspaper_extra';
 
 	/// Definition of umlauts which MySQL cannot match case-insensitively
