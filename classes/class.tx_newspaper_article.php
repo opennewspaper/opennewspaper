@@ -376,9 +376,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                     }
                 }
         }
-tx_newspaper::devlog('before usort', array($this->extras, get_class($this), debug_backtrace()));
+
         usort($this->extras, array(get_class($this), 'compareExtras'));
-tx_newspaper::devlog('after usort', array($this->extras));
+
         return $this->extras;
     }
 
