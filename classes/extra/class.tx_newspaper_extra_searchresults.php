@@ -563,9 +563,9 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
  	 * 		Extras
  	 */
 	private static function totalScore(array $article) {
-		return self::title_score_factor*$article['title_score'] +
+		return self::title_score_weight*$article['title_score'] +
 				$article['text_score'] +
-				self::extra_score_factor*$article['extra_score'];
+				self::extra_score_weight*$article['extra_score'];
 	}
 
 }
