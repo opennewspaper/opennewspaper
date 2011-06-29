@@ -273,6 +273,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
 		$articles = array();
 
+###!!!###
+        if (false) {
 		foreach (self::$extra_fields as $extra_table => $fields) {
 			$current_table = $table .
 				' JOIN ' . self::article_tag_mm .
@@ -314,6 +316,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
 			}
 		}
+        }
+###!!!###
 
     	$this->num_results = sizeof($articles);
 		$return = array();
@@ -414,7 +418,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	        if (!$current_term) continue;
 	        //	don't search for excluded words
 	        if (!$this->isExcludedWord($current_term)) {
-	            $where .= $this->umlautCaseInsensitiveMatch($current_term);
+	            $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list);
 	        }
 	    }
 
@@ -427,14 +431,14 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         $tstamp = $this->getStartTimeForSearch();
         if ($tstamp) {
-            $where .= " ((starttime > 0 AND starttime >= $tstamp) OR (starttime = 0 AND crdate >= $tstamp)) AND ";
+            $where .= " ( (starttime > 0 AND starttime >= $tstamp) OR (starttime = 0 AND crdate >= $tstamp) ) AND ";
         }
 
-
-        if ($this->end_day || $this->end_month || $this->end_year) {
-            $tstamp = $this->getEndTimeForSearch();
-            $where .= " ((endtime > 0 AND endtime < $tstamp) OR (endtime = 0 AND crdate < $tstamp)) AND ";
+        $tstamp = $this->getEndTimeForSearch();
+        if ($tstamp) {
+            $where .= " ( (endtime > 0 AND endtime < $tstamp) OR (endtime = 0 AND crdate < $tstamp) ) AND ";
         }
+
         tx_newspaper::devlog('Time clause', $where);
         return $where;
     }
@@ -453,7 +457,10 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
     }
 
     private function getEndTimeForSearch() {
-        return mktime(23, 59, 59, $this->end_month, $this->end_day, $this->end_year);
+        if ($this->end_day || $this->end_month || $this->end_year) {
+            return mktime(23, 59, 59, $this->end_month, $this->end_day, $this->end_year);
+        }
+        return 0;
     }
 
     ///	Checks whether the word is excluded from search terms.
