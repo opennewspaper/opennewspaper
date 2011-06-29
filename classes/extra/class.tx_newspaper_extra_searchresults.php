@@ -39,7 +39,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	const max_search_results = 1000;
 
 	/// Whether to log search terms
-	private static $log_searches = true;
+	private static $log_searches = false;
 
 	/// Whether to log search results
 	private static $log_results = true;
