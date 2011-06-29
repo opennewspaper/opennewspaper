@@ -407,23 +407,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	 */
 	private function searchWhereClause($term, array $field_list) {
 
-	    $where = '';
-
-		// Assemble conditions for pulishing date
-	    $tstamp = 0;
-	    if (intval($this->search_lifetime)) {
-	    	$tstamp = mktime()-intval($$this->search_lifetime)*24*60*60;
-	    }
-	    if ($this->start_day || $this->start_month || $this->start_year) {
-	        $tstamp = max($tstamp,
-	              		  mktime(0, 0, 0, $this->start_month, $this->start_day, $this->start_year));
-	    }
-	    $where .= " ((starttime > 0 AND starttime >= $tstamp) OR (starttime = 0 AND crdate >= $tstamp)) AND ";
-
-	    if ($this->end_day || $this->end_month || $this->end_year) {
-		      $tstamp = mktime(23, 59, 59, $this->end_month, $this->end_day, $this->end_year);
-		      $where .= " ((endtime > 0 AND endtime < $tstamp) OR (endtime = 0 AND crdate < $tstamp)) AND ";
-	    }
+        $where = $this->getTimeClauseForSearch();
 
 		//	Assemble conditions on search terms
 	    foreach (explode(' ', $term) as $current_term) {
@@ -434,10 +418,45 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	        }
 	    }
 
+        tx_newspaper::devlog('Article search clause', $where);
 	    return $where;
     }
 
-	///	Checks whether the word is excluded from search terms.
+    private function getTimeClauseForSearch() {
+        $where = '';
+
+        $tstamp = $this->getStartTimeForSearch();
+        if ($tstamp) {
+            $where .= " ((starttime > 0 AND starttime >= $tstamp) OR (starttime = 0 AND crdate >= $tstamp)) AND ";
+        }
+
+
+        if ($this->end_day || $this->end_month || $this->end_year) {
+            $tstamp = $this->getEndTimeForSearch();
+            $where .= " ((endtime > 0 AND endtime < $tstamp) OR (endtime = 0 AND crdate < $tstamp)) AND ";
+        }
+        tx_newspaper::devlog('Time clause', $where);
+        return $where;
+    }
+
+    /// Assemble conditions for pulishing date
+    private function getStartTimeForSearch() {
+        $tstamp = 0;
+        if (intval($this->search_lifetime)) {
+            $tstamp = mktime() - intval($$this->search_lifetime) * 24 * 60 * 60;
+        }
+        if ($this->start_day || $this->start_month || $this->start_year) {
+            $tstamp = max($tstamp,
+                          mktime(0, 0, 0, $this->start_month, $this->start_day, $this->start_year));
+        }
+        return $tstamp;
+    }
+
+    private function getEndTimeForSearch() {
+        return mktime(23, 59, 59, $this->end_month, $this->end_day, $this->end_year);
+    }
+
+    ///	Checks whether the word is excluded from search terms.
 	/** Excluded words are silently dropped from the search words.
 	 *
 	 *  \param $term Word to check
