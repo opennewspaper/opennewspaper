@@ -271,7 +271,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 				  ' JOIN ' . self::extra_table .
 				  '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
 
-		$articles = self::getSearchResults($fields, $table, $where);
+		$articles = self::getSearchResultsForClass($fields, $table, $where);
 
 		foreach (self::$extra_fields as $extra_table => $fields) {
 			$current_table = $table .
@@ -294,7 +294,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 			if (!$num_articles) continue;
 
             $articles = array_merge($articles,
-                                    self::getSearchResults($current_fields, $current_table, $current_where));
+                                    self::getSearchResultsForClass($current_fields, $current_table, $current_where));
 		}
 
     	$this->num_results = sizeof($articles);
@@ -315,7 +315,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		return $return;
 	}
 
-    private static function getSearchResults($current_fields, $current_table, $current_where) {
+    private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
         $results = tx_newspaper::selectRows(
             $current_fields,
             $current_table,
