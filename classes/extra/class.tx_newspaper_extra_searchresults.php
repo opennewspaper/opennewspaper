@@ -271,10 +271,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 				  ' JOIN ' . self::extra_table .
 				  '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
 
-		$articles = array();
+		$articles = self::getSearchResults($fields, $table, $where);
 
-###!!!###
-        if (false) {
 		foreach (self::$extra_fields as $extra_table => $fields) {
 			$current_table = $table .
 				' JOIN ' . self::article_tag_mm .
@@ -295,29 +293,9 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 			$num_articles = intval($row['number']);
 			if (!$num_articles) continue;
 
-	        $results = tx_newspaper::selectRows(
-				$current_fields,
-				$current_table,
-				$current_where,
-				'',
-				'',
-				'0, ' . self::max_search_results
-			);
-			t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
-
-			foreach ($results as $result) {
-				foreach ($articles as $article) {
-					if (intval($article['uid']) == intval($result['uid'])) {
-						$article['extra_score'] += $result['extra_score'];
-						continue 2;		//	continue outer loop
-					}
-				}
-				$articles[] = $result;
-
-			}
+            $articles = array_merge($articles,
+                                    self::getSearchResults($current_fields, $current_table, $current_where));
 		}
-        }
-###!!!###
 
     	$this->num_results = sizeof($articles);
 		$return = array();
@@ -337,7 +315,32 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		return $return;
 	}
 
-	/// Gets sections the search is restricted to as comma-separated list
+    private static function getSearchResults($current_fields, $current_table, $current_where) {
+        $results = tx_newspaper::selectRows(
+            $current_fields,
+            $current_table,
+            $current_where,
+            '',
+            '',
+            '0, ' . self::max_search_results
+        );
+        t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
+
+        $articles = array();
+        foreach ($results as $result) {
+            foreach ($articles as $article) {
+                if (intval($article['uid']) == intval($result['uid'])) {
+                    $article['extra_score'] += $result['extra_score'];
+                    continue 2; //	continue outer loop
+                }
+            }
+            $articles[] = $result;
+
+        }
+        return $articles;
+    }
+
+    /// Gets sections the search is restricted to as comma-separated list
 	/** \return UIDs of the sections as comma separated list usable in an SQL statement
 	 */
 	protected function getSections() {
