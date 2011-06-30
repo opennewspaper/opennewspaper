@@ -119,9 +119,11 @@ tx_newspaper::devlog("createNew(): parent ".$parent->getUid());
 			/// copy iff parent section exists
 			$pagezone_reborn->copyExtrasFrom($parent);
 		}
-		
+tx_newspaper::devlog("createNew(): copied ");
+
 		$pagezone_reborn->store();
-		
+
+tx_newspaper::devlog("createNew(): stored ");
 		return $pagezone_reborn;
 	}
 

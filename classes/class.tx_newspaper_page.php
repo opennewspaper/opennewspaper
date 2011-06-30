@@ -576,10 +576,13 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 				$this,
 				$type
 			);
+tx_newspaper::devlog("createNew done ");
+
 			$pz->setAttribute('crdate', time());
 			$pz->setAttribute('tstamp', time());
 			$pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
 			$pz->store();
+tx_newspaper::devlog("pz stored ");
 		}
 
 		$this->appendPagezone($pz); // add pagezone to pageZones array, so it's available right away
