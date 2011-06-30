@@ -1263,11 +1263,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   public static function getAttributes($object) {
     global $TCA;
     $object = self::getTable($object);
-self::devlog("getAttributes($object)");
     t3lib_div::loadTCA($object);
-    $columns = array_keys($TCA[$object]['columns']);
-self::devlog("getAttributes($object): cols", $columns);
-    return $columns;
+    return array_keys($TCA[$object]['columns']);
   }
 
   /// The \c GET parameter which determines the article UID

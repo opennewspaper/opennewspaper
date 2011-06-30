@@ -85,7 +85,6 @@ class tx_newspaper_PageZone_Factory {
 	 *  page \p $page
 	 */
 	public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
-tx_newspaper::devlog("createNew(".$page->getUid().', '.$type->getUid().")");
 		$pagezone = null;
 		if ($type->getAttribute('is_article')) {
 			$pagezone = new tx_newspaper_Article();
@@ -93,7 +92,6 @@ tx_newspaper::devlog("createNew(".$page->getUid().', '.$type->getUid().")");
 		} else {
 			$pagezone = new tx_newspaper_PageZone_Page();
 		}
-tx_newspaper::devlog("createNew(): pagezone ".$pagezone->getUid());
 		$pagezone->setParentPage($page);
 		$pagezone->setPageZoneType($type);
 
@@ -101,29 +99,24 @@ tx_newspaper::devlog("createNew(): pagezone ".$pagezone->getUid());
 		 *  way to ensure the attributes are consistent in memory.
 		 */
 		$uid = $pagezone->store();
-tx_newspaper::devlog("createNew(): uid $uid ");
 
 		if ($type->getAttribute('is_article')) {
 			$pagezone_reborn = new tx_newspaper_Article($uid);
 		} else {
 			$pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
 		}
-tx_newspaper::devlog("createNew(): pagezone reborn ".$pagezone_reborn->getUid());
 
 		///	copy Extras from appropriate page zone
 		$parent = $pagezone_reborn->getParentForPlacement();
-tx_newspaper::devlog("createNew(): parent ".$parent->getUid());
 
 /// \todo Helge: alternative: getParentForPlacement() could return an empty pagezone instead of null - would that be better??? 
 		if ($parent) {
 			/// copy iff parent section exists
 			$pagezone_reborn->copyExtrasFrom($parent);
 		}
-tx_newspaper::devlog("createNew(): copied ");
 
 		$pagezone_reborn->store();
 
-tx_newspaper::devlog("createNew(): stored ");
 		return $pagezone_reborn;
 	}
 
