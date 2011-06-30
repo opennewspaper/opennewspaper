@@ -43,7 +43,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.
  */
 class tx_newspaper_PageZone_Factory {
 	
-	/// Returns the only instance of the tx_newspaper_PageZone_Factory Singleton
+	/** @return tx_newspaper_PageZone_Factory the only instance of the
+     *  tx_newspaper_PageZone_Factory Singleton
+     */
 	public static function getInstance() {
 		if (self::$instance == null) {
 			self::$instance = new tx_newspaper_PageZone_Factory();
@@ -83,6 +85,7 @@ class tx_newspaper_PageZone_Factory {
 	 *  page \p $page
 	 */
 	public function createNew(tx_newspaper_Page $page, tx_newspaper_PageZoneType $type) {
+tx_newspaper::devlog("createNew(".$page->getUid().', '.$type->getUid().")");
 		$pagezone = null;
 		if ($type->getAttribute('is_article')) {
 			$pagezone = new tx_newspaper_Article();
@@ -90,6 +93,7 @@ class tx_newspaper_PageZone_Factory {
 		} else {
 			$pagezone = new tx_newspaper_PageZone_Page();
 		}
+tx_newspaper::devlog("createNew(): pagezone ".$pagezone->getUid());
 		$pagezone->setParentPage($page);
 		$pagezone->setPageZoneType($type);
 
@@ -97,16 +101,19 @@ class tx_newspaper_PageZone_Factory {
 		 *  way to ensure the attributes are consistent in memory.
 		 */
 		$uid = $pagezone->store();
-				
+tx_newspaper::devlog("createNew(): uid $uid ");
+
 		if ($type->getAttribute('is_article')) {
 			$pagezone_reborn = new tx_newspaper_Article($uid);
 		} else {
 			$pagezone_reborn = new tx_newspaper_PageZone_Page($uid);
 		}
-		
+tx_newspaper::devlog("createNew(): pagezone reborn ".$pagezone_reborn->getUid());
+
 		///	copy Extras from appropriate page zone
 		$parent = $pagezone_reborn->getParentForPlacement();
-		
+tx_newspaper::devlog("createNew(): parent ".$parent->getUid());
+
 /// \todo Helge: alternative: getParentForPlacement() could return an empty pagezone instead of null - would that be better??? 
 		if ($parent) {
 			/// copy iff parent section exists

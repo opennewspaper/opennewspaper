@@ -440,7 +440,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 
 	/// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
 	/** \param $includeDefaultArticle Are default articles included?
-	 *  \return array of active tx_newspaper_PageZone objects for given
+	 *  @return tx_newspaper_PageZone[] array of active page zones for given
 	 *  	tx_newspaper_Page.
 	 */
 	public function getActivePageZones($includeDefaultArticle=true) {

@@ -366,7 +366,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	
 	///	Get the tx_newspaper_Page on which the PageZone lies.
-	/** \return The tx_newspaper_Page on which the PageZone lies.
+	/** @return tx_newspaper_Page on which the PageZone lies.
 	 */
 	public function getParentPage() {
 		if (!$this->parent_page) {
