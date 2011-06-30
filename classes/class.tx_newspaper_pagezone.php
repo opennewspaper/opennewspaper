@@ -706,8 +706,11 @@ tx_newspaper::devlog("copyExtrasFrom(): is_inheritable " . $extra_to_copy->getUi
 			 */
 			$new_extra = array();
 			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
+tx_newspaper::devlog("copyExtrasFrom(): copying attribute $attribute ");
+
 				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
-			} 
+tx_newspaper::devlog("copyExtrasFrom(): copy attribute $attribute done");
+			}
 tx_newspaper::devlog("copyExtrasFrom(): new extra ");
 			$new_extra['show_extra'] = 1;
 			if (!$extra_to_copy->getOriginUid()) {
