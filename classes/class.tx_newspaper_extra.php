@@ -313,7 +313,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
     private function readExtraAttributes() {
         if (!$this->getExtraUid()) {
-            tx_newspaper::devlog('readExtraAttributes: no extra UID');
             $this->extra_attributes = array();
         } else {
             $this->extra_attributes = tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid());
