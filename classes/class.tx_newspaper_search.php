@@ -208,6 +208,14 @@ class tx_newspaper_Search {
                                     self::getSearchResultsForClass($current_fields, $current_table, $current_where));
         }
 
+        $return = $this->generateArticleObjectsFromSearchResults($articles);
+
+        $this->logSearch($search_term, $return);
+
+        return $return;
+    }
+
+    private function generateArticleObjectsFromSearchResults($articles) {
         $this->num_results = sizeof($articles);
         $return = array();
 
@@ -217,15 +225,13 @@ class tx_newspaper_Search {
             foreach ($articles as $article) {
                 $return[] = new tx_newspaper_Article($article['uid']);
             }
+            return $return;
 
         }
-
-        $this->logSearch($search_term, $return);
-
         return $return;
     }
 
-	///	Assembles a SQL \c WHERE - clause to search for the supplied search term
+    ///	Assembles a SQL \c WHERE - clause to search for the supplied search term
 	/** \param $term the search term to look for.
 	 *  \param $field_list The fields in which to search.
 	 *
