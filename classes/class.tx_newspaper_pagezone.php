@@ -694,7 +694,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \param $parent_zone Page Zone from which the Extras are copied.
 	 */
 	public function copyExtrasFrom(tx_newspaper_PageZone $parent_zone) {
+tx_newspaper::devlog("copyExtrasFrom(".$parent_zone->getUid().")");
+
 		foreach ($parent_zone->getExtras() as $extra_to_copy) {
+tx_newspaper::devlog("copyExtrasFrom(): copy " . $extra_to_copy->getUid());
 			if (!$extra_to_copy->getAttribute('is_inheritable')) continue;
 			/// Clone $extra_to_copy
 			/** Not nice: because we're working on the abstract superclass here, we
@@ -704,13 +707,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			foreach (tx_newspaper::getAttributes('tx_newspaper_extra') as $attribute) {
 				$new_extra[$attribute] = $extra_to_copy->getAttribute($attribute); 
 			} 
+tx_newspaper::devlog("copyExtrasFrom(): new extra ");
 			$new_extra['show_extra'] = 1;
 			if (!$extra_to_copy->getOriginUid()) {
 				$new_extra['origin_uid'] = $extra_to_copy->getAttribute('uid');
 			}
 			$extra_uid = tx_newspaper::insertRows('tx_newspaper_extra', $new_extra);
-			
+tx_newspaper::devlog("copyExtrasFrom(): insert  ");
+
 			$this->addExtra(tx_newspaper_Extra_Factory::getInstance()->create($extra_uid));
+tx_newspaper::devlog("copyExtrasFrom(): create  ");
 		}
 	}
 
