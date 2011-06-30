@@ -99,7 +99,11 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return false; }
 
     private function searchArticles($search_term) {
+
+        if (!$search_term) return array();
+
         $articles = $this->search_object->searchArticles($search_term);
+
         return array_slice(
             $articles,
             self::getFirstArticleIndex(),
