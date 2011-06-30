@@ -100,18 +100,22 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
     private function searchArticles($search_term) {
         $articles = $this->search_object->searchArticles($search_term);
+        tx_newspaper::devlog("array_slice(..., ".self::getFirstArticleIndex().', '.self::getNumResultsPerPage(), $articles);
         return array_slice(
             $articles,
-            $this->getResultPage()*$this->getNumResultsPerPage(),
-            $this->getNumResultsPerPage()
+            self::getFirstArticleIndex(),
+            self::getNumResultsPerPage()
         );
     }
 
+    private static function getFirstArticleIndex() {
+        return self::getResultPage()*self::getNumResultsPerPage();
+    }
 
 	///	Page of search results currently displayed
 	/** \return Page of search results currently displayed
 	 */
-	protected function getResultPage() {
+	private static function getResultPage() {
 		return intval(t3lib_div::_GP(self::page_GET_var));
 	}
 
