@@ -699,6 +699,7 @@ tx_newspaper::devlog("copyExtrasFrom(".$parent_zone->getUid().")");
 		foreach ($parent_zone->getExtras() as $extra_to_copy) {
 tx_newspaper::devlog("copyExtrasFrom(): copy " . $extra_to_copy->getUid());
 			if (!$extra_to_copy->getAttribute('is_inheritable')) continue;
+tx_newspaper::devlog("copyExtrasFrom(): is_inheritable " . $extra_to_copy->getUid());
 			/// Clone $extra_to_copy
 			/** Not nice: because we're working on the abstract superclass here, we
 			 * 	can't clone the superclass entry because there's no object for it.
