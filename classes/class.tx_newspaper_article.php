@@ -296,6 +296,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
+    public function setOriginUid() {}
+
     static public function mapFieldToSourceField($fieldname, tx_newspaper_Source $source) {
         return tx_newspaper_ArticleBehavior::mapFieldToSourceField($fieldname, $source,
                 self::$mapFieldsToSourceFields);
