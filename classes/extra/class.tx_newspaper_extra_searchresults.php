@@ -100,7 +100,11 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
     private function searchArticles($search_term) {
         $articles = $this->search_object->searchArticles($search_term);
-        return array_slice($articles, $this->getResultPage(), $this->getNumResultsPerPage());
+        return array_slice(
+            $articles,
+            $this->getResultPage()*$this->getNumResultsPerPage(),
+            $this->getNumResultsPerPage()
+        );
     }
 
 
