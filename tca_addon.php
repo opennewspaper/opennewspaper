@@ -262,8 +262,6 @@ $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['c
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'required';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;
 
-$TCA["tx_newspaper_extra"]["columns"]["pagezonetype_id"]["config"]["range"] = array ("lower" => "1");
-
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['size'] = '12';
