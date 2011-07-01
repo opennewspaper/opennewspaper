@@ -16,7 +16,7 @@
 
    $extra_attributes    	attributes for abstract extra record as stored in DB
 *}
-{debug}
+{*debug*}
 {$section_or_ctrltag}: #{$id}
 {section name="i" loop=$articles}
 	{$articles[i]->getAttribute('uid')}{if !$smarty.section.i.last}, {/if}
