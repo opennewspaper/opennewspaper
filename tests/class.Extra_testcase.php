@@ -300,7 +300,9 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_GetAttributeShortDescription() {
 		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registeredExtra) {
 			$table = $registeredExtra->getTable();
-			if (strpos($table, 'tx_newspaper_extra') !== false) { // check newspaper (core) extras only
+			if (strpos($table, 'tx_newspaper_extra') !== false) {
+				// check newspaper (core) extras (db tables missing for other extras)
+
 				$registeredExtra->store(); // save to database so attributes can be read
 
 				//re-read extra
@@ -309,7 +311,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 				try {
 			        $extra->getAttribute('short_description');
 				} catch (tx_newspaper_Exception $e) {
-					$this->fail('Could not get mandatory attribute short_description for extra ' . $extra->getTitle());
+					$this->fail('Could not get mandatory attribute short_description for core extra ' . $extra->getTitle());
+				}
+			} else {
+				// simply check tca for other extras
+				t3lib_div::loadTCA($table);
+				if (!isset($GLOBALS['TCA'][$table]['columns']['short_description'])) {
+					$this->fail('Could not get mandatory attribute short_description for extension extra ' . $extra->getTitle());
 				}
 			}
 		}
@@ -317,7 +325,9 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_GetAttributeTemplate() {
 		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registeredExtra) {
 			$table = $registeredExtra->getTable();
-			if (strpos($table, 'tx_newspaper_extra') !== false) { // check newspaper (core) extras only
+			if (strpos($table, 'tx_newspaper_extra') !== false) {
+				// check newspaper (core) extras (db tables missing for other extras)
+
 				$registeredExtra->store(); // save to database so attributes can be read
 
 				//re-read extra
@@ -327,6 +337,12 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			        $extra->getAttribute('template');
 				} catch (tx_newspaper_Exception $e) {
 					$this->fail('Could not get mandatory attribute template for extra ' . $extra->getTitle());
+				}
+			} else {
+				// simply check tca for other extras
+				t3lib_div::loadTCA($table);
+				if (!isset($GLOBALS['TCA'][$table]['columns']['template'])) {
+					$this->fail('Could not get mandatory attribute template for extension extra ' . $extra->getTitle());
 				}
 			}
 		}
