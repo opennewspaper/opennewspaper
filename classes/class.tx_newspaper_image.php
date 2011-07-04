@@ -75,6 +75,8 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
+
+tx_newspaper::devlog('rsyncAllImageFiles');
         foreach (self::getSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
@@ -83,7 +85,10 @@ class tx_newspaper_Image {
 
     public function rsyncSingleImageFile($subfolder) {
 
-        if (!self::isRsyncEnabled()) return;
+        if (!self::isRsyncEnabled()) {
+tx_newspaper::devlog('rsync not enabled', array(self::$rsync_host, self::$rsync_path));
+return;
+        }
 
         $filename = implode('/', array(PATH_site, self::getBasepath(), $subfolder, $this->image_file));
         $target_file = implode('/', array(self::$rsync_path, $subfolder, $this->image_file));
@@ -125,6 +130,7 @@ class tx_newspaper_Image {
         $return = 0;
         exec($command, $output, $return);
         if (self::getRsyncLog()) {
+tx_newspaper::devlog('rsync log: '.self::getRsyncLog());
             exec("date >> " . self::getRsyncLog());
             $f = fopen(self::getRsyncLog(), "a+");
             fwrite ($f, "$basedir\n");
@@ -156,7 +162,7 @@ class tx_newspaper_Image {
 
     private static function isRsyncEnabled() {
         self::readRsyncOptions();
-        return !(empty($target_host) || empty($target_path));
+        return !(empty(self::$rsync_host) || empty(self::$rsync_path));
     }
 
     private function getThumbnailPath() {
