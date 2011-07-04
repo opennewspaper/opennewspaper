@@ -148,8 +148,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public function store() {
+        $uid = $this->storeWithoutSavehooks();
 
-        /// insert article data (if uid == 0) or update if uid > 0
+        $this->callTypo3Savehooks(); // call Typo3 save hooks (triggers dependency tree etc.)
+
+        return $uid;
+    }
+
+    /// insert article data (if uid == 0) or update if uid > 0
+    public function storeWithoutSavehooks() {
         if ($this->getUid()) {
             /// If the attributes are not yet in memory, read them now
             if (!$this->attributes) {
@@ -159,7 +166,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $this->setTypo3Attributes();
 
             tx_newspaper::updateRows(
-                            $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
+                $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
             );
         } else {
             $this->setAttribute('pid', tx_newspaper_Sysfolder::getInstance()->getPid($this));
@@ -167,9 +174,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $this->setTypo3Attributes();
 
             $this->setUid(
-                    tx_newspaper::insertRows(
-                            $this->getTable(), $this->attributes
-                    )
+                tx_newspaper::insertRows(
+                    $this->getTable(), $this->attributes
+                )
             );
         }
 
@@ -179,17 +186,18 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->connectToPage($pagezone_uid);
 
         /// store all extras and make sure they are in the MM relation table
-        if ($this->extras)
+        if ($this->extras) {
             foreach ($this->extras as $extra) {
                 $extra_uid = $extra->store();
                 $extra_table = $extra->getTable();
                 $this->relateExtra2Article($extra);
             }
-
-        $this->callTypo3Savehooks(); // call Typo3 save hooks (triggers dependency tree etc.)
+        }
 
         return $this->getUid();
+
     }
+
 
     public function getUid() {
         if (!intval($this->uid))
