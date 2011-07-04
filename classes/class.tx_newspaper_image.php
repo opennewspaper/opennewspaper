@@ -151,16 +151,24 @@ tx_newspaper::devlog('rsync log: '.self::getRsyncLog());
         if (!is_null(self::$rsync_host)) return;
 tx_newspaper::devlog('readRsyncOptions '.tx_newspaper::getTSConfig());
 
-        self::$rsync_host = tx_newspaper::getTSConfigVar('rsync_host');
-        self::$rsync_path = tx_newspaper::getTSConfigVar('rsync_path');
+        self::$rsync_host = self::getTSConfigVar('rsync_host');
+        self::$rsync_path = self::getTSConfigVar('rsync_path');
 
-        $target_user = tx_newspaper::getTSConfigVar('rsync_user');
+        $target_user = self::getTSConfigVar('rsync_user');
         if ($target_user) {
             self::$rsync_host = $target_user . '@' .self::$rsync_host;
         }
 
     }
 
+    private static $ts_config = array();
+    private static function getTSConfigVar($key) {
+        if (empty(self::$ts_config)) {
+            $global_tsconfig = tx_newspaper::getTSConfig();
+            self::$ts_config = $global_tsconfig['newspaper.'];
+        }
+        return self::$ts_config[$key];
+    }
     private static function isRsyncEnabled() {
         self::readRsyncOptions();
         return !(empty(self::$rsync_host) || empty(self::$rsync_path));
