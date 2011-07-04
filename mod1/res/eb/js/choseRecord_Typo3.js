@@ -18,7 +18,23 @@ function choseRecord(className, uid, close) {
 	var form_uid = extractQuerystringDirect('tx_newspaper_mod1[uid]');
 
 // \todo: replace "New entry" with correct record title
-	insertElement(className, uid, 'db', '[New entry]', '', '', '../typo3conf/ext/newspaper/res/icons/icon_tx_newspaper_extra.gif', '', close, form_table, form_field, form_uid);
+
+
+
+	// Write a new abstract extra to the database
+	var request = new Ajax.Request(
+			"index.php", {
+				method: 'get',
+				parameters: "tx_newspaper_mod1[ajaxController]=cloneAbstractExtra&tx_newspaper_mod1[extraUid]=" +  parseInt(uid),
+				onSuccess: function(response) {
+					if (response) {
+						var data = response.responseText.evalJSON(true);
+						insertElement(className, data.uid, 'db', '[New entry]', '', '', '../typo3conf/ext/newspaper/res/icons/icon_tx_newspaper_extra.gif', '', close, form_table, form_field, form_uid);
+					}
+				},
+			}
+		);
+
 }
 
 

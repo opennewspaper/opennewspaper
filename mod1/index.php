@@ -556,6 +556,14 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					$extra = $this->createNewConcreteExtra($this->input['extraClass']);
 					die(json_encode(array('uid' => $extra->getUid(), 'abstractUid' => $extra->getExtraUid()))); // return uids
 				break;
+				case 'cloneAbstractExtra':
+//tx_newspaper::devlog('cloneAbstractExtra', array('input' => $this->input));
+					$extra = tx_newspaper_Extra_Factory::getInstance()->create(intval($this->input['extraUid']));
+					$clonedExtra = clone $extra;
+        			$clonedExtra->setOriginUid(0);
+        			$clonedExtra->store();
+        			die(json_encode(array('uid' => $clonedExtra->getExtraUid())));
+				break;
 			}
 
 
