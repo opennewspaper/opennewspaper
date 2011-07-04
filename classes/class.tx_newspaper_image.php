@@ -149,6 +149,7 @@ tx_newspaper::devlog('rsync log: '.self::getRsyncLog());
 
     private static function readRsyncOptions() {
         if (!is_null(self::$rsync_host)) return;
+tx_newspaper::devlog('readRsyncOptions '.tx_newspaper::getTSConfig());
 
         self::$rsync_host = tx_newspaper::getTSConfigVar('rsync_host');
         self::$rsync_path = tx_newspaper::getTSConfigVar('rsync_path');
