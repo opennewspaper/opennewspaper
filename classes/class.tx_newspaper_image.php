@@ -75,19 +75,15 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
-
-tx_newspaper::devlog('rsyncAllImageFiles');
         foreach (self::getSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
-
     }
 
     public function rsyncSingleImageFile($subfolder) {
 
         if (!self::isRsyncEnabled()) {
-tx_newspaper::devlog('rsync not enabled', array(self::$rsync_host, self::$rsync_path));
-return;
+            return;
         }
 
         $filename = implode('/', array(PATH_site, self::getBasepath(), $subfolder, $this->image_file));
@@ -149,7 +145,6 @@ tx_newspaper::devlog('rsync log: '.self::getRsyncLog());
 
     private static function readRsyncOptions() {
         if (!is_null(self::$rsync_host)) return;
-tx_newspaper::devlog('readRsyncOptions '.tx_newspaper::getTSConfig());
 
         self::$rsync_host = self::getTSConfigVar('rsync_host');
         self::$rsync_path = self::getTSConfigVar('rsync_path');
@@ -355,8 +350,8 @@ tx_newspaper::devlog('readRsyncOptions '.tx_newspaper::getTSConfig());
     }
 
     private static function getRsyncLog() {
-        if (tx_newspaper::getTSConfigVar('rsync_log')) {
-            return tx_newspaper::getTSConfigVar('rsync_log');
+        if (self::getTSConfigVar('rsync_log')) {
+            return self::getTSConfigVar('rsync_log');
         }
         return null;
     }
