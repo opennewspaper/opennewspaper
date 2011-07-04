@@ -125,22 +125,30 @@ class tx_newspaper_Image {
         $output = array();
         $return = 0;
         exec($command, $output, $return);
-        if (self::getRsyncLog()) {
-tx_newspaper::devlog('rsync log: '.self::getRsyncLog());
-            exec("date >> " . self::getRsyncLog());
-            $f = fopen(self::getRsyncLog(), "a+");
-            fwrite ($f, "$basedir\n");
-            fwrite ($f, print_r($output,1));
-            fclose($f);
-        }
+        
+        self::writeRsyncLog($basedir, $output);
 
         if ($return) {
-            tx_newspaper::devlog(
-                "Transfer of uploaded images to live server failed!",
-                array('command' => $command, 'output' => $output, 'return value' => $return)
-            );
+            self::logRsyncError($command, $output, $return);
         }
 
+    }
+
+    private static function logRsyncError($command, $output, $return) {
+        tx_newspaper::devlog(
+            "Transfer of uploaded images to live server failed!",
+            array('command' => $command, 'output' => $output, 'return value' => $return)
+        );
+    }
+
+    private static function writeRsyncLog($basedir, $output) {
+        if (self::getRsyncLog()) {
+            exec("date >> " . self::getRsyncLog());
+            $f = fopen(self::getRsyncLog(), "a+");
+            fwrite($f, "$basedir\n");
+            fwrite($f, print_r($output, 1));
+            fclose($f);
+        }
     }
 
     private static function readRsyncOptions() {
