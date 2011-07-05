@@ -8,6 +8,7 @@
    					1 => tx_newspaper_Article object,
    					...
    				)
+   $num_results     number of articles found
    $template_set	template set used, if any
    $attributes	attributes as stored in DB
    $extra_attributes	attributes for abstract extra record as stored in DB
@@ -15,7 +16,7 @@
 *}
 
 <h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2> 
-
+<h4>{$num_results} results found</h4>
 {section name=i loop=$articles}
 	<a href="{$articles[i]->getLink()}">
         <h3>{$articles[i]->getAttribute('publish_date')}</h3>

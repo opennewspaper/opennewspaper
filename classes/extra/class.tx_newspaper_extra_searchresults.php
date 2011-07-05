@@ -80,6 +80,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
 		// perform the search on all articles
 		$this->smarty->assign('articles', $this->searchArticles($this->search));
+        $this->smarty->assign('num_results', $this->num_results);
 
         $rendered = $this->smarty->fetch($this);
 
@@ -104,6 +105,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         $this->search_object->setOrderMethod('compareArticlesByDate');
         $articles = $this->search_object->searchArticles($search_term);
+        $this->num_results = sizeof($articles);
 
         return array_slice(
             $articles,
@@ -139,6 +141,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	private $search = '';
 
     private $search_object = null;
+
+    private $num_results = 0;
 
 }
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SearchResults());
