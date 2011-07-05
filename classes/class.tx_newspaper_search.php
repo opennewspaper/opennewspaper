@@ -441,6 +441,7 @@ class tx_newspaper_Search {
 	}
 
     private static function compareArticlesByScore(array $art1, array $art2) {
+        tx_newspaper::devlog('cabS', array($art1, $art2));
         return self::totalScore($art2)-self::totalScore($art1);
     }
 
