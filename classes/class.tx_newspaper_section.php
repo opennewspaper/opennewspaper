@@ -371,7 +371,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		$new_article->setAttribute('crdate', time());
  		$new_article->setAttribute('tstamp', time());
 
- 		$new_article->store(); // store article before adding the section (otherwise no uid available)
+ 		$new_article->storeWithoutSavehooks(); // store article before adding the section (otherwise no uid available)
  		$new_article->addSection($this);
 
  		// \todo: check if extra is placed on $this->getDefaultArticle(), if default article are to be used at all

@@ -641,7 +641,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$new_article->setAttribute('bodytext', tx_newspaper_be::getLoremIpsum(rand(1, 3), true, false));
 		}
 
-		$new_article->store();
+		$new_article->storeWithoutSavehooks();
 
 		$base_url = tx_newspaper::getAbsolutePath();
 
@@ -788,7 +788,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         $new_article->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
         $new_article->setAttribute('hidden', 1); // hide imported article
 
-        $new_article->store();
+        $new_article->storeWithoutSavehooks();
 
         return $new_article;
 	}
