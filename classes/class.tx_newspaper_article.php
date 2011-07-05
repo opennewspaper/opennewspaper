@@ -240,7 +240,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->prepare_render($template_set);
 
-        $text_paragraphs = $this->splitIntoParagraphs();
+        $bodytext = tx_newspaper::convertRteField($this->getAttribute('bodytext'));
+        $text_paragraphs = self::splitIntoParagraphs($bodytext);
         $paragraphs = $this->assembleTextParagraphs($text_paragraphs);
 
         $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
@@ -1120,12 +1121,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  \attention If the format of line breaks changes, this function must be
      * 	altered.
      */
-    protected function splitIntoParagraphs() {
+    protected static function splitIntoParagraphs($text) {
         /** A text usually starts with a \c "<p>", in that case the first paragraph
          *  must be removed. It may not be the case though, if so, the first
          *  paragraph is meaningful and must be kept.
          */
-        $temp_paragraphs = explode('<p', $this->getAttribute('bodytext'));
+        $temp_paragraphs = explode('<p', $text);
         $paragraphs = array();
 
         foreach ($temp_paragraphs as $paragraph) {
