@@ -218,6 +218,7 @@ class tx_newspaper_Search {
 
     public function setOrderMethod($method_name) {
         if (self::isSortMethod($method_name)) {
+            tx_newspaper::devlog('is:', $method_name);
             self::$sort_method = $method_name;
         }
     }
