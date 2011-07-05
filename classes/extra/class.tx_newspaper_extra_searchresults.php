@@ -102,6 +102,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         if (!$search_term) return array();
 
+        $this->search_object->setOrderMethod('compareArticlesByDate');
         $articles = $this->search_object->searchArticles($search_term);
 
         return array_slice(

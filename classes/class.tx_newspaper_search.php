@@ -153,6 +153,7 @@ class tx_newspaper_Search {
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
+                  self::article_table . '.publish_date, ' .
                   'MATCH (' . implode(', ', self::$title_fields).') ' .
                     'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS title_score, '.
                   'MATCH (' . implode(', ', self::$text_fields).') ' .
@@ -214,6 +215,14 @@ class tx_newspaper_Search {
 
         return $return;
     }
+
+    public function setOrderMethod($method_name) {
+        if (self::isSortMethod($method_name)) {
+            self::$sort_method = $method_name;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private function generateArticleObjectsFromSearchResults($articles) {
         $this->num_results = sizeof($articles);
@@ -421,8 +430,30 @@ class tx_newspaper_Search {
  	 */
 	private static function compareArticles(array $art1,
 											array $art2) {
-		return self::totalScore($art2)-self::totalScore($art1);
+
+        if (self::isSortMethod(self::$sort_method)) {
+            $method = self::$sort_method;
+            return self::$method($art1, $art2);
+        }
+
+		return self::compareArticlesByScore($art1, $art2);
 	}
+
+    private static function compareArticlesByScore(array $art1, array $art2) {
+        return self::totalScore($art2)-self::totalScore($art1);
+    }
+
+    private static function compareArticlesByDate(array $art1, array $art2) {
+        return $art2['publish_date']-$art2['publish_date'];
+    }
+
+    private static function isSortMethod($method_name) {
+        if (empty(self::$sort_method)) return false;
+        $refl = new ReflectionMethod('tx_newspaper_Search', $method_name);
+        if (!$refl->isStatic()) return false;
+        if (!$refl->getNumberOfParameters() != 2) return false;
+        return true;
+    }
 
 	///	Calculates the cumulative score on SQL \c MATCH for title, text and extras
 	/** \param $article Article to evaluate in the form \code
@@ -462,6 +493,8 @@ class tx_newspaper_Search {
     private $end_date = null;
     private $section = 0;
     private $tags = array();
+
+    private static $sort_method = 'compareArticlesByScore';
 
 	///	Number of results returned by the search
 	private $num_results = 0;
