@@ -444,6 +444,7 @@ class tx_newspaper_Search {
     }
 
     private static function compareArticlesByDate(array $art1, array $art2) {
+        tx_newspaper::devlog('cabd', array($art1, $art2));
         return $art2['publish_date']-$art1['publish_date'];
     }
 
