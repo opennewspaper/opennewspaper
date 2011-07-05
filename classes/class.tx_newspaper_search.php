@@ -444,7 +444,7 @@ class tx_newspaper_Search {
     }
 
     private static function compareArticlesByDate(array $art1, array $art2) {
-        return $art2['publish_date']-$art2['publish_date'];
+        return $art2['publish_date']-$art1['publish_date'];
     }
 
     private static function isSortMethod($method_name) {
