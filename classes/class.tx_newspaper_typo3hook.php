@@ -15,6 +15,8 @@ $GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_extra_comboli
 $GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_extra_controltagzone'] = array('default_extra');
 $GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_extra_container'] = array('extras');
 
+$GLOBALS['newspaper']['AddEditInRelationField']['tx_newspaper_extra_container'] = array('default_extra');
+
 
 
 require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehook.php');
@@ -49,6 +51,10 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 		// replace element browser (EB) with tx_newspaper extra browser, if configured
 		tx_newspaper_be::checkReplaceEbWithExtraBrowser($table, $field, $row['uid'], $out);
+
+		// add edit icon, if configured
+		tx_newspaper_be::checkAddEditInRelationField($table, $field, $row['uid'], $out);
+
 
 		// call registered hooks
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $hook_object) {

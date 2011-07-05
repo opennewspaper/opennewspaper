@@ -1828,10 +1828,15 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 	}
 
 
+	/**
+	 * Replaces Typo3 element browser with newspaper Extra browser (configured to do so)
+	 * @param $table Typo3 table
+	 * @param $field Field in table
+	 * @param $uid   uid in table
+	 * @param $out   HTML code for the backend
+	 */
 	public static function checkReplaceEbWithExtraBrowser($table, $field, $uid, &$out) {
 //t3lib_div::devlog('checkReplaceEbWithExtraBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, 'field' => $field, 'uid' => $uid));
-		//$GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
-		//$GLOBALS['newspaper']['replaceEBwithExtraBrowser'][another_table] = array(field1, ... fieldn);
 		if (self::checkEbConfig($table, $field, 'replaceEBwithExtraBrowser')) {
 			// add table and field name to js function name
 			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
@@ -1849,9 +1854,40 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 		}
 	}
 
-	/// \return true if table and field are set for key, else false
+	/**
+	 * Adds an edit icon to a record browser field
+	 * @param $table Typo3 table
+	 * @param $field Field in table
+	 * @param $uid   uid in table
+	 * @param $out   HTML code for the backend
+	 */
+	public static function checkAddEditInRelationField($table, $field, $uid, &$out) {
+		if (self::checkEbConfig($table, $field, 'replaceEBwithExtraBrowser')) {
+//t3lib_div::devlog('checkAddEditInRelationField()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, 'field' => $field, 'uid' => $uid, 'out' => $out));
+
+			// html code for linked edit icon
+//			$html = '<a onclick="var addEditSelectValue = document.getElementsByName(\'data[' . $table . '][' . intval($uid) . '][' . $field . ']_list\')[0].value; var splitPos=addEditSelectValue.lastIndexOf(\'_\'); if (!addEditSelectValue) {return false;} vHWin=window.open(\'' . tx_newspaper::getAbsolutePath() .  'typo3/alt_doc.php?returnUrl=close.html&amp;edit[\' + addEditSelectValue.substring(0, splitPos) + \'][\' + addEditSelectValue.substring(splitPos+1) + \']=edit\',\'\',\'width=670,height=500,status=0,menubar=0,scrollbars=1,resizable=1\');vHWin.focus();return false;" href="#"><img width="16" height="16" alt="" title="" src="' . tx_newspaper::getAbsolutePath() .  'typo3/sysext/t3skin/icons/gfx/edit2.gif"></a>';
+			$html = '<a onclick="var addEditSelectValue = document.getElementsByName(\'data[' . $table . '][' . intval($uid) . '][' . $field . ']_list\')[0].value; if (!addEditSelectValue) {return false;} vHWin=window.open(\'' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=editextra&tx_newspaper_mod1[abstractExtra]=\' + addEditSelectValue ,\'\',\'width=670,height=500,status=0,menubar=0,scrollbars=1,resizable=1\');vHWin.focus();return false;" href="#"><img width="16" height="16" alt="" title="" src="' . tx_newspaper::getAbsolutePath() .  'typo3/sysext/t3skin/icons/gfx/edit2.gif"></a>';
+
+			// insert edit icon INBETWEEN of last </a></td> \todo: better way, this looks like a hack ....
+			$p = strrpos($out, '</a></td>');
+			if ($p !== false) {
+				// insert edit icon
+				$out = substr($out, 0, $p+4) . $html . substr($out, $p+4);
+			}
+
+		}
+	}
+
+
+	/** Returns true if table and field are set for key, else false
+	 * $GLOBALS['newspaper']['replaceEBwithExtraBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
+	 * $GLOBALS['newspaper']['replaceEBwithExtraBrowser'][another_table] = array(field1, ... fieldn);
+	 * @param $table Typo3 record to check
+	 * @param $field Field in table
+	 * @param $key   Key in configuration array
+	 */
 	private static function checkEbConfig($table, $field, $key) {
-		//$GLOBALS['newspaper'][$key][$table] = array($field1, ... $fieldn);
 		return array_key_exists($key, $GLOBALS['newspaper']) &&
 			array_key_exists(strtolower($table), $GLOBALS['newspaper'][$key]) &&
 			in_array(strtolower($field), $GLOBALS['newspaper'][$key][strtolower($table)]);

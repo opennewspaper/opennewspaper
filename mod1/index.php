@@ -454,6 +454,8 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			$smarty->assign('INPUT', $this->input);
 
 			switch(strtolower($this->input['type'])) {
+
+				// create a new extra from within newspaper's extra element browser
 				case 'e':
 					// check if newOnly parameter is set. create extra right away if so
 					if ($this->input['newOnly'] == 1 && $this->input['extraClassPreselect']) {
@@ -475,6 +477,20 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// element browser for extras
 					$smarty->assign('formExtras', tx_newspaper_extra::getRegisteredExtras());
 					$filter = $smarty->fetch('extra_filter.tmpl');
+				break;
+
+				// Edit an extra from a manipulated Typo3 element (see tx_newspaper_be::checkAddEditInRelationField())
+				case 'editextra':
+					$p = strrpos($this->input['abstractExtra'], '_');
+					if ($p === false || strtolower(substr($this->input['abstractExtra'], 0, $p)) != 'tx_newspaper_extra' ) {
+						die('Unknown extra: ' . htmlspecialchars($this->input['abstractExtra']));
+					}
+					$uid = intval(substr($this->input['abstractExtra'], $p+1)); // extract uid for abstract extra
+					$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+
+					$url = tx_newspaper::getBasePath() . "typo3/alt_doc.php?returnUrl=" . $returnUrl . "&edit[" . $extra->getTable() . "][" . $extra->getUid() . "]=edit";
+					header('Location: ' . $url);
+
 				break;
 //				case 'al':
 //					// element browser for article lists
@@ -500,7 +516,10 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					$smarty->assign('CHOSERECORD', file_get_contents('res/eb/js/choseRecord_Typo3.js'));
 				break;
 				default:
-					t3lib_div::devlog('mod 1 - Element browser - unknown jsType', 'newspaper', 3, array('input' => $this->input));
+					if (strtolower($this->input['type'] != 'editextra')) {
+						// write error message for types that need a javascript type
+						t3lib_div::devlog('mod 1 - Element browser - unknown jsType', 'newspaper', 3, array('input' => $this->input));
+					}
 			}
 
 			$smarty->assign('FILTER', $filter);
