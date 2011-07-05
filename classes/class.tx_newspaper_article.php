@@ -240,9 +240,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->prepare_render($template_set);
 
-        $bodytext = tx_newspaper::convertRteField($this->getAttribute('bodytext'));
-        $text_paragraphs = self::splitIntoParagraphs($bodytext);
-        $paragraphs = $this->assembleTextParagraphs($text_paragraphs);
+        $text_paragraphs = self::splitIntoParagraphs($this->getAttribute('bodytext'));
+        $converted_paragraphs = array();
+        foreach ($text_paragraphs as $paragraph) {
+            $converted_paragraphs[] = tx_newspaper::convertRteField($paragraph);
+        }
+        $paragraphs = $this->assembleTextParagraphs($converted_paragraphs);
 
         $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
 
