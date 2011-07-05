@@ -495,7 +495,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */
 		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		$insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
-		
+
+        $insert_extra->setAttribute('is_inheritable', 1);
+
 		/** Write Extra to DB	*/
 		$insert_extra->store();
 		
