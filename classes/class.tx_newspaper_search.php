@@ -451,9 +451,11 @@ class tx_newspaper_Search {
     }
 
     private static function isSortMethod($method_name) {
-        if (empty(self::$sort_method)) return false;
+        if (empty($method_name)) return false;
+        tx_newspaper::devlog("not empty: $method_name");
         $refl = new ReflectionMethod('tx_newspaper_Search', $method_name);
         if (!$refl->isStatic()) return false;
+        tx_newspaper::devlog("static: $method_name " . $refl->getNumberOfParameters());
         if (!$refl->getNumberOfParameters() != 2) return false;
         return true;
     }
