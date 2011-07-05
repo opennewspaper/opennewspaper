@@ -456,7 +456,7 @@ class tx_newspaper_Search {
         $refl = new ReflectionMethod('tx_newspaper_Search', $method_name);
         if (!$refl->isStatic()) return false;
         tx_newspaper::devlog("static: $method_name " . $refl->getNumberOfParameters());
-        if (!$refl->getNumberOfParameters() != 2) return false;
+        if ($refl->getNumberOfParameters() != 2) return false;
         return true;
     }
 
