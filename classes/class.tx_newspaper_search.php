@@ -255,7 +255,7 @@ class tx_newspaper_Search {
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
         $results = tx_newspaper::selectRows(
-            $current_fields,
+            "DISTINCT $current_fields",
             $current_table,
             $current_where,
             '',
