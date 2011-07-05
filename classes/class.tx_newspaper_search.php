@@ -246,11 +246,11 @@ class tx_newspaper_Search {
 	        if (!$current_term) continue;
 	        //	don't search for excluded words
 	        if (!$this->isExcludedWord($current_term)) {
-	            $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list);
+	            $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . ' OR ';
 	        }
 	    }
 
-	    return $where;
+	    return $where . '0';
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
