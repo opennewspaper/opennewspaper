@@ -220,7 +220,7 @@ class tx_newspaper_Search {
         if (self::isSortMethod($method_name)) {
             tx_newspaper::devlog('is:', $method_name);
             self::$sort_method = $method_name;
-        } else x_newspaper::devlog('is not:', $method_name);
+        } else tx_newspaper::devlog('is not:', $method_name);
     }
 
     ////////////////////////////////////////////////////////////////////////////
