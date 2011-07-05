@@ -1011,13 +1011,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			/** Find the Extra to insert after. If it is not deleted on this page,
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 			 */ 
-			$extra_after_which = null;
-			foreach ($this->getExtras() as $extra) {
-				if ($extra->getOriginUid() == $origin_uid) {
-					$extra_after_which = $extra;
-					break;
-				}
-			}
+			$extra_after_which = $this->findExtraByOriginUID($origin_uid);
+
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s): 
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
@@ -1035,44 +1030,64 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			}
 			$position = $extra_after_which->getAttribute('position');
 			$this->paragraph_for_insert = intval($extra_after_which->getAttribute('paragraph'));
-		} else {
-			foreach ($this->getExtras() as $extra) {
-				$extra->setAttribute('position', $extra->getAttribute('position')+self::EXTRA_SPACING);
-				$extra->store();
-			}
-			$position = 0;
+        } else {
+            $this->shiftPositionOfAllExtras();
+            $position = 0;
 		}
-		/// Find Extra before which to insert the new Extra
-		$position_before_which = 0;
-		foreach ($this->getExtras() as $extra) {
-			/// \todo If $this is an article, handle paragraphs
-			if ($extra->getAttribute('position') > $position &&
-					(!$position_before_which ||
-					 $position_before_which > $extra->getAttribute('position')
-					)
-				) {
-				$position_before_which = $extra->getAttribute('position');
-				break;
-			} 
-		}
-		if (!$position_before_which) $position_before_which = 2*($position? $position: self::EXTRA_SPACING);
-		
-		if ($position_before_which-$position < 2) {
-			/// Increase 'position' attribute for all extras after $extra_after_which 
-			foreach ($this->getExtras() as $extra_to_rearrange) {
-				if ($extra_to_rearrange->getAttribute('position') <= $position) continue;
-				$extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position')+self::EXTRA_SPACING);
-				$extra_to_rearrange->store();
-			}
-			$position_before_which += self::EXTRA_SPACING;
-		}
+        $position_before_which = $this->findExtraToInsertBefore($position);
+        $position_before_which = $this->maintainSpacingBetweenExtras($position_before_which, $position);
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
 		return $position+($position_before_which-$position)/2;
 	}
 
+    private function shiftPositionOfAllExtras() {
+        foreach ($this->getExtras() as $extra) {
+            $extra->setAttribute('position', $extra->getAttribute('position') + self::EXTRA_SPACING);
+            $extra->store();
+        }
+    }
 
-	/// Binary search for an Extra, assuming that $this->extras is ordered by position
+    private function maintainSpacingBetweenExtras($position_before_which, $position) {
+        if (!$position_before_which) $position_before_which = 2 * ($position ? $position : self::EXTRA_SPACING);
+
+        if ($position_before_which - $position < 2) {
+            $position_before_which = $this->shiftPositionOfFollowingExtras($position, $position_before_which);
+            return $position_before_which;
+        }
+        return $position_before_which;
+    }
+
+    /// Find Extra before which to insert the new Extra
+    private function findExtraToInsertBefore($position) {
+        $position_before_which = 0;
+        foreach ($this->getExtras() as $extra) {
+            /// \todo If $this is an article, handle paragraphs
+            if ($extra->getAttribute('position') > $position &&
+                (!$position_before_which ||
+                 $position_before_which > $extra->getAttribute('position')
+                )
+            ) {
+                $position_before_which = $extra->getAttribute('position');
+                break;
+            }
+        }
+        return $position_before_which;
+    }
+
+    /// Increase 'position' attribute for all extras after $extra_after_which
+    private function shiftPositionOfFollowingExtras($position, $position_before_which) {
+        foreach ($this->getExtras() as $extra_to_rearrange) {
+            if ($extra_to_rearrange->getAttribute('position') <= $position) continue;
+            $extra_to_rearrange->setAttribute('position', $extra_to_rearrange->getAttribute('position') + self::EXTRA_SPACING);
+            $extra_to_rearrange->store();
+        }
+        $position_before_which += self::EXTRA_SPACING;
+        return $position_before_which;
+    }
+
+
+    /// Binary search for an Extra, assuming that $this->extras is ordered by position
 	/** This method must be overridden in the Article class because in articles
 	 *  Extras are ordered by paragraph first, position second
 	 */
