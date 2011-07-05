@@ -18,6 +18,7 @@
 
 {section name=i loop=$articles}
 	<a href="{$articles[i]->getLink()}">
+        <h3>{$articles[i]->getAttribute('publish_date')}</h3>
 		<h2>{$articles[i]->getAttribute('kicker')}</h2>
 		<h1>{$articles[i]->getAttribute('title')}</h1>
 
