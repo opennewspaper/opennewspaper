@@ -218,9 +218,8 @@ class tx_newspaper_Search {
 
     public function setOrderMethod($method_name) {
         if (self::isSortMethod($method_name)) {
-            tx_newspaper::devlog('is:', $method_name);
             self::$sort_method = $method_name;
-        } else tx_newspaper::devlog('is not:', $method_name);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -432,30 +431,22 @@ class tx_newspaper_Search {
 	private static function compareArticles(array $art1,
 											array $art2) {
 
-        if (self::isSortMethod(self::$sort_method)) {
-            $method = self::$sort_method;
-            return self::$method($art1, $art2);
-        }
-
-		return self::compareArticlesByScore($art1, $art2);
+        $method = self::$sort_method;
+        return self::$method($art1, $art2);
 	}
 
     private static function compareArticlesByScore(array $art1, array $art2) {
-        tx_newspaper::devlog('cabS', array($art1, $art2));
         return self::totalScore($art2)-self::totalScore($art1);
     }
 
     private static function compareArticlesByDate(array $art1, array $art2) {
-        tx_newspaper::devlog('cabd', array($art1, $art2));
         return $art2['publish_date']-$art1['publish_date'];
     }
 
     private static function isSortMethod($method_name) {
         if (empty($method_name)) return false;
-        tx_newspaper::devlog("not empty: $method_name");
         $refl = new ReflectionMethod('tx_newspaper_Search', $method_name);
         if (!$refl->isStatic()) return false;
-        tx_newspaper::devlog("static: $method_name " . $refl->getNumberOfParameters());
         if ($refl->getNumberOfParameters() != 2) return false;
         return true;
     }
