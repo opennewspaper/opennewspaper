@@ -57,8 +57,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
 		$control_tags = $this->getControlTags();
 		$extras = $this->getExtras($control_tags);
 
@@ -75,8 +73,6 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 		$this->smarty->assign('extras', $rendered_extras);
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
-
-        tx_newspaper::logExecutionTime();
 
         return $rendered;
 	}
