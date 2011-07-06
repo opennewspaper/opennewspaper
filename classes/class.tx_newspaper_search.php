@@ -102,6 +102,8 @@ class tx_newspaper_Search {
 		'ä' => 'Ä', 'ö' => 'Ö', 'ü' => 'Ü', 'Ä' => 'ä', 'Ö' => 'ö', 'Ü' => 'ü'
 	);
 
+    private static $sort_methods = array('compareArticlesByScore', 'compareArticlesByDate');
+
     public function __construct($section, tx_newspaper_Date $start_date, tx_newspaper_Date $end_date) {
         $this->section = $section;
         $this->start_date = $start_date;
@@ -150,9 +152,6 @@ class tx_newspaper_Search {
 	 */
     public function searchArticles($search_term) {
 
-        tx_newspaper::startLoggingQueries();
-        tx_newspaper::setNumLoggedQueries();
-        
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
@@ -169,13 +168,13 @@ class tx_newspaper_Search {
             $where .= ' AND ' . self::article_section_mm . '.uid_foreign IN (' .
                             $this->getSections() . ')';
         }
+
         if ($this->tags) {
             $table .= ' JOIN ' . self::article_tag_mm .
                       '   ON ' . self::article_table . '.uid = ' . self::article_tag_mm .'.uid_local';
 
             $where .= ' AND ' . self::article_tag_mm . '.uid_foreign IN (' .
                             $this->tags .')';
-
         }
 
         $where .= ' AND ( ' . $this->searchWhereClause($search_term, self::$title_fields) .
@@ -215,22 +214,23 @@ class tx_newspaper_Search {
 
         $this->logSearch($search_term, $return);
 
-        tx_newspaper::devlog("tx_newspaper_search::searchArticles($search_term)", tx_newspaper::getLoggedQueries());
-
-
         return $return;
     }
 
-    public function setOrderMethod($method_name) {
+    public function setSortMethod($method_name) {
         if (self::isSortMethod($method_name)) {
             self::$sort_method = $method_name;
         }
     }
-
+    
+    public static function getSortMethods() {
+        return self::$sort_methods;
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
 
     private function generateArticleObjectsFromSearchResults($articles) {
-        tx_newspaper::startExecutionTimer();
+
         $this->num_results = sizeof($articles);
         $return = array();
 
@@ -241,7 +241,7 @@ class tx_newspaper_Search {
                 $return[] = new tx_newspaper_Article($article['uid'], true);
             }
         }
-        tx_newspaper::logExecutionTime("generateArticleObjectsFromSearchResults()");
+
         return $return;
     }
 
@@ -268,7 +268,6 @@ class tx_newspaper_Search {
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
-        tx_newspaper::startExecutionTimer();
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
@@ -277,7 +276,6 @@ class tx_newspaper_Search {
             '',
             '0, ' . self::max_search_results
         );
-        t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
 
         $articles = array();
         foreach ($results as $result) {
@@ -290,7 +288,7 @@ class tx_newspaper_Search {
             $articles[] = $result;
 
         }
-tx_newspaper::logExecutionTime("getSearchResultsForClass($current_fields, $current_table, $current_where)");
+
         return $articles;
     }
 
