@@ -238,7 +238,7 @@ class tx_newspaper_Search {
             usort($articles, array(get_class($this), 'compareArticles'));
 
             foreach ($articles as $article) {
-                $return[] = new tx_newspaper_Article($article['uid']);
+                $return[] = new tx_newspaper_Article($article['uid'], true);
             }
         }
         tx_newspaper::logExecutionTime("generateArticleObjectsFromSearchResults()");

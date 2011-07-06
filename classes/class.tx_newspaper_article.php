@@ -60,14 +60,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  Ensures that the current object has a record identifying it in the
      *  persistent storage as tx_newspaper_Extra and tx_newspaper_PageZone.
      */
-    public function __construct($uid = 0) {
+    public function __construct($uid = 0, $lazy = false) {
         $this->articleBehavior = new tx_newspaper_ArticleBehavior($this);
 
         if ($uid) {
             $this->setUid($uid);
-
-            $this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
-            $this->pagezone_uid = $this->createPageZoneRecord();
+            if (!$lazy) {
+                $this->extra_uid = tx_newspaper_Extra::createExtraRecord($uid, $this->getTable());
+                $this->pagezone_uid = $this->createPageZoneRecord();
+            }
         }
     }
 
