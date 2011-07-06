@@ -259,6 +259,22 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         $this->smarty->assign('extra', $this);
 	}
 
+    protected function getSmartyTemplate() {
+
+        try {
+            $template = $this->getAttribute('template');
+        } catch (tx_newspaper_WrongAttributeException $e) { }
+
+        if (empty($template)) {
+            return $this;
+        }
+
+        if (strpos($template, '.tmpl') === false) {
+            $template .= '.tmpl';
+        }
+        return $template;
+        
+    }
 	/// Convert RTE data in data fields (=attributes) to HTML data
 	private function convertRteFields() {
 

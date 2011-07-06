@@ -116,7 +116,7 @@ class tx_newspaper_Extra_ExternalLinks extends tx_newspaper_Extra {
 		$this->smarty->assign('title', $this->getAttribute('title'));
 		$this->smarty->assign('links', $this->getLinks());
 
-		return $this->smarty->fetch($template);
+		return $this->smarty->fetch($this->getSmartyTemplate());
 	}
 
 	/// A description to identify the link list in the BE, shows the link texts

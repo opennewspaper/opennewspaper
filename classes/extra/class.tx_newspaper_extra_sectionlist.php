@@ -48,7 +48,7 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 
         $this->smarty->assign('rootline', self::getRootline());
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
 	}

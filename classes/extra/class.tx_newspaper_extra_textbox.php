@@ -55,7 +55,7 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 			}
 		}
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

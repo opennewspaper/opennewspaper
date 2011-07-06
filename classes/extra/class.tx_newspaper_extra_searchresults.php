@@ -82,7 +82,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 		$this->smarty->assign('articles', $this->searchArticles($this->search));
         $this->smarty->assign('num_results', $this->num_results);
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

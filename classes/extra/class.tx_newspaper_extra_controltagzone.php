@@ -74,7 +74,7 @@ class tx_newspaper_Extra_ControlTagZone extends tx_newspaper_Extra {
 
 		$this->smarty->assign('extras', $rendered_extras);
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

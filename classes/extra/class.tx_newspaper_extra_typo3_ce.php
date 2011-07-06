@@ -60,7 +60,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         $this->smarty->assign('raw', $raw);
         $this->smarty->assign('rendered', $rendered);
 
-        $ret = $this->smarty->fetch($this->getTemplate());
+        $ret = $this->smarty->fetch($this->getSmartyTemplate());
 
 		return $ret;
 	}
@@ -101,17 +101,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         return $rendered;
     }
 
-    private function getTemplate() {
-        $template = $this->getAttribute('template');
-        if ($template) {
-            if (strpos($template, '.tmpl') === false) {
-                $template .= '.tmpl';
-            }
-        } else {
-            $template = $this;
-        }
-        return $template;
-    }
 
     /** If the CE has a header, display the header. Else if it has a titleText,
 	 *  display that. Else just display its UID.

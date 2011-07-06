@@ -49,10 +49,7 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
 		$this->smarty->assign('extras', $extras);
 		$this->smarty->assign('rendered_extras', $rendered_extras);
 
-		$template = $this->getAttribute('template');
-        if (!$template) $template = $this;
-
-        $rendered = $this->smarty->fetch($template);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

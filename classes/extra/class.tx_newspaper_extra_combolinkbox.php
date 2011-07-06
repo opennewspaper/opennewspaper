@@ -67,7 +67,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 			$this->smarty->assign('external_links', $this->getExternalLinks());
 		}
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

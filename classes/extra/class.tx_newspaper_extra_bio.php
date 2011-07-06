@@ -42,7 +42,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
         $this->image->prepare_render($this->smarty);
 
-        $rendered = $this->smarty->fetch($this);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
     }

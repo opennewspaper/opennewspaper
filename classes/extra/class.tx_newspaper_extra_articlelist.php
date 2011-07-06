@@ -69,27 +69,9 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		$first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
 		$articles = $this->articlelist->getArticles($num, $first);
 
-		$template = $this->getAttribute('template');
-		if ($template) {
-			if (strpos($template, '.tmpl') === false) $template .= '.tmpl';
-		} else {
-			$template = $this;
-		}
-
-		/*
-		foreach ($articles as $art) $art->getAttribute('uid');
-		t3lib_div::devlog('tx_newspaper_extra_ArticleList::render()', 'newspaper', 0,
-			array(
-				'uid' => $this->getUid(),
-				'extra uid' => $this->getExtraUid(),
-				'article list' => $this->articlelist
-				'articles' => $articles
-			)
-		);
-		*/
 		$this->smarty->assign('articles', $articles);
 
-        $rendered = $this->smarty->fetch($template);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

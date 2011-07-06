@@ -41,16 +41,9 @@ class tx_newspaper_extra_MostCommented extends tx_newspaper_Extra {
 
 		$this->prepare_render($template_set);
 
-		$template = $this->getAttribute('template');
-		if ($template) {
-			if (strpos($template, '.tmpl') === false) $template .= '.tmpl';
-		} else {
-			$template = $this;
-		}
-
 		$this->smarty->assign('articles', $this->getMostCommented());
 
-        $rendered = $this->smarty->fetch($template);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper::logExecutionTime();
 

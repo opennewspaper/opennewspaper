@@ -38,16 +38,7 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 
 		$this->smarty->assign('html', $this->getAttribute('html'));
 
-		$template = $this->getAttribute('template');
-		if ($template) {
-			if (strpos($template, '.tmpl') === false) {
-				$template .= '.tmpl';
-			}
-		} else {
-			$template = $this;
-		}
-
-        $rendered = $this->smarty->fetch($template);
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
 	}
