@@ -150,6 +150,8 @@ class tx_newspaper_Search {
 	 */
     public function searchArticles($search_term) {
 
+        tx_newspaper::startLoggingQueries();
+
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
@@ -200,7 +202,6 @@ class tx_newspaper_Search {
                 ' OR ' . $this->searchWhereClause($search_term, $fields) . ' )';
 
             $row = tx_newspaper::selectRows('COUNT(*) AS number', $current_table, $current_where);
-            t3lib_div::devlog('SQL query', 'newspaper', 0, tx_newspaper::$query);
 
             $num_articles = intval($row['number']);
             if (!$num_articles) continue;
@@ -212,6 +213,9 @@ class tx_newspaper_Search {
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
+
+        tx_newspaper::devlog("tx_newspaper_search::searchArticles($search_term)", tx_newspaper::getLoggedQueries());
+
 
         return $return;
     }
@@ -225,6 +229,7 @@ class tx_newspaper_Search {
     ////////////////////////////////////////////////////////////////////////////
 
     private function generateArticleObjectsFromSearchResults($articles) {
+        tx_newspaper::startExecutionTimer();
         $this->num_results = sizeof($articles);
         $return = array();
 
@@ -234,9 +239,8 @@ class tx_newspaper_Search {
             foreach ($articles as $article) {
                 $return[] = new tx_newspaper_Article($article['uid']);
             }
-            return $return;
-
         }
+        tx_newspaper::logExecutionTime("generateArticleObjectsFromSearchResults()");
         return $return;
     }
 
@@ -263,6 +267,7 @@ class tx_newspaper_Search {
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
+        tx_newspaper::startExecutionTimer();
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
@@ -284,6 +289,7 @@ class tx_newspaper_Search {
             $articles[] = $result;
 
         }
+tx_newspaper::logExecutionTime("getSearchResultsForClass($current_fields, $current_table, $current_where)");
         return $articles;
     }
 
