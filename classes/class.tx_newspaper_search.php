@@ -151,7 +151,8 @@ class tx_newspaper_Search {
     public function searchArticles($search_term) {
 
         tx_newspaper::startLoggingQueries();
-
+        tx_newspaper::setNumLoggedQueries();
+        
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
