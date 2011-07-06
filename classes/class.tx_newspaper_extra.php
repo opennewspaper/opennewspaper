@@ -216,30 +216,23 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 *  \param template_set The template set used to render.
 	 */
 	protected function prepare_render(&$template_set = '') {
-		if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
+        $this->configureSmarty($template_set);
 
-		if (!$this->extra_attributes) {
-			$this->extra_attributes = $this->getExtraUid()?
-				tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()):
-				array();
-		}
-		if (!$this->attributes) {
-			$this->attributes = tx_newspaper::selectOneRow(
-				'*', $this->getTable(), 'uid = ' . $this->getUid()
-			);
-		}
+        $this->readAttributes();
+        $this->smarty->assign('attributes', $this->convertRteFields($this->attributes));
+		$this->smarty->assign('extra_attributes', $this->extra_attributes);
 
-		/// Check whether to use a specific template set.
-		if ($this->getAttribute('template_set')) {
-			$template_set = $this->getAttribute('template_set');
-		}
+        $this->smarty->assign('extra', $this);
+	}
 
-		/// Configure Smarty rendering engine.
-		if ($template_set) {
-			$this->smarty->setTemplateSet($template_set);
-		}
+    private function configureSmarty($template_set) {
+        if (!$this->smarty) $this->smarty = new tx_newspaper_Smarty();
+        $this->setTemplateSet($template_set);
+        $this->setSmartyContext();
+    }
 
-		$pagezone = $this->getPageZone();
+    private function setSmartyContext() {
+        $pagezone = $this->getPageZone();
         if ($pagezone instanceof tx_newspaper_PageZone) {
             $page = $pagezone->getParentPage();
 
@@ -248,16 +241,40 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
             if ($page) {
                 $this->smarty->setPageType($page);
             } else {
-                tx_newspaper::devlog('no page', array($page, $pagezone));
+                self::isLoggingOfBadPagezonesSet() && tx_newspaper::devlog('no page', array($page, $pagezone));
             }
         } else {
-            tx_newspaper::devlog('no pagezone', 'extra: ' . $this->getExtraUid());
+            self::isLoggingOfBadPagezonesSet() && tx_newspaper::devlog('no pagezone', 'extra: ' . $this->getExtraUid());
         }
-		$this->smarty->assign('attributes', $this->convertRteFields($this->attributes));
-		$this->smarty->assign('extra_attributes', $this->extra_attributes);
+    }
 
-        $this->smarty->assign('extra', $this);
-	}
+    /// Check whether to use a specific template set.
+    private function setTemplateSet($template_set) {
+        if ($this->getAttribute('template_set')) {
+            $template_set = $this->getAttribute('template_set');
+        }
+
+        if ($template_set) {
+            $this->smarty->setTemplateSet($template_set);
+        }
+    }
+
+    private function readAttributes() {
+        if (!$this->extra_attributes) {
+            $this->extra_attributes = $this->getExtraUid() ?
+                tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $this->getExtraUid()) :
+                array();
+        }
+        if (!$this->attributes) {
+            $this->attributes = tx_newspaper::selectOneRow(
+                '*', $this->getTable(), 'uid = ' . $this->getUid()
+            );
+        }
+    }
+
+    private static function isLoggingOfBadPagezonesSet() {
+        return false;
+    }
 
     protected function getSmartyTemplate() {
 
