@@ -45,7 +45,8 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		$rendered = array();
         $raw = array();
 
-        if (!empty(trim($this->getAttribute('content_elements')))) {
+        $ce_ids = trim($this->getAttribute('content_elements'));
+        if (!empty($ce_ids)) {
             foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
                 $attributes = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
                 $raw[] = $attributes;
