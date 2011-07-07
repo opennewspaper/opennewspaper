@@ -47,8 +47,10 @@ class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
 			$section_id = $this->getAttribute('section');
 			if (!empty($section_id)) {
 				$section=new tx_newspaper_section($section_id);
-				$this->smarty->assign("id",$section_id);
-				$this->smarty->assign("articles",$section->getArticleList()->getArticles($num_articles));
+                $typo3page = $section->getTypo3PageID();
+				$this->smarty->assign("section_id",$section_id);
+                $this->smarty->assign("page_id",$typo3page);
+#				$this->smarty->assign("articles",$section->getArticleList()->getArticles($num_articles));
 			}
 		}  elseif ($is_ctrltag=="1") {
 			$this->smarty->assign("section_or_ctrltag","ctrltag");
@@ -57,8 +59,8 @@ class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
 			$ctrltag_id = $this->getAttribute('ctrltag');
 			if (!empty($ctrltag_id)) {
 				$ctrltag = new tx_newspaper_tag($ctrltag_id);
-				$this->smarty->assign("id",$ctrltag_id);
-				$this->smarty->assign("articles",$ctrltag->getArticles($num_articles));
+				$this->smarty->assign("tag_id",$ctrltag_id);
+#				$this->smarty->assign("articles",$ctrltag->getArticles($num_articles));
 			}
 		}
 
