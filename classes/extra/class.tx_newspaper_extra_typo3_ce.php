@@ -53,7 +53,9 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 			if (TYPO3_MODE == 'BE') {
                 $rendered[] = self::printBasicCE($attributes);
             } else {
-                $rendered[] = self::renderTypo3CE($ce_uid, $cObj);
+                $ce = self::renderTypo3CE($ce_uid, $cObj);
+                $ce = self::stripAnchorBeforeCE($ce);
+                $rendered[] = $ce;
             }
 		}
 
@@ -87,13 +89,24 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             'tables' => 'tt_content',
             'source' => intval($ce_uid),
             'dontCheckPid' => 1,
-            'wrap' => '',
-            'stdWrap' => ''
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
         return $rendered;
     }
 
+    private static function stripAnchorBeforeCE($rendered) {
+        $startpos = strpos($rendered, '<a id="');
+        if ($startpos === false) return $rendered;
+        $endpos = strpos($rendered, '</a>', $startpos+1);
+        $head = substr($rendered, 0, $startpos);
+        $tail = substr($rendered, $endpos);
+        return $head . $tail;
+    }
+
+    private static function stripDivAroundCE($rendered) {
+        
+    }
+    
     /**	In BE (for e.g. unit tests), RECORDS() can't be used. Just show something.
      */
     private static function printBasicCE($attributes) {
