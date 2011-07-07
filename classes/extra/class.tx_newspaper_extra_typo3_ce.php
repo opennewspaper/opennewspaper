@@ -86,7 +86,8 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         $tt_content_conf = array(
             'tables' => 'tt_content',
             'source' => intval($ce_uid),
-            'dontCheckPid' => 1
+            'dontCheckPid' => 1,
+            'wrap' => ''
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
         return $rendered;
