@@ -45,19 +45,20 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 		$rendered = array();
         $raw = array();
 
+        if (!empty(trim($this->getAttribute('content_elements')))) {
+            foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
+                $attributes = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
+                $raw[] = $attributes;
 
-		foreach (explode(',', $this->getAttribute('content_elements')) as $ce_uid) {
-            $attributes = tx_newspaper::selectOneRow('*', 'tt_content', "uid = $ce_uid");
-            $raw[] = $attributes;
-
-			if (TYPO3_MODE == 'BE') {
-                $rendered[] = self::printBasicCE($attributes);
-            } else {
-                $ce = self::renderTypo3CE($ce_uid, $cObj);
-                $ce = self::stripAnchorBeforeCE($ce);
-                $rendered[] = $ce;
+                if (TYPO3_MODE == 'BE') {
+                    $rendered[] = self::printBasicCE($attributes);
+                } else {
+                    $ce = self::renderTypo3CE($ce_uid, $cObj);
+                    $ce = self::stripAnchorBeforeCE($ce);
+                    $rendered[] = $ce;
+                }
             }
-		}
+        }
 
         $this->smarty->assign('raw', $raw);
         $this->smarty->assign('rendered', $rendered);
