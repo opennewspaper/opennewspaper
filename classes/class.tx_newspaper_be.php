@@ -1693,7 +1693,6 @@ JSCODE;
 			}
 		}
 
-        tx_newspaper::devlog('getArticleListBySectionId(' . $section->getAttribute('section_name') .') SQL queries', tx_newspaper::getLoggedQueries());
 		return $result;
 	}
 

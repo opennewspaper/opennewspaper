@@ -274,7 +274,7 @@ class tx_newspaper_Search {
             $current_where,
             '',
             '',
-            '0, ' . self::max_search_results
+            '0, ' . self::getMaxSearchResults()
         );
 
         $articles = array();
@@ -292,6 +292,10 @@ class tx_newspaper_Search {
         return $articles;
     }
 
+    private static function getMaxSearchResults() {
+
+        return self::max_search_results;
+    }
 	///	Write the requested search term and the search results to a log file.
 	/** The behavior of this function is controlled by self::$log_searches and
 	 *  self::$log_results. If self::$log_results is \c false, the search
@@ -405,7 +409,6 @@ class tx_newspaper_Search {
 
 		return false;
 	}
-
 
     /// Gets sections the search is restricted to as comma-separated list
 	/** \return UIDs of the sections as comma separated list usable in an SQL statement
