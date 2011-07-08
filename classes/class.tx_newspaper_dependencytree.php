@@ -208,6 +208,10 @@ class tx_newspaper_DependencyTree {
         return $tree;
     }
 
+    static public function generateFromTag(tx_newspaper_Tag $tag) {
+
+    }
+    
     /// Registers an action that is executed for every page in the tree on demand.
     /** The actions are stored in an array whose entries are arrays of the form
      *  \code array(
