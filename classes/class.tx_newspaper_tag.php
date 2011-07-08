@@ -243,7 +243,9 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
             )
         );
 
-        $this->callTypo3SavehooksForArticles(); // dependency tree etc.
+		// generate dossier
+		$tree = tx_newspaper_DependencyTree::generateFromTag($this);
+		$tree->executeActionsOnPages('exportTags');
 
         return true;
     }
@@ -491,7 +493,9 @@ DESC',
         	$this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
 
-        $this->callTypo3SavehooksForArticles(); // call Typo3 save hooks (triggers dependency tree etc.)
+		// generate dossier
+		$tree = tx_newspaper_DependencyTree::generateFromTag($tag);
+		$tree->executeActionsOnPages('exportTags');
 
         return $this->getUid();
 	}

@@ -375,6 +375,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 
 		// remove extra from tagzone
 		if (isset($input['AjaxRemoveExtraFromTagZone'])) {
+// \todo: move to extra class?
 			$tag = new tx_newspaper_tag(intval($input['tag_uid']));
 			// set deleted flag for this tag zone, control tag and extra uid combination
 			tx_newspaper::deleteRows(
@@ -384,7 +385,9 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 				'tag=' . $tag->getUid() . ' AND extra=' . intval($input['e_uid'])
 			);
 
-			$tag->callTypo3SavehooksForArticles(); // make sure Typo3 hooks are called (depedency tree etc.)
+			// generate dossier
+			$tree = tx_newspaper_DependencyTree::generateFromTag($tag);
+			$tree->executeActionsOnPages('exportTags');
 
 			die($this->renderTagZoneBackend(intval($input['tag_uid']))); // render new tag zone backend
 		}
