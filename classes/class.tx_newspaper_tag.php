@@ -494,7 +494,7 @@ DESC',
         }
 
 		// generate dossier
-		$tree = tx_newspaper_DependencyTree::generateFromTag($tag);
+		$tree = tx_newspaper_DependencyTree::generateFromTag($this);
 		$tree->executeActionsOnPages('exportTags');
 
         return $this->getUid();
