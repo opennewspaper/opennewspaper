@@ -33,6 +33,7 @@
 			<label index="deleteSelectedTag">Delete tag</label>
 			<label index="deleteDetachConfirm">There are articles attached to this tags. Do you want to detach the tags and delete the tag?</label>
 			<label index="messageSelectTag">Please select a tag.</label>
+			<label index="message_performance_warning">Actions in this module can take very long (longer than 1 hour). Please contact developers/webmaster before using this module.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Schlagworte-Verwaltung</label>
@@ -63,6 +64,7 @@
 			<label index="deleteSelectedTag">Schlagwort löschen</label>
 			<label index="deleteDetachConfirm">Das Schlagwort ist Artikeln zugewiesen. Sollen diese Zuweisungen entfernt und das Schlagwort gelöscht werden?</label>
 			<label index="messageSelectTag">Bitte wählen Sie ein Schlagwort aus.</label>
+			<label index="message_performance_warning">Änderungen in diesem Modul können sehr lange dauern (über 1 Stunde). Bitte nur außerhalb der Redaktionsarbeitszeiten nutzen und die Entwickler/Webmaster fragen.</label>
 		</languageKey>
 	</data>
 </T3locallang>

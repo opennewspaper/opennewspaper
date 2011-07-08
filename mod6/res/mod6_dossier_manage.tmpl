@@ -180,7 +180,7 @@ function changeTitleShowEditButton() {
 	$("dossier_title_edit").innerHTML = '<a href="#" onclick="changeDossierTitle(); return false;">{/literal}{$ICON.edit}{literal}</a>';
 }
 function changeTitleShowStoreCancelButtons() {
-	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a> <a href="#" onclick="cancelDossierTitleEdit(); return false;">{/literal}{$ICON.x}{literal}</a>';
+	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a> <a href="#" onclick="cancelDossierTitleEdit(); return false;">{/literal}{$ICON.x}{literal}</a> <span style="color:red;">{/literal}{$LANG.message_performance_warning}{literal}</span>';
 }
 
 var tmpDossierTitle = '';
@@ -558,7 +558,7 @@ function showReloadButton() {
 	{/foreach}
 	</select>
 		<a href="#" onclick="storeDossierSection(); return false;">{$ICON.save}</a>
-		<a href="#" onclick="cancelDossierSectionEdit(); return false;">{$ICON.x}</a>
+		<a href="#" onclick="cancelDossierSectionEdit(); return false;">{$ICON.x}</a> <span style="color:red;">{$LANG.message_performance_warning}</span>
 	</span><span id="dossier_section_edit"></span>
 </div>
 

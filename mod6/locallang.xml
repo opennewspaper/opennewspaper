@@ -42,6 +42,7 @@
 			<label index="label_detach_tag_0">No article was processed.</label>
 			<label index="label_detach_tag_1">1 article was processed:</label>
 			<label index="label_detach_tag_2plus">###COUNT### articles were processed:</label>
+			<label index="message_performance_warning">This action can be slow. Please contact developers/webmaster.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">Schwerpunkte</label>
@@ -80,6 +81,7 @@
 			<label index="label_detach_tag_0">Kein Artikel wurde bearbeitet.</label>
 			<label index="label_detach_tag_1">1 Artikel wurde bearbeitet:</label>
 			<label index="label_detach_tag_2plus">###COUNT### Artikel wurden bearbeitet:</label>
+			<label index="message_performance_warning">Diese Aktion kann sehr langsam sein. Bitte Entwickler/Webmaster fragen.</label>
 		</languageKey>
 	</data>
 </T3locallang>
