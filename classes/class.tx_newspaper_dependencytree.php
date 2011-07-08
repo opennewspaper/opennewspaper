@@ -209,11 +209,11 @@ class tx_newspaper_DependencyTree {
     }
 
     static public function generateFromTag(tx_newspaper_Tag $tag) {
-        tx_newspaper::startExecutionTimer();
+
         $tree = new tx_newspaper_DependencyTree();
         $tree->addTagPages(array($tag));
         $tree->markAsCleared();
-        tx_newspaper::logExecutionTime('generateFromTag()');
+
         return $tree;
     }
     
@@ -259,10 +259,7 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::startExecutionTimer();
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
-tx_newspaper::devlog("eAOP: action", self::$registered_actions[$key]);
                 $this->executeActionOnPages(self::$registered_actions[$key]);
-            } else {
-tx_newspaper::devlog("eAOP: huch!", self::$registered_actions);
             }
         } else {
             foreach (self::$registered_actions as $action) {
