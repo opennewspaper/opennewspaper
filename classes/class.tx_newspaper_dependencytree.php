@@ -259,6 +259,7 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::startExecutionTimer();
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
+tx_newspaper::devlog("eAOP: action", self::$registered_actions[$key]);
                 $this->executeActionOnPages(self::$registered_actions[$key]);
             }
         } else {
