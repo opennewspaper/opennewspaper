@@ -261,6 +261,8 @@ class tx_newspaper_DependencyTree {
             if (isset(self::$registered_actions[$key])) {
 tx_newspaper::devlog("eAOP: action", self::$registered_actions[$key]);
                 $this->executeActionOnPages(self::$registered_actions[$key]);
+            } else {
+tx_newspaper::devlog("eAOP: huch!", self::$registered_actions);
             }
         } else {
             foreach (self::$registered_actions as $action) {
