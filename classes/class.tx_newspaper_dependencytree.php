@@ -209,7 +209,12 @@ class tx_newspaper_DependencyTree {
     }
 
     static public function generateFromTag(tx_newspaper_Tag $tag) {
-
+        tx_newspaper::startExecutionTimer();
+        $tree = new tx_newspaper_DependencyTree();
+        $tree->addTagPages(array($tag));
+        $tree->markAsCleared();
+        tx_newspaper::logExecutionTime('generateFromTag()');
+        return $tree;
     }
     
     /// Registers an action that is executed for every page in the tree on demand.
@@ -419,6 +424,13 @@ class tx_newspaper_DependencyTree {
         );
         if (empty($tags)) return;
 
+        $this->addTagPages($tags);
+
+        tx_newspaper::logExecutionTime('addDossierPages()');
+    }
+
+    /** @var tx_newspaper_Tag[] $tags */
+    private function addTagPages(array $tags) {
         $dossier_page = getDossierPage();
         if (!$dossier_page instanceof tx_newspaper_Page) return;
 
@@ -430,8 +442,6 @@ class tx_newspaper_DependencyTree {
         }
 
         $this->dossier_pages_filled = true;
-
-        tx_newspaper::logExecutionTime('addDossierPages()');
     }
 
     /// Adds all pages which display an article list in the supplied array
