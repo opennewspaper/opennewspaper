@@ -169,16 +169,46 @@ class tx_newspaper_PageType implements tx_newspaper_StoredObject {
 
     static public function getArticlePageType() {
         $pagetypes = self::getAvailablePageTypes('is_article_page');
-        return array_pop($pagetypes);
+        if (!empty($pagetypes)) {
+            return array_pop($pagetypes);
+        }
+
+        throw new tx_newspaper_InconsistencyException(
+            'Tried to get the article pagetype, but none is configured.
+            Please ensure that one (and just one) of your pagetype records has the property \'is_article_page\' set.
+            Obviously, this pagetype should be associated with pages that display articles.'
+        );
     }
 
     static public function getSectionPageType() {
+        if (!is_null(self::getConfiguredSectionPageType())) {
+            return self::getConfiguredSectionPageType();
+        }
+
         $pagetypes = self::getAvailablePageTypes("get_var = '' AND get_value = ''");
-        return array_pop($pagetypes);
+        if (!empty($pagetypes)) {
+            return array_pop($pagetypes);
+        }
+
+        throw new tx_newspaper_InconsistencyException(
+            'Tried to get the section pagetype, but none is configured.
+            You need to either have a page type that has both its \'get_var\' and its \'get_value\' attributes set to empty,
+            or configure the section page type via the TSConfig parameter \'newspaper.section_page_type = <uid of pagetype record>\'.
+            Obviously, this pagetype should be associated with pages that display section overviews.'
+        );
     }
     
 	////////////////////////////////////////////////////////////////////////////
-	
+
+    private static function getConfiguredSectionPageType() {
+        $ts_config = tx_newspaper::getTSConfig();
+        if (intval($ts_config['newspaper.']['section_page_type'])) {
+            return new tx_newspaper_PageType(intval($ts_config['newspaper.']['section_page_type']));
+        }
+        return null;
+
+    }
+
 	/// Derive the SQL condition used to instantiate the type from the parameters the constructor was called with.
 	/** \param $input Either a UID for a concrete PageType record or the array
 	 *     of $_GET parameters.
