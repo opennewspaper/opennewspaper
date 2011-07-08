@@ -1309,9 +1309,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                 foreach ($this->getExtras() as $extra) {
                     if ($extra->getAttribute('paragraph') == $index ||
                             sizeof($text_paragraphs) + $extra->getAttribute('paragraph') == $index) {
-                        $paragraph['extras'][$extra->getAttribute('position')] = array();
-                        $paragraph['extras'][$extra->getAttribute('position')]['extra_name'] = $extra->getTable();
-                        $paragraph['extras'][$extra->getAttribute('position')]['content'] .= $extra->render($template_set);
+                        $paragraph['extras'][$extra->getAttribute('position')] =
+                            self::makeParagraphRepresentationFromExtra($extra, $template_set);
                     }
                 }
                 /*  Braindead PHP does not sort arrays automatically, even if
@@ -1338,11 +1337,20 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     private function addExtrasWithBadParagraphNumbers(array &$paragraphs, $number_of_text_paragraphs) {
         foreach ($this->getExtras() as $extra) {
             if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
-                $paragraphs[0]['extras'][] = $extra->render($template_set);
+                $paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
+                    self::makeParagraphRepresentationFromExtra($extra, $template_set);
             } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
-                $paragraphs[sizeof($paragraphs) - 1]['extras'][] = $extra->render($template_set);
+                $paragraphs[sizeof($paragraphs) - 1]['extras'][intval($extra->getAttribute('position'))] =
+                    self::makeParagraphRepresentationFromExtra($extra, $template_set);
             }
         }
+    }
+
+    private static function makeParagraphRepresentationFromExtra(tx_newspaper_Extra $extra, $template_set) {
+        return array(
+            'extra_name' => $extra->getTable(),
+            'content' => $extra->render($template_set)
+        );
     }
 
     private function assignSmartyVariables(array $paragraphs) {
