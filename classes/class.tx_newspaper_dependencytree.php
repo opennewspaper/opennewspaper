@@ -476,11 +476,11 @@ class tx_newspaper_DependencyTree {
     private function addCachablePagesForPage(tx_newspaper_Page $page) {
         if ($page->getPageType() == tx_newspaper_PageType::getArticlePageType()) {
             $this->article_pages = array_merge($this->article_pages, allArticlePagesForPage($page));
-        } else if ($page->getPageType() == tx_newspaper_PageType::getSectionPageType()) {
-            $this->section_pages[] = new tx_newspaper_CachablePage($page);
         } else if ($page->getTypo3PageID() == tx_newspaper::getDossierPageID()) {
             /// \todo add dossier pages
             tx_newspaper::devlog('add dossier page', $page->getUid());
+        } else {
+            $this->section_pages[] = new tx_newspaper_CachablePage($page);
         }
     }
 
