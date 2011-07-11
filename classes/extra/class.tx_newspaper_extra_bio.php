@@ -84,6 +84,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
         if ($fieldArray[self::image_file_field]) {
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
             $image->resizeImages();
+	        $image->rsyncAllImageFiles();
         }
     }
 
