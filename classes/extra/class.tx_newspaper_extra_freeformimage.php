@@ -74,6 +74,8 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
         if ($table != 'tx_newspaper_extra_freeformimage') return;
 
         if ($fieldArray[self::image_file_field]) {
+            copy(PATH_site . '/uploads/tx_newspaper/' . $fieldArray[self::image_file_field],
+                 PATH_site . self::getUploadFolder() . '/' . $fieldArray[self::image_file_field]);
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
             $image->rsyncSingleImageFile(self::upload_folder_name);
         }
