@@ -84,3 +84,4 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_FreeFormImage());
+tx_newspaper::registerSaveHook(new tx_newspaper_extra_FreeFormImage());
