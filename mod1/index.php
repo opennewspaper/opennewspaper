@@ -488,7 +488,8 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					$uid = intval(substr($this->input['abstractExtra'], $p+1)); // extract uid for abstract extra
 					$extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
-					$url = tx_newspaper::getBasePath() . "typo3/alt_doc.php?returnUrl=" . $returnUrl . "&edit[" . $extra->getTable() . "][" . $extra->getUid() . "]=edit";
+					// tx_newspaper_close_option=1 DO show close buttons
+					$url = tx_newspaper::getBasePath() . "typo3/alt_doc.php?returnUrl=close.html&edit[" . $extra->getTable() . "][" . $extra->getUid() . "]=edit&tx_newspaper_close_option=1";
 					header('Location: ' . $url);
 
 				break;

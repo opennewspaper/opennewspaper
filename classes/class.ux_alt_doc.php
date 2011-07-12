@@ -21,18 +21,11 @@ class ux_SC_alt_doc extends SC_alt_doc {
 			return parent::getButtons();
 		}
 
-//		// check if an Extra is to be placed on a pagezone or an article
-//		if (
-//			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/close.html') === false &&
-//			strpos($_REQUEST['returnUrl'], 'typo3conf/ext/newspaper/mod3/res/closeTab.html') === false
-//		) {
-//			// no non-Typo3 params found, so show all buttons
-//			return parent::getButtons();
-//		}
-
 		// add workflow buttons to newspaper articles (and remove docheader2)
 		if ($this->elementsData[0]['table'] == 'tx_newspaper_article') {
-            $buttons = array(
+
+			// clear button array
+			$buttons = array(
                 'save' => '',
                 'save_view' => '',
                 'save_new' => '',
@@ -48,8 +41,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
             // Render SAVE type buttons and add newspaper workflow buttons
             // The action of each button is decided by its name attribute. (See doProcessData())
-            if (!$this->errorC && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'])	{
-
+            if (!$this->errorC && !$TCA[$this->firstEl['table']]['ctrl']['readOnly']) {
 
                 // SAVE button:
                 $articleLabel = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:title_tx_newspaper_article', false);
@@ -66,34 +58,6 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
             // CLOSE button:
             $buttons['close'] = self::getStyleToHideDocheader2() . '
-
-	<!-- dummy button for iframe testing -->
-	<script type="text/javascript">
-		function frameTest(buttonName) {
-
-			var iframeDok = top.window.frames[\'popupFrame\'].document;
-
-			var saveDokInputX = iframeDok.createElement("input");
-			saveDokInputX.setAttribute("name", buttonName + ".x");
-			saveDokInputX.setAttribute("type", "hidden");
-
-			var saveDokInputY = iframeDok.createElement("input");
-			saveDokInputY.setAttribute("name", buttonName + ".y");
-			saveDokInputY.setAttribute("type", "hidden");
-
-			iframeDok.forms[0].appendChild(saveDokInputX);
-			iframeDok.forms[0].appendChild(saveDokInputY);
-
-			iframeDok.forms[0].submit();
-			return false;
-		}
-		function newspaperArticleStore(that) {
-			frameTest(that.name);
-		}
-	</script>
-
-
-
 					<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">'.
                     '<img'.t3lib_iconWorks::skinImg($this->doc->backPath,'gfx/closedok.gif','width="21" height="16"').' class="c-inputButton" title="'.$LANG->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc',1).'" alt="" />'.
                     '</a>';
@@ -140,7 +104,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
             $buttons['shortcut'] = $this->shortCutLink();
             $buttons['open_in_new_window'] = $this->openInNewWindowLink();
 
-            // was read in parent::makeEditForm() before, but noit stored in a accessible way
+            // was read in parent::makeEditForm() before, but not stored in a accessible way
             $row = t3lib_BEfunc::getRecord($this->elementsData[0]['table'], $this->elementsData[0]['uid']);
             //t3lib_div::devlog('XCLASS', 'newspaper', 0, array('row' => $row));
 
@@ -160,11 +124,11 @@ class ux_SC_alt_doc extends SC_alt_doc {
 				$buttons['save_view'] = '';
 				$buttons['save_new'] = '';
 
-				if (!$this->isInPlacementModule() && (tx_newspaper_be::getExtraBeDisplayMode() == BE_EXTRA_DISPLAY_MODE_TABBED)) {
-					// no close buttons, if tabbed backend for extras in CONCRETE articles
-					$buttons['save_close'] = '';
-					$buttons['close'] = '';
-				} // but do show close buttons in placement module, because in that module
+				if ($this->hideCloseButtons()) {
+					// no close buttons in placement module
+					$buttons['save_close'] = 'tra';
+					$buttons['close'] = 'la la';
+				}
 				// mis-use delete button to add css code and hide docheader2
 				$buttons['delete'] = self::getStyleToHideDocheader2();
 				return $buttons;
@@ -175,6 +139,20 @@ class ux_SC_alt_doc extends SC_alt_doc {
 		// no need to modify the button array for this newspaper record, so let Typo3 handle this call ...
 		return parent::getButtons();
 
+	}
+
+
+	/**
+	 * Checks is close buttons should be hidden
+	 * @return true if close buttons (close, save&close etc.) should be hidden
+	 */
+	private function hideCloseButtons() {
+
+		if (t3lib_div::_GP('tx_newspaper_close_option') == 1) {
+			return false; // this option forces the close buttons to be available
+		}
+
+		return !$this->isInPlacementModule();
 	}
 
 	/// very simple check if the users is editing in the placement module (mod3)
