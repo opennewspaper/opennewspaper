@@ -834,8 +834,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
   public static function getBasePath() {
 
-    if (self::isTazSpambusterHackNeeded()) return self::tazSpambusterHack();
-
     /// \todo replace by a version NOT using EM conf (check t3lib_div)
     $em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
 
@@ -844,14 +842,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     }
 
     return trim($em_conf['newspaperTypo3Path']);
-  }
-
-  private static function isTazSpambusterHackNeeded() {
-    return (stripos($_SERVER['HTTP_HOST'], 'spambuster.taz.de') !== false);
-  }
-
-  private static function tazSpambusterHack() {
-    return '/onlinetaz/red';
   }
 
   /// prepends the given absolute path part if path to check is no absolute path
