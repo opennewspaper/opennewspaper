@@ -126,8 +126,8 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 				if ($this->hideCloseButtons()) {
 					// no close buttons in placement module
-					$buttons['save_close'] = 'tra';
-					$buttons['close'] = 'la la';
+					$buttons['save_close'] = '';
+					$buttons['close'] = '';
 				}
 				// mis-use delete button to add css code and hide docheader2
 				$buttons['delete'] = self::getStyleToHideDocheader2();
