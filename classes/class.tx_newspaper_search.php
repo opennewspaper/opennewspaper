@@ -46,9 +46,6 @@ class tx_newspaper_Search {
     const article_extra_mm = 'tx_newspaper_article_extras_mm';
     const extra_table = 'tx_newspaper_extra';
 
-	/// Number of results stored in memory
-	const max_search_results = 1000;
-
 	/// Above which score a match is considered as good enough
 	const score_limit = 0.1;
 	///	How much higher matches on title fields are rated.
@@ -291,10 +288,6 @@ class tx_newspaper_Search {
         return $articles;
     }
 
-    private static function getMaxSearchResults() {
-
-        return self::max_search_results;
-    }
 	///	Write the requested search term and the search results to a log file.
 	/** The behavior of this function is controlled by self::$log_searches and
 	 *  self::$log_results. If self::$log_results is \c false, the search
