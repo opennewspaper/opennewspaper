@@ -33,6 +33,12 @@ class tx_newspaper_Search {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
+    /// dirty solution for speeding up the search while sacrificing flexibility
+    /** order by date only. do not search extras.
+     *  for launch. make this better ASAP.
+     */
+    const enable_quick_hack = true;
+
 	///	Table storing tx_newspaper_Article
 	const article_table = 'tx_newspaper_article';
 
@@ -184,6 +190,7 @@ class tx_newspaper_Search {
 
         $articles = self::getSearchResultsForClass($fields, $table, $where);
 
+        if (self::enable_quick_hack) {
         foreach (self::$extra_fields as $extra_table => $fields) {
             $current_table = $table .
                 ' JOIN ' . self::article_tag_mm .
@@ -206,7 +213,7 @@ class tx_newspaper_Search {
             $articles = array_merge($articles,
                                     self::getSearchResultsForClass($current_fields, $current_table, $current_where));
         }
-
+        }
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
@@ -268,16 +275,20 @@ class tx_newspaper_Search {
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
-            $current_where
+            $current_where,
+            '',
+            'publish_date DESC'
         );
 
         $articles = array();
         foreach ($results as $result) {
+            if (self::enable_quick_hack) {
             foreach ($articles as $article) {
                 if (intval($article['uid']) == intval($result['uid'])) {
                     $article['extra_score'] += $result['extra_score'];
                     continue 2; //	continue outer loop
                 }
+            }
             }
             $articles[] = $result;
 
