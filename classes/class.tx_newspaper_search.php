@@ -154,7 +154,7 @@ class tx_newspaper_Search {
 	 *  \return Array of tx_newspaper_Article found
 	 */
     public function searchArticles($search_term) {
-tx_newspaper::startLoggingQueries();
+
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
@@ -190,7 +190,7 @@ tx_newspaper::startLoggingQueries();
 
         $articles = self::getSearchResultsForClass($fields, $table, $where);
 
-        if (self::enable_quick_hack) {
+        if (!self::enable_quick_hack) {
         foreach (self::$extra_fields as $extra_table => $fields) {
             $current_table = $table .
                 ' JOIN ' . self::article_tag_mm .
@@ -217,7 +217,7 @@ tx_newspaper::startLoggingQueries();
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
-tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQueries());
+
         return $return;
     }
 
@@ -234,7 +234,6 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
     ////////////////////////////////////////////////////////////////////////////
 
     private function generateArticleObjectsFromSearchResults($articles) {
-        tx_newspaper::startExecutionTimer();
 
         $this->num_results = sizeof($articles);
         $return = array();
@@ -248,7 +247,6 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
                 $return[] = new tx_newspaper_Article($article['uid'], true);
             }
         }
-        tx_newspaper::logExecutionTime("generateArticleObjectsFromSearchResults()");
 
         return $return;
     }
@@ -276,7 +274,6 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
-        tx_newspaper::startExecutionTimer();
 
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
@@ -299,7 +296,6 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
             $articles[] = $result;
 
         }
-        tx_newspaper::logExecutionTime("getSearchResultsForClass()");
 
         return $articles;
     }
