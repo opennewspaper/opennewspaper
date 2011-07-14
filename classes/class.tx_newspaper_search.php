@@ -154,7 +154,7 @@ class tx_newspaper_Search {
 	 *  \return Array of tx_newspaper_Article found
 	 */
     public function searchArticles($search_term) {
-tx_newspaper::startExecutionTimer();
+tx_newspaper::startLoggingQueries();
         $table = self::article_table;
         $where = '1';
         $fields = self::article_table . '.uid, ' .
@@ -217,7 +217,7 @@ tx_newspaper::startExecutionTimer();
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
-tx_newspaper::logExecutionTime("searchArticles($search_term)");
+tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQueries());
         return $return;
     }
 
