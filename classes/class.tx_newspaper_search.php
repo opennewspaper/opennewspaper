@@ -46,6 +46,9 @@ class tx_newspaper_Search {
     const article_extra_mm = 'tx_newspaper_article_extras_mm';
     const extra_table = 'tx_newspaper_extra';
 
+	/// Number of results stored in memory
+	const max_search_results = 1000;
+
 	/// Above which score a match is considered as good enough
 	const score_limit = 0.1;
 	///	How much higher matches on title fields are rated.
@@ -233,7 +236,6 @@ class tx_newspaper_Search {
 
         if ($this->num_results > 0) {
             usort($articles, array(get_class($this), 'compareArticles'));
-            $articles = array_unique($articles);
 
             foreach ($articles as $article) {
                 $return[] = new tx_newspaper_Article($article['uid'], true);
@@ -269,7 +271,9 @@ class tx_newspaper_Search {
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
-            $current_where
+            $current_where,
+            '',
+            ''
         );
 
         $articles = array();
@@ -281,11 +285,16 @@ class tx_newspaper_Search {
                 }
             }
             $articles[] = $result;
+
         }
 
         return $articles;
     }
 
+    private static function getMaxSearchResults() {
+
+        return self::max_search_results;
+    }
 	///	Write the requested search term and the search results to a log file.
 	/** The behavior of this function is controlled by self::$log_searches and
 	 *  self::$log_results. If self::$log_results is \c false, the search
