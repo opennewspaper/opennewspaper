@@ -268,9 +268,7 @@ class tx_newspaper_Search {
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
-            $current_where,
-            '',
-            ''
+            $current_where
         );
 
         $articles = array();
