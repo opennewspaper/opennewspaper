@@ -276,6 +276,8 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
+        tx_newspaper::startExecutionTimer();
+
         $results = tx_newspaper::selectRows(
             "DISTINCT $current_fields",
             $current_table,
@@ -286,7 +288,7 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
 
         $articles = array();
         foreach ($results as $result) {
-            if (self::enable_quick_hack) {
+            if (!self::enable_quick_hack) {
             foreach ($articles as $article) {
                 if (intval($article['uid']) == intval($result['uid'])) {
                     $article['extra_score'] += $result['extra_score'];
@@ -297,6 +299,7 @@ tx_newspaper::devlog("searchArticles($search_term)", tx_newspaper::getLoggedQuer
             $articles[] = $result;
 
         }
+        tx_newspaper::logExecutionTime("getSearchResultsForClass()");
 
         return $articles;
     }
