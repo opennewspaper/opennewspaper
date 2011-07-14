@@ -239,7 +239,9 @@ class tx_newspaper_Search {
         $return = array();
 
         if ($this->num_results > 0) {
+            if (!self::enable_quick_hack) {
             usort($articles, array(get_class($this), 'compareArticles'));
+            }
 
             foreach ($articles as $article) {
                 $return[] = new tx_newspaper_Article($article['uid'], true);
