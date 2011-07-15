@@ -312,10 +312,14 @@ body {
 				<label>{$LABEL.pagezone_inheritancesource}</label>
 
 			{/if}
+
+{*
+// see #1655 \todo: nake tsconfigurable
 			{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
-				{* dummy button for pagezone_page only *}
+				* dummy button for pagezone_page only *
 				<br /><br /><a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a>
 			{/if}
+*}
 
 			{* \todo, see #653 *}
 		 	{* checkbox:deactivate moving and adding extras *}
