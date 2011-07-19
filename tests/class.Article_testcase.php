@@ -108,39 +108,35 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$extras = $this->article->getExtras();
 
 		$this->assertTrue(is_array($extras));
-		if (is_array($extras)) foreach ($extras as $extra) {
+		foreach ($extras as $extra) {
 			$this->assertTrue($extra instanceof tx_newspaper_Extra);
 			$this->assertTrue($extra->getAttribute('uid') > 0);
 			$this->assertTrue($extra->getAttribute('extra_uid') == $extra->getUid(), 
 							  "Attribute 'extra_uid' (" . $extra->getAttribute('extra_uid') . ") != getUid() (" . $extra->getUid() . ")");
-            if (true) {
-			    //  test for PID disabled because $sf->getPid() is not consistent yet
- 			    $sf = tx_newspaper_Sysfolder::getInstance();
-			    $this->assertTrue($extra->getAttribute('pid') == $sf->getPid($extra),
+
+    	    $sf = tx_newspaper_Sysfolder::getInstance();
+		    $this->assertTrue($extra->getAttribute('pid') == $sf->getPid($extra),
 				    'Extra and Sysfolder give different PIDs: ' .
 				    $extra->getAttribute('pid') . ' != ' .
 				    $sf->getPid($extra)
-                );
-            }
+            );
 
 			if ($extra instanceof tx_newspaper_Extra_Image) {
 				$this->assertTrue($extra->getAttribute('image_file') != '');
 				$this->assertTrue($extra->getAttribute('title') != '');
 				$this->assertTrue($extra->getAttribute('caption') != '');
-			} else if ($extra instanceof tx_newspaper_Extra_ArticleRenderer) { 
-				
 			} else t3lib_div::debug($extra);
 
 		}
 		/// \todo check concrete extras in this article for correctness
 	}
-	/*
+
 	public function test_addExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
 		$this->article->addExtra($this->extra);
 		/// \todo check if extra has been added
 	}
-	*/
+	
 //	public function test_getSource() {
 //		/// No source should be returned, because none has been set
 //		$this->assertNull($this->article->getSource());
