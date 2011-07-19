@@ -1087,7 +1087,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   /** Thanks to typo3.net user semidark. Function lifted from
    *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544
    */
-  public static function buildTSFE() {
+  public static function buildTSFE($force = false) {
 
   	require_once(PATH_t3lib.'class.t3lib_timetrack.php');
 
@@ -1102,7 +1102,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
       $GLOBALS['TT']->start();
     }
 
-    if (!is_object($GLOBALS['TSFE'])) {
+    if (!is_object($GLOBALS['TSFE']) || $force) {
       //*** Builds TSFE object
       $GLOBALS['TSFE'] = new $temp_TSFEclassName($GLOBALS['TYPO3_CONF_VARS'],$page_id,0,0,0,0,0,0);
 
