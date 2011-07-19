@@ -149,7 +149,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$this->assertNull($this->article->getSource());
 		$source = new tx_newspaper_DBSource();
 		$this->article->setSource(array($source));
-		$this->assertEquals($this->article->getSource(), $source);
+		$this->assertEquals($this->article->getSource(), array($source));
 	}
 
 	public function test_getUid() {
