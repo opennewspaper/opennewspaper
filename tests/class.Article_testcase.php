@@ -37,6 +37,8 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	
 	public function test_render() {
         tx_newspaper::buildTSFE();
+        $GLOBALS['TSFE']->sys_page = new t3lib_pageSelect();
+        $GLOBALS['TSFE']->sys_page->init(false);
 		try {
 			$this->checkOutput($this->article->render());
 		} catch (tx_newspaper_Exception $e) {
