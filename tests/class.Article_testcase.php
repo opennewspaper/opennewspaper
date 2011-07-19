@@ -138,7 +138,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
         $found = false;
         foreach ($this->article->getExtras() as $article_extra) {
-            if ($article_extra->getUid() = $uid) $found = true;
+            if ($article_extra->getUid() == $uid) $found = true;
         }
 
         $this->assertTrue($found, 'added extra not found in getExtras()');
