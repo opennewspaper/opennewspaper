@@ -132,10 +132,16 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_addExtra() {
-		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
-        $this->extra = new tx_newspaper_Extra_Image();
-		$this->article->addExtra($this->extra);
-		/// \todo check if extra has been added
+        $extra = new tx_newspaper_Extra_Image();
+        $uid = $extra->store();
+		$this->article->addExtra($extra);
+
+        $found = false;
+        foreach ($this->article->getExtras() as $article_extra) {
+            if ($article_extra->getUid() = $uid) $found = true;
+        }
+
+        $this->assertTrue($found, 'added extra not found in getExtras()');
 	}
 	
 //	public function test_getSource() {
