@@ -558,6 +558,17 @@ class tx_newspaper_fixture {
 			'normalized_name' => 'seitenbereich2',
 			'is_article' => '',
 		),
+        array(
+            'pid' => '2822',
+            'tstamp' => '1234567890',
+            'crdate' => '1234567890',
+            'cruser_id' => '1',
+            'sorting' => '1024',
+            'deleted' => '0',
+            'type_name' => 'Unit Test - Artikel',
+            'normalized_name' => 'artikel',
+            'is_article' => '1',
+        ),
 	);
 
 	private $pagezone_table = 'tx_newspaper_pagezone';
