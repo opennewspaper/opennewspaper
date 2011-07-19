@@ -133,6 +133,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
 	public function test_addExtra() {
 		$this->setExpectedException('tx_newspaper_NotYetImplementedException');
+        $this->extra = new tx_newspaper_Extra_Image();
 		$this->article->addExtra($this->extra);
 		/// \todo check if extra has been added
 	}
@@ -380,8 +381,10 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
 
 	private $section_uid = 1;			///< section we assign new articles to. \todo create my own new section
-	private $article = null;			///< the object
+    /** @var tx_newspaper_Article */
+	private $article = null;
 	private $uid = null;					///< The article we use as test object
+    /** @var tx_newspaper_Extra */
 	private $extra = null;
 	private $extra_uid = 1;
 	private $plugin_page = 2472;		///< a Typo3 page containing the Plugin
