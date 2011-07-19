@@ -121,10 +121,16 @@ class tx_newspaper_fixture {
 
 	////////////////////////////////////////////////////////////////////////////
 
+    private function createTypo3Pages() {
+    }
+
 	private function createSectionHierarchy() {
-		foreach ($this->section_data as $section) {
+		foreach ($this->section_data as $i => $section) {
 			$section['parent_section'] = $this->section_uids[sizeof($this->section_uids)-1];
-			$this->section_uids[] = tx_newspaper::insertRows($this->section_table, $section);
+            $uid = tx_newspaper::insertRows($this->section_table, $section);
+			$this->section_uids[] = $uid;
+            $this->typo3_pages_data[$i]['tx_newspaper_associated_section'] = $uid;
+            $uid = tx_newspaper::insertRows($this->typo3_pages_table, $this->typo3_pages_data[$i]);
 		}
 	}
 
@@ -426,6 +432,37 @@ class tx_newspaper_fixture {
 			'pagetype_pagezone' => ''
 		),
 	);
+
+    private $typo3_pages_table = 'pages';
+    private $typo3_pages_data = array(
+        array(
+            'pid' => '2828',
+            'tstamp' => '1234567890',
+            'crdate' => '1234567890',
+            'cruser_id' => '1',
+            'sorting' => '1024',
+            'deleted' => '0',
+            'title' => 'Unit Test - Big Daddy Section Page',
+        ),
+        array(
+            'pid' => '2828',
+            'tstamp' => '1234567890',
+            'crdate' => '1234567890',
+            'cruser_id' => '1',
+            'sorting' => '2048',
+            'deleted' => '0',
+            'title' => 'Son Section Page',
+        ),
+        array(
+            'pid' => '2828',
+            'tstamp' => '1234567890',
+            'crdate' => '1234567890',
+            'cruser_id' => '1',
+            'sorting' => '4096',
+            'deleted' => '0',
+            'title' => 'Little Grandchild Section Page',
+        ),
+    );
 
 	private $articlelist_table = 'tx_newspaper_articlelist';
 	private $articlelist_id = null;
