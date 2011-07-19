@@ -493,9 +493,11 @@ DESC',
         	$this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
         }
 
-		// generate dossier
-		$tree = tx_newspaper_DependencyTree::generateFromTag($this);
-		$tree->executeActionsOnPages('exportTags');
+        if (tx_newspaper_DependencyTree::useDependencyTree()) {
+            // generate dossier
+            $tree = tx_newspaper_DependencyTree::generateFromTag($this);
+            $tree->executeActionsOnPages('exportTags');
+        }
 
         return $this->getUid();
 	}
