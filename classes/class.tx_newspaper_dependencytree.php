@@ -65,13 +65,23 @@ class tx_newspaper_CachablePage {
     }
 
     public function getStarttime() {
-        if (is_null($this->newspaper_article)) return;
+        if ($this->starttime) return $this->starttime;
+        if (is_null($this->newspaper_article)) return 0;
         return $this->newspaper_article->getAttribute('starttime');
     }
 
+    public function setStarttime($starttime) {
+        $this->starttime = $starttime;
+    }
+
     public function getEndtime() {
-        if (is_null($this->newspaper_article)) return;
+        if ($this->endtime) return $this->endtime;
+        if (is_null($this->newspaper_article)) return 0;
         return $this->newspaper_article->getAttribute('endtime');
+    }
+
+    public function setEndtime($endtime) {
+        $this->endtime = $endtime;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -79,6 +89,8 @@ class tx_newspaper_CachablePage {
     private $newspaper_page = null;
     private $newspaper_article = null;
     private $get_parameters = array();
+    private $starttime = 0;
+    private $endtime = 0;
 
 }
 
@@ -380,13 +392,39 @@ class tx_newspaper_DependencyTree {
         call_user_func($function, $pages);
     }
 
+    private function getStarttime() {
+        return $this->getAttributeForArticleOrExtra('starttime');
+    }
+
+    private function getEndtime() {
+        return $this->getAttributeForArticleOrExtra('endtime');
+    }
+
+    private function getAttributeForArticleOrExtra($attribute) {
+        if ($this->article) {
+            if ($this->article->getAttribute($attribute)) {
+                return $this->article->getAttribute($attribute);
+            }
+        }
+
+        if ($this->extra) {
+            try {
+                if ($this->extra->getAttribute($attribute)) {
+                    return $this->extra->getAttribute($attribute);
+                }
+            } catch (tx_newspaper_WrongAttributeException $e) { }
+        }
+
+        return 0;
+    }
+
     /// Adds article pages of all sections \p $article is in
     private function addArticlePages(tx_newspaper_Article $article = null) {
         tx_newspaper::startExecutionTimer();
         if ($article) {
             $sections = $article->getSections();
             $pages = getAllArticlePages($sections);
-            $this->article_pages = array_merge($this->article_pages, makeCachablePages($pages, $article));
+            $this->article_pages = array_merge($this->article_pages, $this->makeCachablePages($pages, $article));
             $this->article_pages = array_unique($this->article_pages);
         }
         $this->article_pages_filled = true;
@@ -397,7 +435,7 @@ class tx_newspaper_DependencyTree {
         tx_newspaper::startExecutionTimer();
         foreach ($sections as $section) {
             $pages = getAllPagesWithSectionListExtra($section);
-            $this->section_pages = array_merge($this->section_pages, makeCachablePages($pages));
+            $this->section_pages = array_merge($this->section_pages, $this->makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
         $this->section_pages_filled = true;
@@ -410,7 +448,7 @@ class tx_newspaper_DependencyTree {
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
             $pages = getAllArticlePages($sections);
-            $this->related_article_pages = array_merge($this->related_article_pages, makeCachablePages($pages, $article));
+            $this->related_article_pages = array_merge($this->related_article_pages, $this->makeCachablePages($pages, $article));
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
         $this->related_article_pages_filled = true;
@@ -450,7 +488,7 @@ class tx_newspaper_DependencyTree {
     private function addArticleListPages(array $article_lists) {
         tx_newspaper::startExecutionTimer();
         $pages = getAllArticleListPages($article_lists);
-        $this->articlelist_pages = array_merge($this->articlelist_pages, makeCachablePages($pages));
+        $this->articlelist_pages = array_merge($this->articlelist_pages, $this->makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
         $this->articlelist_pages_filled = true;
         tx_newspaper::logExecutionTime('addArticleListPages()');
@@ -484,9 +522,25 @@ class tx_newspaper_DependencyTree {
         }
     }
 
+    private function makeCachablePages(array $pages, tx_newspaper_Article $article = null) {
+        $cachable_pages = array();
+        foreach($pages as $page) {
+            if ($page instanceof tx_newspaper_Page) {
+                $new_page = new tx_newspaper_CachablePage($page, $article);
+                if ($this->getStarttime()) $new_page->setStarttime($this->getStarttime());
+                if ($this->getEndtime()) $new_page->setEndtime($this->getEndtime());
+                $cachable_pages[] = $new_page;
+            }
+        }
+        return $cachable_pages;
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
+    /** @var tx_newspaper_Article */
     private $article = null;
+    /** @var tx_newspaper_Extra */
     private $extra = null;
 
     private $article_pages = array();   ///< Article pages of the sections containing the article
@@ -505,15 +559,6 @@ class tx_newspaper_DependencyTree {
 
 }
 
-function makeCachablePages(array $pages, tx_newspaper_Article $article = null) {
-    $cachable_pages = array();
-    foreach($pages as $page) {
-        if ($page instanceof tx_newspaper_Page) {
-            $cachable_pages[] = new tx_newspaper_CachablePage($page, $article);
-        }
-    }
-    return $cachable_pages;
-}
 
 function getAllArticlePages(array $sections) {
 	$article_pages = array();
