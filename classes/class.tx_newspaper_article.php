@@ -1164,15 +1164,22 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         return $paragraph;
     }
+    
     private static function trimLeadingKet($paragraph) {
         $paragraph_start = strpos($paragraph, '>');
 
-        if ($paragraph_start !== false && $paragraph_start <= 1) {
-            $paragraph = substr($paragraph, $paragraph_start + 1);
+        if ($paragraph_start !== false) {
+            if ($paragraph_start <= 1 || self::startsWithHTMLAttribute($paragraph)) {
+                $paragraph = substr($paragraph, $paragraph_start + 1);
+            }
         }
         $paragraph = trim($paragraph);
 
         return $paragraph;
+    }
+
+    private function startsWithHTMLAttribute($paragraph) {
+        return preg_match('/\w+="\w+"/', trim($paragraph));
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
