@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 <link rel="stylesheet" type="text/css" href="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.css" />
 
@@ -194,7 +194,7 @@
 					{if $DATA[i].author}{$LL.label_by_part} {$DATA[i].author}<br />{/if}
 					{if $DATA[i].publish_date}
 						{$LL.label_published}:
-						<strong>{$DATA[i].publish_date|date_format:"%d.%m"}{if $DATA[i].publish_date|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$DATA[i].publish_date|date_format:".%Y"}{/if}</strong>&nbsp;{$DATA[i].publish_date|date_format:"%H:%M:%S"}
+						<strong>{$DATA[i].formattedPublishdate}</strong>&nbsp;{$DATA[i].publish_date|date_format:"%H:%M:%S"}
 					{else}
 						{if $DATA[i].hidden}
 							<i>{$LL.label_not_yet_published}</i>

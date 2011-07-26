@@ -258,11 +258,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 
 		// add information for time controlled articles
+		// add formatted publish date
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_and_future'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_but_will_end'], $row[$i]['starttime'] ,$row[$i]['endtime']);
+
+			$row[$i]['formattedPublishdate'] = $this->getFormattedPublishDate($row[$i]['publish_date']);
 		}
 
 		$smarty->assign('DATA', $row);
@@ -284,6 +287,19 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			return $smarty->fetch('mod2_articlebrowser.tmpl'); // article browser
 		}
 		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
+	}
+
+	/**
+	 * Format timestamp for production list output (skips year if year is current year)
+	 * @param $tstamp Timestamp
+	 * @return Formatted publish date
+	 */
+	private function getFormattedPublishDate($tstamp) {
+		$tstamp = intval($tstamp);
+		if (!$tstamp) {
+			return ''; // no timestamp set
+		}
+		return (date("Y", $tstamp) == date("Y", time()))? date("d.m", $tstamp) : date("d.m.Y", $tstamp);
 	}
 
 	/**
