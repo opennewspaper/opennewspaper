@@ -20,13 +20,23 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
      */
     public function test_readTag() {
         $tag = tx_newspaper_Tag::createControlTag(1,'test-tag');
-		$tag->store();
+		self::storeExpectingExceptionInGetDossierPage($tag);
 		$actualTag = new tx_newspaper_Tag($tag->getUid());
         $this->assertEquals($tag->getUid(), $actualTag->getUid());
         $this->assertEquals($tag->getAttribute('tag'), $actualTag->getAttribute('tag'), 'Tags does not match');
         $this->assertEquals($tag->getAttribute('tag_type'), $actualTag->getAttribute('tag_type'), 'Tagtype does not match');
         $expectedPid = tx_newspaper_Sysfolder::getInstance()->getPid($actualTag);
         $this->assertEquals($expectedPid, $actualTag->getAttribute('pid'), 'Sysfolder does not match');
+    }
+
+    private static function storeExpectingExceptionInGetDossierPage(tx_newspaper_Tag $tag) {
+        try {
+            $tag->store();
+        } catch(tx_newspaper_IllegalUsageException $e) {
+            if (strpos($e->getMessage(), ' is not associated with a newspaper section') === false) {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -43,7 +53,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         //stored with no attributes set
         try {
             $aTag = new tx_newspaper_Tag();
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_EmptyResultException expected, missing content and tagtype not spotted');
         } catch(tx_newspaper_EmptyResultException $e) {
             //expected
@@ -53,7 +63,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
             //only tag_type set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, content not set');
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
@@ -63,7 +73,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
             //only content set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag', 'test-tag');
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, missing tag-type not spotted');
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
@@ -74,7 +84,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             $aTag->setAttribute('tag', '');
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, empty string in content not spotted');
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
@@ -85,7 +95,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             $aTag->setAttribute('tag', null);
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, null as content not spotted');
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
@@ -96,7 +106,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             $aTag->setAttribute('tag', ' ');
-            $aTag->store();
+            self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, blank as content not spotted');
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
