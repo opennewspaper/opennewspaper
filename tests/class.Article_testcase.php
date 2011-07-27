@@ -290,11 +290,12 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         }
 
         $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
-        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet; got ' . count($tags));
+        $this->assertEquals(1, count($tags),
+                            'One Tag expected. Article created with one control tag in tx_newspaper_fixture::createControlTag(); got ' . count($tags));
 
         $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagType());
         $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
-        $this->assertEquals(1, count($tags), 'One Controltags expected, got ' . count($tags));
+        $this->assertEquals(2, count($tags), 'Two Controltags expected, got ' . count($tags));
     }
 	
 	////////////////////////////////////////////////////////////////////////////
