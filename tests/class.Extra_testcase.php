@@ -99,6 +99,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
 	public function test_render() {
 
+        $this->fail('test not yet ready!');
+
 		/// set an article ID for article renderer extra
 		$_GET['art'] = 1;
 		foreach($this->extras_to_test as $extra_class) {
@@ -107,9 +109,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			/// \todo test the output... how can i do that generically?
 		}
 		unset($_GET['art']);
-
-        $this->fail('test not yet ready!');
-
 	}
 
 	public function test_store() {
