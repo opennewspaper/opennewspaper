@@ -236,12 +236,15 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue($section instanceof tx_newspaper_Section);
 		$this->assertEquals($section->getUid(), $this->fixture->getParentSectionUid());
 	}
-	
+
+    const articletype_id = 0;
 	public function test_listArticlesWithArticletype() {
 		/// many articles are articletype 0 because it's a field that was introduced late
-		$articletype = new tx_newspaper_ArticleType(0);
-		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
-		$this->assertEquals(7, sizeof($articles), "Expected number of articles in list wrong: ". sizeof($articles));
+		$articletype = new tx_newspaper_ArticleType(self::articletype_id);
+		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 0);
+        $row = tx_newspaper::selectOneRow('COUNT(*)', 'tx_newspaper_article', 'articletype_id = ' . self::articletype_id);
+        $num_articles = $row['COUNT(*)'];
+		$this->assertEquals($num_articles, sizeof($articles), "Expected number of articles in list wrong: ". sizeof($articles));
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 		}
