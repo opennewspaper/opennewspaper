@@ -270,30 +270,30 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $tagType = tx_newspaper_Tag::getContentTagType();
         $articleId = $this->article->getUid();
 
-        $tags = $this->article->getTags();
+        $tags = $this->article->getTags($tagType);
         $this->assertEquals(0, count($tags), "No tags expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[0], $tagType);
-        $tags = $this->article->getTags();
+        $tags = $this->article->getTags($tagType);
         $this->assertEquals(1, count($tags), "One tag expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[1], $tagType);
-        $tags = $this->article->getTags();
+        $tags = $this->article->getTags($tagType);
         $this->assertEquals(2, count($tags), "Two tags expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[2], $tagType);
-        $tags = $this->article->getTags();
+        $tags = $this->article->getTags($tagType);
         $this->assertEquals(3, count($tags), "Three tags expected, got " . count($tags));
 
         foreach($tags as $i => $tag) {
             $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
         }
 
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
+        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
         $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet; got ' . count($tags));
 
-        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagTypes());
-        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
+        $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagType());
+        $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
         $this->assertEquals(1, count($tags), 'One Controltags expected, got ' . count($tags));
     }
 	

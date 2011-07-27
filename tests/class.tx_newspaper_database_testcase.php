@@ -126,7 +126,7 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
 		$this->assertTrue(true);
 	}
 		
- 		
+    /** @var tx_newspaper_fixture */
  	protected  $fixture = null ;		//< Testdata
  		
  	/// If you want to run setUp() only once per testcase, set this variable in the testcase's setUp().
