@@ -97,59 +97,60 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
 	}
 
-//	public function test_render() {
-//
-//		$this->fail('test not yet ready!');
-//
-//		/// set an article ID for article renderer extra
-//		$_GET['art'] = 1;
-//		foreach($this->extras_to_test as $extra_class) {
-//			$temp = new $extra_class(1);
-//			$temp->render();
-//			/// \todo test the output... how can i do that generically?
-//		}
-//		unset($_GET['art']);
-//	}
+	public function test_render() {
 
-//	public function test_store() {
-//		$tmp = array();
-//        foreach($this->fixture->getExtraUids() as $i => $uid) {
-//			$temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
-//			$uid = $temp[$i]->store();
-//			t3lib_div::debug('store() ok '.$uid);
-//			$this->assertEquals($uid, $temp[$i]->getUid(), "id is wrong");
-//
-//			/// check that record in DB equals data in memory
-//			$data = tx_newspaper::selectOneRow(
-//				'*', $temp[$i]->getTable(), 'uid = ' . $temp[$i]->getUid());
-//            echo "for table ".$temp[$i]->getTable()."<br/>";
-//			foreach ($data as $key => $value) {
-//				$this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
-//			}
+		/// set an article ID for article renderer extra
+		$_GET['art'] = 1;
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);
+			$temp->render();
+			/// \todo test the output... how can i do that generically?
+		}
+		unset($_GET['art']);
+
+        $this->fail('test not yet ready!');
+
+	}
+
+	public function test_store() {
+		$tmp = array();
+        foreach($this->fixture->getExtraUids() as $i => $uid) {
+			$temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+			$uid = $temp[$i]->store();
+			t3lib_div::debug('store() ok '.$uid);
+			$this->assertEquals($uid, $temp[$i]->getUid(), "id is wrong");
+
+			/// check that record in DB equals data in memory
+			$data = tx_newspaper::selectOneRow(
+				'*', $temp[$i]->getTable(), 'uid = ' . $temp[$i]->getUid());
+            echo "for table ".$temp[$i]->getTable()."<br/>";
+			foreach ($data as $key => $value) {
+				$this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
+			}
 
 			/// change an attribute, store and check
-//			$time = time();
-//			$temp->setAttribute('tstamp', $time);
-//			$uid = $temp->store();
-//			t3lib_div::debug('store() 2 ok');
-//			$this->assertEquals($uid, $temp->getUid());
-//			$data = tx_newspaper::selectOneRow(
-//				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
-//			$this->assertEquals($data['tstamp'], $time);
-//
-//			/// create an empty extra and write it. verify it's been written.
-//			$temp = new tx_newspaper_Extra_Image();
-//			$temp->setAttribute('tstamp', $time);
-//			$uid = $temp->store();
-//			t3lib_div::debug('store() 3 ok');
-//			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
-//			$this->assertEquals($data['tstamp'], $time);
+			$time = time();
+			$temp->setAttribute('tstamp', $time);
+			$uid = $temp->store();
+			t3lib_div::debug('store() 2 ok');
+			$this->assertEquals($uid, $temp->getUid());
+			$data = tx_newspaper::selectOneRow(
+				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
+			$this->assertEquals($data['tstamp'], $time);
+
+			/// create an empty extra and write it. verify it's been written.
+			$temp = new tx_newspaper_Extra_Image();
+			$temp->setAttribute('tstamp', $time);
+			$uid = $temp->store();
+			t3lib_div::debug('store() 3 ok');
+			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
+			$this->assertEquals($data['tstamp'], $time);
 
 			/// delete extra
-//			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
 
-//		}
-//	}
+		}
+	}
 
 	public function test_relateExtra2Article() {
 		$article_uid = 1;
@@ -202,13 +203,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-//	public function test_getTable() {
-//		foreach(array_merge($this->extras_to_test,
-//							$this->extras_to_test_additionally) as $extra_class) {
-//			$temp = new $extra_class(1);
-//			$this->assertEquals(strtolower($extra_class), $temp->getTable());
-//		}
-//	}
+	public function test_getTable() {
+		foreach(array_merge($this->extras_to_test,
+							$this->extras_to_test_additionally) as $extra_class) {
+			$temp = new $extra_class(1);
+			$this->assertEquals(strtolower($extra_class), $temp->getTable());
+		}
+	}
 
 	public function test_createExtraRecord() {
 		/// test whether the function runs at all
@@ -284,17 +285,18 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		}
 
 	}
-//	public function test_duplicate() {
-//		$this->fail('test not yet ready!');
-//		foreach($this->extras_to_test as $extra_class) {
-//			$temp = new $extra_class(1);
-//			$time = time();
-//			$temp->setAttribute('crdate', $time);
-//
-//			$that = $temp->duplicate();
-//			t3lib_div::debug($this); t3lib_div::debug($that);
-//		}
-//	}
+
+	public function test_duplicate() {
+		foreach($this->extras_to_test as $extra_class) {
+			$temp = new $extra_class(1);
+			$time = time();
+			$temp->setAttribute('crdate', $time);
+
+			$that = $temp->duplicate();
+			t3lib_div::debug($this); t3lib_div::debug($that);
+		}
+        $this->fail('test not yet ready!');
+	}
 
 
 	public function test_GetAttributeShortDescription() {
