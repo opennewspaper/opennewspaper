@@ -241,7 +241,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		/// many articles are articletype 0 because it's a field that was introduced late
 		$articletype = new tx_newspaper_ArticleType(0);
 		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
-		$this->assertEquals(7, sizeof($articles), "Expected number of articles in list wrong");
+		$this->assertEquals(7, sizeof($articles), "Expected number of articles in list wrong: ". sizeof($articles));
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 		}
