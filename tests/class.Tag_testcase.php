@@ -107,8 +107,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
     public function test_storeEmptyTagWhitespaceOnlyContent() {
 
         $this->setExpectedException(
-            'tx_newspaper_IllegalUsageException',
-            'tx_newspaper_IllegalUsageException expected, blank as content not spotted'
+            'tx_newspaper_IllegalUsageException'
         );
             //check empty content set
             $aTag = new tx_newspaper_Tag();
