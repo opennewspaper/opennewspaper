@@ -40,64 +40,54 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_storeEmptyTagNoAttributes() {
-        try {
+        $this->setExpectedException('tx_newspaper_EmptyResultException');
+
             $aTag = new tx_newspaper_Tag();
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_EmptyResultException expected, missing content and tagtype not spotted');
-        } catch (tx_newspaper_EmptyResultException $e) {
-            //expected
-        }
     }
 
 
     public function test_storeEmptyTagOnlyTagType() {
-        try {
+        $this->setExpectedException('tx_newspaper_IllegalUsageException');
+
             //only tag_type set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, content not set');
-        } catch (tx_newspaper_IllegalUsageException $e) {
-            //expected
-        }
     }
 
     public function test_storeEmptyTagOnlyContent() {
-        try {
+        $this->setExpectedException('tx_newspaper_IllegalUsageException');
+
             //only content set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag', 'test-tag');
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, missing tag-type not spotted');
-        } catch(tx_newspaper_IllegalUsageException $e) {
-            //expected
-        }
     }
 
     public function test_storeEmptyTagEmptyContent() {
-        try {
+        $this->setExpectedException('tx_newspaper_IllegalUsageException');
+
             //check empty content set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             $aTag->setAttribute('tag', '');
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, empty string in content not spotted');
-        } catch(tx_newspaper_IllegalUsageException $e) {
-            //expected
-        }
     }
 
     public function test_storeEmptyTagNullContent() {
-        try {
+        $this->setExpectedException('tx_newspaper_IllegalUsageException');
+
             //check empty content set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             $aTag->setAttribute('tag', null);
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, null as content not spotted');
-        } catch(tx_newspaper_IllegalUsageException $e) {
-            //expected
-        }
     }
 
     /**
@@ -106,14 +96,13 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
      */
     public function test_storeEmptyTagWhitespaceOnlyContent() {
 
-        $this->setExpectedException(
-            'tx_newspaper_IllegalUsageException'
-        );
-            //check empty content set
-            $aTag = new tx_newspaper_Tag();
-            $aTag->setAttribute('tag_type', 1);
-            $aTag->setAttribute('tag', ' ');
-            self::storeExpectingExceptionInGetDossierPage($aTag);
+        $this->setExpectedException('tx_newspaper_IllegalUsageException');
+
+        //check empty content set
+        $aTag = new tx_newspaper_Tag();
+        $aTag->setAttribute('tag_type', 1);
+        $aTag->setAttribute('tag', ' ');
+        self::storeExpectingExceptionInGetDossierPage($aTag);
     }
 
 
