@@ -39,36 +39,30 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    /**
-     * Ensure tags are olny stored when tag and tag_type are set.
-     * @return void
-     */
-    public function test_storeEmptyTag() {
-
-        // NOTE:
-        // I tried using setException('expected_Exception') but it did not work.
-        // When one check passed no other failed, therfore the more noisy try/catch.
-
-
-        //stored with no attributes set
+    public function test_storeEmptyTagNoAttributes() {
         try {
             $aTag = new tx_newspaper_Tag();
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_EmptyResultException expected, missing content and tagtype not spotted');
-        } catch(tx_newspaper_EmptyResultException $e) {
+        } catch (tx_newspaper_EmptyResultException $e) {
             //expected
         }
+    }
 
+
+    public function test_storeEmptyTagOnlyTagType() {
         try {
             //only tag_type set
             $aTag = new tx_newspaper_Tag();
             $aTag->setAttribute('tag_type', 1);
             self::storeExpectingExceptionInGetDossierPage($aTag);
             $this->fail('tx_newspaper_IllegalUsageException expected, content not set');
-        } catch(tx_newspaper_IllegalUsageException $e) {
+        } catch (tx_newspaper_IllegalUsageException $e) {
             //expected
         }
+    }
 
+    public function test_storeEmptyTagOnlyContent() {
         try {
             //only content set
             $aTag = new tx_newspaper_Tag();
@@ -78,7 +72,9 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
         }
+    }
 
+    public function test_storeEmptyTagEmptyContent() {
         try {
             //check empty content set
             $aTag = new tx_newspaper_Tag();
@@ -89,7 +85,9 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
         }
+    }
 
+    public function test_storeEmptyTagNullContent() {
         try {
             //check empty content set
             $aTag = new tx_newspaper_Tag();
@@ -100,6 +98,13 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         } catch(tx_newspaper_IllegalUsageException $e) {
             //expected
         }
+    }
+
+    /**
+     * Ensure tags are olny stored when tag and tag_type are set.
+     * @return void
+     */
+    public function test_storeEmptyTagWhitespaceOnlyContent() {
 
         try {
             //check empty content set
@@ -113,25 +118,26 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         }
     }
 
+
     public function test_storeTagOnlyOnce() {
 
         $aTag = new tx_newspaper_Tag();
         $aTag->setAttribute('tag', 'test-tag');
         $aTag->setAttribute('tag_type', 1);
-        $aTag->store();
+        self::storeExpectingExceptionInGetDossierPage($aTag);
 
         $duplicateTag = new tx_newspaper_Tag();
         $duplicateTag->setAttribute('tag', 'test-tag');
         $duplicateTag->setAttribute('tag_type', 1);
-        $duplicateTag->store();
+        self::storeExpectingExceptionInGetDossierPage($duplicateTag);
 
         $this->assertEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids did not match. Duplicated tag in database.');
 
 		$aCtrlTag = tx_newspaper_Tag::createControlTag(1, 'test-tag');
-		$aCtrlTag->store();
+        self::storeExpectingExceptionInGetDossierPage($aCtrlTag);
 
 		$duplicateCtrlTag = tx_newspaper_Tag::createControlTag(1, 'test-tag');
-		$duplicateCtrlTag->store();
+        self::storeExpectingExceptionInGetDossierPage($duplicateCtrlTag);
 
 		$this->assertEquals($aCtrlTag->getUid(), $duplicateCtrlTag->getUid(), 'Uids did not match. Duplicated tag in database.');
 
@@ -140,20 +146,20 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
 
 	public function test_storeCtrlTagOnlyOnce() {
 		$aTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
-        $aTag->store();
+        self::storeExpectingExceptionInGetDossierPage($aTag);
 
         $duplicateTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
-        $duplicateTag->store();
+        self::storeExpectingExceptionInGetDossierPage($duplicateTag);
 
         $this->assertEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids did not match. Duplicated tag in database.');
 	}
 
 	public function test_storeCtrlTagTwiceInDifferentCategories() {
 		$aTag = tx_newspaper_Tag::createControlTag(1,'test-tag');
-        $aTag->store();
+        self::storeExpectingExceptionInGetDossierPage($aTag);
 
         $duplicateTag = tx_newspaper_Tag::createControlTag(2,'test-tag');
-        $duplicateTag->store();
+        self::storeExpectingExceptionInGetDossierPage($duplicateTag);
 
         $this->assertNotEquals($aTag->getUid(), $duplicateTag->getUid(), 'Uids do match. Same tag in different categories should be allowed.');
 	}
@@ -161,12 +167,12 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
     public function test_createContentTag() {
         $tag = tx_newspaper_Tag::createContentTag();
         $tag->setAttribute('tag', 'test');
-		$tag->store();
+        self::storeExpectingExceptionInGetDossierPage($tag);
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getContentTagType(), $tag->getAttribute('tag_type'));
 
         $tag = tx_newspaper_Tag::createContentTag('test');
-        $tag->store();
+        self::storeExpectingExceptionInGetDossierPage($tag);
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getContentTagType(), $tag->getAttribute('tag_type'));
     }
@@ -175,13 +181,13 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         $tagCatId = 1;
 		$tag = tx_newspaper_Tag::createControlTag($tagCatId, 'test');
         $tag->setAttribute('tag', 'test');
-        $tag->store();
+        self::storeExpectingExceptionInGetDossierPage($tag);
         $this->assertEquals('test', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
 		$this->assertEquals($tagCatId, $tag->getAttribute('ctrltag_cat'));
 
         $tag = tx_newspaper_Tag::createControlTag($tagCatId, 'test2');
-        $tag->store();
+        self::storeExpectingExceptionInGetDossierPage($tag);
         $this->assertEquals('test2', $tag->getAttribute('tag'));
         $this->assertEquals(tx_newspaper_tag::getControlTagType(), $tag->getAttribute('tag_type'));
 		$this->assertEquals($tagCatId, $tag->getAttribute('ctrltag_cat'));
@@ -190,7 +196,7 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
 			$tag = new tx_newspaper_Tag();
 			$tag->setAttribute('tag', 'test');
 			$tag->setAttribute('tag_type', tx_newspaper_Tag::getControlTagType());
-			$tag->store();
+            self::storeExpectingExceptionInGetDossierPage($tag);
 			$this->fail('store a ctrl tag without category was possible');
 		} catch(Exception $e) {
 			//expected
@@ -202,8 +208,8 @@ class test_Tag_testcase extends tx_newspaper_database_testcase {
         $controlTag = tx_newspaper_Tag::createControlTag(1, 'test');
         $contentTag = tx_newspaper_Tag::createContentTag('test');
 
-        $contentTag->store();
-        $controlTag->store();
+        self::storeExpectingExceptionInGetDossierPage($contentTag);
+        self::storeExpectingExceptionInGetDossierPage($controlTag);
 
         $this->assertNotEquals(0, $contentTag->getUid(), 'content tag was not stored');
         $this->assertNotEquals(0, $controlTag->getUid(), 'control tag was not stored');
