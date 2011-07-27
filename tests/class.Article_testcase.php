@@ -238,23 +238,32 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 	}
 
     const articletype_id = 0;
+
 	public function test_listArticlesWithArticletype() {
-		/// many articles are articletype 0 because it's a field that was introduced late
-		$articletype = new tx_newspaper_ArticleType(self::articletype_id);
-		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 0);
-        $row = tx_newspaper::selectOneRow('COUNT(*)', 'tx_newspaper_article', 'articletype_id = ' . self::articletype_id);
-        $num_articles = $row['COUNT(*)'];
+
+        $articles = self::getArticlesWithArticleType();
+        $num_articles = self::getNumArticlesWithArticleType();
 		$this->assertEquals($num_articles, sizeof($articles), "Expected number of articles in list wrong: ". sizeof($articles));
+
 		foreach ($articles as $article) {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 		}
 
-		/// article type 3 is deleted, no articles should have it
-		/// \todo select uid from tx_newspaper_articletype where deleted = 1 order by uid asc limit 1
+		/// \todo ensure article type 3 is deleted, no articles should have it
 		$articletype = new tx_newspaper_ArticleType(3);
-		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 10);
+		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 0);
 		$this->assertTrue(sizeof($articles) == 0);
 	}
+
+    private static function getArticlesWithArticleType() {
+        $articletype = new tx_newspaper_ArticleType(self::articletype_id);
+        return tx_newspaper_Article::listArticlesWithArticletype($articletype, 0);
+    }
+
+    private static function getNumArticlesWithArticleType() {
+        $row = tx_newspaper::selectOneRow('COUNT(*)', 'tx_newspaper_article', 'articletype_id = ' . self::articletype_id);
+        return $row['COUNT(*)'];
+    }
 
     public function test_getTags() {
         $tagnames = array('test-tag-1', 'test-tag-2', 'test-tag-3');
@@ -262,30 +271,30 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $articleId = $this->article->getUid();
 
         $tags = $this->article->getTags();
-        $this->assertEquals(0, count($tags), "No tags expected");
+        $this->assertEquals(0, count($tags), "No tags expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[0], $tagType);
         $tags = $this->article->getTags();
-        $this->assertEquals(1, count($tags), "One tag expected");
+        $this->assertEquals(1, count($tags), "One tag expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[1], $tagType);
         $tags = $this->article->getTags();
-        $this->assertEquals(2, count($tags), "Two tags expected");
+        $this->assertEquals(2, count($tags), "Two tags expected, got " . count($tags));
 
         $this->insertTag($articleId, $tagnames[2], $tagType);
         $tags = $this->article->getTags();
-        $this->assertEquals(3, count($tags), "Three tags expected");
+        $this->assertEquals(3, count($tags), "Three tags expected, got " . count($tags));
 
         foreach($tags as $i => $tag) {
             $this->assertEquals($tagnames[$i], $tag->getAttribute('tag'));
         }
 
         $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
-        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet');
+        $this->assertEquals(0, count($tags), 'No Tags expected. Controltags are not in DB yet; got ' . count($tags));
 
         $this->insertTag($articleId, 'ctrl-tag', tx_newspaper_Tag::getControlTagTypes());
         $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagTypes());
-        $this->assertEquals(1, count($tags), 'One Controltags expected.');
+        $this->assertEquals(1, count($tags), 'One Controltags expected, got ' . count($tags));
     }
 	
 	////////////////////////////////////////////////////////////////////////////
