@@ -125,7 +125,13 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
 	public function test_dummyTestToAvoidWarningUntilTestsForThisClassAreWritten() {
 		$this->assertTrue(true);
 	}
-		
+
+
+    protected function skipTest($message) {
+        echo "SKIPPED: $message";
+        $this->markTestSkipped($message);
+    }
+
     /** @var tx_newspaper_fixture */
  	protected  $fixture = null ;		//< Testdata
  		

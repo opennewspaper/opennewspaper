@@ -99,7 +99,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
 	public function test_render() {
 
-        $this->fail('test not yet ready!');
+        $this->skipTest('test not yet ready!'); return;
 
 		/// set an article ID for article renderer extra
 		$_GET['art'] = 1;
@@ -292,9 +292,25 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			$temp->setAttribute('crdate', $time);
 
 			$that = $temp->duplicate();
-			t3lib_div::debug($this); t3lib_div::debug($that);
+
+            $this->assertTrue(
+                $that instanceof $extra_class,
+                "Duplicated extra is not of class $extra_class, but " . get_class($that)
+            );
+
+            foreach (tx_newspaper::getAttributes($temp) as $attribute) {
+                $this->assertTrue(
+                    in_array($attribute, tx_newspaper::getAttributes($that)),
+                    "Attribute $attribute is not in attributes for duplicated extra"
+                );
+                $this->assertEquals(
+                    $temp->getAttribute($attribute), $that->getAttribute($attribute),
+                    "Attribute $attribute original: " . $temp->getAttribute($attribute) . ', copied: ' . $that->getAttribute($attribute)
+                );
+            }
+#			t3lib_div::debug($this); t3lib_div::debug($that);
 		}
-        $this->fail('test not yet ready!');
+#        $this->fail('test not yet ready!');
 	}
 
 

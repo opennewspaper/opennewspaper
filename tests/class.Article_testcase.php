@@ -394,12 +394,6 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         return false;
     }
 
-    private function skipTest($message) {
-        echo "SKIPPED: $message";
-        $this->markTestSkipped($message);
-    }
-
-
 	private $section_uid = 1;			///< section we assign new articles to. \todo create my own new section
     /** @var tx_newspaper_Article */
 	private $article = null;
