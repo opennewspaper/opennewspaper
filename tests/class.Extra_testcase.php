@@ -144,7 +144,9 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         $temp = new tx_newspaper_Extra_Image();
         $temp->setAttribute(self::tested_attribute, $time);
         $uid = $temp->store();
-        $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
+        $extra_data = tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $uid);
+        $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $extra_data['extra_uid']);
+        t3lib_div::debug(time());
         t3lib_div::debug($data);
         $this->assertEquals($data[self::tested_attribute], $time);
         /// delete extra
