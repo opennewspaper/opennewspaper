@@ -92,7 +92,8 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
         foreach ($expected_pagezones as $expected_pagezone) {
             $this->assertTrue(
-                in_array($expected_pagezone, $pagezones)
+                in_array($expected_pagezone, $pagezones),
+                "pagezone $expected_pagezone no in array " . print_r($pagezones, 1)
             );
         }
 	}
