@@ -285,36 +285,58 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
 	}
 
-	public function test_duplicate() {
+	public function test_duplicateReturnsSameClass() {
 		foreach($this->extras_to_test as $extra_class) {
-			$temp = new $extra_class(1);
-			$time = time();
-			$temp->setAttribute('crdate', $time);
 
+            $temp = self::generateExtraWithRandomCrdate($extra_class);
 			$that = $temp->duplicate();
 
             $this->assertTrue(
                 $that instanceof $extra_class,
                 "Duplicated extra is not of class $extra_class, but " . get_class($that)
             );
+		}
+	}
+
+    public function test_duplicateGeneratesSameAttributes() {
+        foreach($this->extras_to_test as $extra_class) {
+
+            $temp = self::generateExtraWithRandomCrdate($extra_class);
+            $that = $temp->duplicate();
 
             foreach (tx_newspaper::getAttributes($temp) as $attribute) {
                 $this->assertTrue(
                     in_array($attribute, tx_newspaper::getAttributes($that)),
                     "Attribute $attribute is not in attributes for duplicated extra"
                 );
+            }
+        }
+    }
+
+    public function test_duplicateGeneratesEqualAttributes() {
+        foreach($this->extras_to_test as $extra_class) {
+
+            $temp = self::generateExtraWithRandomCrdate($extra_class);
+            $that = $temp->duplicate();
+
+            foreach (tx_newspaper::getAttributes($temp) as $attribute) {
                 $this->assertEquals(
                     $temp->getAttribute($attribute), $that->getAttribute($attribute),
                     "Attribute $attribute original: " . $temp->getAttribute($attribute) . ', copied: ' . $that->getAttribute($attribute)
                 );
             }
-#			t3lib_div::debug($this); t3lib_div::debug($that);
-		}
-#        $this->fail('test not yet ready!');
-	}
+        }
+    }
+
+    private static function generateExtraWithRandomCrdate($extra_class) {
+        $temp = new $extra_class(1);
+        $time = time();
+        $temp->setAttribute('crdate', $time);
+        return $temp;
+    }
 
 
-	public function test_GetAttributeShortDescription() {
+    public function test_GetAttributeShortDescription() {
 		foreach (tx_newspaper_Extra::getRegisteredExtras() as $registeredExtra) {
 			$table = $registeredExtra->getTable();
 			if (strpos($table, 'tx_newspaper_extra') !== false) {
