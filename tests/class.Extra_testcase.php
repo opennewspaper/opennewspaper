@@ -122,6 +122,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     const tested_attribute = 'crdate';
     public function test_storeDBEqualsMemory() {
         foreach($this->fixture->getExtraUids() as $uid) {
+            echo "uid: $uid<br />";
             $temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
             $temp->setAttribute(self::tested_attribute, time());
