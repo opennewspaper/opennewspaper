@@ -84,10 +84,22 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue(sizeof($this->page->getPageZones()) == 0);
 	}
 
-	public function testPageZones() {
-		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
-		$this->assertTrue(sizeof($this->page->getPageZones()) == 3, "Expected at 3 pagezones, got " . sizeof($this->page->getPageZones()));
-		$pagezones = $this->page->getPageZones();
+    public function test_getPageZonesReturnsArray() {
+        $this->assertTrue(
+            is_array($this->page->getPageZones()),
+            "Expected pagezones"
+        );
+    }
+
+    public function test_getPageZonesReturnsAsManyPagezonesAsInFixture() {
+        $this->assertTrue(
+            sizeof($this->page->getPageZones()) == sizeof($this->fixture->getPageZones()),
+            "Expected " . $this->fixture->getPageZones() . " pagezones, got " . sizeof($this->page->getPageZones())
+        );
+    }
+
+    public function test_getPageZonesReturnsAllPagezonesInFixture() {
+        $pagezones = $this->page->getPageZones();
         $expected_pagezones = $this->fixture->getPageZones();
 
         foreach ($expected_pagezones as $expected_pagezone) {
@@ -96,32 +108,9 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
                 "pagezone $expected_pagezone not in array " . self::arrayToString($pagezones)
             );
         }
-	}
-
-    /**
-     * @static
-     * @param tx_newspaper_Pagezone $pagezone
-     * @param tx_newspaper_Pagezone[] $pagezones_to_check
-     * @return bool
-     */
-    private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_Pagezone $pagezone, array $pagezones_to_check) {
-        foreach ($pagezones_to_check as $to_check) {
-            if ($pagezone->getPageZoneType()->getUid() == $to_check->getPageZoneType()->getUid()) {
-                return true;
-            }
-        }
-        return false;
     }
 
-    private static function arrayToString(array $array) {
-        $ret = '('; $separator = '';
-        foreach ($array as $element) {
-            $ret .= $element . $separator;
-            $separator = ', ';
-        }
-        return $ret . ')';
-    }
-	public function test_getParentSection() {
+    public function test_getParentSection() {
 		$this->assertEquals($this->page->getParentSection(), $this->section);
 	}
 	
@@ -149,13 +138,40 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 	
 	////////////////////////////////////////////////////////////////////////////
 
+
+    /**
+     * @static
+     * @param tx_newspaper_Pagezone $pagezone
+     * @param tx_newspaper_Pagezone[] $pagezones_to_check
+     * @return bool
+     */
+    private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_Pagezone $pagezone, array $pagezones_to_check) {
+        foreach ($pagezones_to_check as $to_check) {
+            if ($pagezone->getPageZoneType()->getUid() == $to_check->getPageZoneType()->getUid()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static function arrayToString(array $array) {
+        $ret = '('; $separator = '';
+        foreach ($array as $element) {
+            $ret .= $element . $separator;
+            $separator = ', ';
+        }
+        return $ret . ')';
+    }
+
 	private function doTestContains($string, $word) {
 		$this->assertRegExp("/.*$word.*/", $string,
 							"Plugin output (expected $word): $string");
 	}
 
+    /** @var tx_newspaper_Section */
 	private $section = null;
-	private $page = null;					///< the object
+    /** @var tx_newspaper_Page */
+	private $page = null;
 	private $section_uid = null;
     private $section_name = null;
 	private $page_uid = null;				///< id of create page
