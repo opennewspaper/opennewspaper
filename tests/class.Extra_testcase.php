@@ -144,8 +144,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         $temp = new tx_newspaper_Extra_Image();
         $temp->setAttribute(self::tested_attribute, $time);
         $uid = $temp->store();
-        t3lib_div::debug('store() 3 ok');
         $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
+        t3lib_div::debug($data);
         $this->assertEquals($data[self::tested_attribute], $time);
         /// delete extra
         $GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
