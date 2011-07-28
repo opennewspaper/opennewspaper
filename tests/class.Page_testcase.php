@@ -94,7 +94,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
     public function test_getPageZonesReturnsAsManyPagezonesAsInFixture() {
         $this->assertTrue(
             sizeof($this->page->getPageZones()) == sizeof($this->fixture->getPageZones()),
-            "Expected " . $this->fixture->getPageZones() . " pagezones, got " . sizeof($this->page->getPageZones())
+            "Expected " . sizeof($this->fixture->getPageZones()) . " pagezones, got " . sizeof($this->page->getPageZones())
         );
     }
 
