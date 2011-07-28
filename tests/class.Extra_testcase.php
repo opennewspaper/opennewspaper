@@ -119,22 +119,21 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
+    const tested_attribute = 'crdate';
     public function test_storeDBEqualsMemory() {
         foreach($this->fixture->getExtraUids() as $uid) {
             $temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
-            $temp->setAttribute('crdate', time());
+            $temp->setAttribute(self::tested_attribute, time());
             $temp->store();
 
             $data = tx_newspaper::selectOneRow(
-                '*', $temp->getTable(), 'uid = ' . $temp->getAttribute('uid')
+                self::tested_attribute, $temp->getTable(), 'uid = ' . $temp->getAttribute('uid')
             );
-            foreach ($data as $key => $value) {
-                $this->assertEquals(
-                    $temp->getAttribute($key), $value,
-                    $key." has wrong value: $value instead of " . $temp->getAttribute($key)
-                );
-            }
+            $this->assertEquals(
+                $temp->getAttribute(self::tested_attribute), $data[self::tested_attribute],
+                self::tested_attribute." has wrong value: " .  $data[self::tested_attribute] . " instead of " . $temp->getAttribute(self::tested_attribute)
+            );
         }
     }
 
