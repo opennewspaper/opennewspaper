@@ -115,14 +115,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	/// \todo finish test
-//	public function test_store() {
-//		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
-//		$this->pagezone->store();
-//		/// \todo check that record in DB equals data in memory
-//		/// \todo change an attribute, store and check
-//		/// \todo create an empty pagezone and write it. verify it's been written.
-//		/// \see ArticleImpl_testcase
-//	}	
+	public function test_store() {
+		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
+		$this->pagezone->store();
+		/// \todo check that record in DB equals data in memory
+		/// \todo change an attribute, store and check
+		/// \todo create an empty pagezone and write it. verify it's been written.
+		/// \see ArticleImpl_testcase
+	}
 
 	public function test_getUid() {
 		$this->assertEquals($this->pagezone->getUid(), $this->uid);
@@ -285,116 +285,93 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 						    $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
 	}
 	
-//	public function test_insertExtraAfter() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//#		$pagezone = array_pop($this->hierarchy->getPageZones()); {
-//			$old_extras = $pagezone->getExtras();
-//			foreach ($old_extras as $extra_after_which) {
-//				t3lib_div::debug("inserting after $extra_after_which");				
-//				$i = 0;
-//				foreach ($this->extra_abstract_uids as $uid) {
-//					$i++;
-//					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
-//					$new_extra->setAttribute('title', "Inserted ${i}th");
-//					$pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
-//				}
-//			}
-//			
-//			$this->assertEquals(
-//				sizeof($pagezone->getExtras()),
-//				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-//				'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
-//				sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
-//				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
-//				sizeof($pagezone->getExtras()) . '. '
-//			);
-//			
-//			$row = tx_newspaper::selectOneRow(
-//				'COUNT(*) AS num', 
-//				$pagezone->getExtra2PagezoneTable(),
-//				'uid_local = ' . $pagezone->getUid()
-//			);
-//			$this->assertEquals(
-//				intval($row['num']), 
-//				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-//				'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
-//				'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
-//				' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
-//			);
-//
-//			$this->checkPageZoneOrder($pagezone);
-//
-//			/// Make sure the Extras are inserted on inheriting PageZones.
-//			foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
-//				t3lib_div::debug($sub_pagezone.'');
-//				$this->assertEquals(
-//					sizeof($sub_pagezone->getExtras()),
-//					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-//					'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
-//					sizeof($old_extras) . ' original Extras, so inheriting PageZone ' . $sub_pagezone . ' should now have ' .
-//					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
-//					sizeof($sub_pagezone->getExtras()) . '. '
-//				);
-//				
-//				$row = tx_newspaper::selectOneRow(
-//					'COUNT(*) AS num', 
-//					$sub_pagezone->getExtra2PagezoneTable(),
-//					'uid_local = ' . $sub_pagezone->getUid()
-//				);
-//				$this->assertEquals(
-//					intval($row['num']), 
-//					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-//					'Entries in ' . $sub_pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
-//					'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
-//					' but only ' . $row['num'] . ' are there.'
-//				);
-//
-//				$this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
-//			}
-//		}
-//	}
+	public function test_insertExtraAfter() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#		$pagezone = array_pop($this->hierarchy->getPageZones()); {
+			$old_extras = $pagezone->getExtras();
+			foreach ($old_extras as $extra_after_which) {
+				t3lib_div::debug("inserting after $extra_after_which");
+				$i = 0;
+				foreach ($this->extra_abstract_uids as $uid) {
+					$i++;
+					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+					$new_extra->setAttribute('title', "Inserted ${i}th");
+					$pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
+				}
+			}
 
-//	public function test_getExtraOrigin() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//			$hierarchy_root = array_pop($pagezone->getInheritanceHierarchyUp());
-//			$some_origin_extra = array_pop($hierarchy_root->getExtras());
-//			foreach($pagezone->getExtras() as $extra) {
-//#				t3lib_div::debug(
-//					$pagezone->getExtraOrigin($extra)
-//#				)
-//				;
-//#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
-//				$extra->setAttribute('origin_uid', $some_origin_extra->getUid());
-//#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
-//			}
-//		}
-//		
-//		$this->fail('test_getExtraOrigin() not yet implemented.');
-//	}
-	/** Make sure the order is correct. \n
-	 *  Expected order: \n 
-	 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
-	 *  'Unit Test - Image Title 2', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
-	 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
-	 */
-	private function checkPageZoneOrder(tx_newspaper_PageZone $pagezone, $message = '') {
-		$extra = $pagezone->getExtras();
-		$this->assertEquals('Unit Test - Image Title 1', $extra[0]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 3th', $extra[1]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 2th', $extra[2]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 1th', $extra[3]->getAttribute('title'), $message);
-		
-		$this->assertEquals('Unit Test - Image Title 2', $extra[4]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 3th', $extra[5]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 2th', $extra[6]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 1th', $extra[7]->getAttribute('title'), $message);
-		
-		$this->assertEquals('Unit Test - Image Title 3', $extra[8]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 3th', $extra[9]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 2th', $extra[10]->getAttribute('title'), $message);
-		$this->assertEquals('Inserted 1th', $extra[11]->getAttribute('title'), $message);
+			$this->assertEquals(
+				sizeof($pagezone->getExtras()),
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+				'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+				sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
+				sizeof($pagezone->getExtras()) . '. '
+			);
+
+			$row = tx_newspaper::selectOneRow(
+				'COUNT(*) AS num',
+				$pagezone->getExtra2PagezoneTable(),
+				'uid_local = ' . $pagezone->getUid()
+			);
+			$this->assertEquals(
+				intval($row['num']),
+				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+				'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+				'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
+				' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
+			);
+
+			$this->checkPageZoneOrder($pagezone);
+
+			/// Make sure the Extras are inserted on inheriting PageZones.
+			foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
+				t3lib_div::debug($sub_pagezone.'');
+				$this->assertEquals(
+					sizeof($sub_pagezone->getExtras()),
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+					'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+					sizeof($old_extras) . ' original Extras, so inheriting PageZone ' . $sub_pagezone . ' should now have ' .
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
+					sizeof($sub_pagezone->getExtras()) . '. '
+				);
+
+				$row = tx_newspaper::selectOneRow(
+					'COUNT(*) AS num',
+					$sub_pagezone->getExtra2PagezoneTable(),
+					'uid_local = ' . $sub_pagezone->getUid()
+				);
+				$this->assertEquals(
+					intval($row['num']),
+					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+					'Entries in ' . $sub_pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+					'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
+					' but only ' . $row['num'] . ' are there.'
+				);
+
+				$this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
+			}
+		}
 	}
-/*
+
+	public function test_getExtraOrigin() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			$hierarchy_root = array_pop($pagezone->getInheritanceHierarchyUp());
+        	$some_origin_extra = array_pop($hierarchy_root->getExtras());
+			foreach($pagezone->getExtras() as $extra) {
+#				t3lib_div::debug(
+					$pagezone->getExtraOrigin($extra)
+#				)
+				;
+#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+				$extra->setAttribute('origin_uid', $some_origin_extra->getUid());
+#				t3lib_div::debug($pagezone->getExtraOriginAsString($extra));
+			}
+		}
+
+		$this->fail('test_getExtraOrigin() not yet implemented.');
+	}
+
 	public function test_removeExtra() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 			$old_extras = $pagezone->getExtras();
@@ -423,69 +400,93 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			}
 		}
 	}
-*/
-//	public function test_moveExtraAfter() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//			$extras = $pagezone->getExtras();
-//			if (sizeof($extras) < 2) {
-//				$this->fail("fixture error: not enough extras on page zone to run test");
-//			}
-//			$this->assertTrue($extras[0] instanceof tx_newspaper_Extra);
-//			$this->assertTrue($extras[1] instanceof tx_newspaper_Extra);
-//			$pagezone->moveExtraAfter($extras[0], $extras[1]->getOriginUid());
-//			$new_extras = $pagezone->getExtras();
-//			//	find $extra[0] and $extra[1] in $new_extras
-//			for ($i = 0; $i < sizeof($new_extras); $i++) {
-//				if ($new_extras[$i]->getAttribute('title') == $extras[0]->getAttribute('title')) {
-//					$after_index = $i;
-//				}
-//				if ($new_extras[$i]->getAttribute('title') == $extras[1]->getAttribute('title')) {
-//					$before_index = $i;
-//				}
-//			}
-//			$this->assertEquals($after_index, $before_index+1);
-//		}
-//		/// \todo instantiate pagezone from DB and check it still works
-//	}
+
+	public function test_moveExtraAfter() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+    		$extras = $pagezone->getExtras();
+			if (sizeof($extras) < 2) {
+				$this->fail("fixture error: not enough extras on page zone to run test");
+			}
+			$this->assertTrue($extras[0] instanceof tx_newspaper_Extra);
+			$this->assertTrue($extras[1] instanceof tx_newspaper_Extra);
+			$pagezone->moveExtraAfter($extras[0], $extras[1]->getOriginUid());
+			$new_extras = $pagezone->getExtras();
+			//	find $extra[0] and $extra[1] in $new_extras
+			for ($i = 0; $i < sizeof($new_extras); $i++) {
+				if ($new_extras[$i]->getAttribute('title') == $extras[0]->getAttribute('title')) {
+					$after_index = $i;
+				}
+				if ($new_extras[$i]->getAttribute('title') == $extras[1]->getAttribute('title')) {
+					$before_index = $i;
+				}
+			}
+			$this->assertEquals($after_index, $before_index+1);
+		}
+		/// \todo instantiate pagezone from DB and check it still works
+	}
 	
-//	public function test_setInherits() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
-//		}
-//		$this->fail('test_setInherits not yet implemented');
-//	}
+	public function test_setInherits() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
+		$this->fail('test_setInherits not yet implemented');
+	}
 	
-//	public function test_getInheritanceHierarchyDown() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//			$hierarchy = $pagezone->getInheritanceHierarchyDown(false);
-//
-//			foreach ($hierarchy as $sub_pagezone) {
-//				$this->assertTrue(
-//					$sub_pagezone instanceof tx_newspaper_PageZone,
-//					$sub_pagezone . ' is not a PageZone. '
-//				);
-//				$parent_pagezones = $sub_pagezone->getInheritanceHierarchyUp();
-//				$found = false;
-//				foreach ($parent_pagezones as $pagezone_to_check) {
-//					if ($pagezone->getUid() == $pagezone_to_check->getUid())
-//						$found = true;
-//				}
-//				$this->assertTrue($found,
-//					'PageZone ' . $pagezone . ' not found in parents of ' . $sub_pagezone .
-//					', which is listed as a descendant of ' . $pagezone);
-//			}
-//		}
-//	}
+	public function test_getInheritanceHierarchyDown() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+			$hierarchy = $pagezone->getInheritanceHierarchyDown(false);
+
+			foreach ($hierarchy as $sub_pagezone) {
+				$this->assertTrue(
+					$sub_pagezone instanceof tx_newspaper_PageZone,
+					$sub_pagezone . ' is not a PageZone. '
+				);
+				$parent_pagezones = $sub_pagezone->getInheritanceHierarchyUp();
+				$found = false;
+				foreach ($parent_pagezones as $pagezone_to_check) {
+					if ($pagezone->getUid() == $pagezone_to_check->getUid())
+						$found = true;
+				}
+				$this->assertTrue($found,
+					'PageZone ' . $pagezone . ' not found in parents of ' . $sub_pagezone .
+					', which is listed as a descendant of ' . $pagezone);
+			}
+		}
+	}
 
 	
-//	public function test_copyExtrasFrom() {
-//		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-//#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
-//		}
-//		$this->fail('test_copyExtrasFrom not yet implemented');
-//	}
+	public function test_copyExtrasFrom() {
+		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+#			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
+		}
+		$this->fail('test_copyExtrasFrom not yet implemented');
+	}
 
 	////////////////////////////////////////////////////////////////////////////
+
+	/** Make sure the order is correct. \n
+	 *  Expected order: \n
+	 *  'Unit Test - Image Title 1', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+	 *  'Unit Test - Image Title 2', 'Inserted 3th', Inserted 2th', 'Inserted 1th',
+	 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
+	 */
+	private function checkPageZoneOrder(tx_newspaper_PageZone $pagezone, $message = '') {
+		$extra = $pagezone->getExtras();
+		$this->assertEquals('Unit Test - Image Title 1', $extra[0]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[1]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[2]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[3]->getAttribute('title'), $message);
+
+		$this->assertEquals('Unit Test - Image Title 2', $extra[4]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[5]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[6]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[7]->getAttribute('title'), $message);
+
+		$this->assertEquals('Unit Test - Image Title 3', $extra[8]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 3th', $extra[9]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 2th', $extra[10]->getAttribute('title'), $message);
+		$this->assertEquals('Inserted 1th', $extra[11]->getAttribute('title'), $message);
+	}
 
 	private function createExtras() {
 		foreach ($this->extra_data as $index => $extra) {
