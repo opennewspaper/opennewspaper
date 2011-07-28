@@ -51,19 +51,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 						    'Plugin output: '.$this->page->render());
 	}
 	
-	public function testPageTypes() {
-
-		$pagetype = new tx_newspaper_PageType();
-		$pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
-		$pagetype = new tx_newspaper_PageType($pagetype_uid);
-
-		$this->page = new tx_newspaper_Page($this->section,
-											$pagetype);
-		$this->page->store();
-        $this->doTestContains($this->page->render(), $this->section_name);
-        $this->doTestContains($this->page->render(), 'RSS');
-
-		t3lib_div::debug('ressortseite ok');
+	public function test_articlePage() {
 
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
 		/// set an article ID for article renderer extra
@@ -72,14 +60,20 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
 						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
 
-		t3lib_div::debug('artikelseite ok');
-
-		/// \todo tx_newspaper_PageType::getAvailablePageTypes()
-
-		tx_newspaper::deleteRows($pagetype->getTable(), $pagetype_uid);
 	}
-	
-	public function testEmptyPageZones() {
+
+    public function test_sectionPage() {
+        $pagetype = new tx_newspaper_PageType();
+        $pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
+        $pagetype = new tx_newspaper_PageType($pagetype_uid);
+
+        $this->page = new tx_newspaper_Page($this->section,
+            $pagetype);
+        $this->page->store();
+        $this->doTestContains($this->page->render(), $this->section_name);
+    }
+
+    public function testEmptyPageZones() {
 		/// This test page is guaranteed to have no page zones
 		$this->page = new tx_newspaper_Page($this->section, 
 											new tx_newspaper_PageType(array('page' => 666)));
@@ -129,8 +123,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 	////////////////////////////////////////////////////////////////////////////
 
 	private function doTestContains($string, $word) {
-        echo "doTestContains($string, $word)<br />";
-		$this->assertRegExp("/.*$word.*/", $string, 
+		$this->assertRegExp("/.*$word.*/", $string,
 							"Plugin output (expected $word): $string");
 	}
 
