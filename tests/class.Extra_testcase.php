@@ -128,7 +128,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             $temp->store();
 
             $data = tx_newspaper::selectOneRow(
-                self::tested_attribute, $temp->getTable(), 'uid = ' . $temp->getAttribute('uid')
+                self::tested_attribute, 'tx_newspaper_extra',
+                "extra_table ='".$temp->getTable()."' AND extra_uid = " . $temp->getAttribute('uid')
             );
             t3lib_div::debug($temp);
             t3lib_div::debug($data);
