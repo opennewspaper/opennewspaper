@@ -93,19 +93,19 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
     public function test_getPageZonesReturnsAsManyPagezonesAsInFixture() {
         $this->assertTrue(
-            sizeof($this->page->getPageZones()) == sizeof($this->fixture->getPageZones()),
-            "Expected " . sizeof($this->fixture->getPageZones()) . " pagezones, got " . sizeof($this->page->getPageZones())
+            sizeof($this->page->getPageZones()) == sizeof($this->fixture->getPageZoneTypes()),
+            "Expected " . sizeof($this->fixture->getPageZoneTypes()) . " pagezones, got " . sizeof($this->page->getPageZones())
         );
     }
 
     public function test_getPageZonesReturnsAllPagezonesInFixture() {
         $pagezones = $this->page->getPageZones();
-        $expected_pagezones = $this->fixture->getPageZones();
+        $expected_pagezone_types = $this->fixture->getPageZoneTypes();
 
-        foreach ($expected_pagezones as $expected_pagezone) {
+        foreach ($expected_pagezone_types as $expected_type) {
             $this->assertTrue(
-                self::pagezoneOfSameTypeIsPresentInArray($expected_pagezone, $pagezones),
-                "pagezone $expected_pagezone not in array " . self::arrayToString($pagezones)
+                self::pagezoneOfSameTypeIsPresentInArray($expected_type, $pagezones),
+                "pagezone type $expected_type not in array " . self::arrayToString($pagezones)
             );
         }
     }
@@ -141,13 +141,13 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
     /**
      * @static
-     * @param tx_newspaper_Pagezone $pagezone
+     * @param tx_newspaper_PageZoneType $pagezonetype
      * @param tx_newspaper_Pagezone[] $pagezones_to_check
      * @return bool
      */
-    private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_Pagezone $pagezone, array $pagezones_to_check) {
+    private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_PageZoneType $pagezonetype, array $pagezones_to_check) {
         foreach ($pagezones_to_check as $to_check) {
-            if ($pagezone->getPageZoneType()->getUid() == $to_check->getPageZoneType()->getUid()) {
+            if ($pagezonetype->getUid() == $to_check->getPageZoneType()->getUid()) {
                 return true;
             }
         }

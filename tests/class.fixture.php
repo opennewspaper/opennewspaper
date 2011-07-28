@@ -61,6 +61,15 @@ class tx_newspaper_fixture {
 
 	}
 
+    public function getPageZoneTypes() {
+        $uids = tx_newspaper::selectRows('uid', $this->pagezonetype_table);
+        $pagezonetypes = array();
+        foreach ($uids as $uid) {
+            $pagezonetypes[] = new tx_newspaper_PageZoneType($uid['uid']);
+        }
+        return $pagezonetypes;
+    }
+
 	public function getPageZones() {
 		if (!$this->pagezones) {
 			foreach ($this->pagezone_uids as $uid) {
