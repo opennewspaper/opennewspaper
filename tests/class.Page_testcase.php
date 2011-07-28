@@ -18,9 +18,6 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		parent::setUp();
 		$this->section = new tx_newspaper_Section($this->section_uid);
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
-//		$this->page->store();
-//		$pages = $this->fixture->getPages();
-//		$this->page = $pages[0];
 	}
 
 	function tearDown() {
@@ -29,8 +26,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		unset($_GET['art']);
 		unset($_GET['type']);
 		parent::tearDown();
-//		tx_newspaper::deleteRows($this->page->getTable(), $this->page->getUid());
-		
+
 	}
 
 	public function test_createPage() {
@@ -53,36 +49,36 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 //						    'Plugin output: '.$this->page->render());
 //	}
 	
-//	public function testPageTypes() {
-//		
-//		$pagetype = new tx_newspaper_PageType();
-//		$pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
-//		$pagetype = new tx_newspaper_PageType($pagetype_uid);
-//		
-//		$this->page = new tx_newspaper_Page($this->section, 
-//											$pagetype);
-//		$this->page->store();											
-//		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
-//						    'Plugin output: '.$this->page->render('', null));
-//		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
-//						    'Plugin output: '.$this->page->render('', null));						    
-//
-//		t3lib_div::debug('ressortseite ok');
-//
-//		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
-//		/// set an article ID for article renderer extra
-//		$_GET['art'] = 1;		
-//		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
-//						    'Plugin output: '.$this->page->render('', null));
-//		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
-//						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
-//
-//		t3lib_div::debug('artikelseite ok');
-//		
-//		/// \todo tx_newspaper_PageType::getAvailablePageTypes()
-//		
-//		tx_newspaper::deleteRows($pagetype->getTable(), $pagetype_uid);
-//	}
+	public function testPageTypes() {
+
+		$pagetype = new tx_newspaper_PageType();
+		$pagetype_uid = tx_newspaper::insertRows($pagetype->getTable(), array('get_var' => 'page', 'get_value' => 100));
+		$pagetype = new tx_newspaper_PageType($pagetype_uid);
+
+		$this->page = new tx_newspaper_Page($this->section,
+											$pagetype);
+		$this->page->store();
+		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
+						    'Plugin output: '.$this->page->render('', null));
+		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
+						    'Plugin output: '.$this->page->render('', null));
+
+		t3lib_div::debug('ressortseite ok');
+
+		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
+		/// set an article ID for article renderer extra
+		$_GET['art'] = 1;
+		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
+						    'Plugin output: '.$this->page->render('', null));
+		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
+						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
+
+		t3lib_div::debug('artikelseite ok');
+
+		/// \todo tx_newspaper_PageType::getAvailablePageTypes()
+
+		tx_newspaper::deleteRows($pagetype->getTable(), $pagetype_uid);
+	}
 	
 	public function testEmptyPageZones() {
 		/// This test page is guaranteed to have no page zones
@@ -93,17 +89,17 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue(sizeof($this->page->getPageZones()) == 0);
 	}
 
-//	public function testPageZones() {
-//		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
-//		$this->assertTrue(sizeof($this->page->getPageZones()) > 0, "Expected at least two pagezones");
-//		$pagezones = $this->page->getPageZones();
-//		$this->assertEquals($pagezones[0]->getAttribute('name'), 
-//							'Test-Seitenbereich auf Ressortseite - 1',
-//							 $pagezones[0]->getAttribute('name'));
-//		$this->assertEquals($pagezones[1]->getAttribute('name'), 
-//							'Test-Seitenbereich auf Ressortseite - 2',
-//							 $pagezones[1]->getAttribute('name'));
-//	}
+	public function testPageZones() {
+		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
+		$this->assertTrue(sizeof($this->page->getPageZones()) > 0, "Expected at least two pagezones");
+		$pagezones = $this->page->getPageZones();
+		$this->assertEquals($pagezones[0]->getAttribute('name'),
+							'Test-Seitenbereich auf Ressortseite - 1',
+							 $pagezones[0]->getAttribute('name'));
+		$this->assertEquals($pagezones[1]->getAttribute('name'),
+							'Test-Seitenbereich auf Ressortseite - 2',
+							 $pagezones[1]->getAttribute('name'));
+	}
 	
 	public function test_getParentSection() {
 		$this->assertEquals($this->page->getParentSection(), $this->section);
@@ -113,24 +109,25 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($this->page->getTable(), 'tx_newspaper_page');
 	}
 	
-//	public function test_cloneAndStore() {
-//		$this->fail('test not yet ready');
-//		
-//		/// clone current page
-//		$temp_page = clone $this->page;
-//		
-//		t3lib_div::debug('clone ok');
-//		
-//		$this->assertGreaterThan($this->page->getAttribute('crdate'), $temp_page->getAttribute('crdate'));
-//		$this->assertGreaterThan($this->page->getAttribute('tstamp'), $temp_page->getAttribute('tstamp'));
-//		$this->assertEquals($temp_page->getUid(), 0);
-//	}
+	public function test_cloneAndStore() {
+
+		/// clone current page
+		$temp_page = clone $this->page;
+
+		t3lib_div::debug('clone ok');
+
+		$this->assertGreaterThan($this->page->getAttribute('crdate'), $temp_page->getAttribute('crdate'));
+		$this->assertGreaterThan($this->page->getAttribute('tstamp'), $temp_page->getAttribute('tstamp'));
+		$this->assertEquals($temp_page->getUid(), 0);
+
+        $this->fail('test not yet ready');
+	}
 	
-//	public function test_toString() {
-//		$this->page->getAttribute('uid');
-//		$string = strval($this->page);
-//		$this->doTestContains($string, 'UID: 1');
-//	}
+	public function test_toString() {
+		$this->page->getAttribute('uid');
+		$string = strval($this->page);
+		$this->doTestContains($string, 'UID: 1');
+	}
 	
 	////////////////////////////////////////////////////////////////////////////
 
