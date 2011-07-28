@@ -130,12 +130,12 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             $data = tx_newspaper::selectOneRow(
                 self::tested_attribute, $temp->getTable(), 'uid = ' . $temp->getAttribute('uid')
             );
+            t3lib_div::debug($temp);
+            t3lib_div::debug($data);
             $this->assertEquals(
                 $temp->getAttribute(self::tested_attribute), $data[self::tested_attribute],
                 self::tested_attribute." has wrong value: " .  $data[self::tested_attribute] . " instead of " . $temp->getAttribute(self::tested_attribute)
             );
-            t3lib_div::debug($temp);
-            t3lib_div::debug($data);
         }
     }
 
