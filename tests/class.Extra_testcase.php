@@ -140,15 +140,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
     /// create an empty extra and write it. verify it's been written.
     public function test_storeNewExtra() {
-        $time = time()+123;
         $temp = new tx_newspaper_Extra_Image();
-        $temp->setAttribute(self::tested_attribute, $time);
+        $temp->setAttribute('title', 'teststring');
         $uid = $temp->store();
-        $extra_data = tx_newspaper::selectOneRow('*', 'tx_newspaper_extra', 'uid = ' . $uid);
-        $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $extra_data['extra_uid']);
+        $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
         t3lib_div::debug(time());
         t3lib_div::debug($data);
-        $this->assertEquals($data[self::tested_attribute], $time);
+        $this->assertEquals($data['title'], 'teststring');
         /// delete extra
         $GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
     }
