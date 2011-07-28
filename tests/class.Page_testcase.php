@@ -88,6 +88,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
 		$this->assertTrue(sizeof($this->page->getPageZones()) > 0, "Expected at least two pagezones");
 		$pagezones = $this->page->getPageZones();
+        t3lib_div::debug($pagezones);
 		$this->assertEquals($pagezones[0]->getAttribute('name'),
 							'Test-Seitenbereich auf Ressortseite - 1',
 							 $pagezones[0]->getAttribute('name'));
