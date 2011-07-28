@@ -90,7 +90,7 @@ class tx_newspaper_Extra_Factory {
 	/** Reads the concrete Extra pointed at by the abstract record \p $uid, 
 	 *  instantiates and returns it.
 	 *  
-	 *  \param $uid The UID of the tx_newspaper_Extra in the abstract Extra table
+	 *  @param $uid The UID of the tx_newspaper_Extra in the abstract Extra table
 	 *  @return tx_newspaper_Extra A fully instantiated concrete Extra of the correct type
 	 *  \throw tx_newspaper_DBException If a DB operation goes wrong, e.g. when
 	 * 		the abstract UID is not present or hidden by 

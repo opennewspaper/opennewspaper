@@ -119,18 +119,27 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-    public function test_store() {
-        $tmp = array();
-        foreach($this->fixture->getExtraUids() as $i => $uid) {
-            $temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+    public function test_storeDBEqualsMemory() {
+        foreach($this->fixture->getExtraUids() as $uid) {
+            $temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
-            /// check that record in DB equals data in memory
+            $temp->setAttribute('crdate', time());
+            $temp->store();
+
             $data = tx_newspaper::selectOneRow(
-                '*', $temp[$i]->getTable(), 'uid = ' . $temp[$i]->getUid());
-            echo "for table ".$temp[$i]->getTable()."<br/>";
+                '*', $temp->getTable(), 'uid = ' . $temp>getUid());
             foreach ($data as $key => $value) {
-                $this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
+                $this->assertEquals(
+                    $temp->getAttribute($key), $value,
+                    $key." has wrong value"
+                );
             }
+        }
+    }
+
+    public function test_store() {
+        foreach($this->fixture->getExtraUids() as $uid) {
+            $temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
             /// change an attribute, store and check
             $time = time();
