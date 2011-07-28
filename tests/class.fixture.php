@@ -70,6 +70,7 @@ class tx_newspaper_fixture {
         return $pagezonetypes;
     }
 
+    /** @return tx_newspaper_PageZone[] */
 	public function getPageZones() {
 		if (!$this->pagezones) {
 			foreach ($this->pagezone_uids as $uid) {

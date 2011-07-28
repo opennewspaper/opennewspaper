@@ -107,19 +107,19 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
     }
 
-    public function test_getParentPage() {
+    public function test_getParentPageReturnsPage() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
-            $this->assertTrue(is_object($pagezone),
-                              'PageZone in hierarchy->getPageZones() is not an object: ' .
-                              print_r($pagezone, 1));
-            $this->assertTrue($pagezone instanceof tx_newspaper_PageZone,
-                              'PageZone in hierarchy->getPageZones() is not a PageZone: ' .
-                              print_r($pagezone, 1));
-
             $parent_page = $pagezone->getParentPage();
             $this->assertTrue($parent_page instanceof tx_newspaper_Page,
                               'getParentPage() is not a Page: ' .
                               print_r($parent_page, 1));
+        }
+    }
+
+    public function test_getParentPageFoundInFixture() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+
+            $parent_page = $pagezone->getParentPage();
 
             $found = false;
             foreach ($this->fixture->getPages() as $page) {
@@ -143,28 +143,46 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    public function test_getParentForPlacement() {
+    /** @todo create a pagezone in the fixture which explicitly does not inherit
+     */
+    public function test_getParentForPlacementWithoutInheritance() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
-            $parent = $pagezone->getParentForPlacement();
-
-            /// Different inheritance modes are treated separately
             if ($pagezone->getAttribute('inherits_from') < 0) {
-                //	Don't inherit at all
-                $this->assertEquals($parent, null,
-                                    'PageZone ' . $pagezone->getUid() .': ' .
-                                    'inheritance mode is set to no inheritance, but a parent (' .
-                                    print_r($parent, 1) . ') is returned. ');
-            } else if ($pagezone->getAttribute('inherits_from') > 0) {
-                //	Inherit from explicitly stated PageZone
-                $this->assertTrue($parent instanceof tx_newspaper_PageZone,
-                                  'PageZone object expected, but ' .
-                                  print_r($parent, 1) . ') is returned. ');
-                $this->assertEquals($parent->getUid(),
-                                    $pagezone->getAttribute('inherits_from'),
-                                    'PageZone ' . $pagezone->getUid() .': ' .
-                                    'explicitly inherits from PageZone ' . $pagezone->getAttribute('inherits_from') .
-                                    ' but PageZone ' . $parent->getUid() . ' is returned. ');
-            } else {
+                $parent = $pagezone->getParentForPlacement();
+                $this->assertEquals(
+                    $parent, null,
+                    'PageZone ' . $pagezone->getUid() .': ' .
+                    'inheritance mode is set to no inheritance, but a parent (' .
+                    print_r($parent, 1) . ') is returned. '
+                );
+            }
+        }
+    }
+
+    /** @todo create a pagezone in the fixture which inherits from a specified pagezone
+     */
+    public function test_getParentForPlacementExplicitPagezone() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            if ($pagezone->getAttribute('inherits_from') > 0) {
+                $parent = $pagezone->getParentForPlacement();
+                $this->assertTrue(
+                    $parent instanceof tx_newspaper_PageZone,
+                    'PageZone object expected, but ' .print_r($parent, 1) . ') is returned. '
+                );
+                $this->assertEquals(
+                    $parent->getUid(), $pagezone->getAttribute('inherits_from'),
+                    'PageZone ' . $pagezone->getUid() .': ' .
+                    'explicitly inherits from PageZone ' . $pagezone->getAttribute('inherits_from') .
+                    ' but PageZone ' . $parent->getUid() . ' is returned. '
+                );
+            }
+        }
+    }
+
+    public function test_getParentForPlacementInheritFromSameType() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            if ($pagezone->getAttribute('inherits_from') == 0) {
+                $parent = $pagezone->getParentForPlacement();
                 //	Normal inheritance mode: go up in the section tree
                 if ($parent) {
                     $this->assertTrue($parent instanceof tx_newspaper_PageZone,
@@ -182,14 +200,16 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                                          $parent->__toString());
                     }
                 } else {
-                    if (0) {
+                    if (1) {
                         t3lib_div::debug($pagezone->__toString() . ': no parent');
                     }
                 }
             }
         }
+    }
 
-        ///	singularly created page zone has no parent
+    ///	singularly created page zone has no parent
+    public function test_getParentForPlacementWithoutParen() {
         $this->assertEquals($this->pagezone->getParentForPlacement(), null);
     }
 
@@ -524,7 +544,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
 	private $bad_uid = 2000000000;			///< pagezone that does not exist
-	private $pagezone = null;				///< the object
+    /** @var tx_newspaper_PageZone */
+	private $pagezone = null;
 	private $source = null;
 	private $uid = 0;
 	private $pagezone_uid = 0;

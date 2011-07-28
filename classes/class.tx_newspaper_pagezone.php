@@ -440,7 +440,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \param $structure_only Ignore the value of \c 'inherit_mode', base the
 	 * 		return value only on the structure of the tx_newspaper_Section tree.
 	 *
-	 *  \return The tx_newspaper_PageZone object from which to copy the
+     *  @return tx_newspaper_PageZone The object from which to copy the
 	 *  	tx_newspaper_Extra s and their placements.
 	 *
 	 *  \todo What if inherit_mode points to a non-existent PageZone? Currently
