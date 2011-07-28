@@ -127,7 +127,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             $temp->store();
 
             $data = tx_newspaper::selectOneRow(
-                '*', $temp->getTable(), 'uid = ' . $temp->getUid());
+                '*', $temp->getTable(), 'uid = ' . $temp->getAttribute('uid')
+            );
             foreach ($data as $key => $value) {
                 $this->assertEquals(
                     $temp->getAttribute($key), $value,
