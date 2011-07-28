@@ -108,7 +108,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_getParentPage() {
-        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
             $this->assertTrue(is_object($pagezone),
                               'PageZone in hierarchy->getPageZones() is not an object: ' .
                               print_r($pagezone, 1));
@@ -129,12 +129,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                               'Parent page of PageZone ' . $pagezone->getUid() .
                               ' (abstract PageZone '.$pagezone->getAbstractUid() . ')' .
                               ' not found in array of pages: ' .
-                              print_r($this->hierarchy->getPages(), 1));
+                              print_r($this->fixture->getPages(), 1));
         }
     }
 
     public function test_setParentPage() {
-        foreach ($this->hierarchy->getPages() as $page) {
+        foreach ($this->fixture->getPages() as $page) {
             $this->pagezone->setParentPage($page);
             $this->assertEquals($this->pagezone->getParentPage()->getUid(),
                                 $page->getUid(),
@@ -144,7 +144,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_getParentForPlacement() {
-        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
             $parent = $pagezone->getParentForPlacement();
 
             /// Different inheritance modes are treated separately
@@ -194,7 +194,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_getInheritanceHierarchyUp() {
-        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
             $hierarchy = $pagezone->getInheritanceHierarchyUp();
             if ($pagezone->getParentForPlacement()) {
                 $this->assertGreaterThan(1, sizeof($hierarchy),
@@ -285,8 +285,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_insertExtraAfter() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-#		$pagezone = array_pop($this->hierarchy->getPageZones()); {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
+#		$pagezone = array_pop($this->fixture->getPageZones()); {
 			$old_extras = $pagezone->getExtras();
 			foreach ($old_extras as $extra_after_which) {
 				t3lib_div::debug("inserting after $extra_after_which");
@@ -354,7 +354,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_getExtraOrigin() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
 			$hierarchy_root = array_pop($pagezone->getInheritanceHierarchyUp());
         	$some_origin_extra = array_pop($hierarchy_root->getExtras());
 			foreach($pagezone->getExtras() as $extra) {
@@ -372,7 +372,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_removeExtra() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
 			$old_extras = $pagezone->getExtras();
 
 			foreach ($old_extras as $extra_to_remove) {
@@ -401,7 +401,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_moveExtraAfter() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
     		$extras = $pagezone->getExtras();
 			if (sizeof($extras) < 2) {
 				$this->fail("fixture error: not enough extras on page zone to run test");
@@ -425,14 +425,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	public function test_setInherits() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
 #			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
 		}
 		$this->fail('test_setInherits not yet implemented');
 	}
 	
 	public function test_getInheritanceHierarchyDown() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
 			$hierarchy = $pagezone->getInheritanceHierarchyDown(false);
 
 			foreach ($hierarchy as $sub_pagezone) {
@@ -455,7 +455,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
 	
 	public function test_copyExtrasFrom() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
+		foreach ($this->fixture->getPageZones() as $pagezone) {
 #			t3lib_div::debug($pagezone->getInheritanceHierarchyUp());
 		}
 		$this->fail('test_copyExtrasFrom not yet implemented');
