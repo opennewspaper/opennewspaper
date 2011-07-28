@@ -86,15 +86,15 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
 	public function testPageZones() {
 		$this->assertTrue(is_array($this->page->getPageZones()), "Expected pagezones");
-		$this->assertTrue(sizeof($this->page->getPageZones()) > 0, "Expected at least two pagezones");
+		$this->assertTrue(sizeof($this->page->getPageZones()) == 3, "Expected at 3 pagezones, got " . sizeof($this->page->getPageZones()));
 		$pagezones = $this->page->getPageZones();
-        t3lib_div::debug($pagezones);
-		$this->assertEquals($pagezones[0]->getAttribute('name'),
-							'Test-Seitenbereich auf Ressortseite - 1',
-							 $pagezones[0]->getAttribute('name'));
-		$this->assertEquals($pagezones[1]->getAttribute('name'),
-							'Test-Seitenbereich auf Ressortseite - 2',
-							 $pagezones[1]->getAttribute('name'));
+        $expected_pagezones = $this->fixture->getPageZones();
+
+        foreach ($expected_pagezones as $expected_pagezone) {
+            $this->assertTrue(
+                in_array($expected_pagezone, $pagezones)
+            );
+        }
 	}
 	
 	public function test_getParentSection() {
