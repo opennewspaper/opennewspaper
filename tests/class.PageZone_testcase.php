@@ -31,19 +31,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 //		$this->createExtras();
 
 //		$this->source = new tx_newspaper_DBSource();
-		$this->hierarchy = $this->fixture;
 	}
 
 	public function test_createPageZone() {
 		$temp = tx_newspaper_PageZone_Factory::getInstance()->create($this->pagezone->getPageZoneUID());
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
-	}
-	
-	public function test_Attribute() {
-		$this->pagezone->setAttribute('', '');
-		$this->assertEquals($this->pagezone->getAttribute(''), '');
-		/// \todo test with existing and nonexisting attributes
 	}
 	
 	public function test_Title() {
@@ -76,7 +69,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	
 	/**	setAttribute is tested without calling getAttribute() first
 	 *  WrongAttributeException is tested */
-	public function test_PageZoneType_2() {
+	public function test_PageZoneType_setAttribute() {
 		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
 		foreach ($rows as $pzt) {
 			
@@ -89,7 +82,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 	
 	/// test NotYetImplementedException
-	public function test_PageZoneType_3() {
+	public function test_PageZoneType_store() {
 		$rows = tx_newspaper_PageZoneType::getAvailablePageZoneTypes();
 		foreach ($rows as $pzt) {
 			$this->setExpectedException('tx_newspaper_NotYetImplementedException');
@@ -97,11 +90,163 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 	
-	
+    public function test_getUid() {
+        $this->assertEquals($this->pagezone->getUid(), $this->uid);
+    }
+
+    public function test_setUid() {
+        $this->pagezone->setUid(1);
+        $this->assertEquals($this->pagezone->getUid(), 1);
+    }
+
+    public function test_getTable() {
+        $this->assertEquals($this->pagezone->getTable(), 'tx_newspaper_pagezone_page');
+    }
+
+    public function test_getModuleName() {
+        $this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
+    }
+
+    public function test_getParentPage() {
+        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+            $this->assertTrue(is_object($pagezone),
+                              'PageZone in hierarchy->getPageZones() is not an object: ' .
+                              print_r($pagezone, 1));
+            $this->assertTrue($pagezone instanceof tx_newspaper_PageZone,
+                              'PageZone in hierarchy->getPageZones() is not a PageZone: ' .
+                              print_r($pagezone, 1));
+
+            $parent_page = $pagezone->getParentPage();
+            $this->assertTrue($parent_page instanceof tx_newspaper_Page,
+                              'getParentPage() is not a Page: ' .
+                              print_r($parent_page, 1));
+
+            $found = false;
+            foreach ($this->fixture->getPages() as $page) {
+                if ($parent_page->getUid() == $page->getUid()) $found = true;
+            }
+            $this->assertTrue($found,
+                              'Parent page of PageZone ' . $pagezone->getUid() .
+                              ' (abstract PageZone '.$pagezone->getAbstractUid() . ')' .
+                              ' not found in array of pages: ' .
+                              print_r($this->hierarchy->getPages(), 1));
+        }
+    }
+
+    public function test_setParentPage() {
+        foreach ($this->hierarchy->getPages() as $page) {
+            $this->pagezone->setParentPage($page);
+            $this->assertEquals($this->pagezone->getParentPage()->getUid(),
+                                $page->getUid(),
+                                'getParentPage() [' . $this->pagezone->getParentPage()->getUid() . ']' .
+                                ' != $page [' . $page->getUid() .']');
+        }
+    }
+
+    public function test_getParentForPlacement() {
+        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+            $parent = $pagezone->getParentForPlacement();
+
+            /// Different inheritance modes are treated separately
+            if ($pagezone->getAttribute('inherits_from') < 0) {
+                //	Don't inherit at all
+                $this->assertEquals($parent, null,
+                                    'PageZone ' . $pagezone->getUid() .': ' .
+                                    'inheritance mode is set to no inheritance, but a parent (' .
+                                    print_r($parent, 1) . ') is returned. ');
+            } else if ($pagezone->getAttribute('inherits_from') > 0) {
+                //	Inherit from explicitly stated PageZone
+                $this->assertTrue($parent instanceof tx_newspaper_PageZone,
+                                  'PageZone object expected, but ' .
+                                  print_r($parent, 1) . ') is returned. ');
+                $this->assertEquals($parent->getUid(),
+                                    $pagezone->getAttribute('inherits_from'),
+                                    'PageZone ' . $pagezone->getUid() .': ' .
+                                    'explicitly inherits from PageZone ' . $pagezone->getAttribute('inherits_from') .
+                                    ' but PageZone ' . $parent->getUid() . ' is returned. ');
+            } else {
+                //	Normal inheritance mode: go up in the section tree
+                if ($parent) {
+                    $this->assertTrue($parent instanceof tx_newspaper_PageZone,
+                                      'PageZone object expected, but ' .
+                                      print_r($parent, 1) . ') is returned. ');
+                    $this->assertTrue($pagezone->getUid() != $parent->getUid(),
+                                     'Pagezone ' . $pagezone->getUid() . ' has itself as parent. ');
+                    $this->assertTrue($parent->getParentPage()->getParentSection()->getUid() !=
+                                      $pagezone->getParentPage()->getParentSection()->getUid(),
+                                      'Pagezone ' . $pagezone->getUid() . ' has a parent in the same Section (' .
+                                      $pagezone->getParentPage()->getParentSection()->getUid() .
+                                      '), but should not. ');
+                    if (0) {
+                        t3lib_div::debug($pagezone->__toString() . ': parent is ' .
+                                         $parent->__toString());
+                    }
+                } else {
+                    if (0) {
+                        t3lib_div::debug($pagezone->__toString() . ': no parent');
+                    }
+                }
+            }
+        }
+
+        ///	singularly created page zone has no parent
+        $this->assertEquals($this->pagezone->getParentForPlacement(), null);
+    }
+
+    public function test_getInheritanceHierarchyUp() {
+        foreach ($this->hierarchy->getPageZones() as $pagezone) {
+            $hierarchy = $pagezone->getInheritanceHierarchyUp();
+            if ($pagezone->getParentForPlacement()) {
+                $this->assertGreaterThan(1, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must be bigger than 1 element (including itself). ');
+            } else {
+                $this->assertEquals(1, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
+            }
+
+            foreach ($hierarchy as $element) {
+                $this->assertTrue($element instanceof tx_newspaper_PageZone,
+                                  $element->__toString() . ' is not a PageZone');
+            }
+
+            /// Same thing, not including the current PageZone in the hierarchy
+            $hierarchy = $pagezone->getInheritanceHierarchyUp(false);
+            if ($pagezone->getParentForPlacement()) {
+                $this->assertGreaterThan(0, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must have elements (not including itself). ');
+                foreach ($hierarchy as $element) {
+                    $this->assertTrue($element instanceof tx_newspaper_PageZone,
+                                      $element->__toString() . ' is not a PageZone');
+                }
+            } else {
+                $this->assertEquals(0, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
+            }
+        }
+
+        $hierarchy = $this->pagezone->getInheritanceHierarchyUp();
+        $this->assertEquals(1, sizeof($hierarchy),
+                            $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
+        $this->assertTrue($hierarchy[0] instanceof tx_newspaper_PageZone,
+                          $hierarchy[0]->__toString() . ' is not a PageZone');
+        $this->assertEquals($this->pagezone->getUid(), $hierarchy[0]->getUid(),
+                            'First element in hierarchy does not equal original PageZone');
+
+        $this->assertEquals(0, sizeof($this->pagezone->getInheritanceHierarchyUp(false)),
+                            $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
+    }
+
 	////////////////////////////////////////////////////////////////////////////
 	//	still a lot of work to be done here
 	////////////////////////////////////////////////////////////////////////////
-	
+
+    public function test_Attribute() {
+        $this->pagezone->setAttribute('crdate', 1);
+        $this->assertEquals($this->pagezone->getAttribute('crdate'), 1);
+        /// \todo test with existing and nonexisting attributes
+    }
+
+
 	/// \todo finish test
 	public function test_clone() {
 		$cloned = clone $this->pagezone;
@@ -124,27 +269,10 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		/// \see ArticleImpl_testcase
 	}
 
-	public function test_getUid() {
-		$this->assertEquals($this->pagezone->getUid(), $this->uid);
+	public function test_render() {
+		$this->fail('test_render not yet implemented');
+		t3lib_div::debug($this->pagezone->render());
 	}
-
-	public function test_setUid() {
-		$this->pagezone->setUid(1);
-		$this->assertEquals($this->pagezone->getUid(), 1);
-	}
-	
-	public function test_getTable() {
-		$this->assertEquals($this->pagezone->getTable(), 'tx_newspaper_pagezone_page');
-	}
-	
-	public function test_getModuleName() {
-		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');
-	}
-		
-//	public function test_render() {
-//		$this->fail('test_render not yet implemented');
-//		t3lib_div::debug($this->pagezone->render());
-//	}
 	
 	public function test_getAbstractUid() {
 		/** This test seems a bit redundant because it checks the return value
@@ -156,135 +284,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($this->pagezone->getUid(), $pagezone->getUid());
 	}
 
-	public function test_getParentPage() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			$this->assertTrue(is_object($pagezone),
-							  'PageZone in hierarchy->getPageZones() is not an object: ' .
-							  print_r($pagezone, 1));
-			$this->assertTrue($pagezone instanceof tx_newspaper_PageZone,
-							  'PageZone in hierarchy->getPageZones() is not a PageZone: ' .
-							  print_r($pagezone, 1));
-
-			$parent_page = $pagezone->getParentPage();
-			$this->assertTrue($parent_page instanceof tx_newspaper_Page,
-							  'getParentPage() is not a Page: ' .
-							  print_r($parent_page, 1));
-
-			$found = false;
-			foreach ($this->hierarchy->getPages() as $page) {
-				if ($parent_page->getUid() == $page->getUid()) $found = true;
-			}
-			$this->assertTrue($found, 
-							  'Parent page of PageZone ' . $pagezone->getUid() .
-							  ' (abstract PageZone '.$pagezone->getAbstractUid() . ')' .
-							  ' not found in array of pages: ' .
-							  print_r($this->hierarchy->getPages(), 1));
-		}
-	}
-
-	public function test_setParentPage() {
-		foreach ($this->hierarchy->getPages() as $page) {
-			$this->pagezone->setParentPage($page);
-			$this->assertEquals($this->pagezone->getParentPage()->getUid(), 
-								$page->getUid(),
-								'getParentPage() [' . $this->pagezone->getParentPage()->getUid() . ']' .
-								' != $page [' . $page->getUid() .']');
-		}
-	}
-	
-	public function test_getParentForPlacement() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			$parent = $pagezone->getParentForPlacement();
-			
-			/// Different inheritance modes are treated separately
-			if ($pagezone->getAttribute('inherits_from') < 0) {
-				//	Don't inherit at all
-				$this->assertEquals($parent, null,
-									'PageZone ' . $pagezone->getUid() .': ' .
-									'inheritance mode is set to no inheritance, but a parent (' .
-									print_r($parent, 1) . ') is returned. ');
-			} else if ($pagezone->getAttribute('inherits_from') > 0) {
-				//	Inherit from explicitly stated PageZone
-				$this->assertTrue($parent instanceof tx_newspaper_PageZone,
-								  'PageZone object expected, but ' .
-								  print_r($parent, 1) . ') is returned. ');
-				$this->assertEquals($parent->getUid(), 
-									$pagezone->getAttribute('inherits_from'),
-									'PageZone ' . $pagezone->getUid() .': ' .
-									'explicitly inherits from PageZone ' . $pagezone->getAttribute('inherits_from') .
-									' but PageZone ' . $parent->getUid() . ' is returned. ');
-			} else {
-				//	Normal inheritance mode: go up in the section tree
-				if ($parent) {
-					$this->assertTrue($parent instanceof tx_newspaper_PageZone,
-									  'PageZone object expected, but ' .
-									  print_r($parent, 1) . ') is returned. ');
-					$this->assertTrue($pagezone->getUid() != $parent->getUid(),
-									 'Pagezone ' . $pagezone->getUid() . ' has itself as parent. ');
-					$this->assertTrue($parent->getParentPage()->getParentSection()->getUid() != 
-									  $pagezone->getParentPage()->getParentSection()->getUid(),
-									  'Pagezone ' . $pagezone->getUid() . ' has a parent in the same Section (' .
-									  $pagezone->getParentPage()->getParentSection()->getUid() .
-									  '), but should not. ');
-					if (0) {
-						t3lib_div::debug($pagezone->__toString() . ': parent is ' . 
-										 $parent->__toString());
-					}					
-				} else {
-					if (0) {
-						t3lib_div::debug($pagezone->__toString() . ': no parent');
-					}
-				}
-			}
-		}
-		
-		///	singularly created page zone has no parent
-		$this->assertEquals($this->pagezone->getParentForPlacement(), null);
-	}
-	
-	public function test_getInheritanceHierarchyUp() {
-		foreach ($this->hierarchy->getPageZones() as $pagezone) {
-			$hierarchy = $pagezone->getInheritanceHierarchyUp();
-			if ($pagezone->getParentForPlacement()) {
-				$this->assertGreaterThan(1, sizeof($hierarchy),
-								  $pagezone->__toString() . ' has parents, inheritance hierarchy must be bigger than 1 element (including itself). ');
-			} else {
-				$this->assertEquals(1, sizeof($hierarchy),
-								  $pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
-			}
-			
-			foreach ($hierarchy as $element) {
-				$this->assertTrue($element instanceof tx_newspaper_PageZone,
-								  $element->__toString() . ' is not a PageZone');
-			}
-
-			/// Same thing, not including the current PageZone in the hierarchy
-			$hierarchy = $pagezone->getInheritanceHierarchyUp(false);
-			if ($pagezone->getParentForPlacement()) {
-				$this->assertGreaterThan(0, sizeof($hierarchy),
-								  $pagezone->__toString() . ' has parents, inheritance hierarchy must have elements (not including itself). ');
-				foreach ($hierarchy as $element) {
-					$this->assertTrue($element instanceof tx_newspaper_PageZone,
-									  $element->__toString() . ' is not a PageZone');
-				}
-			} else {
-				$this->assertEquals(0, sizeof($hierarchy),
-								  $pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
-			}
-		}
-
-		$hierarchy = $this->pagezone->getInheritanceHierarchyUp();
-		$this->assertEquals(1, sizeof($hierarchy),
-						    $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
-		$this->assertTrue($hierarchy[0] instanceof tx_newspaper_PageZone,
-						  $hierarchy[0]->__toString() . ' is not a PageZone');
-		$this->assertEquals($this->pagezone->getUid(), $hierarchy[0]->getUid(),
-							'First element in hierarchy does not equal original PageZone');
-						    
-		$this->assertEquals(0, sizeof($this->pagezone->getInheritanceHierarchyUp(false)),
-						    $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
-	}
-	
 	public function test_insertExtraAfter() {
 		foreach ($this->hierarchy->getPageZones() as $pagezone) {
 #		$pagezone = array_pop($this->hierarchy->getPageZones()); {
@@ -597,6 +596,5 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	);
 	
 	private $extra_abstract_uids = array();
-	private $hierarchy = null;
 }
 ?>
