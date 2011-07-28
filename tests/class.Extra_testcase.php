@@ -131,7 +131,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
             foreach ($data as $key => $value) {
                 $this->assertEquals(
                     $temp->getAttribute($key), $value,
-                    $key." has wrong value"
+                    $key." has wrong value: $value instead of " . $temp->getAttribute($key)
                 );
             }
         }
