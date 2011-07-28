@@ -689,7 +689,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
         $this->getAttribute('uid');
 
         tx_newspaper::setDefaultFields($this, array('tstamp'));
-
+t3lib_div::debug($this->attributes);
+t3lib_div::debug($this->extra_attributes);
         tx_newspaper::updateRows(
             $this->getTable(), 'uid = ' . $this->getUid(), $this->attributes
         );
