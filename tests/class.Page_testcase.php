@@ -16,7 +16,9 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		parent::setUp();
+        $this->section_uid = $this->fixture->getParentSectionUid();
 		$this->section = new tx_newspaper_Section($this->section_uid);
+        $this->section_name = $this->fixture->getParentSectionName();
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(1));
 	}
 
@@ -42,12 +44,11 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$temp = new tx_newspaper_Page('I\'m a string!');
 	}
 	
-//	public function testRender() {
-//		$this->assertRegExp('/.*Testressort.*/', $this->page->render(),
-//						    'Plugin output: '.$this->page->render());
-//		$this->assertRegExp('/.*Ressortseite.*/', $this->page->render(),
-//						    'Plugin output: '.$this->page->render());
-//	}
+	public function testRender() {
+        $this->doTestContains($this->section_name, $this->page->render());
+		$this->assertRegExp('/.*Ressortseite.*/', $this->page->render(),
+						    'Plugin output: '.$this->page->render());
+	}
 	
 	public function testPageTypes() {
 
@@ -58,8 +59,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->page = new tx_newspaper_Page($this->section,
 											$pagetype);
 		$this->page->store();
-		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
-						    'Plugin output: '.$this->page->render('', null));
+        $this->doTestContains($this->section_name, $this->page->render());
 		$this->assertRegExp('/.*RSS.*/', $this->page->render('', null),
 						    'Plugin output: '.$this->page->render('', null));
 
@@ -68,8 +68,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		$this->page = new tx_newspaper_Page($this->section, new tx_newspaper_PageType(array('art' => 1)));
 		/// set an article ID for article renderer extra
 		$_GET['art'] = 1;
-		$this->assertRegExp('/.*Testressort.*/', $this->page->render('', null),
-						    'Plugin output: '.$this->page->render('', null));
+        $this->doTestContains($this->section_name, $this->page->render());
 		$this->assertRegExp('/.*Artikelseite.*/', $this->page->render('', null),
 						    'Plugin output: '.preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $this->page->render('', null)));
 
@@ -114,8 +113,6 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 		/// clone current page
 		$temp_page = clone $this->page;
 
-		t3lib_div::debug('clone ok');
-
 		$this->assertGreaterThan($this->page->getAttribute('crdate'), $temp_page->getAttribute('crdate'));
 		$this->assertGreaterThan($this->page->getAttribute('tstamp'), $temp_page->getAttribute('tstamp'));
 		$this->assertEquals($temp_page->getUid(), 0);
@@ -138,7 +135,8 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
 	private $section = null;
 	private $page = null;					///< the object
-	private $section_uid = 1;
+	private $section_uid = null;
+    private $section_name = null;
 	private $page_uid = null;				///< id of create page
 }
 ?>
