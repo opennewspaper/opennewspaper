@@ -290,7 +290,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
             $template .= '.tmpl';
         }
         return $template;
-        
+
     }
 	/// Convert RTE data in data fields (=attributes) to HTML data
 	private function convertRteFields() {
@@ -342,6 +342,15 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
         throw new tx_newspaper_WrongAttributeException(
         	$attribute, array('attributes' => $this->attributes, 'extra_attributes' => $this->extra_attributes));
+	}
+
+	/**
+	 * Converts RTE codes to HTML for the requested attribute
+	 * @param $attribute Attribute of the Extra
+	 * @return Attribue value with RTE codes converted to HTML
+	 */
+	public function getAttributeRte($attribute) {
+		return tx_newspaper::convertRteField($this->getAttribute($attribute));
 	}
 
     private function readExtraAttributes() {
