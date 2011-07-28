@@ -122,7 +122,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     const tested_attribute = 'crdate';
     public function test_storeDBEqualsMemory() {
         foreach($this->fixture->getExtraUids() as $uid) {
-            echo "uid: $uid<br />";
             $temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
 
             $temp->setAttribute(self::tested_attribute, time());
@@ -132,8 +131,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
                 '*', 'tx_newspaper_extra',
                 "uid = $uid"
             );
-            t3lib_div::debug($temp);
-            t3lib_div::debug($data);
             $this->assertEquals(
                 $temp->getAttribute(self::tested_attribute), $data[self::tested_attribute],
                 self::tested_attribute." has wrong value: " .  $data[self::tested_attribute] . " instead of " . $temp->getAttribute(self::tested_attribute)
