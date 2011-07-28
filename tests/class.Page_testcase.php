@@ -92,11 +92,20 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
         foreach ($expected_pagezones as $expected_pagezone) {
             $this->assertTrue(
-                in_array($expected_pagezone, $pagezones),
-                "pagezone $expected_pagezone no in array " . self::arrayToString($pagezones)
+                self::pagezoneOfSameTypeIsPresentInArray($expected_pagezone, $pagezones),
+                "pagezone $expected_pagezone not in array " . self::arrayToString($pagezones)
             );
         }
 	}
+
+    private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_Pagezone $pagezone, array $pagezones_to_check) {
+        foreach ($pagezones_to_check as $to_check) {
+            if ($pagezone->getPageZoneType() == $to_check->getPageZoneType()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static function arrayToString(array $array) {
         $ret = '('; $separator = '';
