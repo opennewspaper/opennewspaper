@@ -129,6 +129,7 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 	////////////////////////////////////////////////////////////////////////////
 
 	private function doTestContains($string, $word) {
+        echo "doTestContains($string, $word)<br />";
 		$this->assertRegExp("/.*$word.*/", $string, 
 							"Plugin output (expected $word): $string");
 	}
