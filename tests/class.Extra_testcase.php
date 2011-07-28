@@ -111,45 +111,50 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		unset($_GET['art']);
 	}
 
-	public function test_store() {
-		$tmp = array();
-        foreach($this->fixture->getExtraUids() as $i => $uid) {
-			$temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
-			$uid = $temp[$i]->store();
-			t3lib_div::debug('store() ok '.$uid);
-			$this->assertEquals($uid, $temp[$i]->getUid(), "id is wrong");
-
-			/// check that record in DB equals data in memory
-			$data = tx_newspaper::selectOneRow(
-				'*', $temp[$i]->getTable(), 'uid = ' . $temp[$i]->getUid());
-            echo "for table ".$temp[$i]->getTable()."<br/>";
-			foreach ($data as $key => $value) {
-				$this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
-			}
-
-			/// change an attribute, store and check
-			$time = time();
-			$temp->setAttribute('tstamp', $time);
-			$uid = $temp->store();
-			t3lib_div::debug('store() 2 ok');
-			$this->assertEquals($uid, $temp->getUid());
-			$data = tx_newspaper::selectOneRow(
-				'*', $temp->getTable(), 'uid = ' . $temp->getUid());
-			$this->assertEquals($data['tstamp'], $time);
-
-			/// create an empty extra and write it. verify it's been written.
-			$temp = new tx_newspaper_Extra_Image();
-			$temp->setAttribute('tstamp', $time);
-			$uid = $temp->store();
-			t3lib_div::debug('store() 3 ok');
-			$data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
-			$this->assertEquals($data['tstamp'], $time);
-
-			/// delete extra
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
-
+	public function test_storeReturnsEqualUids() {
+        foreach($this->fixture->getExtraUids() as $uid) {
+			$temp = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+			$uid_after_store = $temp->store();
+			$this->assertEquals($uid_after_store, $temp->getUid(), "id after store ($uid_after_store) != original id ($uid)");
 		}
 	}
+
+    public function test_store() {
+        $tmp = array();
+        foreach($this->fixture->getExtraUids() as $i => $uid) {
+            $temp[] = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+
+            /// check that record in DB equals data in memory
+            $data = tx_newspaper::selectOneRow(
+                '*', $temp[$i]->getTable(), 'uid = ' . $temp[$i]->getUid());
+            echo "for table ".$temp[$i]->getTable()."<br/>";
+            foreach ($data as $key => $value) {
+                $this->assertEquals($temp[$i]->getAttribute($key), $value, $key." has wrong value");
+            }
+
+            /// change an attribute, store and check
+            $time = time();
+            $temp->setAttribute('tstamp', $time);
+            $uid = $temp->store();
+            t3lib_div::debug('store() 2 ok');
+            $this->assertEquals($uid, $temp->getUid());
+            $data = tx_newspaper::selectOneRow(
+                '*', $temp->getTable(), 'uid = ' . $temp->getUid());
+            $this->assertEquals($data['tstamp'], $time);
+
+            /// create an empty extra and write it. verify it's been written.
+            $temp = new tx_newspaper_Extra_Image();
+            $temp->setAttribute('tstamp', $time);
+            $uid = $temp->store();
+            t3lib_div::debug('store() 3 ok');
+            $data = tx_newspaper::selectOneRow('*', $temp->getTable(), 'uid = ' . $uid);
+            $this->assertEquals($data['tstamp'], $time);
+
+            /// delete extra
+            $GLOBALS['TYPO3_DB']->exec_DELETEquery($temp->getTable(), 'uid = ' . $uid);
+
+        }
+    }
 
 	public function test_relateExtra2Article() {
 		$article_uid = 1;
