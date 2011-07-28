@@ -98,9 +98,15 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
         }
 	}
 
+    /**
+     * @static
+     * @param tx_newspaper_Pagezone $pagezone
+     * @param tx_newspaper_Pagezone[] $pagezones_to_check
+     * @return bool
+     */
     private static function pagezoneOfSameTypeIsPresentInArray(tx_newspaper_Pagezone $pagezone, array $pagezones_to_check) {
         foreach ($pagezones_to_check as $to_check) {
-            if ($pagezone->getPageZoneType() == $to_check->getPageZoneType()) {
+            if ($pagezone->getPageZoneType()->getUid() == $to_check->getPageZoneType()->getUid()) {
                 return true;
             }
         }

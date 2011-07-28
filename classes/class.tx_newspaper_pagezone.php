@@ -334,7 +334,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	////////////////////////////////////////////////////////////////////////////
 
 	///	The tx_newspaper_PageZoneType of the current PageZone.
-	/** \return The tx_newspaper_PageZoneType of \c $this.
+	/** @return tx_newspaper_PageZoneType The type of \c $this.
 	 */
 	public function getPageZoneType() {
 		if (!$this->pagezonetype) {
