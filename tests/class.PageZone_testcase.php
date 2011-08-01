@@ -213,40 +213,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 }
             }
         }
+        $this->skipTest("No pagezones with automatic inheritance set up yet");
     }
 
 
-    public function test_getInheritanceHierarchyUp() {
-        foreach ($this->fixture->getPageZones() as $pagezone) {
-            $hierarchy = $pagezone->getInheritanceHierarchyUp();
-            if ($pagezone->getParentForPlacement()) {
-                $this->assertGreaterThan(1, sizeof($hierarchy),
-                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must be bigger than 1 element (including itself). ');
-            } else {
-                $this->assertEquals(1, sizeof($hierarchy),
-                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
-            }
-
-            foreach ($hierarchy as $element) {
-                $this->assertTrue($element instanceof tx_newspaper_PageZone,
-                                  $element->__toString() . ' is not a PageZone');
-            }
-
-            /// Same thing, not including the current PageZone in the hierarchy
-            $hierarchy = $pagezone->getInheritanceHierarchyUp(false);
-            if ($pagezone->getParentForPlacement()) {
-                $this->assertGreaterThan(0, sizeof($hierarchy),
-                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must have elements (not including itself). ');
-                foreach ($hierarchy as $element) {
-                    $this->assertTrue($element instanceof tx_newspaper_PageZone,
-                                      $element->__toString() . ' is not a PageZone');
-                }
-            } else {
-                $this->assertEquals(0, sizeof($hierarchy),
-                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
-            }
-        }
-
+    public function test_getInheritanceHierarchyUp_SinglePagezone() {
         $hierarchy = $this->pagezone->getInheritanceHierarchyUp();
         $this->assertEquals(1, sizeof($hierarchy),
                             $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
@@ -257,6 +228,44 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $this->assertEquals(0, sizeof($this->pagezone->getInheritanceHierarchyUp(false)),
                             $this->pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
+    }
+
+    public function test_getInheritanceHierarchyUpWithSelf() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            $hierarchy = $pagezone->getInheritanceHierarchyUp();
+            if ($pagezone->getParentForPlacement()) {
+                $this->assertGreaterThan(1, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must be bigger than 1 element (including itself). ');
+            } else {
+                $this->assertEquals(1, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must have exactly 1 element (including itself). ');
+            }
+
+            $this->checkAllElementsArePagezones($hierarchy);
+        }
+    }
+
+    public function test_getInheritanceHierarchyUpWithoutSelf() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            /// Same thing, not including the current PageZone in the hierarchy
+            $hierarchy = $pagezone->getInheritanceHierarchyUp(false);
+            if ($pagezone->getParentForPlacement()) {
+                $this->assertGreaterThan(0, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has parents, inheritance hierarchy must have elements (not including itself). ');
+                $this->checkAllElementsArePagezones($hierarchy);
+            } else {
+                $this->assertEquals(0, sizeof($hierarchy),
+                                  $pagezone->__toString() . ' has no parents, inheritance hierarchy must be empty (not including itself). ');
+            }
+        }
+    }
+
+
+    private function checkAllElementsArePagezones($hierarchy) {
+        foreach ($hierarchy as $element) {
+            $this->assertTrue($element instanceof tx_newspaper_PageZone,
+                              $element->__toString() . ' is not a PageZone');
+        }
     }
 
 	////////////////////////////////////////////////////////////////////////////
