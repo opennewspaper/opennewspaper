@@ -268,38 +268,61 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-	////////////////////////////////////////////////////////////////////////////
-	//	still a lot of work to be done here
-	////////////////////////////////////////////////////////////////////////////
-
     public function test_Attribute() {
         $this->pagezone->setAttribute('crdate', 1);
         $this->assertEquals($this->pagezone->getAttribute('crdate'), 1);
-        /// \todo test with existing and nonexisting attributes
     }
 
-
-	/// \todo finish test
 	public function test_clone() {
 		$cloned = clone $this->pagezone;
 		$this->assertEquals($cloned->getAttribute('uid'), 0);
 		$this->assertEquals($cloned->getUid(), 0);
 		$this->assertEquals($cloned->getAttribute('crdate'), time());
 		$this->assertEquals($cloned->getAttribute('tstamp'), time());
-		
-		// ...
-		t3lib_div::debug("finish me!");
 	}
 	
+	////////////////////////////////////////////////////////////////////////////
+	//	still a lot of work to be done here
+	////////////////////////////////////////////////////////////////////////////
+
 	/// \todo finish test
-	public function test_store() {
-		$this->fail('PageZone->store() not yet implemented. Requirements not known yet.');
+	public function test_storeEqualAttributes() {
 		$this->pagezone->store();
-		/// \todo check that record in DB equals data in memory
-		/// \todo change an attribute, store and check
-		/// \todo create an empty pagezone and write it. verify it's been written.
-		/// \see ArticleImpl_testcase
-	}
+        $uid = $this->pagezone->getUid();
+        $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = $uid");
+
+        $this->checkAttributesAreEqualToRecord($record);
+
+    }
+
+    private function checkAttributesAreEqualToRecord(array $record) {
+        foreach ($record as $attribute => $value) {
+            $this->assertEquals(
+                $this->pagezone->getAttribute($attribute), $value,
+                "Attribute $attribute: stored as $value, in memory as " . $this->pagezone->getAttribute($attribute)
+            );
+        }
+    }
+
+    public function test_storeEqualAbstractAttributes() {
+        $this->pagezone->store();
+
+        $abstract_uid = $this->pagezone->getAbstractUid();
+        $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = $abstract_uid");
+
+        $this->checkAttributesAreEqualToRecord($abstract_record);
+    }
+
+    public function test_store() {
+        $this->pagezone->store();
+
+        /// \todo check that record in DB equals data in memory
+        /// \todo change an attribute, store and check
+        /// \todo create an empty pagezone and write it. verify it's been written.
+        /// \see ArticleImpl_testcase
+        $this->skipTest('PageZone->store() not yet implemented. Requirements not known yet.');
+    }
+
 
 	public function test_render() {
 		$this->fail('test_render not yet implemented');
