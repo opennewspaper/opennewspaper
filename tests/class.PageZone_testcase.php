@@ -287,8 +287,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
 	public function test_storeEqualAttributes() {
 		$this->pagezone->store();
-        $uid = $this->pagezone->getUid();
-        $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = $uid");
+        $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $this->pagezone->getUid());
 
         $this->checkAttributesAreEqualToRecord($record);
 
@@ -306,20 +305,35 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     public function test_storeEqualAbstractAttributes() {
         $this->pagezone->store();
 
-        $abstract_uid = $this->pagezone->getAbstractUid();
-        $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = $abstract_uid");
-        $this->pagezone->getAttribute('pagezone_table');
+        $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = " . $this->pagezone->getAbstractUid());
+
         unset($abstract_record['pid']);
-t3lib_div::debug($abstract_record);
-t3lib_div::debug($this->pagezone);
         $this->checkAttributesAreEqualToRecord($abstract_record);
+    }
+
+    public function test_storeChangedAttribute() {
+
+        $this->pagezone->store();
+        $record = tx_newspaper::selectOneRow('crdate', 'tx_newspaper_pagezone_page', "uid = " . $this->pagezone->getUid());
+        $this->assertEquals(
+            $record['crdate'], 1234567890,
+            'preset crdate should be 1234567890, is ' . $record['crdate']
+        );
+
+        $time = time();
+        $this->pagezone->setAttribute('crdate', $time);
+        $this->pagezone->store();
+        $record = tx_newspaper::selectOneRow('crdate', 'tx_newspaper_pagezone_page', "uid = " . $this->pagezone->getUid());
+        $this->assertEquals(
+            $record['crdate'], $time,
+            "changed crdate should be $time, is " . $record['crdate']
+        );
+
     }
 
 	/// \todo finish test
     public function test_store() {
-        $this->pagezone->store();
 
-        /// \todo change an attribute, store and check
         /// \todo create an empty pagezone and write it. verify it's been written.
         /// \see ArticleImpl_testcase
         $this->skipTest('PageZone->store() not yet implemented. Requirements not known yet.');
