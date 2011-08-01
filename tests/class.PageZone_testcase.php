@@ -28,7 +28,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->pagezone = new tx_newspaper_PageZone_Page($this->uid);
 		$this->pagezone_uid = $this->pagezone->getAbstractUid();
 
-//		$this->createExtras();
+		$this->createExtras();
 
 //		$this->source = new tx_newspaper_DBSource();
 	}
