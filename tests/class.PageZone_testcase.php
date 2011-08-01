@@ -378,7 +378,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     private function insertNewExtras($pagezone) {
         $old_extras = $pagezone->getExtras();
         foreach ($old_extras as $extra_after_which) {
-            t3lib_div::debug("inserting after $extra_after_which");
             $i = 0;
             foreach ($this->extra_abstract_uids as $uid) {
                 $i++;
@@ -414,12 +413,17 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         );
     }
 
-    public function test_insertExtraAfter() {
+    public function test_insertExtraAfterCheckOrder() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            $this->insertNewExtras($pagezone);
+            $this->checkPageZoneOrder($pagezone);
+        }
+    }
+
+    public function test_insertExtraAfterInsertsOnInheritingPagezones() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
 
             $old_extras = $this->insertNewExtras($pagezone);
-
-            $this->checkPageZoneOrder($pagezone);
 
             /// Make sure the Extras are inserted on inheriting PageZones.
             foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
@@ -445,7 +449,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                     'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
                     ' but only ' . $row['num'] . ' are there.'
                 );
+            }
+        }
+    }
 
+    public function test_insertExtraAfterInsertsCorrectlyOnInheritingPagezones() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+            $old_extras = $this->insertNewExtras($pagezone);
+            foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
                 $this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
             }
         }
