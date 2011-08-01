@@ -345,16 +345,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = " . $abstract_uid);
         $this->checkAttributesAreEqualToRecord($new_pagezone, $record);
 
-        return;
         $uid = $new_pagezone->getUid();
         $this->assertTrue($uid > 0);
 
         $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $uid);
         $this->checkAttributesAreEqualToRecord($new_pagezone, $record);
-
-        /// \todo same for abstract record
-
-        $this->skipTest('PageZone->store() not yet implemented. Requirements not known yet.');
     }
 
 
