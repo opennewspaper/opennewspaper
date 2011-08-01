@@ -281,10 +281,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($cloned->getAttribute('tstamp'), time());
 	}
 	
-	////////////////////////////////////////////////////////////////////////////
-	//	still a lot of work to be done here
-	////////////////////////////////////////////////////////////////////////////
-
 	public function test_storeEqualAttributes() {
 		$this->pagezone->store();
         $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $this->pagezone->getUid());
@@ -353,10 +349,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->checkAttributesAreEqualToRecord($new_pagezone, $record);
     }
 
+	////////////////////////////////////////////////////////////////////////////
+	//	still a lot of work to be done here
+	////////////////////////////////////////////////////////////////////////////
+
 
 	public function test_render() {
-		$this->fail('test_render not yet implemented');
 		t3lib_div::debug($this->pagezone->render());
+        $this->skipTest('test_render not yet implemented');
 	}
 	
 	public function test_getAbstractUid() {
