@@ -285,7 +285,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	//	still a lot of work to be done here
 	////////////////////////////////////////////////////////////////////////////
 
-	/// \todo finish test
 	public function test_storeEqualAttributes() {
 		$this->pagezone->store();
         $uid = $this->pagezone->getUid();
@@ -309,14 +308,15 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $abstract_uid = $this->pagezone->getAbstractUid();
         $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = $abstract_uid");
-
+t3lib_div::debug($abstract_record);
+t3lib_div::debug($this->pagezone);
         $this->checkAttributesAreEqualToRecord($abstract_record);
     }
 
+	/// \todo finish test
     public function test_store() {
         $this->pagezone->store();
 
-        /// \todo check that record in DB equals data in memory
         /// \todo change an attribute, store and check
         /// \todo create an empty pagezone and write it. verify it's been written.
         /// \see ArticleImpl_testcase
