@@ -368,62 +368,10 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	//	still a lot of work to be done here
 	////////////////////////////////////////////////////////////////////////////
 
-	public function test_insertExtraAfter() {
+	public function test_insertExtraAfterInsertsCorrectNumber() {
 		foreach ($this->fixture->getPageZones() as $pagezone) {
-
             $old_extras = $this->insertNewExtras($pagezone);
-
-			$this->assertEquals(
-				sizeof($pagezone->getExtras()),
-				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-				'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
-				sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
-				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
-				sizeof($pagezone->getExtras()) . '. '
-			);
-
-			$row = tx_newspaper::selectOneRow(
-				'COUNT(*) AS num',
-				$pagezone->getExtra2PagezoneTable(),
-				'uid_local = ' . $pagezone->getUid()
-			);
-			$this->assertEquals(
-				intval($row['num']),
-				sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-				'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
-				'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
-				' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
-			);
-
-			$this->checkPageZoneOrder($pagezone);
-
-			/// Make sure the Extras are inserted on inheriting PageZones.
-			foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
-				t3lib_div::debug($sub_pagezone.'');
-				$this->assertEquals(
-					sizeof($sub_pagezone->getExtras()),
-					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-					'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
-					sizeof($old_extras) . ' original Extras, so inheriting PageZone ' . $sub_pagezone . ' should now have ' .
-					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
-					sizeof($sub_pagezone->getExtras()) . '. '
-				);
-
-				$row = tx_newspaper::selectOneRow(
-					'COUNT(*) AS num',
-					$sub_pagezone->getExtra2PagezoneTable(),
-					'uid_local = ' . $sub_pagezone->getUid()
-				);
-				$this->assertEquals(
-					intval($row['num']),
-					sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
-					'Entries in ' . $sub_pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
-					'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
-					' but only ' . $row['num'] . ' are there.'
-				);
-
-				$this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
-			}
+            $this->checkNumberInsertedExtrasCorrect($pagezone, $old_extras);
 		}
 	}
 
@@ -440,6 +388,67 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
             }
         }
         return $old_extras;
+    }
+
+    private function checkNumberInsertedExtrasCorrect($pagezone, $old_extras) {
+        $this->assertEquals(
+            sizeof($pagezone->getExtras()),
+            sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1),
+            'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+            sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
+            sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1) . ' Extras. Actually the number is ' .
+            sizeof($pagezone->getExtras()) . '. '
+        );
+
+        $row = tx_newspaper::selectOneRow(
+            'COUNT(*) AS num',
+            $pagezone->getExtra2PagezoneTable(),
+            'uid_local = ' . $pagezone->getUid()
+        );
+        $this->assertEquals(
+            intval($row['num']),
+            sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1),
+            'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+            'There should be ' . sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1) .
+            ' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
+        );
+    }
+
+    public function test_insertExtraAfter() {
+        foreach ($this->fixture->getPageZones() as $pagezone) {
+
+            $old_extras = $this->insertNewExtras($pagezone);
+
+            $this->checkPageZoneOrder($pagezone);
+
+            /// Make sure the Extras are inserted on inheriting PageZones.
+            foreach ($pagezone->getInheritanceHierarchyDown(false) as $sub_pagezone) {
+                t3lib_div::debug($sub_pagezone.'');
+                $this->assertEquals(
+                    sizeof($sub_pagezone->getExtras()),
+                    sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+                    'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
+                    sizeof($old_extras) . ' original Extras, so inheriting PageZone ' . $sub_pagezone . ' should now have ' .
+                    sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) . ' Extras. Actually the number is ' .
+                    sizeof($sub_pagezone->getExtras()) . '. '
+                );
+
+                $row = tx_newspaper::selectOneRow(
+                    'COUNT(*) AS num',
+                    $sub_pagezone->getExtra2PagezoneTable(),
+                    'uid_local = ' . $sub_pagezone->getUid()
+                );
+                $this->assertEquals(
+                    intval($row['num']),
+                    sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1),
+                    'Entries in ' . $sub_pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
+                    'There should be ' . sizeof($old_extras)*(sizeof($this->extra_abstract_uids)+1) .
+                    ' but only ' . $row['num'] . ' are there.'
+                );
+
+                $this->checkPageZoneOrder($sub_pagezone, 'Order of Extras in inherited PageZone ' . $sub_pagezone . ' wrong. ');
+            }
+        }
     }
 
     public function test_getExtraOrigin() {
