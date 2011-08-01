@@ -132,6 +132,10 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
         $this->markTestSkipped($message);
     }
 
+    protected function doTestContains($string, $word) {
+        $this->assertRegExp("/.*$word.*/", $string);
+    }
+
     /** @var tx_newspaper_fixture */
  	protected  $fixture = null ;		//< Testdata
  		

@@ -359,11 +359,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$this->doTestContains($output, substr($this->article_data['bodytext'], 0, 100));
 		$this->doTestContains($output, $this->article_data['author']);
 	}
-	
-	private function doTestContains($string, $word) {
-		$this->assertRegExp("/.*$word.*/", $string);
-	}
-	
+		
 	private function checkComesBefore($text, $first_string, $second_string) {
 		$pos1 = strpos($text, $first_string);
 		if ($pos1 === false) $this->fail("$first_string is not even present");
