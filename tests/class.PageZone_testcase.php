@@ -673,7 +673,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 1",
-			'image' => "E3_033009T.jpg",	
+			'image_file' => "E3_033009T.jpg",
 			'caption' => "Caption for image 3",	
 		),
 		array(
@@ -686,7 +686,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 2",	
-			'image' => "120px-GentooFreeBSD-logo.svg_02.png",	
+			'image_file' => "120px-GentooFreeBSD-logo.svg_02.png",
 			'caption' => "Daemonic Gentoo",	
 		),
 		array(
@@ -699,7 +699,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			'starttime' => 0,
 			'endtime' => 0,
 			'title' => "Image 3",	
-			'image' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",	
+			'image_file' => "lolcatsdotcomoh5o6d9hdjcawys6.jpg",
 			'caption' => "caption[5]",	
 		),
 	);
