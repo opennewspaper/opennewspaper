@@ -133,7 +133,10 @@ class tx_newspaper_database_testcase extends tx_phpunit_database_testcase {
     }
 
     protected function doTestContains($string, $word) {
-        $this->assertRegExp("/.*$word.*/", $string);
+        $this->assertRegExp(
+            "/.*$word.*/", $string,
+			"Plugin output (expected $word): $string"
+        );
     }
 
     /** @var tx_newspaper_fixture */

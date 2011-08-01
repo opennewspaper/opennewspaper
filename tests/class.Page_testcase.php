@@ -163,11 +163,6 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
         return $ret . ')';
     }
 
-	private function doTestContains($string, $word) {
-		$this->assertRegExp("/.*$word.*/", $string,
-							"Plugin output (expected $word): $string");
-	}
-
     /** @var tx_newspaper_Section */
 	private $section = null;
     /** @var tx_newspaper_Page */
