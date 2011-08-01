@@ -289,14 +289,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->pagezone->store();
         $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $this->pagezone->getUid());
 
-        $this->checkAttributesAreEqualToRecord($record);
+        $this->checkAttributesAreEqualToRecord($this->pagezone, $record);
 
     }
 
-    private function checkAttributesAreEqualToRecord(array $record) {
+    private function checkAttributesAreEqualToRecord(tx_newspaper_Pagezone $pagezone, array $record) {
         foreach ($record as $attribute => $value) {
             $this->assertEquals(
-                $this->pagezone->getAttribute($attribute), $value,
+                $pagezone->getAttribute($attribute), $value,
                 "Attribute $attribute: stored as $value, in memory as " . $this->pagezone->getAttribute($attribute)
             );
         }
@@ -308,7 +308,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = " . $this->pagezone->getAbstractUid());
 
         unset($abstract_record['pid']);
-        $this->checkAttributesAreEqualToRecord($abstract_record);
+        $this->checkAttributesAreEqualToRecord($this->pagezone, $abstract_record);
     }
 
     public function test_storeChangedAttribute() {
@@ -331,11 +331,19 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     }
 
-	/// \todo finish test
-    public function test_store() {
+    public function test_storeNewPagezone() {
 
-        /// \todo create an empty pagezone and write it. verify it's been written.
-        /// \see ArticleImpl_testcase
+        $new_pagezone = new tx_newspaper_PageZone_Page();
+        $new_pagezone->store();
+
+        $uid = $new_pagezone->getUid();
+        $this->assertTrue($uid > 0);
+
+        $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $uid);
+        $this->checkAttributesAreEqualToRecord($new_pagezone, $record);
+
+        /// \todo same for abstract record
+
         $this->skipTest('PageZone->store() not yet implemented. Requirements not known yet.');
     }
 
