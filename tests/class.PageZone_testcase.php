@@ -578,7 +578,10 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	 *  'Unit Test - Image Title 3', 'Inserted 3th', Inserted 2th', 'Inserted 1th'
 	 */
 	private function checkPageZoneOrder(tx_newspaper_PageZone $pagezone, $message = '') {
-		$extra = $pagezone->getExtras();
+
+        $extra = $pagezone->getExtras();
+        t3lib_div::debug($extra);
+
 		$this->assertEquals('Unit Test - Image Title 1', $extra[0]->getAttribute('title'), $message);
 		$this->assertEquals('Inserted 3th', $extra[1]->getAttribute('title'), $message);
 		$this->assertEquals('Inserted 2th', $extra[2]->getAttribute('title'), $message);
