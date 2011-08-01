@@ -143,6 +143,11 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
     }
 
+    ///	singularly created page zone has no parent
+    public function test_getParentForPlacementWithoutParent() {
+        $this->assertEquals($this->pagezone->getParentForPlacement(), null);
+    }
+
     /** @todo create a pagezone in the fixture which explicitly does not inherit
      */
     public function test_getParentForPlacementWithoutInheritance() {
@@ -157,6 +162,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 );
             }
         }
+        $this->skipTest("No pagezones without inheritance set up yet");
     }
 
     /** @todo create a pagezone in the fixture which inherits from a specified pagezone
@@ -177,6 +183,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 );
             }
         }
+        $this->skipTest("No pagezones with manual inheritance set up yet");
     }
 
     public function test_getParentForPlacementInheritFromSameType() {
@@ -195,12 +202,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                                       'Pagezone ' . $pagezone->getUid() . ' has a parent in the same Section (' .
                                       $pagezone->getParentPage()->getParentSection()->getUid() .
                                       '), but should not. ');
-                    if (0) {
+                    if (1) {
                         t3lib_div::debug($pagezone->__toString() . ': parent is ' .
                                          $parent->__toString());
                     }
                 } else {
-                    if (1) {
+                    if (0) {
                         t3lib_div::debug($pagezone->__toString() . ': no parent');
                     }
                 }
@@ -208,10 +215,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    ///	singularly created page zone has no parent
-    public function test_getParentForPlacementWithoutParen() {
-        $this->assertEquals($this->pagezone->getParentForPlacement(), null);
-    }
 
     public function test_getInheritanceHierarchyUp() {
         foreach ($this->fixture->getPageZones() as $pagezone) {
