@@ -145,7 +145,7 @@ class test_TBO_testcase extends tx_newspaper_database_testcase {
 	
 	////////////////////////////////////////////////////////////////////////////
 		
-	private function doTestContains($string, $word) {
+	protected  function doTestContains($string, $word) {
 		$this->assertRegExp("/.*$word.*/", $string, 
 							"Plugin output (expected $word): " .
 							preg_replace('/"data:image\/png;base64,.*?"/', '"data:image/png;base64,..."', $string));
