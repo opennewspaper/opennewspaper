@@ -439,6 +439,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 $pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
             }
         }
+        return $old_extras;
     }
 
     public function test_getExtraOrigin() {
