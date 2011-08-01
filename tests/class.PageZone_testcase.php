@@ -345,11 +345,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue($uid > 0);
     }
 
-	////////////////////////////////////////////////////////////////////////////
-	//	still a lot of work to be done here
-	////////////////////////////////////////////////////////////////////////////
-
-
 	public function test_render() {
         $rendered = $this->pagezone->render();
         $template = file_get_contents(PATH_typo3conf . 'ext/newspaper/res/templates/tx_newspaper_pagezone_page.tmpl');
@@ -357,7 +352,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $this->doTestContains($rendered, 'uid: ' . $this->pagezone->getUid());
         $this->doTestContains($rendered, 'crdate: ' . $this->pagezone->getAttribute('crdate'));
-		t3lib_div::debug($rendered);
 	}
 	
 	public function test_getAbstractUid() {
@@ -370,20 +364,14 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($this->pagezone->getUid(), $pagezone->getUid());
 	}
 
+	////////////////////////////////////////////////////////////////////////////
+	//	still a lot of work to be done here
+	////////////////////////////////////////////////////////////////////////////
+
 	public function test_insertExtraAfter() {
 		foreach ($this->fixture->getPageZones() as $pagezone) {
-#		$pagezone = array_pop($this->fixture->getPageZones()); {
-			$old_extras = $pagezone->getExtras();
-			foreach ($old_extras as $extra_after_which) {
-				t3lib_div::debug("inserting after $extra_after_which");
-				$i = 0;
-				foreach ($this->extra_abstract_uids as $uid) {
-					$i++;
-					$new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
-					$new_extra->setAttribute('title', "Inserted ${i}th");
-					$pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
-				}
-			}
+
+            $old_extras = $this->insertNewExtras($pagezone);
 
 			$this->assertEquals(
 				sizeof($pagezone->getExtras()),
@@ -439,7 +427,20 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-	public function test_getExtraOrigin() {
+    private function insertNewExtras($pagezone) {
+        $old_extras = $pagezone->getExtras();
+        foreach ($old_extras as $extra_after_which) {
+            t3lib_div::debug("inserting after $extra_after_which");
+            for ($i = 1; $i <= 3; $i++) {
+                $new_extra = new tx_newspaper_Extra_Image();
+                $new_extra->setAttribute('title', "Inserted ${i}th");
+                $new_extra->store();
+                $pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
+            }
+        }
+    }
+
+    public function test_getExtraOrigin() {
 		foreach ($this->fixture->getPageZones() as $pagezone) {
 			$hierarchy_root = array_pop($pagezone->getInheritanceHierarchyUp());
         	$some_origin_extra = array_pop($hierarchy_root->getExtras());
@@ -538,7 +539,6 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			}
 		}
 	}
-
 	
 	public function test_copyExtrasFrom() {
 		foreach ($this->fixture->getPageZones() as $pagezone) {
