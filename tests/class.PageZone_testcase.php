@@ -346,6 +346,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone_page', "uid = " . $uid);
         unset($record['pagezonetype_id']);
+        unset($record['pagezone_id']);
         $this->checkAttributesAreEqualToRecord($new_pagezone, $record);
     }
 
