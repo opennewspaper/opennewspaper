@@ -380,6 +380,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         foreach ($old_extras as $extra_after_which) {
             $i = 0;
             foreach ($this->extra_abstract_uids as $uid) {
+                t3lib_div::debug($i);
                 $i++;
                 $new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
                 $new_extra->setAttribute('title', "Inserted ${i}th");
