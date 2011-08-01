@@ -334,6 +334,9 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     public function test_storeNewPagezone() {
 
         $new_pagezone = new tx_newspaper_PageZone_Page();
+        $types = $this->fixture->getPageZoneTypes();
+        $this->assertFalse(empty($types));
+        $new_pagezone->setPageZoneType($types[0]);
         $new_pagezone->store();
 
         $uid = $new_pagezone->getUid();
