@@ -308,6 +308,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
         $abstract_uid = $this->pagezone->getAbstractUid();
         $abstract_record = tx_newspaper::selectOneRow('*', 'tx_newspaper_pagezone', "uid = $abstract_uid");
+        $this->pagezone->getAttribute('pagezone_table');
 t3lib_div::debug($abstract_record);
 t3lib_div::debug($this->pagezone);
         $this->checkAttributesAreEqualToRecord($abstract_record);
