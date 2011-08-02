@@ -118,7 +118,7 @@ function changeCtrlTagCat(uid) {
 						// insert tags into select box
 						options = data.responseText.evalJSON();
 						for(i = 0; i < options.length; i++) {
-							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 						}
 						$("tz").innerHTML = ''; // remove spinner
 						$("tag_batch_msg").innerHTML = ''; // clear message
@@ -189,7 +189,7 @@ function changeDossierTitle() {
 	uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 	var title = $("dossier_title").innerHTML; // read current title
 	tmpDossierTitle = title; // store if editing is cancelled
-	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + hscQuotes(title) + '" />'; // render input form field
+	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + NpTools.hscQuotes(title) + '" />'; // render input form field
 	changeTitleShowStoreCancelButtons();
 }
 
@@ -206,7 +206,7 @@ function storeDossierTitle() {
 		"index.php",
 			{
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + escapeQuotes(title),
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + NpTools.escapeQuotes(title),
 				onCreate: function() {
 					$("dossier_title_edit").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // remove store icon, render spinner
 				},

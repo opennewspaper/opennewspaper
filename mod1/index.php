@@ -390,41 +390,47 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					}
 
 
-					if (isset($_REQUEST['extra_modalbox']) || isset($_REQUEST['extra_iframe']))
-						$this->processExtraForm(); // AJAX call for Extra form (modalbox or iframe)
+					if (isset($_REQUEST['extra_modalbox'])) {
+						$this->processExtraForm(); // AJAX call for Extra form
+					}
 
-					if (isset($_REQUEST['extra_toggle_visibility']))
+					if (isset($_REQUEST['extra_toggle_visibility'])) {
 						$this->processExtraToggleVisibility(); // AJAX call for toggle visibility
+					}
 
-					if (isset($_REQUEST['extra_delete']))
+					if (isset($_REQUEST['extra_delete'])) {
 						$this->processExtraDelete(); // AJAX call
+					}
 
                     //Tag handling
-                    if ($_REQUEST['param'] == 'tag-suggest')
+                    if ($_REQUEST['param'] == 'tag-suggest') {
                         $this->processTagSuggest(); //AJAX call
+                    }
 
-                    if ($_REQUEST['param'] == 'tag-insert')
+                    if ($_REQUEST['param'] == 'tag-insert') {
                         $this->processTagInsert(); //AJAX call
+                    }
 
-                    if ($_REQUEST['param'] == 'tag-getall')
+                    if ($_REQUEST['param'] == 'tag-getall') {
                         $this->processTagGetAll(); //AJAX call
+                    }
 
 
 
 // new stuff for section
-					if (isset($_REQUEST['activate_page_type']))
+					if (isset($_REQUEST['activate_page_type'])) {
 						$this->processActivatePageType(); // AJAX call
-					if (isset($_REQUEST['activate_pagezone_type']))
+					}
+					if (isset($_REQUEST['activate_pagezone_type'])) {
 						$this->processActivatePageZoneType(); // AJAX call
-					if (isset($_REQUEST['delete_page']))
+					}
+					if (isset($_REQUEST['delete_page'])) {
 						$this->processDeletePage(); // AJAX call
-					if (isset($_REQUEST['delete_pagezone']))
+					}
+					if (isset($_REQUEST['delete_pagezone'])) {
 						$this->processDeletePageZone(); // AJAX call
+					}
 
-
-					/// as the module is used for ajax only so far, why not use it as the shortcut for the section list module?
-//<a onclick="return jumpTo('2',this,'pages2',0);" href="#">np_section</a>
-//top.goToModule('web_list');this.blur();return false;
 
 					return false; // if processing was successful, the script died after the AJAX request was answered; if params weren't valid return false anyway
 

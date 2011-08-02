@@ -16,7 +16,7 @@
 	function addOptionsToTarget(options) {
 		$("tag_delete").options[$("tag_delete").options.length] = new Option(labelChooseTag, -1);
 		for(i = 0; i < options.length; i++) {
-			$("tag_delete").options[$("tag_delete").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+			$("tag_delete").options[$("tag_delete").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 		}
 	}
 

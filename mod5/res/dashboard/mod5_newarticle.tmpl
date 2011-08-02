@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 	function gotoProductionList() {
-		self.location.href = "../mod2/index.php?tx_newspaper_mod2[type]=filter&" + unescape(extractQuerystringDirect("tx_newspaper_mod5[mod2Filter]", false));
+		self.location.href = "../mod2/index.php?tx_newspaper_mod2[type]=filter&" + unescape(NpTools.extractQuerystringDirect("tx_newspaper_mod5[mod2Filter]", false));
 		return false;
 	}
 </script>
@@ -545,7 +545,7 @@ body {
 						// insert tags into select box
 						options = data.responseText.evalJSON();
 						for(i = 0; i < options.length; i++) {
-							$("controltag").options[$("controltag").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+							$("controltag").options[$("controltag").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 						}
 						executeCtrlTagFilter();
 					}

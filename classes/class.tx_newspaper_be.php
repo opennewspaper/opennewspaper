@@ -22,8 +22,6 @@ class tx_newspaper_BE {
 
 	private static $smarty = null;
 
-	private static $backend_files_added = false; // are js/css files added for backend
-
 	const default_num_articles_in_articlelist = 50;
     const num_articles_tsconfig_var = 'num_articles_in_article_list_be';
 
@@ -1327,27 +1325,15 @@ JSCODE;
 
 
 	/**
-	 * add javascript and css files needed for display mode (adds to $GLOBALS['TYPO3backend'])
-	 * called by hook $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][]
+	 * Add javascript and css files needed (adds to $GLOBALS['TYPO3backend'])
+	 * Called by hook $GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][]
 	 */
 	public static function addAdditionalScriptToBackend() {
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'res/be/newspaper.js');
-
 		// add modalbox - is used for placing extra on pagezones
 		// add modalbox js to top (so modal box can be displayed over the whole backend, not only the content frame)
 		$GLOBALS['TYPO3backend']->addJavascriptFile(t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/newspaper_subModal.js');
 		$GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-        $GLOBALS['TYPO3backend']->addCssFile('subModal', t3lib_extMgm::extRelPath('newspaper') . 'contrib/subModal/subModal.css');
-
-		switch(self::getExtraBeDisplayMode()) {
-			case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
-				self::$backend_files_added = true;
-			break;
-			case BE_EXTRA_DISPLAY_MODE_TABBED:
-			default:
-				self::$backend_files_added = true; // nothing to add
-			break;
-		}
 	}
 
 

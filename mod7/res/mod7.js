@@ -238,7 +238,7 @@ function collectSections () {
 
 
 function closePlacement() {
-	self.location.href = "../mod2/index.php?tx_newspaper_mod2[type]=filter&" + unescape(extractQuerystringDirect("tx_newspaper_mod7[mod2Filter]", false));
+	self.location.href = "../mod2/index.php?tx_newspaper_mod2[type]=filter&" + unescape(NpTools.extractQuerystringDirect("tx_newspaper_mod7[mod2Filter]", false));
 	return false;
 }
 

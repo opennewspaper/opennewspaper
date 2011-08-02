@@ -45,14 +45,12 @@ function loadJsCssFile(filename, filetype, param) {
 
 /// utility functions //////////////////////////////////////////////////////////
 
-	// returns object containing getViewportWidth() etc. functions (or returns false if not available)
+	// returns object containing NpTools.getViewportWidth() function (or returns false if not available)
 	function getTypo3BackendObject() {
-//top.console.log('getTypo3BackendObject()');
-//top.console.log(typeof top.getViewportWidth);
-		if (typeof top.getViewportWidth == 'function') {
+		if (typeof top.NpTools.getViewportWidth == 'function') {
 			return top; // called in "normal" typo3 backend
 		}
-		if (opener != null && typeof opener.top.getViewportWidth == 'function') {
+		if (opener != null && typeof opener.top.NpTools.getViewportWidth == 'function') {
 			return opener.top; // called in standalone popup
 		}
 		return false; // no reference could be found
@@ -281,8 +279,8 @@ function loadJsCssFile(filename, filetype, param) {
 
 	// new at top = show input field for paragraph
 	function subModalExtraInsertAfter(origin_uid, pz_uid, paragraph, new_at_top, is_concrete_article) {
-		var width = Math.min(700, top.getViewportWidth() - 100);
-		var height = top.getViewportHeight() - 50;
+		var width = Math.min(700, top.NpTools.getViewportWidth() - 100);
+		var height = top.NpTools.getViewportHeight() - 50;
 		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
 		top.showPopWin(
 			t3BackendObject.path + "typo3conf/ext/newspaper/mod3/index.php?chose_extra=1&origin_uid=" + origin_uid + "&pz_uid=" + pz_uid + "&paragraph=" + paragraph + "&new_at_top=" + new_at_top + "&is_concrete_article=" + is_concrete_article + "&returnUrl=" + closehtml,
@@ -294,8 +292,8 @@ function loadJsCssFile(filename, filetype, param) {
 	}
 
 	function subModalExtraEdit(table, uid, pz_uid, is_concrete_article) {
-		var width = Math.min(700, top.getViewportWidth() - 100);
-		var height = top.getViewportHeight() - 50;
+		var width = Math.min(700, top.NpTools.getViewportWidth() - 100);
+		var height = top.NpTools.getViewportHeight() - 50;
 		var closehtml = (is_concrete_article)? escape(t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close_reload_in_concrete_article.html?pz_uid=" + pz_uid) : t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/close.html";
 		top.showPopWin(
 			t3BackendObject.path + "typo3/alt_doc.php?returnUrl=" + closehtml + "&edit[" + table + "][" + uid + "]=edit",
@@ -705,8 +703,8 @@ function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, par
 //		    new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 //		 }
     var extra_class_sysfolder = getChosenExtra();
-    var extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
-    var extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
+    var extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+    var extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
     if (!extra_class || !extra_sysfolder) {
         alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
         return false;
@@ -737,7 +735,7 @@ function extra_insert_after_POOL(origin_uid, pz_uid, in_article, paragraphUsed) 
         new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
     }
     extra_class_sysfolder = getChosenExtra();
-    extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+    extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
     if (extra_class == false) {
         alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
         return false;

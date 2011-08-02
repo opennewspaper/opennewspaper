@@ -22,8 +22,8 @@
 		new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 {/if}
 		extra_class_sysfolder = getChosenExtra();
-		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
-		extra_sysfolder = top.splitAtPipe(extra_class_sysfolder, 1);
+		extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+		extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
 		if (extra_class == false || extra_sysfolder == false) {ldelim}
 			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
 			return false;
@@ -42,7 +42,7 @@ if (in_article) alert("pool: in article not yet implemented");
 		new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 {/if}
 		extra_class_sysfolder = getChosenExtra();
-		extra_class = top.splitAtPipe(extra_class_sysfolder, 0);
+		extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
 		if (extra_class == false) {ldelim}
 			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
 			return false;

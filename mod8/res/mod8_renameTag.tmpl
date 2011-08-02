@@ -14,7 +14,7 @@
 	function addOptionsToTarget(options) {
 		$("tag_rename").options[$("tag_rename").options.length] = new Option(labelChooseTag, -1);
 		for(i = 0; i < options.length; i++) {
-			$("tag_rename").options[$("tag_rename").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+			$("tag_rename").options[$("tag_rename").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 		}
 	}
 
@@ -44,7 +44,7 @@
 				"index.php",
 					{
 						method: 'get',
-						parameters: 'tx_newspaper_mod8[ajaxController]=renameTag&tx_newspaper_mod8[tagUid]=' + tagUid + '&tx_newspaper_mod8[newTagName]=' + escapeQuotes(newTagName),
+						parameters: 'tx_newspaper_mod8[ajaxController]=renameTag&tx_newspaper_mod8[tagUid]=' + tagUid + '&tx_newspaper_mod8[newTagName]=' + NpTools.escapeQuotes(newTagName),
 						onCreate: function() {
 							$("spinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
 						},

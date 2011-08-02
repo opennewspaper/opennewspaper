@@ -52,15 +52,15 @@
 				},
 				onSuccess: function(response) {
 					var data = response.responseText.evalJSON(true);
-					switch(extractQuerystringDirect('tx_newspaper_mod1[jsType]')) {
+					switch(NpTools.extractQuerystringDirect('tx_newspaper_mod1[jsType]')) {
 						case 'Typo3':
 							var returnUrl = escape(
 								path + "typo3conf/ext/newspaper/mod1/res/eb/js/closeNewExtraTypo3.html?" +
 								"tx_newspaper_mod1[newExtraClass]=" + extraClass +
 								"&tx_newspaper_mod1[newExtraUid]=" + data.uid +
-								"&tx_newspaper_mod1[table]=" + extractQuerystringDirect('tx_newspaper_mod1[table]') +
-								"&tx_newspaper_mod1[field]=" + extractQuerystringDirect('tx_newspaper_mod1[field]') +
-								"&tx_newspaper_mod1[uid]=" + extractQuerystringDirect('tx_newspaper_mod1[uid]') +
+								"&tx_newspaper_mod1[table]=" + NpTools.extractQuerystringDirect('tx_newspaper_mod1[table]') +
+								"&tx_newspaper_mod1[field]=" + NpTools.extractQuerystringDirect('tx_newspaper_mod1[field]') +
+								"&tx_newspaper_mod1[uid]=" + NpTools.extractQuerystringDirect('tx_newspaper_mod1[uid]') +
 								"&tx_newspaper_mod1[abstractUid]=" + data.abstractUid
 							);
 						break;

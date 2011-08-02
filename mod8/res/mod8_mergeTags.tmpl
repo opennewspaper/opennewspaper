@@ -14,11 +14,11 @@
 	}
 	function addOptionsToTarget(options) {
 		for(i = 0; i < options.length; i++) {
-			$("tag_merge").options[$("tag_merge").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+			$("tag_merge").options[$("tag_merge").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 		}
 		$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(labelChooseTag, -1);
 		for(i = 0; i < options.length; i++) {
-			$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(splitParamAtPipe(options[i], 0), splitParamAtPipe(options[i], 1));
+			$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
 		}
 	}
 

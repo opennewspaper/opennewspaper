@@ -13,9 +13,9 @@ function choseRecord(className, uid, close) {
 	}
 
 	// get target element to receive the reocrd
-	var form_table = extractQuerystringDirect('tx_newspaper_mod1[table]');
-	var form_field = extractQuerystringDirect('tx_newspaper_mod1[field]');
-	var form_uid = extractQuerystringDirect('tx_newspaper_mod1[uid]');
+	var form_table = NpTools.extractQuerystringDirect('tx_newspaper_mod1[table]');
+	var form_field = NpTools.extractQuerystringDirect('tx_newspaper_mod1[field]');
+	var form_uid = NpTools.extractQuerystringDirect('tx_newspaper_mod1[uid]');
 
 // \todo: replace "New entry" with correct record title
 

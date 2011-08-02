@@ -12,17 +12,17 @@
 /// \todo: will this work in all browsers?
 if (top.content.frameElement == null) {
 	// no frameset found, typo3 form was used in (standalone) popup
-	top.reload_in_article(top.extract_querystring(window.location.search, 'pz_uid'));
+	top.reload_in_article(top.NpTools.extractQuerystringDirect('pz_uid'));
 	top.hidePopWin(false); /// \todo: this is working for subModal only !!!
 } else  {
 	// frameset found, so we assume that this file is called from within the typo3 frameset
 	if (top.content.list_frame != undefined) {
 		// "real" typo3 frameset with nav frame
-		top.content.list_frame.reload_in_article(top.extract_querystring(window.location.search, 'pz_uid'));
+		top.content.list_frame.reload_in_article(top.NpTools.extractQuerystringDirect('pz_uid'));
 	} else {
 		// nav_frame is missing (probably article backend was called after using new article wizard
-		top.content.reload_in_article(top.extract_querystring(window.location.search, 'pz_uid'));
-	} 
+		top.content.reload_in_article(top.NpTools.extractQuerystringDirect('pz_uid'));
+	}
 	top.hidePopWin(false); /// \todo: this is working for subModal only !!!
 }
 /*]]>*/
