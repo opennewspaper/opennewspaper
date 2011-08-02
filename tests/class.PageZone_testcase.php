@@ -375,15 +375,15 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-    private function insertNewExtras($pagezone) {
+    private function insertNewExtras(tx_newspaper_PageZone $pagezone) {
         $old_extras = $pagezone->getExtras();
         foreach ($old_extras as $extra_after_which) {
-            $i = 0;
-            foreach ($this->extra_abstract_uids as $uid) {
+            for ($i = 1; $i <= 3; $i++) {
                 t3lib_div::debug($i);
-                $i++;
-                $new_extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
+                t3lib_div::debug($extra_after_which->getOriginUid());
+                $new_extra = new tx_newspaper_Extra_Image();
                 $new_extra->setAttribute('title', "Inserted ${i}th");
+                $new_extra->store();
                 $pagezone->insertExtraAfter($new_extra, $extra_after_which->getOriginUid());
             }
         }
