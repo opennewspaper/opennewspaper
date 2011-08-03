@@ -1022,7 +1022,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 			 */
 			$extra_after_which = $this->findExtraByOriginUID($origin_uid);
-t3lib_div::debug($extra_after_which);
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s):
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
@@ -1044,8 +1043,11 @@ t3lib_div::debug($extra_after_which);
             $this->shiftPositionOfAllExtras();
             $position = 0;
 		}
+        echo "position: $position";
         $position_before_which = $this->findExtraToInsertBefore($position);
+        echo " position before which: $position_before_which";
         $position_before_which = $this->maintainSpacingBetweenExtras($position_before_which, $position);
+        echo " position before which: $position_before_which<br />";
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
 		return $position+($position_before_which-$position)/2;
