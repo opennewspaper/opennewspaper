@@ -384,7 +384,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
                 $new_extra->setAttribute('title', "Inserted ${i}th");
                 $new_extra->store();
                 echo $i.": ".$new_extra->getExtraUid();
-                $pagezone->insertExtraAfter($new_extra, $extra_after_which->getExtraUid());
+                $pagezone->insertExtraAfter($new_extra, $extra_after_which->getExtraUid(), false);
                 echo "... inserted <br />";
             }
         }
