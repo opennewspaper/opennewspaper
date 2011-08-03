@@ -500,9 +500,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 *   	this function. otherwise a workaround is needed: insert extra to
 		 * 		article and call changeExtraArticle() on the article afterwards
 		 */
-        $position = $this->getInsertPosition($origin_uid);
-        echo "insert position: $position<br />";
-		$insert_extra->setAttribute('position', $position);
+		$insert_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
 		$insert_extra->setAttribute('paragraph', $this->paragraph_for_insert);
 
         $insert_extra->setAttribute('is_inheritable', 1);
