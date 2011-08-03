@@ -392,12 +392,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
     private function checkNumberInsertedExtrasCorrect($pagezone, $old_extras) {
         $this->assertEquals(
-            sizeof($pagezone->getExtras()),
+            sizeof($pagezone->getExtrasOf('tx_newspaper_Extra_Image')),
             sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1),
             'There should be ' . sizeof($this->extra_abstract_uids) . ' new Extras after each of the ' .
             sizeof($old_extras) . ' original Extras, so PageZone ' . $pagezone . ' should now have ' .
             sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1) . ' Extras. Actually the number is ' .
-            sizeof($pagezone->getExtras()) . '. '
+            sizeof($pagezone->getExtrasOf('tx_newspaper_Extra_Image')) . '. '
         );
 
         $row = tx_newspaper::selectOneRow(
