@@ -1022,7 +1022,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  it is the Extra whose attribute 'origin_uid' equals $origin_uid.
 			 */
 			$extra_after_which = $this->findExtraByOriginUID($origin_uid);
-
+t3lib_div::debug($extra_after_which);
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
 				/** Deduce the $extra_after_which from the parent page(s):
 				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
