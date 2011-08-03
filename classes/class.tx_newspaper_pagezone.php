@@ -510,7 +510,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/** Write Extra to DB	*/
 		$insert_extra->store();
-        echo "stored<br />";
 
 		$this->addExtra($insert_extra);
 
@@ -1046,11 +1045,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             $this->shiftPositionOfAllExtras();
             $position = 0;
 		}
-        echo "position: $position";
         $position_before_which = $this->findExtraToInsertBefore($position);
-        echo " position before which: $position_before_which";
         $position_before_which = $this->maintainSpacingBetweenExtras($position_before_which, $position);
-        echo " position before which: $position_before_which<br />";
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
 		return $position+($position_before_which-$position)/2;
@@ -1133,11 +1129,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
 		foreach ($this->getExtras($hidden_too) as $extra) {
-            echo "origin uid: " . $extra->getOriginUid() . ", wanted: $origin_uid";
 			if (intval($extra->getOriginUid()) == intval($origin_uid)) {
                 return $extra;
-            } else {
-                echo "...Nope! <br />\n";
             }
 		}
 		return null;
