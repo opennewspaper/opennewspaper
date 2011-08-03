@@ -1129,7 +1129,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
 		foreach ($this->getExtras($hidden_too) as $extra) {
             echo "origin uid: " . $extra->getOriginUid() . ", wanted: $origin_uid";
-			if (intval($extra->getOriginUid()) == intval($origin_uid)) return $extra;
+			if (intval($extra->getOriginUid()) == intval($origin_uid)) {
+                return $extra;
+            } else {
+                echo "...Nope! <br />\n";
+            }
 		}
 		return null;
 	}
