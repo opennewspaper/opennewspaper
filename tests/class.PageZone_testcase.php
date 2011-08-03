@@ -390,7 +390,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         return $old_extras;
     }
 
-    private function checkNumberInsertedExtrasCorrect($pagezone, $old_extras) {
+    private function checkNumberInsertedExtrasCorrect(tx_newspaper_PageZone $pagezone, array $old_extras) {
         $this->assertEquals(
             sizeof($pagezone->getExtrasOf('tx_newspaper_Extra_Image')),
             sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1),
@@ -407,7 +407,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         );
         $this->assertEquals(
             intval($row['num']),
-            sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1),
+            sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1 + (sizeof($pagezone->getExtras())) - sizeof($pagezone->getExtrasOf('tx_newspaper_Extra_Image'))),
             'Entries in ' . $pagezone->getExtra2PagezoneTable() . ' not written correctly. ' .
             'There should be ' . sizeof($old_extras) * (sizeof($this->extra_abstract_uids) + 1) .
             ' where uid_local = ' . $pagezone->getUid() . ', but actually ' . $row['num'] . ' are there.'
