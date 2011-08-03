@@ -380,11 +380,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         t3lib_div::debug($old_extras);
         foreach ($old_extras as $extra_after_which) {
             for ($i = 1; $i <= 3; $i++) {
-                t3lib_div::debug($i);
                 $new_extra = new tx_newspaper_Extra_Image();
                 $new_extra->setAttribute('title', "Inserted ${i}th");
                 $new_extra->store();
+                echo $i.": ".$new_extra->getExtraUid();
                 $pagezone->insertExtraAfter($new_extra, $extra_after_which->getExtraUid());
+                echo "... inserted <br />";
             }
         }
         return $old_extras;
