@@ -376,7 +376,9 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 	}
 
     private function insertNewExtras(tx_newspaper_PageZone $pagezone) {
-        $old_extras = $pagezone->getExtras();
+#        $old_extras = $pagezone->getExtras();
+        $old_extras = $pagezone->getExtrasOf('tx_newspaper_Extra_Image');
+
         foreach ($old_extras as $extra_after_which) {
             for ($i = 1; $i <= 3; $i++) {
                 $new_extra = new tx_newspaper_Extra_Image();
