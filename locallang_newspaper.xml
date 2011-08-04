@@ -60,11 +60,9 @@
 			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
 			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
 			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
-			<label index="message_check_new_page_in_section">Do you really want to activate this page type?</label>
             <label index="message_delete_page_in_section">Delete this page</label>
             <label index="message_check_delete_page_in_section">Do you really want to DELETE this page type?</label>
 			<label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
-			<label index="message_check_new_pagezone_in_page">Do you really want to activate this page zone type?</label>
 			<label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
 			<label index="message_close_pagezone_in_section">Return to list of page types</label>
 			<label index="message_delete_pagezone_in_section">Delete this page zone</label>

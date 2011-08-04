@@ -1,10 +1,14 @@
 
-// @todo: use NpTools.getPath() only !!! xyz
+// @todo: use NpTools.getPath() only !!!
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
 
-var NpTools =  {
+
+/**
+ * A collection of tools and utilities
+ */
+var NpTools = {
     params: [],
 
     /**
@@ -180,3 +184,150 @@ var NpTools =  {
     }
 
 };
+
+
+
+/**
+ * Javascript function s for activating and deleting pages and pagezones in the
+ * section backend.
+ */
+var NpPagePagetype = {
+	params: [],
+
+	/**
+	 * AJAX call: Activate page type, displays a spinner
+	 * @param section_id Section uid
+	 * @param pagetype_uid Page type uid
+	 * @return void
+	 */
+    activatePageType: function(section_id, pagetype_id) {
+    	var request = new Ajax.Request(
+    		path + "typo3conf/ext/newspaper/mod1/index.php", {
+    			method: 'get',
+    			parameters: "activate_page_type&param=[section]" + section_id + "|[pagetype]" + pagetype_id + "&no_cache=" + new Date().getTime(),
+    			onSuccess: this.updatePageTypePageZoneType
+    		}
+    	);
+    	document.getElementById('pagetype_pagezonetype').innerHTML = '<img src="' + path + 'typo3/gfx/spinner.gif"/>';
+    },
+
+	/**
+	 * AJAX call: Delete page (after confirmation check)
+	 * @param section_id Section uid
+	 * @param page_id Page uid
+	 * @param message Confirmation message
+	 * @return void
+	 */
+    deletePage: function(section_id, page_id, message) {
+
+		if (message == undefined) {
+			alert('Illegal function call');
+			return;
+		}
+
+		// user must confirm that he knows what he's doing
+		if (!confirm(message)) {
+			return;
+		}
+
+		/// ajax call: delete page
+		var request = new Ajax.Request(
+			path + "typo3conf/ext/newspaper/mod1/index.php",
+				{
+					method: 'get',
+					parameters: "delete_page&param=[section]" + section_id + "|[page]" + page_id + "&no_cache=" + new Date().getTime(),
+					onSuccess: this.updatePageTypePageZoneType
+				}
+		);
+		document.getElementById('pagetype_pagezonetype').innerHTML = '<img src="' + path + 'typo3/gfx/spinner.gif"/>';
+	},
+
+	/**
+	 * AJAX call: Activate pagezone type, displays a spinner
+	 * @param section_id Section uid
+	 * @param page_id Page uid
+	 * @param pagezone_type Pagezone type uid
+	 * @return void
+	 */
+	activatePageZoneType: function(section_id, page_id, pagezone_type) {
+		var request = new Ajax.Request(
+			path + "typo3conf/ext/newspaper/mod1/index.php", {
+				method: 'get',
+				parameters: "activate_pagezone_type&param=[section]" + section_id + "|[page]" + page_id + "|[pagezonetype]" + pagezone_type + "&no_cache=" + new Date().getTime(),
+				onSuccess: this.updatePageTypePageZoneType
+			}
+		);
+		document.getElementById('pagetype_pagezonetype').innerHTML = '<img src="' + path + 'typo3/gfx/spinner.gif"/>';
+	},
+
+	/**
+	 * AJAX call: Delete pagezone (after confirmation check)
+	 * @param section_id Section uid
+	 * @param page_id Page uid
+	 * @param pagezone_id Pagezone uid
+	 * @param message Confirmation message
+	 * @return void
+	 */
+	deletePageZone: function(section_id, page_id, pagezone_id, message) {
+
+		if (message == undefined) {
+			alert('Illegal function call');
+			return;
+		}
+
+		// user must confirm that he knows what he's doing
+		if (!confirm(message)) return;
+
+		/// ajax call: delete page zone
+		var request = new Ajax.Request(
+			path + "typo3conf/ext/newspaper/mod1/index.php",
+				{
+					method: 'get',
+					parameters: "delete_pagezone&param=[section]" + section_id + "|[page]" + page_id + "|[pagezone]" + pagezone_id + "&no_cache=" + new Date().getTime(),
+					onSuccess: this.updatePageTypePageZoneType
+				}
+		);
+		document.getElementById('pagetype_pagezonetype').innerHTML = '<img src="' + path + 'typo3/gfx/spinner.gif"/>';
+	},
+
+	/// one update function for all ajax calls
+    /**
+     * AJAX onSuccess function for all AJAX call in section backend
+     * @param request AJAX response
+     * @return void
+     */
+    updatePageTypePageZoneType: function(request) {
+		var json = request.responseText.evalJSON(true);
+		document.getElementById('pagetype_pagezonetype').innerHTML = json.html;
+	}
+
+}
+
+
+
+/**
+ * Newspaper backend function that are needed at various placed
+ */
+var NpBackend = {
+	params: [],
+
+	/**
+	 * Updates the selected template set for a given record
+	 * @param table Table containing the record to be updated
+	 * @param uid uid of the reocrd to be updated
+	 * @param value Name of template set to be stored
+	 * @return void
+	 */
+	storeTemplateSet: function(table, uid, value) {
+		uid = parseInt(uid);
+		var request = new top.Ajax.Request(
+			path + "typo3conf/ext/newspaper/mod3/index.php", {
+				method: 'get',
+				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+			}
+		);
+	}
+
+}
+
+

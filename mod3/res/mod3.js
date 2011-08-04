@@ -47,7 +47,7 @@ function loadJsCssFile(filename, filetype, param) {
 
 	// returns object containing NpTools.getViewportWidth() function (or returns false if not available)
 	function getTypo3BackendObject() {
-		if (typeof top.NpTools.getViewportWidth == 'function') {
+		if (typeof top.NpTools != 'undefined' && typeof top.NpTools.getViewportWidth == 'function') {
 			return top; // called in "normal" typo3 backend
 		}
 		if (opener != null && typeof opener.top.NpTools.getViewportWidth == 'function') {

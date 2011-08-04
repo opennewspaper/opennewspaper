@@ -71,7 +71,7 @@ class tx_newspaper_BE {
 					$data[$i]['ACTIVE'] = true;
 					$data[$i]['ACTIVE_PAGE_ID'] = $active_page->getUid();
 					$data[$i]['DEFAULT_ARTICLE_PAGE'] = $active_page->getPageType()->getAttribute('is_article_page');
-					$data[$i]['AJAX_DELETE_URL'] = 'javascript:deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_page_in_section')) . '\');';
+					$data[$i]['AJAX_DELETE_URL'] = 'javascript:NpPagePagetype.deletePage(' . $section_uid . ', ' . $active_page->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_page_in_section')) . '\');';
 					$data[$i]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_page', $active_page->getUid(), $active_page->getAttribute('template_set'));
 					break;
 				}
@@ -96,7 +96,7 @@ class tx_newspaper_BE {
 							// active pagezone type found
 							$data[$i]['pagezones'][$j]['ACTIVE'] = true;
 							$data[$i]['pagezones'][$j]['ACTIVE_PAGEZONE_ID'] = $active_pagezone->getUid();
-							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_pagezone_in_page')) . '\');';
+							$data[$i]['pagezones'][$j]['AJAX_DELETE_URL'] = 'javascript:NpPagePagetype.deletePageZone(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $active_pagezone->getAbstractUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_delete_pagezone_in_page')) . '\');';
 							$data[$i]['pagezones'][$j]['TEMPLATE_SET_HTML'] = tx_newspaper_BE::createTemplateSetDropdown($active_pagezone->getTable(), $active_pagezone->getUid(), $active_pagezone->getAttribute('template_set'));
 							break;
 						}
@@ -114,14 +114,14 @@ class tx_newspaper_BE {
 							unset($data[$i]['pagezones'][$j]); // so remove data collected so far for this combination
 						} else {
 							// active pagezone type found ['ACTIVE'] = false;
-							$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_new_pagezone_in_page')) . '\');';
+							$data[$i]['pagezones'][$j]['AJAX_ACTIVATE_URL'] = 'javascript:NpPagePagetype.activatePageZoneType(' . $section_uid . ', ' . $data[$i]['ACTIVE_PAGE_ID'] . ', ' . $pagezone_types[$j]->getUid() . ');';
 						}
 					}
 				}
 			} else {
 				// page type not active, so no pagezones to display
 				$data[$i]['ACTIVE'] = false;
-				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:activatePageType(' . $section_uid . ' , ' . $page_types[$i]->getUid() . ', \'' . addslashes(tx_newspaper::getTranslation('message_check_new_page_in_section')) . '\');';
+				$data[$i]['AJAX_ACTIVATE_URL'] = 'javascript:NpPagePagetype.activatePageType(' . $section_uid . ', ' . $page_types[$i]->getUid() . ');';
 			}
 			if (is_array($data[$i]['pagezones'])) {
 				ksort($data[$i]['pagezones'], SORT_NUMERIC); // sort array, so order of pagezone is fixed
@@ -206,12 +206,12 @@ class tx_newspaper_BE {
 	}
 
 	/// create html code for a template set dropdown (including AJAX call in onchange event)
-	/// assumes that js function storeTemplateSet() is available
+	/// assumes that js function NpBackend.storeTemplateSet() is available (is defined in newspaper.js)
 	public static function createTemplateSetDropdown($table, $uid, $default_value='') {
 		$params = array();
 		self::readTemplateSetItems($params); // call by reference ...
 
-		$html = '<select id="templateset_' . $uid . '" onchange="storeTemplateSet(\'' . $table . '\', ' . $uid . ', this.options[this.selectedIndex].value); return false;">'; //
+		$html = '<select id="templateset_' . $uid . '" onchange="NpBackend.storeTemplateSet(\'' . $table . '\', ' . $uid . ', this.options[this.selectedIndex].value); return false;">'; //
 		foreach($params['items'] as $item) {
 			$selected = ($item[1] == $default_value)? ' selected="selected"' : ''; // item[0] = title, item[1] = value to store
 			$html .= '<option value="' . $item[1] . '"' . $selected . '>' . $item[0] . '</option>';
