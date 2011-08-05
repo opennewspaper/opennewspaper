@@ -457,8 +457,9 @@ function findElementsByName(name, type) {
 	}
 
 
-/// Userfunc for a texarea field in the backend with newspaper conf
-/** Configuration array
+/**
+ * Userfunc for a texarea field in the backend with newspaper conf
+ * Configuration array
  *  'type' => 'user'
  *  'userFunc' => 'tx_newspaper_be->renderTextarea'
  *  'width' => '[int+]' (default: 530)
@@ -466,11 +467,10 @@ function findElementsByName(name, type) {
  *  'maxlen' => '[int+]' (default: 1000)
  *  'useCountdown' => '1' (default: 0; if set, a countdown shows how many character are still available in the textarea field)
  *
- *  \param $PA
- *  \param $fobj
- *  \return HTML code
+ * @param $PA
+ * @param $fobj
+ * @return HTML code
  */
- 	// js: http://www.rgagnon.com/jsdetails/js-0091.html
 	function renderTextarea($PA, $fobj) {
 //t3lib_div::debug($PA); die();
 
@@ -481,10 +481,6 @@ function findElementsByName(name, type) {
 
 		$uniq = $PA['field'] . $PA['row']['uid']; // unique string based on field name and record uid
 
-// \todo: move as one function to an external js file
-		$jsFuncName = 'checkMaxLen_' . $uniq; // unique js function name
-
-		// add js function (name extended with field name and uid, so js func name is unique)
 		// add typo3 like html code with additional newspaper textarea according to given configuration
 		$html = '<style type="text/css">
 #countdown_' . $uniq . ' {
@@ -493,24 +489,14 @@ function findElementsByName(name, type) {
   margin-top:2px;
 }
 </style>
-<script type="text/javascript">
-  function ' . $jsFuncName . '(field, maxLen, countdownField) {
-      if (field.value.length > maxLen) {
-          field.value = field.value.substring(0, maxLen);
-      }
-      if (countdownField) {
-          document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length);
-      }
-}
-</script>
 ';
 		if ($useCountdown) {
-			// add textarea AND a countdown
-			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'countdown_' . $uniq . '\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
+			// add textarea AND a countdown field
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="NpBackend.checkMaxLenTextarea(this, '. $maxLen . ', \'countdown_' . $uniq . '\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>
 <div id="countdown_' . $uniq . '">' . intval($maxLen - strlen(utf8_decode($PA['row'][$PA['field']]))) . '</div>';
 		} else {
 			// add textarea only
-			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="' . $jsFuncName . '(this, '. $maxLen . ', \'\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
+			$html .= '<div style="float:left;"><textarea onchange="' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" onkeyup="npBackend.checkMaxLenTextarea(this, '. $maxLen . ', \'\');" wrap="virtual" class="formField" style="width:' . $width . 'px; height:' . $height . 'px;" name="' . $PA['itemFormElName'] . '">' . $PA['itemFormElValue'] . '</textarea></div>';
 
 		}
 

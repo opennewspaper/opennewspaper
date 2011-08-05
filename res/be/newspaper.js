@@ -326,6 +326,22 @@ var NpBackend = {
 				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
 			}
 		);
+	},
+
+	/**
+	 * Checks if the textarea field exceeds maxLen. Displays countdown if countdownField is set
+	 * @param field Reference to textarea
+	 * @param maxLen maximum numbr of characters
+	 * @param countdownField id of countField or empty
+	 * @return void
+	 */
+	checkMaxLenTextarea: function(field, maxLen, countdownField) {
+		if (field.value.length > maxLen) {
+			field.value = field.value.substring(0, maxLen);
+		}
+		if (countdownField) {
+			document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length);
+		}
 	}
 
 }
