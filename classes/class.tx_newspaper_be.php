@@ -285,45 +285,10 @@ class tx_newspaper_BE {
 	/// render article list form for section backend
 	/// either called by userfunc in be or ajax
 	public static function renderArticleList($PA, $fObj=null) {
-/// \todo: move js to external file ... but how to handle localization then? And access to $PA?
-echo "
-<script language='javascript'>
- function processArticlelist() {
-
- 	tmp = findElementsByName('" . $PA['itemFormElName'] . "', 'select');
- 	if (tmp.length > 0)
- 		selectbox = tmp[0];
- 	else {
- 		alert('Dropdown for article list cannot be found');
- 		return false;
- 	}
-
- 	selIndex = selectbox.selectedIndex;
-
-	if (isNaN(selectbox.options[selIndex].value)) {
-		// value is a class name -> create new super table record for article list
-		document.getElementById('edit_articlelist').style.display = 'none';
-		document.getElementById('NO_edit_articlelist').style.display = 'inline';
-	} else {
-		document.getElementById('edit_articlelist').style.display = 'inline';
-		document.getElementById('NO_edit_articlelist').style.display = 'none';
-	}
-
- }
-
-function findElementsByName(name, type) {
-    var res = document.getElementsByTagName(type || '*');
-    var ret = [];
-    for (var i = 0; i < res.length; i++)
-        if (res[i].getAttribute('name') == name) ret.push(res[i]);
-    return ret;
-};
-
-</script>
-";
 
 //t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));
 		if (strtolower(substr($PA['row']['uid'], 0, 3)) == 'new') {
+			// @todo: displayCond REC NEW
 			/// new section record, so no "real" section uid available
 			return tx_newspaper::getTranslation('message_section_not_saved_articlelist');
 		}
@@ -357,9 +322,6 @@ function findElementsByName(name, type) {
 
 		$obj = new t3lib_TCEforms();
 
-		// add javascript to onchange field
-		$PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] = 'processArticlelist(); ' . $PA['fieldChangeFunc']['TBE_EDITOR_fieldChanged'];
-
 		// set configuration
 		$config['type'] = 'select';
 		$config['size'] = 1;
@@ -368,24 +330,10 @@ function findElementsByName(name, type) {
 
 		$out = $obj->getSingleField_typeSelect_single('tx_newspaper_section', 'articlelist', $PA['row'], $PA, $config, $selItems, $nMV_label);
 
-		// $out .= ' ' . self::renderEditIcon4ArticleList($s->getArticleList()); // might be needed later, see renderEditIcon4ArticleList()
-
 		return $out;
 
 	}
 
-/** deactivated, see #806; might be needed later to link to section article list module
-	function renderEditIcon4ArticleList(tx_newspaper_Articlelist $al) {
-		global $LANG;
-		$html .= '<span id="edit_articlelist">';
-		$html .= '<a target="np" href="alt_doc.php?returnUrl=../typo3conf/ext/newspaper/res/be/just_close.html&edit[' . $al->getTable() . '][' . $al->getUid() . ']=edit">';
-		$html .= self::renderIcon('gfx/edit2.gif', '', $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:flag_edit_articlelist_in_section', false));
-		$html .= '</a>';
-		$html .= '</span>';
-		$html .= '<span style="display:none;" id="NO_edit_articlelist">' .  $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:message_edit_articlelist_in_section_save_first', false) . '</span>';
-		return $html;
-	}
-*/
 
 /// \todo: move to pagezone
 /// \todo: correct sorting: negative paragraph at the bottom
