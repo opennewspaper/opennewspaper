@@ -522,6 +522,7 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 			$new_extras = $pagezone->getExtras();
 			//	find $extra[0] and $extra[1] in $new_extras
 			for ($i = 0; $i < sizeof($new_extras); $i++) {
+                t3lib_div::debug($new_extras[$i]);
 				if ($new_extras[$i]->getAttribute('title') == $extras[0]->getAttribute('title')) {
 					$after_index = $i;
 				}
