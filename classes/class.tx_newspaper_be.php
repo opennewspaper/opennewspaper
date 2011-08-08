@@ -1717,38 +1717,41 @@ JSCODE;
 		return $icon;
 	}
 
-	/// replaces element browser with article browser
 	/**
-	 *
-	 * \param $table Typo3 table
-	 * \param $field Field in table
-	 * \param uid of the record
-	 * \param $out   HTML code that might be processed (if configured in $GLOBALS['newspaper']['replaceEBwithArticleBrowser'])
-	 * \return void
+	 * Replaces element browser with article browser (if configured to do so)
+	 * $GLOBALS['newspaper']['replaceEBwithArticleBrowser'][table] = array(field1, ..., fieldn);
+	 * @param $table Typo3 table
+	 * @param $field Field in table
+	 * @param $uid of the record
+	 * @param $out   HTML code that might be processed (if configured in $GLOBALS['newspaper']['replaceEBwithArticleBrowser'])
+	 * @return void
 	 */
 	public static function checkReplaceEbWithArticleBrowser($table, $field, $uid, &$out) {
 //t3lib_div::devlog('checkReplaceEbWithArticleBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field));
 		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser']['tx_newspaper_article'] = array(field1, ... fieldn);
 		//$GLOBALS['newspaper']['replaceEBwithArticleBrowser'][another_table] = array(field1, ... fieldn);
 		if (self::checkEbConfig($table, $field, 'replaceEBwithArticleBrowser')) {
-			// add table and field name to js function name
-			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
+
+			// Typo3 param for element browser
+			$jsParams = 'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|';
+
+			// conf for newspaper article browser
 			$js = '<script type="text/javascript">
-function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
-  var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode="+mode+"&bparams="+params+"&form_table="+form_table+"&form_field="+form_field+"&form_uid="+form_uid;
-  browserWin = window.open(url,"Typo3WinBrowser","height=485,width="+(mode=="db"?925:925)+",status=0,menubar=0,resizable=1,scrollbars=1");
-  browserWin.focus();
-}
+	NpBackend.param["ElementBrowserUrl"] = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode=db&bparams=' . $jsParams . '&form_table=' . $table . '&form_field=' . $field . '&form_uid=' . $uid . '";
+	NpBackend.param["ElementBrowserWidth"] = 925;
+	NpBackend.param["ElementBrowserHeight"] = 485;
 </script>';
+
 			// replace eb with article browser
-			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', ' . $uid . '); return false;" >';
+			$replace = $js . '<a href="#" onclick="NpBackend.setFormValueOpenBrowser(); return false;" >';
 			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
 		}
 	}
 
 
 	/**
-	 * Replaces Typo3 element browser with newspaper Extra browser (configured to do so)
+	 * Replaces Typo3 element browser with newspaper Extra browser (if configured to do so)
+	 * $GLOBALS['newspaper']['replaceEBwithExtraBrowser'][table] = array(field1, ..., fieldn);
 	 * @param $table Typo3 table
 	 * @param $field Field in table
 	 * @param $uid   uid in table
@@ -1758,16 +1761,17 @@ function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_
 //t3lib_div::devlog('checkReplaceEbWithExtraBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, 'field' => $field, 'uid' => $uid));
 		if (self::checkEbConfig($table, $field, 'replaceEBwithExtraBrowser')) {
 			// add table and field name to js function name
-			// \todo better solution: make sure that setFormValueOpenBrowser[newspaper]() is added once only for ALL occurances ...
-			$js = '<script type="text/javascript">
-function setFormValueOpenBrowser_' . $table . '_' . $field . '(mode,params,form_table,form_field,form_uid) {
-  var url = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=1&tx_newspaper_mod1[jsType]=Typo3&tx_newspaper_mod1[table]=' . $table . '&tx_newspaper_mod1[field]=' . $field . '&tx_newspaper_mod1[uid]=' . $uid . '";
-  browserWin = window.open(url,"Typo3WinBrowser","height=800,width="+(mode=="db"?650:600)+",status=0,menubar=0,resizable=1,scrollbars=1");
-  browserWin.focus();
-}
+
+		$js = '<script type="text/javascript" src="../typo3conf/ext/newspaper/res/be/newspaper.js"> </script>
+<script type="text/javascript">
+	NpBackend.param["ElementBrowserUrl"] = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=1&tx_newspaper_mod1[jsType]=Typo3&tx_newspaper_mod1[table]=' . $table . '&tx_newspaper_mod1[field]=' . $field . '&tx_newspaper_mod1[uid]=' . $uid . '";
+	NpBackend.param["ElementBrowserWidth"] = 650;
+	NpBackend.param["ElementBrowserHeight"] = 800;
 </script>';
-			// replace eb with article browser
-			$replace = $js . '<a href="#" onclick="setFormValueOpenBrowser_' . $table . '_' . $field . '(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', \'' . $uid . '\'); return false;" >';
+
+			// Replace Typo3 element broser with newspaper etxra browser
+			//$replace = $js . '<a href="#" onclick="top.NpBackend.setFormValueOpenBrowser(\'db\',\'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|\', \'' . $table . '\', \'' . $field . '\', \'' . $uid . '\'); return false;" >';
+			$replace = $js . '<a href="#" onclick="NpBackend.setFormValueOpenBrowser(); return false;" >';
 			$out = preg_replace('/<a [^>]*setFormValueOpenBrowser[^>]*>/i', $replace, $out);
 //t3lib_div::devlog('checkReplaceEbWithExtraBrowser()', 'newspaper', 0, array('GLOBALS[newspaper]' => $GLOBALS['newspaper'], 'table' => $table, $field => $field, 'out' => $out));
 		}
