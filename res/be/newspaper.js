@@ -9,7 +9,7 @@ path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
  * A collection of tools and utilities
  */
 var NpTools = {
-    params: [],
+    param: [],
 
     /**
      * Gets the root path of the installation
@@ -188,11 +188,68 @@ var NpTools = {
 
 
 /**
+ * Newspaper backend function that are needed at various placed
+ */
+var NpBackend = {
+	param: [],
+
+	/**
+	 * Updates the selected template set for a given record
+	 * @param table Table containing the record to be updated
+	 * @param uid uid of the reocrd to be updated
+	 * @param value Name of template set to be stored
+	 * @return void
+	 */
+	storeTemplateSet: function(table, uid, value) {
+		uid = parseInt(uid);
+		var request = new top.Ajax.Request(
+			path + "typo3conf/ext/newspaper/mod3/index.php", {
+				method: 'get',
+				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
+			}
+		);
+	},
+
+	/**
+	 * Checks if the textarea field exceeds maxLen. Displays countdown if countdownField is set
+	 * @param field Reference to textarea
+	 * @param maxLen maximum numbr of characters
+	 * @param countdownField id of countField or empty
+	 * @return void
+	 */
+	checkMaxLenTextarea: function(field, maxLen, countdownField) {
+		if (field.value.length > maxLen) {
+			field.value = field.value.substring(0, maxLen);
+		}
+		if (countdownField) {
+			document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length);
+		}
+	},
+
+	/**
+	 * Opens the newspaper element browser
+	 * Expects this.param["ElementBrowserUrl"], this.param["ElementBrowserWidth"], this.param["ElementBrowserHeight"] to be set
+	 * @param params
+	 * @param form_table
+	 * @param form_field
+	 * @param form_uid
+	 */
+	setFormValueOpenBrowser: function(params, form_table, form_field, form_uid) {
+		browserWin = window.open(this.param["ElementBrowserUrl"], "Typo3WinBrowser", "height=" + this.param["ElementBrowserHeight"] + ",width=" + this.param["ElementBrowserWidth"] + ",status=0,menubar=0,resizable=1,scrollbars=1");
+		browserWin.focus();
+	}
+
+
+}
+
+
+
+/**
  * Javascript function s for activating and deleting pages and pagezones in the
  * section backend.
  */
 var NpPagePagetype = {
-	params: [],
+	param: [],
 
 	/**
 	 * AJAX call: Activate page type, displays a spinner
@@ -299,49 +356,6 @@ var NpPagePagetype = {
     updatePageTypePageZoneType: function(request) {
 		var json = request.responseText.evalJSON(true);
 		document.getElementById('pagetype_pagezonetype').innerHTML = json.html;
-	}
-
-}
-
-
-
-/**
- * Newspaper backend function that are needed at various placed
- */
-var NpBackend = {
-	params: [],
-
-	/**
-	 * Updates the selected template set for a given record
-	 * @param table Table containing the record to be updated
-	 * @param uid uid of the reocrd to be updated
-	 * @param value Name of template set to be stored
-	 * @return void
-	 */
-	storeTemplateSet: function(table, uid, value) {
-		uid = parseInt(uid);
-		var request = new top.Ajax.Request(
-			path + "typo3conf/ext/newspaper/mod3/index.php", {
-				method: 'get',
-				parameters: "templateset_dropdown_store=1&table=" + table + "&uid=" + uid + "&value=" + value + "&no_cache=" + new Date().getTime(),
-			}
-		);
-	},
-
-	/**
-	 * Checks if the textarea field exceeds maxLen. Displays countdown if countdownField is set
-	 * @param field Reference to textarea
-	 * @param maxLen maximum numbr of characters
-	 * @param countdownField id of countField or empty
-	 * @return void
-	 */
-	checkMaxLenTextarea: function(field, maxLen, countdownField) {
-		if (field.value.length > maxLen) {
-			field.value = field.value.substring(0, maxLen);
-		}
-		if (countdownField) {
-			document.getElementById(countdownField).innerHTML = parseInt(maxLen - field.value.length);
-		}
 	}
 
 }
