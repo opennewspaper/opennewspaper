@@ -24,13 +24,10 @@ function toggleCommentProdList(el) {
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
 
-/// \todo: based from mod7, how to merge into 1 js file?
+
 function showArticlePreview(article_uid) {
-	window.open(
-		path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid,
-		"preview",
-		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
-	);
+	var url = path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid;
+	top.NpBackend.showArticlePreview(url);
 }
 
 /**

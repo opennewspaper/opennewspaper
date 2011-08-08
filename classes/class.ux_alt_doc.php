@@ -161,16 +161,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 	}
 
 	private function getJsForArticlePreview() {
-		return '<script language="javascript">
+		return '<script type="text/javascript">
+function showArticlePreview(article_uid) {
 	var path = window.location.pathname;
 	path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-/// \todo: based on mod7, how to merge into 1 js file?
-function showArticlePreview(article_uid) {
-	window.open(
-		path + "typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid,
-		"preview",
-		"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
-	);
+	var url = path + "typo3conf/ext/newspaper/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + article_uid;
+	top.NpBackend.showArticlePreview(url);
 }
 </script>
 <a href="#" onclick="showArticlePreview('. $this->elementsData[0]['uid'] . '); return false;">' . tx_newspaper_BE::renderIcon('gfx/zoom.gif', '', $GLOBALS['LANG']->sL('LLL:EXT:newspaper/mod2/locallang.xml:label.preview_article', false)) . '</a>';

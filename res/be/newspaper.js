@@ -237,8 +237,20 @@ var NpBackend = {
 	setFormValueOpenBrowser: function(params, form_table, form_field, form_uid) {
 		browserWin = window.open(this.param["ElementBrowserUrl"], "Typo3WinBrowser", "height=" + this.param["ElementBrowserHeight"] + ",width=" + this.param["ElementBrowserWidth"] + ",status=0,menubar=0,resizable=1,scrollbars=1");
 		browserWin.focus();
-	}
+	},
 
+	/**
+	 * Opens the url in a preview popup
+	 * @param url URL to open in the preview popup
+	 * @return void
+	 */
+	showArticlePreview: function(url) {
+		window.open(
+			url,
+			"preview",
+			"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
+		);
+	}
 
 }
 
