@@ -11,10 +11,10 @@
 	$ICON
 *}
 
-
 {include file="../../mod3/res/mod3.css"}
 
 {literal}
+
 <style>
 #tz_used {
 	float:left;
@@ -83,447 +83,28 @@
   font-weight:bold;
 }
 </style>
+{/literal}
 
-
-<script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
-<script language="javascript" type="text/javascript" src="../res/be/newspaper.js"> </script>
+<script type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
+<script type="text/javascript" src="../res/be/newspaper.js"> </script>
+<script type="text/javascript" src="res/mod6.js"> </script>
 
 <script type="text/javascript">
-{/literal}
-var confirmMessage = "{$LANG.message_confirm_delete_extra_from_tagzone}";
-var titleNotUniqueMesssage = "{$LANG.message_dossier_title_not_unique}";
-var labelCheckboxBatchDetachTag = "{$LANG.label_checkbox_batch_detach_tag}";
-var labelCheckboxBatchDetachTagAllArticles = "{$LANG.label_checkbox_batch_detach_tag_all_articles}";
-var labelCheckboxBatchDetachTagSubmit = "{$LANG.label_checkbox_batch_detach_tag_submit}";
-{literal}
+	NpManageDossier.param["confirmMessage"] = "{$LANG.message_confirm_delete_extra_from_tagzone}";
+	NpManageDossier.param["titleNotUniqueMesssage"] = "{$LANG.message_dossier_title_not_unique}";
+	NpManageDossier.param["labelCheckboxBatchDetachTag"] = "{$LANG.label_checkbox_batch_detach_tag}";
+	NpManageDossier.param["labelCheckboxBatchDetachTagAllArticles"] = "{$LANG.label_checkbox_batch_detach_tag_all_articles}";
+	NpManageDossier.param["labelCheckboxBatchDetachTagSubmit"] = "{$LANG.label_checkbox_batch_detach_tag_submit}";
 
-var tz_uid = null; // stores tag zone uid when opening the element browser popup
+	NpManageDossier.param["labelTitle"] = "{$LANG.label_title}";
+	NpManageDossier.param["labelSection"] = "{$LANG.label_section}";
+	NpManageDossier.param["messagePerformanceWarning"] = "{$LANG.message_performance_warning}";
+	NpManageDossier.param["messageWizardDossierTitleMissing"] = "{$LANG.wizard_dossier_title_missing}";
 
-function getTagzoneUid() {
-	return tz_uid;
-}
-
-function changeCtrlTagCat(uid) {
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxCtrlTagCat]=' + parseInt(uid),
-				onCreate: function() {
-					$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
-					$("tx_newspaper_mod6[tag]").descendants().each(Element.remove); // clear tag select box
-				},
-				onSuccess: function(data) {
-					if (data) {
-						// insert tags into select box
-						options = data.responseText.evalJSON();
-						for(i = 0; i < options.length; i++) {
-							$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
-						}
-						$("tz").innerHTML = ''; // remove spinner
-						$("tag_batch_msg").innerHTML = ''; // clear message
-						$("article_list").innerHTML = ''; // clear article list
-						$("article_list").style.display = 'none'; // clear article list
-					}
-				}
-			}
-		);
-	showArticleBackend(0);
-}
-
-function changeTag(uid) {
-	$("article_list").style.display = 'none'; // clear article list
-	uid = parseInt(uid);
-	if (!uid) {
-		$("tz").innerHTML = ''; // selected empty row in dropdown, so clear tagzone backend
-		$("article_batch").style.display = "none"; // hide article batch backend
-		$("article_list_trigger").style.display = "none"; // hide list of article assigned to this tag
-		$("article_list").innerHTML = ''; // clear article list
-		refreshDossierTitle('');
-		return;
-	}
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxTag]=' + parseInt(uid),
-				onCreate: function() {
-					$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
-				},
-				onSuccess: function(data) {
-					if (data) {
-						var tmp = data.responseText.evalJSON();
-						$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
-						refreshDossierTitle(tmp.dossierTitle);
-						displaySection(tmp.sectionTitle, tmp.sectionUid);
-						$("tag_batch_msg").innerHTML = ''; // clear message
-						$("article_list").innerHTML = ''; // clear article list
-					}
-				}
-			}
-		);
-	showArticleBackend(1);
-}
-
-// Display given section title (if any)
-function refreshDossierTitle(title) {
-	$("dossier_title").innerHTML = title;
-	if (title) {
-		$("dossier_title_label").innerHTML = '{/literal}{$LANG.label_title}{literal}: ';
-		changeTitleShowEditButton();
-	} else {
-		$("dossier_title_label").innerHTML = '';
-		$("dossier_title_edit").innerHTML = '';
-	}
-}
-function changeTitleShowEditButton() {
-	$("dossier_title_edit").innerHTML = '<a href="#" onclick="changeDossierTitle(); return false;">{/literal}{$ICON.edit}{literal}</a>';
-}
-function changeTitleShowStoreCancelButtons() {
-	$("dossier_title_edit").innerHTML = '<a href="#" onclick="storeDossierTitle(); return false;">{/literal}{$ICON.save}{literal}</a> <a href="#" onclick="cancelDossierTitleEdit(); return false;">{/literal}{$ICON.x}{literal}</a> <span style="color:red;">{/literal}{$LANG.message_performance_warning}{literal}</span>';
-}
-
-var tmpDossierTitle = '';
-// Remove dossier title display, show dossier title input field to edit title
-function changeDossierTitle() {
-	uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
-	var title = $("dossier_title").innerHTML; // read current title
-	tmpDossierTitle = title; // store if editing is cancelled
-	$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + NpTools.hscQuotes(title) + '" />'; // render input form field
-	changeTitleShowStoreCancelButtons();
-}
-
-// store new dossier title
-function storeDossierTitle() {
-	var uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
-	var title = $("input_dossier_title").value; // read new title from input field
-	if (title == '') {
-		alert('{/literal}{$LANG.wizard_dossier_title_missing}{literal}');
-		return false;
-	}
-	// store new title
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + NpTools.escapeQuotes(title),
-				onCreate: function() {
-					$("dossier_title_edit").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // remove store icon, render spinner
-				},
-				onSuccess: function(data) {
-					if (data) {
-						var success = data.responseText.evalJSON().success;
-						if (success) {
-							var title = $("input_dossier_title").value;
-							refreshDossierTitle(title);
-						} else {
-							alert(titleNotUniqueMesssage);
-							changeTitleShowStoreCancelButtons(); // show store and cancel buttons again
-						}
-					}
-				}
-			}
-		);
-}
-
-// Cancel dossier title editing, restore title
-function cancelDossierTitleEdit() {
-	refreshDossierTitle(tmpDossierTitle);
-}
-
-
-
-var tmpSectionUid = 0;
-var tmpSectiontitle = "";
-// Display current section
-function displaySection(section, uid) {
-	tmpSectionTitle = section;
-	tmpSectionUid = parseInt(uid);
-	$("dossier_section").innerHTML = section;
-	if (section) {
-		$("dossier_section_label").innerHTML = '{/literal}{$LANG.label_section}{literal}: ';
-		$("dossier_section_edit").innerHTML = '<a href="#" onclick="editSection(); return false;">{/literal}{$ICON.edit}{literal}</a>';
-	} else {
-		$("dossier_section_label").innerHTML = '';
-		$("dossier_section_edit").innerHTML = '';
-	}
-	$("dossier_section").show();
-	$("dossier_section_edit").show();
-	$("dossier_section_dropdown").style.display = "none";
-}
-
-// Edit section (display dropdown, hide text)
-function editSection() {
-	// select current section in dropdown
-
-	for (var i=0; i < $("sections").options.length; i++) {
-		if ($("sections").options[i].value == tmpSectionUid) {
-			$("sections").options[i].selected = true;
-		}
-	}
-
-	$("dossier_section").hide();
-	$("dossier_section_edit").hide();
-	$("dossier_section_dropdown").style.display = "inline";
-}
-
-// store new dossier section
-function storeDossierSection() {
-	var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
-	var sectionUid = $("sections").value; // read new section from select box
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierSectionUid]=' + parseInt(sectionUid) + '&tx_newspaper_mod6[tagUid]=' + parseInt(tagUid),
-				onCreate: function() {
-				},
-				onSuccess: function() {
-					tmpSectionUid = sectionUid;
-					tmpSectionTitle = $("sections").options[$("sections").selectedIndex].text;
-					displaySection(tmpSectionTitle, sectionUid);
-				}
-			}
-		);
-}
-
-// Cancel dossier section editing, restore section display
-function cancelDossierSectionEdit() {
-	displaySection(tmpSectionTitle, tmpSectionUid);
-}
-
-
-
-
-function reloadTagzone(uid) {
-	changeTag(uid);
-}
-function removeExtraFromTagzone(tz_uid, e_uid) {
-	if (confirm(confirmMessage)) {
-		var request = new Ajax.Request(
-			"index.php",
-				{
-					method: 'get',
-					parameters: 'tx_newspaper_mod6[AjaxRemoveExtraFromTagZone]=1' + "&tx_newspaper_mod6[tz_uid]=" + parseInt(tz_uid) + "&tx_newspaper_mod6[e_uid]=" + parseInt(e_uid) + "&tx_newspaper_mod6[tag_uid]=" + parseInt($("tx_newspaper_mod6[tag]").value),
-					onCreate: function() {
-						$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
-					},
-					onSuccess: function(data) {
-						if (data) {
-							var tmp = data.responseText.evalJSON();
-							$("tz").innerHTML = tmp.backend; // display tag zone backend, remove spinner
-						}
-					}
-				}
-		);
-	}
-}
-
-
-// \todo move window.open to some element browser lib
-function addExtraToTagzone(uid, extraClass) {
-	tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
-
-	var extraPreselect = (typeof(extraClass) == 'undefined')? '' : '&tx_newspaper_mod1[extraClassPreselect]=' + extraClass;
-	var newOnly = (extraPreselect)? '&tx_newspaper_mod1[newOnly]=1' : ''; // if an Exra is pre-selected, create it right away
-
-	// open element browser popup
-	var w = window.open(
-		"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers" + extraPreselect + newOnly,
-		"npeb",
-		"width=800,height=500"
-	);
-	w.focus();
-}
-
-
-function showArticleBackend(state) {
-	if (state != 1) {
-		var display = 'none';
-	} else {
-		var display = 'block';
-	}
-	document.getElementById("article_batch").style.display = display;
-	document.getElementById("article_list_trigger").style.display = display;
-}
-function toggleBatchForm() {
-	if (document.getElementById('article_batch_form').style.display != 'block') {
-		document.getElementById('article_batch_form').style.display = 'block';
-	} else {
-		document.getElementById('article_batch_form').style.display = 'none';
-		$("tag_batch_msg").innerHTML = "";
-	}
-}
-
-function setFormValueOpenBrowser_A() {
-// \todo: path - lib solution needed ...
-var path = window.location.pathname;
-path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-if (path.indexOf('typo3conf/ext/newspaper') == -1) {
-	path += 'typo3conf/ext/newspaper'; // modify path if called from within a module
-}
-
-    var url = path + '/mod2/index.php?ab4al=1&select_box_id=tx_newspaper_mod6[articles]';
-    browserWin = window.open(url,"Typo3WinBrowser","height=350,width=650,status=0,menubar=0,resizable=1,scrollbars=1");
-    browserWin.focus();
-}
-
-
-function addOption(uid, kicker, title) {
-
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-
-	uid = parseInt(uid);
-	// don't add if uid is known already ...
-	for (var i = 0; i < s.options.length; i++) {
-		if (uid == s.options[i].value) {
-			return false; // this article has been added to the list already
-		}
-	}
-
-	// attach article to select box
-	s.options[s.length] = new Option(kicker + ': ' + title, uid, false, false);
-
-}
-function removeOptions() {
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-	found = true;// check at least one time ...
-	while (found) {
-		found = false;
-		for (var i = 0; i < s.options.length; i++) {
-			if (s.options[i].selected && !found) {
-				s.options[i] = null;
-				found = true;
-			}
-		}
-	}
-}
-
-
-// assign tag to all articles in article selectbox
-function batchAttachTag() {
-	var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
-
-	// collect article uids
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-	var aUids = '';
-	for (var i = 0; i < s.options.length; i++) {
-		aUids += s.options[i].value;
-		if (i < s.options.length-1) {
-			aUids += ',';
-		}
-	}
-
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + tag + '&tx_newspaper_mod6[articleUids]=' + aUids,
-				onCreate: function() {
-					$("processSpinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
-					$("tag_batch_msg").innerHTML = ''; // clear message
-				},
-				onSuccess: function(data) {
-					$("tx_newspaper_mod6[articles]").descendants().each(Element.remove); // clear article select box
-					$("processSpinner").innerHTML = ''; // remove spinner
-					$("tag_batch_msg").innerHTML = data.responseText; // show message
-				}
-			}
-		);
-
-}
-
-// open and get list or close list
-function toggleArticleList() {
-	if (document.getElementById('article_list').style.display != 'block') {
-		document.getElementById('article_list').style.display = 'block';
-		// get assigned articles
-		var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
-		var request = new Ajax.Request(
-			"index.php", {
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxListArticlesForCtrlTag]=' + tag,
-				onCreate: function() {
-					$("article_list").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
-				},
-				onSuccess: function(data) {
-					$("article_list").innerHTML = getDetachTagCheckbox();
-					$("article_list").innerHTML += data.responseText;
-					$("detachTagStuff").style.display = 'none'; // hide initially
-				}
-			}
-		);
-	} else {
-		document.getElementById('article_list').style.display = 'none';
-		document.getElementById('article_list').innerHTML = '';
-	}
-}
-
-function getDetachTagCheckbox() {
-	var html = '<div><input id="checkboxDetachTags" onchange="changeCheckboxDetachTag(); return false;" type="checkbox" />' + labelCheckboxBatchDetachTag;
-	html += '<span id="detachTagStuff"><input id="checkboxDetachTagsAllArticles" type="checkbox" onchange="cbDetachAll(); return false;" />' + labelCheckboxBatchDetachTagAllArticles + ' <input type="button" onclick="detachTagFromArticles(); return false;" value="' + labelCheckboxBatchDetachTagSubmit + '" /></span><span id="processSpinnerDetach"></span>';
-	html += '</div>';
-	return html;
-}
-
-function detachTagFromArticles() {
-	var prefixLength = 7; // length of prefix "detach_" vor field name
-	var elements = $$("#article_list .detachTag");
-
-	// collect article uids to detach the tag from
-	var ids = Array();
-	elements.each(function(element) {
-		if (element.checked == true) {
-			var id = parseInt(element.id.substring(prefixLength)); // get substring with article uid
-			ids.push(id);
-		}
-	});
-
-	var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
-	var request = new Ajax.Request(
-		"index.php",
-			{
-				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxBatchDetachTag]=' + tagUid + '&tx_newspaper_mod6[articleUids]=' + ids.join(","),
-				onCreate: function() {
-					$("processSpinnerDetach").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
-				},
-				onSuccess: function(data) {
-					$("article_list").innerHTML = data.responseText;
-				}
-			}
-		);
-}
-
-function cbDetachAll() {
-	var checked = $("checkboxDetachTagsAllArticles").checked;
-	var elements = $$("#article_list .detachTag");
-	elements.each(function(element) {
-		element.checked = checked;
-	});
-}
-
-function changeCheckboxDetachTag() {
-	if ($("checkboxDetachTags").checked) {
-		var display = "inline";
-	} else {
-		var display = "none";
-		$("checkboxDetachTagsAllArticles").checked = false; // reset checkbox
-	}
-	$("detachTagStuff").style.display = display;
-	var elements = $$("#article_list .detachTag");
-	elements.each(function(element) {
-		element.style.display = display;
-	});
-}
-
-
-function showReloadButton() {
-	$("tz_reload").style.display = "block";
-}
-
+	NpManageDossier.param["iconEdit"] = '{$ICON.edit}';
+	NpManageDossier.param["iconSave"] = '{$ICON.save}';
+	NpManageDossier.param["iconX"] = '{$ICON.x}';
 </script>
-{/literal}
 
 
 {if $noCtrlTagCatAvailable}
@@ -535,7 +116,7 @@ function showReloadButton() {
 
 <div>
 	<label for="tx_newspaper_mod6[ctrltagcat]">{$LANG.label_ctrltagcat}</label>
-	<select name="tx_newspaper_mod6[ctrltagcat]" onchange="changeCtrlTagCat(this.value); return false;">
+	<select name="tx_newspaper_mod6[ctrltagcat]" onchange="NpManageDossier.changeCtrlTagCat(this.value); return false;">
 	{foreach from=$CTRLTAGCATS item=ctrltagcat}
 		<option value="{$ctrltagcat.uid}"{if $ctrltagcat.uid == $DATA.ctrltagcat} selected="selected"{/if}>{$ctrltagcat.title}</option>
 	{/foreach}
@@ -544,7 +125,7 @@ function showReloadButton() {
 
 <div>
 	<label for="tx_newspaper_mod6[tag]">{$LANG.label_tag}</label>
-	<select name="tx_newspaper_mod6[tag]" id="tx_newspaper_mod6[tag]" onchange="changeTag(this.value); return false;">
+	<select name="tx_newspaper_mod6[tag]" id="tx_newspaper_mod6[tag]" onchange="NpManageDossier.changeTag(this.value); return false;">
 		<option value="0"></option>
 	{foreach from=$TAGS item=tag}
 		<option value="{$tag->getUid()}"{if $tag->getUid() == $DATA.tag} selected="selected"{/if}>{$tag->getAttribute('tag')}</option>
@@ -557,8 +138,8 @@ function showReloadButton() {
 		<option value="{$section->getUid()}">{$section->getAttribute('section_name')}</option>
 	{/foreach}
 	</select>
-		<a href="#" onclick="storeDossierSection(); return false;">{$ICON.save}</a>
-		<a href="#" onclick="cancelDossierSectionEdit(); return false;">{$ICON.x}</a> <span style="color:red;">{$LANG.message_performance_warning}</span>
+		<a href="#" onclick="NpManageDossier.storeDossierSection(); return false;">{$ICON.save}</a>
+		<a href="#" onclick="NpManageDossier.cancelDossierSectionEdit(); return false;">{$ICON.x}</a> <span style="color:red;">{$LANG.message_performance_warning}</span>
 	</span><span id="dossier_section_edit"></span>
 </div>
 
@@ -580,7 +161,7 @@ function showReloadButton() {
 	</div>
 </div>
 
-<div id="article_list_trigger" onclick="toggleArticleList(); return false;">{$LANG.label_show_article_list}</div>
+<div id="article_list_trigger" onclick="NpManageDossier.toggleArticleList(); return false;">{$LANG.label_show_article_list}</div>
 <div id="article_list"></div>
 
 {/if}

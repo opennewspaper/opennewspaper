@@ -256,7 +256,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * \return Array with articles
 	 */
     public function getArticles($limit = 1000000, $start = 0) {
-        $article_list = self::getDossierArticleList();
+// todo: Helge fragen, was hier passiert: $article_list = self::getDossierArticleList();
         if (!$article_list) {
             return $this->getArticlesDirect($limit, $start);
         }
