@@ -452,112 +452,68 @@ alert('hideTagBackend()');
 				}
 			}
 		);
-	}
-
-
-
-}
+	},
 
 
 
 
 
+	/**
+	 * Open Extra element browser
+	 * @param uid Tagzone uid
+	 * @param extraClass Pre-selected Extra class (if any)
+	 * @return void
+	 * @todo: move window.open to some element browser lib
+	 */
+	addExtraToTagzone: function(uid, extraClass) {
+		tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
 
+		var extraPreselect = (typeof(extraClass) == 'undefined')? '' : '&tx_newspaper_mod1[extraClassPreselect]=' + extraClass;
+		var newOnly = (extraPreselect)? '&tx_newspaper_mod1[newOnly]=1' : ''; // if an Exra is pre-selected, create it right away
 
+		// open element browser popup
+		var w = window.open(
+			"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers" + extraPreselect + newOnly,
+			"npeb",
+			"width=800,height=500"
+		);
+		w.focus();
+	},
 
-
-
-
-
-
-// \todo move window.open to some element browser lib
-function addExtraToTagzone(uid, extraClass) {
-	tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
-
-	var extraPreselect = (typeof(extraClass) == 'undefined')? '' : '&tx_newspaper_mod1[extraClassPreselect]=' + extraClass;
-	var newOnly = (extraPreselect)? '&tx_newspaper_mod1[newOnly]=1' : ''; // if an Exra is pre-selected, create it right away
-
-	// open element browser popup
-	var w = window.open(
-		"../mod1/index.php?tx_newspaper_mod1[controller]=eb&tx_newspaper_mod1[type]=e&tx_newspaper_mod1[allowMultipleSelection]=0&tx_newspaper_mod1[jsType]=manageDossiers" + extraPreselect + newOnly,
-		"npeb",
-		"width=800,height=500"
-	);
-	w.focus();
-}
-
-
-function toggleBatchForm() {
-	if (document.getElementById('article_batch_form').style.display != 'block') {
-		document.getElementById('article_batch_form').style.display = 'block';
-	} else {
-		document.getElementById('article_batch_form').style.display = 'none';
-		$("tag_batch_msg").innerHTML = "";
-	}
-}
-
-function setFormValueOpenBrowser_A() {
-// \todo: path - lib solution needed ...
-var path = window.location.pathname;
-path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
-if (path.indexOf('typo3conf/ext/newspaper') == -1) {
-	path += 'typo3conf/ext/newspaper'; // modify path if called from within a module
-}
-
-    var url = path + '/mod2/index.php?ab4al=1&select_box_id=tx_newspaper_mod6[articles]';
-    browserWin = window.open(url,"Typo3WinBrowser","height=350,width=650,status=0,menubar=0,resizable=1,scrollbars=1");
-    browserWin.focus();
-}
-
-
-function addOption(uid, kicker, title) {
-
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-
-	uid = parseInt(uid);
-	// don't add if uid is known already ...
-	for (var i = 0; i < s.options.length; i++) {
-		if (uid == s.options[i].value) {
-			return false; // this article has been added to the list already
+	/**
+	 * Toggle batch assign tag to articles backend
+	 * @return void
+	 */
+	toggleBatchForm: function() {
+		if (document.getElementById('article_batch_form').style.display != 'block') {
+			document.getElementById('article_batch_form').style.display = 'block';
+		} else {
+			document.getElementById('article_batch_form').style.display = 'none';
+			$("tag_batch_msg").innerHTML = "";
 		}
-	}
+	},
 
-	// attach article to select box
-	s.options[s.length] = new Option(kicker + ': ' + title, uid, false, false);
 
-}
-function removeOptions() {
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-	found = true;// check at least one time ...
-	while (found) {
-		found = false;
+	/**
+	 * Adds the selected tag to all articles that has been added to select box tx_newspaper_mod6[articles]
+	 * @return void
+	 */
+	batchAttachTag: function() {
+		var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
+
+		// collect article uids
+		var s = document.getElementById('tx_newspaper_mod6[articles]');
+		var aUids = '';
 		for (var i = 0; i < s.options.length; i++) {
-			if (s.options[i].selected && !found) {
-				s.options[i] = null;
-				found = true;
+			aUids += s.options[i].value;
+			if (i < s.options.length-1) {
+				aUids += ',';
 			}
 		}
-	}
-}
 
-
-// assign tag to all articles in article selectbox
-function batchAttachTag() {
-	var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
-
-	// collect article uids
-	var s = document.getElementById('tx_newspaper_mod6[articles]');
-	var aUids = '';
-	for (var i = 0; i < s.options.length; i++) {
-		aUids += s.options[i].value;
-		if (i < s.options.length-1) {
-			aUids += ',';
-		}
-	}
-
-	var request = new Ajax.Request(
-		"index.php",
-			{
+		// assign tag
+		var request = new Ajax.Request(
+			"index.php", {
 				method: 'get',
 				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + tag + '&tx_newspaper_mod6[articleUids]=' + aUids,
 				onCreate: function() {
@@ -572,18 +528,51 @@ function batchAttachTag() {
 			}
 		);
 
+	},
+
+	/**
+	 *
+	 * @return void
+	 * @todo: remove when dependecy tree performance issues are solved
+	 */
+	showReloadButton: function() {
+		$("tz_reload").style.display = "block";
+	},
+
+	/**
+	 * Add article to article select box
+	 * @param uid Article uid
+	 * @param kicker Article kicker
+	 * @param title Article title
+	 * @return void
+	 */
+	addOption: function(uid, kicker, title) {
+		NpBackend.addOption(document.getElementById('tx_newspaper_mod6[articles]'), uid, NpTools.assembleArticleTitle(kicker, title));
+	},
+
+	/**
+	 * Removes all selected options from article select box
+	 * @return void
+	 */
+	removeOptions: function() {
+		NpBackend.removeSelectedOptions(document.getElementById('tx_newspaper_mod6[articles]'));
+	},
+
+	/**
+	 * Opens the article browser
+	 * @return void
+	 * @todo move to newspaper.js?
+	 */
+	setFormValueOpenBrowser_A: function() {
+
+		var path = NpTools.getPath();
+		if (path.indexOf('typo3conf/ext/newspaper') == -1) {
+			path += 'typo3conf/ext/newspaper'; // modify path if called from within a module
+		}
+
+	    var url = path + '/mod2/index.php?ab4al=1&select_box_id=tx_newspaper_mod6[articles]';
+	    browserWin = window.open(url,"Typo3WinBrowser","height=350,width=650,status=0,menubar=0,resizable=1,scrollbars=1");
+	    browserWin.focus();
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-function showReloadButton() {
-	$("tz_reload").style.display = "block";
-}
-

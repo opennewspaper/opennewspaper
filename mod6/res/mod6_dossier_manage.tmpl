@@ -146,16 +146,16 @@
 <div id="tz"></div>
 
 <div id="article_batch" style="display:none;">
-	<div id="batch_trigger" onclick="toggleBatchForm(); return false;">{$LANG.label_wizard_dossier_article_tag}</div>
+	<div id="batch_trigger" onclick="NpManageDossier.toggleBatchForm(); return false;">{$LANG.label_wizard_dossier_article_tag}</div>
 	<div id="article_batch_form" style="display:none;">
 		<div style="float:left;"><select id="tx_newspaper_mod6[articles]" multiple="multiple" size="12"> </select></div>
 		<div style="float:left;">
-			<a href="#" onclick="setFormValueOpenBrowser_A(); return false;">{$ICON.articlebrowser}</a><br />
-			<a href="#" onclick="removeOptions(); return false;">{$ICON.x}</a>
+			<a href="#" onclick="NpManageDossier.setFormValueOpenBrowser_A(); return false;">{$ICON.articlebrowser}</a><br />
+			<a href="#" onclick="NpManageDossier.removeOptions(); return false;">{$ICON.x}</a>
 		</div>
 		<span id="processSpinner"></span>
 		<div id="button">
-			<input onclick="batchAttachTag()" type="button" value="{$LANG.label_attach_tag_button}" /></div>
+			<input onclick="NpManageDossier.batchAttachTag()" type="button" value="{$LANG.label_attach_tag_button}" /></div>
 		</div>
 		<div id="tag_batch_msg"></div>
 	</div>

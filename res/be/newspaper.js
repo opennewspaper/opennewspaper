@@ -181,14 +181,36 @@ var NpTools = {
     		}
     	}
     	return ''; // no hit found
-    }
+    },
+
+
+// some newspaper string tools
+
+	/**
+	 * Renders a string representing the kicker and title of an article
+	 * @param kicker Kicker of the article
+	 * @param title Title of the article
+	 * @return Title for an article
+	 */
+	assembleArticleTitle: function(kicker, title) {
+    	if (!kicker && !title) {
+    		return "---";
+    	}
+
+		var ret = "";
+		if (kicker) {
+			ret = kicker + ": ";
+		}
+		ret += title;
+		return ret;
+	}
 
 };
 
 
 
 /**
- * Newspaper backend function that are needed at various placed
+ * Newspaper backend function that are needed at various places
  */
 var NpBackend = {
 	param: [],
@@ -250,6 +272,43 @@ var NpBackend = {
 			"preview",
 			"width=800,height=500,left=100,top=100,resizable=yes,toolbar=no,location=no,scrollbars=yes"
 		);
+	},
+
+	/**
+	 * Add a new option to a select box
+	 * @param selectboxObj DOM select box
+	 * @param value Value to be stored in the select box
+	 * @param label Label to be rendered in the select box
+	 * @return true, if the option was added, flase if not (value has been on use already)
+	 */
+	addOption: function(selectboxObj, value, label) {
+		// don't add if value is already in use
+		for (var i = 0; i < selectboxObj.options.length; i++) {
+			if (selectboxObj.options[i].value == value) {
+				return false; // this option has been added to the list already
+			}
+		}
+
+		// attach new option to select box
+		selectboxObj.options[selectboxObj.length] = new Option(label, value, false, false);
+		return true;
+	},
+
+
+	/**
+	 * Remove all selected option from select box selectboxObj
+	 * @param selectboxObj DOM select box
+	 * @return true, if at least one option was removed, else false
+	 */
+	removeSelectedOptions: function(selectboxObj) {
+		var found = false;
+		for (var i = selectboxObj.options.length-1; i >= 0; i--) {
+			if (selectboxObj.options[i].selected) {
+				selectboxObj.options[i] = null;
+				found = true;
+			}
+		}
+		return found;
 	}
 
 }

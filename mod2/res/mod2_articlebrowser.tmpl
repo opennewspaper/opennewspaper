@@ -35,25 +35,25 @@ td {
 
   // for article list module (select box is rendered with newspaper ext)
 
-  function insertElementNpStyle(uid, kicker, title, element, doClose) {
-      var selectBox = parent.window.opener.$('#' + element);
-      if (selectBox == null) {
-        // hack: this happens in dossier wizard
-      selectBox = parent.window.opener.document.getElementById(element);
-    }
+	function insertElementNpStyle(uid, kicker, title, element, doClose) {
+		// get handle to select box
+		var selectBox = parent.window.opener.$('#' + element);
 
-      if (element != 'tx_newspaper_mod6[articles]') {
-      // \todo: remove this ugly hack
-      selectBox.addOptionAboveSelected(uid, kicker, title);
-      parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
-    } else {
-      parent.window.opener.addOption(uid, kicker, title);
-    }
-      if(doClose) {
-        parent.close();
-      }
-      return false;
-  }
+		switch(element) {
+			case "tx_newspaper_mod6[articles]":
+				// manage dossier in mod6
+				selectBox = parent.window.opener.document.getElementById(element);
+				parent.window.opener.NpManageDossier.addOption(uid, kicker, title);
+			break;
+			default:
+				selectBox.addOptionAboveSelected(uid, kicker, title);
+				parent.window.opener.$("input.save[title=" +  element + "]").addClass("unsaved");
+		}
+
+		if (doClose) {
+			parent.close();
+		}
+	}
 
 
 
