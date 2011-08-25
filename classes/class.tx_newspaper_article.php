@@ -1180,7 +1180,7 @@ tx_newspaper::devlog('trimLeadingKet() result', array($paragraph));
     }
 
     private function startsWithHTMLAttribute($paragraph) {
-        return preg_match('/\w+="\w+"/', trim($paragraph));
+        return preg_match('/\w+="\w+">/', trim($paragraph));
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
