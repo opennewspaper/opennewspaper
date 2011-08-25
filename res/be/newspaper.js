@@ -296,7 +296,7 @@ var NpBackend = {
 
 
 	/**
-	 * Remove all selected option from select box selectboxObj
+	 * Remove all selected options from select box selectboxObj
 	 * @param selectboxObj DOM select box
 	 * @return true, if at least one option was removed, else false
 	 */
@@ -309,7 +309,19 @@ var NpBackend = {
 			}
 		}
 		return found;
+	},
+
+	/**
+	 * Remove all options from select box selectboxObj
+	 * @param selectboxObj DOM select box
+	 * @return void
+	 */
+	removeAllOptions: function(selectboxObj) {
+		for (var i = selectboxObj.options.length-1; i >= 0; i--) {
+			selectboxObj.options[i] = null;
+		}
 	}
+
 
 }
 

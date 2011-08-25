@@ -1,83 +1,13 @@
 {* debug *}
 
-
-<script type="text/javascript">
-	var labelChooseTag = "{$LL.chooseTag}";
-	var confirmMessage = "{$LL.renameConfirm}";
-	var tagNotUniqueMesssage = "{$LL.message_tag_not_unique}";
-	var tagRenamedMesssage = "{$LL.message_tag_renamed}";
-{literal}
-	function clearOptionsInTarget() {
-		// clear tag select boxes
-		$("tag_rename").descendants().each(Element.remove);
-	}
-	function addOptionsToTarget(options) {
-		$("tag_rename").options[$("tag_rename").options.length] = new Option(labelChooseTag, -1);
-		for(i = 0; i < options.length; i++) {
-			$("tag_rename").options[$("tag_rename").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
-		}
-	}
-
-	// Fills the rename tag input fields (or hides it if no tag is selected)
-	function processInputField() {
-		var tagUid = $("tag_rename").value;
-		if (tagUid < 1) {
-			$("renameBackend").style.display = 'none';
-			return false; // nothing to do
-		}
-		refreshInputField();
-
-		$("renameBackend").style.display = 'block';
-	}
-
-	// Copies the tag name to rename input field
-	function refreshInputField() {
-		$("rename").value = $("tag_rename").options[$("tag_rename").selectedIndex].text;
-		$("message").innerHTML = ''; // clear message
-	}
-
-	function storeRenamedTag() {
-		if (confirm(confirmMessage)) {
-			var tagUid = parseInt($("tag_rename").value);
-			var newTagName = $("rename").value;
-			var request = new Ajax.Request(
-				"index.php",
-					{
-						method: 'get',
-						parameters: 'tx_newspaper_mod8[ajaxController]=renameTag&tx_newspaper_mod8[tagUid]=' + tagUid + '&tx_newspaper_mod8[newTagName]=' + NpTools.escapeQuotes(newTagName),
-						onCreate: function() {
-							$("spinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
-						},
-						onSuccess: function(data) {
-							if (data) {
-								var success = data.responseText.evalJSON().success;
-								if (success) {
-									$("message").innerHTML = tagRenamedMesssage;
-									fetchTags();
-									processInputField();
-								} else {
-									alert(tagNotUniqueMesssage);
-								}
-							}
-							$("spinner").innerHTML = ''; // hide spinner
-						}
-					}
-				);
-		}
-	}
-
-
-</script>
-{/literal}
-
 <div class="tag_selection">
     <h3>{$LL.tagRename}</h3>
-    <select id="tag_rename" size="1" onchange="processInputField(); return false;">
+    <select id="tag_rename" size="1" onchange="NpTag.processRenameInputField(); return false;">
         <option selected="selected" id="0">{$lang.chooseTag}</option>
         {html_options options=$tags}
     </select>
 	<div id="renameBackend">
-		<input type="text" id="rename" value="" /> <a href="#" onclick="storeRenamedTag(); return false;">{$ICON.save}</a><span id="spinner"></span> <a href="#" onclick="refreshInputField(); return false;">{$ICON.undo}</a>
+		<input type="text" id="rename" value="" /> <a href="#" onclick="NpTag.storeRenamedTag(); return false;">{$ICON.save}</a><span id="spinner"></span> <a href="#" onclick="NpTag.refreshRenameInputField(); return false;">{$ICON.undo}</a>
 	</div>
 	<div id="message"></div>
 </div>

@@ -1,65 +1,5 @@
 {* debug *}
 
-
-<script type="text/javascript">
-	var labelChooseTag = "{$LL.chooseTag}";
-	var messageMergeConfirm = "{$LL.mergeConfirm}";
-	var messagePleaseSelectTargetTag = "{$LL.messageSelectTargetTag}";
-	var messagePleaseSelectSourceTags = "{$LL.messageSelectSourceTags}";
-{literal}
-	function clearOptionsInTarget() {
-		// clear tag select boxes
-		$("tag_merge").descendants().each(Element.remove);
-		$("tag_merge_with").descendants().each(Element.remove);
-	}
-	function addOptionsToTarget(options) {
-		for(i = 0; i < options.length; i++) {
-			$("tag_merge").options[$("tag_merge").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
-		}
-		$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(labelChooseTag, -1);
-		for(i = 0; i < options.length; i++) {
-			$("tag_merge_with").options[$("tag_merge_with").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
-		}
-	}
-
-	function merge() {
-		var targetTagUid = parseInt($("tag_merge_with").value);
-		if (targetTagUid < 1) {
-			alert(messagePleaseSelectTargetTag);
-			return;
-		}
-
-		var sourceTags = $F("tag_merge").join("|");
-		if (!sourceTags) {
-			alert(messagePleaseSelectSourceTags);
-			return;
-		}
-
-		if (!confirm(messageMergeConfirm)) {
-			return; // user must confirm that he knows what he's doing
-		}
-
-		var request = new Ajax.Request(
-			"index.php", {
-				method: 'get',
-				parameters: 'tx_newspaper_mod8[ajaxController]=mergeTags&tx_newspaper_mod8[sourceTags]=' + sourceTags + '&tx_newspaper_mod8[targetTag]=' + targetTagUid,
-				onCreate: function() {
-					$("spinnerMerge").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
-				},
-				onSuccess: function(data) {
-					if (data) {
-						fetchTags(); // re-read tags
-						$("message").innerHTML = data.responseText;
-					}
-					$("spinnerMerge").innerHTML = '';
-				}
-			}
-		);
-	}
-
-</script>
-{/literal}
-
 <p class="description">
 {$LL.mergeDescription}
 </p>
@@ -78,6 +18,6 @@
         <option selected="selected" id="0">{$lang.chooseTag}</option>
         {html_options options=$tags}
     </select>
-	<p><input type="button" value="{$LL.mergeSelected}" onclick="merge(); return false;" /><span id="spinnerMerge"></span></p>
+	<p><input type="button" value="{$LL.mergeSelected}" onclick="NpTag.merge(); return false;" /><span id="spinnerMerge"></span></p>
 	<div id="message"></div>
 </div>
