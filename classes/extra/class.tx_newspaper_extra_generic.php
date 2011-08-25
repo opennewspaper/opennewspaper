@@ -30,13 +30,9 @@ class tx_newspaper_Extra_Generic extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
-
 		$this->prepare_render($template_set);
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
-
-        tx_newspaper::logExecutionTime();
 
         return $rendered;
 	}
