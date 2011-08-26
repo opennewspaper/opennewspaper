@@ -58,6 +58,7 @@ function deleteArticle(article_uid, message) {
  * @param status: 1 = hidden, 0 = published
  */
 function changeArticleHiddenStatus(article_uid, status) {
+	showProgress();
 	type = (status != 0)? 'hideArticle' : 'publishArticle';
 	var request = new Ajax.Request(
 		"index.php", {
@@ -110,4 +111,8 @@ function checkEnter(code) {
 	}
 	submitFilter('reset_startpage');
 	return false;
+}
+
+function showProgress() {
+	document.getElementById("progress").style.display = "inline";
 }
