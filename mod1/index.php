@@ -588,7 +588,10 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					$clonedExtra = clone $extra;
         			$clonedExtra->setOriginUid(0);
         			$clonedExtra->store();
-        			die(json_encode(array('uid' => $clonedExtra->getExtraUid())));
+        			die(json_encode(array(
+        				'uid' => $clonedExtra->getExtraUid(),
+        				'label' => htmlspecialchars($clonedExtra->getAbstractExtraLabel())
+        			)));
 				break;
 			}
 

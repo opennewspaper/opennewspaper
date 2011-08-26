@@ -39,9 +39,7 @@ class tx_newspaper_BE {
 //t3lib_div::devlog('getAbstractExtraLabel()', 'newspaper', 0, array('params' => $params));
 		if ($params['row']['extra_table']) {
 			$e = new $params['row']['extra_table'](intval($params['row']['extra_uid']));
-			if (!$params['title'] = $e->getAttribute('short_description')) {
-				$params['title'] = $params['row']['extra_table'] . ' #' . $params['row']['extra_uid'] . ' (#' . $params['row']['uid'] . ')';
-			}
+			$params['title'] = $e->getAbstractExtraLabel();
 		}
 		if (!$params['title']) {
 			$params['title'] = $params['table'] . ' #' . $params['row']['uid'];

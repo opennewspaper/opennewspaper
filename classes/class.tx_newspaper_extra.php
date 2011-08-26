@@ -428,6 +428,17 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 			$this->getTitle() . ' ' . $this->getUid();
 	}
 
+	/**
+	 * Get backend title for an abstract extra
+	 * @return Content of field "short_description" in concrete Extra or concrete table name and uid if field "short_description" is empty.
+	 */
+	public function getAbstractExtraLabel() {
+		if (!$title = $this->getAttribute('short_description')) {
+			$title = $this->getTable() . ' #' . $this->getUid() . ' (#' . $this->getExtraUid() . ')';
+		}
+		return $title;
+	}
+
 	public function deleteIncludingReferences() {
 		/// Find abstract records linking to the concrete Extra
 		$uids = tx_newspaper::selectRows(

@@ -29,7 +29,7 @@ function choseRecord(className, uid, close) {
 				onSuccess: function(response) {
 					if (response) {
 						var data = response.responseText.evalJSON(true);
-						insertElement(className, data.uid, 'db', '[New entry]', '', '', '../typo3conf/ext/newspaper/res/icons/icon_tx_newspaper_extra.gif', '', close, form_table, form_field, form_uid);
+						insertElement(className, data.uid, 'db', data.label, '', '', '../typo3conf/ext/newspaper/res/icons/icon_tx_newspaper_extra.gif', '', close, form_table, form_field, form_uid);
 					}
 				},
 			}
