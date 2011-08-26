@@ -78,6 +78,11 @@ $TCA['tx_newspaper_ctrltag_category']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_ctrltag_category.gif';
 $TCA['tx_newspaper_extra_html']['ctrl']['iconfile'] =
 	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_html.gif';
+$TCA['tx_newspaper_extra_freeformimage']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_freeformimage.gif';
+$TCA['tx_newspaper_extra_sectionteaser']['ctrl']['iconfile'] =
+	t3lib_extMgm::extRelPath($_EXTKEY).'res/icons/icon_tx_newspaper_extra_sectionteaser.gif';
+
 
 if (TYPO3_MODE == 'BE') {
 
