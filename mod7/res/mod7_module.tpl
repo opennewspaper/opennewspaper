@@ -15,7 +15,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 
 <h2>
 	<a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title}
-	<img src="res/move-spinner.gif" alt="" id="progress" />
+	<div id="progress"><img src="res/move-spinner.gif" alt="" /></div>
 </h2>
 <div style="padding-top: 5px;" />
 <hr style="margin-top: 5px; margin-bottom: 5px;" />

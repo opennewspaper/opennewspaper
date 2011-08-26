@@ -1,42 +1,52 @@
-.tx_newspaper_mod7 table th { 
-	font-size:10px; 
-	text-align:left; 
+.tx_newspaper_mod7 table th {
+	font-size:10px;
+	text-align:left;
 }
-.tx_newspaper_mod7 .multiple-select { 
-	width:100%; 
+.tx_newspaper_mod7 .multiple-select {
+	width:100%;
 }
-.tx_newspaper_mod7 .ressort-select { 
-	width:400px; 
+.tx_newspaper_mod7 .ressort-select {
+	width:400px;
 }
-.tx_newspaper_mod7 table td, .tx_newspaper_mod7 table th { 
-	padding:2px; 
-	text-align:left; 
+.tx_newspaper_mod7 table td, .tx_newspaper_mod7 table th {
+	padding:2px;
+	text-align:left;
 }
-.tx_newspaper_mod7 table.sections {	
-	width:650px; 
+.tx_newspaper_mod7 table.sections {
+	width:650px;
 }
-.tx_newspaper_mod7 table.articles {	
-	width:300px; 
+.tx_newspaper_mod7 table.articles {
+	width:300px;
 }
 .tx_newspaper_mod7 td.level {
-	width:360px; 
+	width:360px;
 }
-.tx_newspaper_mod7 div.level { 
-	float:left; 
-	display:inline; 
+.tx_newspaper_mod7 div.level {
+	float:left;
+	display:inline;
 }
-.tx_newspaper_mod7 h2 { 
-	height:13px; 
-	padding-top:3px; }
-.tx_newspaper_mod7 #progress { 
-	display:none; 
-	vertical-align:middle; 
+.tx_newspaper_mod7 h2 {
+	height:13px;
+	padding-top:3px;
+}
+.tx_newspaper_mod7 #progress {
+	display:none;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.7);
+    bottom:0;
+    color:#808080;
+    left:0;
+    padding-top:180px;
+    position:absolute;
+    right:0;
+    text-align:center;
+    top:0;
+    z-index:99;
 }
 .tx_newspaper_mod7 select#sections_available {
 	margin-top:5px;
 }
 .tx_newspaper_mod7 i.noaccess {
-	height:88px; 
+	height:88px;
 	display:block;
 }
 .tx_newspaper_mod7 option.current {
@@ -87,7 +97,7 @@ table#section_selects {
 }
 
 #workflow_comment {
-	width:400px; 
+	width:400px;
 	height:41px;
 }
 
@@ -140,7 +150,7 @@ table#section_selects {
 .np_wf_link a.more {
 	text-decoration: none;
 	font-size: 10px;
-	text-transform: uppercase;	
+	text-transform: uppercase;
     background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_down.gif);
     background-repeat: no-repeat;
     background-position: -2px 3px;
@@ -152,7 +162,7 @@ table#section_selects {
 .np_wf_link a.less {
 	text-decoration: none;
 	font-size: 10px;
-	text-transform: uppercase;	
+	text-transform: uppercase;
     background-image: url(../typo3conf/ext/newspaper/res/be/img/arrow_up.gif);
     background-repeat: no-repeat;
     background-position: -2px 3px;
@@ -164,6 +174,6 @@ table#section_selects {
 
 
 
-.tx_newspaper_mod7 .counter { 
-	text-align:right; 
+.tx_newspaper_mod7 .counter {
+	text-align:right;
 }
