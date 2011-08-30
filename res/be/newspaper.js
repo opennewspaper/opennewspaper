@@ -366,11 +366,11 @@ var NpBackend = {
 	 * @return Path to spinner file
 	 */
 	getSpinnerFile: function() {
-		if (document.location.href.indexOf('M=txnewspaperMmain_txnewspaperM9')) {
-			return "../res/be/css/move-spinner.gif"; //
+		if (document.location.href.indexOf('M=txnewspaperMmain_txnewspaperM9') >= 0) {
+			return "../typo3conf/ext/newspaper/res/be/css/move-spinner.gif"; //
 		}
-		if (document.location.href.indexOf('tx_newsapper_mod7[controller]=singleplacement')) {
-			return "res/be/css/move-spinner.gif";
+		if (document.location.href.indexOf('tx_newsapper_mod7[controller]=singleplacement') >= 0) {
+			return "move-spinner.gif";
 		}
 		return "../res/be/css/move-spinner.gif"; // default
 	}
