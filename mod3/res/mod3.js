@@ -702,28 +702,26 @@ function extra_insert_after_NEW(origin_uid, pz_uid, article_uid, in_article, par
 //		 if(paragraphUsed) {
 //		    new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 //		 }
-    var extra_class_sysfolder = getChosenExtra();
-    var extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
-    var extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
-    if (!extra_class || !extra_sysfolder) {
-        alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
-        return false;
-    }
-    extra_sysfolder = parseInt(extra_sysfolder);
-    if (extra_class != false) { //extra is related to pagezone in save hook!
-        var loc = top.path + "typo3conf/ext/newspaper/mod3/index.php";
-        new Ajax.Request(loc, {
-            parameters: {'extra_create' : 1, 'article_uid' : article_uid, 'extra_class' : extra_class, 'origin_uid' : origin_uid, 'pz_uid' : pz_uid, 'paragraph' : getParagraph(), 'doShow' : show},
-            onCreate: processing_in_article,
-            onSuccess: function(transport) {
-                if(transport) {
-                    var  data = transport.responseJSON;
-                    $('extras').innerHTML = data.content;
-                    tabManagement.clearTabCache();
-                    tabManagement.show(extra_class+'_'+data.extra_uid);
-                }
-            }
-        });
+    var extra_class_sysfolder;
+    if (extra_class_sysfolder = getChosenExtra()) {
+	    var extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+	    var extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
+	    extra_sysfolder = parseInt(extra_sysfolder);
+	    if (extra_class != false) { //extra is related to pagezone in save hook!
+	        var loc = top.path + "typo3conf/ext/newspaper/mod3/index.php";
+	        new Ajax.Request(loc, {
+	            parameters: {'extra_create' : 1, 'article_uid' : article_uid, 'extra_class' : extra_class, 'origin_uid' : origin_uid, 'pz_uid' : pz_uid, 'paragraph' : getParagraph(), 'doShow' : show},
+	            onCreate: processing_in_article,
+	            onSuccess: function(transport) {
+	                if(transport) {
+	                    var  data = transport.responseJSON;
+	                    $('extras').innerHTML = data.content;
+	                    tabManagement.clearTabCache();
+	                    tabManagement.show(extra_class+'_'+data.extra_uid);
+	                }
+	            }
+	        });
+	    }
     }
     return false;
 }
@@ -734,15 +732,12 @@ function extra_insert_after_POOL(origin_uid, pz_uid, in_article, paragraphUsed) 
     if(paragraphUsed) {
         new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
     }
-    extra_class_sysfolder = getChosenExtra();
-    extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
-    if (extra_class == false) {
-        alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
-        return false;
-    }
-    if (extra_class != false) {
+    if (extra_class_sysfolder = getChosenExtra()) {
+        extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+        if (extra_class != false) {
 //self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pool_extra_pz_uid=" + pz_uid + "&pool_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
-        self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data;
+            self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data;
+        }
     }
 }
 

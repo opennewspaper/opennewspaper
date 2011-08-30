@@ -21,16 +21,13 @@
 		{* todo: move logic from smarty to js *}
 		new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 {/if}
-		extra_class_sysfolder = getChosenExtra();
-		extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
-		extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
-		if (extra_class == false || extra_sysfolder == false) {ldelim}
-			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
-			return false;
-		{rdelim}
-		extra_sysfolder = parseInt(extra_sysfolder);
-		if (extra_class != false) {ldelim} {* extra is related to pagezone in save hook! *}
-			self.location.href = top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/res/" + closehtml + "&edit[" + extra_class + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
+		if (extra_class_sysfolder = getChosenExtra()) {ldelim}
+			extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+			extra_sysfolder = top.NpTools.splitAtPipe(extra_class_sysfolder, 1);
+			extra_sysfolder = parseInt(extra_sysfolder);
+			if (extra_class != false) {ldelim} {* extra is related to pagezone in save hook! *}
+				self.location.href = top.path + "typo3/alt_doc.php?returnUrl=" + top.path + "typo3conf/ext/newspaper/mod3/res/" + closehtml + "&edit[" + extra_class + "][" + extra_sysfolder + "]=new&new_extra_pz_uid=" + pz_uid + "&new_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
+			{rdelim}
 		{rdelim}
 	{rdelim}
 
@@ -41,15 +38,13 @@ if (in_article) alert("pool: in article not yet implemented");
 		{* todo: move logic from smarty to js *}
 		new_extra_paragraph_position_data = '&paragraph=' + getParagraph();
 {/if}
-		extra_class_sysfolder = getChosenExtra();
-		extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
-		if (extra_class == false) {ldelim}
-			alert('Fatal error: Value in list of extras has wrong structure! Please contact developers!');
-			return false;
-		{rdelim}
-		if (extra_class != false) {ldelim}
+
+		if (extra_class_sysfolder = getChosenExtra()) {ldelim}
+			extra_class = top.NpTools.splitAtPipe(extra_class_sysfolder, 0);
+			if (extra_class != false) {ldelim}
 //self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pool_extra_pz_uid=" + pz_uid + "&pool_extra_after_origin_uid=" + origin_uid + new_extra_paragraph_position_data
-			self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data
+				self.location.href = "index.php?chose_extra_from_pool=1&origin_uid=" + origin_uid + "&extra=" + extra_class + "&pz_uid=" + pz_uid + new_extra_paragraph_position_data
+			{rdelim}
 		{rdelim}
 	{rdelim}
 
