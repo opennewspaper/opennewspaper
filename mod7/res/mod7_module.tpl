@@ -13,10 +13,7 @@ var langReallyrefresh = "{$lang.reallyrefresh}";
 <script src="res/mod7.js" type="text/javascript"></script>
 <script src="../res/be/newspaper.js" type="text/javascript"></script>
 
-<h2>
-	<a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title}
-	<div id="progress"><img src="res/move-spinner.gif" alt="" /></div>
-</h2>
+<h2><a href="#" onclick="closePlacement(); return false;">{$ICON.close}</a> {$lang.title}</h2>
 <div style="padding-top: 5px;" />
 <hr style="margin-top: 5px; margin-bottom: 5px;" />
 <div style="padding-top: 5px;" />

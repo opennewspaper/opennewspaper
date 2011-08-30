@@ -2,6 +2,7 @@
 {* template for section article lists *}
 
 {if $singlemode}
+	<script src="{$T3PATH}typo3conf/ext/newspaper/res/be/newspaper.js" type="text/javascript"></script>
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
 	var langReallycancel = "{$lang.reallycancel}";
@@ -53,10 +54,10 @@
 								{/foreach}
 								</th>
 							</tr>
-	
-						{if $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic"}			
+
+						{if $section.listtype|lower == "tx_newspaper_articlelist_semiautomatic"}
 							{* type semiautomatic are rendered here only *}
-		
+
 							{if $isde && isset($section.articlelist)}
 								{* duty editor, article list available, class for article list is known *}
 								<tr>
@@ -68,7 +69,7 @@
 									<td>
 										<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if  $section.listtype|lower == "tx_newspaper_articlelist_manual"} manual-list {/if}">
 											{foreach from=$section.articlelist item="list" name="al_loop" key="key"}
-												<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>										
+												<option value="{$key}" label="{$list}" title="{$list}">{$list}</option>
 											{/foreach}
 										</select>
 									</td>
@@ -101,7 +102,7 @@
 									</td>
 								</tr>
 							{/if}
-						
+
 						{else}
 							{* hide complete div *}
 	<style>
@@ -110,16 +111,16 @@
 	{rdelim}
 	</style>
 						{/if}
-							
+
 						</table>
-						
+
 						{if $isde && isset($section.articlelist)}
 							<div align="right" {if !$singlemode}style="display:none;"{/if}>
 								<input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
 								<input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
 							</div>
 						{/if}
-	
+
 					</div>
 					{/foreach}
 				</td>
@@ -147,10 +148,10 @@
 							</th>
 						</tr>
 
-					{if (!$SEMIAUTO_AL_FOLDED || $singlemode) || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}				
+					{if (!$SEMIAUTO_AL_FOLDED || $singlemode) || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
 						{* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
-	
-	
+
+
 						{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
 							{* duty editor, article list available, class for article list is known *}
 							<tr>
@@ -162,7 +163,7 @@
 								<td>
 									<select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if  $section.listtype|lower == "tx_newspaper_articlelist_manual"} manual-list {/if}">
 										{foreach from=$section.articlelist item="list" name="al_loop" key="key"}
-											<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>										
+											<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>
 										{/foreach}
 									</select>
 								</td>
@@ -194,7 +195,7 @@
 											</a>
 										{else}
 											<br />
-											{* add article browser *}											
+											{* add article browser *}
 											<a href="#" onclick="setFormValueOpenBrowser_AL('placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}', '{$section.section->getAttribute('section_name')|escape:html}'); return false;" >{$ICON.articlebrowser}</a>
 										{/if}
 										<br />
@@ -215,11 +216,11 @@
 								</td>
 							</tr>
 						{/if}
-						
+
 					{/if}
-						
+
 					</table>
-					
+
 					{if !$SEMIAUTO_AL_FOLDED || $singlemode || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
 						{if $isde && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
 							<div align="right" {if !$singlemode}style="display:none;"{/if}>
@@ -248,10 +249,10 @@ display:none;
 
 {if $singlemode}
 	{if !$FULLRECORD}
-		</form>        
+		</form>
         <a href="{$smarty.server.PHP_SELF}?{$smarty.server.QUERY_STRING}&tx_newspaper_mod7[fullrecord]=1&tx_newspaper_mod9[fullrecord]=1">{$lang.label_articlelist_fullrecord}</a>
 	{else}
 		{$AL_BACKEND}
 	{/if}
         </div>
-{/if}                                                    
+{/if}

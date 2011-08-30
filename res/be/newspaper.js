@@ -320,6 +320,59 @@ var NpBackend = {
 		for (var i = selectboxObj.options.length-1; i >= 0; i--) {
 			selectboxObj.options[i] = null;
 		}
+	},
+
+	/**
+	 * Show a semi-transparent layer with a spinner
+	 * @return void
+	 */
+	showProgress: function() {
+		if (!document.getElementById("NpBackendProgress")) {
+			var layer = document.createElement("div");
+			layer.setAttribute("id", "NpBackendProgress");
+			layer.style.backgroundAttachment = "scroll";
+			layer.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
+			layer.style.backgroundImage = "none";
+			layer.style.backgroundPosition = "0 0";
+			layer.style.backgroundRepeat = "repeat";
+		    layer.style.position = "absolute";
+			layer.style.top = 0;
+			layer.style.bottom = 0;
+		    layer.style.left = 0;
+		    layer.style.right = 0;
+		    layer.style.zIndex = 99;
+		    layer.style.paddingTop = 180;
+		    layer.style.color = "#808080";
+		    layer.style.textAlign = "center";
+			layer.innerHTML = '<img src="' + this.getSpinnerFile() + '" alt="" />';
+			document.body.appendChild(layer);
+		}
+		document.getElementById("NpBackendProgress").style.display = "inline";
+	},
+
+	/**
+	 * Hides the layer and spinner (see NpBackend.showProgress())
+	 * @return void
+	 */
+	hideProgress: function() {
+		if (!document.getElementById("NpBackendProgress")) {
+			return; // I've got nothing to hide ;-)
+		}
+		document.getElementById("NpBackendProgress").style.display = "none";
+	},
+
+	/**
+	 * Get path to spinner file
+	 * @return Path to spinner file
+	 */
+	getSpinnerFile: function() {
+		if (document.location.href.indexOf('M=txnewspaperMmain_txnewspaperM9')) {
+			return "../res/be/css/move-spinner.gif"; //
+		}
+		if (document.location.href.indexOf('tx_newsapper_mod7[controller]=singleplacement')) {
+			return "res/be/css/move-spinner.gif";
+		}
+		return "../res/be/css/move-spinner.gif"; // default
 	}
 
 

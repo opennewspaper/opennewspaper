@@ -17,17 +17,6 @@ function hideEmptyTablecells() {
             });
 }
 
-// show spinner
-function showProgress() {
-	$("#progress").css("display", "inline");
-}
-
-
-// hide spinner
-function hideProgress() {
-	$("#progress").css("display", "none");
-}
-
 // open preview window
 function showArticlePreview() {
 	var url = path + "/mod7/index.php?tx_newspaper_mod7[controller]=preview&tx_newspaper_mod7[articleid]=" + $("#placearticleuid").val();
@@ -86,7 +75,7 @@ function displayInsertOrDelButton(elementId){
 		$("#addbutton_" + buttonListId).show();
 		$("#delbutton_" + buttonListId).hide();
 	}
-	hideProgress(); // displayInsertOrDelButton() might be called when refreshing a list with AJAX
+	NpBackend.hideProgress(); // displayInsertOrDelButton() might be called when refreshing a list with AJAX
 }
 
 function isDirty() {
@@ -125,7 +114,7 @@ function saveArticleList(elementId, async) {
     var selectedOption = $("#" + elementId).getSelectedOption();
     $('#' + elementId).attr('multiple', 'multiple');
 	$("#" + elementId).selectAllOptions();
-	showProgress();
+	NpBackend.showProgress();
 	jQuery.ajax({
 		url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=savearticlelist&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + $("#" + elementId).selectedValues().join("|"),
 		success: function (data) {
@@ -135,7 +124,7 @@ function saveArticleList(elementId, async) {
 			$("#" + elementId).unselectAllOptions();
             $("#" + elementId).removeAttr('multiple');
             reselectLastOption(elementId, selectedOption.value);
-			hideProgress();
+            NpBackend.hideProgress();
 		},
 		async: async
 	});
@@ -168,7 +157,7 @@ function resortArticleList(elementId, action, async) {
         var selectedOption = $("#" + elementId).getSelectedOption();
         if(selectedOption) {
             var articleids = $("#" + elementId).getOptionValues().join('|');
-            showProgress();
+            NpBackend.showProgress();
             jQuery.ajax({
                 url: path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]="+action+"&tx_newspaper_mod7[sel_article_id]="+selectedOption.value+"&tx_newspaper_mod7[element]=" + elementId + "&tx_newspaper_mod7[articleids]=" + articleids,
                 dataType: 'json',
@@ -178,7 +167,7 @@ function resortArticleList(elementId, action, async) {
                     } else {
                         alert(langSavedidnotwork);
                     }
-                    hideProgress();
+                    NpBackend.hideProgress();
                 },
                 async: async
             });
@@ -263,7 +252,7 @@ function checkForRefresh () {
 		}
 		allSelectValues = allSelectValues.join("/");
 
-		showProgress();
+		NpBackend.showProgress();
 		$.getJSON(
 			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=checkarticlelistsforupdates&tx_newspaper_mod7[sectionvalues]=" + allSelectValues + "&tx_newspaper_mod7[sections]=" + sections.join("|"),
 			$("#placementform").serialize(),
@@ -275,7 +264,7 @@ function checkForRefresh () {
 						$("input.refresh[title=" + index + "]").removeClass("unsaved");
 					}
 				});
-				hideProgress();
+				NpBackend.hideProgress();
 			}
 		);
 	}
@@ -287,7 +276,7 @@ function executeAJAX (action, close) {
 	if (close == undefined) {
 		close = true;
 	}
-	showProgress();
+	NpBackend.showProgress();
 	$.get(
 		path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=" + action,
 		$("#placementform").serialize(),
@@ -300,7 +289,7 @@ function executeAJAX (action, close) {
 			} else {
 				alert (langActiondidnotwork);
 			}
-			hideProgress();
+			NpBackend.hideProgress();
 		}
 	);
 }
@@ -387,7 +376,7 @@ function connectPlacementEvents() {
             $('#' + this.title).attr('multiple', 'multiple');
             $("#" + this.title).selectAllOptions();
             $("#" + this.title).removeOption(/./, true);
-            showProgress();
+            NpBackend.showProgress();
             $("#" + this.title).ajaxAddOption(
                 path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=updatearticlelist", {
                     "tx_newspaper_mod7[element]" : this.title,
@@ -429,7 +418,7 @@ function startCheckCountdown () {
 function saveSections() {
 		elementId = $("#savesections").attr("title");
 		$("#" + elementId).selectAllOptions();
-		showProgress();
+		NpBackend.showProgress();
 		$.get(
 			path + "/mod7/index.php?tx_newspaper_mod7[ajaxcontroller]=showplacementandsavesections",
 			$("#placementform").serialize(),
@@ -438,7 +427,7 @@ function saveSections() {
 				$("#" + elementId).unselectAllOptions();
 				connectPlacementEvents();
 				hideEmptyTablecells();
-                hideProgress();
+				NpBackend.hideProgress();
 			}
 		);
 		return false;

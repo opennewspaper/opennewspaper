@@ -2,6 +2,7 @@
 {* template for non-section article lists *}
 
 {if $singlemode}
+	<script src="{$T3PATH}typo3conf/ext/newspaper/res/be/newspaper.js" type="text/javascript"></script>
 	<script type="text/javascript" language="javascript">
 	var langSavedidnotwork = "{$lang.savedidnotwork}";
 	var langReallycancel = "{$lang.reallycancel}";
@@ -35,7 +36,7 @@
 					    <td>
 							<select name="tx_newspaper_mod7[al_{$articlelist->getAbstractUid()}][]" id="al_{$articlelist->getAbstractUid()}" multiple="multiple" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if $articlelist_type == "tx_newspaper_articlelist_manual"} manual-list {/if} ">
 								{foreach from=$articles item="list" name="al_loop" key="key"}
-									<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>										
+									<option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>
 								{/foreach}
 							</select>
 						</td>
@@ -43,10 +44,10 @@
 							<a href="#" class="movetotop" rel="al_{$articlelist->getAbstractUid()}">
 								{$ICON.group_totop}
 							</a>
-							<br />	
+							<br />
 							<a href="#" class="moveup" rel="al_{$articlelist->getAbstractUid()}">
 								{$ICON.up}
-							</a> 
+							</a>
 							<br />
 							<a href="#" class="movedown" rel="al_{$articlelist->getAbstractUid()}">
 								{$ICON.down}
@@ -85,7 +86,7 @@
 					</div>
 				{/if}
 			</div>
-		</td> 
+		</td>
 	</tr>
 </table>
 
