@@ -1245,6 +1245,19 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return (stripos($haystack, $needle) === 0);
   }
 
+	/**
+	 * Gets an array of objects with getUid() function available, creates an array with uids only
+	 * @param array $objects objects with getUid() function available
+	 * @return array Contains the uids of the objects
+	 */
+	public static function getUidArray(array $objects) {
+		$uids = array();
+  		foreach($objects as $object) {
+			$uids[] = $object->getUid();
+		}
+		return $uids;
+  	}
+
 
   /// Get a list of all the attributes/DB fields an object (or class) has
   /** \param $object An object of the desired class, or the class name as string

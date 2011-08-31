@@ -1,9 +1,9 @@
 <?php
 /**
  *  \file class.tx_newspaper_articlelist.php
- * 
+ *
  *  This file is part of the TYPO3 extension "newspaper".
- * 
+ *
  *  Copyright notice
  *
  *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
@@ -24,36 +24,36 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- *  
+ *
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Jan 30, 2009
  */
- 
+
  /// A list of tx_newspaper_Article s
  /** An Article List returns an array of Articles on request. Which Articles are
   *  returned is defined by the logic of the ArticleList.
-  * 
+  *
   *  Typical examples include:
   *   - All Articles belonging to a specified tx_newspaper_Section
   *   - All Articles tagged with a specified tx_newspaper_Tag
   *   - All Articles written by a specified author
   *   - or any other condition for Articles that can be specified as an SQL
   * 	statement
-  * 
+  *
   *  This is the abstract base class which every concrete Article List must
   *  extend.
-  *  
+  *
   *  Abstract functions which the concrete class must implement:
   *  - function getArticles($number, $start)
   *	 - static function getModuleName()
   *  - function insertArticleAtPosition($pos)
   *
   *  Currently the important classes which implement tx_newspaper_ArticleList
-  *  are tx_newspaper_ArticleList_Manual and 
+  *  are tx_newspaper_ArticleList_Manual and
   *  tx_newspaper_ArticleList_Semiautomatic.
-  * 
+  *
   *  If you want to write a new type of Article List, you must register your
-  *  class by calling 
+  *  class by calling
   *  \code
   *  tx_newspaper_ArticleList::registerArticleList(new <your class>());
   *  \endcode
@@ -111,8 +111,8 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	function getAttribute($attribute) {
 		/// Read Attributes from persistent storage on first call
 		if (!$this->abstract_attributes) {
-			$this->abstract_attributes = $this->getAbstractUid()? 
-				tx_newspaper::selectOneRow('*', self::$table, 'uid = ' . $this->getAbstractUid()): 
+			$this->abstract_attributes = $this->getAbstractUid()?
+				tx_newspaper::selectOneRow('*', self::$table, 'uid = ' . $this->getAbstractUid()):
 				array();
 		}
 
@@ -181,12 +181,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function store() {
 
 		if ($this->getUid()) {
-			
+
 			// read attributes initially
 			if (!$this->attributes) {
 				$this->readAttributes($this->getTable(), $this->getUid());
 			}
-			
+
 			tx_newspaper::updateRows(
 				'tx_newspaper_articlelist', 'uid = ' . $this->getAbstractUid(), $this->abstract_attributes
 			);
@@ -209,6 +209,22 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		return $this->getUid();
 	}
 
+
+	/**
+	 * Add $articles to an EMPTY article list
+	 * @param $articles Array with tx_newspaper_article's
+	 * @return true if article were added, else false
+	 */
+	public function addArticlesToEmptyManualArticlelist(array $articles) {
+		if ($this->getTable() == 'tx_newspaper_articlelist_manual' && !$this->getArticles(1) && $articles) {
+			// Add articles (from a semiautomatic articlelist) to this manual article list
+			$this->assembleFromUIDs(tx_newspaper::getUidArray($articles));
+			return true;
+		}
+		return false;
+	}
+
+
 	public function getTitle() {
 		return tx_newspaper::getTranslation('title_' . tx_newspaper::getTable($this));
 	}
@@ -230,7 +246,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 * 		or the UIDs may be paired with an offset value.
 	 */
 	abstract function assembleFromUIDs(array $uids);
-	
+
 	/// Inserts an Article at a specified position in the list
 	/** \param $article Article to insert
 	 *  \param $pos Position to insert \p $article at
@@ -247,12 +263,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	///	Moves an Article up or down in the list
 	/** \param $article Article to move
 	 * 	\param $offset Positions to relocate \p $article - negative for up,
-	 * 		positive for down 
+	 * 		positive for down
 	 *  \throw tx_newspaper_ArticleNotFoundException if \p $article could not be
 	 * 		found in the list
 	 */
 	abstract function moveArticle(tx_newspaper_ArticleIface $article, $offset);
-		
+
 	/// Returns a number of tx_newspaper_Article s from the list
 	/** \param $number Number of Articles to return
 	 *  \param $start Index of first Article to return (starts with 0)
@@ -289,7 +305,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		}
 		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
 	}
-	
+
 	/// A short description that makes an Article List identifiable in the BE
 	/** This function might be overridden in every implementation. Here it gives
 	 *  a reasonable default: Name of the Article List and any notes.
@@ -299,9 +315,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$section = new tx_newspaper_Section($this->getAttribute('section_id'));
 			$name = $section->getAttribute('section_name');
 		}
-		return $this->getTitle() . 
+		return $this->getTitle() .
 		($name? '[' . $name . ']': '') . (
-			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): '' 
+			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): ''
 		);
 	}
 
@@ -347,24 +363,24 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
  	/// Create the record for a concrete ArticleList in the table of abstract ArticleList
 	/** This is probably necessary because a concrete ArticleList has been freshly
 	 *  created.
-	 *  Does nothing if the concrete ArticleList is already linked in the abstract table. 
-	 * 
+	 *  Does nothing if the concrete ArticleList is already linked in the abstract table.
+	 *
 	 *  \param $uid UID of the ArticleList in the table of concrete ArticleList
 	 *  \param $table Table of concrete ArticleList
 	 *  \return UID of abstract ArticleList record
 	 *  \todo Does it need to be public?
-	 */ 
+	 */
 	public function createAbstractRecord($uid, $table) {
         $uid = intval($uid);
         if (!$uid) return 0;
-        
+
         if ($al_uid = self::readAbstractRecordUid($uid, $table)) return $al_uid;
 
         $al_uid = tx_newspaper::insertRows(
             'tx_newspaper_articlelist',
             $this->prepareAbstractRecord($uid, $table)
         );
-		
+
         $this->addArticleListToSection($al_uid);
 
         return $al_uid;
@@ -379,23 +395,23 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			return $this->abstract_uid;
 
 		if (!is_object($GLOBALS['TYPO3_DB'])) return false;
-					
+
 		// add section to query if this article list is assigned to a section
 		$where = '';
-		if ($this->section instanceof tx_newspaper_Section) 
+		if ($this->section instanceof tx_newspaper_Section)
 			$where = ' AND section_id = ' . intval($this->section->getUid());
 
 		$row = tx_newspaper::selectZeroOrOneRows(
-			'uid', 'tx_newspaper_articlelist', 
-			'list_table = \'' . $this->getTable() . '\'' . 
+			'uid', 'tx_newspaper_articlelist',
+			'list_table = \'' . $this->getTable() . '\'' .
 			' AND list_uid=' . $this->getUid() . $where .
 			tx_newspaper::enableFields('tx_newspaper_articlelist')
 		);
-		if ($row) 
+		if ($row)
 			$this->abstract_uid = $row['uid'];
 		return $this->abstract_uid;
 	}
-	
+
 	/// Set UID of abtract article list
 	/** \param $uid New UID of abstract ArticleList record
 	 *  \todo Does it need to be public?
@@ -403,14 +419,14 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	public function setAbstractUid($uid) {
 		$this->abstract_uid = $uid;
 	}
-		
+
 	/// Register a type of Article List so the system knows about it
 	/** The registered Article Lists are used so a BE user can select the type
 	 *  of Article List they need.
-	 * 
+	 *
 	 *  registerArticleList() must be called from the definition file of all
 	 *  Article List classes which should be usable by the BE user.
-	 * 
+	 *
 	 *  \param $newList A (default constructed) object of the Article List type
 	 * 		to be registered.
 	 */
@@ -442,31 +458,31 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$table = $data;
 		}
 		$table = strtolower($table);
-		
+
 		// check if database table is known
 		for ($i = 0; $i < sizeof(self::$registered_articlelists); $i++) {
 			if (strtolower(self::$registered_articlelists[$i]->getTable()) == $table) {
 				return true; // here you go
 			}
-		} 
+		}
 		return false;
 	}
-	
+
 	static public function registerSaveHook($class) {
 		self::$registered_savehooks[] = $class;
 	}
-	
+
 	static public function getRegisteredSaveHooks() {
 		return self::$registered_savehooks;
 	}
-	
+
 	/// Save hook function, called from the global save hook in tx_newspaper_typo3hook
 	/** Writes an abstract record for a concreate3 article list, if no abstract record is available
 	 * \param $status Status of the current operation, 'new' or 'update
 	 * \param $table The table currently processing data for
 	 * \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
 	 * \param $fieldArray The field array of a record
-	 * \param $that t3lib_TCEmain object? 
+	 * \param $that t3lib_TCEmain object?
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('datamap ado hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
@@ -524,7 +540,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	/** \param $status Status of the current operation, 'new' or 'update
 	 *  \param $table The table currently processing data for
 	 *  \param $id The record uid currently processing data for, [integer] or [string] (like 'NEW...')
-	 */	 
+	 */
 	private static function writeAbstractRecordIfNeeded($status, $table, $id, $that) {
 		if ($status == 'new') {
 			// new record, so get substituated uid
@@ -533,12 +549,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			// existing record with existing uid, so just use the given $id
 			$concrete_al_uid = intval($id);
 		}
-	
+
 		$concrete_al = new $table($concrete_al_uid);
 		if ($concrete_al->getAbstractUid() == 0) {
 			/// no abstract record found, so create a new one
 			$concrete_al->createAbstractRecord($concrete_al_uid, $table);
-		}	
+		}
 	}
 
     private static function updateDependencyTree(tx_newspaper_ArticleList $list) {
@@ -592,13 +608,13 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			// a section is associated with this article list ...
 			die(self::blockAccessIfSectionArticleListMessage(new tx_newspaper_section($concrete_al->getAttribute('section_id'))));
 		}
-	} 
-	
+	}
+
 	/// \return Error message (Section article lists can only be edited in article list module)
 	private static function blockAccessIfSectionArticleListMessage(tx_newspaper_section $s) {
 		return 'This article list is associated to section "' . htmlspecialchars($s->getAttribute('section_name')) . '". This article list can only be edited in the section article list module.';
 	}
-	
+
 	///	Remove all articles from the list.
 	/** This function should be an abstract function. But it also should be
 	 *  protected or private, and PHP doesn't allow abstract functions to be
@@ -610,7 +626,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			'clearList() should never be called. Override it in the child classes!'
 		);
 	}
-	
+
 	/// Call all registered save hooks
 	protected function callSaveHooks() {
 		foreach (self::$registered_savehooks as $hook_class) {
@@ -621,12 +637,12 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		}
         self::updateDependencyTree($this);
 	}
-	
+
 	/// \return $TCA for this article list (abstract and concrete)
 	public function getTcaFields() {
 		t3lib_div::loadTCA(tx_newspaper_articlelist::$table); // load tca for abstract articlelist
 		t3lib_div::loadTCA($this->getTable()); // load tca for current concrete articlelist
-		
+
 		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPidRootfolder());
 
 		// read TCA for abstract article list and this concrete article list
@@ -636,22 +652,22 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		);
 		return $tca;
 	}
-	
+
 	/// \return HTML code containing the form for (abstract and concrete) article list editing
 	public function getAndProcessTceformBasedBackend() {
 		$fields = $this->getTcaFields();
 //t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('fields' => $fields, '_request' => $_REQUEST)); //, 'TBE_STYLES[stylesheet]' => $GLOBALS['TBE_STYLES']));
-		
+
 		// check if data needs to be stored in article list configuration
-		$this->processDataStorage(); 
-		
+		$this->processDataStorage();
+
 		// check if configuration form was closed and redirect to article list form
-		// make sure that processDataStorage() has run (otherwise save&close can't save the data) 
-		$this->checkIfFormWasClosed(); 
-		
-//t3lib_div::devlog('t3 consts', 'newspaper', 0, array('PATH_typo3_mod' => PATH_typo3_mod, 'TYPO3_MOD_PATH' => TYPO3_MOD_PATH, 'TBE_MODULES' => $GLOBALS['TBE_MODULES'], 'TBE_STYLES' => $GLOBALS['TBE_STYLES'], 'T3_VAR' => $GLOBALS['T3_VAR']));		
+		// make sure that processDataStorage() has run (otherwise save&close can't save the data)
+		$this->checkIfFormWasClosed();
+
+//t3lib_div::devlog('t3 consts', 'newspaper', 0, array('PATH_typo3_mod' => PATH_typo3_mod, 'TYPO3_MOD_PATH' => TYPO3_MOD_PATH, 'TBE_MODULES' => $GLOBALS['TBE_MODULES'], 'TBE_STYLES' => $GLOBALS['TBE_STYLES'], 'T3_VAR' => $GLOBALS['T3_VAR']));
 		$content = '';
-		
+
 		// tceforms configuration
 		$form = t3lib_div::makeInstance('t3lib_TCEforms');
 		$form->initDefaultBEmode();
@@ -677,7 +693,7 @@ body {
 	display: block;
 	margin: 0 0 10px 0;
 }
-</style> 
+</style>
 <script type="text/javascript" src="' . tx_newspaper::getAbsolutePath() . 'typo3/contrib/prototype/prototype.js"></script>
 <script type="text/javascript" src="' . tx_newspaper::getAbsolutePath() . 'typo3/js/iecompatibility.js"></script>
 <script type="text/javascript" src="' . tx_newspaper::getAbsolutePath() . 'typo3/js/clickmenu.js"></script>
@@ -694,10 +710,10 @@ body {
 
 		// add abtract article list uid
 		$content .= '<input type="hidden" name="abstr_al_uid" value="' . $this->getAbstractUid() . '" />';
-		
+
 
 		// idea for tceforms rendering, see: http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
-		
+
 		// render abstract article list backend first ...
 		$row = tx_newspaper::selectOneRow(
 			'*',
@@ -707,7 +723,7 @@ body {
 		foreach($fields['abstract'] as $tcaField => $tcaFieldConfig) {
 			if ($tcaField != 'list_table' && $tcaField != 'list_uid') {
 				$content .= $form->getSingleField('tx_newspaper_articlelist', $tcaField, $row);
-			} 
+			}
 		}
 		// ... render concrete article list backend then
 		$row = tx_newspaper::selectOneRow(
@@ -718,10 +734,10 @@ body {
 		foreach($fields['concrete'] as $tcaField => $tcaFieldConfig) {
 			if ($tcaField != 'articles') { // \todo: add field articles too to allow complete form editiing (but will this work with the mod7 standalone article list backend??)
 				$content .= $form->getSingleField($this->getAttribute('list_table'), $tcaField, $row);
-			} 
+			}
 		}
-		
-		
+
+
 		// add store buttons (based on /typo3/alt_doc.php)
 		$buttons['save'] = '<input type="image" class="c-inputButton" name="_savedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/savedok.gif','') . ' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveDoc', 1) . '" />';
 		$buttons['save_close'] = '<input onclick="document.editform.closeDoc.value=1;" type="image" class="c-inputButton" name="_saveandclosedok"' . t3lib_iconWorks::skinImg($form->backPath, 'gfx/saveandclosedok.gif', '').' title="' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.php:rm.saveCloseDoc', 1) . '" />';
@@ -733,12 +749,12 @@ body {
 			$content .= $button;
 		}
 
-		// add typo3 js files		
+		// add typo3 js files
 		$content .= $form->printNeededJSFunctions();
 
-		// add some hidden fields (needed for typo3 js backend handling) 
+		// add some hidden fields (needed for typo3 js backend handling)
 		$content = tx_newspaper_UtilMod::compileForm($content);
-		
+
 		$content .= '</form>'; // close form
 
 //t3lib_div::devlog('getAndProcessTceformBasedBackend()', 'newspaper', 0, array('content' => $content, 'button' => $buttons));
@@ -748,9 +764,9 @@ body {
 	/// check if article list configuration needs to be stored and stores the data if yes
 	private function processDataStorage() {
 //t3lib_div::devlog('processDataStorage()', 'newspaper', 0, array('_request' => $_REQUEST));
-		
+
 		/// loadTCA for abstract und concrete table has run already, so TCA is accessible
-		
+
 		if (
 			(isset($_REQUEST['_saveandclosedok_x']) ||
 			isset($_REQUEST['_saveandclosedok_y']) ||
@@ -776,22 +792,22 @@ body {
 					$parts = explode('_',$val,2);
 					$value = strrev($parts[0]); // overwrite $value
 				}
-				
+
 				$al->setAttribute($field, $value);
-			}			
+			}
 			$al->store();
 		}
 	}
-	
+
 	// checks if an article list configuration form was closed and redirect to article list form if yes
 	private function checkIfFormWasClosed() {
 		if (isset($_REQUEST['closeDoc']) && $_REQUEST['closeDoc'] == 1) {
 			header('Location: ' . $_SERVER['PHP_SELF'] . '?fullrecord=0&M=' . htmlspecialchars($_REQUEST['M']) .'&id=' . intval($_REQUEST['id']));
 		}
 	}
-	
-	
-	
+
+
+
 
 	private $uid = 0;				///< UID of concrete record
 	protected $abstract_uid = 0;	///< UID of abstract record
@@ -807,14 +823,14 @@ body {
 
 	/// SQL table for persistence for the abstract record
 	static protected $table = 'tx_newspaper_articlelist';
-	/// SQL table for tx_newspaper_Section objects	
+	/// SQL table for tx_newspaper_Section objects
 	static protected $section_table = 'tx_newspaper_section';
 	/// Array for registered article lists (subclasses of tx_newspaper_ArticleList)
 	static protected $registered_articlelists = array();
-	
+
 	/// Array for registered save hooks (called after assembleFromUIDs())
 	private static $registered_savehooks = array();
-	
+
 	///	Fields which should be copied from the concrete to the abstract record
 	private static $fields_to_copy_to_abstract_table = array(
 		'pid', 'crdate', 'cruser_id'

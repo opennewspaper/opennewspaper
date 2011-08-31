@@ -109,16 +109,23 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 
 
-	/// replaces the current (if any) article list with ths given new article list
-	/** the method first removes the old article list (if any) and then assign the new article list.
-	 *  As some attribute are changed (crdate f.ex) the new article gets stored in this method.
-	 * \param $new_al article list object of the new article list
-	 * \return uid of abstract article list
+	/// Replace the current article list (if any) with the given new article list
+	/** The function first removes the old article list (if any) and then assign the new article list.
+	 *  As some attributes are changed (crdate f.ex.) the new article gets stored in this function.
+	 * @param $new_al Article list object: new article list
+	 * @return uid of Abstract article list
 	 */
 	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
 
+		$articles = array();
+
 		try {
 			$current_al = $this->getArticleList(); // get current article list
+
+			if ($current_al->getTable() == 'tx_newspaper_articlelist_semiautomatic') {
+				// store articles if semiautomatic article list, might be copied to manual list later ...
+				$articles = $current_al->getArticles($current_al->getNumArticles());
+			}
 
 			// "delete" (= set deleted flag) previous concrete article list before writing the new one
 			// concrete article list must be deleted first (otherwise data for concrete article list can't be obtained from abstract article list)
@@ -139,7 +146,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'section_id=' . $this->getUid(),
 			array('deleted' => 1)
 		);
-
 
 		/// try to re-activate an old deleted article list for the new article list type
 
@@ -171,6 +177,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 					'uid=' . $al_abstract[0]['uid'],
 					array('deleted' => 0)
 				);
+
+				$reactivatedArticlelist = tx_newspaper_ArticleList_Factory::getInstance()->create($al_abstract[0]['uid']);
+				$reactivatedArticlelist->addArticlesToEmptyManualArticlelist($articles);
+
 				return $al_abstract[0]['uid']; // uid of abstract article list
 			}
 		}
@@ -190,10 +200,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			)
 		);
 
+		$new_al->addArticlesToEmptyManualArticlelist($articles);
+
 		return $new_al->getAbstractUid();
 
 	}
-
 
 
 	public function getArticleList() {
@@ -232,7 +243,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$sections[] = $child;
 			if ($recursive) {
 				$sections = array_merge($sections,
-										$child->getChildSections($recursive));
+									 	$child->getChildSections($recursive));
 			}
 		}
 
