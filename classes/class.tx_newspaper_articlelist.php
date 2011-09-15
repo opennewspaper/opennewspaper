@@ -316,9 +316,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 			$name = $section->getAttribute('section_name');
 		}
 		return $this->getTitle() .
-		($name? '[' . $name . ']': '') . (
-			$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): ''
-		);
+			($name? '[' . $name . ']': '') . (
+				$this->getAttribute('notes')? "<br />\n" . $this->getAttribute('notes'): ''
+			);
 	}
 
 	///	Check if current Article List is associated with a tx_newspaper_Section

@@ -62,8 +62,9 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	 */
 	public function getDescription() {
 		return substr(
-			$this->getAttribute('short_description') . '<br />' .
-			'<strong>' . $this->getAttribute('title') . '</strong> ' . $this->getAttribute('bodytext'),
+			$this->getAttribute('short_description') .
+			($this->getAttribute('short_description')? '<br />' : '') .
+			'<strong>' . $this->getAttribute('title') . '</strong> ' . strip_tags($this->getAttribute('bodytext')),
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 

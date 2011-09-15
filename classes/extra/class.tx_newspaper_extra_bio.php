@@ -55,9 +55,9 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 		return substr(
 			($this->getAttribute('short_description')? $this->getAttribute('short_description') . '<br />' : '') .
 			'<strong>' . $this->getAttribute('author_name') . '</strong> ' .
-				$this->getAttribute('bio_text'),
+				strip_tags($this->getAttribute('bio_text')),
 			0, self::description_length+2*strlen('<strong>')+1) .
-			(strlen($this->getAttribute('author_name') . ' ' . $this->getAttribute('bio_text')) > self::description_length?
+			(strlen($this->getAttribute('author_name') . ' ' . strip_tags($this->getAttribute('bio_text'))) > self::description_length?
 				'...': '');
 	}
 
