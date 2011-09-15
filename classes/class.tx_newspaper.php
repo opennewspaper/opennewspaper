@@ -554,26 +554,26 @@ class tx_newspaper  {
         return $array;
     }
 
-	/// \c WHERE clause to filter out unwanted records
-	/** Returns a part of a \c WHERE clause which will filter out records with
-	 *  start/end times, deleted flag set, or hidden flag set (if hidden should
-	 *  be included used); switch for BE/FE is included.
-	 *
-	 *  \param $tableString name of db table to check (can be a comma separated
-	 *         list of tables too)
-	 *  \param $show_hidden [0|1] specifies if hidden records are to be included
-	 * 		(ignored if in FE)
-	 *  \return \c WHERE part of an SQL statement starting with \c AND; or an
-	 * 		empty string, if not applicable.
-	 */
-	static public function enableFields($tableString) {
+  /// \c WHERE clause to filter out unwanted records
+  /** Returns a part of a \c WHERE clause which will filter out records with
+   *  start/end times, deleted flag set, or hidden flag set (if hidden should
+   *  be included used); switch for BE/FE is included.
+   *
+   *  \param $tableString name of db table to check (can be a comma separated
+   *         list of tables too)
+   *  \param $show_hidden [0|1] specifies if hidden records are to be included
+   * 		(ignored if in FE)
+   *  \return \c WHERE part of an SQL statement starting with \c AND; or an
+   * 		empty string, if not applicable.
+   */
+  static public function enableFields($tableString) {
 
-		$enableFields = '';
-		foreach(tx_newspaper_TableDescription::createDescriptions($tableString) as $tableDescription) {
+    $enableFields = '';
+    foreach(tx_newspaper_TableDescription::createDescriptions($tableString) as $tableDescription) {
             $enableFields .= $tableDescription->getEnableFields();
-		}
+    }
 
-    	return $enableFields;
+      return $enableFields;
     }
 
     /// Gets sorting position for next element in a MM table
@@ -800,6 +800,23 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         if (!$dossier_get_parameter) $dossier_get_parameter = self::default_dossier_get_parameter;
 
         return $dossier_get_parameter;
+    }
+
+
+    /**
+     * Get uid to use for internal preview of articles (in production list or placement module)
+     * @return uid of page
+     */
+    public static function getPreviewPageUid() {
+        $TSConfig = self::getTSConfig();
+
+        $previewPage = intval($TSConfig['newspaper.']['be.']['previewPageUid']);
+        if (!$previewPage) {
+            throw new tx_newspaper_IllegalUsageException(
+                'No preview page defined. Please set newspaper.be.previewPageUid in TSConfig!'
+            );
+        }
+        return $previewPage;
     }
 
 
@@ -1089,9 +1106,16 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
    */
   public static function buildTSFE($force = false) {
 
-  	require_once(PATH_t3lib.'class.t3lib_timetrack.php');
+    if (!defined('PATH_tslib')) { // see sysext/cms/tslib/index_ts.php
+      define('PATH_tslib', PATH_typo3 . 'sysext/cms/tslib/');
+    }
+    require_once(PATH_t3lib . 'class.t3lib_timetrack.php');
+    require_once(PATH_t3lib . 'class.t3lib_page.php');
+    require_once(PATH_tslib . 'class.tslib_fe.php');
+    require_once(PATH_tslib . 'class.tslib_content.php');
+    require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-    $page_id = 1;	/// \todo Ensure that this is a valid page ID
+    $page_id = self::getPreviewPageUid();
 
     /* Declare */
     $temp_TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
@@ -1196,21 +1220,21 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return $link['href'];
   }
 
-	/**
-	 * Let Typo3 convert links in RTE data
-	 * @param $text unconverted RTE data
-	 * @return Converted RTE data
-	 */
-	public static function convertRteField($text) {
-		require_once(PATH_tslib . 'class.tslib_pibase.php');
+  /**
+   * Let Typo3 convert links in RTE data
+   * @param $text unconverted RTE data
+   * @return Converted RTE data
+   */
+  public static function convertRteField($text) {
+    require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-		// prepare some Typo3 frontend object
-		tx_newspaper::buildTSFE();
-		$pibase = t3lib_div::makeInstance('tslib_pibase');
-		$pibase->cObj = $GLOBALS['TSFE']->cObj;
+    // prepare some Typo3 frontend object
+    tx_newspaper::buildTSFE();
+    $pibase = t3lib_div::makeInstance('tslib_pibase');
+    $pibase->cObj = $GLOBALS['TSFE']->cObj;
 
-		return $pibase->pi_RTEcssText($text);
-	}
+    return $pibase->pi_RTEcssText($text);
+  }
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -1245,18 +1269,18 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return (stripos($haystack, $needle) === 0);
   }
 
-	/**
-	 * Gets an array of objects with getUid() function available, creates an array with uids only
-	 * @param array $objects objects with getUid() function available
-	 * @return array Contains the uids of the objects
-	 */
-	public static function getUidArray(array $objects) {
-		$uids = array();
-  		foreach($objects as $object) {
-			$uids[] = $object->getUid();
-		}
-		return $uids;
-  	}
+  /**
+   * Gets an array of objects with getUid() function available, creates an array with uids only
+   * @param array $objects objects with getUid() function available
+   * @return array Contains the uids of the objects
+   */
+  public static function getUidArray(array $objects) {
+    $uids = array();
+      foreach($objects as $object) {
+      $uids[] = $object->getUid();
+    }
+    return $uids;
+    }
 
 
   /// Get a list of all the attributes/DB fields an object (or class) has
