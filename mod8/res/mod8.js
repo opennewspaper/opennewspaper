@@ -133,7 +133,7 @@ var NpTag = {
 						method: 'get',
 						parameters: 'tx_newspaper_mod8[ajaxController]=renameTag&tx_newspaper_mod8[tagUid]=' + tagUid + '&tx_newspaper_mod8[newTagName]=' + NpTools.escapeQuotes(newTagName),
 						onCreate: function() {
-							$("spinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
+							NpBackend.showProgress();
 						},
 						onSuccess: function(data) {
 							if (data) {
@@ -146,7 +146,7 @@ var NpTag = {
 									alert(NpTag.param["tagNotUniqueMesssage"]);
 								}
 							}
-							$("spinner").innerHTML = ''; // hide spinner
+							NpBackend.hideProgress();
 						}
 					}
 				);
@@ -181,14 +181,14 @@ var NpTag = {
 				method: 'get',
 				parameters: 'tx_newspaper_mod8[ajaxController]=mergeTags&tx_newspaper_mod8[sourceTags]=' + sourceTags + '&tx_newspaper_mod8[targetTag]=' + targetTagUid,
 				onCreate: function() {
-					$("spinnerMerge").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
+					NpBackend.showProgress();
 				},
 				onSuccess: function(data) {
 					if (data) {
 						NpTag.fetchTags(); // re-read tags
 						$("message").innerHTML = data.responseText;
 					}
-					$("spinnerMerge").innerHTML = '';
+					NpBackend.hideProgress();
 				}
 			}
 		);
@@ -221,7 +221,7 @@ var NpTag = {
 					method: 'get',
 					parameters: 'tx_newspaper_mod8[ajaxController]=deleteTag&tx_newspaper_mod8[tagUid]=' + tagUid + detachParam,
 					onCreate: function() {
-						$("spinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
+						NpBackend.showProgress();
 					},
 					onSuccess: function(data) {
 						if (data) {
@@ -229,17 +229,19 @@ var NpTag = {
 							if (success) {
 								$("message").innerHTML = NpTag.param["tagDeletedMesssage"];
 								NpTag.fetchTags();
+								NpBackend.hideProgress();
 							} else {
 								if (data.responseText.evalJSON().attachedTagsFound) {
 									if (confirm(NpTag.param["confirmDetachMessage"])) {
 										NpTag.deleteTag(true);
+									} else {
+										NpBackend.hideProgress();
 									}
 								} else {
 									alert("Internal error: Could not delete tag.");
 								}
 							}
 						}
-						$("spinner").innerHTML = ''; // hide spinner
 					}
 				}
 			);

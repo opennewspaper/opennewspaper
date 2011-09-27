@@ -129,7 +129,6 @@ var NpManageDossier = {
 	 * Hides backend for tag title and tag section editing
 	 */
 	hideTagBackend: function() {
-alert('hideTagBackend()');
 		this.displayDossierTitle();
 		this.setCurrentDossierSection();
 		this.displayDossierSection();
@@ -466,7 +465,7 @@ alert('hideTagBackend()');
 	 * @todo: move window.open to some element browser lib
 	 */
 	addExtraToTagzone: function(uid, extraClass) {
-		tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
+		this.tz_uid = parseInt(uid); // store tag zone uid so the element browser knows which tag zone the extra should be added to
 
 		var extraPreselect = (typeof(extraClass) == 'undefined')? '' : '&tx_newspaper_mod1[extraClassPreselect]=' + extraClass;
 		var newOnly = (extraPreselect)? '&tx_newspaper_mod1[newOnly]=1' : ''; // if an Exra is pre-selected, create it right away

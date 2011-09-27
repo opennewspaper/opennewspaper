@@ -17,10 +17,6 @@ function choseRecord(className, uid, close) {
 	var form_field = NpTools.extractQuerystringDirect('tx_newspaper_mod1[field]');
 	var form_uid = NpTools.extractQuerystringDirect('tx_newspaper_mod1[uid]');
 
-// \todo: replace "New entry" with correct record title
-
-
-
 	// Write a new abstract extra to the database
 	var request = new Ajax.Request(
 			"index.php", {
