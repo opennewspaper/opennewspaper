@@ -200,9 +200,12 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			)
 		);
 
-		$new_al->addArticlesToEmptyManualArticlelist($articles);
+		//re-read articlelist in order get read the full set of attributes
+		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($new_al->getAbstractUid());
 
-		return $new_al->getAbstractUid();
+		$al->addArticlesToEmptyManualArticlelist($articles);
+
+		return $al->getAbstractUid();
 
 	}
 

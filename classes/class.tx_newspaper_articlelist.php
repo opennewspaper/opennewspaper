@@ -211,9 +211,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 
 
 	/**
-	 * Add $articles to an EMPTY article list
+	 * Add $articles to an EMPTY manual article list
 	 * @param $articles Array with tx_newspaper_article's
-	 * @return true if article were added, else false
+	 * @return true if articles were added, else false
 	 */
 	public function addArticlesToEmptyManualArticlelist(array $articles) {
 		if ($this->getTable() == 'tx_newspaper_articlelist_manual' && !$this->getArticles(1) && $articles) {
