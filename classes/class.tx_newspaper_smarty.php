@@ -1,9 +1,9 @@
 <?php
 /**
  *  \file class.tx_newspaper_smarty.php
- * 
+ *
  *  This file is part of the TYPO3 extension "newspaper".
- * 
+ *
  *  Copyright notice
  *
  *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
@@ -24,14 +24,14 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- *  
+ *
  *  \author Helge Preuss <helge.preuss@gmail.com>
  *  \date Feb 13, 2009
  */
- 
+
 if (file_exists(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php')) {
 	// new smarty extension
-	require_once(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php');	
+	require_once(PATH_typo3conf . 'ext/smarty/Smarty/libs/Smarty.class.php');
 } else {
 	// old smarty extension
 	require_once(PATH_typo3conf . 'ext/smarty/Smarty.class.php');
@@ -43,28 +43,28 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
 
 /// Smarty rendering engine with configurable template directory
 /** Smarty suffers from the limitation that you can only have \em one folder to
- *  store templates in per instance. For that reason, you must instantiate a 
+ *  store templates in per instance. For that reason, you must instantiate a
  *  separate Smarty object per template folder, and set the folder manually.
  *  Because that process is somewhat tedious, this class does it automatically
  *  in the constructor.
- * 
+ *
  *  tx_newspaper_Smarty looks for templates which describe how objects are
  *  rendered in the following directories:
- *  -# if a parameter \p $template_set is set, look under the 
+ *  -# if a parameter \p $template_set is set, look under the
  *    \p template_sets/$template_set subdirectory under the base directory for
- *      templates, which is defined in the TSConfig parameter 
+ *      templates, which is defined in the TSConfig parameter
  *      \p newspaper.defaultTemplate.
  *      -# first look in the directory \p $pagezone_type under the directory
  *          \p $page_type under \p template_sets/$template_set, where
  *          \p $page_type is the normalized name (all lowercase, special
- *          characters and whitespace replaced with an underscore) of the 
+ *          characters and whitespace replaced with an underscore) of the
  *          tx_newspaper_PageType of the tx_newspaper_Page currently displayed,
- *          and \p $pagezone_type is the normalized name of the 
+ *          and \p $pagezone_type is the normalized name of the
  *          tx_newspaper_PageZoneType of the tx_newspaper_PageZone currently
  *          rendered.
  *      -# next look in the directory \p $page_type under
  *          \p template_sets/$template_set.
- *      -# then look under the template set root folder, 
+ *      -# then look under the template set root folder,
  * 	        \p template_sets/$template_set.
  *  -# if no smarty template is found for the rendered object in the desired
  *      template set, look for the template under the default template set,
@@ -72,23 +72,23 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  *      -# \p template_sets/default/$page_type/$pagezone_type
  *      -# \p template_sets/default/$page_type
  *      -# \p template_sets/default
- *  -# finally, if no template is found in any of the folders under the 
+ *  -# finally, if no template is found in any of the folders under the
  *      template folder, look in the \p res/templates folder of the
  *      \em newspaper extension and in  the \p res/templates folder of all
  *      other installed extensions whose names start with \em newspaper.
  *  The name of the smarty template is the lowercased class name of the object,
  *  suffixed by \p ".tmpl".
- * 
+ *
  *  For example, say you want to render a tx_newspaper_Extra_Image on the
  *  \p Content page zone on the \p Article page. Your
  *  \p newspaper.defaultTemplate folder is \p "fileadmin/templates". The
  *  template set that is asked for is called, um, \p "whatever".
  *  In that case, the following files are checked for existence:
- *  - \p fileadmin/templates/template_sets/whatever/article/content/tx_newspaper_extra_image.tmpl 
- *  - \p fileadmin/templates/template_sets/whatever/article/tx_newspaper_extra_image.tmpl 
- *  - \p fileadmin/templates/template_sets/whatever/tx_newspaper_extra_image.tmpl 
- *  - \p fileadmin/templates/template_sets/default/article/content/tx_newspaper_extra_image.tmpl 
- *  - \p fileadmin/templates/template_sets/default/article/tx_newspaper_extra_image.tmpl 
+ *  - \p fileadmin/templates/template_sets/whatever/article/content/tx_newspaper_extra_image.tmpl
+ *  - \p fileadmin/templates/template_sets/whatever/article/tx_newspaper_extra_image.tmpl
+ *  - \p fileadmin/templates/template_sets/whatever/tx_newspaper_extra_image.tmpl
+ *  - \p fileadmin/templates/template_sets/default/article/content/tx_newspaper_extra_image.tmpl
+ *  - \p fileadmin/templates/template_sets/default/article/tx_newspaper_extra_image.tmpl
  *  - \p fileadmin/templates/template_sets/default/tx_newspaper_extra_image.tmpl
  *  - \p typo3conf/ext/newspaper/res/templates/tx_newspaper_extra_image.tmpl
  *  - file \p res/templates/tx_newspaper_extra_image.tmpl in any other extension
@@ -96,20 +96,21 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  * 		order.
  */
 class tx_newspaper_Smarty extends Smarty {
-	
+
 	const debug_search_path = false;
-	
+
 	const default_template_directory = 'ext/newspaper/res/templates';
     const default_smarty_plugins_dir = 'fileadmin/templates/newspaper/smarty_plugins';
-	
+
 	const pagename_for_all_pagezones = 'common';
 	const default_template_set = 'default';
-	
+
 	public function __construct() {
 
         $this->setBasePath();
         $this->setWorkDirectories();
         $this->setPluginsDirectories();
+        $this->addSmartyFunctions();
 
 		$this->caching = false;
 	}
@@ -123,11 +124,11 @@ class tx_newspaper_Smarty extends Smarty {
 		'search path = ' . print_r($this->templateSearchPath, 1) . "\n" .
 		'assigned variables = ' . print_r($this->get_template_vars(), 1);
 	}
-	
+
 	public function setTemplateSearchPath(array $path) {
 		$this->templateSearchPath = $path;
 	}
-	
+
 	/// Get the list of template sets present in the template directory
 	/** \return Array of available template sets
 	 */
@@ -138,12 +139,12 @@ class tx_newspaper_Smarty extends Smarty {
 		$root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig($root_page);
 		$basepath = $TSConfig['newspaper.']['defaultTemplate'];
-		
+
 		$basepath = tx_newspaper::createAbsolutePath($basepath, PATH_site);
 		if (!is_dir($basepath . '/template_sets/')) {
 			throw new tx_newspaper_PathNotFoundException('Templates could\'t be found. Is TSConfig newspaper.defaultTemplate set to the correct path?', $basepath . '/template_sets/');
 		}
-		
+
 		$basedir = dir($basepath . '/template_sets/');
 		while (false !== ($template_set = $basedir->read())) {
 			if (substr($template_set, 0, 1) != '.' && is_dir($basepath . '/template_sets/' . $template_set)) {
@@ -153,38 +154,38 @@ class tx_newspaper_Smarty extends Smarty {
 		$basedir->close();
 
 		sort($template_sets);
-		
+
 		return $template_sets;
 	}
-	
+
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = tx_newspaper_Smarty::default_template_set) {
 self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
-		
+
 		$this->templateset = $template_set;
 		$this->assign('template_set', $template_set);
 	}
-	
+
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
 self::debug_search_path && tx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
 		$this->pagetype = $page_type;
 	}
-	
+
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
 		$pagezone_type = $pagezone->getPageZoneType();
 self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_type->getAttribute('type_name'));
 		$this->pagezonetype = $pagezone_type;
 	}
-		
+
 	/// Render a template, scanning several directories for it
 	/** The directories under which to search smarty templates are set with
 	 *  setTemplateSearchPath().
-	 * 
+	 *
 	 *	\param $template Either a smarty template or a Renderable object to be rendered
-	 *  \return The rendered template as HTML (or XML, whatever your template does) 
+	 *  \return The rendered template as HTML (or XML, whatever your template does)
 	 */
 	public function fetch($template) {
         self::ensureIsTemplateName($template);
@@ -233,8 +234,8 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
     }
 
 	///	Sets the path in which Smarty looks for renderable templates
-	/** The template search path consists of the following directories, each 
-	 *	subject to the existence of the necessary parameters: template set, 
+	/** The template search path consists of the following directories, each
+	 *	subject to the existence of the necessary parameters: template set,
 	 *	page zone type, page type.
 	 *  \code
 	 *  $basepath/<template set>/<page type name>/<page zone type name>
@@ -247,17 +248,17 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 	 *  \endcode
 	 */
 	private function assembleSearchPath() {
-		
+
 		$temporary_searchpath = $this->searchpathFromTemplateSet();
-		
+
 		$page_name = $this->getPageName();
-		
+
 		$page_template_dir = $this->basepath . '/template_sets/' . self::default_template_set . '/'. $page_name;
-		
+
 		//	first look for the page zone specific templates
-		$temporary_searchpath = array_merge($temporary_searchpath, 
+		$temporary_searchpath = array_merge($temporary_searchpath,
 											$this->pagezoneTemplates($page_template_dir));
-		
+
 		//	then for the page specific ones
 		if (file_exists($page_template_dir) && is_dir($page_template_dir)) {
 			$temporary_searchpath[] = 'template_sets/' . self::default_template_set . '/'. $page_name;
@@ -265,9 +266,9 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 
 		//	finally those common for all pages and page zones
 		$temporary_searchpath[] = 'template_sets/' . self::default_template_set;
-		
+
 		//  and the default templates delivered with the newspaper extension
-		$temporary_searchpath = array_merge($temporary_searchpath, 
+		$temporary_searchpath = array_merge($temporary_searchpath,
 											$this->defaultTemplatePaths());
 
 		$this->templateSearchPath = array_unique(array_merge($this->templateSearchPath, $temporary_searchpath));
@@ -290,14 +291,14 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 			}
 			$temporary_searchpath[] = 'template_sets/' . $this->templateset;
 		}
-		
+
 		return $temporary_searchpath;
 	}
-	
+
 	private function getTemplateSetFolder() {
 		return $this->basepath . '/template_sets/' . $this->templateset;
 	}
-	
+
 	private function templateSetFolderExists() {
 		if (!$this->templateset) return false;
 		if (!file_exists($this->getTemplateSetFolder())) return false;
@@ -314,16 +315,16 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 			$page_name = self::pagename_for_all_pagezones;
 		}
 
-		return $page_name;		
+		return $page_name;
 	}
-	
+
 	private function getPageZoneName() {
 		$pagezone_name = $this->pagezonetype->getAttribute('normalized_name')?
 						$this->pagezonetype->getAttribute('normalized_name'):
 						strtolower($this->pagezonetype->getAttribute('type_name'));
 		return $pagezone_name;
 	}
-	
+
 	private function pagezoneTemplates($page_template_dir) {
 		if (!$this->templateset) {
 			$this->setTemplateSet();
@@ -352,10 +353,10 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
 			}
 
 		}
-		
+
 		return $temporary_searchpath;
 	}
-	
+
 	private function defaultTemplatePaths() {
 
 		global $TYPO3_CONF_VARS;
@@ -417,6 +418,31 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
         }
     }
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// New Smarty functions
+
+	/**
+	 * Add functions to Smarty
+	 * - convertRteField()
+	 * @return void
+	 */
+    private function addSmartyFunctions() {
+		$this->register_function('convertRTE', array('tx_newspaper_smarty', 'convertRteField'));
+	}
+
+	/**
+	 * A wrapper for tx_newspaper::convertRteField()
+	 * @param $param['text'] will be converted
+	 * @return Text with RTE tags converted to HTML
+	 */
+	public function convertRteField(array $param) {
+		return $param['text']? tx_newspaper::convertRteField($param['text']) : '';
+	}
+
+
+
     ////////////////////////////////////////////////////////////////////////////
 
 	private $templateset = '';
@@ -425,7 +451,7 @@ tx_newspaper::devlog('tx_newspaper_Smarty::pagezoneTemplates(): common template 
 
 	private $basepath = '';
     private $compile_base_dir = '';
-	
+
 	private $templateSearchPath = array();
 
 }
