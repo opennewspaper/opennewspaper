@@ -45,6 +45,7 @@ class tx_newspaper_DBSource implements tx_newspaper_Source {
 	public function readArticle($articleclass, tx_newspaper_SourcePath $uid) {
 		/** \todo Factor out the code to check the class into SourceBehavior and
 		 *  call that one. Also from SourceBehavior::readArticle().
+         *  @var tx_newspaper_Article $article
 		 */
 		$article = null;
 		
