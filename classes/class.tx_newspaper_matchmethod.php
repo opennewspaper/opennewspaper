@@ -11,7 +11,7 @@ class tx_newspaper_MatchMethod {
 
     public function __construct($method = '') {
         $method = strtolower($method);
-        if ($method == '') $method == 'phrase';
+        if ($method == '') $method = 'phrase';
         if (!$method == 'phrase' || $method == 'or') {
             throw new tx_newspaper_IllegalUsageException(
                 'Matching method "' . $method . '" not supported'
