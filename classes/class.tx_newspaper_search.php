@@ -1,29 +1,7 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: lene
- * Date: 6/30/11
- * Time: 12:04 PM
- * To change this template use File | Settings | File Templates.
- */
 
-class tx_newspaper_Date {
-
-    public function __construct($year = 0, $month = 1, $day = 1) {
-        $this->year = $year;
-        $this->month = $month;
-        $this->day = $day;
-    }
-
-    public function getTimestamp() {
-        if (!$this->year) return 0;
-        return mktime(0, 0, 0, $this->month, $this->day, $this->year);
-    }
-
-    private $year;
-    private $month;
-    private $day;
-}
+require_once('class.tx_newspaper_date.php');
+require_once('class.tx_newspaper_matchmethod.php');
 
 class tx_newspaper_Search {
 
@@ -111,6 +89,7 @@ class tx_newspaper_Search {
         $this->section = $section;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
+        $this->setMatchMethod(new tx_newspaper_MatchMethod());
     }
 
 	///	Performs the search on all articles.
@@ -191,29 +170,9 @@ class tx_newspaper_Search {
         $articles = self::getSearchResultsForClass($fields, $table, $where);
 
         if (!self::enable_quick_hack) {
-        foreach (self::$extra_fields as $extra_table => $fields) {
-            $current_table = $table .
-                ' JOIN ' . self::article_tag_mm .
-                '   ON ' . self::extra_table . '.extra_uid = ' . $extra_table . '.uid' .
-                '     AND ' . self::extra_table . '.extra_table = \'' . $extra_table . '\'';
-
-            $current_fields = $fields . ', ' .
-                'MATCH (' . implode(', ', $fields).') ' .
-                'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS extra_score ';
-
-            $current_where = $where .
-                ' AND ( ' . $this->searchWhereClause($search_term, $fields) .
-                ' OR ' . $this->searchWhereClause($search_term, $fields) . ' )';
-
-            $row = tx_newspaper::selectRows('COUNT(*) AS number', $current_table, $current_where);
-
-            $num_articles = intval($row['number']);
-            if (!$num_articles) continue;
-
-            $articles = array_merge($articles,
-                                    self::getSearchResultsForClass($current_fields, $current_table, $current_where));
+            $articles = array_merge($articles, $this->searchInExtras($table, $search_term, $where));
         }
-        }
+        
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
@@ -230,8 +189,42 @@ class tx_newspaper_Search {
     public static function getSortMethods() {
         return self::$sort_methods;
     }
+
+    public function setMatchMethod(tx_newspaper_MatchMethod $method) {
+        $this->match_method = $method;
+    }
     
     ////////////////////////////////////////////////////////////////////////////
+
+    private function searchInExtras($table, $search_term, $where) {
+
+        $articles = array();
+
+        foreach (self::$extra_fields as $extra_table => $fields) {
+            $current_table = $table .
+                             ' JOIN ' . self::article_tag_mm .
+                             '   ON ' . self::extra_table . '.extra_uid = ' . $extra_table . '.uid' .
+                             '     AND ' . self::extra_table . '.extra_table = \'' . $extra_table . '\'';
+
+            $current_fields = $fields . ', ' .
+                              'MATCH (' . implode(', ', $fields) . ') ' .
+                              'AGAINST (\'' . mysql_real_escape_string($search_term) . '\') AS extra_score ';
+
+            $current_where = $where .
+                             ' AND ( ' . $this->searchWhereClause($search_term, $fields) .
+                             ' OR ' . $this->searchWhereClause($search_term, $fields) . ' )';
+
+            $row = tx_newspaper::selectRows('COUNT(*) AS number', $current_table, $current_where);
+
+            $num_articles = intval($row['number']);
+            if (!$num_articles) continue;
+
+            $articles = array_merge($articles,
+                                    self::getSearchResultsForClass($current_fields, $current_table, $current_where));
+        }
+
+        return $articles;
+    }
 
     private function generateArticleObjectsFromSearchResults($articles) {
 
@@ -261,16 +254,26 @@ class tx_newspaper_Search {
 
         $where = $this->getTimeClauseForSearch();
 
-		//	Assemble conditions on search terms
-	    foreach (explode(' ', $term) as $current_term) {
-	        if (!$current_term) continue;
-	        //	don't search for excluded words
-	        if (!$this->isExcludedWord($current_term)) {
-	            $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . ' OR ';
-	        }
-	    }
+        if ($this->match_method->isOr()) {
+            return $where . $this->orRelatedSearchWhereClause($term, $field_list);
 
-	    return $where . '0';
+        } else if ($this->match_method->isPhrase()) {
+            return $where . $this->umlautCaseInsensitiveMatch($term, $field_list);
+        }
+
+    }
+
+    ///	Assemble conditions on search terms
+    private function orRelatedSearchWhereClause($term, $field_list) {
+        $where = '';
+        foreach (explode(' ', $term) as $current_term) {
+            if (!$current_term) continue;
+            //	don't search for excluded words
+            if (!$this->isExcludedWord($current_term)) {
+                $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . ' OR ';
+            }
+        }
+        return $where . '0';
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
@@ -369,29 +372,38 @@ class tx_newspaper_Search {
 		$ret = '(';
 		foreach (array_keys(self::$umlauts) as $replacableChar) {
 			if (strpos($search_term, $replacableChar) !== false) {
-
-				$ret .= 'MATCH (' . implode(', ', $field_list) . ')' .
-	           			' AGAINST (\'' .
-	           				mysql_real_escape_string(
-	           					trim(
-	           						str_replace(
-	           							$replacableChar,
-	           							self::$umlauts[$replacableChar],
-	           							$search_term
-	           						)
-	           					)
-	           				) .
-						'\') > ' . self::score_limit . ' OR ';
+				$ret .= self::matchPhrase(
+                            self::searchTermWithReplacedUmlaut($replacableChar, $search_term),
+                            $field_list
+                        ) . ' OR ';
 			}
 		}
-		$ret .= 'MATCH (' . implode(', ', $field_list) . ')' .
-	           ' AGAINST (\'' .
-	           		mysql_real_escape_string(trim($search_term)) .
-				'\') > ' . self::score_limit;
+		$ret .= self::matchPhrase(mysql_real_escape_string(trim($search_term)), $field_list);
 		$ret .=')';
 
 		return $ret;
 	}
+
+    private static function matchPhrase($match_against, array $field_list) {
+        return 'MATCH (' . implode(', ', $field_list) . ')' .
+	           ' AGAINST (\'' . $match_against . '\') > ' . self::getScoreLimit();
+    }
+
+    private static function getScoreLimit() {
+        return self::score_limit;
+    }
+
+    private static function searchTermWithReplacedUmlaut($replacableChar, $search_term) {
+        return mysql_real_escape_string(
+            trim(
+                self::replaceUmlaut($replacableChar, $search_term)
+            )
+        );
+    }
+
+    private static function replaceUmlaut($replacableChar, $search_term) {
+        return str_replace($replacableChar, self::$umlauts[$replacableChar], $search_term);
+    }
 
 
     ///	Checks whether the word is excluded from search terms.
@@ -426,16 +438,16 @@ class tx_newspaper_Search {
  	 *  This function may be overridden or reimplemented to reflect changing
  	 *  requirements for the sorting of articles.
  	 *
- 	 *  \param $art1 first tx_newspaper_Article to compare in the form \code
+ 	 *  @param $art1 first tx_newspaper_Article to compare in the form \code
  	 * 		array(
  	 * 			'uid' => tx_newspaper_Article UID
  	 * 			'title_score' => MATCH score on self::$title_fields
  	 * 			'text_score' => MATCH score on self::$text_fields
  	 * 			'extra_score' => MATCH score on self::$extra_fields
  	 * 		) \endcode
- 	 *  \param $art2 second tx_newspaper_Article to compare, same format as
+ 	 *  @param $art2 second tx_newspaper_Article to compare, same format as
  	 *  	\p $art1.
- 	 *  \return < 0 if \p $art1 comes before \p $art2, > 0 if it comes after,
+ 	 *  @return int < 0 if \p $art1 comes before \p $art2, > 0 if it comes after,
  	 * 			== 0 if their position is the same.
  	 *
  	 *  \todo take into account the possibility to sort by publishing date.
@@ -481,7 +493,7 @@ class tx_newspaper_Search {
 	}
 
 
-    /// Assemble conditions for pulishing date
+    /// Assemble conditions for publishing date
     private function getStartTimeForSearch() {
         $tstamp = 0;
         if (intval($this->search_lifetime)) {
@@ -501,6 +513,9 @@ class tx_newspaper_Search {
     private $end_date = null;
     private $section = 0;
     private $tags = array();
+
+    /** @var tx_newspaper_MatchMethod */
+    private $match_method = null;
 
     private static $sort_method = 'compareArticlesByScore';
 
