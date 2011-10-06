@@ -606,6 +606,7 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
             $sections[] = $section;
         }
     }
+    return $sections;
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
