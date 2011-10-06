@@ -602,7 +602,7 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
     $sections = array();
     foreach ($all_sections as $section) {
         $article_list = $section->getArticleList();
-        if ($article_list->doesContainArticle($article)) {
+        if ($article_list->doesContainArticle($article, tx_newspaper_DependencyTree::limitForArticlesDisplayedOnSectionPage())) {
             $sections[] = $section;
         }
     }
