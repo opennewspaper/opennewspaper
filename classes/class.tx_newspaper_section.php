@@ -201,6 +201,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		);
 
 		//re-read articlelist in order get read the full set of attributes
+		// @todo Lene: Why do I have to reload the list?
 		$al = tx_newspaper_ArticleList_Factory::getInstance()->create($new_al->getAbstractUid());
 
 		$al->addArticlesToEmptyManualArticlelist($articles);
