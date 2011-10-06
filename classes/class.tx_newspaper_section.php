@@ -209,7 +209,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	}
 
-
+    /** @return tx_newspaper_ArticleList The section's article list */
 	public function getArticleList() {
 		if (!$this->articlelist) {
 			$list = tx_newspaper::selectOneRow(
@@ -221,17 +221,18 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $this->articlelist;
 	}
 
+    /** @return tx_newspaper_Section The parent node in the section tree. */
 	public function getParentSection() {
 		if ($this->getAttribute('parent_section')) {
 			return new tx_newspaper_Section($this->getAttribute('parent_section'));
 		} else return null;
 	}
 
-	/// Get all Sections which have $this as ancestor
-	/** \param $recursive If true, return all inheriting sections down to the
+	/// Get all Sections which have \c $this as ancestor
+	/** @param $recursive If true, return all inheriting sections down to the
 	 * 		leaves. Otherwise, return the direct children of this Section.
-	 *  \return Array of Section objects under \p $this. parental relations are
-	 * 		\em not preserved.
+	 *  @return tx_newspaper_Section[] Flat array of Section objects under \p $this.
+	 * 		Parental relations are \em not preserved.
 	 */
 	public function getChildSections($recursive = false) {
 
@@ -604,11 +605,11 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	}
 
 	///	Get all tx_newspaper_Section records in the DB.
-	/** \param $articlesAllowedOnly if set to true only section with the
+	/** @param $articlesAllowedOnly if set to true only section with the
 	 *       show_in_list flag set are returned
-	 *  \param $sort_by Field of the \c tx_newspaper_section SQL table to sort
+	 *  @param $sort_by Field of the \c tx_newspaper_section SQL table to sort
 	 * 		results by.
-	 *  \return tx_newspaper_Section objects in the DB.
+	 *  @return tx_newspaper_Section[] Section objects in the DB.
 	 */
 	public static function getAllSections($articlesAllowedOnly=true, $sort_by = 'sorting') {
 		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);

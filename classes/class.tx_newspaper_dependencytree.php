@@ -143,6 +143,9 @@ class tx_newspaper_DependencyTree {
     /// Maximum number of articles which are retroactively re-rendered when the placement of an article page is changed.
     const limit_for_articles_on_placement_change = 50;
 
+    /// Number of articles assumed to be displayed on section page - determines if a section page is re-rendered when an article changes
+    const limit_for_articles_displayed_on_section_page = 5;
+
     /// An action marked with this flag is executed on dependent articles.
     const ACT_ON_ARTICLES = 1;
     /// An action marked with this flag is executed on the section page(s) the affected article appears upon.
@@ -293,6 +296,7 @@ class tx_newspaper_DependencyTree {
     public function getSectionPages() {
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
+            $this->addSectionPages(getSectionsWhoseArticleListContains($this->article));
         }
         return $this->section_pages;
     }
@@ -347,10 +351,17 @@ class tx_newspaper_DependencyTree {
 
     /// Returns number of articles which are retroactively re-rendered when the placement of an article page is changed.
     public static function limitForArticlesOnPlacementChange() {
-        $tsconfig = tx_newspaper::getTSConfig();
-        $limit = intval($tsconfig['newspaper.']['limit_for_articles_on_placement_change']);
-        if ($limit) return $limit;
-        return self::limit_for_articles_on_placement_change;
+        return self::tsConfigValueOrDefault(
+            'limit_for_articles_on_placement_change',
+            self::limit_for_articles_on_placement_change
+        );
+    }
+
+    public static function limitForArticlesDisplayedOnSectionPage() {
+        return self::tsConfigValueOrDefault(
+            'limit_for_articles_displayed_on_section_page',
+            self::limit_for_articles_displayed_on_section_page
+        );
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -535,7 +546,18 @@ class tx_newspaper_DependencyTree {
         return $cachable_pages;
     }
 
+    private static function tsConfigValueOrDefault($var, $default) {
+        $limit = intval(self::getTSConfigVar($var));
+        if ($limit) return $limit;
+        return $default;
+    }
 
+    private static function getTSConfigVar($var) {
+        $tsconfig = tx_newspaper::getTSConfig();
+        return $tsconfig['newspaper.'][$var];
+    }
+
+    
     ////////////////////////////////////////////////////////////////////////////
 
     /** @var tx_newspaper_Article */
@@ -573,6 +595,17 @@ function getAllArticlePages(array $sections) {
 function getArticlePage(tx_newspaper_Section $section) {
     $articlepagetype = tx_newspaper_PageType::getArticlePageType();
     return $section->getSubPage($articlepagetype);
+}
+
+function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
+    $all_sections = tx_newspaper_Section::getAllSections(false);
+    $sections = array();
+    foreach ($all_sections as $section) {
+        $article_list = $section->getArticleList();
+        if ($article_list->doesContainArticle($article)) {
+            $sections[] = $section;
+        }
+    }
 }
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
@@ -710,7 +743,8 @@ function getPage(tx_newspaper_Pagezone $pagezone) {
 	return new tx_newspaper_Page(intval($pagezone->getAttribute('page_id')));
 }
 
-/// Returns array of all article lists \p $article belongs to
+/**  @return tx_newspaper_ArticleList[] array of all article lists \p $article belongs to
+ */
 function getAffectedArticleLists(tx_newspaper_Article $article) {
 
     $all_article_lists = getAllArticleLists();
@@ -724,6 +758,9 @@ function getAffectedArticleLists(tx_newspaper_Article $article) {
     return $article_lists;
 }
 
+/**
+ * @return tx_newspaper_ArticleList[] All visible article lists in the system
+ */
 function getAllArticleLists() {
 
     static $all_article_lists = array();
@@ -760,6 +797,9 @@ function debugPage(tx_newspaper_CachablePage $page) {
     					 $np_page->getParentSection()->getAttribute('section_name') . $np_page->getPageType()->getAttribute('type_name'));
 }
 
+/**
+ * Example for registering an action that is executed whenever the dependency tree updates
+ */
 // tx_newspaper_DependencyTree::registerAction('debugPage');
 
 ?>
