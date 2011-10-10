@@ -294,7 +294,7 @@ class tx_newspaper_Search {
             '',
             'publish_date DESC'
         );
-tx_newspaper::devlog("getSearchResultsForClass()", tx_newspaper::$query);
+
         $articles = array();
         foreach ($results as $result) {
             if (!self::enable_quick_hack) {
