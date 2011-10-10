@@ -89,7 +89,7 @@ class tx_newspaper_Search {
         $this->section = $section;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
-        $this->setMatchMethod(new tx_newspaper_MatchMethod());
+        $this->setMatchMethod(new tx_newspaper_MatchMethod('AND'));
     }
 
 	///	Performs the search on all articles.
@@ -255,8 +255,9 @@ class tx_newspaper_Search {
         $where = $this->getTimeClauseForSearch();
 
         if ($this->match_method->isOr()) {
-            return $where . $this->orRelatedSearchWhereClause($term, $field_list);
-
+            return $where . $this->relatedSearchWhereClause('OR', $term, $field_list);
+        } else if ($this->match_method->isAnd()) {
+            return $where . $this->relatedSearchWhereClause('AND', $term, $field_list);
         } else if ($this->match_method->isPhrase()) {
             return $where . $this->umlautCaseInsensitiveMatch($term, $field_list);
         }
@@ -264,13 +265,13 @@ class tx_newspaper_Search {
     }
 
     ///	Assemble conditions on search terms
-    private function orRelatedSearchWhereClause($term, $field_list) {
+    private function relatedSearchWhereClause($relation, $term, $field_list) {
         $where = '';
         foreach (explode(' ', $term) as $current_term) {
             if (!$current_term) continue;
             //	don't search for excluded words
             if (!$this->isExcludedWord($current_term)) {
-                $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . ' OR ';
+                $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . " $relation ";
             }
         }
         return $where . '0';
