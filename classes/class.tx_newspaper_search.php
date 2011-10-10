@@ -255,13 +255,21 @@ class tx_newspaper_Search {
         $where = $this->getTimeClauseForSearch();
 
         if ($this->match_method->isOr()) {
-            return $where . $this->relatedSearchWhereClause('OR', $term, $field_list);
+            return $where . $this->orRelatedSearchWhereClause($term, $field_list);
         } else if ($this->match_method->isAnd()) {
-            return $where . $this->relatedSearchWhereClause('AND', $term, $field_list);
+            return $where . $this->andRelatedSearchWhereClause($term, $field_list);
         } else if ($this->match_method->isPhrase()) {
             return $where . $this->umlautCaseInsensitiveMatch($term, $field_list);
         }
 
+    }
+
+    private function orRelatedSearchWhereClause($term, $field_list) {
+        $this->relatedSearchWhereClause('OR', $term, $field_list) . '0';
+    }
+
+    private function andRelatedSearchWhereClause($term, $field_list) {
+        $this->relatedSearchWhereClause('AND', $term, $field_list) . '1';
     }
 
     ///	Assemble conditions on search terms
@@ -274,7 +282,7 @@ class tx_newspaper_Search {
                 $where .= $this->umlautCaseInsensitiveMatch($current_term, $field_list) . " $relation ";
             }
         }
-        return $where . '0';
+        return $where;
     }
 
     private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
