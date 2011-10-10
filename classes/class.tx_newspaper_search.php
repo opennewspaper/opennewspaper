@@ -265,11 +265,11 @@ class tx_newspaper_Search {
     }
 
     private function orRelatedSearchWhereClause($term, $field_list) {
-        $this->relatedSearchWhereClause('OR', $term, $field_list) . '0';
+        return $this->relatedSearchWhereClause('OR', $term, $field_list) . '0';
     }
 
     private function andRelatedSearchWhereClause($term, $field_list) {
-        $this->relatedSearchWhereClause('AND', $term, $field_list) . '1';
+        return $this->relatedSearchWhereClause('AND', $term, $field_list) . '1';
     }
 
     ///	Assemble conditions on search terms
