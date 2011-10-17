@@ -243,7 +243,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						'tx_newspaper_articlelist',
 						'(section_id IS NULL OR section_id="")', // non-section articlelists only
 						'',
-						'notes, crdate DESC'
+						'sorting, uid'
 					);
 					$articlelist = array();
 					foreach($row as $current_al) {
