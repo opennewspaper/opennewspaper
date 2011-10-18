@@ -549,8 +549,31 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			$extra->setAttribute('crdate', time());
 			$extra->setAttribute('tstamp', time());
 			$extra->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+			$this->setNewExtraDefaultValues($extra);
 			$extra->store();
 			return $extra;
+		}
+
+		/**
+		 * Set default values to an Extra
+		 * Default values are set in TSConfig:
+		 * newspaper.be.dossierWizard.default.[Extra].[field] = [value]
+		 * @param Extra object
+		 * @return void
+		 * @todo Don't execute directly. Just offer a hook here ...
+		 */
+		private function setNewExtraDefaultValues(tx_newspaper_Extra &$extra) {
+			// get tsconfig
+			$tsc = tx_newspaper::getTSConfig();
+			if (array_key_exists(
+				strtolower(get_class($extra)) . '.', // Extra class name plus "."
+				$tsc['newspaper.']['be.']['dossierWizard.']['default.'] // tsconfig
+			)) {
+				// set defaults ...
+				foreach($tsc['newspaper.']['be.']['dossierWizard.']['default.'][strtolower(get_class($extra)) . '.'] as $field => $defaultValue) {
+					$extra->setAttribute($field, $defaultValue);
+				}
+			}
 		}
 
 
