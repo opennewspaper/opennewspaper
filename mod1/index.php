@@ -516,6 +516,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 			// add choseRecord js according to jsType setting
 			switch($this->input['jsType']) {
+                //@todo: use $this->isDossierWizard() ...
 				case 'manageDossiers':
 					$smarty->assign('CHOSERECORD', file_get_contents('res/eb/js/choseRecord_manageDossiers.js'));
 				break;
@@ -540,9 +541,9 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 		/// Creates a concrete extra (in Typo3 database)
 		/**
-		 * \param $extraClass Class of Extra to be created
-		 * \return Extra
-		 * \todo: where to move this function to???
+		 * @param $extraClass Class of Extra to be created
+		 * @return Extra
+		 * @todo where to move this function to???
 		 */
 		private function createNewConcreteExtra($extraClass) {
 			$extra = new $extraClass();
@@ -563,17 +564,19 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		 * @todo Don't execute directly. Just offer a hook here ...
 		 */
 		private function setNewExtraDefaultValues(tx_newspaper_Extra &$extra) {
-			// get tsconfig
-			$tsc = tx_newspaper::getTSConfig();
-			if (array_key_exists(
-				strtolower(get_class($extra)) . '.', // Extra class name plus "."
-				$tsc['newspaper.']['be.']['dossierWizard.']['default.'] // tsconfig
-			)) {
-				// set defaults ...
-				foreach($tsc['newspaper.']['be.']['dossierWizard.']['default.'][strtolower(get_class($extra)) . '.'] as $field => $defaultValue) {
-					$extra->setAttribute($field, $defaultValue);
+			if ($tsc = tx_newspaper::getTSConfig()) { // get tsconfig
+				if ($this->isDossierWizard() && $currentTsc = $tsc['newspaper.']['be.']['dossierWizard.']['default.']) {
+					if (array_key_exists(
+						strtolower(get_class($extra)) . '.', // Extra class name plus "."
+						$currentTsc // tsconfig
+					)) {
+						// set defaults ...
+						foreach($tsc['newspaper.']['be.']['dossierWizard.']['default.'][strtolower(get_class($extra)) . '.'] as $field => $defaultValue) {
+							$extra->setAttribute($field, $defaultValue);
+						}
+					}
 				}
-			}
+            }
 		}
 
 
@@ -669,6 +672,13 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 			die($browse . $results);
 		}
 
+        /**
+         * Check if newspaper element browser is opened in dossier wizard
+         * @return true if yes, else false
+         */
+        private function isDossierWizard() {
+            return $this->input['jsType'] == 'manageDossiers';
+        }
 
 		private function getIcons() {
 			return array(

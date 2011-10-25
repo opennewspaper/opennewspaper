@@ -38,6 +38,7 @@
 	function newExtra() {
 		var extraClass = document.getElementById("tx_newspaper_mod1[extra]").value;
 		var extraSysfolder = sysFolder[extraClass]; // get uid of sysfolder the extra will be stored in
+        var jsType = document.getElementById("tx_newspaper_mod1[jsType]").value;
 		var path = window.location.pathname;
 		path = path.substring(0, path.indexOf("/typo3conf/")) + "/";
 
@@ -46,7 +47,7 @@
 			'../mod1/index.php',
 			{
 				method: 'get',
-				parameters: 'tx_newspaper_mod1[ajaxController]=createNewExtra&tx_newspaper_mod1[extraClass]=' + extraClass,
+				parameters: 'tx_newspaper_mod1[ajaxController]=createNewExtra&tx_newspaper_mod1[extraClass]=' + extraClass + '&tx_newspaper_mod1[jsType]=' + jsType,
 				onError: function() {
 					alert('Error! Please retry creating the extra.');
 				},
