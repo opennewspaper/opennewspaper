@@ -112,7 +112,9 @@ CREATE TABLE tx_newspaper_extra_bio (
 
 # Index on pagetype.get_var to speed up lookup of page types
 CREATE TABLE tx_newspaper_pagetype (
-  INDEX get_var (get_var(8))
+  INDEX get_var (get_var(8)),
+  INDEX get_value (get_value(20)),
+  INDEX get_params (get_var(8),get_value(20))
 );
 
 # InnoDB for log
