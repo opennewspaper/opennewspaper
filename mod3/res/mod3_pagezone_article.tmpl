@@ -61,9 +61,9 @@
 {* show *}
 				<td class="mod3_td" align="center">
 					{if $EXTRA_DATA[i].show == 0}
-					<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 1);" />
+					<input id="show_extra_{$EXTRA_DATA[i].uid}" type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid});" />
 					{else}
-					<input type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid}, 0);" checked="checked" />
+					<input id="show_extra_{$EXTRA_DATA[i].uid}" type="checkbox" onchange="extra_set_show({$EXTRA_DATA[i].uid});" checked="checked" />
 					{/if}
 				</td>
 				{if (!$IS_CONCRETE_ARTICLE)}

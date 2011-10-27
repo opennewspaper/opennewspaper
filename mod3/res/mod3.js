@@ -318,15 +318,23 @@ function loadJsCssFile(filename, filetype, param) {
 	}
 
 
-	function extra_set_show(extra_uid, show) {
-		var request = new top.Ajax.Request(
- 			top.path + "typo3conf/ext/newspaper/mod3/index.php",
- 			{
-				method: 'get',
-				parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime()
-			}
-		);
-	}
+/**
+ * Toggle value "show" of given extra
+ * Checkbox needs to have id "show_extra_" plus extra_uid
+ * @param extra_uid Extra uid
+ */
+	function extra_set_show(extra_uid) {
+        var checkboxId = "show_extra_" + parseInt(extra_uid);
+        var show;
+        show = (document.getElementById(checkboxId).checked)? 1 : 0;
+        var request = new top.Ajax.Request(
+            top.path + "typo3conf/ext/newspaper/mod3/index.php",
+            {
+                method: 'get',
+                parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime()
+            }
+        );
+    }
 
 	function extra_set_pass_down(pz_uid, extra_uid, pass_down) {
 		var request = new top.Ajax.Request(
