@@ -331,7 +331,9 @@ function loadJsCssFile(filename, filetype, param) {
             top.path + "typo3conf/ext/newspaper/mod3/index.php",
             {
                 method: 'get',
-                parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime()
+                parameters: "extra_set_show=1&extra_uid=" + extra_uid + "&show=" + show + "&no_cache=" + new Date().getTime(),
+                onCreate: processing,
+                onSuccess: hideProcessing
             }
         );
     }
@@ -433,9 +435,20 @@ function loadJsCssFile(filename, filetype, param) {
 	}
 
 
+/**
+ * Show spinner
+ */
 /// \to do: remove after all calls are switched to page/article version ????
 	function processing() {
 
+        // Check if div is existing, just show uf yes
+        if (document.getElementById('processing') != null) {
+            document.getElementById('processing').style.display = "block";
+            return;
+        }
+
+
+        // create div with spinner else
 		img = document.createElement('img');
 		img_src = document.createAttribute('src');
 		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
@@ -446,10 +459,22 @@ function loadJsCssFile(filename, filetype, param) {
 
 		layer = document.createElement('div');
 		layer.setAttributeNode(layer_style);
+        layer.setAttribute('id', 'processing');
 
 		layer.appendChild(img);
 		self.document.getElementsByTagName('body')[0].appendChild(layer);
 	}
+
+
+/**
+ * Hide spinner
+ */
+    function hideProcessing() {
+        // hide spinner, if existing
+        if (document.getElementById('processing') != null) {
+            document.getElementById('processing').style.display = "none";
+        }
+    }
 
 	// direct reload (no popup/modalbox involved ...)
 	function reload(data) {
