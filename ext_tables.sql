@@ -1076,11 +1076,14 @@ CREATE TABLE tx_newspaper_page (
 );
 
 CREATE TABLE tx_newspaper_pagezone (
-	page_id text NOT NULL
+	page_id int(11) DEFAULT '0' NOT NULL,
+	KEY page_id (page_id)
 );
 
 CREATE TABLE tx_newspaper_pagezone_page (
 	template_set tinytext NOT NULL,
+	pagezone_id int(11) DEFAULT '0' NOT NULL,
+	KEY pagezone_id (pagezone_id),
 	KEY pagezonetype_id (pagezonetype_id)
 );
 
