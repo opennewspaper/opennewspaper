@@ -14,11 +14,27 @@ var NpTools = {
     /**
      * Gets the root path of the installation
      * @return Root path of the installation
-     * @todo: will this always work???
+     * @todo: will this always work??? well, no ... :-(
      */
     getPath: function() {
 	    var path = window.location.pathname;
 		return path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
+    },
+
+    /**
+     * Get path to newspaper directory in typo3conf/ext
+     */
+    getNewspaperPath: function() {
+    	var path,
+    		p;
+
+    	var path = window.location.pathname;
+    	if (p = path.indexOf("typo3conf/ext/newspaper")) {
+    		return path.substring(0, p+23);
+    	}
+    	
+// @todo: other cases are still missing ...
+
     },
 
 

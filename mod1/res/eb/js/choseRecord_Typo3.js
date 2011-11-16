@@ -19,7 +19,7 @@ function choseRecord(className, uid, close) {
 
 	// Write a new abstract extra to the database
 	var request = new Ajax.Request(
-			"../../../index.php", {
+			NpTools.getNewspaperPath() + "/mod1/index.php", {
 				method: 'get',
 				parameters: "tx_newspaper_mod1[ajaxController]=cloneAbstractExtra&tx_newspaper_mod1[extraUid]=" +  parseInt(uid),
 				onSuccess: function(response) {
