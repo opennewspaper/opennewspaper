@@ -393,6 +393,11 @@ class tx_newspaper_Search {
 		return $ret;
 	}
 
+    private static function matchPhraseWithUTF8FuckupWorkedAround($match_against, array $field_list) {
+        return self::matchPhrase($match_against, $field_list) . ' OR ' .
+            self::matchPhrase(utf8_decode($match_against), $field_list);
+    }
+
     private static function matchPhrase($match_against, array $field_list) {
         return 'MATCH (' . implode(', ', $field_list) . ')' .
 	           ' AGAINST (\'' . $match_against . '\') > ' . self::getScoreLimit();
