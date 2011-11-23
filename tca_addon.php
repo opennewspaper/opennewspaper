@@ -308,6 +308,48 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag']['displayCond'] = 'FIELD:is_ctrltag:=:1';
 
 
+    // add cps_tcatree to field section in article, if extension "cps_tcatree" is available
+    if (t3lib_extMgm::isLoaded('cps_tcatree')) {
+
+        // load some files, auto loading not working in Typo3 4.2.x
+        $extensionPath = t3lib_extMgm::extPath('cps_devlib') . 'Classes/';
+        $autoloadFiles = array(
+            'tx_cpsdevlib_db' => $extensionPath.'class.tx_cpsdevlib_db.php',
+            'tx_cpsdevlib_debug' => $extensionPath.'class.tx_cpsdevlib_debug.php',
+            'tx_cpsdevlib_div' => $extensionPath.'class.tx_cpsdevlib_div.php',
+            'tx_cpsdevlib_extmgm' => $extensionPath.'class.tx_cpsdevlib_extmgm.php',
+            'tx_cpsdevlib_parser' => $extensionPath.'class.tx_cpsdevlib_parser.php',
+        );
+        foreach ($autoloadFiles as $key => $value) {
+            if (!class_exists($key)) {
+                if (file_exists($value)) {
+                    require_once($value);
+                }
+            }
+        }
+        require_once PATH_t3lib . 'class.t3lib_tceforms.php';
+
+        // get storage folder for sections
+        $sectionPid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
+
+        $GLOBALS['TCA']['tx_newspaper_section']['ctrl']['treeParentField'] = 'parent_section';
+
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['form_type'] = 'user';
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['userFunc'] = 'tx_cpstcatree->getTree';
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['foreign_table'] = 'tx_newspaper_section';
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['foreign_table_where'] = ' AND tx_newspaper_section.pid=' . $sectionPid;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['treeView'] = 1;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandable'] = 1;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandFirst'] = 0;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandAll'] = 0;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['size'] = 3;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['minitems'] = 0;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['trueMaxItems'] = 3;
+    }
+
+
+
+
 // todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
 
 // for testing image upload sizes (in extra image)
