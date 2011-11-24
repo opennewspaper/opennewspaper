@@ -1734,7 +1734,8 @@ JSCODE;
 			$jsParams = 'data[' . $table . '][' . $row['uid'] . '][' . $field . ']|||tx_newspaper_article|';
 
 			// conf for newspaper article browser
-			$js = '<script type="text/javascript">
+			$js = '<script type="text/javascript" src="../typo3conf/ext/newspaper/res/be/newspaper.js"> </script>
+<script type="text/javascript">
 	NpBackend.param["ElementBrowserUrl"] = "' . tx_newspaper::getAbsolutePath() .  'typo3conf/ext/newspaper/mod2/index.php?mode=db&bparams=' . $jsParams . '&form_table=' . $table . '&form_field=' . $field . '&form_uid=' . $uid . '";
 	NpBackend.param["ElementBrowserWidth"] = 925;
 	NpBackend.param["ElementBrowserHeight"] = 485;
