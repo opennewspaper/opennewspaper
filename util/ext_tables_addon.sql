@@ -15,8 +15,7 @@
 CREATE TABLE tx_newspaper_section (
 	template_set tinytext NOT NULL,
 	KEY parent_section (parent_section),
-	KEY articlelist (articlelist),
-	KEY default_articletype (default_articletype)
+	KEY articlelist (articlelist)
 );
 
 CREATE TABLE tx_newspaper_page (
@@ -35,9 +34,7 @@ CREATE TABLE tx_newspaper_pagezone (
 
 CREATE TABLE tx_newspaper_pagezone_page (
 	template_set tinytext NOT NULL,
-	pagezone_id int(11) DEFAULT '0' NOT NULL,
-	KEY pagezone_id (pagezone_id),
-	KEY pagezonetype_id (pagezonetype_id)
+	pagezone_id int(11) DEFAULT '0' NOT NULL
 );
 
 CREATE TABLE tx_newspaper_article (
@@ -46,8 +43,7 @@ CREATE TABLE tx_newspaper_article (
 	template_set tinytext NOT NULL,
 	FULLTEXT KEY title (title,kicker,title_list,kicker_list),
 	FULLTEXT KEY text (teaser,teaser_list,bodytext,author),
-	KEY articletype_id (articletype_id),
-	KEY pagezonetype_id (pagezonetype_id)
+	KEY articletype_id (articletype_id)
 );
 
 CREATE TABLE tx_newspaper_articlelist (
@@ -70,7 +66,6 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic_articles_mm (
 CREATE TABLE tx_newspaper_tag (
 	section int(11) DEFAULT '0' NOT NULL,
 	KEY section (section),
-	KEY tag_type (tag_type),
 	KEY ctrltag_cat (ctrltag_cat)
 );
 
@@ -90,7 +85,6 @@ CREATE TABLE tx_newspaper_extra_controltagzone (
 );
 
 CREATE TABLE tx_newspaper_extra_sectionteaser (
-	KEY ctrltag_cat (ctrltag_cat),
 	KEY ctrltag (ctrltag),
 	KEY section (section)
 );
