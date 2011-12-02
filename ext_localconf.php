@@ -84,5 +84,8 @@ RTE.config.tx_newspaper_extra_bio.bio_text {
 t3lib_extMgm::addUserTSConfig('
 	options.saveDocNew.tx_newspaper_tag_zone=1
 ');
+t3lib_extMgm::addUserTSConfig('
+	options.saveDocNew.tx_newspaper_specialhit=1
+');
 require_once(PATH_typo3conf . 'ext/newspaper/ext_localconf_addon.php');
 ?>

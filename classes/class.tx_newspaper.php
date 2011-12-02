@@ -130,7 +130,7 @@ class tx_newspaper  {
         }
     }
 
-    private static function executeQuery() {
+    public static function executeQuery() {
         self::logQuery();
         return $GLOBALS['TYPO3_DB']->sql_query(self::$query);
     }
