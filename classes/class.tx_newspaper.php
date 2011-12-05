@@ -36,6 +36,10 @@ class tx_newspaper  {
 
     const default_max_logged_queries = 1000;
 
+  // Type for case conversion
+  const toLower = 'toLower';
+  const toUpper = 'toUpper';
+
     ////////////////////////////////////////////////////////////////////////////
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
@@ -928,6 +932,8 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
      *
      * @param	$string		String to clean up
      * @return	string		Encoded \p $string, passed through rawurlencode() = ready to put in the URL.
+     *
+     * @todo Refactor, see tx_newspaper::toLowerCase()
      */
     public static function normalizeString($string) {
 
@@ -938,7 +944,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         $charset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : $GLOBALS['TSFE']->defaultCharSet;
 
         // Convert to lowercase:
-        $normalizedString = $cs_converter->conv_case($charset, $string, 'toLower');
+        $normalizedString = $cs_converter->conv_case($charset, $string, self::toLower);
 
         // Convert some special tokens to the space character:
         $normalizedString = preg_replace('/[ -+_]+/', self::space, $normalizedString); // convert spaces
@@ -963,6 +969,112 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     $replaceWith = array('%3F', '%3D', '%26');
     return str_replace($chars, $replaceWith, $url);
     }
+
+
+    /**
+     * Check if given string is UTF8 encoded
+     * Thanx: http://www.php.net/manual/en/function.utf8-encode.php#82210
+     * @param $string String to be checked
+     * @return bool True if string is UTF8 encoded, else false
+     */
+    public static function isUTF8($string) {
+        return (utf8_encode(utf8_decode($string)) == $string);
+    }
+
+    /**
+     * Recusively convert array $arr to lowercase
+     * @static
+     * @param array $arr Array to be convered
+     * @return array Converted array
+     */
+    public static function toLowerCaseArray(array $arr) {
+        return self::convertCaseArray($arr, self::toLower);
+    }
+    /**
+     * Recusively convert array $arr to uppercase
+     * @static
+     * @param array $arr Array to be convered
+     * @return array Converted array
+     */
+    public static function toUpperCaseArray(array $arr) {
+        return self::convertCaseArray($arr, self::toUpper);
+    }
+
+    /// Recursively convert strings in an array to case given in $type
+    /**
+     * @static
+     * @param array $arr Array to be converted
+     * @param $type Either set to self::toLower or self::toUpper ($string is returned unprocessed if another $type is
+     * given)
+     * @return array Converted array
+     */
+    private static function convertCaseArray(array $arr, $type) {
+        if ($type != self::toLower && $type != self::toUpper) {
+            return $arr; // no proper type, just return the given array
+        }
+        foreach($arr as $key => $value) {
+            if (is_array($value)) {
+                $arr[$key] = self::convertCaseArray($value, $type);
+            } elseif (is_string($value)) {
+                $arr[$key] = ($type == self::toLower)? self::toLowerCase($value) : self::toUpperCase($value);
+            }
+        }
+        return $arr;
+    }
+
+    /**
+     * Convert $string to lowercase. Uses Typo3 csConvObj to process special characters correctly.
+     * @param $string String to be converted to lowercase
+     * @return Converted string
+     */
+    public static function toLowerCase($string) {
+        return self::convertCase($string, self::toLower);
+    }
+    /**
+     * Convert $string to uppercase. Uses Typo3 csConvObj to process special characters correctly.
+     * @param $string String to be converted to uppercase
+     * @return Converted string
+     */
+    public static function toUpperCase($string) {
+        return self::convertCase($string, self::toUpper);
+    }
+
+    /**
+     * Converts $string to lowercase or uppercase depending on setting in $type. Uses Typo3 csConvObj to process special
+     * characters correctly.
+     * @static
+     * @param $string String to be converted
+     * @param $type Either set to self::toLower or self::toUpper ($string is returned unprocessed if another $type is
+     * given)
+     * @return string Converted string
+     * @todo See tx_newspaper::normalizeString()
+     */
+    private static function convertCase($string, $type) {
+
+        if (!is_string($string) || ($type != self::toLower && $type != self::toUpper)) {
+            return $string; // nothing to do
+        }
+
+        if (TYPO3_MODE == 'BE' && !is_object($GLOBALS['TSFE'])) {
+            self::buildTSFE();
+            if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
+                return ($type == self::toLower)? strtolower($string) : strtoupper($string);
+            }
+        }
+
+        $cs_converter = $GLOBALS['TSFE']->csConvObj;
+        if (!$cs_converter instanceof t3lib_cs) {
+            return ($type == self::toLower)? strtolower($string) : strtoupper($string);
+        }
+
+        // Fetch character set:
+        $charset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset']?
+                $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : $GLOBALS['TSFE']->defaultCharSet;
+
+        // Convert:
+        return $cs_converter->conv_case($charset, $string, $type);
+    }
+
 
 
   /**

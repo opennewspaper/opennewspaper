@@ -236,6 +236,44 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         }
     }
 
+
+    // Utility functions
+    public function test_toLowerCase() {
+        $this->assertEquals(tx_newspaper::toLowerCase(self::$stringToBeConverted), 'example with umlaut äöü äöü');
+    }
+    public function test_toUpperCase() {
+        $this->assertEquals(tx_newspaper::toUpperCase(self::$stringToBeConverted), 'EXAMPLE WITH UMLAUT ÄÖÜ ÄÖÜ');
+    }
+
+    public function test_toLowerCaseArray() {
+        $lowerCaseArray = array(
+        'example with umlaut äöü äöü',
+        array(
+            'nested' => 'example with umlaut äöü äöü',
+            1
+        )
+    );
+        $this->assertEquals(tx_newspaper::toLowerCaseArray(self::$arrayToBeConverted), $lowerCaseArray);
+    }
+    public function test_toUpperCaseArray() {
+        $upperCaseArray = array(
+        'EXAMPLE WITH UMLAUT ÄÖÜ ÄÖÜ',
+        array(
+            'nested' => 'EXAMPLE WITH UMLAUT ÄÖÜ ÄÖÜ',
+            1
+        )
+    );
+        $this->assertEquals(tx_newspaper::toUpperCaseArray(self::$arrayToBeConverted), $upperCaseArray);
+    }
+
+    public function test_isUTF8_true() {
+        $this->isTrue(tx_newspaper::isUTF8(utf8_encode('Test äöu')));
+    }
+    public function test_isUTF8_false() {
+        $this->isFalse(tx_newspaper::isUTF8(utf8_decode(('Test äöu'))));
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
     private function checkEnableFields($table, $expected) {
@@ -273,5 +311,17 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
         return tx_newspaper::explodeByList($separators, self::explode_by_list_string);
     }
 
+
+
+    
+    private static $stringToBeConverted = 'Example with Umlaut äöü ÄÖÜ';
+    private static $arrayToBeConverted = array(
+        'Example with Umlaut äöü ÄÖÜ',
+        array(
+            'nested' => 'Example with Umlaut äöü ÄÖÜ',
+            1
+        )
+    );
+    
 }
 ?>
