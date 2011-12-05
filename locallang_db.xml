@@ -258,7 +258,7 @@
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Number of articles with image</label>
 			<label index="tx_newspaper_extra_sectionteaser.template">Template</label>
 			<label index="tx_newspaper_specialhit">Special hit</label>
-			<label index="tx_newspaper_specialhit.title">Internal title</label>
+			<label index="tx_newspaper_specialhit.title">Title</label>
 			<label index="tx_newspaper_specialhit.teaser">Teaser</label>
 			<label index="tx_newspaper_specialhit.words">Search words</label>
 			<label index="tx_newspaper_specialhit.url">URL</label>
@@ -523,7 +523,7 @@
 			<label index="tx_newspaper_extra_sectionteaser.num_articles_w_image">Anzahl der Artikel mit Bild</label>
 			<label index="tx_newspaper_extra_sectionteaser.template">Designvorlage</label>
 			<label index="tx_newspaper_specialhit">Sondertreffer</label>
-			<label index="tx_newspaper_specialhit.title">Titel (intern)</label>
+			<label index="tx_newspaper_specialhit.title">Titel</label>
 			<label index="tx_newspaper_specialhit.teaser">Teaser</label>
 			<label index="tx_newspaper_specialhit.words">Suchbegriffe</label>
 			<label index="tx_newspaper_specialhit.url">URL</label>
