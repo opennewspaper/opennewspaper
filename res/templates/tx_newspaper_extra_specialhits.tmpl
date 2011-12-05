@@ -1,0 +1,25 @@
+<!-- start res/templates/tx_newspaper_extra_specialhits.tmpl -->
+
+{* debug *}
+
+{* Variables:
+   $template_set        Template set used, if any
+   $attributes          Attributes as stored in DB
+   $extra_attributes    Attributes of the Extra
+   $special_hits        Array(array('title', 'teaser, 'url')
+   $search_query        Array: Search query strings
+*}
+
+{if $special_hits}
+    <h2>Special hits: Template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+
+    {foreach item=special_hit from=$special_hits}
+        Title: {$special_hit.title}<br />
+        Teaser: {$special_hit.teaser}<br />
+        URL: {$special_hit.url}<br />
+        <br />
+    {/foreach}
+
+{/if}
+
+<!--  end  res/templates/tx_newspaper_extra_specialhits.tmpl -->
