@@ -643,13 +643,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$new_article->storeWithoutSavehooks();
 
-		$base_url = tx_newspaper::getAbsolutePath();
-
-		// add calling module to url in order to return to the correct calling module ...
-		$url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
-				'typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModuleAndFilter($input) . '&tx_newspaper_mod5[mod2Filter]=' . $input['mod2Filter'] . '&edit[tx_newspaper_article][' .
-				$new_article->getUid() . ']=edit';
-		header('Location: ' . $url);
+        $this->redirectToArticleMask($new_article, $input);
 	}
 
 	function browse_path(array $input) {
@@ -807,22 +801,22 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 
 	/// Redirect the browser to the article mask for further editing after the import.
-	private function redirectToArticleMask(tx_newspaper_Article $new_article, array $input=array()) {
-        $path2installation = substr(PATH_site, strlen($_SERVER['DOCUMENT_ROOT']));
+    private function redirectToArticleMask(tx_newspaper_Article $new_article, array $input = array()) {
 
-        /*  volle URL muss angegeben werden, weil manche browser sonst
-         *  'http://' davorhaengen.
-         */
-        $url_parts = explode('/typo3', tx_newspaper::currentURL());
-        $base_url = $url_parts[0];
+        /* @todo: Does this work with all browsers?
+         * Is the following comment still true?
+         * "Volle URL muss angegeben werden, weil manche Browser sonst 'http://' davorhaengen"
+        */
 
-		// add calling module to url in order to return to the correct calling module ...
-        $url = $base_url . '/typo3/alt_doc.php?returnUrl=' . $path2installation .
-                '/typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModuleAndFilter($input) . '&edit[tx_newspaper_article][' .
-                $new_article->getUid() . ']=edit';
+        $base_url = tx_newspaper::getAbsolutePath();
+
+        // add calling module to url in order to return to the correct calling module ...
+        $url = $base_url . 'typo3/alt_doc.php?returnUrl=' . $base_url .
+            'typo3conf/ext/newspaper/mod5/res/returnUrl.php?' . $this->extractCallingModuleAndFilter($input) . '&tx_newspaper_mod5[mod2Filter]=' . $input['mod2Filter'] . '&edit[tx_newspaper_article][' .
+            $new_article->getUid() . ']=edit';
 
         header('Location: ' . $url); // redirect to article backend
-	}
+    }
 
 	private function changeRole(array $input) {
 //t3lib_div::devlog('changeRole()', 'newspaper', 0, array('input' => $input));
