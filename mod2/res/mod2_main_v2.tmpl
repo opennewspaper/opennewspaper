@@ -148,6 +148,7 @@
 				($DATA[i].starttime == 0 || $DATA[i].starttime <= $smarty.now) &&
 				($DATA[i].endtime == 0 || $DATA[i].endtime > $smarty.now)
 			} online{/if}">
+            {* Icon showing if article is published (clickable for duty editors and admins) *}
 			{if $DATA[i].hidden == 0}
 				{if $IS_DUTY_EDITOR || $IS_ADMIN}
 					<a title="{$LL.label_hide}" class="statButton" href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 1);" }>
@@ -165,14 +166,26 @@
 					</a>
 				{/if}
 			{/if}
+            {* Icon and flag if article is time controlled *}
 			{if $DATA[i].starttime > 0 || $DATA[i].endtime > 0}
-				{* so this is a time controlled article ... *}
 				{if $DATA[i].starttime != 0 && $DATA[i].starttime > $smarty.now}
 					{* not yet published *}
-					<span title="{$DATA[i].time_controlled_not_yet}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
+                    {if $DATA[i].endtime != 0 && $DATA[i].endtime > $DATA[i].starttime}
+                        {* with enddate *}
+                        <span title="{$DATA[i].time_controlled_not_yet_with_endtime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
+                    {else }
+                        {*without enddate *}
+                        <span title="{$DATA[i].time_controlled_not_yet}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
+                    {/if}
 				{elseif $DATA[i].endtime != 0 && $DATA[i].endtime < $smarty.now}
 					{* publish time exceeded - will never be visible again *}
-					<span title="{$DATA[i].time_controlled_not_anymore}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
+                    {if $DATA[i].starttime != 0 && $DATA[i].starttime < $DATA[i].endtime}
+                        {* with startdate *}
+					    <span title="{$DATA[i].time_controlled_not_anymore_with_starttime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
+                    {else}
+                        {* without startdate *}
+                        <span title="{$DATA[i].time_controlled_not_anymore}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
+                    {/if}
 				{elseif $DATA[i].endtime != 0 && $DATA[i].endtime >= $smarty.now}
 					{* article is online, but will be offline in future; endtime is set *}
 					<span title="{$DATA[i].time_controlled_now_but_will_end}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_green.gif" class="statWatch"></span>

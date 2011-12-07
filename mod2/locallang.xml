@@ -34,10 +34,12 @@
 			<label index="label_title_commands">Commands</label>
 			<label index="label_title_role">Role</label>
 
-			<label index="label_time_controlled_not_yet">Will be activated at ###STARTTIME###</label>
-			<label index="label_time_controlled_not_anymore">Ended on ###ENDTIME###</label>
-			<label index="label_time_controlled_now_and_future">Was activated at ###STARTTIME###</label>
-			<label index="label_time_controlled_now_but_will_end">Was activated at ###STARTTIME###, will end at ###ENDTIME###</label>
+			<label index="label_time_controlled_not_yet">Will be published at ###STARTTIME###</label>
+            <label index="label_time_controlled_not_yet_with_endtime">Will be published at ###STARTTIME###, will end at ###ENDTIME###</label>
+			<label index="label_time_controlled_not_anymore">Ended at ###ENDTIME###</label>
+            <label index="label_time_controlled_not_anymore_with_starttime">Ended at ###ENDTIME### (started at ###STARTTIME###)</label>
+			<label index="label_time_controlled_now_and_future">Started at ###STARTTIME###</label>
+			<label index="label_time_controlled_now_but_will_end">Started at ###STARTTIME###, will end at ###ENDTIME###</label>
 
 			<label index="label_author">Author</label>
 			<label index="label_section">Section</label>
@@ -108,9 +110,11 @@
 			<label index="label_title_role">Rolle</label>
 
 			<label index="label_time_controlled_not_yet">Startdatum/-uhrzeit wird sein: ###STARTTIME###</label>
+            <label index="label_time_controlled_not_yet_with_endtime">Startdatum/-uhrzeit wird sein:  ###STARTTIME###, Enddatum/-uhrzeit wird sein: ###ENDTIME###</label>
 			<label index="label_time_controlled_not_anymore">Enddatum/-uhrzeit: ###ENDTIME###</label>
+            <label index="label_time_controlled_not_anymore_with_starttime">Enddatum/-uhrzeit war: ###ENDTIME### (Startdatum/-uhrzeit war: ###STARTTIME###)</label>
 			<label index="label_time_controlled_now_and_future">Startdatum/-uhrzeit war: ###STARTTIME###</label>
-			<label index="label_time_controlled_now_but_will_end">Startdatum/-uhrzeit war: ###STARTTIME###, Enddatum/-uhrzeit: ###ENDTIME###</label>
+			<label index="label_time_controlled_now_but_will_end">Startdatum/-uhrzeit war: ###STARTTIME###, Enddatum/-uhrzeit wird sein: ###ENDTIME###</label>
 
 			<label index="label_author">Autor</label>
 			<label index="label_section">Ressort</label>

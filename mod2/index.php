@@ -42,7 +42,7 @@ class fullWidthDoc_mod2 extends template {
 /**
  * Module 'Moderation list' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schrï¿½der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module2 extends t3lib_SCbase {
 	var $pageinfo;
@@ -257,14 +257,18 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 
-		// add information for time controlled articles
-		// add formatted publish date
+
+        // Publish date, starttime and endtime
 		for ($i = 0; $i < sizeof($row); $i++) {
+            // Add information for time controlled articles
 			$row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet'], $row[$i]['starttime'] ,$row[$i]['endtime']);
+            $row[$i]['time_controlled_not_yet_with_endtime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet_with_endtime'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore'], $row[$i]['starttime'] ,$row[$i]['endtime']);
+            $row[$i]['time_controlled_not_anymore_with_starttime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore_with_starttime'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_and_future'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 			$row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_but_will_end'], $row[$i]['starttime'] ,$row[$i]['endtime']);
 
+            // Add formatted publish date
 			$row[$i]['formattedPublishdate'] = $this->getFormattedPublishDate($row[$i]['publish_date']);
 		}
 
@@ -326,10 +330,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'published' => tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $this->LL['label.published']),
 			'hidden' => tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $this->LL['label_hidden']),
 			'published' => tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', ''),
-			'timeGreen' => tx_newspaper_BE::renderIcon($image_path . 'history_green.gif', '', ''),
-			'timeYellow' => tx_newspaper_BE::renderIcon($image_path . 'history_yellow.gif', '', ''),
-			'timeRed' => tx_newspaper_BE::renderIcon($image_path . 'history_red.gif', '', ''),
-			'timeVeryGreen' => tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', ''),
 			'recordLocked' => tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false),
 			'placeArticle' => tx_newspaper_BE::renderIcon('gfx/list.gif', '', $this->LL['label_article_placement']),
 			'addArticle' =>  tx_newspaper_BE::renderIcon('gfx/plusbullet2.gif', '', $this->LL['label_article_add']),
@@ -355,7 +355,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	}
 
 	private function insertStartEndtime($string, $starttime, $endtime) {
-// \todo: time format string should be configurable
+// @todo: time format string should be configurable
 		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
 		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
 		return $string;
