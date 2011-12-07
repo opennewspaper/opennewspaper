@@ -357,10 +357,9 @@ var NpBackend = {
 		    layer.style.left = 0;
 		    layer.style.right = 0;
 		    layer.style.zIndex = 99;
-		    layer.style.paddingTop = 180;
 		    layer.style.color = "#808080";
 		    layer.style.textAlign = "center";
-			layer.innerHTML = '<img src="' + this.getSpinnerFile() + '" alt="" />';
+			layer.innerHTML = '<img style="padding-top:180px;" src="' + this.getSpinnerFile() + '" alt="" />';
 			document.body.appendChild(layer);
 		}
 		document.getElementById("NpBackendProgress").style.display = "inline";
@@ -388,6 +387,9 @@ var NpBackend = {
 		if (document.location.href.indexOf('tx_newsapper_mod7[controller]=singleplacement') >= 0) {
 			return "move-spinner.gif";
 		}
+        if (document.location.href.indexOf('typo3/backend.php') >= 0) {
+            return "../typo3conf/ext/newspaper/res/be/css/move-spinner.gif";
+        }
 		return "../res/be/css/move-spinner.gif"; // default
 	}
 

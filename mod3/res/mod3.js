@@ -81,16 +81,7 @@ function loadJsCssFile(filename, filetype, param) {
 
 	/// "processing spinner" over whole page
 	function processing_page() {
-		img = document.createElement('img');
-		img_src = document.createAttribute('src');
-		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
-		img.setAttributeNode(img_src);
-		layer_style = document.createAttribute('style');
-		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
-		layer = document.createElement('div');
-		layer.setAttributeNode(layer_style);
-		layer.appendChild(img);
-		self.document.getElementsByTagName('body')[0].appendChild(layer);
+        top.NpBackend.showProgress();
 	}
 
 	function processing_in_article() {
@@ -440,29 +431,7 @@ function loadJsCssFile(filename, filetype, param) {
  */
 /// \to do: remove after all calls are switched to page/article version ????
 	function processing() {
-
-        // Check if div is existing, just show uf yes
-        if (document.getElementById('processing') != null) {
-            document.getElementById('processing').style.display = "block";
-            return;
-        }
-
-
-        // create div with spinner else
-		img = document.createElement('img');
-		img_src = document.createAttribute('src');
-		img_src.nodeValue = top.path + 'typo3/gfx/spinner.gif';
-		img.setAttributeNode(img_src);
-
-		layer_style = document.createAttribute('style');
-		layer_style.nodeValue = 'color: red; position: absolute; z-index: 99; text-align: center; background: rgba(208, 208, 208, 0.8) none repeat scroll 0 0; top: 0; bottom: 0; left: 0; right: 0; padding-top: 33%;';
-
-		layer = document.createElement('div');
-		layer.setAttributeNode(layer_style);
-        layer.setAttribute('id', 'processing');
-
-		layer.appendChild(img);
-		self.document.getElementsByTagName('body')[0].appendChild(layer);
+        NpBackend.showProgress();
 	}
 
 
@@ -470,10 +439,7 @@ function loadJsCssFile(filename, filetype, param) {
  * Hide spinner
  */
     function hideProcessing() {
-        // hide spinner, if existing
-        if (document.getElementById('processing') != null) {
-            document.getElementById('processing').style.display = "none";
-        }
+        NpBackend.hideProgress();
     }
 
 	// direct reload (no popup/modalbox involved ...)

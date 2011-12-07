@@ -13,8 +13,10 @@
 	if (href_reload.charAt(href_reload.length - 1) == '#') {
 		href_reload = href_reload.substr(0, href_reload.length - 1); // cut off last '#', so T3 can reload correctly
 	}
-	parent.window.frames[0].frames['list_frame'].location.href = href_reload;
-	top.hidePopWin(false); /// \todo: this is working for subModal only !!!
+    parent.window.frames[0].frames['list_frame'].location.href = href_reload; // reload placement module, so changes are displayed
+    top.hidePopWin(false); /// @todo: this is working for subModal only !!!
+    parent.NpBackend.showProgress(); // show spinner
+
 // 	top.goToModule('txnewspaperMmain_txnewspaperM3');
 /*]]>*/
 </script>
