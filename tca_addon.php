@@ -307,6 +307,9 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag_cat']['displayCond'] = 'FIELD:is_ctrltag:=:1';
 	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag']['displayCond'] = 'FIELD:is_ctrltag:=:1';
 
+    // @todo: make configurable?
+    $GLOBALS['TCA']['tx_newspaper_specialhit']['columns']['url']['config']['eval'] = 'required';
+
 
     // add cps_tcatree to field section in article, if extension "cps_tcatree" is available
     if (t3lib_extMgm::isLoaded('cps_tcatree')) {
