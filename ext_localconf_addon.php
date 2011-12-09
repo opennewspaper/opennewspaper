@@ -150,6 +150,15 @@
 		t3lib_extMgm::addUserTSConfig('
 			options.saveDocNew.tx_newspaper_article=0
 		');
+
+
+		// Set default value of type to "Section" so BE can render "Section" field right away
+		t3lib_extMgm::addUserTSConfig('
+			TCAdefaults.tx_newspaper_extra_sectionteaser.is_ctrltag = 0
+		');
+
+
+
 	}
 
 
