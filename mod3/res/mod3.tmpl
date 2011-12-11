@@ -394,6 +394,12 @@ body {
 {/section}
 
 	</div>
+{literal}
 <script type="text/javascript">
-    top.NpBackend.hideProgress();
+    if (typeof top.NpBackend != 'undefined' && typeof top.NpBackend.hideProgress == 'function') {
+        top.NpBackend.hideProgress();
+    } else if (typeof NpBackend != 'undefined' && typeof NpBackend.hideProgress == 'function') {
+        NpBackend.hideProgress();
+    }
 </script>
+{/literal}

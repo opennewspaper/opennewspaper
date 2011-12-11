@@ -431,7 +431,7 @@ function loadJsCssFile(filename, filetype, param) {
  */
 /// \to do: remove after all calls are switched to page/article version ????
 	function processing() {
-        NpBackend.showProgress();
+        top.NpBackend.showProgress();
 	}
 
 
@@ -439,7 +439,7 @@ function loadJsCssFile(filename, filetype, param) {
  * Hide spinner
  */
     function hideProcessing() {
-        NpBackend.hideProgress();
+        top.NpBackend.hideProgress();
     }
 
 	// direct reload (no popup/modalbox involved ...)
