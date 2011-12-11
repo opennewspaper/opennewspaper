@@ -883,7 +883,7 @@ class tx_newspaper_BE {
 
     private function addTagInputField($selectBox, $articleId, $tagType) {
         $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\['.$tagType.'\]_sel.*</select>';
-        $with='<input type="text" id="autocomplete_'.$tagType.'" /><span id="indicator_'.$tagType.'" style="display: none"><img src="/typo3_base/typo3/gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$tagType.'" class="autocomplete"></div>';
+        $with='<input type="text" id="autocomplete_'.$tagType.'" /><span id="indicator_'.$tagType.'" style="display: none"><img src="gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$tagType.'" class="autocomplete"></div>';
         return $this->replaceIncludingEndOfLine($selectBox, $with, $pattern);
     }
 
@@ -945,7 +945,7 @@ class tx_newspaper_BE {
 
     private function getFindTagsJs($articleId, $ctrlCatUids) {
         return <<<JSCODE
-<link rel="stylesheet" type="text/css" href="ext/newspaper/res/be/autocomplete.css" />
+<link rel="stylesheet" type="text/css" href="../typo3conf/ext/newspaper/res/be/autocomplete.css" />
 <script type="text/javascript" src="contrib/scriptaculous/scriptaculous.js?load=builder,effects,controls,dragdrop"></script>
     <script language="JavaScript">
         var mapSelector = function(instance) {
