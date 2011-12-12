@@ -1487,16 +1487,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 //t3lib_div::devlog('joinTags()', 'newspaper', 0, array('incommingFields' => $incomingFieldArray));
         if ($table == 'tx_newspaper_article' && isset($incomingFieldArray['tags'])) {
             $tags = $incomingFieldArray['tags'];
-            $ctrlTags = '';
+            $ctrlTags = array();
 
             foreach($incomingFieldArray as $field => $value) {
                 if(stristr($field, 'tags_ctrl')) {
-                    $ctrlTags .= $value;
+                    $ctrlTags = array_merge($ctrlTags, explode(',', $value));
                 }
             }
-            if ($ctrlTags) {
+            if (!empty($ctrlTags)) {
                 $tags = explode(",", $tags);
-                $ctrlTags = explode(",", $ctrlTags);
                 $allTags = implode(",", array_merge($tags, $ctrlTags));
                 $incomingFieldArray['tags'] = $allTags;
                 $_REQUEST['data'][$table][$id]['tags'] = $allTags;
