@@ -381,13 +381,21 @@ var NpBackend = {
 	 * @return Path to spinner file
 	 */
 	getSpinnerFile: function() {
-		if (document.location.href.indexOf('M=txnewspaperMmain_txnewspaperM9') >= 0) {
+//console.log(document.location.href);
+        if (document.location.href.indexOf('typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article]') >= 0) {
+            // Article backend
+            return "../typo3conf/ext/newspaper/res/be/css/move-spinner.gif";
+        }
+        if (document.location.href.indexOf('M=txnewspaperMmain_txnewspaperM9') >= 0) {
+            // Section article list module
 			return "../typo3conf/ext/newspaper/res/be/css/move-spinner.gif"; //
 		}
 		if (document.location.href.indexOf('tx_newsapper_mod7[controller]=singleplacement') >= 0) {
+            // Placement module (?)
 			return "move-spinner.gif";
 		}
         if (document.location.href.indexOf('typo3/backend.php') >= 0) {
+            // ???
             return "../typo3conf/ext/newspaper/res/be/css/move-spinner.gif";
         }
 		return "../res/be/css/move-spinner.gif"; // default
