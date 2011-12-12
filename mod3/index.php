@@ -299,16 +299,17 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         die();
     }
 
-	/// called via ajax: toggle show checkbox for extra on pagezone
-	/** \param $extra_uid uid of extra
-	 * \param $show boolean value wheater to show or not this extra
+	/** Called via ajax: Toggle show checkbox for extra on pagezone (both pagezone_page and article)
+     *  Note: Visibility setting is NOT inherited
+     *  @param $extra_uid uid of Extra
+	 *  @param $show boolean Whether to show this extra or not
      */
 	private function processExtraSetShow($extra_uid, $show) {
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
 
-		tx_newspaper_Extra::updateDependencyTree($e);
+		tx_newspaper_PageZone::updateDependencyTree($e);
 
 		tx_newspaper_workflow::logPlacement('tx_newspaper_extra', $extra_uid, array('show' => $show), NP_WORKLFOW_LOG_PLACEMENT_SHOW);
 
