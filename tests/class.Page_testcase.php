@@ -6,7 +6,7 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_pagezone_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 /// testsuite for class tx_newspaper_page
 class test_Page_testcase extends tx_newspaper_database_testcase {
