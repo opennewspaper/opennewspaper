@@ -13,7 +13,7 @@ interface tx_newspaper_TimingLogger {
 
 class tx_newspaper_Devlogger implements tx_newspaper_TimingLogger {
     public function log($message, tx_newspaper_TimingInfo $info) {
-        tx_newspaper::devlog($message, $info);
+        tx_newspaper::devlog($message, "$info");
     }
 }
 

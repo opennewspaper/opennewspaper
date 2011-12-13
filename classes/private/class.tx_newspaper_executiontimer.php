@@ -53,7 +53,6 @@ class tx_newspaper_ExecutionTimer {
 
     private static function logExecutionTimes() {
         $tsconfig = tx_newspaper::getTSConfig();
-        tx_newspaper::devlog('logExecutionTimes', $tsconfig['newspaper.']['logExecutionTimes']);
         return intval($tsconfig['newspaper.']['logExecutionTimes']);
     }
 
@@ -64,7 +63,18 @@ class tx_newspaper_ExecutionTimer {
             self::setLogger(new tx_newspaper_Devlogger());
         }
 
-        self::$logger->log($message, $timing_info);
+        self::$logger->log(
+            self::getRecursionLevelInsertString() . $message,
+            $timing_info
+        );
+    }
+
+    private static function getRecursionLevelInsertString() {
+        $string = '';
+        for ($i = 0; $i < self::$recursion_level; $i++) {
+            $string = "__$string";
+        }
+        return $string;
     }
 
     private $message = '';

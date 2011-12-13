@@ -12,25 +12,45 @@ class tx_newspaper_TimingInfo {
     public function __construct($start_time) {
         $execution_time_microseconds = microtime(true)-$start_time;
         $this->execution_time_ms = 1000*$execution_time_microseconds;
-        $this->timed_object = self::initializeTimedObject();
+        $this->initializeTimedObject();
+    }
+
+    public function __toString() {
+        return $this->getTimedClass() . '::' .$this->getTimedFunction() . '(): ' . $this->getExecutionTime() . ' ms';
     }
 
     public function getExecutionTime() { return $this->execution_time_ms; }
     public function getTimedObject() { return $this->timed_object; }
+    public function getTimedClass() { return $this->timed_class; }
+    public function getTimedFunction() { return $this->timed_function; }
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private $execution_time_ms;
-    private  $timed_object;
-
-    private static function initializeTimedObject() {
+    private function initializeTimedObject() {
         $backtrace = array_slice(debug_backtrace(), 0, 5);
         foreach($backtrace as $function) {
-            if ($function['class'] == 'tx_newspaper_TimingInfo') continue;
-            if ($function['class'] == 'tx_newspaper_ExecutionTimer') continue;
-            return $function['object'];
+            if (self::functionIsPartOfTimingFramework($function)) continue;
+            $this->initializeFromBacktrace($function);
+            return;
         }
     }
+
+    private function initializeFromBacktrace(array $function) {
+        $this->timed_object = $function['object'];
+        $this->timed_class = $function['class'];
+        $this->timed_function = $function['function'];
+    }
+
+    private static function functionIsPartOfTimingFramework(array $function) {
+        return ($function['class'] == 'tx_newspaper_TimingInfo' ||
+                $function['class'] == 'tx_newspaper_ExecutionTimer');
+    }
+
+    private $execution_time_ms;
+
+    private $timed_object = null;
+    private $timed_class = '';
+    private $timed_function = '';
 
 }
 
