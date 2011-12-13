@@ -1,7 +1,7 @@
 <?php
 
-require_once('class.tx_newspaper_date.php');
-require_once('class.tx_newspaper_matchmethod.php');
+require_once('private/class.tx_newspaper_date.php');
+require_once('private/class.tx_newspaper_matchmethod.php');
 
 class tx_newspaper_Search {
 

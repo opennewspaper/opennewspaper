@@ -1,6 +1,6 @@
 <?php
 
-require_once('class.tx_newspaper_cachablepage.php');
+require_once('private/class.tx_newspaper_cachablepage.php');
 
 /// A structure which traces objects which are affected by changes on another object and performs actions on them.
 /** Because all newspaper rendering takes place independent of Typo3, a mechanism
