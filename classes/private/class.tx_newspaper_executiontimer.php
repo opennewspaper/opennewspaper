@@ -55,14 +55,14 @@ class tx_newspaper_ExecutionTimer {
         return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
     }
 
-    private static function writeToLogger(tx_newspaper_TimingInfo $timing_info) {
+    private static function writeToLogger($message, tx_newspaper_TimingInfo $timing_info) {
         if (!self::logExecutionTimes()) return;
 
         if (!self::$logger) {
             self::setLogger(new tx_newspaper_Devlogger());
         }
 
-        self::$logger->log('logExecutionTime', $timing_info);
+        self::$logger->log($message, $timing_info);
     }
 
     private $message = '';
