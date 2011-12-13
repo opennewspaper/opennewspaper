@@ -5,7 +5,7 @@
  * Author: helge
  */
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_extra_factory.php');
 
 /// testsuite for classes which don't warrant a full testsuite on their own
 class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
