@@ -715,11 +715,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
     }
 
-    /// Get the list of tx_newspaper_Section s to which the current article belongs
     /**
-     *  \param $limit Maximum number of tx_newspaper_Section s to find
-     *  \param $sorted If set, the sections gets sorted level-wise
-     *  \return List of tx_newspaper_Section s to which the current article belongs
+     *  Get the list of tx_newspaper_Section s to which the current article belongs
+     *
+     *  @param $limit Maximum number of tx_newspaper_Section s to find
+     *  @param $sorted If set, the sections gets sorted level-wise
+     *  @return tx_newspaper_Section[] to which the current article belongs
      */
     public function getSections($limit = 0, $sorted=false) {
         $section_ids = tx_newspaper::selectRows(
@@ -738,9 +739,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return $sections;
     }
 
-    /// Get the primary tx_newspaper_Section of a tx_newspaper_Article.
     /**
-     *  \return The tx_newspaper_Section in which \p $this is displayed by
+     *  Get the primary tx_newspaper_Section of a tx_newspaper_Article.
+     *
+     *  @return tx_newspaper_Section in which \p $this is displayed by
      *  	default, if no Section context is given, or \c null.
      */
     public function getPrimarySection() {
@@ -751,12 +753,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return $sections[0];
     }
 
-    /// Gets a list of (configured but) missing extras in the article
+    /** @return bool Whether the article is in section $section. */
+    public function hasSection(tx_newspaper_Section $section) {
+        foreach ($this->getSections() as $check_section) {
+            if ($check_section->getUid() == $section->getUid()) return true;
+        }
+        return false;
+    }
+
     /**
+     *  Gets a list of (configured but) missing extras in the article
+     *
      *  It is checked if extras placed on the default article are missing in
      *  the concrete article and if extras configured as must-have or should-
      *  have are missing in the article.
-     *  \return array of Extra objects (either existing extras or newly created empty extras)
+     *  @return tx_newspaper_Extra[] either existing extras or newly created empty extras
      */
     public function getMissingDefaultExtras() {
 
