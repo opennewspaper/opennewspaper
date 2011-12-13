@@ -53,8 +53,8 @@ class tx_newspaper_ExecutionTimer {
 
     private static function logExecutionTimes() {
         $tsconfig = tx_newspaper::getTSConfig();
-        tx_newspaper::devlog('logExecutionTimes', $tsconfig);
-        return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
+        tx_newspaper::devlog('logExecutionTimes', $tsconfig['newspaper.']['logExecutionTimes']);
+        return intval($tsconfig['newspaper.']['logExecutionTimes']);
     }
 
     private static function writeToLogger($message, tx_newspaper_TimingInfo $timing_info) {
