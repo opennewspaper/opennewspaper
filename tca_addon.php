@@ -33,8 +33,6 @@ $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx
 $TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = array ("lower" => "0");
-// make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
-$TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
 
 // newspaper textarea field for teaser
@@ -349,6 +347,8 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['minitems'] = 0;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['trueMaxItems'] = 3;
     }
+// make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
+$TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
 
 
