@@ -185,15 +185,15 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_w
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_section.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articlelist_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_extra_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_articlelist_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articletype.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_util_mod.php'); // \todo: why is this class used in frontend? (see #1019)
 
 if (TYPO3_MODE == 'BE')	{
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_be.php');	
+	require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_be.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_workflow.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_typo3hook.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dependencytree.php');

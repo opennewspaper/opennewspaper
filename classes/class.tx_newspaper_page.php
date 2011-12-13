@@ -30,7 +30,7 @@
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagetype.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_pagezone_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 

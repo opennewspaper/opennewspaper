@@ -31,7 +31,7 @@
 
 
 	// XCLASS extending typo3/alt_doc.php
-	$GLOBALS['TYPO3_CONF_VARS']['BE']['XCLASS']['typo3/alt_doc.php'] = t3lib_extMgm::extPath('newspaper') . 'classes/class.ux_alt_doc.php';
+	$GLOBALS['TYPO3_CONF_VARS']['BE']['XCLASS']['typo3/alt_doc.php'] = t3lib_extMgm::extPath('newspaper') . 'classes/private/class.ux_alt_doc.php';
 
 
 
