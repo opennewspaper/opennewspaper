@@ -5,7 +5,7 @@
  * Author: helge
  */
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_extra_factory.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for all extras belonging to the newspaper extension
