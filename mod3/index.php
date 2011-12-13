@@ -313,7 +313,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 		tx_newspaper_workflow::logPlacement('tx_newspaper_extra', $extra_uid, array('show' => $show), NP_WORKLFOW_LOG_PLACEMENT_SHOW);
 
-		die();//TEST SVN
+		die();
 	}
 
 	/// called via ajax: create an extra (using a shortcut link in "extra in article"); is used in concrete articles only
