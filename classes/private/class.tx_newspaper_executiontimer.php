@@ -64,18 +64,12 @@ class tx_newspaper_ExecutionTimer {
         }
 
         self::$logger->log(
-            self::getRecursionLevelInsertString() . $message,
-            $timing_info
+            $message,
+            $timing_info,
+            self::$recursion_level
         );
     }
 
-    private static function getRecursionLevelInsertString() {
-        $string = '';
-        for ($i = 0; $i < self::$recursion_level; $i++) {
-            $string = "__$string";
-        }
-        return $string;
-    }
 
     private $message = '';
     
