@@ -113,7 +113,7 @@ class tx_newspaper  {
         self::$are_queries_logged = false;
 
         $timing = tx_newspaper_ExecutionTimer::getTimingInfo();
-        $queries = array_merge($queries, $timing);
+        $queries = $queries['Timing'] = $timing;
 
         return $queries;
     }

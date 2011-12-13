@@ -7,77 +7,73 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require_once('class.tx_newspaper_logger.php');
+require_once('class.tx_newspaper_timinglogger.php');
+require_once('class.tx_newspaper_timinginfo.php');
 
 class tx_newspaper_ExecutionTimer {
 
-    /// Whether to measure the execution times of functions
-    const log_execution_times_default = true;
-
-    public static function setLogger(tx_newspaper_Logger $logger) {
+    public static function setLogger(tx_newspaper_TimingLogger $logger) {
         self::$logger = $logger;
     }
 
+    public function __construct($message = '') {
+        self::$recursion_level++;
+
+        $this->message = $message;
+        $this->execution_start_time = microtime(true);
+    }
+
+    public function __destruct() {
+        self::writeToLogger(
+            $this->message,
+            new tx_newspaper_TimingInfo($this->execution_start_time)
+        );
+
+        self::$recursion_level--;
+    }
+
     public static function start() {
-        self::$execution_start_time = microtime(true);
-        self::$execution_time_stack[] = self::$execution_start_time;
+        self::$execution_time_stack[] = microtime(true);
     }
 
     public static function logExecutionTime($message = '') {
-
-        $timing_info = self::getTimingInfo();
-        $timing_info['message'] = $message;
-
-        if (self::logExecutionTimes()) {
-            self::writeToLogger($timing_info);
-        }
+        self::writeToLogger($message, self::getTimingInfo());
     }
 
     public static function getExecutionTime() {
-        $timing_info = self::getTimingInfo();
-        return $timing_info['execution time'];
+        return self::getTimingInfo()->getExecutionTime();
     }
 
+    /** @return tx_newspaper_TimingInfo */
     public static function getTimingInfo() {
-        $start_time = array_pop(self::$execution_time_stack);
-        $execution_time = microtime(true)-$start_time;
-        $execution_time_ms = 1000*$execution_time;
-
-        return array(
-            'execution time' => $execution_time_ms . ' ms',
-            'object' => self::getTimedObject(),
-        );
+        return new tx_newspaper_TimingInfo(array_pop(self::$execution_time_stack));
     }
 
     ////////////////////////////////////////////////////////////////////////////
 
     private static function logExecutionTimes() {
-        if (tx_newspaper::getTSConfigVar('logExecutionTimes')) {
-            return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
-        }
-        return self::log_execution_times_default;
+        return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
     }
 
-    private static function getTimedObject() {
-        $backtrace = array_slice(debug_backtrace(), 0, 5);
-        foreach($backtrace as $function) {
-            if ($function['class'] == 'tx_newspaper_ExecutionTimer') continue;
-            return $function['object'];
-        }
-    }
+    private static function writeToLogger(tx_newspaper_TimingInfo $timing_info) {
+        if (!self::logExecutionTimes()) return;
 
-    private static function writeToLogger($timing_info) {
         if (!self::$logger) {
-            self::$logger = new tx_newspaper_Devlogger();
+            self::setLogger(new tx_newspaper_Devlogger());
         }
+
         self::$logger->log('logExecutionTime', $timing_info);
     }
 
-    private static $execution_start_time = 0;
+    private $message = '';
+    
+    private $execution_start_time = 0;
 
     private static $execution_time_stack = array();
 
-    /** @var tx_newspaper_Logger */
+    /** @var tx_newspaper_TimingLogger */
     private static $logger = null;
+
+    private static $recursion_level = 0;
 
 }
