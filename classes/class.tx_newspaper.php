@@ -2,6 +2,8 @@
 
 require_once('private/class.tx_newspaper_tabledescription.php');
 
+require_once('private/class.tx_newspaper_executiontimer.php');
+
 /// Utility class which provides static functions. A namespace, so to speak.
 /** Because PHP has introduced namespaces only with PHP 5.3, and we started
  *  development for \c newspaper on 5.2, and also because 5.3 is not yet widely
@@ -28,8 +30,6 @@ class tx_newspaper  {
   ///	The \c GET parameter which determines which page type is displayed
   const pagetype_get_parameter = 'pagetype';
 
-    /// Whether to measure the execution times of functions
-    const log_execution_times = true;
 
     /// GET-parameter describing the wanted control tag for a dossier
     const default_dossier_get_parameter = 'dossier';
@@ -101,7 +101,7 @@ class tx_newspaper  {
 
     public static function startLoggingQueries() {
 
-        self::startExecutionTimer();
+        tx_newspaper_ExecutionTimer::start();
 
         self::$are_queries_logged = true;
     }
@@ -112,7 +112,7 @@ class tx_newspaper  {
         self::$logged_queries = array();
         self::$are_queries_logged = false;
 
-        $timing = self::getTimingInfo();
+        $timing = tx_newspaper_ExecutionTimer::getTimingInfo();
         $queries = array_merge($queries, $timing);
 
         return $queries;
@@ -729,44 +729,6 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
   }
 
-    public static function startExecutionTimer() {
-        self::$execution_time_stack[] = microtime(true);
-
-        self::$execution_start_time = microtime(true);
-    }
-
-    public static function logExecutionTime($message = '') {
-
-        $timing_info = self::getTimingInfo();
-        $timing_info['message'] = $message;
-
-        if (self::log_execution_times) self::devlog('logExecutionTime', $timing_info);
-    }
-
-    public static function getExecutionTime() {
-        $timing_info = self::getTimingInfo();
-        return $timing_info['execution time'];
-    }
-
-    private static function getTimingInfo() {
-        $start_time = array_pop(self::$execution_time_stack);
-        $execution_time = microtime(true)-$start_time;
-        $execution_time_ms = 1000*$execution_time;
-
-        return array(
-            'execution time' => $execution_time_ms . ' ms',
-            'object' => self::getTimedObject(),
-        );
-    }
-
-    private static function getTimedObject() {
-        $backtrace = array_slice(debug_backtrace(), 0, 5);
-        foreach($backtrace as $function) {
-            if ($function['class'] == 'tx_newspaper') continue;
-            return $function['object'];
-        }
-    }
-
     ////////////////////////////////////////////////////////////////////////////
 
     /// \return Array with TSConfig set in newspaper root folder
@@ -1107,7 +1069,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   }
   /**
    * Gets the uid of current be_user
-   * \return uid of logged in be_user, or 0 if uid couldn't be fetched
+   * @return int uid of logged in be_user, or 0 if uid couldn't be fetched
    */
   public static function getBeUserUid() {
     $uid = self::getBeUserData('uid');
@@ -1507,11 +1469,11 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
    */
   public static $query = '';
 
-    private static $logged_queries = array();
+  private static $logged_queries = array();
 
-    private static $are_queries_logged = false;
+  private static $are_queries_logged = false;
 
-    private static $max_logged_queries = self::default_max_logged_queries;
+  private static $max_logged_queries = self::default_max_logged_queries;
 
   /// a \c tslib_cObj object used to generate typolinks
   private static $local_cObj = null;
@@ -1522,11 +1484,7 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
   private static $registeredSubTca = array();
 
-    private static $execution_start_time = 0;
-
-    private static $newspaperConfig = null;
-
-    private static $execution_time_stack = array();
+  private static $newspaperConfig = null;
 
 }
 

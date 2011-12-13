@@ -102,7 +102,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         if (!$search_term) return array();
 
-        tx_newspaper::startExecutionTimer();
+        tx_newspaper_ExecutionTimer::start();
 
         $this->search_object->setSortMethod('compareArticlesByDate');
         $articles = $this->search_object->searchArticles($search_term);
@@ -114,7 +114,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
             self::getNumResultsPerPage()
         );
 
-        tx_newspaper::logExecutionTime("searchArticles($search_term)");
+        tx_newspaper_ExecutionTimer::logExecutionTime("searchArticles($search_term)");
 
         return $return;
     }

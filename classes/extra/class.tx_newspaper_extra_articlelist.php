@@ -55,7 +55,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
+        tx_newspaper_ExecutionTimer::start();
 
 		$this->prepare_render($template_set);
 
@@ -73,7 +73,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
-        tx_newspaper::logExecutionTime();
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $rendered;
 	}
@@ -93,6 +93,7 @@ class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 		);
 	}
 
+    /** @var tx_newspaper_ArticleList */
 	private $articlelist;
 }
 

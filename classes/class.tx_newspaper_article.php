@@ -237,7 +237,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if ($this->getAttribute('is_template'))
             return;
 
-        tx_newspaper::startExecutionTimer();
+        tx_newspaper_ExecutionTimer::start();
 
         $this->prepare_render($template_set);
 
@@ -250,7 +250,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $ret = $this->smarty->fetch($this);
 
-        tx_newspaper::logExecutionTime();
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $ret;
     }
@@ -891,6 +891,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 		return $tags;
     }
 
+    /** @return tx_newspaper_Article[] */
     public function getRelatedArticles($hidden_ones_too = false) {
 
         $rows = tx_newspaper::selectRowsDirect(

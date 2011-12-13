@@ -43,7 +43,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-        tx_newspaper::startExecutionTimer();
+        tx_newspaper_ExecutionTimer::start();
 
 		$this->getAttribute('uid');
 
@@ -69,7 +69,7 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
-        tx_newspaper::logExecutionTime();
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $rendered;
 	}
