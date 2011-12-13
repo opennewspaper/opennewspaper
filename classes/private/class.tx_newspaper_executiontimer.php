@@ -52,6 +52,7 @@ class tx_newspaper_ExecutionTimer {
     ////////////////////////////////////////////////////////////////////////////
 
     private static function logExecutionTimes() {
+        tx_newspaper::devlog('logExecutionTimes', intval(tx_newspaper::getTSConfigVar('logExecutionTimes')));
         return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
     }
 
