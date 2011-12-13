@@ -81,7 +81,7 @@ class tx_newspaper_DependencyTree {
         if (!empty($removed_tags)) {
             $tree->setDeletedContentTags($removed_tags);
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime('generateFromArticle()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
@@ -92,7 +92,7 @@ class tx_newspaper_DependencyTree {
         if ($list->isSectionList()) {
             $tree->setList($list);
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime('generateFromArticlelist()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
@@ -114,7 +114,7 @@ class tx_newspaper_DependencyTree {
             $tree->markAsCleared();
             # throw new tx_newspaper_InconsistencyException('Page zone is neither article nor page: ' . get_class($pagezone));
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime('generateFromExtra()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
@@ -347,7 +347,7 @@ class tx_newspaper_DependencyTree {
             $this->article_pages = array_unique($this->article_pages);
         }
         $this->article_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime('addArticlePages()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addSectionPages(array $sections) {
@@ -358,7 +358,7 @@ class tx_newspaper_DependencyTree {
         }
         $this->section_pages = array_unique($this->section_pages);
         $this->section_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime('addSectionPages()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addRelatedArticles(tx_newspaper_Article $article) {
@@ -371,7 +371,7 @@ class tx_newspaper_DependencyTree {
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
         $this->related_article_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime('addRelatedArticles()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addDossierPages(tx_newspaper_Article $article) {
@@ -385,7 +385,7 @@ class tx_newspaper_DependencyTree {
 
         $this->addTagPages($tags);
 
-        tx_newspaper_ExecutionTimer::logExecutionTime('addDossierPages()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     /** @var tx_newspaper_Tag[] $tags */
@@ -410,7 +410,7 @@ class tx_newspaper_DependencyTree {
         $this->articlelist_pages = array_merge($this->articlelist_pages, $this->makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
         $this->articlelist_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime('addArticleListPages()');
+        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addAllExtraPagesForPagezone(tx_newspaper_Pagezone_Page $pagezone) {
@@ -534,7 +534,7 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
         $section_list_pages[$section->__toString()] = $pages;
     }
 
-#    tx_newspaper_ExecutionTimer::logExecutionTime('getAllPagesWithSectionListExtra()');
+#    tx_newspaper_ExecutionTimer::logExecutionTime();
 
     return $section_list_pages[$section->__toString()];
 }
