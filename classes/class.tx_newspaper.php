@@ -1,6 +1,6 @@
 <?php
 
-require_once('class.tx_newspaper_tabledescription.php');
+require_once('private/class.tx_newspaper_tabledescription.php');
 
 /// Utility class which provides static functions. A namespace, so to speak.
 /** Because PHP has introduced namespaces only with PHP 5.3, and we started
