@@ -17,19 +17,19 @@ class tx_newspaper_ExecutionTimer {
     }
 
     public function __construct($message = '') {
-        self::$recursion_level++;
-
         $this->message = $message;
         $this->execution_start_time = microtime(true);
+
+        self::$recursion_level++;
     }
 
     public function __destruct() {
+        self::$recursion_level--;
+
         self::writeToLogger(
             $this->message,
             new tx_newspaper_TimingInfo($this->execution_start_time)
         );
-
-        self::$recursion_level--;
     }
 
     public static function start() {
