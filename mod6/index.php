@@ -587,24 +587,46 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 
 	}
 
-	/// \return array with tagzone configuration: key=tagzone uid, value = extra class or empty
-	// \todo: move to tagzone class?
+    /**
+     * Get TSConfig configuration for tag zones
+     *
+     * TSConfig example:
+     * newspaper.dossierWizard.mustHaveTagzones = 1|tx_newspaper_extra_images
+     * newspaper.dossierWizard.shouldHaveTagzones = 2
+     *
+     * Musthave tagzones will be rendered with a red frame in the Dossier module backend
+     *
+     * @return Array with tagzone configuration: array('mustHave' => array(uid1 => class|empty, ..., uidn => class|empty), 'shouldHave' => array(...))
+     * @todo: move to tagzone class?
+     */
 	private function getTagzoneConfig() {
 		require_once  PATH_typo3conf . '/ext/newspaper/tx_newspaper_include.php';
-		$tsc = tx_newspaper::getTSConfig();
-		if (!$conf = $tsc['newspaper.']['dossierWizard.']['mustHaveTagezones']) {
-			return array(); // nothing found ...
-		}
 
+        $tsc = tx_newspaper::getTSConfig();
+
+        $conf['mustHave'] = $tsc['newspaper.']['dossierWizard.']['mustHaveTagzones']?
+            $tsc['newspaper.']['dossierWizard.']['mustHaveTagzones'] : array();
+        $conf['shouldHave'] = $tsc['newspaper.']['dossierWizard.']['shouldHaveTagzones']?
+            $tsc['newspaper.']['dossierWizard.']['shouldHaveTagzones'] : array();
+//t3lib_div::debug($conf, 'conf');
+
+        // Move TSConfig configuration into array
 		$data = array();
-		foreach(t3lib_div::trimExplode(',', $conf) as $line) {
-			$cmd = t3lib_div::trimExplode('|', $line);
-			if (sizeof($cmd) > 1) {
-				$data[intval($cmd[0])] = $cmd[1];
-			} else {
-				$data[intval($cmd[0])] = '';
-			}
-		}
+        foreach($conf as $key => $config) {
+            // Process for mustHave and shouldHave tagzones
+            foreach(t3lib_div::trimExplode(',', $config) as $line) {
+                $cmd = t3lib_div::trimExplode('|', $line);
+                if (sizeof($cmd) > 1) {
+                    // Add tagzone uid and assign the Extra class to be assigned
+                    $data[$key][intval($cmd[0])] = $cmd[1];
+                } else {
+                    // Just add tagzone uid to configuration
+                    $data[$key][intval($cmd[0])] = '';
+                }
+            }
+        }
+//t3lib_div::debug($data, 'data');
+
 		return $data;
 	}
 

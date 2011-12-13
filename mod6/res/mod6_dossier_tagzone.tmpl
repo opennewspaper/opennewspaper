@@ -27,13 +27,13 @@
 		<strong>{$LANG.label_tagzones_unused}</strong><br /><br />
 			{foreach from=$TAGZONES_ALL item=tz}
 				{if !array_key_exists($tz.uid, $TAGZONES_USED_EXTRAS)}
-					{if array_key_exists($tz.uid, $TSCONFIG)}
-						<div class="tz_musthave">
+					{if array_key_exists($tz.uid, $TSCONFIG.mustHave)}
+						<div class="tz_musthave"> {* red frame for mustHave tagzones *}
 {assign var="idx" value=$tz.uid} {* make current tagzone uid accessable for Smarty *}
 					{/if}
-						{$tz.name} (#{$tz.uid}) <a href="#" onclick="NpManageDossier.addExtraToTagzone({$tz.uid}{if array_key_exists($tz.uid, $TSCONFIG)}, '{$TSCONFIG.$idx}'{/if}); return false;">{$ICON.add}</a> <br /><br />
-					{if array_key_exists($tz.uid, $TSCONFIG)}
-						</div>
+						{$tz.name} (#{$tz.uid}) <a href="#" onclick="NpManageDossier.addExtraToTagzone({$tz.uid}{if array_key_exists($tz.uid, $TSCONFIG.mustHave) || array_key_exists($tz.uid, $TSCONFIG.shouldHave)}, '{$TSCONFIG.$idx}'{/if}); return false;">{$ICON.add}</a> <br /><br />
+					{if array_key_exists($tz.uid, $TSCONFIG.mustHave)}
+						</div> {* close red frame *}
 					{/if}
 				{/if}
 			{/foreach}
