@@ -6,16 +6,21 @@
  * Time: 4:35 PM
  * To change this template use File | Settings | File Templates.
  */
- 
+
+require_once('class.tx_newspaper_logger.php');
+
 class tx_newspaper_ExecutionTimer {
 
     /// Whether to measure the execution times of functions
-    const log_execution_times = true;
+    const log_execution_times_default = true;
+
+    public static function setLogger(tx_newspaper_Logger $logger) {
+        self::$logger = $logger;
+    }
 
     public static function start() {
-        self::$execution_time_stack[] = microtime(true);
-
         self::$execution_start_time = microtime(true);
+        self::$execution_time_stack[] = self::$execution_start_time;
     }
 
     public static function logExecutionTime($message = '') {
@@ -23,7 +28,9 @@ class tx_newspaper_ExecutionTimer {
         $timing_info = self::getTimingInfo();
         $timing_info['message'] = $message;
 
-        if (self::logExecutionTimes()) tx_newspaper::devlog('logExecutionTime', $timing_info);
+        if (self::logExecutionTimes()) {
+            self::writeToLogger($timing_info);
+        }
     }
 
     public static function getExecutionTime() {
@@ -45,7 +52,10 @@ class tx_newspaper_ExecutionTimer {
     ////////////////////////////////////////////////////////////////////////////
 
     private static function logExecutionTimes() {
-        return self::log_execution_times;
+        if (tx_newspaper::getTSConfigVar('logExecutionTimes')) {
+            return intval(tx_newspaper::getTSConfigVar('logExecutionTimes'));
+        }
+        return self::log_execution_times_default;
     }
 
     private static function getTimedObject() {
@@ -56,9 +66,18 @@ class tx_newspaper_ExecutionTimer {
         }
     }
 
+    private static function writeToLogger($timing_info) {
+        if (!self::$logger) {
+            self::$logger = new tx_newspaper_Devlogger();
+        }
+        self::$logger->log('logExecutionTime', $timing_info);
+    }
+
     private static $execution_start_time = 0;
 
     private static $execution_time_stack = array();
 
+    /** @var tx_newspaper_Logger */
+    private static $logger = null;
 
 }
