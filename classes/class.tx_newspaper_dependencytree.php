@@ -75,24 +75,22 @@ class tx_newspaper_DependencyTree {
      *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
-        tx_newspaper_ExecutionTimer::start();
+        $timer = new tx_newspaper_ExecutionTimer();
         $tree = new tx_newspaper_DependencyTree();
         $tree->setArticle($article);
         if (!empty($removed_tags)) {
             $tree->setDeletedContentTags($removed_tags);
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
 
     static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
-        tx_newspaper_ExecutionTimer::start();
+        $timer = new tx_newspaper_ExecutionTimer();
         $tree = new tx_newspaper_DependencyTree();
         if ($list->isSectionList()) {
             $tree->setList($list);
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
@@ -102,7 +100,8 @@ class tx_newspaper_DependencyTree {
      *   called "the affected extra".
      */
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
-        tx_newspaper_ExecutionTimer::start();
+        $timer = new tx_newspaper_ExecutionTimer();
+
         $pagezone = $extra->getPageZone();
         $tree = new tx_newspaper_DependencyTree();
         if ($pagezone instanceof tx_newspaper_Article) {
@@ -114,7 +113,6 @@ class tx_newspaper_DependencyTree {
             $tree->markAsCleared();
             # throw new tx_newspaper_InconsistencyException('Page zone is neither article nor page: ' . get_class($pagezone));
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $tree;
     }
@@ -179,7 +177,7 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-        tx_newspaper_ExecutionTimer::start();
+        $timer = new tx_newspaper_ExecutionTimer("executeActionsOnPages($key)");
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -189,7 +187,6 @@ class tx_newspaper_DependencyTree {
                 $this->executeActionOnPages($action);
             }
         }
-        tx_newspaper_ExecutionTimer::logExecutionTime("executeActionsOnPages($key)");
     }
 
     /// Returns all article pages on which the affected article is shown.
