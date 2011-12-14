@@ -75,7 +75,7 @@ class tx_newspaper_DependencyTree {
      *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
-        $timer = new tx_newspaper_ExecutionTimer();
+
         $tree = new tx_newspaper_DependencyTree();
         $tree->setArticle($article);
         if (!empty($removed_tags)) {
@@ -86,7 +86,7 @@ class tx_newspaper_DependencyTree {
     }
 
     static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
-        $timer = new tx_newspaper_ExecutionTimer();
+
         $tree = new tx_newspaper_DependencyTree();
         if ($list->isSectionList()) {
             $tree->setList($list);
@@ -100,7 +100,6 @@ class tx_newspaper_DependencyTree {
      *   called "the affected extra".
      */
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
-        $timer = new tx_newspaper_ExecutionTimer();
 
         $pagezone = $extra->getPageZone();
         $tree = new tx_newspaper_DependencyTree();
@@ -295,15 +294,18 @@ class tx_newspaper_DependencyTree {
     }
 
     private function executeActionOnPages(array $action) {
+        $timer = new tx_newspaper_ExecutionTimer('executeActionOnPages(' . print_r($action, 1) . ')');
         $function = $action['function'];
         $when = $action['when'];
         $pages = array();
 
+        tx_newspaper_ExecutionTimer::start();
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
         if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
         if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
         if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
         if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
+        tx_newspaper_ExecutionTimer::logExecutionTime('Collect pages');
 
         call_user_func($function, $pages);
     }
