@@ -743,7 +743,10 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 		} catch (tx_newspaper_DBException $e) {
 			//  This guards against article lists which use GET varaiables,
 			//	which are not set in the BE
-			tx_newspaper::devlog("error", $e->getMessage());
+			tx_newspaper::devlog(
+                "tx_newspaper_ArticleList_Semiautomatic::getRawArticleUIDs($number, $start) error",
+                $e->getMessage()
+            );
 			$results = array();
 		}
 
