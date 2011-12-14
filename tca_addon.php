@@ -312,7 +312,8 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
     // add cps_tcatree to field section in article, if extension "cps_tcatree" is available
     if (t3lib_extMgm::isLoaded('cps_tcatree')) {
 
-        // load some files, auto loading not working in Typo3 4.2.x
+        // Load some files, auto loading not working in Typo3 4.2.x
+        // @todo: Remove when newspaper is working with higher Typo3 version where autoloading is working?
         $extensionPath = t3lib_extMgm::extPath('cps_devlib') . 'Classes/';
         $autoloadFiles = array(
             'tx_cpsdevlib_db' => $extensionPath.'class.tx_cpsdevlib_db.php',
@@ -341,13 +342,12 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['foreign_table_where'] = ' AND tx_newspaper_section.pid=' . $sectionPid;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['treeView'] = 1;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandable'] = 1;
-        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandFirst'] = 0;
-        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandAll'] = 1;
-        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['size'] = 3;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandFirst'] = 1;
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['expandAll'] = 0;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['minitems'] = 0;
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['sections']['config']['trueMaxItems'] = 3;
     }
-// make sure the size of the selectbox for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<= 3
+// make sure the size of the select box for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<=3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
 
