@@ -88,9 +88,11 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
+        tx_newspaper_ExecutionTimer::start();
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
+        tx_newspaper_ExecutionTimer::logExecutionTime('Section, Article, workflow');
 
 
 		/// add modifications user if tx_newspaper_Article is updated
@@ -102,8 +104,10 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		/// check if the combination of get param name and value is unique
 		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
+        tx_newspaper_ExecutionTimer::start();
 		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray',
 										 $status, $table, $id, $fieldArray, $that);
+        tx_newspaper_ExecutionTimer::logExecutionTime('handleRegisteredSavehooks');
 
 /// \todo move to sysfolder class
 		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
@@ -120,8 +124,6 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 #tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", tx_newspaper::getLoggedQueries());
-
-        $timer = new tx_newspaper_ExecutionTimer();
 
         // pass hook to newspaper classes
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!

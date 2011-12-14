@@ -34,9 +34,11 @@ class tx_newspaper_ExecutionTimer {
 
     public static function start() {
         self::$execution_time_stack[] = microtime(true);
+        self::$recursion_level++;
     }
 
     public static function logExecutionTime($message = '') {
+        self::$recursion_level--;
         self::writeToLogger($message, self::getTimingInfo());
     }
 
@@ -57,17 +59,18 @@ class tx_newspaper_ExecutionTimer {
     }
 
     private static function writeToLogger($message, tx_newspaper_TimingInfo $timing_info) {
+
         if (!self::logExecutionTimes()) return;
 
+        self::ensureLoggerIsPresent();
+
+        self::$logger->log($message, $timing_info, self::$recursion_level);
+    }
+
+    private static function ensureLoggerIsPresent() {
         if (!self::$logger) {
             self::setLogger(new tx_newspaper_Devlogger());
         }
-
-        self::$logger->log(
-            $message,
-            $timing_info,
-            self::$recursion_level
-        );
     }
 
 
