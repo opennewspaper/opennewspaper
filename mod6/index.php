@@ -595,6 +595,9 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
      * newspaper.dossierWizard.shouldHaveTagzones = 2
      *
      * Musthave tagzones will be rendered with a red frame in the Dossier module backend
+     * Shouldhave tagzones will be rendered with a yellow frame in the Dossier module backend
+     *
+     * Musthave configuration overrides Shouldhave configuration
      *
      * @return Array with tagzone configuration: array('mustHave' => array(uid1 => class|empty, ..., uidn => class|empty), 'shouldHave' => array(...))
      * @todo: move to tagzone class?
@@ -625,7 +628,15 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
                 }
             }
         }
-//t3lib_div::debug($data, 'data');
+
+        // Remove shouldHave configuration for mustHave tagzone uid
+        foreach($data['shouldHave'] as $key => $value) {
+            if (array_key_exists($key, $data['mustHave'])) {
+                unset($data['shouldHave'][$key]);
+            }
+        }
+
+//t3lib_div::devlog('getTagzoneConfig()', 'newspaper', 0, array('data' => $data, 'conf' => $conf));
 
 		return $data;
 	}
