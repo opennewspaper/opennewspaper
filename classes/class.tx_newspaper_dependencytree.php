@@ -307,7 +307,9 @@ class tx_newspaper_DependencyTree {
         if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
         tx_newspaper_ExecutionTimer::logExecutionTime('Collect pages');
 
+        tx_newspaper_ExecutionTimer::start();
         call_user_func($function, $pages);
+        tx_newspaper_ExecutionTimer::logExecutionTime('call_user_func()');
     }
 
     private function getStarttime() {
