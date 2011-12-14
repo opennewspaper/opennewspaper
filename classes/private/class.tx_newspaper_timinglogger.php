@@ -7,58 +7,69 @@
  * To change this template use File | Settings | File Templates.
  */
 
+require_once('class.tx_newspaper_file.php');
+
 abstract class tx_newspaper_TimingLogger {
     abstract public function log($message, tx_newspaper_TimingInfo $info, $depth);
 
-    protected static function formatMessage($message, tx_newspaper_TimingInfo $info, $depth) {
+    abstract protected function indentString();
+
+    protected function formatMessage($message, tx_newspaper_TimingInfo $info, $depth) {
         if (!$message) $message = $info->getTimedFunction();
-        return self::getRecursionLevelInsertString($depth) . $message;
+        return str_repeat($this->indentString(), $depth) . $message;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    
-    private static function getRecursionLevelInsertString($level) {
-        $string = '';
-        for ($i = 0; $i < $level; $i++) {
-            $string = "__$string";
-        }
-        return $string;
-    }
-    
 }
 
 class tx_newspaper_Devlogger extends tx_newspaper_TimingLogger {
     public function log($message, tx_newspaper_TimingInfo $info, $depth) {
-        $message = tx_newspaper_TimingLogger::formatMessage($message, $info, $depth);
-        tx_newspaper::devlog($message, "$info");
+        tx_newspaper::devlog($this->formatMessage($message, $info, $depth), "$info");
     }
+
+    protected function indentString() { return '__'; }
 
 }
 
 class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
 
-    public function __construct($filename) {
-        $this->filename = $filename;
-    }
-
     public function log($message, tx_newspaper_TimingInfo $info, $depth) {
         $this->checkLogfileValid();
-
-        $message = tx_newspaper_TimingLogger::formatMessage($message, $info, $depth);
-
-        throw new tx_newspaper_NotYetImplementedException();
+        $this->writeToLogfile($this->formatMessage($message, $info, $depth));
     }
+
+    protected function indentString() { return '  '; }
 
     ////////////////////////////////////////////////////////////////////////////
-    
+
+    private function getFileName() {
+        $tsconfig = tx_newspaper::getTSConfig();
+        return intval($tsconfig['newspaper.']['executionTimeLogFilename']);
+    }
+
     private function checkLogfileValid() {
-        if (!$this->filename) {
-            throw new tx_newspaper_IllegalUsageException('tx_newspaper_FileLogger instantiated without a file name');
-        }
-        if (!file_exists($this->filename) && !is_writable($this->filename)) {
-            throw new tx_newspaper_IllegalUsageException('tx_newspaper_FileLogger: File ' . $this->filename . ' not writable');
+        $this->checkLogfileSpecified();
+        $this->checkLogfileWritable();
+    }
+
+    private function checkLogfileWritable() {
+        if (!file_exists($this->getFileName()) && !is_writable($this->getFileName())) {
+            throw new tx_newspaper_IllegalUsageException(
+                'tx_newspaper_FileLogger: File ' . $this->getFileName() . ' not writable'
+            );
         }
     }
 
-    private $filename = '';
+    private function checkLogfileSpecified() {
+        if (!$this->getFileName()) {
+            throw new tx_newspaper_IllegalUsageException(
+                'tx_newspaper_FileLogger instantiated without a file name specified in newspaper.executionTimeLogFilename'
+            );
+        }
+    }
+
+    private function writeToLogfile($message) {
+        $f = new tx_newspaper_File($this->getFileName());
+        $f->write($message . "\n");
+    }
 }
+

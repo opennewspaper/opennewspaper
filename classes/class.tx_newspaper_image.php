@@ -7,6 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+require_once('private/class.tx_newspaper_file.php');
+
 /// Class for handing the upload, resizing and deployment of an image.
 class tx_newspaper_Image {
 
@@ -144,10 +146,9 @@ class tx_newspaper_Image {
     private static function writeRsyncLog($basedir, $output) {
         if (self::getRsyncLog()) {
             exec("date >> " . self::getRsyncLog());
-            $f = fopen(self::getRsyncLog(), "a+");
-            fwrite($f, "$basedir\n");
-            fwrite($f, print_r($output, 1));
-            fclose($f);
+            $f = new tx_newspaper_File(self::getRsyncLog());
+            $f->write("$basedir\n");
+            $f->write(print_r($output, 1));
         }
     }
 

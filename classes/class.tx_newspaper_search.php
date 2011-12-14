@@ -2,6 +2,8 @@
 
 require_once('private/class.tx_newspaper_date.php');
 require_once('private/class.tx_newspaper_matchmethod.php');
+require_once('private/class.tx_newspaper_file.php');
+
 
 class tx_newspaper_Search {
 
@@ -325,30 +327,36 @@ class tx_newspaper_Search {
 
 		if (!self::$log_searches) return;
 
-		$log = fopen(self::$log_file, 'a');
+		$log = new tx_newspaper_File(self::$log_file, 'a');
 
-	    fwrite($log, 'Search term: ' . $search . "\n");
+	    $log->write('Search term: ' . $search . "\n");
 
-		if (self::$log_results) {
-		    fwrite($log, 'Results:' . "\n");
-		    if ($results) {
-		    	foreach ($results as $result) {
-		    		if (!($result instanceof tx_newspaper_ArticleIface)) {
-		    			fwrite($log, '    Not an Article: ' . $result . "\n");
-		    		} else {
-		    			fwrite(
-		    				$log,
-							'    Article ' . $result->getUid() . ': ' .
-							$result->getAttribute('title') . "\n");
-		    		}
-		    	}
-		    } else {
-		    	fwrite($log, '    None!' . "\n");
-		    }
-		}
-
-	    fclose($log);
+        $this->logResults($log, $results);
 	}
+
+    private function logResults(tx_newspaper_File $log, $results) {
+
+        if (!self::$log_results) return;
+
+        $log->write('Results:' . "\n");
+        if ($results) {
+            foreach ($results as $result) {
+                $this->logResult($result, $log);
+            }
+        } else {
+            $log->write('    None!' . "\n");
+        }
+    }
+
+    private function logResult($result, $log) {
+        if (!($result instanceof tx_newspaper_ArticleIface)) {
+            $log->write('    Not an Article: ' . $result . "\n");
+        } else {
+            $log->write(
+                '    Article ' . $result->getUid() . ': ' . $result->getAttribute('title') . "\n"
+            );
+        }
+    }
 
     private function getTimeClauseForSearch() {
         $where = '';
