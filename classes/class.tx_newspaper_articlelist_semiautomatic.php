@@ -741,13 +741,15 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				$this->selectLimit($start, $number)
 			);
 		} catch (tx_newspaper_DBException $e) {
-			//  This guards against article lists which use GET varaiables,
-			//	which are not set in the BE
-			tx_newspaper::devlog(
-                "tx_newspaper_ArticleList_Semiautomatic::getRawArticleUIDs($number, $start) error",
-                $e->getMessage()
-            );
-			$results = array();
+            if (TYPO3_MODE == 'BE') {
+                //  This guards against article lists which use GET varaiables,
+                //	which are not set in the BE
+                tx_newspaper::devlog(
+                    "tx_newspaper_ArticleList_Semiautomatic::getRawArticleUIDs($number, $start) error",
+                    $e->getMessage()
+                );
+                $results = array();
+            }
 		}
 
         return $this->select_method_strategy->rawArticleUIDs($results);
