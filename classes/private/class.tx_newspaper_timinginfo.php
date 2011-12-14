@@ -16,13 +16,19 @@ class tx_newspaper_TimingInfo {
     }
 
     public function __toString() {
-        return $this->getTimedClass() . '::' .$this->getTimedFunction() . '(): ' . $this->getExecutionTime() . ' ms';
+        return $this->getTimedFunction() . ': ' . $this->getExecutionTime() . ' ms';
     }
 
     public function getExecutionTime() { return $this->execution_time_ms; }
+
     public function getTimedObject() { return $this->timed_object; }
+
     public function getTimedClass() { return $this->timed_class; }
-    public function getTimedFunction() { return $this->timed_function; }
+
+    public function getTimedFunction() {
+        if ($this->timed_class) $function = $this->timed_class . '::';
+        return $function . $this->timed_function . '()';
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 

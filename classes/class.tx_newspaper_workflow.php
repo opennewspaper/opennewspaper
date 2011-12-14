@@ -442,6 +442,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// typo3 save hook ...
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+        $timer = new tx_newspaper_ExecutionTimer();
 		self::processAndLogWorkflow($status, $table, $id, $fieldArray);
 	}
 

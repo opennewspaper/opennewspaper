@@ -76,6 +76,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 #t3lib_div::devlog('tx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
+        $timer = new tx_newspaper_ExecutionTimer();
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 
@@ -88,12 +89,9 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		// call save hook in newspaper classes
 		/// \todo do it in handleRegisteredSaveHooks() - or must this be executed first?
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
-        tx_newspaper_ExecutionTimer::start();
 		tx_newspaper_Section::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_Article::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
 		tx_newspaper_workflow::processDatamap_postProcessFieldArray($status, $table, $id, $fieldArray, $that);
-        tx_newspaper_ExecutionTimer::logExecutionTime('Section, Article, workflow');
-
 
 		/// add modifications user if tx_newspaper_Article is updated
 		$this->addModificationUserIfArticle($status, $table, $id, $fieldArray);
@@ -105,8 +103,10 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 		$this->checkIfPageTypeGetVarGetValueIsUnique($fieldArray, $table, $id);
 
         tx_newspaper_ExecutionTimer::start();
-		$this->handleRegisteredSaveHooks('processDatamap_postProcessFieldArray',
-										 $status, $table, $id, $fieldArray, $that);
+		$this->handleRegisteredSaveHooks(
+            'processDatamap_postProcessFieldArray',
+			$status, $table, $id, $fieldArray, $that)
+        ;
         tx_newspaper_ExecutionTimer::logExecutionTime('handleRegisteredSavehooks');
 
 /// \todo move to sysfolder class
@@ -124,6 +124,8 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 #tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", tx_newspaper::getLoggedQueries());
+
+        $timer = new tx_newspaper_ExecutionTimer();
 
         // pass hook to newspaper classes
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
@@ -154,6 +156,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
 	function processDatamap_afterAllOperations($that) {
+        $timer = new tx_newspaper_ExecutionTimer();
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
 			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
 				$savehook_object->processDatamap_afterAllOperations($that);

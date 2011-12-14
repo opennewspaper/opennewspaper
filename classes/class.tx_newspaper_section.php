@@ -693,6 +693,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
 	/// \todo: documentation
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
+        $timer = new tx_newspaper_ExecutionTimer();
 		if ($status == 'new' && $table == 'tx_newspaper_section') {
 			// a new section is stored, so assign a default article list
 			$section_uid = intval($that->substNEWwithIDs[$id]); // $id contains "NEWS...." id
@@ -703,6 +704,7 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
 	/// \todo: documentation
 	public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
+        $timer = new tx_newspaper_ExecutionTimer();
 		if ($table != 'tx_newspaper_section') {
 			return; // no section processed, nothing to do
 		}

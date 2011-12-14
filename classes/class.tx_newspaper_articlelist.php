@@ -486,6 +486,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 //t3lib_div::devlog('datamap ado hook', 'newspaper', 0, array('status' => $status, 'table' => $table, 'id' => $id, 'fieldArray' => $fieldArray));
+        $timer = new tx_newspaper_ExecutionTimer();
 		if (self::isRegisteredArticleList($table)) {
 			self::writeAbstractRecordIfNeeded($status, $table, $id, $that);
 		}

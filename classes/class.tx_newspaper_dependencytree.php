@@ -294,22 +294,18 @@ class tx_newspaper_DependencyTree {
     }
 
     private function executeActionOnPages(array $action) {
-        $timer = new tx_newspaper_ExecutionTimer('executeActionOnPages(' . print_r($action, 1) . ')');
+
         $function = $action['function'];
         $when = $action['when'];
         $pages = array();
 
-        tx_newspaper_ExecutionTimer::start();
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
         if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
         if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
         if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
         if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
-        tx_newspaper_ExecutionTimer::logExecutionTime('Collect pages');
 
-        tx_newspaper_ExecutionTimer::start();
         call_user_func($function, $pages);
-        tx_newspaper_ExecutionTimer::logExecutionTime('call_user_func()');
     }
 
     private function getStarttime() {
@@ -340,7 +336,6 @@ class tx_newspaper_DependencyTree {
 
     /// Adds article pages of all sections \p $article is in
     private function addArticlePages(tx_newspaper_Article $article = null) {
-        tx_newspaper_ExecutionTimer::start();
         if ($article) {
             $sections = $article->getSections();
             $pages = getAllArticlePages($sections);
@@ -348,22 +343,18 @@ class tx_newspaper_DependencyTree {
             $this->article_pages = array_unique($this->article_pages);
         }
         $this->article_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addSectionPages(array $sections) {
-        tx_newspaper_ExecutionTimer::start();
         foreach ($sections as $section) {
             $pages = getAllPagesWithSectionListExtra($section);
             $this->section_pages = array_merge($this->section_pages, $this->makeCachablePages($pages));
         }
         $this->section_pages = array_unique($this->section_pages);
         $this->section_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addRelatedArticles(tx_newspaper_Article $article) {
-        tx_newspaper_ExecutionTimer::start();
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -372,12 +363,9 @@ class tx_newspaper_DependencyTree {
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
         $this->related_article_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addDossierPages(tx_newspaper_Article $article) {
-        tx_newspaper_ExecutionTimer::start();
-
         $tags = array_merge(
             $article->getTags(tx_newspaper_Tag::getControlTagType()),
             $this->removed_dossier_tags
@@ -385,8 +373,6 @@ class tx_newspaper_DependencyTree {
         if (empty($tags)) return;
 
         $this->addTagPages($tags);
-
-        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     /** @var tx_newspaper_Tag[] $tags */
@@ -406,12 +392,10 @@ class tx_newspaper_DependencyTree {
 
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
-        tx_newspaper_ExecutionTimer::start();
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, $this->makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
         $this->articlelist_pages_filled = true;
-        tx_newspaper_ExecutionTimer::logExecutionTime();
     }
 
     private function addAllExtraPagesForPagezone(tx_newspaper_Pagezone_Page $pagezone) {
@@ -520,8 +504,6 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 
-#    tx_newspaper_ExecutionTimer::start();
-
     static $section_list_pages = array();
 
     if (!isset($section_list_pages[$section->__toString()])) {
@@ -534,8 +516,6 @@ function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 
         $section_list_pages[$section->__toString()] = $pages;
     }
-
-#    tx_newspaper_ExecutionTimer::logExecutionTime();
 
     return $section_list_pages[$section->__toString()];
 }

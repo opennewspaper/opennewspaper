@@ -72,6 +72,7 @@ class tx_newspaper_Extra_FreeFormImage extends tx_newspaper_Extra {
         $status, $table, $id, &$fieldArray, $that
     ) {
         if ($table != 'tx_newspaper_extra_freeformimage') return;
+        $timer = new tx_newspaper_ExecutionTimer();
 
         if ($fieldArray[self::image_file_field]) {
             copy(PATH_site . '/uploads/tx_newspaper/' . $fieldArray[self::image_file_field],

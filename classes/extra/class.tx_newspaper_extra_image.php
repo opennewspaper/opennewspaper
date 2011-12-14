@@ -152,6 +152,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		if ($table != 'tx_newspaper_extra_image') return;
 		if (!isset($fieldArray[self::image_file_field])) return;
+        $timer = new tx_newspaper_ExecutionTimer();
 
         $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
         $image->resizeImages();
@@ -163,12 +164,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     private $image = null;
 }
 
-tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_Image());
+tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_Image());
 
-tx_newspaper::registerSaveHook(new tx_newspaper_extra_Image());
-
-//  Popups displaying enlarged images are handled here
-if ($_GET['bild_fuer_artikel']) {
-	//...
-}
+tx_newspaper::registerSaveHook(new tx_newspaper_Extra_Image());
 ?>
