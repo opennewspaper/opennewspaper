@@ -289,7 +289,7 @@ class tx_newspaper_DependencyTree {
      *
      *  @return tx_newspaper_DependencyTree
      */
-    public static function create() {
+    private static function create() {
         return new tx_newspaper_TimedTree();
 #        return new tx_newspaper_DependencyTree();
     }
@@ -513,7 +513,12 @@ class tx_newspaper_TimedTree {
     public function __call($method, $arguments) {
         $timer = tx_newspaper_ExecutionTimer::create($method);
         tx_newspaper::devlog("__call($method)", $arguments);
-        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
+
+        $reflection_method = new ReflectionMethod('tx_newspaper_DependencyTree', $method);
+        $reflection_method->setAccessible(true);
+
+        return $reflection_method->invokeArgs($this->dependency_tree, $arguments);
+#        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
     }
 
     public function __construct() {
