@@ -138,7 +138,17 @@ class tx_newspaper_DependencyTree {
 
         return $tree;
     }
-    
+
+    /**
+     *  One-stop function to make a new dependency tree, provided to make
+     *  dependency injection in the generateFrom...() functions easier.
+     *
+     *  @return tx_newspaper_DependencyTree
+     */
+    public static function create() {
+        return new tx_newspaper_TimedTree();
+    }
+
     /// Registers an action that is executed for every page in the tree on demand.
     /** The actions are stored in an array whose entries are arrays of the form
      *  \code array(
@@ -282,16 +292,6 @@ class tx_newspaper_DependencyTree {
      *  functions.
      */
     private function __construct() { }
-
-    /**
-     *  One-stop function to make a new dependency tree, provided to make
-     *  dependency injection in the generateFrom...() functions easier.
-     *
-     *  @return tx_newspaper_DependencyTree
-     */
-    private function create() {
-        return new tx_newspaper_TimedTree();
-    }
 
     private function setArticle(tx_newspaper_Article $article) {
         $this->article = $article;
@@ -507,16 +507,20 @@ class tx_newspaper_DependencyTree {
 }
 
 
-class tx_newspaper_TimedTree extends tx_newspaper_DependencyTree {
+class tx_newspaper_TimedTree {
 
     public function __call($method, $arguments) {
         $timer = tx_newspaper_ExecutionTimer::create($method);
         tx_newspaper::devlog("__call($method)", $arguments);
-        parent::__call($method, $arguments);
+        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
     }
 
-    protected function __construct() { }
-    
+    protected function __construct() {
+        $this->dependency_tree = tx_newspaper_DependencyTree::create();
+    }
+
+    /** @var tx_newspaper_DependencyTree */
+    protected $dependency_tree = null;
 }
 
 function getAllArticlePages(array $sections) {
