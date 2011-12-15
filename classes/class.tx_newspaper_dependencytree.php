@@ -347,6 +347,7 @@ class tx_newspaper_DependencyTree {
 
     /// Adds article pages of all sections \p $article is in
     private function addArticlePages(tx_newspaper_Article $article = null) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if ($article) {
             $sections = $article->getSections();
             $pages = getAllArticlePages($sections);
@@ -357,6 +358,7 @@ class tx_newspaper_DependencyTree {
     }
 
     private function addSectionPages(array $sections) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($sections as $section) {
             $pages = getAllPagesWithSectionListExtra($section);
             $this->section_pages = array_merge($this->section_pages, $this->makeCachablePages($pages));
@@ -366,6 +368,7 @@ class tx_newspaper_DependencyTree {
     }
 
     private function addRelatedArticles(tx_newspaper_Article $article) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -377,6 +380,7 @@ class tx_newspaper_DependencyTree {
     }
 
     private function addDossierPages(tx_newspaper_Article $article) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $tags = array_merge(
             $article->getTags(tx_newspaper_Tag::getControlTagType()),
             $this->removed_dossier_tags
@@ -388,6 +392,7 @@ class tx_newspaper_DependencyTree {
 
     /** @var tx_newspaper_Tag[] $tags */
     private function addTagPages(array $tags) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $dossier_page = getDossierPage();
         if (!$dossier_page instanceof tx_newspaper_Page) return;
 
@@ -403,6 +408,7 @@ class tx_newspaper_DependencyTree {
 
     /// Adds all pages which display an article list in the supplied array
     private function addArticleListPages(array $article_lists) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $pages = getAllArticleListPages($article_lists);
         $this->articlelist_pages = array_merge($this->articlelist_pages, $this->makeCachablePages($pages));
         $this->articlelist_pages = array_unique($this->articlelist_pages);
