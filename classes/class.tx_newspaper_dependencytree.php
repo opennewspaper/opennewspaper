@@ -76,7 +76,7 @@ class tx_newspaper_DependencyTree {
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
 
-        $tree = new tx_newspaper_DependencyTree();
+        $tree = new tx_newspaper_TimedTree();
         $tree->setArticle($article);
         if (!empty($removed_tags)) {
             $tree->setDeletedContentTags($removed_tags);
@@ -491,6 +491,15 @@ class tx_newspaper_DependencyTree {
 
 }
 
+
+class tx_newspaper_TimedTree extends tx_newspaper_DependencyTree {
+
+    public function __call($method, $arguments) {
+        $timer = tx_newspaper_ExecutionTimer::create($method);
+        parent::__call($method, $arguments);
+    }
+    
+}
 
 function getAllArticlePages(array $sections) {
 	$article_pages = array();
