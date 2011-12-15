@@ -526,7 +526,7 @@ function getArticlePage(tx_newspaper_Section $section) {
 
 function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
-    $timer = new tx_newspaper_ExecutionTimer();
+    $timer = tx_newspaper_ExecutionTimer::create();
 
     $all_sections = tx_newspaper_Section::getAllSections(false);
     $sections = array();

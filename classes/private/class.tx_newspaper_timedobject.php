@@ -5,6 +5,8 @@
  * Time: 4:13 PM
  */
 
+require_once('class.tx_newspaper_executiontimer.php');
+
 /**
  *  Class to time every method of another class, using a tx_newspaper_ExecutionTimer.
  *  The result of the time measurements is logged according to the tx_newspaper_TimingLogger
