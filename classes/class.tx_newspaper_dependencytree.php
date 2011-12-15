@@ -87,7 +87,7 @@ class tx_newspaper_DependencyTree {
 
     static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
 
-        $tree = new tx_newspaper_DependencyTree();
+        $tree = new tx_newspaper_TimedTree();
         if ($list->isSectionList()) {
             $tree->setList($list);
         }
@@ -102,7 +102,7 @@ class tx_newspaper_DependencyTree {
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
 
         $pagezone = $extra->getPageZone();
-        $tree = new tx_newspaper_DependencyTree();
+        $tree = new tx_newspaper_TimedTree();
         if ($pagezone instanceof tx_newspaper_Article) {
             /// \todo or maybe not: if in article(s): generateFromArticle() for all articles.
             $tree->markAsCleared();
@@ -117,7 +117,7 @@ class tx_newspaper_DependencyTree {
     }
 
     static public function generateFromPagezone(tx_newspaper_Pagezone_Page $pagezone) {
-        $tree = new tx_newspaper_DependencyTree();
+        $tree = new tx_newspaper_TimedTree();
 
         if ($pagezone instanceof tx_newspaper_PageZone_Page) {
             $tree->addAllExtraPagesForPagezone($pagezone);
@@ -130,7 +130,7 @@ class tx_newspaper_DependencyTree {
 
     static public function generateFromTag(tx_newspaper_Tag $tag) {
 
-        $tree = new tx_newspaper_DependencyTree();
+        $tree = new tx_newspaper_TimedTree();
         $tree->addTagPages(array($tag));
         $tree->markAsCleared();
 
