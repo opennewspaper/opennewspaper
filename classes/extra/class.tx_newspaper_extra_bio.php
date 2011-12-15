@@ -79,7 +79,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
     ) {
         if ($table != 'tx_newspaper_extra_bio') return;
 
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
         
 #$extra = new tx_newspaper_extra_Bio($id);
 #tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());

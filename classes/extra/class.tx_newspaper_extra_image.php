@@ -152,7 +152,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		if ($table != 'tx_newspaper_extra_image') return;
 		if (!isset($fieldArray[self::image_file_field])) return;
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
         $image->resizeImages();

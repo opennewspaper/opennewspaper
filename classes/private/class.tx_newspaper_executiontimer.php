@@ -16,11 +16,8 @@ class tx_newspaper_ExecutionTimer {
         self::$logger = $logger;
     }
 
-    public function __construct($message = '') {
-        $this->message = $message;
-        $this->execution_start_time = microtime(true);
-
-        self::$recursion_level++;
+    public static function create($message = '') {
+        return new tx_newspaper_ExecutionTimer($message);
     }
 
     public function __destruct() {
@@ -52,6 +49,13 @@ class tx_newspaper_ExecutionTimer {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function __construct($message = '') {
+        $this->message = $message;
+        $this->execution_start_time = microtime(true);
+
+        self::$recursion_level++;
+    }
 
     private static function logExecutionTimes() {
         $tsconfig = tx_newspaper::getTSConfig();

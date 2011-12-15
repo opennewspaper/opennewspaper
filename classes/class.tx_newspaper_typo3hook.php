@@ -76,14 +76,14 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 #t3lib_div::devlog('tx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
-        $timer = new tx_newspaper_ExecutionTimer("\ntx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray()");
+        $timer = tx_newspaper_ExecutionTimer::create("\ntx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray()");
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 
 	/** \todo some documentation would be nice ;-) */
 	function processDatamap_postProcessFieldArray($status, $table, $id, array &$fieldArray, t3lib_TCEmain $that) {
 
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
 #tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_postProcessFieldArray($status, $table, $id, ...)", $fieldArray);
 		// call save hook in newspaper classes
@@ -125,7 +125,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
     function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
 #tx_newspaper::devlog("tx_newspaper_Typo3Hook::processDatamap_afterDatabaseOperations($status, $table, $id, ...)", tx_newspaper::getLoggedQueries());
 
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         // pass hook to newspaper classes
         // !!! if this list of manually triggered savehooks should ever change, add the class to isAlreadyHandledExplicitlyInSavehook() !!!
@@ -156,7 +156,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	}
 
 	function processDatamap_afterAllOperations($that) {
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
 			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
 				$savehook_object->processDatamap_afterAllOperations($that);

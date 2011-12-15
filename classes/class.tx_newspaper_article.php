@@ -957,7 +957,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  \param $that The t3lib_tcemain object handling the datamap that stores the record
      */
     public static function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!self::isValidForSavehook($table, $id)) return;
 
         self::saveOldControlTagsForArticle($id);
@@ -994,7 +994,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     public static function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, $that) {
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         if (!self::isValidForSavehook($table, $id)) return;
 

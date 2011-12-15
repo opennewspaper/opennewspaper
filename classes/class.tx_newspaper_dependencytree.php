@@ -176,7 +176,7 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-        $timer = new tx_newspaper_ExecutionTimer("tx_newspaper_DependencyTree::executeActionsOnPages($key)");
+        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_DependencyTree::executeActionsOnPages($key)");
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -295,7 +295,7 @@ class tx_newspaper_DependencyTree {
 
     private function executeActionOnPages(array $action) {
 
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         $function = $action['function'];
         $when = $action['when'];

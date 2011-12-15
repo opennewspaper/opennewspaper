@@ -909,7 +909,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	 * \param $that t3lib_TCEmain object?
 	 */
 	public static function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, $that) {
-        $timer = new tx_newspaper_ExecutionTimer();
+        $timer = tx_newspaper_ExecutionTimer::create();
 		self::writeRecordsIfNewExtraOnPageZone($status, $table, $id, $fieldArray, $that);
 	}
 
