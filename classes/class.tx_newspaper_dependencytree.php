@@ -70,13 +70,15 @@ class tx_newspaper_DependencyTree {
         return (boolean)$ts_config['newspaper.']['use_dependency_tree'];
     }
 
-    /// Generates the tree of pages that change when a tx_newspaper_Article changes.
-    /** @param $article The article which is changed. \p $article is from now on
+    /**
+     *  Generates the tree of pages that change when a tx_newspaper_Article changes.
+     *
+     *  @param $article The article which is changed. \p $article is from now on
      *    called "the affected article".
      */
     static public function generateFromArticle(tx_newspaper_Article $article, array $removed_tags = array()) {
 
-        $tree = new tx_newspaper_TimedTree();
+        $tree = self::create();
         $tree->setArticle($article);
         if (!empty($removed_tags)) {
             $tree->setDeletedContentTags($removed_tags);
@@ -87,7 +89,7 @@ class tx_newspaper_DependencyTree {
 
     static public function generateFromArticlelist(tx_newspaper_Articlelist $list) {
 
-        $tree = new tx_newspaper_TimedTree();
+        $tree = self::create();
         if ($list->isSectionList()) {
             $tree->setList($list);
         }
@@ -102,7 +104,7 @@ class tx_newspaper_DependencyTree {
     static public function generateFromExtra(tx_newspaper_Extra $extra) {
 
         $pagezone = $extra->getPageZone();
-        $tree = new tx_newspaper_TimedTree();
+        $tree = self::create();
         if ($pagezone instanceof tx_newspaper_Article) {
             /// \todo or maybe not: if in article(s): generateFromArticle() for all articles.
             $tree->markAsCleared();
@@ -117,7 +119,7 @@ class tx_newspaper_DependencyTree {
     }
 
     static public function generateFromPagezone(tx_newspaper_Pagezone_Page $pagezone) {
-        $tree = new tx_newspaper_TimedTree();
+        $tree = self::create();
 
         if ($pagezone instanceof tx_newspaper_PageZone_Page) {
             $tree->addAllExtraPagesForPagezone($pagezone);
@@ -130,7 +132,7 @@ class tx_newspaper_DependencyTree {
 
     static public function generateFromTag(tx_newspaper_Tag $tag) {
 
-        $tree = new tx_newspaper_TimedTree();
+        $tree = self::create();
         $tree->addTagPages(array($tag));
         $tree->markAsCleared();
 
@@ -275,8 +277,21 @@ class tx_newspaper_DependencyTree {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    /// Ensure that a dependency tree is not created other than by the generator functions.
+    /**
+     *  Ensure that a dependency tree is not created other than by the generator
+     *  functions.
+     */
     private function __construct() { }
+
+    /**
+     *  One-stop function to make a new dependency tree, provided to make
+     *  dependency injection in the generateFrom...() functions easier.
+     *
+     *  @return tx_newspaper_DependencyTree
+     */
+    private function create() {
+        return new tx_newspaper_TimedTree();
+    }
 
     private function setArticle(tx_newspaper_Article $article) {
         $this->article = $article;
@@ -496,6 +511,7 @@ class tx_newspaper_TimedTree extends tx_newspaper_DependencyTree {
 
     public function __call($method, $arguments) {
         $timer = tx_newspaper_ExecutionTimer::create($method);
+        tx_newspaper::devlog("__call($method)", $arguments);
         parent::__call($method, $arguments);
     }
 
