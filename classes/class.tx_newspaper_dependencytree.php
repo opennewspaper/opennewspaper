@@ -146,7 +146,8 @@ class tx_newspaper_DependencyTree {
      *  @return tx_newspaper_DependencyTree
      */
     public static function create() {
-        return new tx_newspaper_TimedTree();
+#        return new tx_newspaper_TimedTree();
+        return new tx_newspaper_DependencyTree();
     }
 
     /// Registers an action that is executed for every page in the tree on demand.
