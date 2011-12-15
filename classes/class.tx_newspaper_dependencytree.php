@@ -510,6 +510,7 @@ class tx_newspaper_DependencyTree {
 class tx_newspaper_TimedTree {
 
     public function __call($method, $arguments) {
+        die("__call($method)");
 #        $timer = tx_newspaper_ExecutionTimer::create($method);
         tx_newspaper::devlog("__call($method)", $arguments);
 #        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
