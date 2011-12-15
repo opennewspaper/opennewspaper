@@ -295,17 +295,23 @@ class tx_newspaper_DependencyTree {
 
     private function executeActionOnPages(array $action) {
 
+        $timer = new tx_newspaper_ExecutionTimer();
+
         $function = $action['function'];
         $when = $action['when'];
         $pages = array();
 
+        tx_newspaper_ExecutionTimer::start();
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
         if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
         if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
         if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
         if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
+        tx_newspaper_ExecutionTimer::logExecutionTime('executeActionOnPages(): get pages');
 
+        tx_newspaper_ExecutionTimer::start();
         call_user_func($function, $pages);
+        tx_newspaper_ExecutionTimer::logExecutionTime("executeActionOnPages(): call_user_func($function)");
     }
 
     private function getStarttime() {
