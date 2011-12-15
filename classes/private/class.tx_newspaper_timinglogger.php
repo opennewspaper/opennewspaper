@@ -52,13 +52,18 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
     }
 
     private function checkLogfileWritable() {
-        if (!is_writable($this->getFileName())) {
+        if (!self::isFileWritable($this->getFileName())) {
             throw new tx_newspaper_IllegalUsageException(
                 'tx_newspaper_FileLogger: File ' . $this->getFileName() . ' not writable', true
             );
         }
     }
 
+    private static function isFileWritable($filename) {
+        if (file_exists($filename) && is_writable($filename)) return true;
+        if (!file_exists($filename) && is_writable(dirname($filename))) return true;
+        return false;
+    }
     private function checkLogfileSpecified() {
         if (!$this->getFileName()) {
             throw new tx_newspaper_IllegalUsageException(
