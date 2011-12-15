@@ -139,17 +139,6 @@ class tx_newspaper_DependencyTree {
         return $tree;
     }
 
-    /**
-     *  One-stop function to make a new dependency tree, provided to make
-     *  dependency injection in the generateFrom...() functions easier.
-     *
-     *  @return tx_newspaper_DependencyTree
-     */
-    public static function create() {
-#        return new tx_newspaper_TimedTree();
-        return new tx_newspaper_DependencyTree();
-    }
-
     /// Registers an action that is executed for every page in the tree on demand.
     /** The actions are stored in an array whose entries are arrays of the form
      *  \code array(
@@ -292,7 +281,18 @@ class tx_newspaper_DependencyTree {
      *  Ensure that a dependency tree is not created other than by the generator
      *  functions.
      */
-    private function __construct() { }
+    public function __construct() { }
+
+    /**
+     *  One-stop function to make a new dependency tree, provided to make
+     *  dependency injection in the generateFrom...() functions easier.
+     *
+     *  @return tx_newspaper_DependencyTree
+     */
+    public static function create() {
+        return new tx_newspaper_TimedTree();
+#        return new tx_newspaper_DependencyTree();
+    }
 
     private function setArticle(tx_newspaper_Article $article) {
         $this->article = $article;
@@ -511,14 +511,13 @@ class tx_newspaper_DependencyTree {
 class tx_newspaper_TimedTree {
 
     public function __call($method, $arguments) {
-        die("__call($method)");
-#        $timer = tx_newspaper_ExecutionTimer::create($method);
+        $timer = tx_newspaper_ExecutionTimer::create($method);
         tx_newspaper::devlog("__call($method)", $arguments);
-#        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
+        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
     }
 
     public function __construct() {
-        $this->dependency_tree = tx_newspaper_DependencyTree::create();
+        $this->dependency_tree = new tx_newspaper_DependencyTree();
     }
 
     /** @var tx_newspaper_DependencyTree */
