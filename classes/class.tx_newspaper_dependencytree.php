@@ -285,11 +285,14 @@ class tx_newspaper_DependencyTree {
 
     /**
      *  One-stop function to make a new dependency tree, provided to make
-     *  dependency injection in the generateFrom...() functions easier.
+     *  dependency injection in the generateFrom...() functions easier. If you
+     *  want to use a dependency tree of another type, simply change this
+     *  function. See below for an example.
      *
      *  @return tx_newspaper_DependencyTree
      */
     private static function create() {
+
         // can't use this as long as we have to work with PHP 5.2
         // return new tx_newspaper_TimedObject('tx_newspaper_DependencyTree');
         

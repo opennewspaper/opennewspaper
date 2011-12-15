@@ -197,7 +197,12 @@ if (TYPO3_MODE == 'BE')	{
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_workflow.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_typo3hook.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dependencytree.php');
-    tx_newspaper_ExecutionTimer::setLogger(new tx_newspaper_FileLogger());
+
+    $tsconfig = tx_newspaper::getTSConfig();
+    if ($tsconfig['newspaper.']['executionTimeLogFilename']) {
+        tx_newspaper_ExecutionTimer::setLogger(new tx_newspaper_FileLogger());
+    }
+
 }
 
 ?>
