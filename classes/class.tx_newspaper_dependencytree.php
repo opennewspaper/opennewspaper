@@ -498,6 +498,8 @@ class tx_newspaper_TimedTree extends tx_newspaper_DependencyTree {
         $timer = tx_newspaper_ExecutionTimer::create($method);
         parent::__call($method, $arguments);
     }
+
+    protected function __construct() { }
     
 }
 
