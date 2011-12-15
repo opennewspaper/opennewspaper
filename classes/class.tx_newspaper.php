@@ -1455,36 +1455,61 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
   public static function loadSubTca() {
     foreach(self::$registeredSubTca as $extKey) {
       $file = PATH_typo3conf . 'ext/' . $extKey . '/tca.php';
-      if (is_readble($file)) {
+      if (is_readable($file)) {
         require_once $file;
       }
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////
+  public static function checkAtLeastPHPVersion($version_string, $message) {
+    if (!tx_newspaper::isAtLeastPHPVersion($version_string)) {
+      throw new tx_newspaper_IllegalUsageException(
+        "$message needs at least PHP $version_string. You are running PHP " .
+        PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION
+      );
+    }
+  }
+    
+  public static function isAtLeastPHPVersion($version_string) {
+      $version_parts = explode('.', $version_string);
+      $required_version_numerically = self::versionStringToNumber($version_parts[0], $version_parts[1], $version_parts[2]);
+      $actual_version_numerically = self::versionStringToNumber(PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION);
+      return $actual_version_numerically >= $required_version_numerically;
+  }
 
-  /** SQL queries are stored as a static member variable, so they can be
-   *  accessed for debugging from outside the function if a query does not
-   *  return the desired result.
-   */
-  public static $query = '';
+  private static function versionStringToNumber($major, $minor, $release) {
+      return intval($major) * 10000 + intval($minor) * 100 + intval($release);
+  }
 
-  private static $logged_queries = array();
+    ////////////////////////////////////////////////////////////////////////////
 
-  private static $are_queries_logged = false;
+    /**
+     *  Ensure nobody instantiates a tx_newspaper object.
+     */
+    private function __construct() { }
 
-  private static $max_logged_queries = self::default_max_logged_queries;
+    /** SQL queries are stored as a static member variable, so they can be
+     *  accessed for debugging from outside the function if a query does not
+     *  return the desired result.
+     */
+    public static $query = '';
 
-  /// a \c tslib_cObj object used to generate typolinks
-  private static $local_cObj = null;
+    private static $logged_queries = array();
 
-  private static $registered_sources = array();
+    private static $are_queries_logged = false;
 
-  private static $registered_savehooks = array();
+    private static $max_logged_queries = self::default_max_logged_queries;
 
-  private static $registeredSubTca = array();
+    /// a \c tslib_cObj object used to generate typolinks
+    private static $local_cObj = null;
 
-  private static $newspaperConfig = null;
+    private static $registered_sources = array();
+
+    private static $registered_savehooks = array();
+
+    private static $registeredSubTca = array();
+
+    private static $newspaperConfig = null;
 
 }
 

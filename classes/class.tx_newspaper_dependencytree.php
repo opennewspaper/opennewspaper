@@ -281,7 +281,7 @@ class tx_newspaper_DependencyTree {
      *  Ensure that a dependency tree is not created other than by the generator
      *  functions.
      */
-    public function __construct() { }
+    private function __construct() { }
 
     /**
      *  One-stop function to make a new dependency tree, provided to make
@@ -290,8 +290,10 @@ class tx_newspaper_DependencyTree {
      *  @return tx_newspaper_DependencyTree
      */
     private static function create() {
-        return new tx_newspaper_TimedTree();
-#        return new tx_newspaper_DependencyTree();
+        // can't use this as long as we have to work with PHP 5.2
+        // return new tx_newspaper_TimedObject('tx_newspaper_DependencyTree');
+        
+        return new tx_newspaper_DependencyTree();
     }
 
     private function setArticle(tx_newspaper_Article $article) {
@@ -507,28 +509,6 @@ class tx_newspaper_DependencyTree {
 
 }
 
-
-class tx_newspaper_TimedTree {
-
-    public function __call($method, $arguments) {
-        $timer = tx_newspaper_ExecutionTimer::create($method);
-        tx_newspaper::devlog("__call($method)", $arguments);
-
-        $reflection_method = new ReflectionMethod('tx_newspaper_DependencyTree', $method);
-        $reflection_method->setAccessible(true);
-
-        return $reflection_method->invokeArgs($this->dependency_tree, $arguments);
-#        return call_user_func_array(array($this->dependency_tree, $method), $arguments);
-    }
-
-    public function __construct() {
-        $this->dependency_tree = new tx_newspaper_DependencyTree();
-    }
-
-    /** @var tx_newspaper_DependencyTree */
-    private $dependency_tree = null;
-}
-
 function getAllArticlePages(array $sections) {
 	$article_pages = array();
     foreach ($sections as $section) {
@@ -545,6 +525,9 @@ function getArticlePage(tx_newspaper_Section $section) {
 }
 
 function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
+
+    $timer = new tx_newspaper_ExecutionTimer();
+
     $all_sections = tx_newspaper_Section::getAllSections(false);
     $sections = array();
     foreach ($all_sections as $section) {
