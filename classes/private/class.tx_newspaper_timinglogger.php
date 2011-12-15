@@ -43,7 +43,7 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
 
     private function getFileName() {
         $tsconfig = tx_newspaper::getTSConfig();
-        return intval($tsconfig['newspaper.']['executionTimeLogFilename']);
+        return $tsconfig['newspaper.']['executionTimeLogFilename'];
     }
 
     private function checkLogfileValid() {
