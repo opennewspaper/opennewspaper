@@ -52,7 +52,7 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
     }
 
     private function checkLogfileWritable() {
-        if (!file_exists($this->getFileName()) && !is_writable($this->getFileName())) {
+        if (!is_writable($this->getFileName())) {
             throw new tx_newspaper_IllegalUsageException(
                 'tx_newspaper_FileLogger: File ' . $this->getFileName() . ' not writable', true
             );
