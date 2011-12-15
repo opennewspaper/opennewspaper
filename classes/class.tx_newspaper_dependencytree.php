@@ -190,6 +190,7 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->article_pages_filled) {
             $this->addArticlePages($this->article);
         }
@@ -198,6 +199,7 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
             $this->addSectionPages(getSectionsWhoseArticleListContains($this->article));
@@ -207,6 +209,7 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
         }
@@ -215,6 +218,7 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
         }
@@ -223,6 +227,7 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
+        $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
         }
