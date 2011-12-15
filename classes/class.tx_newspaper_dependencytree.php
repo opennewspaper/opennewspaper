@@ -515,12 +515,12 @@ class tx_newspaper_TimedTree {
         return call_user_func_array(array($this->dependency_tree, $method), $arguments);
     }
 
-    protected function __construct() {
+    public function __construct() {
         $this->dependency_tree = tx_newspaper_DependencyTree::create();
     }
 
     /** @var tx_newspaper_DependencyTree */
-    protected $dependency_tree = null;
+    private $dependency_tree = null;
 }
 
 function getAllArticlePages(array $sections) {
