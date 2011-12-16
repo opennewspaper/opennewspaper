@@ -125,6 +125,14 @@ var NpManageDossier = {
 		this.changeTag(uid);
 	},
 
+    /**
+     * Read uid for selected tag
+     * @return Current tag uid
+     */
+    getTagUid: function() {
+        return parseInt($("tx_newspaper_mod6[tag]").value);
+    },
+
 	/**
 	 * Hides backend for tag title and tag section editing
 	 */
@@ -147,7 +155,7 @@ var NpManageDossier = {
 			var request = new Ajax.Request(
 				"index.php", {
 					method: 'get',
-					parameters: 'tx_newspaper_mod6[AjaxRemoveExtraFromTagZone]=1' + "&tx_newspaper_mod6[tz_uid]=" + parseInt(tz_uid) + "&tx_newspaper_mod6[e_uid]=" + parseInt(e_uid) + "&tx_newspaper_mod6[tag_uid]=" + parseInt($("tx_newspaper_mod6[tag]").value),
+					parameters: 'tx_newspaper_mod6[AjaxRemoveExtraFromTagZone]=1' + "&tx_newspaper_mod6[tz_uid]=" + parseInt(tz_uid) + "&tx_newspaper_mod6[e_uid]=" + parseInt(e_uid) + "&tx_newspaper_mod6[tag_uid]=" + this.getTagUid(),
 					onCreate: function() {
 						$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
 					},
@@ -199,7 +207,6 @@ var NpManageDossier = {
 	 * @return void
 	 */
 	storeDossierTitle: function() {
-		var uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 		var title = $("input_dossier_title").value; // read new title from input field
 		if (!title) {
 			alert(this.param["messageWizardDossierTitleMissing"]);
@@ -209,7 +216,7 @@ var NpManageDossier = {
 		var request = new Ajax.Request(
 			"index.php", 				{
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + parseInt(uid) + '&tx_newspaper_mod6[dossierTitle]=' + NpTools.escapeQuotes(title),
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierTitleUid]=' + this.getTagUid() + '&tx_newspaper_mod6[dossierTitle]=' + NpTools.escapeQuotes(title),
 				onCreate: function() {
 					$("dossier_title_edit").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // remove store icon, render spinner
 				},
@@ -235,9 +242,7 @@ var NpManageDossier = {
 	 * @return void
 	 */
 	editDossierTitle: function() {
-		var uid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
-
-		// render iput field
+		// Render input field
 		$("dossier_title").innerHTML = '<input class="inputDossierTitle" id="input_dossier_title" value="' + NpTools.hscQuotes(this.currentDossierTitle) + '" />'; // render input form field
 
 		// Show store and cancel icons, hide other icons
@@ -315,12 +320,11 @@ var NpManageDossier = {
 	 * @return void
 	 */
 	storeDossierSection: function() {
-		var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 		var sectionUid = $("sections").value; // read new section from select box
 		var request = new Ajax.Request(
 			"index.php", 				{
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxStoreDossierSectionUid]=' + parseInt(sectionUid) + '&tx_newspaper_mod6[tagUid]=' + parseInt(tagUid),
+				parameters: 'tx_newspaper_mod6[AjaxStoreDossierSectionUid]=' + parseInt(sectionUid) + '&tx_newspaper_mod6[tagUid]=' + this.getTagUid(),
 				onCreate: function() {},
 				onSuccess: function() {
 					NpManageDossier.setCurrentDossierSection($("sections").options[$("sections").selectedIndex].text, sectionUid);
@@ -354,11 +358,10 @@ var NpManageDossier = {
 			// Show article list backend
 			document.getElementById('article_list').style.display = 'block';
 			// get assigned articles
-			var tag = parseInt(document.getElementById("tx_newspaper_mod6[tag]").value);
 			var request = new Ajax.Request(
 				"index.php", {
 					method: 'get',
-					parameters: 'tx_newspaper_mod6[AjaxListArticlesForCtrlTag]=' + tag,
+					parameters: 'tx_newspaper_mod6[AjaxListArticlesForCtrlTag]=' + this.getTagUid(),
 					onCreate: function() {
 						$("article_list").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
 					},
@@ -438,11 +441,10 @@ var NpManageDossier = {
 			}
 		});
 
-		var tagUid = parseInt($("tx_newspaper_mod6[tag]").value); // read uid of current control tag
 		var request = new Ajax.Request(
 			"index.php", {
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxBatchDetachTag]=' + tagUid + '&tx_newspaper_mod6[articleUids]=' + ids.join(","),
+				parameters: 'tx_newspaper_mod6[AjaxBatchDetachTag]=' + this.getTagUid() + '&tx_newspaper_mod6[articleUids]=' + ids.join(","),
 				onCreate: function() {
 					$("processSpinnerDetach").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // show spinner
 				},
@@ -498,9 +500,7 @@ var NpManageDossier = {
 	 * @return void
 	 */
 	batchAttachTag: function() {
-		var tag = document.getElementById("tx_newspaper_mod6[tag]").value;
-
-		// collect article uids
+		// Collect article uids
 		var s = document.getElementById('tx_newspaper_mod6[articles]');
 		var aUids = '';
 		for (var i = 0; i < s.options.length; i++) {
@@ -510,11 +510,11 @@ var NpManageDossier = {
 			}
 		}
 
-		// assign tag
+		// Assign tag
 		var request = new Ajax.Request(
 			"index.php", {
 				method: 'get',
-				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + tag + '&tx_newspaper_mod6[articleUids]=' + aUids,
+				parameters: 'tx_newspaper_mod6[AjaxBatchAttachTag]=' + this.getTagUid() + '&tx_newspaper_mod6[articleUids]=' + aUids,
 				onCreate: function() {
 					$("processSpinner").innerHTML = '<img src="../res/be/css/move-spinner.gif" />';
 					$("tag_batch_msg").innerHTML = ''; // clear message
@@ -527,15 +527,6 @@ var NpManageDossier = {
 			}
 		);
 
-	},
-
-	/**
-	 *
-	 * @return void
-	 * @todo: remove when dependecy tree performance issues are solved
-	 */
-	showReloadButton: function() {
-		$("tz_reload").style.display = "block";
 	},
 
 	/**

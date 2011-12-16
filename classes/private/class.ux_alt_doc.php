@@ -143,7 +143,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
 
 	/**
-	 * Checks is close buttons should be hidden
+	 * Checks if close buttons should be hidden
 	 * @return true if close buttons (close, save&close etc.) should be hidden
 	 */
 	private function hideCloseButtons() {
