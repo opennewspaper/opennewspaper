@@ -322,6 +322,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function placeArticle($input, array $statusHidePublish=array()) {
+tx_newspaper::devlog("placeArticle", $input);
+                    $timer = new tx_newspaper_ExecutionTimer();
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 
