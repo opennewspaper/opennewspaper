@@ -322,8 +322,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function placeArticle($input, array $statusHidePublish=array()) {
-tx_newspaper::devlog("placeArticle", $input);
-                    $timer = new tx_newspaper_ExecutionTimer();
+
+                    tx_newspaper::devlog("placeArticle", $input);
+                    tx_newspaper_ExecutionTimer::start();
+
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 
@@ -338,6 +340,9 @@ tx_newspaper::devlog("placeArticle", $input);
 					}
 					$article->store();
 					$this->writeLog($input, $log);
+
+                    tx_newspaper_ExecutionTimer::logExecutionTime();
+
 					return true;
 				}
 
@@ -465,6 +470,10 @@ tx_newspaper::devlog("placeArticle", $input);
 				 *  \return \c true
 				 */
 				function saveSection($input) {
+
+tx_newspaper::devlog("placeArticle", $input);
+tx_newspaper_ExecutionTimer::start();
+
 //t3lib_div::devlog('saveSection()', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
 					$offsets = array();
@@ -488,7 +497,6 @@ tx_newspaper::devlog("placeArticle", $input);
 						$section = new tx_newspaper_section ($sectionId);
 						$sectionType = get_class($section->getArticleList());
 
-tx_newspaper::startExecutionTimer();
 						// save differently depending on list type
 						switch(strtolower($sectionType)) {
 							case 'tx_newspaper_articlelist_manual' :
@@ -507,7 +515,7 @@ tx_newspaper::startExecutionTimer();
 							default:
 								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
 						}
-tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section_name') . '")');
+tx_newspaper_ExecutionTimer::logExecutionTime('saveSection("' . $section->getAttribute('section_name') . '")');
 						return true;
 
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
@@ -535,6 +543,7 @@ tx_newspaper::logExecutionTime('saveSection("' . $section->getAttribute('section
 							break;
 						}
 
+tx_newspaper_ExecutionTimer::logExecutionTime('saveSection("' . $al->getTable() . $al->getUid() .  '")');
 						return true;
 
 					}
