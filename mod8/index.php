@@ -225,96 +225,120 @@ class  tx_newspaper_module8 extends t3lib_SCbase {
                 }
 
 
-                private function ajaxDeleteTag() {
-					$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
-					if ($tag->getArticles(1)) {
-						if ($this->input['confirmDetachTags']) {
-							$tag->detach();
-						} else {
-							die(json_encode(array('success' => false, 'attachedTagsFound' => true)));
-						}
-					}
-					$tag->delete();
-					die(json_encode(array('success' => true)));
-                }
+    private function ajaxDeleteTag() {
+        tx_newspaper_ExecutionTimer::create();
+		$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
+        $this->detachTagIfNecessary($tag);
+        self::deleteTag($tag);
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+		die(json_encode(array('success' => true)));
+    }
+
+    private function ajaxRenameTag() {
+        tx_newspaper_ExecutionTimer::create();
+		$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
+       	if (!$tag->isTagUnique($this->input['newTagName'])) {
+            tx_newspaper_ExecutionTimer::logExecutionTime();
+			die(json_encode(array('success' => false)));
+		}
+		$tag->storeRenamedTag($this->input['newTagName']);
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+		die(json_encode(array('success' => true)));
+    }
 
 
-                private function ajaxRenameTag() {
-					$tag = new tx_newspaper_tag(intval($this->input['tagUid']));
-                	if (!$tag->isTagUnique($this->input['newTagName'])) {
-						die(json_encode(array('success' => false)));
-					}
-					$tag->storeRenamedTag($this->input['newTagName']);
-					die(json_encode(array('success' => true)));
-                }
+    private function ajaxMergeTags() {
+        tx_newspaper_ExecutionTimer::create();
+		// extract source tag uids
+       	$sourceTagUids = explode('|', $this->input['sourceTags']);
 
+       	// create target tag
+       	$targetTag = new tx_newspaper_tag(intval($this->input['targetTag']));
 
-                private function ajaxMergeTags() {
-					// extract source tag uids
-                	$sourceTagUids = explode('|', $this->input['sourceTags']);
+       	// merge source tags
+       	$mergeCount = 0;
+       	foreach($sourceTagUids as $sourceTagUid) {
+       		if ($targetTag->merge(new tx_newspaper_tag($sourceTagUid))) {
+       			$mergeCount++;
+       		}
+       	}
 
-                	// create target tag
-                	$targetTag = new tx_newspaper_tag(intval($this->input['targetTag']));
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+       	if ($mergeCount) {
+        	die($this->localLang['mergeSuccess'] . $mergeCount);
+        } else {
+			die($this->localLang['mergeFailed']);
+        }
 
-                	// merge source tags
-                	$mergeCount = 0;
-                	foreach($sourceTagUids as $sourceTagUid) {
-                		if ($targetTag->merge(new tx_newspaper_tag($sourceTagUid))) {
-                			$mergeCount++;
-                		}
-                	}
+    }
 
-                	if ($mergeCount) {
-						die($this->localLang['mergeSuccess'] . $mergeCount);
-                	} else {
-						die($this->localLang['mergeFailed']);
-                	}
+    /**
+     * Fetches all tags requested in $this->input
+     * Dies with JSON array: tagUid|title
+     */
+    private function ajaxChangeTagCat() {
+        tx_newspaper_ExecutionTimer::create();
 
-                }
+        $tags = $this->getTagsToChange();
 
-                /**
-                 * Fetches all tags requested in $this->input
-                 * Dies with JSON array: tagUid|title
-                 */
-                private function ajaxChangeTagCat() {
-	                if ($this->input['tagType'] == 'content') {
-						$tags = tx_newspaper_tag::getAllContentTags();
-	                } elseif ($this->input['tagType'] == 'ctrl' && $this->input['ctrlTagCat']) {
-						$tags = tx_newspaper_tag::getAllControlTags(intval($this->input['ctrlTagCat']));
-	                } else {
-	                	t3lib_div::devlog('Tag module: unknown tagType', 'newspaper', 3, array('input' => $this->input));
-	                	die();
-	                }
-					$options = array();
-					foreach($tags as $tag) {
-						$options[] = $tag->getUid() . '|' . htmlspecialchars($tag->getAttribute('tag'));
-					}
-					die(json_encode($options));
-               	}
+        $options = array();
+		foreach($tags as $tag) {
+			$options[] = $tag->getUid() . '|' . htmlspecialchars($tag->getAttribute('tag'));
+		}
 
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+		die(json_encode($options));
+   	}
 
-               	/**
-               	 * Renders upper part of backend: selection of tag type (and control tag categorie, if tag type is control tag)
-               	 * Tags are fetched via AJAX request
-               	 */
-                private function renderTagTypeSelection() {
-					$smarty = $this->getSmarty();
-					$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
-					return $smarty->fetch('mod8_base.tmpl');
-                }
+    private function getTagsToChange() {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        if ($this->input['tagType'] == 'content') {
+            $tags = tx_newspaper_tag::getAllContentTags();
+            return $tags;
+        } elseif ($this->input['tagType'] == 'ctrl' && $this->input['ctrlTagCat']) {
+            $tags = tx_newspaper_tag::getAllControlTags(intval($this->input['ctrlTagCat']));
+            return $tags;
+        } else {
+            t3lib_div::devlog('Tag module: unknown tagType', 'newspaper', 3, array('input' => $this->input));
+            die();
+        }
+    }
 
-                /// \return Smarty objects with T3PATH and LL (localized strings) assigned already
-                private function getSmarty() {
-                    $smarty = new tx_newspaper_Smarty();
-                    $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod8/res/'));
-                    $smarty->assign('LL', $this->localLang);
-                    $smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-                    return $smarty;
-                }
+    private static function deleteTag($tag) {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        $tag->delete();
+    }
 
+    private function detachTagIfNecessary($tag) {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        if ($tag->getArticles(1)) {
+            if ($this->input['confirmDetachTags']) {
+                $tag->detach();
+            } else {
+                die(json_encode(array('success' => false, 'attachedTagsFound' => true)));
+            }
+        }
+    }
+
+   	/**
+   	 * Renders upper part of backend: selection of tag type (and control tag categorie, if tag type is control tag)
+   	 * Tags are fetched via AJAX request
+   	 */
+    private function renderTagTypeSelection() {
+		$smarty = $this->getSmarty();
+		$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+		return $smarty->fetch('mod8_base.tmpl');
+    }
+
+    /// \return Smarty objects with T3PATH and LL (localized strings) assigned already
+    private function getSmarty() {
+        $smarty = new tx_newspaper_Smarty();
+        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod8/res/'));
+        $smarty->assign('LL', $this->localLang);
+        $smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
+        return $smarty;
+    }
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod8/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod8/index.php']);
