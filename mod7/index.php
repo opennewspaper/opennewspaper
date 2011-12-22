@@ -323,7 +323,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function placeArticle($input, array $statusHidePublish=array()) {
 
-                    tx_newspaper::devlog("placeArticle", $input);
                     tx_newspaper_ExecutionTimer::start();
 
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
@@ -420,9 +419,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 
 				private function hideArticle(tx_newspaper_article $article) {
+                    $timer = tx_newspaper_ExecutionTimer::create();
 					$article->storeHiddenStatusWithHooks(true);
 				}
 				private function publishArticle(tx_newspaper_article $article) {
+                    $timer = tx_newspaper_ExecutionTimer::create();
 					$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
 				}
 

@@ -48,7 +48,10 @@ class tx_newspaper_Sysfolder {
  	
  	protected function __clone() {} // singleton pattern
  	
- 	/// get instance (singleton pattern)
+ 	/**
+      * get instance (singleton pattern)
+      * @return tx_newspaper_Sysfolder
+      */
  	public static function getInstance() {
 		if (self::$instance == null) {
 			self::$instance = new tx_newspaper_Sysfolder();

@@ -235,7 +235,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         /// Default articles should never contain text that is displayed.
         if ($this->getAttribute('is_template'))
-            return;
+            return '';
 
         tx_newspaper_ExecutionTimer::start();
 
@@ -793,6 +793,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
             if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
                 if (!$this->checkExtra($extra_class)) {
+                    /** @var $e tx_newspaper_Extra */
                     $e = new $extra_class();
                     $shortcuts[] = array(
                         'extra_class' => $extra_class,
@@ -869,7 +870,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /**
      * \param  $tagtype int defaults to contentTagType
-     * \return array with tags objects
+     * @return tx_newspaper_Tag[] array with tags objects
      */
     public function getTags($tagtype = null, $category =  null) {
         $where = " AND uid_local = " . $this->getUid();
@@ -1046,6 +1047,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      */
     public function storeHiddenStatusWithHooks($hidden) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         $hidden_value = $hidden ? true : false;
 
         // prepare datamap
@@ -1056,6 +1059,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         );
 
         // use datamap, so all save hooks get called
+        /** @var $tce t3lib_TCEmain */
         $tce = t3lib_div::makeInstance('t3lib_TCEmain');
         $tce->start($datamap, array());
         $tce->process_datamap();
@@ -1332,7 +1336,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                     if ($extra->getAttribute('paragraph') == $index ||
                             sizeof($text_paragraphs) + $extra->getAttribute('paragraph') == $index) {
                         $paragraph['extras'][$extra->getAttribute('position')] =
-                            self::makeParagraphRepresentationFromExtra($extra, $template_set);
+                            self::makeParagraphRepresentationFromExtra($extra);
                     }
                 }
                 /*  Braindead PHP does not sort arrays automatically, even if
@@ -1360,18 +1364,18 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         foreach ($this->getExtras() as $extra) {
             if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
                 $paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
-                    self::makeParagraphRepresentationFromExtra($extra, $template_set);
+                    self::makeParagraphRepresentationFromExtra($extra);
             } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
                 $paragraphs[sizeof($paragraphs) - 1]['extras'][intval($extra->getAttribute('position'))] =
-                    self::makeParagraphRepresentationFromExtra($extra, $template_set);
+                    self::makeParagraphRepresentationFromExtra($extra);
             }
         }
     }
 
-    private static function makeParagraphRepresentationFromExtra(tx_newspaper_Extra $extra, $template_set) {
+    private static function makeParagraphRepresentationFromExtra(tx_newspaper_Extra $extra) {
         return array(
             'extra_name' => $extra->getTable(),
-            'content' => $extra->render($template_set)
+            'content' => $extra->render()
         );
     }
 
@@ -1575,6 +1579,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 		$datamap['tx_newspaper_article'][$this->getUid()] = array('tstamp' => time());
 
 		// use datamap, so all save hooks get called
+        /** @var $tce t3lib_TCEmain */
 		$tce = t3lib_div::makeInstance('t3lib_TCEmain');
 		$tce->start($datamap, array());
 		$tce->process_datamap();
