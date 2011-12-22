@@ -117,9 +117,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	 *  uid: uid of a concrete pagezone on the same level (pagezone_page); not available for articles (articles are unique to a section)
 	 */
 	private function processInheritanceSourceChange($pz_uid, $new_parent_pagezone_value) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // create pagezone or article
 		$pz->changeParent(intval($new_parent_pagezone_value));
         tx_newspaper_PageZone::updateDependencyTree($pz);
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
 		die();
 	}
 
@@ -162,6 +168,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	}
 
 	private function processExtraInsertAfterFromPoolCopy($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$origin_uid = intval($origin_uid);
 		$pooled_extra_uid = intval($pooled_extra_uid);
 		$pz_uid = intval($pz_uid);
@@ -181,10 +190,15 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
         tx_newspaper_PageZone::updateDependencyTree($pz);
 
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
 		die();
 	}
 	private function processExtraInsertAfterFromPoolReference($origin_uid, $extra_class, $pooled_extra_uid, $pz_uid, $paragraph, $path) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$origin_uid = intval($origin_uid);
 		$pooled_extra_uid = intval($pooled_extra_uid);
 		$pz_uid = intval($pz_uid);
@@ -203,6 +217,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$pz->insertExtraAfter($e, $origin_uid);
 
         tx_newspaper_PageZone::updateDependencyTree($pz);
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
 //\todo: close.html/close_in_article.html
 		header('location: http://' . $_SERVER['SERVER_NAME'] . $path . 'typo3conf/ext/newspaper/mod3/res/close.html');
@@ -233,6 +249,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $extra_uid uid of extra
 	 */
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
@@ -249,6 +268,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
         }
 
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
 		die();
 	}
 
@@ -257,6 +278,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $extra_uid uid of extra
 	 */
 	private function processExtraDelete($pz_uid, $extra_uid) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
@@ -272,11 +296,16 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_DELETE);
         }
 
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
 		die();
 	}
 
     private function processExtraCreate($article_uid, $extra_class, $origin_uid = 0, $pz_uid, $paragraph, $show = 1) {
 //t3lib_div::devlog('processExtraCreate()', 'newspaper', 0, array('a_uid' => $article_uid, 'e_class' => $extra_class, 'o_uid' => $origin_uid, 'pz_uid' => $pz_uid, 'para' => $paragraph, 'show' => $show));
+
+        tx_newspaper_ExecutionTimer::create();
+
     	$extra = new $extra_class;
         $extra->setAttribute('crdate', time());
         $extra->setAttribute('tstamp', time());
@@ -294,6 +323,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
         $pz->moveExtraAfter($extra, $origin_uid);
         $data = array('extra_uid' => $extraUid, 'content' => tx_newspaper_be::renderBackendPageZone($pz, false, true));
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
         header('Content-type: application/json');
         echo json_encode($data);
         die();
@@ -305,6 +337,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  @param $show boolean Whether to show this extra or not
      */
 	private function processExtraSetShow($extra_uid, $show) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$e->setAttribute('show_extra', $show);
 		$e->store();
@@ -312,6 +347,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		tx_newspaper_PageZone::updateDependencyTree($e);
 
 		tx_newspaper_workflow::logPlacement('tx_newspaper_extra', $extra_uid, array('show' => $show), NP_WORKLFOW_LOG_PLACEMENT_SHOW);
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
 		die();
 	}
@@ -323,6 +360,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $paragraph paragraph for (non-duplicated) extras
      */
 	private function processExtraShortcutCreate($article_uid, $extra_class, $extra_uid, $paragraph, $show = 1) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 //t3lib_div::devlog('processExtraShortcurtCreate()', 'newspaper', 0, array('article_uid' => $article_uid, 'extra class' => $extra_class, 'extra uid' => $extra_uid, 'paragraph' => $paragraph));
 		$extra_uid = intval($extra_uid);
 		$paragraph = intval($paragraph);
@@ -353,6 +393,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
         $htmlContent = tx_newspaper_be::renderBackendPageZone(tx_newspaper_PageZone_Factory::getInstance()->create($article->getAbstractUid()), false, true); // function is called in concrete articles only
         $data = array('extra_uid' => $extra_uid, 'htmlContent' => $htmlContent);
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
+
         header('Content-type: application/json');
         echo json_encode($data);
 		die();
@@ -362,6 +405,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 
 
 	private function processExtraSetPassDown($pz_uid, $extra_uid, $pass_down) {
+
+        tx_newspaper_ExecutionTimer::create();
+
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz->setInherits($e, $pass_down);
@@ -370,6 +416,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         tx_newspaper_Extra::updateDependencyTree($e);
 
         tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('extra uid' => $extra_uid, 'pass_down' => $pass_down), NP_WORKLFOW_LOG_PLACEMENT_INHERIT);
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
 		die();
 	}

@@ -55,7 +55,7 @@ class tx_newspaper_PageZone_Factory {
 	
 	/// Create a tx_newspaper_PageZone given a UID
 	/** \param $uid UID of the abstract tx_newspaper_PageZone record in DB
-	 *  \return A concrete object of a class derived from tx_newspaper_PageZone
+	 *  @return tx_newspaper_PageZone A concrete object of a class derived from tx_newspaper_PageZone
 	 */
 	public function create($uid) {
 		/// Read actual type and UID of the PageZone to instantiate from DB
