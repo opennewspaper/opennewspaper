@@ -1070,6 +1070,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             // if article is published the publish date might have been stored in save hook, so re-read it from db
             $articleFromDb = new tx_newspaper_article($this->getUid());
             $this->setAttribute('publish_date', $articleFromDb->getAttribute('publish_date'));
+            $this->setAttribute('tx_newspapertaz_vgwort_public_id', $articleFromDb->getAttribute('tx_newspapertaz_vgwort_public_id'));
         }
         $this->store();
     }
