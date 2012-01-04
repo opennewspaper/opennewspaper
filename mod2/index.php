@@ -511,6 +511,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * param $statusHidden
 	 */
 	private function changeArticleHiddenStatus($articleUid, $statusHidden) {
+        $timer = tx_newspaper_ExecutionTimer::create();
 		$article = new tx_newspaper_article($articleUid);
 		$article->storeHiddenStatusWithHooks($statusHidden);
 	}

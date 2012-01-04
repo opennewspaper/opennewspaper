@@ -181,6 +181,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  \return The \p $number Articles starting with \p $start
 	 */
 	public function getArticles($number, $start = 0) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$articles_sorted = $this->getSortedArticles($number, $start);
 
 		$articles = array();

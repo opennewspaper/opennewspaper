@@ -64,6 +64,9 @@ uid_local = ${articlelist_uid} AND hidden = 0
 ORDER BY sorting ASC
 LIMIT 0, 10
  */				
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$results = tx_newspaper::selectRows(
 				$this->select_method_strategy->fieldsToSelect(),
 				self::mm_table . 
