@@ -7,6 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/**
+ *  This class represents the object, class (if applicable) and function whose
+ *  execution time is measured by tx_newspaper_ExecutionTimer, as well as the
+ *  time that has elapsed since the beginning of the time measurement.
+ */
 class tx_newspaper_TimingInfo {
 
     public function __construct($start_time) {
