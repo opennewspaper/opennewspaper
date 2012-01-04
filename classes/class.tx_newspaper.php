@@ -786,97 +786,86 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     }
 
 
-  /// get absolute path to Typo3 installation
-  /** \param $endsWithSlash determines if the returned path ends with a slash
-   *  \return absolute path to Typo3 installation
-   */
-  public static function getAbsolutePath($endsWithSlash=true) {
+    /// get absolute path to Typo3 installation
+    /** \param $endsWithSlash determines if the returned path ends with a slash
+     *  \return absolute path to Typo3 installation
+     */
+    public static function getAbsolutePath($endsWithSlash=true) {
 
-    $path = self::getBasePath();
+        $path = self::getBasePath();
 
-    if ($endsWithSlash) {
-      // append "/", if missing
-      if ($path == '') {
-        $path = '/';
-      }
-      elseif (substr($path, strlen($path)-1) != '/') {
-        $path .= '/';
-      }
-    } else {
-      // remove last "/", if any
-      $path = rtrim($path, '/');
+        $path = rtrim($path, '/');
+        if ($endsWithSlash) {
+            $path .= '/';
+        }
+
+        return '/' . ltrim($path, '/');
     }
 
-    // first character in ABSOLUTE path must be a "/"
-    if (substr($path, 0, 1) != '/') {
-      $path = '/' . $path;
+    public static function getBasePath() {
+
+        /// \todo replace by a version NOT using EM conf (check t3lib_div)
+        $em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
+
+        if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
+            throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
+        }
+
+        return trim($em_conf['newspaperTypo3Path']);
     }
 
-    return $path;
-  }
+    /**
+     *  prepends the given absolute path part if path to check is no absolute path
+     *
+     *  @param $path2check path to check if it's an absolute path
+     *  @param $absolutePath this path is prepended to $path2check; no
+     * 		check, if this path is absolute
+     *  @return absolute path (either absolute string was prepended or path to
+     * 		check was absolute already); WIN: backslashes are converted to slashes
+     *  @todo: throw exception if created path does not exist???
+     */
+    public static function createAbsolutePath($path2check, $absolutePath) {
 
-  public static function getBasePath() {
+        // windows uses the backslash character as path delimiter - make sure slashes are used only
+        $path2check = str_replace('\\', '/', $path2check);
+        $absolutePath = str_replace('\\', '/', $absolutePath);
 
-    /// \todo replace by a version NOT using EM conf (check t3lib_div)
-    $em_conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['newspaper']);
+        if ($absolutePath == '')
+            return preg_replace('#/+#', '/', $path2check); // nothing to prepend, just return $path2check
 
-    if (!isset($em_conf['newspaperTypo3Path']) || !$em_conf['newspaperTypo3Path']) {
-      throw new tx_newspaper_Exception('newspaperTypo3Path was not set in EM');
+        if ($path2check == '')
+            return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend
+
+        $newpath = $path2check;
+        // prepend absolute path, if needed
+        if (TYPO3_OS == 'WIN') {
+            if ($path2check[1] != ':') {
+                // windows
+                $newpath = $absolutePath . '/' . $path2check;
+            }
+        } else {
+            // linux etc.
+            if ($path2check[0] != '/')
+                $newpath = $absolutePath . '/' . $path2check;
+        }
+
+        return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
     }
 
-    return trim($em_conf['newspaperTypo3Path']);
-  }
+    public static function getTranslation($key, $translation_file = 'locallang_newspaper.xml', $extension = 'newspaper') {
+        global $LANG;
 
-  /// prepends the given absolute path part if path to check is no absolute path
-  /** \param $path2check path to check if it's an absolute path
-   *  \param $absolutePath this path is prepended to $path2check; no
-   * 		check, if this path is absolute
-   *  \return absolute path (either absolute string was prepended or path to
-   * 		check was absolute already); WIN: backslashes are converted to slashes
-   *  \todo: throw exception if created path does not exist???
-   */
-  public static function createAbsolutePath($path2check, $absolutePath) {
+        if ($translation_file === false) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "false" parameter when refactoring!'); }
+        if ($translation_file === true) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "true" parameter when refactoring!'); }
 
-    // windows uses the backslash character as path delimiter - make sure slashes are used only
-    $path2check = str_replace('\\', '/', $path2check);
-    $absolutePath = str_replace('\\', '/', $absolutePath);
+        if (!($LANG instanceof language)) {
+            require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+            $LANG = t3lib_div::makeInstance('language');
+            $LANG->init('default');
+        }
 
-    if ($absolutePath == '')
-      return preg_replace('#/+#', '/', $path2check); // nothing to prepend, just return $path2check
-
-    if ($path2check == '')
-      return preg_replace('#/+#', '/', $absolutePath); // no path to check, just return the absolute path to prepend
-
-    $newpath = $path2check;
-    // prepend absolute path, if needed
-    if (TYPO3_OS == 'WIN') {
-      if ($path2check[1] != ':') {
-        // windows
-        $newpath = $absolutePath . '/' . $path2check;
-      }
-    } else {
-      // linux etc.
-      if ($path2check[0] != '/')
-        $newpath = $absolutePath . '/' . $path2check;
+        return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
     }
-
-    return preg_replace('#/+#', '/', $newpath); // remove multiple slashes
-  }
-
-  public static function getTranslation($key, $translation_file = 'locallang_newspaper.xml', $extension = 'newspaper') {
-    global $LANG;
-
-    if ($translation_file === false) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "false" parameter when refactoring!'); }
-    if ($translation_file === true) { throw new tx_newspaper_IllegalUsageException('You forgot to remove the "true" parameter when refactoring!'); }
-
-    if (!($LANG instanceof language)) {
-      require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
-      $LANG = t3lib_div::makeInstance('language');
-      $LANG->init('default');
-    }
-
-    return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
-  }
 
 
     /// Symbol used as a replacement for whitespace characters by normalizeString().
@@ -927,9 +916,9 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     /// \param $url URL to be encoded
     /// \return encoded URL
     public static function encodeUrlBasic($url) {
-    $chars = array('?', '=', '&');
-    $replaceWith = array('%3F', '%3D', '%26');
-    return str_replace($chars, $replaceWith, $url);
+        $chars = array('?', '=', '&');
+        $replaceWith = array('%3F', '%3D', '%26');
+        return str_replace($chars, $replaceWith, $url);
     }
 
 
@@ -1419,67 +1408,60 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return 'http' . ($_SERVER['HTTPS']? 's': '') . '://' . $_SERVER['SERVER_NAME'];
   }
 
-  public static function registerSource($key, tx_newspaper_Source $new_source) {
-    self::$registered_sources[$key] = $new_source;
-  }
-
-  public static function getRegisteredSources() {
-    return self::$registered_sources;
-  }
-
-  public static function getRegisteredSource($key) {
-    if (!isset(self::$registered_sources[$key])) {
-      throw new tx_newspaper_InconsistencyException(
-          "Requested source '$key' not present in registered sources: " . print_r(self::$registered_sources, 1)
-      );
+    public static function registerSource($key, tx_newspaper_Source $new_source) {
+        self::$registered_sources[$key] = $new_source;
     }
-    return self::$registered_sources[$key];
-  }
 
-  public static function registerSaveHook($class) {
-    self::$registered_savehooks[] = $class;
-  }
-
-  public static function getRegisteredSaveHooks() {
-    return self::$registered_savehooks;
-  }
-
-  // Register $extKey so extKey's tca.php is loaded after newspaper/tca_php_addon.php is loaded
-  public static function registerSubTca($extKey) {
-    if (t3lib_extMgm::isLoaded($extKey)) {
-      self::$registeredSubTca[] = $extKey;
+    public static function getRegisteredSources() {
+        return self::$registered_sources;
     }
-  }
 
-  /// Load tca.php from all registered extensions (so modifications are visible in newspaper)
-  public static function loadSubTca() {
-    foreach(self::$registeredSubTca as $extKey) {
-      $file = PATH_typo3conf . 'ext/' . $extKey . '/tca.php';
-      if (is_readable($file)) {
-        require_once $file;
-      }
+    public static function getRegisteredSource($key) {
+        if (!isset(self::$registered_sources[$key])) {
+            throw new tx_newspaper_InconsistencyException(
+                "Requested source '$key' not present in registered sources: " . print_r(self::$registered_sources, 1)
+            );
+        }
+        return self::$registered_sources[$key];
     }
-  }
 
-  public static function checkAtLeastPHPVersion($version_string, $message) {
-    if (!tx_newspaper::isAtLeastPHPVersion($version_string)) {
-      throw new tx_newspaper_IllegalUsageException(
-        "$message needs at least PHP $version_string. You are running PHP " .
-        PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION
-      );
+    public static function registerSaveHook($class) {
+        self::$registered_savehooks[] = $class;
     }
-  }
+
+    public static function getRegisteredSaveHooks() {
+        return self::$registered_savehooks;
+    }
+
+    // Register $extKey so extKey's tca.php is loaded after newspaper/tca_php_addon.php is loaded
+    public static function registerSubTca($extKey) {
+        if (t3lib_extMgm::isLoaded($extKey)) {
+            self::$registeredSubTca[] = $extKey;
+        }
+    }
+
+    /// Load tca.php from all registered extensions (so modifications are visible in newspaper)
+    public static function loadSubTca() {
+        foreach(self::$registeredSubTca as $extKey) {
+            $file = PATH_typo3conf . 'ext/' . $extKey . '/tca.php';
+            if (is_readable($file)) {
+                require_once $file;
+            }
+        }
+    }
+
+    public static function checkAtLeastPHPVersion($version_string, $message) {
+        if (!tx_newspaper::isAtLeastPHPVersion($version_string)) {
+            throw new tx_newspaper_IllegalUsageException(
+                "$message needs at least PHP $version_string. You are running PHP " .
+                PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION
+            );
+        }
+    }
     
-  public static function isAtLeastPHPVersion($version_string) {
-      $version_parts = explode('.', $version_string);
-      $required_version_numerically = self::versionStringToNumber($version_parts[0], $version_parts[1], $version_parts[2]);
-      $actual_version_numerically = self::versionStringToNumber(PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION);
-      return $actual_version_numerically >= $required_version_numerically;
-  }
-
-  private static function versionStringToNumber($major, $minor, $release) {
-      return intval($major) * 10000 + intval($minor) * 100 + intval($release);
-  }
+    public static function isAtLeastPHPVersion($version_string) {
+        return (strnatcmp(phpversion(), $version_string) >= 0);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
