@@ -106,7 +106,6 @@ class tx_newspaper_Smarty extends Smarty {
 	const default_template_set = 'default';
 
 	public function __construct() {
-tx_newspaper::devlog('__construct()', $GLOBALS['TYPO3_DB']);
 
         $this->setBasePath();
         $this->setWorkDirectories();
@@ -217,7 +216,6 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
     }
 
     private function setBasePath() {
-tx_newspaper::devlog('setBasePath()', $GLOBALS['TYPO3_DB']);
         $TSConfig = t3lib_BEfunc::getPagesTSconfig($GLOBALS['TSFE']->page['uid']);
         $this->basepath = $TSConfig['newspaper.']['defaultTemplate'];
         if ($this->basepath[0] != '/') $this->basepath = PATH_site . '/' . $this->basepath;
