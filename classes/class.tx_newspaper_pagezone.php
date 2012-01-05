@@ -1023,32 +1023,37 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 */
 			$extra_after_which = $this->findExtraByOriginUID($origin_uid);
 			if (!($extra_after_which instanceof tx_newspaper_Extra)) {
-				/** Deduce the $extra_after_which from the parent page(s):
-				 *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
-				 *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
-				 */
-				$parent = $this->getParentForPlacement();
-				if (!$parent instanceof tx_newspaper_PageZone) {
-					throw new tx_newspaper_IllegalUsageException(
-						'Tried to insert an Extra with an origin uid which is neither in the current' .
-						' PageZone nor in any of the parents.'
-						);
-				} else {
-					return $parent->getInsertPosition($origin_uid);
-				}
+				return $this->deduceInsertExtraFromParent($origin_uid);
 			}
+            $this->paragraph_for_insert = intval($extra_after_which->getAttribute('paragraph'));
 			$position = $extra_after_which->getAttribute('position');
-			$this->paragraph_for_insert = intval($extra_after_which->getAttribute('paragraph'));
         } else {
             $this->shiftPositionOfAllExtras();
             $position = 0;
 		}
+
         $position_before_which = $this->findExtraToInsertBefore($position);
         $position_before_which = $this->maintainSpacingBetweenExtras($position_before_which, $position);
 
 		/// Place Extra to insert between $extra_after and $extra_before (or at end)
 		return $position+($position_before_which-$position)/2;
 	}
+
+    /** Deduce the $extra_after_which from the parent page(s):
+     *  http://segfault.hal.taz.de/mediawiki/index.php/Vererbung_Bestueckung_Seitenbereiche_(DEV)
+     *  (2.3.1.3 Beispiel - Aenderung Ebene 1, aber Referenzelement wird nicht vererbt)
+     */
+    private function deduceInsertExtraFromParent($origin_uid) {
+    	$parent = $this->getParentForPlacement();
+		if (!$parent instanceof tx_newspaper_PageZone) {
+			throw new tx_newspaper_IllegalUsageException(
+				'Tried to insert an Extra with an origin uid which is neither in the current' .
+				' PageZone nor in any of the parents.'
+				);
+		} else {
+			return $parent->getInsertPosition($origin_uid);
+		}
+    }
 
     private function shiftPositionOfAllExtras() {
         foreach ($this->getExtras() as $extra) {

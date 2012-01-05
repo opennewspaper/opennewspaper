@@ -92,9 +92,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
-                                if (!is_a($GLOBALS['TYPO3_DB'], 't3lib_DB')) {
-                                    die('AUAUAUAUAUAUAUUUUU!');
-                                }
 								die($this->al_be->renderPlacement($input, false));
 							break;
 							case 'updatearticlelist':
