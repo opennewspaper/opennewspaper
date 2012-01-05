@@ -37,7 +37,7 @@ abstract class tx_newspaper_TimingLogger {
      */
     protected function formatMessage($message, tx_newspaper_TimingInfo $info, $depth) {
         if (!$message) $message = $info->getTimedFunction();
-        return str_repeat($this->indentString(), $depth) . $message;
+        return str_repeat($this->indentString(), max($depth, 0)) . $message;
     }
 
 }

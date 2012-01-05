@@ -107,7 +107,7 @@ class tx_newspaper_Smarty extends Smarty {
 
 	public function __construct() {
         if (!is_a($GLOBALS['TYPO3_DB'], 't3lib_DB')) {
-            die('UUUUUUHHHHHH...');
+            tx_newspaper::devlog('__construct(): no t3lib_DB object');
         }
 
         $this->setBasePath();
