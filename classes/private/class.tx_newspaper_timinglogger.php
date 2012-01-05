@@ -69,7 +69,7 @@ class tx_newspaper_Devlogger extends tx_newspaper_TimingLogger {
  *  No particular attention is paid to the order of the messages; the lines in
  *  file are written whenever the logger is called.
  */
-class tx_newspaper_SimpleFileLogger extends tx_newspaper_TimingLogger {
+class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
 
     /**
      *  Writes the execution time of a function to a text file.
@@ -148,7 +148,7 @@ class tx_newspaper_SimpleFileLogger extends tx_newspaper_TimingLogger {
  *  The log entries are written in the order calling function first, called
  *  functions below the caller.
  */
-class tx_newspaper_FileLogger extends tx_newspaper_SimpleFileLogger {
+class tx_newspaper_OrderedFileLogger extends tx_newspaper_FileLogger {
 
     /**
      *  Ensures that all messages which have not yet been written are logged.
