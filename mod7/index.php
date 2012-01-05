@@ -53,6 +53,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				var $pageinfo;
 				var $prefixId = 'tx_newspaper_mod7';
 
+                /** @var tx_newspaper_BE */
 				private $al_be = null; // backend object providing the methods for generating the backend for article list placement
 
 				/**
@@ -91,6 +92,9 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
+                                if (!is_a($GLOBALS['TYPO3_DB'], 't3lib_DB')) {
+                                    die('AUAUAUAUAUAUAUUUUU!');
+                                }
 								die($this->al_be->renderPlacement($input, false));
 							break;
 							case 'updatearticlelist':
