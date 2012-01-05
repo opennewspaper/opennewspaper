@@ -159,7 +159,9 @@ class tx_newspaper_OrderedFileLogger extends tx_newspaper_FileLogger {
      *  Ensures that all messages which have not yet been written are logged.
      */
     public function __destruct() {
-        $this->writeStackReversed();
+        if (is_a($GLOBALS['TYPO3_DB'], 't3lib_db')) {
+            $this->writeStackReversed();
+        }
     }
 
     /**
