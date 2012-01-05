@@ -511,7 +511,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			$selection[$i] = explode('|', $selection[$i]);
 			$ressort = array();
 			for ($j = 0; $j < count($selection[$i]); ++$j) {
-				$ressort[]['uid'] = $selection[$i][$j];
+                $tmp = array('uid' => $selection[$i][$j]);
+				$ressort[] = $tmp;
 				if(!isset($result[$j]) || !in_array($ressort, $result[$j])) {
 					$result[$j][] = $ressort;
 				}
