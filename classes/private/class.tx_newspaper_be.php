@@ -1406,9 +1406,7 @@ JSCODE;
 	 *  \return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
-        if (!is_a($GLOBALS['TYPO3_DB'], 't3lib_DB')) {
-            tx_newspaper::devlog('renderPlacement(): no t3lib_DB object');
-        }
+tx_newspaper::devlog('renderPlacement()', $GLOBALS['TYPO3_DB']);
 
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
 		if (
