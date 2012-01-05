@@ -107,8 +107,11 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
     ////////////////////////////////////////////////////////////////////////////
 
     private function getFileName() {
-        $tsconfig = tx_newspaper::getTSConfig();
-        return $tsconfig['newspaper.']['executionTimeLogFilename'];
+        if (!$this->filename) {
+            $tsconfig = tx_newspaper::getTSConfig();
+            $this->filename = $tsconfig['newspaper.']['executionTimeLogFilename'];
+        }
+        return $this->filename;
     }
 
     private function checkLogfileValid() {
@@ -137,6 +140,8 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
             );
         }
     }
+
+    private $filename = '';
 
 }
 
