@@ -182,7 +182,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function getArticles($number, $start = 0) {
 
-        $timer = tx_newspaper_ExecutionTimer::create();
+        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_ArticleList_Semiautomatic(" . $this->getUid() . ")::getArticles($number)");
 
 		$articles_sorted = $this->getSortedArticles($number, $start);
 
@@ -693,6 +693,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	private function getSortedArticles($number, $start = 0) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
 		$articles = $this->getArticlesAndOffsets($number, $start);
 
 		$articles_sorted = $this->sortArticles($articles);

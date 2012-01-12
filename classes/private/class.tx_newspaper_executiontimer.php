@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: lene
- * Date: 12/13/11
- * Time: 4:35 PM
- * To change this template use File | Settings | File Templates.
- */
 
 require_once('class.tx_newspaper_timinglogger.php');
 require_once('class.tx_newspaper_timinginfo.php');
