@@ -65,3 +65,22 @@ class tx_newspaper_TimingInfo {
 
 }
 
+/**
+ *  Class to instantiate null objects of class tx_newspaper_TimingInfo.
+ *  Used wherever a tx_newspaper_TimingInfo should be used, but is not available.
+ */
+class tx_newspaper_NullTimingInfo extends tx_newspaper_TimingInfo {
+
+    public function __construct() {}
+
+    public function __toString() { return ''; }
+
+    public function getExecutionTime() { return ''; }
+
+    public function getTimedObject() { return null; }
+
+    public function getTimedClass() { return ''; }
+
+    public function getTimedFunction() { return ''; }
+
+}

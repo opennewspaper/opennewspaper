@@ -76,8 +76,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 	function processDatamap_preProcessFieldArray(&$incomingFieldArray, $table, $id, $that) {
 #t3lib_div::devlog('tx_newspaper_Typo3Hook::processDatamap_preProcessFieldArray', 'newspaper', 0, array('incoming field array' => $incomingFieldArray, 'table' => $table, 'id' => $id, '_request' => $_REQUEST));
 		// pass data to newspaper classes
-        tx_newspaper_ExecutionTimer::start();
-        tx_newspaper_ExecutionTimer::logExecutionTime("\nArticle ID: $id\n");
+        tx_newspaper_ExecutionTimer::logMessage("\nArticle ID: $id\n");
         tx_newspaper_Article::processDatamap_preProcessFieldArray($incomingFieldArray, $table, $id, $that);
 	}
 

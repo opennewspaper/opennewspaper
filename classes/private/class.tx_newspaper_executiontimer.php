@@ -120,6 +120,10 @@ class tx_newspaper_ExecutionTimer {
         return new tx_newspaper_TimingInfo(array_pop(self::$execution_time_stack));
     }
 
+    public static function logMessage($message) {
+        self::writeToLogger($message, new tx_newspaper_NullTimingInfo(), 0);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -136,7 +140,8 @@ class tx_newspaper_ExecutionTimer {
         return intval(self::getTSconfig('logExecutionTimes'));
     }
 
-    private static function writeToLogger($message, tx_newspaper_TimingInfo $timing_info) {
+    public static function writeToLogger($message,
+                                         tx_newspaper_TimingInfo $timing_info) {
 
         if (!self::logExecutionTimes()) return;
 
@@ -147,7 +152,8 @@ class tx_newspaper_ExecutionTimer {
         self::$logger->log($message, $timing_info, self::$recursion_level);
     }
 
-    private static function executionTimeIsRelevant($timing_info) {
+    private static function executionTimeIsRelevant(tx_newspaper_TimingInfo $timing_info) {
+        if ($timing_info instanceof tx_newspaper_NullTimingInfo) return true;
         return ($timing_info->getExecutionTime() >= self::getMinimumTime());
     }
 
