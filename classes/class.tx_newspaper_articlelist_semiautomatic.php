@@ -737,6 +737,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function getRawArticleUIDs($number, $start = 0) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 
 		try {
@@ -771,6 +773,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 *  ) \endcode
 	 */
 	public function getOffsets(array $uids) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
 
 		if (!$uids) return array();
 
