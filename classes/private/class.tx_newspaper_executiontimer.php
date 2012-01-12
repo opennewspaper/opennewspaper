@@ -17,6 +17,11 @@ require_once('class.tx_newspaper_timinginfo.php');
  *  Also contains methods to measure the execution time between two arbitrary
  *  points in any code.
  *
+ *  Relevant TSconfig:
+ *  \code
+ *  newspaper.logExecutionTimes = 0|1
+ *  newspaper.logExecutionTimesThreshold = [minimum logged time in ms]
+ *  \endcode
  *  Usage example:
  *  \code
  *  function measured() {
@@ -135,17 +140,30 @@ class tx_newspaper_ExecutionTimer {
     }
 
     private static function logExecutionTimes() {
-        $tsconfig = tx_newspaper::getTSConfig();
-        return intval($tsconfig['newspaper.']['logExecutionTimes']);
+        return intval(self::getTSconfig('logExecutionTimes'));
     }
 
     private static function writeToLogger($message, tx_newspaper_TimingInfo $timing_info) {
 
         if (!self::logExecutionTimes()) return;
 
+        if (!self::executionTimeIsRelevant($timing_info)) return;
+
         self::ensureLoggerIsPresent();
 
         self::$logger->log($message, $timing_info, self::$recursion_level);
+    }
+
+    private static function executionTimeIsRelevant($timing_info) {
+        return ($timing_info->getExecutionTime() >= self::getMinimumTime());
+    }
+
+    private static function getTSconfig($key) {
+        $tsconfig = tx_newspaper::getTSConfig();
+        return $tsconfig['newspaper.'][$key];
+    }
+    private static function getMinimumTime() {
+        return intval(self::getTSconfig('logExecutionTimesThreshold'));
     }
 
     private static function ensureLoggerIsPresent() {
