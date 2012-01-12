@@ -182,7 +182,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function getArticles($number, $start = 0) {
 
-        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_ArticleList_Semiautomatic(" . $this->getUid() . ")::getArticles($number)");
+        $timer = tx_newspaper_ExecutionTimer::create("Automatic ArticleList(" . $this->getUid() . ")::getArticles($number)");
 
 		$articles_sorted = $this->getSortedArticles($number, $start);
 
@@ -706,6 +706,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	}
 
 	private function getArticlesAndOffsets($number, $start = 0) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		/*	Because articles may be moved off the bottom of the list, we need a
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */

@@ -65,7 +65,7 @@ ORDER BY sorting ASC
 LIMIT 0, 10
  */				
 
-        $timer = tx_newspaper_ExecutionTimer::create();
+        $timer = tx_newspaper_ExecutionTimer::create("Manual ArticleList(" . $this->getUid() . ")::getArticles($number)");
 
 		$results = tx_newspaper::selectRows(
 				$this->select_method_strategy->fieldsToSelect(),
