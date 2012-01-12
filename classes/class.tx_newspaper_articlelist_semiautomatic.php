@@ -716,6 +716,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
         $offsets = $this->getOffsets($this->select_method_strategy->getUids($uids));
 
+        tx_newspaper_ExecutionTimer::start();
 		$articles = array();
 		foreach ($uids as $uid) {
 			$articles[] = array(
@@ -723,6 +724,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 				'offset' => $this->select_method_strategy->getOffset($offsets, $uid)
 			);
 		}
+        tx_newspaper_ExecutionTimer::logExecutionTime("create " . sizeof($articles) . " articles");
+        
 		return $articles;
 	}
 	/// Get the UIDs of articles found by the conditions defining the list
