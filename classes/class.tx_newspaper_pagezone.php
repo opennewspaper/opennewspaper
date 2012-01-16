@@ -699,11 +699,17 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
     private function addInheritingPagezoneOnPage(tx_newspaper_Page $sub_page, array &$hierarchy) {
         $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
-        if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
-            if ($inheriting_pagezone->getParentForPlacement(false)->getUid() == $this->getUid()) {
-                $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
-            }
+        if ($this->isInheritedBy($inheriting_pagezone)) {
+            $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
         }
+    }
+
+    private function isInheritedBy(tx_newspaper_PageZone $pagezone) {
+        if (!$pagezone instanceof tx_newspaper_PageZone) return false;
+        $parent = $pagezone->getParentForPlacement(false);
+        if (!$parent instanceof tx_newspaper_PageZone) return false;
+        if ($parent->getUid() != $this->getUid()) return false;
+        return true;
     }
 
     /// As the name says, copies Extras from another PageZone
