@@ -704,7 +704,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         }
     }
 
-    private function isInheritedBy(tx_newspaper_PageZone $pagezone) {
+    private function isInheritedBy(tx_newspaper_PageZone $pagezone = null) {
         if (!$pagezone instanceof tx_newspaper_PageZone) return false;
         $parent = $pagezone->getParentForPlacement(false);
         if (!$parent instanceof tx_newspaper_PageZone) return false;
