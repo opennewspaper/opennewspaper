@@ -31,6 +31,16 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezonetype.php');
 
+class tx_newspaper_DoesntInheritException extends tx_newspaper_IllegalUsageException {
+
+    public function __construct(tx_newspaper_PageZone $pagezone, $origin_uid) {
+        parent::__construct(
+            'Tried to insert an Extra with an origin uid ' . $origin_uid .
+            ' which is neither in PageZone ' . $pagezone->getUid() . ' nor in any of the parents.'
+        );
+    }
+}
+
 /// A section of a page for an online edition of a newspaper
 /** Pages are divided into several independent sections, or zones, such as:
  *  - Left column, containing the main content area (article text, list of
@@ -1065,20 +1075,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function deduceInsertExtraFromParent($origin_uid) {
     	$parent = $this->getParentForPlacement();
 		if (!$parent instanceof tx_newspaper_PageZone) {
-            tx_newspaper::devlog('
-                Tried to insert an Extra with an origin uid which is neither in the current PageZone nor in any of the parents.',
-                array(
-                    'pagezone' => $this->getUid(),
-                    'origin uid' => $origin_uid
-                )
-            );
-            return 0;
-/*
-			throw new tx_newspaper_IllegalUsageException(
-				'Tried to insert an Extra with an origin uid which is neither in the current' .
-				' PageZone nor in any of the parents.'
-				);
-*/
+            throw new tx_newspaper_DoesntInheritException($this, $origin_uid);
 		} else {
 			return $parent->getInsertPosition($origin_uid);
 		}
