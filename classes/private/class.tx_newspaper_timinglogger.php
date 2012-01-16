@@ -100,8 +100,11 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
     }
     
     protected function writeToLogfile($message) {
-        $f = new tx_newspaper_File($this->getFileName());
-        $f->write($message . "\n");
+        if (!$this->filehandle) {
+            $this->filehandle = new tx_newspaper_File($this->getFileName());
+        }
+
+        $this->filehandle->write($message . "\n");
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -141,6 +144,8 @@ class tx_newspaper_FileLogger extends tx_newspaper_TimingLogger {
         }
     }
 
+    /** @var tx_newspaper_File */
+    protected  $filehandle = null;
     private $filename = '';
 
 }
@@ -159,7 +164,7 @@ class tx_newspaper_OrderedFileLogger extends tx_newspaper_FileLogger {
      *  Ensures that all messages which have not yet been written are logged.
      */
     public function __destruct() {
-        if (is_a($GLOBALS['TYPO3_DB'], 't3lib_db')) {
+        if (!is_null($this->filehandle)) {
             $this->writeStackReversed();
         }
     }
