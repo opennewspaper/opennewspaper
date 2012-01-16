@@ -1048,10 +1048,13 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function deduceInsertExtraFromParent($origin_uid) {
     	$parent = $this->getParentForPlacement();
 		if (!$parent instanceof tx_newspaper_PageZone) {
+            return 0;
+/*
 			throw new tx_newspaper_IllegalUsageException(
 				'Tried to insert an Extra with an origin uid which is neither in the current' .
 				' PageZone nor in any of the parents.'
 				);
+*/
 		} else {
 			return $parent->getInsertPosition($origin_uid);
 		}
