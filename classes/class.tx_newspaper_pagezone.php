@@ -691,16 +691,22 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $sub_pages = $this->getParentPage()->getSubPagesOfSameType();
 
         foreach ($sub_pages as $sub_page) {
-            $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
-            if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
-                $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
-            }
+            $this->addInheritingPagezoneOnPage($sub_page, $hierarchy);
         }
 
         return $hierarchy;
     }
 
-	/// As the name says, copies Extras from another PageZone
+    private function addInheritingPagezoneOnPage(tx_newspaper_Page $sub_page, array &$hierarchy) {
+        $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
+        if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
+            if ($inheriting_pagezone->getParentForPlacement(true)->getUid() == $this->getUid()) {
+                $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
+            }
+        }
+    }
+
+    /// As the name says, copies Extras from another PageZone
 	/** In particular, it copies the entry from the abstract Extra supertable,
 	 *  but not the data from the concrete Extra_* tables. I.e. it creates a
 	 *  new Extra which is a reference to a concrete Extra for each copyable

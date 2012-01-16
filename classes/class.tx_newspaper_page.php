@@ -267,9 +267,9 @@ class tx_newspaper_Page
 	 *  tx_newspaper_PageZoneType on every  tx_newspaper_Page. If it is found on
 	 *  \c $this, it is returned. Otherwise, \c null is returned.
 	 *
-	 *  \param $type Wanted tx_newspaper_PageZoneType.
+	 *  @param $type Wanted tx_newspaper_PageZoneType.
 	 *
-	 *  \return tx_newspaper_PageZone of type \p $type, or \c null.
+	 *  @return tx_newspaper_PageZone of type \p $type, or \c null.
 	 */
 	function getPageZone(tx_newspaper_PageZoneType $type) {
 		if (!is_array($this->getPageZones())) return null;
@@ -511,6 +511,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 
  	}
 
+    /**
+     * @return tx_newspaper_Page[]
+     */
 	public function getSubPagesOfSameType() {
 
 		$sub_pages = array();
