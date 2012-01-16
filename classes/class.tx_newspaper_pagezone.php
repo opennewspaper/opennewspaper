@@ -700,7 +700,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function addInheritingPagezoneOnPage(tx_newspaper_Page $sub_page, array &$hierarchy) {
         $inheriting_pagezone = $sub_page->getPageZone($this->getPageZoneType());
         if ($inheriting_pagezone instanceof tx_newspaper_PageZone) {
-            if ($inheriting_pagezone->getParentForPlacement(true)->getUid() == $this->getUid()) {
+            if ($inheriting_pagezone->getParentForPlacement(false)->getUid() == $this->getUid()) {
                 $hierarchy = $inheriting_pagezone->getInheritanceHierarchyDown(true, $hierarchy);
             }
         }
