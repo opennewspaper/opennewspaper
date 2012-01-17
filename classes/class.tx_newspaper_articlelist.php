@@ -820,6 +820,7 @@ body {
 	/// tx_newspaper_Section this Article List is associated with, if any
 	protected $section = null;
 
+    /** @var SelectMethodStrategy */
     protected $select_method_strategy = null;
 
 	/// SQL table for persistence for the abstract record
