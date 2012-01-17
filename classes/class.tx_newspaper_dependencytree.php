@@ -540,6 +540,8 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
 function getAllPagesWithSectionListExtra(tx_newspaper_Section $section) {
 
+    $timer = tx_newspaper_ExecutionTimer::create();
+
     static $section_list_pages = array();
 
     if (!isset($section_list_pages[$section->__toString()])) {
