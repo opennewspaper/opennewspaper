@@ -88,6 +88,9 @@ LIMIT 0, 10
 	}
 
 	function assembleFromUIDs(array $uids) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$this->clearList();
 		for($i = 0; $i < sizeof($uids); $i++) {
 //			t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));
