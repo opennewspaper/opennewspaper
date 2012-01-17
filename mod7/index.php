@@ -465,8 +465,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 
 
-
-
 				/// save all the articles of a single section
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
@@ -474,89 +472,97 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				function saveSection($input) {
 
                     tx_newspaper_ExecutionTimer::logMessage("saveSection: ArticleIDs " . $input['articleids']);
-                    tx_newspaper_ExecutionTimer::start();
+                    $timer = tx_newspaper_ExecutionTimer::create();
 
-//t3lib_div::devlog('saveSection()', 'newspaper', 0, array('input' => $input));
-                    $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
-					$offsets = array();
-
-					//split offsets from article ids
-					if (isset($articleIds[0]) && strstr($articleIds[0], '_')) {
-						for ($i = 0; $i < count($articleIds); ++$i) {
-							$articleId = explode('_', $articleIds[$i]);
-							$offsets[$i] = $articleId[0];
-							$articleIds[$i] = $articleId[1];
-						}
-					}
-
-					$result = false;
+                    $articleIds = $offsets = array();
+                    self::extractIDsAndOffsets($input, $articleIds, $offsets);
 
 					if (substr($input['element'], 0, 7) == 'placer_') {
-						// section article list
-						$input['section'] = $input['element']; // section al type
-
-						$sectionId = $this->al_be->extractElementId($input['section']);
-						$section = new tx_newspaper_section ($sectionId);
-						$sectionType = get_class($section->getArticleList());
-
-						// save differently depending on list type
-						switch(strtolower($sectionType)) {
-							case 'tx_newspaper_articlelist_manual' :
-								$result = $section->getArticleList()->assembleFromUIDs($articleIds);
-							break;
-							case 'tx_newspaper_articlelist_semiautomatic' :
-								$articleIdsAndOffsets = array ();
-								for ($i = 0; $i < count($articleIds); ++$i) {
-									$articleIdsAndOffsets[] = array(
-										$articleIds[$i],
-										(isset($offsets[$i])) ? $offsets[$i] : '0'
-									);
-								}
-								$result = $section->getArticleList()->assembleFromUIDs($articleIdsAndOffsets);
-							break;
-							default:
-								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
-						}
-
-                        tx_newspaper_ExecutionTimer::logExecutionTime('tx_newspaper_module7::saveSection("' . $section->getAttribute('section_name') . '")');
-
-                        return true;
-
+                        $this->handleSection($input, $articleIds, $offsets);
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
-						// non-section-article list
-						$input['al'] = $input['element']; // non-section al type
-
-						$al_uid = intval($this->al_be->extractElementId($input['al']));
-
-						$al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
-
-						// save differently depending on list type
-						switch ($al->getTable()) {
-							case 'tx_newspaper_articlelist_manual' :
-								$result = $al->assembleFromUIDs($articleIds);
-							break;
-							case 'tx_newspaper_articlelist_semiautomatic' :
-								$articleIdsAndOffsets = array ();
-								for ($i = 0; $i < count($articleIds); ++$i) {
-									$articleIdsAndOffsets[] = array(
-										$articleIds[$i],
-										(isset($offsets[$i])) ? $offsets[$i] : '0'
-									);
-								}
-								$result = $al->assembleFromUIDs($articleIdsAndOffsets);
-							break;
-						}
-
-tx_newspaper_ExecutionTimer::logExecutionTime('saveSection("' . $al->getTable() . $al->getUid() .  '")');
-						return true;
-
-					}
-					t3lib_div::devlog('saveSection() - unknown type [element]', 'newspaper', 3, array('input' => $input));
+                        $this->handleAL($input, $articleIds, $offsets);
+					} else {
+                        t3lib_div::devlog('saveSection() - unknown type [element]', 'newspaper', 3, array('input' => $input));
+                        return false;
+                    }
+                    return true;
 
 				}
 
+    /// split offsets from article ids
+    private static function extractIDsAndOffsets($input, &$articleIds, &$offsets) {
+        $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
+        $offsets = array();
 
-				/// check several article lists if they have been modified in database
+        if (isset($articleIds[0]) && strstr($articleIds[0], '_')) {
+            for ($i = 0; $i < count($articleIds); ++$i) {
+                $articleId = explode('_', $articleIds[$i]);
+                $offsets[$i] = $articleId[0];
+                $articleIds[$i] = $articleId[1];
+            }
+        }
+    }
+
+    private function handleSection($input, $articleIds, $offsets) {
+        // section article list
+        $input['section'] = $input['element']; // section al type
+
+        $sectionId = $this->al_be->extractElementId($input['section']);
+        $section = new tx_newspaper_section ($sectionId);
+        $sectionType = get_class($section->getArticleList());
+
+        $timer = tx_newspaper_ExecutionTimer::create('tx_newspaper_module7::handleSection("' . $section->getAttribute('section_name') . '")');
+
+        // save differently depending on list type
+        switch (strtolower($sectionType)) {
+            case 'tx_newspaper_articlelist_manual' :
+                $section->getArticleList()->assembleFromUIDs($articleIds);
+                return;
+            case 'tx_newspaper_articlelist_semiautomatic' :
+                $articleIdsAndOffsets = array();
+                for ($i = 0; $i < count($articleIds); ++$i) {
+                    $articleIdsAndOffsets[] = array(
+                        $articleIds[$i],
+                        (isset($offsets[$i])) ? $offsets[$i] : '0'
+                    );
+                }
+                $section->getArticleList()->assembleFromUIDs($articleIdsAndOffsets);
+                return;
+            default:
+                t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
+        }
+    }
+
+    private function handleAL($input, $articleIds, $offsets) {
+        // non-section-article list
+        $input['al'] = $input['element']; // non-section al type
+
+        $al_uid = intval($this->al_be->extractElementId($input['al']));
+
+        $al = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
+
+        $timer = tx_newspaper_ExecutionTimer::create('tx_newspaper_module7::handleAL("' . $al->getTable() . $al->getUid() .  '")');
+
+        // save differently depending on list type
+        switch ($al->getTable()) {
+            case 'tx_newspaper_articlelist_manual' :
+                $al->assembleFromUIDs($articleIds);
+                return;
+            case 'tx_newspaper_articlelist_semiautomatic' :
+                $articleIdsAndOffsets = array();
+                for ($i = 0; $i < count($articleIds); ++$i) {
+                    $articleIdsAndOffsets[] = array(
+                        $articleIds[$i],
+                        (isset($offsets[$i])) ? $offsets[$i] : '0'
+                    );
+                }
+                $al->assembleFromUIDs($articleIdsAndOffsets);
+                return;
+        }
+    }
+
+
+    /// check several article lists if they have been modified in database
 				/** in comparison the the displayed ones in the form
 				 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return ?
