@@ -178,7 +178,6 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_DependencyTree::executeActionsOnPages($key)");
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -327,17 +326,13 @@ class tx_newspaper_DependencyTree {
         $when = $action['when'];
         $pages = array();
 
-        tx_newspaper_ExecutionTimer::start();
         if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
         if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
         if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
         if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
         if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
-        tx_newspaper_ExecutionTimer::logExecutionTime('executeActionOnPages(): get pages');
 
-        tx_newspaper_ExecutionTimer::start();
         call_user_func($function, $pages);
-        tx_newspaper_ExecutionTimer::logExecutionTime("executeActionOnPages(): call_user_func($function)");
     }
 
     private function getStarttime() {

@@ -473,8 +473,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function saveSection($input) {
 
-tx_newspaper::devlog("placeArticle", $input);
-tx_newspaper_ExecutionTimer::start();
+                    tx_newspaper_ExecutionTimer::logMessage("saveSection: ArticleIDs " . $input['articleids']);
+                    tx_newspaper_ExecutionTimer::start();
 
 //t3lib_div::devlog('saveSection()', 'newspaper', 0, array('input' => $input));
                     $articleIds = $input['articleids'] ? explode('|', $input['articleids']) : array();
@@ -517,8 +517,10 @@ tx_newspaper_ExecutionTimer::start();
 							default:
 								t3lib_div::devlog('Unknown article list type', 'newspaper', 3, array('sectionType' => $sectionType, 'input' => $input));
 						}
-tx_newspaper_ExecutionTimer::logExecutionTime('saveSection("' . $section->getAttribute('section_name') . '")');
-						return true;
+
+                        tx_newspaper_ExecutionTimer::logExecutionTime('tx_newspaper_module7::saveSection("' . $section->getAttribute('section_name') . '")');
+
+                        return true;
 
 					} elseif (substr($input['element'], 0, 3) == 'al_') {
 						// non-section-article list
