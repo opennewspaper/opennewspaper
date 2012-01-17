@@ -710,8 +710,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-        $this->useOptimizedGetArticles(true);
-
 		/*	Because articles may be moved off the bottom of the list, we need a
 		 *  safety margin. Twice as many articles as required should be enough.
 		 */
