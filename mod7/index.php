@@ -516,6 +516,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
         // save differently depending on list type
         switch (strtolower($sectionType)) {
             case 'tx_newspaper_articlelist_manual' :
+                $section->getArticleList()->useOptimizedGetArticles(true);
                 $section->getArticleList()->assembleFromUIDs($articleIds);
                 return;
             case 'tx_newspaper_articlelist_semiautomatic' :
