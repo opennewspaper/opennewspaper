@@ -525,8 +525,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-        $al->useOptimizedGetArticles(true);
-
         switch ($al->getTable()) {
             case 'tx_newspaper_articlelist_manual' :
                 $al->assembleFromUIDs($articleIds);
