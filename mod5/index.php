@@ -703,9 +703,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 
 	private function makeFolderMenuEntry($source_id, tx_newspaper_SourcePath $entry) {
-		return '<option title="' . utf8_encode($entry->getTitle()) .
+		return '<option title="' . ($entry->getTitle()) .
                      '" onclick="changeSource(\'' . $source_id . '\',\'' . $entry->getID() .'\')"' . '>' .
-                   utf8_encode($entry->getTitle()) .
+                   ($entry->getTitle()) .
                '</option>' . "\n";
 	}
 
