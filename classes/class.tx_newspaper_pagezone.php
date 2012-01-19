@@ -1132,6 +1132,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  Extras are ordered by paragraph first, position second
 	 */
 	protected function indexOfExtra(tx_newspaper_Extra $extra) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         return $this->binarySearchForExtra($extra, 0, sizeof($this->getExtras())-1);
 	}
 
