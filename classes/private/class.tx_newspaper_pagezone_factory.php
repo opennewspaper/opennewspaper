@@ -58,6 +58,7 @@ class tx_newspaper_PageZone_Factory {
 	 *  @return tx_newspaper_PageZone A concrete object of a class derived from tx_newspaper_PageZone
 	 */
 	public function create($uid) {
+        $timer = tx_newspaper_ExecutionTimer::create();
 		/// Read actual type and UID of the PageZone to instantiate from DB
 		$row = tx_newspaper::selectOneRow(
 			'pagezone_table, pagezone_uid', 'tx_newspaper_pagezone', "uid = $uid"

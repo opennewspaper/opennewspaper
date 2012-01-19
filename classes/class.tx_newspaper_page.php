@@ -285,13 +285,12 @@ class tx_newspaper_Page
 
     private function selectPagezoneUidFromPagezoneTable(tx_newspaper_PageZoneType $type, $table) {
 
-        $timer = tx_newspaper_ExecutionTimer::create();
-
         $row = tx_newspaper::selectZeroOrOneRows(
             'tx_newspaper_pagezone.uid',
             "tx_newspaper_pagezone JOIN $table ON tx_newspaper_pagezone.pagezone_uid = $table.uid",
             "pagezone_table = '$table' AND page_id = " . $this->getAttribute('uid') . ' AND pagezonetype_id = ' . $type->getUid()
         );
+
         return intval($row['uid']);
     }
 
