@@ -299,6 +299,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 
 	/// Returns all pages attached to the current section
+    /** @return tx_newspaper_Page[] */
 	public function getSubPages() {
         if (!$this->subPages) {
             $row = tx_newspaper::selectRows(

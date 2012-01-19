@@ -483,7 +483,8 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
         return $this->getParentSection()->getTypo3PageID();
     }
 
- 	/// Find page of same page type under parent section.	*/
+ 	/// Find page of same page type under parent section.
+    /** @return tx_newspaper_Page */
  	public function getParentPageOfSameType() {
 
 	 	/** First get parent section of the current page...	*/

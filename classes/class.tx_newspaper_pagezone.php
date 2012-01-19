@@ -1208,11 +1208,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			/** Look for PageZone of the same type. If no active PageZone is
 			 *  found, continue looking in the parent section.
 			 */
-			foreach ($current_page->getActivePageZones() as $parent_pagezone) {
-				if ($parent_pagezone->getPageZoneType() == $this->getPageZoneType()) {
-					return $parent_pagezone;
-                }
-			}
+            $parent_pagezone = $current_page->getPageZone($this->getPageZoneType());
+            if (!is_null($parent_pagezone)) return $parent_pagezone;
 
 		}
 
