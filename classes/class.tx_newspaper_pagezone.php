@@ -591,14 +591,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		 */
 	}
 
-    private function changePositionOfExtra($move_extra, $origin_uid) {
+    private function changePositionOfExtra(tx_newspaper_Extra $move_extra, $origin_uid) {
         $timer = tx_newspaper_ExecutionTimer::create();
         $move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
         $move_extra->store();
     }
 
     ///	Check that \p $move_extra is really on $this
-    private function checkExtraIsOnThis($move_extra) {
+    private function checkExtraIsOnThis(tx_newspaper_Extra $move_extra) {
         $timer = tx_newspaper_ExecutionTimer::create();
         try {
             $this->indexOfExtra($move_extra);
@@ -608,7 +608,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     ///	Move Extra on inheriting PageZones
-    private function moveExtraOnInheritingPagezones($move_extra, $origin_uid) {
+    private function moveExtraOnInheritingPagezones(tx_newspaper_Extra $move_extra, $origin_uid) {
         $timer = tx_newspaper_ExecutionTimer::create();
         foreach ($this->getInheritanceHierarchyDown(false) as $inheriting_pagezone) {
             $copied_extra = $inheriting_pagezone->findExtraByOriginUID($move_extra->getOriginUid());
