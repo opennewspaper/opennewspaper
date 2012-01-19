@@ -56,6 +56,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	const EXTRA_SPACING = 1024;
 
+    protected static $lazy_creation = false;
+    static public function setLazyCreation($lazy) {
+        self::$lazy_creation = $lazy;
+    }
+
 	/// Configure Smarty rendering engine
 	public function __construct($uid = 0) {
 		/// Configure Smarty rendering engine
@@ -679,6 +684,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
+        self::setLazyCreation(true);
+
 		if ($including_myself) $hierarchy[] = $this;
 
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
@@ -1199,7 +1206,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		$current_page = $this->getParentPage();
+        $current_page = $this->getParentPage();
 		while ($current_page) {
 
 			$current_page = $current_page->getParentPageOfSameType();

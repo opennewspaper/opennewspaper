@@ -46,15 +46,17 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
  *  \include res/templates/tx_newspaper_pagezone_page.tmpl
  */
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
-		
+
 	public function __construct($uid = 0) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
 		parent::__construct($uid);
 		if ($uid) {
-			$this->readExtrasForPagezoneID($uid);
-		    $this->readAttributes($this->getTable(), $uid);
+            if (!self::$lazy_creation) {
+                $this->readExtrasForPagezoneID($uid);
+       		    $this->readAttributes($this->getTable(), $uid);
+            }
 		    $this->pagezonetype = new tx_newspaper_PageZoneType($this->attributes['pagezonetype_id']);
 		    $this->pagezone_uid = $this->createPageZoneRecord();
 		}
