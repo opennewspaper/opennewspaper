@@ -384,6 +384,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** @return tx_newspaper_Page on which the PageZone lies.
 	 */
 	public function getParentPage() {
+        $timer = tx_newspaper_ExecutionTimer::create();
 		if (!$this->parent_page) {
 			if (!$this->parent_page_id) {
 				$pagezone_record = tx_newspaper::selectOneRow(
