@@ -495,6 +495,8 @@ class tx_newspaper_BE {
 
 	public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$data = array();
 		$extra_data = array();
 
