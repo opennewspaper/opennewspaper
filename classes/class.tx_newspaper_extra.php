@@ -365,7 +365,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
     public function setAttribute($attribute, $value) {
 
-        $timer = tx_newspaper_ExecutionTimer::create();
+        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_Extra(". $this->getExtraUid() . ")::setAttribute($attribute, $value)");
 
 		if (!$this->extra_attributes) {
             $this->readExtraAttributes();
