@@ -466,6 +466,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
+        self::setLazyCreation(true);
+
 		if (!$structure_only) {
 			$inherit_mode = intval($this->getAttribute('inherits_from'));
 
