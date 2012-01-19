@@ -273,8 +273,6 @@ class tx_newspaper_Page
 	 */
 	function getPageZone(tx_newspaper_PageZoneType $type) {
 
-        $timer = tx_newspaper_ExecutionTimer::create();
-
         foreach (array('tx_newspaper_pagezone_page', 'tx_newspaper_article') as $table) {
             $uid = $this->selectPagezoneUidFromPagezoneTable($type, $table);
             if ($uid) return tx_newspaper_PageZone_Factory::getInstance()->create($uid);
@@ -500,8 +498,6 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
  	/// Find page of same page type under parent section.
     /** @return tx_newspaper_Page */
  	public function getParentPageOfSameType() {
-
-         $timer = tx_newspaper_ExecutionTimer::create();
 
 	 	/** First get parent section of the current page...	*/
 	 	$parent_section = $this->getParentSection();

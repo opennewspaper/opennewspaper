@@ -384,7 +384,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** @return tx_newspaper_Page on which the PageZone lies.
 	 */
 	public function getParentPage() {
-        $timer = tx_newspaper_ExecutionTimer::create();
 		if (!$this->parent_page) {
 			if (!$this->parent_page_id) {
 				$pagezone_record = tx_newspaper::selectOneRow(
@@ -1202,12 +1201,15 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
 
+    static private $parents_cache = array();
 	/** Step from parent to parent until a PageZone with matching type is
 	 *  found.
 	 */
 	protected function getParentPageZoneOfSameType() {
 
         $timer = tx_newspaper_ExecutionTimer::create();
+
+        if (isset(self::$parents_cache[$this->getAbstractUid()])) return self::$parents_cache[$this->getAbstractUid()];
 
         $current_page = $this->getParentPage();
 		while ($current_page) {
@@ -1219,7 +1221,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			 *  found, continue looking in the parent section.
 			 */
             $parent_pagezone = $current_page->getPageZone($this->getPageZoneType());
-            if (!is_null($parent_pagezone)) return $parent_pagezone;
+            if (!is_null($parent_pagezone)) {
+                self::$parents_cache[$this->getAbstractUid()] = $parent_pagezone;
+                return $parent_pagezone;
+            }
 
 		}
 
