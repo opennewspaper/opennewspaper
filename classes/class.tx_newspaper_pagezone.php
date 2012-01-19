@@ -459,6 +459,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 */
 	public function getParentForPlacement($structure_only = false) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		if (!$structure_only) {
 			$inherit_mode = intval($this->getAttribute('inherits_from'));
 
@@ -1194,6 +1196,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  found.
 	 */
 	protected function getParentPageZoneOfSameType() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
 
 		$current_page = $this->getParentPage();
 		while ($current_page) {
