@@ -592,14 +592,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	}
 
     private function changePositionOfExtra(tx_newspaper_Extra $move_extra, $origin_uid) {
-        $timer = tx_newspaper_ExecutionTimer::create();
         $move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
         $move_extra->store();
     }
 
     ///	Check that \p $move_extra is really on $this
     private function checkExtraIsOnThis(tx_newspaper_Extra $move_extra) {
-        $timer = tx_newspaper_ExecutionTimer::create();
         try {
             $this->indexOfExtra($move_extra);
         } catch (tx_newspaper_InconsistencyException $e) {
@@ -690,6 +688,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 	/// Reads page zones which have been explicitly set to inherit from \c $this.
 	private function getExplicitlyInheritingPagezoneHierarchy() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$hierarchy = array();
 
 		$table = tx_newspaper::getTable($this);
@@ -708,6 +709,9 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
 		/// look for page zones on pages in section down the section hierarchy
     private function addInheritingPagezonesDownTheHierarchy(array $hierarchy) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         $sub_pages = $this->getParentPage()->getSubPagesOfSameType();
 
         foreach ($sub_pages as $sub_page) {
