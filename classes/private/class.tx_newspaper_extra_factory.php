@@ -104,6 +104,8 @@ class tx_newspaper_Extra_Factory {
 	 */
 	public function create($uid) {
 
+        $timer = tx_newspaper_ExecutionTimer::create("tx_newspaper_ExtraFactory::create($uid)");
+
         try {
             /// Read actual type and UID of the Extra to instantiate from DB
             $row =  tx_newspaper::selectOneRow(
