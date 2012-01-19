@@ -233,6 +233,9 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 	 *  \param $extra_uid uid of extra
 	 */
 	private function processExtraMoveAfter($origin_uid, $pz_uid, $extra_uid) {
+
+        tx_newspaper_ExecutionTimer::start();
+
 		$e = tx_newspaper_Extra_Factory::getInstance()->create(intval($extra_uid));
 		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid));
 		$pz->moveExtraAfter($e, $origin_uid);
@@ -248,6 +251,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
         if (!$pz->isConcreteArticle()) {
 	        tx_newspaper_workflow::logPlacement('tx_newspaper_pagezone', $pz_uid, array('origin uid' => $origin_uid, 'extra uid' => $extra_uid), NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER);
         }
+
+        tx_newspaper_ExecutionTimer::logExecutionTime();
 
 		die();
 	}
