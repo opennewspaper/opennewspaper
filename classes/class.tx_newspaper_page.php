@@ -275,15 +275,24 @@ class tx_newspaper_Page
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		if (!is_array($this->getPageZones())) return null;
- 		foreach ($this->getPageZones() as $pagezone) {
- 			if ($pagezone->getPageZoneType()->getUid() == $type->getUid())
- 				return $pagezone;
- 		}
+        foreach (array('tx_newspaper_pagezone_page', 'tx_newspaper_article') as $table) {
+            $uid = $this->selectPagezoneUidFromPagezoneTable($type, $table);
+            if ($uid) return tx_newspaper_PageZone_Factory::getInstance()->create($uid);
+        }
+
  		return null;
 	}
 
-	/// Render the page, containing all associated tx_newspaper_PageZone s
+    private function selectPagezoneUidFromPagezoneTable(tx_newspaper_PageZoneType $type, $table) {
+        $row = tx_newspaper::selectZeroOrOneRows(
+            'uid',
+            "tx_newspaper_pagezone JOIN $table ON tx_newspaper_pagezone.pagezone_uid = $table.uid",
+            "pagezone_table = '$table' AND page_id = " . $this->getAttribute('uid') . ' AND pagezonetype_id = ' . $type->getUid()
+        );
+        return intval($row['uid']);
+    }
+
+    /// Render the page, containing all associated tx_newspaper_PageZone s
 	/** The correct template is found the following way.
 	 *  - The template set for the page is set via TSConfig.
 	 *  - The name for the page is found via its tx_newspaper_PageType.
