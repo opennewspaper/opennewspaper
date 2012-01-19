@@ -711,6 +711,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		global $BE_USER;
 		/// \todo: check permissions?
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$this->show_levels_above = $BE_USER->getModuleData('tx_newspaper/mod3/index.php/show_levels_above'); // read from be user
 		if ($this->show_levels_above !== true) $this->show_levels_above = false; // make sure it's boolean
 
@@ -921,6 +923,8 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 				 */
 				function moduleContent() {
 					global $LANG;
+
+                    $timer = tx_newspaper_ExecutionTimer::create();
 
 					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
 					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
