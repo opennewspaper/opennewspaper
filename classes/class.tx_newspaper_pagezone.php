@@ -1219,15 +1219,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
      */
     public function getExtras($hidden_too = false) {
 
-        tx_newspaper_ExecutionTimer::start();
-
     	if (empty($this->extras) || $hidden_too) {
             $this->readExtrasForPagezoneID($this->getUid(), $hidden_too);
         }
 
         usort($this->extras, array(get_class($this), 'compareExtras'));
 
-        tx_newspaper_ExecutionTimer::logExecutionTime($this->getPageZoneUid()."->getExtras(): " .sizeof($this->extras));
         return $this->extras;
     }
 

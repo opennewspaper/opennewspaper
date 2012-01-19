@@ -339,58 +339,63 @@ class tx_newspaper_BE {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		$extra = $pz->getExtras();
-
 		$data = array();
 
-		for ($i = 0; $i < sizeof($extra); $i++) {
-
+		foreach ($pz->getExtras() as $extra) {
 			//	don't display extras for which attribute gui_hidden is set
-			if ($extra[$i]->getAttribute('gui_hidden')) continue;
-			$extra_data = array(
-				'extra_type' => $extra[$i]->getTitle(),
-				'uid' => $extra[$i]->getExtraUid(),
-				'title' => $extra[$i]->getDescription(),
-				'origin_placement' => $extra[$i]->isOriginExtra(),
-				'origin_uid' => $extra[$i]->getOriginUid(),
-				'concrete_table' => $extra[$i]->getTable(),
-				'concrete_uid' => $extra[$i]->getUid(),
-				'inherits_from' =>  $pz->getExtraOriginAsString($extra[$i]),
-				'pass_down' => $extra[$i]->getAttribute('is_inheritable'),
-				'notes' => $extra[$i]->getAttribute('notes'),
-				'template_set' => $extra[$i]->getAttribute('template_set'),
-                'tstamp' => $extra[$i]->getAttribute('tstamp'),
-			);
-			// the following attributes aren't always available
-			try {
-				$extra_data['hidden'] = $extra[$i]->getAttribute('hidden');
-			} catch (tx_newspaper_WrongAttributeException $e) {
+			if ($extra->getAttribute('gui_hidden')) continue;
 
-			}
-			try {
-				$extra_data['show'] = $extra[$i]->getAttribute('show_extra');
-			} catch (tx_newspaper_WrongAttributeException $e) {
-
-			}
-			try {
-				$extra_data['paragraph'] = $extra[$i]->getAttribute('paragraph');
-			} catch (tx_newspaper_WrongAttributeException $e) {
-
-			}
-			try {
-				$extra_data['position'] = $extra[$i]->getAttribute('position');
-			} catch (tx_newspaper_WrongAttributeException $e) {
-
-			}
-
-			// render html dropdown and add to array
-			$extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);
-
-			$data[] = $extra_data;
-
+			$data[] = self::populateExtraData($extra, $pz);
 		}
 		return $data;
 	}
+
+    private static function populateExtraData(tx_newspaper_Extra $extra, $pz) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $extra_data = array(
+            'extra_type' => $extra->getTitle(),
+            'uid' => $extra->getExtraUid(),
+            'title' => $extra->getDescription(),
+            'origin_placement' => $extra->isOriginExtra(),
+            'origin_uid' => $extra->getOriginUid(),
+            'concrete_table' => $extra->getTable(),
+            'concrete_uid' => $extra->getUid(),
+            'inherits_from' => $pz->getExtraOriginAsString($extra),
+            'pass_down' => $extra->getAttribute('is_inheritable'),
+            'notes' => $extra->getAttribute('notes'),
+            'template_set' => $extra->getAttribute('template_set'),
+            'tstamp' => $extra->getAttribute('tstamp'),
+        );
+        // the following attributes aren't always available
+        try {
+            $extra_data['hidden'] = $extra->getAttribute('hidden');
+        } catch (tx_newspaper_WrongAttributeException $e) {
+
+        }
+        try {
+            $extra_data['show'] = $extra->getAttribute('show_extra');
+        } catch (tx_newspaper_WrongAttributeException $e) {
+
+        }
+        try {
+            $extra_data['paragraph'] = $extra->getAttribute('paragraph');
+        } catch (tx_newspaper_WrongAttributeException $e) {
+
+        }
+        try {
+            $extra_data['position'] = $extra->getAttribute('position');
+        } catch (tx_newspaper_WrongAttributeException $e) {
+
+        }
+
+        // render html dropdown and add to array
+        $extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);
+
+        return $extra_data;
+
+    }
 
 
 /// \todo: is this really needed?
