@@ -674,8 +674,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 
 	public function store() {
 
-        $timer = tx_newspaper_ExecutionTimer::create();
-
 		if ($this->getUid()) {
             $this->updateExisting();
         } else {
@@ -686,8 +684,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
 	}
 
     private function insertNew() {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
 
         if ($this->extra_attributes) {
             throw new tx_newspaper_InconsistencyException(
@@ -713,8 +709,6 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
     }
 
     private function updateExisting() {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
 
         $this->getAttribute('uid');
 
