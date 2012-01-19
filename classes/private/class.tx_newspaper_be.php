@@ -336,6 +336,9 @@ class tx_newspaper_BE {
 /// \todo: move to pagezone
 /// \todo: correct sorting: negative paragraph at the bottom
 	public static function collectExtras(tx_newspaper_PageZone $pz) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		$extra = $pz->getExtras();
 
 		$data = array();
