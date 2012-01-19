@@ -578,26 +578,34 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
             "tx_newspaper_PageZone(" . $this->getUid() . ")::moveExtraAfter(" . $move_extra->getUid() . ", $origin_uid, " . intval($recursive).")"
         );
 
+        $this->checkExtraIsOnThis($move_extra);
+
+        $this->changePositionOfExtra($move_extra, $origin_uid);
+
+		if (!$recursive) return;
+
+        $this->moveExtraOnInheritingPagezones($move_extra, $origin_uid);
+
+		/** ... and that's it. We don't need to update the M-M association table
+		 *  because we already asserted that the Extra is on the PageZone.
+		 */
+	}
+
+    private function changePositionOfExtra($move_extra, $origin_uid) {
+        $timer = tx_newspaper_ExecutionTimer::create();
+        $move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
+        $move_extra->store();
+    }
+
+    ///	Check that \p $move_extra is really on $this
+    private function checkExtraIsOnThis($move_extra) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         try {
-            ///	Check that $move_extra is really on $this
             $this->indexOfExtra($move_extra);
         } catch (tx_newspaper_InconsistencyException $e) {
             throw new tx_newspaper_InconsistencyException($e->getMessage(), true);
         }
-
-		$move_extra->setAttribute('position', $this->getInsertPosition($origin_uid));
-
-		/// Write Extra to DB
-		$move_extra->store();
-
-		if ($recursive) {
-            $this->moveExtraOnInheritingPagezones($move_extra, $origin_uid);
-        }
-
-		/** ... and that's it. We don't need to update the association table
-		 *  because we asserted that the Extra is already on the PageZone.
-		 */
-	}
+    }
 
     ///	Move Extra on inheriting PageZones
     private function moveExtraOnInheritingPagezones($move_extra, $origin_uid) {
