@@ -48,6 +48,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone
 class tx_newspaper_PageZone_Page extends tx_newspaper_PageZone {
 		
 	public function __construct($uid = 0) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		parent::__construct($uid);
 		if ($uid) {
 			$this->readExtrasForPagezoneID($uid);
