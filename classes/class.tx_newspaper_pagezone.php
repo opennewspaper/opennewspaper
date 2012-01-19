@@ -677,6 +677,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function getInheritanceHierarchyDown($including_myself = true,
 												$hierarchy = array()) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		if ($including_myself) $hierarchy[] = $this;
 
 		$hierarchy = array_merge($hierarchy, $this->getExplicitlyInheritingPagezoneHierarchy());
@@ -1140,7 +1142,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  Extras are ordered by paragraph first, position second
 	 */
 	protected function indexOfExtra(tx_newspaper_Extra $extra) {
-        $timer = tx_newspaper_ExecutionTimer::create();
         return $this->binarySearchForExtra($extra, 0, sizeof($this->getExtras())-1);
 	}
 
@@ -1166,8 +1167,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  @return tx_newspaper_Extra
      */
 	final protected function findExtraByOriginUID($origin_uid, $hidden_too = false) {
-
-        $timer = tx_newspaper_ExecutionTimer::create();
 
         foreach ($this->getExtras($hidden_too) as $extra) {
 			if (intval($extra->getOriginUid()) == intval($origin_uid)) {
