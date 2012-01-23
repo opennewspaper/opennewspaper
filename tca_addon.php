@@ -241,7 +241,8 @@ $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['starttime']['config']['e
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['endtime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = 10240; // 10 mb \todo: make configurable
+$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['image_file']['config']['max_size'] = tx_newspaper_Image::getMaxImageFileSize();
+$GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['width_set']['config']['items'] = tx_newspaper_Image::getDataForFormatDropdown();
 
 $TCA["tx_newspaper_extra_mostcommented"]["columns"]["hours"]["config"]["range"] = array ( "lower" => "1" );
 $TCA["tx_newspaper_extra_mostcommented"]["columns"]["num_favorites"]["config"]["range"] = array ( "lower" => "1" );

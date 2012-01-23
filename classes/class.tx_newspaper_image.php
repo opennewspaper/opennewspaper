@@ -117,7 +117,16 @@ class tx_newspaper_Image {
         return self::$heights;
     }
 
+    public static function getDataForFormatDropdown() {
+        return array(
+            array("default" => 0),
+            array("dummy" => 1)
+        );
+    }
 
+    public static function getMaxImageFileSize() {
+        return 10240; // 10 mb \todo: make configurable
+    }
     ////////////////////////////////////////////////////////////////////////////
 
     /** copy $basedir to $targetPath on $targetHost	*/
