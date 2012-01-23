@@ -7,9 +7,9 @@ var NpManageDossier = {
 
 	tz_uid: null, // stores tag zone uid when opening the element browser popup
 
-	currentDossierTitle: '', // stores dossier title (for undo function)
+	currentDossierTitle: "", // stores dossier title (for undo function)
 	currentSectionUid: 0, // stores uid of associated section
-	currentSectionTitle: '', // stores name of associated section
+	currentSectionTitle: "", // stores name of associated section
 
 	/**
 	 * Get tagzone uid
@@ -107,6 +107,8 @@ var NpManageDossier = {
 						NpManageDossier.setCurrentDossierSection(tmp.sectionTitle, tmp.sectionUid);
 						NpManageDossier.displayDossierSection();
 
+                        NpManageDossier.showDossierUid();
+
 						$("tag_batch_msg").innerHTML = ''; // clear message
 						$("article_list").innerHTML = ''; // clear article list
 					}
@@ -137,9 +139,11 @@ var NpManageDossier = {
 	 * Hides backend for tag title and tag section editing
 	 */
 	hideTagBackend: function() {
+        this.setCurrentDossierTitle("");
 		this.displayDossierTitle();
 		this.setCurrentDossierSection();
 		this.displayDossierSection();
+        this.showDossierUid();
 	},
 
 
@@ -170,8 +174,20 @@ var NpManageDossier = {
 		}
 	},
 
+    /**
+     * Show dossier uid (if configured to do so in TSConfig)
+     */
+    showDossierUid: function() {
+        var uid = this.getTagUid();
+        if (NpManageDossier.param["showDossierUid"] && uid) {
+            $("dossier_uid").innerHTML = "[uid: " + parseInt(uid) + "]";
+        } else {
+            $("dossier_uid").innerHTML = "";
+        }
+    },
 
-// dossier title handling
+
+// Dossier title handling
 
 	/**
 	 * Store current section (for displaying and undoing)

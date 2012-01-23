@@ -70,7 +70,7 @@
 #button {
   clear:both;
 }
-#dossier_title_label, #dossier_title_edit,
+#dossier_title_label, #dossier_title_edit, #dossier_uid,
 #dossier_section_label, #dossier_section_edit, #dossier_section_dropdown {
   margin-left:10px;
 }
@@ -102,6 +102,8 @@
 	NpManageDossier.param["iconEdit"] = '{$ICON.edit}';
 	NpManageDossier.param["iconSave"] = '{$ICON.save}';
 	NpManageDossier.param["iconX"] = '{$ICON.x}';
+
+    NpManageDossier.param["showDossierUid"] = {$TSCONFIG.showDossierUid};
 </script>
 
 
@@ -138,7 +140,7 @@
 	</select>
 		<a href="#" onclick="NpManageDossier.storeDossierSection(); return false;">{$ICON.save}</a>
 		<a href="#" onclick="NpManageDossier.cancelDossierSectionEdit(); return false;">{$ICON.x}</a> <span style="color:red;">{$LANG.message_performance_warning}</span>
-	</span><span id="dossier_section_edit"></span>
+	</span><span id="dossier_section_edit"></span><span id="dossier_uid"></span>
 </div>
 
 <div id="tz"></div>

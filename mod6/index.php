@@ -425,7 +425,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 		$tagzones = $tag->getTagzones();
 		$tz_extras = array();
 		foreach($tagzones as $row) {
-//t3lib_div::devlog('tz', 'newspaper', 0, $row);
+//t3lib_div::devlog('tz', 'newspaper', 0, array('row' => $row, 'ts' => $this->getTagzoneConfig()));
 			$tz_extras[$row['tag_zone']] = $tag->getTagzoneExtras($row['tag_zone']);
 		}
 
@@ -571,6 +571,7 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 				'edit' => tx_newspaper_BE::renderIcon('gfx/edit2.gif', ''),
 				'save' => tx_newspaper_BE::renderIcon('gfx/saveandclosedok.gif', '')
 			));
+            $this->smarty->assign('TSCONFIG', $this->getTagzoneConfig()); // TSConfig settings
 		}
 
 
@@ -610,7 +611,7 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
             $tsc['newspaper.']['dossierWizard.']['mustHaveTagzones'] : array();
         $conf['shouldHave'] = $tsc['newspaper.']['dossierWizard.']['shouldHaveTagzones']?
             $tsc['newspaper.']['dossierWizard.']['shouldHaveTagzones'] : array();
-//t3lib_div::debug($conf, 'conf');
+//t3lib_div::devlog('dossier tsc', 'newspaper', 0, array($tsc['newspaper.']['dossierWizard.']));
 
         // Move TSConfig configuration into array
 		$data = array();
@@ -634,6 +635,11 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
                 unset($data['shouldHave'][$key]);
             }
         }
+
+        // Add User TSConfig setting for newspaper.dossierWizard.showDossierUid (defaults to 0)
+        $data['showDossierUid'] = intval(
+            ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.dossierWizard.showDossierUid') != 0)
+        );
 
 //t3lib_div::devlog('getTagzoneConfig()', 'newspaper', 0, array('data' => $data, 'conf' => $conf));
 
