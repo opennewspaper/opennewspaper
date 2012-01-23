@@ -133,7 +133,7 @@
 			<label index="tx_newspaper_extra_textbox.pool">Add to pool</label>
 			<label index="tx_newspaper_extra_textbox.title">Title</label>
 			<label index="tx_newspaper_extra_textbox.bodytext">Text</label>
-			<label index="tx_newspaper_extra_textbox.image">Image</label>
+			<label index="tx_newspaper_extra_textbox.image_file">Image file</label>
 			<label index="tx_newspaper_extra_textbox.template">Design template</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: External links</label>
 			<label index="tx_newspaper_extra_externallinks.short_description">Short description</label>
@@ -398,7 +398,7 @@
 			<label index="tx_newspaper_extra_textbox.pool">In Pool aufnehmen</label>
 			<label index="tx_newspaper_extra_textbox.title">Titel</label>
 			<label index="tx_newspaper_extra_textbox.bodytext">Text</label>
-			<label index="tx_newspaper_extra_textbox.image">Bild</label>
+			<label index="tx_newspaper_extra_textbox.image_file">Bilddatei</label>
 			<label index="tx_newspaper_extra_textbox.template">Designvorlage</label>
 			<label index="tx_newspaper_extra_externallinks">Extra: Externe Links</label>
 			<label index="tx_newspaper_extra_externallinks.short_description">Kurzbeschreibung</label>

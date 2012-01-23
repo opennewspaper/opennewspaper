@@ -14,14 +14,14 @@ function replace() {
 	echo $close >> "${file}".bak
 
 	tail -n 5 "${file}".bak
-	mv -i "${file}".bak "${file}"
+	mv  "${file}".bak "${file}"
 }
 
 function add_file() {
 	cat "$1" > "$1".bak
 	cat "$2" >> "$1".bak
 	tail -n 20 "$1".bak
-	mv -i "$1".bak "$1"
+	mv  "$1".bak "$1"
 }
 
 function remove_line() {
@@ -29,7 +29,7 @@ function remove_line() {
 	remove_lines_with_string="$2"
 	# remove lines containing search string
 	cat ${file} | grep -v "${remove_lines_with_string}" > "${file}".bak
-	mv -i "${file}".bak "${file}"	
+	mv  "${file}".bak "${file}"	
 }
 
 function change_main_module() {
@@ -68,7 +68,9 @@ replace "tca.php" \
 		"require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');" \
 		'?>'
 
-svn ci -m "auto-fixed changes from kickstarter"
+echo "Enter commit message:"
+read commit_message
+svn ci -m "$commit_message"
 
 #for addon in ../newspaper_?*; do 
 #	if [ -x ${addon}/util/replace.sh ]; then

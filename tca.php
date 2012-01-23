@@ -1677,7 +1677,7 @@ $TCA["tx_newspaper_extra_articlelist"] = array (
 $TCA["tx_newspaper_extra_textbox"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_textbox"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "starttime,endtime,short_description,pool,title,bodytext,image,template"
+		"showRecordFieldList" => "starttime,endtime,short_description,pool,title,bodytext,image_file,template"
 	),
 	"feInterface" => $TCA["tx_newspaper_extra_textbox"]["feInterface"],
 	"columns" => array (
@@ -1752,13 +1752,16 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 				),
 			)
 		),
-		"image" => Array (		
+		"image_file" => Array (		
 			"exclude" => 1,		
-			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.image",		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_textbox.image_file",		
 			"config" => Array (
-				"type" => "group",	
-				"internal_type" => "db",	
-				"allowed" => "tx_newspaper_extra_image",	
+				"type" => "group",
+				"internal_type" => "file",
+				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
+				"max_size" => 1000,	
+				"uploadfolder" => "uploads/tx_newspaper",
+				"show_thumbs" => 1,	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -1774,7 +1777,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, pool, title;;;;2-2-2, bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/];3-3-3, image, template")
+		"0" => array("showitem" => "starttime;;;;1-1-1, endtime, short_description, pool, title;;;;2-2-2, bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/];3-3-3, image_file, template")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -2633,7 +2636,7 @@ $TCA["tx_newspaper_extra_bio"] = array (
 				"type" => "group",
 				"internal_type" => "file",
 				"allowed" => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],	
-				"max_size" => 500,	
+				"max_size" => 1000,	
 				"uploadfolder" => "uploads/tx_newspaper",
 				"show_thumbs" => 1,	
 				"size" => 1,	

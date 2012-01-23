@@ -375,7 +375,7 @@ $TCA["tx_newspaper_extra_textbox"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_textbox.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "starttime, endtime, short_description, pool, title, bodytext, image, template",
+		"fe_admin_fieldList" => "starttime, endtime, short_description, pool, title, bodytext, image_file, template",
 	)
 );
 
