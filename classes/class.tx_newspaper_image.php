@@ -127,7 +127,10 @@ class tx_newspaper_Image {
     ////////////////////////////////////////////////////////////////////////////
 
     private static function readFormats() {
-        $TSconfig = self::readTSConfig();
+        $sysfolder = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
+  		$TSconfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+        tx_newspaper::devlog("readFormats()", $TSconfig);
+
         $formats = $TSconfig['newspaper.']['image.']['format.'];
         $return = array (
             array("Default", 0)
