@@ -119,8 +119,8 @@ class tx_newspaper_Image {
 
     public static function getDataForFormatDropdown() {
         return array(
-            array("default" => 0),
-            array("dummy" => 1)
+            array("default", 0),
+            array("dummy", 1)
         );
     }
 
