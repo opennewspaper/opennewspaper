@@ -118,16 +118,25 @@ class tx_newspaper_Image {
     }
 
     public static function getDataForFormatDropdown() {
-        return array(
-            array("default", 0),
-            array("dummy", 1)
-        );
+        return self::readFormats();
     }
 
     public static function getMaxImageFileSize() {
         return 10240; // 10 mb \todo: make configurable
     }
     ////////////////////////////////////////////////////////////////////////////
+
+    private static function readFormats() {
+        $TSconfig = self::readTSConfig();
+        $formats = $TSconfig['newspaper.']['image.']['format.'];
+        $return = array (
+            array("Default", 0)
+        );
+        for ($i = 1; $i < sizeof($formats); $i++) {
+            $return[] = array($formats[$i], $i);
+        }
+        return $return;
+    }
 
     /** copy $basedir to $targetPath on $targetHost	*/
     private static function rsync($basedir, $targetHost, $targetPath) {
