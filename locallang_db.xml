@@ -25,6 +25,8 @@
 			<label index="tx_newspaper_extra_image.alttext">Alt text</label>
 			<label index="tx_newspaper_extra_image.image_url">Link image with URL</label>
 			<label index="tx_newspaper_extra_image.tags">Tags</label>
+			<label index="tx_newspaper_extra_image.width_set.I.0">Dummy</label>
+			<label index="tx_newspaper_extra_image.width_set">Format: set of widths</label>
 			<label index="tx_newspaper_extra_image.template">Design template</label>
 			<label index="tx_newspaper_section">Section</label>
 			<label index="tx_newspaper_section.section_name">Name of the section</label>
@@ -290,6 +292,8 @@
 			<label index="tx_newspaper_extra_image.alttext">Alt-Text</label>
 			<label index="tx_newspaper_extra_image.image_url">Bild mit URL verlinken</label>
 			<label index="tx_newspaper_extra_image.tags">Schlagworte</label>
+			<label index="tx_newspaper_extra_image.width_set.I.0">Dummy</label>
+			<label index="tx_newspaper_extra_image.width_set">Format: Satz an Breiten</label>
 			<label index="tx_newspaper_extra_image.template">Designvorlage</label>
 			<label index="tx_newspaper_section">Ressort</label>
 			<label index="tx_newspaper_section.section_name">Name des Ressorts</label>

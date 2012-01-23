@@ -39,6 +39,7 @@ CREATE TABLE tx_newspaper_extra_image (
 	alttext tinytext NOT NULL,
 	image_url tinytext NOT NULL,
 	tags int(11) DEFAULT '0' NOT NULL,
+	width_set int(11) DEFAULT '0' NOT NULL,
 	template tinytext NOT NULL,
 	
 	PRIMARY KEY (uid),

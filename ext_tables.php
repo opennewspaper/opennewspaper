@@ -79,7 +79,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_image.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, short_description, pool, title, image_file, credit, caption, normalized_filename, kicker, source, image_type, alttext, image_url, tags, template",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, short_description, pool, title, image_file, credit, caption, normalized_filename, kicker, source, image_type, alttext, image_url, tags, width_set, template",
 	)
 );
 
