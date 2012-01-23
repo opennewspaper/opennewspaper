@@ -129,14 +129,16 @@ class tx_newspaper_Image {
     private static function readFormats() {
         $sysfolder = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
   		$TSconfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-        tx_newspaper::devlog("readFormats()", $TSconfig);
 
         $formats = $TSconfig['newspaper.']['image.']['format.'];
+        tx_newspaper::devlog("readFormats()", $formats);
         $return = array (
             array("Default", 0)
         );
-        for ($i = 1; $i < sizeof($formats); $i++) {
-            $return[] = array($formats[$i]['label'], $i);
+        for ($i = 0; $i < sizeof($formats); $i++) {
+            $return[] = array($formats[$i]['label'], $i+1);
+            tx_newspaper::devlog("readFormats($i)", $formats[$i]['label']);
+
         }
         return $return;
     }
