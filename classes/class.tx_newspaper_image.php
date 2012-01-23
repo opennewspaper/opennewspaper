@@ -136,7 +136,7 @@ class tx_newspaper_Image {
             array("Default", 0)
         );
         for ($i = 1; $i < sizeof($formats); $i++) {
-            $return[] = array($formats[$i], $i);
+            $return[] = array($formats[$i]['label'], $i);
         }
         return $return;
     }
