@@ -135,10 +135,11 @@ class tx_newspaper_Image {
         $return = array (
             array("Default", 0)
         );
-        for ($i = 0; $i < sizeof($formats); $i++) {
-            $return[] = array($formats[$i]['label'], $i+1);
-            tx_newspaper::devlog("readFormats($i)", $formats[$i]['label']);
-
+        $i = 1;
+        foreach ($formats as $format) {
+            $return[] = array($format['label'], $i);
+            tx_newspaper::devlog("format $i", $format['label']);
+            $i++;
         }
         return $return;
     }
