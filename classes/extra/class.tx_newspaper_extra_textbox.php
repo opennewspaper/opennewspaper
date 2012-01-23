@@ -15,11 +15,16 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_extra.ph
 class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
 	const description_length = 50;
+    /// The field which carries the image file
+    const image_file_field = 'image_file';
 
 	public function __construct($uid = 0) {
-		if ($uid) {
-			parent::__construct($uid);
-		}
+        if ($uid) {
+            parent::__construct($uid);
+            $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field));
+        } else {
+            $this->image = new tx_newspaper_NullImage();
+        }
 	}
 
 	public function __toString() {
@@ -41,17 +46,10 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 	public function render($template_set = '') {
 
 		$this->prepare_render($template_set);
+        $this->image->prepare_render($this->smarty);
 
 		$this->smarty->assign('title', $this->getAttribute('title'));
 		$this->smarty->assign('bodytext', tx_newspaper::convertRteField($this->getAttribute('bodytext')));
-		$image = $this->getAttribute('image');
-		if ($image) {
-			if (intval($image)) {
-				$image = new tx_newspaper_Extra_Image(intval($image));
-				$this->smarty->assign('image', $image);
-				$this->smarty->assign('rendered_image', $image->render());
-			}
-		}
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
