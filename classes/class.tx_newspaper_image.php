@@ -276,13 +276,14 @@ class tx_newspaper_Image {
             self::$sizes[0][self::thumbnail_name] = self::thumbnail_size;
         }
 
-        tx_newspaper::devlog("setSizes()", $TSconfig['newspaper.']['image.']['format.']);
         $i = sizeof(self::$sizes);
         foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            $return[] = array($format['label'], $i);
+            unset($format['label']);
+            self::$sizes[$i] = $format;
             $i++;
         }
 
+        tx_newspaper::devlog("Sizes", self::$sizes);
     }
 
     private static function extractWidth($dimension, $key) {
