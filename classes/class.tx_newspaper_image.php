@@ -131,17 +131,13 @@ class tx_newspaper_Image {
             array("Default", 0)
         );
 
-        self::fillFormatDropdownArray(self::getTSconfig(), $return);
+        self::fillFormatDropdownArray($return);
 
         return $return;
     }
 
-    private static function fillFormatDropdownArray(array $TSconfig, array &$return) {
-        $i = sizeof($return);
-        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            $return[$i] = array($format['label'], $i);
-            $i++;
-        }
+    private static function fillFormatDropdownArray(array &$return) {
+        self::fillArrayForFormat($return, 'getLabelFromTSconfigForFormat');
     }
 
     /** copy $basedir to $targetPath on $targetHost	*/
@@ -276,16 +272,7 @@ class tx_newspaper_Image {
             self::$sizes[0][self::thumbnail_name] = self::thumbnail_size;
         }
 
-        if (0) {
-            $i = sizeof(self::$sizes);
-            foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-                unset($format['label']);
-                self::$sizes[$i] = $format;
-                $i++;
-            }
-        } else {
-            self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
-        }
+        self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
 
         tx_newspaper::devlog("Sizes", self::$sizes);
     }
@@ -294,7 +281,7 @@ class tx_newspaper_Image {
         $TSconfig = self::getTSconfig();
         $i = sizeof($prefilled);
         foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            $prefilled[$i] = self::$function($format);
+            $prefilled[$i] = self::$function($format, $i);
             $i++;
         }
     }
@@ -302,6 +289,10 @@ class tx_newspaper_Image {
     private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
         unset($format_tsconfig['label']);
         return $format_tsconfig;
+    }
+
+    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
+        return array($format_tsconfig['label'], $i);
     }
 
     private static function extractWidth($dimension, $key) {
