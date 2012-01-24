@@ -139,7 +139,7 @@ class tx_newspaper_Image {
     private static function fillFormatDropdownArray(array $TSconfig, array &$return) {
         $i = sizeof($return);
         foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            $return[] = array($format['label'], $i);
+            $return[$i] = array($format['label'], $i);
             $i++;
         }
     }
@@ -276,14 +276,32 @@ class tx_newspaper_Image {
             self::$sizes[0][self::thumbnail_name] = self::thumbnail_size;
         }
 
-        $i = sizeof(self::$sizes);
-        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            unset($format['label']);
-            self::$sizes[$i] = $format;
-            $i++;
+        if (0) {
+            $i = sizeof(self::$sizes);
+            foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
+                unset($format['label']);
+                self::$sizes[$i] = $format;
+                $i++;
+            }
+        } else {
+            self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
         }
 
         tx_newspaper::devlog("Sizes", self::$sizes);
+    }
+
+    private static function fillArrayForFormat(array &$prefilled, $function) {
+        $TSconfig = self::getTSconfig();
+        $i = sizeof($prefilled);
+        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
+            $prefilled[$i] = self::$function($format);
+            $i++;
+        }
+    }
+
+    private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
+        unset($format_tsconfig['label']);
+        return $format_tsconfig;
     }
 
     private static function extractWidth($dimension, $key) {
