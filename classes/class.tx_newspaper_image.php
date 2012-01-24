@@ -21,6 +21,9 @@ class tx_newspaper_Image {
         $smarty->assign('sizes', self::getSizes($width_set));
         $smarty->assign('widths', self::getWidths($width_set));
         $smarty->assign('heights', self::getHeights($width_set));
+        if ($width_set) {
+            $smarty->assign('width_set', self::getWidthSetLabel($width_set));
+        }
     }
 
     public function getThumbnail() {
@@ -124,7 +127,16 @@ class tx_newspaper_Image {
     public static function getMaxImageFileSize() {
         return 10240; // 10 mb \todo: make configurable
     }
+
     ////////////////////////////////////////////////////////////////////////////
+
+    private static function getWidthSetLabel($width_set) {
+        $formats = self::readFormats();
+        foreach ($formats as $format) {
+            if ($format[1] == $width_set) return $format[0];
+        }
+        throw new tx_newspaper_IllegalUsageException("Width set label for set $width_set not found");
+    }
 
     private static function readFormats() {
         $return = array (
@@ -249,7 +261,7 @@ class tx_newspaper_Image {
         $TSConfig = self::getTSconfig();
 
 		if (!self::$basepath) self::setBasepath($TSConfig);
-		if (!self::$sizes) self::setSizes($TSConfig);
+		if (!self::$sizes) self::setSizes();
 
 		return $TSConfig;
 	}
@@ -266,15 +278,18 @@ class tx_newspaper_Image {
         self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
     }
 
-    private static function setSizes($TSconfig) {
-        self::$sizes[0] =  $TSconfig['newspaper.']['image.']['size.'];
-        if (!isset(self::$sizes[self::thumbnail_name])) {
-            self::$sizes[0][self::thumbnail_name] = self::thumbnail_size;
-        }
-
+    private static function setSizes() {
+        self::$sizes[0] = self::getDefaultSizesArray();
         self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
+    }
 
-        tx_newspaper::devlog("Sizes", self::$sizes);
+    private static function getDefaultSizesArray() {
+        $TSconfig = self::getTSconfig();
+        $sizes = $TSconfig['newspaper.']['image.']['size.'];
+        if (!isset($sizes[self::thumbnail_name])) {
+            $sizes[self::thumbnail_name] = self::thumbnail_size;
+        }
+        return $sizes;
     }
 
     private static function fillArrayForFormat(array &$prefilled, $function) {
