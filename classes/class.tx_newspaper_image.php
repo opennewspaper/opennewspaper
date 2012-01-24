@@ -16,11 +16,11 @@ class tx_newspaper_Image {
         $this->image_file = $image_file;
     }
 
-    public function prepare_render(tx_newspaper_Smarty $smarty) {
+    public function prepare_render(tx_newspaper_Smarty $smarty, $width_set = 0) {
         $smarty->assign('basepath', self::getBasepath());
-        $smarty->assign('sizes', self::getSizes());
-        $smarty->assign('widths', self::getWidths());
-        $smarty->assign('heights', self::getHeights());
+        $smarty->assign('sizes', self::getSizes($width_set));
+        $smarty->assign('widths', self::getWidths($width_set));
+        $smarty->assign('heights', self::getHeights($width_set));
     }
 
     public function getThumbnail() {
@@ -102,19 +102,19 @@ class tx_newspaper_Image {
 	}
 
 	/// Get the array of possible image sizes registered in TSConfig
-	public static function getSizes() {
+	public static function getSizes($width_set = 0) {
 		self::readTSConfig();
-		return self::$sizes;
+		return self::$sizes[$width_set];
 	}
 
-    public static function getWidths() {
+    public static function getWidths($width_set = 0) {
         self::fillWidthOrHeightArray(self::$widths, 0);
-        return self::$widths;
+        return self::$widths[$width_set];
     }
 
-    public static function getHeights() {
+    public static function getHeights($width_set = 0) {
         self::fillWidthOrHeightArray(self::$heights, 1);
-        return self::$heights;
+        return self::$heights[$width_set];
     }
 
     public static function getDataForFormatDropdown() {
@@ -131,17 +131,17 @@ class tx_newspaper_Image {
             array("Default", 0)
         );
 
-        $sysfolder = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
-  		$TSconfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
-        $formats = $TSconfig['newspaper.']['image.']['format.'];
+        self::fillFormatDropdownArray(self::getTSconfig(), $return);
 
-        $i = 1;
-        foreach ($formats as $format) {
+        return $return;
+    }
+
+    private static function fillFormatDropdownArray(array $TSconfig, array &$return) {
+        $i = sizeof($return);
+        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
             $return[] = array($format['label'], $i);
             $i++;
         }
-
-        return $return;
     }
 
     /** copy $basedir to $targetPath on $targetHost	*/
@@ -250,14 +250,18 @@ class tx_newspaper_Image {
 
 		if (self::$basepath && self::$sizes) return;
 
- 		$sysfolder = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig($sysfolder);
+        $TSConfig = self::getTSconfig();
 
 		if (!self::$basepath) self::setBasepath($TSConfig);
 		if (!self::$sizes) self::setSizes($TSConfig);
 
 		return $TSConfig;
 	}
+
+    private static function getTSconfig() {
+        $sysfolder = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
+        return t3lib_BEfunc::getPagesTSconfig($sysfolder);
+    }
 
     private static function setBasepath($TSConfig) {
         if (!$TSConfig['newspaper.']['image.']['basepath']) {
@@ -266,11 +270,19 @@ class tx_newspaper_Image {
         self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
     }
 
-    private static function setSizes($TSConfig) {
-        self::$sizes =  $TSConfig['newspaper.']['image.']['size.'];
+    private static function setSizes($TSconfig) {
+        self::$sizes[0] =  $TSconfig['newspaper.']['image.']['size.'];
         if (!isset(self::$sizes[self::thumbnail_name])) {
-            self::$sizes[self::thumbnail_name] = self::thumbnail_size;
+            self::$sizes[0][self::thumbnail_name] = self::thumbnail_size;
         }
+
+        tx_newspaper::devlog("setSizes()", $TSconfig['newspaper.']['image.']['format.']);
+        $i = sizeof(self::$sizes);
+        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
+            $return[] = array($format['label'], $i);
+            $i++;
+        }
+
     }
 
     private static function extractWidth($dimension, $key) {

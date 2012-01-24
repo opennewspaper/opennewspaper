@@ -81,7 +81,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         $this->prepare_render($template_set);
 
-        $this->image->prepare_render($this->smarty);
+        $this->image->prepare_render($this->smarty, $this->getAttribute('width_set'));
 
         $this->smarty->assign('type', $this->getImageType());
 
