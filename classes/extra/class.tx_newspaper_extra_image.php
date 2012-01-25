@@ -81,7 +81,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         $this->prepare_render($template_set);
 
-        $this->image->prepare_render($this->smarty, $this->getAttribute('width_set'));
+        $this->image->prepare_render($this->smarty, intval($this->getAttribute('width_set')));
 
         $this->smarty->assign('type', $this->getImageType());
 
@@ -115,23 +115,24 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 		return 'np_image';
 	}
 
+
+    public function getSizes() {
+        return tx_newspaper_Image::getSizes(intval($this->getAttribute('width_set')));
+    }
+
+    public function getWidths() {
+        return tx_newspaper_Image::getWidths(intval($this->getAttribute('width_set')));
+    }
+
+    public function getHeights() {
+        return tx_newspaper_Image::getHeights(intval($this->getAttribute('width_set')));
+    }
+
 	public static function dependsOnArticle() { return false; }
 
 
     public static function getBasepath() {
         return tx_newspaper_Image::getBasepath();
-    }
-
-    public static function getSizes() {
-        return tx_newspaper_Image::getSizes();
-    }
-
-    public static function getWidths() {
-        return tx_newspaper_Image::getWidths();
-    }
-
-    public static function getHeights() {
-        return tx_newspaper_Image::getHeights();
     }
 
 	/// Save hook function, called from the global save hook
