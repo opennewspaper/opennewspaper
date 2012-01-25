@@ -73,8 +73,29 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 
 	public static function dependsOnArticle() { return true; }
 
+    /// Save hook function, called from the global save hook
+    /** Resizes the uploaded image into all sizes specified in TSConfig.
+     */
+    public static function processDatamap_postProcessFieldArray(
+        $status, $table, $id, &$fieldArray, $that
+    ) {
+        if ($table != 'tx_newspaper_extra_textbox') return;
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+#$extra = new tx_newspaper_extra_Bio($id);
+#tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());
+        if ($fieldArray[self::image_file_field]) {
+            $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
+            $image->resizeImages();
+	        $image->rsyncAllImageFiles();
+        }
+    }
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_Textbox());
+
+tx_newspaper::registerSaveHook(new tx_newspaper_Extra_Textbox());
 
 ?>
