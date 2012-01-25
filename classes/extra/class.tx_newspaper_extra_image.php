@@ -117,15 +117,15 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 
     public function getSizes() {
-        return $this->image->getSizes();
+        return $this->image->getAllSizes();
     }
 
     public function getWidths() {
-        return $this->image->getWidths();
+        return $this->image->getAllWidths();
     }
 
     public function getHeights() {
-        return $this->image->getHeights();
+        return $this->image->getAllHeights();
     }
 
 	public static function dependsOnArticle() { return false; }

@@ -17,29 +17,14 @@ class tx_newspaper_Image {
         $this->width_set = intval($width_set);
     }
 
-    public function prepare_render(tx_newspaper_Smarty $smarty) {
+    public function prepare_render(tx_newspaper_Smarty $smarty, $width_set = 0) {
         $smarty->assign('basepath', self::getBasepath());
-        $smarty->assign('sizes', $this->getSizes());
-        $smarty->assign('widths', $this->getWidths());
-        $smarty->assign('heights', $this->getHeights());
-        $smarty->assign('width_set', self::getWidthSetLabel($this->width_set));
-    }
-
-
- 	/// Get the array of possible image sizes registered in TSConfig
-   	public function getSizes() {
-   		self::readTSConfig();
-   		return self::$sizes[$this->width_set];
-   	}
-
-    public function getWidths() {
-        $this->fillWidthOrHeightArray(self::$widths, 0);
-        return self::$widths[$this->width_set];
-    }
-
-    public function getHeights() {
-        $this->fillWidthOrHeightArray(self::$heights, 1);
-        return self::$heights[$this->width_set];
+        $smarty->assign('sizes', self::getAllSizes($width_set));
+        $smarty->assign('widths', self::getAllWidths($width_set));
+        $smarty->assign('heights', self::getAllHeights($width_set));
+        if ($width_set) {
+            $smarty->assign('width_set', self::getWidthSetLabel($width_set));
+        }
     }
 
     public function getThumbnail() {
@@ -96,7 +81,7 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
-        foreach ($this->getSizes() as $size) {
+        foreach (self::getAllSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
     }
@@ -119,6 +104,22 @@ class tx_newspaper_Image {
 		self::readTSConfig();
 		return self::$basepath;
 	}
+
+	/// Get the array of possible image sizes registered in TSConfig
+	public static function getAllSizes($width_set = 0) {
+		self::readTSConfig();
+		return self::$sizes[$width_set];
+	}
+
+    public static function getAllWidths($width_set = 0) {
+        self::fillWidthOrHeightArray(self::$widths, 0);
+        return self::$widths[$width_set];
+    }
+
+    public static function getAllHeights($width_set = 0) {
+        self::fillWidthOrHeightArray(self::$heights, 1);
+        return self::$heights[$width_set];
+    }
 
     public static function getDataForFormatDropdown() {
         return self::readFormats();
@@ -217,12 +218,12 @@ class tx_newspaper_Image {
     }
 
     private static function getThumbnailWidth() {
-        $widths = self::getWidths();
+        $widths = self::getAllWidths();
         return $widths[self::thumbnail_name];
     }
 
     private static function getThumbnailHeight() {
-        $heights = self::getHeights();
+        $heights = self::getAllHeights();
         return $heights[self::thumbnail_name];
     }
 
@@ -330,9 +331,9 @@ class tx_newspaper_Image {
         return $dim;
     }
 
-    private function fillWidthOrHeightArray(array &$what, $index) {
+    private static function fillWidthOrHeightArray(array &$what, $index) {
         if (empty($what)) {
-            foreach ($this->getSizes() as $key => $size) {
+            foreach (self::getAllSizes() as $key => $size) {
                 $width_and_height = explode('x', $size);
                 if (isset($width_and_height[$index])) {
                     $what[$key] = $width_and_height[$index];
