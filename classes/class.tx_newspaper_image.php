@@ -33,12 +33,12 @@ class tx_newspaper_Image {
    	}
 
     public function getWidths() {
-        self::fillWidthOrHeightArray(self::$widths, 0);
+        $this->fillWidthOrHeightArray(self::$widths, 0);
         return self::$widths[$this->width_set];
     }
 
     public function getHeights() {
-        self::fillWidthOrHeightArray(self::$heights, 1);
+        $this->fillWidthOrHeightArray(self::$heights, 1);
         return self::$heights[$this->width_set];
     }
 
@@ -96,7 +96,7 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
-        foreach (self::getSizes() as $size) {
+        foreach ($this->getSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
     }
@@ -330,9 +330,9 @@ class tx_newspaper_Image {
         return $dim;
     }
 
-    private static function fillWidthOrHeightArray(array &$what, $index) {
+    private function fillWidthOrHeightArray(array &$what, $index) {
         if (empty($what)) {
-            foreach (self::getSizes() as $key => $size) {
+            foreach ($this->getSizes() as $key => $size) {
                 $width_and_height = explode('x', $size);
                 if (isset($width_and_height[$index])) {
                     $what[$key] = $width_and_height[$index];
