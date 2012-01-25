@@ -41,6 +41,17 @@ class tx_newspaper_Image {
         return self::iconImageMissing();
     }
 
+    public function getSizes() {
+        return self::getAllSizes($this->width_set);
+    }
+
+    public function getWidths() {
+        return $this->getAllWidths($this->width_set);
+    }
+
+    public function getHeights() {
+        return $this->getAllHeights($this->width_set);
+    }
 
     /// If image needs resizing, resize it to all sizes defined in TSConfig
 	/** The image sizes are defined as
