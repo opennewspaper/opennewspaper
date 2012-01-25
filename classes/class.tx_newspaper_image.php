@@ -17,14 +17,12 @@ class tx_newspaper_Image {
         $this->width_set = intval($width_set);
     }
 
-    public function prepare_render(tx_newspaper_Smarty $smarty, $width_set = 0) {
+    public function prepare_render(tx_newspaper_Smarty $smarty) {
         $smarty->assign('basepath', self::getBasepath());
-        $smarty->assign('sizes', self::getAllSizes($width_set));
-        $smarty->assign('widths', self::getAllWidths($width_set));
-        $smarty->assign('heights', self::getAllHeights($width_set));
-        if ($width_set) {
-            $smarty->assign('width_set', self::getWidthSetLabel($width_set));
-        }
+        $smarty->assign('sizes', $this->getSizes());
+        $smarty->assign('widths', $this->getWidths());
+        $smarty->assign('heights', $this->getHeights());
+        $smarty->assign('width_set', self::getWidthSetLabel($this->width_set));
     }
 
     public function getThumbnail() {
@@ -70,7 +68,7 @@ class tx_newspaper_Image {
 
 		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
 
-		foreach (self::$sizes as $key => $dimension) {
+		foreach ($this->getSizes() as $key => $dimension) {
 	    	if (self::imgIsResized($this->image_file, $dimension)) continue;
             $this->resizeImage(self::extractWidth($dimension, $key), self::extractHeight($dimension, $key));
 		}
@@ -92,7 +90,7 @@ class tx_newspaper_Image {
     }
 
     public function rsyncAllImageFiles() {
-        foreach (self::getAllSizes() as $size) {
+        foreach ($this->getSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
     }
@@ -225,7 +223,7 @@ class tx_newspaper_Image {
     private function getThumbnailPath() {
         self::readTSConfig();
 
-        return self::$basepath . '/' . self::$sizes[self::thumbnail_name] . '/' . $this->image_file;
+        return self::$basepath . '/' . self::$sizes[0][self::thumbnail_name] . '/' . $this->image_file;
     }
 
     private static function getThumbnailWidth() {
