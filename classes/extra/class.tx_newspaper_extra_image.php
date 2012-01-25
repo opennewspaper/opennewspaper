@@ -56,7 +56,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
     public function __construct($uid = 0) {
         if ($uid) {
             parent::__construct($uid);
-            $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field));
+            $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field), $this->getAttribute('width_set'));
         } else {
             $this->image = new tx_newspaper_NullImage();
         }
@@ -117,15 +117,15 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 
     public function getSizes() {
-        return tx_newspaper_Image::getSizes(intval($this->getAttribute('width_set')));
+        return $this->image->getSizes(intval($this->getAttribute('width_set')));
     }
 
     public function getWidths() {
-        return tx_newspaper_Image::getWidths(intval($this->getAttribute('width_set')));
+        return $this->image->getWidths(intval($this->getAttribute('width_set')));
     }
 
     public function getHeights() {
-        return tx_newspaper_Image::getHeights(intval($this->getAttribute('width_set')));
+        return $this->image->getHeights(intval($this->getAttribute('width_set')));
     }
 
 	public static function dependsOnArticle() { return false; }
@@ -162,6 +162,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    /** @var tx_newspaper_Image */
     private $image = null;
 }
 
