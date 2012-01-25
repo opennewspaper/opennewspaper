@@ -81,7 +81,7 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
         $this->prepare_render($template_set);
 
-        $this->image->prepare_render($this->smarty, intval($this->getAttribute('width_set')));
+        $this->image->prepare_render($this->smarty);
 
         $this->smarty->assign('type', $this->getImageType());
 
@@ -117,15 +117,15 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 
     public function getSizes() {
-        return $this->image->getSizes(intval($this->getAttribute('width_set')));
+        return $this->image->getSizes();
     }
 
     public function getWidths() {
-        return $this->image->getWidths(intval($this->getAttribute('width_set')));
+        return $this->image->getWidths();
     }
 
     public function getHeights() {
-        return $this->image->getHeights(intval($this->getAttribute('width_set')));
+        return $this->image->getHeights();
     }
 
 	public static function dependsOnArticle() { return false; }

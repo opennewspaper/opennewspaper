@@ -17,31 +17,29 @@ class tx_newspaper_Image {
         $this->width_set = intval($width_set);
     }
 
-    public function prepare_render(tx_newspaper_Smarty $smarty, $width_set = 0) {
+    public function prepare_render(tx_newspaper_Smarty $smarty) {
         $smarty->assign('basepath', self::getBasepath());
-        $smarty->assign('sizes', self::getSizes($width_set));
-        $smarty->assign('widths', self::getWidths($width_set));
-        $smarty->assign('heights', self::getHeights($width_set));
-        if ($width_set) {
-            $smarty->assign('width_set', self::getWidthSetLabel($width_set));
-        }
+        $smarty->assign('sizes', $this->getSizes());
+        $smarty->assign('widths', $this->getWidths());
+        $smarty->assign('heights', $this->getHeights());
+        $smarty->assign('width_set', self::getWidthSetLabel($this->width_set));
     }
 
 
  	/// Get the array of possible image sizes registered in TSConfig
-   	public function getSizes($width_set = 0) {
+   	public function getSizes() {
    		self::readTSConfig();
-   		return self::$sizes[$width_set];
+   		return self::$sizes[$this->width_set];
    	}
 
-    public function getWidths($width_set = 0) {
+    public function getWidths() {
         self::fillWidthOrHeightArray(self::$widths, 0);
-        return self::$widths[$width_set];
+        return self::$widths[$this->width_set];
     }
 
-    public function getHeights($width_set = 0) {
+    public function getHeights() {
         self::fillWidthOrHeightArray(self::$heights, 1);
-        return self::$heights[$width_set];
+        return self::$heights[$this->width_set];
     }
 
     public function getThumbnail() {
