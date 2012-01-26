@@ -156,7 +156,8 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 	) {
 
 		if ($table != 'tx_newspaper_extra_image') return;
-		if (!isset($fieldArray[self::image_file_field])) return;
+
+		if (!self::imageResizeIsNecessary($fieldArray)) return;
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
@@ -169,16 +170,28 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         $image->rsyncAllImageFiles();
 	}
 
-    private static function getWidthSet($fieldArray, $table, $id) {
-        if (isset($fieldArray[self::width_set_field])) {
-            return $fieldArray[self::width_set_field];
+    private static function imageResizeIsNecessary(array $fieldArray) {
+        return (isset($fieldArray[self::image_file_field]) || isset($fieldArray[self::width_set_field]));
+    }
+
+    private static function getImageFile(array $fieldArray, $table, $id) {
+        return self::getFieldFromArrayOrDB(self::image_file_field, $fieldArray, $table, $id);
+    }
+
+    private static function getWidthSet(array $fieldArray, $table, $id) {
+        return self::getFieldFromArrayOrDB(self::width_set_field, $fieldArray, $table, $id);
+    }
+
+    private static function getFieldFromArrayOrDB($field, array $fieldArray, $table, $id) {
+        if (isset($fieldArray[$field])) {
+            return $fieldArray[$field];
         } else {
             $result = tx_newspaper::selectOneRow(
-                self::width_set_field,
+                $field,
                 $table,
                 "uid = $id"
             );
-            return $result[self::width_set_field];
+            return $result[$field];
         }
     }
 
