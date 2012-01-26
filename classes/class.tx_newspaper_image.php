@@ -291,7 +291,7 @@ class tx_newspaper_Image {
         self::$sizes[0] = self::getDefaultSizesArray();
         self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
         for ($i = 1; $i < sizeof(self::$sizes); $i++) {
-#            self::$sizes[$i][] =
+            self::$sizes[$i][self::thumbnail_name] = self::thumbnail_size;
         }
         tx_newspaper::devlog("setSizes()", self::$sizes);
     }
