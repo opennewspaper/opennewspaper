@@ -12,24 +12,6 @@ class tx_newspaper_TSconfigControlled {
         return t3lib_BEfunc::getPagesTSconfig($sysfolder);
     }
 
-    protected static function fillArrayForFormat(array &$prefilled, $function) {
-        $TSconfig = self::getTSconfig();
-        $i = sizeof($prefilled);
-        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
-            $prefilled[$i] = self::$function($format, $i);
-            $i++;
-        }
-    }
-
-    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
-        return array($format_tsconfig['label'], $i);
-    }
-
-    private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
-        unset($format_tsconfig['label']);
-        return $format_tsconfig;
-    }
-
 }
 
 class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
@@ -75,6 +57,24 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
        }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    protected static function fillArrayForFormat(array &$prefilled, $function) {
+        $TSconfig = self::getTSconfig();
+        $i = sizeof($prefilled);
+        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
+            $prefilled[$i] = self::$function($format, $i);
+            $i++;
+        }
+    }
+
+    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
+        return array($format_tsconfig['label'], $i);
+    }
+
+    private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
+        unset($format_tsconfig['label']);
+        return $format_tsconfig;
+    }
 
     private static function getWidthSetLabel($width_set) {
         $formats = self::readFormats();
