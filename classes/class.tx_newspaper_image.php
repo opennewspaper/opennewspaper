@@ -12,7 +12,7 @@ require_once('private/class.tx_newspaper_imagesizeset.php');
 
 
 /// Class for handing the upload, resizing and deployment of an image.
-class tx_newspaper_Image  {
+class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function __construct($image_file, $width_set = 0) {
         $this->image_file = $image_file;
