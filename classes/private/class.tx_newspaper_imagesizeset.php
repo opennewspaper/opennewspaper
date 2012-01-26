@@ -137,5 +137,9 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     /// The list of image sizes, predefined in TSConfig
     private static $sizes = array();
+    /// The list of image widths, predefined as sizes in TSConfig
+    private static $widths = array();
+    /// The list of image heights, predefined as sizes in TSConfig
+    private static $heights = array();
 
 }

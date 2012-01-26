@@ -379,6 +379,10 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     /// The list of image sizes, predefined in TSConfig
     private static $sizes = array();
+    /// The list of image widths, predefined as sizes in TSConfig
+    private static $widths = array();
+    /// The list of image heights, predefined as sizes in TSConfig
+    private static $heights = array();
 
     //
     // duplicated in size set end
@@ -388,10 +392,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     private $width_set = 0;
 
-    /// The list of image widths, predefined as sizes in TSConfig
-    private static $widths = array();
-    /// The list of image heights, predefined as sizes in TSConfig
-    private static $heights = array();
 
     /// The path to the image storage directory, relative to the Typo3 installation directory
     private static $basepath = null;
