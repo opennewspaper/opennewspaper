@@ -182,7 +182,8 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     private function getThumbnailPath() {
         self::readTSConfig();
 
-        return self::$basepath . '/' . self::$sizes[0][self::thumbnail_name] . '/' . $this->image_file;
+        $sizes = $this->getSizes();
+        return self::$basepath . '/' . $sizes[self::thumbnail_name] . '/' . $this->image_file;
     }
 
     private static function getThumbnailWidth() {
