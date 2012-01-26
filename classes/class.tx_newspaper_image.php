@@ -32,7 +32,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
             return self::iconImageUnset();
         }
 
-        $this->resizeImage(self::getThumbnailWidth(), self::getThumbnailHeight());
+        $this->resizeImage($this->getThumbnailWidth(), $this->getThumbnailHeight());
 
         if (file_exists(PATH_site . $this->getThumbnailPath())) {
             return $this->getIcon();
@@ -186,13 +186,13 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         return self::$basepath . '/' . $sizes[self::thumbnail_name] . '/' . $this->image_file;
     }
 
-    private static function getThumbnailWidth() {
-        $widths = tx_newspaper_ImageSizeSet::getAllWidths();
+    private function getThumbnailWidth() {
+        $widths = $this->size_set->getWidths();
         return $widths[self::thumbnail_name];
     }
 
-    private static function getThumbnailHeight() {
-        $heights = tx_newspaper_ImageSizeSet::getAllHeights();
+    private function getThumbnailHeight() {
+        $heights = $this->size_set->getHeights();
         return $heights[self::thumbnail_name];
     }
 

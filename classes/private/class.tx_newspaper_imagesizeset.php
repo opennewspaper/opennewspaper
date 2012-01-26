@@ -29,36 +29,20 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     public function getSizes() {
-        return self::getAllSizes($this->index);
+        return self::readAndGetSizes($this->index);
     }
 
     public function getWidths() {
-        return self::getAllWidths($this->index);
+        return self::readAndGetWidths($this->index);
     }
 
     public function getHeights() {
-        return self::getAllHeights($this->index);
+        return self::readAndGetHeights($this->index);
     }
-
-    /// Get the array of possible image sizes registered in TSConfig
-   	public static function getAllSizes($width_set = 0) {
-   		self::readTSConfig();
-   		return self::$sizes[$width_set];
-   	}
-
-       public static function getAllWidths($width_set = 0) {
-           self::fillWidthOrHeightArray(self::$widths, 0);
-           return self::$widths[$width_set];
-       }
-
-       public static function getAllHeights($width_set = 0) {
-           self::fillWidthOrHeightArray(self::$heights, 1);
-           return self::$heights[$width_set];
-       }
 
     ////////////////////////////////////////////////////////////////////////////
 
-    protected static function fillArrayForFormat(array &$prefilled, $function) {
+    private static function fillArrayForFormat(array &$prefilled, $function) {
         $TSconfig = self::getTSconfig();
         $i = sizeof($prefilled);
         foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
@@ -100,7 +84,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     private static function fillWidthOrHeightArray(array &$what, $index) {
         if (empty($what)) {
-            foreach (self::getAllSizes() as $key => $size) {
+            foreach (self::getDefaultSizes() as $key => $size) {
                 $width_and_height = explode('x', $size);
                 if (isset($width_and_height[$index])) {
                     $what[$key] = $width_and_height[$index];
@@ -124,6 +108,21 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
             $sizes[tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
         }
         return $sizes;
+    }
+
+    private static function readAndGetSizes($index) {
+        self::readTSConfig();
+  		return self::$sizes[$index];
+    }
+
+    private static function readAndGetWidths($index) {
+        self::fillWidthOrHeightArray(self::$widths, 0);
+  		return self::$widths[$index];
+    }
+
+    private static function readAndGetHeights($index) {
+        self::fillWidthOrHeightArray(self::$heights, 1);
+  		return self::$heights[$index];
     }
 
     ///	Read base path and predefined sizes for images

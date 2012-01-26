@@ -81,8 +81,6 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
         $timer = tx_newspaper_ExecutionTimer::create();
         
-#$extra = new tx_newspaper_extra_Bio($id);
-#tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());
         if ($fieldArray[self::image_file_field]) {
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
             $image->resizeImages();
@@ -95,19 +93,19 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
         return tx_newspaper_Image::getBasepath();
     }
 
-    public static function getSizes() {
-        return tx_newspaper_ImageSizeSet::getAllSizes();
+    public function getSizes() {
+        return $this->image->getSizes();
     }
 
-    public static function getWidths() {
-        return tx_newspaper_ImageSizeSet::getAllWidths();
+    public function getWidths() {
+        return $this->image->getWidths();
     }
 
-    public static function getHeights() {
-        return tx_newspaper_ImageSizeSet::getAllHeights();
+    public function getHeights() {
+        return $this->image->getHeights();
     }
 
-
+    /** @var tx_newspaper_Image */
     private $image = null;
 
 }
