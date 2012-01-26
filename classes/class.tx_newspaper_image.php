@@ -67,9 +67,7 @@ class tx_newspaper_Image {
 	public function resizeImages() {
 
 		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
-tx_newspaper::devlog("resizeImages", $this->getSizes());
 		foreach ($this->getSizes() as $key => $dimension) {
-tx_newspaper::devlog("resizeImages: $key => $dimension");
 	    	if (self::imgIsResized($this->image_file, $dimension)) continue;
             $this->resizeImage(self::extractWidth($dimension, $key), self::extractHeight($dimension, $key));
 		}
@@ -292,6 +290,10 @@ tx_newspaper::devlog("resizeImages: $key => $dimension");
     private static function setSizes() {
         self::$sizes[0] = self::getDefaultSizesArray();
         self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
+        for ($i = 1; $i < sizeof(self::$sizes); $i++) {
+#            self::$sizes[$i][] =
+        }
+        tx_newspaper::devlog("setSizes()", self::$sizes);
     }
 
     private static function getDefaultSizesArray() {
@@ -383,7 +385,6 @@ tx_newspaper::devlog("doResizeImage($width, $height, $source, $target)", debug_b
     }
 
     private static function makeTargetDir($target) {
-tx_newspaper::devlog("makeTargetDir($target)");
         if (!file_exists(dirname(PATH_site . $target))) {
             if(!mkdir(dirname(PATH_site . $target), 0770, true)) {
                 throw new tx_newspaper_Exception('Couldn\'t mkdir(' . dirname(PATH_site . $target) . ')');
