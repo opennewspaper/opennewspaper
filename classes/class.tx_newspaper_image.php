@@ -45,7 +45,19 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         return self::readFormats();
     }
 
+    public function getLabel() {
+        return self::getWidthSetLabel($this->index);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
+
+    private static function getWidthSetLabel($width_set) {
+        $formats = self::readFormats();
+        foreach ($formats as $format) {
+            if ($format[1] == $width_set) return $format[0];
+        }
+        throw new tx_newspaper_IllegalUsageException("Width set label for set $width_set not found");
+    }
 
     private static function readFormats() {
         $return = array (
@@ -78,7 +90,8 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $smarty->assign('sizes', $this->getSizes());
         $smarty->assign('widths', $this->getWidths());
         $smarty->assign('heights', $this->getHeights());
-        $smarty->assign('width_set', self::getWidthSetLabel($this->width_set));
+        $size_set = new tx_newspaper_ImageSizeSet($this->width_set);
+        $smarty->assign('width_set', $size_set->getLabel());
     }
 
     public function getThumbnail() {
@@ -190,14 +203,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-
-    private static function getWidthSetLabel($width_set) {
-        $formats = self::readFormats();
-        foreach ($formats as $format) {
-            if ($format[1] == $width_set) return $format[0];
-        }
-        throw new tx_newspaper_IllegalUsageException("Width set label for set $width_set not found");
-    }
 
     /** copy $basedir to $targetPath on $targetHost	*/
     private static function rsync($basedir, $targetHost, $targetPath) {
@@ -460,30 +465,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         return '';
     }
 
-    //
-    //  duplicated in size set start
-    //
-    private static function readFormats() {
-        $return = array (
-            array("Default", 0)
-        );
-
-        self::fillFormatDropdownArray($return);
-
-        return $return;
-    }
-
-    private static function fillFormatDropdownArray(array &$return) {
-        self::fillArrayForFormat($return, 'getLabelFromTSconfigForFormat');
-    }
-
-    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
-        return array($format_tsconfig['label'], $i);
-    }
-    //
-    //  duplicated in size set end
-    //
-
+    ////////////////////////////////////////////////////////////////////////////
 
     private $image_file = null;
 
