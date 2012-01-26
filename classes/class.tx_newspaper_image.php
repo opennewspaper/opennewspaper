@@ -373,7 +373,7 @@ tx_newspaper::devlog("resizeImages: $key => $dimension");
      * 		installation directory
      */
     private static function doResizeImage($width, $height, $source, $target) {
-tx_newspaper::devlog("doResizeImage($width, $height, $source, $target)");
+tx_newspaper::devlog("doResizeImage($width, $height, $source, $target)", debug_backtrace());
 
         self::makeTargetDir($target);
 
