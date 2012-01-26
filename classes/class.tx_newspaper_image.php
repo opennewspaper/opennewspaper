@@ -187,12 +187,12 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     private static function getThumbnailWidth() {
-        $widths = self::getAllWidths();
+        $widths = tx_newspaper_ImageSizeSet::getAllWidths();
         return $widths[self::thumbnail_name];
     }
 
     private static function getThumbnailHeight() {
-        $heights = self::getAllHeights();
+        $heights = tx_newspaper_ImageSizeSet::getAllHeights();
         return $heights[self::thumbnail_name];
     }
 
