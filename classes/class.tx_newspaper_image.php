@@ -25,6 +25,15 @@ class tx_newspaper_TSconfigControlled {
         }
     }
 
+    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
+        return array($format_tsconfig['label'], $i);
+    }
+
+    private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
+        unset($format_tsconfig['label']);
+        return $format_tsconfig;
+    }
+
 }
 class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
@@ -50,10 +59,6 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     private static function fillFormatDropdownArray(array &$return) {
         self::fillArrayForFormat($return, 'getLabelFromTSconfigForFormat');
-    }
-
-    private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
-        return array($format_tsconfig['label'], $i);
     }
 
     private $index = 0;
@@ -330,11 +335,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
             $sizes[self::thumbnail_name] = self::thumbnail_size;
         }
         return $sizes;
-    }
-
-    private static function getSizesFromTSconfigForFormat(array $format_tsconfig) {
-        unset($format_tsconfig['label']);
-        return $format_tsconfig;
     }
 
     private static function extractWidth($dimension, $key) {
