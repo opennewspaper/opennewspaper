@@ -46,6 +46,22 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         return self::getWidthSetLabel($this->index);
     }
 
+    /// Get the array of possible image sizes registered in TSConfig
+   	public static function getAllSizes($width_set = 0) {
+   		self::readTSConfig();
+   		return self::$sizes[$width_set];
+   	}
+
+       public static function getAllWidths($width_set = 0) {
+           self::fillWidthOrHeightArray(self::$widths, 0);
+           return self::$widths[$width_set];
+       }
+
+       public static function getAllHeights($width_set = 0) {
+           self::fillWidthOrHeightArray(self::$heights, 1);
+           return self::$heights[$width_set];
+       }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private static function getWidthSetLabel($width_set) {
@@ -70,6 +86,56 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         self::fillArrayForFormat($return, 'getLabelFromTSconfigForFormat');
     }
 
+    private static function fillWidthOrHeightArray(array &$what, $index) {
+        if (empty($what)) {
+            foreach (self::getAllSizes() as $key => $size) {
+                $width_and_height = explode('x', $size);
+                if (isset($width_and_height[$index])) {
+                    $what[$key] = $width_and_height[$index];
+                }
+            }
+        }
+    }
+
+    private static function setSizes() {
+        self::$sizes[0] = self::getDefaultSizesArray();
+        self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
+        for ($i = 1; $i < sizeof(self::$sizes); $i++) {
+            self::$sizes[$i][tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+        }
+    }
+
+    private static function getDefaultSizesArray() {
+        $TSconfig = self::getTSconfig();
+        $sizes = $TSconfig['newspaper.']['image.']['size.'];
+        if (!isset($sizes[tx_newspaper_Image::thumbnail_name])) {
+            $sizes[tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+        }
+        return $sizes;
+    }
+
+    ///	Read base path and predefined sizes for images
+	/** The following parameters must be read from the TSConfig for the storage
+	 *  SysFolder for Image Extras:
+	 *  \code
+	 *  newspaper.image.basepath
+	 *  newspaper.image.size....
+	 *  \endcode
+	 *
+	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
+	 */
+	private static function readTSConfig() {
+
+        $TSConfig = self::getTSconfig();
+
+		if (!self::$sizes) self::setSizes();
+
+		return $TSConfig;
+	}
+
     private $index = 0;
+
+    /// The list of image sizes, predefined in TSConfig
+    private static $sizes = array();
 
 }

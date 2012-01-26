@@ -43,15 +43,15 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function getSizes() {
-        return self::getAllSizes($this->width_set);
+        return tx_newspaper_ImageSizeSet::getAllSizes($this->width_set);
     }
 
     public function getWidths() {
-        return $this->getAllWidths($this->width_set);
+        return tx_newspaper_ImageSizeSet::getAllWidths($this->width_set);
     }
 
     public function getHeights() {
-        return $this->getAllHeights($this->width_set);
+        return tx_newspaper_ImageSizeSet::getAllHeights($this->width_set);
     }
 
     /// If image needs resizing, resize it to all sizes defined in TSConfig
@@ -115,22 +115,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 		self::readTSConfig();
 		return self::$basepath;
 	}
-
-	/// Get the array of possible image sizes registered in TSConfig
-	public static function getAllSizes($width_set = 0) {
-		self::readTSConfig();
-		return self::$sizes[$width_set];
-	}
-
-    public static function getAllWidths($width_set = 0) {
-        self::fillWidthOrHeightArray(self::$widths, 0);
-        return self::$widths[$width_set];
-    }
-
-    public static function getAllHeights($width_set = 0) {
-        self::fillWidthOrHeightArray(self::$heights, 1);
-        return self::$heights[$width_set];
-    }
 
     public static function getMaxImageFileSize() {
         return 10240; // 10 mb \todo: make configurable
@@ -230,50 +214,11 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         );
     }
 
-    ///	Read base path and predefined sizes for images
-	/** The following parameters must be read from the TSConfig for the storage
-	 *  SysFolder for Image Extras:
-	 *  \code
-	 *  newspaper.image.basepath
-	 *  newspaper.image.size....
-	 *  \endcode
-	 *
-	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
-	 */
-	private static function readTSConfig() {
-
-		if (self::$basepath && self::$sizes) return;
-
-        $TSConfig = self::getTSconfig();
-
-		if (!self::$basepath) self::setBasepath($TSConfig);
-		if (!self::$sizes) self::setSizes();
-
-		return $TSConfig;
-	}
-
     private static function setBasepath($TSConfig) {
         if (!$TSConfig['newspaper.']['image.']['basepath']) {
             self::$basepath = 'uploads/images';
         }
         self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
-    }
-
-    private static function setSizes() {
-        self::$sizes[0] = self::getDefaultSizesArray();
-        self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
-        for ($i = 1; $i < sizeof(self::$sizes); $i++) {
-            self::$sizes[$i][self::thumbnail_name] = self::thumbnail_size;
-        }
-    }
-
-    private static function getDefaultSizesArray() {
-        $TSconfig = self::getTSconfig();
-        $sizes = $TSconfig['newspaper.']['image.']['size.'];
-        if (!isset($sizes[self::thumbnail_name])) {
-            $sizes[self::thumbnail_name] = self::thumbnail_size;
-        }
-        return $sizes;
     }
 
     private static function extractWidth($dimension, $key) {
@@ -295,18 +240,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         }
         return $dim;
     }
-
-    private static function fillWidthOrHeightArray(array &$what, $index) {
-        if (empty($what)) {
-            foreach (self::getAllSizes() as $key => $size) {
-                $width_and_height = explode('x', $size);
-                if (isset($width_and_height[$index])) {
-                    $what[$key] = $width_and_height[$index];
-                }
-            }
-        }
-    }
-
 
     /// If image needs resizing, do it (using ImageMagick)
     /** This function is called with the path of the resized image. If the
@@ -401,18 +334,67 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    //**************************************************************************
+    // duplicated in size set start
+    //
+
+    ///	Read base path and predefined sizes for images
+	/** The following parameters must be read from the TSConfig for the storage
+	 *  SysFolder for Image Extras:
+	 *  \code
+	 *  newspaper.image.basepath
+	 *  newspaper.image.size....
+	 *  \endcode
+	 *
+	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
+	 */
+	private static function readTSConfig() {
+
+		if (self::$basepath && self::$sizes) return;
+
+        $TSConfig = self::getTSconfig();
+
+		if (!self::$basepath) self::setBasepath($TSConfig);
+		if (!self::$sizes) self::setSizes();
+
+		return $TSConfig;
+	}
+
+    private static function setSizes() {
+        self::$sizes[0] = self::getDefaultSizesArray();
+        self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
+        for ($i = 1; $i < sizeof(self::$sizes); $i++) {
+            self::$sizes[$i][tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+        }
+    }
+
+    private static function getDefaultSizesArray() {
+        $TSconfig = self::getTSconfig();
+        $sizes = $TSconfig['newspaper.']['image.']['size.'];
+        if (!isset($sizes[tx_newspaper_Image::thumbnail_name])) {
+            $sizes[tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+        }
+        return $sizes;
+    }
+
+    /// The list of image sizes, predefined in TSConfig
+    private static $sizes = array();
+
+    //
+    // duplicated in size set end
+    //**************************************************************************
+
     private $image_file = null;
 
     private $width_set = 0;
 
-    /// The path to the image storage directory, relative to the Typo3 installation directory
-    private static $basepath = null;
-    /// The list of image sizes, predefined in TSConfig
-    private static $sizes = array();
     /// The list of image widths, predefined as sizes in TSConfig
     private static $widths = array();
     /// The list of image heights, predefined as sizes in TSConfig
     private static $heights = array();
+
+    /// The path to the image storage directory, relative to the Typo3 installation directory
+    private static $basepath = null;
 
     private static $rsync_host = null;
     private static $rsync_path = null;

@@ -96,15 +96,15 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
     }
 
     public static function getSizes() {
-        return tx_newspaper_Image::getAllSizes();
+        return tx_newspaper_ImageSizeSet::getAllSizes();
     }
 
     public static function getWidths() {
-        return tx_newspaper_Image::getAllWidths();
+        return tx_newspaper_ImageSizeSet::getAllWidths();
     }
 
     public static function getHeights() {
-        return tx_newspaper_Image::getAllHeights();
+        return tx_newspaper_ImageSizeSet::getAllHeights();
     }
 
 
