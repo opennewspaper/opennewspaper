@@ -46,6 +46,18 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         return self::getWidthSetLabel($this->index);
     }
 
+    public function getSizes() {
+        return self::getAllSizes($this->index);
+    }
+
+    public function getWidths() {
+        return self::getAllWidths($this->index);
+    }
+
+    public function getHeights() {
+        return self::getAllHeights($this->index);
+    }
+
     /// Get the array of possible image sizes registered in TSConfig
    	public static function getAllSizes($width_set = 0) {
    		self::readTSConfig();

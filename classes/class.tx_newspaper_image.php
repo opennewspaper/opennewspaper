@@ -16,7 +16,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function __construct($image_file, $width_set = 0) {
         $this->image_file = $image_file;
-        $this->width_set = intval($width_set);
+        $this->size_set = new tx_newspaper_ImageSizeSet($width_set);
     }
 
     public function prepare_render(tx_newspaper_Smarty $smarty) {
@@ -24,8 +24,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $smarty->assign('sizes', $this->getSizes());
         $smarty->assign('widths', $this->getWidths());
         $smarty->assign('heights', $this->getHeights());
-        $size_set = new tx_newspaper_ImageSizeSet($this->width_set);
-        $smarty->assign('width_set', $size_set->getLabel());
+        $smarty->assign('width_set', $this->size_set->getLabel());
     }
 
     public function getThumbnail() {
@@ -43,15 +42,15 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function getSizes() {
-        return tx_newspaper_ImageSizeSet::getAllSizes($this->width_set);
+        return $this->size_set->getSizes();
     }
 
     public function getWidths() {
-        return tx_newspaper_ImageSizeSet::getAllWidths($this->width_set);
+        return $this->size_set->getWidths();
     }
 
     public function getHeights() {
-        return tx_newspaper_ImageSizeSet::getAllHeights($this->width_set);
+        return $this->size_set->getHeights();
     }
 
     /// If image needs resizing, resize it to all sizes defined in TSConfig
@@ -379,18 +378,14 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     /// The list of image sizes, predefined in TSConfig
     private static $sizes = array();
-    /// The list of image widths, predefined as sizes in TSConfig
-    private static $widths = array();
-    /// The list of image heights, predefined as sizes in TSConfig
-    private static $heights = array();
 
     //
     // duplicated in size set end
     //**************************************************************************
 
     private $image_file = null;
-
-    private $width_set = 0;
+    /** @var tx_newspaper_ImageSizeSet */
+    private $size_set = null;
 
 
     /// The path to the image storage directory, relative to the Typo3 installation directory
