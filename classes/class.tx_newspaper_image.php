@@ -9,7 +9,7 @@
 
 require_once('private/class.tx_newspaper_file.php');
 require_once('private/class.tx_newspaper_imagesizeset.php');
-
+require_once('private/class.tx_newspaper_imagethumbnail.php');
 
 /// Class for handing the upload, resizing and deployment of an image.
 class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
@@ -17,6 +17,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     public function __construct($image_file, $width_set = 0) {
         $this->image_file = $image_file;
         $this->size_set = new tx_newspaper_ImageSizeSet($width_set);
+        $this->thumbnail = new tx_newspaper_ImageThumbnail($this);
     }
 
     public function prepare_render(tx_newspaper_Smarty $smarty) {
@@ -28,17 +29,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function getThumbnail() {
-        if (!$this->image_file) {
-            return self::iconImageUnset();
-        }
-
-        $this->resizeImage($this->getThumbnailWidth(), $this->getThumbnailHeight());
-
-        if (file_exists(PATH_site . $this->getThumbnailPath())) {
-            return $this->getIcon();
-        }
-
-        return self::iconImageMissing();
+        return $this->thumbnail->getThumbnail();
     }
 
     public function getSizes() {
@@ -51,6 +42,10 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function getHeights() {
         return $this->size_set->getHeights();
+    }
+
+    public function getFilename() {
+        return $this->image_file;
     }
 
     /// If image needs resizing, resize it to all sizes defined in TSConfig
@@ -179,41 +174,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         return !(empty(self::$rsync_host) || empty(self::$rsync_path));
     }
 
-    private function getThumbnailPath() {
-        self::readTSConfig();
-
-        $sizes = $this->getSizes();
-        return self::$basepath . '/' . $sizes[self::thumbnail_name] . '/' . $this->image_file;
-    }
-
-    private function getThumbnailWidth() {
-        $widths = $this->size_set->getWidths();
-        return $widths[self::thumbnail_name];
-    }
-
-    private function getThumbnailHeight() {
-        $heights = $this->size_set->getHeights();
-        return $heights[self::thumbnail_name];
-    }
-
-    private function getIcon() {
-        return '<img src="/' . $this->getThumbnailPath() . '" />';
-    }
-
-    private static function iconImageMissing() {
-        return tx_newspaper_BE::renderIcon(
-            'gfx/icon_warning.gif', '',
-            tx_newspaper::getTranslation('message_image_missing')
-        );
-    }
-
-    private static function iconImageUnset() {
-        return tx_newspaper_BE::renderIcon(
-                'gfx/icon_warning2.gif', '',
-                tx_newspaper::getTranslation('message_image_unset')
-        );
-    }
-
     private static function setBasepath($TSConfig) {
         if (!$TSConfig['newspaper.']['image.']['basepath']) {
             self::$basepath = 'uploads/images';
@@ -332,51 +292,39 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         return '';
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-    //**************************************************************************
-    // duplicated in size set start
-    //
-
     ///	Read base path and predefined sizes for images
-	/** The following parameters must be read from the TSConfig for the storage
-	 *  SysFolder for Image Extras:
-	 *  \code
-	 *  newspaper.image.basepath
-	 *  newspaper.image.size....
-	 *  \endcode
-	 *
-	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
-	 */
-	private static function readTSConfig() {
+  	/** The following parameters must be read from the TSConfig for the storage
+   	 *  SysFolder for Image Extras:
+   	 *  \code
+   	 *  newspaper.image.basepath
+   	 *  newspaper.image.size....
+   	 *  \endcode
+   	 *
+   	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
+   	 */
+   	private static function readTSConfig() {
 
         $TSConfig = self::getTSconfig();
 
-		if (!self::$basepath) self::setBasepath($TSConfig);
+    	if (!self::$basepath) self::setBasepath($TSConfig);
 
-		return $TSConfig;
-	}
+    	return $TSConfig;
+    }
 
-    //
-    // duplicated in size set end
-    //**************************************************************************
+    ////////////////////////////////////////////////////////////////////////////
 
+    /** @var string */
     private $image_file = null;
     /** @var tx_newspaper_ImageSizeSet */
     private $size_set = null;
-
+    /** @var tx_newspaper_ImageThumbnail */
+    private $thumbnail = null;
 
     /// The path to the image storage directory, relative to the Typo3 installation directory
     private static $basepath = null;
 
     private static $rsync_host = null;
     private static $rsync_path = null;
-
-    /// Name of the size for thumbnail images displayed in the BE
-    const thumbnail_name = 'thumbnail';
-    /// Default size for thumbnail images displayed in the BE (overridable with TSConfig)
-    const thumbnail_size = '64x64';
-
 
     ///	Where Typo3 stores uploaded images
     const uploads_folder = 'uploads/tx_newspaper';
