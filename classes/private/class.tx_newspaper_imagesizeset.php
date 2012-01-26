@@ -102,18 +102,14 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     private static function setThumbnailSizes() {
         for ($i = 1; $i < sizeof(self::$sizes); $i++) {
-            if (!isset(self::$sizes[$i][tx_newspaper_ImageThumbnail::thumbnail_name])) {
-                self::$sizes[$i][tx_newspaper_ImageThumbnail::thumbnail_name] = self::$sizes[0][tx_newspaper_ImageThumbnail::thumbnail_name];
-            }
+            tx_newspaper_ImageThumbnail::addThumbnailSize(self::$sizes[$i], self::$sizes[0][tx_newspaper_ImageThumbnail::thumbnail_name]);
         }
     }
 
     private static function getDefaultSizesArray() {
         $TSconfig = self::getTSconfig();
         $sizes = $TSconfig['newspaper.']['image.']['size.'];
-        if (!isset($sizes[tx_newspaper_ImageThumbnail::thumbnail_name])) {
-            $sizes[tx_newspaper_ImageThumbnail::thumbnail_name] = self::thumbnail_size;
-        }
+        tx_newspaper_ImageThumbnail::addThumbnailSize($sizes, self::thumbnail_size);
         return $sizes;
     }
 

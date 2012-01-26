@@ -25,6 +25,13 @@ class tx_newspaper_ImageThumbnail {
         return self::iconImageMissing();
     }
 
+    public static function addThumbnailSize(array &$sizes, $default) {
+        if (!isset($sizes[tx_newspaper_ImageThumbnail::thumbnail_name])) {
+            $sizes[tx_newspaper_ImageThumbnail::thumbnail_name] = $default;
+        }
+
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private static function iconImageUnset() {
