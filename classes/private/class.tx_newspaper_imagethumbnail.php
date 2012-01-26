@@ -25,11 +25,14 @@ class tx_newspaper_ImageThumbnail {
         return self::iconImageMissing();
     }
 
-    public static function addThumbnailSize(array &$sizes, $default) {
-        if (!isset($sizes[tx_newspaper_ImageThumbnail::thumbnail_name])) {
-            $sizes[tx_newspaper_ImageThumbnail::thumbnail_name] = $default;
+    public static function addThumbnailSizes(array &$sizes) {
+        for ($i = 0; $i < sizeof($sizes); $i++) {
+            if (isset($sizes[0][self::thumbnail_name])) {
+                self::addThumbnailSize($sizes[$i], $sizes[0][self::thumbnail_name]);
+            } else {
+                self::addThumbnailSize($sizes[$i], self::thumbnail_size);
+            }
         }
-
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -68,10 +71,18 @@ class tx_newspaper_ImageThumbnail {
         );
     }
 
+    private static function addThumbnailSize(array &$sizes, $default) {
+        if (!isset($sizes[tx_newspaper_ImageThumbnail::thumbnail_name])) {
+            $sizes[tx_newspaper_ImageThumbnail::thumbnail_name] = $default;
+        }
+    }
+
     /** @var tx_newspaper_Image */
     private $image;
 
     /// TSconfig Name of the size for thumbnail images displayed in the BE
     const thumbnail_name = 'thumbnail';
+    /// Default size for thumbnail images displayed in the BE (overridable with TSConfig)
+    const thumbnail_size = '64x64';
 
 }

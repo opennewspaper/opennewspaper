@@ -12,6 +12,10 @@ require_once('private/class.tx_newspaper_imagesizeset.php');
 require_once('private/class.tx_newspaper_imagethumbnail.php');
 
 /// Class for handing the upload, resizing and deployment of an image.
+/**
+ *  \todo Factor out handling of resize and rsync into separate classes.
+ *  \todo Documentation
+ */
 class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function __construct($image_file, $width_set = 0) {
@@ -25,7 +29,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $smarty->assign('sizes', $this->getSizes());
         $smarty->assign('widths', $this->getWidths());
         $smarty->assign('heights', $this->getHeights());
-        $smarty->assign('width_set', $this->size_set->getLabel());
+        $smarty->assign('size_set', $this->size_set->getLabel());
     }
 
     public function getThumbnail() {
