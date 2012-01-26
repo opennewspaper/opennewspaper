@@ -293,7 +293,6 @@ class tx_newspaper_Image {
         for ($i = 1; $i < sizeof(self::$sizes); $i++) {
             self::$sizes[$i][self::thumbnail_name] = self::thumbnail_size;
         }
-        tx_newspaper::devlog("setSizes()", self::$sizes);
     }
 
     private static function getDefaultSizesArray() {
@@ -375,7 +374,6 @@ class tx_newspaper_Image {
      * 		installation directory
      */
     private static function doResizeImage($width, $height, $source, $target) {
-tx_newspaper::devlog("doResizeImage($width, $height, $source, $target)", debug_backtrace());
 
         self::makeTargetDir($target);
 
