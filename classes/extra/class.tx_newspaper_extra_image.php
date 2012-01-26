@@ -157,22 +157,30 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
 
 		if ($table != 'tx_newspaper_extra_image') return;
 		if (!isset($fieldArray[self::image_file_field])) return;
+
         $timer = tx_newspaper_ExecutionTimer::create();
 
+        $image = new tx_newspaper_Image(
+            $fieldArray[self::image_file_field],
+            self::getWidthSet($fieldArray, $table, $id)
+        );
+
+        $image->resizeImages();
+        $image->rsyncAllImageFiles();
+	}
+
+    private static function getWidthSet($fieldArray, $table, $id) {
         if (isset($fieldArray[self::width_set_field])) {
-            $width_set = $fieldArray[self::width_set_field];
+            return $fieldArray[self::width_set_field];
         } else {
             $result = tx_newspaper::selectOneRow(
                 self::width_set_field,
                 $table,
                 "uid = $id"
             );
-            $width_set = $result[self::width_set_field];
+            return $result[self::width_set_field];
         }
-        $image = new tx_newspaper_Image($fieldArray[self::image_file_field], $width_set);
-        $image->resizeImages();
-        $image->rsyncAllImageFiles();
-	}
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
