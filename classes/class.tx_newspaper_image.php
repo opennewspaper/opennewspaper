@@ -1,10 +1,10 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: lene
- * Date: 5/19/11
- * Time: 3:15 PM
- * To change this template use File | Settings | File Templates.
+ *  Created by JetBrains PhpStorm.
+ *  User: lene
+ *  Date: 5/19/11
+ *  Time: 3:15 PM
+ *  To change this template use File | Settings | File Templates.
  */
 
 require_once('private/class.tx_newspaper_file.php');
@@ -12,7 +12,7 @@ require_once('private/class.tx_newspaper_imagesizeset.php');
 
 
 /// Class for handing the upload, resizing and deployment of an image.
-class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
+class tx_newspaper_Image  {
 
     public function __construct($image_file, $width_set = 0) {
         $this->image_file = $image_file;
@@ -349,35 +349,12 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 	 */
 	private static function readTSConfig() {
 
-		if (self::$basepath && self::$sizes) return;
-
         $TSConfig = self::getTSconfig();
 
 		if (!self::$basepath) self::setBasepath($TSConfig);
-		if (!self::$sizes) self::setSizes();
 
 		return $TSConfig;
 	}
-
-    private static function setSizes() {
-        self::$sizes[0] = self::getDefaultSizesArray();
-        self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
-        for ($i = 1; $i < sizeof(self::$sizes); $i++) {
-            self::$sizes[$i][tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
-        }
-    }
-
-    private static function getDefaultSizesArray() {
-        $TSconfig = self::getTSconfig();
-        $sizes = $TSconfig['newspaper.']['image.']['size.'];
-        if (!isset($sizes[tx_newspaper_Image::thumbnail_name])) {
-            $sizes[tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
-        }
-        return $sizes;
-    }
-
-    /// The list of image sizes, predefined in TSConfig
-    private static $sizes = array();
 
     //
     // duplicated in size set end
