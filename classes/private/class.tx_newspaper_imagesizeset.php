@@ -33,11 +33,11 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     public function getWidths() {
-        return self::readAndGetWidths($this->index);
+        return $this->readAndGetWidths($this->index);
     }
 
     public function getHeights() {
-        return self::readAndGetHeights($this->index);
+        return $this->readAndGetHeights($this->index);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -82,13 +82,14 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         self::fillArrayForFormat($return, 'getLabelFromTSconfigForFormat');
     }
 
-    private static function fillWidthOrHeightArray(array &$what, $index) {
-        if (empty($what)) {
-            foreach (self::getDefaultSizes() as $key => $size) {
-                $width_and_height = explode('x', $size);
-                if (isset($width_and_height[$index])) {
-                    $what[$key] = $width_and_height[$index];
-                }
+    private function fillWidthOrHeightArray(array &$what, $index) {
+
+        if (!empty($what)) return;
+
+        foreach ($this->getDefaultSizes() as $key => $size) {
+            $width_and_height = explode('x', $size);
+            if (isset($width_and_height[$index])) {
+                $what[$key] = $width_and_height[$index];
             }
         }
     }
@@ -115,13 +116,13 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
   		return self::$sizes[$index];
     }
 
-    private static function readAndGetWidths($index) {
-        self::fillWidthOrHeightArray(self::$widths, 0);
+    private function readAndGetWidths($index) {
+        $this->fillWidthOrHeightArray(self::$widths, 0);
   		return self::$widths[$index];
     }
 
-    private static function readAndGetHeights($index) {
-        self::fillWidthOrHeightArray(self::$heights, 1);
+    private function readAndGetHeights($index) {
+        $this->fillWidthOrHeightArray(self::$heights, 1);
   		return self::$heights[$index];
     }
 
