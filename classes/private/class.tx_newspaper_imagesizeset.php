@@ -86,7 +86,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
         if (!empty($what)) return;
 
-        foreach ($this->getDefaultSizes() as $key => $size) {
+        foreach ($this->getSizes() as $key => $size) {
             $width_and_height = explode('x', $size);
             if (isset($width_and_height[$index])) {
                 $what[$key] = $width_and_height[$index];
@@ -97,8 +97,14 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     private static function setSizes() {
         self::$sizes[0] = self::getDefaultSizesArray();
         self::fillArrayForFormat(self::$sizes, 'getSizesFromTSconfigForFormat');
+        self::setThumbnailSizes();
+    }
+
+    private static function setThumbnailSizes() {
         for ($i = 1; $i < sizeof(self::$sizes); $i++) {
-            self::$sizes[$i][tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+            if (!isset(self::$sizes[$i][tx_newspaper_Image::thumbnail_name])) {
+                self::$sizes[$i][tx_newspaper_Image::thumbnail_name] = tx_newspaper_Image::thumbnail_size;
+            }
         }
     }
 
