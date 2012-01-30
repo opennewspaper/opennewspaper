@@ -353,6 +353,32 @@ $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $
 
 
 
+    // Article: Modify article backend depending on newspaper.articleTypeAsUrl setting
+    // If articletype uid matches setting, field "URL" is shown, fields "RTE" and checkbox "Use RTE" are hidden and vice versa
+    $tsc = tx_newspaper::getTSConfig();
+    if ($tsc['newspaper.']['articleTypeAsUrl']) {
+        // Article as URL
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['url']['displayCond'] =
+               'FIELD:articletype_id:IN:' . $tsc['newspaper.']['articleTypeAsUrl'];
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['bodytext']['displayCond'] =
+               'FIELD:articletype_id:!IN:' . $tsc['newspaper.']['articleTypeAsUrl'];
+        $GLOBALS['TCA']['tx_newspaper_article']['columns']['no_rte']['displayCond'] =
+               'FIELD:articletype_id:!IN:' . $tsc['newspaper.']['articleTypeAsUrl'];
+
+        // Append article type to request update fields
+        if (strpos($GLOBALS['TCA']['tx_newspaper_article']['ctrl']['requestUpdate'], 'articletype_id') === false) {
+            $GLOBALS['TCA']['tx_newspaper_article']['ctrl']['requestUpdate'] .= ',articletype_id';
+        }
+
+    } else {
+        // Plain article only, no article as URL configured
+        unset($GLOBALS['TCA']['tx_newspaper_article']['columns']['url']);
+    }
+
+
+
+
+
 
 // todo: add hook to make article tca modification possible for other newspaper extensions (see: t3lib_div::loadTCA())
 

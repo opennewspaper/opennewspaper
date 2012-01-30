@@ -1130,6 +1130,24 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     ////////////////////////////////////////////////////////////////////////////
 
+    /// Get array based on Typo3 URL coding
+    /**
+     * Example: http://www.opennewspaper.org _blank cssclass titletext
+     * @static
+     * @param $url URL in Typo3 format (see example above)
+     * @return array('href', 'target', 'css', 'title')
+     */
+    public static function getTypo3UrlArray($url) {
+        $data = t3lib_div::unQuoteFilenames($url);
+        return array(
+            'href' => (strpos($data[0], ':') === false)? 'http://' . $data[0] : $data[0],
+            'target' => $data[1],
+            'css' => $data[2],
+            'title' => $data[3]
+        );
+    }
+
+
   /// Create a HTML link with text and URL using the \c typolink() API function
   /** \param  $text the text to be displayed
    *  \param  $params target and optional \c GET parameters as parameter => value

@@ -248,6 +248,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->assignSmartyVariables($paragraphs);
 
+        // Add array for redirecting URL (if article is of type "Article as URL")
+        $this->smarty->assign('redirectURL', tx_newspaper::getTypo3UrlArray($this->getAttribute('url')));
+
         $ret = $this->smarty->fetch($this);
 
         tx_newspaper_ExecutionTimer::logExecutionTime();
@@ -595,6 +598,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
                             tx_newspaper_PageType $pagetype = null,
                             array $additional_parameters = array()) {
 
+        if ($this->isArticleTypeUrl()) {
+            // Article type "Article as URL": Simply return URL.
+            // If more data is needed (CSS target, class, title), this data can be retrieved
+            // in the template by accessing $article.redirectURL.[href|target|css|title]
+            $data = tx_newspaper::getTypo3UrlArray($this->getAttribute('url'));
+            return $data['href'];
+        }
+
         $section = $this->determineRelevantSection($section);
         $typo3page = $section->getTypo3PageID();
 
@@ -812,6 +823,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     /// Get the SQL table which associates tx_newspaper_Extra with tx_newspaper_PageZone.
     public function getExtra2PagezoneTable() {
         return self::$extra_2_pagezone_table;
+    }
+
+
+    /// Is the current article an "Article as URL"
+    /**
+     * Checks if current article type is configured as "Article as URL" in newspaper.articleTypeAsUrl = [uid1,...uidn]
+     * @return bool True if article is configured to be an "Article as URL", else false
+     */
+    public function isArticleTypeUrl() {
+        $tsc = tx_newspaper::getTSConfig();
+        if ($articleType = t3lib_div::trimExplode(',', $tsc['newspaper.']['articleTypeAsUrl'])) {
+            return in_array($this->getArticleType()->getAttribute('uid'), $articleType);
+        }
+        // no TSConfig found, so always false
+        return false;
     }
 
 	/// Attach a tag to the article

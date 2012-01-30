@@ -1,6 +1,5 @@
-
 <!-- start res/templates/tx_newspaper_article.tmpl -->
-
+{*debug*}
 {* Article
    Variables:
    $paragraphs  array(
@@ -62,43 +61,48 @@
 <h1>{$attributes.title}</h1>
 <h3>{$attributes.teaser} {if $attributes.author}VON {$attributes.author}{/if}</h3>
 
-<p> 
-    {if $paragraphs}
+{if !$article->isArticleTypeUrl() }
+    <p>
+        {if $paragraphs}
 
-        {section name=i loop=$paragraphs}
-            {if $paragraphs[i].spacing}
-                {*  You might want this information to display a slightly larger
-                   	spacing below the previous paragraph... writing a HTML
-                   	comment instead is a bogus example. *}
-                <!-- {$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if} -->
-            {/if}
+            {section name=i loop=$paragraphs}
+                {if $paragraphs[i].spacing}
+                    {*  You might want this information to display a slightly larger
+                        spacing below the previous paragraph... writing a HTML
+                        comment instead is a bogus example. *}
+                    <!-- {$paragraphs[i].spacing} empty paragraph{if $paragraphs[i].spacing > 1}s{/if} -->
+                {/if}
 
-{*
-            {if $paragraphs[i].text}
-                <p>{$paragraphs[i].text}</p>
-            {/if}
-*}
-            {if $paragraphs[i].extras}
-                {foreach from=$paragraphs[i].extras item=extra}
-                    <div class="{$extra.extra_name}">
-                        {$extra.content}
-                    </div>
-                {/foreach}
-            {/if}
+    {*
+                {if $paragraphs[i].text}
+                    <p>{$paragraphs[i].text}</p>
+                {/if}
+    *}
+                {if $paragraphs[i].extras}
+                    {foreach from=$paragraphs[i].extras item=extra}
+                        <div class="{$extra.extra_name}">
+                            {$extra.content}
+                        </div>
+                    {/foreach}
+                {/if}
 
-            {if $paragraphs[i].text}
-                <p>{$paragraphs[i].text}</p>
-            {/if}
+                {if $paragraphs[i].text}
+                    <p>{$paragraphs[i].text}</p>
+                {/if}
 
-        {/section}
+            {/section}
 
-    {else}
+        {else}
 
-        {* text has not been correctly split into paragraphs... use the raw text *}
-        {$attributes.text}
+            {* text has not been correctly split into paragraphs... use the raw text *}
+            {$attributes.text}
 
-    {/if}
-	
-</p>
+        {/if}
 
+    </p>
+{else}
+    <p>
+        Redirect URL: <a href="{$redirectURL.href}"{if $redirectURL.title} title="{$redirectURL.title}"{/if}{if $redirectURL.css} class="{$redirectURL.css}"{/if}>{$redirectURL.href}</a>
+    </p>
+{/if}
 <!--  end  res/templates/tx_newspaper_article.tmpl -->
