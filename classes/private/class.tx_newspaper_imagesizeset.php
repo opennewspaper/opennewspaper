@@ -43,12 +43,19 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     ////////////////////////////////////////////////////////////////////////////
 
     private static function fillArrayForFormat(array &$prefilled, $function) {
-        $TSconfig = self::getTSconfig();
         $i = sizeof($prefilled);
-        foreach ($TSconfig['newspaper.']['image.']['format.'] as $format) {
+        foreach (self::getFormatConfig() as $format) {
             $prefilled[$i] = self::$function($format, $i);
             $i++;
         }
+    }
+
+    private static function getFormatConfig() {
+        $TSconfig = self::getTSconfig();
+        if (is_array($TSconfig['newspaper.']['image.']['format.'])) {
+            return $TSconfig['newspaper.']['image.']['format.'];
+        }
+        return array();
     }
 
     private static function getLabelFromTSconfigForFormat(array $format_tsconfig, $i) {
