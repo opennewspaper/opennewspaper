@@ -30,11 +30,90 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		
 	private $oldDbConn = null;
 
-    public function test_storeHiddenStatusWithHooks() {
-        $this->fail("not yet implmented");
+    /**
+     *  storeHiddenStatusWithHooks() MUST set the 'hidden' attribute in the
+     *  object and the DB.
+     *  If publish_date was 0 before and hidden is set to false, publish_date
+     *  MUST be set.
+     *  it MUST NOT change any other attributes.
+     */
+    public function test_storeHiddenStatusWithHooksComplicated() {
+
+        $temp = new tx_newspaper_Article($this->uid);
+        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+
+        $saved_attributes = self::createSavedAttributesArray($temp);
+
+        $temp->storeHiddenStatusWithHooksComplicated(true);
+        $this->assertEquals(true, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(true, $temp);
+        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+
+        $temp->storeHiddenStatusWithHooksComplicated(false);
+        $this->assertEquals(false, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(false, $temp);
+        $publish_date = $temp->getAttribute('publish_date');
+        $this->assertFalse($publish_date == 0);
+
+        $temp->storeHiddenStatusWithHooksComplicated(true);
+        $this->assertEquals(true, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(true, $temp);
+        $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
     }
 
-	public function test_createArticle() {
+    public function test_storeHiddenStatusWithHooksSimple() {
+
+        $temp = new tx_newspaper_Article($this->uid);
+        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+
+        $saved_attributes = self::createSavedAttributesArray($temp);
+
+        $temp->storeHiddenStatusWithHooksSimple(true);
+        $this->assertEquals(true, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(true, $temp);
+        $this->assertTrue($temp->getAttribute('publish_date') == 0);
+
+        $temp->storeHiddenStatusWithHooksSimple(false);
+        $this->assertEquals(false, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(false, $temp);
+        $publish_date = $temp->getAttribute('publish_date');
+        $this->assertFalse($publish_date == 0);
+
+        $temp->storeHiddenStatusWithHooksSimple(true);
+        $this->assertEquals(true, $temp->getAttribute('hidden'));
+        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
+        $this->ensureSavedHiddenStatusIs(true, $temp);
+        $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
+
+    }
+
+    private static function createSavedAttributesArray(tx_newspaper_Article $temp) {
+        $saved_attributes = array();
+        foreach (tx_newspaper::getFields('tx_newspaper_article') as $attribute) {
+            $saved_attributes[$attribute] = $temp->getAttribute($attribute);
+        }
+        return $saved_attributes;
+    }
+
+    private function compareAllAttributesExceptHiddenAndPublishDate(array $saved_attributes, tx_newspaper_Article $temp) {
+        foreach ($saved_attributes as $attribute => $value) {
+            if ($attribute == 'hidden') continue;
+            if ($attribute == 'publish_date') continue;
+            $this->assertEquals($saved_attributes[$attribute], $temp->getAttribute($attribute));
+        }
+    }
+
+    private function ensureSavedHiddenStatusIs($what, tx_newspaper_Article $article) {
+        $saved_article = new tx_newspaper_Article($article->getUid());
+        $this->assertEquals($what, $saved_article->getAttribute('hidden'));
+    }
+
+    public function test_createArticle() {
 		$temp = new tx_newspaper_Article($this->uid);
 		$this->assertTrue(is_object($temp));
 		$this->assertTrue($temp instanceof tx_newspaper_Article);
