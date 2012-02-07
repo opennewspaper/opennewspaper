@@ -1077,11 +1077,24 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $hidden_value = $hidden ? true : false;
 
-        // prepare datamap
+        if (true) {
+            $this->storeHiddenStatusWithHooksComplicated($hidden_value);
+
+
+        } else {
+
+            $this->storeHiddenStatusWithHooksSimple($hidden_value);
+
+        }
+
+    }
+
+    public function storeHiddenStatusWithHooksComplicated($hidden_value)
+    { // prepare datamap
         $datamap['tx_newspaper_article'][$this->getUid()] = array(
             'hidden' => $hidden_value,
-        	'tstamp' => time(),
-        	'modification_user' => tx_newspaper::getBeUserUid()
+            'tstamp' => time(),
+            'modification_user' => tx_newspaper::getBeUserUid()
         );
 
         // use datamap, so all save hooks get called
@@ -1089,9 +1102,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $tce = t3lib_div::makeInstance('t3lib_TCEmain');
         $tce->start($datamap, array());
         $tce->process_datamap();
-    	if (count($tce->errorLog)){
-			throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
-		}
+        if (count($tce->errorLog)) {
+            throw new tx_newspaper_DBException(print_r($tce->errorLog, 1));
+        }
 
         // store in object
         $this->setAttribute('hidden', $hidden_value);
@@ -1102,6 +1115,15 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $this->setAttribute('publish_date', $articleFromDb->getAttribute('publish_date'));
             $this->setAttribute('tx_newspapertaz_vgwort_public_id', $articleFromDb->getAttribute('tx_newspapertaz_vgwort_public_id'));
         }
+
+        // \todo is this really needed? find out why or remove it
+        // \todo if it is needed: why not storeWithoutSavehooks()? using store() calls the savehook twice.
+        $this->store();
+    }
+
+    public function storeHiddenStatusWithHooksSimple($hidden_value)
+    {
+        $this->setAttribute('hidden', $hidden_value);
         $this->store();
     }
 

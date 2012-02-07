@@ -30,6 +30,10 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		
 	private $oldDbConn = null;
 
+    public function test_storeHiddenStatusWithHooks() {
+        $this->fail("not yet implmented");
+    }
+
 	public function test_createArticle() {
 		$temp = new tx_newspaper_Article($this->uid);
 		$this->assertTrue(is_object($temp));
