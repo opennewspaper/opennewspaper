@@ -11,10 +11,18 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_
 
 class TestAsynchronousTaskClass {
 
+    /** Time (in seconds) executeLongTask() takes to complete. */
     const long_task_duration = 10;
+    /** Name of the file executeQuickTask() writes. */
+    const static_state_file = '/tmp/TestAsynchronousTaskClass_state';
+    /** Maximum time (in usec) executeQuickTask() should take to complete.
+     *  This is an estimate!
+     */
+    const quick_execution_time = 1000;
 
     public function __construct() {
         $this->setState();
+        unlink(self::static_state_file);
     }
 
     public function setState() {
@@ -32,6 +40,11 @@ class TestAsynchronousTaskClass {
     public function executeLongTaskChangingState() {
         $this->setState();
         $this->executeLongTask();
+    }
+
+    public function executeQuickTask() {
+        $file = new tx_newspaper_File(self::static_state_file, 'w');
+        $file->write('quick task executed: ' . $this->getState());
     }
 
     private $state = null;
@@ -102,8 +115,16 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         );
     }
 
-    public function executeIsReallyExecuted() {
-        $this->fail('Waiting for an idea how to test this');
+    public function test_executeIsReallyExecuted() {
+        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask');
+        $asynchronous_task->execute();
+
+        usleep(TestAsynchronousTaskClass::quick_execution_time);
+
+        $this->assertTrue(
+            file_exists(TestAsynchronousTaskClass::static_state_file),
+            'executeQuickTask() did not write state file'
+        );
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -119,4 +140,5 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
     private $asynchronous_task = null;
     /** @var TestAsynchronousTaskClass */
     private $test_object = null;
+
 }
