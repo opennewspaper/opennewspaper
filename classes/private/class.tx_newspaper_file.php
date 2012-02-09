@@ -22,6 +22,13 @@ class tx_newspaper_File {
         @fwrite($this->handle, $string);
     }
 
+    public function read($length = -1) {
+        if ($length < 0) {
+            $length = filesize($this->getName());
+        }
+        return @fread($this->handle, $length);
+    }
+
     public function getName() {
         return $this->filename;
     }
