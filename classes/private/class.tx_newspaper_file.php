@@ -10,6 +10,7 @@
 class tx_newspaper_File {
 
     public function __construct($filename, $mode = 'a+') {
+        $this->filename = $filename;
         $this->handle = @fopen($filename, $mode);
     }
 
@@ -21,6 +22,12 @@ class tx_newspaper_File {
         @fwrite($this->handle, $string);
     }
 
+    public function getName() {
+        return $this->filename;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     private static function checkModeValid($mode) {
         if (strlen($mode) > 2 ||
             array_search($mode[0], array('r', 'w', 'a', 'x', 'c') === false ||
@@ -31,5 +38,7 @@ class tx_newspaper_File {
         }
     }
 
+    private $filename = '';
     private $handle = null;
+
 }
