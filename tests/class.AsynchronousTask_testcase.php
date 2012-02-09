@@ -132,8 +132,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
     private function getObjectFromObjectFile() {
         $serialized_file = new tx_newspaper_File($this->asynchronous_task->getSerializedObjectFile());
         $serialized_object = $serialized_file->read();
-        $object = unserialize($serialized_object);
-        return $object;
+        return unserialize($serialized_object);
     }
 
     /** @var tx_newspaper_AsynchronousTask */
