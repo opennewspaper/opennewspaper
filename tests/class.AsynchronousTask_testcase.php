@@ -5,6 +5,8 @@
  * Time: 4:14 PM
  */
 
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_asynchronoustask.php');
+
 class TestAsynchronousTaskClass {
 
     const long_task_duration = 10;
