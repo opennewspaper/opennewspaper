@@ -9,6 +9,12 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_asynchro
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_executiontimer.php');
 
+/** PHPUnit declarations must be included manually here so that they are available
+ *  to the delegate script, which does not have the entire Typo3 environment
+ *  included.
+ */
+require_once(t3lib_extMgm::extPath('phpunit') . '/class.tx_phpunit_testcase.php');
+
 class TestAsynchronousTaskClass {
 
     /** Time (in seconds) executeLongTask() takes to complete. */
