@@ -5,7 +5,7 @@
  * Time:   6:22 PM
  */
 
-require_once(__DIR__ . '/../classes/private/class.tx_newspaper_file.php');
+require_once(dirname(__FILE__) . '/../classes/private/class.tx_newspaper_file.php');
 
 function getObjectFromObjectFile($filename) {
     $serialized_file = new tx_newspaper_File($filename);
@@ -15,5 +15,5 @@ function getObjectFromObjectFile($filename) {
 
 $object = getObjectFromObjectFile($argv[1]);
 
-echo "cwd" . getcwd() . ", class: " . get_class($object) . ", method: " . $argv[2] . ", args: " . $argv[3];
+echo "class: " . get_class($object) . ", method: " . $argv[2] . ", args: " . $argv[3];
 
