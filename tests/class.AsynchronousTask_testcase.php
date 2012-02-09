@@ -7,6 +7,8 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_asynchronoustask.php');
 
+require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_executiontimer.php');
+
 class TestAsynchronousTaskClass {
 
     const long_task_duration = 10;
@@ -28,8 +30,8 @@ class TestAsynchronousTaskClass {
     }
 
     public function executeLongTaskChangingState() {
-        $this->executeLongTask();
         $this->setState();
+        $this->executeLongTask();
     }
 
     private $state = null;
@@ -66,7 +68,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
     public function test_getSerializedObjectFileIsInTypo3temp() {
         $this->assertTrue(
             strpos('typo3temp', $this->asynchronous_task->getSerializedObjectFile()) !== false,
-            'Serialized object file is not in typo3temp folder'
+            'Serialized object file is not in typo3temp folder: ' . $this->asynchronous_task->getSerializedObjectFile()
         );
     }
 
@@ -87,6 +89,24 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
             'Serialized object does not retain original state'
         );
     }
+
+    public function test_executeIsFaster() {
+
+        tx_newspaper_ExecutionTimer::start();
+
+        $this->asynchronous_task->execute();
+
+        $this->assertTrue(
+            tx_newspaper_ExecutionTimer::getExecutionTime() < TestAsynchronousTaskClass::long_task_duration*1000,
+            'execute() is not speeded up'
+        );
+    }
+
+    public function executeIsReallyExecuted() {
+        $this->fail('Waiting for an idea how to test this');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     private function getObjectFromObjectFile() {
         $serialized_file = new tx_newspaper_File($this->asynchronous_task->getSerializedObjectFile());

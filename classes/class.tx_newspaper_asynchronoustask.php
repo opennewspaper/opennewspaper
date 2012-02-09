@@ -50,6 +50,8 @@ class tx_newspaper_AsynchronousTask {
         return self::getSerializedFile($this->args);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+
     private static function checkApplicability($object, $method) {
         if (!is_object($object)) {
             throw new tx_newspaper_IllegalUsageException("Asynchronous task can only be executed on an object");
