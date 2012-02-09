@@ -42,9 +42,12 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         $this->asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeLongTaskChangingState');
     }
 
-    public function test_whut() {
-        $script = $this->asynchronous_task->getDelegateScript();
-        $this->fail($script);
+    public function test_delegateScriptExists() {
+        $this->assertTrue(file_exists($this->asynchronous_task->getDelegateScript()));
+    }
+
+    public function test_delegateScriptIsExecutable() {
+        $this->assertTrue(is_executable($this->asynchronous_task->getDelegateScript()));
     }
 
     /** @var tx_newspaper_AsynchronousTask */
