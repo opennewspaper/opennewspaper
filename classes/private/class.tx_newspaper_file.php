@@ -33,6 +33,12 @@ class tx_newspaper_File {
         return $this->filename;
     }
 
+    public static function unlink($filename) {
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private static function checkModeValid($mode) {

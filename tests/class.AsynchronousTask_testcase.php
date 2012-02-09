@@ -22,7 +22,7 @@ class TestAsynchronousTaskClass {
 
     public function __construct() {
         $this->setState();
-        unlink(self::static_state_file);
+        tx_newspaper_File::unlink(self::static_state_file);
     }
 
     public function setState() {
