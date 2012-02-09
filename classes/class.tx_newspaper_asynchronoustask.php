@@ -26,11 +26,11 @@ class tx_newspaper_AsynchronousTask {
     }
 
     public function execute() {
-        system(
-            $this->getDelegateScript() . ' ' .
-            $this->getSerializedObjectFile() . ' ' .
-            $this->getMethodName() . ' ' .
-            $this->getSerializedArgsFile()
+        return system(
+            self::quote($this->getDelegateScript()) . ' ' .
+            self::quote($this->getSerializedObjectFile()) . ' ' .
+            self::quote($this->getMethodName()) . ' ' .
+            self::quote($this->getSerializedArgsFile())
         );
     }
 
@@ -65,6 +65,10 @@ class tx_newspaper_AsynchronousTask {
         $file = new tx_newspaper_File(t3lib_div::tempnam(get_class($this)), 'w');
         $file->write(serialize($something));
         return $file->getName();
+    }
+
+    private static function quote($string) {
+        return '"' . $string . '"';
     }
 
     private $object = null;
