@@ -8,6 +8,8 @@
 
 $DIR = dirname(__FILE__);
 
+ini_set('memory_limit', '32M');
+
 function includeTypo3() {
 
     global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER;
@@ -65,6 +67,29 @@ function includeTypo3() {
 
     cliProcessing($BE_USER);
 
+require(PATH_typo3conf . '/localconf.php');
+
+    $TYPO3_LOADED_EXT = t3lib_extMgm::typo3_loadExtensions();
+
+#echo str_replace("\n", "<br />", print_r($TYPO3_LOADED_EXT, 1));
+
+echo "<br />";
+    foreach ($TYPO3_LOADED_EXT as $extkey => $ext) {
+        if ($extkey == 'timtab') continue;
+        if ($extkey == 'ch_rterecords') continue;
+        if ($extkey == 'dmc_https') continue;
+        if ($extkey == 'magpierss') continue;
+        if ($extkey == 'smarty') continue;
+
+        if (!isset($ext['ext_localconf.php'])) continue;
+
+	if (file_exists($ext['ext_localconf.php'])) {
+echo $ext['ext_localconf.php'] . "<br />";
+            require_once($ext['ext_localconf.php']);
+        } else {
+            echo "<strong>".$ext['ext_localconf.php'] . " missing!</strong><br />";
+        }
+    }
 }
 
 function includeTablesCustomization($TYPO3_LOADED_EXT) {
@@ -121,9 +146,9 @@ function cliProcessing($BE_USER) {
 }
 
 function includeLibraries() {
-    require_once(PATH_t3lib . 'class.t3lib_userauth.php');
-    require_once(PATH_t3lib . 'class.t3lib_userauthgroup.php');
-    require_once(PATH_t3lib . 'class.t3lib_beuserauth.php');
+#    require_once(PATH_t3lib . 'class.t3lib_userauth.php');
+#    require_once(PATH_t3lib . 'class.t3lib_userauthgroup.php');
+#    require_once(PATH_t3lib . 'class.t3lib_beuserauth.php');
     require_once(PATH_t3lib . 'class.t3lib_iconworks.php');
     require_once(PATH_t3lib . 'class.t3lib_befunc.php');
     require_once(PATH_t3lib . 'class.t3lib_cs.php');
