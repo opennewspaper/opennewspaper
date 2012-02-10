@@ -12,7 +12,7 @@ ini_set('memory_limit', '32M');
 
 function includeTypo3() {
 
-    global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER, $TCA;
+    global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER;
 
     /***************************************************************
     *  Copyright notice
@@ -67,41 +67,44 @@ function includeTypo3() {
 
     cliProcessing($BE_USER);
 
-require(PATH_typo3conf . '/localconf.php');
+    loadExtensions();
+}
+
+function loadExtensions() {
+
+    global $TYPO3_CONF_VARS, $TYPO3_LOADED_EXT, $_EXTKEY;
+
+    require(PATH_typo3conf . '/localconf.php');
+    if (strpos($TYPO3_CONF_VARS['EXT']['requiredExt'], 'lang') === false) {
+        $TYPO3_CONF_VARS['EXT']['requiredExt'] .= ',lang';
+    }
 
     $TYPO3_LOADED_EXT = t3lib_extMgm::typo3_loadExtensions();
 
-#echo str_replace("\n", "<br />\n", print_r($TYPO3_LOADED_EXT, 1));
-
-    global $_EXTKEY;
-#echo "<br />\n";
     foreach ($TYPO3_LOADED_EXT as $_EXTKEY => $ext) {
-        if ($_EXTKEY == 'timtab') continue;
-        if ($_EXTKEY == 'ch_rterecords') continue;
-        if ($_EXTKEY == 'dmc_https') continue;
-        if ($_EXTKEY == 'magpierss') continue;
-        if ($_EXTKEY == 'smarty') continue;
 
-        if (isset($ext['ext_localconf.php'])) {
+        if (isProhibitedExtension($_EXTKEY)) continue;
 
-            if (file_exists($ext['ext_localconf.php'])) {
-#echo $ext['ext_localconf.php'] . "<br />\n";
-                require_once($ext['ext_localconf.php']);
-            } else {
-                echo "<strong>".$ext['ext_localconf.php'] . " missing!</strong><br />\n";
-            }
-        }
+        includeExtensionConfigFile($ext, 'ext_localconf.php');
+        includeExtensionConfigFile($ext, 'ext_tables.php');
 
-        if (isset($ext['ext_tables.php'])) {
+    }
 
-            if (file_exists($ext['ext_tables.php'])) {
-#echo $ext['ext_tables.php'] . "<br />\n";
-                require_once($ext['ext_tables.php']);
-            } else {
-                echo "<strong>".$ext['ext_tables.php'] . " missing!</strong><br />\n";
-            }
+}
+
+function includeExtensionConfigFile(array $ext, $file) {
+    if (isset($ext[$file])) {
+        if (file_exists($ext[$file])) {
+            require_once($ext[$file]);
+        } else {
+            echo "<strong>" . $ext[$file] . " missing!</strong><br />\n";
         }
     }
+}
+
+function isProhibitedExtension($ext) {
+    if (in_array($ext, array('timtab', 'ch_rterecords', 'dmc_https', 'magpierss', 'smarty'))) return true;
+    return false;
 }
 
 function includeTablesCustomization($TYPO3_LOADED_EXT) {
