@@ -53,39 +53,15 @@ function includeTypo3($script_basedir) {
     // *******************************
     $temp_path = str_replace('\\','/',dirname(PATH_thisScript).'/');
     $temp_modPath='';
-        // If TYPO3_MOD_PATH is defined we must calculate the modPath since init.php must be included by a module
-    if (substr($temp_path,-strlen(TYPO3_mainDir))!=TYPO3_mainDir)	{
-        if (defined('TYPO3_MOD_PATH'))	{
-    echo "<br />\ntemp path: " . substr($temp_path,-strlen(TYPO3_MOD_PATH)) . " ; MOD PATH: " . TYPO3_MOD_PATH . " <br />\n";
-    echo "end of temp path: " . substr($temp_path,-strlen(TYPO3_mainDir)) . " <br />\n";
-            if (substr($temp_path,-strlen(TYPO3_MOD_PATH))==TYPO3_MOD_PATH)	{
-                $temp_path=substr($temp_path,0,-strlen(TYPO3_MOD_PATH)) . 'typo3/'; ### <- changed the original here
-                $temp_modPath=TYPO3_MOD_PATH;
-    echo "branch 1; temp path $temp_path <br />\n";
-            } elseif (substr(TYPO3_MOD_PATH,0,13)=='../typo3conf/' && (substr(TYPO3_MOD_PATH,3)==substr($temp_path,-strlen(substr(TYPO3_MOD_PATH,3))))) {
-                $temp_path = substr($temp_path,0,-strlen(substr(TYPO3_MOD_PATH,3))).TYPO3_mainDir;
-                $temp_modPath=TYPO3_MOD_PATH;
-            }
-            if (!@is_dir($temp_path))	{
-                $temp_path='';
-            }
-        }
-    }
+echo "<br />\ntemp path: " . $temp_path . " <br />\n";
+
+    $pos = strpos($temp_path, 'typo3conf');
+    $temp_path = substr($temp_path, 0, $pos+5) . '/';
 
     // OUTPUT error message and exit if there are problems with the path. Otherwise define constants and continue.
     if (!$temp_path || substr($temp_path,-strlen(TYPO3_mainDir))!=TYPO3_mainDir)	{	// This must be the case in order to proceed
 
-    echo substr($temp_path,-strlen(TYPO3_mainDir)). " != ".TYPO3_mainDir . " <br />\n";
-
-        if (TYPO3_OS=='WIN')	{
-            $thisPath_base = basename(substr($temp_path,-strlen(TYPO3_mainDir)));
-            $mainPath_base = basename(TYPO3_mainDir);
-            if (!strcasecmp($thisPath, $mainPath))	{	// Seems like the requested URL is not case-specific. This may happen on Windows only. -case. Otherwise, redirect to the correct URL. TYPO3_mainDir must be lower-case!!
-                $script_name = (php_sapi_name()=='cgi'||php_sapi_name()=='cgi-fcgi')&&($_SERVER['ORIG_PATH_INFO']?$_SERVER['ORIG_PATH_INFO']:$_SERVER['PATH_INFO']) ? ($_SERVER['ORIG_PATH_INFO']?$_SERVER['ORIG_PATH_INFO']:$_SERVER['PATH_INFO']) : ($_SERVER['ORIG_SCRIPT_NAME']?$_SERVER['ORIG_SCRIPT_NAME']:$_SERVER['SCRIPT_NAME']);	// Copied from t3lib_div::getIndpEnv()
-                header('Location: '.str_replace($thisPath_base, $mainPath_base, $script_name));
-                exit;
-            }
-        }
+echo substr($temp_path,-strlen(TYPO3_mainDir)). " != ".TYPO3_mainDir . " <br />\n";
 
         echo 'Error in init.php: Path to TYPO3 main dir could not be resolved correctly. <br /><br />';
 
