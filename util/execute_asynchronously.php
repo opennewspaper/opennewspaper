@@ -75,11 +75,11 @@ function loadExtensions() {
     global $TYPO3_CONF_VARS, $TYPO3_LOADED_EXT, $_EXTKEY;
 
     require(PATH_typo3conf . '/localconf.php');
-    if (strpos($TYPO3_CONF_VARS['EXT']['requiredExt'], 'lang') === false) {
-        if (empty($TYPO3_CONF_VARS['EXT']['requiredExt'])) {
-            $TYPO3_CONF_VARS['EXT']['requiredExt'] = 'lang';
+    if (strpos($TYPO3_CONF_VARS['EXT']['extList'], 'lang') === false) {
+        if (empty($TYPO3_CONF_VARS['EXT']['extList'])) {
+            $TYPO3_CONF_VARS['EXT']['extList'] = 'lang';
         } else {
-            $TYPO3_CONF_VARS['EXT']['requiredExt'] .= ',lang';
+            $TYPO3_CONF_VARS['EXT']['extList'] .= ',lang';
         }
     }
 
