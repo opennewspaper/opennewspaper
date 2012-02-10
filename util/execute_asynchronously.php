@@ -12,7 +12,7 @@ ini_set('memory_limit', '32M');
 
 function includeTypo3() {
 
-    global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER;
+    global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER, $TCA;
 
     /***************************************************************
     *  Copyright notice
@@ -71,23 +71,35 @@ require(PATH_typo3conf . '/localconf.php');
 
     $TYPO3_LOADED_EXT = t3lib_extMgm::typo3_loadExtensions();
 
-#echo str_replace("\n", "<br />", print_r($TYPO3_LOADED_EXT, 1));
+#echo str_replace("\n", "<br />\n", print_r($TYPO3_LOADED_EXT, 1));
 
-echo "<br />";
-    foreach ($TYPO3_LOADED_EXT as $extkey => $ext) {
-        if ($extkey == 'timtab') continue;
-        if ($extkey == 'ch_rterecords') continue;
-        if ($extkey == 'dmc_https') continue;
-        if ($extkey == 'magpierss') continue;
-        if ($extkey == 'smarty') continue;
+    global $_EXTKEY;
+#echo "<br />\n";
+    foreach ($TYPO3_LOADED_EXT as $_EXTKEY => $ext) {
+        if ($_EXTKEY == 'timtab') continue;
+        if ($_EXTKEY == 'ch_rterecords') continue;
+        if ($_EXTKEY == 'dmc_https') continue;
+        if ($_EXTKEY == 'magpierss') continue;
+        if ($_EXTKEY == 'smarty') continue;
 
-        if (!isset($ext['ext_localconf.php'])) continue;
+        if (isset($ext['ext_localconf.php'])) {
 
-	if (file_exists($ext['ext_localconf.php'])) {
-echo $ext['ext_localconf.php'] . "<br />";
-            require_once($ext['ext_localconf.php']);
-        } else {
-            echo "<strong>".$ext['ext_localconf.php'] . " missing!</strong><br />";
+            if (file_exists($ext['ext_localconf.php'])) {
+#echo $ext['ext_localconf.php'] . "<br />\n";
+                require_once($ext['ext_localconf.php']);
+            } else {
+                echo "<strong>".$ext['ext_localconf.php'] . " missing!</strong><br />\n";
+            }
+        }
+
+        if (isset($ext['ext_tables.php'])) {
+
+            if (file_exists($ext['ext_tables.php'])) {
+#echo $ext['ext_tables.php'] . "<br />\n";
+                require_once($ext['ext_tables.php']);
+            } else {
+                echo "<strong>".$ext['ext_tables.php'] . " missing!</strong><br />\n";
+            }
         }
     }
 }
@@ -257,6 +269,8 @@ function getObjectFromObjectFile($filename) {
 }
 
 $object = getObjectFromObjectFile($argv[1]);
+$method = $argv[2];
 
-echo "class: " . get_class($object) . ", method: " . $argv[2] . ", args: " . $argv[3];
+echo "class: " . get_class($object) . ", method: " . $method . ", args: " . $argv[3];
 
+$object->$method();
