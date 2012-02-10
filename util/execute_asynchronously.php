@@ -63,11 +63,12 @@ function includeTypo3() {
 
     connectToDB();
 
-    includeTablesCustomization($TYPO3_LOADED_EXT);
-
     cliProcessing($BE_USER);
 
     loadExtensions();
+
+    includeTablesCustomization();
+
 }
 
 function loadExtensions() {
@@ -75,6 +76,7 @@ function loadExtensions() {
     global $TYPO3_CONF_VARS, $TYPO3_LOADED_EXT, $_EXTKEY;
 
     require(PATH_typo3conf . '/localconf.php');
+
     if (strpos($TYPO3_CONF_VARS['EXT']['extList'], 'lang') === false) {
         if (empty($TYPO3_CONF_VARS['EXT']['extList'])) {
             $TYPO3_CONF_VARS['EXT']['extList'] = 'lang';
@@ -97,6 +99,7 @@ function loadExtensions() {
 }
 
 function includeExtensionConfigFile(array $ext, $file) {
+    global $_EXTKEY, $TCA;
     if (isset($ext[$file])) {
         if (file_exists($ext[$file])) {
             require_once($ext[$file]);
@@ -111,7 +114,10 @@ function isProhibitedExtension($ext) {
     return false;
 }
 
-function includeTablesCustomization($TYPO3_LOADED_EXT) {
+function includeTablesCustomization() {
+
+    global $TYPO3_LOADED_EXT;
+
     include (TYPO3_tables_script ? PATH_typo3conf . TYPO3_tables_script : PATH_t3lib . 'stddb/tables.php');
     // Extension additions
     if ($TYPO3_LOADED_EXT['_CACHEFILE']) {
