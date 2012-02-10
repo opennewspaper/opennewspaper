@@ -13,7 +13,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_
  *  to the delegate script, which does not have the entire Typo3 environment
  *  included.
  */
-require_once(t3lib_extMgm::extPath('phpunit') . '/class.tx_phpunit_testcase.php');
+require_once(PATH_typo3conf . 'ext/phpunit' . '/class.tx_phpunit_testcase.php');
 
 class TestAsynchronousTaskClass {
 
