@@ -66,15 +66,8 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
 
     public function test_delegateScriptExists() {
         $this->assertTrue(
-            file_exists($this->asynchronous_task->getDelegateScript()),
+            file_exists($this->asynchronous_task->getFullScriptPath(tx_newspaper_AsynchronousTask::delegate_php_script_name)),
             'Delegate script does not exist'
-        );
-    }
-
-    public function test_delegateScriptIsExecutable() {
-        $this->assertTrue(
-            is_executable($this->asynchronous_task->getDelegateScript()),
-            'Delegate script is not executable'
         );
     }
 

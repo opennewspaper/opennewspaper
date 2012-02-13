@@ -14,7 +14,8 @@
  */
 class tx_newspaper_AsynchronousTask {
 
-    const delegate_script_name = 'util/execute_asynchronously.sh';
+    const delegate_shell_script_name = 'util/execute_asynchronously.sh';
+    const delegate_php_script_name = 'util/execute_asynchronously.php';
 
     public function __construct($object, $method, array $arguments = array()) {
 
@@ -26,16 +27,36 @@ class tx_newspaper_AsynchronousTask {
     }
 
     public function execute() {
+        return $this->execute_simpler();
+    }
+
+    public function execute_complicated() {
         return system(
-            self::quote($this->getDelegateScript()) . ' ' .
+            self::quote(self::getFullScriptPath(self::delegate_shell_script_name)) . ' ' .
             self::quote($this->getSerializedObjectFile()) . ' ' .
             self::quote($this->getMethodName()) . ' ' .
             self::quote($this->getSerializedArgsFile()) 
         );
     }
 
-    public function getDelegateScript() {
-        return t3lib_extMgm::extPath('newspaper', self::delegate_script_name);
+    public function execute_simpler() {
+        $this->subprocess_pid = shell_exec(
+            "nohup php " .
+            self::quote(self::getFullScriptPath(self::delegate_php_script_name)) . ' ' .
+            self::quote($this->getSerializedObjectFile()) . ' ' .
+            self::quote($this->getMethodName()) . ' ' .
+            self::quote($this->getSerializedArgsFile()) .
+            " 2> /dev/null & echo $!"
+        );
+    }
+
+    public function isRunning() {
+        exec('ps ' . $this->subprocess_pid, $ProcessState);
+        return(count($ProcessState) >= 2);
+    }
+
+    public function getFullScriptPath($script_name) {
+        return t3lib_extMgm::extPath('newspaper', $script_name);
     }
 
     public function getSerializedObjectFile() {
@@ -74,5 +95,7 @@ class tx_newspaper_AsynchronousTask {
     private $object = null;
     private $method = '';
     private $args = array();
+
+    private $subprocess_pid = null;
 
 }
