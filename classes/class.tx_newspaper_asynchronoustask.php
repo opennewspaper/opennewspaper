@@ -30,7 +30,7 @@ class tx_newspaper_AsynchronousTask {
             self::quote($this->getDelegateScript()) . ' ' .
             self::quote($this->getSerializedObjectFile()) . ' ' .
             self::quote($this->getMethodName()) . ' ' .
-            self::quote($this->getSerializedArgsFile())
+            self::quote($this->getSerializedArgsFile()) 
         );
     }
 
