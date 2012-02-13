@@ -26,7 +26,7 @@ class tx_newspaper_AsynchronousTask {
     }
 
     public function execute() {
-        $this->subprocess_pid = shell_exec(
+        shell_exec(
             "nohup php " .
             self::quote(self::getFullScriptPath(self::delegate_php_script_name)) . ' ' .
             self::quote($this->getSerializedObjectFile()) . ' ' .
@@ -76,7 +76,5 @@ class tx_newspaper_AsynchronousTask {
     private $object = null;
     private $method = '';
     private $args = array();
-
-    private $subprocess_pid = null;
 
 }
