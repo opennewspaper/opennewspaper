@@ -14,7 +14,6 @@
  */
 class tx_newspaper_AsynchronousTask {
 
-    const delegate_shell_script_name = 'util/execute_asynchronously.sh';
     const delegate_php_script_name = 'util/execute_asynchronously.php';
 
     public function __construct($object, $method, array $arguments = array()) {
@@ -34,15 +33,6 @@ class tx_newspaper_AsynchronousTask {
             self::quote($this->getMethodName()) . ' ' .
             self::quote($this->getSerializedArgsFile()) .
             " > /dev/null 2>&1 &"
-        );
-    }
-
-    public function execute_complicated() {
-        return system(
-            self::quote(self::getFullScriptPath(self::delegate_shell_script_name)) . ' ' .
-            self::quote($this->getSerializedObjectFile()) . ' ' .
-            self::quote($this->getMethodName()) . ' ' .
-            self::quote($this->getSerializedArgsFile()) 
         );
     }
 

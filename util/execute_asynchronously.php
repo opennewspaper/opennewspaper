@@ -283,7 +283,13 @@ function getObjectFromObjectFile($filename) {
 
 $object = getObjectFromObjectFile($argv[1]);
 $method = $argv[2];
+$args = getObjectFromObjectFile($argv[3]);
 
-echo "class: " . get_class($object) . ", method: " . $method . ", args: " . $argv[3];
+switch (sizeof($args)) {
+    case 0: $object->$method(); break;
+    case 1: $object->$method($args[0]); break;
+    case 2: $object->$method($args[0], $args[1]); break;
+    case 3: $object->$method($args[0], $args[1], $args[3]); break;
 
-$object->$method();
+    default: die("Calling methods with " . sizeof($args) . " not implemented, sorry");
+}

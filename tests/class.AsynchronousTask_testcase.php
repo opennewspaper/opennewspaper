@@ -23,9 +23,12 @@ class TestAsynchronousTaskClass {
     /** Name of the file executeQuickTask() writes. */
     const static_state_file = '/tmp/TestAsynchronousTaskClass_state';
     /** Maximum time (in usec) executeQuickTask() should take to complete.
-     *  This is an estimate!
+     *  This value is dependent on how long the delegate PHP script takes to
+     *  do a single task (writing a file). Because the delegate script needs to
+     *  load the entire framework, expect this to take over half a second. The
+     *  exact value depends on your server environment!
      */
-    const quick_execution_time = 800000;
+    const quick_execution_time = 1000000;
 
     public function __construct() {
         $this->setState();
@@ -123,7 +126,10 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
 
         $this->assertTrue(
             file_exists(TestAsynchronousTaskClass::static_state_file),
-            'executeQuickTask() did not write state file; returned ' . $retval
+            'executeQuickTask() did not write state file; returned ' . intval($retval) .
+            '. This may be because the server this script runs on is to slow; try ' .
+            'increasing TestAsynchronousTaskClass::quick_execution_time in the unit ' .
+            'test PHP file before deciding that this test failed!'
         );
     }
 
