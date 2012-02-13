@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "$@" >> /tmp/deptree.log
+echo $(date) '--' "$@" >> /tmp/deptree.log

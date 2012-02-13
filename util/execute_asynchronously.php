@@ -8,7 +8,7 @@
 
 $DIR = dirname(__FILE__);
 
-ini_set('memory_limit', '32M');
+ini_set('memory_limit', '64M');
 
 function includeTypo3() {
 
