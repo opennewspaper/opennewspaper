@@ -27,7 +27,14 @@ class tx_newspaper_AsynchronousTask {
     }
 
     public function execute() {
-        return $this->execute_simpler();
+        $this->subprocess_pid = shell_exec(
+            "nohup php " .
+            self::quote(self::getFullScriptPath(self::delegate_php_script_name)) . ' ' .
+            self::quote($this->getSerializedObjectFile()) . ' ' .
+            self::quote($this->getMethodName()) . ' ' .
+            self::quote($this->getSerializedArgsFile()) .
+            " > /dev/null 2>&1 &"
+        );
     }
 
     public function execute_complicated() {
@@ -37,22 +44,6 @@ class tx_newspaper_AsynchronousTask {
             self::quote($this->getMethodName()) . ' ' .
             self::quote($this->getSerializedArgsFile()) 
         );
-    }
-
-    public function execute_simpler() {
-        $this->subprocess_pid = shell_exec(
-            "nohup php " .
-            self::quote(self::getFullScriptPath(self::delegate_php_script_name)) . ' ' .
-            self::quote($this->getSerializedObjectFile()) . ' ' .
-            self::quote($this->getMethodName()) . ' ' .
-            self::quote($this->getSerializedArgsFile()) .
-            " 2> /dev/null & echo $!"
-        );
-    }
-
-    public function isRunning() {
-        exec('ps ' . $this->subprocess_pid, $ProcessState);
-        return(count($ProcessState) >= 2);
     }
 
     public function getFullScriptPath($script_name) {
