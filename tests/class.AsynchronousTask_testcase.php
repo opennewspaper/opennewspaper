@@ -122,7 +122,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
     }
 
     public function test_executeIsReallyExecuted() {
-        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), __FILE__);
+        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), array(__FILE__));
         $retval = $asynchronous_task->execute();
 
         usleep(TestAsynchronousTaskClass::quick_execution_time);
