@@ -5,11 +5,6 @@
  * Time:   6:22 PM
  */
 
-
-$DIR = dirname(__FILE__);
-
-ini_set('memory_limit', '64M');
-
 function includeTypo3() {
 
     global $TYPO3_DB, $TYPO3_CONF_VARS, $MCONF, $TYPO3_LOADED_EXT, $BE_USER;
@@ -270,26 +265,49 @@ function defineBasicConstants() {
     define('TYPO3_mainDir', 'typo3/'); // This is the directory of the backend administration for the sites of this TYPO3 installation.
 }
 
-includeTypo3($DIR);
+////////////////////////////////////////////////////////////////////////////////
 
-require_once(dirname(__FILE__) . '/../classes/private/class.tx_newspaper_file.php');
-require_once(dirname(__FILE__) . '/../tests/class.AsynchronousTask_testcase.php');
-
-function getObjectFromObjectFile($filename) {
+function getSerializedObjectFromFile($filename) {
     $serialized_file = new tx_newspaper_File($filename);
     $serialized_object = $serialized_file->read();
     return unserialize($serialized_object);
 }
 
-$object = getObjectFromObjectFile($argv[1]);
-$method = $argv[2];
-$args = getObjectFromObjectFile($argv[3]);
 
-switch (sizeof($args)) {
-    case 0: $object->$method(); break;
-    case 1: $object->$method($args[0]); break;
-    case 2: $object->$method($args[0], $args[1]); break;
-    case 3: $object->$method($args[0], $args[1], $args[3]); break;
+function executeMethod($object, $method, $args) {
+    switch (sizeof($args)) {
+        case 0:
+            $object->$method();
+            return;
+        case 1:
+            $object->$method($args[0]);
+            return;
+        case 2:
+            $object->$method($args[0], $args[1]);
+            return;
+        case 3:
+            $object->$method($args[0], $args[1], $args[3]);
+            return;
 
-    default: die("Calling methods with " . sizeof($args) . " not implemented, sorry");
+        default:
+            die("Calling methods with " . sizeof($args) . " not implemented, sorry");
+    }
 }
+
+
+ini_set('memory_limit', '64M');
+
+$DIR = dirname(__FILE__);
+
+includeTypo3($DIR);
+require_once($DIR . '/../classes/private/class.tx_newspaper_file.php');
+#require_once($DIR . '/../tests/class.AsynchronousTask_testcase.php');
+
+$object = getSerializedObjectFromFile($argv[1]);
+$method = $argv[2];
+$args = getSerializedObjectFromFile($argv[3]);
+
+executeMethod($object, $method, $args);
+
+unlink($argv[1]);
+unlink($argv[3]);

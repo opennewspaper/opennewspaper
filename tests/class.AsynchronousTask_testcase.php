@@ -67,9 +67,13 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         $this->asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeLongTaskChangingState');
     }
 
+    public function tearDown() {
+        tx_newspaper_File::unlink(TestAsynchronousTaskClass::static_state_file);
+    }
+
     public function test_delegateScriptExists() {
         $this->assertTrue(
-            file_exists($this->asynchronous_task->getFullScriptPath(tx_newspaper_AsynchronousTask::delegate_php_script_name)),
+            file_exists($this->asynchronous_task->getDelegateScript()),
             'Delegate script does not exist'
         );
     }
@@ -131,6 +135,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
             'increasing TestAsynchronousTaskClass::quick_execution_time in the unit ' .
             'test PHP file before deciding that this test failed!'
         );
+
     }
 
     ////////////////////////////////////////////////////////////////////////////
