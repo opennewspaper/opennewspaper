@@ -38,13 +38,25 @@ class tx_newspaper_AsynchronousTask {
      */
     const default_log_file = '/dev/null';
 
-    public function __construct($object, $method, array $arguments = array()) {
+    /**
+     *  @param object $object The object a method is called on.
+     *  @param string $method The method called on \p $object.
+     *  @param array $arguments Up to three arguments for method. The method call
+     *      executed is \code $object->$method($args[0], $args[1], $args[2]) \endcode.
+     *      Higher numbers of arguments are not supported and will fail.
+     *  @param array $includes Any additional PHP files that must be included
+     *      in the delegate script. This may be necessary if the class definition
+     *      for \c $object is not automatically included by Typo3. (An example for
+     *      that would be unit tests.)
+     */
+    public function __construct($object, $method, array $arguments = array(), array $includes = array()) {
 
         self::checkApplicability($object, $method);
 
         $this->object = $object;
         $this->method = $method;
         $this->args = $arguments;
+        $this->includes = $includes;
     }
 
     /**
@@ -63,6 +75,7 @@ class tx_newspaper_AsynchronousTask {
             self::quote($this->getSerializedObjectFile()) . ' ' .
             self::quote($this->getMethodName()) . ' ' .
             self::quote($this->getSerializedArgsFile()) .
+            self::quote($this->getSerializedIncludesFile()) .
             ' > ' . self::getLogFile() . ' 2>&1 &'
         );
     }
@@ -81,6 +94,10 @@ class tx_newspaper_AsynchronousTask {
 
     public function getSerializedArgsFile() {
         return self::getSerializedFile($this->args);
+    }
+
+    public function getSerializedIncludesFile() {
+        return self::getSerializedFile($this->includes);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -119,5 +136,6 @@ class tx_newspaper_AsynchronousTask {
     private $object = null;
     private $method = '';
     private $args = array();
+    private $includes = array();
 
 }

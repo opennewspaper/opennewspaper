@@ -13,7 +13,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_
  *  to the delegate script, which does not have the entire Typo3 environment
  *  included.
  */
-#require_once(PATH_typo3conf . 'ext/phpunit' . '/class.tx_phpunit_testcase.php');
 require_once(t3lib_extMgm::extPath('phpunit') . '/class.tx_phpunit_testcase.php');
 
 class TestAsynchronousTaskClass {
@@ -123,7 +122,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
     }
 
     public function test_executeIsReallyExecuted() {
-        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask');
+        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), __FILE__);
         $retval = $asynchronous_task->execute();
 
         usleep(TestAsynchronousTaskClass::quick_execution_time);

@@ -299,15 +299,22 @@ ini_set('memory_limit', '64M');
 
 $DIR = dirname(__FILE__);
 
-includeTypo3($DIR);
+includeTypo3();
 require_once($DIR . '/../classes/private/class.tx_newspaper_file.php');
-#require_once($DIR . '/../tests/class.AsynchronousTask_testcase.php');
 
 $object = getSerializedObjectFromFile($argv[1]);
 $method = $argv[2];
 $args = getSerializedObjectFromFile($argv[3]);
+$includes = getSerializedObjectFromFile($argv[4]);
+
+if (is_array($includes)) {
+    foreach ($includes as $include) {
+        require_once($include);
+    }
+}
 
 executeMethod($object, $method, $args);
 
 unlink($argv[1]);
 unlink($argv[3]);
+unlink($argv[4]);
