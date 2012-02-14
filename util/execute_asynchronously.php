@@ -302,9 +302,6 @@ $DIR = dirname(__FILE__);
 includeTypo3();
 require_once($DIR . '/../classes/private/class.tx_newspaper_file.php');
 
-$object = getSerializedObjectFromFile($argv[1]);
-$method = $argv[2];
-$args = getSerializedObjectFromFile($argv[3]);
 $includes = getSerializedObjectFromFile($argv[4]);
 
 if (is_array($includes)) {
@@ -312,6 +309,10 @@ if (is_array($includes)) {
         require_once($include);
     }
 }
+
+$object = getSerializedObjectFromFile($argv[1]);
+$method = $argv[2];
+$args = getSerializedObjectFromFile($argv[3]);
 
 executeMethod($object, $method, $args);
 
