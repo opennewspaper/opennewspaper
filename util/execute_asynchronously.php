@@ -1,9 +1,9 @@
 <?php
+
+/// This file is the delegate script executed in the background by tx_newspaper_AsynchronousTask.
 /**
- *  Author: Lene Preuss <lene.preuss@gmail.com>
- *
- *  This file is the delegate script that is executed in the background by
- *  tx_newspaper_AsynchronousTask::execute().
+ *  @author Lene Preuss <lene.preuss@gmail.com>
+ *  @file execute_asynchronously.php
  *
  *  This script must be called with (up to) four command line arguments:
  *  \code
@@ -15,11 +15,21 @@
  *       serialized form
  *  - \c includes_file contains an optional array of included PHP files in
  *       serialized form
+ *
+ *  The given method on the given object is executed with the given arguments,
+ *  after including the given PHP include files. Before doing any of that, the
+ *  Typo3 framework is included and initialized.
  */
 
 /**
  *  Loads the Typo3 framework. A refactored version of the script init.php from
  *  Typo3 4.2.
+ *
+ *  The framework is not loaded completely; the user authentication is skipped
+ *  (because this script is standalone, there is no user logged in and authentication
+ *  would fail). Also some extensions are not loaded, because including the
+ *  extension files led to problems; rather than fixing those problems I excluded
+ *  the extensions.
  *
  *  Copyright notice
  *
@@ -44,12 +54,6 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- *
- *  The framework is not loaded completely; the user authentication is skipped
- *  (because this script is standalone, there is no user logged in and authentication
- *  would fail). Also some extensions are not loaded, because including the
- *  extension files led to problems; rather than fixing those problems I excluded
- *  the extensions.
  */
 class LoadTypo3 {
 
@@ -300,70 +304,112 @@ class LoadTypo3 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function getSerializedObjectFromFile($filename) {
-    $serialized_file = new tx_newspaper_File($filename);
-    $serialized_object = $serialized_file->read();
-    return unserialize($serialized_object);
-}
+/**
+ *  This class encapsulates the execution of a method on an object within Typo3.
+ *
+ *  Basically this functionality could have been provided via global functions,
+ *  but both the source code and the documentation look cleaner this way. Yay
+ *  for folding!
+ */
+class MethodExecutor {
 
-function getSerializedArgsFromFile($file) {
-    $args = getSerializedObjectFromFile($file);
-    if (!is_array($args)) {
-        $args = array();
+    /**
+     *  Loads Typo3 framework, includes all necessary PHP files and stores the
+     *  operands necessary to run the task.
+     */
+    public function __construct(array $argv) {
+        self::includeEverythingNecessary($argv[4]);
+
+        $this->object = self::getSerializedObjectFromFile($argv[1]);
+        $this->method = $argv[2];
+        $this->args = self::getSerializedArgsFromFile($argv[3]);
+
+        $this->argv = $argv;
     }
-    return $args;
-}
 
-function includeEverythingNecessary($serialized_includes_file) {
+    /**
+     *  Cleans up after itself.
+     */
+    public function __destruct() {
+        $this->deleteTemporaryFiles();
+    }
 
-    LoadTypo3::includeTypo3();
+    /**
+     *  Runs the task.
+     */
+    public function executeMethod() {
 
-    require_once(dirname(__FILE__) . '/../classes/private/class.tx_newspaper_file.php');
+        // make the body of the switch-statement more readable
+        $object = $this->object;
+        $method = $this->method;
 
-    $includes = getSerializedObjectFromFile($serialized_includes_file);
+        switch (sizeof($this->args)) {
+            case 0:
+                $object->$method();
+                return;
+            case 1:
+                $object->$method($this->args[0]);
+                return;
+            case 2:
+                $object->$method($this->args[0], $this->args[1]);
+                return;
+            case 3:
+                $object->$method($this->args[0], $this->args[1], $this->args[3]);
+                return;
 
-    if (is_array($includes)) {
-        foreach ($includes as $include) {
-            require_once($include);
+            default:
+                die("Calling methods with " . sizeof($this->args) . " not implemented, sorry");
         }
     }
-}
 
-function executeMethod($object, $method, $args) {
-    switch (sizeof($args)) {
-        case 0:
-            $object->$method();
-            return;
-        case 1:
-            $object->$method($args[0]);
-            return;
-        case 2:
-            $object->$method($args[0], $args[1]);
-            return;
-        case 3:
-            $object->$method($args[0], $args[1], $args[3]);
-            return;
+    ////////////////////////////////////////////////////////////////////////////
 
-        default:
-            die("Calling methods with " . sizeof($args) . " not implemented, sorry");
+    private function deleteTemporaryFiles() {
+        unlink($this->argv[1]);
+        unlink($this->argv[3]);
+        unlink($this->argv[4]);
     }
+
+    private static function getSerializedObjectFromFile($filename) {
+        $serialized_file = new tx_newspaper_File($filename);
+        $serialized_object = $serialized_file->read();
+        return unserialize($serialized_object);
+    }
+
+    private static function getSerializedArgsFromFile($file) {
+        $args = self::getSerializedObjectFromFile($file);
+        if (!is_array($args)) {
+            $args = array();
+        }
+        return $args;
+    }
+
+    private static function includeEverythingNecessary($serialized_includes_file) {
+
+        LoadTypo3::includeTypo3();
+
+        require_once(dirname(__FILE__) . '/../classes/private/class.tx_newspaper_file.php');
+
+        $includes = self::getSerializedObjectFromFile($serialized_includes_file);
+
+        if (is_array($includes)) {
+            foreach ($includes as $include) {
+                require_once($include);
+            }
+        }
+    }
+
+    private $object = null;
+    private $method = '';
+    private $args = array();
+    private $argv = array();
+
 }
 
-function deleteTemporaryFiles(array $argv) {
-    unlink($argv[1]);
-    unlink($argv[3]);
-    unlink($argv[4]);
-}
 
 ini_set('memory_limit', '64M');
 
+$executor = new MethodExecutor($argv);
 
-includeEverythingNecessary($argv[4]);
+$executor->executeMethod();
 
-$object = getSerializedObjectFromFile($argv[1]);
-$method = $argv[2];
-$args = getSerializedArgsFromFile($argv[3]);
-
-executeMethod($object, $method, $args);
-
-deleteTemporaryFiles($argv);
