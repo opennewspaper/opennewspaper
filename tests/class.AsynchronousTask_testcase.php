@@ -77,38 +77,6 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         );
     }
 
-    public function test_getSerializedObjectFileExists() {
-        $this->assertTrue(
-            file_exists($this->asynchronous_task->getSerializedObjectFile()),
-            'Serialized object file does not exist'
-        );
-    }
-
-    public function test_getSerializedObjectFileIsInTypo3temp() {
-        $this->assertTrue(
-            strpos('typo3temp', $this->asynchronous_task->getSerializedObjectFile()) !== false,
-            'Serialized object file is not in typo3temp folder: ' . $this->asynchronous_task->getSerializedObjectFile()
-        );
-    }
-
-    public function test_getSerializedObjectFileContainsTestClass() {
-        $object = $this->getObjectFromObjectFile();
-        $this->assertTrue($object !== false, 'Contents of serialized object file are not unserializable');
-        $this->assertTrue(is_object($object), 'Contents of serialized object file are not an object');
-        $this->assertTrue(
-            $object instanceof TestAsynchronousTaskClass,
-            'Contents of serialized object file are not of the expected class'
-        );
-    }
-
-    public function test_getSerializedObjectKeepsState() {
-        $object = $this->getObjectFromObjectFile();
-        $this->assertEquals(
-            $this->test_object->getState(), $object->getState(),
-            'Serialized object does not retain original state'
-        );
-    }
-
     public function test_executeIsFaster() {
 
         tx_newspaper_ExecutionTimer::start();
@@ -123,27 +91,35 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
 
     public function test_executeIsReallyExecuted() {
         $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), array(__FILE__));
-        $retval = $asynchronous_task->execute();
+        $asynchronous_task->execute();
 
         usleep(TestAsynchronousTaskClass::quick_execution_time);
 
         $this->assertTrue(
             file_exists(TestAsynchronousTaskClass::static_state_file),
-            'executeQuickTask() did not write state file; returned ' . intval($retval) .
-            '. This may be because the server this script runs on is to slow; try ' .
+            'executeQuickTask() did not write state file. ' .
+            'This may be because the server this script runs on is to slow; try ' .
             'increasing TestAsynchronousTaskClass::quick_execution_time in the unit ' .
             'test PHP file before deciding that this test failed!'
         );
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    public function test_isRunning() {
+        $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), array(__FILE__));
+        $asynchronous_task->execute();
 
-    private function getObjectFromObjectFile() {
-        $serialized_file = new tx_newspaper_File($this->asynchronous_task->getSerializedObjectFile());
-        $serialized_object = $serialized_file->read();
-        return unserialize($serialized_object);
+        $this->assertTrue($asynchronous_task->isRunning(), 'isRunning() is false immediately after execute()');
+
+        usleep(TestAsynchronousTaskClass::quick_execution_time/100);
+        $this->assertTrue($asynchronous_task->isRunning(), 'isRunning() is false after 1% of estimated execution time');
+
+        usleep(TestAsynchronousTaskClass::quick_execution_time+TestAsynchronousTaskClass::quick_execution_time/2);
+        $this->assertFalse($asynchronous_task->isRunning(), 'isRunning() is true after 151% of estimated execution time');
+
     }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     /** @var tx_newspaper_AsynchronousTask */
     private $asynchronous_task = null;

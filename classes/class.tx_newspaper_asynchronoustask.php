@@ -40,6 +40,7 @@ class tx_newspaper_AsynchronousTask {
      *  relative to the newspaper extension directory.
      */
     const delegate_php_script_name = 'util/execute_asynchronously.php';
+
     /** Name of the file where the output of the delegate script is logged,
      *  defaulting to no logging.
      */
@@ -64,6 +65,7 @@ class tx_newspaper_AsynchronousTask {
         $this->method = $method;
         $this->args = $arguments;
         $this->includes = $includes;
+
     }
 
     /**
@@ -76,38 +78,53 @@ class tx_newspaper_AsynchronousTask {
      *  the streams implicitly.
      */
     public function execute() {
+
+        $this->serializeData();
+
         shell_exec(
             'nohup php ' .
             self::quote(self::getDelegateScript()) . ' ' .
-            self::quote($this->getSerializedObjectFile()) . ' ' .
+            self::quote($this->object_file) . ' ' .
             self::quote($this->getMethodName()) . ' ' .
-            self::quote($this->getSerializedArgsFile()) . ' ' .
-            self::quote($this->getSerializedIncludesFile()) .
-            ' > ' . self::getLogFile() . ' 2>&1 &'
+            self::quote($this->args_file) . ' ' .
+            self::quote($this->includes_file) .
+            ' >> ' . self::getLogFile() . ' 2>&1 &'
         );
+    }
+
+    public function isRunning() {
+        return file_exists($this->object_file);
     }
 
     public function getDelegateScript() {
         return t3lib_extMgm::extPath('newspaper', self::delegate_php_script_name);
     }
 
-    public function getSerializedObjectFile() {
-        return self::getSerializedFile($this->object);
+    public function getObject() {
+        return $this->object;
     }
 
     public function getMethodName() {
         return $this->method;
     }
 
-    public function getSerializedArgsFile() {
-        return self::getSerializedFile($this->args);
+    public function getArgs() {
+        return $this->args;
     }
 
-    public function getSerializedIncludesFile() {
-        return self::getSerializedFile($this->includes);
+    public function getIncludes() {
+        return $this->includes;
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function serializeData() {
+        if ($this->isRunning()) return;
+
+        $this->object_file = self::getSerializedFile($this->object);
+        $this->args_file = self::getSerializedFile($this->args);
+        $this->includes_file = self::getSerializedFile($this->includes);
+    }
 
     private static function getLogFile() {
         if (self::getTSconfig('execute_asynchronously_log')) {
@@ -141,8 +158,11 @@ class tx_newspaper_AsynchronousTask {
     }
 
     private $object = null;
+    private $object_file = '';
     private $method = '';
     private $args = array();
+    private $args_file = '';
     private $includes = array();
+    private $includes_file = '';
 
 }
