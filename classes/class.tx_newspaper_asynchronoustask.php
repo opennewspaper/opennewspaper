@@ -26,6 +26,13 @@
  *
  *  The method called on the object can theoretically take up to three arguments,
  *  but this is not yet tested.
+ *
+ *  TSconfig:
+ *  \code
+ *  # where the output of the delegate script is logged
+ *  # default: /dev/null
+ *  newspaper.execute_asynchronously_log = <filename>
+ *  \endcode
  */
 class tx_newspaper_AsynchronousTask {
 
