@@ -94,6 +94,13 @@ class tx_newspaper_AsynchronousTask {
     }
 
     /**
+     *  Kills the process.
+     */
+    public function kill() {
+        throw new tx_newspaper_NotYetImplementedException();
+    }
+
+    /**
      * @return string The path to the script that executes the task.
      *  @see execute_asynchronously.php
      */
