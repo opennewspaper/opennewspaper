@@ -36,11 +36,8 @@ class tx_newspaper_Exception extends Exception {
 	/** \param $message Additional info about the Exception being thrown
 	 */
 	public function __construct($message, $write_message = true) {
-		if ($GLOBALS['TYPO3_DB'] instanceof t3lib_DB && $write_message) {
-            $backtrace = debug_backtrace();
-            for ($i = 0; $i < sizeof($backtrace); $i++) {
-                unset($backtrace[$i]['object']);
-            }
+		if (self::dbObjectExists() && $write_message) {
+            $backtrace = self::getStrippedBacktrace();
 
             tx_newspaper::devlog(
                 'Exception thrown: ' . $message,
@@ -50,7 +47,19 @@ class tx_newspaper_Exception extends Exception {
         parent::__construct($message);
     }
 
-	/// Maximum depth of the stack backtrace written to the devlog    
+    private static function dbObjectExists() {
+        return $GLOBALS['TYPO3_DB'] instanceof t3lib_DB;
+    }
+
+    private static function getStrippedBacktrace() {
+        $backtrace = debug_backtrace();
+        for ($i = 0; $i < sizeof($backtrace); $i++) {
+            unset($backtrace[$i]['object']);
+        }
+        return $backtrace;
+    }
+
+    /// Maximum depth of the stack backtrace written to the devlog
     const BACKTRACE_DEPTH = 10;
 }
 
