@@ -383,6 +383,10 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_asynchronousDepTree() {
         $this->assertTrue(t3lib_extMgm::isLoaded('asynchronous_task'));
+        tx_newspaper_ExecutionTimer::start();
+        tx_newspaper_Article::updateDependencyTree($this->article);
+        $time = tx_newspaper_ExecutionTimer::getExecutionTime();
+        $this->fail("Time: $time");
     }
 	
 	////////////////////////////////////////////////////////////////////////////
