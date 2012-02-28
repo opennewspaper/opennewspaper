@@ -62,12 +62,12 @@ class TestAsynchronousTaskClass {
 class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
 
     public function setUp() {
-        $this->test_object = new TestAsynchronousTaskHelper();
+        $this->test_object = new AsynchronousTaskTestHelper();
         $this->asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeLongTaskChangingState');
     }
 
     public function tearDown() {
-        tx_newspaper_File::unlink(TestAsynchronousTaskHelper::static_state_file);
+        tx_newspaper_File::unlink(AsynchronousTaskTestHelper::static_state_file);
     }
 
     public function test_delegateScriptExists() {
@@ -84,7 +84,7 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         $this->asynchronous_task->execute();
 
         $this->assertTrue(
-            tx_newspaper_ExecutionTimer::getExecutionTime() < TestAsynchronousTaskHelper::long_task_duration*1000,
+            tx_newspaper_ExecutionTimer::getExecutionTime() < AsynchronousTaskTestHelper::long_task_duration*1000,
             'execute() is not speeded up'
         );
     }
@@ -93,13 +93,13 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
         $asynchronous_task = new tx_newspaper_AsynchronousTask($this->test_object, 'executeQuickTask', array(), array(__FILE__));
         $asynchronous_task->execute();
 
-        usleep(TestAsynchronousTaskHelper::quick_execution_time);
+        usleep(AsynchronousTaskTestHelper::quick_execution_time);
 
         $this->assertTrue(
-            file_exists(TestAsynchronousTaskHelper::static_state_file),
+            file_exists(AsynchronousTaskTestHelper::static_state_file),
             'executeQuickTask() did not write state file. ' .
             'This may be because the server this script runs on is to slow; try ' .
-            'increasing TestAsynchronousTaskHelper::quick_execution_time in the unit ' .
+            'increasing AsynchronousTaskTestHelper::quick_execution_time in the unit ' .
             'test PHP file before deciding that this test failed!'
         );
 
@@ -111,10 +111,10 @@ class tx_newspaper_AsynchronousTask_testcase extends tx_phpunit_testcase {
 
         $this->assertTrue($asynchronous_task->isRunning(), 'isRunning() is false immediately after execute()');
 
-        usleep(TestAsynchronousTaskHelper::quick_execution_time/100);
+        usleep(AsynchronousTaskTestHelper::quick_execution_time/100);
         $this->assertTrue($asynchronous_task->isRunning(), 'isRunning() is false after 1% of estimated execution time');
 
-        usleep(TestAsynchronousTaskHelper::quick_execution_time+TestAsynchronousTaskHelper::quick_execution_time/2);
+        usleep(AsynchronousTaskTestHelper::quick_execution_time+AsynchronousTaskTestHelper::quick_execution_time/2);
         $this->assertFalse($asynchronous_task->isRunning(), 'isRunning() is true after 151% of estimated execution time');
 
     }
