@@ -380,6 +380,10 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $tags = $this->article->getTags(tx_newspaper_Tag::getControlTagType());
         $this->assertEquals(2, count($tags), 'Two Controltags expected, got ' . count($tags));
     }
+
+    public function test_asynchronousDepTree() {
+        $this->assertTrue(t3lib_extMgm::isLoaded('asynchronous_task'));
+    }
 	
 	////////////////////////////////////////////////////////////////////////////
 
