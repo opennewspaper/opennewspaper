@@ -16,8 +16,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_tag.php'
 require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_smarty.php');
 
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_asynchronoustask.php');
-
 /// An article for the online newspaper
 
 /** The article is the central entity in a newspaper. All other functionalities
