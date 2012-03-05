@@ -92,30 +92,37 @@ LIMIT 0, 10
         $timer = tx_newspaper_ExecutionTimer::create();
 
 		$this->clearList();
-		for($i = 0; $i < sizeof($uids); $i++) {
-            if (!intval($uids[$i])) {
-				throw new tx_newspaper_InconsistencyException(
-					'Manual article list needs UID array to consist of integers,
-					 but no int was given: ' . $uids[$i]
-				);				
-			}
 
-//			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i);
-            tx_newspaper::insertRows(
-          			self::mm_table,
-          			array(
-          				'uid_local' =>  intval($this->getUid()),
-          				'uid_foreign' => $uids[$i],
-          				'sorting' => $i+1
-          			)
-          		);
-		}
+        $this->writeArrayOfUIDsToList($uids);
 
-		$this->callSaveHooks();
+        $this->callSaveHooks();
 
 	}
-		
-	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
+
+    private function writeArrayOfUIDsToList($uids) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        for ($i = 0; $i < sizeof($uids); $i++) {
+            if (!intval($uids[$i])) {
+                throw new tx_newspaper_InconsistencyException(
+                    'Manual article list needs UID array to consist of integers,
+					 but no int was given: ' . $uids[$i]
+                );
+            }
+
+            tx_newspaper::insertRows(
+                self::mm_table,
+                array(
+                    'uid_local' => intval($this->getUid()),
+                    'uid_foreign' => $uids[$i],
+                    'sorting' => $i + 1
+                )
+            );
+        }
+    }
+
+    public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		$this->deleteArticle ($article);
 
         $ids = array();
@@ -158,6 +165,8 @@ LIMIT 0, 10
 	
 	///	Remove all articles from the list.
 	protected function clearList() {
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		tx_newspaper::deleteRows(self::mm_table,
 								 'uid_local = ' . intval($this->getUid()));
 	}
