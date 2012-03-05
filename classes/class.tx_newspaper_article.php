@@ -1149,12 +1149,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tags = self::getRemovedTags($article);
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags);
-#            if (class_exists('tx_AsynchronousTask')) {
-#                $task = new tx_AsynchronousTask($tree, 'executeActionsOnPages', array('tx_newspaper_Article'));
-#                $task->execute();
-#            } else {
+            if (class_exists('tx_AsynchronousTask')) {
+                $task = new tx_AsynchronousTask($tree, 'executeActionsOnPages', array('tx_newspaper_Article'));
+                $task->execute();
+            } else {
                 $tree->executeActionsOnPages('tx_newspaper_Article');
-#            }
+            }
         }
     }
 
