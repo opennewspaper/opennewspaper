@@ -2,6 +2,7 @@
 /**
  * @author: Lene Preuss <lene.preuss@gmail.com>
  */
+require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dependencytree.php');
 
 /**
  * @todo DESCRIPTION
