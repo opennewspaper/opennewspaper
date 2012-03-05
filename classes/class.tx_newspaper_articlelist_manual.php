@@ -50,9 +50,9 @@ class tx_newspaper_ArticleList_Manual extends tx_newspaper_ArticleList {
 	const article_table = 'tx_newspaper_article';
 
 	/// Returns a number of tx_newspaper_Article s from the list
-	/** \param $number Number of Articles to return
-	 *  \param $start Index of first Article to return (starts with 0)
-	 *  \return The \p $number Articles starting with \p $start
+	/** @param $number Number of Articles to return
+	 *  @param $start Index of first Article to return (starts with 0)
+	 *  @return tx_newspaper_Article[] The \p $number Articles starting with \p $start
 	 */
 	public function getArticles($number, $start = 0) {
 /*
@@ -109,18 +109,21 @@ LIMIT 0, 10
 		
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
 		$this->deleteArticle ($article);
-			
+
+        $ids = array();
 		foreach ($this->getArticles($this->getAttribute('num_articles')) as $i => $present_article) {
 			if ($i >= $pos) {
-				tx_newspaper::updateRows(
-					self::mm_table,
-					'uid_local = ' . intval($this->getUid()) .
-						' AND uid_foreign = ' . $present_article->getUid(),
-					array ('sorting' => 'sorting + 1')
-				);
-			}
-		}
-		
+                $ids[] = $present_article->getUid();
+            }
+        }
+
+		tx_newspaper::updateRows(
+		    self::mm_table,
+			'uid_local = ' . intval($this->getUid()) .
+			' AND uid_foreign IN (' . join(', ', $ids) .')',
+			array ('sorting' => 'sorting + 1')
+		);
+
 		tx_newspaper::insertRows(
 			self::mm_table,
 			array(
