@@ -93,14 +93,22 @@ LIMIT 0, 10
 
 		$this->clearList();
 		for($i = 0; $i < sizeof($uids); $i++) {
-//			t3lib_div::devlog('assembleFromUIDs()', 'newspaper', 0, array('uids' => $uids));
             if (!intval($uids[$i])) {
 				throw new tx_newspaper_InconsistencyException(
 					'Manual article list needs UID array to consist of integers,
 					 but no int was given: ' . $uids[$i]
 				);				
 			}
-			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i);
+
+//			$this->insertArticleAtPosition(new tx_newspaper_Article($uids[$i]), $i);
+            tx_newspaper::insertRows(
+          			self::mm_table,
+          			array(
+          				'uid_local' =>  intval($this->getUid()),
+          				'uid_foreign' => $uids[$i],
+          				'sorting' => $i+1
+          			)
+          		);
 		}
 
 		$this->callSaveHooks();
