@@ -178,15 +178,6 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-#        if (class_exists('tx_AsynchronousTask')) {
-#            $task = new tx_AsynchronousTask($this, 'doExecuteActionsOnPages', $key);
-#            $task->execute();
-#        } else {
-            $this->doExecuteActionsOnPages($key);
-#        }
-    }
-
-    public function doExecuteActionsOnPages($key) {
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
