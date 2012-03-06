@@ -276,7 +276,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	abstract function getArticles($number, $start = 0);
 
-    ///
+    /**
+     * @param $do boolean Whether getArticles() uses a faster method to create articles
+     */
     public function useOptimizedGetArticles($do) {
         $this->select_method_strategy = SelectMethodStrategy::create($do);
     }

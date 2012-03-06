@@ -693,11 +693,17 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				}
 
                 function resortArticleList($input, $action) {
+
+                    $timer = tx_newspaper_ExecutionTimer::create();
+
                     $sectionId = $this->al_be->extractElementId($input['element']);
                     $section = new tx_newspaper_section ($sectionId);
                     $articleList = $section->getArticleList();
 
                     if($articleList instanceof tx_newspaper_ArticleList_Semiautomatic) {
+
+                        $articleList->useOptimizedGetArticles(true);
+
                         $selectedArticleId = array_pop(explode('_', $input['sel_article_id']));
                         $oldOrder = array();
                         $articleIds = explode('|', $input['articleids']);
