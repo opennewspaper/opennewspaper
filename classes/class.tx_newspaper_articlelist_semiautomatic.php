@@ -237,6 +237,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 */
 	public function resort(array $old_order, tx_newspaper_Articlelist_Operation $operation) {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		try {
 			$index = self::indexOfArticle($operation->getUid(), $old_order);
 		} catch (tx_newspaper_Exception $e) {
@@ -288,6 +290,9 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 	/// Moves article at position \p $index in array \p $old_order \p $shuffle_value positions up or down.
 	private function resortArticle($uid, $shuffle_value, array &$old_order) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         if (abs($shuffle_value) != 1) {
 			throw new tx_newspaper_IllegalUsageException('Only movements of +/- 1 are supported.');
 		}
