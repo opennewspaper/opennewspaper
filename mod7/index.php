@@ -324,29 +324,43 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 */
 				function placeArticle($input, array $statusHidePublish=array()) {
 
+                    $timer = tx_newspaper_ExecutionTimer::create();
+
                     tx_newspaper_ExecutionTimer::start();
 
 					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 
+                    tx_newspaper_ExecutionTimer::logExecutionTime('placeArticle(): first block');
+
+                    tx_newspaper_ExecutionTimer::start();
+
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_NONE; // \todo: well, this is a hack (simulating a submit)
 					$log['place'] = true;
-					if (isset($statusHidePublish['hide'])) {
-						$log['hidden'] = true;
-						$this->hideArticle($article);
-					} elseif (isset($statusHidePublish['publish'])) {
-						$log['hidden'] = false;
-						$this->publishArticle($article);
-					}
-					$article->store();
+                    $this->updatePublishingStatus($statusHidePublish, $article, $log);
 					$this->writeLog($input, $log);
 
-                    tx_newspaper_ExecutionTimer::logExecutionTime();
+                    tx_newspaper_ExecutionTimer::logExecutionTime('placeArticle(): second block');
 
 					return true;
 				}
 
-				/// send article further to duty editor
+    private function updatePublishingStatus(array $statusHidePublish, tx_newspaper_Article $article, array &$log) {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        if (isset($statusHidePublish['hide'])) {
+            $log['hidden'] = true;
+            $this->hideArticle($article);
+        } elseif (isset($statusHidePublish['publish'])) {
+            $log['hidden'] = false;
+            $this->publishArticle($article);
+        }
+
+        $article->store();
+    }
+
+    /// send article further to duty editor
 				/** \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 				 *  \return \c true
 				 */
@@ -423,6 +437,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
                     $timer = tx_newspaper_ExecutionTimer::create();
 					$article->storeHiddenStatusWithHooks(true);
 				}
+
 				private function publishArticle(tx_newspaper_article $article) {
                     $timer = tx_newspaper_ExecutionTimer::create();
 					$article->storeHiddenStatusWithHooks(false); // this makes sure the publish_date is set correctly (if needed)
