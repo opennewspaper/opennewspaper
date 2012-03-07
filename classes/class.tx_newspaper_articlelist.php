@@ -679,6 +679,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 		$content = '';
 
 		// tceforms configuration
+        /** @var $form t3lib_TCEforms */
 		$form = t3lib_div::makeInstance('t3lib_TCEforms');
 		$form->initDefaultBEmode();
 		$form->backPath = '';
@@ -722,9 +723,9 @@ body {
 		$content .= '<input type="hidden" name="abstr_al_uid" value="' . $this->getAbstractUid() . '" />';
 
 
-		// idea for tceforms rendering, see: http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
+		// Idea for tceforms rendering, see: http://www.typo3.net/forum/list/list_post//85598/?page=1#pid339011
 
-		// render abstract article list backend first ...
+		// Render abstract article list backend first ...
 		$row = tx_newspaper::selectOneRow(
 			'*',
 			'tx_newspaper_articlelist',
@@ -735,14 +736,19 @@ body {
 				$content .= $form->getSingleField('tx_newspaper_articlelist', $tcaField, $row);
 			}
 		}
+
 		// ... render concrete article list backend then
 		$row = tx_newspaper::selectOneRow(
 			'*',
 			$this->getAttribute('list_table'),
 			'uid=' . $this->getUid()
 		);
+        foreach($row as $key => $value) {
+            // Strip slashes. Otherwise TCEforms will render the backslahes in field values.
+            $row[$key] = stripslashes($value);
+        }
 		foreach($fields['concrete'] as $tcaField => $tcaFieldConfig) {
-			if ($tcaField != 'articles') { // \todo: add field articles too to allow complete form editiing (but will this work with the mod7 standalone article list backend??)
+			if ($tcaField != 'articles') { // \todo: add field articles too to allow complete form editing (but will this work with the mod7 standalone article list backend??)
 				$content .= $form->getSingleField($this->getAttribute('list_table'), $tcaField, $row);
 			}
 		}

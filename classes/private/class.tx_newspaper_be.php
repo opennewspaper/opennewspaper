@@ -16,7 +16,8 @@ define('BE_ICON_CLOSE', '1');
 define('DEBUG_OUTPUT', false); // show position etc.
 
 /// function for adding newspaper functionality to the backend
-/** \todo Oliver: document me!
+/** @todo Oliver: document me!
+ *  @todo: Oliver: many functions should be converted to static functions
  */
 class tx_newspaper_BE {
 
@@ -1387,7 +1388,7 @@ JSCODE;
 
 
 
-	// article list functions (for mod7)
+	// article list functions (for mod7/mod9)
 
 	public function renderSinglePlacement($input) {
 //t3lib_div::devlog('be::renderSinglePlacement()', 'newspaper', 0, array('input' => $input));
@@ -1410,7 +1411,7 @@ JSCODE;
 	/// render the placement editors according to sections selected for article
 	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
 	 *  if not, a button to call the article browser is displayed.
-	 * \todo: docuemnt $input array types ...
+	 * @todo: document $input array types ...
 	 *  in comparison the the displayed ones in the form
 	 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 	 *  \return ?
@@ -1505,18 +1506,23 @@ JSCODE;
 
     }
 
-	/// render full record backend if paramter fullrecord is set to 1
+    /**
+     * Render backend for article list configuration form if $input['fullrecord'] is set to 1
+     * @param array $input
+     * @param null|tx_newspaper_Articlelist $al
+     * @return Backend form or empty string, if $input['fullrecord'] is not set to 1
+     */
     private function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al = null) {
 		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
 			if ($al == null) {
 				// article list hasn't been read
 				if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
-					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // cget article list for first (and only) section
+					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // Get article list for first (and only) section
 					$al = $s->getArticleList();
 				}
 			}
 			if ($al != null) {
-				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // render backend, store if saved, close if closed
+				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // Render backend, store if saved, close if closed
 			} else {
 				$articlelistFullrecordBackend = 'Error'; // \todo: localization
 			}
