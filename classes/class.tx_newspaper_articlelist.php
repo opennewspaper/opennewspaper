@@ -731,6 +731,10 @@ body {
 			'tx_newspaper_articlelist',
 			'uid=' . $this->getAbstractUid()
 		);
+        foreach($row as $key => $value) {
+            // Strip slashes. Otherwise TCEforms will render the backslahes in field values.
+            $row[$key] = stripslashes($value);
+        }
 		foreach($fields['abstract'] as $tcaField => $tcaFieldConfig) {
 			if ($tcaField != 'list_table' && $tcaField != 'list_uid') {
 				$content .= $form->getSingleField('tx_newspaper_articlelist', $tcaField, $row);
