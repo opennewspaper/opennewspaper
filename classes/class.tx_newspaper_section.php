@@ -613,46 +613,24 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	 * 		results by.
 	 *  @return tx_newspaper_Section[] Section objects in the DB.
 	 */
-	public static function getAllSections($articlesAllowedOnly=true, $sort_by = 'sorting') {
-		$TSConfig = t3lib_BEfunc::getPagesTSconfig(0);
-		$excluded = $TSConfig['newspaper.']['excluded_sections'];
+	public static function getAllSections($articlesAllowedOnly=true, $sort_by='sorting') {
 
-		$excluded_sections = array();
-		$additional_where = '';
-		if ($excluded) {
-			foreach (explode(',', $excluded) as $excluded_section_uid) {
-				$excluded_section = new tx_newspaper_Section($excluded_section_uid);
-				$excluded_sections = array_merge(
-					$excluded_sections,
-					array($excluded_section),
-					$excluded_section->getChildSections(true));
-			}
-			if ($excluded_sections) {
-				$additional_where .= ' AND uid NOT IN (';
-				$separator = '';
-				foreach ($excluded_sections as $excluded_section) {
-					$additional_where .= $separator . $excluded_section->getUid();
-					$separator = ', ';
-				}
-				$additional_where .= ')';
-			}
-		}
+        // Check $articlesAllowedOnly
+        $where = ($articlesAllowedOnly)? ' AND show_in_list=1' : '';
 
-		if ($articlesAllowedOnly) {
-			$additional_where .= ' AND show_in_list=1';
-		}
+		// Add sysfolder id
+		$where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
 
-		// add sysfolder id
-		$additional_where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
-
+        // Fetch sections
 		$row = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
-			'1' . $additional_where,
+			'1' . $where,
 			'',
 			$sort_by
 		);
 
+        // Create section objects (and store in array)
 		$s = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
