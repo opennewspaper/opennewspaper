@@ -48,9 +48,9 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
     public function test_automaticArticleListGetArticles() {
 
         $row = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist' , "list_table = 'tx_newspaper_articlelist_semiautomatic'");
-        $this->assertGreaterThan(0, intval($row['uid']), 'No automatic article list found: ' . print_r($row, 1));
+        $this->assertGreaterThan(0, intval($row[0]['uid']), 'No automatic article list found: ' . print_r($row, 1));
 
-        $al = tx_newspaper_ArticleList_Factory::getInstance()->create($row['uid']);
+        $al = tx_newspaper_ArticleList_Factory::getInstance()->create($row[0]['uid']);
 
         $this->fail(print_r($al->getArticles(10), 1));
     }
