@@ -87,8 +87,12 @@ class tx_newspaper_Extra_Textbox extends tx_newspaper_Extra {
 #tx_newspaper::devlog('bio save hook: extra '.$extra->getExtraUid().' origin uid '.$extra->getOriginUid());
         if ($fieldArray[self::image_file_field]) {
             $image = new tx_newspaper_Image($fieldArray[self::image_file_field]);
-            $image->resizeImages();
-	        $image->rsyncAllImageFiles();
+            if (class_exists('tx_AsynchronousTask')) {
+                $task = new tx_AsynchronousTask($image, 'deployImages');
+                $task->execute();
+            } else {
+                $image->deployImages();
+            }
         }
     }
 
