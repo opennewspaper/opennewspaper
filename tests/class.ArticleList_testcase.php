@@ -73,10 +73,13 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
             ') does not match size of UID array (' . sizeof($articles_swapped) . ')'
         );
 
+        $mm = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist_semiautomatic_articles_mm');
         for ($i = 0; $i < sizeof($articles_swapped); $i++) {
             $this->assertTrue(
                 $articles_swapped[$i] == $articles_after[$i],
-                "article $i is not equal after assembleFromUids(): " . print_r($articles_swapped, 1) . " != " . print_r($articles_after, 1)
+                "article $i is not equal after assembleFromUids(): " .
+                        print_r($articles_swapped, 1) . " != " . print_r($articles_after, 1) .
+                        'MM table: ' . print_r($mm, 1)
             );
         }
 
