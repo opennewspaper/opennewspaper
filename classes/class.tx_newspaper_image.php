@@ -52,6 +52,15 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         return $this->image_file;
     }
 
+    public function deployImages() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
+        $this->resizeImages();
+        $this->rsyncAllImageFiles();
+
+    }
+
     /// If image needs resizing, resize it to all sizes defined in TSConfig
 	/** The image sizes are defined as
 	 *  \code

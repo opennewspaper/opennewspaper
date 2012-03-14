@@ -166,8 +166,12 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
             self::getWidthSet($fieldArray, $table, $id)
         );
 
-        $image->resizeImages();
-        $image->rsyncAllImageFiles();
+        if (class_exists('tx_AsynchronousTask')) {
+            $task = new tx_AsynchronousTask($image, 'deployImages');
+            $task->execute();
+        } else {
+            $image->deployImages();
+        }
 	}
 
     private static function imageResizeIsNecessary(array $fieldArray) {
