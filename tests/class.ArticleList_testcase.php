@@ -60,8 +60,8 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $articles[1] = $swap;
 
         $uids = array();
-        foreach($articles as $article) {
-            $uids[] = $article->getUid();
+        for ($i = 0; $i < sizeof($articles); $i++) {
+            $uids[$i] = array($articles[$i]->getUid(), $i-1);
         }
 
         $al->assembleFromUIDs($uids);
