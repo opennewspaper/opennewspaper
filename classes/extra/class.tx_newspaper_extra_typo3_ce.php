@@ -124,7 +124,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
    	 */
    	private static function processLinks($text) {
    		$textnew = preg_replace(self::internal_regexp,
-   					            '<a href="'.self::makeLinkTarget('&id=$1').'">$2</a>',
+   					            '<a href="'.self::makeLinkTarget(array('id' => '$1')).'">$2</a>',
    					            $text);
    		$textnew = preg_replace(self::external_regexp,
    								 '<a href="$1" target="$2">$3</a>',
@@ -135,7 +135,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
    		return $textnew;
    	}
 
-    private static function makeLinkTarget($args) {
+    private static function makeLinkTarget(array $args) {
         return tx_newspaper::typolink_url($args);
     }
 
