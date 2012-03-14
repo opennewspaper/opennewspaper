@@ -76,7 +76,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         for ($i = 0; $i < sizeof($articles); $i++) {
             $this->assertTrue(
                 $articles[$i]->getUid() == $articles_after[$i]->getUid(),
-                "article $i is not equal after assembleFromUids()"
+                "article $i is not equal after assembleFromUids(): " . print_r($articles, 1) . " != " . print_r($articles_after, 1)
             );
         }
 
