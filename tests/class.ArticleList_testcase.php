@@ -45,7 +45,7 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
     }
 
-    public function test_automaticArticleListGetArticles() {
+    public function test_automaticArticleListAssembleSortingUp() {
 
         $al = $this->createAutomaticArticleList();
 
@@ -66,8 +66,34 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
             $this->assertTrue(
                 $articles_swapped[$i] == $articles_after[$i],
                 "article $i is not equal after assembleFromUids(): " .
-                        print_r($articles_swapped, 1) . " != " . print_r($articles_after, 1) . "<br />\n" .
-                        'MM table: ' . print_r(tx_newspaper::selectRows('*', 'tx_newspaper_articlelist_semiautomatic_articles_mm'), 1)
+                        print_r($articles_swapped, 1) . " != " . print_r($articles_after, 1) . "<br />\n"
+            );
+        }
+
+    }
+
+    public function test_automaticArticleListAssembleSortingDown() {
+
+        $al = $this->createAutomaticArticleList();
+
+        $articles_before = $this->getFirstTwoArticleUIDs($al);
+
+        $articles_swapped = self::getFirstTwoEntriesSwapped($articles_before);
+
+        $al->assembleFromUIDs(
+            array(
+                array($articles_before[0], -1),
+                array($articles_before[1],  0),
+            )
+        );
+
+        $articles_after = $this->getFirstTwoArticleUIDs($al);
+
+        for ($i = 0; $i < sizeof($articles_swapped); $i++) {
+            $this->assertTrue(
+                $articles_swapped[$i] == $articles_after[$i],
+                "article $i is not equal after assembleFromUids(): " .
+                        print_r($articles_swapped, 1) . " != " . print_r($articles_after, 1) . "<br />\n"
             );
         }
 
