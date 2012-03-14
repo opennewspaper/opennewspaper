@@ -55,8 +55,8 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
         $al->assembleFromUIDs(
             array(
-                array($articles_swapped[1], -1),
-                array($articles_swapped[0],  0),
+                array($articles_before[1], 1),
+                array($articles_before[0], 0),
             )
         );
 
