@@ -45,6 +45,15 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
 
     }
 
+    public function test_automaticArticleListGetArticles() {
+
+        $row = tx_newspaper::selectRows('*', 'tx_newspaper_articlelist');
+
+        $this->fail(print_r($row, 1));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     private static function getLastArticleListUid() {
         $row = tx_newspaper::selectRows('uid', 'tx_newspaper_articlelist');
         self::$num_article_lists = count($row);
