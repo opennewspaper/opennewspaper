@@ -60,8 +60,8 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $articles_swapped[1] = $articles_before[0];
 
         $uids = array(
-            array($articles_swapped[0], 0),
-            array($articles_swapped[1],  1),
+            array($articles_swapped[0], -1),
+            array($articles_swapped[1],  0),
         );
 
         $al->assembleFromUIDs($uids);
