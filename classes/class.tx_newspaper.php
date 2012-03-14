@@ -30,7 +30,6 @@ class tx_newspaper  {
   ///	The \c GET parameter which determines which page type is displayed
   const pagetype_get_parameter = 'pagetype';
 
-
     /// GET-parameter describing the wanted control tag for a dossier
     const default_dossier_get_parameter = 'dossier';
 
@@ -1301,21 +1300,23 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
     return $link['href'];
   }
 
-  /**
-   * Let Typo3 convert links in RTE data
-   * @param $text unconverted RTE data
-   * @return Converted RTE data
-   */
-  public static function convertRteField($text) {
-    require_once(PATH_tslib . 'class.tslib_pibase.php');
+    /**
+     * Let Typo3 convert links in RTE data
+     * @param string $text unconverted RTE data
+     * @return string Converted RTE data
+     */
+    public static function convertRteField($text) {
+      require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-    // prepare some Typo3 frontend object
-    tx_newspaper::buildTSFE();
-    $pibase = t3lib_div::makeInstance('tslib_pibase');
-    $pibase->cObj = $GLOBALS['TSFE']->cObj;
+      // prepare some Typo3 frontend object
+      tx_newspaper::buildTSFE();
 
-    return $pibase->pi_RTEcssText($text);
-  }
+      /** @var $pibase tslib_pibase */
+      $pibase = t3lib_div::makeInstance('tslib_pibase');
+      $pibase->cObj = $GLOBALS['TSFE']->cObj;
+
+      return $pibase->pi_RTEcssText($text);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 

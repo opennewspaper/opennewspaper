@@ -93,7 +93,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             'dontCheckPid' => 1,
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
-        return $rendered;
+        return tx_newspaper::convertRteField($rendered);
     }
 
     private static function stripAnchorBeforeCE($rendered) {
@@ -103,10 +103,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         $head = substr($rendered, 0, $startpos);
         $tail = substr($rendered, $endpos);
         return $head . $tail;
-    }
-
-    private static function stripDivAroundCE($rendered) {
-        
     }
     
     /**	In BE (for e.g. unit tests), RECORDS() can't be used. Just show something.
