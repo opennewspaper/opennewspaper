@@ -67,6 +67,8 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 	 */
 	public function resizeImages() {
 
+        $timer = tx_newspaper_ExecutionTimer::create();
+
 		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
 		foreach ($this->getSizes() as $key => $dimension) {
 	    	if (self::imgIsResized($this->image_file, $dimension)) continue;
@@ -90,6 +92,9 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function rsyncAllImageFiles() {
+
+        $timer = tx_newspaper_ExecutionTimer::create();
+
         foreach ($this->getSizes() as $size) {
             $this->rsyncSingleImageFile($size);
         }
