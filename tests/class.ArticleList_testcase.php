@@ -51,8 +51,35 @@ class test_ArticleList_testcase extends tx_newspaper_database_testcase {
         $this->assertGreaterThan(0, intval($row[0]['uid']), 'No automatic article list found: ' . print_r($row, 1));
 
         $al = tx_newspaper_ArticleList_Factory::getInstance()->create($row[0]['uid']);
+        $articles = $al->getArticles(10);
 
-        $this->fail(print_r($al->getArticles(10), 1));
+        $this->assertGreaterThan(1, sizeof($articles), 'Need at least 2 articles in list: ' . print_r($articles, 1));
+
+        $swap = $articles[0];
+        $articles[0] = $articles[1];
+        $articles[1] = $swap;
+
+        $uids = array();
+        foreach($articles as $article) {
+            $uids[] = $article->getUid();
+        }
+
+        $al->assembleFromUIDs($uids);
+
+        $articles_after = $al->getArticles(10);
+        $this->assertEquals(
+            sizeof($uids), sizeof($articles_after),
+            'Size of articles in list after assembleFromUids() (' . sizeof($articles_after) .
+            ') does not match size of UID array (' . sizeof($uids) . ')'
+        );
+
+        for ($i = 0; $i < sizeof($articles); $i++) {
+            $this->assertTrue(
+                $articles[$i]->getUid() == $articles_after[$i]->getUid(),
+                "article $i is not equal after assembleFromUids()"
+            );
+        }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////

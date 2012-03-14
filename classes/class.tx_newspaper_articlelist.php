@@ -270,9 +270,9 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	abstract function moveArticle(tx_newspaper_ArticleIface $article, $offset);
 
 	/// Returns a number of tx_newspaper_Article s from the list
-	/** \param $number Number of Articles to return
-	 *  \param $start Index of first Article to return (starts with 0)
-	 *  \return The \p $number Articles starting with \p $start
+	/** @param $number Number of Articles to return
+	 *  @param $start Index of first Article to return (starts with 0)
+	 *  @return tx_newspaper_Article[] The \p $number Articles starting with \p $start
 	 */
 	abstract function getArticles($number, $start = 0);
 
