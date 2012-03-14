@@ -93,7 +93,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             'dontCheckPid' => 1,
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
-        return tx_newspaper::convertRteField($rendered);
+        return self::processLinks($rendered);
     }
 
     private static function stripAnchorBeforeCE($rendered) {
@@ -114,6 +114,26 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         return $rendered;
     }
 
+    const internal_regexp = '/\<link (\d+) .*?\>(.*?)\<\/link\>/i';
+    const external_regexp = '/\<link (http:\/\/.+?) (.*?)\>(.*?)\<\/link\>/i';
+    const simple_external_regexp = '/\<link (http:\/\/.+?)\>(.*?)\<\/link\>/i';
+    /**
+   	 *	return the text with all typo3-<link>-tags replaced with the appropriate <a> tags
+   	 *  @param string $text typo3 pseudo-HTML text to process
+   	 *  @return string valid HTML with straight <a>'s
+   	 */
+   	private static function processLinks($text) {
+   		$textnew = preg_replace(self::internal_regexp,
+   					            '<a href="'.$this->makeLinkTarget('&id=$1').'">$2</a>',
+   					            $text);
+   		$textnew = preg_replace(self::external_regexp,
+   								 '<a href="$1" target="$2">$3</a>',
+   								 $textnew);
+   		$textnew = preg_replace(self::simple_external_regexp,
+   								 '<a href="$1">$2</a>',
+   								 $textnew);
+   		return $textnew;
+   	}
 
     /** If the CE has a header, display the header. Else if it has a titleText,
 	 *  display that. Else just display its UID.
