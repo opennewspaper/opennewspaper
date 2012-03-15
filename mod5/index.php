@@ -549,7 +549,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('SECTION1', $startSections);
 		$smarty->assign('SECTION2', $targetSections);
-t3lib_div::devlog('new article wizard', 'newspaper', 0, array('baseSections' => $baseSections, 'startSections' => $startSections, 'targetSections' => $targetSections));
+//t3lib_div::devlog('new article wizard', 'newspaper', 0, array('baseSections' => $baseSections, 'startSections' => $startSections, 'targetSections' => $targetSections));
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);

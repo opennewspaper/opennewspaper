@@ -455,7 +455,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		if ($this->isProductionList()) {
 			if (!array_key_exists('section', $settings) || $forceReset) {
-				$settings['section'] = '';
+                $settings['section'] = $this->getDefaultSectionForProductionList();
 			}
 		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
 			$settings['section'] = $_REQUEST['s'];
@@ -476,6 +476,24 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $settings;
 	}
 
+    /**
+     * Get default value for section filter in production list
+     * If user TSConfig newspaper.baseSections is set, the first section will be used as default filter
+     * @return string Default section title
+     */
+    private function getDefaultSectionForProductionList() {
+        // Read User TSConfig for base sections (if available): get uids of base sections
+        if ($GLOBALS['BE_USER']) {
+            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
+                $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
+            }
+            if ($baseSectionUids) {
+                $section = new tx_newspaper_Section(intval($baseSectionUids[0]));
+                return $section->getAttribute('section_name');
+            }
+        }
+        return ''; // Default section filter
+    }
 
 
 	/**

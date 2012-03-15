@@ -671,14 +671,6 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
         // Create section objects
         foreach($baseSectionUids as $sectionUid) {
-//            $baseSection = new tx_newspaper_Section($sectionUid);
-//            if (!in_array($sectionUid, $baseAsStartSectionUids)) {
-//                foreach($baseSection->getChildSections(false) as $section) {
-//                    $baseSections[] = $section;
-//                }
-//            } else {
-//                $baseSections[] = $baseSection;
-//            }
             $baseSections[] = new tx_newspaper_Section($sectionUid);
         }
 
