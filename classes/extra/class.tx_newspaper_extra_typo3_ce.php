@@ -93,6 +93,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             'dontCheckPid' => 1,
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
+        tx_newspaper::devlog('renderTypo3CE()', array('rendered' => $rendered, 'processed' => self::processLinks($rendered)));
         return self::processLinks($rendered);
     }
 
