@@ -638,21 +638,91 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 		return $s;
 	}
 
+    /**
+     * Get base sections (either root sections or configured by TSConfig) for article wizard
+     * newspaper.baseSections = [uid1, ..., uidn]
+     * newspaper.baseSectionsAsStartSection = [uid1, ..., [uidn]
+     * A base section is a section users can get access to in order add articles in child sections
+     * Only if newspaper.baseSectionAsStartSection is set, the base section can be accessed by the used
+     * Example: see Article wizard in production list
+     * @static
+     * @return array Sections
+     */
+    public static function getBaseSections() {
+
+        // Init
+        $baseSections = array();
+        $baseSectionUids = array();
+
+        // Read User TSConfig for base sections (if available): get uids of base sections
+        if ($GLOBALS['BE_USER']) {
+            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
+                $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
+            }
+            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection')) {
+                $baseAsStartSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection'));
+            }
+        }
+
+        if (!$baseSectionUids) {
+            // If no base sections were configured or found, use root sections
+            $baseSectionUids = self::getRootSectionUids();
+        }
+
+        // Create section objects
+        foreach($baseSectionUids as $sectionUid) {
+//            $baseSection = new tx_newspaper_Section($sectionUid);
+//            if (!in_array($sectionUid, $baseAsStartSectionUids)) {
+//                foreach($baseSection->getChildSections(false) as $section) {
+//                    $baseSections[] = $section;
+//                }
+//            } else {
+//                $baseSections[] = $baseSection;
+//            }
+            $baseSections[] = new tx_newspaper_Section($sectionUid);
+        }
+
+        return $baseSections;
+
+    }
+
 
 	static public function getModuleName() { return 'np_section'; }
 
 
-	/// Get root section(s)
-	/// \return root section(s)
+    /**
+     * Get root sections
+     * @static
+     * @return array Root sections
+     */
 	public static function getRootSections() {
-		$root = array();
-		foreach(tx_newspaper_section::getAllSections(false) as $section) { // check all sections ...
-			if (!$section->getParentSection()) {
-				$root[] = $section; // no parent, so root section
-			}
-		}
-		return $root;
+        $sections = array();
+        foreach(self::getRootSectionUids() as $uid) {
+            $sections[] = new tx_newspaper_Section($uid);
+        }
+        return $sections;
 	}
+
+    /**
+     * Get uids of root sections
+     * @static
+     * @return array Section uids
+     */
+    public static function getRootSectionUids() {
+		$row = tx_newspaper::selectRows(
+			'uid',
+			'tx_newspaper_section',
+			'parent_section=0 AND pid=' .
+                tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()),
+			'',
+			'sorting'
+		);
+        $uids = array();
+        foreach($row as $data) {
+            $uids[] = $data['uid'];
+        }
+        return $uids;
+    }
 
 	static public function getSectionForTypo3Page($typo_page_id) {
 

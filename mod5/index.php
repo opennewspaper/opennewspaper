@@ -524,29 +524,10 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/dashboard/'));
 
-		$smarty->assign('LABEL', array(
-			'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
-			'new_article_button' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false),
-			'new_article_typo3' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false),
-			'section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false),
-			'section_base' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_base', false),
-			'section_select' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_select', false),
-			'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
-			'controltag' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_controltype', false),
-			'to_productionlist' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_to_productionlist', false),
-			'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
-			'no_sect' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
-		));
+		$smarty->assign('LABEL', $this->getNewArticleLabels());
+		$smarty->assign('MESSAGE', $this->getNewArticleMessages());
 
-		$smarty->assign('MESSAGE', array(
-			'no_section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section', false),
-			'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
-			'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
-			'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
-			'no_ctrltagtype_available' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_ctrltagtype_available', false),
-		));
-
-		$smarty->assign('INPUT', $input);
+		$smarty->assign('INPUT', $input); // Add data
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 		$smarty->assign('SHOW_LOREM', ($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.use_lorem') != 0));
@@ -559,33 +540,16 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
 
 
-		// \todo: TSConfig + more than 1 start section
-		$start_section = new tx_newspaper_section(1); // ATTENTION: 1 is hard coded section "Start" !!!
-		$start_sections = $start_section->getChildSections(false);
+        // Get base sections
+        $baseSections = tx_newspaper_Section::getBaseSections();
 
-		$sub_sections = array();
-		foreach($start_sections as $key => $current_sub_section) {
-			// check if main section on level 1 can take articles. add to section2 if yes (only selectbox2 sections can be chosen)
-			if ($current_sub_section->getAttribute('show_in_list')) {
-				$sub_sections[$current_sub_section->getUid()][$start_section->getUid()] = $current_sub_section;
-			}
-			// add all sub sections that can take articles
-			$tmp_sections = $current_sub_section->getChildSections(true);
-			foreach($tmp_sections as $tmp_section) {
-				// check if section can take articles. add to section2 if yes (only selectbox2 sections can be chosen)
-				if ($tmp_section->getAttribute('show_in_list')) {
-					$sub_sections[$current_sub_section->getUid()][$tmp_section->getUid()] = $tmp_section;
-				}
-			}
-			// if no sub section could be found for a start section, remove start section (if main section is allowed to take articles, the sub section IS NOT empty)
-			if (sizeof($sub_sections[$current_sub_section->getUid()]) == 0) {
-				unset($start_sections[$key]); // no sub section for this base section, so do not list this base section
-			}
-		}
 
-		$smarty->assign('SECTION1', $start_sections);
-		$smarty->assign('SECTION2', $sub_sections);
-//t3lib_div::devlog('new article wizard', 'newspaper', 0, array('start_sections' => $start_sections, 'sub_sections' => $sub_sections));
+        $startSections = $this->getStartSections($baseSections);
+        $targetSections = $this->getTargetSections($startSections);
+
+		$smarty->assign('SECTION1', $startSections);
+		$smarty->assign('SECTION2', $targetSections);
+//t3lib_div::devlog('new article wizard', 'newspaper', 0, array('baseSections' => $baseSections, 'startSections' => $startSections, 'targetSections' => $targetSections));
 
 		if ($this->browse_path) {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
@@ -596,11 +560,116 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('DEFAULT_SOURCE', $this->getDefaultSource()); // select this radio button by default
 
 		$this->content .= $this->doc->section('', $smarty->fetch('mod5_newarticle.tmpl'), 0, 1);
-		$this->content.=$this->doc->spacer(10);
+		$this->content .= $this->doc->spacer(10);
 
 	}
 
-	/// gets the default source for importing articles
+    /**
+     * Get all subsequent section for given start sections
+     * @param array $startSections
+     * @return array [uid of start section][uidS of target sections] = section object
+     */
+    private function getTargetSections(array $startSections) {
+        $targetSections = array();
+        /** @var tx_newspaper_Section $startSection */
+        foreach ($startSections as $startSection) {
+
+            // Get direct children
+            $childSections = $startSection->getChildSections(false);
+
+            /** @var tx_newspaper_Section $startSection */
+            foreach ($childSections as $key => $childSection) {
+
+                // Check if start section can take articles. Add if yes.
+                if ($childSection->getAttribute('show_in_list')) {
+                    $targetSections[$startSection->getUid()][$childSection->getUid()] = $childSection;
+                }
+
+                // Add (recursivly) all sub sections that can take articles
+                $tmpSections = $childSection->getChildSections(true);
+                foreach ($tmpSections as $tmpSection) {
+                    // Check if section can take articles.
+                    if ($tmpSection->getAttribute('show_in_list')) {
+                        $targetSections[$startSection->getUid()][$tmpSection->getUid()] = $tmpSection;
+                    }
+                }
+
+                // If no sub section could be found for a start section, remove start section (if main section is allowed to take articles, the sub section IS NOT empty)
+                if (sizeof($targetSections[$startSection->getUid()]) == 0) {
+                    unset($targetSections[$key]); // no sub section for this base section, so do not list this base section
+                }
+
+            }
+        }
+        return $targetSections;
+    }
+
+    /**
+     * Extract start section from base section using TSConfig setting in newspaper.baseSectionsAsStartSection
+     * The return value might contain start section that does not have children.
+     * @param array $baseSections
+     * @return array sections
+     */
+    private function getStartSections(array $baseSections) {
+
+        // Read User TSConfig for base sections (if available)
+        $baseAsStartSectionUids = array();
+        if ($GLOBALS['BE_USER']) {
+            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection')) {
+                $baseAsStartSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection'));
+            }
+        }
+
+        $startSections = array();
+        /** @var tx_newspaper_Section $baseSection */
+        foreach($baseSections as $baseSection) {
+            if (!in_array($baseSection->getUid(), $baseAsStartSectionUids)) {
+                foreach($baseSection->getChildSections(false) as $startSection) {
+                    $startSections[] = $startSection;
+                }
+            } else {
+                $startSections[] = $baseSection;
+            }
+        }
+        return $startSections;
+    }
+
+
+    /**
+     * @return array Localized warnings and error messages for new article wozard
+     */
+    private function getNewArticleMessages() {
+        global $LANG;
+        return array(
+            'no_section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section', false),
+            'no_articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_articletype', false),
+            'no_section_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_section_chosen', false),
+            'no_article_chosen' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_article_chosen', false),
+            'no_ctrltagtype_available' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:message_no_ctrltagtype_available', false),
+        );
+    }
+
+    /**
+     * @return array Localized labels for new article wizard
+     */
+    private function getNewArticleLabels()     {
+        global $LANG;
+        return array(
+            'new_article' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article', false),
+            'new_article_button' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_button', false),
+            'new_article_typo3' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_new_article_typo3', false),
+            'section' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section', false),
+            'section_base' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_base', false),
+            'section_select' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_section_select', false),
+            'articletype' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_articletype', false),
+            'controltag' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_controltype', false),
+            'to_productionlist' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_to_productionlist', false),
+            'error_browsing' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
+            'no_sect' => $LANG->sL('LLL:EXT:newspaper/mod5/locallang.xml:label_error_browsing', false),
+        );
+    }
+
+    /// gets the default source for importing articles
 	// \return name of source configured in TSConfig (newspaper.article.defaultSource), or "new" if not set
 	private function getDefaultSource() {
 		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()));

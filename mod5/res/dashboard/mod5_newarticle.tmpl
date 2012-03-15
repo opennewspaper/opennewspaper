@@ -616,7 +616,10 @@ body {
 				<label>{$LABEL.section_base}</label> <br />
 				<select id="section1" onchange="changeSectionBox2(this.value)" size="9">
 				{foreach key=section_id item=section from=$SECTION1}
-		    	  	<option value="{$section->getUid()}"> {$section->getAttribute('section_name')}</option>
+                    {if array_key_exists($section->getUid(), $SECTION2)}
+                        {* Make sure to show start section only if thtere's at least one target section available *}
+		    	  	    <option value="{$section->getUid()}"> {$section->getAttribute('section_name')}</option>
+                    {/if}
 				{/foreach}
 				</select>
 			</div>
