@@ -659,9 +659,6 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
             if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
                 $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
             }
-            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection')) {
-                $baseAsStartSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSectionsAsStartSection'));
-            }
         }
 
         if (!$baseSectionUids) {
@@ -676,6 +673,23 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
         return $baseSections;
 
+    }
+
+    /**
+     * Get all section uids regarding user TSConfig setting newspaper.baseSections
+     * @static
+     * @return array Section uids
+     */
+    public static function getSectionTreeUids() {
+        $sectionUids = array();
+        /** @var tx_newspaper_Section $baseSection */
+        foreach(tx_newspaper_Section::getBaseSections() as $baseSection) {
+            $sectionUids[] = $baseSection->getUid();
+            foreach($baseSection->getChildSections(true) as $section) {
+                $sectionUids[] = $section->getUid();
+            }
+        }
+        return $sectionUids;
     }
 
 

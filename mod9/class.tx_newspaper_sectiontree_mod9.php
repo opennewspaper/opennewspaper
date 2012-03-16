@@ -66,8 +66,9 @@ class tx_newspaper_SectionTree_mod9 extends t3lib_treeView {
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
         $this->orderByFields = 'sorting';
+        $this->clause = ' AND uid IN (' . implode(',', tx_newspaper_Section::getSectionTreeUids()) . ')';
 	}
- 
+
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
 	/** init() already sets up all parameters for the tree to display correctly,
 	 *  we only need to supply the JavaScript jumpTo() function, which tells
