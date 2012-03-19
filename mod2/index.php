@@ -162,7 +162,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$count = tx_newspaper::countRows($where['table'], $where['where']);
 
 			$row = tx_newspaper::selectRows(
-				'*',
+				'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple secions
 				$where['table'],
 				$where['where'],
 				'',
