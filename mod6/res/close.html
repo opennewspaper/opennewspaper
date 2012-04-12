@@ -11,6 +11,8 @@
 /*<![CDATA[*/
 
     if (opener != null) {
+        var uid = parseInt(opener.NpTools.extract_querystring(window.location.search, 'tagUid')); // Get tag uid from querystring
+        opener.NpBackend.callDepTreeForTag(uid); // Call DepTree for Extra is currently not working for Extras on a tag zone
         opener.NpManageDossier.reloadTagzone(opener.NpManageDossier.getTagUid());
     }
 

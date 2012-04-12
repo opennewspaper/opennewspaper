@@ -1025,7 +1025,17 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
         return $cs_converter->conv_case($charset, $string, $type);
     }
 
-
+    /**
+     * Replacement for non-working t3lib_div::removeXSS() calls
+     * @static
+     * @param $string String to be checked
+     * @return string String with potential XSS stuff removed
+     */
+    public static function removeXSS($string)	{
+   		require_once(PATH_typo3 . 'contrib/RemoveXSS/RemoveXSS.php');
+        $removeXSS = new RemoveXSS(''); // t3lib_div::makeInstance() can't handle params ...
+   		return $removeXSS->RemoveXSS($string);
+   	}
 
   /**
    * Gets field data of current be_user

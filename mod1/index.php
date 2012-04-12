@@ -582,6 +582,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 		/// Process AJAX requests, if any. Terminates with die() if AJAX request.
 		private function processAjaxRequest() {
+//t3lib_div::devlog('processAjaxRequest()', 'newspaper', 0, array('ajaxController' => $this->input['ajaxController']));
 			switch($this->input['ajaxController']) {
 				case 'fixPubDate':
 					// update publish date for published articles without publish date
@@ -591,9 +592,38 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					// set all template_set fields to "default"
 					die($this->fixDefaultTemplateSet());
 				break;
-
+                case 'depTree':
+                    die($this->callDepTree());
+                break;
 			}
 		}
+
+
+        /**
+         * Calls the dependeny tree fpr the config set in $this->input
+         * Implemeted:
+         * $this->input['type'] == 'extra', uid = uid of (abstract) Extra
+         * $this->input['type'] == 'tag', uid = uid of Tag
+         */
+        private function callDepTree() {
+            switch(tx_newspaper::removeXSS($this->input['type'])) {
+                case 'extra':
+                    $tree = tx_newspaper_DependencyTree::generateFromExtra(
+                        tx_newspaper_Extra_Factory::getInstance()->create(intval($this->input['uid']))
+                    );
+                    $tree->executeActionsOnPages('tx_newspaper_Extra');
+                break;
+                case 'tag':
+                    $tree = tx_newspaper_DependencyTree::generateFromTag(
+                            new tx_newspaper_Tag(intval($this->input['uid']))
+                    );
+                    $tree->executeActionsOnPages('exportTags');
+                break;
+                default:
+                    t3lib_div::devlog('callDepTree() - Unknown call', 'newspaper', 2, array('input' => $this->input));
+            }
+        }
+
 
 
 		// processes newspaper element browsers ajax requests
