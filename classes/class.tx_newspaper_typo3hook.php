@@ -139,9 +139,9 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	/// command map hooks
 
-	function processCmdmap_preProcess($command, $table, $id, $value, $that) {
+	function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
 //t3lib_div::devlog('command pre enter', 'newspaper', 0, array('command' => $command, 'table' => $table, 'id' => $id, 'value' => $value));
-//t3lib_div::debug($that); die();
+//t3lib_div::debug($pObj); die();
 		if ($command == 'delete') {
 			$this->checkIfArticletypeCanBeDeleted($table, $id);
 			$this->checkIfSectionCanBeDeleted($table, $id);
@@ -150,8 +150,9 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 /// \todo: check if articles are assigned to section
 /// \todo: check if pages are assigned to section
 
-			// pass hook to newspaper classes
-			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $that);
+			// Pass hook to newspaper classes
+			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $pObj);
+            tx_newspaper_Article::processCmdmap_preProcess($command, $table, $id, $value, $pObj);
 		}
 	}
 
