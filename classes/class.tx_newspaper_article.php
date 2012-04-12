@@ -1073,7 +1073,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 	public static function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
         $id = intval($id);
         if ($command == 'delete' && $table == 'tx_newspaper_article' && $id) {
-            self::updateDependencyTree(new tx_newspaper_Article($id));
+            self::updateDependencyTree(new tx_newspaper_Article($id), false);
         }
     }
 
@@ -1164,12 +1164,23 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::$render_hooks[$class] = $function;
     }
 
-    public static function updateDependencyTree(tx_newspaper_Article $article) {
+    /**
+     * Update the dependency tree for given article
+     * @static
+     * @param tx_newspaper_Article $article Article to be processed
+     * @param bool $asynchronous If set, the DepTree is called asynchronous, if false the DepTree getsa called directly
+     */
+    public static function updateDependencyTree(tx_newspaper_Article $article, $asynchronous=true) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tags = self::getRemovedTags($article);
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags);
-            $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
-            $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
+            if ($asynchronous) {
+                $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
+                $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
+            } else {
+                // Force direct execution. Needed to process an article that is being deleted.
+                $tree->executeActionsOnPages('tx_newspaper_Article');
+            }
         }
     }
 
