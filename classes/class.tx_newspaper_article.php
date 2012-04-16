@@ -1445,7 +1445,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
                 $paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
                     self::makeParagraphRepresentationFromExtra($extra);
-            } else if ($extra->getAttribute('paragraph') > $number_of_text_paragraphs) {
+            } else {
                 $paragraphs[sizeof($paragraphs) - 1]['extras'][intval($extra->getAttribute('position'))] =
                     self::makeParagraphRepresentationFromExtra($extra);
             }
