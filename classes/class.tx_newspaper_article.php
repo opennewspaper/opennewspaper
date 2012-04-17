@@ -1058,25 +1058,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     }
 
-
-	/**
-     * Stuff to do when an article gets deleted:
-     * 1. Call DepTree, if the article gets deleted
-     * @static
-     * @todo: documentation, copy from T3 doc ...
-     * @param $command
-     * @param $table
-     * @param $id
-     * @param $value
-     * @param $pObj
-     */
-	public static function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
-        $id = intval($id);
-        if ($command == 'delete' && $table == 'tx_newspaper_article' && $id) {
-            self::updateDependencyTree(new tx_newspaper_Article($id), false);
-        }
-    }
-
     public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
         if (strtolower($table) == 'tx_newspaper_article') {
             // hide default articles in list module, only concrete article are visible in list module
@@ -1164,23 +1145,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         self::$render_hooks[$class] = $function;
     }
 
-    /**
-     * Update the dependency tree for given article
-     * @static
-     * @param tx_newspaper_Article $article Article to be processed
-     * @param bool $asynchronous If set, the DepTree is called asynchronous, if false the DepTree getsa called directly
-     */
-    public static function updateDependencyTree(tx_newspaper_Article $article, $asynchronous=true) {
+    public static function updateDependencyTree(tx_newspaper_Article $article) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tags = self::getRemovedTags($article);
             $tree = tx_newspaper_DependencyTree::generateFromArticle($article, $tags);
-            if ($asynchronous) {
-                $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
-                $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
-            } else {
-                // Force direct execution. Needed to process an article that is being deleted.
-                $tree->executeActionsOnPages('tx_newspaper_Article');
-            }
+            $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
+            $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
         }
     }
 
@@ -1445,7 +1415,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             if ($extra->getAttribute('paragraph') + $number_of_text_paragraphs < 0) {
                 $paragraphs[0]['extras'][intval($extra->getAttribute('position'))] =
                     self::makeParagraphRepresentationFromExtra($extra);
-            } else {
+            } else if ($extra->getAttribute('paragraph') >= $number_of_text_paragraphs) {
                 $paragraphs[sizeof($paragraphs) - 1]['extras'][intval($extra->getAttribute('position'))] =
                     self::makeParagraphRepresentationFromExtra($extra);
             }
