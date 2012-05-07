@@ -25,6 +25,16 @@ class tx_newspaper_ImageThumbnail {
         return self::iconImageMissing();
     }
 
+    public function getThumbnailWidth() {
+        $widths = $this->image->getWidths();
+        return $widths[self::thumbnail_name];
+    }
+
+    public function getThumbnailHeight() {
+        $heights = $this->image->getHeights();
+        return $heights[self::thumbnail_name];
+    }
+
     public static function addThumbnailSizes(array &$sizes) {
         for ($i = 0; $i < sizeof($sizes); $i++) {
             if (isset($sizes[0][self::thumbnail_name])) {
@@ -42,16 +52,6 @@ class tx_newspaper_ImageThumbnail {
                 'gfx/icon_warning2.gif', '',
                 tx_newspaper::getTranslation('message_image_unset')
         );
-    }
-
-    private function getThumbnailWidth() {
-        $widths = $this->image->getWidths();
-        return $widths[self::thumbnail_name];
-    }
-
-    private function getThumbnailHeight() {
-        $heights = $this->image->getHeights();
-        return $heights[self::thumbnail_name];
     }
 
     private function getThumbnailPath() {
