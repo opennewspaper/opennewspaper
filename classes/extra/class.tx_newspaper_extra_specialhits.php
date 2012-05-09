@@ -116,7 +116,9 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'words,title,teaser,url',
 			self::special_hits_table,
-			'pid=' . $pid . tx_newspaper::enableFields(self::special_hits_table)
+			'pid=' . $pid . tx_newspaper::enableFields(self::special_hits_table),
+            '',
+            'sorting'
 		);
 
         $specialWords = array();
