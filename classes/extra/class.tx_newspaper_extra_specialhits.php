@@ -15,6 +15,9 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
 	///	SQL table special hits are stored in
 	const special_hits_table = 'tx_newspaper_specialhit';
 
+    private $search; // Stores search query
+    private $seachArray; // Search query in an array
+
 
 	/// Constructor
 	public function __construct($uid = 0) {
@@ -65,13 +68,13 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
         }
 
         // Split search query into single words (and convert to lowercase)
-        $searchTerms = tx_newspaper::toLowerCaseArray(explode(' ', preg_replace("/\s\s+/", ' ', trim($this->search))));
-        if (sizeof($searchTerms) == 0) {
+        $this->searchArray = tx_newspaper::toLowerCaseArray(explode(' ', preg_replace("/\s\s+/", ' ', trim($this->search))));
+        if (sizeof($this->searchArray) == 0) {
             return array(); // nothing to do ...
         }
 
         // Execute search
-        return $this->executeSpecialHitSearch($searchTerms);
+        return $this->executeSpecialHitSearch();
   }
 
     /**
@@ -79,27 +82,36 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
      * @param array $searchTerms
      * @return array with items array('title', 'teaser', 'url')
      */
-    private function executeSpecialHitSearch(array $searchTerms) {
-
-        $specialWords = $this->readSpecialWords();
-
+    private function executeSpecialHitSearch() {
+        // Check all special hits if the search query matches
         $specialHits = array();
-        foreach ($searchTerms as $searchTerm) {
-            for ($i = 0; $i < sizeof($specialWords); $i++) {
-                if (in_array($searchTerm, $specialWords[$i]['words'])) {
-                    $specialHits[] = array(
-                        'title' => $specialWords[$i]['title'],
-                        'teaser' => $specialWords[$i]['teaser'],
-                        'url' => $specialWords[$i]['url']
-                    );
-                    continue;
-                }
+        foreach ($this->readSpecialWords() as $specialWord) {
+            if ($this->matchesSearchQuery($specialWord)) {
+                $specialHits[] = array(
+                    'title' => $specialWord['title'],
+                    'teaser' => $specialWord['teaser'],
+                    'url' => $specialWord['url']
+                );
             }
         }
-//t3lib_div::devlog('executeSpecialHitSearch()', 'np', 0, array('terms' => $searchTerms, 'this->search' => $this->search, 'special Hits' => $specialHits, 'specialWords' => $specialWords));
+//t3lib_div::devlog('executeSpecialHitSearch()', 'np', 0, array('terms' => $this->searchArray, 'this->search' => $this->search, 'special Hits' => $specialHits, 'specialWords' => $this->readSpecialWords()));
+//t3lib_div::debug(array('terms' => $this->searchArray, 'this->search' => $this->search, 'special Hits' => $specialHits, 'specialWords' => $this->readSpecialWords()));
         return $specialHits;
     }
 
+    /**
+     * Check if given $specialWord matched the query string
+     * @param array $specialWord Array with a list of words triggering a special hit
+     * @return bool True if a hit was found, else false
+     */
+    private function matchesSearchQuery(array $specialWord) {
+        foreach($specialWord['words'] as $word) {
+            if (in_array($word, $this->searchArray)) {
+                return true; // Hit found
+            }
+        }
+        return false; // No hit found
+    }
 
 
     /**
@@ -114,7 +126,7 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
         $pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Extra_SpecialHits());
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'words,title,teaser,url',
+			'words,title,teaser,url,sorting',
 			self::special_hits_table,
 			'pid=' . $pid . tx_newspaper::enableFields(self::special_hits_table),
             '',
@@ -133,7 +145,6 @@ class tx_newspaper_Extra_SpecialHits extends tx_newspaper_Extra {
 			}
 		}
 		$GLOBALS['TYPO3_DB']->sql_free_result($res);
-
         return $specialWords;
   }
 
