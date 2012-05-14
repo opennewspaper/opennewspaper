@@ -20,6 +20,12 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         $this->index = intval($width_set_index);
     }
 
+    public function __toString() {
+        return "sizes: " . print_r(self::$widths, 1) .
+                ", widths: " . print_r(self::$widths, 1) .
+                ", heights: " . print_r(self::$heights, 1);
+    }
+
     public static function getDataForFormatDropdown() {
         return self::readFormats();
     }
