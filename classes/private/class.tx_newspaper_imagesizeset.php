@@ -125,6 +125,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     private function readAndGetWidths($index) {
+        tx_newspaper::devlog("readAndGetWidths()", array(self::$widths, $index));
         $this->fillWidthOrHeightArray(self::$widths, 0);
   		return self::$widths[$index];
     }
