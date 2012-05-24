@@ -97,6 +97,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     private function fillWidthOrHeightArray(array &$what, $index) {
 
+        tx_newspaper::devlog("fillWidthOrHeightArray()", array($what, $index));
         if (!empty($what)) return;
 
         foreach ($this->getSizes() as $key => $size) {
