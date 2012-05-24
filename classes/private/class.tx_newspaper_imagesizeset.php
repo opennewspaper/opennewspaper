@@ -39,6 +39,8 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     public function getWidths() {
+        tx_newspaper::devlog("getWidths()", array(self::$widths, $this->index, $this->readAndGetWidths($this->index)));
+
         return $this->readAndGetWidths($this->index);
     }
 
