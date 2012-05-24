@@ -35,6 +35,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     public function getSizes() {
+        tx_newspaper::devlog("getSizes()", array(self::$sizes, $this->index, $this->readAndGetSizes($this->index)));
         return self::readAndGetSizes($this->index);
     }
 
