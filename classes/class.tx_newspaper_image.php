@@ -25,7 +25,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function __toString() {
-        return "file: $this->image_file Sizes: " . $this->getSizes();
+        return "file: $this->image_file Sizes: " . print_r($this->getSizes(), 1);
     }
 
     public function prepare_render(tx_newspaper_Smarty $smarty) {
