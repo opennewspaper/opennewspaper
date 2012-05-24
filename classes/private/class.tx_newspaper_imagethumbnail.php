@@ -26,17 +26,18 @@ class tx_newspaper_ImageThumbnail {
     }
 
     public function getThumbnailWidth() {
-
         $widths = $this->image->getWidths();
         if (isset($widths[self::thumbnail_name])) return $widths[self::thumbnail_name];
-        throw new tx_newspaper_InconsistencyException("image->getWidths() didnt return thumbnail width: " . print_r($widths, 1));
+        $default_sizes = explode('x', self::thumbnail_size);
+        return $default_sizes[0];
     }
 
     public function getThumbnailHeight() {
         $heights = $this->image->getHeights();
         return $heights[self::thumbnail_name];
         if (isset($heights[self::thumbnail_name])) return $heights[self::thumbnail_name];
-        throw new tx_newspaper_InconsistencyException("image->getHeights() didnt return thumbnail height: " . print_r($heights, 1));
+        $default_sizes = explode('x', self::thumbnail_size);
+        return $default_sizes[1];
     }
 
     public static function addThumbnailSizes(array &$sizes) {
