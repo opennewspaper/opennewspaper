@@ -130,12 +130,14 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     private function readAndGetWidths($index) {
         tx_newspaper::devlog("readAndGetWidths()", array(self::$widths, $index));
         $this->fillWidthOrHeightArray(self::$widths, 0);
+        return self::$widths;
   		return self::$widths[$index];
     }
 
     private function readAndGetHeights($index) {
         $this->fillWidthOrHeightArray(self::$heights, 1);
-  		return self::$heights[$index];
+        return self::$heights;
+        return self::$heights[$index];
     }
 
     ///	Read base path and predefined sizes for images
