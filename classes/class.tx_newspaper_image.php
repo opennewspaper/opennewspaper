@@ -90,7 +90,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 	}
 
     public function resizeImage($width, $height) {
-tx_newspaper::devlog("resizeImage($width, $height)", array($this->getWidths(), $this->getHeights()));
         self::doResizeImage(
             $width, $height,
             self::uploads_folder . '/'. $this->image_file,
