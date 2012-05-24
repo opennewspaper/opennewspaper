@@ -24,6 +24,10 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $this->thumbnail = new tx_newspaper_ImageThumbnail($this);
     }
 
+    public function __toString() {
+        return "file: $this->image_file Sizes: " . $this->getSizes();
+    }
+
     public function prepare_render(tx_newspaper_Smarty $smarty) {
         $smarty->assign('basepath', self::getBasepath());
         $smarty->assign('sizes', $this->getSizes());
