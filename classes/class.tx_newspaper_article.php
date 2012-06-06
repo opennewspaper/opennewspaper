@@ -1256,7 +1256,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  the p's while keeping the link conversion.
      */
     private static function convertRTELinks($paragraph) {
-        return self::trimPTags(tx_newspaper::convertRteField($paragraph));
+        return self::trimPTags(substr(tx_newspaper::convertRteField($paragraph), 2));
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
