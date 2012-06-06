@@ -1217,7 +1217,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     private function getTextParagraphsWithSpacing($text_paragraphs) {
         $converted_paragraphs = array();
         foreach ($text_paragraphs as $paragraph) {
-            $converted_paragraphs[] = tx_newspaper::convertRteField($paragraph);
+            $converted_paragraphs[] = self::convertRTELinks($paragraph);
         }
         $paragraphs = $this->assembleTextParagraphs($converted_paragraphs);
         return $paragraphs;
@@ -1249,6 +1249,14 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     private function startsWithHTMLAttribute($paragraph) {
         return preg_match('/^\w+="\w+">/', trim($paragraph));
+    }
+
+    /**
+     *  convertRteField wraps paragraphs in <p></p> again. This function removes
+     *  the p's while keeping the link conversion.
+     */
+    private static function convertRTELinks($paragraph) {
+        return self::trimPTags(tx_newspaper::convertRteField($paragraph));
     }
 
     /// Get the index of the provided tx_newspaper_Extra in the Extra array
