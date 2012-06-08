@@ -556,6 +556,8 @@ function changeWorkflowStatus(role, hidden_status) {
     private static $current_time = 0;
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
+
+        self::$current_time = time(); // make sure all log entries written in this run have the same time
 /*
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
@@ -569,8 +571,6 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 		if (!self::isLoggableClass($table)) return;
 
 		self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
-
-        self::$current_time = time(); // make sure all log entries written in this run have the same time
 
         self::writePublishingStatusEntry($fieldArray, $table, $id);
 
@@ -623,6 +623,12 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
     private static function writeWebElementSpecificLogEntries($table, $fieldArray, $id) {
         $article_id = self::getArticleUid($table, $id);
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_UNKNOWN,
+            "writeWebElementSpecificLogEntries(): $article_id",
+            $fieldArray['pid'], $table, $id
+        );
+
         if (!$article_id) return;
 
         self::writeLogEntry(
