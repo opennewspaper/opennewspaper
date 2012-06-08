@@ -644,14 +644,14 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                     JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
             "$table.uid = $id"
         );
+        tx_newspaper::devlog('getArticleUid()', tx_newspaper::$query);
         return intval($data['uid_local']);
     }
 
     private static function getExtraChangedMessage($table, $id) {
-        // @todo make more informative
         /** @var $extra tx_newspaper_Extra */
         $extra = new $table($id);
-        return "Extra changed: " . $extra->getDescription();
+        return tx_newspaper::getTranslation('label_workflow_extra_changed') . ' ' . $extra->getDescription();
     }
 
     private static function getFieldTranslations($fields) {
