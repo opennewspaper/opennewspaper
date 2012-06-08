@@ -552,6 +552,11 @@ function changeWorkflowStatus(role, hidden_status) {
  * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
  * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
  */
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_UNKNOWN,
+            "Tabelle geaendert: $table",
+            $fieldArray['pid'], $table, $id
+        );
 		if (!self::isLoggableClass($table)) return;
 
 		self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
@@ -563,12 +568,6 @@ function changeWorkflowStatus(role, hidden_status) {
         self::writeArticleSpecificLogEntries($table, $fieldArray, $id);
 
         self::writeManuallySpecifiedLogEntries($fieldArray, $table, $id);
-
-        self::writeLogEntry(
-            NP_WORKLFOW_LOG_UNKNOWN,
-            $table,
-            $fieldArray['pid'], $table, $id
-        );
 
 /// \todo: if ($redirectToPlacementModule) { ...}
 	}
