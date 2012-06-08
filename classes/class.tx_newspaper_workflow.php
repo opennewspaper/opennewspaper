@@ -20,6 +20,7 @@ define('NP_WORKLFOW_LOG_IMPORT', 5);
 define('NP_WORKLFOW_LOG_ERRROR', 6);
 define('NP_WORKLFOW_LOG_WARNING', 7);
 define('NP_WORKLFOW_LOG_CHANGE_FIELD', 8);
+define('NP_WORKLFOW_LOG_CHANGE_EXTRA', 9);
 
 define('NP_WORKLFOW_LOG_PLACEMENT_INSERT_AFTER', 20);
 define('NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER', 21);
@@ -40,6 +41,13 @@ define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button
 
 
 class tx_newspaper_Workflow {
+
+    static $operations_in_loglevel = array(
+        // default loglevel shown in production list
+        0 => array(
+            1, 2, 3, 4, 5, 6
+        )
+    );
 
 	// render workflow storage buttons for tx_newspaper_areticle given in $row
 	/** Depending on the workflow and the hidden field status various combinations of buttons can be rendered
@@ -549,14 +557,15 @@ function changeWorkflowStatus(role, hidden_status) {
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
 /*
- * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
- * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
- */
+t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
+t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
+
         self::writeLogEntry(
             NP_WORKLFOW_LOG_UNKNOWN,
             "Tabelle geaendert: $table",
             $fieldArray['pid'], $table, $id
         );
+ */
 		if (!self::isLoggableClass($table)) return;
 
 		self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
@@ -608,6 +617,35 @@ function changeWorkflowStatus(role, hidden_status) {
             );
         }
 
+    }
+
+    private static function writeWebElementSpecificLogEntries($table, $fieldArray, $id) {
+        $article_id = self::getArticleUid($table, $id);
+        if (!$article_id) return;
+
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_CHANGE_EXTRA,
+            self::getExtraChangedMessage($table, $id),
+            $fieldArray['pid'], 'tx_newspaper_article', $article_id
+        );
+    }
+
+    private static function getArticleUid($table, $id) {
+        if (substr($table, strlen('tx_newspaper_extra')) != 'tx_newspaper_extra') return 0;
+
+        // @todo INDEX on tx_newspaper_article_extras_mm.uid_foreign is not used - why?
+        $data = tx_newspaper::selectZeroOrOneRows(
+            'tx_newspaper_article_extras_mm.uid_local',
+            "$table JOIN tx_newspaper_extra ON tx_newspaper_extra.extra_uid = $table.uid AND tx_newspaper_extra.extra_table = '$table'
+                    JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
+            "$table.uid = $id"
+        );
+        return intval($data['uid_local']);
+    }
+
+    private static function getExtraChangedMessage($table, $id) {
+        // @todo make more informative
+        return "Extra changed: $table $id";
     }
 
     private static function getFieldTranslations($fields) {
