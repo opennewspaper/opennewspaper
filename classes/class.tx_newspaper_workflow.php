@@ -490,18 +490,8 @@ function changeWorkflowStatus(role, hidden_status) {
 	 */
 	public static function directLog($table, $id, $comment, $type = 0) {
 		$type = intval($type);
-		$current_time = time();
-		tx_newspaper::insertRows('tx_newspaper_log', array(
-			'pid' => 0,
-			'tstamp' => $current_time,
-			'crdate' => $current_time,
-			'cruser_id' => tx_newspaper::getBeUserUid(),
-			'be_user' => tx_newspaper::getBeUserUid(), // same value as cruser_id, but this field is visible in backend
-			'table_name' => $table,
-			'table_uid' => $id,
-			'operation' => $type,
-			'comment' => $comment
-		));
+		self::$current_time = time();
+        self::writeLogEntry($type, $comment, 0, $table, $id);
 	}
 
 
@@ -554,78 +544,103 @@ function changeWorkflowStatus(role, hidden_status) {
 	}
 
 
+    private static $current_time = 0;
 	/// write log data for newspaper classes implemting the tx_newspaper_WritesLog interface
 	public static function processAndLogWorkflow($status, $table, $id, &$fieldArray) {
-//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
-//t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
-		if (class_exists($table) && !tx_newspaper::isAbstractClass($table)) { ///<newspaper specification: table name = class name
-			$np_obj = new $table();
+/*
+ * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
+ * t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
+ */
+		if (!self::isLoggableClass($table)) return;
 
-			/// check if a newspaper record operation should be logged
-			if (in_array("tx_newspaper_WritesLog", class_implements($np_obj))) {
+		self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
 
-				self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
+        self::$current_time = time(); // make sure all log entries written in this run have the same time
 
-//debug($GLOBALS['BE_USER']);
-				$be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
+        self::writePublishingStatusEntry($fieldArray, $table, $id);
 
-				/// check if auto log entry for hiding/publishing newspaper record should be written
-				$current_time = time(); // make sure all log entries written in this run have the same time
-				if (array_key_exists('hidden', $fieldArray)) {
-					if ($table == 'tx_newspaper_article') {
-						$operation = $fieldArray['hidden']? tx_newspaper::getTranslation('log_article_hidden') : tx_newspaper::getTranslation('log_article_published');
-					} else {
-						$operation = $fieldArray['hidden']? tx_newspaper::getTranslation('log_record_hidden') : tx_newspaper::getTranslation('log_record_published');
-					}
-//t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => $current_time,
-						'crdate' => $current_time,
-						'cruser_id' => $be_user,
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table,
-						'table_uid' => $id,
-						'operation' => $fieldArray['hidden']? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
-						'comment' => $operation
-					));
-				}
+        self::writeArticleSpecificLogEntries($table, $fieldArray, $id);
 
-				/// check if auto log entry for change of workflow status should be written (article only)
-				if ($table == 'tx_newspaper_article' & array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => $current_time,
-						'crdate' => $current_time,
-						'cruser_id' => $be_user,
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table,
-						'table_uid' => $id,
-						'operation' => NP_WORKLFOW_LOG_CHANGE_ROLE,
-						'comment' => self::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG']))
-					));
-				}
+        self::writeManuallySpecifiedLogEntries($fieldArray, $table, $id);
 
-				/// check if manual comment should be written (this log record should always be written LAST)
-				if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
-					tx_newspaper::insertRows('tx_newspaper_log', array(
-						'pid' => $fieldArray['pid'],
-						'tstamp' => $current_time,
-						'crdate' => $current_time,
-						'cruser_id' => $be_user,
-						'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
-						'table_name' => $table,
-						'table_uid' => $id,
-						'operation' => NP_WORKLFOW_LOG_USERCOMMENT,
-						'comment' => $_REQUEST['workflow_comment']
-					));
-				}
+
 /// \todo: if ($redirectToPlacementModule) { ...}
-			}
-		}
 	}
+
+    /// check if auto log entry for hiding/publishing newspaper record should be written
+    private static function writePublishingStatusEntry($fieldArray, $table, $id) {
+        if (array_key_exists('hidden', $fieldArray)) {
+//t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
+            self::writeLogEntry(
+                $fieldArray['hidden'] ? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
+                self::getPublishingStatusComment($table, $fieldArray),
+                $fieldArray['pid'], $table, $id
+            );
+        }
+    }
+
+    /// check if auto log entry for change of workflow status should be written (article only)
+    private static function writeArticleSpecificLogEntries($table, $fieldArray, $id) {
+
+        if ($table != 'tx_newspaper_article') return;
+
+        if(array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
+            self::writeLogEntry(
+                NP_WORKLFOW_LOG_CHANGE_ROLE,
+                self::getWorkflowStatusChangedComment(intval($fieldArray['workflow_status']), intval($_REQUEST['workflow_status_ORG'])),
+                $fieldArray['pid'], $table, $id
+            );
+        }
+    }
+
+    /// check if manual comment should be written (this log record should always be written LAST)
+    private static function writeManuallySpecifiedLogEntries($fieldArray, $table, $id) {
+        if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
+            self::writeLogEntry(
+                NP_WORKLFOW_LOG_USERCOMMENT,
+                $_REQUEST['workflow_comment'],
+                $fieldArray['pid'], $table, $id
+            );
+        }
+    }
+
+    /** check if a newspaper record operation should be logged */
+    private static function isLoggableClass($class) {
+        return class_exists($class) && !tx_newspaper::isAbstractClass($class) &&
+               in_array("tx_newspaper_WritesLog", class_implements($class));
+    }
+
+    /**
+     * @static
+     * @param $operation int Operation that is logged - see defines above
+     * @param $comment string Comment for the operation
+     * @param $pid int Parent ID for the record that is logged
+     * @param $table string Table for the record that is logged
+     * @param $id int UID for the record that is logged
+     */
+    private static function writeLogEntry($operation, $comment, $pid, $table, $id) {
+        $be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
+
+        tx_newspaper::insertRows('tx_newspaper_log', array(
+     		'pid' => $pid,
+     		'tstamp' => self::$current_time,
+     		'crdate' => self::$current_time,
+     		'cruser_id' => $be_user,
+     		'be_user' => $be_user, // same value as cruser_id, but this field is visible in backend
+     		'table_name' => $table,
+     		'table_uid' => $id,
+     		'operation' => $operation,
+     		'comment' => $comment
+     	));
+    }
+
+    private static function getPublishingStatusComment($table, array $fieldArray) {
+        $type = ($table == 'tx_newspaper_article'? 'article': 'record');
+        return $fieldArray['hidden']?
+                tx_newspaper::getTranslation("log_${type}_hidden") :
+                tx_newspaper::getTranslation("log_${type}_published");
+    }
+
 }
 
 //tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
-
-?>
