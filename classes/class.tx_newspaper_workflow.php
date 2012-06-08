@@ -639,6 +639,11 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getArticleUid($table, $id) {
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_UNKNOWN,
+            "getArticleUid(): " . $table,
+            0, $table, $id
+        );
         if (substr($table, strlen('tx_newspaper_extra')) != 'tx_newspaper_extra') return 0;
 
         // @todo INDEX on tx_newspaper_article_extras_mm.uid_foreign is not used - why?
