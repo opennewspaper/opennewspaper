@@ -96,7 +96,7 @@
  *    best way to do that is from the \c ext_localconf.php for your Typo3
  *    extension.
  */
-abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface {
+abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspaper_WritesLog {
 
 	/// Create a tx_newspaper_Extra
 	/** Only the UID of the corresponding DB record is set. All attributes are
