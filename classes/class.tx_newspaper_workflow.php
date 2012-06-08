@@ -609,6 +609,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
             );
         }
 
+        tx_newspaper::devlog('writeArticleSpecificLogEntries()', $fieldArray);
+
         $changed_fields = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (!empty($changed_fields)) {
             self::writeLogEntry(
@@ -622,6 +624,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function writeWebElementSpecificLogEntries($table, $fieldArray, $id) {
+        tx_newspaper::devlog('writeWebElementSpecificLogEntries()', $fieldArray);
         $article_id = self::getArticleUid($table, $id);
 
         if (!$article_id) return;
