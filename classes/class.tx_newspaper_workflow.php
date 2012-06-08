@@ -576,6 +576,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
         self::writeArticleSpecificLogEntries($table, $fieldArray, $id);
 
+        self::writeWebElementSpecificLogEntries($table, $fieldArray, $id);
+
         self::writeManuallySpecifiedLogEntries($fieldArray, $table, $id);
 
 /// \todo: if ($redirectToPlacementModule) { ...}
