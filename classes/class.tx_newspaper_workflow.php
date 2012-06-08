@@ -564,6 +564,11 @@ function changeWorkflowStatus(role, hidden_status) {
 
         self::writeManuallySpecifiedLogEntries($fieldArray, $table, $id);
 
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_UNKNOWN,
+            $table,
+            $fieldArray['pid'], $table, $id
+        );
 
 /// \todo: if ($redirectToPlacementModule) { ...}
 	}
@@ -593,19 +598,25 @@ function changeWorkflowStatus(role, hidden_status) {
                 $fieldArray['pid'], $table, $id
             );
         }
+
         $changed_fields = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (!empty($changed_fields)) {
-            $message = tx_newspaper::getTranslation('label_workflow_field_changed');
-            foreach($changed_fields as $field) {
-                $message .= tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml') . ' ';
-            }
             self::writeLogEntry(
                 NP_WORKLFOW_LOG_CHANGE_FIELD,
-                $message,
+                tx_newspaper::getTranslation('label_workflow_field_changed') . ' ' .
+                        implode(', ', self::getFieldTranslations($changed_fields)),
                 $fieldArray['pid'], $table, $id
             );
         }
 
+    }
+
+    private static function getFieldTranslations($fields) {
+        $translations = array();
+        foreach ($fields as $field) {
+            $translations[] = tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml');
+        }
+        return $translations;
     }
 
 
