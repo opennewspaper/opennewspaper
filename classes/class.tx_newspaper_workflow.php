@@ -19,6 +19,7 @@ define('NP_WORKLFOW_LOG_USERCOMMENT', 4);
 define('NP_WORKLFOW_LOG_IMPORT', 5);
 define('NP_WORKLFOW_LOG_ERRROR', 6);
 define('NP_WORKLFOW_LOG_WARNING', 7);
+define('NP_WORKLFOW_LOG_CHANGE_FIELD', 8);
 
 define('NP_WORKLFOW_LOG_PLACEMENT_INSERT_AFTER', 20);
 define('NP_WORKLFOW_LOG_PLACEMENT_MOVE_AFTER', 21);
@@ -579,6 +580,7 @@ function changeWorkflowStatus(role, hidden_status) {
         }
     }
 
+    private static $fields_to_log_changes_for_in_article = array('kicker', 'title', 'teaser', 'bodytext');
     /// check if auto log entry for change of workflow status should be written (article only)
     private static function writeArticleSpecificLogEntries($table, $fieldArray, $id) {
 
@@ -591,7 +593,21 @@ function changeWorkflowStatus(role, hidden_status) {
                 $fieldArray['pid'], $table, $id
             );
         }
+        $changed_fields = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
+        if (!empty($changed_fields)) {
+            $message = tx_newspaper::getTranslation('label_workflow_field_changed');
+            foreach($changed_fields as $field) {
+                $message .= tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml') . ' ';
+            }
+            self::writeLogEntry(
+                NP_WORKLFOW_LOG_CHANGE_FIELD,
+                $message,
+                $fieldArray['pid'], $table, $id
+            );
+        }
+
     }
+
 
     /// check if manual comment should be written (this log record should always be written LAST)
     private static function writeManuallySpecifiedLogEntries($fieldArray, $table, $id) {
