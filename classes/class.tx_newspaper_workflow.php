@@ -648,6 +648,11 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                     JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
             "$table.uid = $id"
         );
+        self::writeLogEntry(
+            NP_WORKLFOW_LOG_UNKNOWN,
+            "getArticleUid(): " . tx_newspaper::$query,
+            0, $table, $id
+        );
         return intval($data['uid_local']);
     }
 
