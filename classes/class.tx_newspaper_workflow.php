@@ -623,11 +623,6 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
     private static function writeWebElementSpecificLogEntries($table, $fieldArray, $id) {
         $article_id = self::getArticleUid($table, $id);
-        self::writeLogEntry(
-            NP_WORKLFOW_LOG_UNKNOWN,
-            "writeWebElementSpecificLogEntries(): $article_id",
-            $fieldArray['pid'], $table, $id
-        );
 
         if (!$article_id) return;
 
@@ -639,11 +634,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getArticleUid($table, $id) {
-        self::writeLogEntry(
-            NP_WORKLFOW_LOG_UNKNOWN,
-            "getArticleUid(): " . $table . substr($table, strlen('tx_newspaper_extra')),
-            0, $table, $id
-        );
+
         if (substr($table, 0, strlen('tx_newspaper_extra')) != 'tx_newspaper_extra') return 0;
 
         // @todo INDEX on tx_newspaper_article_extras_mm.uid_foreign is not used - why?
@@ -653,17 +644,14 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                     JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
             "$table.uid = $id"
         );
-        self::writeLogEntry(
-            NP_WORKLFOW_LOG_UNKNOWN,
-            "getArticleUid(): " . tx_newspaper::$query,
-            0, $table, $id
-        );
         return intval($data['uid_local']);
     }
 
     private static function getExtraChangedMessage($table, $id) {
         // @todo make more informative
-        return "Extra changed: $table $id";
+        /** @var $extra tx_newspaper_Extra */
+        $extra = new $table($id);
+        return "Extra changed: " . $extra->getDescription();
     }
 
     private static function getFieldTranslations($fields) {
