@@ -648,7 +648,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     		}
     	}
     	if($maxlen == 0) {
-            if (($old) || ($new)) {
+            if (self::isTextElement($old) || self::isTextElement($new)) {
                 return array(array('d'=>$old, 'i'=>$new));
             }
             else return '';
@@ -658,6 +658,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     		array_slice($new, $nmax, $maxlen),
     		self::arrayDiff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
+
+    private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
     private static function textDiff($old, $new) {
         $diff = self::arrayDiff(explode(' ', $old), explode(' ', $new));
