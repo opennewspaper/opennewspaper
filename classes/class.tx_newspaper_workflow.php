@@ -6,6 +6,8 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
+require_once('private/class.tx_newspaper_logrun.php');
+
 define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
 define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
 define('NP_ACTIVE_ROLE_NONE', 1000);
@@ -457,7 +459,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
 
  	/// modify $fieldArray if the workflow and/ or the hidden status for an article changed
- 	private static function checkIfWorkflowStatusChanged(&$fieldArray, $table, $id) {
+ 	private static function checkIfWorkflowStatusChanged(array &$fieldArray, $table, $id) {
 //t3lib_div::devlog('checkIfWorkflowStatusChanged() - enter', 'newspaper', 0, array('fieldArray' => $fieldArray, 'table' => $table, 'id' => $id, '_REQUEST' => $_REQUEST));
 
 		if (strtolower($table) != 'tx_newspaper_article') {
@@ -568,15 +570,18 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
  */
 		if (!self::isLoggableClass($table)) return;
 
-        $log_run = new tx_newspaper_LogRun($fieldArray['pid'], $table, $id);
+        /** @var $object tx_newspaper_StoredObject */
+        $object = new $table($id);
+
+        $log_run = new tx_newspaper_LogRun($object, $fieldArray['pid']);
 
 		self::checkIfWorkflowStatusChanged($fieldArray, $table, $id); // IMPORTANT: might alter $fieldArray !
 
-        self::writePublishingStatusEntry($log_run, $fieldArray, $table);
+        self::writePublishingStatusEntry($log_run, $fieldArray, $object);
 
-        self::writeArticleSpecificLogEntries($log_run, $fieldArray, $table);
+        self::writeArticleSpecificLogEntries($log_run, $fieldArray, $object);
 
-        self::writeWebElementSpecificLogEntries($log_run, $fieldArray, $table, $id);
+        self::writeWebElementSpecificLogEntries($log_run, $fieldArray, $object);
 
         self::writeManuallySpecifiedLogEntries($log_run);
 
@@ -584,11 +589,11 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 	}
 
     /// check if auto log entry for hiding/publishing newspaper record should be written
-    private static function writePublishingStatusEntry(tx_newspaper_LogRun $log_run, array $fieldArray, $table) {
+    private static function writePublishingStatusEntry(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
         if (array_key_exists('hidden', $fieldArray)) {
             $log_run->write(
                 $fieldArray['hidden'] ? NP_WORKLFOW_LOG_HIDE : NP_WORKLFOW_LOG_PUBLISH,
-                self::getPublishingStatusComment($table, $fieldArray)
+                self::getPublishingStatusComment($object, $fieldArray)
             );
 //t3lib_div::devlog('processAndLogWorkflow() hidden status','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
         }
@@ -596,9 +601,9 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
     private static $fields_to_log_changes_for_in_article = array('kicker', 'title', 'teaser', 'bodytext');
     /// check if auto log entry for change of workflow status should be written (article only)
-    private static function writeArticleSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, $table) {
+    private static function writeArticleSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
 
-        if ($table != 'tx_newspaper_article') return;
+        if (!$object instanceof tx_newspaper_Article) return;
 
         if(array_key_exists('workflow_status', $fieldArray) && array_key_exists('workflow_status', $_REQUEST)) {
             $log_run->write(
@@ -609,7 +614,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
         tx_newspaper::devlog('writeArticleSpecificLogEntries()', $fieldArray);
 
-        $changed_fields = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
+        $changed_fields = self::getChangedFields($fieldArray, $object);
         if (!empty($changed_fields)) {
             $log_run->write(
                 NP_WORKLFOW_LOG_CHANGE_FIELD,
@@ -620,33 +625,36 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
     }
 
-    private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, $table, $id) {
-        tx_newspaper::devlog('writeWebElementSpecificLogEntries()', $fieldArray);
-        $article_id = self::getArticleUid($table, $id);
-
-        if (!$article_id) return;
-
-        $log_run->write(NP_WORKLFOW_LOG_CHANGE_EXTRA, self::getExtraChangedMessage($table, $id));
+    private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
+        $marked = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
+        if (in_array('bodytext', $marked)) {
+            tx_newspaper::devlog('getChangedFields()', array($fieldArray['bodytext'], $article->getAttribute('bodytext')));
+        }
+        return $marked;
     }
 
-    private static function getArticleUid($table, $id) {
+    private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
+        if (!$object instanceof tx_newspaper_Extra) return;
+        if (!self::getArticleUid($object)) return;
 
-        if (substr($table, 0, strlen('tx_newspaper_extra')) != 'tx_newspaper_extra') return 0;
+        $log_run->write(NP_WORKLFOW_LOG_CHANGE_EXTRA, self::getExtraChangedMessage($object));
+    }
 
+    private static function getArticleUid(tx_newspaper_Extra $extra) {
+
+        $table = $extra->getTable();
         // @todo INDEX on tx_newspaper_article_extras_mm.uid_foreign is not used - why?
         $data = tx_newspaper::selectZeroOrOneRows(
             'tx_newspaper_article_extras_mm.uid_local',
             "$table JOIN tx_newspaper_extra ON tx_newspaper_extra.extra_uid = $table.uid AND tx_newspaper_extra.extra_table = '$table'
                     JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
-            "$table.uid = $id"
+            "$table.uid = " . $extra->getUid()
         );
         tx_newspaper::devlog('getArticleUid()', tx_newspaper::$query);
         return intval($data['uid_local']);
     }
 
-    private static function getExtraChangedMessage($table, $id) {
-        /** @var $extra tx_newspaper_Extra */
-        $extra = new $table($id);
+    private static function getExtraChangedMessage(tx_newspaper_Extra $extra) {
         return tx_newspaper::getTranslation('label_workflow_extra_changed') . ' ' . $extra->getDescription();
     }
 
@@ -672,8 +680,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                in_array("tx_newspaper_WritesLog", class_implements($class));
     }
 
-    private static function getPublishingStatusComment($table, array $fieldArray) {
-        $type = ($table == 'tx_newspaper_article'? 'article': 'record');
+    private static function getPublishingStatusComment(tx_newspaper_StoredObject $object, array $fieldArray) {
+        $type = ($object instanceof tx_newspaper_Article? 'article': 'record');
         return $fieldArray['hidden']?
                 tx_newspaper::getTranslation("log_${type}_hidden") :
                 tx_newspaper::getTranslation("log_${type}_published");
@@ -681,31 +689,4 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
 }
 
-class tx_newspaper_LogRun {
-
-    public function __construct($pid, $table, $id, $tstamp = 0) {
-        $this->tstamp = $tstamp? $tstamp: time();
-        $this->pid = $pid;
-        $this->table = $table;
-        $this->id = $id;
-        $this->be_user = $GLOBALS['BE_USER']->user['uid']; /// i'm not sure if this object is always available, we'll see ...
-    }
-
-    public function write($operation, $comment, $details = '') {
-        tx_newspaper::insertRows('tx_newspaper_log', array(
-     		'pid' => $this->pid,
-     		'tstamp' => $this->tstamp,
-     		'crdate' => $this->tstamp,
-     		'cruser_id' => $this->be_user,
-     		'be_user' => $this->be_user, // same value as cruser_id, but this field is visible in backend
-     		'table_name' => $this->table,
-     		'table_uid' => $this->id,
-     		'operation' => $operation,
-     		'comment' => $comment,
-            'details' => $details
-     	));
-    }
-
-    private $tstamp, $pid, $table, $id, $be_user;
-}
 //tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
