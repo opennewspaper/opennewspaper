@@ -7,6 +7,7 @@
  */
 
 require_once('private/class.tx_newspaper_logrun.php');
+require_once('private/class.tx_newspaper_diff.php');
 
 define('NP_ACTIVE_ROLE_EDITORIAL_STAFF', 0);
 define('NP_ACTIVE_ROLE_DUTY_EDITOR', 1);
@@ -495,9 +496,8 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
 	public static function directLog($table, $id, $comment, $type = 0) {
-		$type = intval($type);
         $log_run = new tx_newspaper_LogRun(0, $table, $id);
-        $log_run->write($type, $comment);
+        $log_run->write(intval($type), $comment);
 	}
 
 
@@ -556,12 +556,6 @@ function changeWorkflowStatus(role, hidden_status) {
 /*
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
-
-        self::writeLogEntry(
-            NP_WORKLFOW_LOG_UNKNOWN,
-            "Tabelle geaendert: $table",
-            $fieldArray['pid'], $table, $id
-        );
  */
 		if (!self::isLoggableClass($table)) return;
 
@@ -609,12 +603,10 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
         $changed_fields = self::getChangedFields($fieldArray, $object);
         if (!empty($changed_fields)) {
-            $diffs = self::getDiffDescriptions($object, $fieldArray, $changed_fields);
             $log_run->write(
                 NP_WORKLFOW_LOG_CHANGE_FIELD,
-                tx_newspaper::getTranslation('label_workflow_field_changed') . ' ' .
-                        implode(', ', self::getFieldTranslations($changed_fields)),
-                '<table>' . implode('', $diffs) . '</table>'
+                tx_newspaper::getTranslation('label_workflow_field_changed') . ' ' . implode(', ', self::getFieldTranslations($changed_fields)),
+                "<table>\n" . implode('', self::getDiffDescriptions($object, $fieldArray, $changed_fields)) . "</table>\n"
 
             );
         }
@@ -625,7 +617,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         $diffs = array();
         foreach ($changed_fields as $field) {
             $diff = new tx_newspaper_Diff($article->getAttribute($field), $fieldArray[$field]);
-            $diffs[$field] = "<tr><td>" . self::getFieldTranslation($field) . "</td><td>" . $diff->textDiff() . "</td></tr>";
+            $diffs[$field] = "<tr><td>" . self::getFieldTranslation($field) . "</td><td>" . $diff->textDiff() . "</td></tr>\n";
         }
         return $diffs;
     }
@@ -681,7 +673,6 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         return tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml');
     }
 
-
     /// check if manual comment should be written (this log record should always be written LAST)
     private static function writeManuallySpecifiedLogEntries(tx_newspaper_LogRun $log_run) {
         if (isset($_REQUEST['workflow_comment']) && $_REQUEST['workflow_comment'] != '') {
@@ -702,62 +693,6 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                 tx_newspaper::getTranslation("log_${type}_published");
     }
 
-}
-
-class tx_newspaper_Diff {
-
-    public function __construct($old_text, $new_text) {
-        $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
-    }
-
-    public function textDiff() {
-        return array_reduce($this->diff_representation, array($this, 'elementsToText'));
-    }
-
-    private static function elementsToText($already, $next) {
-        if (!is_array($next)) return $already . ' ' . $next;
-        return $already . ' ' . self::markedToText($next['d'], 'red') . self::markedToText($next['i'], 'green');
-    }
-
-    private static function markedToText(array $changed, $color) {
-        return !empty($changed)? '<span style="color:' . $color . '">' . implode(' ', $changed) . "</span> ": '';
-    }
-
-    public function isDifferent() {
-        foreach ($this->diff_representation as $element) {
-            if (is_array($element)) return true;
-        }
-        return false;
-    }
-
-    private static function arrayDiff(array $old, array $new){
-    	foreach($old as $oindex => $ovalue){
-    		$nkeys = array_keys($new, $ovalue);
-    		foreach($nkeys as $nindex){
-    			$matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
-    				$matrix[$oindex - 1][$nindex - 1] + 1 : 1;
-    			if($matrix[$oindex][$nindex] > $maxlen){
-    				$maxlen = $matrix[$oindex][$nindex];
-    				$omax = $oindex + 1 - $maxlen;
-    				$nmax = $nindex + 1 - $maxlen;
-    			}
-    		}
-    	}
-    	if($maxlen == 0) {
-            if (self::isTextElement($old) || self::isTextElement($new)) {
-                return array(array('d'=>$old, 'i'=>$new));
-            }
-            else return array('');
-        }
-    	return array_merge(
-    		self::arrayDiff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
-    		array_slice($new, $nmax, $maxlen),
-    		self::arrayDiff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
-    }
-
-    private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
-
-    private $diff_representation = array();
 }
 
 //tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
