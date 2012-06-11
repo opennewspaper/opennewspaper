@@ -649,9 +649,9 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     	}
     	if($maxlen == 0) return array(array('d'=>$old, 'i'=>$new));
     	return array_merge(
-    		diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+    		self::diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
     		array_slice($new, $nmax, $maxlen),
-    		diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+    		self::diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
 
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
