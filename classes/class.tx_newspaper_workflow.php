@@ -230,12 +230,7 @@ function changeWorkflowStatus(role, hidden_status) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
         $tableUid = intval($tableUid);
-        if($allComments) {
-            $comments = self::getComments($table, $tableUid);
-        } else {
-            $comments = self::getComments($table, $tableUid, NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT);
-        }
-
+        $comments = self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT);
         $comments = self::addUsername($comments);
         return self::renderTemplate($comments, $tableUid, $allComments, $showFoldLinks);
     }
@@ -612,17 +607,27 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
             );
         }
 
-        tx_newspaper::devlog('writeArticleSpecificLogEntries()', $fieldArray);
-
         $changed_fields = self::getChangedFields($fieldArray, $object);
         if (!empty($changed_fields)) {
+            $diffs = self::getDiffDescriptions($object, $fieldArray, $changed_fields);
             $log_run->write(
                 NP_WORKLFOW_LOG_CHANGE_FIELD,
                 tx_newspaper::getTranslation('label_workflow_field_changed') . ' ' .
-                        implode(', ', self::getFieldTranslations($changed_fields))
+                        implode(', ', self::getFieldTranslations($changed_fields)),
+                '<table>' . implode('', $diffs) . '</table>'
+
             );
         }
 
+    }
+
+    private static function getDiffDescriptions(tx_newspaper_Article $article, array $fieldArray, array $changed_fields) {
+        $diffs = array();
+        foreach ($changed_fields as $field) {
+            $diff = new tx_newspaper_Diff($article->getAttribute($field), $fieldArray[$field]);
+            $diffs[$field] = "<tr><td>" . self::getFieldTranslation($field) . "</td><td>" . $diff->textDiff() . "</td></tr>";
+        }
+        return $diffs;
     }
 
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
@@ -667,9 +672,13 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     private static function getFieldTranslations($fields) {
         $translations = array();
         foreach ($fields as $field) {
-            $translations[] = tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml');
+            $translations[] = self::getFieldTranslation($field);
         }
         return $translations;
+    }
+
+    private static function getFieldTranslation($field) {
+        return tx_newspaper::getTranslation('tx_newspaper_article.' . $field, 'locallang_db.xml');
     }
 
 
@@ -702,13 +711,16 @@ class tx_newspaper_Diff {
     }
 
     public function textDiff() {
-       	foreach($this->diff_representation as $k){
-       		if(is_array($k))
-       			$ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
-       				(!empty($k['i'])?"<ins>".implode(' ',$k['i'])."</ins> ":'');
-       		else $ret .= $k . ' ';
-       	}
-       	return $ret;
+        return array_reduce($this->diff_representation, array($this, 'elementsToText'));
+    }
+
+    private static function elementsToText($already, $next) {
+        if (!is_array($next)) return $already . ' ' . $next;
+        return $already . ' ' . self::markedToText($next['d'], 'red') . self::markedToText($next['i'], 'green');
+    }
+
+    private static function markedToText(array $changed, $color) {
+        return !empty($changed)? '<span style="color:' . $color . '">' . implode(' ', $changed) . "</span> ": '';
     }
 
     public function isDifferent() {
