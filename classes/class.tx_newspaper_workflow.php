@@ -628,9 +628,30 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
         $marked = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (in_array('bodytext', $marked)) {
-            tx_newspaper::devlog('getChangedFields()', array($fieldArray['bodytext'], $article->getAttribute('bodytext')));
+            $diff = self::diff(explode(' ', $article->getAttribute('bodytext')), explode(' ', $fieldArray['bodytext']));
+            tx_newspaper::devlog('getChangedFields()', $diff);
         }
         return $marked;
+    }
+
+    private static function diff(array $old, array $new){
+    	foreach($old as $oindex => $ovalue){
+    		$nkeys = array_keys($new, $ovalue);
+    		foreach($nkeys as $nindex){
+    			$matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
+    				$matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+    			if($matrix[$oindex][$nindex] > $maxlen){
+    				$maxlen = $matrix[$oindex][$nindex];
+    				$omax = $oindex + 1 - $maxlen;
+    				$nmax = $nindex + 1 - $maxlen;
+    			}
+    		}
+    	}
+    	if($maxlen == 0) return array(array('d'=>$old, 'i'=>$new));
+    	return array_merge(
+    		diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+    		array_slice($new, $nmax, $maxlen),
+    		diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
     }
 
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
