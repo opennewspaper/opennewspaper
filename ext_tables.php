@@ -288,7 +288,7 @@ $TCA["tx_newspaper_log"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_log.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "table_name, table_uid, be_user, operation, comment",
+		"fe_admin_fieldList" => "table_name, table_uid, be_user, operation, comment, details",
 	)
 );
 

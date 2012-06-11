@@ -1379,7 +1379,7 @@ $TCA["tx_newspaper_pagezonetype"] = array (
 $TCA["tx_newspaper_log"] = array (
 	"ctrl" => $TCA["tx_newspaper_log"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "table_name,table_uid,be_user,operation,comment"
+		"showRecordFieldList" => "table_name,table_uid,be_user,operation,comment,details"
 	),
 	"feInterface" => $TCA["tx_newspaper_log"]["feInterface"],
 	"columns" => array (
@@ -1439,9 +1439,18 @@ $TCA["tx_newspaper_log"] = array (
 				"rows" => "5",
 			)
 		),
+		"details" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_log.details",		
+			"config" => Array (
+				"type" => "text",
+				"cols" => "30",	
+				"rows" => "5",
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "table_name;;;;1-1-1, table_uid, be_user, operation, comment")
+		"0" => array("showitem" => "table_name;;;;1-1-1, table_uid, be_user, operation, comment, details")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

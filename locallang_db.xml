@@ -115,6 +115,7 @@
 			<label index="tx_newspaper_log.be_user">Backend user</label>
 			<label index="tx_newspaper_log.operation">Operation</label>
 			<label index="tx_newspaper_log.comment">Comment</label>
+			<label index="tx_newspaper_log.details">Details</label>
 			<label index="tx_newspaper_articletype">Article type</label>
 			<label index="tx_newspaper_articletype.title">Title</label>
 			<label index="tx_newspaper_articletype.normalized_name">Internal title for TSConfig usage. Please modify TSConfig if you change this title.</label>
@@ -383,6 +384,7 @@
 			<label index="tx_newspaper_log.be_user">Backend-User</label>
 			<label index="tx_newspaper_log.operation">Operation</label>
 			<label index="tx_newspaper_log.comment">Kommentar</label>
+			<label index="tx_newspaper_log.details">Details</label>
 			<label index="tx_newspaper_articletype">Artikeltyp</label>
 			<label index="tx_newspaper_articletype.title">Titel</label>
 			<label index="tx_newspaper_articletype.normalized_name">Interner Titel für den Zugriff per TSConfig. Bitte passen Sie TSConfig-Einträge an, wenn Sie diesen Titel ändern.</label>

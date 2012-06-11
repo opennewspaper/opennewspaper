@@ -401,6 +401,7 @@ CREATE TABLE tx_newspaper_log (
 	be_user blob NOT NULL,
 	operation tinytext NOT NULL,
 	comment text NOT NULL,
+	details text NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
