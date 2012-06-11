@@ -628,16 +628,16 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
         $marked = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (in_array('bodytext', $marked)) {
-            if (!tx_newspaper_Diff::isDifferent($article->getAttribute('bodytext'), $fieldArray['bodytext'])) {
-                tx_newspaper::devlog('getChangedFields()', tx_newspaper_Diff::textDiff($article->getAttribute('bodytext'), $fieldArray['bodytext']));
+            $diff = new tx_newspaper_Diff($article->getAttribute('bodytext'), $fieldArray['bodytext']);
+            if ($diff->isDifferent()) {
+                tx_newspaper::devlog('getChangedFields()', $diff->textDiff());
+            } else {
+                unset($marked[array_search('bodytext', $marked)]);
             }
         }
         return $marked;
     }
 
-
-    private static function textDiff($old, $new) {
-    }
 
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
         if (!$object instanceof tx_newspaper_Extra) return;
@@ -697,9 +697,12 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
 class tx_newspaper_Diff {
 
-    public static function textDiff($old_text, $new_text) {
-        $diff = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
-       	foreach($diff as $k){
+    public function __construct($old_text, $new_text) {
+        $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
+    }
+
+    public function textDiff() {
+       	foreach($this->diff_representation as $k){
        		if(is_array($k))
        			$ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
        				(!empty($k['i'])?"<ins>".implode(' ',$k['i'])."</ins> ":'');
@@ -708,8 +711,8 @@ class tx_newspaper_Diff {
        	return $ret;
     }
 
-    public static function isDifferent($old_text, $new_text) {
-        foreach (self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text)) as $element) {
+    public function isDifferent() {
+        foreach ($this->diff_representation as $element) {
             if (is_array($element)) return true;
         }
         return false;
@@ -742,6 +745,7 @@ class tx_newspaper_Diff {
 
     private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
+    private $diff_representation = array();
 }
 
 //tx_newspaper::registerSaveHook(new tx_newspaper_Workflow());
