@@ -628,48 +628,15 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
         $marked = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (in_array('bodytext', $marked)) {
-            $diff = self::arrayDiff(explode(' ', $article->getAttribute('bodytext')), explode(' ', $fieldArray['bodytext']));
-            tx_newspaper::devlog('getChangedFields()', $diff);
+            if (!tx_newspaper_Diff::isDifferent($article->getAttribute('bodytext'), $fieldArray['bodytext'])) {
+                tx_newspaper::devlog('getChangedFields()', tx_newspaper_Diff::textDiff($article->getAttribute('bodytext'), $fieldArray['bodytext']));
+            }
         }
         return $marked;
     }
 
-    private static function arrayDiff(array $old, array $new){
-    	foreach($old as $oindex => $ovalue){
-    		$nkeys = array_keys($new, $ovalue);
-    		foreach($nkeys as $nindex){
-    			$matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
-    				$matrix[$oindex - 1][$nindex - 1] + 1 : 1;
-    			if($matrix[$oindex][$nindex] > $maxlen){
-    				$maxlen = $matrix[$oindex][$nindex];
-    				$omax = $oindex + 1 - $maxlen;
-    				$nmax = $nindex + 1 - $maxlen;
-    			}
-    		}
-    	}
-    	if($maxlen == 0) {
-            if (self::isTextElement($old) || self::isTextElement($new)) {
-                return array(array('d'=>$old, 'i'=>$new));
-            }
-            else return '';
-        }
-    	return array_merge(
-    		self::arrayDiff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
-    		array_slice($new, $nmax, $maxlen),
-    		self::arrayDiff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
-    }
-
-    private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
     private static function textDiff($old, $new) {
-        $diff = self::arrayDiff(explode(' ', $old), explode(' ', $new));
-       	foreach($diff as $k){
-       		if(is_array($k))
-       			$ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
-       				(!empty($k['i'])?"<ins>".implode(' ',$k['i'])."</ins> ":'');
-       		else $ret .= $k . ' ';
-       	}
-       	return $ret;
     }
 
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
@@ -725,6 +692,55 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
                 tx_newspaper::getTranslation("log_${type}_hidden") :
                 tx_newspaper::getTranslation("log_${type}_published");
     }
+
+}
+
+class tx_newspaper_Diff {
+
+    public static function textDiff($old_text, $new_text) {
+        $diff = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
+       	foreach($diff as $k){
+       		if(is_array($k))
+       			$ret .= (!empty($k['d'])?"<del>".implode(' ',$k['d'])."</del> ":'').
+       				(!empty($k['i'])?"<ins>".implode(' ',$k['i'])."</ins> ":'');
+       		else $ret .= $k . ' ';
+       	}
+       	return $ret;
+    }
+
+    public static function isDifferent($old_text, $new_text) {
+        foreach (self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text)) as $element) {
+            if (is_array($element)) return true;
+        }
+        return false;
+    }
+
+    private static function arrayDiff(array $old, array $new){
+    	foreach($old as $oindex => $ovalue){
+    		$nkeys = array_keys($new, $ovalue);
+    		foreach($nkeys as $nindex){
+    			$matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
+    				$matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+    			if($matrix[$oindex][$nindex] > $maxlen){
+    				$maxlen = $matrix[$oindex][$nindex];
+    				$omax = $oindex + 1 - $maxlen;
+    				$nmax = $nindex + 1 - $maxlen;
+    			}
+    		}
+    	}
+    	if($maxlen == 0) {
+            if (self::isTextElement($old) || self::isTextElement($new)) {
+                return array(array('d'=>$old, 'i'=>$new));
+            }
+            else return array('');
+        }
+    	return array_merge(
+    		self::arrayDiff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
+    		array_slice($new, $nmax, $maxlen),
+    		self::arrayDiff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+    }
+
+    private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
 }
 
