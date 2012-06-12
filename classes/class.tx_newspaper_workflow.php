@@ -496,7 +496,7 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
 	public static function directLog($table, $id, $comment, $type = 0) {
-        $log_run = new tx_newspaper_LogRun(0, $table, $id);
+        $log_run = new tx_newspaper_LogRun(new $table($id), 0);
         $log_run->write(intval($type), $comment);
 	}
 
