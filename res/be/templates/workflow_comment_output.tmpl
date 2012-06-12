@@ -1,5 +1,14 @@
 {* debug *}
-<div id="comments-{$tableUid}" class="comments">
+<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js"> </script>
+
+<div id="comments-{$tableUid}" class="comments" style="display:block">
+
+    {* link to show all comments *}
+    <p>
+        <a title="Show all messages" class="right" href="#"
+           onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
+           >Show all messages</a>
+    </p>
 
     <table style="width:456px">
 
@@ -32,5 +41,40 @@
 		<div class="np_wf_link"><a href="#" class="less" onclick="getComments({$tableUid}, 0); return false;">{$LABEL.less}</a></div>
 	{/if}
 {/if}
+
+</div>
+
+<div id="comments-{$tableUid}-all" class="comments" style="display:none">
+
+    {* link to show only default comments *}
+    <p>
+        <a title="Show only default messages" class="right" href="#"
+           onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
+           >Show only default messages</a>
+    </p>
+
+    <table style="width:456px">
+
+        {foreach item=comment from=$all_comments}
+            <tr>
+                <td style="padding:2px; vertical-align:top;">{$comment.username} </td>
+                <td style="padding:2px; vertical-align:top; width:100px;">{$comment.created} </td>
+                {* <td style="padding:2px; vertical-align:top;">{$comment.operation}</td> *}
+                {if $comment.operation == 4}
+                	{* user comment *}
+                	<td class="style="padding:2px; vertical-align:top; width:266px;"><strong><span style="color:red;">{$comment.comment|nl2br}</span></strong> </td>
+                {elseif $comment.operation == 6}
+                	{* error msg *}
+                	<td class="style="padding:2px; vertical-align:top; width:266px;"><span style="color:red;">{$comment.comment|nl2br}</span> </td>
+                {else}
+                	{* no special formatting *}
+                	<td style="padding:2px; vertical-align:top; width:266px;">{$comment.comment} </td> {* newspaper system comment *}
+                {/if}
+                {if $comment.details}
+                    </tr><tr><td colspan="5">{$comment.details}</td>
+                {/if}
+           </tr>
+        {/foreach}
+    </table>
 
 </div>

@@ -48,16 +48,6 @@ define('NP_SHOW_PLACE_BUTTONS', false);
 
 class tx_newspaper_Workflow {
 
-    static $operations_in_loglevel = array(
-        // default loglevel shown in production list
-        0 => array(
-            1, 2, 3, 4, 5, 6
-        ),
-        1 => array(
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        )
-    );
-
 	// render workflow storage buttons for tx_newspaper_areticle given in $row
 	/** Depending on the workflow and the hidden field status various combinations of buttons can be rendered
 	 *  hide if article is published, publish if article is hidden
@@ -292,17 +282,28 @@ function changeWorkflowStatus(role, hidden_status) {
     	';
     }
 
+    private static $operations_in_loglevel = array(
+        // default loglevel shown in production list
+        0 => array( 1, 2, 3, 4, 5, 6),
+        // all logged messages shown
+        1 => array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    );
+
     public static function getComments($table, $table_uid, $limit = 0, $log_level = 0) {
-        $comments = tx_newspaper::selectRows(
+
+        $where = "table_name = '$table' AND table_uid = $table_uid";
+        if (is_array(self::$operations_in_loglevel[$log_level])) {
+            $where .= ' AND operation IN (' . implode(', ', self::$operations_in_loglevel[$log_level]) . ')';
+        }
+
+        return tx_newspaper::selectRows(
 			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment, details",
 			'tx_newspaper_log',
-            "table_name = '$table' AND table_uid = $table_uid
-                AND operation IN (" . implode(', ', self::$operations_in_loglevel[$log_level]) . ')',
+            $where,
 			'',
 			'crdate desc',
 			($limit > 0) ? $limit : ''
 		);
-        return $comments;
     }
 
     private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $showFoldLinks=false) {
