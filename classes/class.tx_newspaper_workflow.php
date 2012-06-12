@@ -317,6 +317,7 @@ function changeWorkflowStatus(role, hidden_status) {
 			'more' => tx_newspaper::getTranslation('log_more_link'),
 			'less' => tx_newspaper::getTranslation('log_less_link')
 		));
+        $smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }
