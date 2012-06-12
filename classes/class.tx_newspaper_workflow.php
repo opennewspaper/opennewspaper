@@ -568,7 +568,7 @@ function changeWorkflowStatus(role, hidden_status) {
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('table' => $table, 'id' => $id, 'fieldArray' => $fieldArray, '_request' => $_REQUEST));
 t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtrace' => debug_backtrace()));
  */
-		if (!self::isLoggableClass($table)) return;
+		if (empty($fieldArray) || !self::isLoggableClass($table)) return;
 
         /** @var $object tx_newspaper_StoredObject */
         $object = new $table($id);
