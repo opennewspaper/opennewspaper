@@ -652,6 +652,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
         if (!$object instanceof tx_newspaper_Extra) return;
 
+        tx_newspaper::devlog("writeWebElementSpecificLogEntries", $fieldArray);
+
         $article_uid = self::getArticleUid($object);
         if ($article_uid) {
             $log_run = new tx_newspaper_LogRun(new tx_newspaper_Article($article_uid), $fieldArray['pid']);
