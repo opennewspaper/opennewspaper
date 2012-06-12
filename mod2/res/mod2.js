@@ -16,7 +16,7 @@ function toggleCommentProdList(el) {
 	 		document.getElementById(el_previous).style.display = 'none';
 	 		document.getElementById('b_' + el_previous).src = '../res/be/css/arrow-270.png';
 	 	}
-	 	el_previous = el; // store, so this message can be closen when other messages are to be displayed
+	 	el_previous = el; // store, so this message can be closed when other messages are to be displayed
  	}
  }
 

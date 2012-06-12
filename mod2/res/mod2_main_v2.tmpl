@@ -234,10 +234,14 @@
 			<div id="messages{$DATA[i].uid}" class="allMessages">
 
 {* \todo: message are rendered twice -> only one should be used ... *}
-			{foreach from=$DATA[i].workflowlog_v2 item=comment}
+			{foreach from=$DATA[i].workflowlog_v2 key=j item=comment}
 				<p class="autor">{$comment.username}</p>
 				<p class="autor right"> <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>&nbsp;{$comment.crdate|date_format:"%H:%M:%S"}</p>
 				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
+                {if $comment.details}
+                    <p class="message" id="message_{$i}_{$j}">{$comment.details}</p>
+                {/if}
+
 			{/foreach}
 
 		</div>
