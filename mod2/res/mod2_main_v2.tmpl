@@ -229,11 +229,18 @@
 			{/foreach}
 		</div>
 
-			<!-- All Messages / hidden -->
+		<!-- All Messages / hidden -->
 
-			<div id="messages{$DATA[i].uid}" class="allMessages">
+        {* @todo: message are rendered twice -> only one should be used ... *}
+		<div id="messages_{$DATA[i].uid}_basic" class="allMessages">
 
-{* \todo: message are rendered twice -> only one should be used ... *}
+            {* link to show all comments *}
+            <p>
+                <a title="Show all messages" class="right" href="#"
+                   onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
+                   >Show all messages</a>
+            </p>
+
 			{foreach from=$DATA[i].workflowlog_v2 key=j item=comment}
 				<p class="autor">{$comment.username}</p>
 				<p class="autor right">
@@ -243,7 +250,9 @@
 				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">
                     {$comment.comment}
                     {if $comment.details}
-                        <a title="Details" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
+                        {* @todo title as localized text message *}
+                        {* @todo change the "+" to an image? *}
+                        <a title="Details" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
                     {/if}
                 </p>
                 {if $comment.details}
@@ -253,6 +262,38 @@
 			{/foreach}
 
 		</div>
+
+        {* @todo: aaand rendered a third time... can we do this better? *}
+        <div id="messages_{$DATA[i].uid}_all" class="allMessages">
+
+            {* link to show only basic comments *}
+            <p>
+                <a title="Show only default messages" class="right" href="#"
+                   onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
+                   >Show only default messages</a>
+            </p>
+
+      		{foreach from=$DATA[i].workflowlog_all key=j item=comment}
+      			<p class="autor">{$comment.username}</p>
+      			<p class="autor right">
+                    <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>
+                    &nbsp;{$comment.crdate|date_format:"%H:%M:%S"}
+                </p>
+      			<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">
+                    {$comment.comment}
+                    {if $comment.details}
+                        {* @todo title as localized text message *}
+                        {* @todo change the "+" to an image? *}
+                        <a title="Details" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
+                    {/if}
+                </p>
+                {if $comment.details}
+                    <p class="message" id="message_{$DATA[i].uid}_{$j}" style="display:none">{$comment.details}</p>
+                {/if}
+
+      		{/foreach}
+
+      	</div>
 
 		<div class="hide">
 			<div>
@@ -277,7 +318,7 @@
 				<a title="{$LL.label_preview_article}" href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_preview.png" width="30" height="30"></a>
 				<a title="{$LL.label_edit_article} (#{$DATA[i].uid})" href="{$T3PATH}alt_doc.php?returnUrl={$ABSOLUTE_PATH}/typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a>
 				<a title="{$LL.label_delete_article}" href="#" onclick="deleteArticle({$DATA[i].uid}, '{$LL.message_delete_article}'); return false;"><img src="../res/be/img/edit_delete.png" width="30" height="30"></a>
-				<a title="{$LL.label_messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggleCommentProdList('messages{$DATA[i].uid}'); return false;"><img src="../res/be/css/arrow-270.png" id="b_messages{$DATA[i].uid}" alt="" width="30" height="30"></a>
+				<a title="{$LL.label_messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggleCommentProdList('messages_{$DATA[i].uid}_basic'); return false;"><img src="../res/be/css/arrow-270.png" id="b_messages{$DATA[i].uid}" alt="" width="30" height="30"></a>
 			</div>
 		</div>
 	</div>

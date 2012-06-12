@@ -247,6 +247,11 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$comments = tx_newspaper_workflow::addUsername($comments);
 			$row[$i]['workflowlog_v2'] = $comments;
 
+   			// add extended workflowlog data to $row - displayable on demand
+			$comments = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid'], 0, 1);
+			$comments = tx_newspaper_workflow::addUsername($comments);
+			$row[$i]['workflowlog_all'] = $comments;
+
 			// add sections
 			$a = new tx_newspaper_article(intval($row[$i]['uid']));
 			$sections = array();

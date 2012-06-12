@@ -39,8 +39,11 @@ define('NP_WORKLFOW_LOG_WEBMASTER_TOOL_INHERITANCE_SOURCE', 40);
 define('NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT', 2);
 
 define('NP_ARTICLE_WORKFLOW_NOCLOSE', false); // if set to true the workflow buttons don't close the form (better for testing)
-define('NP_SHOW_PLACE_BUTTONS', false); // \todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened. as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
-
+/*
+ * @todo after pressing the place button the article gets stores, workflow_status is set to 1 AND the placement form is opened.
+ *       as that "open placement form" feature isn't implemented, this const can be used to hide the buttons in the backend
+ */
+define('NP_SHOW_PLACE_BUTTONS', false);
 
 
 class tx_newspaper_Workflow {
@@ -49,6 +52,9 @@ class tx_newspaper_Workflow {
         // default loglevel shown in production list
         0 => array(
             1, 2, 3, 4, 5, 6
+        ),
+        1 => array(
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         )
     );
 
@@ -285,11 +291,12 @@ function changeWorkflowStatus(role, hidden_status) {
     	';
     }
 
-    public static function getComments($table, $table_uid, $limit = 0) {
+    public static function getComments($table, $table_uid, $limit = 0, $log_level = 0) {
         $comments = tx_newspaper::selectRows(
 			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment, details",
 			'tx_newspaper_log',
-            'table_name = \''.$table.'\' AND table_uid = '.$table_uid,
+            "table_name = '$table' AND table_uid = $table_uid
+                AND operation IN (" . implode(', ', self::$operations_in_loglevel[$log_level]) . ')',
 			'',
 			'crdate desc',
 			($limit > 0) ? $limit : ''

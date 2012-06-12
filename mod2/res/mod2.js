@@ -25,8 +25,10 @@ function toggleCommentDetails(el) {
 	if (document.getElementById(el).style.display == 'block') {
 		// hide comments
  		document.getElementById(el).style.display = 'none';
+        // @todo change displayed element to "+"
  	} else {
  		document.getElementById(el).style.display = 'block';
+        // @todo change displayed element to "-"
  	}
  }
 
