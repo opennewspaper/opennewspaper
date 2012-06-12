@@ -239,7 +239,7 @@
 				<p class="autor right"> <strong>{$comment.crdate|date_format:"%d.%m"}{if $comment.crdate|date_format:"%Y" != $smarty.now|date_format:"%Y"}{$comment.crdate|date_format:".%Y"}{/if}</strong>&nbsp;{$comment.crdate|date_format:"%H:%M:%S"}</p>
 				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">{$comment.comment}</p>
                 {if $comment.details}
-                    <p class="message" id="message_{$i}_{$j}">{$comment.details}</p>
+                    <p class="message" id="message_{$DATA[i].uid}_{$j}">{$comment.details}</p>
                 {/if}
 
 			{/foreach}

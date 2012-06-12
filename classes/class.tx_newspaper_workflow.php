@@ -617,9 +617,13 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         $diffs = array();
         foreach ($changed_fields as $field) {
             $diff = new tx_newspaper_Diff($article->getAttribute($field), $fieldArray[$field]);
-            $diffs[$field] = "<tr><td>" . self::getFieldTranslation($field) . "</td><td>" . $diff->textDiff() . "</td></tr>\n";
+            $diffs[$field] = self::getFormattedDetailsField(self::getFieldTranslation($field), $diff->textDiff());
         }
         return $diffs;
+    }
+
+    private static function getFormattedDetailsField($field_name, $field_content) {
+        return "<tr><td width='100%'>$field_name</td></tr><tr><td width='100%'>$field_content</td></tr>\n";
     }
 
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
