@@ -287,7 +287,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
     public static function getComments($table, $table_uid, $limit = 0) {
         $comments = tx_newspaper::selectRows(
-			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment",
+			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment, details",
 			'tx_newspaper_log',
             'table_name = \''.$table.'\' AND table_uid = '.$table_uid,
 			'',
@@ -626,9 +626,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         $marked = array_intersect(array_keys($fieldArray), self::$fields_to_log_changes_for_in_article);
         if (in_array('bodytext', $marked)) {
             $diff = new tx_newspaper_Diff($article->getAttribute('bodytext'), $fieldArray['bodytext']);
-            if ($diff->isDifferent()) {
-                tx_newspaper::devlog('getChangedFields()', $diff->textDiff());
-            } else {
+            if (!$diff->isDifferent()) {
                 unset($marked[array_search('bodytext', $marked)]);
             }
         }

@@ -16,6 +16,9 @@
                 	{* no special formatting *}
                 	<td style="padding:2px; vertical-align:top; width:266px;">{$comment.comment} </td> {* newspaper system comment *}
                 {/if}
+                {if $comment.details}
+                    </tr><tr><td colspan="5">{$comment.details}</td>
+                {/if}
            </tr>
         {/foreach}
     </table>
