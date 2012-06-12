@@ -20,6 +20,15 @@ function toggleCommentProdList(el) {
  	}
  }
 
+function toggleCommentDetails(el) {
+	// toggle comments
+	if (document.getElementById(el).style.display == 'block') {
+		// hide comments
+ 		document.getElementById(el).style.display = 'none';
+ 	} else {
+ 		document.getElementById(el).style.display = 'block';
+ 	}
+ }
 
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"
