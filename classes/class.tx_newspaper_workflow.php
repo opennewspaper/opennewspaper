@@ -651,9 +651,17 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
     private static function writeWebElementSpecificLogEntries(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
         if (!$object instanceof tx_newspaper_Extra) return;
-        if (!self::getArticleUid($object)) return;
 
-        $log_run->write(NP_WORKLFOW_LOG_CHANGE_EXTRA, self::getExtraChangedMessage($object));
+        $article_uid = self::getArticleUid($object);
+        if ($article_uid) {
+            $log_run = new tx_newspaper_LogRun(new tx_newspaper_Article($article_uid), $fieldArray['pid']);
+        }
+
+        $log_run->write(
+            NP_WORKLFOW_LOG_CHANGE_EXTRA,
+            tx_newspaper::getTranslation('label_workflow_extra_changed'),
+            self::getExtraChangedDetails($object, $fieldArray)
+        );
     }
 
     private static function getArticleUid(tx_newspaper_Extra $extra) {
@@ -670,8 +678,13 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         return intval($data['uid_local']);
     }
 
-    private static function getExtraChangedMessage(tx_newspaper_Extra $extra) {
-        return tx_newspaper::getTranslation('label_workflow_extra_changed') . ' ' . $extra->getDescription();
+    private static function getExtraChangedDetails(tx_newspaper_Extra $extra, array $fieldArray) {
+        $old = $extra->getDescription();
+        foreach ($fieldArray as $attribute => $value) {
+            $extra->setAttribute($attribute, $value);
+        }
+        $new = $extra->getDescription();
+        return "$old -> $new";
     }
 
     private static function getFieldTranslations($fields) {
