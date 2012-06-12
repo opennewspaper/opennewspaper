@@ -236,10 +236,11 @@ function changeWorkflowStatus(role, hidden_status) {
         if(!$table || !$tableUid) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
-        $tableUid = intval($tableUid);
-        $comments = self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT);
-        $comments = self::addUsername($comments);
-        return self::renderTemplate($comments, $tableUid, $allComments, $showFoldLinks);
+
+        return self::renderTemplate(
+            self::addUsername(self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT)),
+            self::addUsername(self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT, 1)),
+            intval($tableUid), $allComments, $showFoldLinks);
     }
 
     /// return javascript for ajax calls
@@ -304,17 +305,12 @@ function changeWorkflowStatus(role, hidden_status) {
         return $comments;
     }
 
-    private static function renderTemplate($comments, $tableUid, $allComments=true, $showFoldLinks=false) {
-		self::addUsername($comments);
+    private static function renderTemplate(array $comments, array $all_comments, $tableUid) {
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
+        $smarty->assign('all_comments', $all_comments);
 		$smarty->assign('tableUid', $tableUid);
-		$smarty->assign('allComments', $allComments);
-		$smarty->assign('showFoldLinks', $showFoldLinks);
-		$smarty->assign('LABEL', array(
-			'more' => tx_newspaper::getTranslation('log_more_link'),
-			'less' => tx_newspaper::getTranslation('log_less_link')
-		));
+
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }
@@ -344,6 +340,7 @@ function changeWorkflowStatus(role, hidden_status) {
 		}
 		return ($role == 1);
 	}
+
 	/// \return true if be_user has newspaper role "editorial staff"
 	public static function isEditor() {
 		$role = self::getRole();

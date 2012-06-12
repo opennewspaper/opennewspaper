@@ -1,6 +1,8 @@
 {* debug *}
 <div id="comments-{$tableUid}" class="comments">
+
     <table style="width:456px">
+
         {foreach item=comment from=$comments}
             <tr>
                 <td style="padding:2px; vertical-align:top;">{$comment.username} </td>
@@ -22,11 +24,5 @@
            </tr>
         {/foreach}
     </table>
-{if $showFoldLinks}
-   	{if !$allComments}
-		<div class="np_wf_link"><a href="#" class="more" onclick="getComments({$tableUid}, 1); return false;">{$LABEL.more}</a></div>
-	{else}
-		<div class="np_wf_link"><a href="#" class="less" onclick="getComments({$tableUid}, 0); return false;">{$LABEL.less}</a></div>
-	{/if}
-{/if}
+
 </div>
