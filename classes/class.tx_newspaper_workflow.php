@@ -305,12 +305,17 @@ function changeWorkflowStatus(role, hidden_status) {
         return $comments;
     }
 
-    private static function renderTemplate(array $comments, array $all_comments, $tableUid) {
+    private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $showFoldLinks=false) {
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
         $smarty->assign('all_comments', $all_comments);
 		$smarty->assign('tableUid', $tableUid);
-
+		$smarty->assign('show_all_comments', $show_all_comments);
+		$smarty->assign('showFoldLinks', $showFoldLinks);
+		$smarty->assign('LABEL', array(
+			'more' => tx_newspaper::getTranslation('log_more_link'),
+			'less' => tx_newspaper::getTranslation('log_less_link')
+		));
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }

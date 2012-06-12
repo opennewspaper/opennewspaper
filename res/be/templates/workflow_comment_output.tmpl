@@ -25,4 +25,12 @@
         {/foreach}
     </table>
 
+{if $showFoldLinks}
+   	{if !$show_all_comments}
+		<div class="np_wf_link"><a href="#" class="more" onclick="getComments({$tableUid}, 1); return false;">{$LABEL.more}</a></div>
+	{else}
+		<div class="np_wf_link"><a href="#" class="less" onclick="getComments({$tableUid}, 0); return false;">{$LABEL.less}</a></div>
+	{/if}
+{/if}
+
 </div>
