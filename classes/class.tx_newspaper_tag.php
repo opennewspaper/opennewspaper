@@ -87,36 +87,22 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 
     /// \return Array with all control tags for given $category
     public static function getAllControlTags($category) {
-    	$category = intval($category);
-    	$rows = tx_newspaper::selectRows(
-    		'uid',
-    		self::tag_table,
-    		'tag_type=' . self::getControltagType() . ' AND ctrltag_cat=' . $category  . tx_newspaper::enableFields(self::tag_table),
-    		'',
-    		'tag'
-    	);
-    	$tags = array();
-    	foreach($rows as $row) {
-    		$tags[] = new tx_newspaper_tag($row['uid']);
-    	}
-    	return $tags;
+        return self::getAllTagsWhere('tag_type=' . self::getControltagType() . ' AND ctrltag_cat=' . intval($category));
     }
 
 
 	/// \return Array with all content tags
     public static function getAllContentTags() {
-    	$rows = tx_newspaper::selectRows(
-    		'uid',
-    		self::tag_table,
-    		'tag_type=' . self::getContentTagType() . tx_newspaper::enableFields(self::tag_table),
-    		'',
-    		'tag'
-    	);
-    	$tags = array();
-    	foreach($rows as $row) {
-    		$tags[] = new tx_newspaper_tag($row['uid']);
-    	}
-    	return $tags;
+        return self::getAllTagsWhere('tag_type=' . self::getContentTagType());
+    }
+
+    public static function getAllTagsWhere($where) {
+       	$tags = array();
+       	foreach(tx_newspaper::selectRows('uid', self::tag_table,  $where . tx_newspaper::enableFields(self::tag_table), '', 'tag')
+                as $row) {
+       		$tags[] = new tx_newspaper_tag($row['uid']);
+       	}
+       	return $tags;
     }
 
 	/**

@@ -543,16 +543,15 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	private function createWherePartArray() {
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
 		$where = array();
+        $tables = array('tx_newspaper_article');
 
 		if (trim($this->input['section'])) {
 			$where_section = $this->getWhereForSection($this->input['section']);
 			if ($where_section === false) {
 				return false; // no matching section found, so not article in search result
 			}
-			$table = 'tx_newspaper_article, tx_newspaper_article_sections_mm';
+			$tables[] = 'tx_newspaper_article_sections_mm';
 			$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')'; //
-		} else {
-			$table = 'tx_newspaper_article';
 		}
 
 		$where['is_template'] = 'is_template=0';
@@ -594,33 +593,38 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 
 		if (trim($this->input['text'])) {
+            if (substr(trim($this->input['text']), 0, 1) == '#') {
+         	    // looking for an article uid?
+         		$uid = intval(substr(trim($this->input['text']), 1));
+         		if (trim($this->input['text']) == '#' . $uid) {
+         			// text contains a query like #[int], so search for this uid ONLY
+         			return array(
+         				'table' => $table,
+         				'where' => 'uid=' . $uid
+         			);
+         		}
+         	}
 			$where['text'] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
 				addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
 				addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
 				addslashes(trim($this->input['text'])) . '%")';
-			if (substr(trim($this->input['text']), 0, 1) == '#') {
-				// looking for an article uid?
-				$uid = intval(substr(trim($this->input['text']), 1));
-				if (trim($this->input['text']) == '#' . $uid) {
-					// text contains a query like #[int], so search for this uid ONLY
-					$where['uid'] = $uid;
-					$table = 'tx_newspaper_article';
-					return array(
-						'table' => $table,
-						'where' => 'uid=' . $uid
-					);
-				}
-			}
 		}
 
         if ($this->input['controltag']) {
-            // @todo do
-            tx_newspaper::devlog('createWherePartArray', $this->input);
+
+            $tags = tx_newspaper_Tag::getAllTagsWhere(
+                "title='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
+            );
+
+            if (!empty($tags)) {
+                $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
+                $tables[] = 'tx_newspaper_article_tags_mm';
+            }
         }
 
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('where' => $where, 'table' => $table));
 		return array(
-			'table' => $table,
+			'table' => implode(', ', $tables),
 			'where' => implode(' AND ', $where)
 		);
 	}
@@ -703,9 +707,16 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	}
 
     private function getControltags() {
-        // @todo do
-        return array('', 'dummy1', 'dummy2');
+        $categories = tx_newspaper_Tag::getAllControltagCategories();
+        if (empty($categories)) return array();
+
+        $tags = tx_newspaper_Tag::getAllControlTags($categories[0]['uid']);
+        array_walk($tags, array($this, 'extractTagTitle'));
+        return array_merge(array(''), $tags);
     }
+
+    private function extractTagTitle(tx_newspaper_Tag $tag, $key) { return $tag->getTitle(); }
+
 }
 
 

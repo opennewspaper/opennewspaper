@@ -83,17 +83,19 @@
 	<br />
 
     {* control tags *}
-    <label>{$LL.label_controltag}</label>
+    {if $CONTROLTAGS}
+        <label>{$LL.label_controltag}</label>
         <select name="tx_newspaper_mod2[controltag]" onchange=submitFilter('reset_startpage');>
-      			{foreach from=$CONTROLTAGS item=value}
+      		{foreach from=$CONTROLTAGS item=value}
       			{if $value == $FILTER.controltag}
       				<option selected="selected" value="{$value}">{$value}</option>
       			{else}
       				<option value="{$value}">{$value}</option>
       			{/if}
-      			{/foreach}
-      		</select>
+      		{/foreach}
+      	</select>
       	<br />
+    {/if}
 
 	{* stop / items per page *}
 	<label>{$LL.label_step_items_per_page}</label>
