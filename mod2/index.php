@@ -210,6 +210,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
 		$smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
 
+        $smarty->assign('CONTROLTAGS', $this->getControltags());
+
 		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
 		$smarty->assign('ICON', $this->getIcons());
 
@@ -610,6 +612,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 				}
 			}
 		}
+
+        if ($this->input['controltag']) {
+            // @todo do
+            tx_newspaper::devlog('createWherePartArray', $this->input);
+        }
+
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('where' => $where, 'table' => $table));
 		return array(
 			'table' => $table,
@@ -694,7 +702,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $range;
 	}
 
-
+    private function getControltags() {
+        // @todo do
+        return array('', 'dummy1', 'dummy2');
+    }
 }
 
 

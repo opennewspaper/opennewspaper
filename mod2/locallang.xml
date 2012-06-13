@@ -42,6 +42,7 @@
 			<label index="label_time_controlled_now_but_will_end">Started at ###STARTTIME###, will end at ###ENDTIME###</label>
 
 			<label index="label_author">Author</label>
+            <label index="label_controltag">Control tag</label>
 			<label index="label_section">Section</label>
 			<label index="label_textsearch">Text</label>
 			<label index="flag_textsearch">#[article id] searches this article only</label>
@@ -117,6 +118,7 @@
 			<label index="label_time_controlled_now_but_will_end">Startdatum/-uhrzeit war: ###STARTTIME###, Enddatum/-uhrzeit wird sein: ###ENDTIME###</label>
 
 			<label index="label_author">Autor</label>
+            <label index="label_controltag">Steuertag</label>
 			<label index="label_section">Ressort</label>
 			<label index="label_textsearch">Text</label>
 			<label index="flag_textsearch">#[Artikel-Id] sucht nur diesen Artikel</label>

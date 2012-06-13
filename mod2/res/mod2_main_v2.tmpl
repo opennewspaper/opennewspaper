@@ -82,6 +82,19 @@
 	<input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 	<br />
 
+    {* control tags *}
+    <label>{$LL.label_controltag}</label>
+        <select name="tx_newspaper_mod2[controltag]" onchange=submitFilter('reset_startpage');>
+      			{foreach from=$CONTROLTAGS item=value}
+      			{if $value == $FILTER.controltag}
+      				<option selected="selected" value="{$value}">{$value}</option>
+      			{else}
+      				<option value="{$value}">{$value}</option>
+      			{/if}
+      			{/foreach}
+      		</select>
+      	<br />
+
 	{* stop / items per page *}
 	<label>{$LL.label_step_items_per_page}</label>
 		<select name="tx_newspaper_mod2[step]" onchange=submitFilter('reset_startpage');>
