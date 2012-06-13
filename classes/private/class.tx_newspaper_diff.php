@@ -23,28 +23,37 @@ class tx_newspaper_Diff {
     ////////////////////////////////////////////////////////////////////////////
 
     private static function arrayDiff(array $old, array $new){
-    	foreach($old as $oindex => $ovalue){
-    		$nkeys = array_keys($new, $ovalue);
-    		foreach($nkeys as $nindex){
-    			$matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
-    				$matrix[$oindex - 1][$nindex - 1] + 1 : 1;
-    			if($matrix[$oindex][$nindex] > $maxlen){
-    				$maxlen = $matrix[$oindex][$nindex];
-    				$omax = $oindex + 1 - $maxlen;
-    				$nmax = $nindex + 1 - $maxlen;
-    			}
-    		}
-    	}
+
+        list($maxlen, $omax, $nmax) = self::findDifferenceData($old, $new);
+
     	if($maxlen == 0) {
             if (self::isTextElement($old) || self::isTextElement($new)) {
                 return array(array('d'=>$old, 'i'=>$new));
             }
             else return array('');
         }
+
     	return array_merge(
     		self::arrayDiff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)),
     		array_slice($new, $nmax, $maxlen),
     		self::arrayDiff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+    }
+
+    private static function findDifferenceData($old, $new) {
+        $maxlen = 0;
+        $matrix = array();
+        foreach ($old as $oindex => $ovalue) {
+            foreach (array_keys($new, $ovalue) as $nindex) {
+                $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
+                        $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+                if ($matrix[$oindex][$nindex] > $maxlen) {
+                    $maxlen = $matrix[$oindex][$nindex];
+                    $omax = $oindex + 1 - $maxlen;
+                    $nmax = $nindex + 1 - $maxlen;
+                }
+            }
+        }
+        return array($maxlen, $omax, $nmax);
     }
 
     private static function elementsToText($already, $next) {

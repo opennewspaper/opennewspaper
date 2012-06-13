@@ -254,7 +254,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			$row[$i]['sections'] = implode(', ', $sections);
 		}
 
-        // redundant because tx_newspaper_workflow::renderBackend() calls it too; added for clarity's sake
         tx_newspaper_Workflow::addWorkflowTranslations($smarty);
 
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
