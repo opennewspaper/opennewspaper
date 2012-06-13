@@ -291,17 +291,19 @@ function changeWorkflowStatus(role, hidden_status) {
 
     public static function getComments($table, $table_uid, $limit = 0, $log_level = 0) {
 
-        $where = "table_name = '$table' AND table_uid = $table_uid";
+        $where = "tx_newspaper_log.table_name = '$table' AND tx_newspaper_log.table_uid = $table_uid";
         if (is_array(self::$operations_in_loglevel[$log_level])) {
-            $where .= ' AND operation IN (' . implode(', ', self::$operations_in_loglevel[$log_level]) . ')';
+            $where .= ' AND tx_newspaper_log.operation IN (' . implode(', ', self::$operations_in_loglevel[$log_level]) . ')';
         }
 
         return tx_newspaper::selectRows(
-			"FROM_UNIXTIME(`crdate`, '%d.%m.%Y %H:%i') as created, crdate, be_user, operation, comment, details",
-			'tx_newspaper_log',
+			"FROM_UNIXTIME(tx_newspaper_log.crdate, '%d.%m.%Y %H:%i') as created, tx_newspaper_log.crdate,
+			    tx_newspaper_log.be_user, tx_newspaper_log.operation, tx_newspaper_log.comment, tx_newspaper_log.details,
+                IF(be_users.realname != '', be_users.realname, be_users.username) AS username",
+			'tx_newspaper_log JOIN be_users ON  tx_newspaper_log.be_user = be_users.uid',
             $where,
 			'',
-			'crdate desc',
+			'tx_newspaper_log.crdate desc',
 			($limit > 0) ? $limit : ''
 		);
     }
@@ -323,13 +325,14 @@ function changeWorkflowStatus(role, hidden_status) {
     }
 
     public static function addUsername($comments) {
+/*
         $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
         foreach($comments as $i => $comment) {
             $userId = $comment['be_user'];
             $userdata= $beFunc->getUserNames('username, uid, realName', 'AND uid ='.$userId);
             $comments[$i]['username'] = $userdata[$userId]['realName']? $userdata[$userId]['realName'] : $userdata[$userId]['username'];
         }
-
+ */
         return $comments;
     }
 
@@ -659,7 +662,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
         $log_run->write(
             NP_WORKLFOW_LOG_CHANGE_EXTRA,
-            tx_newspaper::getTranslation('label_workflow_extra_changed'),
+            self::getExtraChangedText($object),
             self::getExtraChangedDetails($object, $fieldArray)
         );
     }
@@ -676,6 +679,10 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
         );
         tx_newspaper::devlog('getArticleUid()', tx_newspaper::$query);
         return intval($data['uid_local']);
+    }
+
+    private static function getExtraChangedText(tx_newspaper_Extra $extra) {
+        return tx_newspaper::getTranslation('label_workflow_extra_changed') . $extra->getTitle();
     }
 
     private static function getExtraChangedDetails(tx_newspaper_Extra $extra, array $fieldArray) {
