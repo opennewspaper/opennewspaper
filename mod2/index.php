@@ -542,23 +542,19 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	/// \return array key 'table' table(s) to be used, key 'where': condition combined with "AND"; or false if query will return an empty result set
 	private function createWherePartArray() {
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
-		$where = array();
+		$where = array(
+            'is_template' => 'is_template=0',
+            'tstamp' => 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']),
+            'pid' => 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
+        );
         $tables = array('tx_newspaper_article');
 
-		if (trim($this->input['section'])) {
-			$where_section = $this->getWhereForSection($this->input['section']);
-			if ($where_section === false) {
-				return false; // no matching section found, so not article in search result
-			}
-			$tables[] = 'tx_newspaper_article_sections_mm';
-			$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')'; //
-		}
-
-		$where['is_template'] = 'is_template=0';
-		$where['tstamp'] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']);
-
-		// get articles from correct sysfolder only
-		$where['pid'] = 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article());
+        foreach (array('section') as $key) {
+            if (trim($this->input[$key])) {
+                $method = 'addConditionFor' . ucfirst($key);
+                $this->$method($tables, $where);
+       		}
+        }
 
 		switch($this->input['hidden']) {
 			case 'on':
@@ -599,7 +595,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
          		if (trim($this->input['text']) == '#' . $uid) {
          			// text contains a query like #[int], so search for this uid ONLY
          			return array(
-         				'table' => $table,
+         				'table' => 'tx_newspaper_article',
          				'where' => 'uid=' . $uid
          			);
          		}
@@ -615,7 +611,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
             $tags = tx_newspaper_Tag::getAllTagsWhere(
                 "tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
             );
-t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array("tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType(), $tags));
 
             if (!empty($tags)) {
                 $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
@@ -623,14 +618,20 @@ t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array("tag='" . $thi
             }
         }
 
-        $return = array(
+        return array(
         	'table' => implode(', ', $tables),
        		'where' => implode(' AND ', $where)
        	);
-t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, $return);
-		return $return;
 	}
 
+    private function addConditionForSection(array &$tables, array &$where) {
+        $where_section = $this->getWhereForSection($this->input['section']);
+     	if ($where_section === false) {
+     		return; // no matching section found, so not article in search result
+     	}
+     	$tables[] = 'tx_newspaper_article_sections_mm';
+     	$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
+    }
 
 
 	/// Get section uids for given search term $section
