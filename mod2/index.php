@@ -629,7 +629,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     private function addConditionForControltag(array &$tables, array &$where) {
         $tags = tx_newspaper_Tag::getAllTagsWhere(
-            "tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
+            "title='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
         );
         if (empty($tags)) return;
 
