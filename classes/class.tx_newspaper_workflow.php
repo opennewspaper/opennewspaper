@@ -662,27 +662,17 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getArticleUid(tx_newspaper_Extra $extra) {
-
-        $table = $extra->getTable();
-        // @todo INDEX on tx_newspaper_article_extras_mm.uid_foreign is not used - why?
-#        $data = tx_newspaper::selectZeroOrOneRows(
-#            'tx_newspaper_article_extras_mm.uid_local',
-#            "$table JOIN tx_newspaper_extra ON tx_newspaper_extra.extra_uid = $table.uid AND tx_newspaper_extra.extra_table = '$table'
-#                    JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign",
-#            "$table.uid = " . $extra->getUid()
-#        );
         $data = tx_newspaper::selectZeroOrOneRows(
             'tx_newspaper_article_extras_mm.uid_local',
             'tx_newspaper_extra
              JOIN tx_newspaper_article_extras_mm ON tx_newspaper_extra.uid = tx_newspaper_article_extras_mm.uid_foreign',
             'tx_newspaper_extra.uid = ' . $extra->getExtraUid()
         );
-        tx_newspaper::devlog('getArticleUid()', tx_newspaper::$query);
         return intval($data['uid_local']);
     }
 
     private static function getExtraChangedText(tx_newspaper_Extra $extra) {
-        return tx_newspaper::getTranslation('label_workflow_extra_changed') . $extra->getTitle();
+        return tx_newspaper::getTranslation('label_workflow_extra_changed') . ' ' . $extra->getTitle();
     }
 
     private static function getExtraChangedDetails(tx_newspaper_Extra $extra, array $fieldArray) {
