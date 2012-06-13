@@ -5,9 +5,9 @@
 
     {* link to show all comments *}
     <p>
-        <a title="Show all messages" class="right" href="#"
+        <a title="{$label_workflow_show_all_messages}" class="right" href="#"
            onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
-           >Show all messages</a>
+           >{$label_workflow_show_all_messages}</a>
     </p>
 
     <table style="width:456px">
@@ -48,9 +48,9 @@
 
     {* link to show only default comments *}
     <p>
-        <a title="Show only default messages" class="right" href="#"
+        <a title="{$label_workflow_show_default_messages}" class="right" href="#"
            onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
-           >Show only default messages</a>
+           >{$label_workflow_show_default_messages}</a>
     </p>
 
     <table style="width:456px">

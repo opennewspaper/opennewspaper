@@ -236,9 +236,9 @@
 
             {* link to show all comments *}
             <p>
-                <a title="Show all messages" class="right" href="#"
+                <a title="{$label_workflow_show_all_messages}" class="right" href="#"
                    onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
-                   >Show all messages</a>
+                   >{$label_workflow_show_all_messages}</a>
             </p>
 
 			{foreach from=$DATA[i].workflowlog_v2 key=j item=comment}
@@ -250,9 +250,8 @@
 				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">
                     {$comment.comment}
                     {if $comment.details}
-                        {* @todo title as localized text message *}
                         {* @todo change the "+" to an image? *}
-                        <a title="Details" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
+                        <a title="{$label_workflow_show_details}" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
                     {/if}
                 </p>
                 {if $comment.details}
@@ -268,9 +267,9 @@
 
             {* link to show only basic comments *}
             <p>
-                <a title="Show only default messages" class="right" href="#"
+                <a title="{$label_workflow_show_default_messages}" class="right" href="#"
                    onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
-                   >Show only default messages</a>
+                   >{$label_workflow_show_default_messages}s</a>
             </p>
 
       		{foreach from=$DATA[i].workflowlog_all key=j item=comment}
@@ -282,9 +281,8 @@
       			<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">
                     {$comment.comment}
                     {if $comment.details}
-                        {* @todo title as localized text message *}
                         {* @todo change the "+" to an image? *}
-                        <a title="Details" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
+                        <a title="{$label_workflow_show_details}" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
                     {/if}
                 </p>
                 {if $comment.details}

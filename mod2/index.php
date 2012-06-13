@@ -239,16 +239,11 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			// add role title
 			$row[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($row[$i]['workflow_status']);
 
-			//add workflowlog data to $row - simple version for mod2_main.tmpl
-			$row[$i]['workflowlog'] = tx_newspaper_workflow::renderBackend('tx_newspaper_article', $row[$i]['uid'], false);
-
 			// add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
-			$comments = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
-			$row[$i]['workflowlog_v2'] = $comments;
+			$row[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid']);
 
    			// add extended workflowlog data to $row - displayable on demand
-			$comments = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid'], 0, 1);
-			$row[$i]['workflowlog_all'] = $comments;
+			$row[$i]['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $row[$i]['uid'], 0, 1);
 
 			// add sections
 			$a = new tx_newspaper_article(intval($row[$i]['uid']));
@@ -258,6 +253,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			}
 			$row[$i]['sections'] = implode(', ', $sections);
 		}
+
+        // redundant because tx_newspaper_workflow::renderBackend() calls it too; added for clarity's sake
+        tx_newspaper_Workflow::addWorkflowTranslations($smarty);
+
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
 
 

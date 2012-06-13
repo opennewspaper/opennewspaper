@@ -308,10 +308,17 @@ function changeWorkflowStatus(role, hidden_status) {
 		);
     }
 
+    public static function addWorkflowTranslations(tx_newspaper_Smarty $smarty) {
+        foreach (array('label_workflow_show_all_messages', 'label_workflow_show_default_messages', 'label_workflow_show_details') as $label) {
+            $smarty->assign($label, tx_newspaper::getTranslation($label));
+        }
+    }
+
     private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $showFoldLinks=false) {
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
         $smarty->assign('all_comments', $all_comments);
+        self::addWorkflowTranslations($smarty);
 		$smarty->assign('tableUid', $tableUid);
 		$smarty->assign('show_all_comments', $show_all_comments);
 		$smarty->assign('showFoldLinks', $showFoldLinks);
