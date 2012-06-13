@@ -543,13 +543,13 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	private function createWherePartArray() {
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
 		$where = array(
-            'is_template' => 'is_template=0',
-            'tstamp' => 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']),
-            'pid' => 'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
+            'is_template=0',
+            'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']),
+            'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
         );
         $tables = array('tx_newspaper_article');
 
-        ksort($this->input);
+        ksort($this->input);    // helps ensure that text is handled last
         foreach (array_keys($this->input) as $key) {
             if (trim($this->input[$key])) {
                 $method = 'addConditionFor' . ucfirst($key);
@@ -571,20 +571,17 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
      		return; // no matching section found, so not article in search result
      	}
      	$tables[] = 'tx_newspaper_article_sections_mm';
-     	$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
+     	$where[] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
     }
 
     private function addConditionForHidden(array &$tables, array &$where) {
         switch($this->input['hidden']) {
       	case 'on':
-      		$where['hidden'] = 'hidden=1';
+      		$where[] = 'hidden=1';
       		break;
       	case 'off':
-      		$where['hidden'] = 'hidden=0';
+      		$where[] = 'hidden=0';
       		break;
-      	case 'all':
-      	default:
-      		// nothing to do
       	}
     }
 
@@ -593,20 +590,18 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
       	case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
       	case NP_ACTIVE_ROLE_DUTY_EDITOR:
       	case NP_ACTIVE_ROLE_NONE:
-      		$where['workflow_status'] = 'workflow_status=' . intval($this->input['role']);
+      		$where[] = 'workflow_status=' . intval($this->input['role']);
       		break;
       	case '-1': // all
-      	default:
-      		// nothing to do
       	}
     }
 
     private function addConditionForAuthor(array &$tables, array &$where) {
-        $where['author'] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
+        $where[] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
     }
 
     private function addConditionForBe_user(array &$tables, array &$where) {
-        $where['be_user'] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
+        $where[] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
     }
 
     private function addConditionForText(array &$tables, array &$where) {
@@ -621,10 +616,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
      		}
      	}
 
-        $where['text'] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
-                            addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
-                            addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
-                            addslashes(trim($this->input['text'])) . '%")';
+        $where[] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
+                     addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
+                     addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
+                     addslashes(trim($this->input['text'])) . '%")';
     }
 
     private function addConditionForControltag(array &$tables, array &$where) {
@@ -633,7 +628,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         );
         if (empty($tags)) return;
 
-        $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
+        $where[] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
         $tables[] = 'tx_newspaper_article_tags_mm';
     }
 
