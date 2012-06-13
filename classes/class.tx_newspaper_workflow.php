@@ -228,8 +228,8 @@ function changeWorkflowStatus(role, hidden_status) {
         }
 
         return self::renderTemplate(
-            self::addUsername(self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT)),
-            self::addUsername(self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT, 1)),
+            self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT),
+            self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT, 1),
             intval($tableUid), $allComments, $showFoldLinks);
     }
 
@@ -323,19 +323,6 @@ function changeWorkflowStatus(role, hidden_status) {
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }
-
-    public static function addUsername($comments) {
-/*
-        $beFunc = t3lib_div::makeInstance('t3lib_BEfunc');
-        foreach($comments as $i => $comment) {
-            $userId = $comment['be_user'];
-            $userdata= $beFunc->getUserNames('username, uid, realName', 'AND uid ='.$userId);
-            $comments[$i]['username'] = $userdata[$userId]['realName']? $userdata[$userId]['realName'] : $userdata[$userId]['username'];
-        }
- */
-        return $comments;
-    }
-
 
 	/// \return role set in be_users (or false if not available)
 	public static function getRole() {
