@@ -613,8 +613,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         if ($this->input['controltag']) {
 
             $tags = tx_newspaper_Tag::getAllTagsWhere(
-                "title='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
+                "tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
             );
+t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array("tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType(), $tags));
 
             if (!empty($tags)) {
                 $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
@@ -622,11 +623,12 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
             }
         }
 
-//t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('where' => $where, 'table' => $table));
-		return array(
-			'table' => implode(', ', $tables),
-			'where' => implode(' AND ', $where)
-		);
+        $return = array(
+        	'table' => implode(', ', $tables),
+       		'where' => implode(' AND ', $where)
+       	);
+t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, $return);
+		return $return;
 	}
 
 
@@ -715,7 +717,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return array_merge(array(''), $tags);
     }
 
-    private function extractTagTitle(tx_newspaper_Tag $tag, $key) { return $tag->getTitle(); }
+    private function extractTagTitle(tx_newspaper_Tag $tag, $key) { return $tag->getAttribute('title'); }
 
 }
 
