@@ -549,51 +549,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         );
         $tables = array('tx_newspaper_article');
 
-        foreach (array('section', 'hidden', 'role') as $key) {
+        ksort($this->input);
+        foreach (array_keys($this->input) as $key) {
             if (trim($this->input[$key])) {
                 $method = 'addConditionFor' . ucfirst($key);
                 if (method_exists($this, $method)) {
                     $this->$method($tables, $where);
                 }
        		}
-        }
-
-		if (trim($this->input['author'])) {
-			$where['author'] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
-		}
-
-		if (trim($this->input['be_user'])) {
-			$where['be_user'] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
-		}
-
-		if (trim($this->input['text'])) {
-            if (substr(trim($this->input['text']), 0, 1) == '#') {
-         	    // looking for an article uid?
-         		$uid = intval(substr(trim($this->input['text']), 1));
-         		if (trim($this->input['text']) == '#' . $uid) {
-         			// text contains a query like #[int], so search for this uid ONLY
-         			return array(
-         				'table' => 'tx_newspaper_article',
-         				'where' => 'uid=' . $uid
-         			);
-         		}
-         	}
-			$where['text'] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
-				addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
-				addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
-				addslashes(trim($this->input['text'])) . '%")';
-		}
-
-        if ($this->input['controltag']) {
-
-            $tags = tx_newspaper_Tag::getAllTagsWhere(
-                "tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
-            );
-
-            if (!empty($tags)) {
-                $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
-                $tables[] = 'tx_newspaper_article_tags_mm';
-            }
         }
 
         return array(
@@ -636,6 +599,42 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
       	default:
       		// nothing to do
       	}
+    }
+
+    private function addConditionForAuthor(array &$tables, array &$where) {
+        $where['author'] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
+    }
+
+    private function addConditionForBe_user(array &$tables, array &$where) {
+        $where['be_user'] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
+    }
+
+    private function addConditionForText(array &$tables, array &$where) {
+        if (substr(trim($this->input['text']), 0, 1) == '#') {
+     	    // looking for an article uid?
+     		$uid = intval(substr(trim($this->input['text']), 1));
+     		if (trim($this->input['text']) == '#' . $uid) {
+     			// text contains a query like #[int], so search for this uid ONLY
+     			$tables = array('tx_newspaper_article');
+     			$where = array('uid=' . $uid);
+                return;
+     		}
+     	}
+
+        $where['text'] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
+                            addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
+                            addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
+                            addslashes(trim($this->input['text'])) . '%")';
+    }
+
+    private function addConditionForControltag(array &$tables, array &$where) {
+        $tags = tx_newspaper_Tag::getAllTagsWhere(
+            "tag='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
+        );
+        if (empty($tags)) return;
+
+        $where['tag'] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
+        $tables[] = 'tx_newspaper_article_tags_mm';
     }
 
 	/// Get section uids for given search term $section
@@ -722,7 +721,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return array_merge(array(''), $tags);
     }
 
-    private function extractTagTitle(tx_newspaper_Tag $tag, $key) { return $tag->getAttribute('title'); }
+    private function extractTagTitle(tx_newspaper_Tag &$tag, $key) { return $tag->getAttribute('title'); }
 
 }
 
