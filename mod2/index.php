@@ -549,36 +549,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         );
         $tables = array('tx_newspaper_article');
 
-        foreach (array('section') as $key) {
+        foreach (array('section', 'hidden', 'role') as $key) {
             if (trim($this->input[$key])) {
                 $method = 'addConditionFor' . ucfirst($key);
-                $this->$method($tables, $where);
+                if (method_exists($this, $method)) {
+                    $this->$method($tables, $where);
+                }
        		}
         }
-
-		switch($this->input['hidden']) {
-			case 'on':
-				$where['hidden'] = 'hidden=1';
-			break;
-			case 'off':
-				$where['hidden'] = 'hidden=0';
-			break;
-			case 'all':
-			default:
-				// nothing to do
-		}
-
-		switch(strtolower($this->input['role'])) {
-			case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
-			case NP_ACTIVE_ROLE_DUTY_EDITOR:
-			case NP_ACTIVE_ROLE_NONE:
-				$where['workflow_status'] = 'workflow_status=' . intval($this->input['role']);
-			break;
-			case '-1': // all
-			default:
-				// nothing to do
-		}
-
 
 		if (trim($this->input['author'])) {
 			$where['author'] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
@@ -633,6 +611,32 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
      	$where['section'] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
     }
 
+    private function addConditionForHidden(array &$tables, array &$where) {
+        switch($this->input['hidden']) {
+      	case 'on':
+      		$where['hidden'] = 'hidden=1';
+      		break;
+      	case 'off':
+      		$where['hidden'] = 'hidden=0';
+      		break;
+      	case 'all':
+      	default:
+      		// nothing to do
+      	}
+    }
+
+    private function addConditionForRole(array &$tables, array &$where) {
+        switch(strtolower($this->input['role'])) {
+      	case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
+      	case NP_ACTIVE_ROLE_DUTY_EDITOR:
+      	case NP_ACTIVE_ROLE_NONE:
+      		$where['workflow_status'] = 'workflow_status=' . intval($this->input['role']);
+      		break;
+      	case '-1': // all
+      	default:
+      		// nothing to do
+      	}
+    }
 
 	/// Get section uids for given search term $section
 	/// \param $section search term for sections (is NOT trimmed)
