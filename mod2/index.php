@@ -721,7 +721,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return array_merge(array(''), $tags);
     }
 
-    private function extractTagTitle(tx_newspaper_Tag &$tag, $key) { return $tag->getAttribute('title'); }
+    private function extractTagTitle(&$tag, $key) { $tag = $tag->getAttribute('title'); }
 
 }
 
