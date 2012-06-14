@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+require_once('class.tx_newspaper_module2_querybuilder.php');
+
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
 require_once('conf.php');
@@ -153,27 +155,21 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function moduleContent() {
-//t3lib_div::devlog('where', 'newspaper', 0, array('where' => $this->createWherePartArray()));
 
-		$where = $this->createWherePartArray(); // get conditions for sql statement
+        $query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
+//t3lib_div::devlog('where', 'newspaper', 0, array($query_builder->getTable(), $query_builder->getWhere()));
 
-		if ($where !== false) {
+		$count = tx_newspaper::countRows($query_builder->getTable(), $query_builder->getWhere());
 
-			$count = tx_newspaper::countRows($where['table'], $where['where']);
-
-			$row = tx_newspaper::selectRows(
-				'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple secions
-				$where['table'],
-				$where['where'],
-				'',
-				'tstamp DESC',
-				intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
-			);
+		$row = tx_newspaper::selectRows(
+			'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple secions
+			$query_builder->getTable(),
+			$query_builder->getWhere(),
+			'',
+			'tstamp DESC',
+			intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
+		);
 //t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
-		} else {
-			$count = 0;
-			$row = array(); // empty result
-		}
 
 		$content = $this->renderBackendSmarty($row, $count);
 
@@ -536,135 +532,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$article = new tx_newspaper_article($articleUid);
 		$article->storeHiddenStatusWithHooks($statusHidden);
 	}
-
-
-	/// create where part of sql statement for current filter setting
-	/// \return array key 'table' table(s) to be used, key 'where': condition combined with "AND"; or false if query will return an empty result set
-	private function createWherePartArray() {
-//t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
-		$where = array(
-            'is_template=0',
-            'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']),
-            'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
-        );
-        $tables = array('tx_newspaper_article');
-
-        ksort($this->input);    // helps ensure that text is handled last
-        foreach (array_keys($this->input) as $key) {
-            if (trim($this->input[$key])) {
-                $method = 'addConditionFor' . ucfirst($key);
-                if (method_exists($this, $method)) {
-                    $this->$method($tables, $where);
-                }
-       		}
-        }
-
-        return array(
-        	'table' => implode(', ', $tables),
-       		'where' => implode(' AND ', $where)
-       	);
-	}
-
-    private function addConditionForSection(array &$tables, array &$where) {
-        $where_section = $this->getWhereForSection($this->input['section']);
-     	if ($where_section === false) {
-     		return; // no matching section found, so not article in search result
-     	}
-     	$tables[] = 'tx_newspaper_article_sections_mm';
-     	$where[] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
-    }
-
-    private function addConditionForHidden(array &$tables, array &$where) {
-        switch($this->input['hidden']) {
-      	case 'on':
-      		$where[] = 'hidden=1';
-      		break;
-      	case 'off':
-      		$where[] = 'hidden=0';
-      		break;
-      	}
-    }
-
-    private function addConditionForRole(array &$tables, array &$where) {
-        switch(strtolower($this->input['role'])) {
-      	case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
-      	case NP_ACTIVE_ROLE_DUTY_EDITOR:
-      	case NP_ACTIVE_ROLE_NONE:
-      		$where[] = 'workflow_status=' . intval($this->input['role']);
-      		break;
-      	case '-1': // all
-      	}
-    }
-
-    private function addConditionForAuthor(array &$tables, array &$where) {
-        $where[] = 'author LIKE "%' . addslashes(trim($this->input['author'])) . '%"';
-    }
-
-    private function addConditionForBe_user(array &$tables, array &$where) {
-        $where[] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
-    }
-
-    private function addConditionForText(array &$tables, array &$where) {
-        if (substr(trim($this->input['text']), 0, 1) == '#') {
-     	    // looking for an article uid?
-     		$uid = intval(substr(trim($this->input['text']), 1));
-     		if (trim($this->input['text']) == '#' . $uid) {
-     			// text contains a query like #[int], so search for this uid ONLY
-     			$tables = array('tx_newspaper_article');
-     			$where = array('uid=' . $uid);
-                return;
-     		}
-     	}
-
-        $where[] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%")';
-    }
-
-    private function addConditionForControltag(array &$tables, array &$where) {
-        $tags = tx_newspaper_Tag::getAllTagsWhere(
-            "title='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
-        );
-        if (empty($tags)) return;
-
-        $where[] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
-        $tables[] = 'tx_newspaper_article_tags_mm';
-    }
-
-	/// Get section uids for given search term $section
-	/// \param $section search term for sections (is NOT trimmed)
-	/// \param $recursive wheater or not sub section are searched too
-	/// \return comma separated list of section uids or false if no section could be found
-	private function getWhereForSection($section, $recursive=true) {
-		$sectionUids = tx_newspaper::selectRows(
-			'uid',
-			'tx_newspaper_section',
-			'section_name LIKE "%' . addslashes($section) . '%"' . // search for sections contains the section search string
-				' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()) // check current section sysfolder only
-		);
-		$uids = array();
-		foreach($sectionUids as $sectionUid) {
-			$uids[] = $sectionUid['uid'];
-			$s = new tx_newspaper_section(intval($sectionUid['uid']));
-			if ($recursive) {
-				foreach($s->getChildSections(true) as $sub_section) {
-					$uids[] = $sub_section->getUid();
-				}
-			}
-		}
-		$sectionUidList = implode(',', array_unique($uids));
-
-		if (!$sectionUidList) {
-			// no matching section found, so no article in result set
-			return false;
-		}
-//t3lib_div::devlog('getWhereForSection()', 'newspaper', 0, array('$sectionUids' => $sectionUids, 'sectionUidList' => $sectionUidList, 'query' => tx_newspaper::$query));
-		return $sectionUidList;
-	}
-
-
-
 
 
 // functions to fill filter dropdowns with data
