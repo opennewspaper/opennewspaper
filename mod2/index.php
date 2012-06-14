@@ -62,7 +62,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function init()	{
-		global $BE_USER,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 		parent::init();
 	}
 
@@ -208,19 +207,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
         $smarty->assign('LOCKED_ARTICLES', self::getLockedArticles($row));
 
-        // add informations to each article that are not in the record
-   		for ($i = 0; $i < sizeof($row); $i++) {
-
-            self::addWorkflowInfo($row, $i);
-
-			$row[$i]['sections'] = self::getSectionNames(intval($row[$i]['uid']));
-
-            $this->addTimeInfo($row, $i);
-        }
+        $this->addArticleInfo($row);
+        $smarty->assign('DATA', $row);
 
         tx_newspaper_Workflow::addWorkflowTranslations($smarty);
-
-		$smarty->assign('DATA', $row);
 
         //  paging
         $smarty->assign('START_PAGE', intval($this->input['startPage']));
@@ -235,83 +225,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $smarty->fetch($this->getSmartyTemplate());
 	}
 
-    /// check which articles are locked
-    private static function getLockedArticles(array $records) {
-        $locked_articles = array();
-        for ($i = 0; $i < sizeof($records); $i++) {
-            // is article locked?
-            $t = t3lib_BEfunc::isRecordLocked('tx_newspaper_article', $records[$i]['uid']);
-            if (isset($t['record_uid'])) {
-                $locked_articles[$i] = array(
-                    'username' => $t['username'],
-                    'msg' => htmlentities($t['msg'])
-                );
-            }
-        }
-        return $locked_articles;
-    }
-
-    private static function addWorkflowInfo(array &$record, $i) {
-        // add role title
-        $record[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($record[$i]['workflow_status']);
-
-        // add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
-        $record[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid']);
-
-        // add extended workflowlog data to $row - displayable on demand
-        $record[$i]['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid'], 0, 1);
-    }
-
-    private static function getSectionNames($article_uid) {
-        $a = new tx_newspaper_article($article_uid);
-     	$sections = array();
-     	foreach($a->getSections() as $current_section) {
-     		$sections[] = $current_section->getAttribute('section_name');
-     	}
-     	return implode(', ', $sections);
-    }
-
-    private function addTimeInfo(array &$row, $i) {
-        // Add information for time controlled articles
-        $row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_yet_with_endtime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet_with_endtime'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_anymore_with_starttime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore_with_starttime'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_and_future'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_but_will_end'], $row[$i]['starttime'], $row[$i]['endtime']);
-
-        // Add formatted publish date
-        $row[$i]['formattedPublishdate'] = $this->getFormattedPublishDate($row[$i]['publish_date']);
-    }
-
-    private function getSmartyTemplate() {
-        return $this->isArticleBrowser()? 'mod2_articlebrowser.tmpl': 'mod2_main_v2.tmpl';
-    }
-
-	/**
-	 * Format timestamp for production list output (skips year if year is current year)
-	 * @param $tstamp Timestamp
-	 * @return Formatted publish date
-	 */
-	private function getFormattedPublishDate($tstamp) {
-		$tstamp = intval($tstamp);
-		if (!$tstamp) {
-			return ''; // no timestamp set
-		}
-		return (date("Y", $tstamp) == date("Y", time()))? date("d.m", $tstamp) : date("d.m.Y", $tstamp);
-	}
-
-	/**
-	 * Calculate the last page number for $count record with $step records per page
-	 * \param $count Total number of records
-	 * \param $step  Number of records per page
-	 * \return Number of last page in browse sequence
-	 */
-	private function calculateMaxPage($count, $step) {
-		return intval($count / $step);
-	}
-
-	// \return Array with icons for the backend
+   	/// \return Array with icons for the backend
 	private function getIcons() {
 		return array(
 			'hide' => tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $this->LL['label_hide']),
@@ -332,26 +246,104 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		);
 	}
 
+    /// check which articles are locked
+    private static function getLockedArticles(array $records) {
+        $locked_articles = array();
+        for ($i = 0; $i < sizeof($records); $i++) {
+            // is article locked?
+            $t = t3lib_BEfunc::isRecordLocked('tx_newspaper_article', $records[$i]['uid']);
+            if (isset($t['record_uid'])) {
+                $locked_articles[$i] = array(
+                    'username' => $t['username'],
+                    'msg' => htmlentities($t['msg'])
+                );
+            }
+        }
+        return $locked_articles;
+    }
+
+    /// add informations to each article that are not in the record
+    private function addArticleInfo(&$row) {
+        for ($i = 0; $i < sizeof($row); $i++) {
+            self::addWorkflowInfo($row, $i);
+            $row[$i]['sections'] = $this->getSectionNames(intval($row[$i]['uid']));
+            $this->addTimeInfo($row, $i);
+        }
+    }
+
+    /**
+   	 * Calculate the last page number for $count record with $step records per page
+   	 * \param $count Total number of records
+   	 * \param $step  Number of records per page
+   	 * \return Number of last page in browse sequence
+   	 */
+   	private function calculateMaxPage($count, $step) {
+   		return intval($count / $step);
+   	}
+
+    private function getSmartyTemplate() {
+        return $this->isArticleBrowser()? 'mod2_articlebrowser.tmpl': 'mod2_main_v2.tmpl';
+    }
+
+    private static function addWorkflowInfo(array &$record, $i) {
+        // add role title
+        $record[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($record[$i]['workflow_status']);
+
+        // add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
+        $record[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid']);
+
+        // add extended workflowlog data to $row - displayable on demand
+        $record[$i]['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid'], 0, 1);
+    }
+
+    private function getSectionNames($article_uid) {
+        $a = new tx_newspaper_article($article_uid);
+     	$sections = $a->getSections();
+        array_walk($sections, array($this, 'extractSectionTitle'));
+     	return implode(', ', $sections);
+    }
+
+    private function extractSectionTitle(&$section, $key) { $section = $section->getAttribute('section_name'); }
+
+    private function addTimeInfo(array &$row, $i) {
+        // Add information for time controlled articles
+        $row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $row[$i]['time_controlled_not_yet_with_endtime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet_with_endtime'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $row[$i]['time_controlled_not_anymore_with_starttime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore_with_starttime'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_and_future'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_but_will_end'], $row[$i]['starttime'], $row[$i]['endtime']);
+
+        // Add formatted publish date
+        $row[$i]['formattedPublishdate'] = $this->getFormattedPublishDate($row[$i]['publish_date']);
+    }
+
+    private function insertStartEndtime($string, $starttime, $endtime) {
+   // @todo: time format string should be configurable
+   		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
+   		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
+   		return $string;
+   	}
+
+	/**
+	 * Format timestamp for production list output (skips year if year is current year)
+	 * @param $tstamp Timestamp
+	 * @return Formatted publish date
+	 */
+	private function getFormattedPublishDate($tstamp) {
+		$tstamp = intval($tstamp);
+		if (!$tstamp) {
+			return ''; // no timestamp set
+		}
+		return (date("Y", $tstamp) == date("Y", time()))? date("d.m", $tstamp) : date("d.m.Y", $tstamp);
+	}
+
 	/// \return true if an article browser is rendered, false if production list is rendered
 	private function isArticleBrowser() {
 		// form_table -> article browser for Typo3 fields
 		// ab4al article browser for articlelists
 		return t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al');
 	}
-
-	/// \return true if production list is rendered, false if an article browser is rendered
-	private function isProductionList() {
-		return !$this->isArticleBrowser();
-	}
-
-
-	private function insertStartEndtime($string, $starttime, $endtime) {
-// @todo: time format string should be configurable
-		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
-		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
-		return $string;
-	}
-
 
 
 	/**

@@ -30,7 +30,7 @@ class tx_newspaper_module2_Filter {
         	'tstamp DESC',
         	intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
        	);
-        tx_newspaper::devlog('filter query', tx_newspaper::$query);
+//tx_newspaper::devlog('filter query', tx_newspaper::$query);
         return $records;
     }
 

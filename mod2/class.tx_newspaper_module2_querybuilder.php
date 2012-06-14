@@ -20,7 +20,7 @@ class tx_newspaper_module2_QueryBuilder {
     }
 
     public function getWhere() {
-        return implode(' AND ', $this->where);
+        return implode("\n AND ", $this->where);
     }
 
 	/// create where part of sql statement for current filter setting
@@ -29,7 +29,6 @@ class tx_newspaper_module2_QueryBuilder {
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
 		$this->where = array(
             'is_template=0',
-            'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']),
             'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
         );
         $this->tables = array('tx_newspaper_article');
@@ -45,6 +44,10 @@ class tx_newspaper_module2_QueryBuilder {
         }
 
 	}
+
+    private function addConditionForRange() {
+        $this->where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']);
+    }
 
     private function addConditionForSection() {
         $where_section = $this->getWhereForSection($this->input['section']);
