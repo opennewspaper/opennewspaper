@@ -189,7 +189,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-        $smarty->assign('FILTER_BOX', $this->renderFilterBox());
+        $filter_box = new tx_newspaper_module2_Filterbox($this->LL, $this->input);
+        $smarty->assign('FILTER_BOX', $filter_box->render());
 
 		$smarty->assign('LL', $this->LL); // localized labels
 
@@ -284,22 +285,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
 	}
 
-    function renderFilterBox() {
-        $smarty = new tx_newspaper_Smarty();
-        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
-
-        $smarty->assign('LL', $this->LL); // localized labels
-        $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
-        $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
-        $smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
-        $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
-        $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
-        $smarty->assign('CONTROLTAGS', $this->getControltags());
-        $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
-
-        return $smarty->fetch('mod2_filterbox.tmpl');
-    }
-
 	/**
 	 * Format timestamp for production list output (skips year if year is current year)
 	 * @param $tstamp Timestamp
@@ -356,10 +341,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return !$this->isArticleBrowser();
 	}
 
-	/// \return true if role filter equals the current role of the be_user, else false
-	private function isRoleFilterEqualToUserRole() {
-		return ($this->input['role'] ==  tx_newspaper_workflow::getRole());
-	}
 
 	private function insertStartEndtime($string, $starttime, $endtime) {
 // @todo: time format string should be configurable
@@ -541,30 +522,34 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$article->storeHiddenStatusWithHooks($statusHidden);
 	}
 
+}
 
-// functions to fill filter dropdowns with data
+class tx_newspaper_module2_Filterbox {
 
-	/// \return Array with options for publish state dropdown
-	private function getHiddenArray() {
-		$hidden = array();
-		$hidden['all'] = $this->LL['option_status_hidden_all'];
-		$hidden['on'] = $this->LL['option_status_hidden_on'];
-		$hidden['off'] = $this->LL['option_status_hidden_off'];
-		return $hidden;
-	}
+    public function __construct($LL, $input) {
+        $this->LL = $LL;
+        $this->input = $input;
+    }
 
-	/// \return Array with options for workflow/role dropdown
-	private function getRoleArray() {
-		global $LANG;
-		$role = array();
-		$role['-1'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
-		$role[NP_ACTIVE_ROLE_EDITORIAL_STAFF] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
-		$role[NP_ACTIVE_ROLE_DUTY_EDITOR] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
-		$role[NP_ACTIVE_ROLE_NONE] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
-		return $role;
-	}
+    public function render() {
+        $smarty = new tx_newspaper_Smarty();
+        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-	/// \return Array with options for time range dropdown
+        $smarty->assign('LL', $this->LL); // localized labels
+        $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
+        $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
+        $smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
+        $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
+        $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
+        $smarty->assign('CONTROLTAGS', $this->getControltags());
+        $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
+
+        return $smarty->fetch('mod2_filterbox.tmpl');
+    }
+
+    // functions to fill filter dropdowns with data
+
+   	/// \return Array with options for time range dropdown
 	private function getRangeArray() {
 		$range = array();
 		$range['today'] = $this->LL['option_range_today'];
@@ -582,6 +567,31 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $range;
 	}
 
+	/// \return Array with options for publish state dropdown
+	private function getHiddenArray() {
+		$hidden = array();
+		$hidden['all'] = $this->LL['option_status_hidden_all'];
+		$hidden['on'] = $this->LL['option_status_hidden_on'];
+		$hidden['off'] = $this->LL['option_status_hidden_off'];
+		return $hidden;
+	}
+
+	/// \return true if role filter equals the current role of the be_user, else false
+	private function isRoleFilterEqualToUserRole() {
+		return ($this->input['role'] ==  tx_newspaper_workflow::getRole());
+	}
+
+   	/// \return Array with options for workflow/role dropdown
+	private function getRoleArray() {
+		global $LANG;
+		$role = array();
+		$role['-1'] = $LANG->sL('LLL:EXT:newspaper/mod2/locallang.xml:label_status_role_all', false);
+		$role[NP_ACTIVE_ROLE_EDITORIAL_STAFF] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_editorialstaff', false);
+		$role[NP_ACTIVE_ROLE_DUTY_EDITOR] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_dutyeditor', false);
+		$role[NP_ACTIVE_ROLE_NONE] = $LANG->sL('LLL:EXT:newspaper/locallang_newspaper.xml:label_workflow_role_none', false);
+		return $role;
+	}
+
     private function getControltags() {
         $categories = tx_newspaper_Tag::getAllControltagCategories();
         if (empty($categories)) return array();
@@ -593,9 +603,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     private function extractTagTitle(&$tag, $key) { $tag = $tag->getAttribute('title'); }
 
+    private $LL = array();
+    private $input = array();
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod2/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod2/index.php']);
