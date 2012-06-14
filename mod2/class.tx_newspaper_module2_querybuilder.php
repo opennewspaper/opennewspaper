@@ -82,7 +82,11 @@ class tx_newspaper_module2_QueryBuilder {
     }
 
     private function addConditionForBe_user() {
-        $this->where[] = 'modification_user IN (SELECT uid FROM be_users WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%")';
+        $this->where[] = 'modification_user IN (
+        SELECT uid FROM be_users
+            WHERE username LIKE "%' . addslashes(trim($this->input['be_user'])) . '%"
+            OR realName LIKE "%' . addslashes(trim($this->input['be_user'])) . '%"
+        )';
     }
 
     private function addConditionForText() {
