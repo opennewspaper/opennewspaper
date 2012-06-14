@@ -189,6 +189,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
+        $this->assignValuesForFilterBox($smarty);
+
 		$smarty->assign('LL', $this->LL); // localized labels
 
 		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
@@ -196,17 +198,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('RESULT_COUNT', intval($count));
 
-		$smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
-
-		$smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 		$smarty->assign('START_PAGE', intval($this->input['startPage']));
-
-		$smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
-
-		$smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
-		$smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
-
-        $smarty->assign('CONTROLTAGS', $this->getControltags());
 
 		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
 		$smarty->assign('ICON', $this->getIcons());
@@ -291,6 +283,17 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		}
 		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
 	}
+
+    function assignValuesForFilterBox(tx_newspaper_Smarty $smarty) {
+        $smarty->assign('LL', $this->LL); // localized labels
+        $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
+        $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
+        $smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
+        $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
+        $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
+        $smarty->assign('CONTROLTAGS', $this->getControltags());
+        $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
+    }
 
 	/**
 	 * Format timestamp for production list output (skips year if year is current year)
