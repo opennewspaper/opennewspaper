@@ -6,9 +6,10 @@
 
 class tx_newspaper_module2_Filterbox {
 
-    public function __construct($LL, $input) {
+    public function __construct($LL, $input, $is_article_browser) {
         $this->LL = $LL;
-        $this->input = $input;
+        $this->input = $this->processFilter($input);
+        $this->is_article_browser = $is_article_browser;
     }
 
     public function render() {
@@ -25,6 +26,81 @@ class tx_newspaper_module2_Filterbox {
         $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 
         return $smarty->fetch('mod2_filterbox.tmpl');
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
+    /// Read filter setting from get params (set default values if not set), stores in $this->input
+    private function processFilter($input) {
+//t3lib_div::devlog('processFilter()', 'newspaper', 0, array('_r' => $_REQUEST, 'input' => $this->input));
+		if ($input['type'] == 'filter' || $input['type'] == 'reset_startpage') {
+			// use filter settings, add default values if needed
+			// no_reset = 1 -> if an article is publish or deleted etc.: don't reset filter settings
+			$filter = $this->addDefaultFilterValues($input);
+			if ($input['type'] == 'reset_startpage') {
+				$filter['startPage'] = 0; // reset startPage if filter settings were submitted
+			}
+            return $filter; // store filter setting (no matter in receive by get param or default value)
+		}
+
+		// module was called from menu or filter were resetted
+		return $this->addDefaultFilterValues(array(), true); // Get default values
+
+//t3lib_div::devlog('processFilter()', 'newspaper',0, array('input' => $this->input));
+	}
+
+	/// Adds default filter settings if filter type is missing in given array
+	/** if array $settings is empty or filled partly only, all missing filter values are filled with default values
+     * \param $settings filter settings
+	 * \param $forceReset if set to true some fields are forced to be filled with default values
+	 * \return array with filter settings where missing filters were added (using default values)
+	 */
+	private function addDefaultFilterValues(array $settings, $forceReset=false) {
+//t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
+
+        self::$force_reset = $forceReset;
+
+        self::addDefaultFilterValue($settings, 'author', '');
+        self::addDefaultFilterValue($settings, 'be_user', '');
+        self::addDefaultFilterValue($settings, 'text', '');
+        self::addDefaultFilterValue($settings, 'controltag', '');
+        self::addDefaultFilterValue($settings, 'step', 10);
+        self::addDefaultFilterValue($settings, 'startPage', 0);
+        self::addDefaultFilterValue($settings, 'hidden', 'all');
+
+        self::addDefaultFilterValue($settings, 'role', $this->is_article_browser? '-1': tx_newspaper_workflow::getRole());
+        self::addDefaultFilterValue($settings, 'range', $this->is_article_browser? 'day_180': 'day_2'); // \todo: make tsconfigurable
+        $section = ($this->is_article_browser && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection();
+        self::addDefaultFilterValue($settings, 'section', $section);
+
+//t3lib_div::devlog('addDefaultFilterValues() done', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
+		return $settings;
+	}
+
+    static $force_reset = false;
+    private static function addDefaultFilterValue(array &$settings, $key, $value) {
+        if (!array_key_exists($key, $settings) || !$settings[$key] || self::$force_reset) {
+      		$settings[$key] = $value;
+      	}
+    }
+
+    /**
+     * Get default value for section filter
+     * If user TSConfig newspaper.baseSections is set, the first section will be used as default filter
+     * @return string Default section title or empty string if not set
+     */
+    private function getDefaultSection() {
+        // Read User TSConfig for base sections (if available): get uids of base sections
+        if ($GLOBALS['BE_USER']) {
+            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
+                $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
+            }
+            if ($baseSectionUids) {
+                $section = new tx_newspaper_Section(intval($baseSectionUids[0]));
+                return $section->getAttribute('section_name');
+            }
+        }
+        return ''; // Default section filter
     }
 
     // functions to fill filter dropdowns with data
@@ -88,4 +164,5 @@ class tx_newspaper_module2_Filterbox {
 
     private $LL = array();
     private $input = array();
+    private $is_article_browser = false;
 }

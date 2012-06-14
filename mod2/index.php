@@ -92,8 +92,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 			$this->processAjaxController(); // process Ajax request (terminates with die() if any
 
-			$this->processFilter(); // checks filter setting, adds default values if a mandatory filter setting is missing
-
 			// get ll labels
 			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod2/locallang.xml', $GLOBALS['LANG']->lang);
 			$this->LL = $localLang[$GLOBALS['LANG']->lang];
@@ -188,7 +186,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-        $filter_box = new tx_newspaper_module2_Filterbox($this->LL, $this->input);
+        $filter_box = new tx_newspaper_module2_Filterbox($this->LL, $this->input, $this->isArticleBrowser());
         $smarty->assign('FILTER_BOX', $filter_box->render());
 
 		$smarty->assign('LL', $this->LL); // localized labels
@@ -244,7 +242,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         tx_newspaper_Workflow::addWorkflowTranslations($smarty);
 
 		$smarty->assign('LOCKED_ARTICLE', $locked_article);
-
 
         // Publish date, starttime and endtime
 		for ($i = 0; $i < sizeof($row); $i++) {
@@ -342,81 +339,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 
 
-
-	/// Read filter setting from get params (set default values if not set), stores in $this->input
-	function processFilter() {
-//t3lib_div::devlog('processFilter()', 'newspaper', 0, array('_r' => $_REQUEST, 'input' => $this->input));
-		if ($this->input['type'] == 'filter' || $this->input['type'] == 'reset_startpage') {
-			// use filter settings, add default values if needed
-			// no_reset = 1 -> if an article is publish or deleted etc.: don't reset filter settings
-			$filter = $this->addDefaultFilterValues($this->input);
-			if ($this->input['type'] == 'reset_startpage') {
-				$filter['startPage'] = 0; // reset startPage if filter settings were submitted
-			}
-		} else {
-			// module was called from menu or filter were resetted
-			$filter = $this->addDefaultFilterValues(array(), true); // Get default values
-		}
-
-		$this->input = $filter; // store filter setting (no matter in receive by get param or default value)
-//t3lib_div::devlog('processFilter()', 'newspaper',0, array('input' => $this->input));
-	}
-
-
-	/// Adds default filter settings if filter type is missing in given array
-	/** if array $settings is empty or filled partly only, all missing filter values are filled with default values
-     * \param $settings filter settings
-	 * \param $forceReset if set to true some fields are forced to be filled with default values
-	 * \return array with filter settings where missing filters were added (using default values)
-	 */
-	private function addDefaultFilterValues(array $settings, $forceReset=false) {
-//t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
-
-        self::$force_reset = $forceReset;
-
-        self::addDefaultFilterValue($settings, 'author', '');
-        self::addDefaultFilterValue($settings, 'be_user', '');
-        self::addDefaultFilterValue($settings, 'text', '');
-        self::addDefaultFilterValue($settings, 'step', 10);
-        self::addDefaultFilterValue($settings, 'startPage', 0);
-        self::addDefaultFilterValue($settings, 'hidden', 'all');
-
-        self::addDefaultFilterValue($settings, 'role', $this->isArticleBrowser()? '-1': tx_newspaper_workflow::getRole());
-        self::addDefaultFilterValue($settings, 'range', $this->isArticleBrowser()? 'day_180': 'day_2'); // \todo: make tsconfigurable
-        $section = ($this->isArticleBrowser() && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection();
-        self::addDefaultFilterValue($settings, 'section', $section);
-
-//t3lib_div::devlog('addDefaultFilterValues() done', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
-		return $settings;
-	}
-
-    static $force_reset = false;
-    private static function addDefaultFilterValue(array &$settings, $key, $value) {
-        if (!array_key_exists($key, $settings) || !$settings[$key] || self::$force_reset) {
-      		$settings[$key] = $value;
-      	}
-    }
-
-    /**
-     * Get default value for section filter
-     * If user TSConfig newspaper.baseSections is set, the first section will be used as default filter
-     * @return string Default section title or empty string if not set
-     */
-    private function getDefaultSection() {
-        // Read User TSConfig for base sections (if available): get uids of base sections
-        if ($GLOBALS['BE_USER']) {
-            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
-                $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
-            }
-            if ($baseSectionUids) {
-                $section = new tx_newspaper_Section(intval($baseSectionUids[0]));
-                return $section->getAttribute('section_name');
-            }
-        }
-        return ''; // Default section filter
-    }
-
-
 	/**
 	 * Process AJAX functions (like publishing or deleting an article)
 	 */
@@ -443,7 +365,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	}
 
-
 	/**
 	 * Set article hidden flag according to $statusHidden
 	 * param $articleUid
@@ -460,7 +381,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod2/index.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/newspaper/mod2/index.php']);
 }
-
 
 
 
