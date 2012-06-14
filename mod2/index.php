@@ -262,7 +262,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         $smarty->assign('START_PAGE', intval($this->input['startPage']));
         $step = intval($this->input['step']);
         $smarty->assign('STEP', $step? $step: 10);
-		$smarty->assign('MAX_PAGE', $this->calculateMaxPage($count, $this->input['step']));
+		$smarty->assign('MAX_PAGE', $this->calculateMaxPage($count, $step));
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
 		$smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
