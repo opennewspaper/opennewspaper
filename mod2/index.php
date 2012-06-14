@@ -169,7 +169,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	function moduleContent() {
 
 		$content = $this->renderBackendSmarty($this->filter->getArticleRecords(), $this->filter->getCount());
-        tx_newspaper::devlog('filter query', tx_newspaper::$query);
 
 		$this->content .= $this->doc->section('', $content, 0, 1);
 //t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));

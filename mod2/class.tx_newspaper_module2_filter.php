@@ -22,7 +22,7 @@ class tx_newspaper_module2_Filter {
     }
 
     public function getArticleRecords() {
-        return tx_newspaper::selectRows(
+        $records = tx_newspaper::selectRows(
         	'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple sections
         	$this->query_builder->getTable(),
         	$this->query_builder->getWhere(),
@@ -30,6 +30,8 @@ class tx_newspaper_module2_Filter {
         	'tstamp DESC',
         	intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
        	);
+        tx_newspaper::devlog('filter query', tx_newspaper::$query);
+        return $records;
     }
 
     public function renderBox() {
