@@ -23,7 +23,7 @@
 ***************************************************************/
 
 require_once('class.tx_newspaper_module2_querybuilder.php');
-require_once('class.tx_newspaper_module2_filterbox.php');
+require_once('class.tx_newspaper_module2_filter.php');
 
 	// DEFAULT initialization of a module [BEGIN]
 unset($MCONF);
@@ -54,6 +54,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 	private $prefixId = 'tx_newspaper_mod2';
 	private $input=array(); // store get params (based on $this->prefixId)
+    /** @var tx_newspaper_module2_Filter */
+    private $filter;
 
 	/**
 	 * Initializes the Module
@@ -95,6 +97,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			// get ll labels
 			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod2/locallang.xml', $GLOBALS['LANG']->lang);
 			$this->LL = $localLang[$GLOBALS['LANG']->lang];
+            $this->filter = new tx_newspaper_module2_Filter($this->LL, $this->input, $this->isArticleBrowser());
 
 				// Draw the header.
 			$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod2');
@@ -153,22 +156,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 */
 	function moduleContent() {
 
-        $query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
-//t3lib_div::devlog('where', 'newspaper', 0, array($query_builder->getTable(), $query_builder->getWhere()));
-
-		$count = tx_newspaper::countRows($query_builder->getTable(), $query_builder->getWhere());
-
-		$row = tx_newspaper::selectRows(
-			'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple secions
-			$query_builder->getTable(),
-			$query_builder->getWhere(),
-			'',
-			'tstamp DESC',
-			intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
-		);
-//t3lib_div::devlog('row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
-
-		$content = $this->renderBackendSmarty($row, $count);
+		$content = $this->renderBackendSmarty($this->filter->getArticleRecords(), $this->filter->getCount());
 
 		$this->content .= $this->doc->section('', $content, 0, 1);
 //t3lib_div::devlog('mod2', 'newspaper', 0, array('content' => htmlspecialchars($content), 'this->content' => htmlspecialchars($this->content)));
@@ -186,8 +174,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-        $filter_box = new tx_newspaper_module2_Filterbox($this->LL, $this->input, $this->isArticleBrowser());
-        $smarty->assign('FILTER_BOX', $filter_box->render());
+        $smarty->assign('FILTER_BOX', $this->filter->renderBox());
 
 		$smarty->assign('LL', $this->LL); // localized labels
 

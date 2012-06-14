@@ -4,15 +4,31 @@
  */
  
 
-class tx_newspaper_module2_Filterbox {
+class tx_newspaper_module2_Filter {
 
     public function __construct($LL, $input, $is_article_browser) {
         $this->LL = $LL;
         $this->input = $this->processFilter($input);
+        $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
         $this->is_article_browser = $is_article_browser;
     }
 
-    public function render() {
+    public function getCount() {
+        return tx_newspaper::countRows($this->query_builder->getTable(), $this->query_builder->getWhere());
+    }
+
+    public function getArticleRecords() {
+        return tx_newspaper::selectRows(
+        	'DISTINCT tx_newspaper_article.*', // Make sure articles are list once only, even if assigned to multiple sections
+        	$this->query_builder->getTable(),
+        	$this->query_builder->getWhere(),
+        	'',
+        	'tstamp DESC',
+        	intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
+       	);
+    }
+
+    public function renderBox() {
         $smarty = new tx_newspaper_Smarty();
         $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
@@ -165,4 +181,6 @@ class tx_newspaper_module2_Filterbox {
     private $LL = array();
     private $input = array();
     private $is_article_browser = false;
+    /** @var tx_newspaper_module2_QueryBuilder */
+    private $query_builder = null;
 }
