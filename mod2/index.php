@@ -90,11 +90,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 			$this->input = t3lib_div::GParrayMerged($this->prefixId); // read params
 
-			$this->processAjaxController(); // process Ajax request (teminutes with die() id any
+			$this->processAjaxController(); // process Ajax request (terminates with die() if any
 
 			$this->processFilter(); // checks filter setting, adds default values if a mandatory filter setting is missing
-
-
 
 			// get ll labels
 			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod2/locallang.xml', $GLOBALS['LANG']->lang);
@@ -200,9 +198,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('RESULT_COUNT', intval($count));
 
-		$smarty->assign('START_PAGE', intval($this->input['startPage']));
-
-		$image_path = tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/res/icons/';
 		$smarty->assign('ICON', $this->getIcons());
 
 		$smarty->assign('AB4AL', (t3lib_div::_GP('ab4al'))? t3lib_div::_GP('ab4al') : ''); // article browser for article lists
@@ -267,14 +262,9 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('DATA', $row);
 
-		if (!isset($this->input['step'])) {
-			$this->input['step'] = 10; // set default
-		}
-		if (!isset($this->input['startPage'])) {
-			$this->input['startPage'] = 0; // set default
-		}
-		$smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
-
+        $smarty->assign('START_PAGE', intval($this->input['startPage']));
+        $step = intval($this->input['step']);
+        $smarty->assign('STEP', $step? $step: 10);
 		$smarty->assign('MAX_PAGE', $this->calculateMaxPage($count, $this->input['step']));
 
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath() . 'typo3/');
@@ -372,38 +362,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 //t3lib_div::devlog('processFilter()', 'newspaper',0, array('input' => $this->input));
 	}
 
-/*
- * currently obsolete, filter is reset each time the module is called
- * const prodListFilterKey = 'tx_newspaper/mod2/index.php/filter_prodlist'; // stores filter setting in be_user
-
-	/// \return filter settings (checks if settings for production list or article browser are requested)
-	private function getFilter() {
-		if ($this->isProductionList()) {
-			return unserialize($GLOBALS['BE_USER']->getModuleData(self::prodListFilterKey));
-		} else {
-			return array(); // no filter is stored for the article browser
-		}
-	}
-
-	/// Stores the filter setting (check whether to store production list or article browser settings)
-	private function storeFilter() {
-		// No need to store article browser filter settings. Filters are reset each time an article browser is called.
-		if ($this->isProductionList()) {
-			$GLOBALS['BE_USER']->pushModuleData(self::prodListFilterKey, serialize(array(
-				'range' => $this->input['range'],
-				'hidden' => $this->input['hidden'],
-				'role' => intval($this->input['role']),
-				'author' => $this->input['author'],
-				'be_user' => $this->input['be_user'],
-				'section' => $this->input['section'],
-				'text' => $this->input['text'],
-				'step' => intval($this->input['step']),
-				'startPage' => 0 // always start on first result page
-			)));
-		}
-	}
-*/
-
 
 	/// Adds default filter settings if filter type is missing in given array
 	/** if array $settings is empty or filled partly only, all missing filter values are filled with default values
@@ -414,56 +372,30 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	private function addDefaultFilterValues(array $settings, $forceReset=false) {
 //t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
 
-		if (!array_key_exists('range', $settings) || !$settings['range'] || $forceReset) {
-			if ($this->isProductionList()) {
-				$settings['range'] = 'day_2'; // \todo: make tsconfigurable
-			} else {
-				$settings['range'] = 'day_180'; // \todo: make tsconfigurable
-			}
-		}
+        self::$force_reset = $forceReset;
 
-		if (!array_key_exists('hidden', $settings) || !$settings['hidden'] || $forceReset) {
-			$settings['hidden'] = 'all';
-		}
+        self::addDefaultFilterValue($settings, 'author', '');
+        self::addDefaultFilterValue($settings, 'be_user', '');
+        self::addDefaultFilterValue($settings, 'text', '');
+        self::addDefaultFilterValue($settings, 'step', 10);
+        self::addDefaultFilterValue($settings, 'startPage', 0);
+        self::addDefaultFilterValue($settings, 'hidden', 'all');
 
-		if (!array_key_exists('role', $settings) || $forceReset) {
-			if ($this->isArticleBrowser()) {
-				$settings['role'] = '-1'; // all role, if article browser
-			} else {
-				$settings['role'] = tx_newspaper_workflow::getRole(); // current role of be_user
-			}
-		}
+        self::addDefaultFilterValue($settings, 'role', $this->isArticleBrowser()? '-1': tx_newspaper_workflow::getRole());
+        self::addDefaultFilterValue($settings, 'range', $this->isArticleBrowser()? 'day_180': 'day_2'); // \todo: make tsconfigurable
+        $section = ($this->isArticleBrowser() && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection();
+        self::addDefaultFilterValue($settings, 'section', $section);
 
-		if (!array_key_exists('author', $settings) || $forceReset) {
-			$settings['author'] = '';
-		}
-
-		if (!array_key_exists('be_user', $settings) || $forceReset) {
-			$settings['be_user'] = '';
-		}
-
-		if ($this->isProductionList()) {
-			if (!array_key_exists('section', $settings) || $forceReset) {
-                $settings['section'] = $this->getDefaultSection();
-			}
-		} elseif (!array_key_exists('section', $settings) && $this->isArticleBrowser()) {
-			$settings['section'] = $_REQUEST['s']? $_REQUEST['s'] : $this->getDefaultSection();
-		}
-
-		if (!array_key_exists('text', $settings) || $forceReset) {
-			$settings['text'] = '';
-		}
-
-		if (!array_key_exists('step', $settings)) {
-			$settings['step'] = 10;
-		}
-
-		if (!array_key_exists('startPage', $settings) || $forceReset) {
-			$settings['startPage'] = 0;
-		}
 //t3lib_div::devlog('addDefaultFilterValues() done', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
 		return $settings;
 	}
+
+    static $force_reset = false;
+    private static function addDefaultFilterValue(array &$settings, $key, $value) {
+        if (!array_key_exists($key, $settings) || !$settings[$key] || self::$force_reset) {
+      		$settings[$key] = $value;
+      	}
+    }
 
     /**
      * Get default value for section filter

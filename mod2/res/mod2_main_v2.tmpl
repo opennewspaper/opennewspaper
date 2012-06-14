@@ -15,7 +15,7 @@
 
 <form action="index.php" id="moderation" name="moderation">
 
-<input type="hidden" name="tx_newspaper_mod2[startPage]" id="tx_newspaper_mod2[startPage]" value="{$FILTER.startPage}" />
+<input type="hidden" name="tx_newspaper_mod2[startPage]" id="tx_newspaper_mod2[startPage]" value="{$START_PAGE}" />
 
 
 <div id="wizards"><a href="#" onclick="newArticle('{$MODULE5_PATH}');" return false;">{$ICON.wizard} {$LL.label_new_article}</a><br /></div>
@@ -28,22 +28,22 @@
 
 <div id="browsePages">
 
-{if $FILTER.startPage > 0}
+{if $START_PAGE > 0}
 <a class="left" href="#" onclick="browse(-1);">{$LL.label_page_prev}</a>
 {/if}
 
 	<strong>
-{$LL.label_page_hits} {$FILTER.startPage*$FILTER.step+1}
+{$LL.label_page_hits} {$START_PAGE*$STEP+1}
  -
-{if ($DATA|@sizeof < $FILTER.step) }
-	{math equation="sp*st+sizeof" sp=$FILTER.startPage st=$FILTER.step sizeof=$DATA|@sizeof}
+{if ($DATA|@sizeof < $STEP) }
+	{math equation="sp*st+sizeof" sp=$START_PAGE st=$STEP sizeof=$DATA|@sizeof}
 {else}
-	{math equation="(sp+1)*st" sp=$FILTER.startPage st=$FILTER.step}
+	{math equation="(sp+1)*st" sp=$START_PAGE st=$STEP}
 {/if}
  / {$RESULT_COUNT}
  	</strong>
 
-{if $FILTER.startPage < $MAX_PAGE}
+{if $START_PAGE < $MAX_PAGE}
 <a class="right" href="#" onclick="browse(1);">{$LL.label_page_next}</a>
 {/if}
 

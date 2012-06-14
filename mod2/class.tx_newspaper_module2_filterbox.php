@@ -72,6 +72,9 @@ class tx_newspaper_module2_Filterbox {
 		return $role;
 	}
 
+    /**
+     * @todo handle categories better than simply using the first one
+     */
     private function getControltags() {
         $categories = tx_newspaper_Tag::getAllControltagCategories();
         if (empty($categories)) return array();
