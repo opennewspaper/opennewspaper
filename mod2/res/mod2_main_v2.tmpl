@@ -121,7 +121,7 @@
 		</div>
 
 		<div class="listrow r2">
-			<h2 class="kicker">{if $LOCKED_ARTICLE[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLE[i].msg|escape:"htlmall"}{/if}{$DATA[i].kicker}</h2>
+			<h2 class="kicker">{if $LOCKED_ARTICLES[i].username != ''}{$RECORD_LOCKED_ICON|replace:'###LOCK_MSG###':$LOCKED_ARTICLES[i].msg|escape:"htlmall"}{/if}{$DATA[i].kicker}</h2>
 			<h1>{$DATA[i].title}</h1>
 			<div class="titelinfo">{* year is shown only if tstamp year does NOT equal the current year *}
 				<p>

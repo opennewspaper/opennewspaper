@@ -2,13 +2,17 @@
 /**
  * @author Lene Preuss <lene.preuss@gmail.com>
  */
- 
+
+require_once('class.tx_newspaper_module2_querybuilder.php');
 
 class tx_newspaper_module2_Filter {
 
+    const template_path = 'typo3conf/ext/newspaper/mod2/res/';
+    const template = 'mod2_filterbox.tmpl';
+
     public function __construct($LL, $input, $is_article_browser) {
         $this->LL = $LL;
-        $this->input = $this->processFilter($input);
+        $this->input = $this->preprocessFilter($input);
         $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
         $this->is_article_browser = $is_article_browser;
     }
@@ -30,7 +34,7 @@ class tx_newspaper_module2_Filter {
 
     public function renderBox() {
         $smarty = new tx_newspaper_Smarty();
-        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
+        $smarty->setTemplateSearchPath(array(self::template_path));
 
         $smarty->assign('LL', $this->LL); // localized labels
         $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
@@ -41,13 +45,13 @@ class tx_newspaper_module2_Filter {
         $smarty->assign('CONTROLTAGS', $this->getControltags());
         $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 
-        return $smarty->fetch('mod2_filterbox.tmpl');
+        return $smarty->fetch(self::template);
     }
 
     ////////////////////////////////////////////////////////////////////////////
 
     /// Read filter setting from get params (set default values if not set), stores in $this->input
-    private function processFilter($input) {
+    private function preprocessFilter($input) {
 //t3lib_div::devlog('processFilter()', 'newspaper', 0, array('_r' => $_REQUEST, 'input' => $this->input));
 		if ($input['type'] == 'filter' || $input['type'] == 'reset_startpage') {
 			// use filter settings, add default values if needed
