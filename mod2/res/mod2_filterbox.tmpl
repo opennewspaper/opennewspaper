@@ -1,0 +1,96 @@
+{* debug *}
+
+<div id="filter">
+
+	{* range *}
+	<label>{$LL.label_range}</label>
+		<select name="tx_newspaper_mod2[range]" onchange="submitFilter('reset_startpage');">
+			{foreach from=$RANGE key=key item=value}
+			{if $key == $FILTER.range}
+				<option selected="selected" value="{$key}">{$value}</option>
+			{else}
+				<option value="{$key}">{$value}</option>
+			{/if}
+			{/foreach}
+		</select>
+	<br />
+
+	{* hidden status *}
+	<label>{$LL.label_status_hidden_field}</label>
+		<select name="tx_newspaper_mod2[hidden]" onchange="submitFilter('reset_startpage');">
+			{foreach from=$HIDDEN key=key item=value}
+			{if $key == $FILTER.hidden}
+				<option selected="selected" value="{$key}">{$value}</option>
+			{else}
+				<option value="{$key}">{$value}</option>
+			{/if}
+			{/foreach}
+		</select>
+	<br />
+
+	{* role *}
+	<label>{$LL.label_status_role}</label>
+		<select name="tx_newspaper_mod2[role]" {if !$ROLE_FILTER_EQUALS_USER_ROLE}style="border:#cc0000 3px solid;" {/if}onchange="submitFilter('reset_startpage');">
+			{foreach from=$ROLE key=key item=value}
+			{if $key == $FILTER.role}
+				<option selected="selected" value="{$key}">{$value}</option>
+			{else}
+				<option value="{$key}">{$value}</option>
+			{/if}
+			{/foreach}
+		</select>
+	<br />
+
+	{* author *}
+	<label>{$LL.label_author}</label>
+	<input type="text" name="tx_newspaper_mod2[author]" value="{$FILTER.author|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
+	<br />
+
+	{* be_user *}
+	<label>{$LL.label_title_be_user}</label>
+	<input type="text" name="tx_newspaper_mod2[be_user]" value="{$FILTER.be_user|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
+	<br />
+
+	{* section *}
+	<label>{$LL.label_section}</label>
+	<input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
+	<br />
+
+	{* text *}
+	<label title="{$LL.flag_textsearch}">{$LL.label_textsearch}</label>
+	<input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
+	<br />
+
+    {* control tags *}
+    {if $CONTROLTAGS}
+        <label>{$LL.label_controltag}</label>
+        <select name="tx_newspaper_mod2[controltag]" onchange=submitFilter('reset_startpage');>
+      		{foreach from=$CONTROLTAGS item=value}
+      			{if $value == $FILTER.controltag}
+      				<option selected="selected" value="{$value}">{$value}</option>
+      			{else}
+      				<option value="{$value}">{$value}</option>
+      			{/if}
+      		{/foreach}
+      	</select>
+      	<br />
+    {/if}
+
+	{* stop / items per page *}
+	<label>{$LL.label_step_items_per_page}</label>
+		<select name="tx_newspaper_mod2[step]" onchange=submitFilter('reset_startpage');>
+			{foreach from=$STEP item=value}
+			{if $value == $FILTER.step}
+				<option selected="selected" value="{$value}">{$value}</option>
+			{else}
+				<option value="{$value}">{$value}</option>
+			{/if}
+			{/foreach}
+		</select>
+	<br />
+
+	<input onclick="submitFilter('reset_startpage'); return false;" name="tx_newspaper_mod2[go]" value="{$LL.label_go}" type="button" class="submit" />
+
+	<input onclick="submitFilter('reset'); return false;" name="tx_newspaper_mod2[reset_filter]" value="{$LL.label_reset_filter}" type="button" class="submit" />
+
+</div>  <!-- filter close-->

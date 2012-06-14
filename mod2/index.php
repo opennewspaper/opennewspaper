@@ -189,7 +189,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-        $this->assignValuesForFilterBox($smarty);
+        $smarty->assign('FILTER_BOX', $this->renderFilterBox());
 
 		$smarty->assign('LL', $this->LL); // localized labels
 
@@ -284,7 +284,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		return $smarty->fetch('mod2_main_v2.tmpl'); // production list
 	}
 
-    function assignValuesForFilterBox(tx_newspaper_Smarty $smarty) {
+    function renderFilterBox() {
+        $smarty = new tx_newspaper_Smarty();
+        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
+
         $smarty->assign('LL', $this->LL); // localized labels
         $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
         $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
@@ -293,6 +296,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
         $smarty->assign('CONTROLTAGS', $this->getControltags());
         $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
+
+        return $smarty->fetch('mod2_filterbox.tmpl');
     }
 
 	/**
