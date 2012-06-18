@@ -279,7 +279,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
     protected function getSmartyTemplate() {
 
         try {
-            $template = $this->getAttribute('template');
+            $template = trim($this->getAttribute('template'));
         } catch (tx_newspaper_WrongAttributeException $e) { }
 
         if (empty($template)) {
