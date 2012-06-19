@@ -36,6 +36,8 @@ class ux_SC_alt_doc extends SC_alt_doc {
                 'history' => '',
                 'columns_only' => '',
                 'csh' => '',
+                'translation_save' => '',
+                'translation_saveclear' => '',
             );
 
 
