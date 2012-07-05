@@ -95,17 +95,18 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
 
 	private function getManuallySelectedArticles() {
         $articles = array();
-        foreach ($this->getValidArticleUids() as $article_uid) {
+        foreach ($this->getManuallySelectedArticleUids() as $article_uid) {
             $articles[] = new tx_newspaper_Article(intval(trim($article_uid)));
         }
         return $articles;
 	}
 
-    private function getValidArticleUids() {
+    private function getManuallySelectedArticleUids() {
         $rows = tx_newspaper::selectRows(
             'uid',
             'tx_newspaper_article',
-            'uid IN (' . $this->getAttribute('manually_selected_articles') . ')'
+            'uid IN (' . $this->getAttribute('manually_selected_articles') . ')',
+            '', 'publish_date DESC'
         );
 
         return array_map('array_pop', $rows);
