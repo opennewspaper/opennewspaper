@@ -5,19 +5,37 @@
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Close</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Close</title>
 <script type="text/javascript">
 /*<![CDATA[*/
-	href_reload = parent.window.frames[0].frames['list_frame'].location.href;
-	if (href_reload.charAt(href_reload.length - 1) == '#') {
-		href_reload = href_reload.substr(0, href_reload.length - 1); // cut off last '#', so T3 can reload correctly
-	}
-    parent.window.frames[0].frames['list_frame'].location.href = href_reload; // reload placement module, so changes are displayed
-    top.hidePopWin(false); /// @todo: this is working for subModal only !!!
-    parent.NpBackend.showProgress(); // show spinner
 
-// 	top.goToModule('txnewspaperMmain_txnewspaperM3');
+    var href_reload;
+
+    if (typeof(parent.window.frames[0].frames['list_frame']) !== 'undefined') {
+        // Typo3 4.2.x
+        href_reload = parent.window.frames[0].frames['list_frame'].location.href;
+    } else if (typeof(parent.window.frames[0].frames['content']) !== 'undefined') {
+        // Typo3 4.5.x (well, content is available in 4.2.x but includes the nav tree part of the backend)
+        href_reload = parent.window.frames.list_frame.location.href;
+    } else {
+        alert('Internal error when closing popup in placement module. Please contact developers. Make sure  you are using Typo3 4.2.x or 4.5.x');
+    }
+
+    if (href_reload.charAt(href_reload.length - 1) == '#') {
+        href_reload = href_reload.substr(0, href_reload.length - 1); // Cut off last '#', so T3 can reload correctly
+    }
+
+    // Reload placement module, so changes are displayed
+    if (typeof(parent.window.frames[0].frames['list_frame']) !== 'undefined') {
+        parent.window.frames[0].frames['list_frame'].location.href = href_reload;
+    } else {
+        parent.window.frames.list_frame.location.href = href_reload;
+    }
+
+    top.hidePopWin(false); // Close modal box (subModal)
+
+    parent.NpBackend.showProgress(); // Show spinner
 /*]]>*/
 </script>
 </head>
