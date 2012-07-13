@@ -579,7 +579,8 @@ var tabManagement =  {
         if( ($(tab_id).innerHTML == "") && isExtraTab) {
 
             var closehtml = t3BackendObject.path + "typo3conf/ext/newspaper/mod3/res/closeTab.html";
-            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl='+closehtml+'"></iframe>';
+//            $(tab_id).innerHTML='<iframe height="840px" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl='+closehtml+'"></iframe>';
+            $(tab_id).innerHTML='<iframe style="height:840px;" width="100%" id="iframe_'+id+'" src="alt_doc.php?edit['+tableName+']['+id+']=edit&returnUrl='+closehtml+'"></iframe>';
 
             //after reload the tab_id is already inside the list
             if(!tabManagement.tabIds.include(tab_id)) {
