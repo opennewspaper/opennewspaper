@@ -35,7 +35,8 @@
 			<label index="label_workflow_check">Send to duty editor</label>
 			<label index="label_workflow_check_hide">Send to duty editor &amp; hide</label>
 			<label index="label_workflow_check_publish">Send to duty editor &amp; publish</label>
-            <label index="label_workflow_extra_changed">Extra changed:</label>
+            <label index="label_workflow_extra_changed">Web element changed:</label>
+            <label index="label_workflow_extra_created">created</label>
             <label index="label_workflow_field_changed">Field(s) changed:</label>
 			<label index="label_workflow_revise">Send to editorial staff</label>
 			<label index="label_workflow_revise_hide">Send to editorial staff &amp; hide</label>
@@ -142,7 +143,8 @@
             <label index="label_workflow_check">Zum CvD</label>
             <label index="label_workflow_check_hide">Zum CvD &amp; verstecken</label>
             <label index="label_workflow_check_publish">Zum CvD &amp; publizieren</label>
-            <label index="label_workflow_extra_changed">Extra geändert:</label>
+            <label index="label_workflow_extra_changed">Webelement geändert:</label>
+            <label index="label_workflow_extra_created">angelegt</label>
             <label index="label_workflow_field_changed">Feld(er) geändert:</label>
             <label index="label_workflow_revise">Zum Redakteur</label>
             <label index="label_workflow_revise_hide">Zum Redakteur &amp; verstecken</label>

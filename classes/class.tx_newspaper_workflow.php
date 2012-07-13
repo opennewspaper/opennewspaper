@@ -676,6 +676,10 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getExtraChangedDetails(tx_newspaper_Extra $extra, array $fieldArray) {
+        if (!$extra->getUid()) {
+            return tx_newspaper::getTranslation('label_workflow_extra_created');
+        }
+
         $old = $extra->getDescription();
         foreach ($fieldArray as $attribute => $value) {
             $extra->setAttribute($attribute, $value);

@@ -18,14 +18,11 @@
 
 <p>
 
-    {if $image}
-        {if $image->getAttribute('kicker')}<h5>{$image->getAttribute('kicker')}</h5>{/if}
-        {if $image->getAttribute('title')}<h4>{$image->getAttribute('title')}</h4>{/if}
-        <img src="{$basepath}/{$sizes.textbox}/{$image->getAttribute('image_file')}" 
-             alt="{if $image->getAttribute('alttext')}{$image->getAttribute('alttext')}{else}{$image->getAttribute('caption')}{/if}" />
-        {if $image->getAttribute('caption')}<p>{$image->getAttribute('caption')}</p>{/if}
+    {if $attributes.image_file}
+        <img src="{$basepath}/{$sizes.teaser}/{$attributes.image_file}"
+             alt="{if $attributes.alttext}{$attributes.alttext}{else}{$attributes.caption}{/if}" />
     {/if}
-    
+
     {$bodytext}
 
 </p>
