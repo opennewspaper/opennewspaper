@@ -504,7 +504,9 @@ function changeWorkflowStatus(role, hidden_status) {
 	 *  \param $type value: see NP_WORKLFOW_LOG_... const at top of file
 	 */
 	public static function directLog($table, $id, $comment, $type = 0) {
-        $log_run = new tx_newspaper_LogRun(new $table($id), 0);
+        $object = self::safelyGenerateObject($table, $id);
+        if (is_null($object)) return;
+        $log_run = new tx_newspaper_LogRun($object, 0);
         $log_run->write(intval($type), $comment);
 	}
 
@@ -567,8 +569,8 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
  */
 		if (empty($fieldArray) || !self::isLoggableClass($table)) return;
 
-        /** @var $object tx_newspaper_StoredObject */
-        $object = new $table($id);
+        $object = self::safelyGenerateObject($table, $id);
+        if (is_null($object)) return;
 
         $log_run = new tx_newspaper_LogRun($object, $fieldArray['pid']);
 
@@ -584,6 +586,16 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
 
 /// \todo: if ($redirectToPlacementModule) { ...}
 	}
+
+    /**
+     * @return tx_newspaper_StoredObject
+     */
+    private static function safelyGenerateObject($table, $id) {
+        if (!intval($id)) return null;
+        if (tx_newspaper::isAbstractClass($table)) return null;
+        if (!tx_newspaper::classImplementsInterface($table, 'tx_newspaper_StoredObject')) return null;
+        return new $table(intval($id));
+    }
 
     /// check if auto log entry for hiding/publishing newspaper record should be written
     private static function writePublishingStatusEntry(tx_newspaper_LogRun $log_run, array $fieldArray, tx_newspaper_StoredObject $object) {
