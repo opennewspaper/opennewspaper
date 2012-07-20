@@ -389,7 +389,7 @@ class tx_newspaper_DependencyTree {
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
             $pages = getAllArticlePages($sections);
-            $this->related_article_pages = array_merge($this->related_article_pages, $this->makeCachablePages($pages, $article));
+            $this->related_article_pages = array_merge($this->related_article_pages, $this->makeCachablePages($pages, $related_article));
         }
         $this->related_article_pages = array_unique($this->related_article_pages);
         $this->related_article_pages_filled = true;
