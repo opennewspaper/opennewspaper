@@ -101,7 +101,7 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
         // CLOSE button:
         // Some css definitions are added here ...
-        $buttons['close'] = self::getStyleForDocheaderColor() . self::getStyleToHideDocheader2() . '
+        $buttons['close'] = self::getTypo3Version45xCssFixes() . self::getStyleToHideDocheader2() . '
 					<a href="#" onclick="document.editform.closeDoc.value=1; document.editform.submit(); return false;">' .
             '<img' . t3lib_iconWorks::skinImg($this->doc->backPath, 'gfx/closedok.gif', 'width="21" height="16"') . ' class="c-inputButton" title="' . $LANG->sL('LLL:EXT:lang/locallang_core.php:rm.closeDoc', 1) . '" alt="" />' .
             '</a>';
@@ -200,18 +200,27 @@ div#typo3-docbody { top:20px; }
 	}
 
     /**
-     * Adds CSS for docheader text color if Typo3 4.5.x or higher
+     * Adds some Typo3 4.5.x CSS fixes, if Typo3 version is 4.5.0 and above
+     * Docheader text color (light gray)
+     * Fixes a scrollbars problem (width:100% + left:20px -> scrollbar is not visible)
      * @return string CSS code or empty string
      */
-    private function getStyleForDocheaderColor() {
+    private function getTypo3Version45xCssFixes() {
 
         if (tx_newspaper::getTypo3Version() < 4005000) {
-            return ''; // The additional CSS code is needed for Typo3 4.5.x and above only. 3.x.x is not supported.
+            return ''; // The additional CSS code is needed for Typo3 4.5.x and above only.
         }
 
         // Set text color to light gray
         return '<style>
 div.buttongroup { color:#e0e0e0; }
+
+div#typo3-docbody {
+    left:0 !important;
+    margin-left:0 !important;
+    top:22px !important;
+}
+
 </style>
 ';
     }
