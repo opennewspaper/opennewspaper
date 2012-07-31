@@ -205,14 +205,8 @@ div#typo3-docbody { top:20px; }
      */
     private function getStyleForDocheaderColor() {
 
-        $typo3version = explode('.', TYPO3_branch);
-
-        if ($typo3version[0] < 4 ) {
-            return ''; // Typo3 3.x.x not supported
-        }
-
-        if ($typo3version[0] == 4 && $typo3version[1] < 5) {
-            return ''; // The CSS code is needed for Typo3 4.5.x and above only
+        if (tx_newspaper::getTypo3Version() < 4005000) {
+            return ''; // The additional CSS code is needed for Typo3 4.5.x and above only. 3.x.x is not supported.
         }
 
         // Set text color to light gray
