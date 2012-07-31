@@ -1037,6 +1037,19 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
    		return $removeXSS->RemoveXSS($string);
    	}
 
+
+    /**
+     * Returns an integer from a three part version number, eg '4.12.3' -> 4012003
+     * @return int Typo3 version number
+     */
+    public function getTypo3Version() {
+        if (class_exists('t3lib_utility_VersionNumber')) {
+            return t3lib_utility_VersionNumber::convertVersionNumberToInteger(TYPO3_version);
+        }
+        return t3lib_div::int_from_ver(TYPO3_version);
+    }
+
+
   /**
    * Gets field data of current be_user
    * \param $field Name of field to be read
