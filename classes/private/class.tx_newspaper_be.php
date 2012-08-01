@@ -844,40 +844,62 @@ class tx_newspaper_BE {
 
 
 
-
+    /**
+     * "Replace" the tag backend created by the kickstarter with a backend offering an list for content tags and for
+     * each control tag. All tags ared stored in a single field and split here into the tag types.
+     *
+     * In tx_newspaper_article::modifyTagSelection():
+     * $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
+     *
+     * @param $PA
+     * @param $fobj
+     * @return string
+     */
     public function renderTagControlsInArticle(&$PA, $fobj) {
-//t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
-        $articleId = $PA['row']['uid'];
-        $obj = new t3lib_TCEforms();
+//t3lib_div::devlog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
+        $articleId = intval($PA['row']['uid']);
+        $TCEformsObj = new t3lib_TCEforms();
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
         $PA['fieldConf']['config']['size'] = '5';
 
         $contentTagTitle = self::getTranslation('label_content_tag');
-        $contentTags = $this->createTagSelectElement($PA, $obj, $articleId, 'tags', tx_newspaper_tag::getContentTagType(),$contentTagTitle);
+        $contentTags = $this->createTagSelectElement($PA, $TCEformsObj, $articleId, 'tags', tx_newspaper_tag::getContentTagType(),$contentTagTitle);
         $ctrlCats = tx_newspaper_Tag::getAllControltagCategories();
         $controlTags = '';
         $ctrlUids = array();
         foreach($ctrlCats as $cat) {
             $tagType = 'tags_ctrl_'.$cat['uid'];
-            $controlTags .= $this->createTagSelectElement($PA, $obj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['title'], $cat['uid']);
+            $controlTags .= $this->createTagSelectElement($PA, $TCEformsObj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['title'], $cat['uid']);
             $ctrlUids[] = $cat['uid'];
         }
-//t3lib_div::devLog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
-        return $this->getFindTagsJs($articleId, implode(',', $ctrlUids)).$contentTags.$controlTags;
+//t3lib_div::devlog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
+        return $this->getFindTagsJs($articleId, implode(',', $ctrlUids)) . $contentTags . $controlTags;
     }
 
-    private function createTagSelectElement(&$PA, $obj, $articleId, $tagType, $tagTypeId, $title ,$category = false) {
-        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.']['.$tagType.']';
-        $PA['itemFormElID'] = 'data_tx_newspaper_article_'.$articleId.'_'.$tagType;
+    /**
+     * Creates a select box for given tag type (using TCEforms)
+     * @param $PA
+     * @param $TCEformsObj
+     * @param $articleId
+     * @param $tagType
+     * @param $tagTypeId
+     * @param $title
+     * @param bool $category
+     * @return mixed
+     */
+    private function createTagSelectElement(&$PA, $TCEformsObj, $articleId, $tagType, $tagTypeId, $title, $category = false) {
+        $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][' . $tagType . ']';
+        $PA['itemFormElID'] = 'data_tx_newspaper_article_' . $articleId . '_' . $tagType;
         $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId, $category);
-        $fld = $obj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
+        /** @var $TCEformsObj t3lib_TCEforms */
+        $fld = $TCEformsObj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
         $fld = $this->addTagInputField($fld, $articleId, $tagType);
-        return str_replace($obj->getLL('l_items'), $title, $fld);
+        return str_replace($TCEformsObj->getLL('l_items'), $title, $fld);
     }
 
     private function fillItemValues($articleId, $tagType, $category = false) {
-        $where .= " AND tag_type = " . $tagType;
+        $where = " AND tag_type = " . $tagType;
         $where .= " AND uid_local = " . $articleId;
         if($category)
             $where .= ' AND ctrltag_cat=' . $category;
@@ -892,10 +914,28 @@ class tx_newspaper_BE {
         return implode(',', $items);
     }
 
+    /**
+     * Adds a text input field with auto completer to the $selectBox
+     * @param $selectBox HTML code containng a seelct box
+     * @param $articleId
+     * @param $tagType
+     * @return replaced
+     */
     private function addTagInputField($selectBox, $articleId, $tagType) {
-        $pattern = '<select name="data\[tx_newspaper_article\]\['.$articleId.'\]\['.$tagType.'\]_sel.*</select>';
-        $with='<input type="text" id="autocomplete_'.$tagType.'" /><span id="indicator_'.$tagType.'" style="display: none"><img src="gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_'.$tagType.'" class="autocomplete"></div>';
-        return $this->replaceIncludingEndOfLine($selectBox, $with, $pattern);
+//t3lib_div::devlog('tag select box', 'np', 0 ,array('sB' => $selectBox, 'aId' => $articleId, 'tT' => $tagType));
+
+        if (tx_newspaper::getTypo3Version() < 4005000) {
+            // Pattern: HTML code TCEform 4.2.x generated
+            $pattern = '<select name="data\[tx_newspaper_article\]\[' . $articleId . '\]\[' . $tagType . '\]_sel.*</select>';
+        } else {
+            // Pattern: HTML code TCEform 4.5.x (and above) generated
+            $pattern = '<select id="tceforms-multiselect-[0-9a-f]*" name="data\[tx_newspaper_article\]\[' . $articleId . '\]\[' . $tagType . '\]_sel.*</select>';
+        }
+
+        $with = '<input type="text" id="autocomplete_' . $tagType . '" /><span id="indicator_' . $tagType .
+            '" style="display: none"><img src="gfx/spinner.gif" alt="Working..." /></span><div id="autocomplete_choices_' .
+            $tagType . '" class="autocomplete"></div>';
+        return $this->replaceIncludingEndOfLine($selectBox, $with, $pattern, true); // Re-insert match!
     }
 
     /**
@@ -908,18 +948,17 @@ class tx_newspaper_BE {
      */
     private function replaceIncludingEndOfLine($what, $with, $pattern, $reinsertMatch = true) {
         $newText = $this->replaceEol($what);
-        $toReplace = '|('.$pattern.')|m'; // with 'm' option . matches EOL
+        $toReplace = '|(' . $pattern . ')|m'; // with 'm' option . matches EOL
         preg_match($toReplace, $newText, $matches);
         $hasMatches = (count($matches) > 0);
         if($hasMatches) {
             if($reinsertMatch) {
-                $fld = preg_replace($toReplace, $with.$matches[0], $newText);
+                $fld = preg_replace($toReplace, $with . $matches[0], $newText);
             } else {
                 $fld = preg_replace($toReplace, $with, $newText);
             }
         }
-
-        return $hasMatches ? $fld : $what;
+        return $hasMatches? $fld : $what;
     }
 
     private function replaceEol($text) {
@@ -929,26 +968,33 @@ class tx_newspaper_BE {
         return preg_replace("/\n{2,}/","\r\r",$text);
     }
 
+    /**
+     * $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx_newspaper_be->getArticleTags';
+     * @param $params
+     * @param $pObj Parent object
+     * @return void
+     * @throws tx_newspaper_Exception
+     */
     public function getArticleTags(&$params, &$pObj) {
-// t3lib_div::devLog('getArticleTags', 'newspaper', 0, array('params' => $params) );
-        if(!$params['row']['uid']) {
-            return; // new articles can't have tags ...
+//t3lib_div::devlog('getArticleTags', 'newspaper', 0, array('params' => $params) );
+        if(!intval($params['row']['uid'])) {
+            return; // New articles can't have tags ...
         }
-        $articleID = $params['row']['uid'];
-        $article = new tx_newspaper_Article($articleID);
+
+        $article = new tx_newspaper_Article(intval($params['row']['uid']));
         if($params['field'] == 'tags') {
 			$tags = $article->getTags(tx_newspaper_tag::getContentTagType());
         } else if(stristr($params['field'], 'tags_ctrl')) {
             $category = array_pop(explode('_',$params['field']));
             $tags = $article->getTags(tx_newspaper_tag::getControlTagType(), $category);
         } else {
-            throw new tx_newspaper_Exception('field \''.$params['field'].'\' unkown');
+            throw new tx_newspaper_Exception("field '" . $params['field'] . "' unkown");
         }
         $items = array();
         foreach($tags as $tag) {
             $items[] = array($tag->getAttribute('tag'), $tag->getUid(), '');
         }
-// t3lib_div::devLog('getArticleTags--items', 'newspaper', 0, array('tags' => $items));
+//t3lib_div::devlog('getArticleTags--items', 'newspaper', 0, array('tags' => $items));
         $params['items'] = $items;
     }
 
