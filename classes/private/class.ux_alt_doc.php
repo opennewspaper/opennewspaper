@@ -213,7 +213,7 @@ div#typo3-docbody { top:20px; }
 
         // Set text color to light gray
         return '<style>
-div.buttongroup { color:#e0e0e0; }
+div.buttongroup { color:white; font-weight:bold; }
 
 div#typo3-docbody {
     left:0 !important;
