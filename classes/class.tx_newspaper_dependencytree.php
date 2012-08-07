@@ -42,6 +42,21 @@ require_once('private/class.tx_newspaper_cachablepage.php');
  *
  *  [1] In fact such a change can also happen on a PageZone, a Page or a Section,
  *    but we are not concerned with those here.
+ *
+ *  Example for registering an action  that is executed whenever the dependency
+ *  tree updates:
+ *  \code
+ *    function debugPage(tx_newspaper_CachablePage $page) {
+ *        $np_page = $page->getNewspaperPage();
+ *        tx_newspaper::devlog(
+ *            $np_page->getUid(),
+ *    		  $np_page->getParentSection()->getAttribute('section_name') .
+ *            $np_page->getPageType()->getAttribute('type_name')
+ *        );
+ *    }
+ *
+ *    tx_newspaper_DependencyTree::registerAction('debugPage');
+ *  \endcode
  */
 class tx_newspaper_DependencyTree {
 

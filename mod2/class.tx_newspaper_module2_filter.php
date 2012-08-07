@@ -11,6 +11,7 @@ class tx_newspaper_module2_Filter {
     const template = 'mod2_filterbox.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
+        $timer = tx_newspaper_ExecutionTimer::create();
         $this->LL = $LL;
         $this->input = $this->preprocessFilter($input);
         $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
