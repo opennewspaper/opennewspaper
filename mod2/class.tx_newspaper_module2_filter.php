@@ -11,9 +11,11 @@ class tx_newspaper_module2_Filter {
     const template = 'mod2_filterbox.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
-        $timer = tx_newspaper_ExecutionTimer::create();
+        tx_newspaper::devlog('call stack', debug_backtrace());
+        tx_newspaper::devlog('$input when called', $input);
         $this->LL = $LL;
         $this->input = $this->preprocessFilter($input);
+        tx_newspaper::devlog('$input after preprocessing', $this->input);
         $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
         $this->is_article_browser = $is_article_browser;
     }
