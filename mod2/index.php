@@ -82,6 +82,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 */
 	function main()	{
 		global $BE_USER;
+        tx_newspaper::devlog('call stack', debug_backtrace());
 
 		// Access check!
 		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
