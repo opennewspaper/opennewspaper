@@ -175,7 +175,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 
 	/**
-	 *
 	 * \param $row article to be rendered
 	 * \param $count total number of article found for current filter settings
 	 * \return HTML code, rendered backend
