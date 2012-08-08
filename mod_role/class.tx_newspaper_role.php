@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  Oliver Schröder
+*  Oliver Schrï¿½der
 *  Based on opendocs sys extension
 *  All rights reserved
 *
@@ -35,7 +35,7 @@ require_once(PATH_typo3.'interfaces/interface.backend_toolbaritem.php');
 /**
  * Adding newspaper role to the backend.php
  *
- * @author	Oliver Schröder
+ * @author	Oliver SchrÃ¶der
  * @package	TYPO3
  * @subpackage	newspaper
  */
@@ -59,17 +59,18 @@ class tx_newspaper_role implements backend_toolbarItem {
 		$this->backendReference = $backendReference;
 	}
 
-
-	// \return Integer representing to newspaper role to change to
-	private function getRoleToChangeTo() {
+    /**
+     * @return int Integer representing the newspaper role to change to
+     */
+    private function getRoleToChangeTo() {
 		return (tx_newspaper_workflow::getRole() == NP_ACTIVE_ROLE_DUTY_EDITOR)?
 			NP_ACTIVE_ROLE_EDITORIAL_STAFF :
 			NP_ACTIVE_ROLE_DUTY_EDITOR;
 	}
 
 	/**
-	 * checks whether the user has access to this toolbar item
-	 * \return  boolean  true if user has access, false if not
+	 * Checks whether the user has access to this toolbar item
+	 * @return boolean true if user has access, false if not
 	 */
 	public function checkAccess() {
 		$conf = $GLOBALS['BE_USER']->getTSConfig('backendToolbarItem.tx_newsspaper_role.disabled');
@@ -77,16 +78,9 @@ class tx_newspaper_role implements backend_toolbarItem {
 	}
 
 	/**
-	 * Counts the articles assigned to newspaper role of be_user
-	 */
-	public function countDocs() {
-		$this->docsAssignedToRole = 'x';
-	}
-
-	/**
-	 * renders the toolbar item and the initial menu
+	 * Renders the toolbar item and the initial menu
 	 *
-	 * @return	string		the toolbar item including the initial menu content as HTML
+	 * @return string The toolbar item including the initial menu content as HTML
 	 */
 	public function render() {
 		$this->addJavascriptToBackend();
@@ -109,8 +103,8 @@ class tx_newspaper_role implements backend_toolbarItem {
 	}
 
 	/**
-	 * renders the pure contents of the menu
-	 * @return	string		the menu's content
+	 * Renders the pure contents of the menu
+	 * @return string The menu's content
 	 */
 	public function renderMenu() {
 		$content = '<table class="list" cellspacing="0" cellpadding="0" border="0">';
@@ -125,7 +119,7 @@ class tx_newspaper_role implements backend_toolbarItem {
 		return $content;
 	}
 
-	/// \return Localized String: current role and new role
+	// @return Localized String: current role and new role
 	private function getChangeRoleLabel() {
 		return $GLOBALS['LANG']->getLL('labelChangeRole', true) . ' -> ' . tx_newspaper_Workflow::getRoleTitle($this->getRoleToChangeTo());
 	}
@@ -133,7 +127,7 @@ class tx_newspaper_role implements backend_toolbarItem {
 
 	/**
 	 * Adds javascript to the backend
-	 * \return	void
+	 * @return	void
 	 */
 	protected function addJavascriptToBackend() {
 		$this->backendReference->addJavascriptFile(t3lib_extMgm::extRelPath($this->extkey) . 'mod_role/newspaper_role.js');
@@ -141,7 +135,7 @@ class tx_newspaper_role implements backend_toolbarItem {
 
 	/**
 	 * Adds CSS to the backend
-	 * \return	void
+	 * @return	void
 	 */
 	protected function addCssToBackend() {
 		$this->backendReference->addCssFile('newspaper-role', t3lib_extMgm::extRelPath($this->extkey) . 'mod_role/newspaper_role.css');
@@ -156,61 +150,25 @@ class tx_newspaper_role implements backend_toolbarItem {
 	public function changeRoleToDutyEditor($params=array(), TYPO3AJAX &$ajaxObj=null) {
 		$this->changeRole(NP_ACTIVE_ROLE_DUTY_EDITOR, $ajaxObj);
 	}
-	private function changeRole($role, $ajaxObj) {
-		// change the role
-		tx_newspaper_workflow::changeRole($role);
 
-		// render json (new menu and new label)
+    /**
+     * Change the be_user's role to $role
+     * @param $role
+     * @param $ajaxObj
+     */
+    private function changeRole($role, $ajaxObj) {
+		// Change the role
+		tx_newspaper_workflow::changeRole(intval($role));
+
+		// Render json (new menu and new label)
 		$content = t3lib_div::array2json(array('roleLabel' => tx_newspaper_Workflow::getRoleTitle(tx_newspaper_Workflow::getRole()), 'menu' => $this->renderMenu()));
 
-		// set output
+		// Set output
 		$ajaxObj->setContentFormat('json');
 		$ajaxObj->addContent('newspaperRoleMenu', $content);
 
 	}
 
-
-
-//	/*******************
-//	 ***    HOOKS    ***
-//	 *******************/
-//
-//	/**
-//	 * called as a hook in t3lib_BEfunc::setUpdateSignal, calls a JS function to change
-//	 * the number of opened documents
-//	 *
-//	 * @param	array		$params
-//	 * @param	unknown_type		$ref
-//	 * @return	string		list item HTML attibutes
-//	 */
-//	public function updateNumberOfOpenDocsHook(&$params, &$ref) {
-//		$params['JScode'] = '
-//			if (top && top.TYPO3BackendNewspaperRole) {
-//				top.TYPO3BackendNewspaperRole.updateNumberOfDocs(' . count($this->openDocs) . ', true);
-//			}
-//		';
-//	}
-
-
-	/******************
-	 *** AJAX CALLS ***
-	 ******************/
-
-
-	/**
-	 * renders the menu so that it can be returned as response to an AJAX call
-	 *
-	 * @param	array		array of parameters from the AJAX interface, currently unused
-	 * @param	TYPO3AJAX	object of type TYPO3AJAX
-	 * @return	void
-	 */
-//	public function renderAjax($params = array(), TYPO3AJAX &$ajaxObj = null) {
-//t3lib_div::devlog('renderAjax()', 'newspaper', 0, array('p' => $params));
-////		self::changeRole(1);
-//		$menuContent = $this->renderMenu();
-//
-//		$ajaxObj->addContent('changeRole', $menuContent);
-//	}
 
 	/**
 	 * Returns additional attributes for the list item in the toolbar
