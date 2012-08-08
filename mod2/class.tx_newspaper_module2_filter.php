@@ -37,8 +37,8 @@ class tx_newspaper_module2_Filter {
         return $records;
     }
 
-    public function renderBox() {
-        $smarty = new tx_newspaper_Smarty();
+    public function renderBox(tx_newspaper_Smarty $smarty) {
+
         $smarty->setTemplateSearchPath(array(self::template_path));
 
         $smarty->assign('LL', $this->LL); // localized labels

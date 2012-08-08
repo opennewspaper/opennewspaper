@@ -186,7 +186,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
 
-        $smarty->assign('FILTER_BOX', $this->filter->renderBox());
+        $smarty->assign('FILTER_BOX', $this->filter->renderBox($smarty));
 
 		$smarty->assign('LL', $this->LL); // localized labels
 
