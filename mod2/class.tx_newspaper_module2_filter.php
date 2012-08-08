@@ -11,12 +11,9 @@ class tx_newspaper_module2_Filter {
     const template = 'mod2_filterbox.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
-        tx_newspaper::devlog('call stack', debug_backtrace());
-        tx_newspaper::devlog('$input when called', $input);
-        $this->LL = $LL;
-        $this->input = $this->preprocessFilter($input);
-        tx_newspaper::devlog('$input after preprocessing', $this->input);
-        $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->input);
+        $this->localized_labels = $LL;
+        $this->filter_values = $this->preprocessFilter($input);
+        $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->filter_values);
         $this->is_article_browser = $is_article_browser;
     }
 
@@ -31,7 +28,7 @@ class tx_newspaper_module2_Filter {
         	$this->query_builder->getWhere(),
         	'',
         	'tstamp DESC',
-        	intval($this->input['startPage']) * intval($this->input['step']) . ', ' . (intval($this->input['step']))
+        	intval($this->filter_values['startPage']) * intval($this->filter_values['step']) . ', ' . (intval($this->filter_values['step']))
        	);
 //tx_newspaper::devlog('filter query', tx_newspaper::$query);
         return $records;
@@ -41,8 +38,8 @@ class tx_newspaper_module2_Filter {
 
         $smarty->setTemplateSearchPath(array(self::template_path));
 
-        $smarty->assign('LL', $this->LL); // localized labels
-        $smarty->assign('FILTER', $this->input); // add filter settings (for setting selected values in select boxes and text fields)
+        $smarty->assign('LL', $this->localized_labels); // localized labels
+        $smarty->assign('FILTER', $this->filter_values); // add filter settings (for setting selected values in select boxes and text fields)
         $smarty->assign('RANGE', $this->getRangeArray()); // add data for range dropdown
         $smarty->assign('HIDDEN', $this->getHiddenArray()); // add data for "hidden" dropdown
         $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
@@ -133,33 +130,33 @@ class tx_newspaper_module2_Filter {
    	/// \return Array with options for time range dropdown
 	private function getRangeArray() {
 		$range = array();
-		$range['today'] = $this->LL['option_range_today'];
-		$range['day_1'] = '1 ' . $this->LL['option_range_day'];
-		$range['day_2'] = '2 ' . $this->LL['option_range_days'];
-		$range['day_3'] = '3 ' . $this->LL['option_range_days'];
-		$range['day_7'] = '7 ' . $this->LL['option_range_days'];
-		$range['day_14'] = '14 ' . $this->LL['option_range_days'];
-		$range['day_30'] = '30 ' . $this->LL['option_range_days'];
-		$range['day_60'] = '60 ' . $this->LL['option_range_days'];
-		$range['day_90'] = '90 ' . $this->LL['option_range_days'];
-		$range['day_180'] = '180 ' . $this->LL['option_range_days'];
-		$range['day_360'] = '360 ' . $this->LL['option_range_days'];
-		$range['no_limit'] = $this->LL['option_range_no_limit'];
+		$range['today'] = $this->localized_labels['option_range_today'];
+		$range['day_1'] = '1 ' . $this->localized_labels['option_range_day'];
+		$range['day_2'] = '2 ' . $this->localized_labels['option_range_days'];
+		$range['day_3'] = '3 ' . $this->localized_labels['option_range_days'];
+		$range['day_7'] = '7 ' . $this->localized_labels['option_range_days'];
+		$range['day_14'] = '14 ' . $this->localized_labels['option_range_days'];
+		$range['day_30'] = '30 ' . $this->localized_labels['option_range_days'];
+		$range['day_60'] = '60 ' . $this->localized_labels['option_range_days'];
+		$range['day_90'] = '90 ' . $this->localized_labels['option_range_days'];
+		$range['day_180'] = '180 ' . $this->localized_labels['option_range_days'];
+		$range['day_360'] = '360 ' . $this->localized_labels['option_range_days'];
+		$range['no_limit'] = $this->localized_labels['option_range_no_limit'];
 		return $range;
 	}
 
 	/// \return Array with options for publish state dropdown
 	private function getHiddenArray() {
 		$hidden = array();
-		$hidden['all'] = $this->LL['option_status_hidden_all'];
-		$hidden['on'] = $this->LL['option_status_hidden_on'];
-		$hidden['off'] = $this->LL['option_status_hidden_off'];
+		$hidden['all'] = $this->localized_labels['option_status_hidden_all'];
+		$hidden['on'] = $this->localized_labels['option_status_hidden_on'];
+		$hidden['off'] = $this->localized_labels['option_status_hidden_off'];
 		return $hidden;
 	}
 
 	/// \return true if role filter equals the current role of the be_user, else false
 	private function isRoleFilterEqualToUserRole() {
-		return ($this->input['role'] ==  tx_newspaper_workflow::getRole());
+		return ($this->filter_values['role'] ==  tx_newspaper_workflow::getRole());
 	}
 
    	/// \return Array with options for workflow/role dropdown
@@ -173,22 +170,24 @@ class tx_newspaper_module2_Filter {
 		return $role;
 	}
 
-    /**
-     * @todo handle categories better than simply using the first one
-     */
     private function getControltags() {
-        $categories = tx_newspaper_Tag::getAllControltagCategories();
-        if (empty($categories)) return array();
-
-        $tags = tx_newspaper_Tag::getAllControlTags($categories[0]['uid']);
+        $tags = tx_newspaper_Tag::getAllControlTags(self::getControltagCategoryUid());
         array_walk($tags, array($this, 'extractTagTitle'));
         return array_merge(array(''), $tags);
     }
 
+    /**
+     * @todo handle categories better than simply using the first one
+     */
+    private static function getControltagCategoryUid() {
+        $categories = tx_newspaper_Tag::getAllControltagCategories();
+        return intval($categories[0]['uid']);
+    }
+
     private function extractTagTitle(&$tag, $key) { $tag = $tag->getAttribute('title'); }
 
-    private $LL = array();
-    private $input = array();
+    private $localized_labels = array();
+    private $filter_values = array();
     private $is_article_browser = false;
     /** @var tx_newspaper_module2_QueryBuilder */
     private $query_builder = null;

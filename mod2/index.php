@@ -81,38 +81,39 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * @return	[type]		...
 	 */
 	function main()	{
-		global $BE_USER;
-        tx_newspaper::devlog('call stack', debug_backtrace());
 
-		// Access check!
-		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
-
-		if ($access) {
-//t3lib_div::devlog('main()', 'newspaper',0, array('_r' => $_REQUEST));
-
-			$this->input = t3lib_div::GParrayMerged($this->prefixId); // read params
-
-			$this->processAjaxController(); // process Ajax request (terminates with die() if any)
-
-			// get ll labels
-			$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod2/locallang.xml', $GLOBALS['LANG']->lang);
-			$this->LL = $localLang[$GLOBALS['LANG']->lang];
-
-            $this->filter = new tx_newspaper_module2_Filter($this->LL, $this->input, $this->isArticleBrowser());
-
-				// Draw the header.
-            $this->makeDoc();
-
-			$this->content .= $this->doc->startPage('');
-
-			// Render content:
-			$this->moduleContent();
-
-			$this->content.=$this->doc->spacer(10);
-		} else {
+        if (!$this->isAccessAllowed()) {
             $this->denyAccess();
-		}
+            return;
+        }
+
+		$this->input = t3lib_div::GParrayMerged($this->prefixId); // read params
+
+		$this->processAjaxController(); // process Ajax request (terminates with die() if any)
+
+		// get ll labels
+		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod2/locallang.xml', $GLOBALS['LANG']->lang);
+		$this->LL = $localLang[$GLOBALS['LANG']->lang];
+
+        $this->filter = new tx_newspaper_module2_Filter($this->LL, $this->input, $this->isArticleBrowser());
+
+		// Draw the header.
+        $this->makeDoc();
+
+		$this->content .= $this->doc->startPage('');
+
+		// Render content:
+		$this->moduleContent();
+
+		$this->content.=$this->doc->spacer(10);
 	}
+
+    /**
+     *  \todo: better check needed
+     */
+    private function isAccessAllowed() {
+        return $GLOBALS['BE_USER']->user['uid'] ? true : false;
+    }
 
     private function makeDoc() {
 
@@ -140,10 +141,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     private function denyAccess() { // If no access or if ID == zero
 
-        global $BACK_PATH;
-
         $this->doc = t3lib_div::makeInstance('mediumDoc');
-        $this->doc->backPath = $BACK_PATH;
+        $this->doc->backPath = $GLOBALS['BACK_PATH'];
 
         $this->content .= $this->doc->startPage($this->LL['title']);
         $this->content .= $this->doc->header($this->LL['title']);
@@ -181,7 +180,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 * \param $count total number of article found for current filter settings
 	 * \return HTML code, rendered backend
 	 */
-	function renderBackendSmarty($row, $count) {
+	function renderBackendSmarty(array $article_records, $count) {
 
  		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod2/res/'));
@@ -206,10 +205,10 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 		$smarty->assign('FORM_FIELD', (t3lib_div::_GP('form_field'))? t3lib_div::_GP('form_field') : '');
 		$smarty->assign('FORM_UID', intval(t3lib_div::_GP('form_uid'))? intval(t3lib_div::_GP('form_uid')) : 0);
 
-        $smarty->assign('LOCKED_ARTICLES', self::getLockedArticles($row));
+        $smarty->assign('LOCKED_ARTICLES', self::getLockedArticles($article_records));
 
-        $this->addArticleInfo($row);
-        $smarty->assign('DATA', $row);
+        $this->addArticleInfo($article_records);
+        $smarty->assign('DATA', $article_records);
 
         tx_newspaper_Workflow::addWorkflowTranslations($smarty);
 
@@ -264,11 +263,11 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
     }
 
     /// add informations to each article that are not in the record
-    private function addArticleInfo(&$row) {
-        for ($i = 0; $i < sizeof($row); $i++) {
-            self::addWorkflowInfo($row, $i);
-            $row[$i]['sections'] = $this->getSectionNames(intval($row[$i]['uid']));
-            $this->addTimeInfo($row, $i);
+    private function addArticleInfo(array &$records) {
+        for ($i = 0; $i < sizeof($records); $i++) {
+            self::addWorkflowInfo($records[$i]);
+            $records[$i]['sections'] = $this->getSectionNames(intval($records[$i]['uid']));
+            $this->addTimeInfo($records[$i]);
         }
     }
 
@@ -286,15 +285,15 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return $this->isArticleBrowser()? 'mod2_articlebrowser.tmpl': 'mod2_main_v2.tmpl';
     }
 
-    private static function addWorkflowInfo(array &$record, $i) {
+    private static function addWorkflowInfo(array &$record) {
         // add role title
-        $record[$i]['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($record[$i]['workflow_status']);
+        $record['workflow_status_TITLE'] = tx_newspaper_workflow::getRoleTitle($record['workflow_status']);
 
         // add workflowlog data to $row - new layout for production list version for mod2_main_v2.tmpl
-        $record[$i]['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid']);
+        $record['workflowlog_v2'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record['uid']);
 
         // add extended workflowlog data to $row - displayable on demand
-        $record[$i]['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record[$i]['uid'], 0, 1);
+        $record['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record['uid'], 0, 1);
     }
 
     private function getSectionNames($article_uid) {
@@ -306,21 +305,25 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     private function extractSectionTitle(&$section, $key) { $section = $section->getAttribute('section_name'); }
 
-    private function addTimeInfo(array &$row, $i) {
+    private function addTimeInfo(array &$record) {
         // Add information for time controlled articles
-        $row[$i]['time_controlled_not_yet'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_yet_with_endtime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_yet_with_endtime'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_anymore'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_not_anymore_with_starttime'] = $this->insertStartEndtime($this->LL['label_time_controlled_not_anymore_with_starttime'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_now_and_future'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_and_future'], $row[$i]['starttime'], $row[$i]['endtime']);
-        $row[$i]['time_controlled_now_but_will_end'] = $this->insertStartEndtime($this->LL['label_time_controlled_now_but_will_end'], $row[$i]['starttime'], $row[$i]['endtime']);
+        $this->addTimeInfoToRow($record, 'time_controlled_not_yet');
+        $this->addTimeInfoToRow($record, 'time_controlled_not_yet_with_endtime');
+        $this->addTimeInfoToRow($record, 'time_controlled_not_anymore');
+        $this->addTimeInfoToRow($record, 'time_controlled_not_anymore_with_starttime');
+        $this->addTimeInfoToRow($record, 'time_controlled_now_and_future');
+        $this->addTimeInfoToRow($record, 'time_controlled_now_but_will_end');
 
         // Add formatted publish date
-        $row[$i]['formattedPublishdate'] = $this->getFormattedPublishDate($row[$i]['publish_date']);
+        $record['formattedPublishdate'] = $this->getFormattedPublishDate($record['publish_date']);
     }
 
-    private function insertStartEndtime($string, $starttime, $endtime) {
-   // @todo: time format string should be configurable
+    private function addTimeInfoToRow(array &$record, $label) {
+        $record[$label] = self::insertStartEndtime($this->LL[$label], $record['starttime'], $record['endtime']);
+    }
+
+    private static function insertStartEndtime($string, $starttime, $endtime) {
+        // @todo: time format string should be configurable
    		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
    		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
    		return $string;
@@ -352,23 +355,18 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 	 */
 	private function processAjaxController() {
 //t3lib_div::devlog('processAjaxController()', 'newspaper', 0, array('input' => $this->input));
-		if (!isset($this->input['ajaxController']) || !isset($this->input['ajaxController'])) {
-			return;
-		}
+		if (!isset($this->input['ajaxController'])) return;
 
 		switch($this->input['ajaxController']) {
 			case 'deleteArticle':
 				tx_newspaper::deleteUsingCmdMap('tx_newspaper_article', array(intval($this->input['articleUid'])));
 				die();
-			break;
 			case 'publishArticle':
 				$this->changeArticleHiddenStatus(intval($this->input['articleUid']), false);
 				die();
-			break;
 			case 'hideArticle':
 				$this->changeArticleHiddenStatus(intval($this->input['articleUid']), true);
 				die();
-			break;
 		}
 
 	}
