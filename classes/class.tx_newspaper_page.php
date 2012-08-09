@@ -573,7 +573,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
             $pz->changeParent($pz->getParentForPlacement());
         } else {
             $pz = $this->createNewPagezone($type);
-            $pz->changeParent($pz->getParentPageZoneOfSameType());
+            $pz->changeParent(0);
 		}
 
 
