@@ -569,12 +569,13 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 
 		if ($row) {
             $pz = self::restorePagezoneFromRecord($row, $pzConcreteTable);
+            // inherit extras (to reflect all changes since this pagezone was deleted)
+            $pz->changeParent($pz->getParentForPlacement());
         } else {
             $pz = $this->createNewPagezone($type);
+            $pz->changeParent($pz->getParentPageZoneOfSameType());
 		}
 
-        // inherit extras (to reflect all changes since this pagezone was deleted)
-        $pz->changeParent($pz->getParentForPlacement());
 
 		$this->appendPagezone($pz); // add pagezone to pageZones array, so it's available right away
 

@@ -1205,7 +1205,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	/** Step from parent to parent until a PageZone with matching type is
 	 *  found.
 	 */
-	protected function getParentPageZoneOfSameType() {
+	public function getParentPageZoneOfSameType() {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
