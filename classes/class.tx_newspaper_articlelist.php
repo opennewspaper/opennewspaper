@@ -567,7 +567,8 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
             $tree = tx_newspaper_DependencyTree::generateFromArticlelist($list);
             $tree_proxy = new tx_newspaper_DependencyTreeProxy($tree);
-            $tree_proxy->executeActionsOnPages();
+            $tree_proxy->executeActionsOnPages('tx_newspaper_Article');
+            $tree_proxy->executeActionsOnPages('tx_newspaper_Extra');
         }
     }
 
