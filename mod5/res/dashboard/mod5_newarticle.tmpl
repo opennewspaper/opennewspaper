@@ -617,7 +617,7 @@ body {
 				<select id="section1" onchange="changeSectionBox2(this.value)" size="9">
 				{foreach key=section_id item=section from=$SECTION1}
                     {if array_key_exists($section->getUid(), $SECTION2)}
-                        {* Make sure to show start section only if thtere's at least one target section available *}
+                        {* Make sure to show start section only if there's at least one target section available *}
 		    	  	    <option value="{$section->getUid()}"> {$section->getAttribute('section_name')}</option>
                     {/if}
 				{/foreach}
@@ -648,6 +648,7 @@ body {
 			</div>
 
 			{* control tags *}
+            {if ($SHOW_CTRLTAGS)}
 			<div>
 				<label>{$LABEL.controltag}</label>
 				<select id="controltagcat" name="tx_newspaper_mod5[ctrltagcat]" onchange="changeCtrlTagCat(); return false;">
@@ -665,6 +666,7 @@ body {
 <br />{$MESSAGE.no_ctrltagtype_available}
 {/if}
 			</div>
+            {/if}
 
 			<br /><br />
 			<input type="button" onclick="executeSubmit('new_article_create'); return false;" name="tx_newspaper_mod5[new_article_create]" value="{$LABEL.new_article_button}" class="submit" />
@@ -686,8 +688,10 @@ body {
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
 		changeSource('{$DEFAULT_SOURCE}', ''); // select default source initially
 {/if}
-		changeCtrlTagCat(); // load control tag categories
-	{rdelim}
+{if ($SHOW_CTRLTAGS)}
+        changeCtrlTagCat(); // load control tag categories
+{/if}
+    {rdelim}
 </script>
 
 {*

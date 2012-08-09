@@ -537,7 +537,13 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
 
-		$smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+
+        if (!self::hideControlTagInNewArticleWizard()) {
+		    $smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+		    $smarty->assign('SHOW_CTRLTAGS', true);
+        } else {
+            $smarty->assign('SHOW_CTRLTAGS', false);
+        }
 
 
         // Get base sections
@@ -563,6 +569,19 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$this->content .= $this->doc->spacer(10);
 
 	}
+
+    /**
+     * Checks User-TSConfig setting for
+     * newspaper.articleWizard.hideControlTags
+     * If set to 1, the control tag select box is hidden in new article wizards
+     * If set to 0 (default) the select box is shown (and filled)
+     * @static
+     * @return bool Boolean value whether to show the control tag selectbox
+     * @default 0
+     */
+    public static function hideControlTagInNewArticleWizard() {
+        return (bool) $GLOBALS['BE_USER']->getTSConfigVal('newspaper.articleWizard.hideControlTags');
+    }
 
     /**
      * Get all subsequent section for given start sections
