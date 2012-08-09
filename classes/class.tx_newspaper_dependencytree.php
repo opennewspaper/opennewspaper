@@ -193,7 +193,6 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-        tx_newspaper::devlog("executeActionsOnPages($key)", self::$registered_actions);
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
