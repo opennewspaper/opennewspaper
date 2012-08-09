@@ -15,7 +15,7 @@ class tx_newspaper_DependencyTreeProxy extends tx_newspaper_DependencyTree {
 
     public function executeActionsOnPages($key = '') {
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (class_exists('tx_AsynchronousTask') && false) {
+        if (class_exists('tx_AsynchronousTask')) {
             $task = new tx_AsynchronousTask($this->tree, 'executeActionsOnPages', array($key));
             $task->execute();
         } else {
