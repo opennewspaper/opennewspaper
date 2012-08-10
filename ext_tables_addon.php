@@ -120,7 +120,7 @@ if (TYPO3_MODE == 'BE') {
 	);
 
 
-//	// add newspaper role module
+	// add newspaper role module
 	$pathRole = t3lib_extMgm::extPath('newspaper') . 'mod_role/';
 	// register toolbar item
 	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = $pathRole . 'registerToolbarItem.php';
@@ -128,6 +128,26 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToEditorialStaff'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToEditorialStaff';
 	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToDutyEditor'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToDutyEditor';
 
+    if (tx_newspaper::getTypo3Version() >= 4005000) {
+
+        // Register extbase Backend Module(s)
+
+        Tx_Extbase_Utility_Extension::registerModule(
+            $_EXTKEY,
+            'txnewspaperMmain', // Make module a submodule of 'web'
+            'sectionmodule',    // Submodule key
+            '',                 // Position
+            array(              // An array holding the controller-action-combinations that are accessible
+                'SectionModule'        => 'list,single'
+            ),
+            array(
+                'access' => 'user,group',
+                'icon'   => 'EXT:'.$_EXTKEY.'/Resources/Public/Images/icon_tx_newspaper_section.gif',
+                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_sectionmodule.xml',
+            )
+        );
+
+    }
 
 }
 
