@@ -613,7 +613,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
     private function restoredPagezone(tx_newspaper_PagezoneType $type) {
 		// check if a pagezone can be re-activated
 		$records = tx_newspaper::selectRowsDirect(
-			'tx_newspaper_pagezone.uid AS pz_uid, pz_concrete.uid AS pz_concrete_uid',
+			'tx_newspaper_pagezone.uid AS pz_uid, ' . self::getPagezoneTable($type) . '.uid AS pz_concrete_uid',
 			'tx_newspaper_pagezone, ' . self::getPagezoneTable($type),
 			'tx_newspaper_pagezone.page_id = ' . $this->getUid() .
                 ' AND tx_newspaper_pagezone.pagezone_uid = ' . self::getPagezoneTable($type) . '.uid' .
