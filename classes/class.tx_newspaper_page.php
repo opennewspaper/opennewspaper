@@ -216,13 +216,6 @@ class tx_newspaper_Page
 		return false;
 	}
 
-	/// Adds pagezone $pz to pageZones attribute array
-	private function appendPagezone(tx_newspaper_pagezone $pz) {
-		if ($this->pageZones === true) {
-			$this->pageZones = array();
-		}
-		$this->pageZones[] = $pz;
-	}
 
 	public function getTitle() {
 		return tx_newspaper::getTranslation('title_' . $this->getTable());
@@ -280,17 +273,6 @@ class tx_newspaper_Page
 
  		return null;
 	}
-
-    private function selectPagezoneUidFromPagezoneTable(tx_newspaper_PageZoneType $type, $table) {
-
-        $row = tx_newspaper::selectZeroOrOneRows(
-            'tx_newspaper_pagezone.uid',
-            "tx_newspaper_pagezone JOIN $table ON tx_newspaper_pagezone.pagezone_uid = $table.uid",
-            "pagezone_table = '$table' AND page_id = " . $this->getAttribute('uid') . ' AND pagezonetype_id = ' . $type->getUid()
-        );
-
-        return intval($row['uid']);
-    }
 
     /// Render the page, containing all associated tx_newspaper_PageZone s
 	/** The correct template is found the following way.
@@ -550,62 +532,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
      *  @param tx_newspaper_PagezoneType $type
      */
     public function activatePagezone(tx_newspaper_PagezoneType $type) {
-
-		if ($this->getPageZone($type)) return;
-
-		// pagezone table associated to current pagezone type
-		$pzConcreteTable = ($type->getAttribute('is_article'))? 'tx_newspaper_article' : 'tx_newspaper_pagezone_page';
-
-		// check if a pagezone can be re-activated
-		$row = tx_newspaper::selectRowsDirect(
-			'pz.uid AS pz_uid, pz_concrete.uid AS pz_concrete_uid',
-			'tx_newspaper_pagezone AS pz, ' . $pzConcreteTable . ' AS pz_concrete',
-			'pz.page_id=' . $this->getUid() . ' AND pz.pagezone_uid=pz_concrete.uid AND pz_concrete.pagezonetype_id=' .
-				$type->getUid() . ' AND pz.deleted=1',
-			'',
-			'pz.uid DESC',
-			'1'
-		);
-
-		if ($row) {
-            $pz = self::restorePagezoneFromRecord($row, $pzConcreteTable);
-            // inherit extras (to reflect all changes since this pagezone was deleted)
-            $pz->changeParent($pz->getParentForPlacement());
-        } else {
-            $pz = $this->createNewPagezone($type);
-            $pz->changeParent(0);
-		}
-
-
-		$this->appendPagezone($pz); // add pagezone to pageZones array, so it's available right away
-
+		if (!is_null($this->getPageZone($type))) return;
+		$this->appendPagezone($this->restoredOrNewPagezone($type));
 	}
-
-    private function createNewPagezone(tx_newspaper_PagezoneType $type) {
-
-        $pz = tx_newspaper_PageZone_Factory::getInstance()->createNew($this, $type);
-
-        $pz->setAttribute('crdate', time());
-        $pz->setAttribute('tstamp', time());
-        $pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
-        $pz->store();
-
-        return $pz;
-    }
-
-    private static function restorePagezoneFromRecord(array $row, $pzConcreteTable) {
-        tx_newspaper::updateRows(
-            'tx_newspaper_pagezone', 'uid=' . $row[0]['pz_uid'],
-            array('deleted' => 0, 'tstamp' => time())
-        );
-
-        tx_newspaper::updateRows(
-            $pzConcreteTable, 'uid=' . $row[0]['pz_concrete_uid'],
-            array('deleted' => 0, 'tstamp' => time())
-        );
-
-        return tx_newspaper_PageZone_Factory::getInstance()->create($row[0]['pz_uid']);
-    }
 
 
     /// tx_newspaper_PageType of the current tx_newspaper_Page
@@ -652,6 +581,86 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 			$this->setUid($this->attributes['uid']);
 		}
 	}
+
+    /// Adds pagezone $pz to pageZones attribute array
+	private function appendPagezone(tx_newspaper_pagezone $pz) {
+		if ($this->pageZones === true) {
+			$this->pageZones = array();
+		}
+		$this->pageZones[] = $pz;
+	}
+
+    private function selectPagezoneUidFromPagezoneTable(tx_newspaper_PageZoneType $type, $table) {
+
+        $row = tx_newspaper::selectZeroOrOneRows(
+            'tx_newspaper_pagezone.uid',
+            "tx_newspaper_pagezone JOIN $table ON tx_newspaper_pagezone.pagezone_uid = $table.uid",
+            "pagezone_table = '$table' AND page_id = " . $this->getAttribute('uid') . ' AND pagezonetype_id = ' . $type->getUid()
+        );
+
+        return intval($row['uid']);
+    }
+
+    private function restoredOrNewPagezone($type) {
+        $pz = $this->restoredPagezone($type);
+        if (is_null($pz)) {
+            $pz = $this->createNewPagezone($type);
+            $pz->changeParent(0);
+        }
+        return $pz;
+    }
+
+    private function restoredPagezone(tx_newspaper_PagezoneType $type) {
+		// check if a pagezone can be re-activated
+		$records = tx_newspaper::selectRowsDirect(
+			'tx_newspaper_pagezone.uid AS pz_uid, pz_concrete.uid AS pz_concrete_uid',
+			'tx_newspaper_pagezone, ' . self::getPagezoneTable($type),
+			'tx_newspaper_pagezone.page_id = ' . $this->getUid() .
+                ' AND tx_newspaper_pagezone.pagezone_uid = ' . self::getPagezoneTable($type) . '.uid' .
+                ' AND ' . self::getPagezoneTable($type) . '.pagezonetype_id = ' . $type->getUid() .
+                ' AND tx_newspaper_pagezone.deleted = 1',
+			'',
+			'tx_newspaper_pagezone.uid DESC',
+			'1'
+		);
+
+		if (empty($records)) return null;
+
+        $pz = self::restorePagezoneFromRecord($records[0], $type);
+        $pz->changeParent($pz->getParentForPlacement());
+
+        return $pz;
+    }
+
+    private static function getPagezoneTable(tx_newspaper_PagezoneType $type) {
+        return ($type->getAttribute('is_article')) ? 'tx_newspaper_article' : 'tx_newspaper_pagezone_page';
+    }
+
+    private function createNewPagezone(tx_newspaper_PagezoneType $type) {
+
+        $pz = tx_newspaper_PageZone_Factory::getInstance()->createNew($this, $type);
+
+        $pz->setAttribute('crdate', time());
+        $pz->setAttribute('tstamp', time());
+        $pz->setAttribute('cruser_id', $GLOBALS['BE_USER']->user['uid']);
+        $pz->store();
+
+        return $pz;
+    }
+
+    private static function restorePagezoneFromRecord(array $record, tx_newspaper_PagezoneType $type) {
+        tx_newspaper::updateRows(
+            'tx_newspaper_pagezone', 'uid=' . $record['pz_uid'],
+            array('deleted' => 0, 'tstamp' => time())
+        );
+
+        tx_newspaper::updateRows(
+            self::getPagezoneTable($type), 'uid=' . $record['pz_concrete_uid'],
+            array('deleted' => 0, 'tstamp' => time())
+        );
+
+        return tx_newspaper_PageZone_Factory::getInstance()->create($record['pz_uid']);
+    }
 
 
 	/// UID of record in the DB
