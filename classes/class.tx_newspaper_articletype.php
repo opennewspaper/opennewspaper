@@ -105,6 +105,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		$this->uid = $uid;
 	}
 
+    public function getTypeName() { return $this->getAttribute('title'); }
 
 	/// Get TSConfig setting for this article type
 	/** \param $type article type configured in TSConfig, currently
@@ -135,7 +136,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	static public function getArticleTypes() {
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_ArticleType());
 		$row = tx_newspaper::selectRows(
-			'*',
+			'uid',
 			'tx_newspaper_articletype',
 			'pid=' . $pid,
 			'',

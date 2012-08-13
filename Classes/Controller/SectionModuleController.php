@@ -14,16 +14,34 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         // @todo Evaluate how the intval() call can be used with Extbase validators/filters
         $this->pageId = intval(t3lib_div::_GP('id'));
 
-        $this->pageRenderer->addInlineLanguageLabelFile('EXT:workspaces/Resources/Private/Language/locallang_sectionmodule.xml');
+        $this->pageRenderer->addInlineLanguageLabelFile('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml');
     }
 
     /**
-     * Simple action to list some stuff
+     * Action to create a new section
      */
-    public function listAction() {
+    public function newAction() {
         $this->view->assign('sections', tx_newspaper_Section::getAllSections());
+        $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
+        tx_newspaper::devlog('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
+        $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypes());
+        tx_newspaper::devlog('article_types', tx_newspaper_ArticleType::getArticleTypes());
+        $this->view->assign('REQUEST', $_REQUEST);
+        $module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
+        if ($module_request) {
+            $this->view->assign('module_request', $module_request);
+            if (self::isValidRequest($module_request)) {
+
+            }
+        }
     }
 
+    /**
+     * Action to edit existing section
+     */
+    public function editAction() {
+        $this->view->assign('sections', tx_newspaper_Section::getAllSections());
+    }
 
     /**
      * Processes a general request. The result can be returned by altering the given response.
@@ -35,7 +53,6 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      */
     public function processRequest(Tx_Extbase_MVC_RequestInterface $request, Tx_Extbase_MVC_ResponseInterface $response) {
 
-        tx_newspaper::devlog('request', $request);
         $this->template = t3lib_div::makeInstance('template');
         $this->pageRenderer = $this->template->getPageRenderer();
 
@@ -45,12 +62,18 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         parent::processRequest($request, $response);
 
         $pageHeader = $this->template->startpage(
-            $GLOBALS['LANG']->sL('LLL:EXT:workspaces/Resources/Private/Language/locallang_sectionmodule.xml:module.title')
+            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.title')
         );
         $pageEnd = $this->template->endPage();
 
         $response->setContent($pageHeader . $response->getContent() . $pageEnd);
     }
+
+
+    private static function isValidRequest(array $request) {
+        return true;
+    }
+
 
     /** @var string Key of the extension this controller belongs to */
     protected $extensionName = 'newspaper';

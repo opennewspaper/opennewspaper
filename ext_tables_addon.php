@@ -138,12 +138,12 @@ if (TYPO3_MODE == 'BE') {
             'sectionmodule',    // Submodule key
             '',                 // Position
             array(              // An array holding the controller-action-combinations that are accessible
-                'SectionModule'        => 'list,single'
+                'SectionModule'        => 'new,edit'
             ),
             array(
                 'access' => 'user,group',
                 'icon'   => 'EXT:'.$_EXTKEY.'/Resources/Public/Images/icon_tx_newspaper_section.gif',
-                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_sectionmodule.xml',
+                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
             )
         );
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+
+    <meta type="array">
+		<type>module</type>
+		<description>Creating and editing sections</description>
+	</meta>
+
+	<data type="array">
+
+        <languageKey index="default" type="array">
+		    <label index="mlang_tabs_tab">Sections</label>
+			<label index="mlang_labels_tabdescr">Creating and editing sections</label>
+			<label index="mlang_labels_tablabel">Creating and editing sections</label>
+            <label index="module.section.new">Create new section</label>
+            <label index="module.section.edit">Edit Section</label>
+            <label index="module.section.title">Create and edit Sections</label>
+            <label index="module.section.parent_section">Parent Section</label>
+            <label index="module.section.show_in_list">Show in Section list</label>
+            <label index="module.section.articlelist_type.label">Article list type</label>
+            <label index="module.section.articlelist_type.select">Please select!</label>
+            <label index="module.section.articlelist_type.auto">Automatic</label>
+            <label index="module.section.articlelist_type.manual">Manual</label>
+            <label index="module.section.default_type">Default article type</label>
+            <label index="module.section.template_set">Template set</label>
+		</languageKey>
+
+        <languageKey index="de" type="array">
+      	    <label index="mlang_tabs_tab">Ressorts</label>
+      		<label index="mlang_labels_tabdescr">Ressorts anlegen und editieren</label>
+      		<label index="mlang_labels_tablabel">Ressorts anlegen und editieren</label>
+            <label index="module.section.new">Neues Ressort anlegen</label>
+            <label index="module.section.edit">Ressort bearbeiten</label>
+            <label index="module.section.title">Ressorts anlegen und bearbeiten</label>
+            <label index="module.section.parent_section">Elternressort</label>
+            <label index="module.section.show_in_list">In Ressortliste anzeigen</label>
+            <label index="module.section.articlelist_type.label">Artikelliste</label>
+            <label index="module.section.articlelist_type.select">Bitte wählen!</label>
+            <label index="module.section.articlelist_type.auto">Automatisch</label>
+            <label index="module.section.articlelist_type.manual">Manuell</label>
+            <label index="module.section.default_type">Default-Artikeltyp</label>
+            <label index="module.section.template_set">Template Set</label>
+      	</languageKey>
+
+	</data>
+
+</T3locallang>

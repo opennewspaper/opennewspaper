@@ -1,0 +1,17 @@
+{namespace np=Tx_Newspaper_ViewHelpers}
+
+<h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' /></h1>
+
+<f:be.buttons.csh />
+<f:be.menus.actionMenu>
+    <f:be.menus.actionMenuItem label="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' />"
+                               controller="SectionModule" action="new" />
+    <f:be.menus.actionMenuItem label="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />"
+                               controller="SectionModule" action="edit" />
+</f:be.menus.actionMenu>
+
+<f:for each="{sections}" as="section" key="number">
+    <p>
+        {number}: <np:attribute object="{section}" attribute="section_name" />
+    </p>
+</f:for>
