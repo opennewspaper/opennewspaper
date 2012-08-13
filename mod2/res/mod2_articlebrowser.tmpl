@@ -309,12 +309,12 @@ function focusOpenerAndClose(close)	{
 			<div title="{$DATA[i].teaser}">
 			{if $AB4AL}
 				{* manual article list module *}
-				<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', false);" href="#">{$ICON.addArticle}</a>&nbsp;
-				<a onclick="return insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', true);" href="#">
+				<a onclick="insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', false); return false;" href="#">{$ICON.addArticle}</a>&nbsp;
+				<a onclick="insertElementNpStyle('{$DATA[i].uid}', '{$DATA[i].kicker|escape:'javascript'|escape:'html'}', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '{$select_box_id}', true); return false;" href="#">
 			{else}
 				{* article select box rendered by Typo3 *}
-				<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">{$ICON.addArticle}</a>&nbsp;
-	      		<a onclick="return insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID});" href="#">
+				<a onclick="insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 0, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID}); return false;" href="#">{$ICON.addArticle}</a>&nbsp;
+	      		<a onclick="insertElement('tx_newspaper_article', '{$DATA[i].uid}', 'db', '{$DATA[i].title|escape:'javascript'|escape:'html'}', '', '', 'gfx/i/be_users_admin.gif', '', 1, '{$FORM_TABLE}', '{$FORM_FIELD}', {$FORM_UID}); return false;" href="#">
 			{/if}
 				<span class="kicker">{$DATA[i].kicker}</span> {$DATA[i].title} (#{$DATA[i].uid})
 			</div>
