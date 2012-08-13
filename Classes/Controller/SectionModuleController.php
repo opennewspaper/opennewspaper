@@ -79,29 +79,71 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     }
 
     private static function createSection(array $request) {
-        tx_newspaper::devlog('create section', $request);
+
+        $section = self::createSectionObject($request);
+
+        // @todo Article lists; ask oli
+
+        self::activatePageZones($section);
+
+        try {
+            $parent_page = $section->getParentSection()->getTypo3PageID();
+        } catch (tx_newspaper_IllegalUsageException $e) {
+            // @todo error handlings if multiple pages for the parent section
+            die("Nope!");
+        }
+
+        $record = tx_newspaper::selectOneRow('*', 'pages', "uid = $parent_page");
+
+        $record['pid'] = $record['uid'];
+        unset($record['uid']);
+        $record['crdate'] = $record['tstamp'] = time();
+        $record['cruser_id'] = tx_newspaper::getBeUserUid();
+        $record['title'] = $section->getSectionName();
+        $record['TSconfig'] = null;
+        $record['is_siteroot'] = 0;
+        $record['tx_newspaper_associated_section'] = $section->getUid();
+
+        // @todo check that page does not yet exist
+        $new_page_id = tx_newspaper::insertRows('pages', $record);
+
+        $record = tx_newspaper::selectOneRow(
+            '*', 'tt_content',
+            "pid = $parent_page AND CType = 'list' AND list_type = 'newspaper_pi1'"
+        );
+
+        unset($record['uid']);
+        $record['pid'] = $new_page_id;
+        $record['crdate'] = $record['tstamp'] = time();
+        $record['cruser_id'] = tx_newspaper::getBeUserUid();
+
+        $ce_uid = tx_newspaper::insertRows('tt_content', $record);
+    }
+
+    private static function createSectionObject(array $request) {
         $section = new tx_newspaper_Section();
 
         $section->setAttribute('section_name', $request['section_name']);
         $section->setAttribute('parent_section', $request['parent_section']);
-        $section->setAttribute('show_in_list', $request['show_in_section_list']? 1: 0);
+        $section->setAttribute('show_in_list', $request['show_in_section_list'] ? 1 : 0);
         $template_sets = tx_newspaper_smarty::getAvailableTemplateSets();
         $section->setAttribute('template_set', $template_sets[$request['template_set']]);
         $section->setAttribute('default_articletype', $request['article_type']);
 
         $section->store();
 
-        // @todo Article lists; ask oli
+        return $section;
+    }
 
-        $parent = $section->getParentSection();
-        foreach ($parent->getActivePages() as $page) {
+    private static function activatePageZones(tx_newspaper_Section $section) {
+        foreach ($section->getParentSection()->getActivePages() as $page) {
             $section->activatePage($page->getPageType());
             foreach ($page->getActivePageZones() as $page_zone) {
                 $section->getSubPage($page->getPageType())->activatePagezone($page_zone->getPageZoneType());
             }
         }
-
     }
+
 
     /** @var string Key of the extension this controller belongs to */
     protected $extensionName = 'newspaper';
