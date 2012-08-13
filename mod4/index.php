@@ -30,7 +30,7 @@
 
 /// \todo:
 /**
- * Inconsistency check für Extras:
+ * Inconsistency check fï¿½r Extras:
  * alle PZs auslesen
  * dazu alle Extra auslesen und indexOfExtra() aufrufen (try catch)
  */
@@ -54,7 +54,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'Administration' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Helge Preuss, Oliver Schrï¿½der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module4 extends t3lib_SCbase {
 	var $pageinfo;

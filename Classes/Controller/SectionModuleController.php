@@ -21,17 +21,19 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to create a new section
      */
     public function newAction() {
+        $this->view->assign('REQUEST', $_REQUEST);
+
         $this->view->assign('sections', tx_newspaper_Section::getAllSections());
         $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
-        tx_newspaper::devlog('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
         $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypes());
-        tx_newspaper::devlog('article_types', tx_newspaper_ArticleType::getArticleTypes());
-        $this->view->assign('REQUEST', $_REQUEST);
+
         $module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
         if ($module_request) {
             $this->view->assign('module_request', $module_request);
             if (self::isValidRequest($module_request)) {
-
+                self::createSection($module_request);
+            } else {
+                $this->view->assign('invalid_input', 1);
             }
         }
     }
@@ -71,9 +73,35 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
 
     private static function isValidRequest(array $request) {
+        if ($request['articlelist_type'] == 'none') return false;
+        if (empty($request['section_name'])) return false;
         return true;
     }
 
+    private static function createSection(array $request) {
+        tx_newspaper::devlog('create section', $request);
+        $section = new tx_newspaper_Section();
+
+        $section->setAttribute('section_name', $request['section_name']);
+        $section->setAttribute('parent_section', $request['parent_section']);
+        $section->setAttribute('show_in_list', $request['show_in_section_list']? 1: 0);
+        $template_sets = tx_newspaper_smarty::getAvailableTemplateSets();
+        $section->setAttribute('template_set', $template_sets[$request['template_set']]);
+        $section->setAttribute('default_articletype', $request['article_type']);
+
+        $section->store();
+
+        // @todo Article lists; ask oli
+
+        $parent = $section->getParentSection();
+        foreach ($parent->getActivePages() as $page) {
+            $section->activatePage($page->getPageType());
+            foreach ($page->getActivePageZones() as $page_zone) {
+                $section->getSubPage($page->getPageType())->activatePagezone($page_zone->getPageZoneType());
+            }
+        }
+
+    }
 
     /** @var string Key of the extension this controller belongs to */
     protected $extensionName = 'newspaper';

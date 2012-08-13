@@ -69,7 +69,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 *  attributes, even if they don't exist beforehand.
 	 */
 	public function setAttribute($attribute, $value) {
-		if (!$this->attributes) {
+		if (!$this->attributes && $this->getUid() > 0) {
 			$this->attributes = tx_newspaper::selectOneRow(
 				'*', $this->getTable(), 'uid = ' . $this->getUid()
 			);
@@ -80,7 +80,17 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	/// Write or overwrite Section data in DB, return UID of stored record
 	public function store() {
-		throw new tx_newspaper_NotYetImplementedException();
+
+        tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
+
+        $this->setUid(
+            tx_newspaper::insertRows(
+                $this->getTable(), $this->attributes
+            )
+        );
+
+        //	empty attributes array so it can be read in full at next access
+        $this->attributes = array();
 	}
 
 
@@ -555,25 +565,26 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 	public function setUid($uid) { $this->uid = intval($uid); }
 	public function getUid() { return $this->uid; }
 
-	/// get active pages for current Section
-	/// \return array uids of active pages objects for given section
-	public function getActivePages() {
-		$sf = tx_newspaper_Sysfolder::getInstance();
-//t3lib_div::devlog('gap', 'newspaper', 0);
+    /**
+     *  get active page uids for current Section
+     *  @return tx_newspaper_Page[] Active pages for this section
+     */
+    public function getActivePages() {
+
 		$p = new tx_newspaper_Page($this);
+
 		$row = tx_newspaper::selectRows(
 			'uid',
 			$p->getTable(),
-			'pid=' . $sf->getPid($p) . ' AND section=' . $this->getUid()
+			'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid($p) . ' AND section=' . $this->getUid()
 		);
-//t3lib_div::devlog('gap row', 'newspaper', 0, $row);
+
 		$list = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
 			$list[] = new tx_newspaper_Page(intval($row[$i]['uid']));
 		}
 		return $list;
 	}
-
 
 	/// Get array with article objects assigned to this section (limited by $limit)
 	public function getArticles($limit=10) {

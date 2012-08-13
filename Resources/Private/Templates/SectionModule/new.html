@@ -1,6 +1,6 @@
 {namespace np=Tx_Newspaper_ViewHelpers}
 
-<h1 xmlns:f="http://www.w3.org/1999/html"><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' /></h1>
+<h1 xmlns:f="http://www.w3.org/1999/html" xmlns:f="http://www.w3.org/1999/html"><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' /></h1>
 
 <f:be.buttons.csh />
 <f:be.menus.actionMenu>
@@ -28,31 +28,49 @@
 <f:form controller="SectionModule" action="new">
 
     <p>
+        <f:if condition="{invalid_input}">
+            <f:then><strong></f:then>
+        </f:if>
+        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_name' />
+        <f:if condition="{invalid_input}">
+            <f:then></strong></f:then>
+        </f:if>
+        <f:form.textfield name="section_name" value="{module_request.section_name}" />
+    </p>
+
+    <p>
         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section' />
-        <f:form.select name="parent_section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" />
+        <f:form.select name="parent_section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.parent_section}" />
     </p>
 
     <p>
         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.show_in_list' />
-        <f:form.checkbox name="show_in_section_list" value="yes" />
+        <f:form.checkbox name="show_in_section_list" value="yes" checked="{module_request.show_in_section_list}" />
     </p>
 
     <p>
+        <f:if condition="{invalid_input}">
+            <f:then><strong></f:then>
+        </f:if>
         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.label' />
+        <f:if condition="{invalid_input}">
+            <f:then></strong></f:then>
+        </f:if>
         <f:form.select name="articlelist_type"
                        options="{none: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.select\' />',
                                  auto: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.auto\' />',
-                                 manual: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.manual\' />'}" />
+                                 manual: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.manual\' />'}"
+                       value="{module_request.articlelist_type}" />
     </p>
 
     <p>
         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_type' />
-        <f:form.select name="article_type" options="{article_types}" optionValueField="uid" optionLabelField="typeName" />
+        <f:form.select name="article_type" options="{article_types}" optionValueField="uid" optionLabelField="typeName" value="{module_request.article_type}" />
     </p>
 
     <p>
         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.template_set' />
-        <f:form.select name="template_set" options="{template_sets}" />
+        <f:form.select name="template_set" options="{template_sets}" value="{module_request.template_set}" />
     </p>
 
     <p>
