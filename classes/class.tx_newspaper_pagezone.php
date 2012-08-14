@@ -1386,7 +1386,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
  	protected function readAttributes($table, $uid) {
 		/// Read Attributes from persistent storage
  		$this->attributes = tx_newspaper::selectOneRow('*', $table, 'uid = ' . $uid);
- 		$this->attributes['query'] = tx_newspaper::$query;
+ 		$this->attributes['query'] = tx_newspaper::getQuery();
  	}
 
 

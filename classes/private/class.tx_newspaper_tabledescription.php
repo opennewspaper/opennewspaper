@@ -9,7 +9,7 @@ class tx_newspaper_TableDescription {
 
     /** Creates an array of table descriptions from an SQL table definition
      *  that may contain any number of JOINs
-     *  @return array A table description with name and alias for every table.
+     *  @return tx_newspaper_TableDescription[] A table description with name and alias for every table.
      */
     static public function createDescriptions($string) {
         $descriptions = array();

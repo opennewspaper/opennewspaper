@@ -701,7 +701,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
             )
         );
         if (!$this->getUid())
-            t3lib_div::debug(tx_newspaper::$query);
+            t3lib_div::debug(tx_newspaper::getQuery());
         //	Write data for abstract Extra
         $this->setExtraUid(
             self::createExtraRecord($this->getUid(), $this->getTable())

@@ -93,31 +93,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             die("Nope!");
         }
 
-        $record = tx_newspaper::selectOneRow('*', 'pages', "uid = $parent_page");
+        $new_page_id = self::createTypo3Page($parent_page, $section);
 
-        $record['pid'] = $record['uid'];
-        unset($record['uid']);
-        $record['crdate'] = $record['tstamp'] = time();
-        $record['cruser_id'] = tx_newspaper::getBeUserUid();
-        $record['title'] = $section->getSectionName();
-        $record['TSconfig'] = null;
-        $record['is_siteroot'] = 0;
-        $record['tx_newspaper_associated_section'] = $section->getUid();
-
-        // @todo check that page does not yet exist
-        $new_page_id = tx_newspaper::insertRows('pages', $record);
-
-        $record = tx_newspaper::selectOneRow(
-            '*', 'tt_content',
-            "pid = $parent_page AND CType = 'list' AND list_type = 'newspaper_pi1'"
-        );
-
-        unset($record['uid']);
-        $record['pid'] = $new_page_id;
-        $record['crdate'] = $record['tstamp'] = time();
-        $record['cruser_id'] = tx_newspaper::getBeUserUid();
-
-        $ce_uid = tx_newspaper::insertRows('tt_content', $record);
+        $ce_id = self::createContentElement($parent_page, $new_page_id);
     }
 
     private static function createSectionObject(array $request) {
@@ -142,6 +120,44 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
                 $section->getSubPage($page->getPageType())->activatePagezone($page_zone->getPageZoneType());
             }
         }
+    }
+
+    private static function createTypo3Page($parent_page, tx_newspaper_Section $section)  {
+
+        $record = tx_newspaper::selectZeroOrOneRows(
+            'uid', 'pages',
+            "pid = $parent_page AND title='" . $section->getSectionName() . "' AND NOT tx_newspaper_associated_section"
+        );
+        if (!empty($record)) {
+            return $record['uid'];
+        }
+
+        $record = tx_newspaper::selectOneRow('*', 'pages', "uid = $parent_page");
+
+        $record['pid'] = $record['uid'];
+        unset($record['uid']);
+        $record['crdate'] = $record['tstamp'] = time();
+        $record['cruser_id'] = tx_newspaper::getBeUserUid();
+        $record['title'] = $section->getSectionName();
+        $record['TSconfig'] = null;
+        $record['is_siteroot'] = 0;
+        $record['tx_newspaper_associated_section'] = $section->getUid();
+
+        return tx_newspaper::insertRows('pages', $record);
+    }
+
+    private static function createContentElement($parent_page, $new_page_id) {
+        $record = tx_newspaper::selectOneRow(
+            '*', 'tt_content',
+            "pid = $parent_page AND CType = 'list' AND list_type = 'newspaper_pi1'"
+        );
+
+        unset($record['uid']);
+        $record['pid'] = $new_page_id;
+        $record['crdate'] = $record['tstamp'] = time();
+        $record['cruser_id'] = tx_newspaper::getBeUserUid();
+
+        return tx_newspaper::insertRows('tt_content', $record);
     }
 
 

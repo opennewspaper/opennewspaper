@@ -239,8 +239,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		} else return null;
 	}
 
-	/// Get all Sections which have \c $this as ancestor
-	/** @param $recursive If true, return all inheriting sections down to the
+	/**
+     *  Get all Sections which have \c $this as ancestor
+	 *  @param bool $recursive If true, return all inheriting sections down to the
 	 * 		leaves. Otherwise, return the direct children of this Section.
 	 *  @return tx_newspaper_Section[] Flat array of Section objects under \p $this.
 	 * 		Parental relations are \em not preserved.
