@@ -127,6 +127,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 */
 	public function replaceArticleList(tx_newspaper_articlelist $new_al) {
 
+        if (get_class($new_al) == get_class($this->articlelist)) {
+            return $this->getArticleList()->getAbstractUid();
+        }
+
 		$articles = array();
 
 		try {
@@ -206,7 +210,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'tx_newspaper_articlelist',
 			'uid=' . $new_al->getAbstractUid(),
 			array(
-				'notes' => $title
+				'notes' => $title,
 			)
 		);
 

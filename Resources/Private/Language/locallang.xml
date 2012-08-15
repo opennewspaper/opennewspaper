@@ -22,8 +22,21 @@
             <label index="module.section.articlelist_type.select">Please select!</label>
             <label index="module.section.articlelist_type.auto">Automatic</label>
             <label index="module.section.articlelist_type.manual">Manual</label>
-            <label index="module.section.default_type">Default article type</label>
+            <label index="module.section.default_articletype">Default article type</label>
             <label index="module.section.template_set">Template set</label>
+            <label index="module.section.error.user_error">You made a mistake</label>
+            <label index="module.section.error.system_error">Something is wrong with the system</label>
+            <label index="module.section.error.multiple_section_pages">
+                Section ###SECTION### could not be created because parent section ###PARENT## has more than one TYPO3
+                pages associated with it. (Honestly, I'm wondering how that could happen.)
+            </label>
+            <label index="module.section.error.select_articlelist_type">
+                Please select which kind of article list you want.
+            </label>
+            <label index="module.section.error.enter_section_name">
+                Please enter a name for the new section.
+            </label>
+            <label index="module.section.success">Section ###SECTION### successfully created.</label>
 		</languageKey>
 
         <languageKey index="de" type="array">
@@ -40,8 +53,21 @@
             <label index="module.section.articlelist_type.select">Bitte wählen!</label>
             <label index="module.section.articlelist_type.auto">Automatisch</label>
             <label index="module.section.articlelist_type.manual">Manuell</label>
-            <label index="module.section.default_type">Default-Artikeltyp</label>
+            <label index="module.section.default_articletype">Default-Artikeltyp</label>
             <label index="module.section.template_set">Template Set</label>
+            <label index="module.section.error.user_error">Eingabefehler</label>
+            <label index="module.section.error.system_error">Das System ist korrupt</label>
+            <label index="module.section.error.multiple_section_pages">
+                Ressort ###SECTION### konnte nicht erzeugt werden, da das Elternressort ###PARENT## mit mehr als einer
+                TYPO3-Seite verknüpft ist. (Ehrlich, ich habe keine Ahnung, wie es dazu kommen konnte.)
+            </label>
+            <label index="module.section.error.select_articlelist_type">
+                Bitte die Art der Artikelliste auswählen.
+            </label>
+            <label index="module.section.error.enter_section_name">
+                Bitte einen Namen für das neue Ressort eingeben.
+            </label>
+            <label index="module.section.success">Ressort ###SECTION### erfolgreich angelegt.</label>
       	</languageKey>
 
 	</data>
