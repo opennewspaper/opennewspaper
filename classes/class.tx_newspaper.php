@@ -67,22 +67,6 @@ class tx_newspaper  {
         return tx_newspaper_DB::getInstance()->countRows($table, $where, $groupBy);
     }
 
-    public static function startLoggingQueries() {
-        tx_newspaper_DB::getInstance()->startLoggingQueries();
-    }
-
-    public static function getLoggedQueries() {
-        return tx_newspaper_DB::getInstance()->getLoggedQueries();
-    }
-
-    public static function setNumLoggedQueries($num = self::default_max_logged_queries) {
-        tx_newspaper_DB::getInstance()->setNumLoggedQueries($num);
-    }
-
-    public static function executeQuery() {
-        return tx_newspaper_DB::getInstance()->executeQuery();
-    }
-
     /// Execute a \c SELECT query, check the result, return zero or one record(s)
     /** enableFields() are taken into account.
      *

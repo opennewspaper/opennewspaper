@@ -1645,8 +1645,6 @@ JSCODE;
 	/// get a list of articles by a section id
 	function getArticleListBySectionId($sectionId) {
 
-        tx_newspaper::startLoggingQueries();
-
 		$result = array();
 		$sectionId = $this->extractElementId($sectionId);
 		$section = new tx_newspaper_section($sectionId);
