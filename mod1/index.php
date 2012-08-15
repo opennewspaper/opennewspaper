@@ -173,7 +173,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 
 //new stuff for section, this is in use
 	function processActivatePageType() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/private/class.tx_newspaper_be.php');
+		require_once(t3lib_extMgm::extPath('newspaper'). 'Classes/private/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papt param', 'newspaper', 0, array('param' => $param));
 
@@ -192,7 +192,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	}
 
 	function processDeletePage() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/private/class.tx_newspaper_be.php');
+		require_once(t3lib_extMgm::extPath('newspaper'). 'Classes/private/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papt param', 'newspaper', 0, 'param' => $param);
 
@@ -208,7 +208,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 	}
 
 	function processActivatePageZoneType() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/private/class.tx_newspaper_be.php');
+		require_once(t3lib_extMgm::extPath('newspaper'). 'Classes/private/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('papzt param', 'newspaper', 0, 'param' => $param);
 
@@ -226,7 +226,7 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 		exit();
 	}
 	function processDeletePageZone() {
-		require_once(t3lib_extMgm::extPath('newspaper'). 'classes/private/class.tx_newspaper_be.php');
+		require_once(t3lib_extMgm::extPath('newspaper'). 'Classes/private/class.tx_newspaper_be.php');
 		$param = $this->splitParams();
 //t3lib_div::devlog('pdpz param', 'newspaper', 0, $param);
 

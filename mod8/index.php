@@ -28,7 +28,7 @@ unset($MCONF);
 require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
-require_once('../classes/class.tx_newspaper_tag.php');
+require_once('../Classes/class.tx_newspaper_tag.php');
 
 $LANG->includeLLFile('EXT:newspaper/mod8/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');

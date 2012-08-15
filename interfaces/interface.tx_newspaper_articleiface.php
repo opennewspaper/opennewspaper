@@ -9,7 +9,7 @@
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_articlebehavior.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_articlebehavior.php');
 
 /// This is the interface that every Article class must implement
 /** Additional functions that an Article needs to implement in addition to an

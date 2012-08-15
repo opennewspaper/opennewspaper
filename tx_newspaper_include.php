@@ -173,8 +173,8 @@
  *  \todo Write me!
  */
  
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_exception.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_exception.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
@@ -182,22 +182,22 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_a
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_source.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_renderable.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_writeslog.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_section.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_page.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_pagezone.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_extra_factory.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_articlelist_factory.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_articletype.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_util_mod.php'); // \todo: why is this class used in frontend? (see #1019)
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_section.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_page.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_extra_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_articlelist_factory.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_article.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_articletype.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_sysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_util_mod.php'); // \todo: why is this class used in frontend? (see #1019)
 
 if (TYPO3_MODE == 'BE')	{
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_be.php');
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_workflow.php');
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_typo3hook.php');
-	require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dependencytree.php');
-    require_once(PATH_typo3conf . 'ext/newspaper/classes/private/class.tx_newspaper_dependencytreeproxy.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_be.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_workflow.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_typo3hook.php');
+	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_dependencytree.php');
+    require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_dependencytreeproxy.php');
 
     tx_newspaper_ExecutionTimer::setLogger(new tx_newspaper_OrderedFileLogger());
 

@@ -7,9 +7,9 @@
 // require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
 // base class for extras
-require_once(PATH_typo3conf. 'ext/newspaper/classes/class.tx_newspaper_extra.php');
+require_once(PATH_typo3conf. 'ext/newspaper/Classes/class.tx_newspaper_extra.php');
 
 
 // set sorting for dropdown article type in article

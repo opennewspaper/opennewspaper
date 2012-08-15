@@ -3,7 +3,7 @@
 // modifications after generating with the kickstarter (at bottom of file ext_tables.php)
 // require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
 
 // overwrite data set in ext_tables.php
 

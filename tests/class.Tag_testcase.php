@@ -6,7 +6,7 @@
  * Time: 14:11:39
  * To change this template use File | Settings | File Templates.
  */
-require_once(PATH_typo3conf.'ext/newspaper/classes/class.tx_newspaper_exception.php');
+require_once(PATH_typo3conf.'ext/newspaper/Classes/class.tx_newspaper_exception.php');
 
 class test_Tag_testcase extends tx_newspaper_database_testcase {
 

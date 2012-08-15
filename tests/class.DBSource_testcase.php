@@ -5,8 +5,8 @@
  * Author: helge
  */
 
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_dbsource.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_article.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_dbsource.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_article.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class taz_RedsysSource

@@ -7,7 +7,7 @@
 
 
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
-require_once(PATH_typo3conf . 'ext/newspaper/classes/class.tx_newspaper_sysfolder.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_sysfolder.php');
 require_once(PATH_typo3conf . 'ext/newspaper/tests/class.tx_newspaper_database_testcase.php');
 
 /// testsuite for class tx_newspaper_Sysfolder
