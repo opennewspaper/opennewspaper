@@ -75,7 +75,10 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     }
 
 
-    private function isValidRequest(array $request) {
+    private function isValidRequest($request) {
+
+        if (!is_array($request)) return false;
+
         $ok = true;
         if ($request['articlelist_type'] == 'none') {
             $this->addError(
