@@ -1058,6 +1058,24 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     }
 
+    /**
+     * Stuff to do when an article gets deleted:
+     * 1. Call DepTree, if the article gets deleted
+     * @static
+     * @todo: documentation, copy from T3 doc ...
+     * @param $command
+     * @param $table
+     * @param $id
+     * @param $value
+     * @param $pObj
+     */
+    public static function processCmdmap_preProcess($command, $table, $id, $value, $pObj) {
+        $id = intval($id);
+        if ($command == 'delete' && $table == 'tx_newspaper_article' && $id) {
+            self::updateDependencyTree(new tx_newspaper_Article($id));
+        }
+    }
+
     public static function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
         if (strtolower($table) == 'tx_newspaper_article') {
             // hide default articles in list module, only concrete article are visible in list module
