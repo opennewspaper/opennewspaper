@@ -70,19 +70,19 @@
 			} online{/if}">
             {* Icon showing if article is published (clickable for duty editors and admins) *}
 			{if $DATA[i].hidden == 0}
-				{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                {if $CAN_PUBLISH_ARTICLES}
 					<a title="{$LL.label_hide}" class="statButton" href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 1);" }>
 				{/if}
 				<img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_online.png">
-				{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                {if $CAN_PUBLISH_ARTICLES}
 					</a>
 				{/if}
 			{else}
-				{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                {if $CAN_PUBLISH_ARTICLES}
 					<a title="{$LL.unhide}" class="statButton" href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 0);">
 				{/if}
 				<img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_offline.png">
-				{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                {if $CAN_PUBLISH_ARTICLES}
 					</a>
 				{/if}
 			{/if}
@@ -216,23 +216,27 @@
 		<div class="hide">
 			<div>
 				{if $DATA[i].hidden == 0}
-					{if $IS_DUTY_EDITOR || $IS_ADMIN}
+					{if $CAN_PUBLISH_ARTICLES}
 						<a href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 1);">
 					{/if}
 					<img title="{$LL.label_hide}" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_online.png" />
-					{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                    {if $CAN_PUBLISH_ARTICLES}
 						</a>
 					{/if}
 				{else}
-					{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                    {if $CAN_PUBLISH_ARTICLES}
 						<a href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 0);">
 					{/if}
 					<img title="{$LL.label_unhide}" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/stat_offline.png" />
-					{if $IS_DUTY_EDITOR || $IS_ADMIN}
+                    {if $CAN_PUBLISH_ARTICLES}
 						</a>
 					{/if}
 				{/if}
-				{if $IS_DUTY_EDITOR}<a title="{$LL.label_article_placement}" href="#" onclick="openPlacementMask({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_placement.png" width="30" height="30"></a>{else}<img src="../res/be/img/gray.png" width="30" height="30">{/if}
+				{if $CAN_PLACE_ARTICLES}
+                    <a title="{$LL.label_article_placement}" href="#" onclick="openPlacementMask({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_placement.png" width="30" height="30"></a>
+                {else}
+                    <img src="../res/be/img/gray.png" width="30" height="30">
+                {/if}
 				<a title="{$LL.label_preview_article}" href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_preview.png" width="30" height="30"></a>
 				<a title="{$LL.label_edit_article} (#{$DATA[i].uid})" href="{$T3PATH}alt_doc.php?returnUrl={$ABSOLUTE_PATH}/typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a>
 				<a title="{$LL.label_delete_article}" href="#" onclick="deleteArticle({$DATA[i].uid}, '{$LL.message_delete_article}'); return false;"><img src="../res/be/img/edit_delete.png" width="30" height="30"></a>

@@ -345,6 +345,14 @@ function changeWorkflowStatus(role, hidden_status) {
 		return ($role == 1);
 	}
 
+    public static function canPlaceArticles() {
+        $placement_level = intval($GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementAllowedLevel'));
+        if ($placement_level) {
+            die('hooray!');
+        }
+        return self::isDutyEditor();
+    }
+
 	/// \return true if be_user has newspaper role "editorial staff"
 	public static function isEditor() {
 		$role = self::getRole();

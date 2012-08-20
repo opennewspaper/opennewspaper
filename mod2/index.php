@@ -188,15 +188,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('LL', $this->LL); // localized labels
 
-		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
-		$smarty->assign('IS_DUTY_EDITOR', tx_newspaper_workflow::isDutyEditor());
+        $smarty->assign('CAN_PUBLISH_ARTICLES', tx_newspaper_workflow::isDutyEditor() || $GLOBALS['BE_USER']->user['admin']);
+        $smarty->assign('CAN_PLACE_ARTICLES', tx_newspaper_workflow::canPlaceArticles());
 
 		$smarty->assign('RESULT_COUNT', intval($count));
 
 		$smarty->assign('ICON', $this->getIcons());
 
 		$smarty->assign('AB4AL', (t3lib_div::_GP('ab4al'))? t3lib_div::_GP('ab4al') : ''); // article browser for article lists
-		$smarty->assign('IS_ARTICLE_BROWSER', (t3lib_div::_GP('form_table') || t3lib_div::_GP('ab4al'))? 1 : 0); // set flag if mod2 should be rendered as production list or as article browser
 		$smarty->assign('select_box_id', (t3lib_div::_GP('select_box_id'))? t3lib_div::_GP('select_box_id') : ''); // selectbox id for article browser
 
 		// some values for article browser functionality for Typo3 fields, tx_newspaper_be::checkReplaceEbWithArticleBrowser()
