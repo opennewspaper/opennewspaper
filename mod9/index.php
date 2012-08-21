@@ -33,7 +33,7 @@ require_once('conf.php');
 require_once($BACK_PATH . 'init.php');
 require_once($BACK_PATH . 'template.php');
 
-require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/clas.tx_newspaper_placementbe.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_placementbe.php');
 
 /// Class to generate a BE module with 100% width
 class fullWidthDoc_mod9 extends template {

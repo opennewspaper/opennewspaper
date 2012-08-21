@@ -33,7 +33,7 @@ $LANG->includeLLFile('EXT:newspaper/mod7/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);
 
-require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/clas.tx_newspaper_placementbe.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_placementbe.php');
 
 /// Class to generate a BE module with 100% width
 class fullWidthDoc_mod7 extends template {
