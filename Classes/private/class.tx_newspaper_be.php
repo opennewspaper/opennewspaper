@@ -1465,72 +1465,76 @@ JSCODE;
 	public function renderPlacement($input, $singleMode=false) {
 
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
-		if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
-			// calculate which / how many placers to show
-			// \todo make order tsconfigurable
-			$tree = array_reverse($this->calculatePlacementTreeFromSelection($input['sections_selected']));
-            $tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
-		} elseif (isset($input['articlelistid']) && $input['articlelistid']) {
-			// read article list
-			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
 
-			// fill the articlelist with articles
-			$article_list = $this->getArticleListMaxArticles($al);
-			$articles = array();
-			foreach ($article_list as $article) {
-				if ($al->getTable() == 'tx_newspaper_articlelist_manual') {
-					$articles[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
-				}
-				if ($al->getTable() == 'tx_newspaper_articlelist_semiautomatic') {
-					$articleUids = $this->getArticleIdsFromArticleList($al);
-					$offsetList = $al->getOffsets($articleUids);
-
-					$offset = $offsetList[$article->getAttribute('uid')];
-					if ($offset > 0) {
-						$offset = '+' . $offset;
-					}
-					$articles[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
-				}
-			}
-
-		} else {
-			$al = null; // no article list
-		}
-
-        $smarty_template = self::getSmartyTemplateForPlacement($input);
-
-        $article = $this->getArticleForPlacement($input);
-
-		// get locallang labels
-		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-		$localLang = $localLang[$GLOBALS['LANG']->lang];
-
-		// render
+        // render
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-		$smarty->assign('tree', $tree);
-		$smarty->assign('article', $article);
-#		$smarty->assign('articlelist', $al);
-		if ($al) {
+
+        $smarty->assign('tree', $this->getSectionTree($input));
+		$smarty->assign('article', $this->getArticleForPlacement($input));
+        $al = self::getArticleListForPlacement($input);
+		if (!is_null($al)) {
 			$smarty->assign('articlelist_type', strtolower($al->getTable()));
-			$smarty->assign('articles', $articles);
+			$smarty->assign('articles', $this->getArticlesFromListForPlacement($al));
 		}
+
 		$smarty->assign('singlemode', $singleMode);
-		$smarty->assign('lang', $localLang);
+		$smarty->assign('lang', self::getLocallangLabels());
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-		$smarty->assign('ICON', $this->getArticlelistIcons());
+        $smarty->assign('allowed_placement_level', 2);
+
+        $smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
+  		$smarty->assign('AL_BACKEND', $this->getArticlelistFullrecordBackend($input, $al));
+
+        $smarty->assign('ICON', $this->getArticlelistIcons());
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-
-		$smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
-		$smarty->assign('AL_BACKEND', $this->getArticlelistFullrecordBackend($input, $al));
-
 		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
-
 		$smarty->assign('AL_HEIGHT', $this->getArticleListHeight());
 
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
-		return $smarty->fetch($smarty_template);
+		return $smarty->fetch(self::getSmartyTemplateForPlacement($input));
 	}
+
+    private static function getArticleListForPlacement(array $input) {
+        if (isset($input['articlelistid']) && $input['articlelistid']) {
+            return tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
+        }
+        return null;
+    }
+
+    private function getSectionTree(array $input) {
+        if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
+            // calculate which / how many placers to show
+            // \todo make order tsconfigurable
+            $tree = array_reverse($this->calculatePlacementTreeFromSelection($input['sections_selected']));
+            return $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
+        }
+        return array();
+    }
+
+    public function getArticlesFromListForPlacement(tx_newspaper_ArticleList $al) {
+        $articles = array();
+        foreach ($this->getArticleListMaxArticles($al) as $article) {
+            if ($al->getTable() == 'tx_newspaper_articlelist_manual') {
+                $articles[$article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title');
+            } else if ($al->getTable() == 'tx_newspaper_articlelist_semiautomatic') {
+                $articleUids = $this->getArticleIdsFromArticleList($al);
+                $offsetList = $al->getOffsets($articleUids);
+
+                $offset = $offsetList[$article->getAttribute('uid')];
+                if ($offset > 0) {
+                    $offset = '+' . $offset;
+                }
+                $articles[$offsetList[$article->getAttribute('uid')] . '_' . $article->getAttribute('uid')] = $article->getAttribute('kicker') . ': ' . $article->getAttribute('title') . ' (' . $offset . ')';
+            }
+        }
+        return $articles;
+    }
+
+    private static function getLocallangLabels() {
+        $localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
+        return $localLang[$GLOBALS['LANG']->lang];
+    }
 
     private static function getSmartyTemplateForPlacement(array $input) {
         if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
