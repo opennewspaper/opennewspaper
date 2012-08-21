@@ -120,8 +120,8 @@
 						            {else}
                                         <tr>
                                             <td>
-                                                {if !$isde}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
-                                                {if $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">NEE!</i>{/if}
+                                                {if !$isde && $smarty.foreach.levelloop.index < $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
+                                                {if $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
                                                 {if !isset($section.articlelist)}<i class="noaccess">{$lang.message_no_articlelist}</i><br />{/if}
                                                 {if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
                                                     <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />

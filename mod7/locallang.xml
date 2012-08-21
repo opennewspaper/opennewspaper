@@ -49,6 +49,7 @@
 			<label index="label_edit_articlelist">Edit article list</label>
 			<label index="label_save">Save</label>
 			<label index="message_no_dutyeditor">Access for duty editors only.</label>
+            <label index="message_no_access_to_level">You don't have access to this section.</label>
 			<label index="message_no_articlelist">No article list found in section</label>
 			<label index="message_unknown_articlelisttype">Unknown article list type</label>
 			<label index="title_articlelist_list">Article lists</label>
@@ -105,6 +106,7 @@
 			<label index="label_edit_articlelist">Artikelliste bearbeiten</label>
 			<label index="label_save">Speichern</label>
 			<label index="message_no_dutyeditor">Keine CvD-Rechte.</label>
+            <label index="message_no_access_to_level">Keine Platzierungsberechtigung für dieses Ressort.</label>
 			<label index="message_no_articlelist">Keine Artikelliste im Ressort.</label>
 			<label index="message_unknown_articlelisttype">Unbekannter Artikellistentyp.</label>
 			<label index="title_articlelist_list">Artikellisten</label>
