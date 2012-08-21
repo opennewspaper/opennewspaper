@@ -1465,18 +1465,11 @@ JSCODE;
 	public function renderPlacement($input, $singleMode=false) {
 
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
-		if (
-			(isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) || // section article list
-			(isset($input['ajaxcontroller']) && $input['ajaxcontroller'] == 'showplacementandsavesections') // placing ONE article
-		) {
-			// section article list
-			$selection = $input['sections_selected'];
+		if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
 			// calculate which / how many placers to show
-
 			// \todo make order tsconfigurable
-			$tree = array_reverse($this->calculatePlacementTreeFromSelection($selection));
-
-			$smarty_template = 'mod7_placement_section.tpl';
+			$tree = array_reverse($this->calculatePlacementTreeFromSelection($input['sections_selected']));
+            $tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
 		} elseif (isset($input['articlelistid']) && $input['articlelistid']) {
 			// read article list
 			$al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
@@ -1500,14 +1493,13 @@ JSCODE;
 				}
 			}
 
-			$smarty_template = 'mod7_placement_non_section.tpl';
 		} else {
 			$al = null; // no article list
 		}
 
-        $article = $this->getArticleForPlacement($input);
+        $smarty_template = self::getSmartyTemplateForPlacement($input);
 
-		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
+        $article = $this->getArticleForPlacement($input);
 
 		// get locallang labels
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
@@ -1518,7 +1510,7 @@ JSCODE;
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 		$smarty->assign('tree', $tree);
 		$smarty->assign('article', $article);
-		$smarty->assign('articlelist', $al);
+#		$smarty->assign('articlelist', $al);
 		if ($al) {
 			$smarty->assign('articlelist_type', strtolower($al->getTable()));
 			$smarty->assign('articles', $articles);
@@ -1539,6 +1531,26 @@ JSCODE;
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input, 'article' => $article, 'tree' => $tree, 'smarty_template' => $smarty_template, 'smarty' => $smarty));
 		return $smarty->fetch($smarty_template);
 	}
+
+    private static function getSmartyTemplateForPlacement(array $input) {
+        if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
+            return 'mod7_placement_section.tpl';
+        }
+        if (isset($input['articlelistid']) && $input['articlelistid']) {
+            return 'mod7_placement_non_section.tpl';
+        }
+        throw new tx_newspaper_IllegalUsageException(
+            'tx_newspaper_BE::renderPlacement() called neither for section article list, single article nor free articlelist: ' . print_r($input, 1)
+        );
+    }
+
+    private static function sectionArticleListRequested(array $input) {
+        return (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0);
+    }
+
+    private static function singleArticlePlacementRequested(array $input) {
+        return (isset($input['ajaxcontroller']) && $input['ajaxcontroller'] == 'showplacementandsavesections');
+    }
 
     /// grab the article, if an article id was given
     private function getArticleForPlacement(array $input) {
