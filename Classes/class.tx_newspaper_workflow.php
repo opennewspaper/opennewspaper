@@ -338,15 +338,15 @@ function changeWorkflowStatus(role, hidden_status) {
 
 	/// \return true if be_user has newspaper role "duty editor"
 	public static function isDutyEditor() {
-		$role = self::getRole();
-		if ($role === false) {
-			return false;
-		}
-		return ($role == 1);
+		return (self::getRole() == 1);
 	}
 
+    public static function placementAllowedLevel() {
+        return intval($GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementAllowedLevel'));
+    }
+
     public static function canPlaceArticles() {
-        return self::isDutyEditor() || intval($GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementAllowedLevel')) > 0;
+        return self::isDutyEditor() || self::placementAllowedLevel() > 0;
     }
 
 	/// \return true if be_user has newspaper role "editorial staff"

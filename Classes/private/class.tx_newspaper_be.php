@@ -1440,13 +1440,13 @@ JSCODE;
 //t3lib_div::devlog('be::renderSinglePlacement()', 'newspaper', 0, array('input' => $input));
 		if (isset($input['sectionid'])) {
 			// render section article list
-			$input = array(
-				'sections_selected' => array($input['sectionid']),
-				'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0,
-				'fullrecord' => (isset($input['fullrecord']))? $input['fullrecord'] : 0
-			);
-
-			return $this->renderPlacement($input, true);
+			return $this->renderPlacement(
+                array(
+				    'sections_selected' => array($input['sectionid']),
+					'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0,
+					'fullrecord' => (isset($input['fullrecord']))? $input['fullrecord'] : 0
+				), true
+            );
 		}
 		if (isset($input['articlelistid'])) {
 			// render NON-section article list
@@ -1457,31 +1457,29 @@ JSCODE;
 	/// render the placement editors according to sections selected for article
 	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
 	 *  if not, a button to call the article browser is displayed.
-	 * @todo: document $input array types ...
-	 *  in comparison the the displayed ones in the form
-	 *  \param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
-	 *  \return ?
+	 *  @todo: document $input array types ...
+	 *  @param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
+	 *  @return ?
 	 */
 	public function renderPlacement($input, $singleMode=false) {
 
 //t3lib_div::devlog('be::renderPlacement()', 'newspaper', 0, array('input' => $input));
 
-        // render
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 
         $smarty->assign('tree', $this->getSectionTree($input));
-		$smarty->assign('article', $this->getArticleForPlacement($input));
         $al = self::getArticleListForPlacement($input);
 		if (!is_null($al)) {
 			$smarty->assign('articlelist_type', strtolower($al->getTable()));
 			$smarty->assign('articles', $this->getArticlesFromListForPlacement($al));
 		}
+        $smarty->assign('article', $this->getArticleForPlacement($input));
 
 		$smarty->assign('singlemode', $singleMode);
 		$smarty->assign('lang', self::getLocallangLabels());
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-        $smarty->assign('allowed_placement_level', 2);
+        $smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
 
         $smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
   		$smarty->assign('AL_BACKEND', $this->getArticlelistFullrecordBackend($input, $al));
