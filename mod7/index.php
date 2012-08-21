@@ -92,7 +92,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
-								die($this->al_be->renderPlacement($input, false));
+								die(tx_newspaper_PlacementBE::render($input, false));
 							break;
 							case 'updatearticlelist':
 								die($this->updateArticlelist($input));
@@ -159,16 +159,16 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						switch ($input['controller']) {
 							case 'preview' :
 								$output = $this->renderPreview($input['articleid']);
-							break;
+    							break;
 							case 'placement' :
-								$output = $this->al_be->renderPlacement($input, false);
-							break;
+								$output = tx_newspaper_PlacementBE::render($input, false);
+	    						break;
 							case 'singleplacement' :
-								$output = $this->al_be->renderSinglePlacement($input);
-							break;
+								$output = tx_newspaper_PlacementBE::renderSingle($input);
+		    					break;
 							default :
 								$output = $this->renderModule($input);
-							break;
+			    				break;
 						}
 						$output = $this->be_wrapInBaseClass($output);
 
@@ -196,7 +196,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
 				// render a frontend preview of an article
 				function renderPreview ($articleId) {
-					$article = new tx_newspaper_article($articleId);
+					$article = new tx_newspaper_Article($articleId);
 					return $article->render();
 				}
 
@@ -258,7 +258,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				/// render backend for placing an article into all article lists (depending on the chosen setions)
 				function renderPlacementModule($input) {
 					// get data
-					$article = $this->al_be->getArticleByArticleId($input['articleid']);
+					$article = new tx_newspaper_Article($input['articleid']);
 					$sections = $this->renderAllAvailableSections();
 					$sections_active = $this->renderSectionsForArticle($article);
 					$backendUser = $this->getBackendUserById($article->getAttribute('modification_user'));
@@ -328,7 +328,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
                     tx_newspaper_ExecutionTimer::start();
 
-					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
+					$article = new tx_newspaper_Article($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_NONE);
 
                     tx_newspaper_ExecutionTimer::logExecutionTime('placeArticle(): first block');
@@ -365,7 +365,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToDutyEditor($input, array $statusHidePublish=array()) {
-					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
+					$article = new tx_newspaper_Article($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_DUTY_EDITOR);
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_DUTY_EDITOR; // \todo: well, this is a hack ...
 					$log = array(
@@ -389,7 +389,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function sendArticleToEditor($input, array $statusHidePublish=array()) {
-					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
+					$article = new tx_newspaper_Article($input['placearticleuid']);
 					$article->setAttribute('workflow_status', NP_ACTIVE_ROLE_EDITORIAL_STAFF);
 					$_REQUEST['workflow_status'] = NP_ACTIVE_ROLE_EDITORIAL_STAFF; // \todo: well, this is a hack ...
 					$log = array(
@@ -413,7 +413,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOnline($input) {
-					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
+					$article = new tx_newspaper_Article($input['placearticleuid']);
 					$log['hidden'] = false;
 					$this->publishArticle($article);
 					$this->writeLog($input, $log);
@@ -425,7 +425,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  \return \c true
 				 */
 				function putArticleOffline($input) {
-					$article = $this->al_be->getArticleByArticleId($input['placearticleuid']);
+					$article = new tx_newspaper_Article($input['placearticleuid']);
 					$log['hidden'] = true;
 					$this->hideArticle($article);
 					$this->writeLog($input, $log);

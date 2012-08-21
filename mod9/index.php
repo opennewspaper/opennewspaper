@@ -158,12 +158,9 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 				 * @return	void
 				 */
 				function moduleContent(array $input) {
-					global $LANG;
-		
-					$al_be = new tx_newspaper_BE();
 					$input['sectionid'] = $this->id;
-					$content = $al_be->renderSinglePlacement($input); // $this->id = section uid clicked oon in section tree (in navigation frame)
-					
+                    $content = tx_newspaper_PlacementBE::renderSingle($input);
+
 					$this->content .= $this->doc->section('', $content, 0, 1);
 				}	
 	
