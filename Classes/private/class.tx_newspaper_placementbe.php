@@ -12,11 +12,17 @@ class tx_newspaper_PlacementBE {
     public static function renderSingle($input) {
 
    		if (isset($input['sectionid'])) {       // render section article list
+            if (intval($input['fullrecord'])) {
+                $smarty = new tx_newspaper_Smarty();
+                $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
+                $smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($input, self::getArticleListForPlacement($input)));
+                return $smarty->fetch('mod7_listview.tmpl');
+            }
    			return self::render(
                 array(
    				    'sections_selected' => array($input['sectionid']),
-   					'placearticleuid' => (isset($input['articleid']))? $input['articleid'] : 0,
-   					'fullrecord' => (isset($input['fullrecord']))? $input['fullrecord'] : 0
+   					'placearticleuid' => intval($input['articleid']),
+   					'fullrecord' => intval($input['fullrecord'])
    				), true
             );
    		}
@@ -55,7 +61,7 @@ class tx_newspaper_PlacementBE {
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
         $smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
 
-        $smarty->assign('FULLRECORD', (isset($input['fullrecord']))? intval($input['fullrecord']): 0);
+        $smarty->assign('FULLRECORD', intval($input['fullrecord']));
   		$smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($input, $al));
 
         $smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
@@ -123,26 +129,19 @@ class tx_newspaper_PlacementBE {
      * @return Backend form or empty string, if $input['fullrecord'] is not set to 1
      */
     private static function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al = null) {
-		if (isset($input['fullrecord']) && $input['fullrecord'] == 1) {
-			if ($al == null) {
-				// article list hasn't been read
-				if (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
-					$s = new tx_newspaper_section(intval($input['sections_selected'][0])); // Get article list for first (and only) section
-					$al = $s->getArticleList();
-				}
-			}
-			if ($al != null) {
-				$articlelistFullrecordBackend = $al->getAndProcessTceformBasedBackend(); // Render backend, store if saved, close if closed
-			} else {
-				$articlelistFullrecordBackend = 'Error'; // \todo: localization
-			}
+        if (!intval($input['fullrecord'])) return '';
 
-		} else {
-			$articlelistFullrecordBackend = '';
+        if (is_null($al)) {
+		    // article list hasn't been read
+			if (is_array($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
+				$s = new tx_newspaper_Section(intval($input['sections_selected'][0])); // Get article list for first (and only) section
+				$al = $s->getArticleList();
+			}
 		}
 
-//t3lib_div::devlog('be::render()', 'newspaper', 0, array('articlelistFullrecordBackend' => $articlelistFullrecordBackend, 'al' => $al));
-        return $articlelistFullrecordBackend;
+		if (!is_null($al)) return $al->getAndProcessTceformBasedBackend(); // Render backend, store if saved, close if closed
+
+		return 'Error'; // \todo: localization
     }
 
    	/// Gets the height (rows) for an article list select box

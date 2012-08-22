@@ -222,15 +222,15 @@ function changeWorkflowStatus(role, hidden_status) {
 
 
 
-	 public static function renderBackend($table, $tableUid, $allComments=true, $showFoldLinks=false) {
+	 public static function renderBackend($table, $tableUid, $show_all_comments=true, $show_fold_links=false) {
         if(!$table || !$tableUid) {
             throw new tx_newspaper_Exception("Arguments table and tableUid may not be null");
         }
 
         return self::renderTemplate(
-            self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT),
-            self::getComments($table, $tableUid, $allComments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT, 1),
-            intval($tableUid), $allComments, $showFoldLinks);
+            self::getComments($table, $tableUid, $show_all_comments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT),
+            self::getComments($table, $tableUid, $show_all_comments? 0: NP_WORKFLOW_COMMENTS_PREVIEW_LIMIT, 1),
+            intval($tableUid), $show_all_comments, $show_fold_links);
     }
 
     /// return javascript for ajax calls
@@ -314,14 +314,14 @@ function changeWorkflowStatus(role, hidden_status) {
         }
     }
 
-    private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $showFoldLinks=false) {
+    private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $show_fold_links=false) {
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
         $smarty->assign('all_comments', $all_comments);
         self::addWorkflowTranslations($smarty);
 		$smarty->assign('tableUid', $tableUid);
 		$smarty->assign('show_all_comments', $show_all_comments);
-		$smarty->assign('showFoldLinks', $showFoldLinks);
+		$smarty->assign('showFoldLinks', $show_fold_links);
 		$smarty->assign('LABEL', array(
 			'more' => tx_newspaper::getTranslation('log_more_link'),
 			'less' => tx_newspaper::getTranslation('log_less_link')

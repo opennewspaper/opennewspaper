@@ -19,17 +19,21 @@
 	var langReallyrefresh = "{$lang.reallyrefresh}";
 	</script>
 	<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.css" />
-	{if !$FULLRECORD}
-		<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery-1.3.2.min.js" type="text/javascript"></script>
-		<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery.selectboxes.js" type="text/javascript"></script>
-		<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.js" type="text/javascript"></script>
-		<form action="" method="post" id="placementform">
-		{if $article}
-			<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
-			<input type="hidden" value="{$article->getAttribute('kicker')|escape:html}: {$article->getAttribute('title')|escape:html}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
-		{/if}
+{/if}
+
+{if $singlemode && !$FULLRECORD}
+	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery-1.3.2.min.js" type="text/javascript"></script>
+	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery.selectboxes.js" type="text/javascript"></script>
+	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.js" type="text/javascript"></script>
+	<form action="" method="post" id="placementform">
+	{if $article}
+		<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
+		<input type="hidden" value="{$article->getAttribute('kicker')|escape:html}: {$article->getAttribute('title')|escape:html}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
 	{/if}
-	<div class="tx_newspaper_mod7">
+{/if}
+
+{if $singlemode}
+    <div class="tx_newspaper_mod7">
 {/if}
 
 {if !$FULLRECORD}
