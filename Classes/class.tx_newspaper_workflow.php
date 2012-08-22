@@ -352,7 +352,7 @@ function changeWorkflowStatus(role, hidden_status) {
 
     public static function canPlaceArticles(tx_newspaper_Section $section = null) {
         if (self::isDutyEditor()) return true;
-        if (is_null($section)) return false;
+        if (is_null($section)) return self::placementAllowedLevel() > 0;
         return self::placementAllowedLevel() <= sizeof($section->getRootLine());
     }
 
