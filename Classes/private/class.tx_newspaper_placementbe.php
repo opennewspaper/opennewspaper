@@ -61,13 +61,12 @@ class tx_newspaper_PlacementBE {
 		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
         $smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
 
-        $smarty->assign('FULLRECORD', intval($input['fullrecord']));
-  		$smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($input, $al));
-
         $smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
 		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
 		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
 		$smarty->assign('AL_HEIGHT', self::getArticleListHeight());
+
+        $smarty->assign('input', $input);
 
 		return $smarty->fetch(self::getSmartyTemplateForPlacement($input));
 	}

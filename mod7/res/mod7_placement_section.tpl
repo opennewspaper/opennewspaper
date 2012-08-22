@@ -168,7 +168,7 @@
 {if $singlemode}
 	{if !$FULLRECORD}
 		</form>
-        <a href="{$smarty.server.PHP_SELF}?{$smarty.server.QUERY_STRING}&tx_newspaper_mod7[fullrecord]=1&tx_newspaper_mod9[fullrecord]=1">{$lang.label_articlelist_fullrecord}</a>
+        <a href="{$smarty.server.PHP_SELF}?{$smarty.server.QUERY_STRING}&tx_newspaper_mod9[sectionid]={$input.sectionid}&tx_newspaper_mod7[fullrecord]=1&tx_newspaper_mod9[fullrecord]=1">{$lang.label_articlelist_fullrecord}</a>
 	{else}
 		{$AL_BACKEND}
 	{/if}
