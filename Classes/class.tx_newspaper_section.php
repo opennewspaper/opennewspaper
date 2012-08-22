@@ -270,6 +270,16 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $sections;
 	}
 
+    public function getRootLine() {
+        $parent = $this->getParentSection();
+        $rootline = array();
+        while (!is_null($parent)) {
+            $rootline[] = $parent;
+            $parent = $parent->getParentSection();
+        }
+        return $rootline;
+    }
+
 	/// \return uid of parent abstract record for concrete article list associated with section
 	public function getAbstractArticleListUid() {
 		return $this->getAttribute('articlelist');

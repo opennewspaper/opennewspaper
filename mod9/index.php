@@ -69,111 +69,105 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	 * @return	[type]		...
 	 */
 	function main()	{
-					global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-					
-					$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
+		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
 
-					if ($access)	{
+		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 
-						// read be conf and merge with $this->id
-						$this->be_conf = unserialize($BE_USER->getModuleData('tx_newspaper/mod9'));
+		if ($access) {
+
+			// read be conf and merge with $this->id
+			$this->be_conf = unserialize($BE_USER->getModuleData('tx_newspaper/mod9'));
 //t3lib_div::devlog('mod9', 'newspaper', 0, array('be_conf' => $this->be_conf, 'this->id' => $this->id));
-						if (!$this->id && isset($this->be_conf['id'])) {
-							$this->id = $this->be_conf['id'];
-						} else {
-							$this->be_conf['id'] = $this->id;
-						}
+			if (!$this->id && isset($this->be_conf['id'])) {
+				$this->id = $this->be_conf['id'];
+			} else {
+				$this->be_conf['id'] = $this->id;
+			}
 
-						// get ll labels 
-						$this->ll = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod9/locallang.xml', $GLOBALS['LANG']->lang);
-						$this->ll = $this->ll[$GLOBALS['LANG']->lang];	
+			// get ll labels
+			$this->ll = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod9/locallang.xml', $GLOBALS['LANG']->lang);
+			$this->ll = $this->ll[$GLOBALS['LANG']->lang];
 //t3lib_div::devlog('mod9', 'newspaper', 0, array('this->ll' => $this->ll));
 
-							// Draw the header.
-						$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod9');
-						$this->doc->backPath = $BACK_PATH;
-//						$this->doc->form='<form action="" method="post" enctype="multipart/form-data">';
+			// Draw the header.
+			$this->doc = t3lib_div::makeInstance('fullWidthDoc_mod9');
+			$this->doc->backPath = $BACK_PATH;
 
-							// JavaScript
-						$this->doc->JScode = '
-							<script language="javascript" type="text/javascript">
-								script_ended = 0;
-								function jumpToUrl(URL)	{
-									document.location = URL;
-								}
-							</script>
-						';
-						$this->doc->postCode='
-							<script language="javascript" type="text/javascript">
-								script_ended = 1;
-								if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-							</script>
-						';
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-
-						// Render content:
-						if (!$this->id) {
-							// no section chosen
-							$this->content .= $this->doc->section('', '<br /> ' . $this->ll['message_no_section_chosen'], 0, 1);
-						} else {
-							// render chosen section's article list
-							$input = t3lib_div::GParrayMerged($this->prefixId);
-							$this->moduleContent($input);
-						}
-
-						$this->content.=$this->doc->spacer(10);
-						
-						// store conf
-						$BE_USER->pushModuleData('tx_newspaper/mod9', serialize($this->be_conf));
-						
-					} else {
-							// If no access or if ID == zero
-
-						$this->doc = t3lib_div::makeInstance('mediumDoc');
-						$this->doc->backPath = $BACK_PATH;
-
-						$this->content.=$this->doc->startPage($LANG->getLL('title'));
-						$this->content.=$this->doc->header($LANG->getLL('title'));
-						$this->content.=$this->doc->spacer(5);
-						$this->content.=$this->doc->spacer(10);
+			// JavaScript
+			$this->doc->JScode = '
+				<script language="javascript" type="text/javascript">
+					script_ended = 0;
+					function jumpToUrl(URL)	{
+						document.location = URL;
 					}
+				</script>
+			';
+			$this->doc->postCode='
+				<script language="javascript" type="text/javascript">
+					script_ended = 1;
+					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
+				</script>
+			';
+
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+
+			// Render content:
+			if (!$this->id) {
+				// no section chosen
+				$this->content .= $this->doc->section('', '<br /> ' . $this->ll['message_no_section_chosen'], 0, 1);
+			} else {
+				// render chosen section's article list
+				$input = t3lib_div::GParrayMerged($this->prefixId);
+				$this->moduleContent($input);
+			}
+
+			$this->content.=$this->doc->spacer(10);
+						
+			// store conf
+			$BE_USER->pushModuleData('tx_newspaper/mod9', serialize($this->be_conf));
+
+		} else {
+			// If no access or if ID == zero
+
+			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc->backPath = $BACK_PATH;
+
+			$this->content.=$this->doc->startPage($LANG->getLL('title'));
+			$this->content.=$this->doc->header($LANG->getLL('title'));
+			$this->content.=$this->doc->spacer(5);
+			$this->content.=$this->doc->spacer(10);
+		}
 				
-				}
+	}
 
-				/**
-				 * Prints out the module HTML
-				 *
-				 * @return	void
-				 */
-				function printContent()	{
-					$this->form = false; // do not add </form>
-					$this->content .= $this->doc->endPage();
-					echo $this->content;
-				}
+	/**
+	 * Prints out the module HTML
+	 *
+	 * @return	void
+	 */
+	function printContent()	{
+		$this->form = false; // do not add </form>
+		$this->content .= $this->doc->endPage();
+		echo $this->content;
+	}
 
-				/**
-				 * Generates the module content
-				 *
-				 * @return	void
-				 */
-				function moduleContent(array $input) {
-					$input['sectionid'] = $this->id;
-                    $content = tx_newspaper_PlacementBE::renderSingle($input);
-
-					$this->content .= $this->doc->section('', $content, 0, 1);
-				}	
+	/**
+	 * Generates the module content
+	 *
+	 * @return	void
+	 */
+	function moduleContent(array $input) {
+		$input['sectionid'] = $this->id;
+		$this->content .= $this->doc->section('', tx_newspaper_PlacementBE::renderSingle($input), 0, 1);
+	}
 	
 	/**
 	 * Initializes the Module
 	 * @return	void
 	 */
 	function init()	{
-		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
-	
 		parent::init();
-	
 	}
 
 	/**
@@ -182,7 +176,6 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function menuConfig()	{
-		global $LANG;
 		parent::menuConfig();
 	}
 

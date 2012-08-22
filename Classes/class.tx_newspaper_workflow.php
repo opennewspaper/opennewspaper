@@ -341,22 +341,21 @@ function changeWorkflowStatus(role, hidden_status) {
 		return (self::getRole() == 1);
 	}
 
+	/// \return true if be_user has newspaper role "editorial staff"
+	public static function isEditor() {
+        return (self::getRole() === 0);
+	}
+
     public static function placementAllowedLevel() {
         return intval($GLOBALS['BE_USER']->getTSConfigVal('newspaper.placementAllowedLevel'));
     }
 
-    public static function canPlaceArticles() {
-        return self::isDutyEditor() || self::placementAllowedLevel() > 0;
+    public static function canPlaceArticles(tx_newspaper_Section $section = null) {
+        if (self::isDutyEditor()) return true;
+        if (is_null($section)) return false;
+        return self::placementAllowedLevel() <= sizeof($section->getRootLine());
     }
 
-	/// \return true if be_user has newspaper role "editorial staff"
-	public static function isEditor() {
-		$role = self::getRole();
-		if ($role === false) {
-			return false;
-		}
-		return ($role == 0);
-	}
 
 
 	/// Changes the newspaper role of the be_user

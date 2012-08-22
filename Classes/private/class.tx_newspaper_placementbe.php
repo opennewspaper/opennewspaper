@@ -25,6 +25,9 @@ class tx_newspaper_PlacementBE {
    			return self::render($input, true);
    		}
 
+        throw new tx_newspaper_IllegalUsageException(
+            'tx_newspaper_PlacementBE::renderSingle() called neither for section article list nor free articlelist: ' . print_r($input, 1)
+        );
    	}
 
     /// render the placement editors according to sections selected for article
