@@ -15,7 +15,15 @@ class tx_newspaper_PlacementBE {
             if (intval($input['fullrecord'])) {
                 $smarty = new tx_newspaper_Smarty();
                 $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-                $smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($input, self::getArticleListForPlacement(array($input['sectionid']))));
+                $smarty->assign(
+                    'AL_BACKEND',
+                    self::getArticlelistFullrecordBackend(
+                        array(
+                            'fullrecord' => 1,
+                            'sections_selected' => array($input['sectionid'])
+                        )
+                    )
+                );
                 return $smarty->fetch('mod7_listview.tmpl');
             }
    			return self::render(
