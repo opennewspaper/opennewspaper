@@ -69,7 +69,7 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	 * @return	[type]		...
 	 */
 	function main()	{
-		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS;
+		global $BE_USER,$LANG,$BACK_PATH;
 
 		$access = $BE_USER->user['uid']? true : false; // \todo: better check needed
 
@@ -160,23 +160,6 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	function moduleContent(array $input) {
 		$input['sectionid'] = $this->id;
 		$this->content .= $this->doc->section('', tx_newspaper_PlacementBE::renderSingle($input), 0, 1);
-	}
-	
-	/**
-	 * Initializes the Module
-	 * @return	void
-	 */
-	function init()	{
-		parent::init();
-	}
-
-	/**
-	 * Adds items to the ->MOD_MENU array. Used for the function menu selector.
-	 *
-	 * @return	void
-	 */
-	function menuConfig()	{
-		parent::menuConfig();
 	}
 
 }
