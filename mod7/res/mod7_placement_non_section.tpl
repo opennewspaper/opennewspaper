@@ -1,4 +1,4 @@
-{debug}
+{*debug*}
 {* template for non-section article lists *}
 
 <script src="{$T3PATH}typo3conf/ext/newspaper/res/be/newspaper.js" type="text/javascript"></script>

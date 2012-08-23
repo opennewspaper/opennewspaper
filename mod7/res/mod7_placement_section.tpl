@@ -4,42 +4,17 @@
 {*
     $T3PATH
     $lang
-    $singlemode
     $article     article object
     $SEMIAUTO_AL_FOLDED
     $tree
 *}
-{if $singlemode}
-	<script src="{$T3PATH}typo3conf/ext/newspaper/res/be/newspaper.js" type="text/javascript"></script>
-	<script type="text/javascript" language="javascript">
-    	var langSavedidnotwork = "{$lang.savedidnotwork}";
-	    var langReallycancel = "{$lang.reallycancel}";
-    	var langActiondidnotwork = "{$lang.actiondidnotwork}";
-	    var langReallyrefresh = "{$lang.reallyrefresh}";
-	</script>
-	<link rel="stylesheet" type="text/css" href="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.css" />
-	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery-1.3.2.min.js" type="text/javascript"></script>
-	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/jquery.selectboxes.js" type="text/javascript"></script>
-	<script src="{$T3PATH}typo3conf/ext/newspaper/mod7/res/mod7.js" type="text/javascript"></script>
-
-	<form action="" method="post" id="placementform">
-
-	{if $article}
-		<input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
-		<input type="hidden" value="{$article->getAttribute('kicker')|escape:html}: {$article->getAttribute('title')|escape:html}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
-	{/if}
-
-    <div class="tx_newspaper_mod7">
-{/if}
 
 {* semiautomatic articles lists ONLY, if $SEMIAUTO_AL_FOLDED is set *}
-{if $SEMIAUTO_AL_FOLDED && !$singlemode}
+{if $SEMIAUTO_AL_FOLDED}
 
     {include file="mod7_automatic_al.tmpl"}
 
 {/if}
-
-
 
 {* all article lists or manual lists only, if $SEMIAUTO_AL_FOLDED is set *}
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;" id="hide-empty">
@@ -51,13 +26,13 @@
                         <table border="0" cellspacing="0" cellpadding="0" class="articles">
                             <tr>
                                 <th scope="col" colspan="3">
-                                {foreach from=$sections item="section" name="sectionloop"}
-                                    {$section.section->getAttribute('section_name')} {if $smarty.foreach.sectionloop.iteration < count($sections)}&gt;{/if}
-                                {/foreach}
+                                    {foreach from=$sections item="section" name="sectionloop"}
+                                        {$section.section->getAttribute('section_name')} {if $smarty.foreach.sectionloop.iteration < count($sections)}&gt;{/if}
+                                    {/foreach}
                                 </th>
                             </tr>
 
-          					{if (!$SEMIAUTO_AL_FOLDED || $singlemode) || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
+          					{if !$SEMIAUTO_AL_FOLDED || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
 		            			{* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
 
 
@@ -132,10 +107,10 @@
 
 				        </table>
 
-                        {if !$SEMIAUTO_AL_FOLDED || $singlemode || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
+                        {if !$SEMIAUTO_AL_FOLDED || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
                             {if $isde || $smarty.foreach.levelloop.index < $allowed_placement_level
                                 && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
-                                <div align="right" {if !$singlemode}style="display:none;"{/if}>
+                                <div align="right" style="display:none;">
                                     <input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
                                     <input type="button" name="tx_newspaper_mod7[save]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="save" value="{$lang.save}" />
                                 </div>
@@ -143,13 +118,11 @@
                         {else}
                             {* old version, display a message where to find the article list: $lang.semiauto_list_is_folded *}
                             {* hide complete div *}
-                            {if !$singlemode}
-                                <style>
-                                    #al{$section.section->getUid()} {ldelim}
-                                    display:none;
-                                    {rdelim}
-                                </style>
-                            {/if}
+                            <style>
+                                #al{$section.section->getUid()} {ldelim}
+                                display:none;
+                                {rdelim}
+                            </style>
       					{/if}
 	        		</div>
 			    {/foreach}
@@ -158,8 +131,3 @@
 	</tr>
 </table>
 
-{if $singlemode}
-	</form>
-    <a href="{$smarty.server.PHP_SELF}?{$smarty.server.QUERY_STRING}&tx_newspaper_mod9[sectionid]={$input.sections_selected.0}&tx_newspaper_mod7[fullrecord]=1&tx_newspaper_mod9[fullrecord]=1">{$lang.label_articlelist_fullrecord}</a>
-    </div>
-{/if}
