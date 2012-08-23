@@ -42,7 +42,12 @@ class tx_newspaper_PlacementBE {
    		}
 
    		if (isset($this->input['articlelistid'])) {   // render NON-section article list
-   			return $this->render(true);
+            $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
+            if (!is_null($al)) {
+       			$this->smarty->assign('articlelist_type', strtolower($al->getTable()));
+       			$this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
+       		}
+            return $this->smarty->fetch('mod7_placement_non_section.tpl');
    		}
 
         throw new tx_newspaper_IllegalUsageException(
@@ -57,21 +62,14 @@ class tx_newspaper_PlacementBE {
 	 *  @param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 	 *  @return ?
 	 */
-	public function render($singleMode = false) {
+	public function render() {
 
         $this->smarty->assign('tree', self::getSectionTree($this->input));
-        $al = self::getArticleListForPlacement($this->input);
-		if (!is_null($al)) {
-			$this->smarty->assign('articlelist_type', strtolower($al->getTable()));
-			$this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
-		}
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
-
-		$this->smarty->assign('singlemode', $singleMode);
 
         $this->smarty->assign('input', $this->input);
 
-		return $this->smarty->fetch(self::getSmartyTemplateForPlacement($this->input));
+		return $this->smarty->fetch('mod7_placement_section.tpl');
 	}
 
     ////////////////////////////////////////////////////////////////////////////
@@ -82,13 +80,6 @@ class tx_newspaper_PlacementBE {
             return self::fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
         }
         return array();
-    }
-
-    private static function getArticleListForPlacement(array $input) {
-        if (isset($input['articlelistid']) && $input['articlelistid']) {
-            return tx_newspaper_ArticleList_Factory::getInstance()->create(intval($input['articlelistid']));
-        }
-        return null;
     }
 
     private static function getArticlesFromListForPlacement(tx_newspaper_ArticleList $al) {
