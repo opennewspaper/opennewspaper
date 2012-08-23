@@ -44,6 +44,7 @@ class tx_newspaper_PlacementBE {
    		if (isset($this->input['articlelistid'])) {   // render NON-section article list
             $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
             if (!is_null($al)) {
+                $this->smarty->assign('articlelist', $al);
        			$this->smarty->assign('articlelist_type', strtolower($al->getTable()));
        			$this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
        		}
