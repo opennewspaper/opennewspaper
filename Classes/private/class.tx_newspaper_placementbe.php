@@ -18,6 +18,8 @@ class tx_newspaper_PlacementBE {
 		$this->smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
 		$this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
         $this->smarty->assign('lang', self::getLocallangLabels());
+        $this->smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
+        $this->smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
     }
 
     public function renderSingle() {
@@ -31,15 +33,11 @@ class tx_newspaper_PlacementBE {
                 return $this->smarty->fetch('mod7_listview.tmpl');
             } else {
 
-                $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $this->input['sectionid']), intval($this->input['articleid']), true));
+                $section = new tx_newspaper_Section($this->input['sectionid']);
+                $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $section->getUid()), intval($this->input['articleid']), true));
+                $this->smarty->assign('level', sizeof($section->getRootLine()));
                 return $this->smarty->fetch('mod7_placement_single.tmpl');
 
-                return $this->render(
-                    array(
-                        'sections_selected' => array($this->input['sectionid']),
-                        'placearticleuid' => intval($this->input['articleid'])
-                    ), true
-                );
             }
    		}
 
@@ -70,9 +68,6 @@ class tx_newspaper_PlacementBE {
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
 		$this->smarty->assign('singlemode', $singleMode);
-		$this->smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-        $this->smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
-
 
         $this->smarty->assign('input', $this->input);
 

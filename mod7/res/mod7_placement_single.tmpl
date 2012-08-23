@@ -23,11 +23,6 @@
 
     <form action="" method="post" id="placementform">
 
-        {if $article}
-            <input type="hidden" value="{$article->getAttribute("uid")}" name="tx_newspaper_mod7[placearticleuid]" id="placearticleuid" />
-            <input type="hidden" value="{$article->getAttribute('kicker')|escape:html}: {$article->getAttribute('title')|escape:html}" name="tx_newspaper_mod7[placearticletitle]" id="placearticletitle" />
-        {/if}
-
         <table border="0" cellspacing="0" cellpadding="0" class="articles">
             <tr>
                 <th scope="col" colspan="3">
@@ -94,8 +89,8 @@
             {else}
                 <tr>
                     <td>
-                        {if !$isde && $smarty.foreach.levelloop.index < $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
-                        {if $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
+                        {if !$isde && $level < $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
+                        {if $level >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
                         {if !isset($section.articlelist)}<i class="noaccess">{$lang.message_no_articlelist}</i><br />{/if}
                         {if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
                             <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
