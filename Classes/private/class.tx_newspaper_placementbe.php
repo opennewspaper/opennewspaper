@@ -31,7 +31,7 @@ class tx_newspaper_PlacementBE {
                 return $this->smarty->fetch('mod7_listview.tmpl');
             } else {
 
-                $this->smarty->assign('section', self::fillPlacementElementWithData(array(($this->input['sectionid'])), intval($this->input['articleid']), true));
+                $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $this->input['sectionid']), intval($this->input['articleid']), true));
                 return $this->smarty->fetch('mod7_placement_single.tmpl');
 
                 return $this->render(
