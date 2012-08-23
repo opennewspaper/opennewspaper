@@ -159,7 +159,8 @@ class  tx_newspaper_module9 extends t3lib_SCbase {
 	 */
 	function moduleContent(array $input) {
 		$input['sectionid'] = $this->id;
-		$this->content .= $this->doc->section('', tx_newspaper_PlacementBE::renderSingle($input), 0, 1);
+        $be = new tx_newspaper_PlacementBE($input);
+		$this->content .= $this->doc->section('', $be->renderSingle(), 0, 1);
 	}
 
 }

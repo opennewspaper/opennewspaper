@@ -9,38 +9,46 @@
  */
 class tx_newspaper_PlacementBE {
 
-    public static function renderSingle($input) {
+    public function __construct($input) {
+        $this->input = $input;
+        $this->smarty = new tx_newspaper_Smarty();
+        $this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
+        $this->smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
+		$this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
+		$this->smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
+		$this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
+        $this->smarty->assign('lang', self::getLocallangLabels());
+    }
 
-   		if (isset($input['sectionid'])) {       // render section article list
-            if (intval($input['fullrecord'])) {
-                $smarty = new tx_newspaper_Smarty();
-                $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-                $smarty->assign(
+    public function renderSingle() {
+
+   		if (isset($this->input['sectionid'])) {       // render section article list
+            if (intval($this->input['fullrecord'])) {
+                $this->smarty->assign(
                     'AL_BACKEND',
-                    self::getArticlelistFullrecordBackend(
-                        array(
-                            'fullrecord' => 1,
-                            'sections_selected' => array($input['sectionid'])
-                        )
-                    )
+                    self::getArticlelistFullrecordBackend($this->input['sectionid'])
                 );
-                return $smarty->fetch('mod7_listview.tmpl');
+                return $this->smarty->fetch('mod7_listview.tmpl');
+            } else {
+
+                $this->smarty->assign('section', self::fillPlacementElementWithData(array(($this->input['sectionid'])), intval($this->input['articleid']), true));
+                return $this->smarty->fetch('mod7_placement_single.tmpl');
+
+                return $this->render(
+                    array(
+                        'sections_selected' => array($this->input['sectionid']),
+                        'placearticleuid' => intval($this->input['articleid'])
+                    ), true
+                );
             }
-   			return self::render(
-                array(
-   				    'sections_selected' => array($input['sectionid']),
-   					'placearticleuid' => intval($input['articleid']),
-   					'fullrecord' => intval($input['fullrecord'])
-   				), true
-            );
    		}
 
-   		if (isset($input['articlelistid'])) {   // render NON-section article list
-   			return self::render($input, true);
+   		if (isset($this->input['articlelistid'])) {   // render NON-section article list
+   			return $this->render(true);
    		}
 
         throw new tx_newspaper_IllegalUsageException(
-            'tx_newspaper_PlacementBE::renderSingle() called neither for section article list nor free articlelist: ' . print_r($input, 1)
+            'tx_newspaper_PlacementBE::renderSingle() called neither for section article list nor free articlelist: ' . print_r($this->input, 1)
         );
    	}
 
@@ -51,32 +59,24 @@ class tx_newspaper_PlacementBE {
 	 *  @param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
 	 *  @return ?
 	 */
-	public static function render($input, $singleMode=false) {
+	public function render($singleMode = false) {
 
-		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-
-        $smarty->assign('tree', self::getSectionTree($input));
-        $al = self::getArticleListForPlacement($input);
+        $this->smarty->assign('tree', self::getSectionTree($this->input));
+        $al = self::getArticleListForPlacement($this->input);
 		if (!is_null($al)) {
-			$smarty->assign('articlelist_type', strtolower($al->getTable()));
-			$smarty->assign('articles', self::getArticlesFromListForPlacement($al));
+			$this->smarty->assign('articlelist_type', strtolower($al->getTable()));
+			$this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
 		}
-        $smarty->assign('article', self::getArticleForPlacement($input));
+        $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
-		$smarty->assign('singlemode', $singleMode);
-		$smarty->assign('lang', self::getLocallangLabels());
-		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-        $smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
+		$this->smarty->assign('singlemode', $singleMode);
+		$this->smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
+        $this->smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
 
-        $smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
-		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-		$smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
-		$smarty->assign('AL_HEIGHT', self::getArticleListHeight());
 
-        $smarty->assign('input', $input);
+        $this->smarty->assign('input', $this->input);
 
-		return $smarty->fetch(self::getSmartyTemplateForPlacement($input));
+		return $this->smarty->fetch(self::getSmartyTemplateForPlacement($this->input));
 	}
 
     ////////////////////////////////////////////////////////////////////////////
@@ -135,16 +135,9 @@ class tx_newspaper_PlacementBE {
      * @param null|tx_newspaper_Articlelist $al
      * @return Backend form or empty string, if $input['fullrecord'] is not set to 1
      */
-    private static function getArticlelistFullrecordBackend(array $input, tx_newspaper_Articlelist $al = null) {
-        if (!intval($input['fullrecord'])) return '';
-
-        if (is_null($al)) {
-		    // article list hasn't been read
-			if (is_array($input['sections_selected']) && sizeof($input['sections_selected']) > 0) {
-				$s = new tx_newspaper_Section(intval($input['sections_selected'][0])); // Get article list for first (and only) section
-				$al = $s->getArticleList();
-			}
-		}
+    private static function getArticlelistFullrecordBackend($section_id) {
+        $s = new tx_newspaper_Section($section_id);
+		$al = $s->getArticleList();
 
 		if (!is_null($al)) return $al->getAndProcessTceformBasedBackend(); // Render backend, store if saved, close if closed
 
@@ -199,25 +192,34 @@ class tx_newspaper_PlacementBE {
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
-					// get data (for title display) for each section
-					$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
-					// add article list and list type to tree structure for last element only
-					if (($k+1) == count($tree[$i][$j])) {
-						$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
-						$tree[$i][$j][$k]['articlelist'] = tx_newspaper_BE::getArticleListBySectionId($tree[$i][$j][$k]['uid']);
-						if (strtolower($tree[$i][$j][$k]['listtype']) == 'tx_newspaper_articlelist_manual') {
-							$tree[$i][$j][$k]['article_placed_already'] = array_key_exists($articleId, $tree[$i][$j][$k]['articlelist']); // flag to indicated if the article to be placed has already been placed in current article list
-						} else {
-							// semi-auto list: key -> [offset]_[key], so array_key_exists check like for manual list won't work
-							// but an article is ALWAYS placed in a semi-auto list ...
-							$tree[$i][$j][$k]['article_placed_already'] = true;
-						}
-					}
-				}
+                    $tree[$i][$j][$k] = self::fillPlacementElementWithData($tree[$i][$j][$k], $articleId, ($k + 1) == count($tree[$i][$j]));
+                }
 			}
 		}
 
 		return $tree;
 	}
 
+    /// get data (for title display) for each section
+    private static function fillPlacementElementWithData(array $element, $articleId, $fill_articlelist) {
+        $element['section'] = new tx_newspaper_section($element['uid']);
+        // add article list and list type to tree structure for last element only
+        if ($fill_articlelist) {
+            $element['listtype'] = get_class($element['section']->getArticleList());
+            $element['articlelist'] = tx_newspaper_BE::getArticleListBySectionId($element['uid']);
+            if (strtolower($element['listtype']) == 'tx_newspaper_articlelist_manual') {
+                // flag to indicated if the article to be placed has already been placed in current article list
+                $element['article_placed_already'] = array_key_exists($articleId, $element['articlelist']);
+            } else {
+                // semi-auto list: key -> [offset]_[key], so array_key_exists check like for manual list won't work
+                // but an article is ALWAYS placed in a semi-auto list ...
+                $element['article_placed_already'] = true;
+            }
+        }
+        return $element;
+    }
+
+    private $input = array();
+    /** @var tx_newspaper_Smarty */
+    private $smarty = null;
 }

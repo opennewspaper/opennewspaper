@@ -92,7 +92,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						switch ($input['ajaxcontroller']) {
 							case 'showplacementandsavesections' :
 								$this->saveSectionsForArticle($input);
-								die(tx_newspaper_PlacementBE::render($input, false));
+                                $be = new tx_newspaper_PlacementBE($input);
+								die($be->render());
 							break;
 							case 'updatearticlelist':
 								die($this->updateArticlelist($input));
@@ -161,10 +162,12 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 								$output = $this->renderPreview($input['articleid']);
     							break;
 							case 'placement' :
-								$output = tx_newspaper_PlacementBE::render($input, false);
+                                $be = new tx_newspaper_PlacementBE($input);
+								$output = $be->render();
 	    						break;
 							case 'singleplacement' :
-								$output = tx_newspaper_PlacementBE::renderSingle($input);
+                                $be = new tx_newspaper_PlacementBE($input);
+								$output = $be->renderSingle();
 		    					break;
 							default :
 								$output = $this->renderModule($input);
