@@ -31,7 +31,7 @@
             </tr>
 
 
-            {if $isde || $smarty.foreach.levelloop.index < $allowed_placement_level
+            {if $isde || $level < $allowed_placement_level
                 && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
 
                 {* duty editor, article list available, class for article list is known *}
