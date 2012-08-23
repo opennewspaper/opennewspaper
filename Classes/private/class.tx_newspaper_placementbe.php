@@ -24,31 +24,12 @@ class tx_newspaper_PlacementBE {
 
     public function renderSingle() {
 
-   		if (isset($this->input['sectionid'])) {       // render section article list
-            if (intval($this->input['fullrecord'])) {
-                $this->smarty->assign(
-                    'AL_BACKEND',
-                    self::getArticlelistFullrecordBackend($this->input['sectionid'])
-                );
-                return $this->smarty->fetch('mod7_listview.tmpl');
-            } else {
+   		if (intval($this->input['sectionid'])) {       // render section article list
+            return $this->renderSectionList();
+        }
 
-                $section = new tx_newspaper_Section($this->input['sectionid']);
-                $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $section->getUid()), intval($this->input['articleid']), true));
-                $this->smarty->assign('level', sizeof($section->getRootLine()));
-                return $this->smarty->fetch('mod7_placement_single.tmpl');
-
-            }
-   		}
-
-   		if (isset($this->input['articlelistid'])) {   // render NON-section article list
-            $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
-            if (!is_null($al)) {
-                $this->smarty->assign('articlelist', $al);
-       			$this->smarty->assign('articlelist_type', strtolower($al->getTable()));
-       			$this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
-       		}
-            return $this->smarty->fetch('mod7_placement_non_section.tpl');
+   		if (intval($this->input['articlelistid'])) {   // render NON-section article list
+            return $this->renderArticleList();
    		}
 
         throw new tx_newspaper_IllegalUsageException(
@@ -74,6 +55,36 @@ class tx_newspaper_PlacementBE {
 	}
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function renderSectionList() {
+        if (intval($this->input['fullrecord'])) {
+            return $this->renderListviewBE();
+        } else {
+            $this->smarty->assign('rendered_al', $this->renderSection(new tx_newspaper_Section($this->input['sectionid'])));
+            return $this->smarty->fetch('mod7_placement_single.tmpl');
+        }
+    }
+
+    private function renderArticleList() {
+        $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
+        if (!is_null($al)) {
+            $this->smarty->assign('articlelist', $al);
+            $this->smarty->assign('articlelist_type', strtolower($al->getTable()));
+            $this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
+        }
+        return $this->smarty->fetch('mod7_placement_non_section.tpl');
+    }
+
+    private function renderListviewBE() {
+        $this->smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($this->input['sectionid']));
+        return $this->smarty->fetch('mod7_listview.tmpl');
+    }
+
+    private function renderSection(tx_newspaper_Section $section) {
+        $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $section->getUid()), intval($this->input['articleid']), true));
+        $this->smarty->assign('level', sizeof($section->getRootLine()));
+        return $this->smarty->fetch('mod7_section.tmpl');
+    }
 
     private static function getSectionTree(array $input) {
         if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {

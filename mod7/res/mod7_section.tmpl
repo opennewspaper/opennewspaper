@@ -1,0 +1,87 @@
+{*debug*}
+{* template for single section article list *}
+
+{*
+    $lang
+    $article     article object
+    $section
+    $AL_HEIGHT
+*}
+<table border="0" cellspacing="0" cellpadding="0" class="articles">
+    <tr>
+        <th scope="col" colspan="3">
+            {$section.section->getAttribute('section_name')} {if $smarty.foreach.sectionloop.iteration < count($sections)}&gt;{/if}
+        </th>
+    </tr>
+
+
+    {if $isde || $level >= $allowed_placement_level
+        && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
+
+        {* duty editor, article list available, class for article list is known *}
+        <tr>
+            <td>
+                {section name=i start=0 step=1 loop=$AL_HEIGHT}
+                    <div class="counter">{$smarty.section.i.iteration}</div>
+                {/section}
+            </td>
+            <td>
+                <select name="tx_newspaper_mod7[placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}][]" id="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if  $section.listtype|lower == "tx_newspaper_articlelist_manual"} manual-list {/if}">
+                    {foreach from=$section.articlelist item="list" name="al_loop" key="key"}
+                        <option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td valign="top" width="16">
+                <a href="#" class="movetotop" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                    {$ICON.group_totop}
+                </a>
+                <br />
+                <a href="#" class="moveup" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                    {$ICON.up}
+                </a>
+                <br />
+                <a href="#" class="movedown" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                    {$ICON.down}
+                </a>
+                <a href="#" class="movetobottom" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                    {$ICON.group_tobottom}
+                </a>
+                <br />
+                {if $section.listtype|lower == "tx_newspaper_articlelist_manual"}
+                    {if $article}
+                        {* add insert/remove button for article to be placed, remove button for selected article *}
+                        <br />
+                        <a {if ($section.article_placed_already)}style="display:none;" {/if}id="addbutton_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" href="#" class="insertarticle" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                            {$ICON.button_left}{* add button *}
+                        </a>
+                        <a {if (!$section.article_placed_already)}style="display:none;" {/if}id="delbutton_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" href="#" class="removearticletobeplaced" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                            {$ICON.button_right}{* delete article to be placed button *}
+                        </a>
+                    {else}
+                        <br />
+                        {* add article browser *}
+                        <a href="#" onclick="setFormValueOpenBrowser_AL('placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}', '{$section.section->getAttribute('section_name')|escape:html}'); return false;" >{$ICON.articlebrowser}</a>
+                    {/if}
+                    <br />
+                    <a href="#" class="delete" rel="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}">
+                        {$ICON.group_clear}
+                    </a>
+                {/if}
+            </td>
+        </tr>
+    {else}
+        <tr>
+            <td>
+                {if !$isde && $level >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
+                {if $level < $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
+                {if !isset($section.articlelist)}<i class="noaccess">{$lang.message_no_articlelist}</i><br />{/if}
+                {if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
+                    <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
+                {/if}
+            </td>
+        </tr>
+    {/if}
+
+
+</table>
