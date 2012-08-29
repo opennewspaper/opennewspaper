@@ -476,7 +476,7 @@ body {
 	width: 430px; /* \todo: use tsconfig value here */
 	height: 400px;
 	margin-right: 16px;
-	display: none;
+	display: inline;
 }
 </style>
 {/literal}
@@ -685,11 +685,15 @@ body {
 
 <script type="text/javascript">
 	window.onload = function() {ldelim}
+
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}
-		changeSource('{$DEFAULT_SOURCE}', ''); // select default source initially
+	changeSource('{$DEFAULT_SOURCE}', ''); // Select default source initially
+{else}
+    clearSourceBrowser(); // Hide source browser
 {/if}
+
 {if ($SHOW_CTRLTAGS)}
-        changeCtrlTagCat(); // load control tag categories
+    changeCtrlTagCat(); // load control tag categories
 {/if}
     {rdelim}
 </script>
