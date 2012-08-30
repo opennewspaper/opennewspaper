@@ -1,7 +1,7 @@
 {* debug *}
 
 <div id="filter">
-    <table>
+    <table border="0">
         <tr>
             <td>
                 {* range *}
@@ -62,7 +62,7 @@
                 {* text *}
                 {$LL.label_textsearch}: <input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
             </td>
-            <td>
+            <td colspan="2">
                 {* control tags *}
                 {if $CONTROLTAGS}
                     {$LL.label_controltag}:
@@ -79,6 +79,7 @@
             </td>
         </tr>
         <tr>
+            <td></td>
             <td>
                 {* step / items per page *}
                 {$LL.label_step_items_per_page}:
