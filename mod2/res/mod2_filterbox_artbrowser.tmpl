@@ -49,6 +49,8 @@
 	{* section *}
 	{$LL.label_section}: <input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 
+    <br />
+
 	{* text *}
 	{$LL.label_textsearch}: <input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 
@@ -65,6 +67,8 @@
             {/foreach}
         </select>
     {/if}
+
+    <br />
 
 	{* step / items per page *}
 	{$LL.label_step_items_per_page}:
