@@ -5,18 +5,15 @@
     $T3PATH
     $lang
     $article     article object
-    $SEMIAUTO_AL_FOLDED
     $tree
 *}
 
-{* semiautomatic articles lists ONLY, if $SEMIAUTO_AL_FOLDED is set *}
-{if $SEMIAUTO_AL_FOLDED}
+{* semiautomatic articles lists *}
 
-    {include file="mod7_automatic_al.tmpl"}
+{include file="mod7_automatic_al.tmpl"}
 
-{/if}
 
-{* all article lists or manual lists only, if $SEMIAUTO_AL_FOLDED is set *}
+{* all article lists or manual lists *}
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;" id="hide-empty">
 	<tr>
 		{foreach from=$tree item="level" name="levelloop"}
@@ -32,7 +29,7 @@
                                 </th>
                             </tr>
 
-          					{if !$SEMIAUTO_AL_FOLDED || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
+          					{if $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
 		            			{* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
 
 
@@ -107,7 +104,7 @@
 
 				        </table>
 
-                        {if !$SEMIAUTO_AL_FOLDED || $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
+                        {if $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
                             {if $isde || $smarty.foreach.levelloop.index < $allowed_placement_level
                                 && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
                                 <div align="right" style="display:none;">

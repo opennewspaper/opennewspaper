@@ -15,7 +15,6 @@ class tx_newspaper_PlacementBE {
         $this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
         $this->smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
 		$this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-		$this->smarty->assign('SEMIAUTO_AL_FOLDED', true); // \todo: make configurable (tsconfig)
 		$this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
         $this->smarty->assign('lang', self::getLocallangLabels());
         $this->smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
@@ -23,29 +22,24 @@ class tx_newspaper_PlacementBE {
     }
 
     public function renderSingle() {
+        if (intval($this->input['fullrecord'])) return $this->renderListviewBE();
 
-   		if (intval($this->input['sectionid'])) {       // render section article list
-            return $this->renderSectionList();
-        }
+   		if (intval($this->input['sectionid'])) return $this->renderSectionList();
 
-   		if (intval($this->input['articlelistid'])) {   // render NON-section article list
-            return $this->renderArticleList();
-   		}
+   		if (intval($this->input['articlelistid'])) return $this->renderArticleList();
 
         throw new tx_newspaper_IllegalUsageException(
             'tx_newspaper_PlacementBE::renderSingle() called neither for section article list nor free articlelist: ' . print_r($this->input, 1)
         );
    	}
 
-    /// render the placement editors according to sections selected for article
-	/** If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
+	/**
+     *  Render the placement mask for all selected sections for article.
+     *
+     *  If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
 	 *  if not, a button to call the article browser is displayed.
-	 *  @todo: document $input array types ...
-	 *  @param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
-	 *  @return ?
-	 */
+     */
 	public function render() {
-
         $this->smarty->assign('tree', self::getSectionTree($this->input));
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
@@ -56,13 +50,21 @@ class tx_newspaper_PlacementBE {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private function renderSectionList() {
-        if (intval($this->input['fullrecord'])) {
-            return $this->renderListviewBE();
+    private function renderListviewBE() {
+        if (intval($this->input['sectionid'])) {
+            $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
         } else {
-            $this->smarty->assign('rendered_al', $this->renderSection(new tx_newspaper_Section($this->input['sectionid'])));
-            return $this->smarty->fetch('mod7_placement_single.tmpl');
+            $s = new tx_newspaper_Section($this->input['sectionid']);
+            $al = $s->getArticleList();
         }
+
+        $this->smarty->assign('AL_BACKEND', self::getArticlelistListviewBackend($al));
+        return $this->smarty->fetch('mod7_listview.tmpl');
+    }
+
+    private function renderSectionList() {
+        $this->smarty->assign('rendered_al', $this->renderSection(new tx_newspaper_Section($this->input['sectionid'])));
+        return $this->smarty->fetch('mod7_placement_single.tmpl');
     }
 
     private function renderArticleList() {
@@ -73,11 +75,6 @@ class tx_newspaper_PlacementBE {
             $this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
         }
         return $this->smarty->fetch('mod7_placement_non_section.tpl');
-    }
-
-    private function renderListviewBE() {
-        $this->smarty->assign('AL_BACKEND', self::getArticlelistFullrecordBackend($this->input['sectionid']));
-        return $this->smarty->fetch('mod7_listview.tmpl');
     }
 
     private function renderSection(tx_newspaper_Section $section) {
@@ -133,9 +130,7 @@ class tx_newspaper_PlacementBE {
      * @param null|tx_newspaper_Articlelist $al
      * @return Backend form or empty string, if $input['fullrecord'] is not set to 1
      */
-    private static function getArticlelistFullrecordBackend($section_id) {
-        $s = new tx_newspaper_Section($section_id);
-		$al = $s->getArticleList();
+    private static function getArticlelistListviewBackend(tx_newspaper_ArticleList $al) {
 
 		if (!is_null($al)) return $al->getAndProcessTceformBasedBackend(); // Render backend, store if saved, close if closed
 
@@ -147,17 +142,6 @@ class tx_newspaper_PlacementBE {
 		return 10; // \todo: make tsconfigurable
 	}
 
-    private static function getSmartyTemplateForPlacement(array $input) {
-        if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
-            return 'mod7_placement_section.tpl';
-        }
-        if (isset($input['articlelistid']) && $input['articlelistid']) {
-            return 'mod7_placement_non_section.tpl';
-        }
-        throw new tx_newspaper_IllegalUsageException(
-            'tx_newspaper_PlacementBE::render() called neither for section article list, single article nor free articlelist: ' . print_r($input, 1)
-        );
-    }
 
     private static function sectionArticleListRequested(array $input) {
         return (isset($input['sections_selected']) && sizeof($input['sections_selected']) > 0);
