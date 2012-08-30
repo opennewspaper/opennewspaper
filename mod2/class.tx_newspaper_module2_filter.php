@@ -8,7 +8,8 @@ require_once('class.tx_newspaper_module2_querybuilder.php');
 class tx_newspaper_module2_Filter {
 
     const template_path = 'typo3conf/ext/newspaper/mod2/res/';
-    const template = 'mod2_filterbox.tmpl';
+    const production_list_template = 'mod2_filterbox_prodlist.tmpl';
+    const article_browser_template = 'mod2_filterbox_artbrowser.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
         $this->localized_labels = $LL;
@@ -47,7 +48,7 @@ class tx_newspaper_module2_Filter {
         $smarty->assign('CONTROLTAGS', $this->getControltags());
         $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 
-        return $smarty->fetch(self::template);
+        return $smarty->fetch($this->is_article_browser? self::article_browser_template: self::production_list_template);
     }
 
     ////////////////////////////////////////////////////////////////////////////
