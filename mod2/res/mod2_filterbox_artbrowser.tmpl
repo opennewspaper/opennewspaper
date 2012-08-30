@@ -3,36 +3,39 @@
 <div id="filter">
 
 	{* range *}
-	{$LL.label_range}: <select name="tx_newspaper_mod2[range]" onchange="submitFilter('reset_startpage');">
-	{foreach from=$RANGE key=key item=value}
-	{if $key == $FILTER.range}
-		<option selected="selected" value="{$key}">{$value}</option>
-	{else}
-		<option value="{$key}">{$value}</option>
-	{/if}
-	{/foreach}
+	{$LL.label_range}:
+    <select name="tx_newspaper_mod2[range]" onchange="submitFilter('reset_startpage');">
+        {foreach from=$RANGE key=key item=value}
+            {if $key == $FILTER.range}
+                <option selected="selected" value="{$key}">{$value}</option>
+            {else}
+                <option value="{$key}">{$value}</option>
+            {/if}
+        {/foreach}
 	</select>
 
 	{* hidden status *}
-	{$LL.label_status_hidden_field}: <select name="tx_newspaper_mod2[hidden]" onchange="submitFilter('reset_startpage');">
-	{foreach from=$HIDDEN key=key item=value}
-	{if $key == $FILTER.hidden}
-		<option selected="selected" value="{$key}">{$value}</option>
-	{else}
-		<option value="{$key}">{$value}</option>
-	{/if}
-	{/foreach}
+	{$LL.label_status_hidden_field}:
+    <select name="tx_newspaper_mod2[hidden]" onchange="submitFilter('reset_startpage');">
+        {foreach from=$HIDDEN key=key item=value}
+            {if $key == $FILTER.hidden}
+                <option selected="selected" value="{$key}">{$value}</option>
+            {else}
+                <option value="{$key}">{$value}</option>
+            {/if}
+        {/foreach}
 	</select>
 
 	{* role *}
-	{$LL.label_status_role}: <select name="tx_newspaper_mod2[role]" onchange="submitFilter('reset_startpage');">
-	{foreach from=$ROLE key=key item=value}
-	{if $key == $FILTER.role}
-		<option selected="selected" value="{$key}">{$value}</option>
-	{else}
-		<option value="{$key}">{$value}</option>
-	{/if}
-	{/foreach}
+	{$LL.label_status_role}:
+    <select name="tx_newspaper_mod2[role]" onchange="submitFilter('reset_startpage');">
+        {foreach from=$ROLE key=key item=value}
+            {if $key == $FILTER.role}
+                <option selected="selected" value="{$key}">{$value}</option>
+            {else}
+                <option value="{$key}">{$value}</option>
+            {/if}
+        {/foreach}
 	</select>
 
 	<br />
@@ -40,21 +43,39 @@
 	{* author *}
 	{$LL.label_title_author}: <input type="text" name="tx_newspaper_mod2[author]" value="{$FILTER.author|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 
+	{* BE user *}
+	{$LL.label_title_be_user}: <input type="text" name="tx_newspaper_mod2[be_user]" value="{$FILTER.be_user|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
+
 	{* section *}
 	{$LL.label_section}: <input type="text" name="tx_newspaper_mod2[section]" value="{$FILTER.section|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 
 	{* text *}
 	{$LL.label_textsearch}: <input type="text" name="tx_newspaper_mod2[text]" value="{$FILTER.text|escape:html}" onkeyup="checkEnter(event.keyCode); return false;" />
 
+    {* control tags *}
+    {if $CONTROLTAGS}
+        {$LL.label_controltag}:
+        <select name="tx_newspaper_mod2[controltag]" onchange="submitFilter('reset_startpage');">
+            {foreach from=$CONTROLTAGS item=value}
+                {if $value == $FILTER.controltag}
+                    <option selected="selected" value="{$value}">{$value}</option>
+                {else}
+                    <option value="{$value}">{$value}</option>
+                {/if}
+            {/foreach}
+        </select>
+    {/if}
+
 	{* step / items per page *}
-	{$LL.label_step_items_per_page}: <select name="tx_newspaper_mod2[step]" onchange="submitFilter('reset_startpage');">
-	{foreach from=$STEP item=value}
-	{if $value == $FILTER.step}
-		<option selected="selected" value="{$value}">{$value}</option>
-	{else}
-		<option value="{$value}">{$value}</option>
-	{/if}
-	{/foreach}
+	{$LL.label_step_items_per_page}:
+    <select name="tx_newspaper_mod2[step]" onchange="submitFilter('reset_startpage');">
+        {foreach from=$STEP item=value}
+            {if $value == $FILTER.step}
+                <option selected="selected" value="{$value}">{$value}</option>
+            {else}
+                <option value="{$value}">{$value}</option>
+            {/if}
+        {/foreach}
 	</select>
 
 	{* submit button *}
