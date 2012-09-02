@@ -49,11 +49,12 @@ class tx_newspaper_Extra_HTML extends tx_newspaper_Extra {
 		if ($desc = $this->getAttribute('short_description')) {
 		} elseif ($desc = $this->getAttribute('notes')) {
 		} else {
-			$desc = preg_replace("/<(.*)?>/U", "", $this->getAttribute('html'));
+            $desc = strip_tags($this->getAttribute('html'));
 		}
 		return substr(
 			$desc,
-			0, self::description_length+2*strlen('<strong>')+1);
+			0, self::description_length + 2*strlen('<strong>') + 1
+        );
 	}
 
 		/// title for module
