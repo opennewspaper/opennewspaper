@@ -173,8 +173,6 @@
  *  \todo Write me!
  */
  
-require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
-require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_exception.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_storedobject.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_withsource.php');
@@ -182,6 +180,8 @@ require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_a
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_source.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_renderable.php');
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_writeslog.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_exception.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_section.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_page.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');

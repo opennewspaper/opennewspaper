@@ -1,4 +1,8 @@
 <?php
+
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_extraiface.php');
+require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_writeslog.php');
+
 /**
  *  \file class.tx_newspaper_extra.php
  *
