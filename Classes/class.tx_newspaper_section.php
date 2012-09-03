@@ -544,21 +544,17 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		$where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
 
         // Fetch sections
-		$row = tx_newspaper::selectRows(
-			'uid',
-			'tx_newspaper_section',
-			'1' . $where,
-			'',
-			$sort_by
+		$records = tx_newspaper::selectRows(
+			'uid', 'tx_newspaper_section', '1' . $where, '', $sort_by
 		);
+        array_walk($records, array('tx_newspaper_Section', 'extractSection'));
 
-        // Create section objects (and store in array)
-		$s = array();
-		for ($i = 0; $i < sizeof($row); $i++) {
-			$s[] = new tx_newspaper_Section(intval($row[$i]['uid']));
-		}
-		return $s;
+        return $records;
 	}
+
+    private static function extractSection(array &$record, $key) {
+        return new tx_newspaper_Section(intval($record['uid']));
+    }
 
     /**
      * Get base sections (either root sections or configured by TSConfig) for article wizard
