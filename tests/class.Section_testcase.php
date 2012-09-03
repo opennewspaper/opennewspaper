@@ -118,10 +118,6 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
         $rootline = $section->getRootLine();
         $section_path = $section->getSectionPath();
 
-        $this->assertTrue(in_array($section, $section_path), print_r($section, 1) . " not in " . print_r($section_path, 1));
-        $this->assertTrue(in_array($this->section, $section_path), print_r($this->section, 1) . " not in " . print_r($section_path, 1));
-        $this->assertTrue(in_array($this->section, $rootline), print_r($this->section, 1) . " not in " . print_r($rootline, 1));
-
         $this->assertEquals(
             sizeof($section_path)-1, sizeof($rootline),
             "rootline " . sizeof($rootline) . " != section_path " . sizeof($section_path)
