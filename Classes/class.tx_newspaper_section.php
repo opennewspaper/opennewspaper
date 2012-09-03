@@ -376,8 +376,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	/// \return The UID of the associated Typo3 page
 	public function getTypo3PageID() {
 		try {
-			$row = tx_newspaper::selectOneRow('uid', 'pages',
-											  'tx_newspaper_associated_section = ' . $this->getUid());
+			$row = tx_newspaper::selectOneRow(
+                'uid', 'pages','tx_newspaper_associated_section = ' . $this->getUid()
+            );
 		} catch (tx_newspaper_DBException $e) {
 			throw new tx_newspaper_IllegalUsageException(
 				'Section number ' . $this->getUid() . ', "' . $this->getAttribute('section_name') .
@@ -441,6 +442,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	}
 
     private static function addExtraToArticle($extra_class, $paragraph, array $must_have_extras, $key, tx_newspaper_Article $new_article) {
+        /** @var tx_newspaper_Extra $new_extra  */
         $new_extra = new $extra_class();
 
         //	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
@@ -457,11 +459,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
         /// Write association table entry article -> extra
         /// \todo $new_article->relateExtra2Article($new_extra)?
-        tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
-                                 array(
-                                      'uid_local' => $new_article->getUid(),
-                                      'uid_foreign' => $new_extra->getExtraUid(),
-                                 ));
+        tx_newspaper::insertRows(
+            $new_article->getExtra2PagezoneTable(),
+            array('uid_local' => $new_article->getUid(), 'uid_foreign' => $new_extra->getExtraUid())
+        );
     }
 
     private static function calculateInsertPosition(array $must_have_extras, $key) {
@@ -474,104 +475,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
         if ($max_shift < 1) return 1;
         if ($max_shift > 8) return 8;
     }
-
- 	/** Create a new article from the article with the default placement as
- 	 *  specified in the Article PageZone of the Article Page of the Section.
- 	 *
- 	 *  Extras which are mandatory for an Article in this Section (specified in
- 	 *  TSConfig for the Typo3 page in which the current Section lies) are
- 	 *  created. If the Extra is placed in the default placement Article, it is
- 	 *  copied. Else, a new Extra of the specified class is created hidden with
- 	 *  paragraph and position set to (0,0).
- 	 *
- 	 *  \param $at article type object
- 	 */
-/* // note: code not working properly: default extra handling dev stopped ...
- 	public function copyDefaultArticle(tx_newspaper_articletype $at) {
-
- 		if (!$new_article = $this->getDefaultArticle()) {
-			// no default article found, so no article to copy, just return a new empty article
-			return new tx_newspaper_article();
- 		}
- 		if (!$new_article instanceof tx_newspaper_Article) {
- 			throw new tx_newspaper_InconsistencyException('getDefaultArticle() did not return an Article!');
- 		}
-
-		$must_have_extras = $at->getTSConfigSettings('musthave'); // read configured must have extras
-t3lib_div::devlog('at tsc musthave', 'newspaper', 0, array('musthave' => $must_have_extras));
-
-		//	zeroing the UID causes the article to be written to DB as a new object.
- 		$new_article->setAttribute('uid', 0);
- 		$new_article->setUid(0);
- 		$new_article->store();
-
- 		$new_article->clearExtras();
-
- 		$new_article->setAttribute('is_template', 0);
-
- 		$new_article->setAttribute('crdate', time());
- 		$new_article->setAttribute('tstamp', time());
-
-
-		$default_extras = $this->getDefaultArticle()->getExtras();
-		foreach($default_extras as $default_extra) {
-			$key = array_search(tx_newspaper::getTable($default_extra), $must_have_extras);
-			if ($key !== false) {
-				$new_article->addExtra($default_extra->duplicate());
-				unset($must_have_extras[$key]);
-			}
-		}
-
-		///	Create extras configured in TSConfig
-		/// Extras get either copied from default article (if available) or are created empty
-		foreach($must_have_extras as $key => $default_extra) {
-
-			// $default_extra contains a class name or
-			// a class name extended with ":" and a default paragraph for the extra
-			// TSConfig example: newspaper.articletype.[type].musthave = tx_newspaper_extra_image:-2
-			list($extra_class, $paragraph) = explode(':', $default_extra);
-			$paragraph = intval($paragraph);
-t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'default_extra' => $default_extra, 'extra_class' => $extra_class, 'paragraph' => $paragraph));
-
-			if (tx_newspaper::classImplementsInterface($extra_class, 'tx_newspaper_ExtraIface')) {
-				$new_extra = new $extra_class();
-
-				//	I think this is needed before I can safely setAttribute(). Not sure. Anyway, BSTS.
-				$new_extra->store();
-
-		 		$new_extra->setAttribute('crdate', time());
-		 		$new_extra->setAttribute('tstamp', time());
-
-				$new_extra->setAttribute('show_extra', 0);
-				$new_extra->setAttribute('paragraph', $paragraph);
-				$new_extra->setAttribute('position', 0);
-
-				$new_extra->store();						//	Final store()
-
-				/// Write association table entry article -> extra
-				/// \todo $new_article->relateExtra2Article($new_extra)?
-				tx_newspaper::insertRows(tx_newspaper_Article::getExtra2PagezoneTable(),
-					array(
-						'uid_local' => $new_article->getUid(),
-						'uid_foreign' => $new_extra->getExtraUid(),
-				));
-			} else {
-				t3lib_div::devlog('Unknown Extra configured in TSConfig', 'newspaper', 3, array('tsconfig' => $extra_class, 'section' => $this, 'articletype' => $at));
-			}
-		}
-
-		false && t3lib_div::devlog('extras', 'newspaper', 0,
-			array('default extras' => $default_extras,
-				'must have extras' => $must_have_extras,
-				'extras' => $new_article->getExtras()));
-
- 		// set main section
- 		$new_article->addSection($this);
- 		$new_article->store();
-
- 		return $new_article;
- 	}
- */
 
  	public function getTable() {
 		return tx_newspaper::getTable($this);
@@ -588,15 +491,15 @@ t3lib_div::devlog('copyDefaultArticle', 'newspaper', 0, array('key' => $key, 'de
 
 		$p = new tx_newspaper_Page($this);
 
-		$row = tx_newspaper::selectRows(
+		$records = tx_newspaper::selectRows(
 			'uid',
 			$p->getTable(),
 			'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid($p) . ' AND section=' . $this->getUid()
 		);
 
 		$list = array();
-		for ($i = 0; $i < sizeof($row); $i++) {
-			$list[] = new tx_newspaper_Page(intval($row[$i]['uid']));
+		foreach ($records as $record) {
+			$list[] = new tx_newspaper_Page(intval($record['uid']));
 		}
 		return $list;
 	}

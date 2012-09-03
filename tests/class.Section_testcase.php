@@ -111,6 +111,16 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
+    public function test_rootLine() {
+        $rootline = $this->section->getRootLine();
+        $section_path = $this->section->getSectionPath();
+        $this->assertEquals(sizeof($rootline), sizeof($section_path));
+        for ($i = 0; $i < sizeof($rootline); $i++) {
+            $this->assertEquals($rootline[$i]->getUid(), $section_path[$i]->getUid());
+        }
+    }
+
+    /** @var tx_newspaper_Section */
 	private $section = null;					///< the object
 	
 }
