@@ -548,15 +548,16 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'uid', 'tx_newspaper_section', '1' . $where, '', $sort_by
 		);
 
-        array_walk($records, array('tx_newspaper_Section', 'extractSection'));
-        return $records;
-
         // Create section objects (and store in array)
 		$s = array();
 		for ($i = 0; $i < sizeof($records); $i++) {
 			$s[] = new tx_newspaper_Section(intval($records[$i]['uid']));
 		}
 		return $s;
+
+        array_walk($records, array('tx_newspaper_Section', 'extractSection'));
+        return $records;
+
 	}
 
     private static function extractSection(array &$record, $key) {
