@@ -135,10 +135,10 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_getAllSections() {
-        $sections = tx_newspaper_Section::getAllSections(false);
-        print_r($sections);
+        $sections = tx_newspaper_Section::getAllSections(false, 'sorting', false);
         $this->assertTrue(in_array($this->section, $sections));
     }
+
     /** @var tx_newspaper_Section */
 	private $section = null;					///< the object
 	

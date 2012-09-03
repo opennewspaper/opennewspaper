@@ -238,9 +238,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     /** @return tx_newspaper_Section The parent node in the section tree. */
 	public function getParentSection() {
-		if ($this->getAttribute('parent_section')) {
-			return new tx_newspaper_Section($this->getAttribute('parent_section'));
-		} else return null;
+		if (!$this->getAttribute('parent_section')) return null;
+        return new tx_newspaper_Section($this->getAttribute('parent_section'));
 	}
 
 	/**
@@ -529,26 +528,21 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 
 	///	Get all tx_newspaper_Section records in the DB.
-	/** @param $articlesAllowedOnly if set to true only section with the
-	 *       show_in_list flag set are returned
-	 *  @param $sort_by Field of the \c tx_newspaper_section SQL table to sort
-	 * 		results by.
+	/** @param bool $articlesAllowedOnly if set to true only section with the show_in_list flag set are returned
+	 *  @param string $sort_by Field of the \c tx_newspaper_section SQL table to sort results by.
 	 *  @return tx_newspaper_Section[] Section objects in the DB.
 	 */
-	public static function getAllSections($articlesAllowedOnly=true, $sort_by='sorting') {
+	public static function getAllSections($articlesAllowedOnly = true, $sort_by = 'sorting', $sysfolder = true) {
 
-		// Check $articlesAllowedOnly
-		$where = ($articlesAllowedOnly)? ' AND show_in_list=1' : '';
+        $where = '1' .
+		    ($articlesAllowedOnly? ' AND show_in_list=1' : '') .
+		    ($sysfolder? ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()): '');
 
-		// Add sysfolder id
-#		$where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
-
-		// Fetch sections
-		$records = tx_newspaper::selectRows(
-			'uid', 'tx_newspaper_section', '1' . $where, '', $sort_by
+		$sections = tx_newspaper_DB::getInstance()->selectRows(
+			'uid', 'tx_newspaper_section', $where, '', $sort_by
 		);
-		array_walk($records, array('tx_newspaper_Section', 'extractSection'));
-		return $records;
+		array_walk($sections, array('tx_newspaper_Section', 'extractSection'));
+		return $sections;
 
 	}
 
