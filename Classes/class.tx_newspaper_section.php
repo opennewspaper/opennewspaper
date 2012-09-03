@@ -537,31 +537,23 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	 */
 	public static function getAllSections($articlesAllowedOnly=true, $sort_by='sorting') {
 
-        // Check $articlesAllowedOnly
-        $where = ($articlesAllowedOnly)? ' AND show_in_list=1' : '';
+		// Check $articlesAllowedOnly
+		$where = ($articlesAllowedOnly)? ' AND show_in_list=1' : '';
 
 		// Add sysfolder id
-		$where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
+#		$where .= ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section());
 
-        // Fetch sections
+		// Fetch sections
 		$records = tx_newspaper::selectRows(
 			'uid', 'tx_newspaper_section', '1' . $where, '', $sort_by
 		);
-
-        // Create section objects (and store in array)
-		$s = array();
-		for ($i = 0; $i < sizeof($records); $i++) {
-			$s[] = new tx_newspaper_Section(intval($records[$i]['uid']));
-		}
-		return $s;
-
-        array_walk($records, array('tx_newspaper_Section', 'extractSection'));
-        return $records;
+		array_walk($records, array('tx_newspaper_Section', 'extractSection'));
+		return $records;
 
 	}
 
     private static function extractSection(array &$record, $key) {
-        return new tx_newspaper_Section(intval($record['uid']));
+        $record = new tx_newspaper_Section(intval($record['uid']));
     }
 
     /**
