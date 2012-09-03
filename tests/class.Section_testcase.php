@@ -112,8 +112,11 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
 	}
 
     public function test_rootLine() {
-        $rootline = $this->section->getRootLine();
-        $section_path = $this->section->getSectionPath();
+        $children = $this->section->getChildSections();
+        $section = $children[0];
+
+        $rootline = $section->getRootLine();
+        $section_path = $section->getSectionPath();
         $this->assertEquals(
             sizeof($rootline), sizeof($section_path),
             "rootline " . sizeof($rootline) . " != section_path " . sizeof($section_path)
