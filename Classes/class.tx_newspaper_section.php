@@ -271,13 +271,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 
     public function getRootLine() {
-        $parent = $this->getParentSection();
-        $rootline = array();
-        while (!is_null($parent)) {
-            $rootline[] = $parent;
-            $parent = $parent->getParentSection();
-        }
-        return $rootline;
+        return array_slice($this->getSectionPath(), 1);
     }
 
 	/// \return uid of parent abstract record for concrete article list associated with section
@@ -367,10 +361,8 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	/// \return array tx_newspaper_Section objects, up the rootline
 	public function getSectionPath($path = array()) {
 		$path[] = $this;
-		if ($this->getParentSection()) {
-			return $this->getParentSection()->getSectionPath($path);
-		}
-		return $path;
+		if (is_null($this->getParentSection())) return $path;
+        return $this->getParentSection()->getSectionPath($path);
 	}
 
 	/// \return The UID of the associated Typo3 page

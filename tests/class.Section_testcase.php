@@ -118,17 +118,14 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
         $rootline = $section->getRootLine();
         $section_path = $section->getSectionPath();
 
-        print_r($rootline);
-        print_r($section_path);
-
         $this->assertEquals(
-            sizeof($rootline), sizeof($section_path),
+            sizeof($section_path)-1, sizeof($rootline),
             "rootline " . sizeof($rootline) . " != section_path " . sizeof($section_path)
         );
         for ($i = 0; $i < sizeof($rootline); $i++) {
             $this->assertEquals(
-                $rootline[$i]->getUid(), $section_path[$i]->getUid(),
-                "rootline [$i]" . $rootline[$i]->getUid() . " != section_path[$i] " . $section_path[$i]->getUid()
+                $rootline[$i]->getUid(), $section_path[$i+1]->getUid(),
+                "rootline [$i]" . $rootline[$i]->getUid() . " != section_path[$i] " . $section_path[$i+1]->getUid()
             );
         }
     }
