@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `cruser_id` int(11) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) DEFAULT '',
   `doktype` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `TSconfig` text,
+  `TSconfig` varchar(255),
   `storage_pid` int(11) NOT NULL DEFAULT '0',
   `is_siteroot` tinyint(4) NOT NULL DEFAULT '0',
   `php_tree_stop` tinyint(4) NOT NULL DEFAULT '0',
@@ -59,15 +59,15 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `subtitle` varchar(255) DEFAULT '',
   `layout` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `target` varchar(80) DEFAULT '',
-  `media` text,
+  `media` varchar(255),
   `lastUpdated` int(10) unsigned NOT NULL DEFAULT '0',
-  `keywords` text NOT NULL,
+  `keywords` varchar(255) NOT NULL,
   `cache_timeout` int(10) unsigned NOT NULL DEFAULT '0',
   `newUntil` int(10) unsigned NOT NULL DEFAULT '0',
-  `description` text NOT NULL,
+  `description` varchar(255) NOT NULL,
   `no_search` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `SYS_LASTCHANGED` int(10) unsigned NOT NULL DEFAULT '0',
-  `abstract` text NOT NULL,
+  `abstract` varchar(255) NOT NULL,
   `module` varchar(10) NOT NULL DEFAULT '',
   `extendToSubpages` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `author` varchar(255) DEFAULT '',
@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `l18n_cfg` tinyint(4) NOT NULL DEFAULT '0',
   `fe_login_mode` tinyint(4) NOT NULL DEFAULT '0',
   `t3ver_move_id` int(11) NOT NULL DEFAULT '0',
-  `tx_newspaper_associated_section` text,
-  `tx_newspaper_module` tinytext NOT NULL,
+  `tx_newspaper_associated_section` varchar(255),
+  `tx_newspaper_module` varchar(255) NOT NULL,
   `url_scheme` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `backend_layout` int(10) NOT NULL DEFAULT '0',
   `backend_layout_next_level` int(10) NOT NULL DEFAULT '0',
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   KEY `t3ver_oid` (`t3ver_oid`,`t3ver_wsid`),
   KEY `alias` (`alias`),
   KEY `parent` (`pid`,`sorting`,`deleted`,`hidden`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4189 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4189 ;
 
 
 -- --------------------------------------------------------
@@ -123,21 +123,21 @@ CREATE TABLE IF NOT EXISTS `sys_template` (
   `endtime` int(11) unsigned NOT NULL DEFAULT '0',
   `root` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `clear` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `include_static_file` text,
-  `constants` text,
-  `config` text,
-  `editorcfg` text,
-  `resources` text,
+  `include_static_file` varchar(255),
+  `constants` varchar(255),
+  `config` varchar(255),
+  `editorcfg` varchar(255),
+  `resources` varchar(255),
   `nextLevel` varchar(5) NOT NULL DEFAULT '',
-  `description` text NOT NULL,
-  `basedOn` tinytext,
+  `description` varchar(255) NOT NULL,
+  `basedOn` varchar(255),
   `deleted` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `includeStaticAfterBasedOn` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `static_file_mode` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   KEY `t3ver_oid` (`t3ver_oid`,`t3ver_wsid`),
   KEY `parent` (`pid`,`sorting`,`deleted`,`hidden`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=491 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 AUTO_INCREMENT=491 ;
 
 -- --------------------------------------------------------
 
@@ -164,19 +164,19 @@ CREATE TABLE IF NOT EXISTS `tt_content` (
   `CType` varchar(30) NOT NULL DEFAULT '',
   `header` varchar(255) DEFAULT '',
   `header_position` varchar(6) NOT NULL DEFAULT '',
-  `bodytext` mediumtext NOT NULL,
-  `image` text,
+  `bodytext` varchar(255) NOT NULL,
+  `image` varchar(255),
   `imagewidth` mediumint(11) unsigned NOT NULL DEFAULT '0',
   `imageorient` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `imagecaption` text NOT NULL,
+  `imagecaption` varchar(255) NOT NULL,
   `imagecols` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `imageborder` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `media` text,
+  `media` varchar(255),
   `layout` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `deleted` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `cols` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `records` text,
-  `pages` tinytext,
+  `records` varchar(255),
+  `pages` varchar(255),
   `starttime` int(11) unsigned NOT NULL DEFAULT '0',
   `endtime` int(11) unsigned NOT NULL DEFAULT '0',
   `colPos` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -186,14 +186,14 @@ CREATE TABLE IF NOT EXISTS `tt_content` (
   `fe_group` varchar(100) NOT NULL DEFAULT '0',
   `header_link` varchar(255) DEFAULT '',
   `imagecaption_position` varchar(6) NOT NULL DEFAULT '',
-  `image_link` text,
+  `image_link` varchar(255),
   `image_zoom` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `image_noRows` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `image_effects` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `image_compression` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `altText` text NOT NULL,
-  `titleText` text NOT NULL,
-  `longdescURL` text NOT NULL,
+  `altText` varchar(255) NOT NULL,
+  `titleText` varchar(255) NOT NULL,
+  `longdescURL` varchar(255) NOT NULL,
   `header_layout` varchar(30) NOT NULL DEFAULT '0',
   `text_align` varchar(6) NOT NULL DEFAULT '',
   `text_face` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -213,24 +213,24 @@ CREATE TABLE IF NOT EXISTS `tt_content` (
   `section_frame` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `date` int(10) unsigned NOT NULL DEFAULT '0',
   `splash_layout` varchar(30) NOT NULL DEFAULT '0',
-  `multimedia` tinytext,
+  `multimedia` varchar(255),
   `image_frames` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `recursive` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `imageheight` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `rte_enabled` tinyint(4) NOT NULL DEFAULT '0',
   `sys_language_uid` int(11) NOT NULL DEFAULT '0',
-  `pi_flexform` mediumtext NOT NULL,
+  `pi_flexform` varchar(255) NOT NULL,
   `l18n_parent` int(11) NOT NULL DEFAULT '0',
-  `l18n_diffsource` mediumblob NOT NULL,
+  `l18n_diffsource` varchar(255) NOT NULL,
   `t3ver_move_id` int(11) NOT NULL DEFAULT '0',
   `crdate` int(11) unsigned NOT NULL DEFAULT '0',
   `cruser_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `tx_newspaper_extra` tinytext NOT NULL,
+  `tx_newspaper_extra` varchar(255) NOT NULL,
   PRIMARY KEY (`uid`),
   KEY `t3ver_oid` (`t3ver_oid`,`t3ver_wsid`),
   KEY `parent` (`pid`,`sorting`),
   KEY `language` (`l18n_parent`,`sys_language_uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22981 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22981 ;
 
 -- --------------------------------------------------------
 
@@ -617,7 +617,7 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_extra` (
   `hidden` tinyint(4) NOT NULL DEFAULT '0',
   `starttime` int(11) NOT NULL DEFAULT '0',
   `endtime` int(11) NOT NULL DEFAULT '0',
-  `extra_table` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `extra_table` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `extra_uid` int(11) NOT NULL DEFAULT '0',
   `position` int(11) NOT NULL DEFAULT '0',
   `paragraph` int(11) NOT NULL DEFAULT '0',
@@ -625,12 +625,12 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_extra` (
   `is_inheritable` tinyint(3) NOT NULL DEFAULT '0',
   `show_extra` tinyint(3) NOT NULL DEFAULT '0',
   `gui_hidden` tinyint(3) NOT NULL DEFAULT '0',
-  `notes` text COLLATE utf8_unicode_ci NOT NULL,
-  `template_set` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `template_set` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`),
   KEY `origin_uid` (`origin_uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=383423 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=383423 ;
 
 -- --------------------------------------------------------
 
@@ -674,14 +674,14 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_extra_articlelist` (
   `articlelist` int(11) DEFAULT '0',
   `first_article` int(11) NOT NULL DEFAULT '0',
   `num_articles` int(11) NOT NULL DEFAULT '0',
-  `template` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `header` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `image` text COLLATE utf8_unicode_ci,
-  `short_description` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `header` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci,
+  `short_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`),
   KEY `articlelist` (`articlelist`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -925,24 +925,24 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_extra_image` (
   `starttime` int(11) NOT NULL DEFAULT '0',
   `endtime` int(11) NOT NULL DEFAULT '0',
   `pool` tinyint(3) NOT NULL DEFAULT '0',
-  `title` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `image_file` text COLLATE utf8_unicode_ci,
-  `caption` text COLLATE utf8_unicode_ci,
-  `normalized_filename` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `kicker` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `credit` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `source` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `alttext` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image_file` varchar(255) COLLATE utf8_unicode_ci,
+  `caption` varchar(255) COLLATE utf8_unicode_ci,
+  `normalized_filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `kicker` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `credit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `source` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `alttext` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `tags` int(11) NOT NULL DEFAULT '0',
   `image_type` int(11) NOT NULL DEFAULT '0',
-  `short_description` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `image_url` tinytext COLLATE utf8_unicode_ci NOT NULL,
-  `template` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `short_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `width_set` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`),
-  FULLTEXT KEY `title` (`title`,`kicker`,`caption`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=88318 ;
+  KEY `title` (`title`,`kicker`,`caption`)
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=88318 ;
 
 -- --------------------------------------------------------
 
@@ -1232,14 +1232,14 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_pagezone` (
   `cruser_id` int(11) NOT NULL DEFAULT '0',
   `sorting` int(10) NOT NULL DEFAULT '0',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
-  `name` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `page_id` int(11) DEFAULT '0',
-  `pagezone_table` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `pagezone_table` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `pagezone_uid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`),
   KEY `page_id` (`page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=107046 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=107046 ;
 
 -- --------------------------------------------------------
 
@@ -1280,11 +1280,11 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_pagezone_page` (
   `pagezonetype_id` int(11) NOT NULL DEFAULT '0',
   `pagezone_id` int(11) DEFAULT '0',
   `extras` int(11) NOT NULL DEFAULT '0',
-  `template_set` tinytext COLLATE utf8_unicode_ci NOT NULL,
+  `template_set` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `inherits_from` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=613 ;
+) ENGINE=MEMORY  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=613 ;
 
 -- --------------------------------------------------------
 
@@ -1300,7 +1300,7 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_pagezone_page_extras_mm` (
   `sorting` int(11) NOT NULL DEFAULT '0',
   KEY `uid_local` (`uid_local`),
   KEY `uid_foreign` (`uid_foreign`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MEMORY DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
