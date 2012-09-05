@@ -158,18 +158,13 @@ var NewspaperRole = Class.create({
         );
     },
     /**
-     * Reload production list (if production list is shown in content area of Typo3 backend)
+     * Reload production list module (if production list is active)
      */
     updateProductionList:function () {
-        var backendContent;
-        backendContent = $("content");
-        if (typeof(backendContent) != "undefined" && backendContent != null) {
-            if (backendContent.src.indexOf("typo3conf/ext/newspaper/mod2/index.php") != -1) {
-                backendContent.contentWindow.location.reload();
-            }
+        if (top.TYPO3.ModuleMenu.App.loadedModule == 'txnewspaperMmain_txnewspaperM2') {
+            // Reload module, so the new role can be added to the filter settings
+            top.TYPO3.ModuleMenu.App.showModule('txnewspaperMmain_txnewspaperM2', '');
         }
-        console.log($("content").src);
-
     }
 
 });
