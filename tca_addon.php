@@ -351,6 +351,32 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 // make sure the size of the select box for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<=3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
+// quick fix for apparent TYPO3 4.5 bug that resets the range of int fields to (10, 1000) if "max" is set
+unset($TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["max"]);
+unset($TCA["tx_newspaper_pagezone"]["columns"]["inherits_from"]["config"]["max"]);
+# evaluates to date; not sure if this should be unset
+#unset($TCA["tx_newspaper_article"]["columns"]["publish_date"]["config"]["max"]);
+unset($TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["max"]);
+unset($TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["max"]);
+unset($TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra"]["columns"]["extra_uid"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra"]["columns"]["position"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra"]["columns"]["paragraph"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra"]["columns"]["origin_uid"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_sectionlist"]["columns"]["first_article"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_sectionlist"]["columns"]["num_articles"]["config"]["max"]);
+unset($TCA["tx_newspaper_articlelist"]["columns"]["list_uid"]["config"]["max"]);
+unset($TCA["tx_newspaper_log"]["columns"]["table_uid"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_articlelist"]["columns"]["first_article"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_articlelist"]["columns"]["num_articles"]["config"]["max"]);
+unset($TCA["tx_newspaper_articlelist_manual"]["columns"]["num_articles"]["config"]["max"]);
+unset($TCA["tx_newspaper_articlelist_semiautomatic"]["columns"]["num_articles"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_mostcommented"]["columns"]["hours"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_mostcommented"]["columns"]["num_favorites"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_freeformimage"]["columns"]["image_width"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_freeformimage"]["columns"]["image_height"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles"]["config"]["max"]);
+unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles_w_image"]["config"]["max"]);
 
 
     // Article: Modify article backend depending on newspaper.articleTypeAsUrl setting
