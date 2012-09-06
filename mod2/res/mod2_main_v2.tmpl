@@ -240,7 +240,7 @@
 				<a title="{$LL.label_preview_article}" href="#" onclick="showArticlePreview({$DATA[i].uid}); return false;"><img src="../res/be/img/edit_preview.png" width="30" height="30"></a>
 				<a title="{$LL.label_edit_article} (#{$DATA[i].uid})" href="{$T3PATH}alt_doc.php?returnUrl={$ABSOLUTE_PATH}/typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][{$DATA[i].uid}]=edit" target="_blank"><img src="../res/be/img/edit_edit.png" " width="30" height="30"></a>
 				<a title="{$LL.label_delete_article}" href="#" onclick="deleteArticle({$DATA[i].uid}, '{$LL.message_delete_article}'); return false;"><img src="../res/be/img/edit_delete.png" width="30" height="30"></a>
-				<a title="{$LL.label_messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggleCommentProdList('messages_{$DATA[i].uid}_basic'); return false;"><img src="../res/be/css/arrow-270.png" id="b_messages{$DATA[i].uid}" alt="" width="30" height="30"></a>
+				<a title="{$LL.label_messages_show} ({$DATA[i].workflowlog_v2|@sizeof})" href="#" onclick="toggleCommentProdList('messages_{$DATA[i].uid}_basic'); return false;"><img src="../res/be/css/arrow-270.png" id="b_messages_{$DATA[i].uid}" alt="" width="30" height="30"></a>
 			</div>
 		</div>
 	</div>

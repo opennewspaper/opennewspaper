@@ -1,33 +1,67 @@
 
-var el_previous = null; // reference to currently open messages
+var elPrevious = null; // Reference to currently open messages
+
+
+/**
+ * Removes tailing '_basic" and "_all"
+ * @param el
+ * @return element id without tailiung "_basic" or "_all"
+ */
+function cleanElementId(el) {
+    var p;
+    p = el.lastIndexOf('_basic');
+    if (p > -1) {
+        el = el.substr(0, p);
+    }
+    p = el.lastIndexOf('_all');
+    if (p > -1) {
+        el = el.substr(0, p);
+    }
+    return el;
+}
+
+/**
+ * Simply adds '_basic" to the given element id
+ * @param el
+ * @return {String} el appended with "_basic"
+ */
+function getCommentId(el) {
+    el = cleanElementId(el);
+    return el + '_basic';
+}
+
 /// Toggle message display for article in production list
 function toggleCommentProdList(el) {
-	// toggle comments
-	if (document.getElementById(el).style.display == 'block') {
-		// hide comments
- 		document.getElementById(el).style.display = 'none';
- 		document.getElementById('b_' + el).src = '../res/be/css/arrow-270.png';
- 		el_previous = null;
+    var elButtonId, elCommentId;
+    elButtonId = cleanElementId(el);
+    elCommentId = getCommentId(el);
+	// Toggle comments
+	if (document.getElementById(elCommentId).style.display == 'block') {
+		// Hide comments
+ 		document.getElementById(elCommentId).style.display = 'none';
+ 		document.getElementById('b_' + elButtonId).src = '../res/be/css/arrow-270.png';
+ 		elPrevious = null;
  	} else {
- 		document.getElementById(el).style.display = 'block';
- 		document.getElementById('b_' + el).src = '../res/be/css/arrow-90.png';
-	 	// hide old comments (if any)
-	 	if (el_previous != null) {
-	 		document.getElementById(el_previous).style.display = 'none';
-	 		document.getElementById('b_' + el_previous).src = '../res/be/css/arrow-270.png';
+ 		document.getElementById(elCommentId).style.display = 'block';
+ 		document.getElementById('b_' + elButtonId).src = '../res/be/css/arrow-90.png';
+	 	// Hide old comments (if any)
+	 	if (elPrevious != null) {
+	 		document.getElementById(elPrevious).style.display = 'none';
+	 		document.getElementById('b_' + cleanElementId(elPrevious)).src = '../res/be/css/arrow-270.png';
 	 	}
-	 	el_previous = el; // store, so this message can be closed when other messages are to be displayed
+	 	elPrevious = el; // Store, so this message can be closed when other messages are to be displayed
  	}
  }
 
 function toggleCommentDetails(el) {
-	// toggle comments
+	// Toggle comments
 	if (document.getElementById(el).style.display == 'block') {
 		// hide comments
  		document.getElementById(el).style.display = 'none';
         // @todo change displayed element to "+"
  	} else {
  		document.getElementById(el).style.display = 'block';
+        elPrevious = el; // Store currently opened comment id
         // @todo change displayed element to "-"
  	}
  }
