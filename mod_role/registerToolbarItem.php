@@ -2,7 +2,10 @@
 
 if (!defined('TYPO3_MODE')) 	die ('Access denied.');
 
-if (TYPO3_MODE == 'BE') {
+/** Add role switch module
+ * Can be de-activated by User TSConfig newspaper.hideRoleSwitchModule = 1
+ */
+if (TYPO3_MODE == 'BE' && !$GLOBALS['BE_USER']->getTSConfigVal('newspaper.hideRoleSwitchModule')) {
 
 		// first include the class file
 	include_once(t3lib_extMgm::extPath('newspaper').'mod_role/class.tx_newspaper_role.php');

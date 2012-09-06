@@ -120,7 +120,7 @@ if (TYPO3_MODE == 'BE') {
 	);
 
 
-	// add newspaper role module
+	// Add newspaper role switch module
 	$pathRole = t3lib_extMgm::extPath('newspaper') . 'mod_role/';
 	// register toolbar item
 	$GLOBALS['TYPO3_CONF_VARS']['typo3/backend.php']['additionalBackendItems'][] = $pathRole . 'registerToolbarItem.php';
