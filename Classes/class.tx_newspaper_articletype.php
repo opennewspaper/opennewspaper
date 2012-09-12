@@ -131,9 +131,13 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 	public function getTable() { return tx_newspaper::getTable($this); }
 	
 	static public function getModuleName() { return 'np_articletype'; }
-	
-	/// \return Sorted list of all available article types
-	static public function getArticleTypes() {
+
+    /**
+     * Get ALL article types
+     * @static
+     * @return array Sorted list of ALL available article types
+     */
+    static public function getArticleTypes() {
 		$pid = tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_ArticleType());
 		$row = tx_newspaper::selectRows(
 			'uid',
@@ -142,13 +146,82 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 			'',
 			'sorting'
 		);
-		$at = array();
+		$articleTypes = array();
 		for ($i = 0; $i < sizeof($row); $i++) {
-			$at[] = new tx_newspaper_ArticleType(intval($row[$i]['uid']));
+			$articleTypes[] = new tx_newspaper_ArticleType($row[$i]['uid']);
 		}
-		return $at;
-	}	
-	
+		return $articleTypes;
+	}
+
+    /**
+     * Get article types allowed for the current backend user.
+     * $articleTypesToBeMerged will be added if the user doesn't have permission to access these article types
+     * User TSConfig:
+     * newspaper.accessArticleTypes = [comma separated list of article typ uids]
+     * @static
+     * @param Array $articleTypesToBeMerged Article types that should be merged in the the set of allowed article types
+     * @return Array Article types accessible for current BE user
+     */
+    public static function getArticleTypesRestricted(array $articleTypesToBeMerged=array()) {
+        $allowedArticleTypeUids = self::getAllowedArticleTypeUids();
+        if (!is_array($allowedArticleTypeUids)) {
+            return self::getArticleTypes(); // No User TSConfig set, so ALL article types can be accessed
+        }
+
+        $accessibleArticleTypes = array();
+        foreach(self::getArticleTypes() as $at) {
+            if (in_array($at->getUid(), $allowedArticleTypeUids)) {
+                $accessibleArticleTypes[] = $at; // Access to this article type is granted
+            } else {
+                foreach($articleTypesToBeMerged as $mergedAt) {
+                    if ($at->getUid() == $mergedAt->getUid()) {
+                        // This feature is needed the prevent problems for be users while working with an article with
+                        // an article types assigned that IS NOT permitted for that be user.
+                        $accessibleArticleTypes[] = $at; // User can access this article type even though it's not TSConfigured
+                        break;
+                    }
+                }
+            }
+        }
+        return $accessibleArticleTypes;
+    }
+
+    /**
+     * Called by TCEForms as itemsProcFunc to fill the article type dropdown according to User TSConfig restrictions
+     * A sorted list of article types that can be accessed by the current BE user is copied into
+     * $params['items'] (formatted according to TCEForms requirements)
+     * @param $params Array passed by TCEForms, see http://typo3.org/documentation/document-library/core-documentation/doc_core_tca/current/
+     * @return void
+     */
+    public function processArticleTypesForArticleBackend(&$params) {
+//t3lib_div::debug($params, 'params');
+        $currentArticleType = intval($params['row']['articletype_id'])?
+            array(new tx_newspaper_ArticleType(intval($params['row']['articletype_id']))) : array();
+        $allowedArticleTypes = array();
+        foreach(self::getArticleTypesRestricted($currentArticleType) as $at) {
+            // 0=>title, 1=>uid, 2=>icon file (nit used here, so empty)
+            $allowedArticleTypes[] = array('0' => $at->getAttribute('title'), '1' => $at->getUid(), '2' => '');
+        }
+        $params['items'] = $allowedArticleTypes;
+    }
+
+    /**
+     * Return User TSConfig setting (or false if no setting can be found)
+     * newspaper.accessArticleTypes = [comma separated list of article typ uids]
+     * @static
+     * @return Array with article type uids OR false, if no User TSConfig could be found
+     */
+    public static function getAllowedArticleTypeUids() {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return false; // Doesn't make sense without a backend user ...
+        }
+        if (!$tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessArticleTypes')) {
+            return false; // No User TSConfig found
+        }
+        return t3lib_div::trimExplode(',', $tsc);
+    }
+
+
 	////////////////////////////////////////////////////////////////////////////
 	
 	private $uid = ''; ///< UID that identifies the article type

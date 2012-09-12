@@ -395,6 +395,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return null; // no default article found
 	}
 
+    /**
+     * Get default article type for this section
+     * @return tx_newspaper_ArticleType Default article type for this section
+     */
+    public function getDefaultArticleType() {
+        return new tx_newspaper_ArticleType($this->getAttribute('default_articletype'));
+    }
+
     public function getSectionName() { return $this->getAttribute('section_name'); }
 
  	/** Create a new article based on TSConfig settings for musthave extras

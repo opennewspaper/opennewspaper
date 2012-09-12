@@ -1,6 +1,6 @@
 {* debug *}
 
-{include file="mod5.js"}  {* js for importing articles *}
+{include file="mod5.js.tmpl"}  {* js for creating/importing articles *}
 <script language="javascript" type="text/javascript" src="../../../../typo3/contrib/prototype/prototype.js"> </script>
 <script language="javascript" type="text/javascript" src="../res/be/newspaper.js"> </script>
 {literal}
@@ -684,6 +684,11 @@ body {
 </div>
 
 <script type="text/javascript">
+
+    var defaultArticleTypeForSection = {$JSON.defaultArticleTypeForSection};
+    var allowedArticleTypes = {$JSON.allowedArticleTypes};
+    var mergedDefaultArticle = null; // No default article merged to allowed article type list initially
+
 	window.onload = function() {ldelim}
 
 {if $DEFAULT_SOURCE && $DEFAULT_SOURCE != 'new'}

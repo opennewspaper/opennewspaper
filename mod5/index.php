@@ -535,7 +535,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$sources = tx_newspaper::getRegisteredSources();
 		$smarty->assign('IMPORT_SOURCE', $sources);
 
-		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypes());
+		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
 
         if (!self::hideControlTagInNewArticleWizard()) {
@@ -565,10 +565,33 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('DEFAULT_SOURCE', $this->getDefaultSource()); // select this radio button by default
 
+        // Data for restricted article typ handling, see User TSConfig newspaper.accessArticleTypes
+        $smarty->assign('JSON', array(
+            'defaultArticleTypeForSection' => JSON_encode($this->getDefaultArticleTypeForSections()),
+            'allowedArticleTypes' => JSON_encode(tx_newspaper_ArticleType::getAllowedArticleTypeUids())
+        ));
+
+
 		$this->content .= $this->doc->section('', $smarty->fetch('mod5_newarticle.tmpl'), 0, 1);
 		$this->content .= $this->doc->spacer(10);
 
 	}
+
+    /**
+     * Get default article type for all sections
+     * @return array(section uid => array('uid' => article type uid, 'title' => article type title)
+     */
+    private function getDefaultArticleTypeForSections() {
+        $defaultArticleTypes = array();
+        foreach(tx_newspaper_Section::getAllSections() as $section) {
+            $at = $section->getDefaultArticleType();
+            $defaultArticleTypes[$section->getUid()] = array(
+                'uid' => $at->getUid(),
+                'title' => $at->getAttribute('title')
+            );
+        }
+        return $defaultArticleTypes;
+    }
 
     /**
      * Checks User-TSConfig setting for

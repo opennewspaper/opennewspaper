@@ -1,11 +1,11 @@
 {* This file is designed to be include()d by a Smarty template, not <script>ed
    from a HTML page
 *}
-
 <script language="javascript">
 		
-	/// when section is changed the assigned default article type gets selected
+	/// When a target section is changed the assigned default article type gets selected
 	function setDefaultArticletype(section_id) {ldelim}
+        processDefaultArticle(section_id);
 		switch(parseInt(section_id)) {ldelim}
 			{foreach item=sub_section from=$SECTION2}
 				{foreach item=section from=$sub_section}
@@ -23,7 +23,42 @@
 			document.getElementById('articletype').value = d_at;
 		{rdelim}
 	{rdelim}
-	
+
+{literal}
+    /**
+     * Adds the default article type to (bottom of) list, if that article type isn't available for current BE user
+     * Removes a previously added default article (if any)
+     */
+    function processDefaultArticle(sectionId) {
+        if (!sectionId) {
+            return; // Nothing to do ...
+        }
+
+        var defaultArticleTypeUid = defaultArticleTypeForSection[sectionId]["uid"];
+        var defaultArticleTypeTitle = defaultArticleTypeForSection[sectionId]["title"];
+
+        if (defaultArticleTypeUid == mergedDefaultArticle) {
+            return; // This article type has already been appended to the list
+        }
+
+        var select = $("articletype");
+
+        // Remove previously merged default article type (last option) (currently not needed/available for BE user)
+        if (mergedDefaultArticle) {
+            select.removeChild(select.lastChild);
+            mergedDefaultArticle = null;
+        }
+
+        // Check if article type is allowed anyway
+        if (!allowedArticleTypes.include(defaultArticleTypeUid)) {
+            // Append article type
+            select.options[select.options.length] = new Option(defaultArticleTypeTitle, defaultArticleTypeUid);
+            mergedDefaultArticle = defaultArticleTypeUid; // Store merged article type (so it can be removed next time)
+        }
+
+    }
+{/literal}
+
 	/// "processing spinner" in source_browser div
 	function processing() {ldelim}
 		document.getElementById('source_browser').innerHTML = '<img src="' + top.path + 'typo3/gfx/spinner.gif"/>';

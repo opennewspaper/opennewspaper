@@ -12,28 +12,27 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
 require_once(PATH_typo3conf. 'ext/newspaper/Classes/class.tx_newspaper_extra.php');
 
 
-// set sorting for dropdown article type in article
-$TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
-// set default sorting for articles in list module
+// Set default sorting for articles in list module
 $TCA['tx_newspaper_article']['ctrl']['default_sortby'] = 'ORDER BY tstamp DESC';
 unset($TCA['tx_newspaper_article']['columns']['template_set']['config']['items']['0']);
 $TCA['tx_newspaper_article']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
-// /switch Extra field 'extras' in article (created by kickstarter) to a userFunc field (displaying a list of associated Extras)
+
+// Switch Extra field 'extras' in article (created by kickstarter) to a userFunc field (displaying a list of associated Extras)
 unset($TCA['tx_newspaper_article']['columns']['extras']['config']);
 $TCA['tx_newspaper_article']['columns']['extras']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['extras']['config']['userFunc'] = 'tx_newspaper_be->renderExtraInArticle';
-// /switch Extra field 'extras' in article (created by kickstarter)) to a userFunc field (displaying buttons according to workflow_status and be_users.tx_np_role)
+// Switch Extra field 'extras' in article (created by kickstarter)) to a userFunc field (displaying buttons according to workflow_status and be_users.tx_np_role)
 unset($TCA['tx_newspaper_article']['columns']['workflow_status']['config']);
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['type'] = 'user';
 $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc'] = 'tx_newspaper_be->getWorkflowCommentBackend';
-// initially load no tags and let custom code handle it
+
+// Do not load  tags initially and let custom code handle it
 $TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
-// switch field tag in article to a userfunc field (allowing auto completion)
+// Switch field tag in article to a userfunc field (allowing auto completion)
 $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx_newspaper_be->getArticleTags';
 $TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = array ("lower" => "0");
-
 
 // newspaper textarea field for teaser
 unset($TCA['tx_newspaper_article']['columns']['teaser']['config']);
@@ -401,6 +400,12 @@ unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles_w_image"
         unset($GLOBALS['TCA']['tx_newspaper_article']['columns']['url']);
     }
 
+
+
+    // Article type settings: user function to check if article types are not allowed for a BE user
+    unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table']);
+    unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where']);
+    $TCA['tx_newspaper_article']['columns']['articletype_id']['config']['itemsProcFunc'] = 'tx_newspaper_ArticleType->processArticleTypesForArticleBackend';
 
 
 
