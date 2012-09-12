@@ -81,6 +81,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         $this->smarty->assign(self::page_GET_var, self::getResultPage());
         $this->smarty->assign('results_per_page', self::getNumResultsPerPage());
         $this->smarty->assign('first_article_index', self::getFirstArticleIndex());
+        $this->smarty->assign('parameters', $this->search);
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 

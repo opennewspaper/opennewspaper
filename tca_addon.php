@@ -350,7 +350,7 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 // make sure the size of the select box for sections in articles is set to at least 4; ff/mac bug: no proper scrollbars if size<=3
 $TCA['tx_newspaper_article']['columns']['sections']['config']['size'] = max(4, $TCA['tx_newspaper_article']['columns']['sections']['config']['size']);
 
-// quick fix for apparent TYPO3 4.5 bug that resets the range of int fields to (10, 1000) if "max" is set
+// quick fix for PHP 5.2 bug that resets the range of int fields to (10, 1000) if "max" is set (https://bugs.php.net/bug.php?id=37773)
 unset($TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["max"]);
 unset($TCA["tx_newspaper_pagezone"]["columns"]["inherits_from"]["config"]["max"]);
 # evaluates to date; not sure if this should be unset
