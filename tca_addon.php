@@ -198,8 +198,8 @@ $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['starttime']['confi
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['endtime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['first_article']['config']['eval'] = 'required';
-$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['num_articles']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['first_article']['config']['eval'] = 'int,required';
+$GLOBALS['TCA']['tx_newspaper_extra_articlelist']['columns']['num_articles']['config']['eval'] = 'int,required';
 
 $GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_bio']['columns']['endtime']['config']['eval'] = 'datetime';
@@ -255,9 +255,9 @@ $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['starttime']['confi
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['starttime']['config']['size'] = '12';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['endtime']['config']['size'] = '12';
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['eval'] = 'int,required';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['config']['range']['lower'] = 1;
-$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'required';
+$GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'int,required';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;
 
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['eval'] = 'datetime';
