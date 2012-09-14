@@ -535,9 +535,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $this->getParentSection()->getTemplateSet();
 	}
 
-	///	Get all tx_newspaper_Section records in the DB.
-	/** @param bool $articlesAllowedOnly if set to true only section with the show_in_list flag set are returned
+	/** Get all tx_newspaper_Section records in the DB (if $sysfolder is false) or from the sysfolder (if $sysfolder is true)
+     *  @param bool $articlesAllowedOnly if set to true only section with the show_in_list flag set are returned
 	 *  @param string $sort_by Field of the \c tx_newspaper_section SQL table to sort results by.
+     *  @param bool $sysfolder If true only section on the sysfolder are fetched
 	 *  @return tx_newspaper_Section[] Section objects in the DB.
 	 */
 	public static function getAllSections($articlesAllowedOnly = true, $sort_by = 'sorting', $sysfolder = true) {
@@ -553,6 +554,24 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $sections;
 
 	}
+
+    /**
+     * Get all section the current BE user is permitted to access
+     * User TSConfig: newspaper.bnaseSections = [uids]
+     * Params: see getAllSections()
+     * @static
+     * @return array tx_newspaper_section's
+     */
+    public static function getAllSectionsWithRestrictions($articlesAllowedOnly=true, $sort_by='sorting', $sysfolder=true) {
+        $allowedSectionUids = self::getBaseSectionTreeUids();
+        $sections = array();
+        foreach(self::getAllSections($articlesAllowedOnly, $sort_by, $sysfolder) as $s) {
+            if (in_array($s->getUid(), $allowedSectionUids)) {
+                $sections[] = $s;
+            }
+        }
+        return $sections;
+    }
 
     private static function extractSection(array &$record, $key) {
         $record = new tx_newspaper_Section(intval($record['uid']));
@@ -570,29 +589,22 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      */
     public static function getBaseSections() {
 
-        // Init
-        $baseSections = array();
-        $baseSectionUids = array();
-
-        // Read User TSConfig for base sections (if available): get uids of base sections
-        if ($GLOBALS['BE_USER']) {
-            if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
-                $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
-            }
-        }
-
-        if (!$baseSectionUids) {
-            // If no base sections were configured or found, use root sections
+        // Get base sections
+        if ($GLOBALS['BE_USER'] && $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections')) {
+            // Read User TSConfig for base sections: get uids of base sections
+            $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
+        } else {
+            // No base sections were configured or found, so use root sections
             $baseSectionUids = self::getRootSectionUids();
         }
 
         // Create section objects
+        $baseSections = array();
         foreach($baseSectionUids as $sectionUid) {
             $baseSections[] = new tx_newspaper_Section($sectionUid);
         }
 
         return $baseSections;
-
     }
 
     /**
@@ -600,7 +612,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @static
      * @return array Section uids
      */
-    public static function getSectionTreeUids() {
+    public static function getBaseSectionTreeUids() {
         $sectionUids = array();
         /** @var tx_newspaper_Section $baseSection */
         foreach(tx_newspaper_Section::getBaseSections() as $baseSection) {

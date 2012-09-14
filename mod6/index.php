@@ -491,7 +491,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 					'submitted' => $submitted, // true if form was submitted, false if form was just opened
 				)
 			);
-			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSections(false));
+			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSectionsWithRestrictions(false));
 			$this->smarty->assign('CTRLTAGCATS', $cats);
 		}
 
@@ -563,7 +563,7 @@ t3lib_div::devlog('manageArticles() - not implemented yet', 'newspaper', 0, arra
 			$this->smarty->assign('CTRLTAGCATS', $tagCats);
 			$this->smarty->assign('TAGS', tx_newspaper_tag::getAllControlTags($ctrltagcat));
 
-			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSections());
+			$this->smarty->assign('SECTIONS', tx_newspaper_section::getAllSectionsWithRestrictions(false));
 
 			$this->smarty->assign('ICON', array(
 				'articlebrowser' => tx_newspaper_BE::renderIcon('gfx/insert3.gif', ''),

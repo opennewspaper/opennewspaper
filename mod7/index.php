@@ -626,7 +626,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 				 *  )
 				 */
 				function renderAllAvailableSections() {
-					return $this->prepareSectionOptions(tx_newspaper_section::getAllSections());
+					return $this->prepareSectionOptions(tx_newspaper_section::getAllSectionsWithRestrictions());
 				}
 
 				/// get all sections assigned to given article
