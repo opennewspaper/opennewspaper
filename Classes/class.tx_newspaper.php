@@ -339,6 +339,16 @@ class tx_newspaper  {
         throw new tx_newspaper_NotYetImplementedException('Multidimensional TSConfig');
     }
 
+    /**
+     * @param string $key key/name of the property
+     * @return string the value/properties of a TS-object as given by $key
+     */
+    public static function getUserTSConfig($key) {
+        /** @var t3lib_beUserAuth */
+        global $BE_USER;
+        return $BE_USER->getTSConfig($key);
+    }
+
     public static function getDossierPageID() {
 
         $TSConfig = self::getTSConfig();
@@ -505,9 +515,11 @@ class tx_newspaper  {
     }
 
 
-    /// Basic url encoding: encodes '?', '=' and '&' only
-    /// \param $url URL to be encoded
-    /// \return encoded URL
+    /**
+     * Basic url encoding: encodes '?', '=' and '&' only
+     * @param string $url URL to be encoded
+     * @return string encoded URL
+     */
     public static function encodeUrlBasic($url) {
         $chars = array('?', '=', '&');
         $replaceWith = array('%3F', '%3D', '%26');
@@ -644,62 +656,60 @@ class tx_newspaper  {
     }
 
 
-  /**
-   * Gets field data of current be_user
-   * \param $field Name of field to be read
-   * \return $field data of logged in be_user, or false if data couldn't be fetched
-   */
-  public static function getBeUserData($field) {
-    $field = htmlspecialchars($field);
-    // check global object BE_USER first
-    if (isset($GLOBALS['BE_USER']->user[$field])) {
-      return $GLOBALS['BE_USER']->user[$field];
+    /**
+     * Gets field data of current be_user
+     * @param string $field Name of field to be read
+     * @return mixed $field data of logged in be_user, or false if data couldn't be fetched
+     */
+    public static function getBeUserData($field) {
+
+        /** @var t3lib_beUserAuth */
+        global $BE_USER;
+
+        $field = htmlspecialchars($field);
+
+        // check global object BE_USER first
+        if (isset($BE_USER->user[$field])) {
+            return $BE_USER->user[$field];
+        }
+
+        // check session then
+        if ($_COOKIE['be_typo_user'] &&
+            tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+                'ses_userid', 'be_sessions',
+                'sed_id=' . $_COOKIE['be_typo_user'] . ' AND ses_name="be_typo_user"'
+        )) {
+            $user = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+                $field, 'be_users',
+                'uid=' . intval($_COOKIE['be_typo_user']) . ' AND deleted=0'
+            );
+            return $user[$field];
+        }
+
+        return false;
     }
-    // check session then
-    if ($_COOKIE['be_typo_user']) {
-      if ($row = tx_newspaper::selectZeroOrOneRows(
-        'ses_userid',
-        'be_sessions',
-        'sed_id=' . $_COOKIE['be_typo_user'] . ' AND ses_name="be_typo_user"'
-      )) {
-        $user = tx_newspaper::selectZeroOrOneRows(
-          $field,
-          'be_users',
-          'uid=' . intval($_COOKIE['be_typo_user']) . ' AND deleted=0'
-        );
-        return $user[$field];
-      }
+
+    /**
+     * Gets the uid of current be_user
+     * @return int uid of logged in be_user, or 0 if uid couldn't be fetched
+     */
+    public static function getBeUserUid() {
+        return intval(self::getBeUserData('uid'));
     }
-    return false;
-  }
-  /**
-   * Gets the uid of current be_user
-   * @return int uid of logged in be_user, or 0 if uid couldn't be fetched
-   */
-  public static function getBeUserUid() {
-    $uid = self::getBeUserData('uid');
-    if ($uid != false) {
-      return self::getBeUserData('uid');
-    } else {
-      return 0;
-    }
-  }
 
 
     ////////////////////////////////////////////////////////////////////////////
 
-  /// Check if given class name is an abstract class
-  /** \param $class class name
-   *  \return \c true if abstract class, \c false else (or if no class at all)
-   */
-  public static function isAbstractClass($class) {
-    $abstract = false;
-    if (class_exists($class)) {
-      $tmp = new ReflectionClass($class);
-      $abstract = $tmp->isAbstract();
+    /// Check if given class name is an abstract class
+    /** \param $class class name
+     *  \return \c true if abstract class, \c false else (or if no class at all)
+     */
+    public static function isAbstractClass($class) {
+        if (!class_exists($class)) return false;
+
+        $tmp = new ReflectionClass($class);
+        return $tmp->isAbstract();
     }
-    return $abstract;
-  }
 
   /// Return the name of the SQL table \p $class is persistently stored in
   /** \param $class either object or a class name to find the SQL table for
@@ -707,9 +717,7 @@ class tx_newspaper  {
    * 		db table; newspaper convention)
    */
   public static function getTable($class) {
-    if (is_object($class)) {
-      return strtolower(get_class($class));
-    }
+    if (is_object($class)) return strtolower(get_class($class));
     return strtolower($class);
   }
 
@@ -719,7 +727,7 @@ class tx_newspaper  {
    *  \return List of child classes
    */
   public static function getChildClasses($class_name) {
-    if ($class_name == '') return array();
+      if (!class_exists($class_name)) return array();
     $class_name = strtolower($class_name);
     $child_list = array();
     foreach(get_declared_classes() as $cl) {
@@ -735,12 +743,11 @@ class tx_newspaper  {
    *  \return true if given \p $class implentes given \p $interface
    */
   public static function classImplementsInterface($class, $interface) {
-    if (!class_exists($class))
-      return false;
+    if (!class_exists($class)) return false;
+
     $tmp_impl = class_implements($class);
-    if (isset($tmp_impl[$interface])) {
-      return true;
-    }
+    if (isset($tmp_impl[$interface])) return true;
+
     return false;
   }
 
