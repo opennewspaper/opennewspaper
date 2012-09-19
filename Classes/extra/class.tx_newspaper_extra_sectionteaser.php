@@ -88,7 +88,7 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
         tx_newspaper::devlog('addSectionsToDropdown', $params);
         $params['items'][] = array('', '');
         foreach (tx_newspaper_Section::getAllSections(false, 'section_name') as $section) {
-            $params['items'][] = array($section->getAttribute('name'), $section->getUid());
+            $params['items'][] = array($section->getAttribute('section_name'), $section->getUid());
         }
     }
 

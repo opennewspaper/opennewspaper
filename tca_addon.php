@@ -260,6 +260,14 @@ $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['first_article']['c
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['eval'] = 'int,required';
 $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['config']['range']['lower'] = 1;
 
+unset($GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']);
+$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config'] = array(
+    "type" => "select",
+    'itemsProcFunc' => 'tx_newspaper_Extra_Sectionteaser->addSectionsToDropdown',
+    "size" => 1,
+    "maxitems" => 1,
+);
+
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_extra_textbox']['columns']['starttime']['config']['size'] = '12';
@@ -294,7 +302,7 @@ $TCA['tx_newspaper_tag']['types']['2']['showitem'] = 'tag_type;;;;1-1-1, title;;
 
 // extra section teaser
 	// dropdown sorting
-	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_section.section_name';
+#	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_section.section_name';
 	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag_cat']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_ctrltag_category.sorting';
 	// dropdown sorting AND filter control tags depending on selected control tag category
 	$GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['ctrltag']['config']['foreign_table_where'] = 'AND ctrltag_cat=###REC_FIELD_ctrltag_cat### ORDER BY tx_newspaper_tag.tag';
