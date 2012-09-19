@@ -84,9 +84,12 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 	}
 
 	/// itemsProcFunc to fill styles dropdowns in "normal" tceforms backend forms
-    public function addEmptyDropdownEntry(&$params, &$pObj) {
-        tx_newspaper::devlog('addEmptyDropdownEntry', $params);
-        die('AAAAAAAAAAAAAAAAAAAAAAARGH!');
+    public function addSectionsToDropdown(&$params, &$pObj) {
+        tx_newspaper::devlog('addSectionsToDropdown', $params);
+        $params['items'][] = array('', '');
+        foreach (tx_newspaper_Section::getAllSections(false, 'section_name') as $section) {
+            $params['items'][] = array($section->getAttribute('name'), $section->getUid());
+        }
     }
 
 	/// title for module
