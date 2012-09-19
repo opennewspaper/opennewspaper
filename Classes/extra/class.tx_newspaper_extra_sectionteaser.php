@@ -6,7 +6,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
 /** This Extra is used to place HTML in an article
  */
 
-class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
+class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 
 	const description_length = 50;
 
@@ -83,7 +83,13 @@ class tx_newspaper_Extra_sectionteaser extends tx_newspaper_Extra {
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 
-		/// title for module
+	/// itemsProcFunc to fill styles dropdowns in "normal" tceforms backend forms
+    public function addEmptyDropdownEntry(&$params, &$pObj) {
+        tx_newspaper::devlog('addEmptyDropdownEntry', $params);
+        die('AAAAAAAAAAAAAAAAAAAAAAARGH!');
+    }
+
+	/// title for module
 	public static function getModuleName() {
 		return 'np_extra_sectionteaser';
 	}

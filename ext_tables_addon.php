@@ -128,6 +128,9 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToEditorialStaff'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToEditorialStaff';
 	$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['tx_newspaper_role::changeRoleToDutyEditor'] = $pathRole . 'class.tx_newspaper_role.php:tx_newspaper_role->changeRoleToDutyEditor';
 
+    $GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_section.section_name';
+    $GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']['itemsProcFunc'] = 'tx_newspaper_Extra_Sectionteaser->addEmptyDropdownEntry';
+
     if (tx_newspaper::getTypo3Version() >= 4005000) {
 
         // Register extbase Backend Module(s)
