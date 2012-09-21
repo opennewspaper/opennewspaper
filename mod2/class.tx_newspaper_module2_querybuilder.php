@@ -27,7 +27,7 @@ class tx_newspaper_module2_QueryBuilder {
 	/// \return array key 'table' table(s) to be used, key 'where': condition combined with "AND"; or false if query will return an empty result set
 	private function createWherePartArray() {
 //t3lib_div::devlog('createWherePartArray()', 'newspaper', 0, array('_request' => $_REQUEST, 'input' => $this->input));
-		$this->where = array(
+        $this->where = array(
             'is_template=0',
             'pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Article())
         );
@@ -35,7 +35,7 @@ class tx_newspaper_module2_QueryBuilder {
 
         ksort($this->input);    // helps ensure that text is handled last
         foreach (array_keys($this->input) as $key) {
-            if (trim($this->input[$key])) {
+            if (isset($this->input[$key])) {
                 $method = 'addConditionFor' . ucfirst($key);
                 if (method_exists($this, $method)) {
                     $this->$method();
