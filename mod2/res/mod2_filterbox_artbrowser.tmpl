@@ -84,7 +84,7 @@
                 {* step / items per page *}
                 {$LL.label_step_items_per_page}:
                 <select name="tx_newspaper_mod2[step]" onchange="submitFilter('reset_startpage');">
-                    {foreach from=$STEP item=value}
+                    {foreach from=$STEPS item=value}
                         {if $value == $FILTER.step}
                             <option selected="selected" value="{$value}">{$value}</option>
                         {else}

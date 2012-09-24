@@ -46,7 +46,7 @@ class tx_newspaper_module2_Filter {
         $smarty->assign('ROLE_FILTER_EQUALS_USER_ROLE', $this->isRoleFilterEqualToUserRole());
         $smarty->assign('ROLE', $this->getRoleArray()); // add data for role dropdown
         $smarty->assign('CONTROLTAGS', $this->getControltags());
-        $smarty->assign('STEP', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
+        $smarty->assign('STEPS', array(10, 20, 30, 50, 100)); // add data for step dropdown (for page browser)
 
         return $smarty->fetch($this->is_article_browser? self::article_browser_template: self::production_list_template);
     }
