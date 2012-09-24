@@ -549,8 +549,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         // Get base sections
         $baseSections = tx_newspaper_Section::getBaseSections();
 
-
+        // @todo: If a baseSection does NOT contain child sections it is NOT listed as a start section
         $startSections = $this->getStartSections($baseSections);
+
         $targetSections = $this->getTargetSections($startSections);
 
 		$smarty->assign('SECTION1', $startSections);
