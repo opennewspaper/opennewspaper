@@ -12,10 +12,10 @@ class tx_newspaper_module2_Filter {
     const article_browser_template = 'mod2_filterbox_artbrowser.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
+        $this->is_article_browser = $is_article_browser;
         $this->localized_labels = $LL;
         $this->filter_values = $this->preprocessFilter($input);
         $this->query_builder = new tx_newspaper_module2_QueryBuilder($this->filter_values);
-        $this->is_article_browser = $is_article_browser;
     }
 
     public function getCount() {
