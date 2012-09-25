@@ -136,9 +136,10 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $section->setAttribute('section_name', $request['section_name']);
         $section->setAttribute('parent_section', $request['parent_section']);
-        $section->setAttribute('show_in_list', $request['show_in_list'] ? 1 : 0);
-        $template_sets = tx_newspaper_smarty::getAvailableTemplateSets();
-        $section->setAttribute('template_set', $template_sets[$request['template_set']]);
+//        $section->setAttribute('show_in_list', $request['show_in_list'] ? 1 : 0);
+        $section->setAttribute('show_in_list', 1);
+//        $template_sets = tx_newspaper_smarty::getAvailableTemplateSets();
+//        $section->setAttribute('template_set', $template_sets[$request['template_set']]);
         $section->setAttribute('default_articletype', $request['default_articletype']);
 
         $section->store();
