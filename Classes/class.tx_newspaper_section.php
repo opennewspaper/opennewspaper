@@ -555,6 +555,10 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	}
 
+    private static function extractSection(array &$record, $key) {
+        $record = new tx_newspaper_Section(intval($record['uid']));
+    }
+
     /**
      * Get all section the current BE user is permitted to access
      * User TSConfig: newspaper.bnaseSections = [uids]
@@ -571,10 +575,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
             }
         }
         return $sections;
-    }
-
-    private static function extractSection(array &$record, $key) {
-        $record = new tx_newspaper_Section(intval($record['uid']));
     }
 
     /**

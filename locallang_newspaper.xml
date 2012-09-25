@@ -28,8 +28,8 @@
             <label index="label_tab_article_workflow">Messages</label>
             <label index="label_tab_article_tags">Tags</label>
             <label index="label_tab_article_related">Related articles</label>
-            <label index="label_tab_article_timecontrol">Zeitsteuerung</label>
-            <label index="label_tab_article_additional">Erweitere Daten</label>
+            <label index="label_tab_article_timecontrol">Time control</label>
+            <label index="label_tab_article_additional">Additional data</label>
 			<label index="label_workflow_hide">Hide</label>
 			<label index="label_workflow_publish">Publish</label>
 			<label index="label_workflow_check">Send to duty editor</label>
@@ -137,7 +137,7 @@
             <label index="label_tab_article_tags">Schlagworte</label>
             <label index="label_tab_article_related">Verlinkte Artikel</label>
             <label index="label_tab_article_timecontrol">Zeitzündung</label>
-            <label index="label_tab_article_additional">Erweitere Daten</label>
+            <label index="label_tab_article_additional">Erweiterte Daten</label>
             <label index="label_workflow_hide">Verstecken</label>
             <label index="label_workflow_publish">Publizieren</label>
             <label index="label_workflow_check">Zum CvD</label>
