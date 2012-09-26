@@ -513,7 +513,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	 *  \return \p $insert_extra
 	 */
 	public function insertExtraAfter(tx_newspaper_Extra $insert_extra,
-									 $origin_uid = 0, $recursive = true) {
+                                     $origin_uid = 0, $recursive = true) {
 
 		/** \todo: it should be possible to set the paragraph BEFORE calling
 		 *   	this function. otherwise a workaround is needed: insert extra to
@@ -794,7 +794,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->hideOriginExtras();
 
         $parent_zone = $this->getParentZone($new_parent_uid);
-tx_newspaper::devlog('changeParent()', $parent_zone);
         if ($parent_zone) {
             $this->inheritExtrasFrom($parent_zone);
         }
@@ -844,8 +843,7 @@ tx_newspaper::devlog('changeParent()', $parent_zone);
     private static $debug_shit = false;
 
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
-tx_newspaper::devlog('inheritExtrasFrom()', $parent_zone);
-        foreach ($parent_zone->getExtras() as $extra_to_copy) {
+        foreach (array_reverse($parent_zone->getExtras()) as $extra_to_copy) {
             $this->inheritExtra($extra_to_copy);
         }
 tx_newspaper::devlog('inherited:', array('parent' => $parent_zone->getExtras(), 'child' => $this->getExtras()));
