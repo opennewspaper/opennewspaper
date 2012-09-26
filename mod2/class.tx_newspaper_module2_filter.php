@@ -12,6 +12,7 @@ class tx_newspaper_module2_Filter {
     const article_browser_template = 'mod2_filterbox_artbrowser.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
+//tx_newspaper::devlog('Filter ProdList/Article browser input', array('input' => $input));
         $this->is_article_browser = $is_article_browser;
         $this->localized_labels = $LL;
         $this->filter_values = $this->preprocessFilter($input);
@@ -31,7 +32,7 @@ class tx_newspaper_module2_Filter {
         	'tstamp DESC',
         	intval($this->filter_values['startPage']) * intval($this->filter_values['step']) . ', ' . (intval($this->filter_values['step']))
        	);
-//tx_newspaper::devlog('filter query', tx_newspaper::$query);
+//tx_newspaper::devlog('Filter ProdList/Article browser', array('table' => $this->query_builder->getTable(), 'where' => $this->query_builder->getWhere()));
         return $records;
     }
 

@@ -35,7 +35,7 @@ class tx_newspaper_module2_QueryBuilder {
 
         ksort($this->input);    // helps ensure that text is handled last
         foreach (array_keys($this->input) as $key) {
-            if (isset($this->input[$key])) {
+            if (isset($this->input[$key]) && trim($this->input[$key])) {
                 $method = 'addConditionFor' . ucfirst($key);
                 if (method_exists($this, $method)) {
                     $this->$method();
