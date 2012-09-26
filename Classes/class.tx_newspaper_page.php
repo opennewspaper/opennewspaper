@@ -432,35 +432,34 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
 
 
 
-	/// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
-	/** \param $includeDefaultArticle Are default articles included?
-	 *  @return tx_newspaper_PageZone[] array of active page zones for given
-	 *  	tx_newspaper_Page.
-	 */
-	public function getActivePageZones($includeDefaultArticle=true) {
+    /// Get active tx_newspaper_PageZone s for this tx_newspaper_Page
+    /** \param $includeDefaultArticle Are default articles included?
+     *  @return tx_newspaper_PageZone[] array of active page zones for given
+     *  	tx_newspaper_Page.
+     */
+    public function getActivePageZones($includeDefaultArticle=true) {
 
-		$pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
+        $pid_list = tx_newspaper_Sysfolder::getInstance()->getPidsForAbstractClass('tx_newspaper_PageZone');
 #t3lib_div::devlog('gapz pidlist', 'newspaper', 0, $pid_list);
-		if (sizeof($pid_list) == 0) {
-			throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
-		}
+        if (sizeof($pid_list) == 0) {
+            throw new tx_newspaper_SysfolderNoPidsFoundException('tx_newspaper_PageZone');
+        }
 
-		$row = tx_newspaper::selectRows(
-			'*',
-			'tx_newspaper_pagezone',
-			'deleted=0 AND pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($this->getUid())
-		);
+        $row = tx_newspaper::selectRows(
+            '*', 'tx_newspaper_pagezone',
+            'deleted=0 AND pid IN (' . implode(',', $pid_list) . ') AND page_id=' . intval($this->getUid())
+        );
 
 #t3lib_div::devlog('gapz', 'newspaper', 0, $row);
-		$list = array();
-		for ($i = 0; $i < sizeof($row); $i++) {
-			if ($includeDefaultArticle || $row[$i]['pagezone_table'] == 'tx_newspaper_pagezone_page') {
-				$list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
-			}
-		}
+        $list = array();
+        for ($i = 0; $i < sizeof($row); $i++) {
+            if ($includeDefaultArticle || $row[$i]['pagezone_table'] == 'tx_newspaper_pagezone_page') {
+                $list[] = new $row[$i]['pagezone_table'](intval($row[$i]['pagezone_uid']));
+            }
+        }
 #t3lib_div::debug($list);
-		return $list;
-	}
+        return $list;
+    }
 
 	///	The tx_newspaper_Section under which this tx_newspaper_Page lies
     /**
@@ -532,9 +531,9 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
      *  @param tx_newspaper_PagezoneType $type
      */
     public function activatePagezone(tx_newspaper_PagezoneType $type) {
-		if (!is_null($this->getPageZone($type))) return;
-		$this->appendPagezone($this->restoredOrNewPagezone($type));
-	}
+        if (!is_null($this->getPageZone($type))) return;
+        $this->appendPagezone($this->restoredOrNewPagezone($type));
+    }
 
 
     /// tx_newspaper_PageType of the current tx_newspaper_Page
@@ -611,20 +610,20 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
     }
 
     private function restoredPagezone(tx_newspaper_PagezoneType $type) {
-		// check if a pagezone can be re-activated
-		$records = tx_newspaper::selectRowsDirect(
-			'tx_newspaper_pagezone.uid AS pz_uid, ' . self::getPagezoneTable($type) . '.uid AS pz_concrete_uid',
-			'tx_newspaper_pagezone, ' . self::getPagezoneTable($type),
-			'tx_newspaper_pagezone.page_id = ' . $this->getUid() .
+        // check if a pagezone can be re-activated
+        $records = tx_newspaper::selectRowsDirect(
+            'tx_newspaper_pagezone.uid AS pz_uid, ' . self::getPagezoneTable($type) . '.uid AS pz_concrete_uid',
+            'tx_newspaper_pagezone, ' . self::getPagezoneTable($type),
+            'tx_newspaper_pagezone.page_id = ' . $this->getUid() .
                 ' AND tx_newspaper_pagezone.pagezone_uid = ' . self::getPagezoneTable($type) . '.uid' .
                 ' AND ' . self::getPagezoneTable($type) . '.pagezonetype_id = ' . $type->getUid() .
                 ' AND tx_newspaper_pagezone.deleted = 1',
-			'',
-			'tx_newspaper_pagezone.uid DESC',
-			'1'
-		);
+            '',
+            'tx_newspaper_pagezone.uid DESC',
+            '1'
+        );
 
-		if (empty($records)) return null;
+        if (empty($records)) return null;
 
         $pz = self::restorePagezoneFromRecord($records[0], $type);
         $pz->changeParent($pz->getParentForPlacement());
