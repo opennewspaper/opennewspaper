@@ -860,7 +860,16 @@ tx_newspaper::devlog('inheritExtra()', $extra);
             $new_extra->setAttribute('origin_uid', $extra->getExtraUid());
         }
         $new_extra->store();
-tx_newspaper::devlog('inheritExtra()', array('old' => $extra, 'new' => $new_extra));
+tx_newspaper::devlog(
+    'copyExtra()',
+    array(
+        'old' => $extra, 'new' => $new_extra,
+        'SQL' => tx_newspaper_DB::getInstance()->selectRows(
+            '*', 'tx_newspaper_extra',
+            'extra_table = "' . $extra->getAttribute('extra_table') . '" AND extra_uid = ' . $extra->getAttribute('extra_table')
+        )
+    )
+);
 
         return $new_extra;
     }
