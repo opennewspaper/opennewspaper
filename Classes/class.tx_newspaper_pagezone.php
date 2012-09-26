@@ -848,6 +848,7 @@ tx_newspaper::devlog('inheritExtrasFrom()', $parent_zone);
         foreach ($parent_zone->getExtras() as $extra_to_copy) {
             $this->inheritExtra($extra_to_copy);
         }
+tx_newspaper::devlog('inherited:', array('parent' => $parent_zone->getExtras(), 'child' => $this->getExtras()));
     }
 
     private function inheritExtra(tx_newspaper_Extra $extra) {
