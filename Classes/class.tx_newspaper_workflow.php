@@ -331,10 +331,44 @@ function changeWorkflowStatus(role, hidden_status) {
 		return $smarty->fetch('workflow_comment_output.tmpl');
     }
 
-	/// \return role set in be_users (or false if not available)
-	public static function getRole() {
-		return tx_newspaper::getBeUserData('tx_newspaper_role');
+    /**
+     * Get newspaper role (either from be_user or from User TSConfig
+     * @static
+     * @return 0 for editor, 1 for duty editor
+     */
+    /// \return role set in be_users (or false if not available)
+    public static function getRole() {
+        $role = tx_newspaper::getBeUserData('tx_newspaper_role');
+
+        if ($role === false) {
+            // No role stored in be_user so try to read a default role from User TSConfig
+            $role = self::getDefaultRole();
+        }
+
+		return $role;
 	}
+
+
+    /**
+     * Reads role from User TSConfig (or return 0 for editor as default)
+     * User TSConfig: newspaper.defaultRole = [0 = editor, 1 = duty editor]
+     * @static
+     * @return int Role (defaults to 0 = editor)
+     */
+    public static function getDefaultRole() {
+        $role = intval($GLOBALS['BE_USER']->getTSConfigVal('newspaper.defaultRole')); // This produces 0 as default ...
+
+        // A basic check if the configured role is valid
+        if ($role != 0 && $role != 1) {
+            t3lib_div::devlog('newspaper.defaultRole set to wrong value, 0 and 1 are allowed. Role is set to 0 (= editor)', 'newspaper', 0, array('configured value' => $role));
+            $role = 0;
+        }
+
+        //@todo: Store role in be_users ??
+
+        return $role;
+    }
+
 
 	/// \return true if be_user has newspaper role "duty editor"
 	public static function isDutyEditor() {

@@ -668,23 +668,23 @@ class tx_newspaper  {
 
         $field = htmlspecialchars($field);
 
+//if ($field == 'tx_newspaper_role') { unset($BE_USER->user[$field]); } // Unset stored newspaper role for test purposes
+
         // check global object BE_USER first
         if (isset($BE_USER->user[$field])) {
             return $BE_USER->user[$field];
         }
 
-        // check session then
-        if ($_COOKIE['be_typo_user'] &&
-            tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-                'ses_userid', 'be_sessions',
-                'sed_id=' . $_COOKIE['be_typo_user'] . ' AND ses_name="be_typo_user"'
-        )) {
-            $user = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-                $field, 'be_users',
-                'uid=' . intval($_COOKIE['be_typo_user']) . ' AND deleted=0'
-            );
-            return $user[$field];
-        }
+//        // Check session then
+//        if ($_COOKIE['be_typo_user'] &&
+//            tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+//                'ses_userid',
+//                'be_sessions',
+//                'ses_id="' . $_COOKIE['be_typo_user'] . '" AND ses_name="be_typo_user"'
+//        )) {
+//            // A valid be session was found
+//            // @todo The removed code assumed that be_users was extended but couldn't read data from field "uc"
+//        }
 
         return false;
     }
