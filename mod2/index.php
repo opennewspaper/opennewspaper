@@ -188,7 +188,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		$smarty->assign('LL', $this->LL); // localized labels
 
-        $smarty->assign('CAN_PUBLISH_ARTICLES', tx_newspaper_workflow::isDutyEditor() || $GLOBALS['BE_USER']->user['admin']);
+        $smarty->assign('CAN_PUBLISH_ARTICLES', tx_newspaper_Workflow::canPublishArticles());
         $smarty->assign('CAN_PLACE_ARTICLES', tx_newspaper_workflow::canPlaceArticles());
 
 		$smarty->assign('RESULT_COUNT', intval($count));

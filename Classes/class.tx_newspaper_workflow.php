@@ -356,6 +356,24 @@ function changeWorkflowStatus(role, hidden_status) {
         return self::placementAllowedLevel() <= sizeof($section->getRootLine());
     }
 
+    /**
+     * Check if the be_user is allowed to publish a newspaper article
+     * @static
+     * @return bool true, if publishing is allowed
+     */
+    public static function canPublishArticles() {
+        return self::isDutyEditor() || self::mayPublishAsEditor();
+    }
+
+    /**
+     * Checks if the be_user may publish even when newspaper role is set to editor
+     * User TSConfig: newspaper.editorMayPublish = [0|1]
+     * @static
+     * @return bool true, if publishing is allowed
+     */
+    public static function mayPublishAsEditor() {
+        return (bool) ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.editorMayPublish'));
+    }
 
 
 	/// Changes the newspaper role of the be_user
