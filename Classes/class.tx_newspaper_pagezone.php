@@ -850,8 +850,8 @@ tx_newspaper::devlog('inherited:', array('parent' => $parent_zone->getExtras(), 
     }
 
     private function inheritExtra(tx_newspaper_Extra $extra) {
-tx_newspaper::devlog('inheritExtra()', $extra);
         $this->insertExtraAfter($this->copyExtra($extra));
+        tx_newspaper::devlog('inheritExtra() after insert', $this->getExtraAndPagezone($extra));
     }
 
     private function copyExtra(tx_newspaper_Extra $extra) {
