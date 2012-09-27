@@ -14,39 +14,38 @@ class tx_newspaper_PlacementBE {
         $this->smarty = new tx_newspaper_Smarty();
         $this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
         $this->smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
-		$this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
-		$this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
+        $this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
+        $this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
         $this->smarty->assign('lang', self::getLocallangLabels());
         $this->smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
         $this->smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
+        $this->smarty->assign('input', $this->input);
     }
 
     public function renderSingle() {
         if (intval($this->input['fullrecord'])) return $this->renderListviewBE();
 
-   		if (intval($this->input['sectionid'])) return $this->renderSectionList();
+        if (intval($this->input['sectionid'])) return $this->renderSectionList();
 
-   		if (intval($this->input['articlelistid'])) return $this->renderArticleList();
+        if (intval($this->input['articlelistid'])) return $this->renderArticleList();
 
         throw new tx_newspaper_IllegalUsageException(
             'tx_newspaper_PlacementBE::renderSingle() called neither for section article list nor free articlelist: ' . print_r($this->input, 1)
         );
-   	}
+    }
 
-	/**
+    /**
      *  Render the placement mask for all selected sections for article.
      *
      *  If $input['articleid'] is a valid uid an add/remove button for this article will be rendered,
-	 *  if not, a button to call the article browser is displayed.
+     *  if not, a button to call the article browser is displayed.
      */
-	public function render() {
+    public function render() {
         $this->smarty->assign('tree', self::getSectionTree($this->input));
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
-        $this->smarty->assign('input', $this->input);
-
-		return $this->smarty->fetch('mod7_placement_section.tpl');
-	}
+        return $this->smarty->fetch('mod7_placement_section.tpl');
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
