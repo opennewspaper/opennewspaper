@@ -525,10 +525,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $insert_extra->setAttribute('is_inheritable', 1);
         $insert_extra->setAttribute('show_extra', 1);
 
+        tx_newspaper::devlog('insertExtraAfter() before store', $this->getExtraAndPagezone($insert_extra));
+
 		/** Write Extra to DB	*/
 		$insert_extra->store();
 
+        tx_newspaper::devlog('insertExtraAfter() after store', $this->getExtraAndPagezone($insert_extra));
+
 		$this->addExtra($insert_extra);
+
+        tx_newspaper::devlog('insertExtraAfter() after addExtra', $this->getExtraAndPagezone($insert_extra));
 
 		if ($recursive /* && (boolean)$insert_extra->getAttribute('is_inheritable') */) {
             $this->insertExtraOnInheritingPagezones($insert_extra, $origin_uid);
@@ -846,7 +852,6 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         foreach (array_reverse($parent_zone->getExtras()) as $extra_to_copy) {
             $this->inheritExtra($extra_to_copy);
         }
-tx_newspaper::devlog('inherited:', array('parent' => $parent_zone->getExtras(), 'child' => $this->getExtras()));
     }
 
     private function inheritExtra(tx_newspaper_Extra $extra) {
@@ -858,25 +863,13 @@ tx_newspaper::devlog('inherited:', array('parent' => $parent_zone->getExtras(), 
 
     private function copyExtra(tx_newspaper_Extra $extra) {
 
-        tx_newspaper::devlog('copyExtra() before clone', $this->getExtraAndPagezone($extra));
-
         $new_extra = clone $extra;
-
-        tx_newspaper::devlog('copyExtra() after clone', $this->getExtraAndPagezone($extra));
 
         if (!$new_extra->getAttribute('origin_uid')) {
             $new_extra->setAttribute('origin_uid', $extra->getExtraUid());
         }
 
         $new_extra->store();
-
-        tx_newspaper::devlog(
-            'copyExtra() after store',
-            array(
-                'DATA' => $this->getExtraAndPagezone($extra),
-                'query' => tx_newspaper_DB::getInstance()->getQuery()
-            )
-        );
 
         return $new_extra;
     }
