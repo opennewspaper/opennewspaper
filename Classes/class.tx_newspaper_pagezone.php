@@ -1448,6 +1448,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function addExtra(tx_newspaper_Extra $extra) {
 		$this->extras[] = $extra;
 
+        tx_newspaper::devlog('addExtra() before insertRows', $this->getExtraAndPagezone($extra));
+
 		tx_newspaper::insertRows(
 			$this->getExtra2PagezoneTable(),
 			array(
@@ -1455,6 +1457,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_foreign' => $extra->getExtraUid()
 			)
 		);
+        tx_newspaper::devlog('addExtra() after insertRows', $this->getExtraAndPagezone($extra));
 	}
 
 
