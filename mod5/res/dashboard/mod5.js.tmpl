@@ -66,9 +66,7 @@
      * @return {Boolean} true, if value could be found in haystack, else false
      */
     function inArray(needle, haystack) {
-//alert('haystack: '+ haystack + ', needle: ' + needle + ' ###   ' + 'haystack.length: ' + haystack.length + ', 0:' + haystack[0] + ', 1: ' + haystack[1]);
         for (var i = 0; i < haystack.length; i++) {
-//alert('haystack['+ i + '] = ' +  haystack[i]);
             if (haystack[i] == needle) { // @todo: trim
                 return true;
             }
