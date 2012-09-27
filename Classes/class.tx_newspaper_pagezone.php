@@ -857,7 +857,14 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     private function inheritExtra(tx_newspaper_Extra $extra) {
         $copied = $this->copyExtra($extra);
         tx_newspaper::devlog('inheritExtra() after copy', $this->getExtraAndPagezone($extra));
-        $this->insertExtraAfter($copied);
+
+        $copied->setAttribute('position', $this->getInsertPosition($origin_uid));
+        $copied->setAttribute('paragraph', $this->paragraph_for_insert);
+        $copied->setAttribute('is_inheritable', 1);
+        $copied->setAttribute('show_extra', 1);
+
+        $copied->store();
+
         tx_newspaper::devlog('inheritExtra() after insert', $this->getExtraAndPagezone($extra));
     }
 
