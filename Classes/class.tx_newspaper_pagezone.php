@@ -865,25 +865,25 @@ tx_newspaper::devlog(
     array(
         'old' => $extra, 'new' => $new_extra,
         'SQL' => tx_newspaper_DB::getInstance()->selectRows(
-            'extra.uid, extra.crdate, extra.cruser_id, extra.position, extra.origin_uid, extra.show_extra,
-             pagezone.crdate AS pagezone_date, pagezone.cruser_id AS pagezone_user,
-             type.type_name,
-             pagetype.type_name,
-             section.section_name
+            'tx_newspaper_extra.uid, tx_newspaper_extra.crdate, tx_newspaper_extra.cruser_id, tx_newspaper_extra.position, tx_newspaper_extra.origin_uid, tx_newspaper_extra.show_extra,
+             tx_newspaper_pagezone_page.crdate AS pagezone_date, tx_newspaper_pagezone_page.cruser_id AS pagezone_user,
+             tx_newspaper_pagezonetype.type_name,
+             tx_newspaper_pagetype.type_name,
+             tx_newspaper_section.section_name
             ',
-            'tx_newspaper_extra                         AS extra
-             JOIN  tx_newspaper_pagezone_page_extras_mm AS mm       ON extra.uid                =  mm.uid_foreign
-             JOIN tx_newspaper_pagezone_page            AS pagezone ON pagezone.uid             = mm.uid_local
-             JOIN tx_newspaper_pagezonetype             AS type     ON pagezone.pagezonetype_id = type.uid
-             JOIN tx_newspaper_pagezone                 AS pz       ON pz.pagezone_uid          = pagezone.uid
-             JOIN tx_newspaper_page                     AS page     ON pz.page_id               = page.uid
-             JOIN tx_newspaper_pagetype                 AS pagetype ON page.pagetype_id         = pagetype.uid
-             JOIN tx_newspaper_section                  AS section  ON page.section             = section.uid
+            'tx_newspaper_extra
+             JOIN tx_newspaper_pagezone_page_extras_mm ON tx_newspaper_extra.uid                     =  tx_newspaper_pagezone_page_extras_mm.uid_foreign
+             JOIN tx_newspaper_pagezone_page           ON tx_newspaper_pagezone_page.uid             = tx_newspaper_pagezone_page_extras_mm.uid_local
+             JOIN tx_newspaper_pagezonetype            ON tx_newspaper_pagezone_page.pagezonetype_id = tx_newspaper_pagezonetype.uid
+             JOIN tx_newspaper_pagezone                ON tx_newspaper_pagezone.pagezone_uid         = tx_newspaper_pagezone_page.uid
+             JOIN tx_newspaper_page                    ON tx_newspaper_pagezone.page_id              = tx_newspaper_page.uid
+             JOIN tx_newspaper_pagetype                ON tx_newspaper_page.pagetype_id              = tx_newspaper_pagetype.uid
+             JOIN tx_newspaper_section                 ON tx_newspaper_page.section                  = tx_newspaper_section.uid
             ',
-            'extra_table = "' . $extra->getAttribute('extra_table') . '"
-             AND extra_uid = ' . $extra->getAttribute('extra_uid') .'
-             AND pz.pagezone_table = "tx_newspaper_pagezone_page"
-             AND pagezone.uid = ' . $this->getUid() . ' OR pagezone.uid = ' . $this->getParentForPlacement()->getUid()
+            'tx_newspaper_extra.extra_table = "' . $extra->getAttribute('extra_table') . '"
+             AND tx_newspaper_extra.extra_uid = ' . $extra->getAttribute('extra_uid') .'
+             AND tx_newspaper_pagezone.pagezone_table = "tx_newspaper_pagezone_page"
+             AND tx_newspaper_pagezone_page.uid = ' . $this->getUid() . ' OR tx_newspaper_pagezone_page.uid = ' . $this->getParentForPlacement()->getUid()
         ),
         'query' => tx_newspaper_DB::getInstance()->getQuery()
     )
