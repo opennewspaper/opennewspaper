@@ -206,17 +206,22 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
     }
 
     /**
-     * Return User TSConfig setting (or false if no setting can be found)
-     * newspaper.accessArticleTypes = [comma separated list of article typ uids]
+     * Return comma separated list of allowed article type uids.
+     * Either all article types or article types restricted using TSConfig:
+     * newspaper.accessArticleTypes = [comma separated list of article type uids]
      * @static
-     * @return Array with article type uids OR false, if no User TSConfig could be found
+     * @return Array with article type uids OR false, if no be_user is available
      */
     public static function getAllowedArticleTypeUids() {
         if (!isset($GLOBALS['BE_USER'])) {
             return false; // Doesn't make sense without a backend user ...
         }
         if (!$tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessArticleTypes')) {
-            return false; // No User TSConfig found
+            $articleTypes = array();
+            foreach(self::getArticleTypes() as $at) {
+                $articleTypes[] = $at->getUid();
+            }
+            return $articleTypes; // No User TSConfig found, so all article types can be accessed
         }
         return t3lib_div::trimExplode(',', $tsc);
     }
