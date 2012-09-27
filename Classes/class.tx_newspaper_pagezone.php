@@ -855,22 +855,37 @@ tx_newspaper::devlog('inheritExtra()', $extra);
     }
 
     private function copyExtra(tx_newspaper_Extra $extra) {
+
+        tx_newspaper::devlog('copyExtra() before clone', $this->getExtraAndPagezone($extra));
+
         $new_extra = clone $extra;
+
+        tx_newspaper::devlog('copyExtra() after clone', $this->getExtraAndPagezone($extra));
+
         if (!$new_extra->getAttribute('origin_uid')) {
             $new_extra->setAttribute('origin_uid', $extra->getExtraUid());
         }
+
         $new_extra->store();
-tx_newspaper::devlog(
-    'copyExtra()',
-    array(
-        'old' => $extra, 'new' => $new_extra,
-        'SQL' => tx_newspaper_DB::getInstance()->selectRows(
+
+        tx_newspaper::devlog(
+            'copyExtra() after store',
+            array(
+                'DATA' => $this->getExtraAndPagezone($extra),
+                'query' => tx_newspaper_DB::getInstance()->getQuery()
+            )
+        );
+
+        return $new_extra;
+    }
+
+    private function getExtraAndPagezone(tx_newspaper_Extra $extra) {
+        return tx_newspaper_DB::getInstance()->selectRows(
             'tx_newspaper_extra.uid, tx_newspaper_extra.crdate, tx_newspaper_extra.cruser_id, tx_newspaper_extra.position, tx_newspaper_extra.origin_uid, tx_newspaper_extra.show_extra,
              tx_newspaper_pagezone_page.crdate AS pagezone_date, tx_newspaper_pagezone_page.cruser_id AS pagezone_user,
              tx_newspaper_pagezonetype.type_name,
              tx_newspaper_pagetype.type_name,
-             tx_newspaper_section.section_name
-            ',
+             tx_newspaper_section.section_name',
             'tx_newspaper_extra
              JOIN tx_newspaper_pagezone_page_extras_mm ON tx_newspaper_extra.uid                     =  tx_newspaper_pagezone_page_extras_mm.uid_foreign
              JOIN tx_newspaper_pagezone_page           ON tx_newspaper_pagezone_page.uid             = tx_newspaper_pagezone_page_extras_mm.uid_local
@@ -878,18 +893,12 @@ tx_newspaper::devlog(
              JOIN tx_newspaper_pagezone                ON tx_newspaper_pagezone.pagezone_uid         = tx_newspaper_pagezone_page.uid
              JOIN tx_newspaper_page                    ON tx_newspaper_pagezone.page_id              = tx_newspaper_page.uid
              JOIN tx_newspaper_pagetype                ON tx_newspaper_page.pagetype_id              = tx_newspaper_pagetype.uid
-             JOIN tx_newspaper_section                 ON tx_newspaper_page.section                  = tx_newspaper_section.uid
-            ',
+             JOIN tx_newspaper_section                 ON tx_newspaper_page.section                  = tx_newspaper_section.uid',
             'tx_newspaper_extra.extra_table = "' . $extra->getAttribute('extra_table') . '"
-             AND tx_newspaper_extra.extra_uid = ' . $extra->getAttribute('extra_uid') .'
+             AND tx_newspaper_extra.extra_uid = ' . $extra->getAttribute('extra_uid') . '
              AND tx_newspaper_pagezone.pagezone_table = "tx_newspaper_pagezone_page"
              AND tx_newspaper_pagezone_page.uid = ' . $this->getUid() . ' OR tx_newspaper_pagezone_page.uid = ' . $this->getParentForPlacement()->getUid()
-        ),
-        'query' => tx_newspaper_DB::getInstance()->getQuery()
-    )
-);
-
-        return $new_extra;
+        );
     }
 
     private function storeWithNewParent($new_parent_uid) {
