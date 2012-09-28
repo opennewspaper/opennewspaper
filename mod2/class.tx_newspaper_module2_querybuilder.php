@@ -50,12 +50,18 @@ class tx_newspaper_module2_QueryBuilder {
     }
 
     private function addConditionForSection() {
-        $where_section = $this->getWhereForSection($this->input['section']);
-     	if ($where_section === false) {
-     		return; // no matching section found, so not article in search result
+        $whereSectionUids = array();
+        foreach(t3lib_div::trimExplode(',', $this->input['section']) as $section) {
+            $whereSectionUids = array_merge($whereSectionUids, $this->getWhereForSection($section));
+        }
+        $whereSectionUids = array_unique($whereSectionUids); // Remove duplicate section uids
+
+     	if (empty($whereSectionUids)) {
+     		return; // No matching section found, so not article in search result
      	}
+
      	$this->tables[] = 'tx_newspaper_article_sections_mm';
-     	$this->where[] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . $where_section . ')';
+        $this->where[] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . implode(',', $whereSectionUids) . ')';
     }
 
     private function addConditionForHidden() {
@@ -120,35 +126,35 @@ class tx_newspaper_module2_QueryBuilder {
         $this->tables[] = 'tx_newspaper_article_tags_mm';
     }
 
-	/// Get section uids for given search term $section
-	/// \param $section search term for sections (is NOT trimmed)
-	/// \param $recursive wheater or not sub section are searched too
-	/// \return comma separated list of section uids or false if no section could be found
-	private function getWhereForSection($section, $recursive=true) {
+    /** Get section uids for given search term $section
+     * @param $section String Search term
+     * @param bool $recursive Whether or not the search is recursive
+     * @return array Section uids
+     */
+    private function getWhereForSection($section, $recursive=true) {
 		$sectionUids = tx_newspaper::selectRows(
 			'uid',
 			'tx_newspaper_section',
-			'section_name LIKE "%' . addslashes($section) . '%"' . // search for sections contains the section search string
-				' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()) // check current section sysfolder only
+			'section_name LIKE "%' . addslashes($section) . '%"' . // Search for sections containing the section search string
+				' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()) // Check current section sysfolder only
 		);
-		$uids = array();
-		foreach($sectionUids as $sectionUid) {
-			$uids[] = $sectionUid['uid'];
-			$s = new tx_newspaper_section(intval($sectionUid['uid']));
-			if ($recursive) {
-				foreach($s->getChildSections(true) as $sub_section) {
-					$uids[] = $sub_section->getUid();
-				}
-			}
-		}
-		$sectionUidList = implode(',', array_unique($uids));
 
-		if (!$sectionUidList) {
-			// no matching section found, so no article in result set
-			return false;
-		}
-//t3lib_div::devlog('getWhereForSection()', 'newspaper', 0, array('$sectionUids' => $sectionUids, 'sectionUidList' => $sectionUidList, 'query' => tx_newspaper::$query));
-		return $sectionUidList;
+        if (!$sectionUids) {
+            return array(); // No matching section found
+        }
+
+        $uids = array();
+        foreach($sectionUids as $sectionUid) {
+            $uids[] = $sectionUid['uid'];
+            $s = new tx_newspaper_section(intval($sectionUid['uid']));
+            if ($recursive) {
+                foreach($s->getChildSections(true) as $sub_section) {
+                    $uids[] = $sub_section->getUid();
+                }
+            }
+        }
+//t3lib_div::devlog('getWhereForSection()', 'newspaper', 0, array('$sectionUids' => $sectionUids, 'uids' => $uids));
+		return array_unique($uids);
 	}
 
     private $input = array();

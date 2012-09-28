@@ -12,7 +12,7 @@ class tx_newspaper_module2_Filter {
     const article_browser_template = 'mod2_filterbox_artbrowser.tmpl';
 
     public function __construct($LL, $input, $is_article_browser) {
-//tx_newspaper::devlog('Filter ProdList/Article browser input', array('input' => $input));
+//t3lib_div::devlog('Filter ProdList/Article browser input', 'np', 0, array('input' => $input));
         $this->is_article_browser = $is_article_browser;
         $this->localized_labels = $LL;
         $this->filter_values = $this->preprocessFilter($input);
@@ -110,8 +110,8 @@ class tx_newspaper_module2_Filter {
 
     /**
      * Get default value for section filter
-     * If user TSConfig newspaper.baseSections is set, the first section will be used as default filter
-     * @return string Default section title or empty string if not set
+     * If user TSConfig newspaper.baseSections is set, all sections (comma separated) will be added
+     * @return string Default section name(s) or empty string if not set
      */
     private function getDefaultSection() {
         // Read User TSConfig for base sections (if available): get uids of base sections
@@ -120,8 +120,12 @@ class tx_newspaper_module2_Filter {
                 $baseSectionUids = t3lib_div::trimExplode(',', $GLOBALS['BE_USER']->getTSConfigVal('newspaper.baseSections'));
             }
             if ($baseSectionUids) {
-                $section = new tx_newspaper_Section(intval($baseSectionUids[0]));
-                return $section->getAttribute('section_name');
+                $sectionsNames = array();
+                foreach($baseSectionUids as $sectionUid) {
+                    $section = new tx_newspaper_Section(intval($sectionUid));
+                    $sectionsNames[] = $section->getAttribute('section_name');
+                }
+                return implode(', ', $sectionsNames);
             }
         }
         return ''; // Default section filter
