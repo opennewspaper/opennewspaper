@@ -7,6 +7,9 @@
     $section
     $AL_HEIGHT
 *}
+<script src="res/mod7.js" type="text/javascript"></script>
+
+
 <table border="0" cellspacing="0" cellpadding="0" class="articles">
     <tr>
         <th scope="col" colspan="3">
@@ -26,7 +29,7 @@
                 {/section}
             </td>
             <td>
-                <select name="tx_newspaper_mod7[placer_{$section.section->getAttribute('uid')}" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if  $section.listtype|lower == "tx_newspaper_articlelist_manual"} manual-list {/if}">
+                <select name="tx_newspaper_mod7[placer_{$section.section->getAttribute('uid')]}" size="{$AL_HEIGHT}" class="multiple-select ressort-select placement-select {if  $section.listtype|lower == "tx_newspaper_articlelist_manual"} manual-list {/if}">
                     {foreach from=$section.articlelist item="list" name="al_loop" key="key"}
                         <option value="{$key}" label="{$list|escape:"html"}" title="{$list|escape:"html"}">{$list}</option>
                     {/foreach}
@@ -85,7 +88,7 @@
 
     <tr>
       <td colspan="2">
-        <input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{$section.section->getAttribute('uid')}" class="refresh" value="{$lang.refresh}" />
+        <input type="button" name="tx_newspaper_mod7[refresh]" title="tx_newspaper_mod7[placer_{$section.section->getAttribute('uid')}]" class="refresh" value="{$lang.refresh}" />
         <input type="button" name="tx_newspaper_mod7[save]" title="placer_{$section.section->getAttribute('uid')}" class="save" value="{$lang.save}" />
       </td>
     </tr>
