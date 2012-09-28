@@ -51,10 +51,10 @@ class tx_newspaper_PlacementBE {
 
     private function renderListviewBE() {
         if (intval($this->input['sectionid'])) {
-            $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
-        } else {
             $s = new tx_newspaper_Section($this->input['sectionid']);
             $al = $s->getArticleList();
+        } else {
+            $al = tx_newspaper_ArticleList_Factory::getInstance()->create(intval($this->input['articlelistid']));
         }
 
         $this->smarty->assign('AL_BACKEND', self::getArticlelistListviewBackend($al));
