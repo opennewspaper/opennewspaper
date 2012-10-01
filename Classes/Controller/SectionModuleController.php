@@ -24,7 +24,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
         $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
-        $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypes());
+        $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
         if ($this->isValidRequest($module_request)) {
             try {
