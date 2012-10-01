@@ -33,7 +33,7 @@
 		            			{* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
 
 
-					            {if $isde || $smarty.foreach.levelloop.index < $allowed_placement_level
+					            {if $isde || $smarty.foreach.levelloop.index >= $allowed_placement_level
                                     && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
                                     {* duty editor, article list available, class for article list is known *}
                                     <tr>
@@ -90,8 +90,8 @@
 					            {else}
                                     <tr>
                                         <td>
-                                            {if !$isde && $smarty.foreach.levelloop.index < $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
-                                            {if $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
+                                            {if !$isde && $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
+                                            {if $smarty.foreach.levelloop.index < $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
                                             {if !isset($section.articlelist)}<i class="noaccess">{$lang.message_no_articlelist}</i><br />{/if}
                                             {if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
                                                 <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
@@ -105,7 +105,7 @@
 				        </table>
 
                         {if $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
-                            {if $isde || $smarty.foreach.levelloop.index < $allowed_placement_level
+                            {if $isde || $smarty.foreach.levelloop.index >= $allowed_placement_level
                                 && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
                                 <div align="right" style="display:none;">
                                     <input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{foreach from=$sections item="section" name="sectionloop"}{$section.section->getAttribute('uid')}{if $smarty.foreach.sectionloop.iteration < count($sections)}_{/if}{/foreach}" class="refresh" value="{$lang.refresh}" />
