@@ -1,4 +1,5 @@
 {*debug*}
+
 {* template for section article lists *}
 
 {*
@@ -11,7 +12,6 @@
 {* semiautomatic articles lists *}
 
 {include file="mod7_automatic_al.tmpl"}
-
 
 {* all article lists or manual lists *}
 <table border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;" id="hide-empty">
@@ -33,7 +33,10 @@
 		            			{* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
 
 
-					            {if $isde || $smarty.foreach.levelloop.index >= $allowed_placement_level
+					            {if $isde || 
+						    	(($smarty.foreach.levelloop.index >= 3 && $smarty.foreach.levelloop.index >= $allowed_placement_level) ||
+							 ($smarty.foreach.levelloop.index == 2 && $allowed_placement_level <= 1) ||
+							 ($smarty.foreach.levelloop.index == 1 && $allowed_placement_level <= 2))
                                     && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")}
                                     {* duty editor, article list available, class for article list is known *}
                                     <tr>
@@ -90,8 +93,8 @@
 					            {else}
                                     <tr>
                                         <td>
-                                            {if !$isde && $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
                                             {if $smarty.foreach.levelloop.index < $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
+                                            {if !$isde && $smarty.foreach.levelloop.index >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
                                             {if !isset($section.articlelist)}<i class="noaccess">{$lang.message_no_articlelist}</i><br />{/if}
                                             {if ($section.listtype|lower != "tx_newspaper_articlelist_semiautomatic") && ($section.listtype|lower != "tx_newspaper_articlelist_manual")}
                                                 <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
