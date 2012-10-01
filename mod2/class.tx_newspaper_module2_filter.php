@@ -80,30 +80,28 @@ class tx_newspaper_module2_Filter {
 	 * \return array with filter settings where missing filters were added (using default values)
 	 */
 	private function addDefaultFilterValues(array $settings, $forceReset=false) {
-//t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
+//t3lib_div::devlog('addDefaultFilterValues()', 'newspaper', 0, array('settings' => $settings));
 
         self::$force_reset = $forceReset;
 
-        self::addDefaultFilterValue($settings, 'author', '');
-        self::addDefaultFilterValue($settings, 'be_user', '');
-        self::addDefaultFilterValue($settings, 'text', '');
-        self::addDefaultFilterValue($settings, 'controltag', '');
-        self::addDefaultFilterValue($settings, 'step', 10);
-        self::addDefaultFilterValue($settings, 'startPage', 0);
-        self::addDefaultFilterValue($settings, 'hidden', 'all');
-
-        self::addDefaultFilterValue($settings, 'role', $this->is_article_browser? '-1': tx_newspaper_workflow::getRole());
-        self::addDefaultFilterValue($settings, 'range', $this->is_article_browser? 'day_180': 'day_2'); // \todo: make tsconfigurable
-        $section = ($this->is_article_browser && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection();
-        self::addDefaultFilterValue($settings, 'section', $section);
+        self::addDefaultFilterValue($settings, 'author', '', false);
+        self::addDefaultFilterValue($settings, 'be_user', '', false);
+        self::addDefaultFilterValue($settings, 'text', '', false);
+        self::addDefaultFilterValue($settings, 'controltag', '', true);
+        self::addDefaultFilterValue($settings, 'step', 10, true);
+        self::addDefaultFilterValue($settings, 'startPage', 0, true);
+        self::addDefaultFilterValue($settings, 'hidden', 'all', true);
+        self::addDefaultFilterValue($settings, 'role', ($this->is_article_browser? '-1': tx_newspaper_workflow::getRole()), false);
+        self::addDefaultFilterValue($settings, 'range', ($this->is_article_browser? 'day_180': 'day_2'), true); // \todo: make tsconfigurable
+        self::addDefaultFilterValue($settings, 'section', ($this->is_article_browser && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection(), false);
 
 //t3lib_div::devlog('addDefaultFilterValues() done', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
 		return $settings;
 	}
 
     static $force_reset = false;
-    private static function addDefaultFilterValue(array &$settings, $key, $value) {
-        if (!array_key_exists($key, $settings) || !$settings[$key] || self::$force_reset) {
+    private static function addDefaultFilterValue(array &$settings, $key, $value, $checkEmptyValue=false) {
+        if (self::$force_reset || !array_key_exists($key, $settings) || ($checkEmptyValue && !$settings[$key])) {
       		$settings[$key] = $value;
       	}
     }

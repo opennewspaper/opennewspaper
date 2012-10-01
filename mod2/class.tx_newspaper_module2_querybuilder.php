@@ -35,15 +35,29 @@ class tx_newspaper_module2_QueryBuilder {
 
         ksort($this->input);    // helps ensure that text is handled last
         foreach (array_keys($this->input) as $key) {
-            if (isset($this->input[$key]) && trim($this->input[$key])) {
+            if ($this->useFilter($key)) {
                 $method = 'addConditionFor' . ucfirst($key);
                 if (method_exists($this, $method)) {
                     $this->$method();
                 }
-       		}
+            }
         }
 
-	}
+    }
+
+    /**
+     * Checks if the filter for given $key should be used (Depending on key on given value in $this->input)
+     * @param $key Filter to be checked
+     * @return bool true if the filter should be applied, ,else false
+     */
+    private function useFilter($key) {
+        // Make sure role=0 can be filtered
+        if ($key == 'role') {
+            return isset($this->input['role']);
+        }
+        return isset($this->input[$key]) && trim((string)$this->input[$key]);
+    }
+
 
     private function addConditionForRange() {
         $this->where[] = 'tstamp>=' . tx_newspaper_UtilMod::calculateTimestamp($this->input['range']);
@@ -56,34 +70,34 @@ class tx_newspaper_module2_QueryBuilder {
         }
         $whereSectionUids = array_unique($whereSectionUids); // Remove duplicate section uids
 
-     	if (empty($whereSectionUids)) {
-     		return; // No matching section found, so not article in search result
-     	}
+        if (empty($whereSectionUids)) {
+             return; // No matching section found, so not article in search result
+         }
 
-     	$this->tables[] = 'tx_newspaper_article_sections_mm';
+        $this->tables[] = 'tx_newspaper_article_sections_mm';
         $this->where[] = 'tx_newspaper_article.uid=tx_newspaper_article_sections_mm.uid_local AND tx_newspaper_article_sections_mm.uid_foreign IN (' . implode(',', $whereSectionUids) . ')';
     }
 
     private function addConditionForHidden() {
         switch($this->input['hidden']) {
-      	case 'on':
-      		$this->where[] = 'hidden=1';
-      		break;
-      	case 'off':
-      		$this->where[] = 'hidden=0';
-      		break;
-      	}
+            case 'on':
+                $this->where[] = 'hidden=1';
+                break;
+            case 'off':
+                $this->where[] = 'hidden=0';
+                break;
+        }
     }
 
     private function addConditionForRole() {
-        switch(strtolower($this->input['role'])) {
-      	case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
-      	case NP_ACTIVE_ROLE_DUTY_EDITOR:
-      	case NP_ACTIVE_ROLE_NONE:
-      		$this->where[] = 'workflow_status=' . intval($this->input['role']);
-      		break;
-      	case '-1': // all
-      	}
+        switch(intval($this->input['role'])) {
+            case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
+            case NP_ACTIVE_ROLE_DUTY_EDITOR:
+            case NP_ACTIVE_ROLE_NONE:
+            $this->where[] = 'workflow_status=' . intval($this->input['role']);
+            break;
+            case '-1': // all
+        }
     }
 
     private function addConditionForAuthor() {
