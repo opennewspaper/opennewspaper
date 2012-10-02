@@ -372,7 +372,9 @@ function connectPlacementEvents() {
         if (isDirty()) {
             doRefresh = confirm(langReallyrefresh)
         }
+
         if(doRefresh) {
+	    //		alert('#' + this.title);
             $('#' + this.title).attr('multiple', 'multiple');
             $("#" + this.title).selectAllOptions();
             $("#" + this.title).removeOption(/./, true);
