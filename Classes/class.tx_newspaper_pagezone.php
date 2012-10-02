@@ -838,17 +838,12 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         if ($parent_uid < 0) {
             return null;
         } else if ($parent_uid == 0) {
-            self::$debug_shit = true;
-            $parent = $this->getParentPageZoneOfSameType();
-            self::$debug_shit = false;
-            return $parent;
+            return $this->getParentPageZoneOfSameType();
         } else {
             return tx_newspaper_PageZone_Factory::getInstance()->create($parent_uid);
         }
 
     }
-
-    private static $debug_shit = false;
 
     private function inheritExtrasFrom(tx_newspaper_PageZone $parent_zone) {
         foreach (array_reverse($parent_zone->getExtras()) as $extra_to_copy) {
@@ -891,7 +886,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $new_extra;
     }
 
-    static private $debug_lots_of_crap = true;
+    static private $debug_lots_of_crap = false;
     private function getExtraAndPagezone(tx_newspaper_Extra $extra) {
         if ($this instanceof tx_newspaper_Article) return array();
         if (!self::$debug_lots_of_crap) return array();

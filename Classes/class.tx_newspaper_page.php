@@ -604,7 +604,6 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
         $pz = $this->restoredPagezone($type);
         if (is_null($pz)) {
             $pz = $this->createNewPagezone($type);
-#            $pz->changeParent(0);
         }
         return $pz;
     }
