@@ -1470,7 +1470,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function addExtra(tx_newspaper_Extra $extra) {
 		$this->extras[] = $extra;
 
-        if (self::$debug_lots_of_crap) tx_newspaper::devlog('addExtra() before insertRows', $this->getExtraAndPagezone($extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('addExtra() before insertRows', array($this->getExtraAndPagezone($extra), debug_backtrace()));
 
 		tx_newspaper::insertRows(
 			$this->getExtra2PagezoneTable(),
