@@ -234,7 +234,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 			'timeHidden' => tx_newspaper_BE::renderIcon('gfx/history.gif', '', $this->LL['label_time']),
 			'timeVisible' => tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', '', $this->LL['label_time']),
 			'deleteArticle' => tx_newspaper_BE::renderIcon('gfx/garbage.gif', '', $this->LL['label_delete_article']),
-			'published' => tx_newspaper_BE::renderIcon('gfx/button_hide.gif', '', $this->LL['label.published']),
 			'hidden' => tx_newspaper_BE::renderIcon('gfx/button_unhide.gif', '', $this->LL['label_hidden']),
 			'published' => tx_newspaper_BE::renderIcon('gfx/icon_ok2.gif', ''),
 			'recordLocked' => tx_newspaper_BE::renderIcon('gfx/recordlock_warning3.gif', '', '###LOCK_MSG###', false),

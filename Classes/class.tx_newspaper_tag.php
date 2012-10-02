@@ -85,7 +85,12 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     	);
     }
 
-    /// \return Array with all control tags for given $category
+    /**
+     * Get all control tags for given $category
+     * @static
+     * @param $category Int Control tag Category uid
+     * @return array Matching control tags
+     */
     public static function getAllControlTags($category) {
         return self::getAllTagsWhere('tag_type=' . self::getControltagType() . ' AND ctrltag_cat=' . intval($category));
     }

@@ -87,7 +87,7 @@ class tx_newspaper_module2_Filter {
         self::addDefaultFilterValue($settings, 'author', '', false);
         self::addDefaultFilterValue($settings, 'be_user', '', false);
         self::addDefaultFilterValue($settings, 'text', '', false);
-        self::addDefaultFilterValue($settings, 'controltag', '', true);
+        self::addDefaultFilterValue($settings, 'controltag', 0, true);
         self::addDefaultFilterValue($settings, 'step', 10, true);
         self::addDefaultFilterValue($settings, 'startPage', 0, true);
         self::addDefaultFilterValue($settings, 'hidden', 'all', true);
@@ -174,21 +174,26 @@ class tx_newspaper_module2_Filter {
 		return $role;
 	}
 
+    /**
+     * Get (sorted) control tags
+     * @return array [tag uid] => Control tag title
+     */
     private function getControltags() {
-        $tags = tx_newspaper_Tag::getAllControlTags(self::getControltagCategoryUid());
-        array_walk($tags, array($this, 'extractTagTitle'));
-        return array_merge(array(''), $tags);
+        $tags = array(0 => ''); // Empty entry
+        foreach(tx_newspaper_Tag::getAllControlTags(self::getControltagCategoryUid()) as $tag) {
+            $tags[$tag->getUid()] = $tag->getAttribute('title');
+        }
+        natcasesort($tags);
+        return $tags;
     }
 
     /**
-     * @todo handle categories better than simply using the first one
+     * @todo handle categories better than simply using the first one -> User TSConfig?
      */
     private static function getControltagCategoryUid() {
         $categories = tx_newspaper_Tag::getAllControltagCategories();
         return intval($categories[0]['uid']);
     }
-
-    private function extractTagTitle(&$tag, $key) { $tag = $tag->getAttribute('title'); }
 
     private $localized_labels = array();
     private $filter_values = array();

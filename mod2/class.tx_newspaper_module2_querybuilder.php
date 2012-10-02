@@ -167,13 +167,15 @@ class tx_newspaper_module2_QueryBuilder {
         return self::TEXT_SEARCH_FOR_TEXT;
     }
 
+    /**
+     * Adds table to $this->table and where conditions to $this->where
+     * @return void
+     */
     private function addConditionForControltag() {
-        $tags = tx_newspaper_Tag::getAllTagsWhere(
-            "title='" . $this->input['controltag'] ."' AND tag_type=" . tx_newspaper_Tag::getControltagType()
-        );
-        if (empty($tags)) return;
-
-        $this->where[] = 'tx_newspaper_article_tags_mm.uid_foreign=' . $tags[0]->getUid() . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
+        if (!intval($this->input['controltag'])) {
+            return;
+        }
+        $this->where[] = 'tx_newspaper_article_tags_mm.uid_foreign=' . intval($this->input['controltag']) . ' AND tx_newspaper_article.uid=tx_newspaper_article_tags_mm.uid_local';
         $this->tables[] = 'tx_newspaper_article_tags_mm';
     }
 
