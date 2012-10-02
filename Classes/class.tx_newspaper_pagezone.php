@@ -525,16 +525,16 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $insert_extra->setAttribute('is_inheritable', 1);
         $insert_extra->setAttribute('show_extra', 1);
 
-        tx_newspaper::devlog('insertExtraAfter() before store', $this->getExtraAndPagezone($insert_extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('insertExtraAfter() before store', $this->getExtraAndPagezone($insert_extra));
 
 		/** Write Extra to DB	*/
 		$insert_extra->store();
 
-        tx_newspaper::devlog('insertExtraAfter() after store', $this->getExtraAndPagezone($insert_extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('insertExtraAfter() after store', $this->getExtraAndPagezone($insert_extra));
 
 		$this->addExtra($insert_extra);
 
-        tx_newspaper::devlog('insertExtraAfter() after addExtra', $this->getExtraAndPagezone($insert_extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('insertExtraAfter() after addExtra', $this->getExtraAndPagezone($insert_extra));
 
 		if ($recursive /* && (boolean)$insert_extra->getAttribute('is_inheritable') */) {
             $this->insertExtraOnInheritingPagezones($insert_extra, $origin_uid);
@@ -805,6 +805,8 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         }
 
         $this->storeWithNewParent($new_parent_uid);
+
+        self::$debug_lots_of_crap = false;
 	}
 
     private function removeInheritedExtras() {
@@ -859,7 +861,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         $this->insertExtraAfter($extra);
         return;
 
-        tx_newspaper::devlog('inheritExtra() before copy', $this->getExtraAndPagezone($extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('inheritExtra() before copy', $this->getExtraAndPagezone($extra));
         $copied = $this->copyExtra($extra);
         tx_newspaper::devlog('inheritExtra() after copy', $this->getExtraAndPagezone($extra));
 
@@ -870,7 +872,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 
         $copied->store();
 
-        tx_newspaper::devlog('inheritExtra() after insert', $this->getExtraAndPagezone($extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('inheritExtra() after insert', $this->getExtraAndPagezone($extra));
 
         # $this->insertExtraAfter($copied);
     }
@@ -889,8 +891,10 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         return $new_extra;
     }
 
+    static private $debug_lots_of_crap = true;
     private function getExtraAndPagezone(tx_newspaper_Extra $extra) {
         if ($this instanceof tx_newspaper_Article) return array();
+        if (!self::$debug_lots_of_crap) return array();
 
         return tx_newspaper_DB::getInstance()->selectRows(
             'tx_newspaper_extra.uid, tx_newspaper_extra.crdate, tx_newspaper_extra.cruser_id, tx_newspaper_extra.position, tx_newspaper_extra.origin_uid, tx_newspaper_extra.show_extra,
@@ -1466,7 +1470,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 	public function addExtra(tx_newspaper_Extra $extra) {
 		$this->extras[] = $extra;
 
-        tx_newspaper::devlog('addExtra() before insertRows', $this->getExtraAndPagezone($extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('addExtra() before insertRows', $this->getExtraAndPagezone($extra));
 
 		tx_newspaper::insertRows(
 			$this->getExtra2PagezoneTable(),
@@ -1475,7 +1479,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 				'uid_foreign' => $extra->getExtraUid()
 			)
 		);
-        tx_newspaper::devlog('addExtra() after insertRows', $this->getExtraAndPagezone($extra));
+        if (self::$debug_lots_of_crap) tx_newspaper::devlog('addExtra() after insertRows', $this->getExtraAndPagezone($extra));
 	}
 
 
