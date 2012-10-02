@@ -875,6 +875,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
         # $this->insertExtraAfter($copied);
     }
 
+    /** @return tx_newspaper_Extra */
     private function copyExtra(tx_newspaper_Extra $extra) {
 
         $new_extra = clone $extra;
@@ -889,8 +890,11 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
     }
 
     private function getExtraAndPagezone(tx_newspaper_Extra $extra) {
+        if ($this instanceof tx_newspaper_Article) return array();
+
         return tx_newspaper_DB::getInstance()->selectRows(
             'tx_newspaper_extra.uid, tx_newspaper_extra.crdate, tx_newspaper_extra.cruser_id, tx_newspaper_extra.position, tx_newspaper_extra.origin_uid, tx_newspaper_extra.show_extra,
+             tx_newspaper_extra.extra_table, tx_newspaper_extra.extra_uid,
              tx_newspaper_pagezone_page.crdate AS pagezone_date, tx_newspaper_pagezone_page.cruser_id AS pagezone_user,
              tx_newspaper_pagezonetype.type_name,
              tx_newspaper_pagetype.type_name,
