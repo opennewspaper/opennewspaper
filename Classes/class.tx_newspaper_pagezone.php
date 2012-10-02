@@ -1471,7 +1471,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 		$this->extras[] = $extra;
 
         if (self::$debug_lots_of_crap)
-            tx_newspaper::devlog('addExtra() before insertRows', array($this->getExtraAndPagezone($extra), array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 0, 2)));
+            tx_newspaper::devlog('addExtra() before insertRows', array($this->getExtraAndPagezone($extra), array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 0, 4)));
 
 		tx_newspaper::insertRows(
 			$this->getExtra2PagezoneTable(),
@@ -1481,7 +1481,7 @@ abstract class tx_newspaper_PageZone implements tx_newspaper_ExtraIface {
 			)
 		);
         if (self::$debug_lots_of_crap)
-            tx_newspaper::devlog('addExtra() after insertRows', array($this->getExtraAndPagezone($extra), array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 0, 2)));
+            tx_newspaper::devlog('addExtra() after insertRows', $this->getExtraAndPagezone($extra));
 	}
 
 
