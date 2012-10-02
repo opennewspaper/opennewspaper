@@ -64,10 +64,10 @@ class tx_newspaper_module2_Filter {
 			if ($input['type'] == 'reset_startpage') {
 				$filter['startPage'] = 0; // reset startPage if filter settings were submitted
 			}
-            return $filter; // store filter setting (no matter in receive by get param or default value)
+            return $filter; // Return store filter settings
 		}
 
-		// module was called from menu or filter were resetted
+		// Module was called from menu or filter were resetted
 		return $this->addDefaultFilterValues(array(), true); // Get default values
 
 //t3lib_div::devlog('processFilter()', 'newspaper',0, array('input' => $this->input));
