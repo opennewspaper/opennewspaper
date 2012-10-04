@@ -206,11 +206,8 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
-
-        if (!$this->article instanceof tx_newspaper_Article) return array();
-
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (!$this->article_pages_filled) {
+        if ($this->article instanceof tx_newspaper_Article && !$this->article_pages_filled) {
             $this->addArticlePages($this->article);
         }
         return $this->article_pages;
@@ -218,11 +215,8 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
-
-        if (!$this->article instanceof tx_newspaper_Article) return array();
-
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (!$this->section_pages_filled) {
+        if ($this->article instanceof tx_newspaper_Article && !$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
             $this->addSectionPages(getSectionsWhoseArticleListContains($this->article));
         }
@@ -231,11 +225,8 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
-
-        if (!$this->article instanceof tx_newspaper_Article) return array();
-
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (!$this->related_article_pages_filled) {
+        if ($this->article instanceof tx_newspaper_Article && !$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
         }
         return $this->related_article_pages;
@@ -243,11 +234,8 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
-
-        if (!$this->article instanceof tx_newspaper_Article) return array();
-
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (!$this->articlelist_pages_filled) {
+        if ($this->article instanceof tx_newspaper_Article && !$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
         }
         return $this->articlelist_pages;
@@ -255,11 +243,8 @@ class tx_newspaper_DependencyTree {
 
     /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
-
-        if (!$this->article instanceof tx_newspaper_Article) return array();
-
         $timer = tx_newspaper_ExecutionTimer::create();
-        if (!$this->dossier_pages_filled) {
+        if ($this->article instanceof tx_newspaper_Article && !$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
         }
         return $this->dossier_pages;
