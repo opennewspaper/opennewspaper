@@ -193,7 +193,6 @@ class tx_newspaper_DependencyTree {
 
     /// Executes the registered actions on all pages in the tree for which they are registered.
     public function executeActionsOnPages($key = '') {
-tx_newspaper::devlog("executeActionsOnPages($key)", array_merge(self::$registered_actions, array_slice(debug_backtrace(false), 1, 8)));
         if ($key) {
             if (isset(self::$registered_actions[$key])) {
                 $this->executeActionOnPages(self::$registered_actions[$key]);
@@ -203,11 +202,13 @@ tx_newspaper::devlog("executeActionsOnPages($key)", array_merge(self::$registere
                 $this->executeActionOnPages($action);
             }
         }
-tx_newspaper::devlog("executeActionsOnPages($key) done");
     }
 
     /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
+
+        if (!$this->article instanceof tx_newspaper_Article) return array();
+
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->article_pages_filled) {
             $this->addArticlePages($this->article);
@@ -217,20 +218,22 @@ tx_newspaper::devlog("executeActionsOnPages($key) done");
 
     /// Returns all section pages on which the affected article is shown.
     public function getSectionPages() {
-tx_newspaper::devlog('getSectionPages');
+
+        if (!$this->article instanceof tx_newspaper_Article) return array();
+
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->section_pages_filled) {
             $this->addSectionPages($this->article->getSections());
             $this->addSectionPages(getSectionsWhoseArticleListContains($this->article));
         }
-tx_newspaper::devlog('getSectionPages done', $this->section_pages);
         return $this->section_pages;
     }
 
     /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
-    	if (!$this->article instanceof tx_newspaper_Article) return array();
-tx_newspaper::devlog('getRelatedArticlePages', $this->article);
+
+        if (!$this->article instanceof tx_newspaper_Article) return array();
+
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->related_article_pages_filled) {
             $this->addRelatedArticles($this->article);
@@ -240,6 +243,9 @@ tx_newspaper::devlog('getRelatedArticlePages', $this->article);
 
     /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
+
+        if (!$this->article instanceof tx_newspaper_Article) return array();
+
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->articlelist_pages_filled) {
             $this->addArticleListPages(getAffectedArticleLists($this->article));
@@ -249,6 +255,9 @@ tx_newspaper::devlog('getRelatedArticlePages', $this->article);
 
     /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
+
+        if (!$this->article instanceof tx_newspaper_Article) return array();
+
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->dossier_pages_filled) {
             $this->addDossierPages($this->article);
@@ -346,29 +355,14 @@ tx_newspaper::devlog('getRelatedArticlePages', $this->article);
         $function = $action['function'];
         $when = $action['when'];
         $pages = array();
-$func = implode('::', $function);
-tx_newspaper::devlog("executeActionOnPages($func)", array_slice(debug_backtrace(false), 1, 8));
 
-        if ($when & self::ACT_ON_ARTICLES) { $pages = array_merge($pages, $this->getArticlePages());
-tx_newspaper::devlog('executeActionOnPages() 1', $pages);
-}
-        if ($when & self::ACT_ON_SECTION_PAGES) { $pages = array_merge($pages, $this->getSectionPages());
-tx_newspaper::devlog('executeActionOnPages() 2', $pages);
-}
-        if ($when & self::ACT_ON_RELATED_ARTICLES) { $pages = array_merge($pages, $this->getRelatedArticlePages());
-tx_newspaper::devlog('executeActionOnPages() 3', $pages);
-}
-        if ($when & self::ACT_ON_DOSSIER_PAGES) { $pages = array_merge($pages, $this->getDossierPages());
-tx_newspaper::devlog('executeActionOnPages() 4', $pages);
-}
-        if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) { $pages = array_merge($pages, $this->getArticlelistPages());
-tx_newspaper::devlog('executeActionOnPages() 5', $pages);
-}
+        if ($when & self::ACT_ON_ARTICLES) $pages = array_merge($pages, $this->getArticlePages());
+        if ($when & self::ACT_ON_SECTION_PAGES) $pages = array_merge($pages, $this->getSectionPages());
+        if ($when & self::ACT_ON_RELATED_ARTICLES) $pages = array_merge($pages, $this->getRelatedArticlePages());
+        if ($when & self::ACT_ON_DOSSIER_PAGES) $pages = array_merge($pages, $this->getDossierPages());
+        if ($when & self::ACT_ON_ARTICLE_LIST_PAGES) $pages = array_merge($pages, $this->getArticlelistPages());
 
-tx_newspaper::devlog('call_user_func()', array($function, $pages));
-#        call_user_func("test_calluserfunc", $pages);
         call_user_func($function, $pages);
-tx_newspaper::devlog("executeActionOnPages($func) done");
     }
 
     private function getStarttime() {
@@ -421,7 +415,6 @@ tx_newspaper::devlog("executeActionOnPages($func) done");
 
     private function addRelatedArticles(tx_newspaper_Article $article) {
         $timer = tx_newspaper_ExecutionTimer::create();
-tx_newspaper::devlog('addRelatedArticles()', $article);
         $related = $article->getRelatedArticles();
         foreach ($related as $related_article) {
             $sections = $related_article->getSections();
@@ -542,10 +535,6 @@ tx_newspaper::devlog('addRelatedArticles()', $article);
 
     private static $registered_actions = array();
 
-}
-
-function test_calluserfunc($pages) {
-tx_newspaper::devlog("test_calluserfunc()", $pages);
 }
 
 function getAllArticlePages(array $sections) {
