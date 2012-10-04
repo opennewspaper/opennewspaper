@@ -207,7 +207,7 @@ class tx_newspaper_DependencyTree {
     /// Returns all article pages on which the affected article is shown.
     public function getArticlePages() {
 
-        if (!$this->article instanceof tx_newspaper_Article) return array();
+        if (!$this->article instanceof tx_newspaper_Article) return $this->article_pages;
 
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->article_pages_filled) {
@@ -232,7 +232,7 @@ class tx_newspaper_DependencyTree {
     /// Returns all article pages on which articles related to the affected article are shown.
     public function getRelatedArticlePages() {
 
-        if (!$this->article instanceof tx_newspaper_Article) return array();
+        if (!$this->article instanceof tx_newspaper_Article) return $this->related_article_pages;
 
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->related_article_pages_filled) {
@@ -244,7 +244,7 @@ class tx_newspaper_DependencyTree {
     /// Returns all pages which feature an article list displaying the affected article.
     public function getArticlelistPages() {
 
-        if (!$this->article instanceof tx_newspaper_Article) return array();
+        if (!$this->article instanceof tx_newspaper_Article) return $this->articlelist_pages;
 
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->articlelist_pages_filled) {
@@ -256,7 +256,7 @@ class tx_newspaper_DependencyTree {
     /// Returns all dossier pages which display a dossier containing the affected article.
     public function getDossierPages() {
 
-        if (!$this->article instanceof tx_newspaper_Article) return array();
+        if (!$this->article instanceof tx_newspaper_Article) return $this->dossier_pages;
 
         $timer = tx_newspaper_ExecutionTimer::create();
         if (!$this->dossier_pages_filled) {
@@ -473,7 +473,7 @@ class tx_newspaper_DependencyTree {
     private function markAsCleared() {
         $this->article_pages_filled = true;
         $this->section_pages_filled = true;
-        $this->related_article_pages = true;
+        $this->related_article_pages_filled = true;
         $this->dossier_pages_filled = true;
         $this->articlelist_pages_filled = true;
     }
