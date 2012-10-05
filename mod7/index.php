@@ -284,10 +284,10 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty->assign('SPINNER', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod7/res/move-spinner.gif');
 					$smarty->assign('workflow_permissions', array(
 						'hide' => ($article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('hide'),
-						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::isFunctionalityAvailable('publish'),
+						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::canPublishArticles(),
 						'check' => ($article->getAttribute('workflow_status') == 1)? false : tx_newspaper_workflow::isFunctionalityAvailable('check'),
 						'revise' => ($article->getAttribute('workflow_status') == 0)? false : tx_newspaper_workflow::isFunctionalityAvailable('revise'),
-						'place' => tx_newspaper_workflow::isFunctionalityAvailable('place'),
+						'place' => tx_newspaper_workflow::canPlaceArticles(),
 					));
 					$smarty->assign('workflowlog',
 						tx_newspaper_workflow::getJavascript() .

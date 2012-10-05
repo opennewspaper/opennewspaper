@@ -442,6 +442,8 @@ function changeWorkflowStatus(role, hidden_status) {
 	public static function isFunctionalityAvailable($feature) {
 		$role = self::getRole();
 //t3lib_div::devlog('isFunctionalityAvailable()', 'newspaper', 0, array('be_user->isAdmin()' => $GLOBALS['BE_USER']->isAdmin(), 'feature' => $feature, 'role' => $role));
+
+        /** @todo I don't think the following block is a good idea. It makes debugging harder for admins. */
 		if ($GLOBALS['BE_USER']->isAdmin()) {
 			return true; // admins can see all buttons
 		}
@@ -453,25 +455,14 @@ function changeWorkflowStatus(role, hidden_status) {
 		switch(strtolower($feature)) {
 			case 'hide':
 				return true;
-			break;
 			case 'publish':
-				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
-					return true; // only duty editors are allowed to publish
-				}
-			break;
+                return self::canPublishArticles();
 			case 'check':
 				return true;
-			break;
 			case 'revise':
-				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
-					return true;
-				}
-			break;
+			    return ($role == NP_ACTIVE_ROLE_DUTY_EDITOR);
 			case 'place':
-				if ($role == NP_ACTIVE_ROLE_DUTY_EDITOR) {
-					return true;
-				}
-			break;
+				return self::canPlaceArticles();
 		}
 
 		return false;
