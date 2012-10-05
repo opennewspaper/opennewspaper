@@ -560,7 +560,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
             default:
                 t3lib_div::devlog('Unknown article list type', 'newspaper', 3, $al->getTable());
         }
-        $al->
     }
 
 
