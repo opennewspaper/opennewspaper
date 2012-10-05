@@ -78,7 +78,7 @@ class tx_newspaper_PlacementBE {
 
     private function renderSection(tx_newspaper_Section $section) {
         $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $section->getUid()), intval($this->input['articleid']), true));
-        $this->smarty->assign('level', sizeof($section->getRootLine()));
+        $this->smarty->assign('level', sizeof($section->getRootLine())+1);
         return $this->smarty->fetch('mod7_section.tmpl');
     }
 
