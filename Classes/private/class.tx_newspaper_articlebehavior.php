@@ -2,7 +2,7 @@
 /**
  *  \file class.tx_newspaper_articlebehavior.php
  *
- *  \author Helge Preuss <helge.preuss@gmx.net>
+ *  \author Lene Preuss <lene.preuss@gmx.net>
  *  \date Nov 19, 2008
  */
 

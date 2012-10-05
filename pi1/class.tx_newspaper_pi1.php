@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
+*  (c) 2008 Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  *  Also known as "The Big One", because it is the one plugin that does all
  *  rendering.
  * 
- *  \author	Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
+ *  \author	Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
 	

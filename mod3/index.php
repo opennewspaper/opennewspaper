@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Lene Preuss, Oliver Schroeder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -53,7 +53,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'Placement' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Lene Preuss, Oliver Schroeder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module3 extends t3lib_SCbase {
 	var $pageinfo;
@@ -241,7 +241,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 		$pz->moveExtraAfter($e, $origin_uid);
 
 		if ($pz->isConcreteArticle()) {
-			// \todo: Helge, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
+			// \todo: Lene, if I don't re-read the pagezone, the new position for the moved extra is not correct (see #564)
 			$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // re-reading the pagezone ...
 			echo tx_newspaper_be::renderBackendPageZone($pz, false, true);
 		}

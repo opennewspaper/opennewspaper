@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,7 +44,7 @@ class fullWidthDoc_mod2 extends template {
 /**
  * Module 'Moderation list' for the 'newspaper' extension.
  *
- * @author	Helge Preuss, Oliver Schr�der, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Lene Preuss, Oliver Schr�der, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module2 extends t3lib_SCbase {
 	var $pageinfo;

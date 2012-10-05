@@ -6,7 +6,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ *  (c) 2008 Lene Preuss, Oliver Schroeder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -247,7 +247,7 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
 	 * \return Array with articles
 	 */
     public function getArticles($limit = 1000000, $start = 0) {
-// todo: Helge fragen, was hier passiert: $article_list = self::getDossierArticleList();
+// todo: Lene fragen, was hier passiert: $article_list = self::getDossierArticleList();
         if (!$article_list) {
             return $this->getArticlesDirect($limit, $start);
         }

@@ -3,7 +3,7 @@
 /**
  *  \file class.tx_newspaper_article.php
  *
- *  \author Helge Preuss <helge.preuss@gmx.net>
+ *  \author Lene Preuss <lene.preuss@gmx.net>
  *  \date Oct 27, 2008
  */
 require_once(PATH_typo3conf . 'ext/newspaper/interfaces/interface.tx_newspaper_articleiface.php');

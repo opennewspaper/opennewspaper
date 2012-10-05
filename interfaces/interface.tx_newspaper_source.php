@@ -45,7 +45,7 @@ class tx_newspaper_ProductionStatus {
  /** This interface supplies functions which read an Article, or parts of it,
   *  or [parts of] many Articles, or one Extra, or many Extras.
   *
-  *  \author Helge Preuss <helge.preuss@gmx.net>
+  *  \author Lene Preuss <lene.preuss@gmx.net>
   */
 interface tx_newspaper_Source {
 

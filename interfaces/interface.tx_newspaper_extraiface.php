@@ -2,7 +2,7 @@
 /**
  *  \file interface.tx_newspaper_extraiface.php
  *
- *  \author Helge Preuss <helge.preuss@gmail.com>
+ *  \author Lene Preuss <lene.preuss@gmail.com>
  *  \date Oct 27, 2008
  */
 

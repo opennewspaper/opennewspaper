@@ -2,7 +2,7 @@
 /*
  * Created on Oct 27, 2008
  *
- * Author: helge
+ * Author: lene
  */
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_pagezone.php');

@@ -6,7 +6,7 @@
  * 
  *  Copyright notice
  *
- *  (c) 2008 Helge Preuss, Oliver Schroeder, Samuel Talleux <helge.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
+ *  (c) 2008 Lene Preuss, Oliver Schroeder, Samuel Talleux <lene.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *  
- *  \author Helge Preuss <helge.preuss@gmail.com>
+ *  \author Lene Preuss <lene.preuss@gmail.com>
  *  \date Jan 9, 2009
  */
 

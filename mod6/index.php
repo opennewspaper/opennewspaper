@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -58,7 +58,7 @@ class fullWidthDoc_mod6 extends template {
  *
  *  The central function which handles all the action is moduleContent().
  *
- * \author	Helge Preuss <helge.preuss@gmail.com>
+ * \author	Lene Preuss <lene.preuss@gmail.com>
  */
 class  tx_newspaper_module6 extends t3lib_SCbase {
 

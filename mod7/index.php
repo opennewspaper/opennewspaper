@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+*  (c) 2009 Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,7 +45,7 @@ class fullWidthDoc_mod7 extends template {
 /**
  * Module 'Article placement' for the 'newspaper' extension.
  *
- * @author	Matthias Krappitz <matthias@aemka.de>, Helge Preuss, Oliver Schröder, Samuel Talleux <helge.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Matthias Krappitz <matthias@aemka.de>, Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
  */
@@ -546,7 +546,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
         switch ($al->getTable()) {
             case 'tx_newspaper_articlelist_manual' :
                 $al->assembleFromUIDs($articleIds);
-                return;
+                break;
             case 'tx_newspaper_articlelist_semiautomatic' :
                 $articleIdsAndOffsets = array();
                 for ($i = 0; $i < count($articleIds); ++$i) {
@@ -556,10 +556,11 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
                     );
                 }
                 $al->assembleFromUIDs($articleIdsAndOffsets);
-                return;
+                break;
             default:
                 t3lib_div::devlog('Unknown article list type', 'newspaper', 3, $al->getTable());
         }
+        $al->
     }
 
 
