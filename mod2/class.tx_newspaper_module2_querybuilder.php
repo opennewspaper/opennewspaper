@@ -160,10 +160,19 @@ class tx_newspaper_module2_QueryBuilder {
      		}
      	}
 
-        $this->where[] = '(title LIKE "%' . addslashes(trim($this->input['text'])) . '%" OR kicker LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%" OR teaser LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%" OR bodytext LIKE "%' .
-                     addslashes(trim($this->input['text'])) . '%")';
+        // Search for all terms divided by a space character
+        // So "demo example" finds all articles with both the "demo" AND "example" somewhere in the article
+        $wherePart = array();
+        foreach(t3lib_div::trimExplode(' ', $this->input['text']) as $term) {
+            $wherePart[] = '(' .
+                    'title LIKE "%' . addslashes($term) . '%" OR ' .
+                    'kicker LIKE "%' . addslashes($term) . '%" OR ' .
+                    'teaser LIKE "%' . addslashes($term) . '%" OR ' .
+                    'bodytext LIKE "%' . addslashes($term) . '%"' .
+                ')';
+        }
+
+        $this->where[] = implode(' AND ', $wherePart);
         return self::TEXT_SEARCH_FOR_TEXT;
     }
 
