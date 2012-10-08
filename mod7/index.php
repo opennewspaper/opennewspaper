@@ -287,7 +287,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 						'publish' => (!$article->getAttribute('hidden'))? false : tx_newspaper_workflow::canPublishArticles(),
 						'check' => ($article->getAttribute('workflow_status') == 1)? false : tx_newspaper_workflow::isFunctionalityAvailable('check'),
 						'revise' => ($article->getAttribute('workflow_status') == 0)? false : tx_newspaper_workflow::isFunctionalityAvailable('revise'),
-						'place' => tx_newspaper_workflow::canPlaceArticles(),
+						'place' => tx_newspaper_workflow::canPlaceArticles() || tx_newspaper_Workflow::mayPlaceAsEditor(),
 					));
 					$smarty->assign('workflowlog',
 						tx_newspaper_workflow::getJavascript() .

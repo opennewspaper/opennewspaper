@@ -409,6 +409,16 @@ function changeWorkflowStatus(role, hidden_status) {
         return (bool) ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.editorMayPublish'));
     }
 
+    /**
+     * Checks if the be_user may place articles in article lists even when newspaper role is set to editor
+     * User TSConfig: newspaper.editorMayPlace = [0|1]
+     * @todo: This function may ONLY be used to hide/show placement buttons in production list and placement module, see canPlaceArticles()
+     * @static
+     * @return bool true, if placing is allowed
+     */
+    public static function mayPlaceAsEditor() {
+        return (bool) ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.editorMayPlace'));
+    }
 
 	/// Changes the newspaper role of the be_user
 	/**
