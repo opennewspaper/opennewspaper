@@ -64,20 +64,51 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
         $this->titleAttrib = 'section_name';
         $this->orderByFields = 'sorting';
 	}
+
+
+    /**
+     * Get section uids the current be_user is allowed to access
+     * @return array Section uids
+     */
+    private function getSectionRestriction() {
+        $sectionUids = array();
+        foreach(tx_newspaper_Section::getAllSectionsWithRestrictions() as $s) {
+            $sectionUids[] = $s->getUid();
+        }
+        return $sectionUids;
+    }
+
+    /**
+     * Remove sections the current be_user is not allowed to access
+     */
+    private function removeRestrictedSectionsFromTree() {
+        $sectionUids = $this->getSectionRestriction();
+        foreach($this->tree as $key => $value) {
+            if (!in_array($value['row']['uid'], $sectionUids)) {
+                // BE user can't access this section
+                unset($this->tree[$key]);
+            }
+        }
+        $this->tree = array_values($this->tree); // Re-index
+    }
  
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
 	/** init() already sets up all parameters for the tree to display correctly,
 	 *  we only need to supply the JavaScript jumpTo() function, which tells
 	 *  the browser what to do when a node is clicked.
 	 * 
-	 *  \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
-	 */
-	public function printTree($treeArr = '') {
-		$ret = '<script language="javascript">
+	 *  \param $treeArr "tree-array" - Ignored ...
+     *
+     * The tree is rendered based on $this->tree after removing sections the be_user is not allowed to access
+     *
+     */
+    public function printTree($treeArr = '') {
+
+        $this->removeRestrictedSectionsFromTree();
+
+        $ret = '<script language="javascript">
 /*<![CDATA[*/
 top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
-		///taz426/typo3/../typo3conf/ext/newspaper/mod3/class.tx_newspaper_SectionTree.php?&currentSubScript=mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3
-		
 		// setting prefs for pagetree and drag & drop
 //		Tree.highlightClass = "active";
 
@@ -88,8 +119,8 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 			if (theUrl.indexOf("?") != -1) {
 				theUrl += "&id=" + id
 			} else {
-				theUrl += "?id=" + id		    	
-			}	
+				theUrl += "?id=" + id
+			}
 			top.fsMod.currentBank = bank;
 
 			if (top.condensedMode) {
@@ -102,7 +133,9 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM3");
 		}
 /*]]>*/
 </script>' .
-		parent::printTree($treeArr);
+
+
+		parent::printTree($this->tree);
 
 		return $ret;
 	}
