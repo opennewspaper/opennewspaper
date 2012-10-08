@@ -332,20 +332,18 @@ function changeWorkflowStatus(role, hidden_status) {
     }
 
     /**
-     * Get newspaper role (either from be_user or from User TSConfig
+     * Get newspaper role (either from be_user or from User TSConfig)
      * @static
      * @return 0 for editor, 1 for duty editor
      */
-    /// \return role set in be_users (or false if not available)
     public static function getRole() {
         $role = tx_newspaper::getBeUserData('tx_newspaper_role');
-
-        if ($role === false) {
-            // No role found in be_user, so use default role (TSConfigured or editor)
+        if ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.hideRoleSwitchModule') || $role === false) {
+            // No role found in be_user, so use default role (TSConfigured or editor as default role)
+            // Or: Role switch role is hidden, so use default role anyway
             $role = self::getDefaultRole();
             tx_newspaper_Workflow::changeRole($role); // Change and store new role
         }
-
 		return $role;
 	}
 
