@@ -670,21 +670,29 @@ class tx_newspaper  {
 
 //if ($field == 'tx_newspaper_role') { unset($BE_USER->user[$field]); } // Unset stored newspaper role for test purposes
 
-        // check global object BE_USER first
+        // Check global object BE_USER first ...
         if (isset($BE_USER->user[$field])) {
             return $BE_USER->user[$field];
         }
 
-//        // Check session then
-//        if ($_COOKIE['be_typo_user'] &&
-//            tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
-//                'ses_userid',
-//                'be_sessions',
-//                'ses_id="' . $_COOKIE['be_typo_user'] . '" AND ses_name="be_typo_user"'
-//        )) {
-//            // A valid be session was found
-//            // @todo The removed code assumed that be_users was extended but couldn't read data from field "uc"
-//        }
+        // Check session then
+        if ($_COOKIE['be_typo_user'] &&
+            $row = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+                'ses_userid',
+                'be_sessions',
+                'ses_id="' . $_COOKIE['be_typo_user'] . '" AND ses_name="be_typo_user"'
+    )) {
+            // A valid backend session was found
+            // So try to read field from DB directly
+            tx_newspaper::devlog('sess row', $row);
+            if ($row = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+                '*',
+                'be_users',
+                'uid=' . intval($row['ses_userid'])
+            ) && isset($row[$field])) {
+                return $row[$field];
+            }
+        }
 
         return false;
     }

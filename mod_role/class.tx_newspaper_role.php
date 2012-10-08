@@ -161,7 +161,7 @@ class tx_newspaper_role implements backend_toolbarItem {
 		tx_newspaper_workflow::changeRole(intval($role));
 
 		// Render json (new menu and new label)
-		$content = t3lib_div::array2json(array('roleLabel' => tx_newspaper_Workflow::getRoleTitle(tx_newspaper_Workflow::getRole()), 'menu' => $this->renderMenu()));
+		$content = json_encode(array('roleLabel' => tx_newspaper_Workflow::getRoleTitle(tx_newspaper_Workflow::getRole()), 'menu' => $this->renderMenu()));
 
 		// Set output
 		$ajaxObj->setContentFormat('json');

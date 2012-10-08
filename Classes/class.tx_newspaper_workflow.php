@@ -341,8 +341,9 @@ function changeWorkflowStatus(role, hidden_status) {
         $role = tx_newspaper::getBeUserData('tx_newspaper_role');
 
         if ($role === false) {
-            // No role stored in be_user so try to read a default role from User TSConfig
+            // No role found in be_user, so use default role (TSConfigured or editor)
             $role = self::getDefaultRole();
+            tx_newspaper_Workflow::changeRole($role); // Change and store new role
         }
 
 		return $role;
@@ -363,9 +364,6 @@ function changeWorkflowStatus(role, hidden_status) {
             t3lib_div::devlog('newspaper.defaultRole set to wrong value, 0 and 1 are allowed. Role is set to 0 (= editor)', 'newspaper', 0, array('configured value' => $role));
             $role = 0;
         }
-
-        //@todo: Store role in be_users ??
-
         return $role;
     }
 
@@ -425,13 +423,13 @@ function changeWorkflowStatus(role, hidden_status) {
 	 * The role of the be_user will be set to the given new role in $new_role.
 	 * The filter for the moderation list is modified to filter the list according to the new role.
 	 * \param $new_role value for the new role to change to
-	 * \return true if chnage was successful, else false
+	 * \return true if change was successful, else false
 	 */
 	public static function changeRole($new_role) {
 		if (!isset($GLOBALS['BE_USER']->user)) {
 			return false;
 		}
-		// store new role in be_user
+		// Store new role in be_user
 		tx_newspaper::updateRows(
 			'be_users',
 			'uid=' . $GLOBALS['BE_USER']->user['uid'],
