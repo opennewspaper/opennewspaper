@@ -578,6 +578,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
     }
 
     /**
+     * Check if current be_user is allowed to access $this section
+     * @return bool True, if be_user is allowed to access to section, else false
+     */
+    public function isSectionAccessGranted() {
+        return (in_array($this->getUid(), self::getBaseSectionTreeUids()));
+    }
+
+    /**
      * Get base sections (either root sections or configured by TSConfig) for article wizard
      * newspaper.baseSections = [uid1, ..., uidn]
      * newspaper.baseSectionsAsStartSection = [uid1, ..., [uidn]

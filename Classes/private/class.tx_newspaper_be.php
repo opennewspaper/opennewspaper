@@ -13,7 +13,7 @@ define('BE_EXTRA_DISPLAY_MODE_TABBED', 2);   // extras are edited in tabs
 
 define('BE_ICON_CLOSE', '1');
 
-define('DEBUG_OUTPUT', false); // show position etc.
+define('DEBUG_OUTPUT', false); // show position etc. @todo: User TSConfig
 
 /// function for adding newspaper functionality to the backend
 /** @todo Oliver: document me!
@@ -704,8 +704,10 @@ class tx_newspaper_BE {
         if ($showLevelsAbove) {
             $pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
             for ($i = 0; $i < sizeof($pz_up); $i++) {
-                $data[] = self::extractData($pz_up[$i]);
-                $extraData[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
+                if (self::accessToSectionIsGranted($pz_up[$i])) {
+                    $data[] = self::extractData($pz_up[$i]);
+                    $extraData[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
+                }
             }
         }
         // Add CURRENT page zone and extras
@@ -724,6 +726,17 @@ class tx_newspaper_BE {
 //t3lib_div::devlog('getPageZoneDataForPlacementModule() - some more data added', 'newspaper', 0, array('pz' => $pz, 'data' => $data));
 
     }
+
+    /**
+     * @param tx_newspaper_PageZone $pz
+     * @return bool
+     * @todo: Move to pagezone class?
+     */
+    private static function accessToSectionIsGranted(tx_newspaper_PageZone $pz) {
+        $section = $pz->getParentPage()->getParentSection();
+        return $section->isSectionAccessGranted();
+    }
+
 
     /**
      * @return mixed Localized labels for placement module
