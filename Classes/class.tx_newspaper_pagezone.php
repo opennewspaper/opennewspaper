@@ -990,7 +990,8 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 		if ($this->isPagezonePage()) {
 			return false;
 		}
-		return ($this->getAttribute('is_template') == 0);
+        // So $this is an instance of tx_newspaper_article
+		return !$this->isDefaultArticle();
 	}
 
 	/// delete this concrete and the parent abstract pagezone

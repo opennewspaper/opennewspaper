@@ -502,117 +502,58 @@ class tx_newspaper_BE {
 		return tx_newspaper::getTranslation($key, 'mod3/locallang.xml');
 	}
 
-	public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $show_levels_above=false, $ajax_reload=false) {
+    /**
+     * @param tx_newspaper_PageZone $pz Either pagezone_page or article
+     * @param bool $showLevelsAbove Boolean If true, levels above are rendered too
+     * @param bool $ajax_reload
+     * @return mixed HTML code with placement module backend
+     */
+    public static function renderBackendPageZone(tx_newspaper_PageZone $pz, $showLevelsAbove=false, $ajax_reload=false) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		$data = array();
-		$extra_data = array();
-
-		/// add UPPER level page zones and extras, if any
-		if ($show_levels_above) {
-			$pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
-			for ($i = 0; $i < sizeof($pz_up); $i++) {
-				$data[] = self::extractData($pz_up[$i]);
-				$extra_data[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
-			}
-		}
-
-		// check if $pz is a concrete article
-		if ($pz instanceof tx_newspaper_article) {
-			$is_concrete_article = !$pz->isDefaultArticle();
-		} else {
-			$is_concrete_article = 0;
-		}
-
-		/// add CURRENT page zone and extras
-		$data[] = self::extractData($pz); // empty array if concrete article
-		$extra_data[] = tx_newspaper_BE::collectExtras($pz);
-
-//t3lib_div::devlog('extras in article (def/concr)', 'newspaper', 0, array('data' => $data, 'extra_data' => $extra_data));
-		if (!$is_concrete_article) {
-			// so it's no concrete article (= default article or pagezone_page)
-
-			$s = $pz->getParentPage()->getParentSection();
-			$pages = $s->getSubPages(); // get activate pages for current section
-			$pagetype = array();
-			for ($i = 0; $i < sizeof($pages); $i++) {
-				$pagetype[] = $pages[$i]->getPageType();
-			}
-
-			$pagezones = $pz->getParentPage()->getPageZones(); // get activate pages zone for current page
-			$pagezonetype = array();
-			for ($i = 0; $i < sizeof($pagezones); $i++) {
-				// add all pagezone type except for articles
-				// \todo: make article exception ts-configurable if default articles are to be used (note: default article features have not implmented yet)
-				if (!$pagezones[$i]->getPageZoneType()->getAttribute('is_article')) {
-					$pagezonetype[] = $pagezones[$i]->getPageZoneType();
-				}
-			}
-			$data[0]['article_id'] = -1; // only needed for concrete article
-		} else {
-			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // store pz_uid for backend buttons usage
-			$data[0]['article_id'] = $pz->getUid(); // store article uid for backend buttons usage (edit)
-		}
-//t3lib_div::devlog('render Extra on pz - pz, data', 'newspaper', 0, array('pz' => $pz, 'data' => $data));
+        // Smarty
+        $smarty = new tx_newspaper_Smarty();
+        $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
 
 
-		// if concrete article: add shortcuts for missing should-have and must-have extras
-		$shortcuts = $is_concrete_article? $pz->getMissingDefaultExtras() : array();
-//if ($is_concrete_article) t3lib_div::devlog('ex in a: shortcuts', 'newspaper', 0, array($shortcuts));
+        $data = array();
+        $extraData = array();
+        // Fill $data and $extraData
+        self::getPageZoneDataForPlacementModule($showLevelsAbove, $pz, $data, $extraData);
 
+        if (!$pz->isConcreteArticle()) {
+            // Placement module
+            $pageTypes = self::getPageTypesForPagezone($pz);
+            $pageZoneTypes = self::getPageZoneTypesForPagezone($pz);
 
-		// get a smarty object
- 		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod3/res/'));
+            // add possible inheritance sources for this page zone
+            $pp = $pz->getPossibleParents(true);
+            $page_name = array();
+            for ($i = 0; $i < sizeof($pp); $i++) {
+                // Get name of page
+                $page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // Can't be accessed with smarty
+            }
+//t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
+            $smarty->assign('INHERITANCESOURCE', $pp);
+            $smarty->assign('INHERITANCESOURCENAME', $page_name);
+        }
 
-		$label['show_levels_above'] = self::getTranslation('label_show_levels_above');
-		$label['show_visible_only'] = self::getTranslation('label_show_visible_only');
-		$label['pagetype'] = self::getTranslation('label_pagetype');
-		$label['pagezonetype'] = self::getTranslation('label_pagezonetype');
-		$label['pagezone_inheritancesource'] = self::getTranslation('pagezone_inheritancesource');
-		$label['pagezone_inheritancesource_upper'] = self::getTranslation('pagezone_inheritancesource_upper');
-		$label['pagezone_inheritancesource_none'] = self::getTranslation('pagezone_inheritancesource_none');
-		$label['title'] = self::getTranslation('title');
-		$label['clipboard'] = self::getTranslation('label_clipboard');
-		$label['clipboard_cut'] = self::getTranslation('label_clipboard_cut');
-		$label['clipboard_copied'] = self::getTranslation('label_clipboard_copied');
-		$label['clear_clipboard'] = self::getTranslation('label_clear_clipboard');
-	    $label['extra_cut_paste_confirm'] = self::getTranslation('message_cut_paste_confirm');
-	    $label['extra_copy_paste_confirm'] = self::getTranslation('message_copy_paste_confirm');
-
-		$message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
+        $message['pagezone_empty'] = self::getTranslation('message_pagezone_empty');
         $message['confirmation'] = self::getTranslation('message_unsaved_data');
 
-		$smarty->assign('LABEL', $label);
-		$smarty->assign('MESSAGE', $message);
-		$smarty->assign('DATA', $data);
-		$smarty->assign('PAGETYPE', $pagetype);
-		$smarty->assign('PAGEZONETYPE', $pagezonetype);
-		$smarty->assign('SHOW_LEVELS_ABOVE', $show_levels_above);
-		$smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', self::getTranslation('label_new_top')));
-		$smarty->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
-		$smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
-		$smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
-		$smarty->assign('CLEAR_CLIPBOARD_ICON', tx_newspaper_BE::renderIcon('gfx/closedok.gif', '', self::getTranslation('label_clear_clipboard')));
+        $smarty->assign('LABEL', self::getLabelsForPlacementModule());
+        $smarty->assign('MESSAGE', $message);
+        $smarty->assign('DATA', $data);
+        $smarty->assign('PAGETYPE', $pageTypes);
+        $smarty->assign('PAGEZONETYPE', $pageZoneTypes);
+        $smarty->assign('SHOW_LEVELS_ABOVE', $showLevelsAbove);
+        $smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', self::getTranslation('label_new_top')));
+        $smarty->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
+        $smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
+        $smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
+        $smarty->assign('CLEAR_CLIPBOARD_ICON', tx_newspaper_BE::renderIcon('gfx/closedok.gif', '', self::getTranslation('label_clear_clipboard')));
 
-		if (!$is_concrete_article) {
-			// add possible inheritance sources for this page zone
-			$pp = $pz->getPossibleParents(true);
-			$page_name = array();
-			for ($i = 0; $i < sizeof($pp); $i++) {
-				if (false) {
-					// this is the current page, so remove from array
-					unset($pp[$i]);
-				} else {
-					// get name of page
-					$page_name[] = $pp[$i]->getParentPage()->getPageType()->getAttribute('type_name'); // can't be accessed with smarty
-				}
-			}
-//t3lib_div::devlog('inh from', 'newspaper', 0, array($pp, $page_name));
-			$smarty->assign('INHERITANCESOURCE', $pp);
-			$smarty->assign('INHERITANCESOURCENAME', $page_name);
-		}
 
 		/// "new to top" buttons vary for pagezone_page (new to top) and article (new extra, set pos and paragraph in form)
 		if ($data[0]['pagezone_type'] instanceof tx_newspaper_article && $data[0]['pagezone_type']->getAttribute('is_article') == 0) {
@@ -628,18 +569,18 @@ class tx_newspaper_BE {
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
-		for ($i = 0; $i < sizeof($extra_data); $i++) {
+		for ($i = 0; $i < sizeof($extraData); $i++) {
 
-			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extra_data)-1)? true : false); // is this pagezone the currently edited page zone?
+			$smarty_pz->assign('IS_CURRENT', ($i == sizeof($extraData)-1)? true : false); // is this pagezone the currently edited page zone?
 
 			$smarty_pz->assign('DATA', $data[$i]); // so pagezone uid is available
-			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $is_concrete_article);
+			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
 			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForContentPlacement()); // are template set dropdowns visible or not
 			$smarty_pz->assign('CLIPBOARD', self::getClipboardData());
-			if (!$is_concrete_article && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
-				if (sizeof($extra_data[$i]) > 0) {
+			if (!$pz->isConcreteArticle() && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
+				if (sizeof($extraData[$i]) > 0) {
 					// render pagezone table only if extras are available
-					$smarty_pz->assign('EXTRA_DATA', $extra_data[$i]);
+					$smarty_pz->assign('EXTRA_DATA', $extraData[$i]);
 					$pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_page.tmpl');
 				} else {
 					$pagezone[$i] = false; // message "no extra so far" will be displayed in mod3.tmpl
@@ -651,9 +592,10 @@ class tx_newspaper_BE {
 				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_defaultextra_in_article')));
 				$smarty_pz->assign('SHORTCUT_NEWEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_file.gif', '', self::getTranslation('label_new_extra_in_article')));
 
-				$tmp = self::processExtraDataForExtraInArticle($extra_data[$i]);
+				$tmp = self::processExtraDataForExtraInArticle($extraData[$i]);
 				$smarty_pz->assign('EXTRA_DATA', $tmp['extras']);
-				$smarty_pz->assign('SHORTCUT', $shortcuts); // add array with shortcut list
+
+				$smarty_pz->assign('SHORTCUT', ($pz->isConcreteArticle()? $pz->getMissingDefaultExtras() : array())); // Add array with shortcut list
 				$smarty_pz->assign('MESSAGE', $message);
 
                	switch(self::getExtraBeDisplayMode()) {
@@ -662,8 +604,8 @@ class tx_newspaper_BE {
                           $lastTab = 'overview';
                           if(isset($_REQUEST['lastTab'])) { //is set after reload
                             $lastTab = $_REQUEST['lastTab'];
-                          } else if(isset($extra_data[0][0])) { //when opened first time
-                              $lastTab = $extra_data[0][0]['concrete_table'].'_'.$extra_data[0][0]['concrete_uid'];
+                          } else if(isset($extraData[0][0])) { //when opened first time
+                              $lastTab = $extraData[0][0]['concrete_table'].'_'.$extraData[0][0]['concrete_uid'];
                           }
                          $smarty_pz->assign('lastTab', $lastTab);
                          tx_newspaper_BE::addNewExtraData($smarty_pz, tx_newspaper_extra::HIDE_IN_ARTICLE_BE);
@@ -679,7 +621,7 @@ class tx_newspaper_BE {
 
 		$smarty->assign('PAGEZONE', $pagezone);
 
-		// admins might see a little more ...
+		// Admins might see a little more ...
 		$smarty->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 
 		// clipboard
@@ -710,9 +652,100 @@ class tx_newspaper_BE {
 			}
 		}
 
-
 		return $smarty->fetch('mod3.tmpl');
 	}
+
+    /**
+     * Get available page zone  types for page zone $pz
+     * @param tx_newspaper_PageZone $pz Page zone
+     * @return array ty_tx_newspaper_activatePageZoneType
+     * @todo: Move to pagezone class?
+     */
+    public static function getPageZoneTypesForPagezone($pz)     {
+        $pageZones = $pz->getParentPage()->getPageZones(); // Get activate pages zone for current page
+        $pageZoneTypes = array();
+        for ($i = 0; $i < sizeof($pageZones); $i++) {
+            // Add all pagezone types except articles
+            // \todo: make article exception ts-configurable if default articles are to be used (note: default article features have not implemented yet)
+            if (!$pageZones[$i]->getPageZoneType()->getAttribute('is_article')) {
+                $pageZoneTypes[] = $pageZones[$i]->getPageZoneType();
+            }
+        }
+        return $pageZoneTypes;
+    }
+
+    /**
+     * Get available page types for page zone $pz
+     * @param tx_newspaper_PageZone $pz Page zone
+     * @return array tx_newspaper_PageType
+     * @todo: Move to pagezone class?
+     */
+    public static function getPageTypesForPagezone(tx_newspaper_PageZone $pz) {
+        $s = $pz->getParentPage()->getParentSection();
+        $pages = $s->getSubPages(); // Get activate pages for current section
+        $pageTypes = array();
+        for ($i = 0; $i < sizeof($pages); $i++) {
+            $pageTypes[] = $pages[$i]->getPageType();
+        }
+        return $pageTypes;
+    }
+
+    /**
+     * Extra data for placement module
+     * @param $showLevelsAbove Bool If true, levels above are added too
+     * @param tx_newspaper_PageZone $pz tx_newspaper_PageZone Either pagezone_page or article
+     * @param array $data Array (Reference) Data for pagezone
+     * @param array $extraData (Reference) Data for Extras associated wth pagezone
+     * @static
+     * @return void (Data is stored in $data and $extraData)
+     */
+    private static function getPageZoneDataForPlacementModule($showLevelsAbove, tx_newspaper_PageZone $pz, array &$data, array &$extraData) {
+        // Add UPPER level page zones and extras, if any
+        if ($showLevelsAbove) {
+            $pz_up = array_reverse($pz->getInheritanceHierarchyUp(false));
+            for ($i = 0; $i < sizeof($pz_up); $i++) {
+                $data[] = self::extractData($pz_up[$i]);
+                $extraData[] = tx_newspaper_BE::collectExtras($pz_up[$i]);
+            }
+        }
+        // Add CURRENT page zone and extras
+        $data[] = self::extractData($pz); // empty array if concrete article
+        $extraData[] = tx_newspaper_BE::collectExtras($pz);
+//t3lib_div::devlog('getPageZoneDataForPlacementModule() - all levels read', 'newspaper', 0, array('data' => $data, 'extra_data' => $extra_data));
+
+        if (!$pz->isConcreteArticle()) {
+            // Placement module
+			$data[0]['article_id'] = -1; // Only needed for concrete article
+		} else {
+            // Article backend
+			$data[0]['pagezone_id'] = $pz->getAbstractUid(); // Store pz_uid for backend buttons usage
+			$data[0]['article_id'] = $pz->getUid(); // Store article uid for backend buttons usage (edit)
+		}
+//t3lib_div::devlog('getPageZoneDataForPlacementModule() - some more data added', 'newspaper', 0, array('pz' => $pz, 'data' => $data));
+
+    }
+
+    /**
+     * @return mixed Localized labels for placement module
+     */
+    public static function getLabelsForPlacementModule() {
+        return array(
+            'show_levels_above' => self::getTranslation('label_show_levels_above'),
+            'show_visible_only' => self::getTranslation('label_show_visible_only'),
+            'pagetype' => self::getTranslation('label_pagetype'),
+            'pagezonetype' => self::getTranslation('label_pagezonetype'),
+            'pagezone_inheritancesource' => self::getTranslation('pagezone_inheritancesource'),
+            'pagezone_inheritancesource_upper' => self::getTranslation('pagezone_inheritancesource_upper'),
+            'pagezone_inheritancesource_none' => self::getTranslation('pagezone_inheritancesource_none'),
+            'title' => self::getTranslation('title'),
+            'clipboard' => self::getTranslation('label_clipboard'),
+            'clipboard_cut' => self::getTranslation('label_clipboard_cut'),
+            'clipboard_copied' => self::getTranslation('label_clipboard_copied'),
+            'clear_clipboard' => self::getTranslation('label_clear_clipboard'),
+            'extra_cut_paste_confirm' => self::getTranslation('message_cut_paste_confirm'),
+            'extra_copy_paste_confirm' => self::getTranslation('message_copy_paste_confirm')
+        );
+    }
 
 
 // \todo: how are $new_at_top and $paragraph used? are those vars used at all???
