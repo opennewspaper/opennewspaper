@@ -72,7 +72,7 @@ class tx_newspaper_SectionTree extends t3lib_treeView {
      */
     private function getSectionRestriction() {
         $sectionUids = array();
-        foreach(tx_newspaper_Section::getAllSectionsWithRestrictions() as $s) {
+        foreach(tx_newspaper_Section::getAllSectionsWithRestrictions(false) as $s) {
             $sectionUids[] = $s->getUid();
         }
         return $sectionUids;
