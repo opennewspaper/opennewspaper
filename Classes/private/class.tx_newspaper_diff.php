@@ -6,7 +6,12 @@
 class tx_newspaper_Diff {
 
     public function __construct($old_text, $new_text) {
-        $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
+        try {
+            $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
+        } catch (tx_newspaper_OutOfMemoryException $e) {
+            $this->diff_representation = array();
+        }
+
     }
 
     public function textDiff() {
@@ -66,18 +71,18 @@ class tx_newspaper_Diff {
 
 class tx_newspaper_OutOfMemoryException extends tx_newspaper_Exception {
     public function __construct() {
-        parent::__construct("Out of memory", true);
+        parent::__construct("Out of memory", false);
     }
 }
 
 class tx_newspaper_DiffMatrix {
 
     /** if less memory than that is left, throw a tx_newspaper_OutOfMemoryException */
-    const memory_safety_margin = 1048576;
+    const memory_safety_margin = 16777216;
 
     public function set($oindex, $nindex) {
 
-        if (self::getMaxMem() - memory_get_usage(true) < 1000) throw new tx_newspaper_OutOfMemoryException();
+        if (self::getMaxMem() - memory_get_usage(true) < self::memory_safety_margin) throw new tx_newspaper_OutOfMemoryException();
 
         $this->matrix[$oindex][$nindex] = isset($this->matrix[$oindex - 1][$nindex - 1]) ? $this->matrix[$oindex - 1][$nindex - 1] + 1 : 1;
         if ($this->matrix[$oindex][$nindex] > $this->maxlen) {
