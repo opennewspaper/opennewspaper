@@ -40,20 +40,13 @@ class tx_newspaper_Diff {
     }
 
     private static function findDifferenceData($old, $new) {
-        $maxlen = 0;
-        $matrix = array();
+        $matrix = new tx_newspaper_DiffMatrix;
         foreach ($old as $oindex => $ovalue) {
             foreach (array_keys($new, $ovalue) as $nindex) {
-                $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
-                        $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
-                if ($matrix[$oindex][$nindex] > $maxlen) {
-                    $maxlen = $matrix[$oindex][$nindex];
-                    $omax = $oindex + 1 - $maxlen;
-                    $nmax = $nindex + 1 - $maxlen;
-                }
+                $matrix->set($oindex, $nindex);
             }
         }
-        return array($maxlen, $omax, $nmax);
+        return array($matrix->getMaxlen(), $matrix->getOMax(), $matrix->getNMax());
     }
 
     private static function elementsToText($already, $next) {
@@ -68,5 +61,49 @@ class tx_newspaper_Diff {
     private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
     private $diff_representation = array();
+
+}
+
+class tx_newspaper_OutOfMemoryException extends tx_newspaper_Exception {
+    public function __construct() {
+        parent::__construct("Out of memory", true);
+    }
+}
+
+class tx_newspaper_DiffMatrix {
+
+    /** if less memory than that is left, throw a tx_newspaper_OutOfMemoryException */
+    const memory_safety_margin = 1048576;
+
+    public function set($oindex, $nindex) {
+
+        if (self::getMaxMem() - memory_get_usage(true) < 1000) throw new tx_newspaper_OutOfMemoryException();
+
+        $this->matrix[$oindex][$nindex] = isset($this->matrix[$oindex - 1][$nindex - 1]) ? $this->matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+        if ($this->matrix[$oindex][$nindex] > $this->maxlen) {
+            $this->maxlen = $this->matrix[$oindex][$nindex];
+            $this->omax = $oindex + 1 - $this->maxlen;
+            $this->nmax = $nindex + 1 - $this->maxlen;
+        }
+    }
+
+    public function getMaxlen() { return $this->maxlen; }
+    public function getOMax() { return $this->omax; }
+    public function getNMax() { return $this->nmax; }
+
+    static private function getMaxMem() {
+        $max_mem = ini_get('memory_limit');
+        switch (substr($max_mem, -1)) {
+            case 'G': return intval($max_mem)*1024*1024*1024;
+            case 'M': return intval($max_mem)*1024*1024;
+            case 'K': return intval($max_mem)*1024;
+        }
+        return intval($max_mem);
+    }
+
+    private $matrix = array();
+    private $maxlen = 0;
+    private $omax = 0;
+    private $nmax = 0;
 
 }
