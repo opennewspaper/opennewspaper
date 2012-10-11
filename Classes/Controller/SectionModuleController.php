@@ -14,6 +14,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $this->pageId = intval(t3lib_div::_GP('id'));
         $this->pageRenderer->addInlineLanguageLabelFile('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml');
         $this->sections = tx_newspaper_Section::getAllSectionsWithRestrictions(false);
+        $this->view->assign('sections', $this->sections);
         $this->module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
     }
 
@@ -24,7 +25,6 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $this->view->assign('module_request', $this->module_request);
 
-        $this->view->assign('sections', $this->sections);
         $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
         $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
@@ -47,7 +47,6 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function editAction() {
-        $this->view->assign('sections', $this->sections);
         if (!empty($this->module_request['section'])) {
             $this->flashMessageContainer->add($this->module_request['section'], 'Section to delete:');
         }
@@ -57,7 +56,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function deleteAction() {
-        $this->view->assign('sections', $this->sections);
+        if (!empty($this->module_request['section'])) {
+            $this->flashMessageContainer->add($this->module_request['section'], 'Section to delete:');
+        }
     }
 
     /**
@@ -89,6 +90,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
     private function isValidRequest($request) {
 
+        $this->flashMessageContainer->add(print_r($request,1), 'request');
         if (!is_array($request)) return false;
 
         $ok = true;

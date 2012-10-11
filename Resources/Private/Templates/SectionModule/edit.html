@@ -11,13 +11,13 @@
 
 <h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' /></h1>
 
-<f:form controller="SectionModule" action="new" enctype="multipart/form-data">
+<f:form controller="SectionModule" action="edit" enctype="multipart/form-data">
 
     <table>
 
         <tr>
             <td>
-                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_delete' />
+                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
             </td>
             <td>
                 <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
