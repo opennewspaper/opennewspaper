@@ -5,11 +5,16 @@
 
 class tx_newspaper_Diff {
 
-    public function __construct($old_text, $new_text) {
+    public function __construct($old_text, $new_text, $strip_tags = true) {
+        if ($strip_tags) {
+            $old_text = strip_tags($old_text);
+            $new_text = strip_tags($new_text);
+        }
+
         try {
             $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
         } catch (tx_newspaper_OutOfMemoryException $e) {
-            $this->diff_representation = array();
+            $this->diff_representation = array(array('d' => $old_text, 'i' => $new_text));
         }
 
     }
@@ -78,7 +83,7 @@ class tx_newspaper_OutOfMemoryException extends tx_newspaper_Exception {
 class tx_newspaper_DiffMatrix {
 
     /** if less memory than that is left, throw a tx_newspaper_OutOfMemoryException */
-    const memory_safety_margin = 16777216;
+    const memory_safety_margin = 67108864; // 64M
 
     public function set($oindex, $nindex) {
 
@@ -106,7 +111,7 @@ class tx_newspaper_DiffMatrix {
         return intval($max_mem);
     }
 
-    private $matrix = array();
+    private $matrix = array(array());
     private $maxlen = 0;
     private $omax = 0;
     private $nmax = 0;
