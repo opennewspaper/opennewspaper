@@ -695,7 +695,7 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getFormattedDetailsField($field_name, $field_content) {
-        return "<tr><td width='100%'>$field_name</td></tr><tr><td width='100%'>$field_content</td></tr>\n";
+        return "<tr><td width='100%'>$field_name</td></tr><tr><td width='100%'>" . str_replace("\n", "<br />\n", $field_content) . "</td></tr>\n";
     }
 
     private static function getChangedFields(array $fieldArray, tx_newspaper_Article $article) {
