@@ -1210,6 +1210,7 @@ CREATE TABLE tx_newspaper_pagetype (
 # InnoDB for log
 CREATE TABLE tx_newspaper_log (
 	be_user text NOT NULL,
+	details longtext NOT NULL,
 	INDEX table_key (table_name(30),table_uid)
 ) ENGINE=InnoDB;
 

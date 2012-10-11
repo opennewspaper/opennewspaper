@@ -695,7 +695,6 @@ t3lib_div::devlog('processAndLogWorkflow()','newspaper', 0, array('debug_backtra
     }
 
     private static function getFormattedDetailsField($field_name, $field_content) {
-tx_newspaper::devlog($field_name, array('start'=>substr($field_content, 200), 'end'=>substr($field_content, -200)));
         return "<tr><td width='100%'>$field_name</td></tr><tr><td width='100%'><p>" . str_replace("\n", "</p>\n<p>", $field_content) . "</p></td></tr>\n";
     }
 
