@@ -54,10 +54,13 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $section = new tx_newspaper_Section($this->module_request['section']);
             $this->flashMessageContainer->add($section->getSectionName(), 'Section to edit:');
 
-            if (!$this->module_request['section_name']) $this->module_request['section_name'] = $section->getSectionName();
-            if (!$this->module_request['parent_section']) $this->module_request['parent_section'] = $section->getParentSection()->getSectionName();
-            if (!$this->module_request['articlelist_type']) $this->module_request['articlelist_type'] = get_class($section->getArticleList());
-            if (!$this->module_request['default_articletype']) $this->module_request['default_articletype'] = $section->getDefaultArticleType();
+            if ($this->isValidRequest($this->module_request)) {
+                $this->flashMessageContainer->add(print_r($this->module_request, 1), 'change section to:');
+            }
+            $this->setRequest('section_name', $section->getSectionName());
+            $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
+            $this->setRequest('articlelist_type', get_class($section->getArticleList()));
+            $this->setRequest('default_articletype', $section->getDefaultArticleType());
             $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
             $this->view->assign('module_request', $this->module_request);
@@ -106,6 +109,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $response->setContent($pageHeader . $response->getContent() . $pageEnd);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
 
     private function isValidRequest($request) {
 
@@ -248,6 +252,11 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             )
         );
     }
+
+    private function setRequest($key, $value) {
+        if (!$this->module_request[$key]) $this->module_request[$key] = $value;
+    }
+
 
     /** @var string Key of the extension this controller belongs to */
     protected $extensionName = 'newspaper';
