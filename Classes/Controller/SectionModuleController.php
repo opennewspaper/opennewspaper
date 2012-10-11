@@ -55,13 +55,17 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $this->flashMessageContainer->add($section->getSectionName(), 'Section to edit:');
 
             if ($this->isValidRequest($this->module_request)) {
-                $this->flashMessageContainer->add(print_r($this->module_request, 1), 'change section to:');
+                $this->populateSectionObject($section, $this->module_request);
+                $this->createArticleList($section, $this->module_request['articlelist_type']);
+
+                $this->flashMessageContainer->add(print_r($section, 1), 'change section to:');
+            } else {
+                $this->setRequest('section_name', $section->getSectionName());
+                $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
+                $this->setRequest('articlelist_type', get_class($section->getArticleList()));
+                $this->setRequest('default_articletype', $section->getDefaultArticleType());
+                $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
             }
-            $this->setRequest('section_name', $section->getSectionName());
-            $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
-            $this->setRequest('articlelist_type', get_class($section->getArticleList()));
-            $this->setRequest('default_articletype', $section->getDefaultArticleType());
-            $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
             $this->view->assign('module_request', $this->module_request);
 
@@ -172,17 +176,20 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     private static function createSectionObject(array $request) {
         $section = new tx_newspaper_Section();
 
-        $section->setAttribute('section_name', $request['section_name']);
-        $section->setAttribute('parent_section', $request['parent_section']);
 //        $section->setAttribute('show_in_list', $request['show_in_list'] ? 1 : 0);
         $section->setAttribute('show_in_list', 1);
 //        $template_sets = tx_newspaper_smarty::getAvailableTemplateSets();
 //        $section->setAttribute('template_set', $template_sets[$request['template_set']]);
-        $section->setAttribute('default_articletype', $request['default_articletype']);
-
-        $section->store();
+        self::populateSectionObject($section, $request);
 
         return $section;
+    }
+
+    private static function populateSectionObject(tx_newspaper_Section &$section, array $request) {
+        $section->setAttribute('section_name', $request['section_name']);
+        $section->setAttribute('parent_section', $request['parent_section']);
+        $section->setAttribute('default_articletype', $request['default_articletype']);
+        $section->store();
     }
 
     private function createArticleList(tx_newspaper_Section $section, $articlelist_type) {
