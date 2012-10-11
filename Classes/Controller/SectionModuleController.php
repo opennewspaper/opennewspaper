@@ -45,7 +45,14 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function editAction() {
-        $this->view->assign('sections', tx_newspaper_Section::getAllSections());
+        $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
+    }
+
+    /**
+     * Action to edit existing section
+     */
+    public function deleteAction() {
+        $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
     }
 
     /**

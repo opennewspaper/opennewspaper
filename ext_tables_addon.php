@@ -149,7 +149,7 @@ if (TYPO3_MODE == 'BE') {
             'sectionmodule',    // Submodule key
             '',                 // Position
             array(              // An array holding the controller-action-combinations that are accessible
-                'SectionModule'        => 'new,edit'
+                'SectionModule'        => 'new,edit,delete'
             ),
             array(
                 'access' => 'user,group',

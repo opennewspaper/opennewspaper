@@ -14,6 +14,7 @@
 			<label index="mlang_labels_tablabel">Creating and editing sections</label>
             <label index="module.section.new">Create new section</label>
             <label index="module.section.edit">Edit Section</label>
+            <label index="module.section.delete">Delete Section</label>
             <label index="module.section.title">Create and edit Sections</label>
             <label index="module.section.section_name">New Section name</label>
             <label index="module.section.parent_section">Parent Section</label>
@@ -45,6 +46,7 @@
       		<label index="mlang_labels_tablabel">Ressorts anlegen und editieren</label>
             <label index="module.section.new">Neues Ressort anlegen</label>
             <label index="module.section.edit">Ressort bearbeiten</label>
+            <label index="module.section.delete">Ressort löschen</label>
             <label index="module.section.title">Ressorts anlegen und bearbeiten</label>
             <label index="module.section.section_name">Name des neuen Ressorts</label>
             <label index="module.section.parent_section">Elternressort</label>
