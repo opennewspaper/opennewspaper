@@ -6,15 +6,13 @@
 class tx_newspaper_Diff {
 
     public function __construct($old_text, $new_text, $strip_tags = true) {
-        if ($strip_tags) {
-            $old_text = strip_tags($old_text);
-            $new_text = strip_tags($new_text);
-        }
+
+        $this->strip_tags = $strip_tags;
 
         try {
-            $this->diff_representation = self::arrayDiff(explode(' ', $old_text), explode(' ', $new_text));
+            $this->diff_representation = self::arrayDiff($this->textAsArray($old_text), $this->textAsArray($new_text));
         } catch (tx_newspaper_OutOfMemoryException $e) {
-            $this->diff_representation = array(array('d' => $old_text, 'i' => $new_text));
+            $this->diff_representation = array(array('d' => $this->textAsArray($old_text), 'i' => $this->textAsArray($new_text)));
         }
 
     }
@@ -31,6 +29,11 @@ class tx_newspaper_Diff {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function textAsArray($text) {
+        if ($this->strip_tags) $text = strip_tags($text);
+        return explode(' ', $text);
+    }
 
     private static function arrayDiff(array $old, array $new){
 
@@ -71,6 +74,7 @@ class tx_newspaper_Diff {
     private static function isTextElement($old) { return is_array($old) && isset($old[0]) && $old[0]; }
 
     private $diff_representation = array();
+    private $strip_tags = false;
 
 }
 
