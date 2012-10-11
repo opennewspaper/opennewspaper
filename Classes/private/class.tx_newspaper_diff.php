@@ -14,7 +14,7 @@ class tx_newspaper_Diff {
         } catch (tx_newspaper_OutOfMemoryException $e) {
             $this->diff_representation = array(array('d' => $this->textAsArray($old_text), 'i' => $this->textAsArray($new_text)));
         }
-
+# tx_newspaper::devlog('diff representation', $this->diff_representation);
     }
 
     public function textDiff() {
@@ -32,7 +32,7 @@ class tx_newspaper_Diff {
 
     private function textAsArray($text) {
         if ($this->strip_tags) $text = strip_tags($text);
-        return explode(' ', $text);
+        return array_filter(explode(' ', $text), 'trim');
     }
 
     private static function arrayDiff(array $old, array $new){
