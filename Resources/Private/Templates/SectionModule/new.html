@@ -1,18 +1,15 @@
 {namespace np=Tx_Newspaper_ViewHelpers}
 
-<h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' /></h1>
-
-<!--
-<f:be.buttons.csh />
-<f:be.menus.actionMenu>
-    <f:be.menus.actionMenuItem label="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' />"
-                               controller="SectionModule" action="new" />
-    <f:be.menus.actionMenuItem label="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />"
-                               controller="SectionModule" action="edit" />
-</f:be.menus.actionMenu>
--->
+<p style="text-align:right">
+    <f:be.buttons.icon uri="{f:uri.action(action:'edit')}" icon="edit2" 
+                       title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />" />
+    <f:be.buttons.icon uri="{f:uri.action(action:'delete')}" icon="deletedok" 
+                       title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete />" />
+</p>
 
 <f:flashMessages renderMode="div" />
+
+<h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' /></h1>
 
 <f:form controller="SectionModule" action="new" enctype="multipart/form-data">
     <table>
