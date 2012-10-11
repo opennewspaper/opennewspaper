@@ -25,6 +25,7 @@
             <label index="module.section.articlelist_type.manual">Manual</label>
             <label index="module.section.default_articletype">Default article type</label>
             <label index="module.section.template_set">Template set</label>
+            <label index="module.section.section_to_delete">Section to delete</label>
             <label index="module.section.error.user_error">You made a mistake</label>
             <label index="module.section.error.system_error">Something is wrong with the system</label>
             <label index="module.section.error.multiple_section_pages">
@@ -56,6 +57,7 @@
             <label index="module.section.articlelist_type.auto">Automatisch</label>
             <label index="module.section.articlelist_type.manual">Manuell</label>
             <label index="module.section.default_articletype">Default-Artikeltyp</label>
+            <label index="module.section.section_to_delete">Zu löschendes Ressort</label>
             <label index="module.section.template_set">Template Set</label>
             <label index="module.section.error.user_error">Eingabefehler</label>
             <label index="module.section.error.system_error">Das System ist korrupt</label>

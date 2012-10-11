@@ -13,23 +13,25 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     protected function initializeAction() {
         $this->pageId = intval(t3lib_div::_GP('id'));
         $this->pageRenderer->addInlineLanguageLabelFile('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml');
+        $this->sections = tx_newspaper_Section::getAllSectionsWithRestrictions(false);
+        $this->module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
     }
 
     /**
      * Action to create a new section
      */
     public function newAction() {
-        $module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
-        $this->view->assign('module_request', $module_request);
 
-        $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
+        $this->view->assign('module_request', $this->module_request);
+
+        $this->view->assign('sections', $this->sections);
         $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
         $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
-        if ($this->isValidRequest($module_request)) {
+        if ($this->isValidRequest($this->module_request)) {
             try {
-                $this->createSection($module_request);
-                $this->flashMessageContainer->add(self::getSectionMessage('success', $module_request['section_name']));
+                $this->createSection($this->module_request);
+                $this->flashMessageContainer->add(self::getSectionMessage('success', $this->module_request['section_name']));
                 $this->view->assign('module_request', array());
             } catch (tx_newspaper_Exception $e) {
                 $this->addError(
@@ -45,14 +47,17 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function editAction() {
-        $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
+        $this->view->assign('sections', $this->sections);
+        if (!empty($this->module_request['section'])) {
+            $this->flashMessageContainer->add($this->module_request['section'], 'Section to delete:');
+        }
     }
 
     /**
      * Action to edit existing section
      */
     public function deleteAction() {
-        $this->view->assign('sections', tx_newspaper_Section::getAllSectionsWithRestrictions(false));
+        $this->view->assign('sections', $this->sections);
     }
 
     /**
@@ -230,4 +235,8 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     protected $pageId;
     /** @var template */
     private $template;
+    /** @var tx_newspaper_Section[] */
+    private $sections = array();
+    /** @var array */
+    private $module_request = array();
 }
