@@ -512,7 +512,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'tx_newspaper_article_sections_mm.uid_foreign=' . $this->getUid() . ' AND tx_newspaper_article_sections_mm.uid_local=tx_newspaper_article.uid',
 			'',
 			'',
-			$limit
+			$limit? $limit: ''
 		);
 //t3lib_div::devlog('s getArticles row', 'newspaper', 0, array('query' => tx_newspaper::$query, 'row' => $row));
 		$list = array();
