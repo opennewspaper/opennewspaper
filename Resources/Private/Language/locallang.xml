@@ -16,7 +16,8 @@
             <label index="module.section.edit">Edit Section</label>
             <label index="module.section.delete">Delete Section</label>
             <label index="module.section.title">Create and edit Sections</label>
-            <label index="module.section.section_name">New Section name</label>
+            <label index="module.section.section_name">Section name</label>
+            <label index="module.section.new_section_name">New Section name</label>
             <label index="module.section.parent_section">Parent Section</label>
             <label index="module.section.show_in_list">Show in Section list</label>
             <label index="module.section.articlelist_type.label">Article list type</label>
@@ -50,7 +51,8 @@
             <label index="module.section.edit">Ressort bearbeiten</label>
             <label index="module.section.delete">Ressort löschen</label>
             <label index="module.section.title">Ressorts anlegen und bearbeiten</label>
-            <label index="module.section.section_name">Name des neuen Ressorts</label>
+            <label index="module.section.section_name">Name des Ressorts</label>
+            <label index="module.section.new_section_name">Neuer Name des Ressorts</label>
             <label index="module.section.parent_section">Elternressort</label>
             <label index="module.section.show_in_list">In Ressortliste anzeigen</label>
             <label index="module.section.articlelist_type.label">Artikelliste</label>

@@ -20,7 +20,7 @@
             <f:then>
                 <tr>
                     <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_name' />
+                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new_section_name' />
                     </td>
                     <td>
                         <f:form.textfield name="section_name" value="{module_request.section_name}" />
@@ -58,7 +58,7 @@
                     </td>
                 </tr>
 
-                <f.form.hidden name="section" value="{section}" />
+                <f:form.hidden name="section" value="{module_request.section}" />
 
             </f:then>
 

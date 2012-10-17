@@ -83,11 +83,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
         tx_newspaper::setDefaultFields($this, array('crdate', 'tstamp', 'pid', 'cruser_id'));
 
-        $this->setUid(
-            tx_newspaper::insertRows(
-                $this->getTable(), $this->attributes
-            )
-        );
+        if (!$this->getUid()) {
+            $this->setUid(tx_newspaper::insertRows($this->getTable(), $this->attributes));
+        } else {
+            tx_newspaper::updateRows($this->getTable(), 'uid = ' . $this->getUid(), $this->attributes);
+        }
 
         //	empty attributes array so it can be read in full at next access
         $this->attributes = array();
