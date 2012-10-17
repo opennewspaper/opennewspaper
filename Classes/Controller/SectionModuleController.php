@@ -56,13 +56,14 @@ tx_newspaper::devlog("request", $this->module_request);
             $section = new tx_newspaper_Section($this->module_request['section']);
             $this->flashMessageContainer->add($section->getSectionName(), 'Section to edit:');
 
-            if ($this->isValidRequest($this->module_request)) {
+            if ($this->isValidRequest($this->module_request, false)) {
                 $this->populateSectionObject($section, $this->module_request);
                 $this->createArticleList($section, $this->module_request['articlelist_type']);
-tx_newspaper::devlog("section after change", $section);
                 $this->flashMessageContainer->add(print_r($section, 1), 'change section to:');
             } else {
-tx_newspaper::devlog("invalid request");
+tx_newspaper::devlog("invalid request", $this->sections);
+
+                $this->view->assign('parent_sections', $this->sections);
                 $this->setRequest('section_name', $section->getSectionName());
                 $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
                 $this->setRequest('articlelist_type', get_class($section->getArticleList()));
@@ -72,7 +73,7 @@ tx_newspaper::devlog("invalid request");
 
             $this->view->assign('module_request', $this->module_request);
 
-        } else tx_newspaper::devlog("no section");
+        }
     }
 
     /**
@@ -118,7 +119,7 @@ tx_newspaper::devlog("invalid request");
 
     ////////////////////////////////////////////////////////////////////////////
 
-    private function isValidRequest($request) {
+    private function isValidRequest($request, $show_message = true) {
 
         if (!is_array($request)) return false;
 
@@ -126,7 +127,7 @@ tx_newspaper::devlog("invalid request");
 
         $ok = true;
         if ($request['articlelist_type'] == 'none') {
-            $this->addError(
+            $show_message && $this->addError(
                 $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.error.select_articlelist_type'),
                 'user_error'
             );
@@ -134,7 +135,7 @@ tx_newspaper::devlog("invalid request");
             $ok = false;
         }
         if (empty($request['section_name'])) {
-            $this->addError(
+            $show_message && $this->addError(
                 $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.error.enter_section_name'),
                 'user_error'
             );
