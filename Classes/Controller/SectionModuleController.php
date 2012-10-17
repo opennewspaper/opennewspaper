@@ -22,6 +22,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      */
     public function newAction() {
 
+        $this->view->assign('sections', $this->sections);
         $this->view->assign('module_request', $this->module_request);
         $this->view->assign('sections', $this->sections);
 
@@ -48,6 +49,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      */
     public function editAction() {
 
+tx_newspaper::devlog("request", $this->module_request);
         $this->view->assign('sections', $this->sections);
 
         if (intval($this->module_request['section'])) {
@@ -57,9 +59,10 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             if ($this->isValidRequest($this->module_request)) {
                 $this->populateSectionObject($section, $this->module_request);
                 $this->createArticleList($section, $this->module_request['articlelist_type']);
-
+tx_newspaper::devlog("section after change", $section);
                 $this->flashMessageContainer->add(print_r($section, 1), 'change section to:');
             } else {
+tx_newspaper::devlog("invalid request");
                 $this->setRequest('section_name', $section->getSectionName());
                 $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
                 $this->setRequest('articlelist_type', get_class($section->getArticleList()));
@@ -69,7 +72,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
             $this->view->assign('module_request', $this->module_request);
 
-        }
+        } else tx_newspaper::devlog("no section");
     }
 
     /**
