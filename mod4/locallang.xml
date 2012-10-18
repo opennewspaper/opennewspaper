@@ -9,11 +9,15 @@
 			<label index="title">Administration</label>
 			<label index="mod4_db_consistency_checks">DB consistency checks</label>
             <label index="mod4_record_info">Record information</label>
+            <label index="mod4_newspaper_details">Newspaper details</label>
+            <label index="mod4_registered_sources">Registered source(s)</label>
 		</languageKey>
-		<languageKey index="de" type="array">
-			<label index="title">Administration</label>
+        <languageKey index="de" type="array">
+            <label index="title">Administration</label>
             <label index="mod4_db_consistency_checks">DB Konsistenzchecks</label>
             <label index="mod4_record_info">Information über Datensätze</label>
-		</languageKey>
+            <label index="mod4_newspaper_details">Newspaper-Details</label>
+            <label index="mod4_registered_sources">Registrierte Quelle(n)</label>
+        </languageKey>
 	</data>
 </T3locallang>

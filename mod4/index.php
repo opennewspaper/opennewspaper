@@ -102,7 +102,7 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 			'function' => Array (
 				'1' => $LANG->getLL('mod4_db_consistency_checks'),
 				'2' => $LANG->getLL('mod4_record_info'),
-//							'3' => $LANG->getLL('function3'),
+                '3' => $LANG->getLL('mod4_newspaper_details'),
 			)
 		);
 		parent::menuConfig();
@@ -233,11 +233,40 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				$this->content .= $this->doc->section($LANG->getLL('mod4_record_info'), $content, 0, 1);
 			    break;
 			case 3:
-				$content='<div align=center><strong>Menu item #3...</strong></div>';
-				$this->content.=$this->doc->section('Message #3:',$content,0,1);
+                // Newspaper details
+				$content = '<div align=center><strong>...</strong></div>';
+				$this->content .= $this->doc->section($LANG->getLL('mod4_newspaper_details'), $this->renderNewspaperDetails(), 0, 1);
 				break;
 		}
 	}
+
+
+    /**
+     * Render newspaper details
+     * - List of registered sources
+     * @return string Newspaper details
+     */
+    private function renderNewspaperDetails() {
+        $content = '';
+        $content .= $this->renderRegisteredSources();
+        return $content;
+
+    }
+
+    /**
+     * Render a list of registered sources (starts with source "new" which is actually not a registered source but always
+     * available as a default source (= create an article without importing from a source)
+     * @return string
+     */
+    private function renderRegisteredSources() {
+        $content = '<ul><li>new</li>'; // Source "new" -> create a new article without importing. This "source" is always available.
+        foreach(tx_newspaper::getRegisteredSources() as $key => $source) {
+            $content .= "<li>$key</li>";
+        }
+        $content = '<div><strong>' . $GLOBALS['LANG']->getLL('mod4_registered_sources') . ':</strong><br />' . $content . '</ul></div>';
+        return $content;
+    }
+
 
     static function getInfoForm() {
     	$mod_post = t3lib_div::_GP('tx_newspaper_mod4');

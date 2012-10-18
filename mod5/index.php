@@ -716,9 +716,14 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
         );
     }
 
-    /// gets the default source for importing articles
-	// \return name of source configured in TSConfig (newspaper.article.defaultSource), or "new" if not set
-	private function getDefaultSource() {
+    /** Gets the default source for importing articles
+     * Configuration
+     * Page TSConfig: newspaper.article.defaultSource = [name of source]
+     * Will be overridden by User TSConfig newspaper.article.defaultSource = [name of source]
+     * @default "new"
+     * @return string Name of source
+     */
+    private function getDefaultSource() {
 		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()));
 //t3lib_div::devlog('getDefaultSource()', 'newspaper', 0, array('tsc' => $tsc['newspaper.']));
 		if (!isset($tsc['newspaper.']['article.']['defaultSource'])) {

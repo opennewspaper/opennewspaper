@@ -25,7 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  *  
- *  \author Oliver Sch�rder <typo3@schroederbros.de>
+ *  \author Oliver Schröder <typo3@schroederbros.de>
  *  \date Mar 25, 2009
  */
  
@@ -51,6 +51,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
 		if ($uid > 0) {
 			$this->setUid($uid);
 		}
+        //@todo: Handling for case uid=0!
 	}
 	
 	/// Convert object to string to make it visible in stack backtraces, devlog etc.
@@ -199,7 +200,7 @@ class tx_newspaper_ArticleType implements tx_newspaper_StoredObject {
             array(new tx_newspaper_ArticleType(intval($params['row']['articletype_id']))) : array();
         $allowedArticleTypes = array();
         foreach(self::getArticleTypesRestricted($currentArticleType) as $at) {
-            // 0=>title, 1=>uid, 2=>icon file (nit used here, so empty)
+            // 0=>title, 1=>uid, 2=>icon file (not used here, so empty)
             $allowedArticleTypes[] = array('0' => $at->getAttribute('title'), '1' => $at->getUid(), '2' => '');
         }
         $params['items'] = $allowedArticleTypes;
