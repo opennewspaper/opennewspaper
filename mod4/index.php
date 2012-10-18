@@ -209,22 +209,12 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
-				$f = $this->getListOfDbConsistencyChecks();
-				for ($i = 0; $i < sizeof($f); $i++) {
-					$content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
-					$tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
-					if ($tmp === true) {
-						$content .= 'No problems found<br />';
-					} else {
-						$content .= $tmp;
-					}
-				}
-
-				$this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
+                // Newspaper details
+				$content = '<div align=center><strong>...</strong></div>';
+				$this->content .= $this->doc->section($LANG->getLL('mod4_newspaper_details'), $this->renderNewspaperDetails(), 0, 1);
 				break;
 			case 2:
 				$content .= '<div align=center><strong>' . $LANG->getLL('mod4_record_info') . '</strong></div>';
-
 				$content .= self::getInfoForm();
 
 				$result = t3lib_div::_GP('tx_newspaper_mod4');
@@ -233,10 +223,19 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 				$this->content .= $this->doc->section($LANG->getLL('mod4_record_info'), $content, 0, 1);
 			    break;
 			case 3:
-                // Newspaper details
-				$content = '<div align=center><strong>...</strong></div>';
-				$this->content .= $this->doc->section($LANG->getLL('mod4_newspaper_details'), $this->renderNewspaperDetails(), 0, 1);
-				break;
+                //@todo: make list of test configurable, all test may be too long or may need to much memory
+                $f = $this->getListOfDbConsistencyChecks();
+                for ($i = 0; $i < sizeof($f); $i++) {
+                    $content .= '<br /><b>' . $f[$i]['title'] . '</b><br />';
+                    $tmp = call_user_func_array($f[$i]['class_function'], $f[$i]['param']);
+                    if ($tmp === true) {
+                        $content .= 'No problems found<br />';
+                    } else {
+                        $content .= $tmp;
+                    }
+                }
+                $this->content .= $this->doc->section('Newspaper: db consistency check', $content, 0, 1);
+                break;
 		}
 	}
 
