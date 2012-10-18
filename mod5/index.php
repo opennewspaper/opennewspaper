@@ -724,12 +724,22 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
      * @return string Name of source
      */
     private function getDefaultSource() {
+
+        // Check Page TSConfig first ...
 		$tsc = t3lib_BEfunc::getPagesTSconfig(tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_article()));
 //t3lib_div::devlog('getDefaultSource()', 'newspaper', 0, array('tsc' => $tsc['newspaper.']));
 		if (!isset($tsc['newspaper.']['article.']['defaultSource'])) {
-			return 'new'; // default source: just a plain new article
-		}
-		return $tsc['newspaper.']['article.']['defaultSource'];
+			$defaultSource = 'new'; // Default source: just a plain new article
+		} else {
+		    $defaultSource = $tsc['newspaper.']['article.']['defaultSource'];
+        }
+
+        // User TSConfig then ... (User TSConfig overrides Page TSConfig)
+        if ($GLOBALS['BE_USER'] && $GLOBALS['BE_USER']->getTSConfigVal('newspaper.article.defaultSource')) {
+            $defaultSource = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.article.defaultSource');
+        }
+
+        return $defaultSource;
 	}
 
 	/// creates a new article
