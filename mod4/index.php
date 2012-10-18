@@ -100,9 +100,9 @@ class  tx_newspaper_module4 extends t3lib_SCbase {
 		global $LANG;
     	$this->MOD_MENU = Array (
 			'function' => Array (
-				'1' => $LANG->getLL('mod4_db_consistency_checks'),
+				'1' => $LANG->getLL('mod4_newspaper_details'),
 				'2' => $LANG->getLL('mod4_record_info'),
-                '3' => $LANG->getLL('mod4_newspaper_details'),
+                '3' => $LANG->getLL('mod4_db_consistency_checks'),
 			)
 		);
 		parent::menuConfig();
