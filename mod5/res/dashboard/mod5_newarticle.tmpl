@@ -581,7 +581,7 @@ body {
 					<input id="new" {if $DEFAULT_SOURCE == 'new'}checked="checked" {/if}type="radio" name="tx_newspaper_mod5[type]" onclick="clearSourceBrowser()" value="newarticle"> <label for="new">{$LABEL.new_article_typo3}</label>
 					{* read registered sources *}
 					{foreach from=$IMPORT_SOURCE item=source key=key}
-{* \todo: correct typo in   id="soucre_{$key}"   *}
+{* @todo: correct typo in   id="soucre_{$key}"   *}
 						<input id="soucre_{$key}" {if $DEFAULT_SOURCE == $key}checked="checked"{/if} type="radio" name="tx_newspaper_mod5[type]" onclick="changeSource('{$key}', '')"> <label for="soucre_{$key}">{$source->getTitle()}</label>
 					{/foreach}
 				</td>

@@ -1067,6 +1067,23 @@ class tx_newspaper  {
         return self::$registered_sources;
     }
 
+    /**
+     * Get an array of sources the current BE user can access
+     * See User TSConfig newspaper.accessSources
+     * @return array Sources
+     */
+    public static function getRegisteredSourcesWithRestrictions() {
+        $sources = array();
+        $allowedSources = self::getAllowedSourceNames();
+        foreach(self::getRegisteredSources() as $key => $source) {
+            if (in_array($key, $allowedSources)) {
+                $sources[$key] = $source;
+            }
+        }
+        return $sources;
+    }
+
+
     public static function getRegisteredSource($key) {
         if (!isset(self::$registered_sources[$key])) {
             throw new tx_newspaper_InconsistencyException(
@@ -1075,6 +1092,29 @@ class tx_newspaper  {
         }
         return self::$registered_sources[$key];
     }
+
+    /**
+     * Return an array of allowed registered sources
+     * Either all sources or sources restricted using User TSConfig:
+     * newspaper.accessSources = [comma separated list of source names]
+     * @static
+     * @return Array with source names OR false, if no be_user is available
+     */
+    public static function getAllowedSourceNames() {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return false; // Doesn't make sense without a backend user ...
+        }
+        if (!$tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessSources')) {
+            // Read all registered sources, no TSConfig found ...
+            $sources = array();
+            foreach(self::getRegisteredSources() as $key => $source) {
+                $sources[] = $key;
+            }
+            return $sources; // Return ALL sources
+        }
+        return t3lib_div::trimExplode(',', $tsc); // Return ALLOWED sources
+    }
+
 
     public static function registerSaveHook($class) {
         self::$registered_savehooks[] = $class;
