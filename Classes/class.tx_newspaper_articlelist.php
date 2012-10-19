@@ -276,6 +276,17 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 	 */
 	abstract function getArticles($number, $start = 0);
 
+    public function delete() {
+        tx_newspaper_DB::getInstance()->updateRows(
+            $this->getAttribute('list_table'), "uid = " . $this->getAttribute('list_uid'), array('deleted' => 1)
+        );
+        tx_newspaper_DB::getInstance()->updateRows(
+            'tx_newspaper_articlelist', "uid = " . $this->getAttribute('uid'), array('deleted' => 1)
+        );
+
+        throw new tx_newspaper_NotYetImplementedException();
+    }
+
     /**
      * @param $do boolean Whether getArticles() uses a faster method to create articles
      */

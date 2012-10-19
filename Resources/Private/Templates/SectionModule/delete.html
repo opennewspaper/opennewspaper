@@ -15,7 +15,7 @@
 
     <table>
 
-        <f:if condition="deleted == 1">
+        <f:if condition="{deleted} == 1">
 
             <f:then>
                 Section <np:attribute object="{affected_section}" attribute="section_name" /> successfully deleted

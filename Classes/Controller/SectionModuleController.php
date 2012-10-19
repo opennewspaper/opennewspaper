@@ -86,11 +86,20 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
                 $this->flashMessageContainer->add($section->getSectionName(), 'Deleting section');
 
-                tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
+                tx_newspaper_DB::getInstance()->deleteRows(
+                    'tt_content',
+                    "pid = " . $section->getTypo3PageID() . " AND CType = 'list' AND list_type = 'newspaper_pi1'"
+                );
+
+                tx_newspaper_DB::getInstance()->deleteRows('pages', array($section->getTypo3PageID()));
 
                 foreach ($section->getSubPages() as $page) {
                     $page->delete();
                 }
+
+                tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
+
+                $section->getArticleList()->delete();
 
                 $section->setAttribute('deleted', 1);
                 $section->store();
