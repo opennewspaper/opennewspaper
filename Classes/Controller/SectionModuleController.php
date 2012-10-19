@@ -53,13 +53,15 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         if (intval($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
-            $this->flashMessageContainer->add($section->getSectionName(), 'Section to edit:');
 
             if (isset($this->module_request['section_name'])) {
                 $this->view->assign('old_section_name', $section->getSectionName());
                 $this->view->assign('new_section_name', $this->module_request['section_name']);
                 $section->setAttribute('section_name', $this->module_request['section_name']);
                 $section->store();
+                $this->flashMessageContainer->add(
+                    $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_edited')
+                );
             } else {
                 $this->module_request['section_name'] = $section->getSectionName();
             }
