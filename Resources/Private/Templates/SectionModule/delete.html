@@ -11,8 +11,25 @@
 
 <h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete' /></h1>
 
-<f:for each="{sections}" as="section" key="number">
-    <p>
-        {number}: <np:attribute object="{section}" attribute="section_name" />
-    </p>
-</f:for>
+<f:form controller="SectionModule" action="delete" enctype="multipart/form-data">
+
+    <table>
+
+        <tr>
+            <td>
+                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+            </td>
+            <td>
+                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <f:form.submit name="submit" value="Submit" />
+            </td>
+        </tr>
+
+    </table>
+
+</f:form>
