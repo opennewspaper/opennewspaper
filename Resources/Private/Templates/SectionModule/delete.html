@@ -15,14 +15,32 @@
 
     <table>
 
-        <tr>
-            <td>
-                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
-            </td>
-            <td>
-                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
-            </td>
-        </tr>
+        <f:if condition="{affected_pages}">
+
+            <f:then>
+                Affected Pages:
+                <f:for each="{affected_pages}" as="page">
+                    <p><np:pagetype object="{page}" /></p>
+                </f:for>
+
+                Affected Articles:
+                <f:for each="{affected_articles}" as="article">
+                    <p><np:attribute object="{article}" attribute="title" /></p>
+                </f:for>
+            </f:then>
+
+            <f:else>
+                <tr>
+                    <td>
+                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+                    </td>
+                    <td>
+                        <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                    </td>
+                </tr>
+            </f:else>
+
+        </f:if>
 
         <tr>
             <td colspan="2">
