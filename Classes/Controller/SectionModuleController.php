@@ -49,7 +49,6 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      */
     public function editAction() {
 
-tx_newspaper::devlog("request", $this->module_request);
         $this->view->assign('sections', $this->sections);
 
         if (intval($this->module_request['section'])) {
@@ -61,9 +60,9 @@ tx_newspaper::devlog("request", $this->module_request);
                 $this->createArticleList($section, $this->module_request['articlelist_type']);
                 $this->flashMessageContainer->add(print_r($section, 1), 'change section to:');
             } else {
-tx_newspaper::devlog("invalid request", $this->sections);
+tx_newspaper::devlog("invalid request", $this->filterSelectedSection($section, $this->sections));
 
-                $this->view->assign('parent_sections', $this->sections);
+                $this->view->assign('parent_sections', $this->filterSelectedSection($section, $this->sections));
                 $this->setRequest('section_name', $section->getSectionName());
                 $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
                 $this->setRequest('articlelist_type', get_class($section->getArticleList()));
@@ -74,6 +73,17 @@ tx_newspaper::devlog("invalid request", $this->sections);
             $this->view->assign('module_request', $this->module_request);
 
         }
+        tx_newspaper::devlog("request", $this->module_request);
+    }
+
+    private $selected_section = null;
+    private function filterSelectedSection(tx_newspaper_Section $section, array $sections) {
+        $this->selected_section = $section;
+        return array_filter($sections, array($this, 'isSelectedSection'));
+    }
+    private function isSelectedSection($section) {
+        if (!$this->selected_section instanceof tx_newspaper_Section) return false;
+        return $section->getUid() == $this->selected_section->getUid();
     }
 
     /**
