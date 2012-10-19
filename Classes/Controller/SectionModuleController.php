@@ -55,35 +55,18 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $section = new tx_newspaper_Section($this->module_request['section']);
             $this->flashMessageContainer->add($section->getSectionName(), 'Section to edit:');
 
-            if ($this->isValidRequest($this->module_request, false)) {
-                $this->populateSectionObject($section, $this->module_request);
-                $this->createArticleList($section, $this->module_request['articlelist_type']);
-                $this->flashMessageContainer->add(print_r($section, 1), 'change section to:');
+            if (isset($this->module_request['section_name'])) {
+                $this->view->assign('old_section_name', $section->getSectionName());
+                $this->view->assign('new_section_name', $this->module_request['section_name']);
+                $section->setAttribute('section_name', $this->module_request['section_name']);
+                $section->store();
             } else {
-tx_newspaper::devlog("invalid request", $this->filterSelectedSection($section, $this->sections));
-
-                $this->view->assign('parent_sections', $this->filterSelectedSection($section, $this->sections));
-                $this->setRequest('section_name', $section->getSectionName());
-                $this->setRequest('parent_section', $section->getParentSection()->getSectionName());
-                $this->setRequest('articlelist_type', get_class($section->getArticleList()));
-                $this->setRequest('default_articletype', $section->getDefaultArticleType());
-                $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
+                $this->module_request['section_name'] = $section->getSectionName();
             }
 
             $this->view->assign('module_request', $this->module_request);
 
         }
-        tx_newspaper::devlog("request", $this->module_request);
-    }
-
-    private $selected_section = null;
-    private function filterSelectedSection(tx_newspaper_Section $section, array $sections) {
-        $this->selected_section = $section;
-        return array_filter($sections, array($this, 'isSelectedSection'));
-    }
-    private function isSelectedSection($section) {
-        if (!$this->selected_section instanceof tx_newspaper_Section) return false;
-        return $section->getUid() == $this->selected_section->getUid();
     }
 
     /**
@@ -273,11 +256,6 @@ tx_newspaper::devlog("invalid request", $this->filterSelectedSection($section, $
             )
         );
     }
-
-    private function setRequest($key, $value) {
-        if (!$this->module_request[$key]) $this->module_request[$key] = $value;
-    }
-
 
     /** @var string Key of the extension this controller belongs to */
     protected $extensionName = 'newspaper';

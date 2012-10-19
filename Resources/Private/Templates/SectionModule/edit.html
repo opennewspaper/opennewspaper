@@ -26,7 +26,7 @@
                         <f:form.textfield name="section_name" value="{module_request.section_name}" />
                     </td>
                 </tr>
-
+<!--
                 <tr>
                     <td>
                         <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section' />
@@ -57,21 +57,35 @@
                         <f:form.select name="default_articletype" options="{article_types}" optionValueField="uid" optionLabelField="typeName" value="{module_request.default_articletype}" />
                     </td>
                 </tr>
-
+-->
                 <f:form.hidden name="section" value="{module_request.section}" />
 
             </f:then>
 
             <f:else>
 
-                <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
-                    </td>
-                    <td>
-                        <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
-                    </td>
-                </tr>
+                <f:if condition="old_section_name">
+
+                    <f:then>
+                        <tr>
+                            <td colspan="2">
+                                Section "{old_section_name} renamed to {new_section_name}.
+                            </td>
+                        </tr>
+                    </f:then>
+
+                    <f:else>
+                        <tr>
+                            <td>
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+                            </td>
+                            <td>
+                                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                            </td>
+                        </tr>
+                    </f:else>
+
+                </f:if>
 
             </f:else>
         </f:if>
