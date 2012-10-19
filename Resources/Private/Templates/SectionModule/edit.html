@@ -15,20 +15,20 @@
 
     <table>
 
-        <f:if condition="{module_request.section}" >
+        <f:if condition="{0: old_section_name} != {0: ''}">
 
             <f:then>
-                <f:if condition="{0: old_section_name} != {0: ''}">
+                <tr>
+                    <td colspan="2">
+                        Section "{old_section_name}" renamed to "{new_section_name}".
+                    </td>
+                </tr>
+            </f:then>
+
+            <f:else>
+                <f:if condition="{module_request.section}" >
 
                     <f:then>
-                        <tr>
-                            <td colspan="2">
-                                Section "{old_section_name} renamed to {new_section_name}.
-                            </td>
-                        </tr>
-                    </f:then>
-
-                    <f:else>
                         <tr>
                             <td>
                                 <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new_section_name' />
@@ -37,33 +37,33 @@
                                 <f:form.textfield name="section_name" value="{module_request.section_name}" />
                             </td>
                         </tr>
+
+                        <f:form.hidden name="section" value="{module_request.section}" />
+
+                    </f:then>
+
+                    <f:else>
+                        <tr>
+                            <td>
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+                            </td>
+                            <td>
+                                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                            </td>
+                        </tr>
                     </f:else>
 
                 </f:if>
 
-                <f:form.hidden name="section" value="{module_request.section}" />
-
-            </f:then>
-
-            <f:else>
-
                 <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
-                    </td>
-                    <td>
-                        <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                    <td colspan="2">
+                        <f:form.submit name="submit" value="Submit" />
                     </td>
                 </tr>
 
             </f:else>
-        </f:if>
 
-        <tr>
-            <td colspan="2">
-                <f:form.submit name="submit" value="Submit" />
-            </td>
-        </tr>
+        </f:if>
 
     </table>
 
