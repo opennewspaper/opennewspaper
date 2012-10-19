@@ -18,53 +18,7 @@
         <f:if condition="{module_request.section}" >
 
             <f:then>
-                <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new_section_name' />
-                    </td>
-                    <td>
-                        <f:form.textfield name="section_name" value="{module_request.section_name}" />
-                    </td>
-                </tr>
-<!--
-                <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section' />
-                    </td>
-                    <td>
-                        <f:form.select name="parent_section" options="{parent_sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.parent_section}" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.label' />
-                    </td>
-                    <td>
-                        <f:form.select name="articlelist_type"
-                                       options="{none: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.select\' />',
-                                                 tx_newspaper_ArticleList_Semiautomatic: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.auto\' />',
-                                                 tx_newspaper_ArticleList_Manual: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.manual\' />'}"
-                                       value="{module_request.articlelist_type}" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_articletype' />
-                    </td>
-                    <td>
-                        <f:form.select name="default_articletype" options="{article_types}" optionValueField="uid" optionLabelField="typeName" value="{module_request.default_articletype}" />
-                    </td>
-                </tr>
--->
-                <f:form.hidden name="section" value="{module_request.section}" />
-
-            </f:then>
-
-            <f:else>
-
-                <f:if condition="old_section_name">
+                <f:if condition="{0: old_section_name} != {0: ''}">
 
                     <f:then>
                         <tr>
@@ -77,15 +31,30 @@
                     <f:else>
                         <tr>
                             <td>
-                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new_section_name' />
                             </td>
                             <td>
-                                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                                <f:form.textfield name="section_name" value="{module_request.section_name}" />
                             </td>
                         </tr>
                     </f:else>
 
                 </f:if>
+
+                <f:form.hidden name="section" value="{module_request.section}" />
+
+            </f:then>
+
+            <f:else>
+
+                <tr>
+                    <td>
+                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
+                    </td>
+                    <td>
+                        <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                    </td>
+                </tr>
 
             </f:else>
         </f:if>
