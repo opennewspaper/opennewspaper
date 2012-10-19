@@ -83,6 +83,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $this->view->assign('affected_articles', $section->getArticles(0));
 
             if (intval($this->module_request['confirm']) == 1) {
+
                 $this->flashMessageContainer->add($section->getSectionName(), 'Deleting section');
 
                 tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
@@ -93,6 +94,8 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
                 $section->setAttribute('deleted', 1);
                 $section->store();
+
+                $this->view->assign('deleted', 1);
 
             }
 
