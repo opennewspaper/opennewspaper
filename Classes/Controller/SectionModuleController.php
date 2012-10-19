@@ -78,13 +78,26 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $this->view->assign('sections', $this->sections);
         if (!empty($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
+            $this->view->assign('affected_section', $section);
             $this->view->assign('affected_pages', $section->getSubPages());
             $this->view->assign('affected_articles', $section->getArticles(0));
 
-            $this->flashMessageContainer->add($this->module_request['section'], 'Section to delete:');
-            $this->flashMessageContainer->add(print_r($pages,1), 'Active pages');
-            $this->flashMessageContainer->add($articles, 'Active articles');
+            if (intval($this->module_request['confirm']) == 1) {
+                $this->flashMessageContainer->add($section->getSectionName(), 'Deleting section');
+
+                tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
+
+                foreach ($section->getSubPages() as $page) {
+                    $page->delete();
+                }
+
+                $section->setAttribute('deleted', 1);
+                $section->store();
+
+            }
+
         }
+        $this->view->assign('module_request', $this->module_request);
     }
 
     /**

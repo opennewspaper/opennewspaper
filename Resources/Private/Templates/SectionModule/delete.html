@@ -18,15 +18,24 @@
         <f:if condition="{affected_pages}">
 
             <f:then>
-                Affected Pages:
+                <h3>Affected Pages</h3>
                 <f:for each="{affected_pages}" as="page">
                     <p><np:pagetype object="{page}" /></p>
                 </f:for>
 
-                Affected Articles:
+                <h3>Affected Articles</h3>
                 <f:for each="{affected_articles}" as="article">
-                    <p><np:attribute object="{article}" attribute="title" /></p>
+                    <p>
+                        <f:format.number><np:attribute object="{article}" attribute="uid" /></f:format.number>:
+                        <np:attribute object="{article}" attribute="kicker" /> <np:attribute object="{article}" attribute="title" />
+                    </p>
                 </f:for>
+
+                If you are sure you want to delete section <np:attribute object="{affected_section}" attribute="section_name" />, please hit Submit again!
+
+                <f:form.hidden name="section" value="{module_request.section}" />
+                <f:form.hidden name="confirm" value="1" />
+
             </f:then>
 
             <f:else>
