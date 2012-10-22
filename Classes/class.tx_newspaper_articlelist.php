@@ -283,8 +283,6 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
         tx_newspaper_DB::getInstance()->updateRows(
             'tx_newspaper_articlelist', "uid = " . $this->getAttribute('uid'), array('deleted' => 1)
         );
-
-        throw new tx_newspaper_NotYetImplementedException();
     }
 
     /**
