@@ -39,7 +39,7 @@
                             </p>
                         </f:for>
 
-                        <f:translate arguments="{0: <np:attribute object='{affected_section}' attribute='section_name' />}"
+                        <f:translate arguments='{0: affected_section.sectionname}'
                                      key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_areyousure" />
 
                         <f:form.hidden name="section" value="{module_request.section}" />
