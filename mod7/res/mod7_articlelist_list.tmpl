@@ -16,7 +16,7 @@
 			<td><strong>{$lang.label_articlelist_list_title}</strong></td>
 			<td><strong>{$lang.label_articlelist_list_type}</strong></td>
 			<td><strong>{$lang.label_articlelist_list_commands}</strong></td>
-{if $IS_ADMIN}
+{if $DEBUG}
 			<td><strong>uids</strong></td>
 {/if}			
 		</tr>
@@ -25,7 +25,7 @@
 			<td> {$current_al->getAttribute('notes')} </td>
 			<td> {$current_al->getTitle()} </td>
 			<td style="text-align:center;"> <a href="index.php?tx_newspaper_mod7[controller]=singleplacement&tx_newspaper_mod7[articlelistid]={$current_al->getAbstractUid()}">{$ICON.edit}</a> </td>
-{if $IS_ADMIN}
+{if $DEBUG}
 			<td> <span title="Abstract uid"> [{$current_al->getAbstractUid()}</span>|<span title="Concrete uid">{$current_al->getUid()}] </span></td>
 {/if}			
 		</tr>

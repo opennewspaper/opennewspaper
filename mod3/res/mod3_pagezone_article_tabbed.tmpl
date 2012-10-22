@@ -88,7 +88,7 @@
                 {if $USE_TEMPLATE_SETS}
                     <td class="mod3_td">{$LABEL.templateset}</td>
                 {/if}
-                {if ($DEBUG_OUTPUT && $ADMIN)}
+                {if ($DEBUG_OUTPUT)}
                     <td class="mod3_td" align="center">pos</td>
                     <td class="mod3_td" align="center">origin</td>
                     <td class="mod3_td" align="center">uid</td>
@@ -180,7 +180,7 @@
                             {if $USE_TEMPLATE_SETS}
                                 <td class="mod3_td">{$EXTRA_DATA[i].template_set_HTML}</td>
                             {/if}
-                        {if ($DEBUG_OUTPUT && $ADMIN)}
+                        {if ($DEBUG_OUTPUT)}
                             {* if td's are added here, do add them to the table header too *}
                             <td class="mod3_td">{$EXTRA_DATA[i].position}</td>
                             <td class="mod3_td">{$EXTRA_DATA[i].origin_uid}</td>

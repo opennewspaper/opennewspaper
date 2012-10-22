@@ -304,7 +304,7 @@ body {
 							<option selected="selected"
 						{else}
 							<option
-						{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $ADMIN && $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
+						{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
 					{/section}
 {* -1 -> no inheritance *}
 					<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
@@ -364,9 +364,9 @@ body {
 
 {if !$IS_CONCRETE_ARTICLE}
 	{foreach name=np_section item=s from=$DATA[i].section}{$s->getAttribute('section_name')}{* split here to avoid whitespace in html code *}{if
-			($ADMIN && $DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
+			($DEBUG_OUTPUT)}<span title="Section id">[{$s->getUid()}]</span>{/if}{if $smarty.foreach.np_section.last != 1}/{/if}{/foreach}
 	 :{$DATA[i].page_type->getAttribute('type_name')}
-	{if ($ADMIN && $DEBUG_OUTPUT)}
+	{if ($DEBUG_OUTPUT)}
 	 	[<span title="Page id">{$DATA[i].page_id}</span>|<span title="Abstract Pagezone id">{$DATA[i].pagezone_id}</span>|<span title="Concrete Pagezone id">{$DATA[i].pagezone_concrete_id}</span>|<span title="Inheritance source. 0:default, -1:none; else:Abstract Pagezone id">{$DATA[i].inherits_from}</span>]
 	{/if}
 			</strong></p>

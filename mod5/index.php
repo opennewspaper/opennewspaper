@@ -279,8 +279,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 			$smarty->assign('BROWSE_PATH', $this->browse_path);
 		}
 
-		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
-
 		$smarty->assign('MODULE_PATH', tx_newspaper::getAbsolutePath() . 'typo3conf/ext/newspaper/mod5/'); // path to typo3, needed for edit article (form: /a/b/c/typo3/)
 
 		return $smarty->fetch('mod5.tmpl');
@@ -529,7 +527,6 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$smarty->assign('INPUT', $input); // Add data
 
-		$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
 		$smarty->assign('SHOW_LOREM', ($GLOBALS['BE_USER']->getTSConfigVal('tx_newspaper.use_lorem') != 0));
 
 		$sources = tx_newspaper::getRegisteredSourcesWithRestrictions();

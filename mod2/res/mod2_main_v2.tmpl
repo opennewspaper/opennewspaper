@@ -68,7 +68,7 @@
 				($DATA[i].starttime == 0 || $DATA[i].starttime <= $smarty.now) &&
 				($DATA[i].endtime == 0 || $DATA[i].endtime > $smarty.now)
 			} online{/if}">
-            {* Icon showing if article is published (clickable for duty editors and admins) *}
+            {* Icon showing if article is published *}
 			{if $DATA[i].hidden == 0}
                 {if $CAN_PUBLISH_ARTICLES}
 					<a title="{$LL.label_hide}" class="statButton" href="#" onclick="changeArticleHiddenStatus({$DATA[i].uid}, 1);" }>

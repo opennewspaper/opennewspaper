@@ -567,7 +567,6 @@ class tx_newspaper_BE {
 		// pagezones are rendered by a separate smarty template - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = self::getPagezoneSmartyObject();
 		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
-		$smarty_pz->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extraData); $i++) {
 
@@ -620,9 +619,6 @@ class tx_newspaper_BE {
 		}
 
 		$smarty->assign('PAGEZONE', $pagezone);
-
-		// Admins might see a little more ...
-		$smarty->assign('ADMIN', $GLOBALS['BE_USER']->isAdmin());
 
 		// clipboard
 		$clipboard = self::getClipboardData();

@@ -56,6 +56,8 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
                 /** @var tx_newspaper_BE */
 				private $al_be = null; // backend object providing the methods for generating the backend for article list placement
 
+                const DEBUG = false; // @todo User TSConfig
+
 				/**
 				 * Initializes the Module
 				 * @return	void
@@ -231,7 +233,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 					$smarty->assign('input', $input);
-					$smarty->assign('IS_ADMIN', $GLOBALS['BE_USER']->user['admin']);
+					$smarty->assign('DEBUG', self::DEBUG);
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('AL', $al);
 					$smarty->assign('ICON', $al_be->getArticleListIcons());
