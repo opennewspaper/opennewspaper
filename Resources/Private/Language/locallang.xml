@@ -30,6 +30,12 @@
             <label index="module.section.section_edited">Section changed</label>
             <label index="module.section.section_edit_done">Section "%s" renamed to "%s".</label>
             <label index="module.section.section_to_delete">Section to delete</label>
+            <label index="module.section.section_deleted">Section successfully deleted</label>
+            <label index="module.section.delete_affected_pages">Pages associated with the section, will also be deleted</label>
+            <label index="module.section.delete_affected_articles">Articles associated with the section, the association will be unrecoverably deleted</label>
+            <label index="module.section.delete_areyousure">
+                If you are sure you want to delete section "%s", please hit Submit again!
+            </label>
             <label index="module.section.error.user_error">You made a mistake</label>
             <label index="module.section.error.system_error">Something is wrong with the system</label>
             <label index="module.section.error.multiple_section_pages">
@@ -66,6 +72,16 @@
             <label index="module.section.section_edited">Ressort geändert</label>
             <label index="module.section.section_edit_done">Ressort "%s" umbenannt zu "%s".</label>
             <label index="module.section.section_to_delete">Zu löschendes Ressort</label>
+            <label index="module.section.section_deleted">Ressort erfolgreich gelöscht</label>
+            <label index="module.section.delete_affected_pages">
+                Seiten, die mit dem Ressort verbunden sind, und auch gelöscht werden
+            </label>
+            <label index="module.section.delete_affected_articles">
+                Artikel, die dem Ressort zugeordnet sind. Die Zuordnung wird unwiederbringlich gelöscht
+            </label>
+            <label index="module.section.delete_areyousure">
+                Wenn Sie sicher sind, dass Sie Ressort "%s", löschen wollen, drücken sie bitte nochmal "Submit"!
+            </label>
             <label index="module.section.template_set">Template Set</label>
             <label index="module.section.error.user_error">Eingabefehler</label>
             <label index="module.section.error.system_error">Das System ist korrupt</label>

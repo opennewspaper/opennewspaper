@@ -84,32 +84,39 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
             if (intval($this->module_request['confirm']) == 1) {
 
-                $this->flashMessageContainer->add($section->getSectionName(), 'Deleting section');
+                try {
+                    self::deleteSection($section);
 
-                tx_newspaper_DB::getInstance()->deleteRows(
-                    'tt_content',
-                    "pid = " . $section->getTypo3PageID() . " AND CType = 'list' AND list_type = 'newspaper_pi1'"
-                );
-
-                tx_newspaper_DB::getInstance()->deleteRows('pages', array($section->getTypo3PageID()));
-
-                foreach ($section->getSubPages() as $page) {
-                    $page->delete();
+                    $this->flashMessageContainer->add($section->getSectionName(), 'Deleted section');
+                    $this->view->assign('deleted', 1);
+                } catch (tx_newspaper_Exception $e) {
+                    $this->flashMessageContainer->add($e->getMessage(), 'Deleting section failed', t3lib_FlashMessage::ERROR);
                 }
-
-                tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
-
-                $section->getArticleList()->delete();
-
-                $section->setAttribute('deleted', 1);
-                $section->store();
-
-                $this->view->assign('deleted', 1);
 
             }
 
         }
         $this->view->assign('module_request', $this->module_request);
+    }
+
+    private static function deleteSection(tx_newspaper_Section $section) {
+        tx_newspaper_DB::getInstance()->deleteRows(
+            'tt_content',
+                "pid = " . $section->getTypo3PageID() . " AND CType = 'list' AND list_type = 'newspaper_pi1'"
+        );
+
+        tx_newspaper_DB::getInstance()->deleteRows('pages', array($section->getTypo3PageID()));
+
+        foreach ($section->getSubPages() as $page) {
+            $page->delete();
+        }
+
+        tx_newspaper_DB::getInstance()->deleteRows('tx_newspaper_article_sections_mm', 'uid_foreign = ' . $section->getUid());
+
+        $section->getArticleList()->delete();
+
+        $section->setAttribute('deleted', 1);
+        $section->store();
     }
 
     /**

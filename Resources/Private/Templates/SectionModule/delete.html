@@ -18,7 +18,7 @@
         <f:if condition="{deleted} == 1">
 
             <f:then>
-                Section <np:attribute object="{affected_section}" attribute="section_name" /> successfully deleted
+                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_deleted' />: <np:attribute object="{affected_section}" attribute="section_name" />
             </f:then>
 
             <f:else>
@@ -26,12 +26,12 @@
                 <f:if condition="{affected_pages}">
 
                     <f:then>
-                        <h3>Affected Pages</h3>
+                        <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_pages' /></h3>
                         <f:for each="{affected_pages}" as="page">
                             <p><np:pagetype object="{page}" /></p>
                         </f:for>
 
-                        <h3>Affected Articles</h3>
+                        <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_articles' /></h3>
                         <f:for each="{affected_articles}" as="article">
                             <p>
                                 <f:format.number decimals="0"><np:attribute object="{article}" attribute="uid" /></f:format.number>:
@@ -39,7 +39,8 @@
                             </p>
                         </f:for>
 
-                        If you are sure you want to delete section <np:attribute object="{affected_section}" attribute="section_name" />, please hit Submit again!
+                        <f:translate arguments="{0: <np:attribute object='{affected_section}' attribute='section_name' />}"
+                                     key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_areyousure" />
 
                         <f:form.hidden name="section" value="{module_request.section}" />
                         <f:form.hidden name="confirm" value="1" />
