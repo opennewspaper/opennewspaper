@@ -85,9 +85,10 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             if (intval($this->module_request['confirm']) == 1) {
 
                 try {
+                    $section_name = $section->getSectionName();
                     self::deleteSection($section);
 
-                    $this->flashMessageContainer->add($section->getSectionName(), 'Deleted section');
+                    $this->flashMessageContainer->add($section_name, 'Deleted section');
                     $this->view->assign('deleted', 1);
                 } catch (tx_newspaper_Exception $e) {
                     $this->flashMessageContainer->add($e->getMessage(), 'Deleting section failed', t3lib_FlashMessage::ERROR);
