@@ -23,7 +23,7 @@
 ***************************************************************/
 
 
-// \todo merge with mod3/class.tx_newspaper_sectiontree.php
+// @todo merge with mod3/class.tx_newspaper_sectiontree.php
 
 unset($MCONF);
 require_once('conf.php');
@@ -66,17 +66,51 @@ class tx_newspaper_SectionTree_mod9 extends t3lib_treeView {
         $this->expandAll = 1;
         $this->titleAttrib = 'section_name';
         $this->orderByFields = 'sorting';
-        $this->clause = ' AND uid IN (' . implode(',', tx_newspaper_Section::getBaseSectionTreeUids()) . ')';
 	}
+
+
+    /**
+     * Get section uids the current be_user is allowed to access
+     * @return array Section uids
+     * @todo: COPIED from mod3
+     */
+    private function getSectionRestriction() {
+        $sectionUids = array();
+        foreach(tx_newspaper_Section::getAllSectionsWithRestrictions(false) as $s) {
+            $sectionUids[] = $s->getUid();
+        }
+        return $sectionUids;
+    }
+
+    /**
+     * Remove sections the current be_user is not allowed to access
+     * @todo: COPIED from mod3
+     */
+    private function removeRestrictedSectionsFromTree() {
+        $sectionUids = $this->getSectionRestriction();
+        foreach($this->tree as $key => $value) {
+            if (!in_array($value['row']['uid'], $sectionUids)) {
+                // BE user can't access this section
+                unset($this->tree[$key]);
+            }
+        }
+        $this->tree = array_values($this->tree); // Re-index
+    }
 
 	/// Compiles the HTML code for displaying the structure found inside the ->tree array
 	/** init() already sets up all parameters for the tree to display correctly,
 	 *  we only need to supply the JavaScript jumpTo() function, which tells
 	 *  the browser what to do when a node is clicked.
 	 * 
-	 *  \param $treeArr "tree-array" - if blank string, the internal ->tree array is used
-	 */
+	 *  \param $treeArr "tree-array" - Ignored ...
+     *
+     * The tree is rendered based on $this->tree after removing sections the be_user is not allowed to access
+     *
+     */
 	public function printTree($treeArr = '') {
+
+        $this->removeRestrictedSectionsFromTree();
+
 		$ret = '<script language="javascript">
 /*<![CDATA[*/
 top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM9");
@@ -105,7 +139,8 @@ top.currentSubScript=unescape("mod.php%3FM%3DtxnewspaperMmain_txnewspaperM9");
 		}
 /*]]>*/
 </script>' .
-		parent::printTree($treeArr);
+
+            parent::printTree($this->tree); // $this->tree contains allowed sections only
 
 		return $ret;
 	}
