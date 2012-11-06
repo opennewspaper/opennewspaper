@@ -92,26 +92,26 @@
 					{* not yet published *}
                     {if $DATA[i].endtime != 0 && $DATA[i].endtime > $DATA[i].starttime}
                         {* with enddate *}
-                        <span title="{$DATA[i].time_controlled_not_yet_with_endtime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
+                        <span title="{$DATA[i].label_time_controlled_not_yet_with_endtime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
                     {else }
                         {*without enddate *}
-                        <span title="{$DATA[i].time_controlled_not_yet}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
+                        <span title="{$DATA[i].label_time_controlled_not_yet}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_yellow.gif" class="statWatch"></span>
                     {/if}
 				{elseif $DATA[i].endtime != 0 && $DATA[i].endtime < $smarty.now}
 					{* publish time exceeded - will never be visible again *}
                     {if $DATA[i].starttime != 0 && $DATA[i].starttime < $DATA[i].endtime}
                         {* with startdate *}
-					    <span title="{$DATA[i].time_controlled_not_anymore_with_starttime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
+					    <span title="{$DATA[i].label_time_controlled_not_anymore_with_starttime}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
                     {else}
                         {* without startdate *}
-                        <span title="{$DATA[i].time_controlled_not_anymore}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
+                        <span title="{$DATA[i].label_time_controlled_not_anymore}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_red.gif" class="statWatch"></span>
                     {/if}
 				{elseif $DATA[i].endtime != 0 && $DATA[i].endtime >= $smarty.now}
 					{* article is online, but will be offline in future; endtime is set *}
-					<span title="{$DATA[i].time_controlled_now_but_will_end}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_green.gif" class="statWatch"></span>
+					<span title="{$DATA[i].label_time_controlled_now_but_will_end}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_green.gif" class="statWatch"></span>
 				{elseif $DATA[i].starttime != 0 && $DATA[i].starttime <= $smarty.now && $DATA[i].endtime == 0}
 					{* article is online, and will remain online; endtime is NOT set *}
-					<span title="{$DATA[i].time_controlled_now_and_future}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_normal.gif" class="statWatch"></span>
+					<span title="{$DATA[i].label_time_controlled_now_and_future}"><img src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/img/watch_normal.gif" class="statWatch"></span>
 				{/if}
 			{else}
 				<span><img src="clear.gif" width="14" height="14" class="statWatch"></span>

@@ -257,7 +257,14 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return $locked_articles;
     }
 
-    /// add informations to each article that are not in the record
+    /// Add information to each article that are not in the record
+    /**
+     * Add information to articles in $records (call be refernece!)
+     * Add workflow log details
+     * Add section(s)
+     * Add time control infoirmation
+     * @param array $records
+     */
     private function addArticleInfo(array &$records) {
         for ($i = 0; $i < sizeof($records); $i++) {
             self::addWorkflowInfo($records[$i]);
@@ -300,27 +307,41 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
     private function extractSectionTitle(&$section, $key) { $section = $section->getAttribute('section_name'); }
 
+    /**
+     * Add information for time control given in $record (call by reference!)
+     * Add publish date
+     * @param array $record
+     * @return void
+     */
     private function addTimeInfo(array &$record) {
-        // Add information for time controlled articles
-        $this->addTimeInfoToRow($record, 'time_controlled_not_yet');
-        $this->addTimeInfoToRow($record, 'time_controlled_not_yet_with_endtime');
-        $this->addTimeInfoToRow($record, 'time_controlled_not_anymore');
-        $this->addTimeInfoToRow($record, 'time_controlled_not_anymore_with_starttime');
-        $this->addTimeInfoToRow($record, 'time_controlled_now_and_future');
-        $this->addTimeInfoToRow($record, 'time_controlled_now_but_will_end');
+
+        // Add time control labels
+        $this->addTimeInfoToRow($record, 'label_time_controlled_not_yet');
+        $this->addTimeInfoToRow($record, 'label_time_controlled_not_yet_with_endtime');
+        $this->addTimeInfoToRow($record, 'label_time_controlled_not_anymore');
+        $this->addTimeInfoToRow($record, 'label_time_controlled_not_anymore_with_starttime');
+        $this->addTimeInfoToRow($record, 'label_time_controlled_now_and_future');
+        $this->addTimeInfoToRow($record, 'label_time_controlled_now_but_will_end');
 
         // Add formatted publish date
         $record['formattedPublishdate'] = $this->getFormattedPublishDate($record['publish_date']);
     }
 
     private function addTimeInfoToRow(array &$record, $label) {
-        $record[$label] = self::insertStartEndtime($this->LL[$label], $record['starttime'], $record['endtime']);
+        $record[$label] = self::insertStartEndTime($this->LL[$label], $record['starttime'], $record['endtime']);
     }
 
-    private static function insertStartEndtime($string, $starttime, $endtime) {
+    /**
+     * Replace ###STARTTIME### and ###ENDTIME### in $string with given $startTime and $endTime time stamp
+     * @param $string Label that may contain ###STARTTIME### and /or ###ENDTIME###
+     * @param $startTime Start time time stamp
+     * @param $endTime End time time stamp
+     * @return String Label with start time and end time inserted
+     */
+    private static function insertStartEndTime($string, $startTime, $endTime) {
         // @todo: time format string should be configurable
-   		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $starttime), $string);
-   		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endtime), $string);
+   		$string = str_replace('###STARTTIME###', date("d.m.Y, H:i:s", $startTime), $string);
+   		$string = str_replace('###ENDTIME###', date("d.m.Y, H:i:s", $endTime), $string);
    		return $string;
    	}
 
