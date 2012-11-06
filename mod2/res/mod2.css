@@ -76,7 +76,7 @@ body {
 #filter input, #filter select, #filter label, #filter textarea {
 	display:block;
 	float:left;
-	width:146px;
+	width:143px;
 	margin-bottom:5px;
 	padding:2px 0;
 }
