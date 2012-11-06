@@ -186,7 +186,8 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
         $smarty->assign('FILTER_BOX', $this->filter->renderBox($smarty));
 
-		$smarty->assign('LL', $this->LL); // localized labels
+		$smarty->assign('LL', $this->LL); // Localized labels
+        $smarty->assign('LABEL', tx_newspaper_Workflow::addWorkflowTranslations()); // Localized labels
 
         $smarty->assign('CAN_PUBLISH_ARTICLES', tx_newspaper_Workflow::canPublishArticles());
         $smarty->assign('CAN_PLACE_ARTICLES', tx_newspaper_workflow::canPlaceArticles() || tx_newspaper_Workflow::mayPlaceAsEditor());
@@ -207,9 +208,6 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
         $this->addArticleInfo($article_records);
         $smarty->assign('DATA', $article_records);
-
-        tx_newspaper_Workflow::addWorkflowTranslations($smarty);
-
         //  paging
         $smarty->assign('START_PAGE', intval($this->input['startPage']));
         $step = intval($this->input['step']);

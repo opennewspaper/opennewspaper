@@ -1,13 +1,12 @@
-{* debug *}
-<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js"> </script>
+<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js?2"> </script>
 
 <div id="comments-{$tableUid}" class="comments" style="display:block">
 
     {* link to show all comments *}
     <p>
-        <a title="{$label_workflow_show_all_messages}" class="right" href="#"
-           onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
-           >{$label_workflow_show_all_messages}</a>
+        <a class="right" href="#"
+           onclick="toggleCommentDetails('comments-{$tableUid}'); return false;"
+           >{$LABEL.label_workflow_show_all_messages}</a>
     </p>
 
     <table style="width:456px">
@@ -44,13 +43,13 @@
 
 </div>
 
-<div id="comments-{$tableUid}-all" class="comments" style="display:none">
+<div id="comments-{$tableUid}-all" class="comments" style="display:none;">
 
     {* link to show only default comments *}
     <p>
-        <a title="{$label_workflow_show_default_messages}" class="right" href="#"
-           onclick="toggleCommentDetails('comments-{$tableUid}'); toggleCommentDetails('comments-{$tableUid}-all'); return false;"
-           >{$label_workflow_show_default_messages}</a>
+        <a title="{$LABEL.label_workflow_show_default_messages}" class="right" href="#"
+           onclick="toggleCommentDetails('comments-{$tableUid}'); return false;"
+           >{$LABEL.label_workflow_show_default_messages}</a>
     </p>
 
     <table style="width:456px">

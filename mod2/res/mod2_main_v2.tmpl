@@ -1,8 +1,8 @@
 {* debug *}
 
-<link rel="stylesheet" type="text/css" href="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.css" />
+<link rel="stylesheet" type="text/css" href="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.css?2" />
 
-<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js"> </script>
+<script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/mod2/res/mod2.js?2"> </script>
 <script type="text/javascript" src="{$T3PATH}contrib/prototype/prototype.js"> </script>
 <script type="text/javascript" src="{$ABSOLUTE_PATH}typo3conf/ext/newspaper/res/be/newspaper.js"> </script>
 
@@ -151,14 +151,14 @@
 
 		<!-- All Messages / hidden -->
 
-        {* @todo: message are rendered twice -> only one should be used ... *}
+        {* @todo: messages are rendered twice -> only one should be used ... *}
 		<div id="messages_{$DATA[i].uid}_basic" class="allMessages">
 
             {* link to show all comments *}
-            <p>
-                <a title="{$label_workflow_show_all_messages}" class="right" href="#"
+            <p class="allMessagesTrigger">
+                <a class="right" href="#"
                    onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
-                   >{$label_workflow_show_all_messages}</a>
+                   >{$LABEL.label_workflow_show_all_messages}</a>
             </p>
 
 			{foreach from=$DATA[i].workflowlog_v2 key=j item=comment}
@@ -169,15 +169,8 @@
                 </p>
 				<p class="message{if $comment.operation == 4}{* manual comment *} important{elseif $comment.operation == 6}{* error message *} error_message{/if}">
                     {$comment.comment}
-                    {if $comment.details}
-                        {* @todo change the "+" to an image? *}
-                        <a title="{$label_workflow_show_details}" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
-                    {/if}
                 </p>
-                {if $comment.details}
-                    <p class="message" id="message_{$DATA[i].uid}_{$j}" style="display:none">{$comment.details}</p>
-                {/if}
-
+                {* $comment.details: not rendered here, trigger is visible ... *}
 			{/foreach}
 
 		</div>
@@ -186,10 +179,10 @@
         <div id="messages_{$DATA[i].uid}_all" class="allMessages">
 
             {* link to show only basic comments *}
-            <p>
-                <a title="{$label_workflow_show_default_messages}" class="right" href="#"
+            <p class="allMessagesTrigger">
+                <a class="right" href="#"
                    onclick="toggleCommentDetails('messages_{$DATA[i].uid}_basic'); toggleCommentDetails('messages_{$DATA[i].uid}_all'); return false;"
-                   >{$label_workflow_show_default_messages}</a>
+                   >{$LABEL.label_workflow_show_default_messages}</a>
             </p>
 
       		{foreach from=$DATA[i].workflowlog_all key=j item=comment}
@@ -202,11 +195,11 @@
                     {$comment.comment}
                     {if $comment.details}
                         {* @todo change the "+" to an image? *}
-                        <a title="{$label_workflow_show_details}" class="right" href="#" onclick="toggleCommentDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
+                        <a title="{$LABEL.label_workflow_show_details}" class="right" href="#" onclick="toggleCommentDetailsDetails('message_{$DATA[i].uid}_{$j}'); return false;">+</a>
                     {/if}
                 </p>
                 {if $comment.details}
-                    <p class="message" id="message_{$DATA[i].uid}_{$j}" style="display:none">{$comment.details}</p>
+                    <div class="message" id="message_{$DATA[i].uid}_{$j}" style="display:none;">{$comment.details}</div>
                 {/if}
 
       		{/foreach}

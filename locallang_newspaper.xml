@@ -51,8 +51,8 @@
          	<label index="label_workflow_role_new">New role</label>
          	<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
 			<label index="label_workflow_save">Save</label>
-            <label index="label_workflow_show_all_messages">Show all messages</label>
-            <label index="label_workflow_show_default_messages">Show only important messages</label>
+            <label index="label_workflow_show_all_messages">Show details</label>
+            <label index="label_workflow_show_default_messages">Hide details</label>
             <label index="label_workflow_show_details">Show more details</label>
 			<label index="log_article_hidden">Article hidden</label>
 			<label index="log_article_published">Article published</label>
@@ -159,8 +159,8 @@
             <label index="label_workflow_role_new">Neue Rolle</label>
             <label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
             <label index="label_workflow_save">Speichern</label>
-            <label index="label_workflow_show_all_messages">Alle Nachrichten anzeigen</label>
-            <label index="label_workflow_show_default_messages">Nur wichtige Nachrichten anzeigen</label>
+            <label index="label_workflow_show_all_messages">Details einblenden</label>
+            <label index="label_workflow_show_default_messages">Details ausblenden</label>
             <label index="label_workflow_show_details">Mehr Details</label>
             <label index="log_article_hidden">Artikel versteckt</label>
             <label index="log_article_published">Artikel publiziert</label>

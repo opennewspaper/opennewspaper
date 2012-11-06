@@ -1,5 +1,6 @@
 
 var elPrevious = null; // Reference to currently open messages
+var elDetail = null; // Reference to currently opened details
 
 
 /**
@@ -36,10 +37,11 @@ function toggleCommentProdList(el) {
     elButtonId = cleanElementId(el);
     elCommentId = getCommentId(el);
 	// Toggle comments
-	if (document.getElementById(elCommentId).style.display == 'block') {
+	if (document.getElementById(elCommentId).style.display == 'block' || elDetail !== null) {
 		// Hide comments
  		document.getElementById(elCommentId).style.display = 'none';
  		document.getElementById('b_' + elButtonId).src = '../res/be/css/arrow-270.png';
+        hideCommentDetails();
  		elPrevious = null;
  	} else {
  		document.getElementById(elCommentId).style.display = 'block';
@@ -48,23 +50,54 @@ function toggleCommentProdList(el) {
 	 	if (elPrevious != null) {
 	 		document.getElementById(elPrevious).style.display = 'none';
 	 		document.getElementById('b_' + cleanElementId(elPrevious)).src = '../res/be/css/arrow-270.png';
+            hideCommentDetails();
 	 	}
 	 	elPrevious = el; // Store, so this message can be closed when other messages are to be displayed
  	}
  }
 
+
+/**
+ * Hide currently opened messaging details (set in elDetails)
+ */
+function hideCommentDetails() {
+    if (elDetail !== null) {
+        document.getElementById(elDetail).style.display = 'none';
+        elDetail = null;
+    }
+}
+
+/**
+ * Toggle messaging details
+ * @param el
+ */
 function toggleCommentDetails(el) {
 	// Toggle comments
 	if (document.getElementById(el).style.display == 'block') {
-		// hide comments
- 		document.getElementById(el).style.display = 'none';
+        // hide comments
+        document.getElementById(el).style.display = 'none';
+        elDetail = null; // No details opened
+    } else {
+        document.getElementById(el).style.display = 'block';
+        elDetail = el; // Store currently opened comment id
+    }
+}
+
+/**
+ * Toggle detail information in messaging details (f. ex. details for changes in an Extra)
+ * @param el
+ */
+function toggleCommentDetailsDetails(el) {
+	// Toggle comments
+	if (document.getElementById(el).style.display == 'block') {
         // @todo change displayed element to "+"
- 	} else {
- 		document.getElementById(el).style.display = 'block';
-        elPrevious = el; // Store currently opened comment id
+        // hide comments
+        document.getElementById(el).style.display = 'none';
+    } else {
         // @todo change displayed element to "-"
- 	}
- }
+        document.getElementById(el).style.display = 'block';
+    }
+}
 
 var path = window.location.pathname;
 path = path.substring(0, path.lastIndexOf("/") - 5); // -5 -> cut of "typo3"

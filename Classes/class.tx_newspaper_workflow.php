@@ -308,24 +308,28 @@ function changeWorkflowStatus(role, hidden_status) {
 		);
     }
 
-    public static function addWorkflowTranslations(tx_newspaper_Smarty $smarty) {
-        foreach (array('label_workflow_show_all_messages', 'label_workflow_show_default_messages', 'label_workflow_show_details') as $label) {
-            $smarty->assign($label, tx_newspaper::getTranslation($label));
-        }
+    /**
+     * Get some localized labels (for Messaging)
+     * @return array Localized label
+     */
+    public static function addWorkflowTranslations() {
+        return array(
+            'label_workflow_show_all_messages' => tx_newspaper::getTranslation('label_workflow_show_all_messages'),
+            'label_workflow_show_default_messages' => tx_newspaper::getTranslation('label_workflow_show_default_messages'),
+            'label_workflow_show_details' => tx_newspaper::getTranslation('label_workflow_show_details'),
+            'more' => tx_newspaper::getTranslation('log_more_link'),
+        	'less' => tx_newspaper::getTranslation('log_less_link')
+        );
     }
 
     private static function renderTemplate(array $comments, array $all_comments, $tableUid, $show_all_comments=true, $show_fold_links=false) {
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->assign('comments', $comments);
         $smarty->assign('all_comments', $all_comments);
-        self::addWorkflowTranslations($smarty);
-		$smarty->assign('tableUid', $tableUid);
+        $smarty->assign('tableUid', $tableUid);
 		$smarty->assign('show_all_comments', $show_all_comments);
 		$smarty->assign('showFoldLinks', $show_fold_links);
-		$smarty->assign('LABEL', array(
-			'more' => tx_newspaper::getTranslation('log_more_link'),
-			'less' => tx_newspaper::getTranslation('log_less_link')
-		));
+		$smarty->assign('LABEL', self::addWorkflowTranslations());
         $smarty->assign('ABSOLUTE_PATH', tx_newspaper::getAbsolutePath());
 		$smarty->setTemplateSearchPath(array(PATH_typo3conf . 'ext/newspaper/res/be/templates'));
 		return $smarty->fetch('workflow_comment_output.tmpl');

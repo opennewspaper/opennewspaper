@@ -1,5 +1,7 @@
 <style type="text/css">
 
+
+
 /* additional CSS / production list */
 
 body {
@@ -208,6 +210,13 @@ body {
 	background-color:#999999;
 	width:248px;
 	min-height:100px;
+}
+
+#tx_newspaper_mod3 .allMessagesTrigger {
+    padding-bottom: 15px;
+    paddiNG-right: 10px;
+    text-align: right;
+    text-decoration: underline;
 }
 
 #modlist .head {
