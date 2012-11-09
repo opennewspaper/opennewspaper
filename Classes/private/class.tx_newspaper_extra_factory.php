@@ -49,6 +49,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_ex
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_extra_textbox.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_extra_typo3_ce.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_extra_specialhits.php');
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_extra_flexform.php');
 
 
 class ErrorExtra extends tx_newspaper_Extra {

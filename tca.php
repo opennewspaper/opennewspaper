@@ -3481,6 +3481,59 @@ $TCA["tx_newspaper_extra_html"] = array (
 );
 
 
+$TCA["tx_newspaper_extra_flexform"] = array (
+	"ctrl" => $TCA["tx_newspaper_extra_flexform"]["ctrl"],
+	"interface" => array (
+		"showRecordFieldList" => "short_description,flexform,template"
+	),
+	"feInterface" => $TCA["tx_newspaper_extra_flexform"]["feInterface"],
+	"columns" => array (
+		"short_description" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_flexform.short_description",
+			"config" => Array (
+				"type" => "input",
+				"size" => "30",
+			)
+		),
+        "ds_file" => Array (
+            "exclude" => 1,
+            "label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_flexform.ds_file",
+            "config" => Array (
+                "type" => "select",
+                "items" => Array (), // Filled by itemsProcFunc
+                "size" => 1,
+                "maxitems" => 1,
+                'itemsProcFunc' => 'tx_newspaper_Extra_Flexform->addFlexformTemplateDropdownEntries',
+            )
+        ),
+		"flexform" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_flexform.html",
+			"config" => Array (
+				"type" => "flex",
+                "ds" => array(
+                        'default' => '' // filled by: tx_newspaper_Extra_Flexform->addFlexformTemplateDropdownEntries
+                )
+			)
+		),
+		"template" => Array (
+			"exclude" => 1,
+			"label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_flexform.template",
+			"config" => Array (
+				"type" => "input",
+				"size" => "30",
+			)
+		),
+	),
+	"types" => array (
+		"0" => array("showitem" => "short_description;;;;1-1-1, ds_file, flexform, template")
+	),
+	"palettes" => array (
+		"1" => array("showitem" => "")
+	)
+);
+
 
 $TCA["tx_newspaper_extra_freeformimage"] = array (
 	"ctrl" => $TCA["tx_newspaper_extra_freeformimage"]["ctrl"],
@@ -3793,5 +3846,6 @@ $TCA["tx_newspaper_extra_specialhits"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
 require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 ?>

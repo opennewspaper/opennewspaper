@@ -1095,6 +1095,26 @@ CREATE TABLE be_users (
 
 
 
+#
+# Table structure for table 'tx_newspaper_extra_flexform'
+#
+CREATE TABLE tx_newspaper_extra_flexform (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	cruser_id int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	short_description tinytext NOT NULL,
+	ds_file tinytext NOT NULL,
+	flexform mediumtext NOT NULL,
+	datastructure mediumtext NOT NULL,
+	template tinytext NOT NULL,
+
+	PRIMARY KEY (uid),
+	KEY parent (pid)
+);
+
 
 
 

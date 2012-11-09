@@ -107,6 +107,7 @@
 			<label index="title_tx_newspaper_extra_externallinks">External links</label>
             <label index="title_tx_newspaper_extra_freeformimage">Free form image</label>
 			<label index="title_tx_newspaper_extra_html">HTML</label>
+			<label index="title_tx_newspaper_extra_flexform">Flexform</label>
 			<label index="title_tx_newspaper_extra_image">Image</label>
 			<label index="title_tx_newspaper_extra_mostcommented">Most commented articles</label>
 			<label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
@@ -201,6 +202,7 @@
 			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
             <label index="title_tx_newspaper_extra_freeformimage">Bild in Freiformat</label>
 			<label index="title_tx_newspaper_extra_html">HTML</label>
+            <label index="title_tx_newspaper_extra_flexform">Flexform</label>
 			<label index="title_tx_newspaper_extra_image">Bild</label>
 			<label index="title_tx_newspaper_extra_mostcommented">Meistkommentierte Artikel</label>
 			<label index="title_tx_newspaper_extra_sectionlist">Ressortuebersicht</label>

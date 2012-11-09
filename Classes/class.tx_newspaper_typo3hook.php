@@ -38,6 +38,7 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 //t3lib_div::devlog('getSingleField_preProcess() hook', 'newspaper', 0, array('table' => $table, 'field' => $field, 'row' => $row, 'altName' => $altName, 'palette' => $palette, 'extra' => $extra, 'pal' => $pal, '_REQUEST' => $_REQUEST));
 		$this->checkCantUncheckIsArticlePageZoneType($table, $field, $row);
         tx_newspaper_Article::getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that);
+        tx_newspaper_Extra_Flexform::getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that);
 	}
 
 	function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
