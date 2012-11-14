@@ -1,14 +1,31 @@
+{debug}
 <!-- start res/templates/tx_newspaper_extra_flexform.tmpl -->
 {* Flexform
    Variables:
 
-   $attributes          attributes as stored in DB. notable attributes include:
-                template
+   $ds_file.path            Path to data structure xml file
+   $ds_file.file            Name of data structure xml file
 
-   $extra_attributes    attributes for abstract extra record as stored in DB
+   $flexform                Array with flexform data. Example: {$flexform.data.sDEF.lDEF.Test.vDEF}
+
+   $flexform_debug.xml      XML stored in database
+   $flexform_debug.array    XML stored in database (-> can be used to find out how to access the flexform data)
+   $template_set		    Template set used, if any
+   $attributes			    Attributes as stored in DB
+   $extra_attributes	    Attributes for abstract extra record as stored in DB
+   $extra                   The rendered extra as PHP object
 
 *}
-<!-- @todo: add attributes -->
-<!-- @todo: content for Smarty -->
-{$html}
-<!-- end res/templates/tx_newspaper_extra_html.tmpl -->
+
+<h2>template shipped with newspaper extension in typo3conf/ext/newspaper/res/templates</h2>
+
+<div>
+    Extra Flexform<br />
+    Data structure file: {$ds_file.path}/{$ds_file.file}<br /><br />
+
+    Flexform xml data: {$flexform_debug.xml}<br /><br />
+
+    Debug Flexform data: {$flexform_debug.array}<br />
+    <br />
+</div>
+<!-- end res/templates/tx_newspaper_extra_flexform.tmpl -->

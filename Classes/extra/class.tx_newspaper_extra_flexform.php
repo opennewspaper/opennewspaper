@@ -18,6 +18,8 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
     private static $flexformFolderActive = null;
     private static $flexformFolderArchive = null;
 
+    private $flexformArray = null;
+
 
 
 	/// Constructor
@@ -29,8 +31,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 
 	public function __toString() {
 		try {
-            // @todo: Flexform data structure
-			return 'Extra: UID ' . $this->getExtraUid() . ', Flexform: UID ' . $this->getUid();
+			return 'Extra: UID ' . $this->getExtraUid() . ', Flexform: UID ' . $this->getUid() . t3lib_div::view_array($this->getFlexformValues());
 		} catch(Exception $e) {
 			return "Flexform: Exception thrown!" . $e;
 		}
@@ -42,28 +43,29 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-		## t3 developer log error handling
-		#  tx_newspaper::devlog("render", $rendered);
+        $this->prepare_render($template_set);
 
-//		$this->prepare_render($template_set);
-//
-//		$this->smarty->assign('html', $this->getAttribute('html'));
-//
-//        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
+        $this->smarty->assign('ds_file', array(
+                'path' => self::getFlexformFolder(self::getFlexformDataStructureType($this->getAttribute('ds_file'))),
+                'file' => $this->getAttribute('ds_file') . '.xml')
+        );
 
-        // @todo: some code seems to be missing here ...
-        $rendered = 'to come ...';
+        $this->smarty->assign('flexform', $this->getFlexformValues());
+        $this->smarty->assign('flexform_debug', array(
+            'xml' => htmlentities($this->getAttribute('flexform')),
+            'array' => t3lib_div::view_array($this->getFlexformValues())
+        ));
 
+        $rendered = $this->smarty->fetch($this->getSmartyTemplate());
+// tx_newspaper::devlog("render Extra Flecform", $rendered);
         return $rendered;
 	}
 
-
-	public function getDescription() {
+    public function getDescription() {
 		if ($desc = $this->getAttribute('short_description')) {
 		} elseif ($desc = $this->getAttribute('notes')) {
 		} else {
-            // @todo: description missing (xml structure ...)
-            $desc = 'to come ...';
+            $desc = $this->getAttribute('ds_file');
 		}
 		return substr(
 			$desc,
@@ -78,6 +80,27 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 
 	public static function dependsOnArticle() { return false; }
 
+
+
+    private function getFlexformValues() {
+
+        if ($this->flexformArray !== null) {
+            return $this->flexformArray;
+        }
+
+        require_once(PATH_tslib . 'class.tslib_pibase.php');
+        $pi = new tslib_pibase(); // Get pibase object, needed for flexform functions
+
+        // Read current data in $pi
+        $pi->cObj->data = $pi->pi_getRecord('tx_newspaper_extra_flexform', $this->getUid());
+
+        $pi->pi_initPIflexForm('flexform'); // Convert xml data stored in record into an array
+
+        $this->flexformArray = $pi->cObj->data['flexform']; // Cache array
+
+        return $this->flexformArray;
+
+    }
 
 
 
@@ -125,7 +148,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         }
 
         if (!is_dir($folder)) {
-            $message = t3lib_div::makeInstance('t3lib_FlashMessage', 'Folder "' . $folder . ' can\'t be found.', 'Flexform', t3lib_FlashMessage::ERROR);
+            $message = t3lib_div::makeInstance('t3lib_FlashMessage', sprintf(tx_newspaper::getTranslation('flashMessage_extra_flexform_folder_not_found'), $folder), 'Flexform', t3lib_FlashMessage::ERROR);
             t3lib_FlashMessageQueue::addMessage($message);
             return array();
         }
@@ -166,7 +189,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
      * Get type of flexform template
      * Either FF_TYPE_ACTIVE (checked first) or FF_TYPE_ARCHIVED (checked then)
      * So if a file exists in both the active AND the archive folder, the active template will be used
-     * @param $file Flexform datastructure file
+     * @param $file String Flexform datastructure file
      * @return int FF_TYPE_ACTIVE or FF_TYPE_ARCHIVED or false, if file can't be found/read
      */
     public static function getFlexformDataStructureType($file) {
@@ -186,7 +209,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
      * Get folder as configured in Page TSConfig on newspaper root folder for given $type
      * newspaper.extra.flexform.folder.active = [path]
      * newspaper.extra.flexform.folder.archive = [path]
-     * @param $type Either FF_TYPE_ACTIVE or FF_TYPE_ARCHIVED
+     * @param $type int Either FF_TYPE_ACTIVE or FF_TYPE_ARCHIVED
      * @return String Path (or empty string if not configured)
      */
     private static function getFlexformFolder($type) {
@@ -259,7 +282,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         if ($folder = self::getFlexformActiveFolder()) {
             $files = self::getFlexformActiveFolderTemplates();
         } else {
-            $message = t3lib_div::makeInstance('t3lib_FlashMessage', 'No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active', 'Flexform', t3lib_FlashMessage::ERROR);
+            $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_flexform_no_folder_configured'), 'Flexform', t3lib_FlashMessage::ERROR);
             t3lib_FlashMessageQueue::addMessage($message);
         }
 
@@ -268,16 +291,17 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
             $type = self::getFlexformDataStructureType($params['row']['ds_file']);
             if ($type === false) {
                 /// Stored file not found in file system
-                $message = t3lib_div::makeInstance('t3lib_FlashMessage', 'Archived data structure file "' . $params['row']['ds_file'] . '.xml" can\'t be found.', 'Flexform', t3lib_FlashMessage::ERROR);
+                $message = t3lib_div::makeInstance('t3lib_FlashMessage', sprintf(tx_newspaper::getTranslation('flashMessage_extra_flexform_file_not_found'), $params['row']['ds_file']), 'Flexform', t3lib_FlashMessage::ERROR);
                 t3lib_FlashMessageQueue::addMessage($message);
             } else if ($type == self::FF_TYPE_ARCHIVED) {
-                $message = t3lib_div::makeInstance('t3lib_FlashMessage', 'The seelcted Felxform template is archived. Changing the Flexform template can\'t be undone.', 'Flexform', t3lib_FlashMessage::INFO);
+                $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_flexform_archived'), 'Flexform', t3lib_FlashMessage::INFO);
                 t3lib_FlashMessageQueue::addMessage($message);
                 $files = array($params['row']['ds_file']); // Add selected flexform file to dropdown
             } // So file is an active template, has been read already
         }
 
         // Fill $params array for TCEForms
+        $params['items'][] = array('0' => '', '1' => ''); // Empty entry
         foreach($files as $file) {
             $params['items'][] = array('0' => $file, '1' => $file);
         }
@@ -301,14 +325,19 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
     }
 
     /**
-     * Reads Flexform datastructure from file set in dropdown "ds_file"
+     * Reads Flexform data structure from file set in dropdown "ds_file"
+     * Hides Flexform field if no data structure is selected
      * Manipulates $TCA
      * @param $table
      * @param $field
      * @param $row
-     * @retirn void
+     * @return void
      */
     private static function modifyFlexformTca($table, $field, $row) {
+        if ($table == 'tx_newspaper_extra_flexform' && $field == 'ds_file' && !$row['ds_file']) {
+            // Hide Flexform when no data structure was selected
+            unset($GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']);
+        }
         if ($table == 'tx_newspaper_extra_flexform' && $field == 'flexform') {
             $GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']['config']['ds']['default'] = self::getFlexformDataStructure($row['ds_file']);
         }

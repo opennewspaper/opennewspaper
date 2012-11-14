@@ -124,6 +124,11 @@
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
 			<label index="message_article_no_section">No section is assigned to this article. Please select a section and store in order to edit the article.</label>
             <label index="title_tx_newspaper_extra_specialhits">Special hits</label>
+
+            <label index="flashMessage_extra_flexform_folder_not_found">Folder "%s" can't be found.</label>
+            <label index="flashMessage_extra_flexform_no_folder_configured">No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active</label>
+            <label index="flashMessage_extra_flexform_archived">The selected Flexform template is archived. Changing the Flexform template can't be undone.</label>
+            <label index="flashMessage_extra_flexform_file_not_found">Neither active nor archived data structure file "%s.xml" can be found.</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -217,6 +222,12 @@
 			<label index="title_tx_newspaper_tag">Tag</label>
 			<label index="message_article_no_section">Dem Artikel ist kein Ressort zugeordnet. Bitte weisen Sie dem Artikel ein Ressort zu und speichern, um den Artikel bearbeiten zu können.</label>
             <label index="title_tx_newspaper_extra_specialhits">Sondertreffer</label>
+
+            <label index="flashMessage_extra_flexform_folder_not_found">Das Verzeichnis "%s" existiert nicht.</label>
+            <label index="flashMessage_extra_flexform_no_folder_configured">Kein Verzeichnis konfiguriert. Bitte setzen Sie Page TSConfig newspaper.extra.flexform.folder.active</label>
+            <label index="flashMessage_extra_flexform_archived">Die ausgewählte Flexform-Vorlage ist archiviert. Eine Änderung der Vorlagen-Auswahl kann nicht rückgängig gemacht werden.</label>
+            <label index="flashMessage_extra_flexform_file_not_found">Weder die aktive noch die archivierte Datenstruktur "%s.xml" exisitert.</label>
+
 		</languageKey>
 
 	</data>
