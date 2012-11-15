@@ -217,11 +217,6 @@ self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_t
 
     private function setBasePath() {
 
-        // Make sure TSFE is available
-        if (!$GLOBALS['TSFE']) {
-            tx_newspaper::buildTSFE();
-        }
-
         // @todo: Check if $GLOBALS['TSFE']->id would work ($GLOBALS['TSFE']->page['uid'] not working for Windows installations)
         $pageUid = $GLOBALS['TSFE']->page['uid']? $GLOBALS['TSFE']->page['uid'] : $GLOBALS['TSFE']->id;
         $TSConfig = t3lib_BEfunc::getPagesTSconfig($pageUid);
