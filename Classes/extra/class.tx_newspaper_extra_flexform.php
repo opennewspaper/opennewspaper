@@ -57,9 +57,30 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         ));
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
-// tx_newspaper::devlog("render Extra Flecform", $rendered);
+// tx_newspaper::devlog("Render Extra Flexform", $rendered);
         return $rendered;
 	}
+
+    /**
+     * Get template name (or return template set in record)
+     * Name: tx_newspaper_extra_flexform_[name of data structure xml file (omitting .xml)].tmpl
+     * @return string Name of Smarty template to be used
+     */
+    protected function getSmartyTemplate() {
+        try {
+            $template = trim($this->getAttribute('template'));
+        } catch (tx_newspaper_WrongAttributeException $e) { }
+
+        if (!empty($template)) {
+            return $template; // Template file was set in Extra record, so use that template
+        }
+
+        // No template set in Extra, so use template for Extra flexform based on the data structure xml file name
+        return strtolower(get_class($this)) . '_' . $this->getAttribute('ds_file') . '.tmpl';
+
+    }
+
+
 
     public function getDescription() {
 		if ($desc = $this->getAttribute('short_description')) {
