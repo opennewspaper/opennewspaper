@@ -92,7 +92,7 @@ class tx_newspaper_module2_Filter {
         self::addDefaultFilterValue($settings, 'startPage', 0, true);
         self::addDefaultFilterValue($settings, 'hidden', 'all', true);
         self::addDefaultFilterValue($settings, 'role', ($this->is_article_browser? '-1': tx_newspaper_workflow::getRole()), false);
-        self::addDefaultFilterValue($settings, 'range', ($this->is_article_browser? 'day_180': 'day_2'), true); // \todo: make tsconfigurable
+        self::addDefaultFilterValue($settings, 'range', $this->getDefaultRange(), true);
         self::addDefaultFilterValue($settings, 'section', ($this->is_article_browser && $_REQUEST['s'])? $_REQUEST['s']: $this->getDefaultSection(), false);
 
 //t3lib_div::devlog('addDefaultFilterValues() done', 'newspaper', 0, array('settings' => $settings, 'type' => $type));
@@ -105,6 +105,42 @@ class tx_newspaper_module2_Filter {
       		$settings[$key] = $value;
       	}
     }
+
+    /**
+     * Get default range filter setting (for production list or article browser)
+     * Either day_2 for production list, day_180 for article list
+     * or User TSConfig
+     * newspaper.productionList.defaultRange = [today|day_1,day_2,day_3,day_7,day_14,day_30,day_60,day_90,day_180,day_360,no_limit]
+     * newspaper.articleBrowser.defaultRange = [today|day_1,day_2,day_3,day_7,day_14,day_30,day_60,day_90,day_180,day_360,no_limit]
+     * @return string A valid range value (to be used in filter select box)
+     */
+    private function getDefaultRange() {
+        if (isset($GLOBALS['BE_USER'])) {
+            if (!$this->is_article_browser) {
+                $tsc = 'newspaper.productionList.defaultRange'; // Production list
+            } else {
+                $tsc = 'newspaper.articleBrowser.defaultRange'; // Article browser
+            }
+            if ($range = trim($GLOBALS['BE_USER']->getTSConfigVal($tsc))) {
+                if ($this->isValidRange($range)) {
+                    return $range;
+                }
+            }
+        }
+
+        // Just return hard-coded default values
+        return ($this->is_article_browser ? 'day_180' : 'day_2');
+    }
+
+    /**
+     * Checks if given $range is an available filter option
+     * @param $range String (Examples: 'today', 'day_1', 'day_2', ......., 'days_360', 'no_limit', see getRangeArray() for details
+     * @return bool true if the $range is an available option
+     */
+    private function isValidRange($range) {
+        return array_key_exists($range, $this->getRangeArray());
+    }
+
 
     /**
      * Get default value for section filter
@@ -129,24 +165,28 @@ class tx_newspaper_module2_Filter {
         return ''; // Default section filter
     }
 
-    // functions to fill filter dropdowns with data
 
-   	/// \return Array with options for time range dropdown
-	private function getRangeArray() {
-		$range = array();
-		$range['today'] = $this->localized_labels['option_range_today'];
-		$range['day_1'] = '1 ' . $this->localized_labels['option_range_day'];
-		$range['day_2'] = '2 ' . $this->localized_labels['option_range_days'];
-		$range['day_3'] = '3 ' . $this->localized_labels['option_range_days'];
-		$range['day_7'] = '7 ' . $this->localized_labels['option_range_days'];
-		$range['day_14'] = '14 ' . $this->localized_labels['option_range_days'];
-		$range['day_30'] = '30 ' . $this->localized_labels['option_range_days'];
-		$range['day_60'] = '60 ' . $this->localized_labels['option_range_days'];
-		$range['day_90'] = '90 ' . $this->localized_labels['option_range_days'];
-		$range['day_180'] = '180 ' . $this->localized_labels['option_range_days'];
-		$range['day_360'] = '360 ' . $this->localized_labels['option_range_days'];
-		$range['no_limit'] = $this->localized_labels['option_range_no_limit'];
-		return $range;
+    // Functions to fill filter dropdowns with data
+
+    /**
+     * Get available time range filters
+     * @return array Options for time range dropdown (array('key used in form' => 'localized label')
+     */
+    private function getRangeArray() {
+		return array(
+            'today' => $this->localized_labels['option_range_today'],
+            'day_1' => '1 ' . $this->localized_labels['option_range_day'],
+            'day_2' => '2 ' . $this->localized_labels['option_range_days'],
+            'day_3' => '3 ' . $this->localized_labels['option_range_days'],
+            'day_7' => '7 ' . $this->localized_labels['option_range_days'],
+            'day_14' => '14 ' . $this->localized_labels['option_range_days'],
+            'day_30' => '30 ' . $this->localized_labels['option_range_days'],
+            'day_60' => '60 ' . $this->localized_labels['option_range_days'],
+            'day_90' => '90 ' . $this->localized_labels['option_range_days'],
+            'day_180' => '180 ' . $this->localized_labels['option_range_days'],
+            'day_360' => '360 ' . $this->localized_labels['option_range_days'],
+            'no_limit' => $this->localized_labels['option_range_no_limit']
+        );
 	}
 
 	/// \return Array with options for publish state dropdown

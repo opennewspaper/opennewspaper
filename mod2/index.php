@@ -42,9 +42,9 @@ class fullWidthDoc_mod2 extends template {
 
 
 /**
- * Module 'Moderation list' for the 'newspaper' extension.
+ * Module 'Production list' for the 'newspaper' extension.
  *
- * @author	Lene Preuss, Oliver Schr�der, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
+ * @author	Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  */
 class  tx_newspaper_module2 extends t3lib_SCbase {
 	var $pageinfo;
