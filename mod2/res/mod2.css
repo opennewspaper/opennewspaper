@@ -303,6 +303,10 @@ body {
 	margin-right:10px;
 }
 
+#tx_newspaper_mod3 p a.green {
+	color: #006400;
+}
+
 #modlist p.message {
 	clear:both;
 	margin-bottom:4px;
@@ -310,6 +314,10 @@ body {
 
 #modlist p.message.important {
 	color:#C61940;
+}
+
+#modlist div.message table {
+    background-color: #dddddd;
 }
 
 #modlist .more_feld, #modlist .less_feld {
