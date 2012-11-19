@@ -129,7 +129,7 @@ class tx_newspaper_module2_Filter {
         }
 
         // Just return hard-coded default values
-        return ($this->is_article_browser ? 'day_180' : 'day_2');
+        return ($this->is_article_browser ? 'day_180' : 'day_7');
     }
 
     /**
