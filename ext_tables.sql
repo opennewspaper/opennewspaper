@@ -1108,7 +1108,6 @@ CREATE TABLE tx_newspaper_extra_flexform (
 	short_description tinytext NOT NULL,
 	ds_file tinytext NOT NULL,
 	flexform mediumtext NOT NULL,
-	datastructure mediumtext NOT NULL,
 	template tinytext NOT NULL,
 
 	PRIMARY KEY (uid),
