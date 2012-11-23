@@ -451,6 +451,7 @@ class  tx_newspaper_module6 extends t3lib_SCbase {
 			'backend' => $this->smarty->fetch('mod6_dossier_tagzone.tmpl'),
 			'dossierTitle' => $tag->getAttribute('title'),
 			'sectionTitle' => $s->getAttribute('section_name'),
+            'sectionFullPath' => $s->getFormattedRootline(),
 			'sectionUid' => $s->getUid()
 		));
 	}

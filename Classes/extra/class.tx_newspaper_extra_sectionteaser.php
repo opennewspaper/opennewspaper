@@ -83,14 +83,6 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 
-	/// itemsProcFunc to fill styles dropdowns in "normal" tceforms backend forms
-    public function addSectionsToDropdown(&$params, &$pObj) {
-        tx_newspaper::devlog('addSectionsToDropdown', $params);
-        $params['items'][] = array('', '');
-        foreach (tx_newspaper_Section::getAllSections(false, 'section_name') as $section) {
-            $params['items'][] = array($section->getAttribute('section_name'), $section->getUid());
-        }
-    }
 
 	/// title for module
 	public static function getModuleName() {

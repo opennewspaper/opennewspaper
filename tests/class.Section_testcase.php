@@ -138,6 +138,17 @@ class test_Section_testcase extends tx_newspaper_database_testcase {
    		}
     }
 
+    public function test_getFormattedRootline() {
+        $sections = $this->section->getChildSections();
+        $sections = $sections[0]->getChildSections();
+        $section = $sections[0]; // Get level 3 sub section
+
+        $this->assertEquals('Unit Test - Big Daddy Section / Son Section / Little Grandchild Section', $section->getFormattedRootline());
+        $this->assertEquals('Unit Test - Big Daddy Section / Son Section', $section->getFormattedRootline(false));
+        $this->assertEquals('Unit Test - Big Daddy Section>Son Section>Little Grandchild Section', $section->getFormattedRootline(true, '>'));
+        $this->assertEquals('Unit Test - Big Daddy Section>Son Section', $section->getFormattedRootline(false, '>'));
+    }
+
     /** @var tx_newspaper_Section */
 	private $section = null;					///< the object
 	

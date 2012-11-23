@@ -103,8 +103,7 @@ var NpManageDossier = {
 
 						NpManageDossier.setCurrentDossierTitle(tmp.dossierTitle);
 						NpManageDossier.displayDossierTitle();
-
-						NpManageDossier.setCurrentDossierSection(tmp.sectionTitle, tmp.sectionUid);
+						NpManageDossier.setCurrentDossierSection(tmp.sectionTitle, tmp.sectionUid, tmp.sectionFullPath);
 						NpManageDossier.displayDossierSection();
 
                         NpManageDossier.showDossierUid();
@@ -192,7 +191,7 @@ var NpManageDossier = {
 	/**
 	 * Store current section (for displaying and undoing)
 	 * @param title Title of dossier
-	 * @retrun void
+	 * @return void
 	 */
 	setCurrentDossierTitle: function(title) {
 		if (title === "undefined") {
@@ -282,21 +281,22 @@ var NpManageDossier = {
 	 * Store current section (for displaying and undoing)
 	 * @param sectionTitle Name of section
 	 * @param uid uid of section
-	 * @retrun void
+     * @param sectionFullPath Full path of section
+	 * @return void
 	 */
-	setCurrentDossierSection: function(sectionTitle, uid) {
+	setCurrentDossierSection: function(sectionTitle, uid, sectionFullPath) {
 		if (sectionTitle === "undefined" || !sectionTitle || !uid) {
 			// clear settings
 			sectionTitle = "";
 			uid = -1;
 		}
-		this.currentSectionTitle = sectionTitle;
+		this.currentSectionTitle = sectionFullPath? sectionFullPath : sectionTitle;
 		this.currentSectionUid = parseInt(uid);
 	},
 
 	/**
 	 * Display current section in dropdown
-	 * @retrun void
+	 * @return void
 	 */
 	displayDossierSection: function() {
 		$("dossier_section").innerHTML = this.currentSectionTitle;
@@ -343,7 +343,7 @@ var NpManageDossier = {
 				parameters: 'tx_newspaper_mod6[AjaxStoreDossierSectionUid]=' + parseInt(sectionUid) + '&tx_newspaper_mod6[tagUid]=' + this.getTagUid(),
 				onCreate: function() {},
 				onSuccess: function() {
-					NpManageDossier.setCurrentDossierSection($("sections").options[$("sections").selectedIndex].text, sectionUid);
+					NpManageDossier.setCurrentDossierSection($("sections").options[$("sections").selectedIndex].title, sectionUid);
 					NpManageDossier.displayDossierSection();
 				}
 			}

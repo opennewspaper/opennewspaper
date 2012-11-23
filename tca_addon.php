@@ -172,11 +172,11 @@ $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config'][
 $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['type'] = 'user';
 $TCA['tx_newspaper_articlelist_semiautomatic']['columns']['articles']['config']['userFunc'] = 'tx_newspaper_articlelist_semiautomatic->displayListedArticles';
 
-// set labels for abstract extras
-//$TCA['tx_newspaper_extra']['ctrl']['label'] = 'uid';
-//$TCA['tx_newspaper_extra']['ctrl']['label_alt'] = 'extra_table,extra_uid';
-//$TCA['tx_newspaper_extra']['ctrl']['label_alt_force'] = true;
+// Set label for abstract extras
 $TCA['tx_newspaper_extra']['ctrl']['label_userFunc'] = 'tx_newspaper_be->getAbstractExtraLabel';
+
+// Set label for sections
+$TCA['tx_newspaper_section']['ctrl']['label_userFunc'] = 'tx_newspaper_section->getSectionBackendLabel';
 
 // in case the label field "title" is not visible in the backend
 $TCA['tx_newspaper_extra_image']['ctrl']['label_alt'] = 'uid';
@@ -263,7 +263,7 @@ $GLOBALS['TCA']['tx_newspaper_extra_sectionlist']['columns']['num_articles']['co
 unset($GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config']);
 $GLOBALS['TCA']['tx_newspaper_extra_sectionteaser']['columns']['section']['config'] = array(
     "type" => "select",
-    'itemsProcFunc' => 'tx_newspaper_Extra_Sectionteaser->addSectionsToDropdown',
+    'itemsProcFunc' => 'tx_newspaper_Section->addSectionsToDropdown',
     "size" => 1,
     "maxitems" => 1,
 );

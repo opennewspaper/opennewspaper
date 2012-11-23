@@ -684,6 +684,62 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     }
 
+    /**
+     * Get a section rootline string
+     * @param bool $includeLastSection Whether or not the last section is included in the path
+     * @param string $delimiter Delimiter for the sections in the rootline path
+     * @return String $path Formatted section rootline
+     */
+    public function getFormattedRootline($includeLastSection=true, $delimiter=' / ') {
+
+        $rootLine = array_reverse($this->getSectionPath()); // Get complete rootline path
+
+        if (!(bool)$includeLastSection) {
+            $rootLine = array_slice($rootLine, 0, sizeof($rootLine)-1); // Remove last section
+        }
+
+        $path = '';
+        foreach($rootLine as $key => $section) {
+            $path .= $section->getAttribute('section_name') . ($key < (sizeof($rootLine)-1)? $delimiter : '');
+        }
+
+        return $path;
+
+    }
+
+
+
+
+
+    /**
+     * itemsProcFunc to fill styles dropdowns in tceforms backend forms
+     * @param Array $params Dropdown (called by reference!)
+     * @param $pObj Parent object
+     */
+    public function addSectionsToDropdown(&$params, &$pObj) {
+//tx_newspaper::devlog('addSectionsToDropdown', $params);
+        $params['items'][] = array('', '');  // Start with an empty entry
+        foreach (tx_newspaper_Section::getAllSections(false, 'section_name') as $section) {
+            $params['items'][] = array(
+                $section->getAttribute('section_name') . ' (' . $section->getFormattedRootline(false) . ')',
+                $section->getUid()
+            );
+        }
+    }
+
+
+    /**
+     * Get label for sections in backend (Typo3 TCA user function) (Section name and path in parentheses)
+     * The label is set in $params (call by reference)
+     * @param Array $params Data fetched by Typo3
+     */
+    public function getSectionBackendLabel(&$params) {
+//t3lib_div::devlog('getSectionBackendLabel()', 'newspaper', 0, array('params' => $params));
+        $section = new tx_newspaper_Section($params['row']['uid']);
+        $path = $section->getFormattedRootline(false);
+        $params['title'] = $section->getAttribute('section_name') . ($path? ' (' . $path . ')' : '');
+    }
+
 	/// Typo3  hooks
 
 	/// \todo: documentation

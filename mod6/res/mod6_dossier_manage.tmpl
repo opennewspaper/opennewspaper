@@ -135,7 +135,7 @@
 	<span id="dossier_section_label"></span><span id="dossier_section"></span><span id="dossier_section_dropdown">
 	<select name="sections" id="sections">
 	{foreach from=$SECTIONS item=section}
-		<option value="{$section->getUid()}">{$section->getAttribute('section_name')}</option>
+		<option value="{$section->getUid()}" title="{foreach item=sectionPath from=$section->getSectionPath()|@array_reverse name=loop}{$sectionPath->getAttribute('section_name')}{if (!$smarty.foreach.loop.last)} / {/if}{/foreach}">{$section->getAttribute('section_name')}</option>
 	{/foreach}
 	</select>
 		<a href="#" onclick="NpManageDossier.storeDossierSection(); return false;">{$ICON.save}</a>

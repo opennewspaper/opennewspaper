@@ -631,7 +631,9 @@ body {
 				{foreach key=main_section_id item=main_section from=$SECTION2}
 					<select id="section2_{$main_section_id}" style="display:none;" size="9" onchange="setDefaultArticletype(this.value)">
 					{foreach key=sub_section_id item=sub_section from=$main_section}
-						<option value="{$sub_section->getUid()}"> {$sub_section->getAttribute('section_name')}</option>
+						<option value="{$sub_section->getUid()}"
+                                title="{foreach item=sectionPath from=$sub_section->getSectionPath()|@array_reverse name=loop}{$sectionPath->getAttribute('section_name')}{if (!$smarty.foreach.loop.last)} / {/if}{/foreach}"
+                         > {$sub_section->getAttribute('section_name')}</option>
 					{/foreach}
 					</select>
 				{/foreach}
