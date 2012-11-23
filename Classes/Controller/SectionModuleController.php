@@ -53,15 +53,21 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         if (intval($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
+            $this->view->assign('parent_section', $section->getParentSection());
+            $this->view->assign('articlelist_type', get_class($section->getArticleList()));
+            $this->view->assign('default_articletype', $section->getDefaultArticleType()->getUid());
+            $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
             if (isset($this->module_request['section_name'])) {
-                $this->view->assign('old_section_name', $section->getSectionName());
-                $this->view->assign('new_section_name', $this->module_request['section_name']);
-                $section->setAttribute('section_name', $this->module_request['section_name']);
+
+                $this->changeSectionName($section);
+                $this->changeParent($section);
+                $this->changeArticleListType($section);
+                $this->changeDefaultArticleType($section);
+
                 $section->store();
-                $this->flashMessageContainer->add(
-                    $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_edited')
-                );
+
+
             } else {
                 $this->module_request['section_name'] = $section->getSectionName();
             }
@@ -69,6 +75,71 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $this->view->assign('module_request', $this->module_request);
 
         }
+    }
+
+    private function changeSectionName(tx_newspaper_Section &$section) {
+
+        $this->view->assign('old_section_name', $section->getSectionName());
+        $this->view->assign('new_section_name', $this->module_request['section_name']);
+
+        if ($section->getSectionName() == $this->module_request['section_name']) return;
+
+        $old_name = $section->getSectionName();
+        $section->setAttribute('section_name', $this->module_request['section_name']);
+
+        $this->flashMessageContainer->add(
+            $old_name . ' -> ' . $this->module_request['section_name'],
+            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_name_changed')
+        );
+    }
+
+    private function changeParent(tx_newspaper_Section &$section) {
+
+        if (!intval($this->module_request['parent_section'])) return;
+
+        $old_parent = $section->getParentSection();
+        if ($old_parent->getUid() == intval($this->module_request['parent_section'])) return;
+
+        $new_parent = new tx_newspaper_Section($this->module_request['parent_section']);
+
+        $section->setAttribute('parent_section', $new_parent->getUid());
+
+        tx_newspaper_DB::getInstance()->updateRows(
+            'pages', 'uid = ' . $section->getTypo3PageID(),
+            array('pid' => $new_parent->getTypo3PageID())
+        );
+
+        $this->flashMessageContainer->add(
+            $old_parent->getFormattedRootline() . ' -> ' . $new_parent->getFormattedRootline(),
+            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section_changed')
+        );
+    }
+
+    private function changeArticleListType(tx_newspaper_Section &$section) {
+        if (strtolower(substr($this->module_request['articlelist_type'], 0, 24)) != 'tx_newspaper_articlelist') return;
+
+        $old_type = get_class($section->getArticleList());
+        $articlelist_type = $this->module_request['articlelist_type'];
+        $section->replaceArticleList(new $articlelist_type(0, $section));
+
+        $this->flashMessageContainer->add(
+            $old_type . ' -> ' . get_class($section->getArticleList()),
+            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_changed')
+        );
+    }
+
+    private function changeDefaultArticleType(tx_newspaper_Section &$section) {
+        if (!intval($this->module_request['default_articletype'])) return;
+        $old_article_type_id = $section->getAttribute('default_articletype');
+        if ($old_article_type_id == $this->module_request['default_articletype']) return;
+        $section->setAttribute('default_articletype', intval($this->module_request['default_articletype']));
+        $old_type = new tx_newspaper_ArticleType($old_article_type_id);
+        $new_type = new tx_newspaper_ArticleType($this->module_request['default_articletype']);
+        $this->flashMessageContainer->add(
+            $old_type->getAttribute('title') . ' -> ' . $new_type->getAttribute('title'),
+            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_type_changed')
+        );
+
     }
 
     /**

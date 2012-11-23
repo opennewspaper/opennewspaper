@@ -24,8 +24,10 @@
             <f:then>
                 <tr>
                     <td colspan="2">
+<!--
                         <f:translate arguments="{0: old_section_name, 1: new_section_name}"
                                      key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_edit_done" />
+-->
                     </td>
                 </tr>
             </f:then>
@@ -35,6 +37,8 @@
                 <f:if condition="{module_request.section}" >
 
                     <f:then>
+
+                        <!-- section name -->
                         <tr>
                             <td>
                                 <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new_section_name' />
@@ -44,17 +48,52 @@
                             </td>
                         </tr>
 
+                        <!-- parent section -->
+                        <tr>
+                            <td>
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.parent_section' />
+                            </td>
+                            <td>
+                                <f:form.select name="parent_section" options="{sections}" optionValueField="uid" optionLabelField="formattedRootline" value="{parent_section.uid}" />
+                            </td>
+                        </tr>
+
+                        <!-- article list type -->
+                        <tr>
+                            <td>
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.label' />
+                            </td>
+                            <td>
+                                <f:form.select name="articlelist_type"
+                                               options="{none: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.select\' />',
+                                                         tx_newspaper_ArticleList_Semiautomatic: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.auto\' />',
+                                                         tx_newspaper_ArticleList_Manual: '<f:translate key=\'LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.articlelist_type.manual\' />'}"
+                                               value="{articlelist_type}" />
+                            </td>
+                        </tr>
+
+                        <!-- default article type -->
+                        <tr>
+                            <td>
+                                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.default_articletype' />
+                            </td>
+                            <td>
+                                <f:form.select name="default_articletype" options="{article_types}" optionValueField="uid" optionLabelField="typeName" value="{default_articletype}" />
+                            </td>
+                        </tr>
+
                         <f:form.hidden name="section" value="{module_request.section}" />
 
                     </f:then>
 
                     <f:else>
+                        <!-- section to edit -->
                         <tr>
                             <td>
                                 <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_to_edit' />
                             </td>
                             <td>
-                                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="sectionName" value="{module_request.section}" />
+                                <f:form.select name="section" options="{sections}" optionValueField="uid" optionLabelField="formattedRootline" value="{module_request.section}" />
                             </td>
                         </tr>
                     </f:else>

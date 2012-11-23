@@ -28,6 +28,10 @@
             <label index="module.section.template_set">Template set</label>
             <label index="module.section.section_to_edit">Section to edit</label>
             <label index="module.section.section_edited">Section changed</label>
+            <label index="module.section.section_name_changed">Section name changed</label>
+            <label index="module.section.parent_section_changed">Parent section changed</label>
+            <label index="module.section.articlelist_changed">Article list type changed</label>
+            <label index="module.section.default_type_changed">Default article type changed</label>
             <label index="module.section.section_edit_done">Section "%s" renamed to "%s".</label>
             <label index="module.section.section_to_delete">Section to delete</label>
             <label index="module.section.section_deleted">Section successfully deleted</label>
@@ -70,6 +74,10 @@
             <label index="module.section.default_articletype">Default-Artikeltyp</label>
             <label index="module.section.section_to_edit">Zu bearbeitendes Ressort</label>
             <label index="module.section.section_edited">Ressort geändert</label>
+            <label index="module.section.section_name_changed">Ressortname geändert</label>
+            <label index="module.section.parent_section_changed">Elternressort geändert</label>
+            <label index="module.section.articlelist_changed">Artikelliste geändert</label>
+            <label index="module.section.default_type_changed">Standard-Artikeltyp geändert</label>
             <label index="module.section.section_edit_done">Ressort "%s" umbenannt zu "%s".</label>
             <label index="module.section.section_to_delete">Zu löschendes Ressort</label>
             <label index="module.section.section_deleted">Ressort erfolgreich gelöscht</label>
