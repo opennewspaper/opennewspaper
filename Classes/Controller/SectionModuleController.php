@@ -87,6 +87,11 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $old_name = $section->getSectionName();
         $section->setAttribute('section_name', $this->module_request['section_name']);
 
+        tx_newspaper_DB::getInstance()->updateRows(
+            'pages', 'uid = ' . $section->getTypo3PageID(),
+            array('title' => $this->module_request['section_name'])
+        );
+
         $this->flashMessageContainer->add(
             $old_name . ' -> ' . $this->module_request['section_name'],
             $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_name_changed')
