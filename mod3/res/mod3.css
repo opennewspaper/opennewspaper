@@ -59,6 +59,13 @@ body#ext-newspaper-mod6-index-php input.submit {
 	width:300px;
 }
 
+
+#publishButton {
+    margin-top:10px;
+    cursor: pointer;
+}
+
+
 </style>
 
 {/literal}

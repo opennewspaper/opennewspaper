@@ -593,31 +593,41 @@ class  tx_newspaper_module1 extends t3lib_SCbase {
 					die($this->fixDefaultTemplateSet());
 				break;
                 case 'depTree':
-                    die($this->callDepTree());
+                    $this->callDepTree();
                 break;
 			}
 		}
 
 
         /**
-         * Calls the dependeny tree fpr the config set in $this->input
-         * Implemeted:
-         * $this->input['type'] == 'extra', uid = uid of (abstract) Extra
-         * $this->input['type'] == 'tag', uid = uid of Tag
+         * Calls dependency tree for the config set in $this->input
+         * Implemented:
+         * $this->input['type'] == 'extra', 'uid': uid of (abstract) Extra
+         * $this->input['type'] == 'tag', 'uid': uid of Tag
+         * $this->input['type'] == 'pagezone_page', 'uid': uid of pagezone_page
          */
         private function callDepTree() {
+//t3lib_div::devlog('callDepTree()', 'newspaper', 0, array('input' => $this->input));
             switch(tx_newspaper::removeXSS($this->input['type'])) {
                 case 'extra':
                     $tree = tx_newspaper_DependencyTree::generateFromExtra(
                         tx_newspaper_Extra_Factory::getInstance()->create(intval($this->input['uid']))
                     );
                     $tree->executeActionsOnPages('tx_newspaper_Extra');
-                break;
+                    die(json_encode(array('success' => 1)));
+                    break;
                 case 'tag':
                     $tree = tx_newspaper_DependencyTree::generateFromTag(
                             new tx_newspaper_Tag(intval($this->input['uid']))
                     );
                     $tree->executeActionsOnPages('exportTags');
+                    die(json_encode(array('success' => 1)));
+                    break;
+                case 'pagezone_page':
+                    $pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($this->input['uid']));
+                    $tree = tx_newspaper_DependencyTree::generateFromPagezone($pz);
+                    $tree->executeActionsOnPages('tx_newspaper_Extra');
+                    die(json_encode(array('success' => 1)));
                 break;
                 default:
                     t3lib_div::devlog('callDepTree() - Unknown call', 'newspaper', 2, array('input' => $this->input));

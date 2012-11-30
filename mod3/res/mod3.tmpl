@@ -1,4 +1,4 @@
-{* debug *}
+{debug}
 
 <script type="text/javascript" src="contrib/prototype/prototype.js"> </script>
 {include file="mod3.css"} {* css for processing extras *}
@@ -242,18 +242,7 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-	<!-- Section content -->
+<!-- Section content -->
 
 <div id="tx_newspaper_mod3">
 {if (!$IS_CONCRETE_ARTICLE)}
@@ -315,44 +304,49 @@ body {
 			{/if}
 
 {*
-// see #1655 \todo: nake tsconfigurable
+// see #1655 @todo: make tsconfigurable
 			{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
 				* dummy button for pagezone_page only *
 				<br /><br /><a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a>
 			{/if}
 *}
 
-			{* \todo, see #653 *}
+			{* @todo, see #653 *}
 		 	{* checkbox:deactivate moving and adding extras *}
 			{* checkbox:show visible extras only *}
 			{*	<input type="checkbox" {if $SHOW_VISIBLE_ONLY}checked="checked" {/if} onchange="javascript:toggle_show_visible_only(this.checked);" /> {$LABEL.show_visible_only} *}
 			{* dropdown:tagzone extra visibility (yes, no, only) *}
 
 
-{if $CLIPBOARD}
-<div id="clipboard">
+            {* Clipboard *}
+            {if $CLIPBOARD}
+            <div id="clipboard">
 
-<b>{$LABEL.clipboard}</b><br />
+            <b>{$LABEL.clipboard}</b><br />
 
-{if $CLIPBOARD.type == 'copy'}
-	{$LABEL.clipboard_copied}
-{else}
-	{$LABEL.clipboard_cut}
-{/if}<br />
+            {if $CLIPBOARD.type == 'copy'}
+                {$LABEL.clipboard_copied}
+            {else}
+                {$LABEL.clipboard_cut}
+            {/if}<br />
 
-{$CLIPBOARD_DATA.pz}<br />
-{$CLIPBOARD_DATA.e}<br />
+            {$CLIPBOARD_DATA.pz}<br />
+            {$CLIPBOARD_DATA.e}<br />
 
-<br />
+            <br />
 
-<a href="javascript:clear_clipboard();">{$CLEAR_CLIPBOARD_ICON} {$LABEL.clear_clipboard}</a>
-</div>
-{/if}
+            <a href="javascript:clear_clipboard();">{$CLEAR_CLIPBOARD_ICON} {$LABEL.clear_clipboard}</a>
+            </div>
+            {/if}
+
+
+            {* Publish button *}
+            <div id="publishButton">
+                <span onclick="top.NpBackend.callDepTreeForPagezone_page({$DATA[i].pagezone_id}); return false;">{$LABEL.publish}</span>
+            </div>
 
 
 		</div>  <!-- filter close-->
-
-
 
 
 

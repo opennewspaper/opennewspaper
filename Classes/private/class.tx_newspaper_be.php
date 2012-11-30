@@ -752,7 +752,8 @@ class tx_newspaper_BE {
             'clipboard_copied' => self::getTranslation('label_clipboard_copied'),
             'clear_clipboard' => self::getTranslation('label_clear_clipboard'),
             'extra_cut_paste_confirm' => self::getTranslation('message_cut_paste_confirm'),
-            'extra_copy_paste_confirm' => self::getTranslation('message_copy_paste_confirm')
+            'extra_copy_paste_confirm' => self::getTranslation('message_copy_paste_confirm'),
+            'publish' => self::getTranslation('label_publish')
         );
     }
 

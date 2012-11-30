@@ -25,6 +25,7 @@
 			<label index="label_cut">Cut extra</label>
 			<label index="label_copy_paste">Insert copied extra</label>
 			<label index="label_cut_paste">Move extra</label>
+			<label index="label_publish">Publish</label>
 			<label index="message_copy_paste_confirm">Do you really want to place the copied extra here?</label>
 			<label index="message_cut_paste_confirm">Do you really want to insert the cut extra here?</label>
 			<label index="label_clipboard">Clipboard</label>
@@ -86,6 +87,7 @@
 			<label index="label_cut">Web-Element ausschneiden</label>
 			<label index="label_copy_paste">Kopiertes Web-Element einfügen</label>
 			<label index="label_cut_paste">Web-Element verschieben</label>
+            <label index="label_publish">Publizieren</label>
 			<label index="message_copy_paste_confirm">Möchten Sie das kopierte Extra wirklich hier einfügen?</label>
 			<label index="message_cut_paste_confirm">Möchten Sie das ausgeschnittete Extra wirklich hierhin verschieben?</label>
 			<label index="label_clipboard">Zwischenablage</label>

@@ -405,19 +405,32 @@ var NpBackend = {
     /**
      * Call dependency tree via AJAX
      * Just the call gets triggered, the response is ignored
+     * If top.Backend object is available, a spinner shows the progress
      * @todo: Check if path is always working correctly
      * @param type String in 'tag', 'extra'; see callDepTree() in mod1/index.php
      * @param uid uid of record passed in type
      */
     callDepTree: function(type, uid) {
+        var localPath;
+        localPath = (path.indexOf('typo3conf/ext/newspaper') != -1)? path : path + 'typo3conf/ext/newspaper';
+
         var request = new Ajax.Request(
-       		path + "/mod1/index.php", {
+       		localPath + "/mod1/index.php", {
        			method: 'get',
-                parameters: "tx_newspaper_mod1[ajaxController]=depTree&tx_newspaper_mod1[type]=" + type + "&tx_newspaper_mod1[uid]=" + parseInt(uid)
-       		}
+                parameters: "tx_newspaper_mod1[ajaxController]=depTree&tx_newspaper_mod1[type]=" + type + "&tx_newspaper_mod1[uid]=" + parseInt(uid),
+                onCreate: function() {
+                    if (typeof(top.NpBackend) == 'object') {
+                        top.NpBackend.showProgress();
+                    }
+                },
+                onSuccess: function() {
+                    if (typeof(top.NpBackend) == 'object') {
+                        top.NpBackend.hideProgress();
+                    }
+                }
+            }
        	);
     },
-
     /**
      * Call dependency tree for a Tag via AJAX
      * Just the call gets triggered, the response is ignored
@@ -426,7 +439,6 @@ var NpBackend = {
     callDepTreeForTag: function(uid) {
         this.callDepTree('tag', uid);
     },
-
     /**
      * Call dependency tree for an Extra via AJAX
      * Just the call gets triggered, the response is ignored
@@ -434,6 +446,14 @@ var NpBackend = {
      */
     callDepTreeForExtra: function(uid) {
         this.callDepTree('extra', uid);
+    },
+    /**
+     * Call dependency tree for a pagezone_page via AJAX
+     * Just the call gets triggered, the response is ignored
+     * @param uid uid of pagezone_page
+     */
+    callDepTreeForPagezone_page: function(uid) {
+        this.callDepTree('pagezone_page', uid);
     }
 
 }
