@@ -59,7 +59,7 @@
 	<select name="tx_newspaper_mod6[section]">
 		<option value="0"{if $DATA.section == 0} selected="selected"{/if}></option>
 	{foreach from=$SECTIONS item=section}
-        <option value="{$section->getUid()}"{if $section->getUid() == $DATA.section} selected="selected"{/if}>{$section->getAttribute('section_name')} ({foreach item=sectionPath from=$section->getSectionPath()|@array_reverse name=loop}{$sectionPath->getAttribute('section_name')}{if (!$smarty.foreach.loop.last)} / {/if}{/foreach})</option>
+        <option value="{$section->getUid()}"{if $section->getUid() == $DATA.section} selected="selected"{/if}>{$section->getAttribute('section_name')} ({$section->getFormattedRootline(false)})</option>
 	{/foreach}
 	</select>
 	{if $ERROR.sectionMissing && $DATA.submitted}
