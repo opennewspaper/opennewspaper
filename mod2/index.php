@@ -268,7 +268,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
     private function addArticleInfo(array &$records) {
         for ($i = 0; $i < sizeof($records); $i++) {
             self::addWorkflowInfo($records[$i]);
-            $records[$i]['sections'] = $this->getSectionNames(intval($records[$i]['uid']));
+            $records[$i]['sections'] = $this->getSectionData(intval($records[$i]['uid']));
             $this->addTimeInfo($records[$i]);
         }
     }
@@ -298,14 +298,22 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         $record['workflowlog_all'] = tx_newspaper_workflow::getComments('tx_newspaper_article', $record['uid'], 0, 1);
     }
 
-    private function getSectionNames($article_uid) {
-        $a = new tx_newspaper_article($article_uid);
-     	$sections = $a->getSections();
-        array_walk($sections, array($this, 'extractSectionTitle'));
-     	return implode(', ', $sections);
+    /**
+     * Get section data array for given $articleUid
+     * @param $articleUid int Article uid
+     * @return array array('sectionTitle', 'sectionPath')
+     */
+    private function getSectionData($articleUid) {
+        $a = new tx_newspaper_article($articleUid);
+        $sectionData = array();
+     	foreach($a->getSections() as $section) {
+            $sectionData[] = array(
+                'sectionTitle' => $section->getAttribute('section_name'),
+                'sectionPath' => $section->getFormattedRootline()
+            );
+         }
+     	return $sectionData;
     }
-
-    private function extractSectionTitle(&$section, $key) { $section = $section->getAttribute('section_name'); }
 
     /**
      * Add information for time control given in $record (call by reference!)

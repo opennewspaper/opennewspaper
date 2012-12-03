@@ -137,7 +137,13 @@
 						{/if}
 					{/if}
 				<br />
-				{$DATA[i].sections}</p>
+
+				{* sections *}
+				{foreach from=$DATA[i].sections item=section name=sections}
+                    <span title="{$section.sectionPath}">{$section.sectionTitle}<span>{if !$smarty.foreach.sections.last}, {/if}
+				{/foreach}
+
+				</p>
 			</div>
 		</div>
 
