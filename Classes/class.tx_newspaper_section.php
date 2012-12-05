@@ -735,6 +735,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      */
     public function getSectionBackendLabel(&$params) {
 //t3lib_div::devlog('getSectionBackendLabel()', 'newspaper', 0, array('params' => $params));
+
+        if (strpos($params['row']['uid'], 'NEW') !== false) {
+            return ''; // New section in TCEForms, so no section record (so not section instance) yet
+        }
+
         $section = new tx_newspaper_Section($params['row']['uid']);
         $path = $section->getFormattedRootline(false);
         $params['title'] = $section->getAttribute('section_name') . ($path? ' (' . $path . ')' : '');
