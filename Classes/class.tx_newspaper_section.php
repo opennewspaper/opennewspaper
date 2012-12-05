@@ -261,8 +261,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$child =  new tx_newspaper_Section($section_uid['uid']);
 			$sections[] = $child;
 			if ($recursive) {
-				$sections = array_merge($sections,
-									 	$child->getChildSections($recursive));
+                $sections = array_merge($sections, $child->getChildSections(true));
 			}
 		}
 

@@ -33,14 +33,15 @@
                                 {* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
 
 
-                                {if $isde ||
-                                    (($smarty.foreach.levelloop.index >= 3 && $smarty.foreach.levelloop.index >= $allowed_placement_level) ||
-                                     ($smarty.foreach.levelloop.index == 2 && $allowed_placement_level <= 1) ||
-                                     ($smarty.foreach.levelloop.index == 1 && $allowed_placement_level <= 2))
-                                    && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")
-                                }
+                                <tr>
+
+                                    {if $isde ||
+                                        (($smarty.foreach.levelloop.index >= 3 && $smarty.foreach.levelloop.index >= $allowed_placement_level) ||
+                                         ($smarty.foreach.levelloop.index == 2 && $allowed_placement_level <= 1) ||
+                                         ($smarty.foreach.levelloop.index == 1 && $allowed_placement_level <= 2))
+                                        && isset($section.articlelist) && ($section.listtype|lower == "tx_newspaper_articlelist_semiautomatic" || $section.listtype|lower == "tx_newspaper_articlelist_manual")
+                                    }
                                     {* duty editor, article list available, class for article list is known *}
-                                    <tr>
                                         <td>
                                             {section name=i start=0 step=1 loop=$AL_HEIGHT}
                                                 <div class="counter">{$smarty.section.i.iteration}</div>
@@ -90,9 +91,7 @@
                                                 </a>
                                             {/if}
                                         </td>
-                                    </tr>
-                                {else}
-                                    <tr>
+                                    {else}
                                         <td>
                                             {if ($smarty.foreach.levelloop.index >= 3 && $smarty.foreach.levelloop.index < $allowed_placement_level) ||
                                                 ($smarty.foreach.levelloop.index == 2 && $allowed_placement_level > 1) ||
@@ -107,8 +106,9 @@
                                                 <i class="noaccess">{$lang.message_unknown_articlelisttype}</i><br />
                                             {/if}
                                         </td>
-                                    </tr>
-                                {/if}
+                                    {/if}
+
+                                </tr>
 
                             {/if}
 

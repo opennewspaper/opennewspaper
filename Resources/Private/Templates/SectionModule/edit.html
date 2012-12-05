@@ -5,7 +5,7 @@
                        title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' />" />
     <f:if condition="{0: old_section_name} != {0: ''}">
         <f:be.buttons.icon uri="{f:uri.action(action:'edit')}" icon="edit2"
-                           title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />" />
+                           title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit_section' />" />
     </f:if>
     <f:be.buttons.icon uri="{f:uri.action(action:'delete')}" icon="deletedok"
                        title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete' />" />
@@ -13,7 +13,7 @@
 
 <f:flashMessages renderMode="div" />
 
-<h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' /></h1>
+<h1><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit_section' /></h1>
 
 <f:form controller="SectionModule" action="edit" enctype="multipart/form-data">
 

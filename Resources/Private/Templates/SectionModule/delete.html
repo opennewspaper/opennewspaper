@@ -1,10 +1,10 @@
 {namespace np=Tx_Newspaper_ViewHelpers}
 
-<p style="text-align:right">
+<p style="text-align:right" xmlns:f="http://www.w3.org/1999/html">
     <f:be.buttons.icon uri="{f:uri.action(action:'new')}" icon="new_el"
                        title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.new' />" />
     <f:be.buttons.icon uri="{f:uri.action(action:'edit')}" icon="edit2"
-                       title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />" />
+                       title="<f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit_section' />" />
 </p>
 
 <f:flashMessages renderMode="div" />
@@ -23,30 +23,10 @@
 
             <f:else>
 
-                <f:if condition="{affected_pages}">
-
+                <f:if condition="{module_request.section}">
                     <f:then>
-                        <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_pages' /></h3>
-                        <f:for each="{affected_pages}" as="page">
-                            <p><np:pagetype object="{page}" /></p>
-                        </f:for>
-
-                        <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_articles' /></h3>
-                        <f:for each="{affected_articles}" as="article">
-                            <p>
-                                <f:format.number decimals="0"><np:attribute object="{article}" attribute="uid" /></f:format.number>:
-                                <np:attribute object="{article}" attribute="kicker" /> <np:attribute object="{article}" attribute="title" />
-                            </p>
-                        </f:for>
-
-                        <f:translate arguments='{0: affected_section.sectionname}'
-                                     key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_areyousure" />
-
                         <f:form.hidden name="section" value="{module_request.section}" />
-                        <f:form.hidden name="confirm" value="1" />
-
                     </f:then>
-
                     <f:else>
                         <tr>
                             <td>
@@ -57,12 +37,90 @@
                             </td>
                         </tr>
                     </f:else>
+                </f:if>
+
+                <f:if condition="{child_sections -> f:count()} > 0">
+                    <tr><td colspan="2">
+                        <h3><span style="color:red">
+                            <f:translate key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_child_sections" />
+                        </span></h3>
+                    </td> </tr>
+                        <f:for each="{child_sections}" as="section">
+                            <tr>
+                                <td>
+                                    <np:attribute object="{section}" attribute="section_name" />
+                                </td>
+                                <td>
+                                    <a href='/typo3/mod.php?M=txnewspaperMmain_NewspaperSectionmodule&tx_newspaper_txnewspapermmain_newspapersectionmodule[action]=delete&tx_newspaper_txnewspapermmain_newspapersectionmodule[controller]=SectionModule&tx_newspaper_txnewspapermmain_newspapersectionmodule[section]=<np:attribute object="{section}" attribute="uid" />'
+                                       target="_blank">
+                                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete' />
+                                    </a>
+                                </td>
+                            </tr>
+                        </f:for>
+                </f:if>
+
+
+                <f:if condition="{loose_articles -> f:count()} > 0">
+                    <tr><td colspan="2">
+                        <h3><span style="color:red">
+                            <f:translate key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_loose_articles" />
+                        </span></h3>
+                    </td> </tr>
+
+                    <f:for each="{loose_articles}" as="article">
+                        <tr>
+                            <td>
+                                <f:format.number decimals="0"><np:attribute object="{article}" attribute="uid" /></f:format.number>:
+                                <np:attribute object="{article}" attribute="kicker" /> <np:attribute object="{article}" attribute="title" />
+                            </td>
+                            <td>
+                                <span style=”text-decoration:underline;”>
+                                    <a href='/typo3/alt_doc.php?returnUrl=/typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][<np:attribute object="{article}" attribute="uid" />]=edit'
+                                       target="_blank">
+                                        <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.edit' />
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    </f:for>
+                </f:if>
+
+                <f:if condition="{affected_pages}">
+
+                    <f:then>
+                        <tr><td colspan="2">
+                            <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_pages' /></h3>
+                        </td> </tr>
+                        <f:for each="{affected_pages}" as="page">
+                            <tr><td><np:pagetype object="{page}" /></td></tr>
+                        </f:for>
+
+                        <tr><td colspan="2">
+                            <h3><f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_affected_articles' /></h3>
+                        </td> </tr>
+                        <f:for each="{affected_articles}" as="article">
+                            <tr><td>
+                                <f:format.number decimals="0"><np:attribute object="{article}" attribute="uid" /></f:format.number>:
+                                <np:attribute object="{article}" attribute="kicker" /> <np:attribute object="{article}" attribute="title" />
+                            </td></tr>
+                        </f:for>
+
+                        <tr><td colspan="2">
+                            <f:translate arguments='{0: affected_section.sectionname}'
+                                         key="LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.delete_areyousure" />
+                        </td> </tr>
+
+                        <f:form.hidden name="confirm" value="1" />
+
+                    </f:then>
 
                 </f:if>
 
+                <tr><td>&nbsp;</td></tr>
                 <tr>
-                    <td colspan="2">
-                        <f:form.submit name="submit" value="Submit" />
+                    <td colspan="2" style="text-align:center">
+                        <f:render partial="submit_or_refresh" arguments="{loose_articles: loose_articles, child_sections: child_sections, section: module_request.section}" />
                     </td>
                 </tr>
 

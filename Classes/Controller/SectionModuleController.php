@@ -151,14 +151,22 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function deleteAction() {
+        tx_newspaper::devlog("delete", $this->module_request);
         $this->view->assign('sections', $this->sections);
         if (!empty($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
+            $children = $section->getChildSections();
+            $loose_articles = self::getArticlesWithOnlySection($section);
+            tx_newspaper::devlog("children", $children);
+            tx_newspaper::devlog("loose Articles", $loose_articles);
+            $this->view->assign('child_sections', $children);
+            $this->view->assign('loose_articles', $loose_articles);
+                // http://localhost/typo3/alt_doc.php?returnUrl=//typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][104493]=edit
             $this->view->assign('affected_section', $section);
             $this->view->assign('affected_pages', $section->getSubPages());
             $this->view->assign('affected_articles', $section->getArticles(0));
 
-            if (intval($this->module_request['confirm']) == 1) {
+            if (intval($this->module_request['confirm']) == 1 && empty($children) && empty($loose_articles)) {
 
                 try {
                     $section_name = $section->getSectionName();
@@ -171,9 +179,17 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
                 }
 
             }
-
         }
         $this->view->assign('module_request', $this->module_request);
+    }
+
+    private static function getArticlesWithOnlySection(tx_newspaper_Section $section) {
+        $articles = $section->getArticles(0);
+        return array_filter($articles, 'Tx_newspaper_Controller_SectionModuleController::hasSeveralSections');
+    }
+
+    private static function hasSeveralSections(tx_newspaper_Article $article) {
+        return sizeof($article->getSections()) <= 1;
     }
 
     /**

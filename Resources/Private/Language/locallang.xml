@@ -13,7 +13,7 @@
 			<label index="mlang_labels_tabdescr">Creating and editing sections</label>
 			<label index="mlang_labels_tablabel">Creating and editing sections</label>
             <label index="module.section.new">Create new section</label>
-            <label index="module.section.edit">Edit Section</label>
+            <label index="module.section.edit_section">Edit Section</label>
             <label index="module.section.delete">Delete Section</label>
             <label index="module.section.title">Create and edit Sections</label>
             <label index="module.section.section_name">Section name</label>
@@ -40,6 +40,12 @@
             <label index="module.section.delete_areyousure">
                 If you are sure you want to delete section "%s", please hit Submit again!
             </label>
+            <label index="module.section.delete_child_sections">
+                Section cannot be deleted, because the following sections lie below it
+            </label>
+            <label index="module.section.delete_loose_articles">
+                Section cannot be deleted, because the following articles would be left without any section
+            </label>
             <label index="module.section.error.user_error">You made a mistake</label>
             <label index="module.section.error.system_error">Something is wrong with the system</label>
             <label index="module.section.error.multiple_section_pages">
@@ -53,6 +59,8 @@
                 Please enter a name for the new section.
             </label>
             <label index="module.section.success">Section ###SECTION### successfully created.</label>
+            <label index="module.section.edit">Edit</label>
+            <label index="module.section.refresh">Try again</label>
 		</languageKey>
 
         <languageKey index="de" type="array">
@@ -60,7 +68,7 @@
       		<label index="mlang_labels_tabdescr">Ressorts anlegen und editieren</label>
       		<label index="mlang_labels_tablabel">Ressorts anlegen und editieren</label>
             <label index="module.section.new">Neues Ressort anlegen</label>
-            <label index="module.section.edit">Ressort bearbeiten</label>
+            <label index="module.section.edit_section">Ressort bearbeiten</label>
             <label index="module.section.delete">Ressort löschen</label>
             <label index="module.section.title">Ressorts anlegen und bearbeiten</label>
             <label index="module.section.section_name">Name des Ressorts</label>
@@ -90,6 +98,12 @@
             <label index="module.section.delete_areyousure">
                 Wenn Sie sicher sind, dass Sie Ressort "%s", löschen wollen, drücken sie bitte nochmal "Submit"!
             </label>
+            <label index="module.section.delete_child_sections">
+                Ressort kann nicht gelöscht werden, weil die folgenden Ressorts darunter liegen
+            </label>
+            <label index="module.section.delete_loose_articles">
+                Ressort kann nicht gelöscht werden, weil die folgenden Artikel dann kein Ressort mehr hätten
+            </label>
             <label index="module.section.template_set">Template Set</label>
             <label index="module.section.error.user_error">Eingabefehler</label>
             <label index="module.section.error.system_error">Das System ist korrupt</label>
@@ -104,6 +118,8 @@
                 Bitte einen Namen für das neue Ressort eingeben.
             </label>
             <label index="module.section.success">Ressort ###SECTION### erfolgreich angelegt.</label>
+            <label index="module.section.edit">Editieren</label>
+            <label index="module.section.refresh">Nochmals versuchen</label>
       	</languageKey>
 
 	</data>

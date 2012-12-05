@@ -1,0 +1,23 @@
+<f:if condition="<f:count subject='{child_sections}' /> == 0">
+    <f:then>
+        <f:if condition="<f:count subject='{loose_articles}' /> == 0">
+            <f:then>
+                <f:form.submit name="submit" value="Submit" />
+            </f:then>
+            <f:else>
+                <button>
+                <a href="/typo3/mod.php?M=txnewspaperMmain_NewspaperSectionmodule&tx_newspaper_txnewspapermmain_newspapersectionmodule[action]=delete&tx_newspaper_txnewspapermmain_newspapersectionmodule[controller]=SectionModule&tx_newspaper_txnewspapermmain_newspapersectionmodule[section]={section}">
+                    <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.refresh' />
+                </a>
+                </button>
+            </f:else>
+        </f:if>
+    </f:then>
+    <f:else>
+        <button>
+        <a href="/typo3/mod.php?M=txnewspaperMmain_NewspaperSectionmodule&tx_newspaper_txnewspapermmain_newspapersectionmodule[action]=delete&tx_newspaper_txnewspapermmain_newspapersectionmodule[controller]=SectionModule&tx_newspaper_txnewspapermmain_newspapersectionmodule[section]={section}">
+            <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.refresh' />
+        </a>
+        </button>
+    </f:else>
+</f:if>
