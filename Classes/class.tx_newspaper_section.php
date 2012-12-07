@@ -357,7 +357,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
  	/// gets an array of sections up the rootline
 	/// \return array tx_newspaper_Section objects, up the rootline
-	public function getSectionPath($path = array()) {
+	public function getSectionPath(array $path = array()) {
 		$path[] = $this;
 		if (is_null($this->getParentSection())) return $path;
         return $this->getParentSection()->getSectionPath($path);

@@ -25,7 +25,7 @@ class tx_newspaper_PlacementBE {
     public function renderSingle() {
         if (intval($this->input['fullrecord'])) return $this->renderListviewBE();
 
-        if (intval($this->input['sectionid'])) return $this->renderSectionList();
+        if (intval($this->input['sectionid'])) return $this->renderSectionListFromInput();
 
         if (intval($this->input['articlelistid'])) return $this->renderArticleList();
 
@@ -41,10 +41,15 @@ class tx_newspaper_PlacementBE {
      *  if not, a button to call the article browser is displayed.
      */
     public function render() {
-        $this->smarty->assign('tree', self::getSectionTree($this->input));
+        $this->smarty->assign('tree', $this->getSectionTree($this->input));
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
-        return $this->smarty->fetch('mod7_placement_section.tpl');
+        $mask = $this->smarty->fetch('mod7_placement_section.tpl');
+
+        $file = new tx_newspaper_File('/tmp/sections.html');
+        $file->write($mask);
+
+        return $mask;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -61,8 +66,12 @@ class tx_newspaper_PlacementBE {
         return $this->smarty->fetch('mod7_listview.tmpl');
     }
 
-    private function renderSectionList() {
-        $this->smarty->assign('rendered_al', $this->renderSection(new tx_newspaper_Section($this->input['sectionid'])));
+    private function renderSectionListFromInput() {
+        return $this->renderSectionList(new tx_newspaper_Section($this->input['sectionid']));
+    }
+
+    private function renderSectionList(tx_newspaper_Section $section) {
+        $this->smarty->assign('rendered_al', $this->renderSection($section));
         return $this->smarty->fetch('mod7_placement_single.tmpl');
     }
 
@@ -82,10 +91,28 @@ class tx_newspaper_PlacementBE {
         return $this->smarty->fetch('mod7_section.tmpl');
     }
 
-    private static function getSectionTree(array $input) {
+    private function renderSectionObject(tx_newspaper_Section $section) {
+        $article = self::getArticleForPlacement($this->input);
+        $this->smarty->assign('sect', $section);
+        $this->smarty->assign('placed_article', $article);
+        $this->smarty->assign('article_placed_already', self::sectionListContainsArticle($article, $section));
+        $this->smarty->assign('level', sizeof($section->getRootLine())+1);
+        return $this->smarty->fetch('mod7_section_object.tmpl');
+    }
+
+    /** this manual checking routine became necessary when i got weird server crashes with in_array(). */
+    private static function sectionListContainsArticle(tx_newspaper_Article $article, tx_newspaper_Section $section) {
+        $articles = $section->getArticleList()->getArticles(self::getArticleListHeight());
+        foreach ($articles as $testing) {
+            if ($testing->getUid() == $article->getUid()) return true;
+        }
+        return false;
+    }
+
+    private function getSectionTree(array $input) {
         if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
             $tree = array_reverse(self::calculatePlacementTreeFromSelection($input['sections_selected']));
-            return self::fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
+            return $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
         }
         return array();
     }
@@ -169,11 +196,11 @@ class tx_newspaper_PlacementBE {
 	}
 
 	/// get article and offset lists for a set of sections
-	private static function fillPlacementWithData($tree, $articleId) {
+	private function fillPlacementWithData($tree, $articleId) {
 		for ($i = 0; $i < count($tree); ++$i) {
 			for ($j = 0; $j < count($tree[$i]); ++$j) {
 				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
-                    $tree[$i][$j][$k] = self::fillPlacementElementWithData($tree[$i][$j][$k], $articleId, ($k + 1) == count($tree[$i][$j]));
+                    $tree[$i][$j][$k] = $this->fillPlacementElementWithData($tree[$i][$j][$k], $articleId, ($k + 1) == count($tree[$i][$j]));
                 }
 			}
 		}
@@ -182,8 +209,8 @@ class tx_newspaper_PlacementBE {
 	}
 
     /// get data (for title display) for each section
-    private static function fillPlacementElementWithData(array $element, $articleId, $fill_articlelist) {
-        $element['section'] = new tx_newspaper_section($element['uid']);
+    private function fillPlacementElementWithData(array $element, $articleId, $fill_articlelist) {
+        $element['section'] = new tx_newspaper_Section($element['uid']);
         // add article list and list type to tree structure for last element only
         if ($fill_articlelist) {
             $element['listtype'] = get_class($element['section']->getArticleList());
@@ -196,6 +223,7 @@ class tx_newspaper_PlacementBE {
                 // but an article is ALWAYS placed in a semi-auto list ...
                 $element['article_placed_already'] = true;
             }
+            $element['rendered_section'] = $this->renderSectionObject($element['section']);
         }
         return $element;
     }
