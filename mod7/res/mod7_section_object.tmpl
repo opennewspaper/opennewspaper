@@ -2,7 +2,7 @@
 {* template for single section article list *}
 
 {*
-    $section    section object
+    $sect       section object
     $placed_article    article object
     $article_placed_already
     $AL_HEIGHT  int
@@ -29,6 +29,11 @@
 
 {assign var="article_list" value=$sect->getArticleList()}
 
+<tr>
+    <th scope="col" colspan="3">
+        {$sect->getFormattedRootline()}
+    </th>
+</tr>
 <tr>
 
     {if $isde || $level >= $allowed_placement_level}
