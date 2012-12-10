@@ -625,7 +625,7 @@ t3lib_div::devlog('lPZWPZT art', 'newspaper', 0);
         if (empty($records)) return null;
 
         $pz = self::restorePagezoneFromRecord($records[0], $type);
-        $pz->changeParent($pz->getParentForPlacement());
+        $pz->changeParent($pz->getParentForPlacement()->getUid());
 
         return $pz;
     }

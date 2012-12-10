@@ -803,7 +803,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 	/// Change parent Page Zone
 	/** - Hide Extras placed on this Page Zone
 	 *  - Inherit Extras from new parent
-	 *  \param $parent_uid UID of parent Page Zone, or if 0, inherit from next
+	 *  @param int $parent_uid uid of parent Page Zone, or if 0, inherit from next
 	 *      page zone above, or if < 0, don't inherit at all
  	 */
 	public function changeParent($new_parent_uid) {
