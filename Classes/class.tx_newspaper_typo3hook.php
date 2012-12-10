@@ -149,13 +149,25 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 			$this->checkIfPageTypeCanBeDeleted($table, $id);
 			$this->checkIfPageZoneTypeCanBeDeleted($table, $id);
 /// \todo: check if articles are assigned to section
-/// \todo: check if pages are assigned to section
 
 			// Pass hook to newspaper classes
 			tx_newspaper_extra::processCmdmap_preProcess($command, $table, $id, $value, $pObj);
             tx_newspaper_Article::processCmdmap_preProcess($command, $table, $id, $value, $pObj);
 		}
 	}
+
+    /**
+     * Typo3 hook
+     * @param $table A record from this table should be deleted
+     * @param $id uid of record
+     * @param $recordToDelete Record read from db
+     * @param $recordWasDeleted Flag whether or not the record should be deleted (called by reference!)
+     * @param $pObj Parent object
+     */
+    function processCmdmap_deleteAction($table, $id, &$recordToDelete, &$recordWasDeleted, $pObj) {
+        $this->checkIfTypo3PageCanBeDeleted($table, $id, $recordToDelete, $recordWasDeleted);
+    }
+
 
 	function processDatamap_afterAllOperations($that) {
         $timer = tx_newspaper_ExecutionTimer::create();
@@ -178,8 +190,42 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 
 	function releaseLocks($table, $uid, $user_id, $doSave) {
-t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' => $table, 'uid' => $uid, 'user_id' => $user_id, 'doSave' => $doSave));
+//t3lib_div::devlog('np releaseLocks()', 'newspaper', 0, array('table' =>/**/ $table, 'uid' => $uid, 'user_id' => $user_id, 'doSave' => $doSave));
 	}
+
+
+    /**
+     * Checks if Typo3 page to be deleted is linked to a newspaper section. If yes, the page CAN'T be deleted.
+     * @param string $table Table name in hook call
+     * @param integer $id u6id in given $table
+     * @param array $record Typo3 page record
+     */
+    private function checkIfTypo3PageCanBeDeleted($table, $id, &$recordToDelete, &$recordWasDeleted) {
+        if ($table == 'pages') {
+
+            $section = new tx_newspaper_Section(intval($recordToDelete['tx_newspaper_associated_section']));
+
+            try {
+                $section->getAttribute('uid'); // Make sure the section is read from db
+
+                // Still here? So a newspaper section is associated to this Typo3 page
+                $recordWasDeleted = true; // Set to true in order ro PREVENT the record to be deleted
+
+                // Flash message
+                $message = t3lib_div::makeInstance(
+                    't3lib_FlashMessage',
+                    tx_newspaper::getTranslation('flashMessage_typo3_page_cant_be_deleted_message'),
+                    tx_newspaper::getTranslation('flashMessage_typo3_page_cant_be_deleted_header'),
+                    t3lib_FlashMessage::ERROR);
+
+                die(tx_newspaper_BE::getBackendCSS() . $message->render()); // Render content
+
+            } catch (tx_newspaper_EmptyResultException $e) {
+                return; // NO section found, Typo3 page can be deleted
+            }
+        }
+    }
+
 
 	/// the checkbox is_article in pagezonetype can't be unchecked once it was set
 	/** \param $table table name in hook

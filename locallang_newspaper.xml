@@ -129,6 +129,8 @@
             <label index="flashMessage_extra_flexform_no_folder_configured">No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">The selected Flexform template is archived. Changing the Flexform template can't be undone.</label>
             <label index="flashMessage_extra_flexform_file_not_found">Neither active nor archived data structure file "%s.xml" can be found.</label>
+            <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
+            <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
@@ -227,7 +229,8 @@
             <label index="flashMessage_extra_flexform_no_folder_configured">Kein Verzeichnis konfiguriert. Bitte setzen Sie Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">Die ausgewählte Flexform-Vorlage ist archiviert. Eine Änderung der Vorlagen-Auswahl kann nicht rückgängig gemacht werden.</label>
             <label index="flashMessage_extra_flexform_file_not_found">Weder die aktive noch die archivierte Datenstruktur "%s.xml" exisitert.</label>
-
+            <label index="flashMessage_typo3_page_cant_be_deleted_header">Diese Seite kann nicht gelöscht werden, ...</label>
+            <label index="flashMessage_typo3_page_cant_be_deleted_message">... weil ein aktives Newspaper-Ressort mit dieser Seite verbunden ist. Bitte nutzen Sie das Newspaper-Ressortmodul, um das Ressort und diese Seite zu löschen.</label>
 		</languageKey>
 
 	</data>

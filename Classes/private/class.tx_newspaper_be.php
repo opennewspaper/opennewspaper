@@ -28,6 +28,25 @@ class tx_newspaper_BE {
 
     const clipboardKey = 'tx_newspaper/mod3/index.php/clipboard'; // store data in be_user
 
+
+    /**
+     * Get a little Typo3 backend CSS in order to render Flash messages with a die() statement
+     * @return string CSS files and code
+     */
+    public static function getBackendCSS() {
+        return '        <link rel="stylesheet" type="text/css" href="/taz45x/' . TYPO3_mainDir  . 'sysext/t3skin/stylesheets/structure/element_message.css" />
+        <link rel="stylesheet" type="text/css" href="/taz45x/' . TYPO3_mainDir  . 'sysext/t3skin/stylesheets/visual/element_message.css" />
+        <style>
+        body {
+          color: black;
+          font-family: Verdana,Arial,Helvetica,sans-serif;
+          font-size: 11px;
+          line-height: 14px;
+        }
+        </style>';
+    }
+
+
 /// backend: render list of pages and pagezones for section
 
 
