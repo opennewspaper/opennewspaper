@@ -22,13 +22,23 @@
                     <div class="level level{$smarty.foreach.levelloop.iteration}" id="al{foreach from=$sections item="section" name="sectionloop"}{if $smarty.foreach.sectionloop.last}{$section.section->getUid()}{/if}{/foreach}">
                         {if $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
                             {* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
+
                             <div class="level level{$smarty.foreach.levelloop.iteration}"
                                  id="al{$section.section->getUid()}">
 
                                 {$section.rendered_section}
 
                             </div>
+                        {else}
+                            {* hide complete div
+                            <style>
+                                #al_folded_{$section.section->getUid()} {ldelim}
+                                display:none;
+                                {rdelim}
+                            </style>
+                        *}
                         {/if}
+
                     </div>
                 {/foreach}
             </td>
