@@ -19,12 +19,16 @@
         {foreach from=$tree item="level" name="levelloop"}
             <td valign="top" class="level">
                 {foreach from=$level item="sections" name="sectionsloop"}
-                    {foreach from=$sections item="section" name="sectionloop"}{/foreach}
-                    <div class="level level{$smarty.foreach.levelloop.iteration}"
-                         id="al{$section.section->getUid()}">
+                    <div class="level level{$smarty.foreach.levelloop.iteration}" id="al{foreach from=$sections item="section" name="sectionloop"}{if $smarty.foreach.sectionloop.last}{$section.section->getUid()}{/if}{/foreach}">
+                        {if $section.listtype|lower != "tx_newspaper_articlelist_semiautomatic"}
+                            {* if article list is of type semiautomatic it was configured, that these lists are rendered here too *}
+                            <div class="level level{$smarty.foreach.levelloop.iteration}"
+                                 id="al{$section.section->getUid()}">
 
-                        {$section.rendered_section}
+                                {$section.rendered_section}
 
+                            </div>
+                        {/if}
                     </div>
                 {/foreach}
             </td>
