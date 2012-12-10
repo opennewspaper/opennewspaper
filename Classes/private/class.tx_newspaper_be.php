@@ -34,7 +34,7 @@ class tx_newspaper_BE {
      * @return string CSS files and code
      */
     public static function getBackendCSS() {
-        return '        <link rel="stylesheet" type="text/css" href="/taz45x/' . TYPO3_mainDir  . 'sysext/t3skin/stylesheets/structure/element_message.css" />
+        return '        <link rel="stylesheet" type="text/css" href="' . tx_newspaper::getBasePath() . TYPO3_mainDir  . 'sysext/t3skin/stylesheets/structure/element_message.css" />
         <link rel="stylesheet" type="text/css" href="/taz45x/' . TYPO3_mainDir  . 'sysext/t3skin/stylesheets/visual/element_message.css" />
         <style>
         body {
