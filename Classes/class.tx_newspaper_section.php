@@ -356,7 +356,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  	}
 
  	/// gets an array of sections up the rootline
-	/// \return array tx_newspaper_Section objects, up the rootline
+	/// \return tx_newspaper_Section[] up the rootline
 	public function getSectionPath(array $path = array()) {
 		$path[] = $this;
 		if (is_null($this->getParentSection())) return $path;
@@ -693,9 +693,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
         $rootLine = array_reverse($this->getSectionPath()); // Get complete rootline path
 
-        if (!(bool)$includeLastSection) {
-            $rootLine = array_slice($rootLine, 0, sizeof($rootLine)-1); // Remove last section
-        }
+        if (!$includeLastSection) array_pop($rootLine);
 
         $path = '';
         foreach($rootLine as $key => $section) {

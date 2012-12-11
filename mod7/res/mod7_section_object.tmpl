@@ -14,7 +14,7 @@
 *}
 
 
-{* it is extremely annoying to assemble the reverse section path ids in smarty. suggestions for improvement are welcome. *}
+{* assembling the reverse section path ids in smarty is extremely annoying. suggestions for improvement are welcome. *}
 {assign var="section_path" value=""}
 {assign var="path" value=$sect->getSectionPath()}
 {section name=i loop=$path step=-1}
@@ -53,7 +53,7 @@
                         <option value="{$art->getUid()}"
                                 label="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}"
                                 title="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}">
-                            {$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')}
+                            {$art->getAttribute('kicker')}: {$art->getAttribute('title')}
                         </option>
                     {/foreach}
 
