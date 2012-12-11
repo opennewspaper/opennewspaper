@@ -95,7 +95,9 @@ class tx_newspaper_PlacementBE {
         $article = self::getArticleForPlacement($this->input);
         $this->smarty->assign('sect', $section);
         $this->smarty->assign('placed_article', $article);
-        $this->smarty->assign('article_placed_already', self::sectionListContainsArticle($article, $section));
+	if (!is_null($article)) {
+            $this->smarty->assign('article_placed_already', self::sectionListContainsArticle($article, $section));
+	}
         $this->smarty->assign('level', sizeof($section->getRootLine())+1);
         return $this->smarty->fetch('mod7_section_object.tmpl');
     }
