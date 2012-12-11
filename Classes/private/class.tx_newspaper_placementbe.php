@@ -9,6 +9,17 @@
  */
 class tx_newspaper_PlacementBE {
 
+    /**
+     *  Possible GET-variables:
+     *  - fullrecord
+     *  - sectionid
+     *  - articlelistid
+     *  - sections_selected
+     *  - placearticleuid
+     *  - ajaxcontroller == 'showplacementandsavesections'
+     *
+     *  @param $input
+     */
     public function __construct($input) {
         $this->input = $input;
         $this->smarty = new tx_newspaper_Smarty();
@@ -25,7 +36,7 @@ class tx_newspaper_PlacementBE {
     public function renderSingle() {
         if (intval($this->input['fullrecord'])) return $this->renderListviewBE();
 
-        if (intval($this->input['sectionid'])) return $this->renderSectionListFromInput();
+        if (intval($this->input['sectionid'])) return $this->renderSectionList();
 
         if (intval($this->input['articlelistid'])) return $this->renderArticleList();
 
@@ -44,12 +55,7 @@ class tx_newspaper_PlacementBE {
         $this->smarty->assign('tree', $this->getSectionTree($this->input));
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
-        $mask = $this->smarty->fetch('mod7_placement_section.tpl');
-
-        $file = new tx_newspaper_File('/tmp/sections.html');
-        $file->write($mask);
-
-        return $mask;
+        return $this->smarty->fetch('mod7_placement_section.tpl');
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -66,12 +72,11 @@ class tx_newspaper_PlacementBE {
         return $this->smarty->fetch('mod7_listview.tmpl');
     }
 
-    private function renderSectionListFromInput() {
-        return $this->renderSectionList(new tx_newspaper_Section($this->input['sectionid']));
-    }
-
-    private function renderSectionList(tx_newspaper_Section $section) {
-        $this->smarty->assign('rendered_al', $this->renderSection($section));
+    private function renderSectionList() {
+        $this->smarty->assign(
+            'rendered_al',
+            $this->renderSectionObject(new tx_newspaper_Section($this->input['sectionid']), array('buttons' => true))
+        );
         return $this->smarty->fetch('mod7_placement_single.tmpl');
     }
 
@@ -85,38 +90,21 @@ class tx_newspaper_PlacementBE {
         return $this->smarty->fetch('mod7_placement_non_section.tpl');
     }
 
-    private function renderSection(tx_newspaper_Section $section) {
-        $this->smarty->assign('section', self::fillPlacementElementWithData(array('uid' => $section->getUid()), intval($this->input['articleid']), true));
-        $this->smarty->assign('level', sizeof($section->getRootLine())+1);
-        return $this->smarty->fetch('mod7_section.tmpl');
-    }
-
-    private function renderSectionObject(tx_newspaper_Section $section) {
-        $article = self::getArticleForPlacement($this->input);
+    private function renderSectionObject(tx_newspaper_Section $section, array $additional_options) {
         $this->smarty->assign('sect', $section);
-        $this->smarty->assign('placed_article', $article);
-	if (!is_null($article)) {
-            $this->smarty->assign('article_placed_already', self::sectionListContainsArticle($article, $section));
-	}
         $this->smarty->assign('level', sizeof($section->getRootLine())+1);
+        foreach ($additional_options as $key => $value) {
+            $this->smarty->assign($key, $value);
+        }
+
         return $this->smarty->fetch('mod7_section_object.tmpl');
     }
 
-    /** this manual checking routine became necessary when i got weird server crashes with in_array(). */
-    private static function sectionListContainsArticle(tx_newspaper_Article $article, tx_newspaper_Section $section) {
-        $articles = $section->getArticleList()->getArticles(self::getArticleListHeight());
-        foreach ($articles as $testing) {
-            if ($testing->getUid() == $article->getUid()) return true;
-        }
-        return false;
-    }
-
     private function getSectionTree(array $input) {
-        if (self::sectionArticleListRequested($input) || self::singleArticlePlacementRequested($input)) {
-            $tree = array_reverse(self::calculatePlacementTreeFromSelection($input['sections_selected']));
-            return $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
-        }
-        return array();
+        if (!self::sectionArticleListRequested($input) && !self::singleArticlePlacementRequested($input)) return array();
+
+        $tree = array_reverse(self::calculatePlacementTreeFromSelection($input['sections_selected']));
+        return $this->fillPlacementWithData($tree, $input['placearticleuid']); // is called no matter if $input['placearticleuid'] is set or not
     }
 
     private static function getArticlesFromListForPlacement(tx_newspaper_ArticleList $al) {
@@ -165,10 +153,10 @@ class tx_newspaper_PlacementBE {
 		return 'Error'; // \todo: localization
     }
 
-   	/// Gets the height (rows) for an article list select box
-	private static function getArticleListHeight() {
-		return 10; // \todo: make tsconfigurable
-	}
+    /// Gets the height (rows) for an article list select box
+    private static function getArticleListHeight() {
+        return 10; // \todo: make tsconfigurable
+    }
 
 
     private static function sectionArticleListRequested(array $input) {
@@ -179,55 +167,58 @@ class tx_newspaper_PlacementBE {
         return (isset($input['ajaxcontroller']) && $input['ajaxcontroller'] == 'showplacementandsavesections');
     }
 
-	/// calculate a "minimal" (tree-)list of sections
-	private static function calculatePlacementTreeFromSelection($selection) {
-		$result = array();
-
-		//\todo: re-arrange sorting here to achieve different positioning in frontend
-		for ($i = 0; $i < count($selection); ++$i) {
-			$selection[$i] = explode('|', $selection[$i]);
-			$ressort = array();
-			for ($j = 0; $j < count($selection[$i]); ++$j) {
-				$ressort[]['uid'] = $selection[$i][$j];
-				if(!isset($result[$j]) || !in_array($ressort, $result[$j])) {
-					$result[$j][] = $ressort;
-				}
-			}
-		}
-		return $result;
-	}
-
-	/// get article and offset lists for a set of sections
-	private function fillPlacementWithData($tree, $articleId) {
-		for ($i = 0; $i < count($tree); ++$i) {
-			for ($j = 0; $j < count($tree[$i]); ++$j) {
-				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
-                    $tree[$i][$j][$k] = $this->fillPlacementElementWithData($tree[$i][$j][$k], $articleId, ($k + 1) == count($tree[$i][$j]));
+    /// calculate a "minimal" (tree-)list of sections
+    private static function calculatePlacementTreeFromSelection(array $selections) {
+        $result = array();
+tx_newspaper::devlog('selections', $selections);
+        //\todo: re-arrange sorting here to achieve different positioning in frontend
+        foreach ($selections as $selection) {
+            $ressort = array();
+            foreach (explode('|', $selection) as $level=> $section_id) {
+                $ressort[] = $section_id;
+                if(!isset($result[$level]) || !in_array($ressort, $result[$level])) {
+                    $result[$level][] = $ressort;
+#                if(!isset($result[$level]) || !in_array($section_id, $result[$level])) {
+#                    $result[$level][] = $section_id;
                 }
-			}
-		}
+            }
+        }
+tx_newspaper::devlog('tree', $result);
+        return $result;
+    }
 
-		return $tree;
-	}
+    /// get article and offset lists for a set of sections
+    private function fillPlacementWithData($tree, $articleId) {
+        for ($i = 0; $i < count($tree); ++$i) {
+            for ($j = 0; $j < count($tree[$i]); ++$j) {
+                $k = count($tree[$i][$j])-1;
+                $tree[$i][$j][$k] = $this->fillPlacementElementWithData($tree[$i][$j][$k], $articleId);
+            }
+        }
+
+        return $tree;
+    }
 
     /// get data (for title display) for each section
-    private function fillPlacementElementWithData(array $element, $articleId, $fill_articlelist) {
-        $element['section'] = new tx_newspaper_Section($element['uid']);
-        // add article list and list type to tree structure for last element only
-        if ($fill_articlelist) {
-            $element['listtype'] = get_class($element['section']->getArticleList());
-            $element['articlelist'] = tx_newspaper_BE::getArticleListBySectionId($element['uid']);
-            if (strtolower($element['listtype']) == 'tx_newspaper_articlelist_manual') {
-                // flag to indicated if the article to be placed has already been placed in current article list
-                $element['article_placed_already'] = array_key_exists($articleId, $element['articlelist']);
-            } else {
-                // semi-auto list: key -> [offset]_[key], so array_key_exists check like for manual list won't work
-                // but an article is ALWAYS placed in a semi-auto list ...
-                $element['article_placed_already'] = true;
-            }
-            $element['rendered_section'] = $this->renderSectionObject($element['section']);
+    private function fillPlacementElementWithData($element, $articleId) {
+
+        $section = new tx_newspaper_Section($element);
+        $article = new tx_newspaper_Article($articleId);
+
+        return array(
+            'section' => $section,
+            'rendered_section' => $this->renderSectionObject(
+                        $section,
+                        array('placed_article' => $article, 'article_placed_already' => self::isArticleInSectionList($section, $article))
+                    )
+        );
+    }
+
+    private static function isArticleInSectionList(tx_newspaper_Section $section, tx_newspaper_Article $article) {
+        foreach ($section->getArticleList()->getArticles(self::getArticleListHeight()) as $art) {
+            if ($art->getUid() == $article->getUid()) return true;
         }
-        return $element;
+        return false;
     }
 
     private $input = array();
