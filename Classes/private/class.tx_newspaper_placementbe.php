@@ -23,7 +23,7 @@ class tx_newspaper_PlacementBE {
     public function __construct($input) {
         $this->input = $input;
         $this->smarty = new tx_newspaper_Smarty();
-        $this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
+        $this->smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/Resources/Private/Templates/PlacementBE/'));
         $this->smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
         $this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
         $this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
@@ -55,7 +55,7 @@ class tx_newspaper_PlacementBE {
         $this->smarty->assign('tree', $this->getSectionTree());
         $this->smarty->assign('article', self::getArticleForPlacement($this->input));
 
-        return $this->smarty->fetch('mod7_placement_section.tpl');
+        return $this->smarty->fetch('placement.tmpl');
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ class tx_newspaper_PlacementBE {
         }
 
         $this->smarty->assign('AL_BACKEND', self::getArticlelistListviewBackend($al));
-        return $this->smarty->fetch('mod7_listview.tmpl');
+        return $this->smarty->fetch('articlelist_listview.tmpl');
     }
 
     private function renderSectionList() {
@@ -77,7 +77,7 @@ class tx_newspaper_PlacementBE {
             'rendered_al',
             $this->renderSection(new tx_newspaper_Section($this->input['sectionid']), array('buttons' => true))
         );
-        return $this->smarty->fetch('mod7_placement_single.tmpl');
+        return $this->smarty->fetch('placement_section.tmpl');
     }
 
     private function renderArticleList() {
@@ -87,7 +87,7 @@ class tx_newspaper_PlacementBE {
             $this->smarty->assign('articlelist_type', strtolower($al->getTable()));
             $this->smarty->assign('articles', self::getArticlesFromListForPlacement($al));
         }
-        return $this->smarty->fetch('mod7_placement_non_section.tpl');
+        return $this->smarty->fetch('articlelist.tmpl');
     }
 
     private function getSectionTree() {
@@ -121,7 +121,7 @@ class tx_newspaper_PlacementBE {
             $this->smarty->assign($key, $value);
         }
 
-        return $this->smarty->fetch('mod7_section_object.tmpl');
+        return $this->smarty->fetch('section.tmpl');
     }
 
     private static function getArticlesFromListForPlacement(tx_newspaper_ArticleList $al) {

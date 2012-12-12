@@ -463,87 +463,12 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 
 		$current_artlist = new tx_newspaper_ArticleList_Semiautomatic(intval($PA['row']['uid']));
 
-		$articles_sorted = $current_artlist->getSortedArticles($current_artlist->getNumArticles());
-//t3lib_div::devlog('articles', 'newspaper', 0, array('articles_sorted' => $articles_sorted));
+ 	 	$smarty = new tx_newspaper_Smarty();
+		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
+		$smarty->assign('articles', $current_artlist->getSortedArticles($current_artlist->getNumArticles()));
+		$smarty->assign('message_empty', tx_newspaper::getTranslation('message_tx_newspaper_articlelist_empty'));
 
-		if (true) {
-	 	 	$smarty = new tx_newspaper_Smarty();
-			$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/res/be/templates'));
-			$smarty->assign('articles', $articles_sorted);
-			$smarty->assign('message_empty', tx_newspaper::getTranslation('message_tx_newspaper_articlelist_empty'));
-
-			return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
-		} else {
-			return $this->renderPlacement(array());
-		}
-	}
-
-	/// Renders the placement editors according to sections selected for article.
-	/** In comparison to the displayed ones in the form
-		\param $input \c t3lib_div::GParrayMerged('tx_newspaper_mod7')
-		\return ?
-	*/
-	function renderPlacement ($input) {
-		$selection = $input['sections_selected'];
-
-		$tree = array(array(array(array('articlelist'=> $this))));
-		/*
-		// calculate which / how many placers to show
-		$tree = $this->calculatePlacementTreeFromSelection($selection);
-		t3lib_div::devlog('tree 1', 'newspaper', 0, $tree);
-		// grab the data for all the places we need to display
-		$tree = $this->fillPlacementWithData($tree, $input['placearticleuid']);
-		t3lib_div::devlog('tree 2', 'newspaper', 0, $tree);
-		*/
-		// get ll labels
-		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod7/locallang.xml', $GLOBALS['LANG']->lang);
-		$localLang = $localLang[$GLOBALS['LANG']->lang];
-
-		// render
-		$smarty = new tx_newspaper_Smarty();
-		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
-		$smarty->assign('tree', $tree);
-		$smarty->assign('lang', $localLang);
-		$smarty->assign('isde', tx_newspaper_workflow::isDutyEditor());
-		$smarty->assign('T3PATH', tx_newspaper::getAbsolutePath());
-		return $smarty->fetch('mod7_placement_section.tpl');
-	}
-
-	/// Calculates a "minimal" (tree-)list of sections.
-	function calculatePlacementTreeFromSelection ($selection) {
-		$result = array();
-
-		for ($i = 0; $i < count($selection); ++$i) {
-			$selection[$i] = explode('|', $selection[$i]);
-			$ressort = array();
-			for ($j = 0; $j < count($selection[$i]); ++$j) {
-                $tmp = array('uid' => $selection[$i][$j]);
-				$ressort[] = $tmp;
-				if(!isset($result[$j]) || !in_array($ressort, $result[$j])) {
-					$result[$j][] = $ressort;
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	/// Get article and offset lists for a set of sections.
-	function fillPlacementWithData ($tree, $articleId) {
-		for ($i = 0; $i < count($tree); ++$i) {
-			for ($j = 0; $j < count($tree[$i]); ++$j) {
-				for ($k = 0; $k < count($tree[$i][$j]); ++$k) {
-					// get data (for title display) for each section
-					$tree[$i][$j][$k]['section'] = new tx_newspaper_section($tree[$i][$j][$k]['uid']);
-					// add article list and list type for last element only to tree structure
-					if (($k+1) == count($tree[$i][$j])) {
-						$tree[$i][$j][$k]['listtype'] = get_class($tree[$i][$j][$k]['section']->getArticleList());
-						$tree[$i][$j][$k]['articlelist'] = $this->getArticleListBySectionId ($tree[$i][$j][$k]['uid'], $articleId);
-					}
-				}
-			}
-		}
-		return $tree;
+		return $smarty->fetch('tx_newspaper_articlelist_semiautomatic.tmpl');
 	}
 
 	public function insertArticleAtPosition(tx_newspaper_ArticleIface $article, $pos = 0) {
@@ -946,10 +871,10 @@ DESC';
 		return $string;
 	}
 
-	static protected $table = 'tx_newspaper_articlelist_semiautomatic';	///< SQL table for persistence
+    static protected $table = 'tx_newspaper_articlelist_semiautomatic'; ///< SQL table for persistence
 
-	/// The UIDs of articles in the list in the order in which they are originally stored.
-	private $raw_uids = array();
+    /// The UIDs of articles in the list in the order in which they are originally stored.
+    private $raw_uids = array();
 
 }
 

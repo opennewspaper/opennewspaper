@@ -30,6 +30,7 @@ class tx_newspaper_BE {
 
 
     /**
+     * @todo no usages found - remove?
      * Get a little Typo3 backend CSS in order to render Flash messages with a die() statement
      * @return string CSS files and code
      */
@@ -51,6 +52,7 @@ class tx_newspaper_BE {
 
 
     /**
+     * @todo no usages found - remove?
      * Get label for abstract extras in backend (Typo3 TCA user function)
      * The label is set in $params (call by reference)
      * @param $params Data fetched by Typo3
@@ -186,7 +188,10 @@ class tx_newspaper_BE {
 
 /// template set functions
 
-	/// itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
+    /**
+     * @todo no usages found - remove?
+     * itemsProcFunc to fill templateset dropdowns in "normal" tceforms backend forms
+     */
 	function addTemplateSetDropdownEntries(&$params, &$pObj) {
 		$this->readTemplateSetItems($params);
 	}
@@ -279,8 +284,11 @@ class tx_newspaper_BE {
 
 /// pagezone inheritance source functions
 
-	/// itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
-	function addInheritancePageDropdownEntries(&$params, &$pObj) {
+    /**
+     * @todo no usages found - remove?
+     * itemsProcFunc to fill inheritance for pages dropdowns in "normal" tceforms backend forms
+     */
+    function addInheritancePageDropdownEntries(&$params, &$pObj) {
 		$this->readInheritancePageItems($params);
 	}
 
@@ -300,8 +308,11 @@ class tx_newspaper_BE {
 
 /// article list functions
 
-	/// render article list form for section backend
-	/// either called by userfunc in be or ajax
+    /**
+     * @todo no usages found - remove?
+     * render article list form for section backend
+     * either called by userfunc in be or ajax
+     */
 	public static function renderArticleList($PA, $fObj=null) {
 
 //t3lib_div::devlog('renderArticleList()', 'newspaper', 0, array('PA' => $PA));
@@ -418,13 +429,19 @@ class tx_newspaper_BE {
     }
 
 
-/// \todo: is this really needed?
-	/// render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)
-	function renderArticleKickerTtitleTeaser($PA, $fobj) {
+    /**
+     * @todo no usages found - remove?
+     * render dummy field for kicker, title and teaser in order to place these 3 field in 1 row (in a palette)
+     */
+    function renderArticleKickerTtitleTeaser($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
 		return '';
 	}
-	/// render dummy field for kicker, title and teaser in list views in order to place these 3 field in 1 row (in a palette)
+
+    /**
+     * @todo no usages found - remove?
+	 * render dummy field for kicker, title and teaser in list views in order to place these 3 field in 1 row (in a palette)
+     */
 	function renderArticleKickerTtitleTeaserForListviews($PA, $fobj) {
 //t3lib_div::devlog('renderArticleKickerTtitleTeaser()', 'newspaper', 0, array('PA' => $PA));
 		return '';
@@ -432,6 +449,8 @@ class tx_newspaper_BE {
 
 
 /**
+ * @todo no usages found - remove?
+ *
  * Userfunc for a texarea field in the backend with newspaper conf
  * Configuration array
  *  'type' => 'user'
@@ -479,7 +498,9 @@ class tx_newspaper_BE {
 
 
 /// Userfunc for a input field in the backend with newspaper conf
-/** WARNING: DOES NOT WORK FOR required FIELDS
+/**
+ * @todo no usages found - remove?
+ *  WARNING: DOES NOT WORK FOR required FIELDS
  *  Configuration array
  *  'type' => 'user'
  *  'userFunc' => 'tx_newspaper_be->renderInput'
@@ -508,7 +529,10 @@ class tx_newspaper_BE {
 
 
 
-/// function to render extras (article or pagezone_page)
+/**
+ * @todo only found in a commented out line in mod3_pagezone_article.tmpl - remove?
+ * function to render extras (article or pagezone_page)
+ */
 	function renderExtraInArticle($PA, $fobj) {
 		// create article
 		$article = new tx_newspaper_Article(intval($PA['row']['uid']));
@@ -907,6 +931,7 @@ class tx_newspaper_BE {
 
 
     /**
+     * @todo no usages found - remove?
      * "Replace" the tag backend created by the kickstarter with a backend offering an list for content tags and for
      * each control tag. All tags ared stored in a single field and split here into the tag types.
      *
@@ -1031,6 +1056,7 @@ class tx_newspaper_BE {
     }
 
     /**
+     * @todo no usages found - remove?
      * $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx_newspaper_be->getArticleTags';
      * @param $params
      * @param $pObj Parent object
@@ -1295,7 +1321,10 @@ JSCODE;
 
 
 
-	/// Adds workflow log input field and workflow log output to article backend
+	/**
+     * @todo no usages found - remove?
+     *  Adds workflow log input field and workflow log output to article backend
+     */
 	function getWorkflowCommentBackend($PA, $fobj) {
 //t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
 
@@ -1730,7 +1759,10 @@ JSCODE;
 
 	// Typo3 hooks
 
-	/// Do some clean up when user logs off Typo3, called by Typo3 log off hook
+	/**
+     * @todo no usages found - remove?
+     * Do some clean up when user logs off Typo3, called by Typo3 log off hook
+     */
 	public function cleanUpBeforeLogoff() {
 		self::clearClipboard();
 	}
