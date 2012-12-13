@@ -164,7 +164,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 				break;
 				case 'w_pz':
 					// wizard: activate/de-activate pagezones
-					$this->processWizardPagezone($input);
+					$this->processWizardPageZone($input);
 				break;
 				case 'w_inheritance':
 					// wizard: set inheritance source for pagezones
@@ -317,83 +317,116 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 
 	/** Renders/executes wizard: activate/de-activate pagezones
-	 *  \param $input array of get params formed like tx_nwespaper_mod5[...]
-	 *  \return Wizard page (steps within wizard or success message) (and processes commands)
+	 *  @param $input array of get params formed like tx_newspaper_mod5[...]:
+     *  controller 	        w_pz
+     *  section_uid         [uid]
+     *  section_uid         [uid]
+     *  pagetype_uid        [uid]
+     *  pagezonetype_uid    [uid]
+     *  action              [activatePz|deactivatePz]
+	 *  @return string HTML: Wizard page (steps within wizard or success message)
 	 */
-	private function processWizardPagezone(array $input) {
+	private function processWizardPageZone(array $input) {
 //t3lib_div::devlog('processWizardPagezone()', 'newspaper', 0, array('input' => $input));
 
-		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
+        $localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
 
-		// render basic form / display chosen page type and pagezone type
-		$backend = $this->renderWizardPagezoneSelector($input);
+        // Render basic form / display chosen root section, page type and page zone type
+        $backend = $this->renderWizardPagezoneSelector($input);
 
-		if (isset($input['pagetype_uid']) && isset($input['pagezonetype_uid'])) {
-			$pagetype = new tx_newspaper_pagetype(intval($input['pagetype_uid']));
-			$pagezonetype = new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid']));
-			if (!isset($input['action'])) {
-				// so a pagezone type is chosen, start specific wizard
-				$smarty = new tx_newspaper_Smarty();
-				$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
-				$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
-				$smarty->assign('input', $input);
-				$backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
-			} else {
-				// action is chosen, so perform action now ...
-				if ($input['action'] == 'activatePz') {
-					// activate ...
-					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
-						foreach($rootSection->getChildSections(true) as $s) {
-							$s->activatePage($pagetype);
-							$p = $s->getSubPage($pagetype);
-							$p->activatePagezone($pagezonetype);
-						}
-					}
-					// insert backend success message
-					$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_activate_success'];
-				} elseif ($input['action'] == 'deactivatePz') {
-					// delete ...
-					foreach(tx_newspaper_section::getRootSections() as $rootSection) {
-						foreach($rootSection->getChildSections(true) as $s) {
-							if ($p = $s->getSubPage($pagetype)) {
-								if ($pz = $p->getPagezone($pagezonetype)) {
-									$pz->delete();
-								}
-								// \todo: delete page if last pagezone is deleted?
-							}
-						}
-					}
-					// insert backend success message
-					$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_deactivate_success'];
-				} else {
-					t3lib_div::devlog('processWizardPagezone(): Unknown action type', 'newspaper', 3, array('input' => $input));
-				}
-			}
-		}
+        if (isset($input['section_uid'])) {
+            $rootSection = new tx_newspaper_Section($input['section_uid']);
+        }
+
+        if (isset($input['pagetype_uid']) && isset($input['pagezonetype_uid'])) {
+            $pageType = new tx_newspaper_pagetype(intval($input['pagetype_uid']));
+            $pageZoneType = new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid']));
+            if (!isset($input['action'])) {
+                // So a page zone type is chosen, show links with actions (activate/de-activate page zones)
+                $smarty = new tx_newspaper_Smarty();
+                $smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
+                $smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+                $smarty->assign('input', $input);
+                $backend .= $smarty->fetch('mod5_wizard_action_pagezone.tmpl');
+            } else {
+                // Perform selected action
+                if ($input['action'] == 'activatePz') {
+                    $this->activatePageZones($rootSection, $pageType, $pageZoneType); // Activate page zones
+                    $backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_activate_success']; // Insert backend success message
+                } elseif ($input['action'] == 'deactivatePz') {
+                    $this->deactivatePageZones($rootSection, $pageType, $pageZoneType); // De-activate page zones
+                    $backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_pagezone_deactivate_success']; // Insert backend success message
+                } else {
+                    t3lib_div::devlog('processWizardPagezone(): Unknown action type', 'newspaper', 3, array('input' => $input));
+                }
+            }
+        }
+
+        if (isset($input['pagetype_uid']) && $input['action'] == 'deactivateP') {
+            $this->deactivatePages($rootSection, new tx_newspaper_pagetype(intval($input['pagetype_uid']))); // De-activate pages and page zones
+            $backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_page_deactivate_success']; // Insert backend success message
+        }
+
+        $this->content .= $this->doc->section('', $backend, 0, 1);
+        $this->content .= $this->doc->spacer(10);
+
+    }
+
+    /**
+     * Activate (create or re-active) all page zone (and pages) for given section and all sub suctions
+     * @param tx_newspaper_Section $rootSection
+     * @param tx_newspaper_pagetype $pageType
+     * @param tx_newspaper_pagezonetype $pageZoneType
+     */
+    private function activatePageZones(tx_newspaper_Section $rootSection, tx_newspaper_pagetype $pageType, tx_newspaper_pagezonetype $pageZoneType) {
+        foreach(array_merge(array($rootSection), $rootSection->getChildSections(true)) as $s) {
+            /** @var $s tx_newspaper_Section */
+            $s->activatePage($pageType);
+            /** @var $p tx_newspaper_Page */
+            $p = $s->getSubPage($pageType);
+            $p->activatePagezone($pageZoneType);
+        }
+    }
+
+    /**
+     * De-activate all page zones for given section and all sub sections
+     * @param tx_newspaper_Section $rootSection
+     * @param tx_newspaper_pagetype $pageType
+     * @param tx_newspaper_pagezonetype $pageZoneType
+     */
+    private function deactivatePageZones(tx_newspaper_Section $rootSection, tx_newspaper_pagetype $pageType, tx_newspaper_pagezonetype $pageZoneType) {
+        foreach(array_merge(array($rootSection), $rootSection->getChildSections(true)) as $s) {
+            /** @var $s tx_newspaper_Section */
+            /** @var $p tx_newspaper_Page */
+            // @todo: delete page if last page zone is deleted?
+            if ($p = $s->getSubPage($pageType)) {
+                if ($pz = $p->getPagezone($pageZoneType)) {
+                    $pz->delete();
+                }
+            }
+        }
+    }
+
+    /**
+     * De-activate all pages (and page zones) for given section and all sub sections
+     * @param tx_newspaper_Section $rootSection
+     * @param tx_newspaper_pagetype $pageType
+     */
+    private function deactivatePages(tx_newspaper_Section $rootSection, tx_newspaper_pagetype $pageType) {
+        /** @var $s tx_newspaper_Section */
+        /** @var $p tx_newspaper_Page */
+        foreach(array_merge(array($rootSection), $rootSection->getChildSections(true)) as $s) {
+            if ($p = $s->getSubPage($pageType)) {
+                foreach($p->getPagezones() as $pz) {
+                    $pz->delete();
+                }
+                $p->delete();
+            }
+        }
+    }
 
 
-		if (isset($input['pagetype_uid']) && $input['action'] == 'deactivateP') {
-			$pagetype = new tx_newspaper_pagetype(intval($input['pagetype_uid']));
-			// delete pages ...
-			foreach(tx_newspaper_section::getRootSections() as $rootSection) {
-				foreach($rootSection->getChildSections(true) as $s) {
-					if ($p = $s->getSubPage($pagetype)) {
-						foreach($p->getPagezones() as $pz) {
-							$pz->delete();
-						}
-						$p->delete();
-					}
-				}
-			}
-			// insert backend success message
-			$backend = $localLang[$GLOBALS['LANG']->lang]['message_webmaster_wizard_page_deactivate_success'];
-		}
 
-
-		$this->content .= $this->doc->section('', $backend, 0, 1);
-		$this->content.=$this->doc->spacer(10);
-
-	}
 
 	/** Renders/executes wizard: set inheritance source
 	 * Iteration 1: Leave root sections untouched, set all subsequent section to "inherit from above"
@@ -445,41 +478,47 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 
 		$localLang = t3lib_div::readLLfile('typo3conf/ext/newspaper/mod5/locallang.xml', $GLOBALS['LANG']->lang);
 
-
 		$smarty = new tx_newspaper_Smarty();
 		$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
 
-		$smarty_sub = new tx_newspaper_Smarty();
-		$smarty_sub->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
+		$smartySub = new tx_newspaper_Smarty();
+		$smartySub->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod5/res/activate_pz/'));
 
 		// assign labels to smarty templates
 		$smarty->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
-		$smarty_sub->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
+		$smartySub->assign('LL', $localLang[$GLOBALS['LANG']->lang]);
 
 
-		// get object or null
-		$pagetype = (intval($input['pagetype_uid']))? new tx_newspaper_pagetype(intval($input['pagetype_uid'])) : null;
-		$pagezonetype = (intval($input['pagezonetype_uid']))? new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid'])) : null;
+		// Get object or null
+		$rootSection = (intval($input['section_uid']))? new tx_newspaper_Section(intval($input['section_uid'])) : null;
+		$pageType = (intval($input['pagetype_uid']))? new tx_newspaper_pagetype(intval($input['pagetype_uid'])) : null;
+		$pageZoneType = (intval($input['pagezonetype_uid']))? new tx_newspaper_pagezonetype(intval($input['pagezonetype_uid'])) : null;
 
 		$currentStep = '';
-		if (!$pagetype) {
-			// no pagetype set, so get pagetype uid in second step
-			$pageTypes = tx_newspaper_pagetype::getAvailablePageTypes();
-			$smarty_sub->assign('page_types', $pageTypes);
-			$currentStep = $smarty_sub->fetch('mod5_wizard_pagetype.tmpl');
-		} elseif (!$pagezonetype) {
-			// no pagezonetype set, so get pagezonetype uid in third step
-			$smarty_sub->assign('pagetype', $pagetype);
+        if (!$rootSection) {
+			// No root section set, so get section  uid in first step
+            $smartySub->assign('root_sections', tx_newspaper_section::getRootSections());
+			$currentStep = $smartySub->fetch('mod5_wizard_rootsection.tmpl');
+        } elseif (!$pageType) {
+			// No page type set, so get page type uid in second step
+            $smartySub->assign('rootSection', $rootSection);
+            $pageTypes = tx_newspaper_pagetype::getAvailablePageTypes();
+            $smartySub->assign('page_types', $pageTypes);
+            $currentStep = $smartySub->fetch('mod5_wizard_pagetype.tmpl');
+        } elseif (!$pageZoneType) {
+            // No pagezone type set, so get pagezone type uid in third step
+            $smartySub->assign('rootSection', $rootSection);
+            $smartySub->assign('pagetype', $pageType);
 			$pagezoneTypes = tx_newspaper_pagezonetype::getAvailablePagezoneTypes(false);
-			$smarty_sub->assign('pagezone_types', $pagezoneTypes);
-			$smarty_sub->assign('input', $input);
-			$currentStep = $smarty_sub->fetch('mod5_wizard_pagezonetype.tmpl');
+			$smartySub->assign('pagezone_types', $pagezoneTypes);
+			$smartySub->assign('input', $input);
+			$currentStep = $smartySub->fetch('mod5_wizard_pagezonetype.tmpl');
 		}
 		$smarty->assign('currentStep', $currentStep);
 
-		$smarty->assign('root_sections', tx_newspaper_section::getRootSections());
-		$smarty->assign('pagetype', $pagetype);
-		$smarty->assign('pagezonetype', $pagezonetype);
+		$smarty->assign('rootSection', $rootSection);
+		$smarty->assign('pagetype', $pageType);
+		$smarty->assign('pagezonetype', $pageZoneType);
 
 		$smarty->assign('input', $input); // add params
 
@@ -514,7 +553,7 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 	}
 
 	/// render new article wizard backend
-	/// \param $input paramter extracted from url
+	/// \param $input parameter extracted from url
 	private function new_article_backend(array $input) {
 //t3lib_div::devlog('NEW ARTICLE', 'newspaper', 0, array('input' => $input));
 		global $LANG;

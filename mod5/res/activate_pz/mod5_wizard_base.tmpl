@@ -2,6 +2,9 @@
 
 {literal}
 <style type="text/css">
+.typo3-fullWidthDoc {
+    margin:10px;
+}
 .w_ul {
   margin-top:0;
   padding-left:15px;
@@ -21,31 +24,21 @@
 
 <h3> {$LL.label_webmaster_wizard_pagezone} </h3>
 
-{if $root_sections}
-{$LL.label_webmaster_wizard_root_section_start}
-<ul class="w_ul"">
-{foreach from=$root_sections item=section}
-	<li> {$section->getAttribute('section_name')} </li>
-{/foreach}
-</ul>
+    {* Root section, if chosen already *}
+    {if $rootSection}
+        <div><b>{$LL.label_webmaster_wizard_rootsection}:</b> {$rootSection->getFormattedRootline()} <br />&nbsp;</div>
+    {/if}
 
-{* page types, if chosen already *}
-{if $pagetype}
-	<div> {$LL.label_webmaster_wizard_pagetype}: {$pagetype->getAttribute('type_name')} <br />&nbsp;</div>
-{/if}
+    {* Page type, if chosen already *}
+    {if $pagetype}
+        <div><b>{$LL.label_webmaster_wizard_pagetype}:</b> {$pagetype->getAttribute('type_name')} <br />&nbsp;</div>
+    {/if}
 
-{* pagezone types, if chosen already *}
-{if $pagezonetype}
-	<div> {$LL.label_webmaster_wizard_pagezonetype}: {$pagezonetype->getAttribute('type_name')} <br />&nbsp;</div>
-{/if}
+    {* Pagezone type, if chosen already *}
+    {if $pagezonetype}
+        <div><b>{$LL.label_webmaster_wizard_pagezonetype}:</b> {$pagezonetype->getAttribute('type_name')} <br />&nbsp;</div>
+    {/if}
 
-
-{$currentStep}
-
-
-{else}
-	{* no root section found, nothing to do ... *}
-	<div>{$LL.label_webmaster_wizard_no_root_section}</div>
-{/if}
+    {$currentStep}
 
 {* <div><br /><br /><br /><a href="#" onclick="javascript:location.reload(); return false;">Reload</a><br /><br /><br /></div> *}

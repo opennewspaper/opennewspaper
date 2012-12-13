@@ -278,14 +278,18 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	}
 
 
-	/// Activate a page for this section
-	/// \return true if page was activated, false if page has been active already
-	public function activatePage(tx_newspaper_PageType $type) {
-		if ($this->getSubPage($type)) {
-			return false; // page has been activated already
+    /**
+     * Activate a page for this section
+     * @param tx_newspaper_PageType $type
+     * @return bool true if page was activated, false if page has been active already
+     */
+    public function activatePage(tx_newspaper_PageType $type) {
+
+        if ($this->getSubPage($type)) {
+			return false; // Page has been activated already
 		}
 
-		// check if a deleted page can be re-activated
+		// Check if a deleted page can be re-activated
 		$row = tx_newspaper::selectRowsDirect(
 			'*',
 			'tx_newspaper_page',
@@ -294,7 +298,9 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			'uid DESC',
 			'1'
 		);
+
 		if ($row) {
+            // Re-activate deleted page
 			tx_newspaper::updateRows(
 				'tx_newspaper_page',
 				'uid=' . $row[0]['uid'],
@@ -302,6 +308,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			);
 			$p = new tx_newspaper_Page($this, $type);
 		} else {
+            // Create new page
 			$p = new tx_newspaper_Page($this, $type);
 			$p->store();
 			$p->setAttribute('crdate', time());
@@ -310,7 +317,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 			$p->store();
 		}
 
-		$this->subPages[] = $p; // add page to subPages array, so it's available right away
+		$this->subPages[] = $p; // Add page to subPages array, so it's available right away
 
 		return true;
 	}

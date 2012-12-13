@@ -1,0 +1,15 @@
+{* debug *}
+
+{if $root_sections}
+
+<b xmlns="http://www.w3.org/1999/html">{$LL.label_webmaster_wizard_root_section_start}</b>
+    <ul class="w_ul"">
+    {foreach from=$root_sections item=section}
+        <li> <a href="index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[section_uid]={$section->getUid()}">{$section->getFormattedRootline()}</a> </li>
+    {/foreach}
+    </ul><br />
+
+{else}
+	{* No root section found, nothing to do ... *}
+	<div><b>{$LL.label_webmaster_wizard_no_root_section}</b></div>
+{/if}

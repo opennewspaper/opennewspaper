@@ -38,9 +38,10 @@
 			<label index="label_webmaster_wizards_tsconfig">These wizards can be activated with tsconfig in newspaper root folder (newspaper.webmasterWizards = w_pz, w_inheritance, ...)</label>
 			<label index="label_webmaster_wizard_please_chose">Please choose</label>
 			<label index="label_webmaster_wizard_pagezone">Pagezone: activate/de-activate (recursivly)</label>
-			<label index="label_webmaster_wizard_root_section_start">Starting at root section(s)</label>
+			<label index="label_webmaster_wizard_root_section_start">Please select root section</label>
 			<label index="label_webmaster_wizard_no_root_section">No root section found</label>
 			<label index="label_webmaster_wizard_no_pagetypes">No page type found</label>
+			<label index="label_webmaster_wizard_rootsection">Root section</label>
 			<label index="label_webmaster_wizard_select_pagetype">Please select page type</label>
 			<label index="label_webmaster_wizard_select_pagezonetype">Please select page zone type</label>
 			<label index="label_webmaster_wizard_pagetype">Page type</label>
@@ -88,9 +89,10 @@
 			<label index="label_webmaster_wizards_tsconfig">Die Wizards können per TSConfig in Newspaper-Rootfolder aktiviert werden (newspaper.webmasterWizards = w_pz, w_inheritance, ...)</label>
 			<label index="label_webmaster_wizard_please_chose">Bitte wählen Sie</label>
 			<label index="label_webmaster_wizard_pagezone">Seitenbereich: freischalten/deaktivieren (rekursiv)</label>
-			<label index="label_webmaster_wizard_root_section_start">Root-Ressort(s)</label>
+			<label index="label_webmaster_wizard_root_section_start">Bitte wählen Sie das Root-Ressort aus.</label>
 			<label index="label_webmaster_wizard_no_root_section">Kein Root-Ressort gefunden</label>
 			<label index="label_webmaster_wizard_no_pagetypes">Kein Seiten-Typ gefunden</label>
+            <label index="label_webmaster_wizard_rootsection">Root-Ressort</label>
 			<label index="label_webmaster_wizard_select_pagetype">Bitte wählen Sie einen Seitentyp aus</label>
 			<label index="label_webmaster_wizard_select_pagezonetype">Bitte wählen Sie einen Seitenbereichstyp aus</label>
 			<label index="label_webmaster_wizard_pagetype">Seitentyp</label>

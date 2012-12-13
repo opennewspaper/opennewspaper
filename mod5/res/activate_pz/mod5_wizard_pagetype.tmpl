@@ -1,12 +1,10 @@
 {* debug *}
 
 {if $page_types}
-<div> {$LL.label_webmaster_wizard_select_pagetype} </div>
-<ul class="w_ul">
-{foreach from=$page_types item=page_type}
-  <li> <a href="index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[pagetype_uid]={$page_type->getUid()}">{$page_type->getAttribute('type_name')}</a> </li>
-{/foreach}
-</ul>
-{else}
-
+    <div><b>{$LL.label_webmaster_wizard_select_pagetype}</b></div>
+    <ul class="w_ul">
+    {foreach from=$page_types item=page_type}
+      <li> <a href="index.php?tx_newspaper_mod5[controller]=w_pz&tx_newspaper_mod5[section_uid]={$rootSection->getUid()}&tx_newspaper_mod5[pagetype_uid]={$page_type->getUid()}">{$page_type->getAttribute('type_name')}</a> </li>
+    {/foreach}
+    </ul>
 {/if}
