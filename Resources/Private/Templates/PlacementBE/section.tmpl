@@ -50,10 +50,23 @@
                         class="multiple-select ressort-select placement-select {if  $article_list|get_class|lower == "tx_newspaper_articlelist_manual"}manual-list{/if}">
                     {foreach from=$article_list->getArticles($AL_HEIGHT) item="art" name="al_loop" key="key"}
 
-                        <option value="{$art->getUid()}"
-                                label="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}"
-                                title="{$art->getAttribute('kicker')|escape:"html"}: {$art->getAttribute('title')|escape:"html"}">
-                            {$art->getAttribute('kicker')}: {$art->getAttribute('title')}
+                        {assign var="kicker" value=$art->getAttribute('kicker')}
+                        {assign var="title" value=$art->getAttribute('title')}
+                        {assign var="text" value="$kicker: $title"}
+
+                        {if $article_list|get_class|lower == "tx_newspaper_articlelist_semiautomatic"}
+                            {assign var="off" value=$article_list->getOffset($art)}
+                            {assign var="sep" value="_"}
+                            {assign var="uid" value=$art->getUid()}
+                        
+                            {assign var="key" value=$off$sep$uid}
+                            {assign var="text" value="$text ($off)"}
+                        {else}
+                            {assign var="key" value=$art->getUid()}
+                        {/if}
+
+                        <option value="{$key}" label="{$text|escape:"html"}" title="{$text|escape:"html"}">
+                            {$text}
                         </option>
                     {/foreach}
 
