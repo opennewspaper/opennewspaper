@@ -110,15 +110,15 @@ class  tx_newspaper_module3 extends t3lib_SCbase {
 	}
 
 
-	/// change inheritance source
-	/** possible values:
-	 *    0: default, get from same pagezone type from upper level
-	 *   -1: none: do not inherit any extra
-	 *  uid: uid of a concrete pagezone on the same level (pagezone_page); not available for articles (articles are unique to a section)
-	 */
-	private function processInheritanceSourceChange($pz_uid, $new_parent_pagezone_value) {
-		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pz_uid)); // create pagezone or article
-		$pz->changeParent(intval($new_parent_pagezone_value));
+    /**
+     * Change parent Page Zone
+     * @param   int $pzUid Abstract page zone uid of current page zone
+     * @param   int $newAbstractParentUid New parent page zone: Abstract page zone uid OR 0 for same page zone type
+     *              above in hierarchy  OR <0 for no inheritance
+     */
+	private function processInheritanceSourceChange($pzUid, $newAbstractParentUid) {
+		$pz = tx_newspaper_PageZone_Factory::getInstance()->create(intval($pzUid)); // Create pagezone or article
+		$pz->changeParent(intval($newAbstractParentUid));
         tx_newspaper_PageZone::updateDependencyTree($pz);
 		die();
 	}

@@ -800,23 +800,23 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
 	}
 
 
-	/// Change parent Page Zone
-	/** - Hide Extras placed on this Page Zone
-	 *  - Inherit Extras from new parent
-	 *  @param int $parent_uid uid of parent Page Zone, or if 0, inherit from next
-	 *      page zone above, or if < 0, don't inherit at all
- 	 */
-	public function changeParent($new_parent_uid) {
+    /**
+     * Change parent Page Zone
+     * Hide Extras placed on this Page Zone. Inherit Extras from new parent.
+     * @param   int $newAbstractParentUid Abstract page zone uid OR 0 for same page zone type above in hierarchy
+     *          OR <0 for no inheritance
+     */
+    public function changeParent($newAbstractParentUid) {
 
         $this->removeInheritedExtras();
         $this->hideOriginExtras();
 
-        $parent_zone = $this->getParentZone($new_parent_uid);
+        $parent_zone = $this->getParentZone($newAbstractParentUid);
         if ($parent_zone) {
             $this->inheritExtrasFrom($parent_zone);
         }
 
-        $this->storeWithNewParent($new_parent_uid);
+        $this->storeWithNewParent($newAbstractParentUid);
 
         self::$debug_lots_of_crap = false;
 	}
@@ -928,8 +928,8 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
         );
     }
 
-    private function storeWithNewParent($new_parent_uid) {
-        $this->setAttribute('inherits_from', intval($new_parent_uid));
+    private function storeWithNewParent($newAbstractParentUid) {
+        $this->setAttribute('inherits_from', intval($newAbstractParentUid));
         $this->setAttribute('tstamp', time());
         $this->store();
     }
