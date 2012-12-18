@@ -88,7 +88,7 @@ class tx_newspaper_Search {
     private static $sort_methods = array('compareArticlesByScore', 'compareArticlesByDate');
 
     public function __construct($section, tx_newspaper_Date $start_date, tx_newspaper_Date $end_date) {
-        $this->setSections($section);
+        $this->setSections($section, true);
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->setMatchMethod(new tx_newspaper_MatchMethod('AND'));
@@ -149,7 +149,7 @@ class tx_newspaper_Search {
         $this->addTagSQL($table, $where);
 
         $where .= ' AND ( ' . $this->searchWhereClause($search_term, self::$title_fields) .
-                  ' OR ' . $this->searchWhereClause($search_term, self::$text_fields) . ' )';
+                  '    OR ' . $this->searchWhereClause($search_term, self::$text_fields) . ' )';
 
         $table .= ' JOIN ' . self::article_extra_mm .
                   '   ON ' . self::article_table . '.uid = ' . self::article_extra_mm . '.uid_local' .
@@ -191,9 +191,9 @@ class tx_newspaper_Search {
     
     ////////////////////////////////////////////////////////////////////////////
 
-    private function setSections($sections, $recursive = false) {
+    private function setSections($sections, $recursive) {
         if (!$sections) return;
-        if (!is_array($sections)) $sections = array($sections);
+        if (!is_array($sections)) $sections = explode(',', $sections);
 
         foreach ($sections as $section_uid) {
             $this->sections[] = $section_uid;

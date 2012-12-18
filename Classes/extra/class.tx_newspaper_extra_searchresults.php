@@ -47,23 +47,23 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	public function __construct($uid = 0) {
 		if ($uid) {
 			parent::__construct($uid);
+
+            $this->search_object = new tx_newspaper_Search(
+                implode(',', array($this->getAttribute('sections'), intval(t3lib_div::_GP('section')))),
+                new tx_newspaper_Date(
+                    intval(t3lib_div::_GP('start_year')),
+                    intval(t3lib_div::_GP('start_month')),
+                    intval(t3lib_div::_GP('start_day'))
+                ),
+                new tx_newspaper_Date(
+                    intval(t3lib_div::_GP('end_year')),
+                    intval(t3lib_div::_GP('end_month')),
+                    intval(t3lib_div::_GP('end_day')+1)
+                )
+            );
+
+    		$this->search = t3lib_div::_GP(self::search_GET_var);
 		}
-
-        $this->search_object = new tx_newspaper_Search(
-            intval(t3lib_div::_GP('section')),
-            new tx_newspaper_Date(
-                intval(t3lib_div::_GP('start_year')),
-                intval(t3lib_div::_GP('start_month')),
-                intval(t3lib_div::_GP('start_day'))
-            ),
-            new tx_newspaper_Date(
-                intval(t3lib_div::_GP('end_year')),
-                intval(t3lib_div::_GP('end_month')),
-                intval(t3lib_div::_GP('end_day')+1)
-            )
-        );
-
-		$this->search = t3lib_div::_GP(self::search_GET_var);
 
 	}
 
