@@ -13,7 +13,7 @@ define('BE_EXTRA_DISPLAY_MODE_TABBED', 2);   // extras are edited in tabs
 
 define('BE_ICON_CLOSE', '1');
 
-define('DEBUG_OUTPUT', false); // show position etc. @todo: User TSConfig
+define('DEBUG_OUTPUT', true); // show position etc. @todo: User TSConfig
 
 /// function for adding newspaper functionality to the backend
 /** @todo Oliver: document me!
