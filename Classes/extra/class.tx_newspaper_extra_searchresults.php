@@ -27,7 +27,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
-	/// GET parameter used to pass search term
+	/** GET parameter used to pass search term */
 	const search_GET_var = 'search';
 
 	/// GET parameter used to page the search results
@@ -37,7 +37,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
     ////////////////////////////////////////////////////////////////////////////
 
-	/** \todo Populate class members from $_GET or otherwise:
+	/**
+     *  \todo Populate class members from $_GET or otherwise:
 	 *    - section restriction
 	 *    - logging behavior
 	 *    - log file
@@ -102,19 +103,18 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         if (!$search_term) return array();
 
-        tx_newspaper_ExecutionTimer::start();
+        $timer = tx_newspaper_ExecutionTimer::create();
 
         $this->search_object->setSortMethod('compareArticlesByDate');
         $articles = $this->search_object->searchArticles($search_term);
-        $this->num_results = sizeof($articles);
+        $this->num_results = $this->search_object->getNumArticles();
+        $this->num_results = sizeof($articles);                         // @todo get the other version to work
 
         $return = array_slice(
             $articles,
             self::getFirstArticleIndex(),
             self::getNumResultsPerPage()
         );
-
-        tx_newspaper_ExecutionTimer::logExecutionTime("searchArticles($search_term)");
 
         return $return;
     }
@@ -142,14 +142,16 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 	//
 	////////////////////////////////////////////////////////////////////////////
 
-	/// Search term
+	/** @var string Search term */
 	private $search = '';
 
+    /** @var tx_newspaper_Search */
     private $search_object = null;
 
     private $num_results = 0;
 
 }
+
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_SearchResults());
 
 ?>

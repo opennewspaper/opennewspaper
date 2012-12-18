@@ -1759,12 +1759,15 @@ JSCODE;
 
 	// Typo3 hooks
 
-	/**
-     * @todo no usages found - remove?
+    /**
      * Do some clean up when user logs off Typo3, called by Typo3 log off hook
      */
 	public function cleanUpBeforeLogoff() {
-		self::clearClipboard();
+
+        if (TYPO3_MODE != 'BE') return;
+
+        self::clearClipboard();
+
 	}
 
 

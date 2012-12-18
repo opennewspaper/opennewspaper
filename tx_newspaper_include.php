@@ -191,9 +191,9 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_article.
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_articletype.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_sysfolder.php');
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_util_mod.php'); // \todo: why is this class used in frontend? (see #1019)
+require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_be.php');       // cleanUpBeforeLogoff() called via hook by tslib_fe->initFEuser()
 
 if (TYPO3_MODE == 'BE')	{
-	require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_be.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_workflow.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_typo3hook.php');
 	require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_dependencytree.php');

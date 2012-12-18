@@ -88,14 +88,16 @@ class tx_newspaper_Search {
     private static $sort_methods = array('compareArticlesByScore', 'compareArticlesByDate');
 
     public function __construct($section, tx_newspaper_Date $start_date, tx_newspaper_Date $end_date) {
-        $this->section = $section;
+        $this->setSections($section);
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->setMatchMethod(new tx_newspaper_MatchMethod('AND'));
     }
 
-	///	Performs the search on all articles.
-	/** Also searches the configured Extras (as in \c self::$extra_fields) for
+    /**
+     *  Performs the search on all articles.
+     *
+     *  Also searches the configured Extras (as in \c self::$extra_fields) for
 	 *  the term. The search ist executed once for every configured Extra table
 	 *  and the found results are then sorted in PHP.
 	 *
@@ -131,35 +133,20 @@ class tx_newspaper_Search {
 	 *    - self::$logfile
 	 *    - self::$log_results
 	 *
-	 *  \param $search_term The word(s) for which the search is performed
-	 *  \return Array of tx_newspaper_Article found
+	 *  @param string $search_term The word(s) for which the search is performed
+     *  @param int $start Index of first article, for paging
+     *  @param int $number Number of returned articles (default: all), for paging
+	 *  @return tx_newspaper_Article[] articles found
 	 */
-    public function searchArticles($search_term) {
+    public function searchArticles($search_term, $start = 0, $number = 0) {
 
         $table = self::article_table;
         $where = '1';
-        $fields = self::article_table . '.uid, ' .
-                  self::article_table . '.publish_date, ' .
-                  'MATCH (' . implode(', ', self::$title_fields).') ' .
-                    'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS title_score, '.
-                  'MATCH (' . implode(', ', self::$text_fields).') ' .
-                    'AGAINST (\''.mysql_real_escape_string($search_term).'\') AS text_score ';
+        $fields = self::getFieldsSQL($search_term);
 
-        if ($this->getSections()) {
-            $table .= ' JOIN ' . self::article_section_mm .
-                      '   ON ' . self::article_table . '.uid = ' . self::article_section_mm . '.uid_local';
+        $this->addSectionSQL($table, $where);
 
-            $where .= ' AND ' . self::article_section_mm . '.uid_foreign IN (' .
-                            $this->getSections() . ')';
-        }
-
-        if ($this->tags) {
-            $table .= ' JOIN ' . self::article_tag_mm .
-                      '   ON ' . self::article_table . '.uid = ' . self::article_tag_mm .'.uid_local';
-
-            $where .= ' AND ' . self::article_tag_mm . '.uid_foreign IN (' .
-                            $this->tags .')';
-        }
+        $this->addTagSQL($table, $where);
 
         $where .= ' AND ( ' . $this->searchWhereClause($search_term, self::$title_fields) .
                   ' OR ' . $this->searchWhereClause($search_term, self::$text_fields) . ' )';
@@ -169,18 +156,24 @@ class tx_newspaper_Search {
                   ' JOIN ' . self::extra_table .
                   '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
 
-        $articles = self::getSearchResultsForClass($fields, $table, $where);
+        $limit = '';
+        if ($number) $limit = intval($start) . ',' . intval($number);
+        elseif ($start) $limit = intval($start);
+
+        $articles = $this->getSearchResultsForClass($fields, $table, $where, $limit);
 
         if (!self::enable_quick_hack) {
             $articles = array_merge($articles, $this->searchInExtras($table, $search_term, $where));
         }
-        
+
         $return = $this->generateArticleObjectsFromSearchResults($articles);
 
         $this->logSearch($search_term, $return);
 
         return $return;
     }
+
+    public function getNumArticles() { return $this->num_results; }
 
     public function setSortMethod($method_name) {
         if (self::isSortMethod($method_name)) {
@@ -197,6 +190,56 @@ class tx_newspaper_Search {
     }
     
     ////////////////////////////////////////////////////////////////////////////
+
+    private function setSections($sections, $recursive = false) {
+        if (!$sections) return;
+        if (!is_array($sections)) $sections = array($sections);
+
+        foreach ($sections as $section_uid) {
+            $this->sections[] = $section_uid;
+            if ($recursive) $this->setChildSections(new tx_newspaper_Section($section_uid));
+        }
+    }
+
+    private function setChildSections(tx_newspaper_Section $section) {
+        foreach ($section->getChildSections(true) as $child) {
+            $this->sections[] = $child->getUid();
+        }
+    }
+
+    /// Gets sections the search is restricted to
+	/** \return UIDs of the sections as comma separated list usable in an SQL statement
+	 */
+	private function getSections() {
+		return $this->sections;
+	}
+
+    private static function getFieldsSQL($search_term) {
+        return self::article_table . '.uid, ' .
+                self::article_table . '.publish_date, ' .
+                'MATCH (' . implode(', ', self::$title_fields) . ') ' .
+                'AGAINST (\'' . mysql_real_escape_string($search_term) . '\') AS title_score, ' .
+                'MATCH (' . implode(', ', self::$text_fields) . ') ' .
+                'AGAINST (\'' . mysql_real_escape_string($search_term) . '\') AS text_score ';
+    }
+
+    private function addSectionSQL(&$table, &$where) {
+        if (!$this->getSections()) return;
+
+        $table .= ' JOIN ' . self::article_section_mm .
+                '   ON ' . self::article_table . '.uid = ' . self::article_section_mm . '.uid_local';
+
+        $where .= ' AND ' . self::article_section_mm . '.uid_foreign IN (' . implode(', ', $this->getSections()) . ')';
+    }
+
+    private function addTagSQL(&$table, &$where) {
+        if (!$this->tags) return;
+
+        $table .= ' JOIN ' . self::article_tag_mm .
+                '   ON ' . self::article_table . '.uid = ' . self::article_tag_mm . '.uid_local';
+
+        $where .= ' AND ' . self::article_tag_mm . '.uid_foreign IN (' . $this->tags . ')';
+    }
 
     private function searchInExtras($table, $search_term, $where) {
 
@@ -221,8 +264,10 @@ class tx_newspaper_Search {
             $num_articles = intval($row['number']);
             if (!$num_articles) continue;
 
-            $articles = array_merge($articles,
-                                    self::getSearchResultsForClass($current_fields, $current_table, $current_where));
+            $articles = array_merge(
+                $articles,
+                $this->getSearchResultsForClass($current_fields, $current_table, $current_where)
+            );
         }
 
         return $articles;
@@ -230,12 +275,11 @@ class tx_newspaper_Search {
 
     private function generateArticleObjectsFromSearchResults($articles) {
 
-        $this->num_results = sizeof($articles);
         $return = array();
 
         if ($this->num_results > 0) {
             if (!self::enable_quick_hack) {
-            usort($articles, array(get_class($this), 'compareArticles'));
+                usort($articles, array(get_class($this), 'compareArticles'));
             }
 
             foreach ($articles as $article) {
@@ -287,25 +331,31 @@ class tx_newspaper_Search {
         return $where;
     }
 
-    private static function getSearchResultsForClass($current_fields, $current_table, $current_where) {
+    private function getSearchResultsForClass($current_fields, $current_table, $current_where, $limit) {
 
-        $results = tx_newspaper::selectRows(
+        $results = tx_newspaper_DB::getInstance()->selectRows(
+            'COUNT(*)', $current_table, $current_where
+        );
+        $this->num_results += $results[0]['COUNT(*)'];
+
+        $results = tx_newspaper_DB::getInstance()->selectRows(
             "DISTINCT $current_fields",
             $current_table,
             $current_where,
             '',
-            'publish_date DESC'
+            'publish_date DESC',
+            $limit
         );
 
         $articles = array();
         foreach ($results as $result) {
             if (!self::enable_quick_hack) {
-            foreach ($articles as $article) {
-                if (intval($article['uid']) == intval($result['uid'])) {
-                    $article['extra_score'] += $result['extra_score'];
-                    continue 2; //	continue outer loop
+                foreach ($articles as $article) {
+                    if (intval($article['uid']) == intval($result['uid'])) {
+                        $article['extra_score'] += $result['extra_score'];
+                        continue 2;                     //  continue outer loop
+                    }
                 }
-            }
             }
             $articles[] = $result;
 
@@ -314,16 +364,16 @@ class tx_newspaper_Search {
         return $articles;
     }
 
-	///	Write the requested search term and the search results to a log file.
-	/** The behavior of this function is controlled by self::$log_searches and
-	 *  self::$log_results. If self::$log_results is \c false, the search
-	 *  results are not logged. If self::$log_searches is \c false, nothing is
-	 *  logged at all.
-	 *
-	 *  \param $search Search term
-	 *  \param $results Found articles
-	 */
-	protected function logSearch($search, array $results = array()) {
+    ///	Write the requested search term and the search results to a log file.
+    /** The behavior of this function is controlled by self::$log_searches and
+     *  self::$log_results. If self::$log_results is \c false, the search
+     *  results are not logged. If self::$log_searches is \c false, nothing is
+     *  logged at all.
+     *
+     *  \param $search Search term
+     *  \param $results Found articles
+     */
+    protected function logSearch($search, array $results = array()) {
 
 		if (!self::$log_searches) return;
 
@@ -341,14 +391,14 @@ class tx_newspaper_Search {
         $log->write('Results:' . "\n");
         if ($results) {
             foreach ($results as $result) {
-                $this->logResult($result, $log);
+                $this->logResult($log, $result);
             }
         } else {
             $log->write('    None!' . "\n");
         }
     }
 
-    private function logResult($result, $log) {
+    private function logResult(tx_newspaper_File $log, $result) {
         if (!($result instanceof tx_newspaper_ArticleIface)) {
             $log->write('    Not an Article: ' . $result . "\n");
         } else {
@@ -448,13 +498,6 @@ class tx_newspaper_Search {
 		return false;
 	}
 
-    /// Gets sections the search is restricted to as comma-separated list
-	/** \return UIDs of the sections as comma separated list usable in an SQL statement
-	 */
-	private function getSections() {
-		return $this->section;
-	}
-
  	/// Determine which tx_newspaper_Article comes first in search results.
  	/** Supplied as parameter to \c usort() in searchArticles().
  	 *  This function may be overridden or reimplemented to reflect changing
@@ -474,8 +517,7 @@ class tx_newspaper_Search {
  	 *
  	 *  \todo take into account the possibility to sort by publishing date.
  	 */
-	private static function compareArticles(array $art1,
-											array $art2) {
+	private static function compareArticles(array $art1, array $art2) {
 
         $method = self::$sort_method;
         return self::$method($art1, $art2);
@@ -533,7 +575,7 @@ class tx_newspaper_Search {
 
     private $start_date = null;
     private $end_date = null;
-    private $section = 0;
+    private $sections = array();
     private $tags = array();
 
     /** @var tx_newspaper_MatchMethod */
