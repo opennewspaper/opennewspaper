@@ -124,13 +124,12 @@
 			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
 			<label index="message_article_no_section">No section is assigned to this article. Please select a section and store in order to edit the article.</label>
             <label index="title_tx_newspaper_extra_specialhits">Special hits</label>
-
+            <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
+            <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
             <label index="flashMessage_extra_flexform_folder_not_found">Folder "%s" can't be found.</label>
             <label index="flashMessage_extra_flexform_no_folder_configured">No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">The selected Flexform template is archived. Changing the Flexform template can't be undone.</label>
             <label index="flashMessage_extra_flexform_file_not_found">Neither active nor archived data structure file "%s.xml" can be found.</label>
-            <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
-            <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
 		</languageKey>
 
 		<languageKey index="de" type="array">
