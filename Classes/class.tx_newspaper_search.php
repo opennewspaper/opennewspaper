@@ -193,11 +193,11 @@ class tx_newspaper_Search {
 
     private function setSections($sections, $recursive) {
         if (!$sections) return;
-        if (!is_array($sections)) $sections = explode(',', $sections);
+        if (!is_array($sections)) $sections = explode(',', trim($sections, ','));
 
         foreach ($sections as $section_uid) {
             $this->sections[] = $section_uid;
-            if ($recursive) $this->setChildSections(new tx_newspaper_Section($section_uid));
+            if ($section_uid && $recursive) $this->setChildSections(new tx_newspaper_Section($section_uid));
         }
     }
 
@@ -224,12 +224,20 @@ class tx_newspaper_Search {
     }
 
     private function addSectionSQL(&$table, &$where) {
-        if (!$this->getSections()) return;
+        tx_newspaper::devlog("addSectionSQL", $this->getSections());
+        if (!$this->hasSectionRestriction()) return;
 
         $table .= ' JOIN ' . self::article_section_mm .
                 '   ON ' . self::article_table . '.uid = ' . self::article_section_mm . '.uid_local';
 
         $where .= ' AND ' . self::article_section_mm . '.uid_foreign IN (' . implode(', ', $this->getSections()) . ')';
+    }
+
+    private function hasSectionRestriction() {
+        foreach ($this->getSections() as $uid) {
+            if (intval($uid)) return true;
+        }
+        return false;
     }
 
     private function addTagSQL(&$table, &$where) {
