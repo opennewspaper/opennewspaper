@@ -1048,8 +1048,20 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
 
-    public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $that) {
+    /**
+     * Typo3 hook: TCEForms is about to render a single form field
+     * @param $table
+     * @param $field
+     * @param $row
+     * @param $altName
+     * @param $palette
+     * @param $extra
+     * @param $pal
+     * @param $pObj
+     */
+    public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $pObj) {
         self::modifyTagSelection($table, $field);
+        self::processTSConfig($table, $field, $row);
     }
 
     public static function getSingleField_postProcess($table, $field, $row, &$out, $PA, $that) {
@@ -1607,6 +1619,88 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
         }
     }
+
+
+    /**
+     * Process TSConfig settings:
+     * newspaper.be.[field].useRteForArticleTypes = [comma separated list of article type uids]
+     * newspaper.be.[field].hideFieldForArticleTypes = [comma separated list of article type uids]
+     * newspaper.be.[field].showFieldForArticleTypes = [comma separated list of article type uids]
+     * @param string $table Must be set to 'tx_newspaper_article'
+     * @param string $field Field to be processed in 'tx_newspaper_article'
+     * @param array $row Current article data
+     */
+    private static function processTSConfig($table, $field, $row) {
+        if ($table != 'tx_newspaper_article') {
+            return; // Ignore all tables but tx_newspaper_article
+        }
+
+        $tscField = $field . '.'; // In TSConfig array the field name is appeding by a "."
+        $articleTypeUid = $row['articletype_id']; // Article type uid stored in current article
+
+        $tsc = tx_newspaper::getTSConfig(); // Read TSConfig
+//t3lib_div::devlog('a process tsc', 'newspaper', 0, array($tsc['newspaper.']['be.'][$tscField]));
+
+        if (self::checkTSConfigArticleTypesSetting($articleTypeUid, $tsc['newspaper.']['be.'][$tscField]['useRteForArticleTypes'])) {
+            self::useRteInBackend($field); // Show RTE for field
+        }
+
+        if (self::checkTSConfigArticleTypesSetting($articleTypeUid, $tsc['newspaper.']['be.'][$tscField]['hideFieldForArticleTypes'])) {
+            self::hideFieldInBackend($field); // Hide field in backend
+        }
+
+        if (self::checkTSConfigArticleTypesSetting($articleTypeUid, $tsc['newspaper.']['be.'][$tscField]['showFieldForArticleTypes'])) {
+            // @todo: Show field in backend
+            t3lib_div::devlog('newspaper.be.[field].showFieldForArticleTypes is not yet implemeted', 'newspaper', 2);
+        }
+
+    }
+
+    /**
+     * Hides fields in backend (the data stored in the field remians stored in the database)
+     * @param string $field Field in article
+     */
+    private static function hideFieldInBackend($field) {
+        unset($GLOBALS['TCA']['tx_newspaper_article']['columns'][$field]['config']);
+        $GLOBALS['TCA']['tx_newspaper_article']['columns'][$field]['config']['type'] = 'passthrough';
+    }
+
+    /**
+     * Manipulate TCA: Add a RTE to $field
+     * IMPORTANT NOTE: The RTE usage MUST be prepared in TCA type for field, in order for this setting to work
+     * @param string $field Field in article
+     */
+    private static function useRteInBackend($field) {
+        // @todo: check if $field is a text field. Does it make sense to switch to RTE?
+        unset($GLOBALS['TCA']['tx_newspaper_article']['columns'][$field]['config']);
+        $GLOBALS['TCA']['tx_newspaper_article']['columns'][$field]['config'] = array(
+            "type" => "text",
+            "cols" => "30",
+            "rows" => "5",
+            "wizards" => Array(
+                "_PADDING" => 2,
+                "RTE" => array(
+                    "notNewRecords" => 1,
+                    "RTEonly" => 1,
+                    "type" => "script",
+                    "title" => "Full screen Rich Text Editing",
+                    "icon" => "wizard_rte2.gif",
+                    "script" => "wizard_rte.php",
+                )
+            )
+        );
+    }
+
+    /**
+     * Checks if $articleTypeUid can be found in $articleTypeUids
+     * @param int $articleTypeUid Article type to checked
+     * @param string $articleTypeUids  Comma separated list of article types to search $articleTypeUid in
+     * @return bool true if TSConfig setting was found, else false
+     */
+    private static function checkTSConfigArticleTypesSetting($articleTypeUid, $articleTypeUids) {
+        return in_array($articleTypeUid, t3lib_div::trimExplode(',', $articleTypeUids));
+    }
+
 
     /// set publish_date when article changed from hidden=1 to hidden=0 and publish_date isn't set
     /**

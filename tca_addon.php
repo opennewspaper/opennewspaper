@@ -34,7 +34,8 @@ $TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["range"] = 
 $TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["workflow_status"]["config"]["range"] = array ("lower" => "0");
 
-// newspaper textarea field for teaser
+// Newspaper textarea field for teaser
+// Might be replaced with RTE in hook by TSConfig setting newspaper.be.useRTE.teaser.forArticleTypes = uid[s]
 unset($TCA['tx_newspaper_article']['columns']['teaser']['config']);
 $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	'type' => 'user',
@@ -386,10 +387,21 @@ unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles"]["confi
 unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles_w_image"]["config"]["max"]);
 
 
-    // Article: Modify article backend depending on newspaper.articleTypeAsUrl setting
-    // If articletype uid matches setting, field "URL" is shown, fields "RTE" and checkbox "Use RTE" are hidden and vice versa
-    $tsc = tx_newspaper::getTSConfig();
-    if ($tsc['newspaper.']['articleTypeAsUrl']) {
+
+// Article type settings: user function to check if article types are not allowed for a BE user
+unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table']);
+unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where']);
+$TCA['tx_newspaper_article']['columns']['articletype_id']['config']['itemsProcFunc'] = 'tx_newspaper_ArticleType->processArticleTypesForArticleBackend';
+
+
+
+// Newspaper TSConfig
+
+$tsc = tx_newspaper::getTSConfig(); // Read TSConfig
+
+// Article: Modify article backend depending on newspaper.articleTypeAsUrl setting
+// If articletype uid matches setting, field "URL" is shown, fields "RTE" and checkbox "Use RTE" are hidden and vice versa
+if ($tsc['newspaper.']['articleTypeAsUrl']) {
         // Article as URL
         $GLOBALS['TCA']['tx_newspaper_article']['columns']['url']['displayCond'] =
                'FIELD:articletype_id:IN:' . $tsc['newspaper.']['articleTypeAsUrl'];
@@ -409,11 +421,6 @@ unset($TCA["tx_newspaper_extra_sectionteaser"]["columns"]["num_articles_w_image"
     }
 
 
-
-    // Article type settings: user function to check if article types are not allowed for a BE user
-    unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table']);
-    unset($TCA['tx_newspaper_article']['columns']['articletype_id']['config']['foreign_table_where']);
-    $TCA['tx_newspaper_article']['columns']['articletype_id']['config']['itemsProcFunc'] = 'tx_newspaper_ArticleType->processArticleTypesForArticleBackend';
 
 
 
