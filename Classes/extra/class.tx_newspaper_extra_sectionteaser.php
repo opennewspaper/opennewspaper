@@ -31,52 +31,49 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
-		## t3 developer log error handling
-		#  tx_newspaper::devlog("render", $rendered);
-
 		$this->prepare_render($template_set);
 
-		$num_articles=$this->getAttribute('num_articles');
-		$this->smarty->assign("num_articles",$num_articles);
-		$num_articles_w_image=$this->getAttribute('num_articles_w_image');
-		$this->smarty->assign("num_articles_w_image",$num_articles_w_image);
+        $this->smarty->assign("num_articles", $this->getAttribute('num_articles'));
+        $this->smarty->assign("num_articles_w_image", $this->getAttribute('num_articles_w_image'));
 
-		$is_ctrltag = $this->getAttribute('is_ctrltag');
-		if ($is_ctrltag=="0") {
-			$this->smarty->assign("section_or_ctrltag","section");
-			$section_id = $this->getAttribute('section');
-			if (!empty($section_id)) {
-				$section=new tx_newspaper_section($section_id);
-                $typo3page = $section->getTypo3PageID();
-				$this->smarty->assign("section_id",$section_id);
-                $this->smarty->assign("page_id",$typo3page);
-#				$this->smarty->assign("articles",$section->getArticleList()->getArticles($num_articles));
-			}
-		}  elseif ($is_ctrltag=="1") {
-			$this->smarty->assign("section_or_ctrltag","ctrltag");
-			$ctrltag_cat = $this->getAttribute('ctrltag_cat');
-			$this->smarty->assign("cat",$ctrltag_cat);
-			$ctrltag_id = $this->getAttribute('ctrltag');
-			if (!empty($ctrltag_id)) {
-				$ctrltag = new tx_newspaper_tag($ctrltag_id);
-				$this->smarty->assign("tag_id",$ctrltag_id);
-#				$this->smarty->assign("articles",$ctrltag->getArticles($num_articles));
-			}
-		}
+        $this->assignSpecificContent($this->getAttribute('is_ctrltag'));
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
 	}
 
-	/** Displays the title and the beginning of the text.
+    private function assignSpecificContent($is_ctrltag) {
+        if ($is_ctrltag == "0") {
+            $this->smarty->assign("section_or_ctrltag", "section");
+            $this->assignSectionAndPage($this->getAttribute('section'));
+        } elseif ($is_ctrltag == "1") {
+            $this->smarty->assign("section_or_ctrltag", "ctrltag");
+            $this->smarty->assign("cat", $this->getAttribute('ctrltag_cat'));
+            $this->assignControlTag($this->getAttribute('ctrltag'));
+        }
+    }
+
+    private function assignControlTag($ctrltag_id) {
+        $this->smarty->assign("tag_id", intval($ctrltag_id));
+    }
+
+    private function assignSectionAndPage($section_id) {
+        $this->smarty->assign("section_id", $section_id);
+        try {
+            $section = new tx_newspaper_Section($section_id);
+            $this->smarty->assign("page_id", $section->getTypo3PageID());
+        } catch(tx_newspaper_Exception $e) { }
+    }
+
+    /** Displays the title and the beginning of the text.
 	 */
 	public function getDescription() {
 		if ($desc = $this->getAttribute('short_description')) {
 		} elseif ($desc = $this->getAttribute('notes')) {
 			$desc = preg_replace("/<(.*)?>/U", "", $desc);
 		} else {
-			return;
+			return '';
 		}
 		return substr(
 			$desc,

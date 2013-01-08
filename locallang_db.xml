@@ -331,7 +331,7 @@
 			<label index="tx_newspaper_article.author">Autor</label>
 			<label index="tx_newspaper_article.kicker">Dachzeile</label>
 			<label index="tx_newspaper_article.title">Titel</label>
-			<label index="tx_newspaper_article.teaser">Teaser</label>
+			<label index="tx_newspaper_article.teaser">Teasertext</label>
 			<label index="tx_newspaper_article.kicker_list">Dachzeile für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.title_list">Titel für Listenansicht, wenn anders</label>
 			<label index="tx_newspaper_article.teaser_list">Teaser für Listenansicht, wenn anders</label>
