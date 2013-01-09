@@ -48,6 +48,9 @@ class fullWidthDoc_mod7 extends template {
  * @author	Matthias Krappitz <matthias@aemka.de>, Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, typo3@schroederbros.de, samuel@talleux.de>
  * @package	TYPO3
  * @subpackage	tx_newspaper
+ *
+ * Debugging, User TSConfig:
+ * - newspaper.debug.be.articleListModule = [0|1]
  */
 class  tx_newspaper_module7 extends t3lib_SCbase {
 				var $pageinfo;
@@ -55,8 +58,6 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 
                 /** @var tx_newspaper_BE */
 				private $al_be = null; // backend object providing the methods for generating the backend for article list placement
-
-                const DEBUG = false; // @todo User TSConfig
 
 				/**
 				 * Initializes the Module
@@ -233,7 +234,7 @@ class  tx_newspaper_module7 extends t3lib_SCbase {
 					$smarty = new tx_newspaper_Smarty();
 					$smarty->setTemplateSearchPath(array('typo3conf/ext/newspaper/mod7/res/'));
 					$smarty->assign('input', $input);
-					$smarty->assign('DEBUG', self::DEBUG);
+					$smarty->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.articleListModule'));
 					$smarty->assign('lang', $localLang);
 					$smarty->assign('AL', $al);
 					$smarty->assign('ICON', $al_be->getArticleListIcons());

@@ -94,10 +94,12 @@ require_once (PATH_t3lib.'class.t3lib_befunc.php');
  *  - file \p res/templates/tx_newspaper_extra_image.tmpl in any other extension
  * 		folder, where the extension key starts with \em "newspaper", in random
  * 		order.
+ *
+ * Devlog output, User TSConfig:
+ * - newspaper.devlog.smarty.searchPath = [0|1]
+ *
  */
 class tx_newspaper_Smarty extends Smarty {
-
-	const debug_search_path = false;
 
 	const default_template_directory = 'ext/newspaper/res/templates';
     const default_smarty_plugins_dir = 'fileadmin/templates/newspaper/smarty_plugins';
@@ -160,7 +162,9 @@ class tx_newspaper_Smarty extends Smarty {
 
 	/// Sets the template set we're working in
 	public function setTemplateSet($template_set = tx_newspaper_Smarty::default_template_set) {
-self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $template_set);
+        if (tx_newspaper::getUserTSConfigForDebugging('newspaper.devlog.smarty.searchPath')) {
+            t3lib_div::devlog('setTemplateSet', 'newspaper', 0, array($template_set));
+        }
 
 		$this->templateset = $template_set;
 		$this->assign('template_set', $template_set);
@@ -169,14 +173,22 @@ self::debug_search_path && t3lib_div::devlog('setTemplateSet', 'np', 0, $templat
 	/// Sets the page type we're working on
 	public function setPageType(tx_newspaper_Page $page) {
 		$page_type = $page->getPageType();
-self::debug_search_path && tx_newspaper::devlog('setPageType ' . $page_type->getAttribute('type_name'));
+
+        if (tx_newspaper::getUserTSConfigForDebugging('newspaper.devlog.smarty.searchPath')) {
+            t3lib_div::devlog('setTemplateSet', 'newspaper', 0, array('setPageType' => $page_type->getAttribute('type_name')));
+        }
+
 		$this->pagetype = $page_type;
 	}
 
 	/// Sets the page zone type we're working on
 	public function setPageZoneType(tx_newspaper_PageZone $pagezone) {
 		$pagezone_type = $pagezone->getPageZoneType();
-self::debug_search_path && tx_newspaper::devlog('setPageZoneType ' . $pagezone_type->getAttribute('type_name'));
+
+        if (tx_newspaper::getUserTSConfigForDebugging('newspaper.devlog.smarty.searchPath')) {
+            t3lib_div::devlog('setTemplateSet', 'newspaper', 0, array('setPageZoneType' => $pagezone_type->getAttribute('type_name')));
+        }
+
 		$this->pagezonetype = $pagezone_type;
 	}
 

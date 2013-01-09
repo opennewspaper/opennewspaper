@@ -156,8 +156,6 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	/// Whether articles from subsections should be recursively included in the list.
 	const include_articles_from_subsections = false;
 
-	/// Whether to write information about sorting operations to devlog.
-	const debug_resort_operations = false;
 
 	/// Construct a tx_newspaper_ArticleList_Semiautomatic.
 	/** This constructor is used to set the default section filter
@@ -168,8 +166,8 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	public function __construct($uid = 0, tx_newspaper_Section $section = null) {
 		tx_newspaper_ArticleList::__construct($uid, $section);
 		if ($uid == 0 && $section) {
-			// set default filter
-			// currently sections are stored as comma separated list, so init with current secton uid is working (won't work with mm relations)
+			// Set default filter
+			// Currently sections are stored as comma separated list, so init with current section uid is working (won't work with mm relations)
 			$this->setAttribute('filter_sections', $section->getUid());
 		}
 	}

@@ -341,12 +341,29 @@ class tx_newspaper  {
 
     /**
      * @param string $key key/name of the property
-     * @return string the value/properties of a TS-object as given by $key
+     * @return array('value', 'properties') of User TSConfig for $key (or null, if BE_USER object is not available)
      */
     public static function getUserTSConfig($key) {
-        /** @var t3lib_beUserAuth */
+        /** @var $BE_USER t3lib_beUserAuth */
         global $BE_USER;
+        if (!is_object($BE_USER)) {
+            return null;
+        }
         return $BE_USER->getTSConfig($key);
+    }
+
+    /**
+     * Get value for newspaper debug setting
+     * Example: newspaper.debug.be.placementModule = 1
+     * @param string $key key/name of the property
+     * @return int Setting for User TSConfig for $key (or null, if BE_USER object or setting is not available)
+     */
+    public static function getUserTSConfigForDebugging($key) {
+        $tsc = self::getUserTSConfig($key);
+        if (!is_array($tsc)) {
+            return null;
+        }
+        return intval($tsc['value']);
     }
 
     public static function getDossierPageID() {

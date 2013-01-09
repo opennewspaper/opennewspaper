@@ -13,11 +13,18 @@ define('BE_EXTRA_DISPLAY_MODE_TABBED', 2);   // extras are edited in tabs
 
 define('BE_ICON_CLOSE', '1');
 
-define('DEBUG_OUTPUT', true); // show position etc. @todo: User TSConfig
 
 /// function for adding newspaper functionality to the backend
 /** @todo Oliver: document me!
  *  @todo: Oliver: many functions should be converted to static functions
+ */
+
+
+/**
+ * Debugging, User TSConfig
+ * - newspaper.debug.be.placementModule = [0|1]
+ * - newspaper.debug.be.article.extraPlacement = [0|1]
+ *
  */
 class tx_newspaper_BE {
 
@@ -594,7 +601,9 @@ class tx_newspaper_BE {
         $smarty->assign('DUMMY_ICON', tx_newspaper_BE::renderIcon('gfx/dummy_button.gif', '', self::getTranslation('label_new_top')));
         $smarty->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
         $smarty->assign('IS_CONCRETE_ARTICLE_RELOAD', $ajax_reload);
-        $smarty->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
+        if ($pz->isPagezonePage()) {
+            $smarty->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.placementModule'));
+        }
         $smarty->assign('CLEAR_CLIPBOARD_ICON', tx_newspaper_BE::renderIcon('gfx/closedok.gif', '', self::getTranslation('label_clear_clipboard')));
 
 
@@ -609,7 +618,6 @@ class tx_newspaper_BE {
 
 		// pagezones are rendered by a separate smarty template - because 2 versions (pagezone_page or article) can be rendered
 		$smarty_pz = self::getPagezoneSmartyObject();
-		$smarty_pz->assign('DEBUG_OUTPUT', DEBUG_OUTPUT);
 		$pagezone = array();
 		for ($i = 0; $i < sizeof($extraData); $i++) {
 
@@ -619,7 +627,8 @@ class tx_newspaper_BE {
 			$smarty_pz->assign('IS_CONCRETE_ARTICLE', $pz->isConcreteArticle());
 			$smarty_pz->assign('USE_TEMPLATE_SETS', self::useTemplateSetsForContentPlacement()); // are template set dropdowns visible or not
 			$smarty_pz->assign('CLIPBOARD', self::getClipboardData());
-			if (!$pz->isConcreteArticle() && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
+			if ($pz->isPagezonePage() && $data[$i]['pagezone_type']->getAttribute('is_article') == 0) {
+                $smarty_pz->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.placementModule'));
 				if (sizeof($extraData[$i]) > 0) {
 					// render pagezone table only if extras are available
 					$smarty_pz->assign('EXTRA_DATA', $extraData[$i]);
@@ -628,7 +637,10 @@ class tx_newspaper_BE {
 					$pagezone[$i] = false; // message "no extra so far" will be displayed in mod3.tmpl
 				}
 			} else {
-				// needed for concrete articles
+				// Needed for concrete articles
+
+                $smarty_pz->assign('DEBUG_OUTPUT', tx_newspaper::getUserTSConfigForDebugging('newspaper.debug.be.article.extraPlacement'));
+
 				$smarty_pz->assign('NEW_TOP_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_top')));
 
 				$smarty_pz->assign('SHORTCUT_DEFAULTEXTRA_ICON', tx_newspaper_BE::renderIcon('gfx/new_record.gif', '', self::getTranslation('label_new_defaultextra_in_article')));
@@ -655,6 +667,7 @@ class tx_newspaper_BE {
                		break;
                		case BE_EXTRA_DISPLAY_MODE_SUBMODAL:
                		default:
+                        // @todo: Remove submodal code!
 		                 // just a list of extras
 		                 $pagezone[$i] = $smarty_pz->fetch('mod3_pagezone_article.tmpl'); // whole pagezone
                	}
