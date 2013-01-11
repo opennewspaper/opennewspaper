@@ -1,6 +1,6 @@
 <?php
 
-// \todo: re-arrage!
+// @todo: re-arrage!
 
 
 // modifications after generating with the kickstarter (bottom of file tca.php)
@@ -8,7 +8,6 @@
 
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
-// base class for extras
 require_once(PATH_typo3conf. 'ext/newspaper/Classes/class.tx_newspaper_extra.php');
 
 
@@ -28,7 +27,7 @@ $TCA['tx_newspaper_article']['columns']['workflow_status']['config']['userFunc']
 
 // Do not load  tags initially and let custom code handle it
 $TCA['tx_newspaper_article']['columns']['tags']['config']['foreign_table_where'] = 'AND tx_newspaper_tag.uid = 0';
-// Switch field tag in article to a userfunc field (allowing auto completion)
+// Switch field tag in article to a userFunc field (allowing auto completion)
 $TCA['tx_newspaper_article']['columns']['tags']['config']['itemsProcFunc'] = 'tx_newspaper_be->getArticleTags';
 $TCA["tx_newspaper_article"]["columns"]["pagezonetype_id"]["config"]["range"] = array ("lower" => "1");
 $TCA["tx_newspaper_article"]["columns"]["inherits_from"]["config"]["range"] = array ("lower" => "1");
@@ -45,56 +44,28 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 	'maxLen' => '500',
 	'useCountdown' => '0',
 );
+unset($TCA['tx_newspaper_article']['columns']['teaser_list']['config']);
+$TCA['tx_newspaper_article']['columns']['teaser_list']['config'] = array(
+	'type' => 'user',
+	'userFunc' => 'tx_newspaper_be->renderTextarea',
+	'width' => '350',
+	'height' => '31',
+	'maxLen' => '500',
+	'useCountdown' => '0',
+);
 
-
-// article backend modifications
+// Article backend modifications
 //t3lib_div::devlog('TCA', 'np', 0, $GLOBALS['TCA']['tx_newspaper_article']['types'][0]);
 
-//	// remove kickstarter generated palette configuration
+	// Remove kickstarter generated palette configuration
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title;;;;2-2-2, ', ', title, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser;;;;3-3-3, ', ', teaser, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 
-	// detach starttime and endtime from hidden field palette
+	// Detach starttime and endtime from hidden field palette
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace('hidden;;1;;1-1-1, ', 'hidden, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
 
-//	// add kicker, title and teaser to a palette, move kicker, title and teaser for list views in secondary option
-//	// add main fields kicker, title and teaser to palette 2 (in order to render these 3 fields in 1 row)
-//	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][2]['showitem'] = 'kicker;;3, title, teaser';
-//	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][2]['canNotCollapse'] = 1;
 
-	// add list view fields to palette 3
-	$GLOBALS['TCA']['tx_newspaper_article']['palettes'][3]['showitem'] = 'kicker_list, title_list, teaser_list';
-	// create virtual field "kicker_title_teaser", use to attach palette 2 (kicker, title and teaser in 1 row) ...
-//	$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser'] = array(
-//		'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser',
-//		'config' => array(
-//			'type' => 'user',
-//			'userFunc' => 'tx_newspaper_be->renderArticleKickerTtitleTeaser',
-//		)
-//	);
-//	// ... and replace field kicker with virtual field kicker_title_teaser (and remove fields kicker, title and teaser from main form)
-//	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', kicker, ', ', kicker_title_teaser;;2, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-//	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-//	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-
-	// create virtual field "kicker_title_teaser_for_listview", use to attach palette 2 (kicker, title and teaser for list viwes in 1 row) ...
-	// if at least on of the three fields is enabled in the backend
-	if (tx_newspaper_UtilMod::isAvailableInTceform('tx_newspaper_article', array('kicker_list', 'title_list', 'teaser_list'))) {
-		$GLOBALS['TCA']['tx_newspaper_article']['columns']['kicker_title_teaser_for_list_views'] = array(
-			'label' => 'LLL:EXT:newspaper/locallang_newspaper.xml:label_kicker_title_teaser_for_list_views',
-			'config' => array(
-				'type' => 'user',
-				'userFunc' => 'tx_newspaper_be->renderArticleKickerTtitleTeaserForListviews',
-			)
-		);
-		// ... and replace field kicker with virtual field kicker_title_teaser (and remove fields kicker, title and teaser from main form)
-		$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', kicker_list, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-		$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', title_list, ', ', ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-		$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] = str_replace(', teaser_list, ', ', kicker_title_teaser_for_list_views;;3, ', $GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem']);
-	}
-
-
-	// append tab "time control" (starttime and endtime were attached to a secondary option, so they have to added here too)
+	// Append tab "time control" (starttime and endtime were attached to a secondary option, so they have to added here too)
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] .= ', --div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_timecontrol, starttime, endtime';
 	// append empty tab "additional data"
 	$GLOBALS['TCA']['tx_newspaper_article']['types'][0]['showitem'] .= ', --div--;LLL:EXT:newspaper/locallang_newspaper.xml:label_tab_article_additional';
@@ -111,9 +82,9 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 
 
 
-	// force reloading the article backend when the "no_rte" checkbox is changed
+	// Force reloading the article backend when the "no_rte" checkbox is changed
 	$TCA['tx_newspaper_article']['ctrl']['requestUpdate'] = 'no_rte';
-	// insert mode=no_rte to make usage of RTE configurable per article
+	// Insert mode=no_rte to make usage of RTE configurable per article
 	$TCA['tx_newspaper_article']['types']['0']['showitem'] = str_replace('rte_transform[mode=ts_css', 'rte_transform[flag=no_rte|mode=ts_css', $TCA['tx_newspaper_article']['types']['0']['showitem']);
 
 
@@ -121,7 +92,7 @@ $TCA['tx_newspaper_article']['columns']['teaser']['config'] = array(
 
 
 
-// add time to starttime and endtime for newspaper records
+// Add time to starttime and endtime for newspaper records
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['starttime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['endtime']['config']['eval'] = 'datetime';
 $GLOBALS['TCA']['tx_newspaper_article']['columns']['publish_date']['config']['eval'] = 'datetime';
@@ -131,15 +102,15 @@ $GLOBALS['TCA']['tx_newspaper_article']['columns']['publish_date']['config']['si
 
 
 $TCA['tx_newspaper_section']['columns']['default_articletype']['config']['foreign_table_where'] = 'ORDER BY tx_newspaper_articletype.sorting';
-/// add user function for page type and page zone type in section records
+/// Add user function for page type and page zone type in section records
 unset($TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']);
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['pagetype_pagezone']['config']['userFunc'] = 'tx_newspaper_be->renderPagePageZoneList';
-/// add article list dropdown
+/// Add article list dropdown
 unset($TCA['tx_newspaper_section']['columns']['articlelist']['config']);
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['type'] = 'user';
 $TCA['tx_newspaper_section']['columns']['articlelist']['config']['userFunc'] = 'tx_newspaper_be->renderArticleList';
-/// add entries for template set dropdowns
+/// Add entries for template set dropdowns
 unset($TCA['tx_newspaper_section']['columns']['template_set']['config']['items']['0']);
 $TCA['tx_newspaper_section']['columns']['template_set']['config']['itemsProcFunc'] = 'tx_newspaper_BE->addTemplateSetDropdownEntries';
 $TCA["tx_newspaper_section"]["columns"]["articlelist"]["config"]["range"] = array ("lower" => "1");
@@ -179,7 +150,7 @@ $TCA['tx_newspaper_extra']['ctrl']['label_userFunc'] = 'tx_newspaper_be->getAbst
 // Set label for sections
 $TCA['tx_newspaper_section']['ctrl']['label_userFunc'] = 'tx_newspaper_section->getSectionBackendLabel';
 
-// in case the label field "title" is not visible in the backend
+// In case the label field "title" is not visible in the backend
 $TCA['tx_newspaper_extra_image']['ctrl']['label_alt'] = 'uid';
 
 

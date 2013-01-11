@@ -1,0 +1,97 @@
+<form>
+    <div id="filter">
+	{if (!$IS_CONCRETE_ARTICLE)}
+		{* Checkbox: show levels above for pagezone_page and default article *}
+		<input type="checkbox" {if $SHOW_LEVELS_ABOVE}checked="checked" {/if} onchange="javascript:toggle_show_levels_above(this.checked);" />
+		<label>{$LABEL.show_levels_above}</label>
+	{/if}
+
+	{* Dropdown for page and page zone for last (=selected) section only (and if NOT concrete article) *}
+	{if !$IS_CONCRETE_ARTICLE && $smarty.section.i.last} {* yes, this condition if checked twice ..... *}
+
+		<select  onchange="page_type_change(this.value)">
+		{section name=j loop=$PAGETYPE}
+			{if $PAGETYPE[j]->getUid() == $DATA[i].page_type->getUid()}
+				<option selected="selected"
+			{else}
+				<option
+			{/if} value="{$PAGETYPE[j]->getUid()}">{$PAGETYPE[j]->getAttribute('type_name')}</option>
+		{/section}
+		</select>
+		<label>{$LABEL.pagetype}</label>
+
+		<select  onchange="pagezone_type_change(this.value)">
+		{section name=j loop=$PAGEZONETYPE}
+			{if $PAGEZONETYPE[j]->getUid() == $DATA[i].pagezone_type->getUid()}
+				<option selected="selected"
+			{else}
+				<option
+			{/if} value="{$PAGEZONETYPE[j]->getUid()}">{$PAGEZONETYPE[j]->getAttribute('type_name')}</option>
+		{/section}
+		</select>
+		<label>{$LABEL.pagezonetype}</label>
+
+		<select onchange="inheritancesource_change({$DATA[i].pagezone_id}, this.value)">
+{* 0 -> default inheritance mode, read upper level *}
+			<option value="0" {if ($DATA[i].inherits_from == 0)}selected="selected"{/if}>{$LABEL.pagezone_inheritancesource_upper}</option>
+{* page zone being activated for other page on the same level *}
+			{section name=j loop=$INHERITANCESOURCE}
+				{if $INHERITANCESOURCE[j]->getAbstractUid() == $DATA[i].inherits_from}
+					<option selected="selected"
+				{else}
+					<option
+				{/if} value="{$INHERITANCESOURCE[j]->getAbstractUid()}">{$INHERITANCESOURCENAME[j]}{if $DEBUG_OUTPUT} [#{$INHERITANCESOURCE[j]->getAbstractUid()}]{/if}</option>
+			{/section}
+{* -1 -> no inheritance *}
+			<option value="-1" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>{$LABEL.pagezone_inheritancesource_none}</option>
+{* Future feature; <option value="-2" {if ($DATA[i].inherits_from == -1)}selected="selected" {/if}>\todo:use TSConfig setting</option> *}
+		</select>
+		<label>{$LABEL.pagezone_inheritancesource}</label>
+
+	{/if}
+
+{*
+// See #1655 @todo: make tsconfigurable
+	{if !$IS_CONCRETE_ARTICLE && $DATA[0].pagezone_type->getAttribute('is_article') == 0}
+		* dummy button for pagezone_page only *
+		<br /><br /><a href="javascript:extra_insert_after_dummy(0, {$DATA[i].pagezone_id});">{$DUMMY_ICON}</a>
+	{/if}
+*}
+
+	{* @todo, see #653 *}
+ 	{* checkbox:deactivate moving and adding extras *}
+	{* checkbox:show visible extras only *}
+	{*	<input type="checkbox" {if $SHOW_VISIBLE_ONLY}checked="checked" {/if} onchange="javascript:toggle_show_visible_only(this.checked);" /> {$LABEL.show_visible_only} *}
+	{* dropdown:tagzone extra visibility (yes, no, only) *}
+
+
+          {* Clipboard *}
+          {if $CLIPBOARD}
+          <div id="clipboard">
+
+          <b>{$LABEL.clipboard}</b><br />
+
+          {if $CLIPBOARD.type == 'copy'}
+              {$LABEL.clipboard_copied}
+          {else}
+              {$LABEL.clipboard_cut}
+          {/if}<br />
+
+          {$CLIPBOARD_DATA.pz}<br />
+          {$CLIPBOARD_DATA.e}<br />
+
+          <br />
+
+          <a href="javascript:clear_clipboard();">{$CLEAR_CLIPBOARD_ICON} {$LABEL.clear_clipboard}</a>
+          </div>
+          {/if}
+
+
+          {* Publish button *}
+          <div id="publishButton">
+              <span onclick="top.NpBackend.callDepTreeForPagezone_page({$DATA[i].pagezone_id}); return false;">{$LABEL.publish}</span>
+          </div>
+
+
+</div>
+</form>

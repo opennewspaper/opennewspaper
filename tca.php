@@ -542,7 +542,7 @@ $TCA["tx_newspaper_pagezone_page"] = array (
 $TCA["tx_newspaper_article"] = array (
 	"ctrl" => $TCA["tx_newspaper_article"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,author,kicker,title,teaser,kicker_list,title_list,teaser_list,bodytext,no_rte,url,publish_date,modification_user,source_id,source_object,sections,is_template,extras,name,pagezonetype_id,template_set,inherits_from,tags,related,workflow_status"
+		"showRecordFieldList" => "hidden,starttime,endtime,articletype_id,author,kicker_list,kicker,title_list,title,teaser_list,teaser,bodytext,no_rte,url,publish_date,modification_user,source_id,source_object,sections,is_template,extras,name,pagezonetype_id,template_set,inherits_from,tags,related,workflow_status"
 	),
 	"feInterface" => $TCA["tx_newspaper_article"]["feInterface"],
 	"columns" => array (
@@ -899,7 +899,7 @@ $TCA["tx_newspaper_article"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, author, kicker, title;;;;2-2-2, teaser;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], kicker_list, title_list, teaser_list, bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], no_rte, url, publish_date, modification_user, source_id, source_object, sections, is_template, extras, name, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, articletype_id, author, kicker_list, kicker, title_list, title;;;;2-2-2, teaser_list, teaser;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], bodytext;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/tx_newspaper/rte/], no_rte, url, publish_date, modification_user, source_id, source_object, sections, is_template, extras, name, pagezonetype_id, template_set, inherits_from, tags, related, workflow_status")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
