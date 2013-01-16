@@ -18,9 +18,10 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_smarty.p
 
 /// An article for the online newspaper
 
-/** The article is the central entity in a newspaper. All other functionalities
- *  deal with displaying articles, lists of articles or additional information
- *  linked to articles.
+/**
+ *  The article is the central entity in a newspaper. Practically all other
+ *  functionalities deal with displaying articles, lists of articles or
+ *  additional information linked to articles.
  *
  *  Data-wise, an article consists of the minimum set of fields that every
  *  article must have. All additional data connected to an article (e.g. images,
@@ -55,7 +56,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     ////////////////////////////////////////////////////////////////////////////
     /// Create a tx_newspaper_Article
 
-    /** Initializes the tx_newspaper_ArticleBehavior and tx_newspaper_Smarty
+    /**
+     *  Initializes the tx_newspaper_ArticleBehavior and tx_newspaper_Smarty
      *  used as auxiliaries.
      *
      *  Ensures that the current object has a record identifying it in the
@@ -74,8 +76,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     ///	Things to do after an article is cloned
-
-    /** This magic function is called after all attributes of a
+    /**
+     *  This magic function is called after all attributes of a
      *  tx_newspaper_Article have been copied, when the PHP operation \p clone
      *  is executed on a tx_newspaper_Article.
      *
@@ -229,7 +231,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     ////////////////////////////////////////////////////////////////////////////
     /// Renders an article with all of its Extras
 
-    /** \param $template_set Template set to use
+    /** @param string $template_set Template set to use
      */
     public function render($template_set = '') {
 
@@ -276,9 +278,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /// Read data from table \p $table with UID \p $uid
     /**
-     *  \param $uid UID of the record to read
-     *  \param $table SQL table to read record from
-     *  \return The data contained in the requested record
+     *  @param int $uid UID of the record to read
+     *  @param string $table SQL table to read record from
+     *  @return array The data contained in the requested record
      *  \todo remove.
      */
     static public function readExtraItem($uid, $table) {
@@ -331,39 +333,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     //
     ////////////////////////////////////////////////////////////////////////////
 
-    public function importieren(tx_newspaper_Source $quelle) {
-        $this->articleBehavior->importieren($quelle);
-    }
-
-    public function exportieren(tx_newspaper_Source $quelle) {
-        $this->articleBehavior->exportieren($quelle);
-    }
-
-    public function laden() {
-        $this->articleBehavior->laden();
-    }
-
-    public function vergleichen() {
-        $this->articleBehavior->vergleichen();
-    }
-
-    public function extraAnlegen() {
-        $this->articleBehavior->extraAnlegen();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //	class tx_newspaper_PageZone
-    //
-    ////////////////////////////////////////////////////////////////////////////
-
     /// Get the list of tx_newspaper_Extra associated with this Article in sorted order
     /**
      *  The Extras are sorted by attribute \c paragraph first and
      *  \c position second.
-     *
-     * \param $extra_class The desired type of tx_newspaper_Extra, either as
-     *  	object or as class name
      */
     public function getExtras() {
         if (!$this->extras) {
@@ -395,6 +368,78 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return $this->extras;
     }
 
+    /// Get article type of article
+    /**
+     *  @return tx_newspaper_ArticleType assigned to this Article
+     */
+    public function getArticleType() {
+        return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
+    }
+
+    /// Get a list of all attributes in the tx_newspaper_Article table.
+    /** \return All attributes in the tx_newspaper_Article table.
+     *  \todo A static attribute list sucks. Determine it dynamically.
+     */
+    static public function getAttributeList() {
+        return self::$attribute_list;
+    }
+
+    /// Write record in MM table relating an Extra to this article
+    /**
+     *  The MM table record is only written if it did not exist beforehand.
+     *
+     *  If \p $extra did not have a record in the abstract Extra table
+     *  (\c tx_newspaper_extra ), the record is created.
+     *
+     *  The MM-table \c tx_newspaper_article_extra_mm will contain an
+     *  association between the Article's UID and the UID in the abstract Extra
+     *  table.
+     *
+     *  @param $extra tx_newspaper_Extra The extra to add to \c $this.
+     *
+     *  @return int The UID of \p $extra in the abstract Extra table.
+     */
+    public function relateExtra2Article(tx_newspaper_ExtraIface $extra) {
+
+        $extra_table = tx_newspaper::getTable($extra);
+        $extra_uid = $extra->getUid();
+        $article_uid = $this->getUid();
+
+        $abstract_uid = $extra->getExtraUid();
+        if (!$abstract_uid)
+            $abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table);
+
+        /// Write entry in MM table (if not exists)
+        $row = tx_newspaper::selectZeroOrOneRows(
+                        'uid_local, uid_foreign',
+                        tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+                        'uid_local = ' . intval($article_uid) .
+                        ' AND uid_foreign = ' . intval($abstract_uid)
+        );
+
+        if ($row['uid_local'] != $article_uid ||
+                $row['uid_foreign'] != $abstract_uid) {
+            if (!tx_newspaper::insertRows(
+                            tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
+                            array(
+                                'uid_local' => $article_uid,
+                                'uid_foreign' => $abstract_uid)
+                    )
+            ) {
+                return false;
+            }
+        }
+
+        return $abstract_uid;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    //	class tx_newspaper_PageZone
+    //
+    ////////////////////////////////////////////////////////////////////////////
+
     /// Add an extra after the Extra which is on the original page zone as $origin_uid
     /**
      *  Reimplemented from tx_newspaper_PageZone because concrete Articles don't
@@ -408,7 +453,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /// Get the tx_newspaper_PageZoneType associated with this Article
     /**
-     *  \return The tx_newspaper_PageZoneType associated with this Article. If
+     *  @return tx_newspaper_PageZoneType The PageZoneType associated with this Article. If
      * 		this is not the one where attribute \p is_article is set, there
      * 		is something weird going on.
      *  \todo Check for \p is_article. No idea how to handle errors though.
@@ -451,9 +496,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
     /// Find the first tx_newspaper_Extra of a given type
     /**
-     *  \param $extra_class The desired type of tx_newspaper_Extra, either as
+     *  @param $extra_class The desired type of tx_newspaper_Extra, either as
      *  	object or as class name
-     *  \return The first tx_newspaper_Extra of the given class (by appearance
+     *  @return tx_newspaper_Extra The first extra of the given class (by appearance
      * 		in article), or \c null.
      */
     public function getFirstExtraOf($extra_class) {
@@ -463,16 +508,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return null;
     }
 
-    /// Get article type of article
-    /**
-     *  \return tx_newspaper_ArticleType assigned to this Article
-     */
-    public function getArticleType() {
-        return new tx_newspaper_ArticleType($this->getAttribute('articletype_id'));
-    }
-
     /// checks if article is a default article or a concrete article
-    /** \return \c true if article is a default article (else \c false).
+    /**
+     *  @return bool \c true if article is a default article (else \c false).
      */
     public function isDefaultArticle() {
         return $this->getAttribute('is_template');
@@ -483,56 +521,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $this->extras = array();
     }
 
-    /// Write record in MM table relating an Extra to this article
-    /** The MM table record is only written if it did not exist beforehand.
-     *
-     *  If \p $extra did not have a record in the abstract Extra table
-     *  (\c tx_newspaper_extra ), the record is created.
-     *
-     *  The MM-table \c tx_newspaper_article_extra_mm will contain an
-     *  association between the Article's UID and the UID in the abstract Extra
-     *  table.
-     *
-     *  \param $extra The tx_newspaper_Extra to add to \c $this.
-     *
-     *  \return The UID of \p $extra in the abstract Extra table.
-     */
-    public function relateExtra2Article(tx_newspaper_ExtraIface $extra) {
-
-        $extra_table = tx_newspaper::getTable($extra);
-        $extra_uid = $extra->getUid();
-        $article_uid = $this->getUid();
-
-        $abstract_uid = $extra->getExtraUid();
-        if (!$abstract_uid)
-            $abstract_uid = tx_newspaper_Extra::createExtraRecord($extra_uid, $extra_table);
-
-        /// Write entry in MM table (if not exists)
-        $row = tx_newspaper::selectZeroOrOneRows(
-                        'uid_local, uid_foreign',
-                        tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-                        'uid_local = ' . intval($article_uid) .
-                        ' AND uid_foreign = ' . intval($abstract_uid)
-        );
-
-        if ($row['uid_local'] != $article_uid ||
-                $row['uid_foreign'] != $abstract_uid) {
-            if (!tx_newspaper::insertRows(
-                            tx_newspaper_Extra_Factory::getExtra2ArticleTable(),
-                            array(
-                                'uid_local' => $article_uid,
-                                'uid_foreign' => $abstract_uid)
-                    )
-            ) {
-                return false;
-            }
-        }
-
-        return $abstract_uid;
-    }
-
     /// Change the paragraph of an Extra recursively on inheriting Articles
-    /** This function is used to change the paragraph of an Extra on Articles
+    /**
+     *  This function is used to change the paragraph of an Extra on Articles
      *  that serve as templates for the placement of Articles in Sections
      *  ("Default Articles"). Because the \c paragraph attribute must be
      *  changed in the default articles of Sections that inherit from the
@@ -546,9 +537,9 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *
      *  \todo Replace with a generic function to set attributes recursively.
      *
-     *  \param $extra tx_newspaper_Extra which should be moved to another
+     *  @param tx_newspaper_Extra $extra Extra which should be moved to another
      * 		paragraph.
-     *  \param $new_paragraph The paragraph to which \p $extra is moved.
+     *  @param int $new_paragraph The paragraph to which \p $extra is moved.
      */
     public function changeExtraParagraph(tx_newspaper_Extra $extra, $new_paragraph) {
 // \todo: the changed paragraph is STORED in the extra but NOT MODIFIED in this pagezone's extras attribute
@@ -586,12 +577,12 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Generates a URL which links to the tx_newspaper_Article on the correct tx_newspaper_Page.
-    /** \param $section Section from which the link is generated. Defaults to
+    /**
+     *  @param $section Section from which the link is generated. Defaults to
      * 		using the article's primary section.
-     *  \param $pagetype tx_newspaper_PageType of the wanted tx_newspaper_Page.
-     *  \todo Handle PageType other than article page.
-     *  \todo Check if target page has an Article display Extra,
-     * 		tx_newspaper_Extra_DisplayArticles.
+     *  @param $pagetype tx_newspaper_PageType of the wanted tx_newspaper_Page.
+     *  @todo Handle PageType other than article page.
+     *  @todo Check if target page has an Article display Extra, tx_newspaper_Extra_DisplayArticles.
      */
     public function getLink(tx_newspaper_Section $section = null,
                             tx_newspaper_PageType $pagetype = null,
@@ -634,14 +625,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
 
         return $section;
-    }
-
-    /// Get a list of all attributes in the tx_newspaper_Article table.
-    /** \return All attributes in the tx_newspaper_Article table.
-     *  \todo A static attribute list sucks. Determine it dynamically.
-     */
-    static public function getAttributeList() {
-        return self::$attribute_list;
     }
 
     /// Gets a list of tx_newspaper_Article objects assigned to given article type

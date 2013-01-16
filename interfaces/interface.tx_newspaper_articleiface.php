@@ -31,16 +31,6 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/private/class.tx_newspaper_
  */
 interface tx_newspaper_ArticleIface
 	extends tx_newspaper_ExtraIface, tx_newspaper_WithSource {
-	/// \todo Throw out.	
-	public function importieren(tx_newspaper_Source $quelle);
-	/// \todo Throw out.	
-	public function exportieren(tx_newspaper_Source $quelle);
-	/// \todo Throw out.	
-	public function laden();
-	/// \todo Throw out.	
-	public function vergleichen();
-	/// \todo Throw out.	
-	public function extraAnlegen();
 
 	/// \return The list of Extra s associated with this tx_newspaper_ArticleIface
 	public function getExtras();

@@ -29,21 +29,6 @@ class tx_newspaper_ArticleBehavior {
 	public function render($template= '') {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
-	public function importieren() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-	public function exportieren() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-	public function laden() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-	public function vergleichen() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}
-	public function extraAnlegen() {
-		throw new tx_newspaper_NotYetImplementedException();
-	}	
 	static function getAttributeList() {
 		throw new tx_newspaper_NotYetImplementedException();
 	}
