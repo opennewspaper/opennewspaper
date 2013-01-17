@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-	<meta type="array">
-		<type>database</type>
-		<description>Language labels for extension 'newspaper'</description>
-	</meta>
-	<data type="array">
+    <meta type="array">
+        <type>database</type>
+        <description>Language labels for extension 'newspaper'</description>
+    </meta>
+    <data type="array">
 
-		<languageKey index="default" type="array">
-			<label index="entry_templateset_inherit">Inherit from upper level</label>
-			<label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
+        <languageKey index="default" type="array">
+            <label index="entry_templateset_inherit">Inherit from upper level</label>
+
+            <label index="error_dropdown_invalid_articlelist">[ INVALID ARTICLE LIST ("%s") ]</label>
+
             <label index="flag_activated_pagezone_in_section">This page zone is activated</label>
-			<label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
+            <label index="flag_edit_articlelist_in_section">Edit article list for this section</label>
             <label index="flag_edit_page_in_section">Check or activate pages zones for this page</label>
-			<label index="flag_extra_edit">Edit extra</label>
-			<label index="flag_extra_hide">Hide extra</label>
-			<label index="flag_extra_unhide">Unhide extra</label>
-			<label index="flag_extra_delete">Delete extra</label>
-			<label index="flag_new_page_in_section">Activate this page type for this section</label>
-			<label index="flag_new_pagezone_in_section">Activate this page zone type for this section and page</label>
-			<label index="label_articlelist_included_sections">Section(s)</label>
-			<label index="label_articlelist_included_tags">Tag(s)</label>
-			<label index="label_articlelist_excluded_tags">Excluded tag(s)</label>
+            <label index="flag_extra_edit">Edit extra</label>
+            <label index="flag_extra_hide">Hide extra</label>
+            <label index="flag_extra_unhide">Unhide extra</label>
+            <label index="flag_extra_delete">Delete extra</label>
+            <label index="flag_new_page_in_section">Activate this page type for this section</label>
+            <label index="flag_new_pagezone_in_section">Activate this page zone type for this section and page</label>
+
+            <label index="label_articlelist_included_sections">Section(s)</label>
+            <label index="label_articlelist_included_tags">Tag(s)</label>
+            <label index="label_articlelist_excluded_tags">Excluded tag(s)</label>
             <label index="label_kicker_title_teaser">Article header data</label>
             <label index="label_kicker_title_teaser_for_list_views">Article header data for list views</label>
             <label index="label_tab_article_article">Article</label>
@@ -30,52 +33,54 @@
             <label index="label_tab_article_related">Related articles</label>
             <label index="label_tab_article_timecontrol">Time control</label>
             <label index="label_tab_article_additional">Additional data</label>
-			<label index="label_workflow_hide">Hide</label>
-			<label index="label_workflow_publish">Publish</label>
-			<label index="label_workflow_check">Send to duty editor</label>
-			<label index="label_workflow_check_hide">Send to duty editor &amp; hide</label>
-			<label index="label_workflow_check_publish">Send to duty editor &amp; publish</label>
+            <label index="label_workflow_hide">Hide</label>
+            <label index="label_workflow_publish">Publish</label>
+            <label index="label_workflow_check">Send to duty editor</label>
+            <label index="label_workflow_check_hide">Send to duty editor &amp; hide</label>
+            <label index="label_workflow_check_publish">Send to duty editor &amp; publish</label>
             <label index="label_workflow_extra_changed">Web element changed:</label>
             <label index="label_workflow_extra_created">created</label>
             <label index="label_workflow_field_changed">Field(s) changed:</label>
-			<label index="label_workflow_revise">Send to editorial staff</label>
-			<label index="label_workflow_revise_hide">Send to editorial staff &amp; hide</label>
-			<label index="label_workflow_revise_publish">Send to editorial staff &amp; publish</label>
-			<label index="label_workflow_place">Place</label>
-			<label index="label_workflow_place_hide">Place &amp; hide</label>
-			<label index="label_workflow_place_publish">Place &amp; publish</label>
+            <label index="label_workflow_revise">Send to editorial staff</label>
+            <label index="label_workflow_revise_hide">Send to editorial staff &amp; hide</label>
+            <label index="label_workflow_revise_publish">Send to editorial staff &amp; publish</label>
+            <label index="label_workflow_place">Place</label>
+            <label index="label_workflow_place_hide">Place &amp; hide</label>
+            <label index="label_workflow_place_publish">Place &amp; publish</label>
             <label index="label_workflow_role_editorialstaff">Editorial staff</label>
-        	<label index="label_workflow_role_dutyeditor">Duty editor</label>
-         	<label index="label_workflow_role_none">Article online, workflow ended</label>
-         	<label index="label_workflow_role_old">Old role</label>
-         	<label index="label_workflow_role_new">New role</label>
-         	<label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
-			<label index="label_workflow_save">Save</label>
+            <label index="label_workflow_role_dutyeditor">Duty editor</label>
+            <label index="label_workflow_role_none">Article online, workflow ended</label>
+            <label index="label_workflow_role_old">Old role</label>
+            <label index="label_workflow_role_new">New role</label>
+            <label index="label_workflow_role_change">###OLD_ROLE### --> ###NEW_ROLE###</label>
+            <label index="label_workflow_save">Save</label>
             <label index="label_workflow_show_all_messages">Show details</label>
             <label index="label_workflow_show_default_messages">Hide details</label>
             <label index="label_workflow_show_details">Show more details</label>
-			<label index="log_article_hidden">Article hidden</label>
-			<label index="log_article_published">Article published</label>
+
+            <label index="log_article_hidden">Article hidden</label>
+            <label index="log_article_published">Article published</label>
             <label index="log_import">Article imported</label>
             <label index="log_import_source_id">Source</label>
             <label index="log_import_source_path">Path</label>
-			<label index="log_less_link">Less ...</label>
+            <label index="log_less_link">Less ...</label>
             <label index="log_more_link">More ...</label>
             <label index="log_record_hidden">Record hidden</label>
             <label index="log_record_published">Record published</label>
-			<label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
-			<label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
-			<label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
+
+            <label index="message_section_not_saved_page">You can activate pages and page zones once you have saved this section.</label>
+            <label index="message_section_not_saved_articlelist">You can edit the article list once you have saved this section.</label>
+            <label index="message_title_page_in_section">List of pages to edit or page types to activate for this section</label>
             <label index="message_delete_page_in_section">Delete this page</label>
             <label index="message_check_delete_page_in_section">Do you really want to DELETE this page type?</label>
-			<label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
-			<label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
-			<label index="message_close_pagezone_in_section">Return to list of page types</label>
-			<label index="message_delete_pagezone_in_section">Delete this page zone</label>
-			<label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
-			<label index="message_image_missing">The image file you chose is no longer present on the file system!</label>
+            <label index="message_title_pagezone_in_section">List of activated page zones or page zone types to activate for this section and page</label>
+            <label index="message_check_delete_pagezone_in_page">Do you really want to DELETE this page zone type?</label>
+            <label index="message_close_pagezone_in_section">Return to list of page types</label>
+            <label index="message_delete_pagezone_in_section">Delete this page zone</label>
+            <label index="message_edit_articlelist_in_section_save_first">Please save section to edit article list</label>
+            <label index="message_image_missing">The image file you chose is no longer present on the file system!</label>
             <label index="message_image_unset">You have not chosen an image yet.</label>
-			<label index="message_title_sectiontree">Section tree</label>
+            <label index="message_title_sectiontree">Section tree</label>
             <label index="message_tx_newspaper_articlelist_unsaved">Please save this record in order get articles listed</label>
             <label index="message_tx_newspaper_articlelist_empty">No article in this article list</label>
             <label index="message_no_controltag_selected">No control tag selected</label>
@@ -90,49 +95,52 @@
                 Please create a Typo3 page and link it to section ###SECTION### in the Page Properties, tab "Extended".
                 Otherwise, it will be impossible to display or link to this article.
             </label>
+            <label index="message_article_no_section">No section is assigned to this article. Please select a section and store in order to edit the article.</label>
+
             <label index="title_section_articlelist">Article list for section ###SECTION### (###ARTICLELIST_TYPE###)</label>
-			<label index="title_tx_newspaper_article">Article</label>
-			<label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
-			<label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
-			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
-			<label index="title_tx_newspaper_articletype">Article type</label>
-			<label index="title_tx_newspaper_extra_ad">Ad</label>
-			<label index="title_tx_newspaper_extra_generic">Generic element</label>
-			<label index="title_tx_newspaper_extra_articlelinks">Links about the article</label>
-			<label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
-			<label index="title_tx_newspaper_extra_bio">Bio box</label>
-			<label index="title_tx_newspaper_extra_controltagzone">Control tag zone</label>
+            <label index="title_tx_newspaper_article">Article</label>
+            <label index="title_tx_newspaper_articlelist_test">Article list for testing</label>
+            <label index="title_tx_newspaper_articlelist_manual">Manual article list</label>
+            <label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatic article list</label>
+            <label index="title_tx_newspaper_articletype">Article type</label>
+            <label index="title_tx_newspaper_extra_ad">Ad</label>
+            <label index="title_tx_newspaper_extra_generic">Generic element</label>
+            <label index="title_tx_newspaper_extra_articlelinks">Links about the article</label>
+            <label index="title_tx_newspaper_extra_articlelist">Display a list of articles</label>
+            <label index="title_tx_newspaper_extra_bio">Bio box</label>
+            <label index="title_tx_newspaper_extra_controltagzone">Control tag zone</label>
             <label index="title_tx_newspaper_extra_container">Container for Extras</label>
-			<label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
-			<label index="title_tx_newspaper_extra_externallinks">External links</label>
+            <label index="title_tx_newspaper_extra_displayarticles">Article display area</label>
+            <label index="title_tx_newspaper_extra_externallinks">External links</label>
             <label index="title_tx_newspaper_extra_freeformimage">Free form image</label>
-			<label index="title_tx_newspaper_extra_html">HTML</label>
-			<label index="title_tx_newspaper_extra_flexform">Flexform</label>
-			<label index="title_tx_newspaper_extra_image">Image</label>
-			<label index="title_tx_newspaper_extra_mostcommented">Most commented articles</label>
-			<label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
-			<label index="title_tx_newspaper_extra_sectionteaser">Sectionteaser</label>
-			<label index="title_tx_newspaper_extra_textbox">Text box</label>
-			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
-			<label index="title_tx_newspaper_page">Page</label>
-			<label index="title_tx_newspaper_pagetype">Page type</label>
-			<label index="title_tx_newspaper_pagezone_page">Page zone</label>
-			<label index="title_tx_newspaper_pagezonetype">Page zone type</label>
-			<label index="title_tx_newspaper_section">Section</label>
-			<label index="title_tx_newspaper_tag">Tag</label>
-			<label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
-			<label index="title_tx_newspaper_extra_searchresults">Search result</label>
-			<label index="message_article_no_section">No section is assigned to this article. Please select a section and store in order to edit the article.</label>
+            <label index="title_tx_newspaper_extra_html">HTML</label>
+            <label index="title_tx_newspaper_extra_flexform">Flexform</label>
+            <label index="title_tx_newspaper_extra_image">Image</label>
+            <label index="title_tx_newspaper_extra_mostcommented">Most commented articles</label>
+            <label index="title_tx_newspaper_extra_phpinclude">Include PHP</label>
+            <label index="title_tx_newspaper_extra_sectionlist">Section overview</label>
+            <label index="title_tx_newspaper_extra_sectionteaser">Sectionteaser</label>
+            <label index="title_tx_newspaper_extra_textbox">Text box</label>
+            <label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
+            <label index="title_tx_newspaper_page">Page</label>
+            <label index="title_tx_newspaper_pagetype">Page type</label>
+            <label index="title_tx_newspaper_pagezone_page">Page zone</label>
+            <label index="title_tx_newspaper_pagezonetype">Page zone type</label>
+            <label index="title_tx_newspaper_section">Section</label>
+            <label index="title_tx_newspaper_tag">Tag</label>
+            <label index="title_tx_newspaper_extra_combolinkbox">Combo link box</label>
+            <label index="title_tx_newspaper_extra_searchresults">Search result</label>
             <label index="title_tx_newspaper_extra_specialhits">Special hits</label>
+
             <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
             <label index="flashMessage_extra_flexform_folder_not_found">Folder "%s" can't be found.</label>
             <label index="flashMessage_extra_flexform_no_folder_configured">No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">The selected Flexform template is archived. Changing the Flexform template can't be undone.</label>
             <label index="flashMessage_extra_flexform_file_not_found">Neither active nor archived data structure file "%s.xml" can be found.</label>
-		</languageKey>
+        </languageKey>
 
-		<languageKey index="de" type="array">
+        <languageKey index="de" type="array">
             <label index="label_articlelist_included_sections">Ressort(s)</label>
             <label index="label_articlelist_included_tags">Tag(s)</label>
             <label index="label_articlelist_excluded_tags">Ausgeschlossene Tag(s)</label>
@@ -169,6 +177,7 @@
             <label index="label_workflow_show_all_messages">Details einblenden</label>
             <label index="label_workflow_show_default_messages">Details ausblenden</label>
             <label index="label_workflow_show_details">Mehr Details</label>
+
             <label index="log_article_hidden">Artikel versteckt</label>
             <label index="log_article_published">Artikel publiziert</label>
             <label index="log_import">Artikel importiert</label>
@@ -177,6 +186,7 @@
             <label index="log_less_link">Weniger ...</label>
             <label index="log_more_link">Mehr ...</label>
             <label index="log_record_published">Publiziert</label>
+
             <label index="message_image_missing">Die eingestellte Bilddatei ist nicht mehr im Dateisystem vorhanden!</label>
             <label index="message_image_unset">Es wurde noch keine Bilddatei ausgewählt.</label>
             <label index="message_section_typo3page_missing">
@@ -191,37 +201,39 @@
             <label index="message_select_another_articlelist">
                 Bitte wählen Sie eine andere Artikelliste.
             </label>
+            <label index="message_article_no_section">Dem Artikel ist kein Ressort zugeordnet. Bitte weisen Sie dem Artikel ein Ressort zu und speichern, um den Artikel bearbeiten zu können.</label>
+
             <label index="title_section_articlelist">Artikelliste für Ressort ###SECTION### (###ARTICLELIST_TYPE###)</label>
-			<label index="title_tx_newspaper_article">Artikel</label>
-			<label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
-			<label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
-			<label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
-			<label index="title_tx_newspaper_articletype">Artikeltyp</label>
-			<label index="title_tx_newspaper_extra_ad">Werbung</label>
-			<label index="title_tx_newspaper_extra_generic">Allgemeines Element</label>
-			<label index="title_tx_newspaper_extra_articlelinks">Links zum Artikel</label>
-			<label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
-			<label index="title_tx_newspaper_extra_bio">Biokasten</label>
-			<label index="title_tx_newspaper_extra_controltagzone">Steuertag-Bereich</label>
+            <label index="title_tx_newspaper_article">Artikel</label>
+            <label index="title_tx_newspaper_articlelist_test">Artikelliste zum Testen</label>
+            <label index="title_tx_newspaper_articlelist_manual">Manuelle Artikelliste</label>
+            <label index="title_tx_newspaper_articlelist_semiautomatic">Semiautomatische Artikelliste</label>
+            <label index="title_tx_newspaper_articletype">Artikeltyp</label>
+            <label index="title_tx_newspaper_extra_ad">Werbung</label>
+            <label index="title_tx_newspaper_extra_generic">Allgemeines Element</label>
+            <label index="title_tx_newspaper_extra_articlelinks">Links zum Artikel</label>
+            <label index="title_tx_newspaper_extra_articlelist">Artikelliste anzeigen</label>
+            <label index="title_tx_newspaper_extra_bio">Biokasten</label>
+            <label index="title_tx_newspaper_extra_controltagzone">Steuertag-Bereich</label>
             <label index="title_tx_newspaper_extra_container">Container für Extras</label>
-			<label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
-			<label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
+            <label index="title_tx_newspaper_extra_displayarticles">Artikelanzeige</label>
+            <label index="title_tx_newspaper_extra_externallinks">Externe Links</label>
             <label index="title_tx_newspaper_extra_freeformimage">Bild in Freiformat</label>
-			<label index="title_tx_newspaper_extra_html">HTML</label>
+            <label index="title_tx_newspaper_extra_html">HTML</label>
             <label index="title_tx_newspaper_extra_flexform">Flexform</label>
-			<label index="title_tx_newspaper_extra_image">Bild</label>
-			<label index="title_tx_newspaper_extra_mostcommented">Meistkommentierte Artikel</label>
-			<label index="title_tx_newspaper_extra_sectionlist">Ressortuebersicht</label>
-			<label index="title_tx_newspaper_extra_sectionteaser">Ressortteaser</label>
-			<label index="title_tx_newspaper_extra_textbox">Textkasten</label>
-			<label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
-			<label index="title_tx_newspaper_page">Seite</label>
-			<label index="title_tx_newspaper_pagetype">Seitentyp</label>
-			<label index="title_tx_newspaper_pagezone_page">Seitenbereich</label>
-			<label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
-			<label index="title_tx_newspaper_section">Ressort</label>
-			<label index="title_tx_newspaper_tag">Tag</label>
-			<label index="message_article_no_section">Dem Artikel ist kein Ressort zugeordnet. Bitte weisen Sie dem Artikel ein Ressort zu und speichern, um den Artikel bearbeiten zu können.</label>
+            <label index="title_tx_newspaper_extra_image">Bild</label>
+            <label index="title_tx_newspaper_extra_mostcommented">Meistkommentierte Artikel</label>
+            <label index="title_tx_newspaper_extra_phpinclude">PHP einbinden</label>
+            <label index="title_tx_newspaper_extra_sectionlist">Ressortübersicht</label>
+            <label index="title_tx_newspaper_extra_sectionteaser">Ressortteaser</label>
+            <label index="title_tx_newspaper_extra_textbox">Textkasten</label>
+            <label index="title_tx_newspaper_extra_typo3_ce">Typo3 Content Element</label>
+            <label index="title_tx_newspaper_page">Seite</label>
+            <label index="title_tx_newspaper_pagetype">Seitentyp</label>
+            <label index="title_tx_newspaper_pagezone_page">Seitenbereich</label>
+            <label index="title_tx_newspaper_pagezonetype">Seitenbereichstyp</label>
+            <label index="title_tx_newspaper_section">Ressort</label>
+            <label index="title_tx_newspaper_tag">Tag</label>
             <label index="title_tx_newspaper_extra_specialhits">Sondertreffer</label>
 
             <label index="flashMessage_extra_flexform_folder_not_found">Das Verzeichnis "%s" existiert nicht.</label>
@@ -230,7 +242,7 @@
             <label index="flashMessage_extra_flexform_file_not_found">Weder die aktive noch die archivierte Datenstruktur "%s.xml" exisitert.</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_header">Diese Seite kann nicht gelöscht werden, ...</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_message">... weil ein aktives Newspaper-Ressort mit dieser Seite verbunden ist. Bitte nutzen Sie das Newspaper-Ressortmodul, um das Ressort und diese Seite zu löschen.</label>
-		</languageKey>
+        </languageKey>
 
-	</data>
+    </data>
 </T3locallang>
