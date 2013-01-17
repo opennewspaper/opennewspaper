@@ -1464,7 +1464,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         foreach ($this->getTags() as $tag) {
             $tags[] = array(
                 'uid' => $tag->getUid(),
-                'title' => $tag->getAttribute('title'),
+                'title' => $tag->getAttribute('title')? $tag->getAttribute('title'): $tag->getAttribute('tag'),
                 'tag_type' => $tag->getAttribute('tag_type'),
                 'ctrltag_cat_id' => $tag->getAttribute('ctrltag_cat'),
                 'ctrltag_category' => $tag->getCategoryName()

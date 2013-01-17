@@ -36,16 +36,7 @@
                 <f:form.select name="parent_section" options="{sections}" optionValueField="uid" optionLabelField="formattedRootline" value="{module_request.parent_section}" />
             </td>
         </tr>
-<!--
-        <tr>
-            <td>
-                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.show_in_list' />
-            </td>
-            <td>
-                <f:form.checkbox name="show_in_list" value="yes" checked="{module_request.show_in_list}" />
-            </td>
-        </tr>
--->
+
         <tr>
             <td>
                 <f:if condition="{invalid_articlelist_type}">
@@ -73,16 +64,7 @@
                 <f:form.select name="default_articletype" options="{article_types}" optionValueField="uid" optionLabelField="typeName" value="{module_request.default_articletype}" />
             </td>
         </tr>
-<!--
-        <tr>
-            <td>
-                <f:translate key='LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.template_set' />
-            </td>
-            <td>
-                <f:form.select name="template_set" options="{template_sets}" value="{module_request.template_set}" />
-            </td>
-        </tr>
--->
+
         <tr>
             <td colspan="2">
                 <f:form.submit name="submit" value="Submit" />

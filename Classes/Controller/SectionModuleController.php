@@ -24,23 +24,21 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         $this->view->assign('sections', $this->sections);
         $this->view->assign('module_request', $this->module_request);
-        $this->view->assign('sections', $this->sections);
-
         $this->view->assign('template_sets', tx_newspaper_smarty::getAvailableTemplateSets());
         $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
-        if ($this->isValidRequest($this->module_request)) {
-            try {
-                $this->createSection($this->module_request);
-                $this->flashMessageContainer->add(self::getSectionMessage('success', $this->module_request['section_name']));
-                $this->view->assign('module_request', array());
-            } catch (tx_newspaper_Exception $e) {
-                $this->addError(
-                    '<p>' . $e->getMessage() . '</p>' .
-                    '<p>' . str_replace("\n", "<br />\n", $e->getTraceAsString()) . '</p>',
-                    'system_error'
-                );
-            }
+        if (!$this->isValidRequest($this->module_request)) return;
+
+        try {
+            $this->createSection($this->module_request);
+            $this->flashMessageContainer->add(self::getSectionMessage('success', $this->module_request['section_name']));
+            $this->view->assign('module_request', array());
+        } catch (tx_newspaper_Exception $e) {
+            $this->addError(
+                '<p>' . $e->getMessage() . '</p>' .
+                '<p>' . str_replace("\n", "<br />\n", $e->getTraceAsString()) . '</p>',
+                'system_error'
+            );
         }
     }
 
