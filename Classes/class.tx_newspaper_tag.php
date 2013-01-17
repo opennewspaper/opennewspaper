@@ -74,7 +74,11 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
         return $newTag;
     }
 
-    /// \return Array with all control tag categories
+    /**
+     * Get all available control tag categories
+     * @static
+     * @return array Tag record (uid and title field only)
+     */
     public static function getAllControltagCategories() {
     	return tx_newspaper::selectRows(
     		'uid,title',
@@ -83,6 +87,29 @@ class tx_newspaper_Tag implements tx_newspaper_StoredObject {
     		'',
     		'sorting'
     	);
+    }
+
+    /**
+     * Get all control tag categories the be_user can access
+     * User TSConfig: newspaper.accessControlTagCategories = [comma separated list of control tag category uids]
+     * If TSConfig is not set or empty, the user can access ALL control tag categories.
+     * @return array|bool Array (with keys uid and title) or false, if no be_user is available
+     */
+    public static function getAllControlTagCategoriesWithRestrictions() {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return false; // Doesn't make sense without a backend user ...
+        }
+        if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessControlTagCategories')) {
+            $allowedControlTagCategories = t3lib_div::trimExplode(',', $tsc); // Convert comma separated list to array
+            $controlTagCategories = array();
+            foreach(self::getAllControltagCategories() as $controlTagCategory) {
+                if (in_array($controlTagCategory['uid'], $allowedControlTagCategories)) {
+                    $controlTagCategories[] = $controlTagCategory;
+                }
+            }
+            return $controlTagCategories; // be_user can access these control tag categories
+        }
+        return self::getAllControltagCategories(); // No TSConfig found, so user can access ALL control tag categories
     }
 
     /**

@@ -574,8 +574,9 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
 		$smarty->assign('ARTICLETYPE', tx_newspaper_ArticleType::getArticleTypesRestricted());
 
 
+        // Control tag categories
         if (!self::hideControlTagInNewArticleWizard()) {
-		    $smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControltagCategories());
+		    $smarty->assign('CTRLTAGCATS', tx_newspaper_tag::getAllControlTagCategoriesWithRestrictions());
 		    $smarty->assign('SHOW_CTRLTAGS', true);
         } else {
             $smarty->assign('SHOW_CTRLTAGS', false);

@@ -944,11 +944,10 @@ class tx_newspaper_BE {
 
 
     /**
-     * @todo no usages found - remove?
      * "Replace" the tag backend created by the kickstarter with a backend offering an list for content tags and for
      * each control tag. All tags ared stored in a single field and split here into the tag types.
      *
-     * In tx_newspaper_article::modifyTagSelection():
+     * Used in tx_newspaper_article::modifyTagSelection():
      * $TCA['tx_newspaper_article']['columns']['tags']['config']['userFunc'] = 'tx_newspaper_be->renderTagControlsInArticle';
      *
      * @param $PA
@@ -958,23 +957,36 @@ class tx_newspaper_BE {
     public function renderTagControlsInArticle(&$PA, $fobj) {
 //t3lib_div::devlog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
         $articleId = intval($PA['row']['uid']);
-        $TCEformsObj = new t3lib_TCEforms();
         $PA['fieldConf']['config']['foreign_table'] = 'tx_newspaper_tag';
         $PA['fieldConf']['config']['form_type'] = 'select';
         $PA['fieldConf']['config']['size'] = '5';
 
+        // Content tags
         $contentTagTitle = self::getTranslation('label_content_tag');
+        $TCEformsObj = new t3lib_TCEforms();
         $contentTags = $this->createTagSelectElement($PA, $TCEformsObj, $articleId, 'tags', tx_newspaper_tag::getContentTagType(),$contentTagTitle);
-        $ctrlCats = tx_newspaper_Tag::getAllControltagCategories();
+
+        // Control tags
+        $allControlTagCategories = tx_newspaper_Tag::getAllControltagCategories();
+        $allowedControlTagCategories = tx_newspaper_Tag::getAllControlTagCategoriesWithRestrictions();
         $controlTags = '';
-        $ctrlUids = array();
-        foreach($ctrlCats as $cat) {
-            $tagType = 'tags_ctrl_'.$cat['uid'];
-            $controlTags .= $this->createTagSelectElement($PA, $TCEformsObj, $articleId, $tagType, tx_newspaper_tag::getControlTagType(), $cat['title'], $cat['uid']);
-            $ctrlUids[] = $cat['uid'];
+        $controlTagUids = array();
+        foreach($allControlTagCategories as $controlTagCategory) {
+            $tagType = 'tags_ctrl_'.$controlTagCategory['uid'];
+            $controlTags .= $this->createTagSelectElement(
+                $PA,
+                $TCEformsObj,
+                $articleId,
+                $tagType,
+                tx_newspaper_tag::getControlTagType(),
+                $controlTagCategory['title'],
+                $controlTagCategory['uid'],
+                $allowedControlTagCategories
+            );
+            $controlTagUids[] = $controlTagCategory['uid'];
         }
 //t3lib_div::devlog('renderTagControlsInArticle', 'newspaper', 0, array('params' => $PA) );
-        return $this->getFindTagsJs($articleId, implode(',', $ctrlUids)) . $contentTags . $controlTags;
+        return $this->getFindTagsJs($articleId, implode(',', $controlTagUids)) . $contentTags . $controlTags;
     }
 
     /**
@@ -985,17 +997,51 @@ class tx_newspaper_BE {
      * @param $tagType
      * @param $tagTypeId
      * @param $title
-     * @param bool $category
+     * @param $controlTagCategoryUid
      * @return mixed
      */
-    private function createTagSelectElement(&$PA, $TCEformsObj, $articleId, $tagType, $tagTypeId, $title, $category = false) {
+    private function createTagSelectElement(&$PA, $TCEformsObj, $articleId, $tagType, $tagTypeId, $title, $controlTagCategoryUid=false, $allowedControlTagCategories=array()) {
+//t3lib_div::devLog('tag', 'np', 0, array('tag type' => $tagType, 'tt id' => $tagTypeId, 't' => $title, 'cat' => $controlTagCategoriyUid));
         $PA['itemFormElName'] = 'data[tx_newspaper_article]['.$articleId.'][' . $tagType . ']';
         $PA['itemFormElID'] = 'data_tx_newspaper_article_' . $articleId . '_' . $tagType;
-        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId, $category);
+        $PA['itemFormElValue'] = $this->fillItemValues($articleId, $tagTypeId, $controlTagCategoryUid);
         /** @var $TCEformsObj t3lib_TCEforms */
-        $fld = $TCEformsObj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA);
-        $fld = $this->addTagInputField($fld, $articleId, $tagType);
-        return str_replace($TCEformsObj->getLL('l_items'), $title, $fld);
+        $field = $this->addTagInputField(
+            $TCEformsObj->getSingleField_typeSelect('tx_newspaper_article', $tagType ,$PA['row'], $PA),
+            $articleId,
+            $tagType
+        );
+        $field = str_replace($TCEformsObj->getLL('l_items'), $title, $field);
+        if ($this->isTagFieldHiddenInBackend($tagTypeId, $controlTagCategoryUid, $allowedControlTagCategories)) {
+            // Hide control tag categories when access is restricted
+            $field = '<div style="display:none;">' . $field . '</div>';
+        }
+        return $field;
+    }
+
+    /**
+     * Can the current be_user access the control tag category $controlTagCategoryUid
+     * @param $tagTypeId int Tag type id (either content tag or control tag)
+     * @param $controlTagCategoryUid int uid of control tag category
+     * @param $allowedControlTagCategories array[array[uid, title]]
+     * @return bool true, if current be_user can't access the control tag category, else false
+     */
+    private function isTagFieldHiddenInBackend($tagTypeId, $controlTagCategoryUid, $allowedControlTagCategories) {
+        if ($tagTypeId != tx_newspaper_Tag::getControlTagType()) {
+            return false; // Content tag field is always visible
+        }
+        // So tag field is a control tag field
+        if (!is_array($allowedControlTagCategories) || !sizeof($allowedControlTagCategories)) {
+            return false; // No restrictions were configured
+        }
+
+        foreach($allowedControlTagCategories as $controlTagCategory) {
+            if ($controlTagCategory['uid'] == $controlTagCategoryUid) {
+                return false; // Access to control tag category, so don't hide
+            }
+        }
+
+        return true;
     }
 
     private function fillItemValues($articleId, $tagType, $category = false) {
