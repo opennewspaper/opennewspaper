@@ -49,7 +49,7 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
         /*
         if (!is_file($this->getAttribute('file'))) return '';
 
-        $path_stack = new tx_newspaper_IncludePathStack(self::getAdditionalIncludePath());
+        $path_stack = new tx_newspaper_IncludePathStack(self::getBaseFolder());
 
         ob_start();
         include($this->getAttribute('file'));
@@ -126,21 +126,26 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
         return array_filter(self::getAllFiles(self::getBaseFolder(), self::isRecursive()), array('tx_newspaper_Extra_PHPInclude', 'isPHPFile'));
     }
 
+    private static function getTSconfig($key) {
+        $tsconfig = tx_newspaper::getTSConfig();
+        return $tsconfig['newspaper.']['extra_phpinclude.'][$key];
+    }
+
     private static function getBaseFolder() {
-        return PATH_site . '/fileadmin/php/php_verlagsformulare_neu/';
+        $base_folder = self::getTSconfig('basefolder');
+        if (substr($base_folder, 0, 1) != '/') $base_folder = PATH_site . $base_folder;
+        if (substr($base_folder, -1, 1) != '/') $base_folder .= '/';
+        return $base_folder;
     }
 
     private static function allowedExtensions() {
-        return array('.php', '.inc', '.incl');
+        return array_map('trim', explode(',', self::getTSconfig('allowed_extensions')));
     }
 
     private static function isRecursive() {
-        return true;
+        return intval(self::getTSconfig('recursive'));
     }
 
-    private static function getAdditionalIncludePath() {
-        return self::getBaseFolder();
-    }
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_PHPInclude());
