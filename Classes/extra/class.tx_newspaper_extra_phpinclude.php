@@ -2,6 +2,20 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.php');
 
+class tx_newspaper_IncludePathStack {
+
+    public function __construct($additional_path) {
+        $this->old_path = get_include_path();
+        set_include_path($this->old_path . ':' . $additional_path);
+    }
+
+    public function __destruct() {
+        set_include_path($this->old_path);
+    }
+
+    private $old_path = '';
+}
+
 /**
  *  This Extra is used to render PHP from a file
  */
@@ -26,6 +40,8 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
     public function render($template_set = '') {
 
         if (!is_file($this->getAttribute('file'))) return '';
+
+        $path_stack = new tx_newspaper_IncludePathStack(self::getAdditionalIncludePath());
 
         ob_start();
         include($this->getAttribute('file'));
@@ -111,6 +127,10 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
     private static function isRecursive() {
         return true;
+    }
+
+    private static function getAdditionalIncludePath() {
+        return self::getBaseFolder();
     }
 }
 
