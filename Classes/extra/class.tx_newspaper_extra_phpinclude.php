@@ -39,6 +39,14 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
      */
     public function render($template_set = '') {
 
+        $this->prepare_render($template_set);
+        $this->smarty->assign('file', $this->getAttribute('file'));
+        return $this->smarty->fetch($this->getSmartyTemplate());
+
+        /*
+         *  That was actually not according to spec... keeping it in case I need it one day
+         */
+        /*
         if (!is_file($this->getAttribute('file'))) return '';
 
         $path_stack = new tx_newspaper_IncludePathStack(self::getAdditionalIncludePath());
@@ -49,6 +57,7 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
         ob_end_clean();
 
         return $content;
+        */
     }
 
 
