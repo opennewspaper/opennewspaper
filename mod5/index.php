@@ -622,11 +622,15 @@ class  tx_newspaper_module5 extends t3lib_SCbase {
     private function getDefaultArticleTypeForSections() {
         $defaultArticleTypes = array();
         foreach(tx_newspaper_Section::getAllSections() as $section) {
-            $at = $section->getDefaultArticleType();
-            $defaultArticleTypes[$section->getUid()] = array(
-                'uid' => $at->getUid(),
-                'title' => $at->getAttribute('title')
-            );
+            try {
+                $at = $section->getDefaultArticleType();
+                $defaultArticleTypes[$section->getUid()] = array(
+                    'uid' => $at->getUid(),
+                    'title' => $at->getAttribute('title')
+                );
+            } catch (tx_newspaper_EmptyResultException $e) {
+                // No default article type set for this section (for what reason ever), so skip this section
+            }
         }
         return $defaultArticleTypes;
     }

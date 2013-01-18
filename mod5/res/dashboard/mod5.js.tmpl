@@ -5,7 +5,8 @@
 		
 	/// When a target section is changed the assigned default article type gets selected
 	function setDefaultArticletype(section_id) {ldelim}
-        processDefaultArticle(section_id);
+        var d_at;
+        processDefaultArticleType(section_id); // Merge article type into list, if not generally available for current be_user
 		switch(parseInt(section_id)) {ldelim}
 			{foreach item=sub_section from=$SECTION2}
 				{foreach item=section from=$sub_section}
@@ -20,8 +21,10 @@
 				d_at = 0;
 		{rdelim}
 		if (d_at > 0) {ldelim}
-			document.getElementById('articletype').value = d_at;
-		{rdelim}
+			document.getElementById('articletype').value = d_at; // Select default article type
+		{rdelim} else {ldelim}
+            document.getElementById('articletype').options.selectedIndex = -1; // De-select article type
+        {rdelim}
 	{rdelim}
 
 {literal}
@@ -29,13 +32,20 @@
      * Adds the default article type to (bottom of) list, if that article type isn't available for current BE user
      * Removes a previously added default article (if any)
      */
-    function processDefaultArticle(sectionId) {
+    function processDefaultArticleType(sectionId) {
         if (!sectionId) {
             return; // Nothing to do ...
         }
 
-        var defaultArticleTypeUid = defaultArticleTypeForSection[sectionId]["uid"];
-        var defaultArticleTypeTitle = defaultArticleTypeForSection[sectionId]["title"];
+        var defaultArticleTypeUid = null;
+        var defaultArticleTypeTitle = null;
+
+
+        if (sectionId in defaultArticleTypeForSection) {
+            // Default article available for current section, so read data from array
+            var defaultArticleTypeUid = defaultArticleTypeForSection[sectionId]["uid"];
+            var defaultArticleTypeTitle = defaultArticleTypeForSection[sectionId]["title"];
+        }
 
         if (defaultArticleTypeUid == mergedDefaultArticle) {
             return; // This article type has already been appended to the list
@@ -43,13 +53,13 @@
 
         var select = $("articletype");
 
-        // Remove previously merged default article type (last option) (currently not needed/available for BE user)
+        // Remove previously merged default article type (last option)
         if (mergedDefaultArticle) {
             select.removeChild(select.lastChild);
             mergedDefaultArticle = null;
         }
 
-        // Check if article type is allowed anyway
+        // Check if article type is not allowed for be_user and merge article type temporarily into the select box
         if (!inArray(defaultArticleTypeUid, allowedArticleTypes)) {
             // Append article type
             select.options[select.options.length] = new Option(defaultArticleTypeTitle, defaultArticleTypeUid);
