@@ -27,6 +27,7 @@ class tx_newspaper_PlacementBE {
         $this->smarty->assign('ICON', tx_newspaper_BE::getArticlelistIcons());
         $this->smarty->assign('T3PATH', tx_newspaper::getAbsolutePath(true));
         $this->smarty->assign('AL_HEIGHT', self::getArticleListHeight());
+        $this->smarty->assign('AL_NUM_ARTICLES', tx_newspaper_BE::getNumArticlesInArticleList());
         $this->smarty->assign('lang', self::getLocallangLabels());
         $this->smarty->assign('isde', tx_newspaper_Workflow::isDutyEditor());
         $this->smarty->assign('allowed_placement_level', tx_newspaper_Workflow::placementAllowedLevel());
@@ -183,6 +184,7 @@ class tx_newspaper_PlacementBE {
     /// get data (for title display) for each section
     private function fillPlacementElementWithData(&$element, $_, tx_newspaper_Article $article) {
         $section = new tx_newspaper_Section($element);
+        $section->getArticleList()->useOptimizedGetArticles(true);
         $element = array(
             'object' => $section,
             'rendered' => $this->renderSection(

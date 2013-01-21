@@ -1665,7 +1665,7 @@ JSCODE;
 		return $al->getArticles($max);
 	}
 
-    private static function getNumArticlesInArticleList() {
+    public static function getNumArticlesInArticleList() {
         if (tx_newspaper::getTSConfigVar(self::num_articles_tsconfig_var)) {
             return tx_newspaper::getTSConfigVar(self::num_articles_tsconfig_var);
         }

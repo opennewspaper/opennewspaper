@@ -48,7 +48,7 @@
                         id="placer_{$section_path}"
                         size="{$AL_HEIGHT}"
                         class="multiple-select ressort-select placement-select {if  $article_list|get_class|lower == "tx_newspaper_articlelist_manual"}manual-list{/if}">
-                    {foreach from=$article_list->getArticles($AL_HEIGHT) item="art" name="al_loop" key="key"}
+                    {foreach from=$article_list->getArticles($AL_NUM_ARTICLES) item="art" name="al_loop" key="key"}
 
                         {assign var="kicker" value=$art->getAttribute('kicker')}
                         {assign var="title" value=$art->getAttribute('title')}
@@ -58,7 +58,7 @@
                             {assign var="off" value=$article_list->getOffset($art)}
                             {assign var="sep" value="_"}
                             {assign var="uid" value=$art->getUid()}
-                        
+
                             {assign var="key" value=$off$sep$uid}
                             {assign var="text" value="$text ($off)"}
                         {else}
