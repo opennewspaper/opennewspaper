@@ -899,7 +899,6 @@ t3lib_extMgm::addToAllTCAtypes("be_users","tx_newspaper_role;;;;1-1-1");
 ########################################################################################################################
 
 // modifications after generating with the kickstarter (at bottom of file ext_tables.php)
-// require_once(PATH_typo3conf . 'ext/newspaper/ext_tables_addon.php');
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
 

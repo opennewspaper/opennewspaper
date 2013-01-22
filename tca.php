@@ -3891,7 +3891,6 @@ $TCA["tx_newspaper_extra_specialhits"] = array (
 
 
 // modifications after generating with the kickstarter (bottom of file tca.php)
-// require_once(PATH_typo3conf . 'ext/newspaper/tca_addon.php');
 
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper.php');
