@@ -324,6 +324,15 @@ class tx_newspaper  {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    public static function isValid(tx_newspaper_StoredObject $obj) {
+        try {
+            $obj->getAttribute('uid');
+            return true;
+        } catch (tx_newspaper_Exception $e) {
+            return false;
+        }
+    }
+
     /// \return Array with TSConfig set in newspaper root folder
     public static function getTSConfig() {
         $root_page = tx_newspaper_Sysfolder::getInstance()->getPidRootfolder();
