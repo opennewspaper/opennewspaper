@@ -31,6 +31,8 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 	 */
 	public function render($template_set = '') {
 
+        if ($this->hasInvalidSection()) return '<!-- ' . $this->messageInvalidSection() . " -->\n";
+
 		$this->prepare_render($template_set);
 
         $this->smarty->assign("num_articles", $this->getAttribute('num_articles'));
@@ -69,10 +71,8 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
     /** Displays the title and the beginning of the text.
 	 */
 	public function getDescription() {
-        if ($this->getAttribute('is_ctrltag') == '0') {
-            if (!tx_newspaper::isValid(new tx_newspaper_Section($this->getAttribute('section')))) {
-                return '<span style="color:red"><strong>' . sprintf(tx_newspaper::getTranslation('error_invalid_section'), $this->getAttribute('section')) . '</strong></span>';
-            }
+        if ($this->hasInvalidSection()) {
+            return '<span style="color:red"><strong>' . $this->messageInvalidSection() . '</strong></span>';
         }
 		if ($desc = $this->getAttribute('short_description')) {
 		} elseif ($desc = $this->getAttribute('notes')) {
@@ -85,8 +85,16 @@ class tx_newspaper_Extra_Sectionteaser extends tx_newspaper_Extra {
 			0, self::description_length+2*strlen('<strong>')+1);
 	}
 
+    private function messageInvalidSection() {
+        return sprintf(tx_newspaper::getTranslation('error_invalid_section'), $this->getAttribute('section'));
+    }
 
-	/// title for module
+    private function hasInvalidSection() {
+        return $this->getAttribute('is_ctrltag') == '0' && !tx_newspaper::isValid(new tx_newspaper_Section($this->getAttribute('section')));
+    }
+
+
+    /// title for module
 	public static function getModuleName() {
 		return 'np_extra_sectionteaser';
 	}
