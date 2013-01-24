@@ -29,10 +29,6 @@ class tx_newspaper_DB {
         return $instance->query;
     }
 
-    public function assembleSQLQuery($fields, $table, $where = '1', $groupBy = '', $orderBy = '', $limit = '') {
-        return $GLOBALS['TYPO3_DB']->SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
-    }
-
     /// \c WHERE clause to filter out unwanted records
     /** Returns a part of a \c WHERE clause which will filter out records with
      *  start/end times, deleted flag set, or hidden flag set (if hidden should
@@ -477,6 +473,10 @@ class tx_newspaper_DB {
         }
     }
 
+    public function assembleSQLQuery($fields, $table, $where = '1', $groupBy = '', $orderBy = '', $limit = '') {
+        return $GLOBALS['TYPO3_DB']->SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     private function __construct() { }
@@ -486,10 +486,7 @@ class tx_newspaper_DB {
 
         self::ensureTypo3DBObject();
 
-        $this->query = $GLOBALS['TYPO3_DB']->SELECTquery(
-            $fields, $table, $where,
-            $groupBy, $orderBy, $limit
-        );
+        $this->query = $this->assembleSQLQuery($fields, $table, $where, $groupBy, $orderBy, $limit);
         return $this->executeQuery();
     }
 

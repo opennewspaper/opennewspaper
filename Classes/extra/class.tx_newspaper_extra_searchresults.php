@@ -21,32 +21,32 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_search.p
  */
 class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//	Configuration parameters
-	//
-	////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    //    Configuration parameters
+    //
+    ////////////////////////////////////////////////////////////////////////////
 
-	/** GET parameter used to pass search term */
-	const search_GET_var = 'search';
+    /** GET parameter used to pass search term */
+    const search_GET_var = 'search';
 
-	/// GET parameter used to page the search results
-	const page_GET_var = 'search_page';
+    /// GET parameter used to page the search results
+    const page_GET_var = 'search_page';
 
     const default_results_per_page = 10;
 
     ////////////////////////////////////////////////////////////////////////////
 
-	/**
+    /**
      *  \todo Populate class members from $_GET or otherwise:
-	 *    - section restriction
-	 *    - logging behavior
-	 *    - log file
-	 *    - excluded words
-	 */
-	public function __construct($uid = 0) {
-		if ($uid) {
-			parent::__construct($uid);
+     *    - section restriction
+     *    - logging behavior
+     *    - log file
+     *    - excluded words
+     */
+    public function __construct($uid = 0) {
+        if ($uid) {
+            parent::__construct($uid);
 
             $this->search_object = new tx_newspaper_Search(
                 implode(',', array($this->getAttribute('sections'), intval(t3lib_div::_GP('section')))),
@@ -62,22 +62,22 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
                 )
             );
 
-    		$this->search = t3lib_div::_GP(self::search_GET_var);
-		}
+            $this->search = t3lib_div::_GP(self::search_GET_var);
+        }
 
-	}
+    }
 
-	/** Display results of the search leading to the current page.
-	 *
-	 *  Smarty template:
-	 *  \include res/templates/tx_newspaper_extra_searchresults.tmpl
-	 */
-	public function render($template_set = '') {
+    /** Display results of the search leading to the current page.
+     *
+     *  Smarty template:
+     *  \include res/templates/tx_newspaper_extra_searchresults.tmpl
+     */
+    public function render($template_set = '') {
 
-		$this->prepare_render($template_set);
+        $this->prepare_render($template_set);
 
-		// perform the search on all articles
-		$this->smarty->assign('articles', $this->searchArticles($this->search));
+        // perform the search on all articles
+        $this->smarty->assign('articles', $this->searchArticles($this->search));
         $this->smarty->assign('num_results', $this->num_results);
         $this->smarty->assign(self::page_GET_var, self::getResultPage());
         $this->smarty->assign('results_per_page', self::getNumResultsPerPage());
@@ -87,17 +87,17 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         return $rendered;
-	}
+    }
 
-	public function getDescription() {
-		return $this->getAttribute('short_description');
-	}
+    public function getDescription() {
+        return $this->getAttribute('short_description');
+    }
 
-	public static function getModuleName() {
-		return 'np_searchresults';
-	}
+    public static function getModuleName() {
+        return 'np_searchresults';
+    }
 
-	public static function dependsOnArticle() { return false; }
+    public static function dependsOnArticle() { return false; }
 
     private function searchArticles($search_term) {
 
@@ -106,9 +106,8 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         $timer = tx_newspaper_ExecutionTimer::create();
 
         $this->search_object->setSortMethod('compareArticlesByDate');
-        $articles = $this->search_object->searchArticles($search_term);
+        $articles = $this->search_object->searchArticles($search_term, self::getFirstArticleIndex(), self::getNumResultsPerPage());
         $this->num_results = $this->search_object->getNumArticles();
-        $this->num_results = sizeof($articles);                         // @todo get the other version to work
 
         $return = array_slice(
             $articles,
@@ -123,12 +122,12 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         return self::getResultPage()*self::getNumResultsPerPage();
     }
 
-	///	Page of search results currently displayed
-	/** \return Page of search results currently displayed
-	 */
-	private static function getResultPage() {
-		return intval(t3lib_div::_GP(self::page_GET_var));
-	}
+    ///    Page of search results currently displayed
+    /** \return Page of search results currently displayed
+     */
+    private static function getResultPage() {
+        return intval(t3lib_div::_GP(self::page_GET_var));
+    }
 
     private static function getNumResultsPerPage() {
         $tsconf_results_per_page = intval(tx_newspaper::getTSConfigVar('search_results_per_page'));
@@ -136,14 +135,10 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         return self::default_results_per_page;
     }
 
-	////////////////////////////////////////////////////////////////////////////
-	//
-	//	Internal variables. Editing is useless.
-	//
-	////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
-	/** @var string Search term */
-	private $search = '';
+    /** @var string Search term */
+    private $search = '';
 
     /** @var tx_newspaper_Search */
     private $search_object = null;
