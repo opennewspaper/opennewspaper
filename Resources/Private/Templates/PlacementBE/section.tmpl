@@ -109,7 +109,7 @@
 
         {else}
 
-            <td>
+            <td colspan="3">
                 {if !$isde && $level >= $allowed_placement_level}<i class="noaccess">{$lang.message_no_dutyeditor}</i><br />{/if}
                 {if $level < $allowed_placement_level}<i class="noaccess">{$lang.message_no_access_to_level}</i>{/if}
             </td>
@@ -119,8 +119,8 @@
     </tr>
 
 
-    <tr style="display:{if $buttons}block{else}none{/if}">
-        <td colspan="2">
+    <tr {if !$buttons}style="display:none"{/if}>
+        <td colspan="3">
             <input type="button" name="tx_newspaper_mod7[refresh]" title="placer_{$sect->getAttribute('uid')}" class="refresh" value="{$lang.refresh}" />
             <input type="button" name="tx_newspaper_mod7[save]" title="placer_{$sect->getAttribute('uid')}" class="save" value="{$lang.save}" />
         </td>
