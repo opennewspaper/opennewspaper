@@ -340,11 +340,20 @@ class tx_newspaper_Search {
     }
 
     private function getSearchResultsForClass($current_fields, $current_table, $current_where, $limit) {
-
-        $results = tx_newspaper_DB::getInstance()->selectRows(
-            'COUNT(*)', $current_table, $current_where
+        $sub_select = tx_newspaper_DB::getInstance()->assembleSQLQuery(
+            "DISTINCT $current_fields",
+            $current_table,
+            $current_where,
+            '',
+            'publish_date DESC'
         );
+        $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
+            'COUNT(*)', "($sub_select) AS t"
+        );
+
         $this->num_results += $results[0]['COUNT(*)'];
+tx_newspaper::devlog("count query", tx_newspaper_DB::getQuery());
+tx_newspaper::devlog("results", $this->num_results);
 
         $results = tx_newspaper_DB::getInstance()->selectRows(
             "DISTINCT $current_fields",
@@ -354,7 +363,7 @@ class tx_newspaper_Search {
             'publish_date DESC',
             $limit
         );
-
+tx_newspaper::devlog('results query', tx_newspaper_DB::getQuery());
         $articles = array();
         foreach ($results as $result) {
             if (!self::enable_quick_hack) {
@@ -368,6 +377,7 @@ class tx_newspaper_Search {
             $articles[] = $result;
 
         }
+tx_newspaper::devlog("actual results", sizeof($articles));
 
         return $articles;
     }
