@@ -78,7 +78,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
         // perform the search on all articles
         $this->smarty->assign('articles', $this->searchArticles($this->search));
-        $this->smarty->assign('num_results', $this->num_results);
+        $this->smarty->assign('num_results', $this->search_object->getNumArticles());
         $this->smarty->assign(self::page_GET_var, self::getResultPage());
         $this->smarty->assign('results_per_page', self::getNumResultsPerPage());
         $this->smarty->assign('first_article_index', self::getFirstArticleIndex());
@@ -106,16 +106,7 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
         $timer = tx_newspaper_ExecutionTimer::create();
 
         $this->search_object->setSortMethod('compareArticlesByDate');
-        $articles = $this->search_object->searchArticles($search_term, self::getFirstArticleIndex(), self::getNumResultsPerPage());
-        $this->num_results = $this->search_object->getNumArticles();
-
-        $return = array_slice(
-            $articles,
-            self::getFirstArticleIndex(),
-            self::getNumResultsPerPage()
-        );
-
-        return $return;
+        return $this->search_object->searchArticles($search_term, self::getFirstArticleIndex(), self::getNumResultsPerPage());
     }
 
     private static function getFirstArticleIndex() {
@@ -142,8 +133,6 @@ class tx_newspaper_extra_SearchResults extends tx_newspaper_Extra {
 
     /** @var tx_newspaper_Search */
     private $search_object = null;
-
-    private $num_results = 0;
 
 }
 
