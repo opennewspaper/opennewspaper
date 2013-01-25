@@ -263,7 +263,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $convert = self::convert .
             ' -quality ' . self::getJPEGQuality() .
             ' -geometry ' . $width .
-                (self::contain_aspect_ratio? '': ('x' . $height)) .
+                (self::scaleToWidth()? '': ('x' . $height)) .
             ' ' . self::convert_options .
             ' \'' . PATH_site . $source . '\'' .
             ' \'' . PATH_site . $target . '\'';
@@ -312,6 +312,10 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
             return tx_newspaper::getTSConfigVar('rsync_options');
         }
         return '';
+    }
+
+    private static function scaleToWidth() {
+        return self::scale_to_width;
     }
 
     ///	Read base path and predefined sizes for images
@@ -363,7 +367,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     const convert_options = '';
 
     /// Whether to keep aspect ratio when resizing images
-    const contain_aspect_ratio = false;
+    const scale_to_width = true;
 
 }
 
