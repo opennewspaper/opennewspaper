@@ -201,7 +201,7 @@ $TCA["tx_newspaper_extra_image"] = array (
 $TCA["tx_newspaper_section"] = array (
     "ctrl" => $TCA["tx_newspaper_section"]["ctrl"],
     "interface" => array (
-        "showRecordFieldList" => "section_name,show_in_list,parent_section,default_articletype,pagetype_pagezone,articlelist,template_set"
+        "showRecordFieldList" => "section_name,description,show_in_list,parent_section,default_articletype,pagetype_pagezone,articlelist,template_set"
     ),
     "feInterface" => $TCA["tx_newspaper_section"]["feInterface"],
     "columns" => array (
@@ -285,9 +285,29 @@ $TCA["tx_newspaper_section"] = array (
                 "maxitems" => 1,
             )
         ),
+        "description" => Array (
+            "exclude" => 1,
+            "label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_section.description",
+            "config" => Array (
+                "type" => "text",
+                "cols" => "30",
+                "rows" => "5",
+                "wizards" => Array(
+                    "_PADDING" => 2,
+                    "RTE" => array(
+                        "notNewRecords" => 1,
+                        "RTEonly" => 1,
+                        "type" => "script",
+                        "title" => "Full screen Rich Text Editing",
+                        "icon" => "wizard_rte2.gif",
+                        "script" => "wizard_rte.php",
+                    ),
+                ),
+            )
+        ),
     ),
     "types" => array (
-        "0" => array("showitem" => "section_name;;;;1-1-1, show_in_list, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set")
+        "0" => array("showitem" => "section_name, description;;;;1-1-1, show_in_list, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set")
     ),
     "palettes" => array (
         "1" => array("showitem" => "")

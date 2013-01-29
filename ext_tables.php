@@ -51,7 +51,7 @@ $TCA["tx_newspaper_section"] = array (
         'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_section.gif',
     ),
     "feInterface" => array (
-        "fe_admin_fieldList" => "section_name, show_in_list, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set",
+        "fe_admin_fieldList" => "section_name, description, show_in_list, parent_section, default_articletype, pagetype_pagezone, articlelist, template_set",
     )
 );
 
