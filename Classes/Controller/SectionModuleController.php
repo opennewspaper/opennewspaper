@@ -52,6 +52,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         if (intval($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
             $this->view->assign('parent_section', $section->getParentSection());
+            $this->view->assign('description', $section->getAttribute('description'));
             $this->view->assign('articlelist_type', get_class($section->getArticleList()));
             $this->view->assign('default_articletype', $section->getDefaultArticleType()->getUid());
             $this->view->assign('article_types', tx_newspaper_ArticleType::getArticleTypesRestricted());
@@ -59,6 +60,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             if (isset($this->module_request['section_name'])) {
 
                 $this->changeSectionName($section);
+                $this->changeDescription($section);
                 $this->changeParent($section);
                 $this->changeArticleListType($section);
                 $this->changeDefaultArticleType($section);
@@ -77,23 +79,34 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
     private function changeSectionName(tx_newspaper_Section &$section) {
 
-        $this->view->assign('old_section_name', $section->getSectionName());
-        $this->view->assign('new_section_name', $this->module_request['section_name']);
-
-        if ($section->getSectionName() == $this->module_request['section_name']) return;
-
-        $old_name = $section->getSectionName();
-        $section->setAttribute('section_name', $this->module_request['section_name']);
+        if (!$this->changeAttribute($section, 'section_name')) return;
 
         tx_newspaper_DB::getInstance()->updateRows(
             'pages', 'uid = ' . $section->getTypo3PageID(),
             array('title' => $this->module_request['section_name'])
         );
 
+    }
+
+    private function changeDescription(tx_newspaper_Section &$section) {
+        $this->changeAttribute($section, 'description');
+    }
+
+    private function changeAttribute(tx_newspaper_Section &$section, $attribute) {
+        $this->view->assign("old_$attribute", $section->getAttribute($attribute));
+        $this->view->assign("new_$attribute", $this->module_request[$attribute]);
+
+        if ($section->getAttribute($attribute) == $this->module_request[$attribute]) return false;
+
+        $old_value = $section->getAttribute($attribute);
+        $section->setAttribute($attribute, $this->module_request[$attribute]);
+
         $this->flashMessageContainer->add(
-            $old_name . ' -> ' . $this->module_request['section_name'],
-            $GLOBALS['LANG']->sL('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.section_name_changed')
+            $old_value . ' -> ' . $this->module_request[$attribute],
+            $GLOBALS['LANG']->sL("LLL:EXT:newspaper/Resources/Private/Language/locallang.xml:module.section.${attribute}_changed")
         );
+
+        return true;
     }
 
     private function changeParent(tx_newspaper_Section &$section) {
@@ -312,6 +325,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         $section->setAttribute('section_name', $request['section_name']);
         $section->setAttribute('parent_section', $request['parent_section']);
         $section->setAttribute('default_articletype', $request['default_articletype']);
+        $section->setAttribute('description', $request['description']);
         $section->store();
     }
 

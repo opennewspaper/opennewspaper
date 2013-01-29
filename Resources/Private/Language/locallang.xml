@@ -17,6 +17,7 @@
             <label index="module.section.delete">Delete Section</label>
             <label index="module.section.title">Create and edit Sections</label>
             <label index="module.section.section_name">Section name</label>
+            <label index="module.section.description">Description</label>
             <label index="module.section.new_section_name">New Section name</label>
             <label index="module.section.parent_section">Parent Section</label>
             <label index="module.section.show_in_list">Show in Section list</label>
@@ -29,6 +30,7 @@
             <label index="module.section.section_to_edit">Section to edit</label>
             <label index="module.section.section_edited">Section changed</label>
             <label index="module.section.section_name_changed">Section name changed</label>
+            <label index="module.section.description_changed">Description changed</label>
             <label index="module.section.parent_section_changed">Parent section changed</label>
             <label index="module.section.articlelist_changed">Article list type changed</label>
             <label index="module.section.default_type_changed">Default article type changed</label>
@@ -72,6 +74,7 @@
             <label index="module.section.delete">Ressort löschen</label>
             <label index="module.section.title">Ressorts anlegen und bearbeiten</label>
             <label index="module.section.section_name">Name des Ressorts</label>
+            <label index="module.section.description">Beschreibung</label>
             <label index="module.section.new_section_name">Neuer Name des Ressorts</label>
             <label index="module.section.parent_section">Elternressort</label>
             <label index="module.section.show_in_list">In Ressortliste anzeigen</label>
@@ -83,6 +86,7 @@
             <label index="module.section.section_to_edit">Zu bearbeitendes Ressort</label>
             <label index="module.section.section_edited">Ressort geändert</label>
             <label index="module.section.section_name_changed">Ressortname geändert</label>
+            <label index="module.section.description_changed">Beschreibung geändert</label>
             <label index="module.section.parent_section_changed">Elternressort geändert</label>
             <label index="module.section.articlelist_changed">Artikelliste geändert</label>
             <label index="module.section.default_type_changed">Standard-Artikeltyp geändert</label>
