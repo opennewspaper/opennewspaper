@@ -420,6 +420,28 @@ function changeWorkflowStatus(role, hidden_status) {
         return (bool) ($GLOBALS['BE_USER']->getTSConfigVal('newspaper.editorMayPlace'));
     }
 
+
+    /**
+     * Checks if be_user may edit article by checking the article's $workflowStatus
+     * If no User TSConfig is found the be_user may edit every article.
+     * User TSConfig newspaper.be.productionList.editAllowedForRoles = [0 (editor), 1 (duty editor), 1000 (no role)
+     *
+     * @param $workflowStatus An article's worklfow status (0|1|1000)
+     * @return bool true if be_user may edit the article (= $workflowStatus matches TSConfig setting, so no TSConfig)
+     */
+    public static function mayEditArticle($workflowStatus) {
+        if (!isset($GLOBALS['BE_USER'])) {
+            return false; // No be_user, so this check doesn't make any sense
+        }
+
+        if (!$mayEditSettings = t3lib_div::trimExplode(',' ,$GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'))) {
+            return true; // No User TSConfig set, so no active restrictions
+        }
+
+        return in_array($workflowStatus, $mayEditSettings);
+
+    }
+
 	/// Changes the newspaper role of the be_user
 	/**
 	 * The role of the be_user will be set to the given new role in $new_role.

@@ -257,12 +257,13 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
         return $locked_articles;
     }
 
-    /// Add information to each article that are not in the record
     /**
-     * Add information to articles in $records (call be refernece!)
+     * Add information to each article that are not present in the record (= not stored in the database record)
+     * Add information to articles in $records (call be reference!)
      * Add workflow log details
      * Add section(s)
-     * Add time control infoirmation
+     * Add time control information
+     * Add edit permissions
      * @param array $records
      */
     private function addArticleInfo(array &$records) {
@@ -270,6 +271,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
             self::addWorkflowInfo($records[$i]);
             $records[$i]['sections'] = $this->getSectionData(intval($records[$i]['uid']));
             $this->addTimeInfo($records[$i]);
+            $records[$i]['mayEdit'] = tx_newspaper_Workflow::mayEditArticle($records[$i]['workflow_status']);
         }
     }
 

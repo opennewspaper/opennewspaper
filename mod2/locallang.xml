@@ -56,6 +56,7 @@
 			<label index="label_article_placement">Article placement</label>
 			<label index="label_preview_article">Preview article</label>
 			<label index="label_edit_article">Edit article</label>
+			<label index="label_edit_article_disabled">Permissions for editing this article are missing.</label>
 			<label index="label_time">This article uses start time and/ or end time</label>
 			<label index="label_internal_comments">View all internal comments for this article</label>
 			<label index="label_article_add">Add article to list ...</label>
@@ -132,6 +133,7 @@
 			<label index="label_article_placement">Artikel platzieren</label>
 			<label index="label_preview_article">Vorschau</label>
 			<label index="label_edit_article">Artikel bearbeiten</label>
+            <label index="label_edit_article_disabled">Sie haben nicht die nötigen Rechte, um diesen Artikel zu bearbeiten.</label>
 			<label index="label_time">Zeitgezündete Artikel</label>
 			<label index="label_internal_comments">Alle Kommentare anzeigen</label>
 			<label index="label_article_add">Zu Liste hinzufügen</label>
