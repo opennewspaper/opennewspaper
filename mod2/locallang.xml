@@ -61,6 +61,7 @@
 			<label index="label_internal_comments">View all internal comments for this article</label>
 			<label index="label_article_add">Add article to list ...</label>
 			<label index="label_delete_article">Delete article</label>
+            <label index="label_delete_article_disabled">Published articles cannot be deleted.</label>
 			<label index="message_delete_article">Do you really want to delete this article?</label>
 
 			<label index="label_page_prev">Previous hits</label>
@@ -138,6 +139,7 @@
 			<label index="label_internal_comments">Alle Kommentare anzeigen</label>
 			<label index="label_article_add">Zu Liste hinzufügen</label>
 			<label index="label_delete_article">Artikel löschen</label>
+			<label index="label_delete_article_disabled">Publizierte Artikel können nicht gelöscht werden.</label>
 			<label index="message_delete_article">Möchten Sie diesen Artikel wirklich löschen?</label>
 
 			<label index="label_page_prev">Vorige</label>

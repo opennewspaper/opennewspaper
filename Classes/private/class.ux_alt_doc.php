@@ -59,10 +59,12 @@ class ux_SC_alt_doc extends SC_alt_doc {
 
     /**
      * Add workflow buttons to newspaper articles (and remove docheader2)
-     * @return array with buttons (like they are used in Typo3 doheader)
+     * @return array with buttons (like they are used in Typo3 docheader)
      */
     protected function processButtonsInArticleBackend() {
         global $TCA, $LANG;
+
+        $article = new tx_newspaper_Article(intval($this->elementsData[0]['uid'])); // Get article
 
         // clear button array
         $buttons = array(
@@ -112,11 +114,15 @@ class ux_SC_alt_doc extends SC_alt_doc {
             if ($this->firstEl['cmd'] != 'new' && t3lib_div::testInt($this->firstEl['uid'])) {
 
                 // Delete:
-                if ($this->firstEl['deleteAccess'] && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'] && !$this->getNewIconMode($this->firstEl['table'], 'disableDelete')) {
-                    $aOnClick = 'return deleteRecord(\'' . $this->firstEl['table'] . '\',\'' . $this->firstEl['uid'] . '\',unescape(\'' . rawurlencode($this->retUrl) . '\'));';
-                    $buttons['delete'] = '<a href="#" onclick="' . htmlspecialchars($aOnClick) . '">' .
-                        '<img' . t3lib_iconWorks::skinImg($this->doc->backPath, 'gfx/deletedok.gif', 'width="21" height="16"') . ' class="c-inputButton" title="' . $LANG->getLL('deleteItem', 1) . '" alt="" />' .
-                        '</a>';
+                if ($article->getAttribute('hidden')) {
+                    if ($this->firstEl['deleteAccess'] && !$TCA[$this->firstEl['table']]['ctrl']['readOnly'] && !$this->getNewIconMode($this->firstEl['table'], 'disableDelete')) {
+                        $aOnClick = 'return deleteRecord(\'' . $this->firstEl['table'] . '\',\'' . $this->firstEl['uid'] . '\',unescape(\'' . rawurlencode($this->retUrl) . '\'));';
+                        $buttons['delete'] = '<a href="#" onclick="' . htmlspecialchars($aOnClick) . '">' .
+                            '<img' . t3lib_iconWorks::skinImg($this->doc->backPath, 'gfx/deletedok.gif', 'width="21" height="16"') . ' class="c-inputButton" title="' . $LANG->getLL('deleteItem', 1) . '" alt="" />' .
+                            '</a>';
+                    }
+                } else {
+                    $buttons['delete'] = ''; // Published article can't be deleted, must be hidden first.
                 }
 
                 // Undo:

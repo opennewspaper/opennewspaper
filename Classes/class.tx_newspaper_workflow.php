@@ -426,7 +426,7 @@ function changeWorkflowStatus(role, hidden_status) {
      * If no User TSConfig is found the be_user may edit every article.
      * User TSConfig newspaper.be.productionList.editAllowedForRoles = [0 (editor), 1 (duty editor), 1000 (no role)
      *
-     * @param $workflowStatus An article's worklfow status (0|1|1000)
+     * @param $workflowStatus int An article's workflow status (0|1|1000)
      * @return bool true if be_user may edit the article (= $workflowStatus matches TSConfig setting, so no TSConfig)
      */
     public static function mayEditArticle($workflowStatus) {
