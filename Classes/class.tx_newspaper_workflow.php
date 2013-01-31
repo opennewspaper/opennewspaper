@@ -434,7 +434,7 @@ function changeWorkflowStatus(role, hidden_status) {
             return false; // No be_user, so this check doesn't make any sense
         }
 
-        if (!$mayEditSettings = t3lib_div::trimExplode(',' ,$GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'))) {
+        if (!$GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles') || !$mayEditSettings = t3lib_div::trimExplode(',' ,$GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'))) {
             return true; // No User TSConfig set, so no active restrictions
         }
 
