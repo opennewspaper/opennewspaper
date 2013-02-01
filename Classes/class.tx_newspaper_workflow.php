@@ -435,8 +435,11 @@ function changeWorkflowStatus(role, hidden_status) {
             return false; // No be_user, so this check doesn't make any sense
         }
 
-        if (!trim($GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles')) || !$mayEditSettings = t3lib_div::trimExplode(',' ,$GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'))) {
-            return true; // No User TSConfig set, so no active restrictions
+        // Keep in mind: Editors are coded with 0 :-(
+        $tsc = (string) trim($GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'));
+        $mayEditSettings = t3lib_div::trimExplode(',', $tsc);
+        if (!sizeof($mayEditSettings)) {
+            return true; // Empty setting
         }
 
         $whiteList = array(NP_ACTIVE_ROLE_EDITORIAL_STAFF, NP_ACTIVE_ROLE_DUTY_EDITOR, NP_ACTIVE_ROLE_NONE);
