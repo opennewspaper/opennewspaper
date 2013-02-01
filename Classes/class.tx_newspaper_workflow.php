@@ -437,6 +437,11 @@ function changeWorkflowStatus(role, hidden_status) {
 
         // Keep in mind: Editors are coded with 0 :-(
         $tsc = (string) trim($GLOBALS['BE_USER']->getTSConfigVal('newspaper.be.productionList.editAllowedForRoles'));
+
+        if ($tsc === '') {
+            return true; // No TSConfig set
+        }
+
         $mayEditSettings = t3lib_div::trimExplode(',', $tsc);
         if (!sizeof($mayEditSettings)) {
             return true; // Empty setting
