@@ -2938,7 +2938,7 @@ $TCA["tx_newspaper_controltag_to_extra"] = array (
 $TCA["tx_newspaper_extra_combolinkbox"] = array (
     "ctrl" => $TCA["tx_newspaper_extra_combolinkbox"]["ctrl"],
     "interface" => array (
-        "showRecordFieldList" => "hidden,starttime,endtime,short_description,show_related_articles,manually_selected_articles,internal_links,external_links,template"
+        "showRecordFieldList" => "hidden,starttime,endtime,short_description,title,show_related_articles,manually_selected_articles,internal_links,external_links,template"
     ),
     "feInterface" => $TCA["tx_newspaper_extra_combolinkbox"]["feInterface"],
     "columns" => array (
@@ -2986,7 +2986,15 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
                 "size" => "30",
             )
         ),
-        "show_related_articles" => Array (        
+        "title" => Array (
+            "exclude" => 1,
+            "label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.title",
+            "config" => Array (
+                "type" => "input",
+                "size" => "30",
+            )
+        ),
+        "show_related_articles" => Array (
             "exclude" => 1,        
             "label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_combolinkbox.show_related_articles",        
             "config" => Array (
@@ -3106,7 +3114,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
         ),
     ),
     "types" => array (
-        "0" => array("showitem" => "hidden;;1;;1-1-1, short_description, show_related_articles, manually_selected_articles, internal_links, external_links, template")
+        "0" => array("showitem" => "hidden;;1;;1-1-1, short_description, title, show_related_articles, manually_selected_articles, internal_links, external_links, template")
     ),
     "palettes" => array (
         "1" => array("showitem" => "starttime, endtime")

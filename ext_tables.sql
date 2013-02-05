@@ -834,6 +834,7 @@ CREATE TABLE tx_newspaper_extra_combolinkbox (
     starttime int(11) DEFAULT '0' NOT NULL,
     endtime int(11) DEFAULT '0' NOT NULL,
     short_description tinytext NOT NULL,
+    title tinytext NOT NULL,
     show_related_articles tinyint(3) DEFAULT '0' NOT NULL,
     manually_selected_articles blob NOT NULL,
     internal_links blob NOT NULL,

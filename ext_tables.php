@@ -591,7 +591,7 @@ $TCA["tx_newspaper_extra_combolinkbox"] = array (
         'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_newspaper_extra_combolinkbox.gif',
     ),
     "feInterface" => array (
-        "fe_admin_fieldList" => "hidden, starttime, endtime, short_description, show_related_articles, manually_selected_articles, internal_links, external_links, template",
+        "fe_admin_fieldList" => "hidden, starttime, endtime, short_description, title, show_related_articles, manually_selected_articles, internal_links, external_links, template",
     )
 );
 

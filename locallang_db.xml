@@ -217,6 +217,7 @@
             <label index="tx_newspaper_controltag_to_extra.extra">Extra</label>
             <label index="tx_newspaper_extra_combolinkbox">Extra: Combo Link Box</label>
             <label index="tx_newspaper_extra_combolinkbox.short_description">Short description</label>
+            <label index="tx_newspaper_extra_combolinkbox.title">Title</label>
             <label index="tx_newspaper_extra_combolinkbox.show_related_articles">Show related articles</label>
             <label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Manually selected articles</label>
             <label index="tx_newspaper_extra_combolinkbox.internal_links">Internal links</label>
@@ -495,6 +496,7 @@
             <label index="tx_newspaper_controltag_to_extra.extra">Web-Element</label>
             <label index="tx_newspaper_extra_combolinkbox">Extra: Kombi-Linkkasten</label>
             <label index="tx_newspaper_extra_combolinkbox.short_description">Kurzbeschreibung</label>
+            <label index="tx_newspaper_extra_combolinkbox.title">Titel</label>
             <label index="tx_newspaper_extra_combolinkbox.show_related_articles">Verlinkte Artikel anzeigen</label>
             <label index="tx_newspaper_extra_combolinkbox.manually_selected_articles">Weitere Artikel</label>
             <label index="tx_newspaper_extra_combolinkbox.internal_links">Interne Links</label>
