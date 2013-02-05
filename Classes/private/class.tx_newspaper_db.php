@@ -134,7 +134,8 @@ class tx_newspaper_DB {
         $this->max_logged_queries = $num;
     }
 
-    public function executeQuery() {
+    public function executeQuery($query = '') {
+        if ($query) $this->query = $query;
         self::logQuery();
         return $GLOBALS['TYPO3_DB']->sql_query($this->query);
     }
@@ -627,4 +628,25 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
     private $max_logged_queries = self::default_max_logged_queries;
 
+}
+
+class tx_newspaper_DBTransaction {
+
+    public function __construct() {
+        if (self::$transaction_in_progress) throw new tx_newspaper_DBException('Cannot start a transaction; another transaction is already in progress');
+        self::$transaction_in_progress = true;
+        tx_newspaper_DB::getInstance()->executeQuery('START TRANSACTION WITH CONSISTENT SNAPSHOT');
+    }
+
+    public function __destruct() {
+        tx_newspaper_DB::getInstance()->executeQuery('COMMIT');
+        self::$transaction_in_progress = false;
+    }
+
+    public function rollback() {
+        tx_newspaper_DB::getInstance()->executeQuery('ROLLBACK');
+        self::$transaction_in_progress = false;
+    }
+
+    private static $transaction_in_progress = false;
 }
