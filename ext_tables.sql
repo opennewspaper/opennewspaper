@@ -12,7 +12,6 @@ CREATE TABLE tx_newspaper_extra_image_tags_mm (
 );
 
 
-
 #
 # Table structure for table 'tx_newspaper_extra_image'
 #
@@ -67,10 +66,10 @@ CREATE TABLE tx_newspaper_section (
     articlelist int(11) DEFAULT '0' NOT NULL,
     template_set int(11) DEFAULT '0' NOT NULL,
     description text DEFAULT '' NOT NULL,
-    
+
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -91,7 +90,7 @@ CREATE TABLE tx_newspaper_page (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -113,7 +112,7 @@ CREATE TABLE tx_newspaper_pagezone (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -129,7 +128,7 @@ CREATE TABLE tx_newspaper_pagezone_page_extras_mm (
   sorting int(11) DEFAULT '0' NOT NULL,
   KEY uid_local (uid_local),
   KEY uid_foreign (uid_foreign)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -151,7 +150,7 @@ CREATE TABLE tx_newspaper_pagezone_page (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -290,7 +289,7 @@ CREATE TABLE tx_newspaper_extra (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -340,7 +339,7 @@ CREATE TABLE tx_newspaper_articlelist (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -651,7 +650,7 @@ CREATE TABLE tx_newspaper_articlelist_semiautomatic (
     
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
+) ENGINE=InnoDB;
 
 
 
@@ -1074,7 +1073,7 @@ CREATE TABLE tx_newspaper_extra_specialhits (
 #
 CREATE TABLE tt_content (
     tx_newspaper_extra tinytext NOT NULL
-);
+) ENGINE=InnoDB;
 
 
 
@@ -1084,7 +1083,7 @@ CREATE TABLE tt_content (
 CREATE TABLE pages (
     tx_newspaper_associated_section blob NOT NULL,
     tx_newspaper_module tinytext NOT NULL
-);
+) ENGINE=InnoDB;
 
 
 

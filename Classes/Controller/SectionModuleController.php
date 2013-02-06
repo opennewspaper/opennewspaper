@@ -30,9 +30,15 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
         if (!$this->isValidRequest($this->module_request)) return;
 
         try {
+            $transaction = new tx_newspaper_DBTransaction();
+
             $this->createSection($this->module_request);
+
+            $transaction->commit();
+
             $this->flashMessageContainer->add(self::getSectionMessage('success', $this->module_request['section_name']));
             $this->view->assign('module_request', array());
+
         } catch (tx_newspaper_Exception $e) {
             $this->addError(
                 '<p>' . $e->getMessage() . '</p>' .
@@ -40,6 +46,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
                 'system_error'
             );
         }
+
     }
 
     /**
@@ -59,6 +66,8 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
             if (isset($this->module_request['section_name'])) {
 
+                $transaction = new tx_newspaper_DBTransaction();
+
                 $this->changeSectionName($section);
                 $this->changeDescription($section);
                 $this->changeParent($section);
@@ -67,6 +76,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
                 $section->store();
 
+                $transaction->commit();
 
             } else {
                 $this->module_request['section_name'] = $section->getSectionName();
@@ -172,7 +182,6 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             tx_newspaper::devlog("loose Articles", $loose_articles);
             $this->view->assign('child_sections', $children);
             $this->view->assign('loose_articles', $loose_articles);
-                // http://localhost/typo3/alt_doc.php?returnUrl=//typo3conf/ext/newspaper/mod2/res/returnUrl.html&edit[tx_newspaper_article][104493]=edit
             $this->view->assign('affected_section', $section);
             $this->view->assign('affected_pages', $section->getSubPages());
             $this->view->assign('affected_articles', $section->getArticles(0));
@@ -181,7 +190,9 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
                 try {
                     $section_name = $section->getSectionName();
+                    $transaction = new tx_newspaper_DBTransaction();
                     self::deleteSection($section);
+                    $transaction->commit();
 
                     $this->flashMessageContainer->add($section_name, 'Deleted section');
                     $this->view->assign('deleted', 1);
@@ -195,12 +206,10 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     }
 
     private static function getArticlesWithOnlySection(tx_newspaper_Section $section) {
-        $articles = $section->getArticles(0);
-        return array_filter($articles, 'Tx_newspaper_Controller_SectionModuleController::hasSeveralSections');
-    }
-
-    private static function hasSeveralSections(tx_newspaper_Article $article) {
-        return sizeof($article->getSections()) <= 1;
+        return array_filter(
+            $section->getArticles(0),
+            function(tx_newspaper_Article $article) { return sizeof($article->getSections()) <= 1; }
+        );
     }
 
     /**
@@ -375,6 +384,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     }
 
     private static function createContentElement($parent_page, $new_page_id) {
+
         $record = tx_newspaper_DB::getInstance()->selectOneRow(
             '*', 'tt_content',
             "pid = $parent_page AND CType = 'list' AND list_type = 'newspaper_pi1'"

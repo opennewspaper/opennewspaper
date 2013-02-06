@@ -2,7 +2,11 @@
 /**
  * @author Lene Preuss <lene.preuss@gmail.com>
  */
- 
+
+require_once('class.tx_newspaper_tabledescription.php');
+
+require_once('class.tx_newspaper_dbtransaction.php');
+
 class tx_newspaper_DB {
 
     ///	Whether to use Typo3's command- and datamap functions for DB operations
@@ -125,7 +129,7 @@ class tx_newspaper_DB {
         $this->are_queries_logged = false;
 
         $timing = tx_newspaper_ExecutionTimer::getTimingInfo();
-        $queries = $queries['Timing'] = $timing;
+        $queries['Timing'] = "$timing";
 
         return $queries;
     }
@@ -630,23 +634,3 @@ Time: ' . date('Y-m-d H:i:s') . ', Timestamp: ' . time() . ', be_user: ' .  $GLO
 
 }
 
-class tx_newspaper_DBTransaction {
-
-    public function __construct() {
-        if (self::$transaction_in_progress) throw new tx_newspaper_DBException('Cannot start a transaction; another transaction is already in progress');
-        self::$transaction_in_progress = true;
-        tx_newspaper_DB::getInstance()->executeQuery('START TRANSACTION WITH CONSISTENT SNAPSHOT');
-    }
-
-    public function __destruct() {
-        tx_newspaper_DB::getInstance()->executeQuery('COMMIT');
-        self::$transaction_in_progress = false;
-    }
-
-    public function rollback() {
-        tx_newspaper_DB::getInstance()->executeQuery('ROLLBACK');
-        self::$transaction_in_progress = false;
-    }
-
-    private static $transaction_in_progress = false;
-}

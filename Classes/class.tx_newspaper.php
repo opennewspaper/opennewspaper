@@ -1,7 +1,5 @@
 <?php
 
-require_once('private/class.tx_newspaper_tabledescription.php');
-
 require_once('private/class.tx_newspaper_executiontimer.php');
 
 require_once('private/class.tx_newspaper_db.php');
