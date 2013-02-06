@@ -556,14 +556,15 @@ function getSectionsWhoseArticleListContains(tx_newspaper_Article $article) {
 
     $timer = tx_newspaper_ExecutionTimer::create();
 
-    $all_sections = tx_newspaper_Section::getAllSections(false);
     $sections = array();
-    foreach ($all_sections as $section) {
-        $article_list = $section->getArticleList();
-        $article_list->useOptimizedGetArticles(true);
-        if ($article_list->doesContainArticle($article, tx_newspaper_DependencyTree::limitForArticlesDisplayedOnSectionPage())) {
-            $sections[] = $section;
-        }
+    foreach (tx_newspaper_Section::getSectionsByCondition('articlelist') as $section) {
+        try {
+            $article_list = $section->getArticleList();
+            $article_list->useOptimizedGetArticles(true);
+            if ($article_list->doesContainArticle($article, tx_newspaper_DependencyTree::limitForArticlesDisplayedOnSectionPage())) {
+                $sections[] = $section;
+            }
+        } catch (tx_newspaper_Exception $e) { }
     }
     return $sections;
 }

@@ -57,37 +57,35 @@ class tx_newspaper_ArticleList_Factory {
 		return self::$instance;
 	}
 	
-	/// Create a tx_newspaper_ArticleList given a UID
-	/** @param $uid UID of the abstract tx_newspaper_ArticleList record in DB
-	 *  @param $section optional: tx_newspaper_Section the tx_newspaper_ArticleList
-	 * 		belongs to
-	 *  @return tx_newspaper_ArticleList A concrete object of a class derived from tx_newspaper_ArticleList
-	 */
-	public function create($uid, tx_newspaper_Section $section = null) {
-		/// Read actual type and UID of the ArticleList to instantiate from DB
+    /// Create a tx_newspaper_ArticleList given a UID
+    /** @param $uid int UID of the abstract tx_newspaper_ArticleList record in DB
+     *  @param $section tx_newspaper_Section Section the tx_newspaper_ArticleList belongs to
+     *  @return tx_newspaper_ArticleList A concrete object of a class derived from tx_newspaper_ArticleList
+     */
+    public function create($uid, tx_newspaper_Section $section = null) {
+        /// Read actual type and UID of the ArticleList to instantiate from DB
         $row =  tx_newspaper::selectOneRow(
-			'list_table, list_uid', self::$list_table, "uid = $uid"
-		);
+            'list_table, list_uid', self::$list_table, "uid = $uid"
+        );
 
         if (!$row['list_table']) {
-        	throw new tx_newspaper_DBException('No list_table in result', 
-											   $row);
+            throw new tx_newspaper_DBException('No list_table in result', $row);
         }
-		
-		if (!class_exists($row['list_table'])) {
-        	throw new tx_newspaper_WrongClassException($row['list_table']);
-		}
+
+        if (!class_exists($row['list_table'])) {
+            throw new tx_newspaper_WrongClassException($row['list_table']);
+        }
 
         if (!$row['list_uid']) {
-        	throw new tx_newspaper_DBException('No list_uid in result', 
-        									   $row);
+            throw new tx_newspaper_DBException('No list_uid in result', $row);
         }
-		
-		$articlelist = new $row['list_table']($row['list_uid'], $section);
-		$articlelist->setAbstractUid($uid);
-		
-		return $articlelist;
-	}
+
+        /** @var $articlelist tx_newspaper_ArticleList */
+        $articlelist = new $row['list_table']($row['list_uid'], $section);
+        $articlelist->setAbstractUid($uid);
+
+        return $articlelist;
+    }
 	
 	/// Protected constructor, tx_newspaper_ArticleList_Factory cannot be created freely
 	protected function __construct() { }
