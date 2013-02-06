@@ -30,9 +30,6 @@
  */
 
 /// A section of an online edition of a newspaper
-/** Currently just a dummy
- *
- */
 class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
 	/// Construct a tx_newspaper_Section given the UID of the SQL record
@@ -93,7 +90,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
         $this->attributes = array();
 	}
 
-
 	/// \return true if section can be accessed (FE/BE use enableFields)
 	public function isValid() {
 		// check if section is valid
@@ -109,7 +105,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return tx_newspaper::getTranslation('title_' . $this->getTable());
 	}
 
-
 	/// assigns a default article list to this section
 	public function assignDefaultArticleList() {
 // \todo make configurable which article list type is default
@@ -117,7 +112,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		$al = new tx_newspaper_ArticleList_Semiautomatic(0, $this);
 		$this->replaceArticleList($al); // assign new article list to this section
 	}
-
 
 	/// Replace the current article list (if any) with the given new article list
 	/** The function first removes the old article list (if any) and then assign the new article list.
@@ -238,7 +232,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     /** @return tx_newspaper_Section The parent node in the section tree. */
 	public function getParentSection() {
-		if (!$this->getAttribute('parent_section')) return null;
+		if (!intval($this->getAttribute('parent_section'))) return null;
         return new tx_newspaper_Section($this->getAttribute('parent_section'));
 	}
 
@@ -276,7 +270,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 	public function getAbstractArticleListUid() {
 		return $this->getAttribute('articlelist');
 	}
-
 
     /**
      * Activate a page for this section
@@ -362,13 +355,15 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
  		return $sub_pages;
  	}
 
- 	/// gets an array of sections up the rootline
-	/// \return tx_newspaper_Section[] up the rootline
-	public function getSectionPath(array $path = array()) {
-		$path[] = $this;
-		if (is_null($this->getParentSection())) return $path;
+    /**
+     * gets an array of sections up the rootline
+     * @return tx_newspaper_Section[] up the rootline
+     */
+    public function getSectionPath(array $path = array()) {
+        $path[] = $this;
+        if (is_null($this->getParentSection())) return $path;
         return $this->getParentSection()->getSectionPath($path);
-	}
+    }
 
 	/// \return The UID of the associated Typo3 page
 	public function getTypo3PageID() {
@@ -541,28 +536,24 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 		return $this->getParentSection()->getTemplateSet();
 	}
 
-	/** Get all tx_newspaper_Section records in the DB (if $sysfolder is false) or from the sysfolder (if $sysfolder is true)
+    /** Get all tx_newspaper_Section records in the DB (if $sysfolder is false) or from the sysfolder (if $sysfolder is true)
      *  @param bool $articlesAllowedOnly if set to true only section with the show_in_list flag set are returned
-	 *  @param string $sort_by Field of the \c tx_newspaper_section SQL table to sort results by.
+     *  @param string $sort_by Field of the \c tx_newspaper_section SQL table to sort results by.
      *  @param bool $sysfolder If true only section on the sysfolder are fetched
-	 *  @return tx_newspaper_Section[] Section objects in the DB.
-	 */
-	public static function getAllSections($articlesAllowedOnly = true, $sort_by = 'sorting', $sysfolder = true) {
+     *  @return tx_newspaper_Section[] Section objects in the DB.
+     */
+    public static function getAllSections($articlesAllowedOnly = true, $sort_by = 'sorting', $sysfolder = true, $additional_where = '') {
 
         $where = '1' .
-		    ($articlesAllowedOnly? ' AND show_in_list=1' : '') .
-		    ($sysfolder? ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()): '');
+            ($articlesAllowedOnly? ' AND show_in_list=1' : '') .
+            ($sysfolder? ' AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_Section()): '') .
+            ($additional_where? " AND $additional_where": '');
 
-		$sections = tx_newspaper_DB::getInstance()->selectRows(
-			'uid', 'tx_newspaper_section', $where, '', $sort_by
-		);
-		array_walk($sections, array('tx_newspaper_Section', 'extractSection'));
-		return $sections;
+        return array_map(
+            function(array $record) { return new tx_newspaper_Section(intval($record['uid'])); },
+            tx_newspaper_DB::getInstance()->selectRows('uid', 'tx_newspaper_section', $where, '', $sort_by)
+        );
 
-	}
-
-    private static function extractSection(array &$record, $key) {
-        $record = new tx_newspaper_Section(intval($record['uid']));
     }
 
     /**
@@ -572,15 +563,11 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @static
      * @return array tx_newspaper_section's
      */
-    public static function getAllSectionsWithRestrictions($articlesAllowedOnly=true, $sort_by='sorting', $sysfolder=true) {
-        $allowedSectionUids = self::getBaseSectionTreeUids();
-        $sections = array();
-        foreach(self::getAllSections($articlesAllowedOnly, $sort_by, $sysfolder) as $s) {
-            if (in_array($s->getUid(), $allowedSectionUids)) {
-                $sections[] = $s;
-            }
-        }
-        return $sections;
+    public static function getAllSectionsWithRestrictions($articlesAllowedOnly=true, $sort_by='sorting', $additional_where = '') {
+        return array_filter(
+            self::getAllSections($articlesAllowedOnly, $sort_by, true, $additional_where),
+            function(tx_newspaper_Section $s) { return $s->isSectionAccessGranted(); }
+        );
     }
 
     /**
@@ -627,20 +614,20 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @return array Section uids
      */
     public static function getBaseSectionTreeUids() {
-        $sectionUids = array();
+        if (!empty(self::$base_section_uids)) return self::$base_section_uids;
+
         /** @var tx_newspaper_Section $baseSection */
         foreach(tx_newspaper_Section::getBaseSections() as $baseSection) {
-            $sectionUids[] = $baseSection->getUid();
+            self::$base_section_uids[] = $baseSection->getUid();
             foreach($baseSection->getChildSections(true) as $section) {
-                $sectionUids[] = $section->getUid();
+                self::$base_section_uids[] = $section->getUid();
             }
         }
-        return $sectionUids;
+        return self::$base_section_uids;
     }
-
+    private static $base_section_uids = array();
 
 	static public function getModuleName() { return 'np_section'; }
-
 
     /**
      * Get root sections
@@ -648,11 +635,7 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @return array Root sections
      */
 	public static function getRootSections() {
-        $sections = array();
-        foreach(self::getRootSectionUids() as $uid) {
-            $sections[] = new tx_newspaper_Section($uid);
-        }
-        return $sections;
+        return array_map(function($uid) { return new tx_newspaper_Section($uid); }, self::getRootSectionUids());
 	}
 
     /**
@@ -661,19 +644,14 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
      * @return array Section uids
      */
     public static function getRootSectionUids() {
-		$row = tx_newspaper::selectRows(
-			'uid',
-			'tx_newspaper_section',
-			'parent_section=0 AND pid=' .
-                tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()),
-			'',
-			'sorting'
-		);
-        $uids = array();
-        foreach($row as $data) {
-            $uids[] = $data['uid'];
-        }
-        return $uids;
+        return array_map(
+            function(array $data) { return intval($data['uid']); },
+            tx_newspaper::selectRows(
+                'uid', 'tx_newspaper_section',
+                'parent_section=0 AND pid=' . tx_newspaper_Sysfolder::getInstance()->getPid(new tx_newspaper_section()),
+                '', 'sorting'
+            )
+        );
     }
 
 	static public function getSectionForTypo3Page($typo_page_id) {
@@ -692,28 +670,25 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
 
     /**
      * Get a section rootline string
-     * @param bool $includeLastSection Whether or not the last section is included in the path
+     * @param bool $includeSelf Whether or not the last section is included in the path
      * @param string $delimiter Delimiter for the sections in the rootline path
      * @return String $path Formatted section rootline
      */
-    public function getFormattedRootline($includeLastSection=true, $delimiter=' / ') {
+    public function getFormattedRootline($includeSelf=true, $delimiter=' / ') {
 
         $rootLine = array_reverse($this->getSectionPath()); // Get complete rootline path
-
-        if (!$includeLastSection) array_pop($rootLine);
+        if (!$includeSelf) array_pop($rootLine);
 
         $path = '';
         foreach($rootLine as $key => $section) {
+tx_newspaper::devlog('getFormattedRootline for ' . $this->getUid() . ": $key", $section);
             $path .= $section->getAttribute('section_name') . ($key < (sizeof($rootLine)-1)? $delimiter : '');
         }
+tx_newspaper::devlog('getFormattedRootline for ' . $this->getUid(), $path);
 
         return $path;
 
     }
-
-
-
-
 
     /**
      * itemsProcFunc to fill styles dropdowns in tceforms backend forms
@@ -730,7 +705,6 @@ class tx_newspaper_Section implements tx_newspaper_StoredObject {
             );
         }
     }
-
 
     /**
      * Get label for sections in backend (Typo3 TCA user function) (Section name and path in parentheses)

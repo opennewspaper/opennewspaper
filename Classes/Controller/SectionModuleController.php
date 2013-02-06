@@ -13,7 +13,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
     protected function initializeAction() {
         $this->pageId = intval(t3lib_div::_GP('id'));
         $this->pageRenderer->addInlineLanguageLabelFile('LLL:EXT:newspaper/Resources/Private/Language/locallang.xml');
-        $this->sections = tx_newspaper_Section::getAllSectionsWithRestrictions(false);
+        $this->sections = tx_newspaper_Section::getAllSectionsWithRestrictions(false, 'section_name', 'articlelist');
         $this->module_request = $_REQUEST['tx_newspaper_txnewspapermmain_newspapersectionmodule'];
     }
 
