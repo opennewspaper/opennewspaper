@@ -65,7 +65,7 @@ CREATE TABLE tx_newspaper_section (
     pagetype_pagezone tinytext NOT NULL,
     articlelist int(11) DEFAULT '0' NOT NULL,
     template_set int(11) DEFAULT '0' NOT NULL,
-    description text DEFAULT '' NOT NULL,
+    description text NOT NULL,
 
     PRIMARY KEY (uid),
     KEY parent (pid)
