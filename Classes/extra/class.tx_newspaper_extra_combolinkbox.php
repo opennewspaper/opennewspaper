@@ -128,6 +128,48 @@ class tx_newspaper_Extra_ComboLinkBox extends tx_newspaper_Extra {
         return $links;
     }
 
+
+    // Typo3 hooks
+
+    /**
+     * Typo3 hook, see class.t3lib_tceforms.php
+     * @param $table string Table name
+     * @param $field string Field name
+     * @param $row array Record
+     * @param $altName
+     * @param $palette
+     * @param $extra
+     * @param $pal
+     * @param $pObj
+     */
+    public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $pObj) {
+        self::checkFieldManuallySelectedArticles($table, $field, $row);
+    }
+
+    /**
+     * Hides field manually_selected_articles if extra hasn't been stored and displays a message.
+     * @param $table string Table name
+     * @param $field string Field name
+     * @param $row array Record
+     */
+    private static function checkFieldManuallySelectedArticles($table, $field, $row) {
+        if ($table != 'tx_newspaper_extra_combolinkbox' || $field != 'manually_selected_articles') {
+            return; // Wrong field, nothing to do ...
+        }
+
+        if (intval($row['uid'])) {
+            return; // uid found, so this extra has been stored already
+        }
+
+        // New extra, so newspaper can't assign articles to this extra (becuase the uid is missing)
+        unset($GLOBALS['TCA']['tx_newspaper_extra_combolinkbox']['columns']['manually_selected_articles']['config']);
+
+        // Render message
+        $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_combolinkbox_new'), 'Combo link box', t3lib_FlashMessage::WARNING);
+        t3lib_FlashMessageQueue::addMessage($message);
+
+    }
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_ComboLinkBox());

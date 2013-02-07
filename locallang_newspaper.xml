@@ -28,6 +28,7 @@
 
             <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
+            <label index="flashMessage_extra_combolinkbox_new">You can add articles once this extra has been stored.</label>
             <label index="flashMessage_extra_flexform_folder_not_found">Folder "%s" can't be found.</label>
             <label index="flashMessage_extra_flexform_no_folder_configured">No folder configured. Please set Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">The selected Flexform template is archived. Changing the Flexform template can't be undone.</label>
@@ -150,6 +151,7 @@
 
             <label index="error_invalid_section">Das Ressort mit der UID %s ist ungültig</label>
 
+            <label index="flashMessage_extra_combolinkbox_new">Sie können dem Web-Element Artikel hinzufügen, nachdem Sie dieses Extra gespeichert haben.</label>
             <label index="flashMessage_extra_flexform_folder_not_found">Das Verzeichnis "%s" existiert nicht.</label>
             <label index="flashMessage_extra_flexform_no_folder_configured">Kein Verzeichnis konfiguriert. Bitte setzen Sie Page TSConfig newspaper.extra.flexform.folder.active</label>
             <label index="flashMessage_extra_flexform_archived">Die ausgewählte Flexform-Vorlage ist archiviert. Eine Änderung der Vorlagen-Auswahl kann nicht rückgängig gemacht werden.</label>
