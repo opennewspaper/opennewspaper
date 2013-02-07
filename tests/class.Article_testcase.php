@@ -94,7 +94,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     private static function createSavedAttributesArray(tx_newspaper_Article $temp) {
         $saved_attributes = array();
-        foreach (tx_newspaper::getFields('tx_newspaper_article') as $attribute) {
+        foreach (tx_newspaper_DB::getInstance()->getFields('tx_newspaper_article') as $attribute) {
             $saved_attributes[$attribute] = $temp->getAttribute($attribute);
         }
         return $saved_attributes;
@@ -257,7 +257,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
         if ($this->skipTestBecauseDatamap()) return;
 
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
 
@@ -268,7 +268,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
         if ($this->skipTestBecauseDatamap()) return;
 
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
         $uid = $this->article->store();
 
         /// check that record in DB equals data in memory
@@ -284,7 +284,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
         if ($this->skipTestBecauseDatamap()) return;
 
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// change an attribute, store and check
 		$random_string = md5(time());
 		$this->article->setAttribute('bodytext',
@@ -300,7 +300,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
         if ($this->skipTestBecauseDatamap()) return;
 
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 		/// create an empty article and write it. verify it's been written.
 		$article = new tx_newspaper_Article();
         $random_string = md5(time());
@@ -461,7 +461,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     /// tries to perform a datamap operation to see whether it works with the current DB
     private function checkDatamapWorks() {
-        $this->assertTrue(tx_newspaper::isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
+        $this->assertTrue(tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', 'uid = ' . $this->article->getUid()));
 
         $datamap['tx_newspaper_article'][$this->article->getUid()] = array('tstamp' => time());
 

@@ -1452,7 +1452,7 @@ if (false && $parent_zone->getParentPage()->getPageType()->getAttribute('type_na
  	protected function readAttributes($table, $uid) {
 		/// Read Attributes from persistent storage
  		$this->attributes = tx_newspaper::selectOneRow('*', $table, 'uid = ' . $uid);
- 		$this->attributes['query'] = tx_newspaper::getQuery();
+ 		$this->attributes['query'] = tx_newspaper_DB::getQuery();
  	}
 
 

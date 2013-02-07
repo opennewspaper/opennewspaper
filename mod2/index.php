@@ -385,7 +385,7 @@ class  tx_newspaper_module2 extends t3lib_SCbase {
 
 		switch($this->input['ajaxController']) {
 			case 'deleteArticle':
-				tx_newspaper::deleteUsingCmdMap('tx_newspaper_article', array(intval($this->input['articleUid'])));
+                tx_newspaper_DB::getInstance()->deleteUsingCmdMap('tx_newspaper_article', array(intval($this->input['articleUid'])));
 				die();
 			case 'publishArticle':
 				$this->changeArticleHiddenStatus(intval($this->input['articleUid']), false);

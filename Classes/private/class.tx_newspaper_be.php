@@ -1050,7 +1050,7 @@ class tx_newspaper_BE {
         if($category)
             $where .= ' AND ctrltag_cat=' . $category;
 
-        $tags = tx_newspaper::selectMMQuery('uid_foreign, tag', 'tx_newspaper_article',
+        $tags = tx_newspaper_DB::getInstance()->selectMMQuery('uid_foreign, tag', 'tx_newspaper_article',
             'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
         $items = array();
         foreach($tags as $i => $tag) {

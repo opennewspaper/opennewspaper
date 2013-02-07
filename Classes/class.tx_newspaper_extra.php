@@ -565,7 +565,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 
 		$search_where .= ' AND NOT deleted';
 
-		if (!$hidden && tx_newspaper::fieldExists($this->getTable(), 'hidden')) {
+		if (!$hidden && tx_newspaper_DB::getInstance()->fieldExists($this->getTable(), 'hidden')) {
 			$search_where .= ' AND NOT hidden';
 		}
 
@@ -705,7 +705,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
             )
         );
         if (!$this->getUid())
-            t3lib_div::debug(tx_newspaper::getQuery());
+            t3lib_div::debug(tx_newspaper_DB::getQuery());
         //	Write data for abstract Extra
         $this->setExtraUid(
             self::createExtraRecord($this->getUid(), $this->getTable())

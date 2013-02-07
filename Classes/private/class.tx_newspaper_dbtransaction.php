@@ -1,8 +1,7 @@
 <?php
 
+/// Use objects of this class to wrap database operations into a MySQL transaction.
 /**
- *  Use objects of this class to wrap database operations into a MySQL transaction.
- *
  *  Usage:
  *  \code
  *  try {

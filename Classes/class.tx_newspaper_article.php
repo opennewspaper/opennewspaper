@@ -37,7 +37,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public static function createFromArray(array $data) {
 
         if (empty(self::$article_fields)) {
-            self::$article_fields = tx_newspaper::getFields('tx_newspaper_article');
+            self::$article_fields = tx_newspaper_DB::getInstance()->getFields('tx_newspaper_article');
         }
 
         $article = new tx_newspaper_Article();
@@ -667,7 +667,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 /// \todo: if ($this->getuid() == 0) throw e OR
 /// \todo: just collect here and store sections later in article::store()
         // get pos of next element
-        $p = tx_newspaper::getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getUid()) + 1;
+        $p = tx_newspaper_DB::getInstance()->getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getUid()) + 1;
 
         tx_newspaper::insertRows(
                         'tx_newspaper_article_sections_mm',
@@ -890,7 +890,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             $where .= " AND ctrltag_cat = " . intval($category);
         }
 
-        $tag_ids = tx_newspaper::selectMMQuery('uid_foreign', $this->getTable(),
+        $tag_ids = tx_newspaper_DB::getInstance()->selectMMQuery('uid_foreign', $this->getTable(),
             'tx_newspaper_article_tags_mm', 'tx_newspaper_tag', $where);
 
 		$tags = array();
@@ -978,7 +978,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return (
             strtolower($table) == 'tx_newspaper_article' &&
             intval($id) > 0 &&
-            tx_newspaper::isPresent('tx_newspaper_article', "uid = $id")
+            tx_newspaper_DB::getInstance()->isPresent('tx_newspaper_article', "uid = $id")
         );
     }
 

@@ -20,7 +20,7 @@ class tx_newspaper_module2_Filter {
     }
 
     public function getCount() {
-        return tx_newspaper::countRows($this->query_builder->getTable(), $this->query_builder->getWhere());
+        return tx_newspaper_DB::getInstance()->countRows($this->query_builder->getTable(), $this->query_builder->getWhere());
     }
 
     public function getArticleRecords() {

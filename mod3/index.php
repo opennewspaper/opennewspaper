@@ -928,13 +928,13 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
                     $timer = tx_newspaper_ExecutionTimer::create();
 
 					/// check if at least one section page type and page zone type are available. if not, this module is senseless.
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
+					if (!tx_newspaper_DB::getInstance()->atLeastOneRecord('tx_newspaper_section')) {
 						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false));
 					}
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagetype')) {
+					if (!tx_newspaper_DB::getInstance()->atLeastOneRecord('tx_newspaper_pagetype')) {
 						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagetype_available', false));
 					}
-					if (!tx_newspaper::atLeastOneRecord('tx_newspaper_pagezonetype')) {
+					if (!tx_newspaper_DB::getInstance()->atLeastOneRecord('tx_newspaper_pagezonetype')) {
 						die($LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_pagezonetype_available', false));
 					}
 
@@ -944,7 +944,7 @@ t3lib_div::devlog('processExtraInsertAfter() obsolete???', 'newspaper', 0, array
 //debug($_REQUEST);
 
 					if (!$this->section_id) {
-						if (tx_newspaper::atLeastOneRecord('tx_newspaper_section')) {
+						if (tx_newspaper_DB::getInstance()->atLeastOneRecord('tx_newspaper_section')) {
 							/// check if at least one section exists
 							$this->content .= $LANG->sL('LLL:EXT:newspaper/mod3/locallang.xml:message_section_placement_no_section_available', false);
 						} else {

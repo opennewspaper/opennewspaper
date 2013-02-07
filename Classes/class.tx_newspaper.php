@@ -43,28 +43,6 @@ class tx_newspaper  {
     //      DB functions
     ////////////////////////////////////////////////////////////////////////////
 
-    public static function getQuery() {
-        return tx_newspaper_DB::getQuery();
-    }
-
-    /// Returns whether a specified record is available in the DB
-    public static function isPresent($table, $where, $use_enable_fields = true) {
-        return tx_newspaper_DB::getInstance()->isPresent($table, $where, $use_enable_fields);
-    }
-
-    /// Execute a \c SELECT query and return the amount of records in the result set
-    /** enableFields() are taken into account.
-     *  \param $table Table to \c SELECT \c FROM
-     *  \param $where \c WHERE - clause (defaults to selecting all records)
-     *  \param $groupBy Fields to \c GROUP \c BY
-     *  \return number of records found
-     *  \throw tx_newspaper_NoResException if no result is found, probably due
-     * 		to a SQL syntax error
-     */
-    public static function countRows($table, $where='1', $groupBy='') {
-        return tx_newspaper_DB::getInstance()->countRows($table, $where, $groupBy);
-    }
-
     /// Execute a \c SELECT query, check the result, return zero or one record(s)
     /** enableFields() are taken into account.
      *
@@ -139,33 +117,6 @@ class tx_newspaper  {
         return tx_newspaper_DB::getInstance()->selectRowsDirect($fields, $table, $where, $groupBy, $orderBy, $limit);
     }
 
-    /// Execute a \c SELECT query on M-M related tables
-    /** Copied and adapted from \c t3lib_db::exec_SELECT_mm_query() so that the
-     *	SQL query is retained for debugging as \c tx_newspaper::$query.
-     *
-     *	\param $select Field list for \c SELECT
-     *  \param $local_table Tablename, local table
-     *  \param $mm_table Tablename, relation table
-     *  \param $foreign_table Tablename, foreign table
-     *  \param $whereClause Optional additional \c WHERE clauses put in the end
-     *  	   of the query. \b NOTICE: You must escape values in this argument
-     *  	   with \c $GLOBALS['TYPO3_DB']->fullQuoteStr() yourself! DO NOT PUT
-     *  	   IN \c GROUP \c BY, \c ORDER \c BY or \c LIMIT! You have to prepend
-     *  	   \c 'AND ' to this parameter yourself!
-     *  \param $groupBy Optional \c GROUP \c BY field(s), if none, supply blank string.
-     *  \param $orderBy Optional \c ORDER \c BY field(s), if none, supply blank string.
-     *  \param $limit Optional \c LIMIT value ([begin,]max), if none, supply blank string.
-     *  \return The result of the query as 2-dimensional associative array
-     *  \throw tx_newspaper_NoResException if no result is found, probably due
-     * 		to a SQL syntax error
-     */
-    public static function selectMMQuery($select, $local_table, $mm_table, $foreign_table,
-                                         $whereClause='' ,$groupBy='', $orderBy='', $limit='')  {
-        return tx_newspaper_DB::getInstance()->selectMMQuery(
-            $select, $local_table, $mm_table, $foreign_table, $whereClause ,$groupBy, $orderBy, $limit
-        );
-    }
-
     /// Inserts a record into a SQL table
     /** If the class constant \c tx_newspaper::use_datamap is set, the data is
      *  written using \c process_datamap(), which fills in all needed fields and
@@ -216,37 +167,6 @@ class tx_newspaper  {
         return tx_newspaper_DB::getInstance()->deleteRows($table, $uids_or_where, $key, $additional_where);
     }
 
-    /// Deletes a record from a DB table using a Typo3 command map
-    /**
-     *  \param $table SQL table to delete a record from
-     *  \param $uids Array of UIDs to delete
-     *  \return number of affected rows
-     *  \throw tx_newspaper_DBException if an error occurs in process_datamap()
-     */
-    public static function deleteUsingCmdMap($table, array $uids) {
-        return tx_newspaper_DB::getInstance()->deleteUsingCmdMap($table, $uids);
-    }
-
-    /// If \p $table has a \c tstamp field, set it to current time in \p $row
-    public static function setTimestampIfPresent($table, array &$row) {
-        tx_newspaper_DB::getInstance()->setTimestampIfPresent($table, $row);
-    }
-
-    /// Returns true if SQL table \p $table has a field called \p $field
-    public static function fieldExists($table, $field) {
-        return tx_newspaper_DB::getInstance()->fieldExists($table, $field);
-    }
-
-    /// Returns the fields that are present in SQL table \p $table
-    public static function getFields($table) {
-        return tx_newspaper_DB::getInstance()->getFields($table);
-    }
-
-    /// Returns an array which has the fields of SQL table \p $table as keys
-    public static function makeArrayFromFields($table) {
-        return tx_newspaper_DB::getInstance()->makeArrayFromFields($table);
-    }
-
     /// \c WHERE clause to filter out unwanted records
     /** Returns a part of a \c WHERE clause which will filter out records with
      *  start/end times, deleted flag set, or hidden flag set (if hidden should
@@ -261,24 +181,6 @@ class tx_newspaper  {
      */
     static public function enableFields($tableString) {
         return tx_newspaper_DB::getInstance()->enableFields($tableString);
-    }
-
-    /// Gets sorting position for next element in a MM table
-    /** \param $table name of MM table
-     *  \param $uid_local
-     *  \return sorting position of element inserted as last element
-     */
-    public static function getLastPosInMmTable($table, $uid_local) {
-        return tx_newspaper_DB::getInstance()->getLastPosInMmTable($table, $uid_local);
-    }
-
-    /// Check if at least one record exists in given table
-    /**  Enable fields for BE/FE are taken into account.
-     *
-     *  \return \c true, if at least one record availabe in given table
-     */
-    public static function atLeastOneRecord($table) {
-        return tx_newspaper_DB::getInstance()->atLeastOneRecord($table);
     }
 
     public static function setDefaultFields(tx_newspaper_StoredObject &$object, array $fields) {
@@ -395,7 +297,6 @@ class tx_newspaper  {
         return $dossier_get_parameter;
     }
 
-
     /**
      * Get uid to use for internal preview of articles (in production list or placement module)
      * @return uid of page
@@ -411,7 +312,6 @@ class tx_newspaper  {
         }
         return $previewPage;
     }
-
 
     /// get absolute path to Typo3 installation
     /** \param $endsWithSlash determines if the returned path ends with a slash
@@ -494,51 +394,6 @@ class tx_newspaper  {
         return $LANG->sL("LLL:EXT:$extension/$translation_file:$key", false);
     }
 
-
-    /// Symbol used as a replacement for whitespace characters by normalizeString().
-    const space = '_';
-
-    /// Normalizes a string to a basic subset of ASCII, for use in e.g. URLs.
-    /** - Convert spaces to underscores
-     *  - Convert non A-Z characters to ASCII equivalents
-     *  - Convert some special things like the 'ae'-character
-     *  - Strip off all other symbols
-     *  Works with the character set defined as "forceCharset", if defined. Otherwise
-     *  uses the charset used by \p $string.
-     *
-     *  Adapted from Extension RealURL: tx_realurl_advanced::encodeTitle()
-     *
-     * @param	$string		String to clean up
-     * @return	string		Encoded \p $string, passed through rawurlencode() = ready to put in the URL.
-     *
-     * @todo Refactor, see tx_newspaper::toLowerCase()
-     */
-    public static function normalizeString($string) {
-
-        $cs_converter = $GLOBALS['TSFE']->csConvObj;
-        if (!$cs_converter instanceof t3lib_cs) return $string;
-
-        // Fetch character set:
-        $charset = $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : $GLOBALS['TSFE']->defaultCharSet;
-
-        // Convert to lowercase:
-        $normalizedString = $cs_converter->conv_case($charset, $string, self::toLower);
-
-        // Convert some special tokens to the space character:
-        $normalizedString = preg_replace('/[ -+_]+/', self::space, $normalizedString); // convert spaces
-
-        // Convert extended letters to ascii equivalents:
-        $normalizedString = $cs_converter->specCharsToASCII($charset, $normalizedString);
-
-        $normalizedString = preg_replace('[^a-zA-Z0-9\\' . self::space . ']', '', $normalizedString); // strip the rest
-        $normalizedString = preg_replace('\\' . self::space . '+', self::space, $normalizedString); // Convert multiple 'spaces' to a single one
-        $normalizedString = trim($normalizedString, self::space);
-
-        // Return encoded URL:
-        return rawurlencode($normalizedString);
-    }
-
-
     /**
      * Basic url encoding: encodes '?', '=' and '&' only
      * @param string $url URL to be encoded
@@ -549,7 +404,6 @@ class tx_newspaper  {
         $replaceWith = array('%3F', '%3D', '%26');
         return str_replace($chars, $replaceWith, $url);
     }
-
 
     /**
      * Check if given string is UTF8 encoded
@@ -570,6 +424,7 @@ class tx_newspaper  {
     public static function toLowerCaseArray(array $arr) {
         return self::convertCaseArray($arr, self::toLower);
     }
+
     /**
      * Recusively convert array $arr to uppercase
      * @static
@@ -610,6 +465,7 @@ class tx_newspaper  {
     public static function toLowerCase($string) {
         return self::convertCase($string, self::toLower);
     }
+
     /**
      * Convert $string to uppercase. Uses Typo3 csConvObj to process special characters correctly.
      * @param $string String to be converted to uppercase
@@ -803,39 +659,6 @@ class tx_newspaper  {
     }
 
 
-  /// Create a HTML link with text and URL using the \c typolink() API function
-  /** \param  $text the text to be displayed
-   *  \param  $params target and optional \c GET parameters as parameter => value
-   *  \param  $conf optional TypoScript configuration array
-   *  \return array ['text'], ['href']
-   *
-   *  \todo I don't think typolink() is called even once in \c tx_newspaper. Scrap
-   *  	this function and put all functionality into typolink_url().
-   */
-    public static function typolink($text, array $params = array(), array $conf = array()) {
-
-    if (TYPO3_MODE == 'BE') {
-      self::buildTSFE();
-      if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
-        throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
-      }
-    }
-
-    self::makeLocalCObj();
-
-    self::flattenParamsArray($params);
-
-    $temp_conf = self::makeTSConfForTypolink($params, $conf);
-
-      //	call typolink_URL() and return data
-      $data = array(
-      'text' => $text,
-        'href' => self::$local_cObj->typolink_URL($temp_conf)
-      );
-
-    return $data;
-  }
-
   /// populate \c $GLOBALS['TSFE'] even if we're in the BE
   /** Thanks to typo3.net user semidark. Function lifted from
    *  http://www.typo3.net/forum/list/list_post//39975/?tx_mmforum_pi1[page]=&tx_mmforum_pi1[sword]=typolink%20backend%20modules#pid149544
@@ -898,52 +721,6 @@ class tx_newspaper  {
     }
   }
 
-  ///  A tslib_cObj object is needed to call the typolink_URL() function
-  private static function makeLocalCObj() {
-    if (!self::$local_cObj) {
-          self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
-          self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
-    }
-  }
-
-  /// Make sure \p $params is a one-dimensional array
-  private static function flattenParamsArray(array &$params) {
-    foreach ($params as $key => $param) {
-      if (is_array($param)) {
-        foreach ($param as $subkey => $value) {
-          $params[$key.'['.$subkey.']'] = $value;
-        }
-        unset($params[$key]);
-      }
-    }
-  }
-
-  ///	set TypoScript config array - yeah I know, it's not TSConfig!
-  private static function makeTSConfForTypolink(array $params, array $conf) {
-
-    if ($conf) $temp_conf = $conf;
-    else $temp_conf = array();
-
-    if ($params['id']) $temp_conf['parameter'] = $params['id'];
-      else $temp_conf['parameter.']['current'] = 1;
-      unset($params['id']);
-
-      $no_cache = false;
-       $sep = '&';
-      if (sizeof($params) > 0) {
-        foreach ($params as $key => $value) {
-        if ($key == 'no_cache' && $value != 0) $no_cache = true;
-        if ($key != 'cHash') {
-              $temp_conf['additionalParams'] .= "$sep$key=$value";
-              $sep = '&';
-        }
-          }
-      }
-        if (!$no_cache) $temp_conf['useCacheHash'] = 1;
-
-    return $temp_conf;
-  }
-
   /// Get a typolink-compatible URL
   /** \param  $params Target and optional \c GET parameters. See the TSRef for
    * 		details, eg. http://typo3.org/documentation/document-library/references/doc_core_tsref/4.1.0/view/5/8/
@@ -976,7 +753,6 @@ class tx_newspaper  {
 
     ////////////////////////////////////////////////////////////////////////////
 
-
   /// \return array [key]=value if $key is found in config file, emtpy array else
   public static function getNewspaperConfig($key) {
 
@@ -995,29 +771,23 @@ class tx_newspaper  {
 
   }
 
-  /// checks if a string starts with a specific text
-  /** \param $haystack string to searched
-   *  \param $needle string to search for
-   *  \param $caseSensitive specifies if the search is case-sensitive (default=false)
-   */
-  public static function startsWith($haystack, $needle, $caseSensitive=false) {
-    if ($caseSensitive) {
-        return (strpos($haystack, $needle) === 0);
+    /// checks if a string starts with a specific text
+    /** @param $haystack string to search
+     *  @param $needle string to search for
+     *  @param $caseSensitive specifies if the search is case-sensitive (default=false)
+     */
+    public static function startsWith($haystack, $needle, $caseSensitive=false) {
+        $function = $caseSensitive? 'strpos': 'stripos';
+        return ($function($haystack, $needle) === 0);
     }
-    return (stripos($haystack, $needle) === 0);
-  }
 
-  /**
-   * Gets an array of objects with getUid() function available, creates an array with uids only
-   * @param array $objects objects with getUid() function available
-   * @return array Contains the uids of the objects
-   */
-  public static function getUidArray(array $objects) {
-    $uids = array();
-      foreach($objects as $object) {
-      $uids[] = $object->getUid();
-    }
-    return $uids;
+    /**
+     * Gets an array of objects with getUid() function available, creates an array with uids only
+     * @param array $objects objects with getUid() function available
+     * @return array Contains the uids of the objects
+     */
+    public static function getUidArray(array $objects) {
+        return array_map(function($object) { return $object->getUid();}, $objects);
     }
 
 
@@ -1042,46 +812,39 @@ class tx_newspaper  {
     return self::pagetype_get_parameter;
   }
 
-  /// Get the tx_newspaper_Section object of the page currently displayed
-  /** Currently, that means it returns the tx_newspaper_Section record which
-   *  lies on the current Typo3 page. This implementation may change, but this
-   *  function is required to always return the correct tx_newspaper_Section.
-   *
-   *  \return The tx_newspaper_Section object the plugin currently works on
-   *  \throw tx_newspaper_IllegalUsageException if the current page is not
-   * 		associated with a tx_newspaper_Section.
-   */
-  public static function getSection() {
-    $section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
+    /// Get the tx_newspaper_Section object of the page currently displayed
+    /** Currently, that means it returns the tx_newspaper_Section record which lies on the current Typo3 page.
+     *  This implementation may change, but this function is required to always return the correct tx_newspaper_Section.
+     *
+     *  @return The tx_newspaper_Section object the plugin currently works on
+     *  @throw tx_newspaper_IllegalUsageException if the current page is not associated with a tx_newspaper_Section.
+     */
+    public static function getSection() {
+        $section_uid = intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section']);
 
         if (!$section_uid) {
-          throw new tx_newspaper_IllegalUsageException('No section associated with current page');
+            throw new tx_newspaper_IllegalUsageException('No section associated with current page');
         }
 
-    return new tx_newspaper_Section($section_uid);
-  }
+        return new tx_newspaper_Section($section_uid);
+    }
 
-  /// Find out whether we are displaying a tx_newpaper_Article right now
-  /** \return true, if on an Article tx_newspaper_Page
-   */
-  public static function onArticlePage() {
-    $pagetype = new tx_newspaper_PageType($_GET);
-    $is_article_page = $pagetype->getAttribute('is_article_page');
-    return $is_article_page;
-  }
+    /// Find out whether we are displaying a tx_newpaper_Article right now
+    /** @return true, if on an Article tx_newspaper_Page */
+    public static function onArticlePage() {
+        $pagetype = new tx_newspaper_PageType($_GET);
+        return $pagetype->getAttribute('is_article_page');
+    }
 
-  public static function currentURL() {
-    $hostname = $_SERVER['SERVER_NAME'];
-    $baseURI = explode($hostname, t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
-    $https = $_SERVER['HTTPS'];
-    $url = 'http' . ($https? 's': '') . '://'.$hostname.$baseURI[1];
-    return $url;
-  }
+    public static function currentURL() {
+        $baseURI = explode($_SERVER['SERVER_NAME'], t3lib_div::getIndpEnv('TYPO3_REQUEST_URL'));
+        return self::currentProtocolHost() . $baseURI[1];
+    }
 
-  /// \return current protocol and host
-  public static function currentProtocolHost() {
-    return 'http' . ($_SERVER['HTTPS']? 's': '') . '://' . $_SERVER['SERVER_NAME'];
-  }
+    /// @return current protocol and host
+    public static function currentProtocolHost() {
+        return 'http' . ($_SERVER['HTTPS']? 's': '') . '://' . $_SERVER['SERVER_NAME'];
+    }
 
     public static function registerSource($key, tx_newspaper_Source $new_source) {
         self::$registered_sources[$key] = $new_source;
@@ -1107,7 +870,6 @@ class tx_newspaper  {
         return $sources;
     }
 
-
     public static function getRegisteredSource($key) {
         if (!isset(self::$registered_sources[$key])) {
             throw new tx_newspaper_InconsistencyException(
@@ -1128,15 +890,10 @@ class tx_newspaper  {
         if (!isset($GLOBALS['BE_USER'])) {
             return false; // Doesn't make sense without a backend user ...
         }
-        if (!$tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessSources')) {
-            // Read all registered sources, no TSConfig found ...
-            $sources = array();
-            foreach(self::getRegisteredSources() as $key => $source) {
-                $sources[] = $key;
-            }
-            return $sources; // Return ALL sources
+        if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessSources')) {
+            return t3lib_div::trimExplode(',', $tsc); // Return ALLOWED sources
         }
-        return t3lib_div::trimExplode(',', $tsc); // Return ALLOWED sources
+        return self::getRegisteredSources(); // Return ALL sources
     }
 
 
@@ -1185,13 +942,82 @@ class tx_newspaper  {
      */
     private function __construct() { }
 
-    /** SQL queries are stored as a static member variable, so they can be
-     *  accessed for debugging from outside the function if a query does not
-     *  return the desired result.
-     */
-    public static $query = '';
+  /// Create a HTML link with text and URL using the \c typolink() API function
+  /** \param  $text the text to be displayed
+   *  \param  $params target and optional \c GET parameters as parameter => value
+   *  \param  $conf optional TypoScript configuration array
+   *  \return array ['text'], ['href']
+   */
+    private static function typolink($text, array $params = array(), array $conf = array()) {
 
-    /// a \c tslib_cObj object used to generate typolinks
+    if (TYPO3_MODE == 'BE') {
+      self::buildTSFE();
+      if (!is_object($GLOBALS['TSFE']) || !($GLOBALS['TSFE'] instanceof tslib_fe)) {
+        throw new tx_newspaper_Exception('Tried to generate a typolink in the BE. Could not instantiate $GLOBALS[TSFE]. Have to give up, sorry.');
+      }
+    }
+
+    self::makeLocalCObj();
+
+    self::flattenParamsArray($params);
+
+    $temp_conf = self::makeTSConfForTypolink($params, $conf);
+
+      //	call typolink_URL() and return data
+      $data = array(
+      'text' => $text,
+        'href' => self::$local_cObj->typolink_URL($temp_conf)
+      );
+
+    return $data;
+  }
+
+    ///  A tslib_cObj object is needed to call the typolink_URL() function
+    private static function makeLocalCObj() {
+        if (self::$local_cObj) return;
+        self::$local_cObj = t3lib_div::makeInstance("tslib_cObj");
+        self::$local_cObj->setCurrentVal($GLOBALS["TSFE"]->id);
+    }
+
+    /// Make sure \p $params is a one-dimensional array
+    private static function flattenParamsArray(array &$params) {
+        foreach ($params as $key => $param) {
+            if (is_array($param)) {
+                foreach ($param as $subkey => $value) {
+                    $params[$key.'['.$subkey.']'] = $value;
+                }
+                unset($params[$key]);
+            }
+        }
+    }
+
+    /// set TypoScript config array - yes I know, it's not TSConfig! It's a TS config.
+    private static function makeTSConfForTypolink(array $params, array $conf) {
+
+        if ($conf) $temp_conf = $conf;
+        else $temp_conf = array();
+
+        if ($params['id']) $temp_conf['parameter'] = $params['id'];
+        else $temp_conf['parameter.']['current'] = 1;
+        unset($params['id']);
+
+        $no_cache = false;
+        $sep = '&';
+        if (sizeof($params) > 0) {
+            foreach ($params as $key => $value) {
+                if ($key == 'no_cache' && $value != 0) $no_cache = true;
+                if ($key != 'cHash') {
+                    $temp_conf['additionalParams'] .= "$sep$key=$value";
+                    $sep = '&';
+                }
+            }
+        }
+        if (!$no_cache) $temp_conf['useCacheHash'] = 1;
+
+        return $temp_conf;
+    }
+
+    /** @var tslib_cObj Used to generate typolinks */
     private static $local_cObj = null;
 
     private static $registered_sources = array();
