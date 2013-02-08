@@ -58,6 +58,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         if (intval($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
+            $this->view->assign('parent_sections', self::pruneChildSections($section, $this->sections));
             $this->view->assign('parent_section', $section->getParentSection());
             $this->view->assign('description', $section->getAttribute('description'));
             $this->view->assign('articlelist_type', get_class($section->getArticleList()));
@@ -85,6 +86,26 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
             $this->view->assign('module_request', $this->module_request);
 
         }
+    }
+
+    /**
+     *  This function has to take two annoying facts into account:
+     *  - \c $section->getChildSections() does not include \c $section
+     *  - \c $sections and \c $section->getChildSections() contain partially populated
+     *    objects, so a test using \c in_array does not work.
+     * @param tx_newspaper_Section $section The section which gets its parent section changed
+     * @param array $sections All sections
+     * @return array All sections minus \c $section and its child sections
+     */
+    private static function pruneChildSections(tx_newspaper_Section $section, array $sections) {
+        $child_uids = array_map(
+            function(tx_newspaper_Section $s) { return $s->getUid(); },
+            array_merge($section->getChildSections(true), array($section))
+        );
+        return array_filter(
+            $sections,
+            function(tx_newspaper_Section $s) use ($child_uids) { return !in_array($s->getUid(), $child_uids); }
+        );
     }
 
     private function changeSectionName(tx_newspaper_Section &$section) {
