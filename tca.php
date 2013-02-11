@@ -3540,9 +3540,8 @@ $TCA["tx_newspaper_extra_flexform"] = array (
             "label" => "LLL:EXT:newspaper/locallang_db.xml:tx_newspaper_extra_flexform.html",
             "config" => Array (
                 "type" => "flex",
-                "ds" => array(
-                        'default' => '' // filled by: tx_newspaper_Extra_Flexform->addFlexformTemplateDropdownEntries
-                )
+                "ds_pointerField" => "ds_file",
+//                "ds" => array()
             )
         ),
         "template" => Array (

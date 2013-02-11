@@ -31,7 +31,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 
 	public function __toString() {
 		try {
-			return 'Extra: UID ' . $this->getExtraUid() . ', Flexform: UID ' . $this->getUid() . t3lib_div::view_array($this->getFlexformValues());
+			return 'Extra: UID ' . $this->getExtraUid() . ', Flexform: UID ' . $this->getUid() . t3lib_utility_Debug::viewArray($this->getFlexformValues());
 		} catch(Exception $e) {
 			return "Flexform: Exception thrown!" . $e;
 		}
@@ -46,20 +46,23 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         $this->prepare_render($template_set);
 
         $this->smarty->assign('ds_file', array(
-                'path' => self::getFlexformFolder(self::getFlexformDataStructureType($this->getAttribute('ds_file'))),
-                'file' => $this->getAttribute('ds_file') . '.xml')
+                'path' => dirname($this->getAttribute('ds_file')),
+                'file' => self::extractDsFileTitle($this->getAttribute('ds_file'))
+            )
         );
 
         $this->smarty->assign('flexform', $this->getFlexformValues());
+
         $this->smarty->assign('flexform_debug', array(
             'xml' => htmlentities($this->getAttribute('flexform')),
-            'array' => t3lib_div::view_array($this->getFlexformValues())
+            'array' => t3lib_utility_Debug::viewArray($this->getFlexformValues())
         ));
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
-// tx_newspaper::devlog("Render Extra Flexform", $rendered);
+//tx_newspaper::devlog("Render Extra Flexform", array('smarty template' => $this->getSmartyTemplate(), 'ds_file' => array('path' => dirname($this->getAttribute('ds_file'))), 'file' => self::extractDsFileTitle($this->getAttribute('ds_file')), 'flexform data' => $this->getFlexformValues(), 'rendered' => $rendered));
         return $rendered;
 	}
+
 
     /**
      * Get template name (or return template set in record)
@@ -76,7 +79,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         }
 
         // No template set in Extra, so use template for Extra flexform based on the data structure xml file name
-        return strtolower(get_class($this)) . '_' . $this->getAttribute('ds_file') . '.tmpl';
+        return strtolower(get_class($this)) . '_' . self::extractDsFileTitle($this->getAttribute('ds_file')) . '.tmpl';
 
     }
 
@@ -86,12 +89,9 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 		if ($desc = $this->getAttribute('short_description')) {
 		} elseif ($desc = $this->getAttribute('notes')) {
 		} else {
-            $desc = $this->getAttribute('ds_file');
+            $desc =  self::extractDsFileTitle($this->getAttribute('ds_file'));// Show file name only (cut off xml file extension)
 		}
-		return substr(
-			$desc,
-			0, self::description_length + 2*strlen('<strong>') + 1
-        );
+		return substr($desc, 0, self::description_length + 2*strlen('<strong>') + 1);
 	}
 
 		/// title for module
@@ -102,7 +102,10 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
 	public static function dependsOnArticle() { return false; }
 
 
-
+    /**
+     * Get data stored in flexform xml as array
+     * @return array Flexform data
+     */
     private function getFlexformValues() {
 
         if ($this->flexformArray !== null) {
@@ -135,12 +138,11 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
      */
     public static function getFlexformDataStructure($file) {
 
-        $type = self::getFlexformDataStructureType($file);
-
-        if ($type == self::FF_TYPE_ACTIVE) {
-            return file_get_contents(self::getFlexformActiveFolder() . '/' . $file . '.xml');
-        } else if ($type == self::FF_TYPE_ARCHIVED) {
-            return file_get_contents(self::getFlexformArchiveFolder() . '/' . $file . '.xml');
+        switch(self::getFlexformDataStructureType($file)) {
+            case self::FF_TYPE_ACTIVE:
+                return file_get_contents($file);
+            case self::FF_TYPE_ARCHIVED:
+                return file_get_contents($file);
         }
 
         return ''; // File not found/readable ...
@@ -179,7 +181,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         while (($file = $dir->read()) !== false) {
             $parts = pathinfo($folder . '/' . $file);
             if (is_readable($folder . '/' . $file) && $parts['extension'] == 'xml') {
-                $files[] = $parts['filename'];
+                $files[] = $folder . '/'. $parts['filename'];
             }
         }
       	$dir->close();
@@ -210,16 +212,20 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
      * Get type of flexform template
      * Either FF_TYPE_ACTIVE (checked first) or FF_TYPE_ARCHIVED (checked then)
      * So if a file exists in both the active AND the archive folder, the active template will be used
-     * @param $file String Flexform datastructure file
+     * @param $file String Flexform data structure file (full path)
      * @return int FF_TYPE_ACTIVE or FF_TYPE_ARCHIVED or false, if file can't be found/read
      */
     public static function getFlexformDataStructureType($file) {
+
         // Check active folder first ...
-        if (file_exists(self::getFlexformActiveFolder() . '/' . $file . '.xml') && is_readable(self::getFlexformActiveFolder() . '/' . $file . '.xml')) {
+        if (file_exists($file) && is_readable($file)) {
             return self::FF_TYPE_ACTIVE;
         }
+
         // ... and then archive folder
-        if (file_exists(self::getFlexformArchiveFolder() . '/' . $file . '.xml') && is_readable(self::getFlexformArchiveFolder() . '/' . $file . '.xml')) {
+        // Switch flexform template path to archived folder
+        $file = self::getFlexformArchiveFolder() . '/' . self::extractDsFileTitle($file) . '.xml';
+        if (file_exists($file) && is_readable($file)) {
             return self::FF_TYPE_ARCHIVED;
         }
         return false; // File not found, so no type ...
@@ -283,23 +289,33 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         return self::getFlexformFolder(self::FF_TYPE_ARCHIVED);
     }
 
+    /**
+     * Extract title for flexform data structure file (strips path and xml file extensions)
+     * Example: /this/is/an/example/dummy.xml -> dummy
+     * @param $file string File name (may include the path)
+     * @return string Data structure file title
+     */
+    public static function extractDsFileTitle($file) {
+        $tmp = pathinfo($file);
+        return $tmp['filename']; // Show file name only (cut off xml file extension)
+    }
 
 
     /// Backend functions
 
     /**
-     * Fill dropdown for flexform data structure xml files in Extra flexform
+     * Fill dropdown for flexform data structure xml files in Extra flexform.
      * Current value might be an archived flexform template. In that case the entry is merged into the array.
      * $TCA['tx_newspaper_extra_flexform']['columns']['ds_file']['config']['itemsProcFunc'] = 'tx_newspaper_Extra_Flexform->addFlexformTemplateDropdownEntries';
-     * @param $params Params array (call by reference!)
+     * @param $params array Params (call by reference!)
      * @param $pObj t3lib_TCEforms Parent object
      * @return void
      */
     public function addFlexformTemplateDropdownEntries(&$params, &$pObj) {
-//t3lib_div::debug($params);
-
+//t3lib_div::devlog('addFlexformTemplateDropdownEntries', 'newspaper', 0, array('paramas' => $params));
         $files = array();
 
+        // Get active templates
         if ($folder = self::getFlexformActiveFolder()) {
             $files = self::getFlexformActiveFolderTemplates();
         } else {
@@ -308,6 +324,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
         }
 
         // Check if chosen template is an archived template
+        // @todo: Process archived flexform templates correctly ...
         if ($params['row']['ds_file']) {
             $type = self::getFlexformDataStructureType($params['row']['ds_file']);
             if ($type === false) {
@@ -315,16 +332,19 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
                 $message = t3lib_div::makeInstance('t3lib_FlashMessage', sprintf(tx_newspaper::getTranslation('flashMessage_extra_flexform_file_not_found'), $params['row']['ds_file']), 'Flexform', t3lib_FlashMessage::ERROR);
                 t3lib_FlashMessageQueue::addMessage($message);
             } else if ($type == self::FF_TYPE_ARCHIVED) {
-                $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_flexform_archived'), 'Flexform', t3lib_FlashMessage::INFO);
+//                $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_flexform_archived'), 'Flexform', t3lib_FlashMessage::INFO);
+                $message = t3lib_div::makeInstance('t3lib_FlashMessage', 'File not found. Please contact Typo3 support.', 'Flexform', t3lib_FlashMessage::ERROR);
                 t3lib_FlashMessageQueue::addMessage($message);
-                $files = array($params['row']['ds_file']); // Add selected flexform file to dropdown
+//                $archivedFile = self::getFlexformArchiveFolder() . '/' . self::extractDsFileTitle($params['row']['ds_file']);
+//                $files[] = $archivedFile; // Add selected flexform file to dropdown
+//                 NOT WORKING: $params['row']['ds_file'] = $archivedFile . '.xml'; // Modify selected entry //@todo: move '.xml' into self::getFlexformActiveFolderTemplates()
             } // So file is an active template, has been read already
         }
 
         // Fill $params array for TCEForms
         $params['items'][] = array('0' => '', '1' => ''); // Empty entry
         foreach($files as $file) {
-            $params['items'][] = array('0' => $file, '1' => $file);
+            $params['items'][] = array('0' => basename($file), '1' => $file  . '.xml'); // Store complete path, show Filename (excluding .xml) only
         }
 
     }
@@ -360,6 +380,7 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
             unset($GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']);
         }
         if ($table == 'tx_newspaper_extra_flexform' && $field == 'flexform') {
+            // @todo: Modify when template moved from active to archived path (see #2028)
             $GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']['config']['ds']['default'] = self::getFlexformDataStructure($row['ds_file']);
         }
     }
