@@ -265,7 +265,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
 
         if (!is_array($request)) return false;
 
-        if ($request == array('action' => 'new', 'controller' => 'SectionModule')) return true;
+        if ($request == array('action' => 'new', 'controller' => 'SectionModule')) return false;
 
         $ok = true;
         if ($request['articlelist_type'] == 'none') {
@@ -297,7 +297,7 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
                 self::getSectionMessage('error.multiple_section_pages', $request['section_name'], $parent->getSectionName()),
                 'system_error'
             );
-            return;
+            throw $e;
         }
 
         $section = self::createSectionObject($request);
