@@ -259,19 +259,38 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         }
     }
 
+    /**
+     * Get (path and) ImageMagick's convert program
+     * @return string (Path and) program name, defaults to /usr/bin/convert
+     */
+    private static function getConvertCommand() {
+        $tsc = tx_newspaper::getTSConfig();
+        return $tsc['newspaper.']['ImageMagick.']['convert']? $tsc['newspaper.']['ImageMagick.']['convert'] : '/usr/bin/convert';
+    }
+
+    /**
+     * Scale the images according to $width and $height settings
+     * When successful: writes a devlog entry
+     * @param $width int Target image width
+     * @param $height int Target image height
+     * @param $source string Source image filename
+     * @param $target string Target image file name
+     */
     private static function executeConvert($width, $height, $source, $target) {
-        $convert = self::convert .
+        $convert = self::getConvertCommand() .
             ' -quality ' . self::getJPEGQuality() .
             ' -geometry ' . $width .
                 (self::scaleToWidth()? '': ('x' . $height)) .
             ' ' . self::convert_options .
-            ' \'' . PATH_site . $source . '\'' .
-            ' \'' . PATH_site . $target . '\'';
+            ' "' . PATH_site . $source . '"' .
+            ' "' . PATH_site . $target . '"';
 
         $return = array();
         exec($convert, $return);
 
-        if ($return) tx_newspaper::devlog('convert(1)', array('command'=>$convert, 'return'=>$return));
+        if ($return) {
+            tx_newspaper::devlog('convert(1)', array('command' => $convert, 'return' => $return));
+        }
     }
 
 	/// Get the name of an image of a given size
@@ -354,9 +373,6 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     ///	Where Typo3 stores uploaded images
     const uploads_folder = 'uploads/tx_newspaper';
-
-    /// path to \c convert(1)
-    const convert = '/usr/bin/convert';
 
     /// Default quality for JPEG compression.
     /** Overridden by \p $TYPO3_CONF_VARS['GFX']['jpg_quality'].

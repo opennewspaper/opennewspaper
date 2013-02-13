@@ -362,32 +362,90 @@ class tx_newspaper_Extra_Flexform extends tx_newspaper_Extra {
      * @param $pObj
      */
     public static function getSingleField_preProcess($table, $field, $row, $altName, $palette, $extra, $pal, $pObj) {
-        self::modifyFlexformTca($table, $field, $row);
+        if ($table != 'tx_newspaper_extra_flexform') {
+            return; // Nothing to do ...
+        }
+        if ($field != 'ds_file' && $field != 'flexform') {
+            return; // Still nothing to do ...
+        }
+
+        $ds_file = self::getFlexformDataStructure($row['ds_file']);
+
+        self::modifyFlexformTca($field, $row, $ds_file);
+        self::checkImageUploadFolder($field, $ds_file);
     }
 
     /**
      * Reads Flexform data structure from file set in dropdown "ds_file"
      * Hides Flexform field if no data structure is selected
      * Manipulates $TCA
-     * @param $table
      * @param $field
      * @param $row
+     * @param $ds_file string ds_file contents
      * @return void
      */
-    private static function modifyFlexformTca($table, $field, $row) {
-        if ($table == 'tx_newspaper_extra_flexform' && $field == 'ds_file' && !$row['ds_file']) {
+    private static function modifyFlexformTca($field, $row, $ds_file) {
+        if ($field == 'ds_file' && !$row['ds_file']) {
             // Hide Flexform when no data structure was selected
             unset($GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']);
         }
-        if ($table == 'tx_newspaper_extra_flexform' && $field == 'flexform') {
+        if ($field == 'flexform') {
             // @todo: Modify when template moved from active to archived path (see #2028)
-            $GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']['config']['ds']['default'] = self::getFlexformDataStructure($row['ds_file']);
+            $GLOBALS['TCA']['tx_newspaper_extra_flexform']['columns']['flexform']['config']['ds']['default'] = $ds_file;
         }
     }
+
+//* Shows a warning if image upload path is NOT set to uploads/tx_newspaper
+
+    private static function checkImageUploadFolder($field, $ds_file) {
+        if ($field != 'ds_file') {
+            return; // Nothing to do ...
+        }
+
+        foreach(t3lib_div::trimExplode("\n", $ds_file) as $line) {
+            // 14 -> length of string '<uploadfolder>'
+            // 15 -> length of string '</uploadfolder>'
+            if (strpos($line, '<uploadfolder>') ===  0) {
+                // Upload path setting found
+                $path = substr($line, 14, strlen($line) - 15 - 14);
+                if ($path != tx_newspaper_Image::uploads_folder) {
+                    $message = t3lib_div::makeInstance('t3lib_FlashMessage', sprintf(tx_newspaper::getTranslation('flashMessage_extra_flexform_wrong_upload_folder'), htmlspecialchars($path)), 'Flexform', t3lib_FlashMessage::WARNING);
+                    t3lib_FlashMessageQueue::addMessage($message);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Typo3 image upload post process hook
+     * Scale and deploy (=sync) images that are uploaded in to newspaper image upload folder /uploads/tx_newspaper
+     * @param $filename string File
+     * @param $pObj t3lib_TCEmain Parent object
+     * @return void
+     */
+    public function processUpload_postProcessAction($filename, t3lib_TCEmain $pObj) {
+        if (tx_newspaper::isNewspaperUploadPathUsed($filename)) {
+            // Image is uploaded to newspaper image path, so resize and sync images
+            $timer = tx_newspaper_ExecutionTimer::create();
+            if ($image = new tx_newspaper_Image(basename($filename))) {
+                if (class_exists('tx_AsynchronousTask')) {
+                    $task = new tx_AsynchronousTask($image, 'deployImages');
+                    $task->execute();
+                } else {
+                    $image->deployImages();
+                }
+            }
+        } else {
+            t3lib_div::devlog('Extra Flexform: Wrong image upload path', 'newspaper', 2, array('filename' => $filename));
+        }
+   	}
 
 
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_Extra_Flexform());
+
+tx_newspaper::registerSaveHook(new tx_newspaper_Extra_Flexform());
 
 ?>

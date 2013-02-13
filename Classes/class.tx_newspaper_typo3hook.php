@@ -22,7 +22,7 @@ $GLOBALS['newspaper']['AddEditInRelationField']['tx_newspaper_extra_container'] 
 require_once(PATH_t3lib . 'interfaces/interface.t3lib_localrecordlistgettablehook.php');
 
 
-class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
+class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook, t3lib_TCEmain_processUploadHook {
 
 	/// List module hook - determines which records are hidden in list view
 	public function getDBlistQuery($table, $pageId, &$additionalWhereClause, &$selectedFieldsList, &$parentObject) {
@@ -172,12 +172,28 @@ class tx_newspaper_Typo3Hook implements t3lib_localRecordListGetTableHook {
 
 	function processDatamap_afterAllOperations($that) {
         $timer = tx_newspaper_ExecutionTimer::create();
-		foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
-			if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
-				$savehook_object->processDatamap_afterAllOperations($that);
-			}
-		}
-	}
+        foreach (tx_newspaper::getRegisteredSaveHooks() as $savehook_object) {
+            if (method_exists($savehook_object, 'processDatamap_afterAllOperations')) {
+                $savehook_object->processDatamap_afterAllOperations($that);
+            }
+        }
+    }
+
+
+    /**
+     * Call image upload post process hook
+     * @param string $filename
+     * @param t3lib_TCEmain $pObj
+     */
+    function processUpload_postProcessAction(&$filename, t3lib_TCEmain $pObj) {
+//t3lib_div::devlog('t3hook::processUpload_postProcessAction()', 'newspaper', 0, array('filename' => $filename, 'hook objects' => tx_newspaper::getRegisteredSaveHooks()));
+        $timer = tx_newspaper_ExecutionTimer::create();
+        foreach (tx_newspaper::getRegisteredSaveHooks() as $savehookObject) {
+            if (method_exists($savehookObject, 'processUpload_postProcessAction')) {
+   				$savehookObject->processUpload_postProcessAction($filename, $pObj);
+   			}
+   		}
+   	}
 
 
 	/// Extension manager (EM) hook

@@ -313,6 +313,17 @@ class tx_newspaper  {
         return $previewPage;
     }
 
+    /**
+     * Checks if the given $filename is located in the Typo3 upload folder for a newspaper image
+     * @param $filename string Full path and filename
+     * @return bool true if image is located in the newspaper image upload path, else false
+     */
+    public static function isNewspaperUploadPathUsed($filename) {
+        t3lib_div::loadTCA('tx_newspaper_extra_image');
+        $uploadPath = $GLOBALS['TCA']['tx_newspaper_extra_image']['columns']['image_file']['config']['uploadfolder'];
+        return (strpos($filename, $uploadPath . '/' . basename($filename)) !== false); // @todo: this check ignores the TYPO3_path part of the $filename
+    }
+
     /// get absolute path to Typo3 installation
     /** \param $endsWithSlash determines if the returned path ends with a slash
      *  \return absolute path to Typo3 installation
