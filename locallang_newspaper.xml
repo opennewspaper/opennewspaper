@@ -55,6 +55,7 @@
             <label index="label_workflow_extra_changed">Web element changed:</label>
             <label index="label_workflow_extra_created">created</label>
             <label index="label_workflow_field_changed">Field(s) changed:</label>
+            <label index="label_workflow_pool">Move to article pool</label>
             <label index="label_workflow_revise">Send to editorial staff</label>
             <label index="label_workflow_revise_hide">Send to editorial staff &amp; hide</label>
             <label index="label_workflow_revise_publish">Send to editorial staff &amp; publish</label>
@@ -63,6 +64,7 @@
             <label index="label_workflow_place_publish">Place &amp; publish</label>
             <label index="label_workflow_role_editorialstaff">Editorial staff</label>
             <label index="label_workflow_role_dutyeditor">Duty editor</label>
+            <label index="label_workflow_role_pool">Pool</label>
             <label index="label_workflow_role_none">Article online, workflow ended</label>
             <label index="label_workflow_role_old">Old role</label>
             <label index="label_workflow_role_new">New role</label>
@@ -181,6 +183,7 @@
             <label index="label_workflow_extra_changed">Webelement geändert:</label>
             <label index="label_workflow_extra_created">angelegt</label>
             <label index="label_workflow_field_changed">Feld(er) geändert:</label>
+            <label index="label_workflow_pool">Zur Halde</label>
             <label index="label_workflow_revise">Zum Redakteur</label>
             <label index="label_workflow_revise_hide">Zum Redakteur &amp; verstecken</label>
             <label index="label_workflow_revise_publish">Zum Redakteur &amp; publizieren</label>
@@ -189,6 +192,7 @@
             <label index="label_workflow_place_publish">Platzieren &amp; publizieren</label>
             <label index="label_workflow_role_editorialstaff">Redaktion</label>
             <label index="label_workflow_role_dutyeditor">CvD</label>
+            <label index="label_workflow_role_pool">Halde</label>
             <label index="label_workflow_role_none">Artikel platziert</label>
             <label index="label_workflow_role_old">Alte Rolle</label>
             <label index="label_workflow_role_new">Neue Rolle</label>

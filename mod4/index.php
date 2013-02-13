@@ -1202,7 +1202,7 @@ body#typo3-alt-doc-php, body#typo3-db-list-php, body#typo3-mod-web-perm-index-ph
 		$msg = '';
 		$count = 0;
 
-		$role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_NONE;
+		$role_ids = NP_ACTIVE_ROLE_EDITORIAL_STAFF . ',' . NP_ACTIVE_ROLE_DUTY_EDITOR . ',' . NP_ACTIVE_ROLE_POOL . ',' . NP_ACTIVE_ROLE_NONE;
 
 		$row = tx_newspaper::selectRows(
 			'uid,workflow_status',

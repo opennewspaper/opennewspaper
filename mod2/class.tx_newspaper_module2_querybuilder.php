@@ -129,6 +129,7 @@ class tx_newspaper_module2_QueryBuilder {
         switch(intval($this->input['role'])) {
             case NP_ACTIVE_ROLE_EDITORIAL_STAFF:
             case NP_ACTIVE_ROLE_DUTY_EDITOR:
+            case NP_ACTIVE_ROLE_POOL:
             case NP_ACTIVE_ROLE_NONE:
             $this->where[] = 'workflow_status=' . intval($this->input['role']);
             break;
