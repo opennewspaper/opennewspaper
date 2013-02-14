@@ -37,26 +37,23 @@ class tx_newspaper_Exception extends Exception {
     const BACKTRACE_DEPTH = 10;
 
     /// Constructor which also writes a stack backtrace to the devlog
-    /** \param $message Additional info about the Exception being thrown
+    /** 
+     *  @param string $message Additional info about the Exception being thrown
+     *  @param bool $stack_trace If the class is not set to be silent, write stack trace to devlog
      */
-    public function __construct($message, $write_message = true) {
-        if (self::dbObjectExists() && $write_message && !self::$silent) {
-            $backtrace = self::getStrippedBacktrace();
-
-            tx_newspaper::devlog(
-                'Exception thrown: ' . $message,
-                array_slice($backtrace, 1, self::BACKTRACE_DEPTH)
-            );
+    public function __construct($message, $stack_trace = true) {
+        if ($stack_trace && !self::isSilent() && self::canWriteDevlog()) {
+            tx_newspaper::devlog('Exception thrown: ' . $message, self::getStrippedBacktrace());
         }
         parent::__construct($message);
     }
 
     public static function setSilent($state) { self::$silent = (bool)$state; }
 
-    public static function getSilent() { return self::$silent; }
+    public static function isSilent() { return self::$silent; }
 
 
-    private static function dbObjectExists() {
+    private static function canWriteDevlog() {
         return $GLOBALS['TYPO3_DB'] instanceof t3lib_DB;
     }
 
@@ -65,17 +62,25 @@ class tx_newspaper_Exception extends Exception {
         for ($i = 0; $i < sizeof($backtrace); $i++) {
             unset($backtrace[$i]['object']);
         }
-        return $backtrace;
+        return array_slice($backtrace, 1, self::BACKTRACE_DEPTH);
     }
 
 
     private static $silent = false;
 }
 
+/// Use an object of this class to temporarily stop exceptions from writing to the devlog.
+/**
+ *  Usage:
+ *  \code
+ *  $dont_spam_devlog = new tx_newspaper_ExceptionSilencer();
+ *  throw new tx_newspapaper_Exception('Hey, whatever', true);
+ *  \endcode
+ */
 class tx_newspaper_ExceptionSilencer {
 
     public function __construct() {
-        $this->previous_state = tx_newspaper_Exception::getSilent();
+        $this->previous_state = tx_newspaper_Exception::isSilent();
         tx_newspaper_Exception::setSilent(true);
     }
 
@@ -128,18 +133,18 @@ class tx_newspaper_InconsistencyException extends tx_newspaper_Exception {
 
 	/** \param $message Message about what is wrong
 	 */ 
-	public function __construct($message, $write_message = true) {
-        parent::__construct("Internal inconsistency discovered: $message", $write_message);
+	public function __construct($message, $stack_trace = true) {
+        parent::__construct("Internal inconsistency discovered: $message", $stack_trace);
     }	
 }
 
 /// This Exception is thrown if a feature is used in a wrong way
 class tx_newspaper_IllegalUsageException extends tx_newspaper_Exception { 
 
-	/** \param $message Message about what is wrong
+	/** @param string $message Message about what is wrong
 	 */ 
-	public function __construct($message, $write_message = false) {
-        parent::__construct("Illegal usage: $message", $write_message);
+	public function __construct($message, $stack_trace = false) {
+        parent::__construct("Illegal usage: $message", $stack_trace);
     }	
 }
 
@@ -165,43 +170,51 @@ class tx_newspaper_WrongAttributeException
 /// This Exception is thrown if a database operation fails
 class tx_newspaper_DBException extends tx_newspaper_Exception { 
 
-	/// Displays information about the failed database operation
-	/** \param $message Error message returned by RDBMS
-	 *  \param $row Data returned by last SQL query
-	 */ 
-	public function __construct($message, $row = array()) {
-        parent::__construct("SQL query: \n" . tx_newspaper_DB::getQuery() .
-							" \nfailed with message: \n'$message' \n" .
-                            "Error: " . mysql_error() . "\n" .
-        					($row? print_r($row, 1): ''));
+    /// Displays information about the failed database operation
+    /**
+     *  @param string $message Error message returned by RDBMS
+     *  @param array $row Data returned by last SQL query
+     */
+    public function __construct($message, $row = array()) {
+        $last_error = mysql_error();
+        $message = "SQL query: \n" . tx_newspaper_DB::getQuery() . " \nfailed".
+            ($message? " with message: \n'$message' \n": "\n") .
+            ($last_error? "Error: " . $last_error . "\n": "" ) .
+            ($row? print_r($row, 1): '');
+        parent::__construct($message);
     }
 }
  
 /// This Exception is thrown if a database operation does not return a result set
-class tx_newspaper_NoResException extends tx_newspaper_DBException { 
-
-	public function __construct() {
+class tx_newspaper_NoResException extends tx_newspaper_DBException {
+    public function __construct() {
         tx_newspaper_DBException::__construct('No result set found');
     }
 }
 
 /// This Exception is thrown if a database operation returns an empty result set
-class tx_newspaper_EmptyResultException extends tx_newspaper_DBException { 
-
-	public function __construct() {
-						  
+class tx_newspaper_EmptyResultException extends tx_newspaper_DBException {
+    public function __construct() {
         tx_newspaper_DBException::__construct('Result empty');
     }
 }
 
-/// This Exception is thrown if an Article, requested by UID, doesn't exist
+/// This Exception is thrown if an object, requested by UID, doesn't exist
 class tx_newspaper_ObjectNotFoundException extends tx_newspaper_Exception {
 
-	/** \param $uid UID of the requested tx_newspaper_Article
-	 */
-	public function __construct($class, $uid) {
-        parent::__construct("Article $uid does not exist");
+    /**
+     *  @param string $class Class of the requested object
+     *  @param int $uid UID of the requested object
+     */
+    public function __construct($class, $uid) {
+        parent::__construct("Object of class $class with UID $uid does not exist");
+        $this->class = $class;
+        $this->uid = $uid;
     }
+
+    public $class;
+    public $uid;
+
 }
 
 

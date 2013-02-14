@@ -19,11 +19,10 @@
 
 <p>And this is the message that came with the exception that was thrown:</p>
 
-{* Of course you should NEVER print out the Exception message verbatim, because
-   it might expose some of the SQL that was used to generate this page and open
-   the door for SQL injection.
-   We're doing it here anyway because this is a generic template that is meant
-   to be overridden by the application designer. Yeah, we suck. Go do it better!
-   ;-)
-*} 
 <pre>{$exception->getMessage()}</pre>
+
+<!--
+    If you need them, you can access class and UID of the missing object like this:
+    {$e->class}
+    {$e->uid}
+-->

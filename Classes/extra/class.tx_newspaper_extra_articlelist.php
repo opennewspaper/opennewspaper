@@ -8,8 +8,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  *
  *  This Extra must be inserted on a Page Zone wherever a list of Articles is
  *  displayed, except for the cases which have specialized Extras:
- *  - tx_newspaper_Extra_SectionList: The list of articles belonging to a
- * 		tx_newspaper_Section
+ *  - tx_newspaper_Extra_SectionList: The list of articles belonging to a tx_newspaper_Section
  *
  *  Attributes:
  *  - \p description (string)
@@ -20,81 +19,77 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_extra_ArticleList extends tx_newspaper_Extra {
 
-	/// Boa Constructor ;-)
-	/** Instantiates the associated Article List too. */
-	public function __construct($uid = 0) {
-		if (intval($uid)) {
-			parent::__construct($uid);
-		}
-	}
+    public function __construct($uid = 0) {
+        if (intval($uid)) parent::__construct($uid);
+    }
 
-	function getDescription() {
-		try {
-		$this->readArticleList();
+    function getDescription() {
+        try {
+            $this->readArticleList();
+            return $this->getAttribute('short_description') . '<br />' . $this->articlelist->getDescription();
+        } catch (tx_newspaper_DBException $e) {
+            return '
+                <table>
+                    <tr>
+                        <td valign="middle">' . tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '') .'</td>
+                        <td>' .
+                            tx_newspaper::getTranslation('message_articlelist_missing_deleted') . '<br />' .
+                            tx_newspaper::getTranslation('message_select_another_articlelist') . '</td>
+                    </tr>
+                </table>';
+        }
+    }
 
-		return $this->getAttribute('short_description') . '<br />' .
-			$this->articlelist->getDescription();
-		} catch (tx_newspaper_DBException $e) {
-			return
-				'<table><tr><td valign="middle">' .
-					tx_newspaper_BE::renderIcon('gfx/icon_warning2.gif', '') .
-				'</td><td>' .
-					tx_newspaper::getTranslation('message_articlelist_missing_deleted') . '<br />' .
-					tx_newspaper::getTranslation('message_select_another_articlelist') .
-				'</td></tr></table>';
-		}
-
-	}
-
-	/** Assign the list of articles to a Smarty template. The template must
-	 *  contain all the logic to display the articles.
-	 *  \param $template_set Template set to use
-	 *
-	 *  Smarty template:
-	 *  \include res/templates/tx_newspaper_extra_articlelist.tmpl
-	 */
-	public function render($template_set = '') {
+    /**
+     *  Assign the list of articles to a Smarty template. The template must contain all
+     *  logic to display the articles.
+     *
+     *  @param string $template_set Template set to use
+     *
+     *  Smarty template:
+     *  @include res/templates/tx_newspaper_extra_articlelist.tmpl
+     */
+    public function render($template_set = '') {
 
         tx_newspaper_ExecutionTimer::start();
 
-		$this->prepare_render($template_set);
+        $this->prepare_render($template_set);
 
-		try {
-			$this->readArticleList();
-		} catch (tx_newspaper_EmptyResultException $e) {
-			return $this->smarty->fetch('error_articlelist_missing.tmpl');
-		}
+        try {
+            $this->readArticleList();
+        } catch (tx_newspaper_EmptyResultException $e) {
+            return $this->smarty->fetch('error_articlelist_missing.tmpl');
+        }
 
-		$num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): 1;
-		$first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
-		$articles = $this->articlelist->getArticles($num, $first);
+        $num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): 1;
+        $first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
+        $articles = $this->articlelist->getArticles($num, $first);
 
-		$this->smarty->assign('articles', $articles);
+        $this->smarty->assign('articles', $articles);
 
         $rendered = $this->smarty->fetch($this->getSmartyTemplate());
 
         tx_newspaper_ExecutionTimer::logExecutionTime();
 
         return $rendered;
-	}
+    }
 
-	public static function getModuleName() {
-		return 'np_artlist';
-	}
+    public static function getModuleName() { return 'np_artlist'; }
 
-	public static function dependsOnArticle() { return false; }
+    public static function dependsOnArticle() { return false; }
 
-	private function readArticlelist() {
+    private function readArticlelist() {
 
-		if ($this->articlelist instanceof tx_newspaper_ArticleList) return;
+        if ($this->articlelist instanceof tx_newspaper_ArticleList) return;
 
-		$this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
-			$this->getAttribute('articlelist')
-		);
-	}
+        $this->articlelist = tx_newspaper_ArticleList_Factory::getInstance()->create(
+            $this->getAttribute('articlelist')
+        );
+    }
 
     /** @var tx_newspaper_ArticleList */
-	private $articlelist;
+    private $articlelist;
+
 }
 
 tx_newspaper_Extra::registerExtra(new tx_newspaper_extra_ArticleList());

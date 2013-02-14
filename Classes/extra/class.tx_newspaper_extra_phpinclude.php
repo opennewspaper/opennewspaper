@@ -17,9 +17,8 @@ class tx_newspaper_IncludePathStack {
 }
 
 /**
- *  This Extra is used to render PHP from a file
+ *  This Extra is used to render PHP from a file.
  */
-
 class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
     const description_length = 50;
@@ -35,18 +34,16 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
     }
 
     /**
-     *  Render PHP File.
+     *  Render PHP File. Currently only passes the name of the file to smarty.
+     *  For actually evaluating the PHP and keeping its output use evaluatePHPFile().
      */
     public function render($template_set = '') {
-
         $this->prepare_render($template_set);
         $this->smarty->assign('file', $this->getAttribute('file'));
         return $this->smarty->fetch($this->getSmartyTemplate());
+    }
 
-        /*
-         *  That was actually not according to spec... keeping it in case I need it one day
-         */
-        /*
+    private function evaluatePHPFile() {
         if (!is_file($this->getAttribute('file'))) return '';
 
         $path_stack = new tx_newspaper_IncludePathStack(self::getBaseFolder());
@@ -57,7 +54,6 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
         ob_end_clean();
 
         return $content;
-        */
     }
 
 
@@ -73,15 +69,19 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
     public static function dependsOnArticle() { return false; }
 
+    /// Renders the menu for selecting a PHP file in the BE.
     /**
-     * @param $params Params array (call by reference!)
-     * @param $pObj t3lib_TCEforms Parent object
-     * @return void
+     * @param array $params Params array (call by reference!)
+     * @param t3lib_TCEforms $pObj Parent object
      */
     public function addFileDropdownEntries(&$params, &$pObj) {
 
         if (!is_dir(self::getBaseFolder())) {
-            $message = t3lib_div::makeInstance('t3lib_FlashMessage', tx_newspaper::getTranslation('flashMessage_extra_flexform_no_folder_configured'), 'Flexform', t3lib_FlashMessage::ERROR);
+            $message = t3lib_div::makeInstance(
+                't3lib_FlashMessage',
+                tx_newspaper::getTranslation('flashMessage_extra_flexform_no_folder_configured'),
+                'PHP Include', t3lib_FlashMessage::ERROR
+            );
             t3lib_FlashMessageQueue::addMessage($message);
             return;
         }
@@ -99,6 +99,13 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
 
     private static function endsWith($string, $suffix) {
         return substr_compare($string, $suffix, -strlen($suffix), strlen($suffix)) === 0;
+    }
+
+    private static function getPHPFiles() {
+        return array_filter(
+            self::getAllFiles(self::getBaseFolder(), self::isRecursive()),
+            array('tx_newspaper_Extra_PHPInclude', 'isPHPFile')
+        );
     }
 
     private static function isPHPFile($file) {
@@ -120,10 +127,6 @@ class tx_newspaper_Extra_PHPInclude extends tx_newspaper_Extra {
             }
         }
         return $files;
-    }
-
-    private static function getPHPFiles() {
-        return array_filter(self::getAllFiles(self::getBaseFolder(), self::isRecursive()), array('tx_newspaper_Extra_PHPInclude', 'isPHPFile'));
     }
 
     private static function getTSconfig($key) {

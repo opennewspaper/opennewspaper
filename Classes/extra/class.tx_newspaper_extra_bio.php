@@ -2,8 +2,10 @@
 
 require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_extra_image.php');
 
-/// A tx_newspaper_Extra that displays a bio for a contributor
-/** A photo of an author is displayed along with some biographical text.
+/// A tx_newspaper_Extra that displays a biography for a contributor
+/**
+ *  A photo of an author (or any person, actually) is displayed along with some
+ *  biographical text.
  *
  *  Attributes:
  *  - \p template_set (string)
@@ -14,27 +16,27 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/extra/class.tx_newspaper_ex
  *  - \p photo_source (string)
  *  - \p bio_text (string)
  *
- *	The render() function is inherited from tx_newspaper_Extra_Image, but of
- *  course uses tx_newspaper_extra_bio.tmpl. Ah, the joys of inheritance...
- *  \include res/templates/tx_newspaper_extra_bio.tmpl
+ *  The render() function is inherited from tx_newspaper_Extra_Image, but of course uses
+ *  \c tx_newspaper_extra_bio.tmpl. Ah, the joys of inheritance...
  *
- *  \todo Import the box automatically from the pool when the Article is
- * 		imported.
+ *  @include res/templates/tx_newspaper_extra_bio.tmpl
+ *
+ *  @todo Import the box automatically from the pool when the Article is imported.
  */
 class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 
-	const description_length = 50;
+    const description_length = 50;
     /// The field which carries the image file
     const image_file_field = 'image_file';
 
-	public function __construct($uid = 0) {
+    public function __construct($uid = 0) {
         if ($uid) {
             parent::__construct($uid);
             $this->image = new tx_newspaper_Image($this->getAttribute(self::image_file_field));
         } else {
             $this->image = new tx_newspaper_NullImage();
         }
-	}
+    }
 
     public function render($template_set = '') {
 
@@ -48,9 +50,7 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
     }
 
 
-	/// A description to identify the bio box in the BE
-	/** Shows the author's name and the start of the text.
-	 */
+    /// A description to identify the bio box in the BE. Shows the author's name and the start of the text.
 	public function getDescription() {
 		return substr(
 			($this->getAttribute('short_description')? $this->getAttribute('short_description') . '<br />' : '') .
@@ -65,15 +65,12 @@ class tx_newspaper_extra_Bio extends tx_newspaper_Extra {
 		return array('short_description', 'author_name', 'bio_text');
 	}
 
-	public static function getModuleName() {
-		return 'np_bio';
-	}
+    public static function getModuleName() { return 'np_bio'; }
 
-	public static function dependsOnArticle() { return true; }
+    public static function dependsOnArticle() { return true; }
 
     /// Save hook function, called from the global save hook
-    /** Resizes the uploaded image into all sizes specified in TSConfig.
-     */
+    /** Resizes the uploaded image into all sizes specified in TSConfig. */
     public static function processDatamap_postProcessFieldArray(
         $status, $table, $id, &$fieldArray, $that
     ) {

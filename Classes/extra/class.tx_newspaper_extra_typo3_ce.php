@@ -13,27 +13,24 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  */
 class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
 
-	public function __construct($uid = 0) {
-		if ($uid) {
-			parent::__construct($uid);
-		}
-	}
+    public function __construct($uid = 0) {
+        if ($uid) { parent::__construct($uid); }
+    }
 
-	public function __toString() {
-		try {
-		return 'Extra: UID ' . $this->getExtraUid() . ', Typo3 CE Extra: UID ' . $this->getUid() .
-				' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';
-		} catch(Exception $e) {
-			return "Typo3 CE: Exception thrown!" . $e;
-		}
-	}
+    public function __toString() {
+        try {
+            return 'Extra: UID ' . $this->getExtraUid() . ', Typo3 CE Extra: UID ' . $this->getUid() .
+                ' (Content Element(s): ' . $this->getAttribute('content_elements') . ')';
+        } catch(Exception $e) {
+            return "Typo3 CE: Exception thrown!" . $e;
+        }
+    }
 
 	/** Use TypoScript to render the selected Content Elements
 	 *
 	 *  \param $template_set Ignored
 	 *
-	 *  \todo It's probably not wise to print the whole content of the DB records
-	 *  	inside a HTML comment.
+	 *  \todo It's probably not wise to print the whole content of the DB records inside a HTML comment.
 	 */
 	public function render($template_set = '') {
 
@@ -93,7 +90,6 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
             'dontCheckPid' => 1,
         );
         $rendered = $cObj->RECORDS($tt_content_conf);
-        tx_newspaper::devlog('renderTypo3CE()', array('rendered' => $rendered, 'processed' => self::processLinks($rendered)));
         return self::processLinks($rendered);
     }
 
@@ -106,8 +102,7 @@ class tx_newspaper_Extra_Typo3_CE extends tx_newspaper_Extra {
         return $head . $tail;
     }
     
-    /**	In BE (for e.g. unit tests), RECORDS() can't be used. Just show something.
-     */
+    /** In BE (for e.g. unit tests), RECORDS() can't be used. Just show something. */
     private static function printBasicCE($attributes) {
         $rendered = '<h2>' . $attributes['header'] . "</h2>\n" .
                     '<img src="uploads/pics/' . $attributes['image'] . '" />' . "\n" .
