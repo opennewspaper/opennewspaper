@@ -195,11 +195,11 @@ class tx_newspaper_EmptyResultException extends tx_newspaper_DBException {
 }
 
 /// This Exception is thrown if an Article, requested by UID, doesn't exist
-class tx_newspaper_ArticleNotFoundException extends tx_newspaper_Exception { 
+class tx_newspaper_ObjectNotFoundException extends tx_newspaper_Exception {
 
 	/** \param $uid UID of the requested tx_newspaper_Article
 	 */
-	public function __construct($uid) {
+	public function __construct($class, $uid) {
         parent::__construct("Article $uid does not exist");
     }
 }

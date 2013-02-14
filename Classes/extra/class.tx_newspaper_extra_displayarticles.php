@@ -34,23 +34,26 @@ class tx_newspaper_Extra_DisplayArticles extends tx_newspaper_Extra {
 	 * 		if it is set. So it probably doesn't make much sense to use
 	 * 		\p $template_set.
 	 */
-	public function render($template_set = '') {
+    public function render($template_set = '') {
 
-		if (!intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
-			$this->prepare_render();
-			$this->smarty->assign('GET', $_GET);
-			return $this->smarty->fetch('error_article_on_section_page.tmpl');
-		}
+        if (!intval(t3lib_div::_GP(tx_newspaper::GET_article()))) {
+            $this->prepare_render();
+            $this->smarty->assign('GET', $_GET);
+            return $this->smarty->fetch('error_article_on_section_page.tmpl');
+        }
 
-		/// find current section's default article and read its template set
-		$default_article = $this->getPageZone()->getParentPage()->getParentSection()->getDefaultArticle();
-		if ($default_article instanceof tx_newspaper_article &&
-			$default_article->getAttribute('template_set')) {
-			$template_set = $default_article->getAttribute('template_set');
-		}
-		$article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
-		return $article->render($template_set);
-	}
+        /// find current section's default article and read its template set
+        $default_article = $this->getPageZone()->getParentPage()->getParentSection()->getDefaultArticle();
+        if ($default_article instanceof tx_newspaper_article && $default_article->getAttribute('template_set')) {
+            $template_set = $default_article->getAttribute('template_set');
+        }
+        try {
+            $article = new tx_newspaper_article(t3lib_div::_GP(tx_newspaper::GET_article()));
+            return $article->render($template_set);
+        } catch (tx_newspaper_Exception $e) {
+            throw new tx_newspaper_ObjectNotFoundException('tx_newspaper_Article', t3lib_div::_GP(tx_newspaper::GET_article()));
+        }
+    }
 
 	public function getDescription() {
 		return $this->getAttribute('short_description');

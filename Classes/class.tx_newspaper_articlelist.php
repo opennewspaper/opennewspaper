@@ -314,7 +314,7 @@ abstract class tx_newspaper_ArticleList implements tx_newspaper_StoredObject {
 				return $i;
 			}
 		}
-		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
+        throw new tx_newspaper_ObjectNotFoundException('tx_newspaper_Article', $article->getUid());
 	}
 
 	/// A short description that makes an Article List identifiable in the BE

@@ -32,10 +32,11 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  *  \author	Lene Preuss, Oliver Schröder, Samuel Talleux <lene.preuss@gmail.com, oliver@schroederbros.de, samuel@talleux.de>
  */
 class tx_newspaper_pi1 extends tslib_pibase {
-	
+
     const default_exception_template = 'error_exception.tmpl';
-	const db_exception_template = 'error_db_exception.tmpl';
-	
+    const db_exception_template = 'error_db_exception.tmpl';
+    const notfound_exception_template = 'error_404.tmpl';
+
 	var $prefixId      = 'tx_newspaper_pi1';		// Same as class name
 	var $scriptRelPath = 'pi1/class.tx_newspaper_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'newspaper';	// The extension key.
@@ -71,10 +72,12 @@ class tx_newspaper_pi1 extends tslib_pibase {
 			/// Call the render() method for that page, which renders all page areas
 			$content .= $page->render();
 
-		} catch (tx_newspaper_DBException $e) {
-            $content .= $this->show404($e, self::getDBExceptionTemplate());
+        } catch (tx_newspaper_ObjectNotFoundException $e) {
+            $content .= $this->showError(" 404 Not Found", $e, self::getNotFoundExceptionTemplate());
+        } catch (tx_newspaper_DBException $e) {
+            $content .= $this->showError(" 500 Internal Server Error", $e, self::getDBExceptionTemplate());
 		} catch (tx_newspaper_Exception $e) {
-            $content .= $this->show404($e, self::getDefaultExceptionTemplate());
+            $content .= $this->showError(" 500 Internal Server Error", $e, self::getDefaultExceptionTemplate());
         }
 
 		return $content;
@@ -89,8 +92,8 @@ class tx_newspaper_pi1 extends tslib_pibase {
 		return new tx_newspaper_Page($section, new tx_newspaper_PageType($_GET));
 	}
 
-    private function show404(tx_newspaper_Exception $e, $error_template) {
-        header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+    private function showError($status, tx_newspaper_Exception $e, $error_template) {
+        header($_SERVER["SERVER_PROTOCOL"]. $status);
 
         $smarty = new tx_newspaper_Smarty();
         $smarty->assign('_GET', $_GET);
@@ -100,18 +103,24 @@ class tx_newspaper_pi1 extends tslib_pibase {
     }
 
     private static function getDefaultExceptionTemplate() {
-        if (tx_newspaper::getTSConfigVar('default_exception_template')) {
-            return tx_newspaper::getTSConfigVar('default_exception_template');
-        }
-        return self::default_exception_template;
+        return self::getTSConfigOrDefault('default_exception_template', self::default_exception_template);
     }
 
     private static function getDBExceptionTemplate() {
-        if (tx_newspaper::getTSConfigVar('db_exception_template')) {
-            return tx_newspaper::getTSConfigVar('db_exception_template');
-        }
-        return self::db_exception_template;
+        return self::getTSConfigOrDefault('db_exception_template', self::db_exception_template);
     }
+
+    private static function getNotFoundExceptionTemplate() {
+        return self::getTSConfigOrDefault('notfound_exception_template', self::notfound_exception_template);
+    }
+
+    private static function getTSConfigOrDefault($ts_config_var, $default) {
+        if (tx_newspaper::getTSConfigVar($ts_config_var)) {
+            return tx_newspaper::getTSConfigVar($ts_config_var);
+        }
+        return $default;
+    }
+
 }
 
 

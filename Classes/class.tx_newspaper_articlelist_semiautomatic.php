@@ -487,7 +487,7 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 			}
 		}
 
-		throw new tx_newspaper_ArticleNotFoundException($article->getUid());
+		throw new tx_newspaper_ObjectNotFoundException('tx_newspaper_Article', $article->getUid());
 	}
 
 	public function deleteArticle(tx_newspaper_ArticleIface $article) {

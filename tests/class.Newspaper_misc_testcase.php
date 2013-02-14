@@ -33,9 +33,9 @@ class test_Newspaper_misc_testcase extends tx_phpunit_testcase {
 		$this->setExpectedException('tx_newspaper_InconsistencyException');
 		throw new tx_newspaper_InconsistencyException('');
 	}
-	public function test_ArticleNotFoundException() {
-		$this->setExpectedException('tx_newspaper_ArticleNotFoundException');
-		throw new tx_newspaper_ArticleNotFoundException('');
+	public function test_ObjectNotFoundException() {
+		$this->setExpectedException('tx_newspaper_ObjectNotFoundException');
+		throw new tx_newspaper_ObjectNotFoundException('', 0);
 	}
 	public function test_SysfolderNoPidsFoundException() {
 		$this->setExpectedException('tx_newspaper_SysfolderNoPidsFoundException');

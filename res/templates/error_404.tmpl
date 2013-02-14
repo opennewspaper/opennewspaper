@@ -1,0 +1,29 @@
+{*
+    error message shown if a tx_newspaper_ObjectNotFoundException occurs during frontend rendering.
+    
+    Variables:
+    $_GET       _GET parameters coming with the HTTP request
+    $exception  The exception that was thrown
+    
+*}
+
+<h1>Sorry, your request could not be answered.</h1>
+
+<p>These are the parameters we could deduce from your request:</p>
+
+  <ul>
+    {foreach from=$_GET key=key item=value}
+      <li>{$key}: {$value}</li>
+    {/foreach}
+  </ul>
+
+<p>And this is the message that came with the exception that was thrown:</p>
+
+{* Of course you should NEVER print out the Exception message verbatim, because
+   it might expose some of the SQL that was used to generate this page and open
+   the door for SQL injection.
+   We're doing it here anyway because this is a generic template that is meant
+   to be overridden by the application designer. Yeah, we suck. Go do it better!
+   ;-)
+*} 
+<pre>{$exception->getMessage()}</pre>

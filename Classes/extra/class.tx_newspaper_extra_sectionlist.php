@@ -32,17 +32,23 @@ class tx_newspaper_extra_SectionList extends tx_newspaper_Extra {
 	 *  \todo make number of articles displayed variable
 	 *  \todo WHat if the current section has no article list? (is this even possible?)
 	 */
-	public function render($template_set = '') {
+    public function render($template_set = '') {
 
-		$this->prepare_render($template_set);
+        try {
+            $this->prepare_render($template_set);
 
-		$list = tx_newspaper::getSection()->getArticleList();
+            $list = tx_newspaper::getSection()->getArticleList();
 
-		$first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
-		$num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): self::DEFAULT_NUM_ARTICLES;
-		$articles = $list->getArticles($num, $first);
+            $first = $this->getAttribute('first_article')? $this->getAttribute('first_article')-1: 0;
+            $num = $this->getAttribute('num_articles')? $this->getAttribute('num_articles'): self::DEFAULT_NUM_ARTICLES;
+            $articles = $list->getArticles($num, $first);
+        } catch (tx_newspaper_Exception $e) {
+            throw new tx_newspaper_ObjectNotFoundException(
+                'tx_newspaper_Section', intval($GLOBALS['TSFE']->page['tx_newspaper_associated_section'])
+            );
+        }
 
-		$this->smarty->assign('articles', $articles);
+        $this->smarty->assign('articles', $articles);
         $this->smarty->assign('section_id', tx_newspaper::getSection()->getUid());
         $this->smarty->assign('typo3_page', tx_newspaper::getSection()->getTypo3PageID());
 

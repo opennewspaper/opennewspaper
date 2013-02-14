@@ -236,8 +236,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     public function render($template_set = '') {
 
         /// Default articles should never contain text that is displayed.
-        if ($this->getAttribute('is_template'))
-            return '';
+        if ($this->getAttribute('is_template')) return '';
 
         tx_newspaper_ExecutionTimer::start();
 

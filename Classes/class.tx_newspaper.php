@@ -827,7 +827,7 @@ class tx_newspaper  {
     /** Currently, that means it returns the tx_newspaper_Section record which lies on the current Typo3 page.
      *  This implementation may change, but this function is required to always return the correct tx_newspaper_Section.
      *
-     *  @return The tx_newspaper_Section object the plugin currently works on
+     *  @return tx_newspaper_Section Section the plugin currently works on
      *  @throw tx_newspaper_IllegalUsageException if the current page is not associated with a tx_newspaper_Section.
      */
     public static function getSection() {

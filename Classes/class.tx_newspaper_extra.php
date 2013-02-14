@@ -867,8 +867,7 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
 	 *    - The order in which these MM-tables are checked for the
 	 *      tx_newspaper_Extra is pretty arbitrary.
 	 *
-	 *	\return The tx_newspaper_PageZone this tx_newspaper_Extra is placed
-	 *      upon, or \c null
+	 *	@return tx_newspaper_PageZone Page zone this tx_newspaper_Extra is placed upon, or \c null
 	 */
 	public function getPageZone() {
 		/// Check if the Extra insertExtraAfteris associated with an article...
