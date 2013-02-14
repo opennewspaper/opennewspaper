@@ -29,23 +29,32 @@
  *  \date Jan 9, 2009
  */
 
+
 /// Base class for all exceptions thrown by this Typo3 extension
 class tx_newspaper_Exception extends Exception { 
-	
-	/// Constructor which also writes a stack backtrace to the devlog
-	/** \param $message Additional info about the Exception being thrown
-	 */
-	public function __construct($message, $write_message = true) {
-		if (self::dbObjectExists() && $write_message) {
+
+    /// Maximum depth of the stack backtrace written to the devlog
+    const BACKTRACE_DEPTH = 10;
+
+    /// Constructor which also writes a stack backtrace to the devlog
+    /** \param $message Additional info about the Exception being thrown
+     */
+    public function __construct($message, $write_message = true) {
+        if (self::dbObjectExists() && $write_message && !self::$silent) {
             $backtrace = self::getStrippedBacktrace();
 
             tx_newspaper::devlog(
                 'Exception thrown: ' . $message,
                 array_slice($backtrace, 1, self::BACKTRACE_DEPTH)
             );
-		}
+        }
         parent::__construct($message);
     }
+
+    public static function setSilent($state) { self::$silent = (bool)$state; }
+
+    public static function getSilent() { return self::$silent; }
+
 
     private static function dbObjectExists() {
         return $GLOBALS['TYPO3_DB'] instanceof t3lib_DB;
@@ -59,8 +68,23 @@ class tx_newspaper_Exception extends Exception {
         return $backtrace;
     }
 
-    /// Maximum depth of the stack backtrace written to the devlog
-    const BACKTRACE_DEPTH = 10;
+
+    private static $silent = false;
+}
+
+class tx_newspaper_ExceptionSilencer {
+
+    public function __construct() {
+        $this->previous_state = tx_newspaper_Exception::getSilent();
+        tx_newspaper_Exception::setSilent(true);
+    }
+
+    public function __destruct() {
+        tx_newspaper_Exception::setSilent($this->previous_state);
+    }
+
+    private $previous_state = null;
+
 }
 
 /// This Exception is thrown when opening a tx_newspaper_Source fails

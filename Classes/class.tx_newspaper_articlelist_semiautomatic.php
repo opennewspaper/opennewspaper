@@ -668,35 +668,35 @@ class tx_newspaper_ArticleList_Semiautomatic extends tx_newspaper_ArticleList {
 	 * 		the code to subtract another ArticleList too.
 	 *  \todo Figure out how to preview hidden articles
 	 */
-	public function getRawArticleUIDs($number, $start = 0) {
+    public function getRawArticleUIDs($number, $start = 0) {
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-		/// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
+        /// \todo: Implement \p filter_articlelist_exclude. This must be done separately from the SQL query.
 
-		try {
-			$results = tx_newspaper::selectRowsDirect(
-				$this->select_method_strategy->selectFields(),
-				$this->selectTable(),
-				$this->selectWhere(),
-				'',
-				$this->selectOrderBy(),
-				$this->selectLimit($start, $number)
-			);
-		} catch (tx_newspaper_DBException $e) {
+        try {
+            $dont_spam_devlog = new tx_newspaper_ExceptionSilencer();
+            $results = tx_newspaper_DB::getInstance()->selectRowsDirect(
+                $this->select_method_strategy->selectFields(),
+                $this->selectTable(),
+                $this->selectWhere(),
+                '',
+                $this->selectOrderBy(),
+                $this->selectLimit($start, $number)
+            );
+        } catch (tx_newspaper_DBException $e) {
+            //  Guard against article lists using GET variables, which are not set in the BE
             if (TYPO3_MODE != 'BE') {
-                //  This guards against article lists which use GET varaiables,
-                //	which are not set in the BE
                 tx_newspaper::devlog(
                     "tx_newspaper_ArticleList_Semiautomatic::getRawArticleUIDs($number, $start) error",
                     $e->getMessage()
                 );
             }
             $results = array();
-		}
+        }
 
         return $this->select_method_strategy->rawArticleUIDs($results);
-	}
+    }
 
 	/// Get all offsets for the supplied UIDs
 	/** \param $uids The UIDs for which to look up the offsets
