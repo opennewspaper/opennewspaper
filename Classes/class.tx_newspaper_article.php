@@ -242,7 +242,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $this->prepare_render($template_set);
 
-        $text_paragraphs = self::splitIntoParagraphs($this->getAttribute('bodytext'));
+        $bodytext = self::filterUnprintableCharacters($this->getAttribute('bodytext'));
+        $text_paragraphs = self::splitIntoParagraphs($bodytext);
         $paragraphs = $this->getTextParagraphsWithSpacing($text_paragraphs);
 
         $this->addExtrasWithBadParagraphNumbers($paragraphs, sizeof($text_paragraphs));
@@ -806,7 +807,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         return self::$extra_2_pagezone_table;
     }
 
-
     /// Is the current article an "Article as URL"
     /**
      * Checks if current article type is configured as "Article as URL" in newspaper.articleTypeAsUrl = [uid1,...uidn]
@@ -854,7 +854,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 		return true; // a new tag was attached to the article
     }
 
-
     /**
      * Detach $tag from this article
      * @param $tag
@@ -873,7 +872,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
 		return $count;
     }
-
 
     /**
      * \param  $tagtype int defaults to contentTagType
@@ -1187,6 +1185,10 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         $pagetype = new tx_newspaper_PageType($_GET);
 
         return new tx_newspaper_Page($section, $pagetype);
+    }
+
+    private static function filterUnprintableCharacters($text) {
+        return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $text);
     }
 
     /// Split the article's text into an array, one entry for each paragraph
