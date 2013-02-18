@@ -58,7 +58,7 @@ class tx_newspaper_Workflow {
 	 *  @return string HTML code with all the needed buttons
 	 */
 	public static function getWorkflowButtons($row) {
-//t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('PA[row]' => $PA['row']));
+//t3lib_div::devlog('getWorkflowButtons()', 'newspaper', 0, array('row' => $row));
 
 		$hidden = $row['hidden'];
 		$workflow = intval($row['workflow_status']);
@@ -102,16 +102,19 @@ function changeWorkflowStatus(role, hidden_status) {
 		} else {
 			$button['publish'] = tx_newspaper_workflow::isFunctionalityAvailable('publish');
 		}
-		switch($workflow) {
-			case NP_ACTIVE_ROLE_EDITORIAL_STAFF: // Active role: editor (Redakteur)
-				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
-//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
-			break;
-			case NP_ACTIVE_ROLE_DUTY_EDITOR: // Active role: duty editor (CvD)
-            case NP_ACTIVE_ROLE_POOL: // Active role: pool (Halde)
-				$button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
-//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
 
+		switch($workflow) {
+            case NP_ACTIVE_ROLE_EDITORIAL_STAFF: // Active role: editor (Redakteur)
+                $button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
+//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
+                break;
+            case NP_ACTIVE_ROLE_DUTY_EDITOR: // Active role: duty editor (CvD)
+                $button['revise'] = tx_newspaper_workflow::isFunctionalityAvailable('revise');
+//				$button['place'] = tx_newspaper_workflow::isFunctionalityAvailable('place');
+                break;
+            case NP_ACTIVE_ROLE_POOL: // Active role: pool (Halde)
+                $button['check'] = true;
+                $button['revise'] = true;
 			break;
 			case NP_ACTIVE_ROLE_NONE: // Active role: none
 				$button['check'] = tx_newspaper_workflow::isFunctionalityAvailable('check');
@@ -135,6 +138,12 @@ function changeWorkflowStatus(role, hidden_status) {
 
 		$html .= self::renderWorkflowButtons($hidden, $button);
 //t3lib_div::devlog('button', 'newspaper', 0, array('hidden' => $hidden, 'workflow' => $workflow, 'button' => $button, 'html' => $html));
+
+        // Add note if article has active role "Pool"
+        if ($workflow == NP_ACTIVE_ROLE_POOL) {
+            $html .= '<span style="text-transform: uppercase;">' . tx_newspaper::getTranslation('label_workflow_pooled_article') . '</span>';
+        }
+
 		return $html;
 	}
 

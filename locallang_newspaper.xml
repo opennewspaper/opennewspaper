@@ -56,6 +56,7 @@
             <label index="label_workflow_extra_created">created</label>
             <label index="label_workflow_field_changed">Field(s) changed:</label>
             <label index="label_workflow_pool">Move to article pool</label>
+            <label index="label_workflow_pooled_article">Pooled article</label>
             <label index="label_workflow_revise">Send to editorial staff</label>
             <label index="label_workflow_revise_hide">Send to editorial staff &amp; hide</label>
             <label index="label_workflow_revise_publish">Send to editorial staff &amp; publish</label>
@@ -193,6 +194,7 @@
             <label index="label_workflow_role_editorialstaff">Redaktion</label>
             <label index="label_workflow_role_dutyeditor">CvD</label>
             <label index="label_workflow_role_pool">Halde</label>
+            <label index="label_workflow_pooled_article">Halde</label>
             <label index="label_workflow_role_none">Artikel platziert</label>
             <label index="label_workflow_role_old">Alte Rolle</label>
             <label index="label_workflow_role_new">Neue Rolle</label>
