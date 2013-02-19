@@ -1206,10 +1206,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
          *  removed. It may not be the case though, if so, the first paragraph is meaningful
          *  and must be kept.
          */
-        $temp_paragraphs = preg_split('/<p[\s,>]/', $text);
-tx_newspaper::devlog("temp", $temp_paragraphs);
+        $temp_paragraphs = preg_split('/<p[\s>]/', $text);
         $paragraphs = array();
-#self::getParagraphs($text);
         foreach ($temp_paragraphs as $paragraph) {
 
             $paragraph = self::trimPTags($paragraph);
@@ -1223,21 +1221,6 @@ tx_newspaper::devlog("temp", $temp_paragraphs);
         }
 
         return $paragraphs;
-    }
-
-    private static function getParagraphs($text) {
-        $doc = new DOMDocument();
-        $doc->loadHTML($text);
-        $nodes = $doc->getElementsByTagName('p');
-        tx_newspaper::devlog("doc", $doc);
-        tx_newspaper::devlog("nodes", $nodes);
-        $debug = array();
-        foreach ($nodes as $node) {
-            array_push($debug, $node->nodeValue);
-        }
-        tx_newspaper::devlog("nodes2", $debug);
-
-
     }
 
     private function getTextParagraphsWithSpacing($text_paragraphs) {
@@ -1283,7 +1266,7 @@ tx_newspaper::devlog("temp", $temp_paragraphs);
      */
     private static function convertRTELinks($paragraph) {
         $paragraph = tx_newspaper::convertRteField($paragraph);
-        if (substr($paragraph, 0, 2) != '<p') return $paragraph;
+        if (substr($paragraph, 0, 3) != '<p>' && substr($paragraph, 0, 3) != '<p ') return $paragraph;
         return self::trimPTags(substr($paragraph, 2));
     }
 
