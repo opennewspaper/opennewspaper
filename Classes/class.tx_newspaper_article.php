@@ -1192,25 +1192,24 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     }
 
     /// Split the article's text into an array, one entry for each paragraph
-    /** tx_newspaper_Extra are inserted before or after paragraphs. This
-     *  function splits the article text so the position of a tx_newspaper_Extra
-     *  can be found.
+    /**
+     *  tx_newspaper_Extra are inserted before or after paragraphs. This function splits
+     *  the article text so the position of a tx_newspaper_Extra can be found.
      *
-     *  The functionality of this function depends on the way the RTE stores
-     *  line breaks. Currently it breaks the text at \c "<p>/</p>" -pairs and
-     *  also at line breaks \c ("\n").
+     *  The functionality of this function depends on the way the RTE stores line breaks.
+     *  Currently it breaks the text at \c "<p>/</p>" -pairs and also at line breaks \c ("\n").
      *
-     *  \attention If the format of line breaks changes, this function must be
-     * 	altered.
+     *  @attention If the format of line breaks changes, this function must be altered.
      */
     protected static function splitIntoParagraphs($text) {
-        /** A text usually starts with a \c "<p>", in that case the first paragraph
-         *  must be removed. It may not be the case though, if so, the first
-         *  paragraph is meaningful and must be kept.
+        /** A text usually starts with a \c "<p>", in that case the first paragraph must be
+         *  removed. It may not be the case though, if so, the first paragraph is meaningful
+         *  and must be kept.
          */
-        $temp_paragraphs = explode('<p', $text);
+        $temp_paragraphs = preg_split('/<p[\s,>]/', $text);
+tx_newspaper::devlog("temp", $temp_paragraphs);
         $paragraphs = array();
-
+#self::getParagraphs($text);
         foreach ($temp_paragraphs as $paragraph) {
 
             $paragraph = self::trimPTags($paragraph);
@@ -1224,6 +1223,21 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         }
 
         return $paragraphs;
+    }
+
+    private static function getParagraphs($text) {
+        $doc = new DOMDocument();
+        $doc->loadHTML($text);
+        $nodes = $doc->getElementsByTagName('p');
+        tx_newspaper::devlog("doc", $doc);
+        tx_newspaper::devlog("nodes", $nodes);
+        $debug = array();
+        foreach ($nodes as $node) {
+            array_push($debug, $node->nodeValue);
+        }
+        tx_newspaper::devlog("nodes2", $debug);
+
+
     }
 
     private function getTextParagraphsWithSpacing($text_paragraphs) {

@@ -197,14 +197,11 @@ class Tx_newspaper_Controller_SectionModuleController extends Tx_Extbase_MVC_Con
      * Action to edit existing section
      */
     public function deleteAction() {
-        tx_newspaper::devlog("delete", $this->module_request);
         $this->view->assign('sections', $this->sections);
         if (!empty($this->module_request['section'])) {
             $section = new tx_newspaper_Section($this->module_request['section']);
             $children = $section->getChildSections();
             $loose_articles = self::getArticlesWithOnlySection($section);
-            tx_newspaper::devlog("children", $children);
-            tx_newspaper::devlog("loose Articles", $loose_articles);
             $this->view->assign('child_sections', $children);
             $this->view->assign('loose_articles', $loose_articles);
             $this->view->assign('affected_section', $section);
