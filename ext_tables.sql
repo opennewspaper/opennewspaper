@@ -347,7 +347,7 @@ CREATE TABLE tx_newspaper_extra (
     KEY parent (pid),
     KEY origin_uid (origin_uid),
     KEY extra_uid (extra_uid),
-    KEY extra_table (extra_table)
+    INDEX extra_table (extra_table(30))
 ) ENGINE=InnoDB;
 
 #
