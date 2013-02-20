@@ -31,15 +31,16 @@ class tx_newspaper_Diff {
     ////////////////////////////////////////////////////////////////////////////
 
     private function textAsArray($text) {
-        if ($this->strip_tags) $text = strip_tags($text);
-        return array_filter(explode(' ', $text), 'trim');
+        if ($this->strip_tags) $text = strip_tags($text, '<p>');
+        $text = str_replace("\n", "<br /> ", $text);
+        return array_filter(preg_split("/\s+/", $text), 'trim');
     }
 
     private static function arrayDiff(array $old, array $new){
 
         list($maxlen, $omax, $nmax) = self::findDifferenceData($old, $new);
 
-    	if($maxlen == 0) {
+        if($maxlen == 0) {
             if (self::isTextElement($old) || self::isTextElement($new)) {
                 return array(array('d'=>$old, 'i'=>$new));
             }
@@ -106,18 +107,23 @@ class tx_newspaper_DiffMatrix {
     public function getNMax() { return $this->nmax; }
 
     static private function getMaxMem() {
-        $max_mem = ini_get('memory_limit');
-        switch (substr($max_mem, -1)) {
-            case 'G': return intval($max_mem)*1024*1024*1024;
-            case 'M': return intval($max_mem)*1024*1024;
-            case 'K': return intval($max_mem)*1024;
+        if (!self::$max_mem) {
+            $max_mem = ini_get('memory_limit');
+            switch (substr($max_mem, -1)) {
+                case 'G': return intval($max_mem)*1024*1024*1024;
+                case 'M': return intval($max_mem)*1024*1024;
+                case 'K': return intval($max_mem)*1024;
+            }
+            self::$max_mem = intval($max_mem);
         }
-        return intval($max_mem);
+        return self::$max_mem;
     }
 
     private $matrix = array(array());
     private $maxlen = 0;
     private $omax = 0;
     private $nmax = 0;
+
+    private static $max_mem = 0;
 
 }
