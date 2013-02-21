@@ -1417,3 +1417,15 @@ CREATE TABLE IF NOT EXISTS `tx_newspaper_tag_zone` (
   PRIMARY KEY (`uid`),
   KEY `parent` (`pid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
+
+CREATE TABLE `cache_hash` (
+  `hash` varchar(32) NOT NULL DEFAULT '',
+  `content` mediumblob NOT NULL,
+  `tstamp` int(11) unsigned NOT NULL DEFAULT '0',
+  `ident` varchar(32) DEFAULT '',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `hash` (`hash`)
+) ENGINE=InnoDB AUTO_INCREMENT=79342 DEFAULT CHARSET=utf8 AUTO_INCREMENT=79342 ;
+
