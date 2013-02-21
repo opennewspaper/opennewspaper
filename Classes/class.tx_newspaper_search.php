@@ -14,8 +14,9 @@ class tx_newspaper_Search {
 	////////////////////////////////////////////////////////////////////////////
 
     /// dirty solution for speeding up the search while sacrificing flexibility
-    /** order by date only. do not search extras.
-     *  for launch. make this better ASAP.
+    /**
+     *  order by date only. do not search extras.
+     *  @todo make this better ASAP.
      */
     const enable_quick_hack = true;
 
@@ -151,10 +152,12 @@ class tx_newspaper_Search {
         $where .= ' AND ( ' . $this->searchWhereClause($search_term, self::$title_fields) .
                   '    OR ' . $this->searchWhereClause($search_term, self::$text_fields) . ' )';
 
-        $table .= ' JOIN ' . self::article_extra_mm .
-                  '   ON ' . self::article_table . '.uid = ' . self::article_extra_mm . '.uid_local' .
-                  ' JOIN ' . self::extra_table .
-                  '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
+        if (!self::enable_quick_hack) {
+            $table .= ' JOIN ' . self::article_extra_mm .
+                      '   ON ' . self::article_table . '.uid = ' . self::article_extra_mm . '.uid_local' .
+                      ' JOIN ' . self::extra_table .
+                      '   ON ' . self::extra_table . '.uid = ' . self::article_extra_mm . '.uid_foreign';
+        }
 
         $limit = '';
         if ($number) $limit = intval($start) . ',' . intval($number);
@@ -352,8 +355,6 @@ class tx_newspaper_Search {
         );
 
         $this->num_results += $results[0]['COUNT(*)'];
-tx_newspaper::devlog("count query", tx_newspaper_DB::getQuery());
-tx_newspaper::devlog("results", $this->num_results);
 
         $results = tx_newspaper_DB::getInstance()->selectRows(
             "DISTINCT $current_fields",
@@ -363,7 +364,6 @@ tx_newspaper::devlog("results", $this->num_results);
             'publish_date DESC',
             $limit
         );
-tx_newspaper::devlog('results query', tx_newspaper_DB::getQuery());
         $articles = array();
         foreach ($results as $result) {
             if (!self::enable_quick_hack) {
@@ -377,7 +377,6 @@ tx_newspaper::devlog('results query', tx_newspaper_DB::getQuery());
             $articles[] = $result;
 
         }
-tx_newspaper::devlog("actual results", sizeof($articles));
 
         return $articles;
     }

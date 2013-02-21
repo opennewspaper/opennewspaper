@@ -43,7 +43,7 @@ class tx_newspaper_Exception extends Exception {
      */
     public function __construct($message, $stack_trace = true) {
         if ($stack_trace && !self::isSilent() && self::canWriteDevlog()) {
-            tx_newspaper::devlog('Exception thrown: ' . $message, self::getStrippedBacktrace());
+            tx_newspaper::devlog('Exception thrown: ' . $message, self::getStrippedBacktrace(), 2);
         }
         parent::__construct($message);
     }
