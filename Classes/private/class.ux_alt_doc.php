@@ -218,7 +218,6 @@ div#typo3-docbody { top:20px; }
         }
 
         // Set text color to light gray
-        // Move icon "required" to left and up. Otherwise the first characters of the field aren't accessible
         return '<style>
 div.buttongroup { color:white; font-weight:bold; }
 
@@ -226,12 +225,6 @@ div#typo3-docbody {
     left:0 !important;
     margin-left:0 !important;
     top:22px !important;
-}
-
-img.t3-TCEforms-reqImg {
-  left: -8px;
-  top: -8px;
-  z-index: 4000;
 }
 
 </style>
