@@ -343,7 +343,7 @@ class tx_newspaper_Search {
     }
 
     private function getSearchResultsForClass($current_fields, $current_table, $current_where, $limit) {
-        $sub_select = tx_newspaper_DB::getInstance()->assembleSQLQuery(
+        $sub_select = tx_newspaper_DB::getInstance()->assembleSelectQuery(
             "DISTINCT $current_fields",
             $current_table,
             $current_where,

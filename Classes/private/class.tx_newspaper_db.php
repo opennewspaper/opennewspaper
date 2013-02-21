@@ -481,10 +481,6 @@ class tx_newspaper_DB {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-    private function __construct() { }
-
     /// Assemble an SQL \c SELECT query
     /**
      * @param string $fields Column definition
@@ -495,9 +491,13 @@ class tx_newspaper_DB {
      * @param string $limit \c LIMIT clause
      * @return string \c SELECT query containing all specified definitions
      */
-    private function assembleSelectQuery($fields, $table, $where = '1', $groupBy = '', $orderBy = '', $limit = '') {
+    public function assembleSelectQuery($fields, $table, $where = '1', $groupBy = '', $orderBy = '', $limit = '') {
         return $GLOBALS['TYPO3_DB']->SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+
+    private function __construct() { }
 
     private function getResultSetForSelect($fields, $table, $where, $groupBy, $orderBy, $limit) {
         self::writeFunctionAndArgumentsToLog('logDbSelect');
