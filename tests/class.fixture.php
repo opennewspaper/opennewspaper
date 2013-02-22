@@ -61,6 +61,7 @@ class tx_newspaper_fixture {
 
 	}
 
+    /** @return tx_newspaper_PageZoneType[] */
     public function getPageZoneTypes() {
         $uids = tx_newspaper::selectRows('uid', $this->pagezonetype_table);
         $pagezonetypes = array();
@@ -84,6 +85,7 @@ class tx_newspaper_fixture {
 		return $this->pagezone_page_uids[0];
 	}
 
+    /** @return tx_newspaper_Page[] */
 	public function getPages() {
 		if (!$this->pages) {
 			foreach ($this->page_uids as $uid) {
@@ -92,6 +94,12 @@ class tx_newspaper_fixture {
 		}
 		return $this->pages;
 	}
+
+    /** @return tx_newspaper_PageType[] */
+    public function getPageTypes() {
+        $uids = tx_newspaper::selectRows('uid', $this->pagetype_table);
+        return array_map(function($uid) { return new tx_newspaper_PageType(intval($uid['uid'])); }, $uids);
+    }
 
 	public function getParentSectionUid() {
 		return $this->section_uids[0];

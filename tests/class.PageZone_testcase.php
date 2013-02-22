@@ -348,20 +348,12 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
     }
 
     public function test_render() {
-        try {
-            $rendered = $this->pagezone->render();
-            $template = file_get_contents(PATH_typo3conf . 'ext/newspaper/res/templates/tx_newspaper_pagezone_page.tmpl');
-            $this->assertFalse($template === false);
+        $rendered = $this->pagezone->render();
+        $template = file_get_contents(PATH_typo3conf . 'ext/newspaper/res/templates/tx_newspaper_pagezone_page.tmpl');
+        $this->assertFalse($template === false);
 
-            $this->doTestContains($rendered, 'uid: ' . $this->pagezone->getUid());
-            $this->doTestContains($rendered, 'crdate: ' . $this->pagezone->getAttribute('crdate'));
-        } catch (tx_newspaper_Exception $e) {
-            $types = tx_newspaper_DB::getInstance()->selectRows('*', 'tx_newspaper_pagezonetype');
-            $this->fail(
-                $e->getTraceAsString() .
-                print_r($types, 1)
-            );
-        }
+        $this->doTestContains($rendered, 'uid: ' . $this->pagezone->getUid());
+        $this->doTestContains($rendered, 'crdate: ' . $this->pagezone->getAttribute('crdate'));
     }
 
 	public function test_getAbstractUid() {
