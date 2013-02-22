@@ -38,7 +38,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
      *  it MUST NOT change any other attributes.
      */
     public function test_storeHiddenStatusWithHooksComplicated() {
-
+        try{
         $temp = new tx_newspaper_Article($this->uid);
         $this->assertTrue($temp->getAttribute('publish_date') == 0);
 
@@ -62,10 +62,13 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
         $this->ensureSavedHiddenStatusIs(true, $temp);
         $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
+        }
     }
 
     public function test_storeHiddenStatusWithHooksSimple() {
-
+        try{
         $temp = new tx_newspaper_Article($this->uid);
         $this->assertTrue($temp->getAttribute('publish_date') == 0);
 
@@ -89,7 +92,9 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
         $this->ensureSavedHiddenStatusIs(true, $temp);
         $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
-
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
+        }
     }
 
     private static function createSavedAttributesArray(tx_newspaper_Article $temp) {

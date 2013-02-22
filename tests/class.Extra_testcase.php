@@ -85,13 +85,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	}
 
 	public function test_isRegisteredExtra() {
-        $uid = $this->fixture->getExtraUid();
+        $uid = $this->fixture->getFirstExtraUid();
         $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
         $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
 	}
 
 	public function test_registerExtra() {
-		$uid = $this->fixture->getExtraUid();
+		$uid = $this->fixture->getFirstExtraUid();
         $extra = tx_newspaper_Extra_Factory::getInstance()->create($uid);
         tx_newspaper_Extra::registerExtra($extra);
         $this->assertTrue(tx_newspaper_Extra::isRegisteredExtra($extra));
@@ -200,13 +200,13 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		}
 	}
 
-	public function test_getTable() {
-		foreach(array_merge($this->extras_to_test,
-							$this->extras_to_test_additionally) as $extra_class) {
-			$temp = new $extra_class(1);
-			$this->assertEquals(strtolower($extra_class), $temp->getTable());
-		}
-	}
+    public function test_getTable() {
+        foreach($this->extras_to_test as $extra_class) {
+            $temp = $this->fixture->getFirstExtraOf($extra_class);
+            $this->assertTrue($temp instanceof $extra_class);
+            $this->assertEquals(strtolower($extra_class), $temp->getTable());
+        }
+    }
 
 	public function test_createExtraRecord() {
 		/// test whether the function runs at all
@@ -326,8 +326,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     }
 
     private function generateExtraWithRandomCrdate($extra_class) {
-        $extras = $this->fixture->getExtrasOf($extra_class);
-        $temp = array_shift($extras);
+        $temp = $this->fixture->getFirstExtraOf($extra_class);
         $this->assertTrue($temp instanceof $extra_class);
         $time = time();
         $temp->setAttribute('crdate', $time);

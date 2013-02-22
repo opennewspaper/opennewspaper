@@ -127,7 +127,7 @@ class tx_newspaper_fixture {
 		return $this->article_uid;
 	}
 
-	public function getExtraUid() {
+	public function getFirstExtraUid() {
 		return $this->extra_uids[0];
 	}
 
@@ -149,6 +149,11 @@ class tx_newspaper_fixture {
             $this->getExtras(),
             function($extra) use($class) { return $extra instanceof $class; }
         );
+    }
+
+    /** @return tx_newspaper_Extra */
+    public function getFirstExtraOf($class) {
+        return array_shift($this->getExtrasOf($class));
     }
 
 	public function getPageUid() {
