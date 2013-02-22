@@ -150,7 +150,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     }
 
 	public function test_relateExtra2Article() {
-		$article_uid = 1;
+		$article_uid = $this->fixture->getFirstUidOf('tx_newspaper_article');
 		$article = new tx_newspaper_Article($article_uid);
 		foreach($this->extras_to_test as $extra_class) {
 			/// create a new extra, call relateExtra2Article() on a known article
@@ -209,7 +209,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     }
 
 	public function test_createExtraRecord() {
-        try{
 		/// test whether the function runs at all
 		tx_newspaper_Extra::createExtraRecord(
 			$this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for),
@@ -246,9 +245,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue($row['uid'] > 0);
 
 		/// \todo check if all fields are consistent
-        } catch (tx_newspaper_Exception $e) {
-            $this->fail($e->getTraceAsString());
-        }
 	}
 
 	public function test_getSearchFields() {
