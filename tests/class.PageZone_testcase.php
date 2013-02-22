@@ -41,9 +41,10 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 		$this->assertTrue($temp instanceof tx_newspaper_PageZone);
 	}
 	
-	public function test_Title() {
-		$this->assertEquals('Page zone', $this->pagezone->getTitle());
-	}
+    public function test_Title() {
+        echo $this->pagezone->getTitle();
+        $this->assertEquals('Seitenbereich', $this->pagezone->getTitle());
+    }
 	
 	public function test_modulename() {
 		$this->assertEquals($this->pagezone->getModuleName(), 'np_pagezone_page');

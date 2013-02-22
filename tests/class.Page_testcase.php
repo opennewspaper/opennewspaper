@@ -130,20 +130,14 @@ class test_Page_testcase extends tx_newspaper_database_testcase {
 
         $this->skipTest('test not yet ready'); return;
 	}
-	
-    public function test_toString() {
-        try {
-            $uid = $this->page->getAttribute('uid');
-            $string = strval($this->page);
-            $this->doTestContains($string, 'UID: ' . $uid);
-        } catch (tx_newspaper_Exception $e) {
-            $types = tx_newspaper_DB::getInstance()->selectRows('*', 'tx_newspaper_pagetype');
-            $this->fail($e->getTraceAsString() . print_r($types, 1));
-        }
-    }
-	
-	////////////////////////////////////////////////////////////////////////////
 
+    public function test_toString() {
+        $uid = $this->page->getAttribute('uid');
+        $string = strval($this->page);
+        $this->doTestContains($string, 'UID: ' . $uid);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     /**
      * @static
