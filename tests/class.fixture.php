@@ -97,8 +97,10 @@ class tx_newspaper_fixture {
 
     /** @return tx_newspaper_PageType[] */
     public function getPageTypes() {
-        $uids = tx_newspaper::selectRows('uid', $this->pagetype_table);
-        return array_map(function($uid) { return new tx_newspaper_PageType(intval($uid['uid'])); }, $uids);
+        return array_map(
+            function($uid) { return new tx_newspaper_PageType(intval($uid['uid'])); },
+            tx_newspaper::selectRows('uid', $this->pagetype_table)
+        );
     }
 
 	public function getParentSectionUid() {
@@ -131,6 +133,22 @@ class tx_newspaper_fixture {
 
     public function getExtraUids() {
         return $this->extra_uids;
+    }
+
+    /** @return tx_newspaper_Extra[] */
+    public function getExtras() {
+        return array_map(
+            function($uid) { return tx_newspaper_Extra_Factory::getInstance()->create($uid); },
+            $this->getExtraUids()
+        );
+    }
+
+    /** @return tx_newspaper_Extra[] */
+    public function getExtrasOf($class) {
+        return array_filter(
+            $this->getExtras(),
+            function($extra) use($class) { return $extra instanceof $class; }
+        );
     }
 
 	public function getPageUid() {

@@ -286,7 +286,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	public function test_duplicateReturnsSameClass() {
 		foreach($this->extras_to_test as $extra_class) {
 
-            $temp = self::generateExtraWithRandomCrdate($extra_class);
+            $temp = $this->generateExtraWithRandomCrdate($extra_class);
 			$that = $temp->duplicate();
 
             $this->assertTrue(
@@ -299,7 +299,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     public function test_duplicateGeneratesSameAttributes() {
         foreach($this->extras_to_test as $extra_class) {
 
-            $temp = self::generateExtraWithRandomCrdate($extra_class);
+            $temp = $this->generateExtraWithRandomCrdate($extra_class);
             $that = $temp->duplicate();
 
             foreach (tx_newspaper::getAttributes($temp) as $attribute) {
@@ -313,8 +313,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 
     public function test_duplicateGeneratesEqualAttributes() {
         foreach($this->extras_to_test as $extra_class) {
-
-            $temp = self::generateExtraWithRandomCrdate($extra_class);
+            $temp = $this->generateExtraWithRandomCrdate($extra_class);
             $that = $temp->duplicate();
 
             foreach (tx_newspaper::getAttributes($temp) as $attribute) {
@@ -326,8 +325,10 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    private static function generateExtraWithRandomCrdate($extra_class) {
-        $temp = new $extra_class(1);
+    private function generateExtraWithRandomCrdate($extra_class) {
+        $extras = $this->fixture->getExtrasOf($extra_class);
+        $temp = array_shift($extras);
+        $this->assertTrue($temp instanceof $extra_class);
         $time = time();
         $temp->setAttribute('crdate', $time);
         return $temp;
@@ -391,7 +392,8 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	/// Extra classes that should be subjected to all tests
 	private $extras_to_test = array(
 		'tx_newspaper_Extra_Image',
-		'tx_newspaper_Extra_SectionList',
+		'tx_newspaper_Extra_ArticleList',
+        'tx_newspaper_Extra_SectionList'
 	);
 	/// Extra classes that will have additional tests run on them
 	private $extras_to_test_additionally = array(
