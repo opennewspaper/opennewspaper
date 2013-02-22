@@ -160,6 +160,11 @@ class tx_newspaper_fixture {
 		return $this->page_uids[0];
 	}
 
+    public function getFirstUidOf($table) {
+        $uids = tx_newspaper_DB::getInstance()->selectRows('uid', $table, '1', '', '', '1');
+        return intval($uids[0]['uid']);
+    }
+
 	////////////////////////////////////////////////////////////////////////////
 
     private function createTypo3Pages() {

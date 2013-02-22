@@ -209,9 +209,10 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
     }
 
 	public function test_createExtraRecord() {
+        try{
 		/// test whether the function runs at all
 		tx_newspaper_Extra::createExtraRecord(
-			$this->extra_uid_to_create_superobject_for,
+			$this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for),
 			$this->extra_table_to_create_superobject_for
 		);
 
@@ -220,18 +221,18 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			'uid',
 			$this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
+			' AND extra_uid = ' . $this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for)
 		);
 		$this->assertTrue($row['uid'] > 0);
 
 		/// delete the record from the extra table and check it it really is created anew
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for));
+			' AND extra_uid = ' . $this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for));
 		/// \todo if i were pedantic, i'd check wheter deletion has really succeeded...
 
 		tx_newspaper_Extra::createExtraRecord(
-			$this->extra_uid_to_create_superobject_for,
+            $this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for),
 			$this->extra_table_to_create_superobject_for
 		);
 
@@ -240,11 +241,14 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 			'uid',
 			$this->extras_table,
 			'extra_table = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($this->extra_table_to_create_superobject_for, $this->extras_table) .
-			' AND extra_uid = ' . intval($this->extra_uid_to_create_superobject_for)
+			' AND extra_uid = ' . $this->fixture->getFirstUidOf($this->extra_table_to_create_superobject_for)
 		);
 		$this->assertTrue($row['uid'] > 0);
 
 		/// \todo check if all fields are consistent
+        } catch (tx_newspaper_Exception $e) {
+            $this->fail($e->getTraceAsString());
+        }
 	}
 
 	public function test_getSearchFields() {
@@ -417,9 +421,6 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 	private $extras_table = 'tx_newspaper_extra';
 	/// Extra which is used to test createExtraRecord()
 	private $extra_table_to_create_superobject_for = 'tx_newspaper_article';
-	/// UID of concrete record to test in createExtraRecord()
-	private $extra_uid_to_create_superobject_for = 1;
-
 
 }
 ?>
