@@ -617,6 +617,7 @@ class tx_newspaper_fixture {
             'is_article' => '1',
         ),
 	);
+    private $pagezonetype_uids = array();
 
 	private $pagezone_table = 'tx_newspaper_pagezone';
 	private $pagezone_uids = array();

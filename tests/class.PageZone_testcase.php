@@ -15,6 +15,8 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
 
 	function setUp() {
 		parent::setUp();
+        $pagezonetypes = $this->fixture->getPageZoneTypes();
+        $this->pagezone_page_data['pagezonetype_id'] = $pagezonetypes[0]->getUid();
 		if (false) {
 			$this->uid = tx_newspaper::insertRows($this->pagezone_page_table, $this->pagezone_page_data);
 		} else {
@@ -345,15 +347,23 @@ class test_PageZone_testcase extends tx_newspaper_database_testcase {
         $this->assertTrue($uid > 0);
     }
 
-	public function test_render() {
-        $rendered = $this->pagezone->render();
-        $template = file_get_contents(PATH_typo3conf . 'ext/newspaper/res/templates/tx_newspaper_pagezone_page.tmpl');
-        $this->assertFalse($template === false);
+    public function test_render() {
+        try {
+            $rendered = $this->pagezone->render();
+            $template = file_get_contents(PATH_typo3conf . 'ext/newspaper/res/templates/tx_newspaper_pagezone_page.tmpl');
+            $this->assertFalse($template === false);
 
-        $this->doTestContains($rendered, 'uid: ' . $this->pagezone->getUid());
-        $this->doTestContains($rendered, 'crdate: ' . $this->pagezone->getAttribute('crdate'));
-	}
-	
+            $this->doTestContains($rendered, 'uid: ' . $this->pagezone->getUid());
+            $this->doTestContains($rendered, 'crdate: ' . $this->pagezone->getAttribute('crdate'));
+        } catch (tx_newspaper_Exception $e) {
+            $types = tx_newspaper_DB::getInstance()->selectRows('*', 'tx_newspaper_pagezonetype');
+            $this->fail(
+                $e->getTraceAsString() .
+                print_r($types, 1)
+            );
+        }
+    }
+
 	public function test_getAbstractUid() {
 		/** This test seems a bit redundant because it checks the return value
 		 *  of getAbstractUid() against the return value of getAbstractUid().

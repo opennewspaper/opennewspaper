@@ -240,9 +240,9 @@ INSERT INTO `tx_newspaper_pagezone_page` VALUES (17, 3204, 0, 0, 0, 0, 3, '', 0,
 -- Daten f�r Tabelle `tx_newspaper_pagezonetype`
 -- 
 
-INSERT INTO `tx_newspaper_pagezonetype` VALUES (1, 3201, 1252515322, 1252515322, 1, 256, 0, 'Artikelbereich', '', 1);
-INSERT INTO `tx_newspaper_pagezonetype` VALUES (2, 3201, 1252515331, 1252515331, 1, 512, 0, 'Hauptspalte', '', 0);
-INSERT INTO `tx_newspaper_pagezonetype` VALUES (3, 3201, 1252515337, 1252515337, 1, 768, 0, 'Rechte Spalte', '', 0);
+--INSERT INTO `tx_newspaper_pagezonetype` VALUES (1, 3201, 1252515322, 1252515322, 1, 256, 0, 'Artikelbereich', '', 1);
+--INSERT INTO `tx_newspaper_pagezonetype` VALUES (2, 3201, 1252515331, 1252515331, 1, 512, 0, 'Hauptspalte', '', 0);
+--INSERT INTO `tx_newspaper_pagezonetype` VALUES (3, 3201, 1252515337, 1252515337, 1, 768, 0, 'Rechte Spalte', '', 0);
 
 
 

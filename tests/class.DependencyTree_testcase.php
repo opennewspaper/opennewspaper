@@ -129,6 +129,7 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
     }
 
+/*
     public function test_getArticleListPages() {
         $al_uid = $this->fixture->getArticlelistUid();
         $article_list = tx_newspaper_ArticleList_Factory::getInstance()->create($al_uid);
@@ -143,6 +144,8 @@ class test_DependencyTree_testcase extends tx_newspaper_database_testcase {
 
         $this->checkIsPageArray($pages);
     }
+
+*/
 
     // Tests related to executeActionsOnPages()
 
