@@ -371,7 +371,7 @@ class test_Extra_testcase extends tx_newspaper_database_testcase {
 				$extra = new $table($registeredExtra->getUid());
 
 				try {
-			        $extra->getAttribute('template');
+                    if (!$extra instanceof tx_newspaper_Extra_PHPInclude) $extra->getAttribute('template');
 				} catch (tx_newspaper_Exception $e) {
 					$this->fail('Could not get mandatory attribute template for extra ' . $extra->getTitle());
 				}

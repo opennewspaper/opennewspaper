@@ -18,7 +18,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
 		parent::setUp();
 
-		$this->uid = $this->fixture->getArticleUid();
+		$this->uid = $this->fixture->getFirstUidOf('tx_newspaper_article');
 		$this->article = new tx_newspaper_Article($this->uid);
 	}
 	
@@ -69,7 +69,10 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 
     public function test_storeHiddenStatusWithHooksSimple() {
         try{
+        print_r(tx_newspaper_DB::getInstance()->selectOneRow('*', 'tx_newspaper_article', 'uid = '.$this->uid));
         $temp = new tx_newspaper_Article($this->uid);
+        print_r($temp->getPrimarySection());
+        print_r($temp->getPrimarySection()->getTypo3PageID());
         $this->assertTrue($temp->getAttribute('publish_date') == 0);
 
         $saved_attributes = self::createSavedAttributesArray($temp);
@@ -244,7 +247,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$this->assertEquals($this->article->getUid(), $this->uid);
 	}
 	public function test_getTitle() {
-		$this->assertEquals($this->article->getTitle(), 'Article');
+		$this->assertEquals($this->article->getTitle(), 'Artikel');
 	}
 	public function test_getModuleName() {
 		$this->assertEquals($this->article->getModuleName(), 'np_article');
