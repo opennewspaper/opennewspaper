@@ -67,39 +67,6 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         }
     }
 
-    public function test_storeHiddenStatusWithHooksSimple() {
-        try{
-        print_r(tx_newspaper_DB::getInstance()->selectOneRow('*', 'tx_newspaper_article', 'uid = '.$this->uid));
-        $temp = new tx_newspaper_Article($this->uid);
-        print_r($temp->getPrimarySection());
-        print_r($temp->getPrimarySection()->getTypo3PageID());
-        $this->assertTrue($temp->getAttribute('publish_date') == 0);
-
-        $saved_attributes = self::createSavedAttributesArray($temp);
-
-        $temp->storeHiddenStatusWithHooksSimple(true);
-        $this->assertEquals(true, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(true, $temp);
-        $this->assertTrue($temp->getAttribute('publish_date') == 0);
-
-        $temp->storeHiddenStatusWithHooksSimple(false);
-        $this->assertEquals(false, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(false, $temp);
-        $publish_date = $temp->getAttribute('publish_date');
-        $this->assertFalse($publish_date == 0);
-
-        $temp->storeHiddenStatusWithHooksSimple(true);
-        $this->assertEquals(true, $temp->getAttribute('hidden'));
-        $this->compareAllAttributesExceptHiddenAndPublishDate($saved_attributes, $temp);
-        $this->ensureSavedHiddenStatusIs(true, $temp);
-        $this->assertEquals($publish_date, $temp->getAttribute('publish_date'));
-        } catch (tx_newspaper_Exception $e) {
-            $this->fail($e->getMessage() . "<br .>\n" . $e->getTraceAsString());
-        }
-    }
-
     private static function createSavedAttributesArray(tx_newspaper_Article $temp) {
         $saved_attributes = array();
         foreach (tx_newspaper_DB::getInstance()->getFields('tx_newspaper_article') as $attribute) {
@@ -190,7 +157,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$extras[1]->setAttribute('paragraph', 100);
 		$this->checkComesBefore($this->article->render(), 'title[5]', 'Image 2');	 
 		
-		/// \todo make paragraph for one extra less than negative number of paragraphs
+		/// @todo make paragraph for one extra less than negative number of paragraphs
 		$extras[1]->setAttribute('paragraph', -100);
 		$this->checkComesBefore($this->article->render(), 'Image 2', 'title[5]');	 
 	}
@@ -219,7 +186,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 			} else t3lib_div::debug($extra);
 
 		}
-		/// \todo check concrete extras in this article for correctness
+		/// @todo check concrete extras in this article for correctness
 	}
 
 	public function test_addExtra() {
@@ -269,7 +236,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 		$uid = $this->article->store();
 		$this->assertEquals($uid, $this->article->getUid());
 
-		/// \todo check storing of extras with article
+		/// @todo check storing of extras with article
 	}
 
     public function test_store_AttributesEqual() {
@@ -340,7 +307,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
 			$this->assertTrue($article instanceof tx_newspaper_Article);
 		}
 
-		/// \todo ensure article type 3 is deleted, no articles should have it
+		/// @todo ensure article type 3 is deleted, no articles should have it
 		$articletype = new tx_newspaper_ArticleType(3);
 		$articles = tx_newspaper_Article::listArticlesWithArticletype($articletype, 0);
 		$this->assertTrue(sizeof($articles) == 0);
@@ -489,7 +456,7 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
         return false;
     }
 
-	private $section_uid = 1;			///< section we assign new articles to. \todo create my own new section
+	private $section_uid = 1;			///< section we assign new articles to. @todo create my own new section
     /** @var tx_newspaper_Article */
 	private $article = null;
 	private $uid = null;					///< The article we use as test object

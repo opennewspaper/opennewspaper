@@ -29,13 +29,14 @@
  *  \date Apr 28, 2009
  */
 
-/// \todo brief description
-/** \todo long description
+/// @todo brief description
+/** @todo long description
  */
 class tx_newspaper_fixture {
 
 	public function __construct() {
 		$this->createSectionHierarchy();
+        $this->createTypo3Pages();
 		$this->createPages();
 		$this->createPageZones();
 		$this->createArticleList();
@@ -168,6 +169,10 @@ class tx_newspaper_fixture {
 	////////////////////////////////////////////////////////////////////////////
 
     private function createTypo3Pages() {
+        // Create sysfolder (uid 2574) for storing records and other newspaper related pages (like dossier page)
+        foreach($this->typo3_newspaper_pages_data as $page) {
+            tx_newspaper::insertRows($this->typo3_pages_table, $page);
+        }
     }
 
 	private function createSectionHierarchy() {
@@ -266,9 +271,9 @@ class tx_newspaper_fixture {
 	 *  $this->pagezonetype_data) for every page created above.
 	 *  The page zone types are created first.
 	 *
-	 *  \todo Create page zones which explicitly inherit from another page zone
+	 *  @todo Create page zones which explicitly inherit from another page zone
 	 *  	under the same Page
-	 *  \todo Create page zones which don't inherit from another page zone
+	 *  @todo Create page zones which don't inherit from another page zone
 	 */
 	private function createPageZones() {
 		foreach ($this->pagezonetype_data as $pagezonetype) {
@@ -507,6 +512,19 @@ class tx_newspaper_fixture {
             'sorting' => '4096',
             'deleted' => '0',
             'title' => 'Little Grandchild Section Page',
+        ),
+    );
+    private $typo3_newspaper_pages_data = array(
+        array(
+            'uid' => 2574,              // Sysfolder for Newspaper records
+            'pid' => '2828',
+            'tstamp' => '1234567890',
+            'crdate' => '1234567890',
+            'cruser_id' => '1',
+            'sorting' => '999',
+            'deleted' => '0',
+            'title' => 'Newspaper',
+            'doktype' => '254',
         ),
     );
 
