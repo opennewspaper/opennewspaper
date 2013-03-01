@@ -891,7 +891,7 @@ class tx_newspaper  {
     }
 
     /**
-     * Return an array of allowed registered sources
+     * Return an array of allowed registered sources names (names are strings (!), not source objects)
      * Either all sources or sources restricted using User TSConfig:
      * newspaper.accessSources = [comma separated list of source names]
      * @static
@@ -901,10 +901,18 @@ class tx_newspaper  {
         if (!isset($GLOBALS['BE_USER'])) {
             return false; // Doesn't make sense without a backend user ...
         }
+
+        // Check User TSConfig setting
         if ($tsc = $GLOBALS['BE_USER']->getTSConfigVal('newspaper.accessSources')) {
             return t3lib_div::trimExplode(',', $tsc); // Return ALLOWED sources
         }
-        return self::getRegisteredSources(); // Return ALL sources
+
+        // Read all registered sources, no TSConfig found ...
+        $sources = array();
+        foreach(self::getRegisteredSources() as $key => $source) {
+            $sources[] = $key; // Just add the source name
+        }
+        return $sources; // Return ALL sources
     }
 
 
