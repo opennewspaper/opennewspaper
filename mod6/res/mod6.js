@@ -48,12 +48,12 @@ var NpManageDossier = {
 					method: 'get',
 					parameters: 'tx_newspaper_mod6[AjaxCtrlTagCat]=' + parseInt(uid),
 					onCreate: function() {
-						$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // clear tag zone box (and display spinner there)
-						$("tx_newspaper_mod6[tag]").descendants().each(Element.remove); // clear tag select box
+						$("tz").innerHTML = '<img src="../res/be/css/move-spinner.gif" />'; // Clear tag zone box (and display spinner there)
+                        document.getElementById("tx_newspaper_mod6[tag]").options.length = 0; // clear tag select box
 					},
 					onSuccess: function(data) {
 						if (data) {
-							// insert tags into select box
+							// Insert tags into select box
 							options = data.responseText.evalJSON();
 							for(i = 0; i < options.length; i++) {
 								$("tx_newspaper_mod6[tag]").options[$("tx_newspaper_mod6[tag]").options.length] = new Option(NpTools.splitParamAtPipe(options[i], 0), NpTools.splitParamAtPipe(options[i], 1));
