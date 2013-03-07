@@ -1,6 +1,8 @@
 <?php
 if (!defined ('TYPO3_MODE'))     die ('Access denied.');
 
+try {
+
 $TCA["tx_newspaper_extra_image"] = array (
     "ctrl" => $TCA["tx_newspaper_extra_image"]["ctrl"],
     "interface" => array (
@@ -4318,3 +4320,9 @@ if ($tsc['newspaper.']['articleTypeAsUrl']) {
 
 
     tx_newspaper::loadSubTca(); // make sure modifications in sub extension are loaded too
+
+} catch (tx_newspaper_IllegalUsageException $e) {
+    $message = t3lib_div::makeInstance('t3lib_FlashMessage', $e->getMessage(), 'Flexform', t3lib_FlashMessage::ERROR);
+    t3lib_FlashMessageQueue::addMessage($message);
+
+}
