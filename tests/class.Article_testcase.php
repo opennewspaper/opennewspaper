@@ -13,22 +13,18 @@ class test_Article_testcase extends tx_newspaper_database_testcase {
     /** setting up a typo3 FE to render correctly is extremely laborious and currently disabled. */
     const do_test_rendering = false;
 
-	function setUp() {
-		$GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
-		$GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
-		parent::setUp();
+    function setUp() {
+        $GLOBALS['TSFE']->page['uid'] = $this->plugin_page;
+        $GLOBALS['TSFE']->page['tx_newspaper_associated_section'] = $this->section_uid;
+        parent::setUp();
 
-		$this->uid = $this->fixture->getFirstUidOf('tx_newspaper_article');
-		$this->article = new tx_newspaper_Article($this->uid);
-	}
-	
-	function tearDown() {
-		parent::tearDown();
-	}
-	
-	private $typo3db = null;
-		
-	private $oldDbConn = null;
+        $this->uid = $this->fixture->getFirstUidOf('tx_newspaper_article');
+        $this->article = new tx_newspaper_Article($this->uid);
+    }
+
+    function tearDown() {
+        parent::tearDown();
+    }
 
     /**
      *  storeHiddenStatusWithHooks() MUST set the 'hidden' attribute in the

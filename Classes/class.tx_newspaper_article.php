@@ -1084,17 +1084,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         $timer = tx_newspaper_ExecutionTimer::create();
 
-        $hidden_value = $hidden ? true : false;
-
-        if (true) {
-            $this->storeHiddenStatusWithHooksComplicated($hidden_value);
-
-
-        } else {
-
-            $this->storeHiddenStatusWithHooksSimple($hidden_value);
-
-        }
+        $this->storeHiddenStatusWithHooksComplicated((bool)$hidden);
 
     }
 
@@ -1127,12 +1117,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
 
         // \todo is this really needed? find out why or remove it
         // \todo if it is needed: why not storeWithoutSavehooks()? using store() calls the savehook twice.
-        $this->store();
-    }
-
-    public function storeHiddenStatusWithHooksSimple($hidden_value)
-    {
-        $this->setAttribute('hidden', $hidden_value);
         $this->store();
     }
 
