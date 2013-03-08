@@ -222,6 +222,12 @@ class tx_newspaper  {
         t3lib_div::devlog($message, $extension, $level, $data);
     }
 
+    /// Simplified creation of flash messages
+    public static function showFlashMessage($message, $title, $severity = t3lib_FlashMessage::ERROR) {
+        $message = t3lib_div::makeInstance('t3lib_FlashMessage', $message, $title, $severity);
+        t3lib_FlashMessageQueue::addMessage($message);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     public static function isValid(tx_newspaper_StoredObject $obj) {

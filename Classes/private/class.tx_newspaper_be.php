@@ -409,24 +409,16 @@ class tx_newspaper_BE {
         // the following attributes aren't always available
         try {
             $extra_data['hidden'] = $extra->getAttribute('hidden');
-        } catch (tx_newspaper_WrongAttributeException $e) {
-
-        }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
         try {
             $extra_data['show'] = $extra->getAttribute('show_extra');
-        } catch (tx_newspaper_WrongAttributeException $e) {
-
-        }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
         try {
             $extra_data['paragraph'] = $extra->getAttribute('paragraph');
-        } catch (tx_newspaper_WrongAttributeException $e) {
-
-        }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
         try {
             $extra_data['position'] = $extra->getAttribute('position');
-        } catch (tx_newspaper_WrongAttributeException $e) {
-
-        }
+        } catch (tx_newspaper_WrongAttributeException $e) { }
 
         // render html dropdown and add to array
         $extra_data['template_set_HTML'] = tx_newspaper_BE::createTemplateSetDropdown('tx_newspaper_extra', $extra_data['uid'], $extra_data['template_set']);

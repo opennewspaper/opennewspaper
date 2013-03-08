@@ -1,11 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE'))     die ('Access denied.');
 
-function showFlashMessage($message, $title, $severity = t3lib_FlashMessage::ERROR) {
-    $message = t3lib_div::makeInstance('t3lib_FlashMessage', $message, $title, $severity);
-    t3lib_FlashMessageQueue::addMessage($message);
-}
-
 try {
 
     $TCA["tx_newspaper_extra_image"] = array (
@@ -4328,7 +4323,7 @@ try {
     tx_newspaper::loadSubTca(); // make sure modifications in sub extension are loaded too
 
 } catch (tx_newspaper_IllegalUsageException $e) {
-    showFlashMessage($e->getMessage(), tx_newspaper::getTranslation('flashMessage_title_illegal_usage'));
+    tx_newspaper::showFlashMessage($e->getMessage(), tx_newspaper::getTranslation('flashMessage_title_illegal_usage'));
 } catch (tx_newspaper_Exception $e) {
-    showFlashMessage($e->getMessage(), tx_newspaper::getTranslation('flashMessage_title_generic_error', t3lib_FlashMessage::WARNING));
+    tx_newspaper::showFlashMessage($e->getMessage(), tx_newspaper::getTranslation('flashMessage_title_generic_error', t3lib_FlashMessage::WARNING));
 }
