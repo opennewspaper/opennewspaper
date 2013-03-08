@@ -53,7 +53,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         foreach (self::getFormatConfig() as $key => $format) {
             if (!is_array($format)) {
                 throw new tx_newspaper_IllegalUsageException(
-                    sprintf(tx_newspaper::getTranslation('flashMessage_tsconfig_not_an_array'), $key, print_r($format, 1))
+                    sprintf(tx_newspaper::getTranslation('flashMessage_tsconfig_not_an_array'), "newspaper.image.format.$key", print_r($format, 1))
                 );
             }
             $prefilled[$i] = self::$function($format, $i);

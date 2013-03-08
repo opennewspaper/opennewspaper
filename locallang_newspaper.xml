@@ -34,7 +34,7 @@
             <label index="flashMessage_extra_flexform_file_not_found">Neither active nor archived data structure file "%s.xml" can be found.</label>
             <label index="flashMessage_title_generic_error">An error has occured</label>
             <label index="flashMessage_title_illegal_usage">Error in configuring openNewspaper</label>
-            <label index="flashMessage_tsconfig_not_an_array">TSconfig variable "%s" is not an array, as required: %s</label>
+            <label index="flashMessage_tsconfig_not_an_array">TSconfig variable "%s" is not an array, as required: "%s"</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_header">Page can't be deleted ...</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_message">... because an active Newspaper section is associated to this page. Please use newspaper's section module in order to delete the section and this page.</label>
 
@@ -166,7 +166,7 @@
             <label index="flashMessage_extra_flexform_file_not_found">Weder die aktive noch die archivierte Datenstruktur "%s.xml" exisitert.</label>
             <label index="flashMessage_title_generic_error">Ein Fehler ist aufgetreten</label>
             <label index="flashMessage_title_illegal_usage">Fehler bei der Konfiguration von openNewspaper</label>
-            <label index="flashMessage_tsconfig_not_an_array">TSconfig-Variable "%s" ist nicht, wie benötigt, ein Array: %s</label>
+            <label index="flashMessage_tsconfig_not_an_array">TSconfig-Variable "%s" ist nicht, wie benötigt, ein Array: "%s"</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_header">Diese Seite kann nicht gelöscht werden, ...</label>
             <label index="flashMessage_typo3_page_cant_be_deleted_message">... weil ein aktives Newspaper-Ressort mit dieser Seite verbunden ist. Bitte nutzen Sie das Newspaper-Ressortmodul, um das Ressort und diese Seite zu löschen.</label>
 

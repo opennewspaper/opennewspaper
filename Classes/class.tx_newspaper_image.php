@@ -19,6 +19,7 @@ require_once('private/class.tx_newspaper_imagethumbnail.php');
 class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function __construct($image_file, $width_set = 0) {
+        self::initializeDefaultSizeSet();
         $this->image_file = $image_file;
         $this->size_set = new tx_newspaper_ImageSizeSet($width_set);
         $this->thumbnail = new tx_newspaper_ImageThumbnail($this);
@@ -41,15 +42,15 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     public function getSizes() {
-        return $this->size_set->getSizes();
+        return $this->joinDimensionWithDefaultDimension('getSizes');
     }
 
     public function getWidths() {
-        return $this->size_set->getWidths();
+        return $this->joinDimensionWithDefaultDimension('getWidths');
     }
 
     public function getHeights() {
-        return $this->size_set->getHeights();
+        return $this->joinDimensionWithDefaultDimension('getHeights');
     }
 
     public function getFilename() {
@@ -137,6 +138,17 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    private function joinDimensionWithDefaultDimension($function) {
+        return array_unique(array_merge($this->size_set->$function(), self::$default_size_set->$function()));
+    }
+
+
+    private static function initializeDefaultSizeSet() {
+        if (!self::$default_size_set instanceof tx_newspaper_ImageSizeSet) {
+            self::$default_size_set = new tx_newspaper_ImageSizeSet(0);
+        }
+    }
 
     /** copy $basedir to $targetPath on $targetHost	*/
     private static function rsync($basedir, $targetHost, $targetPath) {
@@ -357,6 +369,9 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
     }
 
     ////////////////////////////////////////////////////////////////////////////
+
+    /** @var tx_newspaper_ImageSizeSet */
+    private static $default_size_set = null;
 
     /** @var string */
     private $image_file = null;
