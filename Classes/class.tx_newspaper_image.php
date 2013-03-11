@@ -290,7 +290,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $convert = self::getConvertCommand() .
             ' -quality ' . self::getJPEGQuality() .
             ' -geometry ' . $width .
-                (self::scaleToWidth() && ($height > 0)? '': ('x' . $height)) .
+                (!self::scaleToWidth() && ($height > 0)? ('x' . $height): '') .
             ' ' . self::convert_options .
             ' "' . PATH_site . $source . '"' .
             ' "' . PATH_site . $target . '"';
