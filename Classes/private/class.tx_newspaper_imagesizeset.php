@@ -39,11 +39,11 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
     }
 
     public function getWidths() {
-        return $this->readAndGetWidths($this->index);
+        return $this->readAndGetWidths();
     }
 
     public function getHeights() {
-        return $this->readAndGetHeights($this->index);
+        return $this->readAndGetHeights();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -127,37 +127,37 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     private static function readAndGetSizes($index) {
         self::readTSConfig();
-  		return self::$sizes[$index];
+        return self::$sizes[$index];
     }
 
-    private function readAndGetWidths($index) {
+    private function readAndGetWidths() {
         $this->fillWidthOrHeightArray(self::$widths, 0);
         return self::$widths;
     }
 
-    private function readAndGetHeights($index) {
+    private function readAndGetHeights() {
         $this->fillWidthOrHeightArray(self::$heights, 1);
         return self::$heights;
     }
 
-    ///	Read base path and predefined sizes for images
-	/** The following parameters must be read from the TSConfig for the storage
-	 *  SysFolder for Image Extras:
-	 *  \code
-	 *  newspaper.image.basepath
-	 *  newspaper.image.size....
-	 *  \endcode
-	 *
-	 *  \return The whole TSConfig for the storage SysFolder for Image Extras
-	 */
-	private static function readTSConfig() {
+    ///    Read base path and predefined sizes for images
+    /** The following parameters must be read from the TSConfig for the storage
+     *  SysFolder for Image Extras:
+     *  \code
+     *  newspaper.image.basepath
+     *  newspaper.image.size....
+     *  \endcode
+     *
+     *  \return The whole TSConfig for the storage SysFolder for Image Extras
+     */
+    private static function readTSConfig() {
 
         $TSConfig = self::getTSconfig();
 
-		if (!self::$sizes) self::setSizes();
+        if (!self::$sizes) self::setSizes();
 
-		return $TSConfig;
-	}
+        return $TSConfig;
+    }
 
     private $index = 0;
 

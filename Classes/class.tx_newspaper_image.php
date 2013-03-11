@@ -84,9 +84,9 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $timer = tx_newspaper_ExecutionTimer::create();
 
 		self::readTSConfig(); // make sure tsconfig is read (when called from outside tx_newspaper_extra_image
-		foreach ($this->getSizes() as $key => $dimension) {
+		foreach ($this->getSizes() as $dimension) {
 	    	if (self::imgIsResized($this->image_file, $dimension)) continue;
-            $this->resizeImage(self::extractWidth($dimension, $key), self::extractHeight($dimension, $key));
+            $this->resizeImage(self::extractWidth($dimension), self::extractHeight($dimension));
 		}
 	}
 
@@ -215,24 +215,17 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         self::$basepath = $TSConfig['newspaper.']['image.']['basepath'];
     }
 
-    private static function extractWidth($dimension, $key) {
-        return self::extractDimension($dimension, $key, 0);
+    private static function extractWidth($dimension) {
+        return self::extractDimension($dimension, 0);
     }
 
-    private static function extractHeight($dimension, $key) {
-        return self::extractDimension($dimension, $key, 1);
+    private static function extractHeight($dimension) {
+        return self::extractDimension($dimension, 1);
     }
 
-    private static function extractDimension($dimension, $key, $index) {
+    private static function extractDimension($dimension, $index) {
         $wxh = explode('x', $dimension);
-        $dim = intval($wxh[$index]);
-        if (!$dim) {
-            throw new tx_newspaper_IllegalUsageException(
-                'TSConfig usage: "newspaper.image.size.{KEY} = {WIDTH}x{HEIGHT}". ' . "\n" .
-                'Actual TSConfig for this line: ' . 'newspaper.image.size.' . $key . ' = ' . $dimension
-            );
-        }
-        return $dim;
+        return intval($wxh[$index]);
     }
 
     /// If image needs resizing, do it (using ImageMagick)
@@ -292,7 +285,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $convert = self::getConvertCommand() .
             ' -quality ' . self::getJPEGQuality() .
             ' -geometry ' . $width .
-                (self::scaleToWidth()? '': ('x' . $height)) .
+                (self::scaleToWidth() && ($height > 0)? '': ('x' . $height)) .
             ' ' . self::convert_options .
             ' "' . PATH_site . $source . '"' .
             ' "' . PATH_site . $target . '"';
