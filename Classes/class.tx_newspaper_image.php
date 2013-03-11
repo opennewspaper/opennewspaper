@@ -94,8 +94,13 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         self::doResizeImage(
             $width, $height,
             self::uploads_folder . '/'. $this->image_file,
-            self::$basepath . '/' . self::imageResizedName($this->image_file, "${width}x${height}")
+            self::$basepath . '/' . self::imageResizedName($this->image_file, self::dimension($width, $height))
         );
+    }
+
+    private static function dimension($width, $height) {
+        if (intval($height)) return "${width}x${height}";
+        return $width;
     }
 
     public function copyTo($folder) {
