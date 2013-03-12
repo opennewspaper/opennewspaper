@@ -35,6 +35,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $smarty->assign('widths', $this->getWidths());
         $smarty->assign('heights', $this->getHeights());
         $smarty->assign('size_set', $this->size_set->getLabel());
+        $smarty->assign('size_set_name', $this->size_set->getName());
     }
 
     public function getThumbnail() {

@@ -30,6 +30,11 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
         return self::readFormats();
     }
 
+    public function getName() {
+        $names = array_keys(self::getFormatConfig());
+        return $names[$this->index];
+    }
+
     public function getLabel() {
         return self::getWidthSetLabel($this->index);
     }
