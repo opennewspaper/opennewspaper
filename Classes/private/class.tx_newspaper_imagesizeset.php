@@ -32,7 +32,7 @@ class tx_newspaper_ImageSizeSet extends tx_newspaper_TSconfigControlled {
 
     public function getName() {
         $names = array_keys(self::getFormatConfig());
-        return $names[$this->index];
+        return rtrim($names[$this->index-1], '.');
     }
 
     public function getLabel() {
