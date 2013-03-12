@@ -34,7 +34,7 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
         $smarty->assign('sizes', $this->getSizes());
         $smarty->assign('widths', $this->getWidths());
         $smarty->assign('heights', $this->getHeights());
-        $smarty->assign('size_set', $this->size_set->getLabel());
+        $smarty->assign('size_set_label', $this->size_set->getLabel());
         $smarty->assign('size_set_name', $this->size_set->getName());
     }
 
@@ -52,6 +52,14 @@ class tx_newspaper_Image extends tx_newspaper_TSconfigControlled {
 
     public function getHeights() {
         return $this->joinDimensionWithDefaultDimension('getHeights');
+    }
+
+    public function getFormatLabel() {
+        return $this->size_set->getLabel();
+    }
+
+    public function getFormatName() {
+        return $this->size_set->getName();
     }
 
     public function getFilename() {

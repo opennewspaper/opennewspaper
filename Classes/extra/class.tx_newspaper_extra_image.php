@@ -132,6 +132,15 @@ class tx_newspaper_Extra_Image extends tx_newspaper_Extra {
         return $this->image->getHeights();
     }
 
+    public function getFormatLabel() {
+        return $this->image->getFormatLabel();
+    }
+
+    public function getFormatName() {
+        return $this->image->getFormatName();
+    }
+
+
 	public static function dependsOnArticle() { return false; }
 
 
