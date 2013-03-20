@@ -257,8 +257,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
      *  @return tx_newspaper_Extra
      */
     private function getContainerExtra() {
-        $container_extra_classes = array_filter(get_declared_classes(), function(
-
+#        $container_extra_classes = array_filter(get_declared_classes(), function(
+        return null;
     }
 
     /// Check whether to use a specific template set.
