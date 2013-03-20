@@ -791,7 +791,7 @@ class tx_newspaper  {
     /// checks if a string starts with a specific text
     /** @param $haystack string to search
      *  @param $needle string to search for
-     *  @param $caseSensitive specifies if the search is case-sensitive (default=false)
+     *  @param bool $caseSensitive specifies if the search is case-sensitive (default=false)
      */
     public static function startsWith($haystack, $needle, $caseSensitive=false) {
         $function = $caseSensitive? 'strpos': 'stripos';
@@ -800,11 +800,11 @@ class tx_newspaper  {
 
     /**
      * Gets an array of objects with getUid() function available, creates an array with uids only
-     * @param array $objects objects with getUid() function available
+     * @param tx_newspaper_StoredObject[] $objects objects with getUid() function available
      * @return array Contains the uids of the objects
      */
     public static function getUidArray(array $objects) {
-        return array_map(function($object) { return $object->getUid();}, $objects);
+        return array_map(function($object) { return $object->getUid(); }, $objects);
     }
 
 

@@ -74,4 +74,19 @@ interface tx_newspaper_ExtraIface
 	 */
 	public static function dependsOnArticle();
 }
+
+interface tx_newspaper_ContainerExtra {
+    /**
+     * @param tx_newspaper_Extra $extra
+     * @return bool Whether \c $this contains \p $extra
+     */
+    public function contains(tx_newspaper_Extra $extra);
+
+    /**
+     * @param tx_newspaper_Extra $extra
+     * @return tx_newspaper_Extra|null An Extra of the calling class which contains \p $extra
+     */
+    static public function getExtraWhichContains(tx_newspaper_Extra $extra);
+
+}
 ?>
