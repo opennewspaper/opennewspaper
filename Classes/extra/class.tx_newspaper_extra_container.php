@@ -7,7 +7,7 @@ require_once(PATH_typo3conf . 'ext/newspaper/Classes/class.tx_newspaper_extra.ph
  *  Attributes:
  *  - \p extras (UIDs of tx_newspaper_Extra records)
  */
-class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
+class tx_newspaper_Extra_Container extends tx_newspaper_Extra implements tx_newspaper_ContainerExtra {
 
     public function __construct($uid = 0) {
         if ($uid) parent::__construct($uid);
@@ -54,6 +54,19 @@ class tx_newspaper_Extra_Container extends tx_newspaper_Extra {
             $ret .= '<p>' . $extra->getDescription() . "</p>\n";
         }
         return $ret;
+    }
+
+    public function contains(tx_newspaper_Extra $extra) {
+        return in_array($extra, $this->getExtras());
+    }
+
+    public static function getExtraWhichContains(tx_newspaper_Extra $extra) {
+        $uids = tx_newspaper_DB::getInstance()->selectZeroOrOneRows(
+            'uid', self::getTable(), 'extras LIKE "%' . $extra->getUid() .'%"'
+        );
+        $uid = intval($uids['uid']);
+        if ($uid == 0) return null;
+        return new tx_newspaper_Extra_Container($uid);
     }
 
     public static function getModuleName() {
