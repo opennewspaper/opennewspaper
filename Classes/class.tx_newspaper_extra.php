@@ -257,8 +257,26 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
      *  @return tx_newspaper_Extra
      */
     private function getContainerExtra() {
-#        $container_extra_classes = array_filter(get_declared_classes(), function(
+
+        foreach (self::getContainerExtraClasses() as $container_class) {
+            $container_extra = $container_class::getExtraWhichContains($this);
+            if (!is_null($container_extra)) return $container_extra;
+        }
+
         return null;
+    }
+
+    private static $container_extra_classes = null;
+    private static function getContainerExtraClasses() {
+        if (is_null(self::$container_extra_classes)) {
+            self::$container_extra_classes = array_filter(
+                get_declared_classes(),
+                function ($class) {
+                    return in_array('tx_newspaper_ContainerExtra', class_implements($class));
+                }
+            );
+        }
+        return self::$container_extra_classes;
     }
 
     /// Check whether to use a specific template set.
@@ -895,6 +913,8 @@ abstract class tx_newspaper_Extra implements tx_newspaper_ExtraIface, tx_newspap
         }
 
         $extra = $this->getContainerExtra();
+        if (!is_null($extra)) return $extra->getPageZone();
+
         return null;
     }
 
