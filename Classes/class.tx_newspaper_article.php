@@ -1762,7 +1762,6 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
             'bodytext' => 'Text',
             'ressort' => 'OnRes',
             'author' => 'Autor',
-            'tx_newspapertaz_author_imported' => 'Autor'
         ),
         'tx_newspaper_DBSource' => array(
             'title' => 'article_manualtitle',
