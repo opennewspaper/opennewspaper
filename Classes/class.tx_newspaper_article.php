@@ -664,7 +664,7 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
      *  \param $s New Section
      */
     public function addSection(tx_newspaper_Section $s) {
-/// \todo: if ($this->getuid() == 0) throw e OR
+/// \todo: if ($this->getUid() == 0) throw e OR
 /// \todo: just collect here and store sections later in article::store()
         // get pos of next element
         $p = tx_newspaper_DB::getInstance()->getLastPosInMmTable('tx_newspaper_article_sections_mm', $this->getUid()) + 1;
@@ -1136,6 +1136,37 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
         if (!method_exists($class, $function)) return;
         self::$render_hooks[$class] = $function;
     }
+
+    /**
+     * Register additional attribute
+     * @param string $attribute KEy for additional attribute. NO check if attribute key is available
+     * @param string $class Class name
+     * @param string $function Function name
+     */
+    public static function registerAdditionalAttribute($attribute, $class, $function) {
+        if (!class_exists($class) || !method_exists($class, $function)) {
+            return;
+        }
+        self::$additionalAttributeConfig[$attribute] = array($class => $function);
+    }
+
+    /**
+     * Get value of additional attribute register with tx_newspaper_article::registerAdditionalAttribute()
+     * @param string $key Key for additional registered attribute
+     * @return mixed Whatever the registered function returns, or null if $key is not registered
+     */
+    public function getAdditionalAttribute($key) {
+        if (!isset(self::$additionalAttributeConfig[$key]) && !is_array(self::$additionalAttributeConfig[$key])) {
+            return null;
+        }
+
+        $class = key(self::$additionalAttributeConfig[$key]);
+        $function = self::$additionalAttributeConfig[$key][$class];
+
+        $object_to_call_static_method_on = new $class();
+        return $object_to_call_static_method_on->$function($this); // get value for additional attribute
+    }
+
 
     public static function updateDependencyTree(tx_newspaper_Article $article) {
         if (tx_newspaper_DependencyTree::useDependencyTree()) {
@@ -1778,6 +1809,8 @@ class tx_newspaper_Article extends tx_newspaper_PageZone implements tx_newspaper
     );
 
     private static $render_hooks = array();
+
+    private static $additionalAttributeConfig = array(); // Additional attribute can be registered with tx_newspaper_article::register::registerAdditionalAttribute()
 
 }
 
